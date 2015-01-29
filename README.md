@@ -1,13 +1,13 @@
 ## Cats
 
-![cats image](http://plastic-idolatry.com/erik/cats.png)
-
 ### Overview
 
 Cats is a proof-of-concept library intended to provide abstractions
 for functional programming in Scala.
 
 The name is a playful shortening of the word *category*.
+
+![cats image](http://plastic-idolatry.com/erik/cats.png)
 
 ### Getting Started
 
