@@ -1,7 +1,6 @@
 package cats
 
 import algebra.Monoid
-import cats.arrow.MonoidK
 import simulacrum._
 
 @typeclass trait Foldable[F[_]] {

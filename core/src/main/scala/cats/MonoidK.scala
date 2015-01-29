@@ -1,5 +1,4 @@
 package cats
-package arrow
 
 import algebra.Monoid
 import simulacrum._

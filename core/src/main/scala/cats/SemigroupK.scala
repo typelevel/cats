@@ -1,5 +1,4 @@
 package cats
-package arrow
 
 import algebra.Semigroup
 import simulacrum._
