@@ -7,7 +7,7 @@ for functional programming in Scala.
 
 The name is a playful shortening of the word *category*.
 
-![cats image](http://plastic-idolatry.com/erik/cats.png)
+![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
 ### Getting Started
 
