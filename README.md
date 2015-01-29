@@ -12,7 +12,9 @@ The name is a playful shortening of the word *category*.
 ### Getting Started
 
 Cats is not currently published, so you'll need to check out this
-repository to try it out.
+repository to try it out. (In fact, you will need to do a
+`publish-local` on [algebra](https://github.com/non/algebra) in order
+to have that dependency available.)
 
 To build Cats you should have [sbt](http://www.scala-sbt.org/0.13/tutorial/Setup.html)
 installed. Run `sbt`, and then use any of the following commands:
