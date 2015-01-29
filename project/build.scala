@@ -21,7 +21,7 @@ object CatsBuild extends Build {
     Project("tests", file("tests")).settings(noPublishSettings: _*).dependsOn(core, laws)
 
   lazy val aggregate =
-    Project("aggregate", file(".")).settings(noPublishSettings: _*).aggregate(core, laws, tests)
+    Project("aggregate", file(".")).settings(noPublishSettings: _*).aggregate(core, laws, tests).dependsOn(core, laws, tests)
 
   lazy val catsSettings = Defaults.defaultSettings ++ releaseSettings ++ Seq(
     releaseProcess := Seq[ReleaseStep](
