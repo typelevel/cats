@@ -4,7 +4,7 @@ import algebra.Monoid
 import cats.arrow.MonoidK
 import simulacrum._
 
-@typeclass trait Foldable[F[_]] extends Functor[F] {
+@typeclass trait Foldable[F[_]] {
   def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B
 
   def foldRight[A, B](fa: F[A], b: B)(f: (A, B) => B): B
