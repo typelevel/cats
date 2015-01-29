@@ -51,7 +51,8 @@ object Lazy {
       override def map[A, B](fa: Lazy[A])(f: A => B): Lazy[B] =
         fa.map(f)
 
-      override def apply[A, B](fa: Lazy[A])(ff: Lazy[A => B]): Lazy[B] = ???
+      override def apply[A, B](fa: Lazy[A])(ff: Lazy[A => B]): Lazy[B] =
+        Lazy(ff.force(fa.force))
 
       override def flatten[A](ffa: Lazy[Lazy[A]]): Lazy[A] =
         Lazy.byName(ffa.force.force)
