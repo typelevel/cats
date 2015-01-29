@@ -16,5 +16,12 @@ trait SetInstances {
       
       def foldRight[A, B](fa: Set[A], b: B)(f: (A, B) => B): B =
         fa.foldRight(b)(f)
+
+      def foldRight[A, B](fa: Set[A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] = {
+        val it = fa.iterator
+        def loop(b: Lazy[B]): Lazy[B] =
+          if (it.hasNext) Lazy.byName(f(it.next, b)) else b
+        Lazy(loop(b).force)
+      }
     }
 }

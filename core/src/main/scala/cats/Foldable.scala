@@ -9,6 +9,8 @@ import simulacrum._
 
   def foldRight[A, B](fa: F[A], b: B)(f: (A, B) => B): B
 
+  def foldRight[A, B](fa: F[A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B]
+
   def foldMap[A, B: Monoid](fa: F[A])(f: A => B): B =
     foldLeft(fa, Monoid[B].empty) { (b, a) =>
       Monoid[B].combine(b, f(a))
