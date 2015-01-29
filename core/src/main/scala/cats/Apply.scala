@@ -11,6 +11,9 @@ import simulacrum._
 @typeclass trait Apply[F[_]] extends Functor[F] {
   def apply[A, B](fa: F[A])(f: F[A => B]): F[B]
 
+  def apply2[A, B, Z](fa: F[A], fb: F[B])(f: F[(A, B) => Z]): F[Z] =
+    apply(fa)(apply(fb)(map(f)(ff => (b: B) => (a: A) => ff(a, b))))
+
   def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
     apply(fa)(map(fb)(b => (a: A) => f(a, b)))
 }
