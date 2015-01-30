@@ -3,7 +3,7 @@ homepage in ThisBuild := Some(url("http://github.com/non/cats"))
 licenses in ThisBuild := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
 scalaVersion in ThisBuild := "2.11.5"
-crossScalaVersions in ThisBuild := Seq("2.10.4", "2.11.5")
+crossScalaVersions in ThisBuild := Seq("2.11.5")
 
 // comprehensive tpolecat-recommended scalac options
 scalacOptions in ThisBuild ++= (
