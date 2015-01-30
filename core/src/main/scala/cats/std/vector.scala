@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 import scala.collection.immutable.VectorBuilder
 
 trait VectorInstances {
-  implicit val vectorInstance =
+  implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] =
     new Traverse[Vector] with MonadCombine[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]

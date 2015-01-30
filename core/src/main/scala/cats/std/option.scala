@@ -2,7 +2,7 @@ package cats
 package std
 
 trait OptionInstances {
-  implicit val optionInstance =
+  implicit val optionInstance: Traverse[Option] with MonadCombine[Option] with CoFlatMap[Option] =
     new Traverse[Option] with MonadCombine[Option] with CoFlatMap[Option] {
 
       def empty[A]: Option[A] = None

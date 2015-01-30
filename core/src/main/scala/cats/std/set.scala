@@ -4,7 +4,7 @@ package std
 import scala.annotation.tailrec
 
 trait SetInstances {
-  implicit val setInstance =
+  implicit val setInstance: Foldable[Set] with MonoidK[Set] =
     new Foldable[Set] with MonoidK[Set] {
 
       def empty[A]: Set[A] = Set.empty[A]
