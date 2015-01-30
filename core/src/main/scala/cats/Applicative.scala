@@ -2,7 +2,7 @@ package cats
 
 import simulacrum._
 
-/**
+/*
  * Applicative functor.
  * 
  * Must obey the following laws:

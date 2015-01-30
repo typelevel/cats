@@ -2,7 +2,7 @@ package cats
 
 import simulacrum._
 
-/**
+/*
  * Weaker version of Applicative[F]; has apply but not pure.
  * 
  * Laws:
