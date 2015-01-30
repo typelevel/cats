@@ -15,11 +15,19 @@ import simulacrum._
   def pure[A](x: A): F[A]
   override def map[A, B](fa: F[A])(f: A => B): F[B] = apply(fa)(pure(f))
 
-  def compose[G[_]: Applicative]: Applicative[({type λ[α] = F[G[α]]})#λ] =
-    new Applicative[({type λ[α] = F[G[α]]})#λ] {
-      def pure[A](a: A): F[G[A]] = self.pure(Applicative[G].pure(a))
+  def compose[G[_]](implicit GG : Applicative[G]): Applicative[λ[α => F[G[α]]]] =
+    new CompositeApplicative[F,G] {
+      implicit def F: Applicative[F] = self
+      implicit def G: Applicative[G] = GG
 
-      def apply[A,B](fa: F[G[A]])(f: F[G[A => B]]): F[G[B]] =
-        self.apply(fa)(self.map(f)(gab => Applicative[G].apply(_)(gab)))
     }
+}
+
+trait CompositeApplicative[F[_],G[_]]
+    extends Applicative[λ[α => F[G[α]]]] with CompositeApply[F,G] {
+
+  implicit def F: Applicative[F]
+  implicit def G: Applicative[G]
+
+  def pure[A](a: A): F[G[A]] = F.pure(G.pure(a))
 }
