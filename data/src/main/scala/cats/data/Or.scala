@@ -7,7 +7,7 @@ import scala.util.control.NonFatal
 
 /** Represents a disjunction: a result that is either an `A` or a `B`.
  *
- * An instance of `A` [[Or]] B is either a [[-\/]]`[A]` (aka a "left") or a [[ROr]]`[B]` (aka a "right").
+ * An instance of `A` [[Or]] B is either a [[LOr]]`[A]` (aka a "left") or a [[ROr]]`[B]` (aka a "right").
  *
  * A common use of a disjunction is to explicitly represent the possibility of failure in a result as opposed to
  * throwing an exception. By convention, the left is used for errors and the right is reserved for successes.
@@ -30,7 +30,7 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   final class SwitchingOr[X](r: => X) {
     def <<?:(left: => X): X =
       Or.this match {
-        case -\/(_) => left
+        case LOr(_) => left
         case ROr(_) => r
       }
   }
@@ -43,21 +43,21 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   /** Return `true` if this disjunction is left. */
   def isLeft: Boolean =
     this match {
-      case -\/(_) => true
+      case LOr(_) => true
       case ROr(_) => false
     }
 
   /** Return `true` if this disjunction is right. */
   def isRight: Boolean =
     this match {
-      case -\/(_) => false
+      case LOr(_) => false
       case ROr(_) => true
     }
 
   /** Catamorphism. Run the first given function if left, otherwise, the second given function. */
   def fold[X](l: A => X, r: B => X): X =
     this match {
-      case -\/(a) => l(a)
+      case LOr(a) => l(a)
       case ROr(b) => r(b)
     }
 
@@ -72,8 +72,8 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   /** Flip the left/right values in this disjunction. Alias for `unary_~` */
   def swap: (B Or A) =
     this match {
-      case -\/(a) => ROr(a)
-      case ROr(b) => -\/(b)
+      case LOr(a) => ROr(a)
+      case ROr(b) => LOr(b)
     }
 
   /** Flip the left/right values in this disjunction. Alias for `swap` */
@@ -91,21 +91,21 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   /** Binary functor map on this disjunction. */
   def bimap[C, D](f: A => C, g: B => D): (C Or D) =
     this match {
-      case -\/(a) => -\/(f(a))
+      case LOr(a) => LOr(f(a))
       case ROr(b) => ROr(g(b))
     }
 
   /** Run the given function on the left value. */
   def leftMap[C](f: A => C): (C Or B) =
     this match {
-      case -\/(a) => -\/(f(a))
+      case LOr(a) => LOr(f(a))
       case b @ ROr(_) => b
     }
 
   /** Binary functor traverse on this disjunction. */
   def bitraverse[F[_]: Functor, C, D](f: A => F[C], g: B => F[D]): F[C Or D] =
     this match {
-      case -\/(a) => Functor[F].map(f(a))(-\/(_))
+      case LOr(a) => Functor[F].map(f(a))(LOr(_))
       case ROr(b) => Functor[F].map(g(b))(ROr(_))
     }
 
@@ -113,13 +113,13 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   def map[D](g: B => D): (A Or D) =
     this match {
       case ROr(a)     => ROr(g(a))
-      case b @ -\/(_) => b
+      case b @ LOr(_) => b
     }
 
   /** Traverse on the right of this disjunction. */
   def traverse[F[_]: Applicative, AA >: A, D](g: B => F[D]): F[AA Or D] =
     this match {
-      case a @ -\/(_) => Applicative[F].pure(a)
+      case a @ LOr(_) => Applicative[F].pure(a)
       case ROr(b) => Functor[F].map(g(b))(ROr(_))
     }
 
@@ -136,56 +136,56 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   /** Bind through the right of this disjunction. */
   def flatMap[AA >: A, D](g: B => (AA Or D)): (AA Or D) =
     this match {
-      case a @ -\/(_) => a
+      case a @ LOr(_) => a
       case ROr(b) => g(b)
     }
 
   /** Fold on the right of this disjunction. */
   def foldRight[Z](z: => Z)(f: (B, => Z) => Z): Z =
     this match {
-      case -\/(_) => z
+      case LOr(_) => z
       case ROr(a) => f(a, z)
     }
 
   /** Filter on the right of this disjunction. */
   def filter[AA >: A](p: B => Boolean)(implicit M: Monoid[AA]): (AA Or B) =
     this match {
-      case -\/(_) => this
-      case ROr(b) => if(p(b)) this else -\/(M.empty)
+      case LOr(_) => this
+      case ROr(b) => if(p(b)) this else LOr(M.empty)
     }
 
   /** Return `true` if this disjunction is a right value satisfying the given predicate. */
   def exists[BB >: B](p: BB => Boolean): Boolean =
     this match {
-      case -\/(_) => false
+      case LOr(_) => false
       case ROr(b) => p(b)
     }
 
   /** Return `true` if this disjunction is a left value or the right value satisfies the given predicate. */
   def forall[BB >: B](p: BB => Boolean): Boolean =
     this match {
-      case -\/(_) => true
+      case LOr(_) => true
       case ROr(b) => p(b)
     }
 
   /** Return an empty list or list with one element on the right of this disjunction. */
   def toList: List[B] =
     this match {
-      case -\/(_) => Nil
+      case LOr(_) => Nil
       case ROr(b) => b :: Nil
     }
 
   /** Return an empty stream or stream with one element on the right of this disjunction. */
   def toStream: Stream[B] =
     this match {
-      case -\/(_) => Stream()
+      case LOr(_) => Stream()
       case ROr(b) => Stream(b)
     }
 
   /** Return an empty option or option with one element on the right of this disjunction. Useful to sweep errors under the carpet. */
   def toOption: Option[B] =
     this match {
-      case -\/(_) => None
+      case LOr(_) => None
       case ROr(b) => Some(b)
     }
 
@@ -193,7 +193,7 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   /** Return an empty maybe or option with one element on the right of this disjunction. Useful to sweep errors under the carpet. */
   def toMaybe[BB >: B]: Maybe[BB] =
     this match {
-      case -\/(_) => Maybe.empty
+      case LOr(_) => Maybe.empty
       case ROr(b) => Maybe.just(b)
     }
   */
@@ -201,14 +201,14 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   /** Convert to a core `scala.Either` at your own peril. */
   def toEither: Either[A, B] =
     this match {
-      case -\/(a) => Left(a)
+      case LOr(a) => Left(a)
       case ROr(b) => Right(b)
     }
 
   /** Return the right value of this disjunction or the given default if left. Alias for `|` */
   def getOrElse[BB >: B](x: => BB): BB =
     this match {
-      case -\/(_) => x
+      case LOr(_) => x
       case ROr(b) => b
     }
 
@@ -219,14 +219,14 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   /** Return the right value of this disjunction or run the given function on the left. */
   def valueOr[BB >: B](x: A => BB): BB =
     this match {
-      case -\/(a) => x(a)
+      case LOr(a) => x(a)
       case ROr(b) => b
     }
 
   /** Return this if it is a right, otherwise, return the given value. Alias for `|||` */
   def orElse[AA >: A, BB >: B](x: => AA Or BB): AA Or BB =
     this match {
-      case -\/(_) => x
+      case LOr(_) => x
       case ROr(_) => this
     }
 
@@ -238,52 +238,52 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
    * Sums up values inside disjunction, if both are left or right. Returns first left otherwise.
    * {{{
    * ROr(v1) +++ ROr(v2) → ROr(v1 + v2)
-   * ROr(v1) +++ -\/(v2) → -\/(v2)
-   * -\/(v1) +++ ROr(v2) → -\/(v1)
-   * -\/(v1) +++ -\/(v2) → -\/(v1 + v2)
+   * ROr(v1) +++ LOr(v2) → LOr(v2)
+   * LOr(v1) +++ ROr(v2) → LOr(v1)
+   * LOr(v1) +++ LOr(v2) → LOr(v1 + v2)
    * }}}
    */
   def +++[AA >: A, BB >: B](x: => AA Or BB)(implicit M1: Semigroup[BB], M2: Semigroup[AA]): AA Or BB =
     this match {
-      case -\/(a1) => x match {
-        case -\/(a2) => -\/(M2.combine(a1, a2))
+      case LOr(a1) => x match {
+        case LOr(a2) => LOr(M2.combine(a1, a2))
         case ROr(_) => this
       }
       case ROr(b1) => x match {
-        case b2 @ -\/(_) => b2
+        case b2 @ LOr(_) => b2
         case ROr(b2) => ROr(M1.combine(b1, b2))
       }
     }
 
   /** Ensures that the right value of this disjunction satisfies the given predicate, or returns left with the given value. */
   def ensure[AA >: A](onLeft: => AA)(f: B => Boolean): (AA Or B) = this match {
-    case ROr(b) => if (f(b)) this else -\/(onLeft)
-    case -\/(_) => this
+    case ROr(b) => if (f(b)) this else LOr(onLeft)
+    case LOr(_) => this
   }
 
   /** Compare two disjunction values for equality. */
   def ===[AA >: A, BB >: B](x: AA Or BB)(implicit EA: Eq[AA], EB: Eq[BB]): Boolean =
     this match {
-      case -\/(a1) => x match {
-        case -\/(a2) => Eq[AA].eqv(a1, a2)
+      case LOr(a1) => x match {
+        case LOr(a2) => Eq[AA].eqv(a1, a2)
         case ROr(_) => false
       }
       case ROr(b1) => x match {
         case ROr(b2) => Eq[BB].eqv(b1, b2)
-        case -\/(_) => false
+        case LOr(_) => false
       }
     }
 
   /** Compare two disjunction values for ordering. */
   def compare[AA >: A, BB >: B](x: AA Or BB)(implicit EA: Order[AA], EB: Order[BB]): Int =
     this match {
-      case -\/(a1) => x match {
-        case -\/(a2) => Order[AA].compare(a1, a2)
+      case LOr(a1) => x match {
+        case LOr(a2) => Order[AA].compare(a1, a2)
         case ROr(_) => -1
       }
       case ROr(b1) => x match {
         case ROr(b2) => Order[BB].compare(b1, b2)
-        case -\/(_) => 1
+        case LOr(_) => 1
       }
     }
 
@@ -291,14 +291,14 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   /** Show for a disjunction value. */
   def show[AA >: A, BB >: B](implicit SA: Show[AA], SB: Show[BB]): Cord =
     this match {
-      case -\/(a) => ("-\Or(": Cord) ++ SA.show(a) :- ')'
+      case LOr(a) => ("-\Or(": Cord) ++ SA.show(a) :- ')'
       case ROr(b) => ("\ROr(": Cord) ++ SB.show(b) :- ')'
     }
 
   /** Convert to a validation. */
   def validation: Validation[A, B] =
     this match {
-      case -\/(a) => Failure(a)
+      case LOr(a) => Failure(a)
       case ROr(b) => Success(b)
     }
 
@@ -313,7 +313,7 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   /** Return the value from whichever side of the disjunction is defined, given a commonly assignable type. */
   def merge[AA >: A](implicit ev: B <~< AA): AA =
     this match {
-      case -\/(a) => a
+      case LOr(a) => a
       case ROr(b) => ev(b)
     }
 
@@ -331,7 +331,7 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
  *
  * Often used to represent the failure case of a result
  */
-final case class -\/[+A](a: A) extends (A Or Nothing)
+final case class LOr[+A](a: A) extends (A Or Nothing)
 
 /** A right disjunction
  *
@@ -345,9 +345,9 @@ object Or extends OrInstances with OrFunctions {
   @annotation.tailrec
   final def loopRight[A, B, X](d: A Or B, left: A => X, right: B => X Or (A Or B)): X =
     d match {
-      case -\/(a) => left(a)
+      case LOr(a) => left(a)
       case ROr(b) => right(b) match {
-        case -\/(x) => x
+        case LOr(x) => x
         case ROr(q) => loopRight(q, left, right)
       }
     }
@@ -356,8 +356,8 @@ object Or extends OrInstances with OrFunctions {
   @annotation.tailrec
   final def loopLeft[A, B, X](d: A Or B, left: A => X Or (A Or B), right: B => X): X =
     d match {
-      case -\/(a) => left(a) match {
-        case -\/(x) => x
+      case LOr(a) => left(a) match {
+        case LOr(x) => x
         case ROr(q) => loopLeft(q, left, right)
       }
       case ROr(b) => right(b)
@@ -424,9 +424,9 @@ sealed abstract class OrInstances1 extends OrInstances2 {
 
       def cozip[A, B](x: L Or (A Or B)) =
         x match {
-          case l @ -\/(_) => -\/(l)
+          case l @ LOr(_) => LOr(l)
           case ROr(e) => e match {
-            case -\/(a) => -\/(ROr(a))
+            case LOr(a) => LOr(ROr(a))
             case b @ ROr(_) => ROr(b)
           }
         }
@@ -435,15 +435,15 @@ sealed abstract class OrInstances1 extends OrInstances2 {
         a orElse b
 
       def pextract[B, A](fa: L Or A): (L Or B) Or A = fa match {
-        case l@ -\/(_) => -\/(l)
+        case l@ LOr(_) => LOr(l)
         case r@ ROr(_) => r
       }
 
       def raiseError[A](e: L): L Or A =
-        -\/(e)
+        LOr(e)
 
       def handleError[A](fa: L Or A)(f: L => L Or A): L Or A = fa match {
-        case -\/(e) => f(e)
+        case LOr(e) => f(e)
         case r => r
       }
     }
@@ -485,7 +485,7 @@ sealed abstract class OrInstances2 {
 trait OrFunctions {
   /** Construct a left disjunction value. */
   def left[A, B]: A => A Or B =
-    -\/(_)
+    LOr(_)
 
   /** Construct a right disjunction value. */
   def right[A, B]: B => A Or B =
@@ -499,13 +499,13 @@ trait OrFunctions {
   def fromTryCatchThrowable[T, E <: Throwable](a: => T)(implicit nn: NotNothing[E], ex: ClassTag[E]): E Or T = try {
     ROr(a)
   } catch {
-    case e if ex.runtimeClass.isInstance(e) => -\/(e.asInstanceOf[E])
+    case e if ex.runtimeClass.isInstance(e) => LOr(e.asInstanceOf[E])
   }
   */
 
   def fromTryCatchNonFatal[T](a: => T): Throwable Or T = try {
     ROr(a)
   } catch {
-    case NonFatal(t) => -\/(t)
+    case NonFatal(t) => LOr(t)
   }
 }
