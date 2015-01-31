@@ -31,7 +31,7 @@ The goal is to provide a lightweight, modular, and extensible library
 that is approachable and powerful. The library will use modern *best
 practices*:
 
- * [simulacum](https://github.com/mpilquist/simulacrum) for minimizing typeclass boilerplate
+ * [simulacrum](https://github.com/mpilquist/simulacrum) for minimizing typeclass boilerplate
  * [machinist](https://github.com/typelevel/machinist) for optimizing implicit operators
  * [scalacheck](http://scalacheck.org) for property-based testing
  * [discipline](https://github.com/typelevel/discipline) for encoding and testing laws
