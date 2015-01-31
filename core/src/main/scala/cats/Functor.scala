@@ -4,6 +4,8 @@ import simulacrum._
 
 /*
  * Functor.
+ * 
+ * The name is short for "covariant functor".
  *
  * Must obey the following laws:
  *  - map(fa)(identity) = fa
@@ -15,7 +17,6 @@ import simulacrum._
   /** alias for map */
   def fmap[A, B](f: A => B): F[A] => F[B] = fa => map(fa)(f)
 
-  /** alias for map */
   def imap[A, B](fa: F[A])(f: A <=> B): F[B] = map(fa)(f)
 
   /////////////////////////////////////////////////////////////////////////
@@ -36,14 +37,25 @@ import simulacrum._
     * with the value */
   def fproduct[A,B](fa: F[A])(f: A => B): F[(A,B)] = map(fa)(a => a -> f(a))
 
+  /** Replaces the `A` value in `F[A]` with the supplied value. */
+  def as[A, B](fa: F[A], b: B): F[B] =
+    map(fa)(_ => b)
+
   /** 
     * Compose this functor F with a functor G to produce a composite
     * Functor on G[F[_]], with a map method which uses an A => B to
     * map a G[F[A]] to a G[F[B]].
     */
-  def compose[G[_]: Functor]: Functor[({type λ[α] = F[G[α]]})#λ] =
-    new Functor[({type λ[α] = F[G[α]]})#λ] {
-      override def map[A, B](fa: F[G[A]])(f: A => B): F[G[B]] = 
-        self.map(fa)(Functor[G].lift(f))
-    }
+  def compose[G[_]](implicit GG: Functor[G]): Functor[λ[α => F[G[α]]]] = new CompositeFunctor[F,G] {
+    implicit def F: Functor[F] = self
+    implicit def G: Functor[G] = GG
+  }
+}
+
+trait CompositeFunctor[F[_], G[_]] extends Functor[λ[α => F[G[α]]]] {
+  implicit def F: Functor[F]
+  implicit def G: Functor[G]
+
+  override def map[A, B](fa: F[G[A]])(f: A => B): F[G[B]] =
+    F.map(fa)(G.lift(f))
 }
