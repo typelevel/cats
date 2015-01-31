@@ -11,9 +11,14 @@ trait Function1Instances {
         fa.compose(f)
     }
 
-  implicit def function1Covariant[T1]: Functor[T1 => ?] =
-    new Functor[T1 => ?] {
-      def map[R1, R2](fa: T1 => R1)(f: R1 => R2): T1 => R2 =
+  implicit def function1Covariant[T1]: Monad[T1 => ?] =
+    new Monad[T1 => ?] {
+      def pure[R](r: R): T1 => R = _ => r
+
+      def flatMap[R1, R2](fa: T1 => R1)(f: R1 => T1 => R2): T1 => R2 =
+        t => f(fa(t))(t)
+
+      override def map[R1, R2](fa: T1 => R1)(f: R1 => R2): T1 => R2 =
         f.compose(fa)
     }
 
