@@ -21,14 +21,17 @@ object CatsBuild extends Build {
     Project("tests", file("tests")).settings(noPublishSettings: _*).dependsOn(core, laws)
 
   lazy val data =
-    Project("data", file("data")).settings(noPublishSettings: _*).dependsOn(core, laws)
+    Project("data", file("data")).settings(catsSettings: _*).dependsOn(core, laws)
+
+  lazy val std =
+    Project("std", file("std")).settings(catsSettings: _*).dependsOn(core, laws)
 
   lazy val examples =
     Project("examples", file("examples")).settings(noPublishSettings: _*).dependsOn(core)
     Project("examples", file("examples")).settings(noPublishSettings: _*).dependsOn(core)
 
   lazy val aggregate =
-    Project("aggregate", file(".")).settings(noPublishSettings: _*).aggregate(core, laws, tests, data).dependsOn(core, laws, tests, data, examples)
+    Project("aggregate", file(".")).settings(noPublishSettings: _*).aggregate(core, laws, tests, data, std, examples).dependsOn(core, laws, tests, data, std, examples)
 
   lazy val catsSettings = Defaults.defaultSettings ++ releaseSettings ++ Seq(
     releaseProcess := Seq[ReleaseStep](
