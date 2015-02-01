@@ -20,7 +20,7 @@ import simulacrum._
   def imap[A, B](fa: F[A])(f: A <=> B): F[B] = map(fa)(f)
 
   /////////////////////////////////////////////////////////////////////////
-  // derrived functions
+  // derived functions
 
   /**
     * Lift a function f to operate on Functors
