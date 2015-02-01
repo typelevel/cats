@@ -375,7 +375,7 @@ sealed abstract class OrInstances extends OrInstances0 {
         ROr(Monoid[B].empty)
     }
 
-  implicit def OrdShow[A: Show, B: Show]: Show[A Or B] =
+  implicit def OrShow[A: Show, B: Show]: Show[A Or B] =
     Show.show[A Or B](_.fold(a => s"LOr(${Show[A].show(a)})", b => s"ROr(${Show[B].show(b)})"))
 
 }
