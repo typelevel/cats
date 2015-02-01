@@ -7,32 +7,34 @@ crossScalaVersions in ThisBuild := Seq("2.11.5")
 
 // comprehensive tpolecat-recommended scalac options
 scalacOptions in ThisBuild ++= (
-  "-deprecation" ::           
+  "-deprecation" ::
   "-encoding" :: "UTF-8" ::
-  "-feature" ::                
+  "-feature" ::
   "-language:existentials" ::
   "-language:higherKinds" ::
   "-language:implicitConversions" ::
   "-unchecked" ::
-  "-Xfatal-warnings" ::       
+  "-Xfatal-warnings" ::
   "-Xlint" ::
-  "-Yno-adapted-args" ::       
+  "-Yno-adapted-args" ::
   "-Ywarn-dead-code" ::
-  "-Ywarn-numeric-widen" ::   
+  "-Ywarn-numeric-widen" ::
   "-Ywarn-value-discard" ::
   "-Xfuture" ::
   Nil
 )
 
-resolvers in ThisBuild +=
-  "bintray/non" at "http://dl.bintray.com/non/maven"
+resolvers in ThisBuild ++=
+  ("bintray/non" at "http://dl.bintray.com/non/maven") ::
+  Resolver.sonatypeRepo("releases") ::
+  Nil
 
 libraryDependencies in ThisBuild ++=
   "org.spire-math" %% "algebra" % "0.2.0-SNAPSHOT" ::
   "org.typelevel" %% "machinist" % "0.3.0" ::
   compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.2") ::
-  "com.github.mpilquist" %% "simulacrum" % "0.1.0" ::
-  compilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full) ::
+  "com.github.mpilquist" %% "simulacrum" % "0.2.0" ::
+  compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full) ::
   Nil
 
 publishMavenStyle in ThisBuild := true
