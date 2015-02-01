@@ -2,9 +2,9 @@ package cats
 
 import simulacrum._
 
-/*
+/**
  * Weaker version of Applicative[F]; has apply but not pure.
- * 
+ *
  * Laws:
  *  - apply(apply(fa)(fab))(fbc) = apply(fa)(apply(fab)(map(fbc)(bc => ab => ab andThen bc)))
  */
