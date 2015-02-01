@@ -5,7 +5,7 @@ import algebra.{Eq, Monoid, Order, Semigroup}
 
 import scala.util.control.NonFatal
 
-/** Represents a disjunction: a result that is either an `A` or a `B`.
+/* Represents a disjunction: a result that is either an `A` or a `B`.
  *
  * An instance of `A` [[Or]] B is either a [[LOr]]`[A]` (aka a "left") or a [[ROr]]`[B]` (aka a "right").
  *
@@ -24,6 +24,8 @@ import scala.util.control.NonFatal
  * instances for [[Validation]] accumulates errors ("lefts") while [[Applicative]] instances for [[Or]] fail fast on the
  * first "left" they evaluate. This fail-fast behavior allows [[Or]] to have lawful [[Monad]] instances that are consistent
  * with their [[Applicative]] instances, while [[Validation]] cannot.
+ *
+ * FIXME Turn this back in to a ScalaDoc comment when Validation exists.
  */
 sealed abstract class Or[+A, +B] extends Product with Serializable {
   /*
