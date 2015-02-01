@@ -3,11 +3,16 @@ package cats.data
 import algebra.{Monoid, Order, Semigroup}
 import cats.{Applicative, Apply, Lazy, Show, Traverse}
 
-
+/**
+ * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
+ * [[Const]] can be seen as a type level version of `Function.const[A, B]: A => B => A`
+ */
 final case class Const[A, B](getConst: A) {
   def retag[C]: Const[A, C] =
     this.asInstanceOf[Const[A, C]]
 }
+
+object Const extends ConstInstances
 
 sealed abstract class ConstInstances extends ConstInstances0 {
   implicit def constOrder[A: Order, B]: Order[Const[A, B]] =
