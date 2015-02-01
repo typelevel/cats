@@ -288,13 +288,6 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
     }
 
   /*
-  /** Show for a disjunction value. */
-  def show[AA >: A, BB >: B](implicit SA: Show[AA], SB: Show[BB]): Cord =
-    this match {
-      case LOr(a) => ("-\Or(": Cord) ++ SA.show(a) :- ')'
-      case ROr(b) => ("\ROr(": Cord) ++ SB.show(b) :- ')'
-    }
-
   /** Convert to a validation. */
   def validation: Validation[A, B] =
     this match {
@@ -381,6 +374,10 @@ sealed abstract class OrInstances extends OrInstances0 {
       def empty =
         ROr(Monoid[B].empty)
     }
+
+  implicit def OrdShow[A: Show, B: Show]: Show[A Or B] =
+    Show.show[A Or B](_.fold(a => s"LOr(${Show[A].show(a)})", b => s"ROr(${Show[B].show(b)})"))
+
 }
 
 sealed abstract class OrInstances0 extends OrInstances1 {
@@ -389,11 +386,6 @@ sealed abstract class OrInstances0 extends OrInstances1 {
       def eqv(a1: A Or B, a2: A Or B) =
         a1 === a2
     }
-
-  /*
-  implicit def OrShow[A: Show, B: Show]: Show[A Or B] =
-    Show.show(_.show)
-    */
 
   implicit def OrSemigroup[A: Semigroup, B: Semigroup]: Semigroup[A Or B] =
     new Semigroup[A Or B] {
