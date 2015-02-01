@@ -19,13 +19,6 @@ import scala.util.control.NonFatal
  * `flatMap` apply only in the context of the "right" case. This right bias makes [[Or]] more convenient to use
  * than `scala.Either` in a monadic context. Methods such as `swap`, `swapped`, and `leftMap` provide functionality
  * that `scala.Either` exposes through left projections.
- *
- * `A` [[Or]] `B` is also isomorphic to [[Validation]]`[A, B]`. The subtle but important difference is that [[Applicative]]
- * instances for [[Validation]] accumulates errors ("lefts") while [[Applicative]] instances for [[Or]] fail fast on the
- * first "left" they evaluate. This fail-fast behavior allows [[Or]] to have lawful [[Monad]] instances that are consistent
- * with their [[Applicative]] instances, while [[Validation]] cannot.
- *
- * FIXME Turn this back in to a ScalaDoc comment when Validation exists.
  */
 sealed abstract class Or[+A, +B] extends Product with Serializable {
   /*
