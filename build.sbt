@@ -3,6 +3,7 @@ import sbtrelease.ReleaseStep
 import sbtrelease.ReleasePlugin.ReleaseKeys.releaseProcess
 import sbtrelease.ReleaseStateTransformations._
 import sbtrelease.Utilities._
+import sbtunidoc.Plugin.UnidocKeys._
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
@@ -47,8 +48,13 @@ lazy val disciplineDependencies = Seq(
   "org.typelevel" %% "discipline" % "0.2.1"
 )
 
+lazy val docSettings = unidocSettings ++ Seq(
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(examples, tests)
+)
+
 lazy val aggregate = project.in(file("."))
   .settings(catsSettings: _*)
+  .settings(docSettings: _*)
   .settings(noPublishSettings: _*)
   .aggregate(core, laws, tests, data, std, examples)
   .dependsOn(core, laws, tests, data, std, examples)
