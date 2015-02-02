@@ -49,6 +49,7 @@ lazy val disciplineDependencies = Seq(
 
 lazy val aggregate = project.in(file("."))
   .settings(catsSettings: _*)
+  .settings(noPublishSettings: _*)
   .aggregate(core, laws, tests, data, std, examples)
   .dependsOn(core, laws, tests, data, std, examples)
 
