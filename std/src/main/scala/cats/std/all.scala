@@ -1,7 +1,7 @@
 package cats.std
 
 trait AllInstances
-  extends Function1Instances
+  extends FunctionInstances
   with ListInstances
   with OptionInstances
   with SetInstances

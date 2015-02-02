@@ -4,6 +4,21 @@ package std
 import cats.arrow.Arrow
 import cats.functor.Contravariant
 
+trait Function0Instances {
+  implicit val function0Instance: Comonad[Function0] with Monad[Function0] =
+    new Comonad[Function0] with Monad[Function0] {
+      def extract[A](x: () => A): A = x()
+
+      def coflatMap[A, B](fa: () => A)(f: (() => A) => B): () => B =
+        () => f(fa)
+
+      def pure[A](x: A): () => A = () => x
+
+      def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
+        () => f(fa())()
+    }
+}
+
 trait Function1Instances {
   implicit def function1Contravariant[R]: Contravariant[? => R] =
     new Contravariant[? => R] {
@@ -39,3 +54,7 @@ trait Function1Instances {
       def compose[A, B, C](f: B => C, g: A => B): A => C = f.compose(g)
     }
 }
+
+trait FunctionInstances
+  extends Function0Instances
+  with Function1Instances
