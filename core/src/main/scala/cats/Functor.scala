@@ -2,16 +2,16 @@ package cats
 
 import simulacrum._
 
-/*
+/**
  * Functor.
- * 
+ *
  * The name is short for "covariant functor".
  *
  * Must obey the following laws:
  *  - map(fa)(identity) = fa
  *  - map(map(fa)(f1))(f2) = map(fa)(f2 compose f1)
  */
-@typeclass trait Functor[F[_]] extends functor.Invariant[F] { self => 
+@typeclass trait Functor[F[_]] extends functor.Invariant[F] { self =>
   def map[A, B](fa: F[A])(f: A => B): F[B]
 
   /** alias for map */
@@ -20,7 +20,7 @@ import simulacrum._
   def imap[A, B](fa: F[A])(f: A <=> B): F[B] = map(fa)(f)
 
   /////////////////////////////////////////////////////////////////////////
-  // derrived functions
+  // derived functions
 
   /**
     * Lift a function f to operate on Functors
@@ -41,7 +41,7 @@ import simulacrum._
   def as[A, B](fa: F[A], b: B): F[B] =
     map(fa)(_ => b)
 
-  /** 
+  /**
     * Compose this functor F with a functor G to produce a composite
     * Functor on G[F[_]], with a map method which uses an A => B to
     * map a G[F[A]] to a G[F[B]].

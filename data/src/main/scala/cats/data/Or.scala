@@ -5,7 +5,7 @@ import algebra.{Eq, Monoid, Order, Semigroup}
 
 import scala.util.control.NonFatal
 
-/** Represents a disjunction: a result that is either an `A` or a `B`.
+/* Represents a disjunction: a result that is either an `A` or a `B`.
  *
  * An instance of `A` [[Or]] B is either a [[LOr]]`[A]` (aka a "left") or a [[ROr]]`[B]` (aka a "right").
  *
@@ -19,11 +19,6 @@ import scala.util.control.NonFatal
  * `flatMap` apply only in the context of the "right" case. This right bias makes [[Or]] more convenient to use
  * than `scala.Either` in a monadic context. Methods such as `swap`, `swapped`, and `leftMap` provide functionality
  * that `scala.Either` exposes through left projections.
- *
- * `A` [[Or]] `B` is also isomorphic to [[Validation]]`[A, B]`. The subtle but important difference is that [[Applicative]]
- * instances for [[Validation]] accumulates errors ("lefts") while [[Applicative]] instances for [[Or]] fail fast on the
- * first "left" they evaluate. This fail-fast behavior allows [[Or]] to have lawful [[Monad]] instances that are consistent
- * with their [[Applicative]] instances, while [[Validation]] cannot.
  */
 sealed abstract class Or[+A, +B] extends Product with Serializable {
   /*
@@ -288,13 +283,6 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
     }
 
   /*
-  /** Show for a disjunction value. */
-  def show[AA >: A, BB >: B](implicit SA: Show[AA], SB: Show[BB]): Cord =
-    this match {
-      case LOr(a) => ("-\Or(": Cord) ++ SA.show(a) :- ')'
-      case ROr(b) => ("\ROr(": Cord) ++ SB.show(b) :- ')'
-    }
-
   /** Convert to a validation. */
   def validation: Validation[A, B] =
     this match {
@@ -381,6 +369,10 @@ sealed abstract class OrInstances extends OrInstances0 {
       def empty =
         ROr(Monoid[B].empty)
     }
+
+  implicit def OrShow[A, B](implicit showA: Show[A], showB: Show[B]): Show[A Or B] =
+    Show.show[A Or B](_.fold(a => s"LOr(${showA.show(a)})", b => s"ROr(${showB.show(b)})"))
+
 }
 
 sealed abstract class OrInstances0 extends OrInstances1 {
@@ -389,11 +381,6 @@ sealed abstract class OrInstances0 extends OrInstances1 {
       def eqv(a1: A Or B, a2: A Or B) =
         a1 === a2
     }
-
-  /*
-  implicit def OrShow[A: Show, B: Show]: Show[A Or B] =
-    Show.show(_.show)
-    */
 
   implicit def OrSemigroup[A: Semigroup, B: Semigroup]: Semigroup[A Or B] =
     new Semigroup[A Or B] {

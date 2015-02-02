@@ -3,7 +3,7 @@ package std
 
 import scala.annotation.tailrec
 
-trait SetInstances {
+trait SetInstances extends algebra.std.SetInstances {
   implicit val setInstance: Foldable[Set] with MonoidK[Set] =
     new Foldable[Set] with MonoidK[Set] {
 
