@@ -19,7 +19,7 @@ import algebra.{Order, Monoid}
  * than `scala.Either` in a monadic context. Methods such as `swap`, and `leftMap` provide functionality
  * that `scala.Either` exposes through left projections.
  */
-sealed abstract class Or[+A, +B] {
+sealed abstract class Or[+A, +B] extends Product with Serializable {
   def fold[C](fa: A => C, fb: B => C): C = this match {
     case RightOr(b) => fb(b)
     case LeftOr(a) => fa(a)
@@ -43,6 +43,12 @@ sealed abstract class Or[+A, +B] {
     _ => this,
     b => if (f(b)) this else LeftOr(M.empty)
   )
+
+  def toEither: Either[A, B] = fold(Left(_), Right(_))
+
+  def toOption: Option[B] = fold(_ => None, Some(_))
+
+  def toList: List[B] = fold(_ => Nil, _ :: Nil)
 
   def to[F[_], BB >: B](implicit monoidKF: MonoidK[F], applicativeF: Applicative[F]): F[BB] =
     fold(_ => monoidKF.empty, applicativeF.pure)
@@ -76,19 +82,14 @@ sealed abstract class Or[+A, +B] {
   def foldRight[C](c: C)(f: (B, C) => C): C = fold(_ => c, f(_, c))
 
   def foldRight[C](c: Lazy[C])(f: (B, Lazy[C]) => C): Lazy[C] = fold(_ => c, b => Lazy(f(b, c)))
+
+  def merge[AA >: A](implicit ev: B <:< AA): AA = fold(identity, ev.apply)
 }
 
 object Or extends OrFunctions {
-  case class LeftOr[+A](a: A) extends (A Or Nothing)
+  final case class LeftOr[+A](a: A) extends (A Or Nothing)
 
-  case class RightOr[+B](b: B) extends (Nothing Or B)
-
-  implicit class MergeableOr[A](private val self: A Or A) extends AnyVal {
-    def merge = self match {
-      case LeftOr(a) => a
-      case RightOr(b) => b
-    }
-  }
+  final case class RightOr[+B](b: B) extends (Nothing Or B)
 
   implicit def orOrder[A: Order, B: Order]: Order[A Or B] = new Order[A Or B] {
     override def compare(x: A Or B, y: A Or B): Int = x compare y
@@ -117,8 +118,8 @@ object Or extends OrFunctions {
 }
 
 trait OrFunctions {
-  def left[A](a: A): A Or Nothing = LeftOr(a)
+  def left[A, B](a: A): A Or B = LeftOr(a)
 
-  def right[B](b: B): Nothing Or B = RightOr(b)
+  def right[A, B](b: B): A Or B = RightOr(b)
 }
 
