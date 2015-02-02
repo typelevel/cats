@@ -33,7 +33,7 @@ lazy val commonSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %% "simulacrum" % "0.2.0",
-    "org.spire-math" %% "algebra" % "0.2.0-SNAPSHOT",
+    "org.spire-math" %% "algebra" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra_2.11-0.2.0-SNAPSHOT.jar",
     "org.typelevel" %% "machinist" % "0.3.0",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.2")
@@ -61,7 +61,7 @@ lazy val laws = project.dependsOn(core)
   .settings(catsSettings: _*)
   .settings(
     libraryDependencies ++= disciplineDependencies ++ Seq(
-      "org.spire-math" %% "algebra-laws" % "0.2.0-SNAPSHOT"
+      "org.spire-math" %% "algebra-laws" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra-laws_2.11-0.2.0-SNAPSHOT.jar"
     )
   )
 
@@ -69,7 +69,7 @@ lazy val std = project.dependsOn(core, laws)
   .settings(moduleName := "cats-std")
   .settings(catsSettings: _*)
   .settings(
-    libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT"
+    libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra-std_2.11-0.2.0-SNAPSHOT.jar"
   )
 
 lazy val tests = project.dependsOn(core, std, laws)
