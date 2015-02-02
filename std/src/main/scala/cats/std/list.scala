@@ -1,6 +1,8 @@
 package cats
 package std
 
+import algebra.Eq
+
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
 
@@ -54,6 +56,25 @@ trait ListInstances {
         val gba = G.pure(ListBuffer.empty[B])
         val gbb = fa.foldLeft(gba)((buf, a) => G.map2(buf, f(a))(_ += _))
         G.map(gbb)(_.toList)
+      }
+    }
+
+  // TODO: eventually use algebra's instances (which will deal with
+  // implicit priority between Eq/PartialOrder/Order).
+
+  implicit def eqList[A](implicit ev: Eq[A]): Eq[List[A]] =
+    new Eq[List[A]] {
+      def eqv(x: List[A], y: List[A]): Boolean = {
+        def loop(xs: List[A], ys: List[A]): Boolean =
+          xs match {
+            case Nil => ys.isEmpty
+            case a :: xs =>
+              ys match {
+                case Nil => false
+                case b :: ys => if (ev.neqv(a, b)) false else loop(xs, ys)
+              }
+          }
+        loop(x, y)
       }
     }
 }
