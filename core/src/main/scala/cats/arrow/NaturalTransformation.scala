@@ -6,5 +6,4 @@ trait NaturalTransformation[F[_], G[_]] {
 }
 
 object NaturalTransformation {
-  def apply[F[_], G[_]](implicit ev: NaturalTransformation[F, G]): NaturalTransformation[F, G] = ev
 }
