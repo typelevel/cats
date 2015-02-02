@@ -2,7 +2,7 @@ package cats
 package data
 
 import Or.{LeftOr, RightOr}
-import algebra.{Order, Monoid}
+import algebra.{Eq, Order, Monoid}
 
 /** Represents a right-biased disjunction that is either an `A` or a `B`.
  *
@@ -72,6 +72,11 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
     b => that.fold(_ => 1, BB.compare(b, _))
   )
 
+  def ===[AA >: A, BB >: B](that: AA Or BB)(implicit AA: Eq[AA], BB: Eq[BB]): Boolean = fold(
+    a => that.fold(AA.eqv(a, _), _ => false),
+    b => that.fold(_ => false, BB.eqv(b, _))
+  )
+
   def traverse[F[_], AA >: A, D](f: B => F[D])(implicit F: Applicative[F]): F[AA Or D] = this match {
     case RightOr(b) => F.map(f(b))(Or.right _)
     case left @ LeftOr(_) => F.pure(left)
@@ -112,9 +117,7 @@ object Or extends OrFunctions {
   implicit def orMonad[A]: Monad[A Or ?] = new Monad[A Or ?] {
     override def flatMap[B, C](fa: A Or B)(f: B => A Or C): A Or C = fa.flatMap(f)
     override def pure[B](b: B): A Or B = Or.right(b)
-
   }
-
 }
 
 trait OrFunctions {

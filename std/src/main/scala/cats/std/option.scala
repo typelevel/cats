@@ -1,6 +1,8 @@
 package cats
 package std
 
+import algebra.Eq
+
 trait OptionInstances {
   implicit val optionInstance: Traverse[Option] with MonadCombine[Option] with CoFlatMap[Option] =
     new Traverse[Option] with MonadCombine[Option] with CoFlatMap[Option] {
@@ -46,5 +48,14 @@ trait OptionInstances {
           case None => Applicative[G].pure(None)
           case Some(a) => Applicative[G].map(f(a))(Some(_))
         }
+    }
+
+  // TODO: eventually use algebra's instances (which will deal with
+  // implicit priority between Eq/PartialOrder/Order).
+
+  implicit def eqOption[A](implicit ev: Eq[A]): Eq[Option[A]] =
+    new Eq[Option[A]] {
+      def eqv(x: Option[A], y: Option[A]): Boolean =
+        x.fold(y == None)(a => y.fold(false)(ev.eqv(_, a)))
     }
 }

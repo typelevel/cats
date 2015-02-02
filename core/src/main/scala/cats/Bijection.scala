@@ -15,6 +15,13 @@ final case class Bijection[A, B](f: A => B, g: B => A) extends Function1[A, B] {
   def inverse(b: B): A = g(b)
   def invert: Bijection[B, A] = Bijection(g, f)
 
-  def compose[C](other: Bijection[B,C]): Bijection[A,C] =
-    Bijection(other.f compose f, g compose other.g)
+  def andThen[C](other: Bijection[B,C]): Bijection[A,C] =
+    Bijection(f andThen other.f, g compose other.g)
+
+  def compose[Z](other: Bijection[Z,A]): Bijection[Z,B] =
+    Bijection(f compose other.f, g andThen other.g)
+}
+
+object Bijection {
+  def identity[A] = Bijection[A, A](Predef.identity, Predef.identity)
 }
