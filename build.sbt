@@ -63,7 +63,7 @@ lazy val core = project
   .settings(moduleName := "cats")
   .settings(catsSettings: _*)
 
-lazy val laws = project.dependsOn(core)
+lazy val laws = project.dependsOn(core, data)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings: _*)
   .settings(
@@ -79,7 +79,7 @@ lazy val std = project.dependsOn(core, laws)
     libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra-std_2.11-0.2.0-SNAPSHOT.jar"
   )
 
-lazy val tests = project.dependsOn(core, std, laws)
+lazy val tests = project.dependsOn(core, data, std, laws)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings: _*)
   .settings(noPublishSettings: _*)
@@ -89,7 +89,7 @@ lazy val tests = project.dependsOn(core, std, laws)
     )
   )
 
-lazy val data = project.dependsOn(core, laws)
+lazy val data = project.dependsOn(core)
   .settings(moduleName := "cats-data")
   .settings(catsSettings: _*)
 

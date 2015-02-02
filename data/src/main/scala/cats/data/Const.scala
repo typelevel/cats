@@ -8,6 +8,9 @@ import cats.{Applicative, Apply, Lazy, Show, Traverse}
  * [[Const]] can be seen as a type level version of `Function.const[A, B]: A => B => A`
  */
 final case class Const[A, B](getConst: A) {
+  /**
+   * changes the type of the second type parameter
+   */
   def retag[C]: Const[A, C] =
     this.asInstanceOf[Const[A, C]]
 
