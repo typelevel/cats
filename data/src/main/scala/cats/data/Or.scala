@@ -117,8 +117,7 @@ sealed abstract class OrInstances extends OrInstances1 {
     )
   }
 
-  implicit def orInstances[A]: OrInstances[A] = new OrInstances[A]
-
+  implicit def orInstances[A] = new OrInstances[A]
   class OrInstances[A] extends Traverse[A Or ?] with Monad[A Or ?] {
     override def traverse[F[_]: Applicative, B, C](fa: A Or B)(f: B => F[C]): F[A Or C] = fa.traverse(f)
     override def foldLeft[B, C](fa: A Or B, b: C)(f: (C, B) => C): C = fa.foldLeft(b)(f)
