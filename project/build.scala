@@ -17,14 +17,14 @@ object CatsBuild extends Build {
   lazy val laws =
     Project("laws", file("laws")).settings(catsSettings: _*).dependsOn(core/*, std*/)
 
+  lazy val std =
+    Project("std", file("std")).settings(catsSettings: _*).dependsOn(core, laws)
+
   lazy val tests =
-    Project("tests", file("tests")).settings(noPublishSettings: _*).dependsOn(core, laws)
+    Project("tests", file("tests")).settings(noPublishSettings: _*).dependsOn(core, std, laws)
 
   lazy val data =
     Project("data", file("data")).settings(catsSettings: _*).dependsOn(core, laws)
-
-  lazy val std =
-    Project("std", file("std")).settings(catsSettings: _*).dependsOn(core, laws)
 
   lazy val examples =
     Project("examples", file("examples")).settings(noPublishSettings: _*).dependsOn(core)
