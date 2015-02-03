@@ -23,6 +23,12 @@ final case class Const[A, B](getConst: A) {
   def ===(that: Const[A, B])(implicit A: Eq[A]): Boolean =
     A.eqv(getConst, that.getConst)
 
+  def partialCompare(that: Const[A, B])(implicit A: PartialOrder[A]): Double =
+    A.partialCompare(getConst, that.getConst)
+
+  def compare(that: Const[A, B])(implicit A: Order[A]): Int =
+    A.compare(getConst, that.getConst)
+
   def show(implicit A: Show[A]): String =
     s"Const(${A.show(getConst)}})"
 }
@@ -30,8 +36,10 @@ final case class Const[A, B](getConst: A) {
 object Const extends ConstInstances
 
 sealed abstract class ConstInstances extends ConstInstances0 {
-  implicit def constOrder[A: Order, B]: Order[Const[A, B]] =
-    Order.by[Const[A, B], A](_.getConst)
+  implicit def constOrder[A: Order, B]: Order[Const[A, B]] = new Order[Const[A, B]] {
+    def compare(x: Const[A, B], y: Const[A, B]): Int =
+      x compare y
+  }
 
   implicit def constShow[A: Show, B]: Show[Const[A, B]] =
     Show.show[Const[A, B]](_.show)
@@ -47,7 +55,7 @@ sealed abstract class ConstInstances extends ConstInstances0 {
     def foldRight[A, B](fa: Const[C, A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] = b
   }
 
-  implicit def monoidConst[A, B](implicit A: Monoid[A]): Monoid[Const[A, B]] = new Monoid[Const[A, B]]{
+  implicit def constMoinoid[A, B](implicit A: Monoid[A]): Monoid[Const[A, B]] = new Monoid[Const[A, B]]{
     def empty: Const[A, B] = Const(A.empty)
 
     def combine(x: Const[A, B], y: Const[A, B]): Const[A, B] =
@@ -56,8 +64,10 @@ sealed abstract class ConstInstances extends ConstInstances0 {
 }
 
 sealed abstract class ConstInstances0 extends ConstInstances1 {
-  implicit def constPartialOrder[A: PartialOrder, B]: PartialOrder[Const[A, B]] =
-    PartialOrder.by[Const[A, B], A](_.getConst)
+  implicit def constPartialOrder[A: PartialOrder, B]: PartialOrder[Const[A, B]] = new PartialOrder[Const[A, B]]{
+    def partialCompare(x: Const[A, B], y: Const[A, B]): Double =
+      x partialCompare y
+  }
 
   implicit def constApplicative[C](implicit C: Monoid[C]): Applicative[Const[C, ?]] = new Applicative[Const[C, ?]] {
     def pure[A](x: A): Const[C, A] =
@@ -69,8 +79,10 @@ sealed abstract class ConstInstances0 extends ConstInstances1 {
 }
 
 sealed abstract class ConstInstances1 {
-  implicit def constEq[A: Eq, B]: Eq[Const[A, B]] =
-    Eq.by[Const[A, B], A](_.getConst)
+  implicit def constEq[A: Eq, B]: Eq[Const[A, B]] = new Eq[Const[A, B]] {
+    def eqv(x: Const[A, B], y: Const[A, B]): Boolean =
+      x === y
+  }
 
   implicit def constApply[C](implicit C: Semigroup[C]): Apply[Const[C, ?]] = new Apply[Const[C, ?]] {
     def apply[A, B](fa: Const[C, A])(f: Const[C, A => B]): Const[C, B] =
