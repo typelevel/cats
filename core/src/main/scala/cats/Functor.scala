@@ -17,7 +17,7 @@ import simulacrum._
   /** alias for map */
   def fmap[A, B](f: A => B): F[A] => F[B] = fa => map(fa)(f)
 
-  def imap[A, B](fa: F[A])(f: A <=> B): F[B] = map(fa)(f)
+  def imap[A, B](fa: F[A])(f: A => B, fi: B => A): F[B] = map(fa)(f)
 
   /////////////////////////////////////////////////////////////////////////
   // derived functions

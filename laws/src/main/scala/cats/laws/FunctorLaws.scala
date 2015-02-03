@@ -31,12 +31,10 @@ trait FunctorLaws[F[_], A] extends Laws {
       name = "functor",
       parents = Nil,
       "invariant identity" -> forAll { (fa: F[A]) =>
-        F.imap(fa)(Bijection.identity[A]) ?== fa
+        F.imap(fa)(identity[A], identity[A]) ?== fa
       },
       "invariant composition" -> forAll { (fa: F[A], f1: A => B, f2: B => A, g1: B => C, g2: C => B) =>
-        val ab = Bijection(f1, f2)
-        val bc = Bijection(g1, g2)
-        F.imap(F.imap(fa)(ab))(bc) ?== F.imap(fa)(ab andThen bc)
+        F.imap(F.imap(fa)(f1, f2))(g1, g2) ?== F.imap(fa)(f1 andThen g1, g2 andThen f2)
       })
 
   def covariant[B: Arbitrary, C: Arbitrary](implicit F: Functor[F], FC: Eq[F[C]]) =
