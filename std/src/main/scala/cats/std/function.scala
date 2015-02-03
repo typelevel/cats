@@ -1,6 +1,7 @@
 package cats
 package std
 
+import algebra.Eq
 import cats.arrow.Arrow
 import cats.functor.Contravariant
 
@@ -16,6 +17,11 @@ trait Function0Instances {
 
       def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
         () => f(fa())()
+    }
+
+  implicit def eqFunction0[A](implicit A: Eq[A]): Eq[() => A] =
+    new Eq[() => A] {
+      def eqv(x: () => A, y: () => A): Boolean = A.eqv(x(), y())
     }
 }
 

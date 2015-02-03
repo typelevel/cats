@@ -16,6 +16,12 @@ object ArbitraryK {
   implicit def f1b[B: Arbitrary]: ArbitraryK[? => B] =
     new ArbitraryK[? => B] { def synthesize[A: Arbitrary]: Arbitrary[A => B] = implicitly }
 
+  implicit val function0: ArbitraryK[Function0] =
+    new ArbitraryK[Function0] {
+      def synthesize[A](implicit A: Arbitrary[A]): Arbitrary[() => A] =
+        Arbitrary(A.arbitrary.map(a => () => a))
+    }
+
   implicit val list: ArbitraryK[List] =
     new ArbitraryK[List] { def synthesize[A: Arbitrary]: Arbitrary[List[A]] = implicitly }
 }
