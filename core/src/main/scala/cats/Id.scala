@@ -12,6 +12,6 @@ object Id {
       override def flatten[A](ffa: A): A = ffa
       override def map2[A, B, Z](fa: A, fb: B)(f: (A, B) => Z): Z = f(fa, fb)
       override def fmap[A, B](f: A => B): A => B = f
-      override def imap[A, B](fa: A)(f: A <=> B): B = f(fa)
+      override def imap[A, B](fa: A)(f: A => B, fi: B => A): B = f(fa)
     }
 }

@@ -63,7 +63,7 @@ object Lazy {
       override def fmap[A, B](f: A => B): Lazy[A] => Lazy[B] =
         la => la.map(f)
 
-      override def imap[A, B](fa: Lazy[A])(f: A <=> B): Lazy[B] =
+      override def imap[A, B](fa: Lazy[A])(f: A => B, fi: B => A): Lazy[B] =
         fa.map(f)
     }
 }
