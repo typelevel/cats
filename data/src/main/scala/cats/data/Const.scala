@@ -33,7 +33,10 @@ final case class Const[A, B](getConst: A) {
     s"Const(${A.show(getConst)}})"
 }
 
-object Const extends ConstInstances
+object Const extends ConstInstances {
+  def empty[A, B](implicit A: Monoid[A]): Const[A, B] =
+    Const(A.empty)
+}
 
 sealed abstract class ConstInstances extends ConstInstances0 {
   implicit def constOrder[A: Order, B]: Order[Const[A, B]] = new Order[Const[A, B]] {
@@ -55,8 +58,9 @@ sealed abstract class ConstInstances extends ConstInstances0 {
     def foldRight[A, B](fa: Const[C, A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] = b
   }
 
-  implicit def constMoinoid[A, B](implicit A: Monoid[A]): Monoid[Const[A, B]] = new Monoid[Const[A, B]]{
-    def empty: Const[A, B] = Const(A.empty)
+  implicit def constMoinoid[A: Monoid, B]: Monoid[Const[A, B]] = new Monoid[Const[A, B]]{
+    def empty: Const[A, B] =
+      Const.empty
 
     def combine(x: Const[A, B], y: Const[A, B]): Const[A, B] =
       x combine y
@@ -69,9 +73,9 @@ sealed abstract class ConstInstances0 extends ConstInstances1 {
       x partialCompare y
   }
 
-  implicit def constApplicative[C](implicit C: Monoid[C]): Applicative[Const[C, ?]] = new Applicative[Const[C, ?]] {
+  implicit def constApplicative[C: Monoid]: Applicative[Const[C, ?]] = new Applicative[Const[C, ?]] {
     def pure[A](x: A): Const[C, A] =
-      Const(C.empty)
+      Const.empty
 
     def apply[A, B](fa: Const[C, A])(f: Const[C, A => B]): Const[C, B] =
       fa.retag[B] combine f.retag[B]
@@ -84,7 +88,7 @@ sealed abstract class ConstInstances1 {
       x === y
   }
 
-  implicit def constApply[C](implicit C: Semigroup[C]): Apply[Const[C, ?]] = new Apply[Const[C, ?]] {
+  implicit def constApply[C: Semigroup]: Apply[Const[C, ?]] = new Apply[Const[C, ?]] {
     def apply[A, B](fa: Const[C, A])(f: Const[C, A => B]): Const[C, B] =
       fa.retag[B] combine f.retag[B]
 
