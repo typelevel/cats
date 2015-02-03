@@ -58,7 +58,7 @@ sealed abstract class ConstInstances extends ConstInstances0 {
     def foldRight[A, B](fa: Const[C, A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] = b
   }
 
-  implicit def constMoinoid[A: Monoid, B]: Monoid[Const[A, B]] = new Monoid[Const[A, B]]{
+  implicit def constMonoid[A: Monoid, B]: Monoid[Const[A, B]] = new Monoid[Const[A, B]]{
     def empty: Const[A, B] =
       Const.empty
 
