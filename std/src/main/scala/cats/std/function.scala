@@ -1,8 +1,29 @@
 package cats
 package std
 
+import algebra.Eq
 import cats.arrow.Arrow
 import cats.functor.Contravariant
+
+trait Function0Instances {
+  implicit val function0Instance: Bimonad[Function0] =
+    new Bimonad[Function0] {
+      def extract[A](x: () => A): A = x()
+
+      def coflatMap[A, B](fa: () => A)(f: (() => A) => B): () => B =
+        () => f(fa)
+
+      def pure[A](x: A): () => A = () => x
+
+      def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
+        () => f(fa())()
+    }
+
+  implicit def eqFunction0[A](implicit A: Eq[A]): Eq[() => A] =
+    new Eq[() => A] {
+      def eqv(x: () => A, y: () => A): Boolean = A.eqv(x(), y())
+    }
+}
 
 trait Function1Instances {
   implicit def function1Contravariant[R]: Contravariant[? => R] =
@@ -39,3 +60,7 @@ trait Function1Instances {
       def compose[A, B, C](f: B => C, g: A => B): A => C = f.compose(g)
     }
 }
+
+trait FunctionInstances
+  extends Function0Instances
+  with Function1Instances
