@@ -5,8 +5,8 @@ import cats.arrow.Arrow
 import cats.functor.Contravariant
 
 trait Function0Instances {
-  implicit val function0Instance: Comonad[Function0] with Monad[Function0] =
-    new Comonad[Function0] with Monad[Function0] {
+  implicit val function0Instance: Bimonad[Function0] =
+    new Bimonad[Function0] {
       def extract[A](x: () => A): A = x()
 
       def coflatMap[A, B](fa: () => A)(f: (() => A) => B): () => B =
