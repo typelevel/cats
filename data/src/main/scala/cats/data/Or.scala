@@ -40,10 +40,10 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
 
   def exists(f: B => Boolean) = fold(_ => false, f)
 
-  def filter[AA >: A](f: B => Boolean)(implicit M: Monoid[AA]): AA Or B = fold(
-    _ => this,
-    b => if (f(b)) this else LeftOr(M.empty)
-  )
+  def filter[AA >: A](f: B => Boolean)(implicit M: Monoid[AA]): AA Or B = this match {
+    case LeftOr(_) => this
+    case RightOr(b) => if (f(b)) this else LeftOr(M.empty)
+  }
 
   def toEither: Either[A, B] = fold(Left(_), Right(_))
 
