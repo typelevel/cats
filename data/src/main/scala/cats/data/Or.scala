@@ -22,8 +22,8 @@ import cats.functor.Invariant
  */
 sealed abstract class Or[+A, +B] extends Product with Serializable {
   def fold[C](fa: A => C, fb: B => C): C = this match {
-    case RightOr(b) => fb(b)
     case LeftOr(a) => fa(a)
+    case RightOr(b) => fb(b)
   }
 
   def isLeft = fold(_ => true, _ => false)
@@ -55,13 +55,13 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
     fold(_ => monoidKF.empty, applicativeF.pure)
 
   def bimap[C, D](fa: A => C, fb: B => D): C Or D = this match {
-    case RightOr(b) => RightOr(fb(b))
     case LeftOr(a) => LeftOr(fa(a))
+    case RightOr(b) => RightOr(fb(b))
   }
 
   def flatMap[AA >: A, D](f: B => AA Or D): AA Or D = this match {
-    case RightOr(b) => f(b)
     case left @ LeftOr(_) => left
+    case RightOr(b) => f(b)
   }
 
   def map[D](f: B => D): A Or D = bimap(identity, f)
@@ -84,8 +84,8 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   )
 
   def traverse[F[_], AA >: A, D](f: B => F[D])(implicit F: Applicative[F]): F[AA Or D] = this match {
-    case RightOr(b) => F.map(f(b))(Or.right _)
     case left @ LeftOr(_) => F.pure(left)
+    case RightOr(b) => F.map(f(b))(Or.right _)
   }
 
   def foldLeft[C](c: C)(f: (C, B) => C): C = fold(_ => c, f(c, _))
@@ -95,6 +95,11 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   def foldRight[C](c: Lazy[C])(f: (B, Lazy[C]) => C): Lazy[C] = fold(_ => c, b => Lazy(f(b, c)))
 
   def merge[AA >: A](implicit ev: B <:< AA): AA = fold(identity, ev.apply)
+
+  def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String = fold(
+    a => s"LeftOr(${AA.show(a)})",
+    b => s"RightOr(${BB.show(b)})"
+  )
 }
 
 object Or extends OrInstances with OrFunctions {
@@ -111,10 +116,7 @@ sealed abstract class OrInstances extends OrInstances1 {
   }
 
   implicit def orShow[A, B](implicit A: Show[A], B: Show[B]): Show[A Or B] = new Show[A Or B] {
-    override def show(f: A Or B): String = f.fold(
-      a => s"LeftOr(${A.show(a)})",
-      b => s"RightOr(${B.show(b)})"
-    )
+    override def show(f: A Or B): String = f.show
   }
 
   implicit def orInstances[A] = new OrInstances[A]
