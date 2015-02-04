@@ -1,6 +1,7 @@
-package cats.functor
+package cats.data
 
 import cats._
+import cats.functor.{Strong, Profunctor}
 
 
 final case class UpStar[F[_], A, B](fab: A => F[B]){
@@ -31,12 +32,12 @@ object UpStar extends UpStarInstances {
     UpStar(_ => F.pure(x))
 }
 
-sealed abstract class UpStarInstances {
-  implicit def upStarStrong[F[_]: Functor]: Profunctor[UpStar[F, ?, ?]] = new Strong[UpStar[F, ?, ?]]{
+sealed abstract class UpStarInstances extends UpStarInstances0 {
+  implicit def upStarStrong[F[_]: Functor]: Strong[UpStar[F, ?, ?]] = new Strong[UpStar[F, ?, ?]]{
     override def lmap[A, B, C](fab: UpStar[F, A, B])(f: C => A): UpStar[F, C, B] =
       fab.lmap(f)
 
-    override def rmap[A, B, C](fab: UpStar[F, A, B])(f: (B) => C): UpStar[F, A, C] =
+    override def rmap[A, B, C](fab: UpStar[F, A, B])(f: B => C): UpStar[F, A, C] =
       fab.rmap(f)
 
     override def dimap[A, B, C, D](fab: UpStar[F, A, B])(f: C => A)(g: B => D): UpStar[F, C, D] =

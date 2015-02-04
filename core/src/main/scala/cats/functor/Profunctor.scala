@@ -29,16 +29,5 @@ trait Profunctor[F[_, _]] { self =>
 
 
 object Profunctor {
-
   def apply[F[_, _]](implicit ev: Profunctor[F]): Profunctor[F] = ev
-
-  case class DownStar[F[_]: Functor, A, B](f: F[A] => B)
-
-  def downStar[F[_]: Functor]: Profunctor[DownStar[F, ?, ?]] =
-    new Profunctor[DownStar[F, ?, ?]] {
-      override def lmap[A, B, C](fab: DownStar[F, A, B])(f: C => A): DownStar[F, C, B] =
-        DownStar(fc => fab.f(Functor[F].map(fc)(f)))
-      override def rmap[A, B, C](fab: DownStar[F, A, B])(f: B => C): DownStar[F, A, C] =
-        DownStar(f compose fab.f)
-    }
 }
