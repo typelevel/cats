@@ -1,10 +1,30 @@
 package cats
 package functor
 
+/**
+ * A [[Profunctor]] is a [[Contravariant]] functor on its first type parameter
+ * and a [[Functor]] on its second type parameter.
+ *
+ * Minimum implementation requires a defining dimap or lmap and rmap
+ */
 trait Profunctor[F[_, _]] { self =>
-  def lmap[A, B, C](fab: F[A, B])(f: C => A): F[C, B]
-  def rmap[A, B, C](fab: F[A, B])(f: B => C): F[A, C]
-  def dimap[A, B, C, D](fab: F[A, B])(f: C => A)(g: B => D): F[C, D] = rmap(lmap(fab)(f))(g)
+  /**
+   * contramap on the first type parameter
+   */
+  def lmap[A, B, C](fab: F[A, B])(f: C => A): F[C, B] =
+    dimap(fab)(f)(identity)
+
+  /**
+   * map on the second type parameter
+   */
+  def rmap[A, B, C](fab: F[A, B])(f: B => C): F[A, C] =
+    dimap[A, B, A, C](fab)(identity)(f)
+
+  /**
+   * contramap on the first type parameter and map on the second type parameter
+   */
+  def dimap[A, B, C, D](fab: F[A, B])(f: C => A)(g: B => D): F[C, D] =
+    rmap(lmap(fab)(f))(g)
 }
 
 
@@ -18,17 +38,17 @@ object Profunctor {
 
   def upStar[F[_]: Functor]: Profunctor[UpStar[F, ?, ?]] =
     new Profunctor[UpStar[F, ?, ?]] {
-      def lmap[A, B, C](fab: UpStar[F, A, B])(f: C => A): UpStar[F, C, B] =
+      override def lmap[A, B, C](fab: UpStar[F, A, B])(f: C => A): UpStar[F, C, B] =
         UpStar(fab.f compose f)
-      def rmap[A, B, C](fab: UpStar[F, A, B])(f: B => C): UpStar[F, A, C] =
+      override def rmap[A, B, C](fab: UpStar[F, A, B])(f: B => C): UpStar[F, A, C] =
         UpStar(a => Functor[F].map(fab.f(a))(f))
     }
 
   def downStar[F[_]: Functor]: Profunctor[DownStar[F, ?, ?]] =
     new Profunctor[DownStar[F, ?, ?]] {
-      def lmap[A, B, C](fab: DownStar[F, A, B])(f: C => A): DownStar[F, C, B] =
+      override def lmap[A, B, C](fab: DownStar[F, A, B])(f: C => A): DownStar[F, C, B] =
         DownStar(fc => fab.f(Functor[F].map(fc)(f)))
-      def rmap[A, B, C](fab: DownStar[F, A, B])(f: B => C): DownStar[F, A, C] =
+      override def rmap[A, B, C](fab: DownStar[F, A, B])(f: B => C): DownStar[F, A, C] =
         DownStar(f compose fab.f)
     }
 }
