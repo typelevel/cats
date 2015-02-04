@@ -9,4 +9,5 @@ package object std {
   object set extends SetInstances
   object stream extends StreamInstances
   object vector extends VectorInstances
+  object string extends StringInstances
 }
