@@ -76,6 +76,13 @@ will be added as well. Modules which depend on other libraries
 
 There are many ways to support Cats' development:
 
+ * Fix bugs: Despite using static types, law-checking, and
+   property-based testing bugs can happen. Reporting problems you
+   encounter (with the documentation, code, or anything else) helps us
+   to improve. Look for issues labelled "ready" as good targets, but 
+   **please add a comment to the issue** if you start working on one. 
+   We want to avoid any duplicated effort.
+
  * Write ScalaDoc comments: One of our goals is to have ScalaDoc
    comments for all types in Cats. The documentation should describe
    the type and give a basic usage (it may also link to relevant
@@ -91,11 +98,6 @@ There are many ways to support Cats' development:
    notice laws or tests which are missing (or could be improved)
    you can open an issue (or send a pull request).
 
- * Fix bugs: Despite using static types, law-checking, and
-   property-based testing bugs can happen. Reporting problems you
-   encounter (with the documentation, code, or anything else) helps us
-   to improve.
-   
  * Help with code review: Most of our design decisions are made
    through conversations on issues and pull requests. You can
    participate in these conversations to help guide the future of
