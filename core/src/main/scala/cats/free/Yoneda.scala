@@ -24,14 +24,14 @@ abstract class Yoneda[F[_], A] { self =>
   /**
    * Simple function composition. Allows map fusion without traversing an `F`.
    */
-  def map[B](f: A => B): Yoneda[F, B] = 
+  def map[B](f: A => B): Yoneda[F, B] =
     new Yoneda[F, B] {
       def apply[C](g: B => C) = self(f andThen g)
     }
 
   // import Id._
   // /** `Yoneda[F, _]` is the right Kan extension of `F` along `Id` */
-  // def toRan: Ran[Id, F, A] = 
+  // def toRan: Ran[Id, F, A] =
   //   new Ran[Id, F, A] {
   //     def apply[B](f: A => B) = self(f)
   //   }
