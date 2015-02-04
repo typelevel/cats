@@ -79,9 +79,9 @@ There are many ways to support Cats' development:
  * Fix bugs: Despite using static types, law-checking, and
    property-based testing bugs can happen. Reporting problems you
    encounter (with the documentation, code, or anything else) helps us
-   to improve. Look for issues labelled "ready" as good targets. but 
-   **please add a comment to the issue** and label the issue "In progress"
-   if you start working on one. We want to avoid any duplicated effort.
+   to improve. Look for issues labelled "ready" as good targets, but 
+   **please add a comment to the issue** if you start working on one. 
+   We want to avoid any duplicated effort.
 
  * Write ScalaDoc comments: One of our goals is to have ScalaDoc
    comments for all types in Cats. The documentation should describe
