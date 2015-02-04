@@ -1,0 +1,59 @@
+/*****************************************************************************/
+/*
+/* if someone wants to get fancy with css. this is the place
+/*
+/*****************************************************************************/
+
+header ol {
+  padding: 0 0 0 20px !important;
+  margin: 0 !important;
+  width: 270px !important;
+  height: auto;
+  overflow: visible;
+  list-style: none;
+  padding-bottom: 20px;
+}
+header ol li {
+  padding: 0;
+  margin: 0;
+  clear: left;
+  border:0;
+}
+header #top > li {
+  margin-left: -20px;
+}
+header ol li {
+  display: block;
+  padding: 5px 0 5px 0;
+}
+header ol li, header ol {
+  width: auto;
+  white-space: nowrap !important;
+  height: auto;
+}
+hr {
+  clear: both;
+}
+section img {
+  border-color: #ccc;
+  border-width: 1px;
+  border-style: solid;
+  padding: 6px;
+}
+.red {
+  color: red;
+}
+
+.msg {
+  font-style: italic;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+.warn {
+  background-color: #F5EEA2;
+  border: 1px solid #F7D386;
+}
+.msg p {
+  padding: 10px;
+  margin: 0;
+}

@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>{{ site.name }} - {{ page.title }}</title>
+
+    <link rel="stylesheet" href="{{ site.baseurl }}css/styles.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}css/custom.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <a name="top"></a>
+    <div class="wrapper">
+      <header>
+        <h1>Cats</h1>
+        <p>Last updated on <em>{{ site.time | date: '%B %d, %Y' }}</em></p>
+
+        <ul>
+          <li><a href="https://github.com/non/cats/zipball/master">Download <strong>.zip File</strong></a></li>
+          <li><a href="https://github.com/non/cats/tarball/master">Download <strong>.tar.gz</strong></a></li>
+          <li><a href="https://github.com/non/cats">View On <strong>GitHub</strong></a></li>
+        </ul>
+
+        <hr />
+
+        <ol id="top">
+          <!-- home -->
+          <li><a href="{{ site.baseurl }}">Introduction</a></li>
+          {% if page.section == 'home' %}
+            <li>
+              <ol class="menu">
+                <li><a href="{{ site.baseurl }}#Introduction">Introduction</a></li>
+                <li><a href="{{ site.baseurl }}#project-structure">Project Structure</a></li>
+                <li><a href="{{ site.baseurl }}#getting-started">Getting Started</a></li>
+              </ol>
+            </li>
+          {% endif %}
+
+          <li><a href="{{ site.baseurl }}typeclasses.html">Typeclasses</a></li>
+          {% if page.section == 'typeclasses' %}
+            <li>
+              <ol class="menu">
+                <li><a href="{{ site.baseurl }}typeclasses.html#functor">Functor</a></li>
+                <li><a href="{{ site.baseurl }}typeclasses.html#apply">Apply</a></li>
+                <li><a href="{{ site.baseurl }}typeclasses.html#applicative">Applicative</a></li>
+                <li><a href="{{ site.baseurl }}typeclasses.html#monad">Monad</a></li>
+              </ol>
+            </li>
+          {% endif %}
+        </ol>
+
+        <hr />
+
+      </header>
+      <section>
+        {{ content }}
+      </section>
+      <footer>
+        <br/>Distributed under an <a href="https://raw.githubusercontent.com/non/cats/master/COPYING" target="_blank">MIT License.</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="{{ site.baseurl }}js/scale.fix.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    //]]>
+    </script>
+    <script type="text/javascript">
+    //<![CDATA[
+      try {
+        var pageTracker = _gat._getTracker("UA-57263411-1");
+        pageTracker._trackPageview();
+      } catch(err) {}
+    //]]>
+    </script>
+  </body>
+</html>
