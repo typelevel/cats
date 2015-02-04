@@ -80,7 +80,7 @@ There are many ways to support Cats' development:
    property-based testing bugs can happen. Reporting problems you
    encounter (with the documentation, code, or anything else) helps us
    to improve. Look for issues labelled "ready" as good targets. but 
-   *please add a comment to the issue* and label the issue "In progress"
+   **please add a comment to the issue** and label the issue "In progress"
    if you start working on one. We want to avoid any duplicated effort.
 
  * Write ScalaDoc comments: One of our goals is to have ScalaDoc
