@@ -5,6 +5,8 @@ import Or.{LeftOr, RightOr}
 import algebra.{PartialOrder, Eq, Order, Monoid}
 import cats.functor.Invariant
 
+import scala.reflect.ClassTag
+
 /** Represents a right-biased disjunction that is either an `A` or a `B`.
  *
  * An instance of `A` [[Or]] `B` is either a [[LeftOr]]`[A]` or a [[RightOr]]`[B]`.
@@ -100,6 +102,7 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
     a => s"LeftOr(${AA.show(a)})",
     b => s"RightOr(${BB.show(b)})"
   )
+
 }
 
 object Or extends OrInstances with OrFunctions {
@@ -150,5 +153,23 @@ trait OrFunctions {
   def left[A, B](a: A): A Or B = LeftOr(a)
 
   def right[A, B](b: B): A Or B = RightOr(b)
+
+
+  /**
+   * Catch a specified `Throwable` ('`T`') instance and return it wrapped in an `Or[T, A]`,
+   * where `A` is the valid return value (inferred from function block)
+   */
+  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchAux[T] = new FromTryCatchAux()
+
+  private class FromTryCatchAux[T] {
+    def apply[A](f: => A)(implicit T: ClassTag[T]): T Or A = {
+      try {
+        Or.RightOr(f)
+      } catch {
+        case t if T.runtimeClass.isInstance(t) =>
+          Or.LeftOr(t.asInstanceOf[T])
+      }
+    }
+  }
 }
 
