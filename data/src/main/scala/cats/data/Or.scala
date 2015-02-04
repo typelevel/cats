@@ -159,9 +159,9 @@ trait OrFunctions {
    * Catch a specified `Throwable` ('`T`') instance and return it wrapped in an `Or[T, A]`,
    * where `A` is the valid return value (inferred from function block)
    */
-  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchAux[T] = new FromTryCatchAux()
+  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchAux[T] = new FromTryCatchAux[T]
 
-  private class FromTryCatchAux[T] {
+  class FromTryCatchAux[T] private[OrFunctions] {
     def apply[A](f: => A)(implicit T: ClassTag[T]): T Or A = {
       try {
         Or.RightOr(f)
