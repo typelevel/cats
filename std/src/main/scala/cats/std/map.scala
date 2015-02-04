@@ -3,8 +3,8 @@ package std
 
 trait MapInstances {
 
-  implicit def mapInstance[K]: Traverse[({type F[V] = Map[K,V]})#F] with FlatMap[({type F[V] = Map[K,V]})#F] =
-    new Traverse[({type F[V] = Map[K,V]})#F] with FlatMap[({type F[V] = Map[K,V]})#F] {
+  implicit def mapInstance[K]: Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] =
+    new Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] {
 
       override def traverse[G[_] : Applicative, A, B](fa: Map[K, A])(f: (A) => G[B]) = {
         val G = Applicative[G]
