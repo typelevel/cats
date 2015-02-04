@@ -32,17 +32,7 @@ object Profunctor {
 
   def apply[F[_, _]](implicit ev: Profunctor[F]): Profunctor[F] = ev
 
-  case class UpStar[F[_]: Functor, A, B](f: A => F[B])
-
   case class DownStar[F[_]: Functor, A, B](f: F[A] => B)
-
-  def upStar[F[_]: Functor]: Profunctor[UpStar[F, ?, ?]] =
-    new Profunctor[UpStar[F, ?, ?]] {
-      override def lmap[A, B, C](fab: UpStar[F, A, B])(f: C => A): UpStar[F, C, B] =
-        UpStar(fab.f compose f)
-      override def rmap[A, B, C](fab: UpStar[F, A, B])(f: B => C): UpStar[F, A, C] =
-        UpStar(a => Functor[F].map(fab.f(a))(f))
-    }
 
   def downStar[F[_]: Functor]: Profunctor[DownStar[F, ?, ?]] =
     new Profunctor[DownStar[F, ?, ?]] {
