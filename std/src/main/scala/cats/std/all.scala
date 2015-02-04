@@ -7,3 +7,4 @@ trait AllInstances
   with SetInstances
   with StreamInstances
   with VectorInstances
+  with AnyValInstances
