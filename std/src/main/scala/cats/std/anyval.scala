@@ -11,7 +11,6 @@ trait AnyValInstances
   with    DoubleInstances
   with    BooleanInstances
   with    UnitInstances
-  with    BigIntInstances
 
 trait IntInstances extends algebra.std.IntInstances {
 
@@ -73,14 +72,6 @@ trait BooleanInstances extends algebra.std.BooleanInstances {
 
   implicit val booleanShow: Show[Boolean] = new Show[Boolean] {
     def show(f: Boolean): String = f.toString
-  }
-
-}
-
-trait BigIntInstances extends algebra.std.BigIntInstances {
-
-  implicit val bigIntShow: Show[BigInt] = new Show[BigInt] {
-    def show(f: BigInt): String = f.toString
   }
 
 }
