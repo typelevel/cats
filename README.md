@@ -75,7 +75,7 @@ Discussion around Cats is currently happening in the [Gitter channel](https://gi
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also
-gladly accepted.
+gladly accepted. For more information, check out the [contributor guide](CONTRIBUTING.md).
 
 People are expected to follow the [Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
 discussing Cats on the Github page, Gitter channel, or other venues.
