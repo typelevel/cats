@@ -8,7 +8,7 @@ import simulacrum._
  * Laws:
  *  - apply(apply(fa)(fab))(fbc) = apply(fa)(apply(fab)(map(fbc)(bc => ab => ab andThen bc)))
  */
-trait Apply[F[_]] extends Functor[F] with ApplyNFunctions[F] { self =>
+trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
   def apply[A, B](fa: F[A])(f: F[A => B]): F[B]
 
   def apply2[A, B, Z](fa: F[A], fb: F[B])(f: F[(A, B) => Z]): F[Z] =
