@@ -1,6 +1,5 @@
 package cats.laws
 
-import algebra.Eq
 import algebra.laws._
 
 import org.scalacheck.{Arbitrary, Prop}
