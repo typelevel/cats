@@ -14,6 +14,7 @@ package object syntax {
   object monadCombine extends MonadCombineSyntax
   object monadFilter extends MonadFilterSyntax
   object profunctor extends ProfunctorSyntax
+  object semigroup extends SemigroupSyntax
   object show extends ShowSyntax
   object strong extends StrongSyntax
 }
