@@ -9,3 +9,4 @@ trait AllInstances
   with    VectorInstances
   with    AnyValInstances
   with    AnyRefInstances
+  with    MapInstances
