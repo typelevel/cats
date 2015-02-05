@@ -13,7 +13,12 @@ package object cats {
   type Eq[A] = algebra.Eq[A]
   type PartialOrder[A] = algebra.PartialOrder[A]
   type Order[A] = algebra.Order[A]
-
   type Semigroup[A] = algebra.Semigroup[A]
   type Monoid[A] = algebra.Monoid[A]
+
+  val Eq = algebra.Eq
+  val PartialOrder = algebra.PartialOrder
+  val Order = algebra.Order
+  val Semigroup = algebra.Semigroup
+  val Monoid = algebra.Monoid
 }

@@ -1,6 +1,6 @@
-package cats.data
+package cats
+package data
 
-import algebra._
 import cats.{Applicative, Apply, Lazy, Show, Traverse}
 
 /**

@@ -11,7 +11,3 @@ import simulacrum._
       def combine(x: F[A], y: F[A]): F[A] = self.combine(x, y)
     }
 }
-
-// object MonoidK {
-//   def apply[F[_]](implicit ev: MonoidK[F]): MonoidK[F] = ev
-// }

@@ -2,7 +2,6 @@ package cats
 package data
 
 import Or.{LeftOr, RightOr}
-import algebra.{PartialOrder, Eq, Order, Monoid}
 import cats.functor.Invariant
 
 import scala.reflect.ClassTag

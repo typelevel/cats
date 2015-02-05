@@ -1,8 +1,6 @@
 package cats
 package arrow
 
-import algebra.Monoid
-
 trait Category[F[_, _]] extends Compose[F] { self =>
 
   def id[A]: F[A, A]
