@@ -1,6 +1,6 @@
 package cats.laws
 
-import cats.data.Const
+import cats.data.{Or, Const}
 import org.scalacheck.Arbitrary
 import cats.laws.arbitrary._
 
@@ -29,4 +29,10 @@ object ArbitraryK {
 
   implicit def constArbitraryK[A](implicit A: Arbitrary[A]): ArbitraryK[Const[A, ?]] =
     new ArbitraryK[Const[A, ?]] { def synthesize[B: Arbitrary]: Arbitrary[Const[A, B]] = implicitly }
+
+  implicit def orA[A](implicit A: Arbitrary[A]): ArbitraryK[A Or ?] =
+    new ArbitraryK[A Or ?] { def synthesize[B: Arbitrary]: Arbitrary[A Or B] = implicitly }
+
+  implicit def orB[B](implicit B: Arbitrary[B]): ArbitraryK[? Or B] =
+    new ArbitraryK[? Or B] { def synthesize[A: Arbitrary]: Arbitrary[A Or B] = implicitly }
 }
