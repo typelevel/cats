@@ -1,6 +1,5 @@
 package cats
 
-import algebra.Monoid
 import simulacrum._
 
 @typeclass trait MonoidK[F[_]] extends SemigroupK[F] { self =>
