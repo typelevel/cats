@@ -1,6 +1,6 @@
 package cats.laws
 
-import cats.data.Const
+import cats.data.{Or, Const}
 import org.scalacheck.Arbitrary
 import cats.laws.arbitrary._
 
@@ -12,10 +12,10 @@ object ArbitraryK {
   implicit val option: ArbitraryK[Option] =
     new ArbitraryK[Option] { def synthesize[A: Arbitrary]: Arbitrary[Option[A]] = implicitly }
 
-  implicit def f1a[A: Arbitrary]: ArbitraryK[A => ?] =
+  implicit def function1A[A: Arbitrary]: ArbitraryK[A => ?] =
     new ArbitraryK[A => ?] { def synthesize[B: Arbitrary]: Arbitrary[A => B] = implicitly }
 
-  implicit def f1b[B: Arbitrary]: ArbitraryK[? => B] =
+  implicit def function1B[B: Arbitrary]: ArbitraryK[? => B] =
     new ArbitraryK[? => B] { def synthesize[A: Arbitrary]: Arbitrary[A => B] = implicitly }
 
   implicit val function0: ArbitraryK[Function0] =
@@ -27,6 +27,12 @@ object ArbitraryK {
   implicit val list: ArbitraryK[List] =
     new ArbitraryK[List] { def synthesize[A: Arbitrary]: Arbitrary[List[A]] = implicitly }
 
-  implicit def constArbitraryK[A](implicit A: Arbitrary[A]): ArbitraryK[Const[A, ?]] =
+  implicit def constA[A](implicit A: Arbitrary[A]): ArbitraryK[Const[A, ?]] =
     new ArbitraryK[Const[A, ?]] { def synthesize[B: Arbitrary]: Arbitrary[Const[A, B]] = implicitly }
+
+  implicit def orA[A](implicit A: Arbitrary[A]): ArbitraryK[A Or ?] =
+    new ArbitraryK[A Or ?] { def synthesize[B: Arbitrary]: Arbitrary[A Or B] = implicitly }
+
+  implicit def orB[B](implicit B: Arbitrary[B]): ArbitraryK[? Or B] =
+    new ArbitraryK[? Or B] { def synthesize[A: Arbitrary]: Arbitrary[A Or B] = implicitly }
 }
