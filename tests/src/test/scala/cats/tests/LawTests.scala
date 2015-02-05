@@ -15,6 +15,7 @@ import cats.std.option._
 
 class LawTests extends FunSuite with Discipline {
   checkAll("Function0[Int]", FunctorLaws[Function0, Int].applicative[Int, Int])
+  checkAll("Function0[Int]", ComonadLaws[Function0, Int, Int].comonad[Int])
   checkAll("Option[Int]", FunctorLaws[Option, Int].applicative[Int, Int])
   checkAll("Option[String]", FunctorLaws[Option, String].applicative[Int, Int])
   checkAll("List[Int]", FunctorLaws[List, Int].applicative[Int, Int])
