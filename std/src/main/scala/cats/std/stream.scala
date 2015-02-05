@@ -38,7 +38,7 @@ trait StreamInstances {
       // this foldRight variant is lazy
       def foldRight[A, B](fa: Stream[A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] = {
         // we use Lazy.byName(...) to avoid memoizing intermediate values.
-        def loop(as: Stream[A], b: Lazy[B]): Lazy[B] = 
+        def loop(as: Stream[A], b: Lazy[B]): Lazy[B] =
           as match {
             case Stream.Empty => b
             case a #:: rest => Lazy.byName(f(a, foldRight(rest, b)(f)))

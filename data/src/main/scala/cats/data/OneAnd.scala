@@ -8,7 +8,7 @@ trait OneAndInstances {
   implicit def oneAndShow[A, F[_]](implicit showHead: Show[A], showTail: Show[F[A]]): Show[OneAnd[A, F]] =
     Show.show[OneAnd[A, F]](x => s"OneAnd(${showHead.show(x.head)}, ${showTail.show(x.tail)})")
 
-  implicit def instance[F[_]](implicit monoid: MonoidK[F], functor: Functor[F], monad: Monad[F]):Comonad[OneAnd[?, F]] with Monad[OneAnd[?, F]] = new Comonad[OneAnd[?, F]] with Monad[OneAnd[?, F]] {
+  implicit def instance[F[_]](implicit monoid: MonoidK[F], functor: Functor[F], monad: Monad[F]): Comonad[OneAnd[?, F]] with Monad[OneAnd[?, F]] = new Comonad[OneAnd[?, F]] with Monad[OneAnd[?, F]] {
     def extract[A](x: OneAnd[A,F]) = x.head
 
     def coflatMap[A, B](fa: OneAnd[A,F])(f: OneAnd[A,F] => B) =

@@ -59,9 +59,9 @@ object Coyoneda {
 
   /**
    * Partial application of type parameters to `apply`.
-   * 
+   *
    * It can be nicer to say `Coyoneda.by[F]{ x: X => ... }`
-   * 
+   *
    * ...instead of `Coyoneda[...](...){ x => ... }`.
    */
   def by[F[_]]: By[F] = new By[F]
