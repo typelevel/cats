@@ -10,7 +10,6 @@ package object std {
   object stream     extends StreamInstances
   object vector     extends VectorInstances
     
-  object anyval     extends AnyValInstances
   object int        extends IntInstances
   object byte       extends ByteInstances
   object long       extends LongInstances
@@ -21,7 +20,6 @@ package object std {
   object boolean    extends BooleanInstances
   object unit       extends UnitInstances
 
-  object anyref     extends AnyRefInstances
   object bigint     extends BigIntInstances
   object bigdecimal extends BigDecimalInstances
 }
