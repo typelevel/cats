@@ -1,13 +1,14 @@
 package cats
 package syntax
 
+import cats.macros.Ops
+import scala.language.experimental.macros
+
 trait EqSyntax {
-  // TODO: use simulacrum instances eventually
-  implicit def eqSyntax[A: Eq](a: A) =
-    new EqOps[A](a)
+  implicit def eqSyntax[A: Eq](a: A) = new EqOps[A](a)
 }
 
 class EqOps[A](lhs: A)(implicit A: Eq[A]) {
-  def ===(rhs: A): Boolean = A.eqv(lhs, rhs)
-  def =!=(rhs: A): Boolean = A.neqv(lhs, rhs)
+  def ===(rhs: A): Boolean = macro Ops.binop[A, Boolean]
+  def =!=(rhs: A): Boolean = macro Ops.binop[A, Boolean]
 }

@@ -1,20 +1,21 @@
 package cats
 package syntax
 
+import cats.macros.Ops
+import scala.language.experimental.macros
+
 trait PartialOrderSyntax {
-  // TODO: use simulacrum instances eventually
-  implicit def partialOrderSyntax[A: PartialOrder](a: A) =
-    new PartialOrderOps[A](a)
+  implicit def partialOrderSyntax[A: PartialOrder](a: A) = new PartialOrderOps[A](a)
 }
 
 class PartialOrderOps[A](lhs: A)(implicit A: PartialOrder[A]) {
-  def >(rhs: A): Boolean = A.gt(lhs, rhs)
-  def >=(rhs: A): Boolean = A.gteqv(lhs, rhs)
-  def <(rhs: A): Boolean = A.lt(lhs, rhs)
-  def <=(rhs: A): Boolean = A.lteqv(lhs, rhs)
+  def >(rhs: A): Boolean = macro Ops.binop[A, Boolean]
+  def >=(rhs: A): Boolean = macro Ops.binop[A, Boolean]
+  def <(rhs: A): Boolean = macro Ops.binop[A, Boolean]
+  def <=(rhs: A): Boolean = macro Ops.binop[A, Boolean]
 
-  def partialCompare(rhs: A): Double = A.partialCompare(lhs, rhs)
-  def tryCompare(rhs: A): Option[Int] = A.tryCompare(lhs, rhs)
-  def pmin(rhs: A): Option[A] = A.pmin(lhs, rhs)
-  def pmax(rhs: A): Option[A] = A.pmax(lhs, rhs)
+  def partialCompare(rhs: A): Double = macro Ops.binop[A, Double]
+  def tryCompare(rhs: A): Option[Int] = macro Ops.binop[A, Option[Int]]
+  def pmin(rhs: A): Option[A] = macro Ops.binop[A, Option[A]]
+  def pmax(rhs: A): Option[A] = macro Ops.binop[A, Option[A]]
 }
