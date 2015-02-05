@@ -15,7 +15,7 @@ import simulacrum._
   def map[A, B](fa: F[A])(f: A => B): F[B]
 
   /**
-   *  alias for map 
+   * Alias for map 
    */
   def fmap[A, B](f: A => B): F[A] => F[B] = fa => map(fa)(f)
 
@@ -29,7 +29,7 @@ import simulacrum._
   def lift[A,B](f: A => B): F[A] => F[B] = map(_)(f)
 
   /**
-   * empty the fa of the values, preserving the structure
+   * Empty the fa of the values, preserving the structure
    */
   def void[A](fa: F[A]): F[Unit] = map(fa)(_ => ())
 
