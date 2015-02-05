@@ -1,6 +1,5 @@
 package cats
 
-import algebra.Semigroup
 import simulacrum._
 
 @typeclass trait SemigroupK[F[_]] { self =>
