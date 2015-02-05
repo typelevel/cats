@@ -1,6 +1,5 @@
 package cats
 
-import algebra.Monoid
 import simulacrum._
 
 /**

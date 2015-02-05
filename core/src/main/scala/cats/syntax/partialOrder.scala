@@ -2,7 +2,6 @@ package cats
 package syntax
 
 import cats.macros.Ops
-import scala.language.experimental.macros
 
 trait PartialOrderSyntax {
   implicit def partialOrderSyntax[A: PartialOrder](a: A) = new PartialOrderOps[A](a)

@@ -2,7 +2,6 @@ package cats
 package syntax
 
 import cats.macros.Ops
-import scala.language.experimental.macros
 
 trait OrderSyntax {
   implicit def orderSyntax[A: Order](a: A) = new OrderOps[A](a)
