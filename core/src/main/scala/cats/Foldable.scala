@@ -49,7 +49,7 @@ import simulacrum._
   def sequence_[G[_]: Applicative, A, B](fga: F[G[A]]): G[Unit] = traverse_(fga)(identity)
 
   /**
-   * Fold up F using the MonoidK instance for G. Like a foldMap(identity), but for values that have a MonoidK.
+   * Fold up F using the MonoidK instance for G. Like fold, but the value is of kind * -> *.
    */
   def foldK[G[_]: MonoidK, A](fga: F[G[A]]): G[A] = foldMap(fga)(identity)(MonoidK[G].algebra)
 
