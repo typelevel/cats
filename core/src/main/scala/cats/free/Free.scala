@@ -72,7 +72,8 @@ sealed abstract class Free[S[_], A] {
           x.f(a).resume
         case Suspend(t) =>
           Left(S.map(t)(_ flatMap x.f))
-        case y: Gosub[S, x.C] =>
+        // The _ should be x.C, but we are hitting this bug: https://github.com/daniel-trinh/scalariform/issues/44
+        case y: Gosub[S, _] =>
           y.a().flatMap(z => y.f(z) flatMap x.f).resume
       }
   }
@@ -106,7 +107,7 @@ sealed abstract class Free[S[_], A] {
 
   /**
    * Catamorphism for `Free`.
-   * 
+   *
    * Runs to completion, mapping the suspension with the given transformation at each step and
    * accumulating into the monad `M`.
    */
