@@ -25,8 +25,8 @@ import simulacrum._
   /**
    * Apply f to each element of F and combine them using the Monoid[B].
    */
-  def foldMap[A, B: Monoid](fa: F[A])(f: A => B): B = foldLeft(fa, Monoid[B].empty) { (b, a) =>
-    Monoid[B].combine(b, f(a))
+  def foldMap[A, B: Monoid](fa: F[A])(f: A => B): B = foldLeft(fa, algebra.Monoid[B].empty) { (b, a) =>
+    algebra.Monoid[B].combine(b, f(a))
   }
 
   /**

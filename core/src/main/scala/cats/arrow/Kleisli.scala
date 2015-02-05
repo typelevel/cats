@@ -14,13 +14,13 @@ final case class Kleisli[M[_], A, B](run: A => M[B]) { self =>
 
   def andThen[C](f: B => M[C])(implicit b: FlatMap[M]): Kleisli[M, A, C] =
     Kleisli((a: A) => b.flatMap(run(a))(f))
-  
+
   def andThen[C](k: Kleisli[M, B, C])(implicit b: FlatMap[M]): Kleisli[M, A, C] =
     this andThen k.run
-  
+
   def compose[Z](f: Z => M[A])(implicit M: FlatMap[M]): Kleisli[M, Z, B] =
     Kleisli((z: Z) => M.flatMap(f(z))(run))
-  
+
   def compose[Z](k: Kleisli[M, Z, A])(implicit b: FlatMap[M]): Kleisli[M, Z, B] =
     this compose k.run
 
