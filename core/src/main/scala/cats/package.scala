@@ -9,4 +9,11 @@ package object cats {
 
   type ⊥ = Nothing
   type ⊤ = Any
+
+  type Eq[A] = algebra.Eq[A]
+  type PartialOrder[A] = algebra.PartialOrder[A]
+  type Order[A] = algebra.Order[A]
+
+  type Semigroup[A] = algebra.Semigroup[A]
+  type Monoid[A] = algebra.Monoid[A]
 }

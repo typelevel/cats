@@ -1,8 +1,17 @@
 package cats.syntax
 
 trait AllSyntax
-    extends InvariantSyntax
+    extends ApplySyntax
+    with BifunctorSyntax
+    with CoFlatMapSyntax
+    with ComonadSyntax
     with ContravariantSyntax
-    with FunctorSyntax
-    with ApplySyntax
     with FlatMapSyntax
+    with FoldableSyntax
+    with FunctorSyntax
+    with InvariantSyntax
+    with MonadCombineSyntax
+    with MonadFilterSyntax
+    with ProfunctorSyntax
+    with ShowSyntax
+    with StrongSyntax
