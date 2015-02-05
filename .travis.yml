@@ -1,6 +1,8 @@
 language: scala
 scala:
   - 2.11.5
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION test scalastyle
 notifications:
   webhooks:
     urls:
