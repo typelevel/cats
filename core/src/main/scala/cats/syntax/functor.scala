@@ -3,7 +3,7 @@ package syntax
 
 trait FunctorSyntax {
   // TODO: use simulacrum instances eventually
-  implicit def functorSyntax[F[_]: Functor, A](fa: F[A]) =
+  implicit def functorSyntax[F[_]: Functor, A](fa: F[A]): FunctorOps[F, A] =
     new FunctorOps[F, A](fa)
 }
 

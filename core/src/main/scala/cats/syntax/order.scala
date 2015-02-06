@@ -4,7 +4,7 @@ package syntax
 import cats.macros.Ops
 
 trait OrderSyntax {
-  implicit def orderSyntax[A: Order](a: A) = new OrderOps[A](a)
+  implicit def orderSyntax[A: Order](a: A): OrderOps[A] = new OrderOps[A](a)
 }
 
 class OrderOps[A](lhs: A)(implicit A: Order[A]) {

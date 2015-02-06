@@ -4,7 +4,8 @@ package syntax
 import cats.macros.Ops
 
 trait PartialOrderSyntax {
-  implicit def partialOrderSyntax[A: PartialOrder](a: A) = new PartialOrderOps[A](a)
+  implicit def partialOrderSyntax[A: PartialOrder](a: A): PartialOrderOps[A] =
+    new PartialOrderOps[A](a)
 }
 
 class PartialOrderOps[A](lhs: A)(implicit A: PartialOrder[A]) {

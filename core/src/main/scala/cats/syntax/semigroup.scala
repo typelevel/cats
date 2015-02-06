@@ -3,7 +3,7 @@ package syntax
 
 trait SemigroupSyntax {
   // TODO: use simulacrum instances eventually
-  implicit def semigroupSyntax[A: Semigroup](a: A) =
+  implicit def semigroupSyntax[A: Semigroup](a: A): SemigroupOps[A] =
     new SemigroupOps[A](a)
 }
 

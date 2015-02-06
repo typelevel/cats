@@ -3,10 +3,10 @@ package syntax
 
 trait FoldableSyntax {
   // TODO: use simulacrum instances eventually
-  implicit def foldableSyntax[F[_]: Foldable, A](fa: F[A]) =
+  implicit def foldableSyntax[F[_]: Foldable, A](fa: F[A]): FoldableOps[F, A] =
     new FoldableOps[F, A](fa)
 
-  implicit def nestedFoldableSyntax[F[_]: Foldable, G[_], A](fga: F[G[A]]) =
+  implicit def nestedFoldableSyntax[F[_]: Foldable, G[_], A](fga: F[G[A]]): NestedFoldableOps[F, G, A] =
     new NestedFoldableOps[F, G, A](fga)
 }
 

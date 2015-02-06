@@ -4,7 +4,7 @@ package syntax
 import cats.functor.Invariant
 
 trait InvariantSyntax {
-  implicit def invariantSyntax[F[_]: Invariant, A](fa: F[A]) =
+  implicit def invariantSyntax[F[_]: Invariant, A](fa: F[A]): InvariantOps[F, A] =
     new InvariantOps(fa)
 }
 
