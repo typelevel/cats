@@ -3,7 +3,7 @@ package syntax
 
 trait ShowSyntax {
   // TODO: use simulacrum instances eventually
-  implicit def showSyntax[A: Show](a: A) =
+  implicit def showSyntax[A: Show](a: A): ShowOps[A] =
     new ShowOps[A](a)
 }
 

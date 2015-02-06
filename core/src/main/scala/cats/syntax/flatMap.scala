@@ -3,10 +3,10 @@ package syntax
 
 trait FlatMapSyntax {
   // TODO: use simulacrum instances eventually
-  implicit def flatMapSyntax[F[_]: FlatMap, A](fa: F[A]) =
+  implicit def flatMapSyntax[F[_]: FlatMap, A](fa: F[A]): FlatMapOps[F, A] =
     new FlatMapOps[F, A](fa)
 
-  implicit def flattenSyntax[F[_]: FlatMap, A](ffa: F[F[A]]) =
+  implicit def flattenSyntax[F[_]: FlatMap, A](ffa: F[F[A]]): FlattenOps[F, A] =
     new FlattenOps[F, A](ffa)
 }
 
