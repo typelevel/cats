@@ -23,9 +23,9 @@ installed. Run `sbt`, and then use any of the following commands:
  * `unidoc`: generate the documentation
  * `scalastyle`: run the style-checker on the code
 
-[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
-
+[![Build Status](https://api.travis-ci.org/non/cats.png)](https://travis-ci.org/non/cats)
 [![Workflow](https://badge.waffle.io/non/cats.png?label=ready&title=Ready)](https://waffle.io/non/cats)
+[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
 
 ### Design
 
