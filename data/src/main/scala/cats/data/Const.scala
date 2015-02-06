@@ -1,8 +1,6 @@
 package cats
 package data
 
-import cats.{Applicative, Apply, Lazy, Show, Traverse}
-
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
  * [[Const]] can be seen as a type level version of `Function.const[A, B]: A => B => A`
@@ -44,8 +42,9 @@ sealed abstract class ConstInstances extends ConstInstances0 {
       x compare y
   }
 
-  implicit def constShow[A: Show, B]: Show[Const[A, B]] =
-    Show.show[Const[A, B]](_.show)
+  implicit def constShow[A: Show, B]: Show[Const[A, B]] = new Show[Const[A, B]] {
+    def show(f: Const[A, B]): String = f.show
+  }
 
   implicit def constTraverse[C]: Traverse[Const[C, ?]] = new Traverse[Const[C, ?]] {
     def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
