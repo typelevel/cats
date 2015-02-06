@@ -14,7 +14,7 @@ sealed abstract class Lazy[A] { self =>
     }
 }
 
-object Lazy {
+object Lazy extends LazyInstances {
   def apply[A](a: => A): Lazy[A] =
     new Lazy[A] {
       lazy val memo = a
@@ -33,7 +33,9 @@ object Lazy {
     new Lazy[A] {
       def force: A = a
     }
+}
 
+trait LazyInstances extends LazyInstances1 {
   implicit val lazyInstance: Bimonad[Lazy] =
     new Bimonad[Lazy] {
 
@@ -65,5 +67,25 @@ object Lazy {
 
       override def imap[A, B](fa: Lazy[A])(f: A => B)(fi: B => A): Lazy[B] =
         fa.map(f)
+    }
+
+  implicit def lazyOrder[A](implicit A: Order[A]): Order[Lazy[A]] =
+    new Order[Lazy[A]] {
+      def compare(x: Lazy[A], y: Lazy[A]): Int = A.compare(x.force, y.force)
+    }
+}
+
+trait LazyInstances1 extends LazyInstances0 {
+  implicit def lazyPartialOrder[A](implicit A: PartialOrder[A]): PartialOrder[Lazy[A]] =
+    new PartialOrder[Lazy[A]] {
+      def partialCompare(x: Lazy[A], y: Lazy[A]): Double =
+        A.partialCompare(x.force, y.force)
+    }
+}
+
+trait LazyInstances0 {
+  implicit def lazyEq[A](implicit A: Eq[A]): Eq[Lazy[A]] =
+    new Eq[Lazy[A]] {
+      def eqv(x: Lazy[A], y: Lazy[A]): Boolean = A.eqv(x.force, y.force)
     }
 }
