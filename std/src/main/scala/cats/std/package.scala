@@ -9,7 +9,7 @@ package object std {
   object set        extends SetInstances
   object stream     extends StreamInstances
   object vector     extends VectorInstances
-    
+
   object int        extends IntInstances
   object byte       extends ByteInstances
   object long       extends LongInstances

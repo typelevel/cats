@@ -5,7 +5,7 @@ package example
 // "map" function) with a new function "apply".  The apply function
 // is similar to map in that we are transforming a value in a context,
 // e.g. F[A] where F is the context (e.g. Option, List, Future) and A
-// is the type of the value.  But the function A => B is now in the 
+// is the type of the value.  But the function A => B is now in the
 // context itself, e.g. F[A => B] such as Option[A => B] or List[A => B].
 
 object ApplyExamples extends App {
