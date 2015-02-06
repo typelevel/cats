@@ -9,10 +9,16 @@ import simulacrum._
  *  - apply(apply(fa)(fab))(fbc) = apply(fa)(apply(fab)(map(fbc)(bc => ab => ab andThen bc)))
  */
 @typeclass trait Apply[F[_]] extends Functor[F] { self =>
-  /** Given a value and a function in the Apply context, applies the function to the value. */
+
+  /**
+   * Given a value and a function in the Apply context, applies the
+   * function to the value.
+   */
   def apply[A, B](fa: F[A])(f: F[A => B]): F[B]
 
-  /** apply2 is a binary version of apply, itself defined in terms of apply */
+  /**
+   * apply2 is a binary version of apply, defined in terms of apply.
+   */
   def apply2[A, B, Z](fa: F[A], fb: F[B])(f: F[(A, B) => Z]): F[Z] =
     apply(fa)(apply(fb)(map(f)(ff => (b: B) => (a: A) => ff(a, b))))
 
@@ -29,8 +35,10 @@ import simulacrum._
    *
    * The composition of Applys `F` and `G`, `F[G[x]]`, is also an Apply.
    *
-   * Apply[Option].compose[List].map2(Some(List(1, 2)), Some(List(3)))(_ + _)
-   * = Some(List(4, 5))
+   * val ap = Apply[Option].compose[List]
+   * val x = Some(List(1, 2))
+   * val y = Some(List(10, 20))
+   * ap.map2(x, y)(_ + _) == Some(List(11, 12, 21, 22))
    */
   def compose[G[_]](implicit GG: Apply[G]): Apply[({type λ[α] = F[G[α]]})#λ] =
     new CompositeApply[F,G] {
