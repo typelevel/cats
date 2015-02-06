@@ -14,13 +14,13 @@ follow up with any polishing that may need to be done.
 If you want to touch up some documentation or fix typos, feel free to
 skip these steps and jump straight to submitting a pull request.
 
- 1. Find something that belongs in cats - [details](#find-something-that-belongs-in-cats)
- 2. Let us know you are working on it - [details](#let-us-know-you-are-working-on-it)
- 3. Implement your contribution - [details](#write-code)
- 4. Write tests - [details](#write-tests)
- 5. Write documentation - [details](#write-documentation)
- 6. Write examples - [details](#write-examples)
- 7. Submit pull request - [details](#submit-a-pull-request)
+ 1. [Find something that belongs in cats](#find-something-that-belongs-in-cats)
+ 2. [Let us know you are working on it](#let-us-know-you-are-working-on-it)
+ 3. [Implement your contribution](#write-code)
+ 4. [Write tests](#write-tests)
+ 5. [Write documentation](#write-documentation)
+ 6. [Write examples](#write-examples)
+ 7. [Submit pull request](#submit-a-pull-request)
 
 ### Find something that belongs in cats
 
