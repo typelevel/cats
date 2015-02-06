@@ -111,24 +111,24 @@ object Or extends OrInstances with OrFunctions {
 
 sealed abstract class OrInstances extends OrInstances1 {
   implicit def orOrder[A: Order, B: Order]: Order[A Or B] = new Order[A Or B] {
-    override def compare(x: A Or B, y: A Or B): Int = x compare y
+    def compare(x: A Or B, y: A Or B): Int = x compare y
     override def partialCompare(x: A Or B, y: A Or B): Double = x partialCompare y
     override def eqv(x: A Or B, y: A Or B): Boolean = x === y
   }
 
   implicit def orShow[A, B](implicit A: Show[A], B: Show[B]): Show[A Or B] = new Show[A Or B] {
-    override def show(f: A Or B): String = f.show
+    def show(f: A Or B): String = f.show
   }
 
   implicit def orInstances[A] = new OrInstances[A]
   class OrInstances[A] extends Traverse[A Or ?] with Monad[A Or ?] {
-    override def traverse[F[_]: Applicative, B, C](fa: A Or B)(f: B => F[C]): F[A Or C] = fa.traverse(f)
-    override def foldLeft[B, C](fa: A Or B, b: C)(f: (C, B) => C): C = fa.foldLeft(b)(f)
-    override def foldRight[B, C](fa: A Or B, b: C)(f: (B, C) => C): C = fa.foldRight(b)(f)
-    override def foldRight[B, C](fa: A Or B, b: Lazy[C])(f: (B, Lazy[C]) => C): Lazy[C] = fa.foldRight(b)(f)
+    def traverse[F[_]: Applicative, B, C](fa: A Or B)(f: B => F[C]): F[A Or C] = fa.traverse(f)
+    def foldLeft[B, C](fa: A Or B, b: C)(f: (C, B) => C): C = fa.foldLeft(b)(f)
+    def foldRight[B, C](fa: A Or B, b: C)(f: (B, C) => C): C = fa.foldRight(b)(f)
+    def foldRight[B, C](fa: A Or B, b: Lazy[C])(f: (B, Lazy[C]) => C): Lazy[C] = fa.foldRight(b)(f)
 
-    override def flatMap[B, C](fa: A Or B)(f: B => A Or C): A Or C = fa.flatMap(f)
-    override def pure[B](b: B): A Or B = Or.right(b)
+    def flatMap[B, C](fa: A Or B)(f: B => A Or C): A Or C = fa.flatMap(f)
+    def pure[B](b: B): A Or B = Or.right(b)
 
     override def map[B, C](fa: A Or B)(f: B => C): A Or C = fa.map(f)
   }
@@ -136,14 +136,14 @@ sealed abstract class OrInstances extends OrInstances1 {
 
 sealed abstract class OrInstances1 extends OrInstances2 {
   implicit def orPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[A Or B] = new PartialOrder[A Or B] {
-    override def partialCompare(x: A Or B, y: A Or B): Double = x partialCompare y
+    def partialCompare(x: A Or B, y: A Or B): Double = x partialCompare y
     override def eqv(x: A Or B, y: Or[A, B]): Boolean = x === y
   }
 }
 
 sealed abstract class OrInstances2 {
   implicit def orEq[A: Eq, B: Eq]: Eq[A Or B] = new Eq[A Or B] {
-    override def eqv(x: A Or B, y: Or[A, B]): Boolean = x === y
+    def eqv(x: A Or B, y: Or[A, B]): Boolean = x === y
   }
 }
 
@@ -151,7 +151,6 @@ trait OrFunctions {
   def left[A, B](a: A): A Or B = LeftOr(a)
 
   def right[A, B](b: B): A Or B = RightOr(b)
-
 
   /**
    * Catch a specified `Throwable` ('`T`') instance and return it wrapped in an `Or[T, A]`,
