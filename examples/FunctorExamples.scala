@@ -5,11 +5,11 @@ package example
   * A Functor is a ubiquitous typeclass involving type constructors of
   * kind * → *, which is another way of saying types that have a
   * single type variable. Examples might be Option, List, Future.
-  * 
+  *
   * The Functor category involves a single operation, named `map`:
-  * 
+  *
   * def map[A, B](fa: F[A])(f: A => B): F[B]
-  * 
+  *
   * This method takes a Function from A => B and turns an F[A] into an F[B]
   */
 object FunctorExamples extends App {

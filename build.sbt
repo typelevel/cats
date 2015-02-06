@@ -100,6 +100,7 @@ lazy val data = project.dependsOn(macros, core)
 
 lazy val examples = project.dependsOn(macros, core)
   .settings(moduleName := "cats-examples")
+  .settings(scalaSource in Compile := baseDirectory.value)
   .settings(catsSettings: _*)
   .settings(noPublishSettings: _*)
 
