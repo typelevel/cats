@@ -8,7 +8,7 @@ import simulacrum._
  * Laws:
  *  - apply(apply(fa)(fab))(fbc) = apply(fa)(apply(fab)(map(fbc)(bc => ab => ab andThen bc)))
  */
-@typeclass trait Apply[F[_]] extends Functor[F] { self =>
+trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
 
   /**
    * Given a value and a function in the Apply context, applies the
@@ -20,7 +20,7 @@ import simulacrum._
    * apply2 is a binary version of apply, defined in terms of apply.
    */
   def apply2[A, B, Z](fa: F[A], fb: F[B])(f: F[(A, B) => Z]): F[Z] =
-    apply(fa)(apply(fb)(map(f)(ff => (b: B) => (a: A) => ff(a, b))))
+    apply(fa)(apply(fb)(map(f)(f => (b: B) => (a: A) => f(a, b))))
 
   /**
    * Applies the pure (binary) function f to the effectful values fa and fb.
@@ -46,6 +46,11 @@ import simulacrum._
       implicit def G: Apply[G] = GG
     }
 }
+
+object Apply {
+  def apply[F[_]](implicit ev: Apply[F]): Apply[F] = ev
+}
+
 
 trait CompositeApply[F[_],G[_]]
     extends Apply[λ[α => F[G[α]]]] with CompositeFunctor[F,G] {

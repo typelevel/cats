@@ -16,8 +16,7 @@ import simulacrum._
  *  - apply(pure(a))(ff) = apply(ff)(pure(f => f(a)))
  *  - map(fa)(f) = apply(fa)(pure(f))
  */
-@typeclass trait Applicative[F[_]] extends Apply[F] { self =>
-
+trait Applicative[F[_]] extends Apply[F] { self =>
   /**
    * `pure` lifts any value into the Applicative Functor
    *
@@ -38,7 +37,12 @@ import simulacrum._
     new CompositeApplicative[F,G] {
       implicit def F: Applicative[F] = self
       implicit def G: Applicative[G] = GG
+
     }
+}
+
+object Applicative {
+  def apply[F[_]](implicit ev: Applicative[F]): Applicative[F] = ev
 }
 
 trait CompositeApplicative[F[_],G[_]]
