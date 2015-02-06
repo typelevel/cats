@@ -1,8 +1,7 @@
 package cats
 package data
 
-import Or.{LeftOr, RightOr}
-import cats.functor.Invariant
+import cats.data.Or.{LeftOr, RightOr}
 
 import scala.reflect.ClassTag
 
@@ -27,19 +26,19 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
     case RightOr(b) => fb(b)
   }
 
-  def isLeft = fold(_ => true, _ => false)
+  def isLeft: Boolean = fold(_ => true, _ => false)
 
-  def isRight = fold(_ => false, _ => true)
+  def isRight: Boolean = fold(_ => false, _ => true)
 
   def swap: B Or A = fold(RightOr(_), LeftOr(_))
 
-  def foreach(f: B => Unit): Unit = fold(_ => (), f(_))
+  def foreach(f: B => Unit): Unit = fold(_ => (), f)
 
   def getOrElse[BB >: B](default: => BB): BB = fold(_ => default, identity)
 
-  def forall(f: B => Boolean) = fold(_ => true, f)
+  def forall(f: B => Boolean): Boolean = fold(_ => true, f)
 
-  def exists(f: B => Boolean) = fold(_ => false, f)
+  def exists(f: B => Boolean): Boolean = fold(_ => false, f)
 
   def filter[AA >: A](f: B => Boolean)(implicit M: Monoid[AA]): AA Or B = this match {
     case LeftOr(_) => this
