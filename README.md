@@ -21,6 +21,7 @@ installed. Run `sbt`, and then use any of the following commands:
  * `console`: launch a REPL
  * `test`: run the tests
  * `unidoc`: generate the documentation
+ * `scalastyle`: run the style-checker on the code
 
 [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
 
