@@ -72,16 +72,16 @@ trait FunctorLaws[F[_], A] extends Laws {
     new FunctorProperties(
       name = "applicative",
       parents = Seq(apply[B, C]),
-      "applicative 1" -> forAll { (fa: F[A]) =>
+      "applicative identity" -> forAll { (fa: F[A]) =>
         F.apply(fa)(F.pure((a: A) => a)) ?== fa
       },
-      "applicative 2" -> forAll { (a: A, f: A => C) =>
+      "applicative homomorphism" -> forAll { (a: A, f: A => C) =>
         F.apply(F.pure(a))(F.pure(f)) ?== F.pure(f(a))
       },
-      "applicative 3" -> forAll { (a: A, ff: F[A => C]) =>
+      "applicative interchange" -> forAll { (a: A, ff: F[A => C]) =>
         F.apply(F.pure(a))(ff) ?== F.apply(ff)(F.pure(f => f(a)))
       },
-      "applicative 4" -> forAll { (fa: F[A], f: A => C) =>
+      "applicative map" -> forAll { (fa: F[A], f: A => C) =>
         F.map(fa)(f) ?== F.apply(fa)(F.pure(f))
       })
     }
