@@ -9,10 +9,10 @@ trait FutureInstances {
 
       def pure[A](x: A): Future[A] = Future(x)
 
-      def flatMap[A, B](fa: Future[A])(f: (A) => Future[B]): Future[B] =
+      def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] =
         fa.flatMap(f)
 
-      def coflatMap[A, B](fa: Future[A])(f: (Future[A]) => B): Future[B] =
+      def coflatMap[A, B](fa: Future[A])(f: Future[A] => B): Future[B] =
         Future(f(fa))
   }
 }
