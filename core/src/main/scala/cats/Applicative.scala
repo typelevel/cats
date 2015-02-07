@@ -7,8 +7,8 @@ import simulacrum._
  *
  * Allows application of a function in an Applicative context to a value in an Applicative context
  *
- * See: http://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf
- * Also: http://staff.city.ac.uk/~ross/papers/Applicative.pdf
+ * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
+ * Also: [[http://staff.city.ac.uk/~ross/papers/Applicative.pdf Applicative programming with effects]]
  *
  * Must obey the following laws:
  *  - apply(fa)(pure(a => a)) = fa
