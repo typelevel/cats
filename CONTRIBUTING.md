@@ -103,10 +103,9 @@ TODO
 
 ### Submit a pull request
 
-Before you open a pull request, you should make sure that `compile`,
-`unidoc`, and `scalastyle` all run successfully. Travis will run these
-as well, but it may save you some time to be alerted to style problems
-earlier.
+Before you open a pull request, you should make sure that `sbt
+validate` runs successfully. Travis will run this as well, but it may
+save you some time to be alerted to style problems earlier.
 
 If your pull request addresses an existing issue, please tag that
 issue number in the body of your pull request or commit message. For

@@ -166,3 +166,5 @@ lazy val noPublishSettings = Seq(
   publishLocal := (),
   publishArtifact := false
 )
+
+addCommandAlias("validate", ";compile;test;scalastyle;test:scalastyle;unidoc")
