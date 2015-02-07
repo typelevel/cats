@@ -69,6 +69,8 @@ trait FunctorLaws[F[_], A] extends Laws {
 
   def applicative[B: Arbitrary, C: Arbitrary](implicit F: Applicative[F], FC: Eq[F[C]]) = {
     implicit val ArbFAC: Arbitrary[F[A => C]] = ArbF.synthesize[A => C]
+    implicit val ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
+    implicit val ArbFBC: Arbitrary[F[B => C]] = ArbF.synthesize[B => C]
     new FunctorProperties(
       name = "applicative",
       parents = Seq(apply[B, C]),
@@ -83,6 +85,13 @@ trait FunctorLaws[F[_], A] extends Laws {
       },
       "applicative map" -> forAll { (fa: F[A], f: A => C) =>
         F.map(fa)(f) ?== F.apply(fa)(F.pure(f))
+      },
+      "applicative composition" -> forAll { (fa: F[A], fab: F[A => B], fbc: F[B => C]) =>
+        // helping out type inference
+        val compose: (B => C) => (A => B) => (A => C) = _.compose
+
+        F.apply(fa)(F.apply(fab)(F.apply(fbc)(F.pure(compose)))) ?==
+          F.apply((F.apply(fa)(fab)))(fbc)
       })
     }
 

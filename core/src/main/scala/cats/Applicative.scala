@@ -15,6 +15,7 @@ import simulacrum._
  *  - apply(pure(a))(pure(f)) = pure(f(a))
  *  - apply(pure(a))(ff) = apply(ff)(pure(f => f(a)))
  *  - map(fa)(f) = apply(fa)(pure(f))
+ *  - apply(fa)(apply(fab)(apply(fbc)(pure(compose)))) = apply(apply(fa)(fab))(fbc)
  */
 trait Applicative[F[_]] extends Apply[F] { self =>
   /**
