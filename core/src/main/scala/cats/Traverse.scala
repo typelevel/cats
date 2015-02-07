@@ -12,7 +12,7 @@ import simulacrum._
  * Traversing with the [[cats.data.Const]] effect where the first type parameter has
  * a [[cats.Monoid]] instance is equivalent to [[cats.Foldable]]#fold.
  *
- * See: [[http://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
+ * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
 @typeclass trait Traverse[F[_]] extends Functor[F] with Foldable[F] { self =>
 

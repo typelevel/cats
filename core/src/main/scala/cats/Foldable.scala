@@ -5,7 +5,7 @@ import simulacrum._
 /**
  * Data structures that can be folded to a summary value.
  *
- * See: [[http://www.cs.nott.ac.uk/~gmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
+ * See: [[https://www.cs.nott.ac.uk/~gmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
 @typeclass trait Foldable[F[_]] { self =>
 
