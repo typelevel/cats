@@ -1,4 +1,6 @@
 import com.typesafe.sbt.pgp.PgpKeys.publishSigned
+import com.typesafe.sbt.SbtSite.SiteKeys._
+import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import sbtrelease.ReleaseStep
 import sbtrelease.ReleasePlugin.ReleaseKeys.releaseProcess
 import sbtrelease.ReleaseStateTransformations._
@@ -48,16 +50,31 @@ lazy val disciplineDependencies = Seq(
   "org.typelevel" %% "discipline" % "0.2.1"
 )
 
-lazy val docSettings = unidocSettings ++ Seq(
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(examples, tests)
+lazy val docSettings = Seq(
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, laws, data, std),
+  site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
+  site.addMappingsToSiteDir(tut, ""),
+  ghpagesNoJekyll := false,
+  git.remoteRepo := "git@github.com:stew/cats.git",
+  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
+
+lazy val docs = project
+  .settings(moduleName := "cats-docs")
+  .settings(catsSettings: _*)
+  .settings(noPublishSettings: _*)
+  .settings(unidocSettings: _*)
+  .settings(site.settings: _*)
+  .settings(ghpages.settings: _*)
+  .settings(tutSettings: _*)
+  .settings(docSettings: _*)
+  .settings(tutSettings: _*)
 
 lazy val aggregate = project.in(file("."))
   .settings(catsSettings: _*)
-  .settings(docSettings: _*)
   .settings(noPublishSettings: _*)
-  .aggregate(core, laws, tests, data, std, examples)
-  .dependsOn(core, laws, tests, data, std, examples)
+  .aggregate(core, laws, tests, data, std)
+  .dependsOn(core, laws, tests, data, std)
 
 lazy val core = project
   .settings(moduleName := "cats")
@@ -92,11 +109,6 @@ lazy val tests = project.dependsOn(core, data, std, laws)
 lazy val data = project.dependsOn(core)
   .settings(moduleName := "cats-data")
   .settings(catsSettings: _*)
-
-lazy val examples = project.dependsOn(core)
-  .settings(moduleName := "cats-examples")
-  .settings(catsSettings: _*)
-  .settings(noPublishSettings: _*)
 
 lazy val publishSettings = Seq(
   homepage := Some(url("http://github.com/non/cats")),

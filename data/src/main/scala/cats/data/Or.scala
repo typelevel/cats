@@ -9,10 +9,10 @@ import scala.reflect.ClassTag
 
 /** Represents a right-biased disjunction that is either an `A` or a `B`.
  *
- * An instance of `A` [[Or]] `B` is either a [[LeftOr]]`[A]` or a [[RightOr]]`[B]`.
+ * An instance of `A` [[Or]] `B` is either a [[Or.LeftOr]]`[A]` or a [[Or.RightOr]]`[B]`.
  *
  * A common use of [[Or]] is to explicitly represent the possibility of failure in a result as opposed to
- * throwing an exception.  By convention, [[LeftOr]] is used for errors and [[RightOr]] is reserved for successes.
+ * throwing an exception.  By convention, [[Or.LeftOr]] is used for errors and [[Or.RightOr]] is reserved for successes.
  * For example, a function that attempts to parse an integer from a string may have a return type of
  * `NumberFormatException` [[Or]] `Int`. However, since there is no need to actually throw an exception, the type (`A`)
  * chosen for the "left" could be any type representing an error and has no need to actually extend `Exception`.
