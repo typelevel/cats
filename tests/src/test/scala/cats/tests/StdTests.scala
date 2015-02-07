@@ -1,7 +1,7 @@
-package cats
-package laws
+package cats.tests
 
 import algebra.laws._
+import cats.laws.{ComonadLaws, FunctorLaws}
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalatest.FunSuite
 
@@ -13,7 +13,7 @@ import cats.std.function._
 import cats.std.list._
 import cats.std.option._
 
-class LawTests extends FunSuite with Discipline {
+class StdTests extends FunSuite with Discipline {
   checkAll("Function0[Int]", FunctorLaws[Function0, Int].applicative[Int, Int])
   checkAll("Function0[Int]", ComonadLaws[Function0, Int, Int].comonad[Int])
   checkAll("Option[Int]", FunctorLaws[Option, Int].applicative[Int, Int])
