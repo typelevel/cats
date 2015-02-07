@@ -2,7 +2,7 @@ language: scala
 scala:
   - 2.11.5
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION test scalastyle unidoc
+  - sbt ++$TRAVIS_SCALA_VERSION test scalastyle test:scalastyle unidoc
 notifications:
   webhooks:
     urls:
