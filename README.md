@@ -22,6 +22,7 @@ installed. Run `sbt`, and then use any of the following commands:
  * `test`: run the tests
  * `unidoc`: generate the documentation
  * `scalastyle`: run the style-checker on the code
+ * `validate`: run tests, style-checker, and doc generation
 
 [![Build Status](https://api.travis-ci.org/non/cats.png)](https://travis-ci.org/non/cats)
 [![Workflow](https://badge.waffle.io/non/cats.png?label=ready&title=Ready)](https://waffle.io/non/cats)
