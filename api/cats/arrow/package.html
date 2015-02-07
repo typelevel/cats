@@ -1,0 +1,308 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>arrow - cats.arrow</title>
+          <meta name="description" content="arrow - cats.arrow" />
+          <meta name="keywords" content="arrow cats.arrow" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'cats.arrow.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a></p>
+        <h1>arrow</h1><span class="permalink">
+      <a href="../../index.html#cats.arrow.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">arrow</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="cats.arrow.Arrow" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Arrow[F[_,_]]extendsSplit[F]withStrong[F]withCategory[F]"></a>
+      <a id="Arrow[F[_,_]]:Arrow[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Arrow.html"><span class="name">Arrow</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Split.html" class="extype" name="cats.arrow.Split">Split</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@Arrow[F[_,_]]extendsSplit[F]withStrong[F]withCategory[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.arrow.Category" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Category[F[_,_]]extendsCompose[F]"></a>
+      <a id="Category[F[_,_]]:Category[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Category.html"><span class="name">Category</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Category.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@Category[F[_,_]]extendsCompose[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.arrow.Cokleisli" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Cokleisli[F[_],A,B]extendsProductwithSerializable"></a>
+      <a id="Cokleisli[F[_],A,B]:Cokleisli[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Cokleisli.html"><span class="name">Cokleisli</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="run">run: (<span class="extype" name="cats.arrow.Cokleisli.F">F</span>[<span class="extype" name="cats.arrow.Cokleisli.A">A</span>]) ⇒ <span class="extype" name="cats.arrow.Cokleisli.B">B</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@Cokleisli[F[_],A,B]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.arrow.Compose" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Compose[F[_,_]]extendsAnyRef"></a>
+      <a id="Compose[F[_,_]]:Compose[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Compose.html"><span class="name">Compose</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@Compose[F[_,_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.arrow.Kleisli" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Kleisli[M[_],A,B]extendsProductwithSerializable"></a>
+      <a id="Kleisli[M[_],A,B]:Kleisli[M,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Kleisli.html"><span class="name">Kleisli</span></a><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="run">run: (<span class="extype" name="cats.arrow.Kleisli.A">A</span>) ⇒ <span class="extype" name="cats.arrow.Kleisli.M">M</span>[<span class="extype" name="cats.arrow.Kleisli.B">B</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@Kleisli[M[_],A,B]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents a function <code>A =&gt; M[B]</code>.</p>
+    </li><li name="cats.arrow.NaturalTransformation" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NaturalTransformation[F[_],G[_]]extendsAnyRef"></a>
+      <a id="NaturalTransformation[F[_],G[_]]:NaturalTransformation[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NaturalTransformation.html"><span class="name">NaturalTransformation</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@NaturalTransformation[F[_],G[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.arrow.Split" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Split[F[_,_]]extendsCompose[F]"></a>
+      <a id="Split[F[_,_]]:Split[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Split.html"><span class="name">Split</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Split.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@Split[F[_,_]]extendsCompose[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="cats.arrow.Arrow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Arrow"></a>
+      <a id="Arrow:Arrow"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Arrow$.html"><span class="name">Arrow</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@Arrow" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.arrow.Category" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Category"></a>
+      <a id="Category:Category"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Category$.html"><span class="name">Category</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@Category" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.arrow.Compose" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Compose"></a>
+      <a id="Compose:Compose"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Compose$.html"><span class="name">Compose</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@Compose" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.arrow.Kleisli" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Kleisli"></a>
+      <a id="Kleisli:Kleisli"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Kleisli$.html"><span class="name">Kleisli</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@Kleisli" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.arrow.Split" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Split"></a>
+      <a id="Split:Split"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Split$.html"><span class="name">Split</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.package@Split" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
