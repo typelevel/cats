@@ -10,3 +10,4 @@ trait AllInstances
   with    AnyValInstances
   with    AnyRefInstances
   with    MapInstances
+  with    FutureInstances

@@ -10,6 +10,7 @@ package object std {
   object stream     extends StreamInstances
   object vector     extends VectorInstances
   object map        extends MapInstances
+  object future     extends FutureInstances
 
   object int        extends IntInstances
   object byte       extends ByteInstances
