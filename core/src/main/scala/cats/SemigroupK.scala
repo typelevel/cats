@@ -10,13 +10,13 @@ import simulacrum._
  * SemigroupK is like a Semigroup for kinds (i.e. parameterized
  * types).
  * 
- * A Semigroup[F] can produce a Semigroup[F[A]] for any type A.
+ * A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.
  * 
  * Here's how to distinguish Semigroup and SemigroupK:
  * 
  *  - Semigroup[A] allows two A values to be combined.
  * 
- *  - Semigroup[F] allows two F[A] values to be combined, for any A.
+ *  - SemigroupK[F] allows two F[A] values to be combined, for any A.
  *    The combination operation just depends on the structure of F,
  *    but not the structure of A.
  */

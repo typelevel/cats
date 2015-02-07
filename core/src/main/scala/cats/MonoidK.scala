@@ -17,7 +17,7 @@ import simulacrum._
  *  - Monoid[A] allows A values to be combined, and also means there
  *    is an "empty" A value that functions as an identity.
  * 
- *  - Monoid[F] allows two F[A] values to be combined, for any A.  It
+ *  - MonoidK[F] allows two F[A] values to be combined, for any A.  It
  *    also means that for any A, there is an "empty" F[A] value. The
  *    combination operation and empty value just depend on the
  *    structure of F, but not on the structure of A.
@@ -30,7 +30,7 @@ import simulacrum._
   def empty[A]: F[A]
 
   /**
-   * Given a type A, create a concrete Semigroup[F[A]].
+   * Given a type A, create a concrete Monoid[F[A]].
    */
   override def algebra[A]: Monoid[F[A]] =
     new Monoid[F[A]] {
