@@ -183,4 +183,4 @@ lazy val noPublishSettings = Seq(
   publishArtifact := false
 )
 
-addCommandAlias("validate", ";compile;test;scalastyle;test:scalastyle;unidoc")
+addCommandAlias("validate", ";compile;test;scalastyle;test:scalastyle;unidoc;tut")
