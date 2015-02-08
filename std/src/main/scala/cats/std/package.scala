@@ -21,6 +21,6 @@ package object std {
   object boolean    extends BooleanInstances
   object unit       extends UnitInstances
 
-  object bigint     extends BigIntInstances
-  object bigdecimal extends BigDecimalInstances
+  object bigInt     extends BigIntInstances
+  object bigDecimal extends BigDecimalInstances
 }
