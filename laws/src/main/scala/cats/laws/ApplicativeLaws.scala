@@ -25,7 +25,7 @@ class ApplicativeLaws[F[_]](implicit F: Applicative[F]) extends ApplyLaws[F] {
    * It is a combination of [[applyComposition]] and [[applicativeMap]] and
    * hence not strictly necessary.
    */
-  def applicativeComposition[A, B, C](fa: F[A], fab: F[A => B], fbc: F[B => C]) = {
+  def applicativeComposition[A, B, C](fa: F[A], fab: F[A => B], fbc: F[B => C]): (F[C], F[C]) = {
     val compose: (B => C) => (A => B) => (A => C) = _.compose
     fa.apply(fab.apply(fbc.apply(F.pure(compose)))) -> fa.apply(fab).apply(fbc)
   }
