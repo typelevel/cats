@@ -2,8 +2,12 @@ package cats
 package std
 
 trait EitherInstances extends EitherInstances0 {
-  implicit def eitherMonadFilter[A: Monoid]: Monad[Either[A, ?]] with MonadFilter[Either[A, ?]] = new EitherMonad[A] with MonadFilter[Either[A, ?]] {
+  implicit def eitherMonadCombine[A: Monoid]: Monad[Either[A, ?]] with MonadCombine[Either[A, ?]] = new EitherMonad[A] with MonadCombine[Either[A, ?]] {
     def empty[B]: Either[A, B] = Left(Monoid[A].empty)
+    def combine[B](x: Either[A, B], y: Either[A, B]): Either[A, B] = (x, y) match {
+      case (Left(_), Right(_)) => y
+      case _ => x
+    }
   }
 
   implicit def eitherTraverse[A]: Traverse[Either[A, ?]] = new Traverse[Either[A, ?]] {
