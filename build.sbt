@@ -69,6 +69,7 @@ lazy val docs = project
   .settings(tutSettings: _*)
   .settings(docSettings: _*)
   .settings(tutSettings: _*)
+  .dependsOn(core)
 
 lazy val aggregate = project.in(file("."))
   .settings(catsSettings: _*)
