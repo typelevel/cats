@@ -202,7 +202,8 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.</p><div class="fullcomment"><div class="comment cmt"><p>Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+      <p class="shortcomment cmt">Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.</p><div class="fullcomment"><div class="comment cmt"><p>Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -338,7 +339,9 @@ map a G[F[A]] to a G[F[B]].
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">alias for map</p><div class="fullcomment"><div class="comment cmt"><p>alias for map</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+      <p class="shortcomment cmt">Alias for map
+</p><div class="fullcomment"><div class="comment cmt"><p>Alias for map
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="cats.Functor#fproduct" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fproduct[A,B](fa:F[A])(f:A=&gt;B):F[(A,B)]"></a>
       <a id="fproduct[A,B](F[G[A]])((A)⇒B):F[G[(A,B)]]"></a>
@@ -356,8 +359,10 @@ map a G[F[A]] to a G[F[B]].
       </a>
     </span>
       <p class="shortcomment cmt">Tuple the values in fa with the result of applying a function
-with the value</p><div class="fullcomment"><div class="comment cmt"><p>Tuple the values in fa with the result of applying a function
-with the value</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+with the value
+</p><div class="fullcomment"><div class="comment cmt"><p>Tuple the values in fa with the result of applying a function
+with the value
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -393,18 +398,18 @@ with the value</p></div><dl class="attributes block"> <dt>Definition Classes</dt
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.Functor#imap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="imap[A,B](fa:F[A])(f:A=&gt;B,fi:B=&gt;A):F[B]"></a>
-      <a id="imap[A,B](F[G[A]])((A)⇒B,(B)⇒A):F[G[B]]"></a>
+      <a id="imap[A,B](fa:F[A])(f:A=&gt;B)(fi:B=&gt;A):F[B]"></a>
+      <a id="imap[A,B](F[G[A]])((A)⇒B)((B)⇒A):F[G[B]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">imap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.CompositeFunctor.F">F</span>[<span class="extype" name="cats.CompositeFunctor.G">G</span>[<span class="extype" name="cats.Functor.imap.A">A</span>]]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Functor.imap.A">A</span>) ⇒ <span class="extype" name="cats.Functor.imap.B">B</span></span>, <span name="fi">fi: (<span class="extype" name="cats.Functor.imap.B">B</span>) ⇒ <span class="extype" name="cats.Functor.imap.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.CompositeFunctor.F">F</span>[<span class="extype" name="cats.CompositeFunctor.G">G</span>[<span class="extype" name="cats.Functor.imap.B">B</span>]]</span>
+        <span class="name">imap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.CompositeFunctor.F">F</span>[<span class="extype" name="cats.CompositeFunctor.G">G</span>[<span class="extype" name="cats.Functor.imap.A">A</span>]]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Functor.imap.A">A</span>) ⇒ <span class="extype" name="cats.Functor.imap.B">B</span></span>)</span><span class="params">(<span name="fi">fi: (<span class="extype" name="cats.Functor.imap.B">B</span>) ⇒ <span class="extype" name="cats.Functor.imap.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.CompositeFunctor.F">F</span>[<span class="extype" name="cats.CompositeFunctor.G">G</span>[<span class="extype" name="cats.Functor.imap.B">B</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.CompositeFunctor@imap[A,B](fa:F[A])(f:A=&gt;B,fi:B=&gt;A):F[B]" title="Permalink" target="_top">
+      <a href="../index.html#cats.CompositeFunctor@imap[A,B](fa:F[A])(f:A=&gt;B)(fi:B=&gt;A):F[B]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -563,8 +568,8 @@ with the value</p></div><dl class="attributes block"> <dt>Definition Classes</dt
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">empty the fa of the values, preserving the structure
-</p><div class="fullcomment"><div class="comment cmt"><p>empty the fa of the values, preserving the structure
+      <p class="shortcomment cmt">Empty the fa of the values, preserving the structure
+</p><div class="fullcomment"><div class="comment cmt"><p>Empty the fa of the values, preserving the structure
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>

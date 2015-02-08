@@ -123,10 +123,11 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Applicative functor.</p><div class="fullcomment"><div class="comment cmt"><p>Applicative functor.</p><p>Must obey the following laws:</p><ul><li>apply(fa)(pure(a =&gt; a)) = fa</li><li>apply(pure(a))(pure(f)) = pure(f(a))</li><li>apply(pure(a))(ff) = apply(ff)(pure(f =&gt; f(a)))</li><li>map(fa)(f) = apply(fa)(pure(f))
+      <p class="shortcomment cmt">Applicative functor.</p><div class="fullcomment"><div class="comment cmt"><p>Applicative functor.</p><p>Allows application of a function in an Applicative context to a value in an Applicative context</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
+Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_blank">Applicative programming with effects</a></p><p>Must obey the following laws:</p><ul><li>apply(fa)(pure(a =&gt; a)) = fa</li><li>apply(pure(a))(pure(f)) = pure(f(a))</li><li>apply(pure(a))(ff) = apply(ff)(pure(f =&gt; f(a)))</li><li>map(fa)(f) = apply(fa)(pure(f))</li><li>apply(fa)(apply(fab)(apply(fbc)(pure(compose)))) = apply(apply(fa)(fab))(fbc)
 </li></ul></div></div>
     </li><li name="cats.Apply" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Apply[F[_]]extendsFunctor[F]"></a>
+      <a id="Apply[F[_]]extendsFunctor[F]withApplyArityFunctions[F]"></a>
       <a id="Apply[F[_]]:Apply[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -134,15 +135,32 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Apply.html"><span class="name">Apply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Apply.F">F</span>]</span>
+        <a href="Apply.html"><span class="name">Apply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a>[<span class="extype" name="cats.Apply.F">F</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Apply[F[_]]extendsFunctor[F]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Apply[F[_]]extendsFunctor[F]withApplyArityFunctions[F]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Weaker version of Applicative[F]; has apply but not pure.</p><div class="fullcomment"><div class="comment cmt"><p>Weaker version of Applicative[F]; has apply but not pure.</p><p>Laws:</p><ul><li>apply(apply(fa)(fab))(fbc) = apply(fa)(apply(fab)(map(fbc)(bc =&gt; ab =&gt; ab andThen bc)))
 </li></ul></div></div>
+    </li><li name="cats.ApplyArityFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ApplyArityFunctions[F[_]]extendsAnyRef"></a>
+      <a id="ApplyArityFunctions[F[_]]:ApplyArityFunctions[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ApplyArityFunctions.html"><span class="name">ApplyArityFunctions</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@ApplyArityFunctions[F[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.Bimonad" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Bimonad[F[_]]extendsMonad[F]withComonad[F]"></a>
       <a id="Bimonad[F[_]]:Bimonad[F]"></a>
@@ -263,7 +281,24 @@
       </a>
     </span>
       
-    </li><li name="cats.FlatMap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="cats.Eq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Eq[A]=algebra.Eq[A]"></a>
+      <a id="Eq[A]:Eq[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Eq</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="algebra.Eq">algebra.Eq</span>[<span class="extype" name="cats.Eq.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Eq[A]=algebra.Eq[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.FlatMap" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="FlatMap[F[_]]extendsApply[F]"></a>
       <a id="FlatMap[F[_]]:FlatMap[F]"></a>
       <h4 class="signature">
@@ -279,8 +314,17 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="cats.Foldable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt"> FlatMap typeclass gives us flatMap, which allows us to have a value
+ in a context (F[A]) and then feed that into a function that takes
+ a normal value and returns a value in a context (A =&gt; F[B]).</p><div class="fullcomment"><div class="comment cmt"><p> FlatMap typeclass gives us flatMap, which allows us to have a value
+ in a context (F[A]) and then feed that into a function that takes
+ a normal value and returns a value in a context (A =&gt; F[B]).</p><p> One motivation for separating this out from Monad is that there are
+ situations where we can implement flatMap but not pure.  For example,
+ we can implement map or flatMap that transforms the values of Map[K, ?],
+ but we can't implement pure (because we wouldn't know what key to use
+ when instantiating the new Map).
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>See <a href="https://github.com/non/cats/issues/3" target="_blank">https://github.com/non/cats/issues/3</a> for some discussion.</p></span></dd></dl></div>
+    </li><li name="cats.Foldable" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Foldable[F[_]]extendsAnyRef"></a>
       <a id="Foldable[F[_]]:Foldable[F]"></a>
       <h4 class="signature">
@@ -296,7 +340,8 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Data structures that can be folded to a summary value.</p>
+      <p class="shortcomment cmt">Data structures that can be folded to a summary value.</p><div class="fullcomment"><div class="comment cmt"><p>Data structures that can be folded to a summary value.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fold.pdf" target="_blank">A tutorial on the universality and expressiveness of fold</a>
+</p></div></div>
     </li><li name="cats.Functor" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Functor[F[_]]extendsInvariant[F]"></a>
       <a id="Functor[F[_]]:Functor[F]"></a>
@@ -349,7 +394,7 @@
       </a>
     </span>
       
-    </li><li name="cats.Monad" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="cats.Monad" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Monad[F[_]]extendsFlatMap[F]withApplicative[F]"></a>
       <a id="Monad[F[_]]:Monad[F]"></a>
       <h4 class="signature">
@@ -365,7 +410,8 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Monad.</p><div class="fullcomment"><div class="comment cmt"><p>Monad.</p><p>Allows composition of dependent effectful functions.</p><p>See: <a href="http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf" target="_blank">Monads for functional programming</a></p><p>Must obey the following laws:</p><ul><li>flatMap(pure(a))(f) = f(a)</li><li>flatMap(fa)(identity) = fa</li><li>flatMap(flatMap(fa)(f))(g) = flatMap(fa)(a =&gt; flatMap(f(a))(g))
+</li></ul></div></div>
     </li><li name="cats.MonadCombine" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="MonadCombine[F[_]]extendsMonadFilter[F]withMonoidK[F]"></a>
       <a id="MonadCombine[F[_]]:MonadCombine[F]"></a>
@@ -400,6 +446,23 @@
       </a>
     </span>
       
+    </li><li name="cats.Monoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Monoid[A]=algebra.Monoid[A]"></a>
+      <a id="Monoid[A]:Monoid[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Monoid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="algebra.Monoid">algebra.Monoid</span>[<span class="extype" name="cats.Monoid.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Monoid[A]=algebra.Monoid[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.MonoidK" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="MonoidK[F[_]]extendsSemigroupK[F]"></a>
       <a id="MonoidK[F[_]]:MonoidK[F]"></a>
@@ -413,6 +476,57 @@
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@MonoidK[F[_]]extendsSemigroupK[F]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.Order" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Order[A]=algebra.Order[A]"></a>
+      <a id="Order[A]:Order[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Order</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="algebra.Order">algebra.Order</span>[<span class="extype" name="cats.Order.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Order[A]=algebra.Order[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.PartialOrder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PartialOrder[A]=algebra.PartialOrder[A]"></a>
+      <a id="PartialOrder[A]:PartialOrder[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">PartialOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="algebra.PartialOrder">algebra.PartialOrder</span>[<span class="extype" name="cats.PartialOrder.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@PartialOrder[A]=algebra.PartialOrder[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.Semigroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Semigroup[A]=algebra.Semigroup[A]"></a>
+      <a id="Semigroup[A]:Semigroup[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Semigroup</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="algebra.Semigroup">algebra.Semigroup</span>[<span class="extype" name="cats.Semigroup.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Semigroup[A]=algebra.Semigroup[A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -452,7 +566,7 @@
     </span>
       <p class="shortcomment cmt">A typeclass to provide textual representation
 </p>
-    </li><li name="cats.Traverse" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="cats.Traverse" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Traverse[F[_]]extendsFunctor[F]withFoldable[F]"></a>
       <a id="Traverse[F[_]]:Traverse[F]"></a>
       <h4 class="signature">
@@ -468,7 +582,10 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Traverse, also known as Traversable.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse, also known as Traversable.</p><p>Traversal over a structure with an effect.</p><p>Traversing with the <a href="#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a> effect is equivalent to <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
+Traversing with the <a href="data/Const.html" class="extype" name="cats.data.Const">cats.data.Const</a> effect where the first type parameter has
+a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a> instance is equivalent to <a href="Foldable.html" class="extype" name="cats.Foldable">cats.Foldable</a>#fold.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
+</p></div></div>
     </li><li name="cats.~&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="~&gt;[F[_],G[_]]=cats.arrow.NaturalTransformation[F,G]"></a>
       <a id="~&gt;[F[_],G[_]]:~&gt;[F,G]"></a>
@@ -612,6 +729,23 @@
       </a>
     </span>
       
+    </li><li name="cats#Eq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Eq:algebra.Eq.type"></a>
+      <a id="Eq:algebra.Eq.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Eq</span><span class="result">: <span class="extype" name="algebra.Eq">algebra.Eq</span>.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Eq:algebra.Eq.type" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.FlatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="FlatMap"></a>
       <a id="FlatMap:FlatMap"></a>
@@ -748,6 +882,23 @@
       </a>
     </span>
       
+    </li><li name="cats#Monoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Monoid:algebra.Monoid.type"></a>
+      <a id="Monoid:algebra.Monoid.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Monoid</span><span class="result">: <span class="extype" name="algebra.Monoid">algebra.Monoid</span>.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Monoid:algebra.Monoid.type" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.MonoidK" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="MonoidK"></a>
       <a id="MonoidK:MonoidK"></a>
@@ -761,6 +912,57 @@
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@MonoidK" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats#Order" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Order:algebra.Order.type"></a>
+      <a id="Order:algebra.Order.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Order</span><span class="result">: <span class="extype" name="algebra.Order">algebra.Order</span>.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Order:algebra.Order.type" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats#PartialOrder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PartialOrder:algebra.PartialOrder.type"></a>
+      <a id="PartialOrder:algebra.PartialOrder.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">PartialOrder</span><span class="result">: <span class="extype" name="algebra.PartialOrder">algebra.PartialOrder</span>.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@PartialOrder:algebra.PartialOrder.type" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats#Semigroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Semigroup:algebra.Semigroup.type"></a>
+      <a id="Semigroup:algebra.Semigroup.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Semigroup</span><span class="result">: <span class="extype" name="algebra.Semigroup">algebra.Semigroup</span>.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Semigroup:algebra.Semigroup.type" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -884,6 +1086,23 @@
       </a>
     </span>
       
+    </li><li name="cats.implicits" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="implicits"></a>
+      <a id="implicits:implicits"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="implicits$.html"><span class="name">implicits</span></a><span class="result"> extends <a href="syntax/AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a> with <a href="std/AllInstances.html" class="extype" name="cats.std.AllInstances">AllInstances</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@implicits" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.laws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="laws"></a>
       <a id="laws:laws"></a>
@@ -914,6 +1133,23 @@
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@std" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.syntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="syntax"></a>
+      <a id="syntax:syntax"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="syntax/package.html"><span class="name">syntax</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@syntax" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>

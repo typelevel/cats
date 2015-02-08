@@ -47,14 +47,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Apply</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Apply.F">F</span>]</span>
+        <span class="name">Apply</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a>[<span class="extype" name="cats.Apply.F">F</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Weaker version of Applicative[F]; has apply but not pure.</p><p>Laws:</p><ul><li>apply(apply(fa)(fab))(fbc) = apply(fa)(apply(fab)(map(fbc)(bc =&gt; ab =&gt; ab andThen bc)))
 </li></ul></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Apply.F">F</span>]</dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Apply.F">F</span>], <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Apply.F">F</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a>[<span class="extype" name="cats.Apply.F">F</span>], <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Apply.F">F</span>], <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Apply.F">F</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>, <a href="CompositeApplicative.html" class="extype" name="cats.CompositeApplicative">CompositeApplicative</a>, <a href="CompositeApply.html" class="extype" name="cats.CompositeApply">CompositeApply</a>, <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>, <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>, <a href="MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>, <a href="MonadFilter.html" class="extype" name="cats.MonadFilter">MonadFilter</a>, <a href="data/OrInstances$OrInstances.html" class="extype" name="cats.data.OrInstances.OrInstances">OrInstances</a></div>
@@ -75,7 +75,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.Apply"><span>Apply</span></li><li class="in" name="cats.Functor"><span>Functor</span></li><li class="in" name="cats.functor.Invariant"><span>Invariant</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.Apply"><span>Apply</span></li><li class="in" name="cats.ApplyArityFunctions"><span>ApplyArityFunctions</span></li><li class="in" name="cats.Functor"><span>Functor</span></li><li class="in" name="cats.functor.Invariant"><span>Invariant</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -115,7 +115,8 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Given a value and a function in the Apply context, applies the
+function to the value.</p>
     </li><li name="cats.Functor#map" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="map[A,B](fa:F[A])(f:A=&gt;B):F[B]"></a>
       <a id="map[A,B](F[A])((A)⇒B):F[B]"></a>
@@ -189,6 +190,57 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#apply10" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply10[A,B,C,D,E,FF,G,H,I,J,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J])(f:F[(A,B,C,D,E,FF,G,H,I,J)=&gt;Z]):F[Z]"></a>
+      <a id="apply10[A,B,C,D,E,FF,G,H,I,J,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G],F[H],F[I],F[J])(F[(A,B,C,D,E,FF,G,H,I,J)⇒Z]):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply10</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="J">J</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply10.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply10.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply10.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply10.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply10.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply10.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply10.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply10.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply10.I">I</span>]</span>, <span name="fj">fj: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply10.J">J</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.apply10.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.apply10.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.apply10.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.apply10.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.apply10.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.apply10.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.apply10.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.apply10.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.apply10.I">I</span>, <span class="extype" name="cats.ApplyArityFunctions.apply10.J">J</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.apply10.Z">Z</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply10.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@apply10[A,B,C,D,E,FF,G,H,I,J,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J])(f:F[(A,B,C,D,E,FF,G,H,I,J)=&gt;Z]):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#apply11" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply11[A,B,C,D,E,FF,G,H,I,J,K,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K])(f:F[(A,B,C,D,E,FF,G,H,I,J,K)=&gt;Z]):F[Z]"></a>
+      <a id="apply11[A,B,C,D,E,FF,G,H,I,J,K,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G],F[H],F[I],F[J],F[K])(F[(A,B,C,D,E,FF,G,H,I,J,K)⇒Z]):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply11</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="J">J</span>, <span name="K">K</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.I">I</span>]</span>, <span name="fj">fj: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.J">J</span>]</span>, <span name="fk">fk: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.K">K</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.apply11.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.apply11.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.apply11.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.apply11.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.apply11.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.apply11.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.apply11.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.apply11.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.apply11.I">I</span>, <span class="extype" name="cats.ApplyArityFunctions.apply11.J">J</span>, <span class="extype" name="cats.ApplyArityFunctions.apply11.K">K</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.apply11.Z">Z</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply11.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@apply11[A,B,C,D,E,FF,G,H,I,J,K,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K])(f:F[(A,B,C,D,E,FF,G,H,I,J,K)=&gt;Z]):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#apply12" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply12[A,B,C,D,E,FF,G,H,I,J,K,L,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K],fl:F[L])(f:F[(A,B,C,D,E,FF,G,H,I,J,K,L)=&gt;Z]):F[Z]"></a>
+      <a id="apply12[A,B,C,D,E,FF,G,H,I,J,K,L,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G],F[H],F[I],F[J],F[K],F[L])(F[(A,B,C,D,E,FF,G,H,I,J,K,L)⇒Z]):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply12</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="J">J</span>, <span name="K">K</span>, <span name="L">L</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.I">I</span>]</span>, <span name="fj">fj: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.J">J</span>]</span>, <span name="fk">fk: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.K">K</span>]</span>, <span name="fl">fl: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.L">L</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.apply12.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.apply12.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.apply12.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.apply12.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.apply12.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.apply12.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.apply12.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.apply12.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.apply12.I">I</span>, <span class="extype" name="cats.ApplyArityFunctions.apply12.J">J</span>, <span class="extype" name="cats.ApplyArityFunctions.apply12.K">K</span>, <span class="extype" name="cats.ApplyArityFunctions.apply12.L">L</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.apply12.Z">Z</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply12.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@apply12[A,B,C,D,E,FF,G,H,I,J,K,L,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K],fl:F[L])(f:F[(A,B,C,D,E,FF,G,H,I,J,K,L)=&gt;Z]):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
     </li><li name="cats.Apply#apply2" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="apply2[A,B,Z](fa:F[A],fb:F[B])(f:F[(A,B)=&gt;Z]):F[Z]"></a>
       <a id="apply2[A,B,Z](F[A],F[B])(F[(A,B)⇒Z]):F[Z]"></a>
@@ -205,7 +257,126 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">apply2 is a binary version of apply, defined in terms of apply.</p>
+    </li><li name="cats.ApplyArityFunctions#apply3" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply3[A,B,C,Z](fa:F[A],fb:F[B],fc:F[C])(f:F[(A,B,C)=&gt;Z]):F[Z]"></a>
+      <a id="apply3[A,B,C,Z](F[A],F[B],F[C])(F[(A,B,C)⇒Z]):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply3</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply3.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply3.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply3.C">C</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.apply3.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.apply3.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.apply3.C">C</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.apply3.Z">Z</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply3.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@apply3[A,B,C,Z](fa:F[A],fb:F[B],fc:F[C])(f:F[(A,B,C)=&gt;Z]):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#apply4" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply4[A,B,C,D,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D])(f:F[(A,B,C,D)=&gt;Z]):F[Z]"></a>
+      <a id="apply4[A,B,C,D,Z](F[A],F[B],F[C],F[D])(F[(A,B,C,D)⇒Z]):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply4</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply4.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply4.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply4.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply4.D">D</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.apply4.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.apply4.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.apply4.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.apply4.D">D</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.apply4.Z">Z</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply4.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@apply4[A,B,C,D,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D])(f:F[(A,B,C,D)=&gt;Z]):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#apply5" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply5[A,B,C,D,E,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E])(f:F[(A,B,C,D,E)=&gt;Z]):F[Z]"></a>
+      <a id="apply5[A,B,C,D,E,Z](F[A],F[B],F[C],F[D],F[E])(F[(A,B,C,D,E)⇒Z]):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply5</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply5.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply5.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply5.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply5.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply5.E">E</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.apply5.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.apply5.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.apply5.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.apply5.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.apply5.E">E</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.apply5.Z">Z</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply5.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@apply5[A,B,C,D,E,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E])(f:F[(A,B,C,D,E)=&gt;Z]):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#apply6" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply6[A,B,C,D,E,FF,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF])(f:F[(A,B,C,D,E,FF)=&gt;Z]):F[Z]"></a>
+      <a id="apply6[A,B,C,D,E,FF,Z](F[A],F[B],F[C],F[D],F[E],F[FF])(F[(A,B,C,D,E,FF)⇒Z]):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply6</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply6.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply6.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply6.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply6.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply6.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply6.FF">FF</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.apply6.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.apply6.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.apply6.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.apply6.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.apply6.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.apply6.FF">FF</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.apply6.Z">Z</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply6.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@apply6[A,B,C,D,E,FF,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF])(f:F[(A,B,C,D,E,FF)=&gt;Z]):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#apply7" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply7[A,B,C,D,E,FF,G,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G])(f:F[(A,B,C,D,E,FF,G)=&gt;Z]):F[Z]"></a>
+      <a id="apply7[A,B,C,D,E,FF,G,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G])(F[(A,B,C,D,E,FF,G)⇒Z]):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply7</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply7.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply7.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply7.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply7.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply7.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply7.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply7.G">G</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.apply7.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.apply7.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.apply7.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.apply7.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.apply7.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.apply7.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.apply7.G">G</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.apply7.Z">Z</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply7.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@apply7[A,B,C,D,E,FF,G,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G])(f:F[(A,B,C,D,E,FF,G)=&gt;Z]):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#apply8" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply8[A,B,C,D,E,FF,G,H,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H])(f:F[(A,B,C,D,E,FF,G,H)=&gt;Z]):F[Z]"></a>
+      <a id="apply8[A,B,C,D,E,FF,G,H,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G],F[H])(F[(A,B,C,D,E,FF,G,H)⇒Z]):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply8</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply8.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply8.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply8.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply8.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply8.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply8.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply8.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply8.H">H</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.apply8.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.apply8.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.apply8.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.apply8.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.apply8.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.apply8.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.apply8.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.apply8.H">H</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.apply8.Z">Z</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply8.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@apply8[A,B,C,D,E,FF,G,H,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H])(f:F[(A,B,C,D,E,FF,G,H)=&gt;Z]):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#apply9" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply9[A,B,C,D,E,FF,G,H,I,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I])(f:F[(A,B,C,D,E,FF,G,H,I)=&gt;Z]):F[Z]"></a>
+      <a id="apply9[A,B,C,D,E,FF,G,H,I,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G],F[H],F[I])(F[(A,B,C,D,E,FF,G,H,I)⇒Z]):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply9</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply9.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply9.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply9.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply9.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply9.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply9.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply9.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply9.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply9.I">I</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.apply9.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.apply9.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.apply9.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.apply9.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.apply9.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.apply9.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.apply9.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.apply9.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.apply9.I">I</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.apply9.Z">Z</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.apply9.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@apply9[A,B,C,D,E,FF,G,H,I,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I])(f:F[(A,B,C,D,E,FF,G,H,I)=&gt;Z]):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
     </li><li name="cats.Functor#as" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="as[A,B](fa:F[A],b:B):F[B]"></a>
       <a id="as[A,B](F[A],B):F[B]"></a>
@@ -222,7 +393,8 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.</p><div class="fullcomment"><div class="comment cmt"><p>Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+      <p class="shortcomment cmt">Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.</p><div class="fullcomment"><div class="comment cmt"><p>Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -263,7 +435,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.Apply#compose" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.Apply#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose[G[_]](implicitGG:cats.Apply[G]):cats.Apply[[α]F[G[α]]]"></a>
       <a id="compose[G[_]](Apply[G]):Apply[[α]F[G[α]]]"></a>
       <h4 class="signature">
@@ -279,7 +451,11 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Two sequentially dependent Applys can be composed.</p><div class="fullcomment"><div class="comment cmt"><p>Two sequentially dependent Applys can be composed.</p><p>The composition of Applys <code>F</code> and <code>G</code>, <code>F[G[x]]</code>, is also an Apply.</p><p>val ap = Apply[Option].compose[List]
+val x = Some(List(1, 2))
+val y = Some(List(10, 20))
+ap.map2(x, y)(_ + _) == Some(List(11, 12, 21, 22))
+</p></div></div>
     </li><li name="cats.Functor#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose[G[_]](implicitGG:cats.Functor[G]):cats.Functor[[α]F[G[α]]]"></a>
       <a id="compose[G[_]](Functor[G]):Functor[[α]F[G[α]]]"></a>
@@ -375,7 +551,9 @@ map a G[F[A]] to a G[F[B]].
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">alias for map</p><div class="fullcomment"><div class="comment cmt"><p>alias for map</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+      <p class="shortcomment cmt">Alias for map
+</p><div class="fullcomment"><div class="comment cmt"><p>Alias for map
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="cats.Functor#fproduct" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fproduct[A,B](fa:F[A])(f:A=&gt;B):F[(A,B)]"></a>
       <a id="fproduct[A,B](F[A])((A)⇒B):F[(A,B)]"></a>
@@ -393,8 +571,10 @@ map a G[F[A]] to a G[F[B]].
       </a>
     </span>
       <p class="shortcomment cmt">Tuple the values in fa with the result of applying a function
-with the value</p><div class="fullcomment"><div class="comment cmt"><p>Tuple the values in fa with the result of applying a function
-with the value</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+with the value
+</p><div class="fullcomment"><div class="comment cmt"><p>Tuple the values in fa with the result of applying a function
+with the value
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -430,18 +610,18 @@ with the value</p></div><dl class="attributes block"> <dt>Definition Classes</dt
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.Functor#imap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="imap[A,B](fa:F[A])(f:A=&gt;B,fi:B=&gt;A):F[B]"></a>
-      <a id="imap[A,B](F[A])((A)⇒B,(B)⇒A):F[B]"></a>
+      <a id="imap[A,B](fa:F[A])(f:A=&gt;B)(fi:B=&gt;A):F[B]"></a>
+      <a id="imap[A,B](F[A])((A)⇒B)((B)⇒A):F[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">imap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.Functor.imap.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Functor.imap.A">A</span>) ⇒ <span class="extype" name="cats.Functor.imap.B">B</span></span>, <span name="fi">fi: (<span class="extype" name="cats.Functor.imap.B">B</span>) ⇒ <span class="extype" name="cats.Functor.imap.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.Functor.imap.B">B</span>]</span>
+        <span class="name">imap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.Functor.imap.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Functor.imap.A">A</span>) ⇒ <span class="extype" name="cats.Functor.imap.B">B</span></span>)</span><span class="params">(<span name="fi">fi: (<span class="extype" name="cats.Functor.imap.B">B</span>) ⇒ <span class="extype" name="cats.Functor.imap.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.Functor.imap.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Apply@imap[A,B](fa:F[A])(f:A=&gt;B,fi:B=&gt;A):F[B]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Apply@imap[A,B](fa:F[A])(f:A=&gt;B)(fi:B=&gt;A):F[B]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -482,7 +662,58 @@ with the value</p></div><dl class="attributes block"> <dt>Definition Classes</dt
       <p class="shortcomment cmt">Lift a function f to operate on Functors
 </p><div class="fullcomment"><div class="comment cmt"><p>Lift a function f to operate on Functors
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
-    </li><li name="cats.Apply#map2" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.ApplyArityFunctions#map10" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map10[A,B,C,D,E,FF,G,H,I,J,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J])(f:(A,B,C,D,E,FF,G,H,I,J)=&gt;Z):F[Z]"></a>
+      <a id="map10[A,B,C,D,E,FF,G,H,I,J,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G],F[H],F[I],F[J])((A,B,C,D,E,FF,G,H,I,J)⇒Z):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map10</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="J">J</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map10.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map10.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map10.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map10.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map10.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map10.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map10.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map10.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map10.I">I</span>]</span>, <span name="fj">fj: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map10.J">J</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.ApplyArityFunctions.map10.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.map10.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.map10.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.map10.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.map10.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.map10.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.map10.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.map10.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.map10.I">I</span>, <span class="extype" name="cats.ApplyArityFunctions.map10.J">J</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.map10.Z">Z</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map10.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@map10[A,B,C,D,E,FF,G,H,I,J,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J])(f:(A,B,C,D,E,FF,G,H,I,J)=&gt;Z):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#map11" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map11[A,B,C,D,E,FF,G,H,I,J,K,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K])(f:(A,B,C,D,E,FF,G,H,I,J,K)=&gt;Z):F[Z]"></a>
+      <a id="map11[A,B,C,D,E,FF,G,H,I,J,K,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G],F[H],F[I],F[J],F[K])((A,B,C,D,E,FF,G,H,I,J,K)⇒Z):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map11</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="J">J</span>, <span name="K">K</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.I">I</span>]</span>, <span name="fj">fj: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.J">J</span>]</span>, <span name="fk">fk: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.K">K</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.ApplyArityFunctions.map11.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.map11.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.map11.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.map11.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.map11.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.map11.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.map11.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.map11.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.map11.I">I</span>, <span class="extype" name="cats.ApplyArityFunctions.map11.J">J</span>, <span class="extype" name="cats.ApplyArityFunctions.map11.K">K</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.map11.Z">Z</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map11.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@map11[A,B,C,D,E,FF,G,H,I,J,K,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K])(f:(A,B,C,D,E,FF,G,H,I,J,K)=&gt;Z):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#map12" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map12[A,B,C,D,E,FF,G,H,I,J,K,L,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K],fl:F[L])(f:(A,B,C,D,E,FF,G,H,I,J,K,L)=&gt;Z):F[Z]"></a>
+      <a id="map12[A,B,C,D,E,FF,G,H,I,J,K,L,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G],F[H],F[I],F[J],F[K],F[L])((A,B,C,D,E,FF,G,H,I,J,K,L)⇒Z):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map12</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="J">J</span>, <span name="K">K</span>, <span name="L">L</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.I">I</span>]</span>, <span name="fj">fj: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.J">J</span>]</span>, <span name="fk">fk: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.K">K</span>]</span>, <span name="fl">fl: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.L">L</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.ApplyArityFunctions.map12.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.map12.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.map12.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.map12.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.map12.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.map12.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.map12.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.map12.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.map12.I">I</span>, <span class="extype" name="cats.ApplyArityFunctions.map12.J">J</span>, <span class="extype" name="cats.ApplyArityFunctions.map12.K">K</span>, <span class="extype" name="cats.ApplyArityFunctions.map12.L">L</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.map12.Z">Z</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map12.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@map12[A,B,C,D,E,FF,G,H,I,J,K,L,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K],fl:F[L])(f:(A,B,C,D,E,FF,G,H,I,J,K,L)=&gt;Z):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.Apply#map2" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="map2[A,B,Z](fa:F[A],fb:F[B])(f:(A,B)=&gt;Z):F[Z]"></a>
       <a id="map2[A,B,Z](F[A],F[B])((A,B)⇒Z):F[Z]"></a>
       <h4 class="signature">
@@ -498,7 +729,127 @@ with the value</p></div><dl class="attributes block"> <dt>Definition Classes</dt
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Applies the pure (binary) function f to the effectful values fa and fb.</p><div class="fullcomment"><div class="comment cmt"><p>Applies the pure (binary) function f to the effectful values fa and fb.</p><p>map2 can be seen as a binary version of <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
+</p></div></div>
+    </li><li name="cats.ApplyArityFunctions#map3" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map3[A,B,C,Z](fa:F[A],fb:F[B],fc:F[C])(f:(A,B,C)=&gt;Z):F[Z]"></a>
+      <a id="map3[A,B,C,Z](F[A],F[B],F[C])((A,B,C)⇒Z):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map3</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map3.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map3.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map3.C">C</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.ApplyArityFunctions.map3.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.map3.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.map3.C">C</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.map3.Z">Z</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map3.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@map3[A,B,C,Z](fa:F[A],fb:F[B],fc:F[C])(f:(A,B,C)=&gt;Z):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#map4" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map4[A,B,C,D,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D])(f:(A,B,C,D)=&gt;Z):F[Z]"></a>
+      <a id="map4[A,B,C,D,Z](F[A],F[B],F[C],F[D])((A,B,C,D)⇒Z):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map4</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map4.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map4.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map4.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map4.D">D</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.ApplyArityFunctions.map4.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.map4.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.map4.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.map4.D">D</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.map4.Z">Z</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map4.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@map4[A,B,C,D,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D])(f:(A,B,C,D)=&gt;Z):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#map5" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map5[A,B,C,D,E,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E])(f:(A,B,C,D,E)=&gt;Z):F[Z]"></a>
+      <a id="map5[A,B,C,D,E,Z](F[A],F[B],F[C],F[D],F[E])((A,B,C,D,E)⇒Z):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map5</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map5.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map5.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map5.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map5.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map5.E">E</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.ApplyArityFunctions.map5.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.map5.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.map5.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.map5.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.map5.E">E</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.map5.Z">Z</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map5.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@map5[A,B,C,D,E,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E])(f:(A,B,C,D,E)=&gt;Z):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#map6" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map6[A,B,C,D,E,FF,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF])(f:(A,B,C,D,E,FF)=&gt;Z):F[Z]"></a>
+      <a id="map6[A,B,C,D,E,FF,Z](F[A],F[B],F[C],F[D],F[E],F[FF])((A,B,C,D,E,FF)⇒Z):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map6</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map6.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map6.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map6.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map6.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map6.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map6.FF">FF</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.ApplyArityFunctions.map6.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.map6.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.map6.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.map6.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.map6.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.map6.FF">FF</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.map6.Z">Z</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map6.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@map6[A,B,C,D,E,FF,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF])(f:(A,B,C,D,E,FF)=&gt;Z):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#map7" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map7[A,B,C,D,E,FF,G,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G])(f:(A,B,C,D,E,FF,G)=&gt;Z):F[Z]"></a>
+      <a id="map7[A,B,C,D,E,FF,G,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G])((A,B,C,D,E,FF,G)⇒Z):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map7</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map7.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map7.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map7.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map7.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map7.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map7.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map7.G">G</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.ApplyArityFunctions.map7.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.map7.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.map7.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.map7.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.map7.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.map7.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.map7.G">G</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.map7.Z">Z</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map7.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@map7[A,B,C,D,E,FF,G,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G])(f:(A,B,C,D,E,FF,G)=&gt;Z):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#map8" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map8[A,B,C,D,E,FF,G,H,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H])(f:(A,B,C,D,E,FF,G,H)=&gt;Z):F[Z]"></a>
+      <a id="map8[A,B,C,D,E,FF,G,H,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G],F[H])((A,B,C,D,E,FF,G,H)⇒Z):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map8</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map8.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map8.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map8.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map8.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map8.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map8.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map8.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map8.H">H</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.ApplyArityFunctions.map8.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.map8.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.map8.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.map8.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.map8.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.map8.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.map8.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.map8.H">H</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.map8.Z">Z</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map8.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@map8[A,B,C,D,E,FF,G,H,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H])(f:(A,B,C,D,E,FF,G,H)=&gt;Z):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#map9" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map9[A,B,C,D,E,FF,G,H,I,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I])(f:(A,B,C,D,E,FF,G,H,I)=&gt;Z):F[Z]"></a>
+      <a id="map9[A,B,C,D,E,FF,G,H,I,Z](F[A],F[B],F[C],F[D],F[E],F[FF],F[G],F[H],F[I])((A,B,C,D,E,FF,G,H,I)⇒Z):F[Z]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map9</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map9.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map9.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map9.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map9.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map9.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map9.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map9.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map9.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map9.I">I</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.ApplyArityFunctions.map9.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.map9.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.map9.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.map9.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.map9.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.map9.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.map9.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.map9.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.map9.I">I</span>) ⇒ <span class="extype" name="cats.ApplyArityFunctions.map9.Z">Z</span></span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.map9.Z">Z</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@map9[A,B,C,D,E,FF,G,H,I,Z](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G],fh:F[H],fi:F[I])(f:(A,B,C,D,E,FF,G,H,I)=&gt;Z):F[Z]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -584,6 +935,193 @@ with the value</p></div><dl class="attributes block"> <dt>Definition Classes</dt
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#tuple10" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tuple10[A,B,C,D,E,G,H,I,K,J](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K]):F[(A,B,C,D,E,G,H,I,J,K)]"></a>
+      <a id="tuple10[A,B,C,D,E,G,H,I,K,J](F[A],F[B],F[C],F[D],F[E],F[G],F[H],F[I],F[J],F[K]):F[(A,B,C,D,E,G,H,I,J,K)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple10</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="K">K</span>, <span name="J">J</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple10.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple10.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple10.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple10.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple10.E">E</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple10.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple10.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple10.I">I</span>]</span>, <span name="fj">fj: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple10.J">J</span>]</span>, <span name="fk">fk: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple10.K">K</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.tuple10.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple10.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple10.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple10.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple10.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple10.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple10.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple10.I">I</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple10.J">J</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple10.K">K</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@tuple10[A,B,C,D,E,G,H,I,K,J](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K]):F[(A,B,C,D,E,G,H,I,J,K)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#tuple11" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tuple11[A,B,C,D,E,G,H,I,K,L,J](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K],fl:F[L]):F[(A,B,C,D,E,G,H,I,J,K,L)]"></a>
+      <a id="tuple11[A,B,C,D,E,G,H,I,K,L,J](F[A],F[B],F[C],F[D],F[E],F[G],F[H],F[I],F[J],F[K],F[L]):F[(A,B,C,D,E,G,H,I,J,K,L)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple11</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="K">K</span>, <span name="L">L</span>, <span name="J">J</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple11.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple11.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple11.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple11.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple11.E">E</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple11.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple11.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple11.I">I</span>]</span>, <span name="fj">fj: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple11.J">J</span>]</span>, <span name="fk">fk: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple11.K">K</span>]</span>, <span name="fl">fl: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple11.L">L</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.tuple11.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple11.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple11.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple11.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple11.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple11.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple11.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple11.I">I</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple11.J">J</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple11.K">K</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple11.L">L</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@tuple11[A,B,C,D,E,G,H,I,K,L,J](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K],fl:F[L]):F[(A,B,C,D,E,G,H,I,J,K,L)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#tuple12" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tuple12[A,B,C,D,E,G,H,I,K,L,M,J](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K],fl:F[L],fm:F[M]):F[(A,B,C,D,E,G,H,I,J,K,L,M)]"></a>
+      <a id="tuple12[A,B,C,D,E,G,H,I,K,L,M,J](F[A],F[B],F[C],F[D],F[E],F[G],F[H],F[I],F[J],F[K],F[L],F[M]):F[(A,B,C,D,E,G,H,I,J,K,L,M)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple12</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="K">K</span>, <span name="L">L</span>, <span name="M">M</span>, <span name="J">J</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.E">E</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.I">I</span>]</span>, <span name="fj">fj: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.J">J</span>]</span>, <span name="fk">fk: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.K">K</span>]</span>, <span name="fl">fl: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.L">L</span>]</span>, <span name="fm">fm: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple12.M">M</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.tuple12.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple12.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple12.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple12.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple12.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple12.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple12.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple12.I">I</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple12.J">J</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple12.K">K</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple12.L">L</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple12.M">M</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@tuple12[A,B,C,D,E,G,H,I,K,L,M,J](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],fg:F[G],fh:F[H],fi:F[I],fj:F[J],fk:F[K],fl:F[L],fm:F[M]):F[(A,B,C,D,E,G,H,I,J,K,L,M)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#tuple2" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tuple2[A,B](fa:F[A],fb:F[B]):F[(A,B)]"></a>
+      <a id="tuple2[A,B](F[A],F[B]):F[(A,B)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple2</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple2.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple2.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.tuple2.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple2.B">B</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@tuple2[A,B](fa:F[A],fb:F[B]):F[(A,B)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#tuple3" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tuple3[A,B,C](fa:F[A],fb:F[B],fc:F[C]):F[(A,B,C)]"></a>
+      <a id="tuple3[A,B,C](F[A],F[B],F[C]):F[(A,B,C)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple3</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple3.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple3.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple3.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.tuple3.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple3.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple3.C">C</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@tuple3[A,B,C](fa:F[A],fb:F[B],fc:F[C]):F[(A,B,C)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#tuple4" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tuple4[A,B,C,D](fa:F[A],fb:F[B],fc:F[C],fd:F[D]):F[(A,B,C,D)]"></a>
+      <a id="tuple4[A,B,C,D](F[A],F[B],F[C],F[D]):F[(A,B,C,D)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple4</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple4.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple4.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple4.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple4.D">D</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.tuple4.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple4.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple4.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple4.D">D</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@tuple4[A,B,C,D](fa:F[A],fb:F[B],fc:F[C],fd:F[D]):F[(A,B,C,D)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#tuple5" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tuple5[A,B,C,D,E](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E]):F[(A,B,C,D,E)]"></a>
+      <a id="tuple5[A,B,C,D,E](F[A],F[B],F[C],F[D],F[E]):F[(A,B,C,D,E)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple5</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple5.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple5.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple5.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple5.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple5.E">E</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.tuple5.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple5.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple5.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple5.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple5.E">E</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@tuple5[A,B,C,D,E](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E]):F[(A,B,C,D,E)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#tuple6" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tuple6[A,B,C,D,E,FF](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF]):F[(A,B,C,D,E,FF)]"></a>
+      <a id="tuple6[A,B,C,D,E,FF](F[A],F[B],F[C],F[D],F[E],F[FF]):F[(A,B,C,D,E,FF)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple6</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple6.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple6.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple6.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple6.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple6.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple6.FF">FF</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.tuple6.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple6.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple6.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple6.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple6.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple6.FF">FF</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@tuple6[A,B,C,D,E,FF](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF]):F[(A,B,C,D,E,FF)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#tuple7" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tuple7[A,B,C,D,E,FF,G](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G]):F[(A,B,C,D,E,FF,G)]"></a>
+      <a id="tuple7[A,B,C,D,E,FF,G](F[A],F[B],F[C],F[D],F[E],F[FF],F[G]):F[(A,B,C,D,E,FF,G)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple7</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="FF">FF</span>, <span name="G">G</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple7.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple7.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple7.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple7.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple7.E">E</span>]</span>, <span name="ff">ff: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple7.FF">FF</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple7.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.tuple7.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple7.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple7.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple7.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple7.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple7.FF">FF</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple7.G">G</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@tuple7[A,B,C,D,E,FF,G](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],ff:F[FF],fg:F[G]):F[(A,B,C,D,E,FF,G)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#tuple8" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tuple8[A,B,C,D,E,G,H,I](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],fg:F[G],fh:F[H],fi:F[I]):F[(A,B,C,D,E,G,H,I)]"></a>
+      <a id="tuple8[A,B,C,D,E,G,H,I](F[A],F[B],F[C],F[D],F[E],F[G],F[H],F[I]):F[(A,B,C,D,E,G,H,I)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple8</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple8.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple8.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple8.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple8.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple8.E">E</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple8.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple8.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple8.I">I</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.tuple8.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple8.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple8.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple8.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple8.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple8.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple8.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple8.I">I</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@tuple8[A,B,C,D,E,G,H,I](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],fg:F[G],fh:F[H],fi:F[I]):F[(A,B,C,D,E,G,H,I)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.ApplyArityFunctions#tuple9" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tuple9[A,B,C,D,E,G,H,I,J](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],fg:F[G],fh:F[H],fi:F[I],fj:F[J]):F[(A,B,C,D,E,G,H,I,J)]"></a>
+      <a id="tuple9[A,B,C,D,E,G,H,I,J](F[A],F[B],F[C],F[D],F[E],F[G],F[H],F[I],F[J]):F[(A,B,C,D,E,G,H,I,J)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple9</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>, <span name="E">E</span>, <span name="G">G</span>, <span name="H">H</span>, <span name="I">I</span>, <span name="J">J</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple9.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple9.B">B</span>]</span>, <span name="fc">fc: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple9.C">C</span>]</span>, <span name="fd">fd: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple9.D">D</span>]</span>, <span name="fe">fe: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple9.E">E</span>]</span>, <span name="fg">fg: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple9.G">G</span>]</span>, <span name="fh">fh: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple9.H">H</span>]</span>, <span name="fi">fi: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple9.I">I</span>]</span>, <span name="fj">fj: <span class="extype" name="cats.Apply.F">F</span>[<span class="extype" name="cats.ApplyArityFunctions.tuple9.J">J</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Apply.F">F</span>[(<span class="extype" name="cats.ApplyArityFunctions.tuple9.A">A</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple9.B">B</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple9.C">C</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple9.D">D</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple9.E">E</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple9.G">G</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple9.H">H</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple9.I">I</span>, <span class="extype" name="cats.ApplyArityFunctions.tuple9.J">J</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Apply@tuple9[A,B,C,D,E,G,H,I,J](fa:F[A],fb:F[B],fc:F[C],fd:F[D],fe:F[E],fg:F[G],fh:F[H],fi:F[I],fj:F[J]):F[(A,B,C,D,E,G,H,I,J)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
     </li><li name="cats.Functor#void" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="void[A](fa:F[A]):F[Unit]"></a>
       <a id="void[A](F[A]):F[Unit]"></a>
@@ -600,8 +1138,8 @@ with the value</p></div><dl class="attributes block"> <dt>Definition Classes</dt
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">empty the fa of the values, preserving the structure
-</p><div class="fullcomment"><div class="comment cmt"><p>empty the fa of the values, preserving the structure
+      <p class="shortcomment cmt">Empty the fa of the values, preserving the structure
+</p><div class="fullcomment"><div class="comment cmt"><p>Empty the fa of the values, preserving the structure
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
@@ -681,7 +1219,9 @@ with the value</p></div><dl class="attributes block"> <dt>Definition Classes</dt
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="cats.Functor">
+        <div class="parent" name="cats.ApplyArityFunctions">
+              <h3>Inherited from <a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a>[<span class="extype" name="cats.Apply.F">F</span>]</h3>
+            </div><div class="parent" name="cats.Functor">
               <h3>Inherited from <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Apply.F">F</span>]</h3>
             </div><div class="parent" name="cats.functor.Invariant">
               <h3>Inherited from <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Apply.F">F</span>]</h3>

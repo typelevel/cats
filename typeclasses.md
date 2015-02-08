@@ -4,10 +4,10 @@ title:  "Typeclasses"
 section: "typeclasses"
 ---
 
-# Functor
+[Functor](functor.html)
 
-# Apply
+[Apply](apply.html)
 
-# Applicative
+[Applicative](applicative.html)
 
-# Monad
+[Monad](monad.html)
