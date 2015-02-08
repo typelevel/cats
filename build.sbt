@@ -39,7 +39,9 @@ lazy val commonSettings = Seq(
     "org.typelevel" %% "machinist" % "0.3.0",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.2")
-  )
+  ),
+  scmInfo := Some(ScmInfo(url("https://github.com/non/cats"),
+    "git@github.com:non/cats.git"))
 )
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ releaseSettings
@@ -50,7 +52,9 @@ lazy val disciplineDependencies = Seq(
 )
 
 lazy val docSettings = unidocSettings ++ Seq(
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(examples, tests)
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(examples, tests),
+  scalacOptions in (ScalaUnidoc, unidoc) ++=
+    Opts.doc.sourceUrl(scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala")
 )
 
 lazy val aggregate = project.in(file("."))
