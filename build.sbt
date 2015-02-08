@@ -55,7 +55,7 @@ lazy val docSettings = Seq(
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, ""),
   ghpagesNoJekyll := false,
-  git.remoteRepo := "git@github.com:stew/cats.git",
+  git.remoteRepo := "git@github.com:non/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
 

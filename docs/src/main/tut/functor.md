@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  "Typeclasses"
+title:  "Functors"
 section: "typeclasses"
 ---
 # Functor
@@ -34,7 +34,7 @@ We can trivially create a functor instance for a type which has a well
 ```tut
 import cats._
 implicit val optionFunctor: Functor[Option] = new Functor[Option] {
-  def map[A,B](fa: Option[A])(f: A => B) = fa
+  def map[A,B](fa: Option[A])(f: A => B) = fa map f
 }
 implicit val listFunctor: Functor[List] = new Functor[List] {
   def map[A,B](fa: List[A])(f: A => B) = fa map f
@@ -46,24 +46,30 @@ method. An example of this would be that Functions which take a String
 form a functor using andThen as the map operation:
 
 ```tut
-implicit def function1Functor[In]: Functor[λ[α => Function1[In,α]]] =
-  new Functor[λ[α => Function1[A,α]]] {
-    def map[A,B](fa: In => A)(f: A => B): In => b = fa andThen f
+implicit def function1Functor[In]: Functor[({type λ[α] = Function1[In,α]})#λ] =
+  new Functor[({type λ[α] = Function1[In,α]})#λ] {
+    def map[A,B](fa: In => A)(f: A => B): Function1[In,B] = fa andThen f
   }
 ```
 
 ## Using functor
 
 ### map
-  // Option is a functor which always returns a Some with the function
-  // applied when the Option value is a Some.
-  assert(Functor[Option].map(Some("adsf"))(len) == Some(4))
-  // When the Option is a None, it always returns None
-  assert(Functor[Option].map(None)(len) == None)
 
-  // List is a functor which applies the function to each element of
-  // the list.
-  assert(Functor[List].map(List("qwer", "adsfg"))(len) == List(4,5))
+Option is a functor which always returns a Some with the function
+applied when the Option value is a Some.
+g
+```tut
+val len: String => Int = _.length
+Functor[Option].map(Some("adsf"))(len)
+// When the Option is a None, it always returns None
+Functor[Option].map(None)(len)
+```
+
+List is a functor which applies the function to each element the list.
+```tut
+Functor[List].map(List("qwer", "adsfg"))(len)
+```
 
 ## Derived methods
 
