@@ -1,0 +1,4 @@
+name: Cats Documentation
+markdown: redcarpet
+highlighter: pygments
+baseurl: "/"
