@@ -1,32 +1,31 @@
 package cats
 package std
 
-trait EitherInstances extends EitherInstances1 {
-  implicit def eitherInstances[A]: Monad[Either[A, ?]] with Traverse[Either[A, ?]] =
-    new Monad[Either[A, ?]] with Traverse[Either[A, ?]] {
-      def pure[B](b: B): Either[A, B] = Right(b)
+trait EitherInstances extends EitherInstances0 {
+  implicit def eitherMonadFilter[A: Monoid]: Monad[Either[A, ?]] with MonadFilter[Either[A, ?]] = new EitherMonad[A] with MonadFilter[Either[A, ?]] {
+    def empty[B]: Either[A, B] = Left(Monoid[A].empty)
+  }
 
-      def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =
-        fa.right.flatMap(f)
+  implicit def eitherTraverse[A]: Traverse[Either[A, ?]] = new Traverse[Either[A, ?]] {
+    def traverse[F[_]: Applicative, B, C](fa: Either[A, B])(f: B => F[C]): F[Either[A, C]] =
+      fa.fold(
+        a => Applicative[F].pure(Left(a)),
+        b => Applicative[F].map(f(b))(Right(_))
+      )
 
-      override def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
-        fa.right.map(f)
+    def foldLeft[B, C](fa: Either[A, B], c: C)(f: (C, B) => C): C =
+      fa.fold(_ => c, f(c, _))
 
-      def traverse[F[_]: Applicative, B, C](fa: Either[A, B])(f: B => F[C]): F[Either[A, C]] =
-        fa.fold(
-          a => Applicative[F].pure(Left(a)),
-          b => Applicative[F].map(f(b))(Right(_))
-        )
+    def foldRight[B, C](fa: Either[A, B], c: C)(f: (B, C) => C): C =
+      fa.fold(_ => c, f(_, c))
 
-      def foldLeft[B, C](fa: Either[A, B], c: C)(f: (C, B) => C): C =
-        fa.fold(_ => c, f(c, _))
+    def foldRight[B, C](fa: Either[A, B], c: Lazy[C])(f: (B, Lazy[C]) => C): Lazy[C] =
+      fa.fold(_ => c, b => Lazy(f(b, c)))
+  }
+}
 
-      def foldRight[B, C](fa: Either[A, B], c: C)(f: (B, C) => C): C =
-        fa.fold(_ => c, f(_, c))
-
-      def foldRight[B, C](fa: Either[A, B], c: Lazy[C])(f: (B, Lazy[C]) => C): Lazy[C] =
-        fa.fold(_ => c, b => Lazy(f(b, c)))
-    }
+trait EitherInstances0 extends EitherInstances1 {
+  implicit def eitherInstances[A]: Monad[Either[A, ?]] = new EitherMonad[A] {}
 
   implicit def eitherOrder[A: Order, B: Order]: Order[Either[A, B]] = new Order[Either[A, B]] {
     def compare(x: Either[A, B], y: Either[A, B]): Int = x.fold(
@@ -42,6 +41,16 @@ trait EitherInstances extends EitherInstances1 {
         b => s"Right(${BB.show(b)})"
       )
     }
+}
+
+private trait EitherMonad[A] extends Monad[Either[A, ?]] {
+  def pure[B](b: B): Either[A, B] = Right(b)
+
+  def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =
+    fa.right.flatMap(f)
+
+  override def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
+    fa.right.map(f)
 }
 
 sealed trait EitherInstances1 extends EitherInstances2 {
