@@ -75,7 +75,7 @@ sealed trait KleisliFunctions {
 }
 
 sealed abstract class KleisliInstances extends KleisliInstances0 {
-  implicit def upStarStrong[F[_]: Functor]: Strong[Kleisli[F, ?, ?]] = new Strong[Kleisli[F, ?, ?]]{
+  implicit def kleisliStrong[F[_]: Functor]: Strong[Kleisli[F, ?, ?]] = new Strong[Kleisli[F, ?, ?]]{
     override def lmap[A, B, C](fab: Kleisli[F, A, B])(f: C => A): Kleisli[F, C, B] =
       fab.lmap(f)
 
@@ -92,7 +92,7 @@ sealed abstract class KleisliInstances extends KleisliInstances0 {
       fa.second[C]
   }
 
-  implicit def upStarMonad[F[_]: Monad, A]: Monad[Kleisli[F, A, ?]] = new Monad[Kleisli[F, A, ?]] {
+  implicit def kleisliMonad[F[_]: Monad, A]: Monad[Kleisli[F, A, ?]] = new Monad[Kleisli[F, A, ?]] {
     def pure[B](x: B): Kleisli[F, A, B] =
       Kleisli.pure[F, A, B](x)
 
@@ -102,7 +102,7 @@ sealed abstract class KleisliInstances extends KleisliInstances0 {
 }
 
 sealed abstract class KleisliInstances0 extends KleisliInstances1 {
-  implicit def upStarFlatMap[F[_]: FlatMap, A]: FlatMap[Kleisli[F, A, ?]] = new FlatMap[Kleisli[F, A, ?]] {
+  implicit def kleisliFlatMap[F[_]: FlatMap, A]: FlatMap[Kleisli[F, A, ?]] = new FlatMap[Kleisli[F, A, ?]] {
     def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
       fa.flatMapK(f)
 
@@ -112,7 +112,7 @@ sealed abstract class KleisliInstances0 extends KleisliInstances1 {
 }
 
 sealed abstract class KleisliInstances1 extends KleisliInstances2 {
-  implicit def upStarApplicative[F[_]: Applicative, A]: Applicative[Kleisli[F, A, ?]] = new Applicative[Kleisli[F, A, ?]] {
+  implicit def kleisliApplicative[F[_]: Applicative, A]: Applicative[Kleisli[F, A, ?]] = new Applicative[Kleisli[F, A, ?]] {
     def pure[B](x: B): Kleisli[F, A, B] =
       Kleisli.pure[F, A, B](x)
 
@@ -122,7 +122,7 @@ sealed abstract class KleisliInstances1 extends KleisliInstances2 {
 }
 
 sealed abstract class KleisliInstances2 extends KleisliInstances3 {
-  implicit def upStarApply[F[_]: Apply, A]: Apply[Kleisli[F, A, ?]] = new Apply[Kleisli[F, A, ?]] {
+  implicit def kleisliApply[F[_]: Apply, A]: Apply[Kleisli[F, A, ?]] = new Apply[Kleisli[F, A, ?]] {
     def apply[B, C](fa: Kleisli[F, A, B])(f: Kleisli[F, A, B => C]): Kleisli[F, A, C] =
       fa.apply(f)
 
@@ -132,7 +132,7 @@ sealed abstract class KleisliInstances2 extends KleisliInstances3 {
 }
 
 sealed abstract class KleisliInstances3 {
-  implicit def upStarFunctor[F[_]: Functor, A]: Functor[Kleisli[F, A, ?]] = new Functor[Kleisli[F, A, ?]] {
+  implicit def kleisliFunctor[F[_]: Functor, A]: Functor[Kleisli[F, A, ?]] = new Functor[Kleisli[F, A, ?]] {
     def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
       fa.map(f)
   }
