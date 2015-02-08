@@ -21,6 +21,7 @@ lazy val commonSettings = Seq(
     "-language:existentials",
     "-language:higherKinds",
     "-language:implicitConversions",
+    "-language:experimental.macros",
     "-unchecked",
     "-Xfatal-warnings",
     "-Xlint",
@@ -74,14 +75,18 @@ lazy val docs = project
 lazy val aggregate = project.in(file("."))
   .settings(catsSettings: _*)
   .settings(noPublishSettings: _*)
-  .aggregate(core, laws, tests, data, std)
-  .dependsOn(core, laws, tests, data, std)
+  .aggregate(macros, core, laws, tests, docs, data, std)
+  .dependsOn(macros, core, laws, tests, docs, data, std)
 
-lazy val core = project
+lazy val macros = project
+  .settings(moduleName := "cats-macros")
+  .settings(catsSettings: _*)
+
+lazy val core = project.dependsOn(macros)
   .settings(moduleName := "cats")
   .settings(catsSettings: _*)
 
-lazy val laws = project.dependsOn(core, data)
+lazy val laws = project.dependsOn(macros, core, data)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings: _*)
   .settings(
@@ -90,14 +95,14 @@ lazy val laws = project.dependsOn(core, data)
     )
   )
 
-lazy val std = project.dependsOn(core, laws)
+lazy val std = project.dependsOn(macros, core, laws)
   .settings(moduleName := "cats-std")
   .settings(catsSettings: _*)
   .settings(
     libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra-std_2.11-0.2.0-SNAPSHOT.jar"
   )
 
-lazy val tests = project.dependsOn(core, data, std, laws)
+lazy val tests = project.dependsOn(macros, core, data, std, laws)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings: _*)
   .settings(noPublishSettings: _*)
@@ -107,7 +112,7 @@ lazy val tests = project.dependsOn(core, data, std, laws)
     )
   )
 
-lazy val data = project.dependsOn(core)
+lazy val data = project.dependsOn(macros, core)
   .settings(moduleName := "cats-data")
   .settings(catsSettings: _*)
 
@@ -173,3 +178,5 @@ lazy val noPublishSettings = Seq(
   publishLocal := (),
   publishArtifact := false
 )
+
+addCommandAlias("validate", ";compile;test;scalastyle;test:scalastyle;unidoc")

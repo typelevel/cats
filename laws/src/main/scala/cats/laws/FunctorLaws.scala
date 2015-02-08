@@ -1,6 +1,5 @@
 package cats.laws
 
-import algebra.Eq
 import algebra.laws._
 
 import org.typelevel.discipline.Laws
@@ -31,10 +30,10 @@ trait FunctorLaws[F[_], A] extends Laws {
       name = "functor",
       parents = Nil,
       "invariant identity" -> forAll { (fa: F[A]) =>
-        F.imap(fa)(identity[A], identity[A]) ?== fa
+        F.imap(fa)(identity[A])(identity[A]) ?== fa
       },
       "invariant composition" -> forAll { (fa: F[A], f1: A => B, f2: B => A, g1: B => C, g2: C => B) =>
-        F.imap(F.imap(fa)(f1, f2))(g1, g2) ?== F.imap(fa)(f1 andThen g1, g2 andThen f2)
+        F.imap(F.imap(fa)(f1)(f2))(g1)(g2) ?== F.imap(fa)(f1 andThen g1)(g2 andThen f2)
       })
 
   def covariant[B: Arbitrary, C: Arbitrary](implicit F: Functor[F], FC: Eq[F[C]]) =
@@ -70,20 +69,29 @@ trait FunctorLaws[F[_], A] extends Laws {
 
   def applicative[B: Arbitrary, C: Arbitrary](implicit F: Applicative[F], FC: Eq[F[C]]) = {
     implicit val ArbFAC: Arbitrary[F[A => C]] = ArbF.synthesize[A => C]
+    implicit val ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
+    implicit val ArbFBC: Arbitrary[F[B => C]] = ArbF.synthesize[B => C]
     new FunctorProperties(
       name = "applicative",
       parents = Seq(apply[B, C]),
-      "applicative 1" -> forAll { (fa: F[A]) =>
+      "applicative identity" -> forAll { (fa: F[A]) =>
         F.apply(fa)(F.pure((a: A) => a)) ?== fa
       },
-      "applicative 2" -> forAll { (a: A, f: A => C) =>
+      "applicative homomorphism" -> forAll { (a: A, f: A => C) =>
         F.apply(F.pure(a))(F.pure(f)) ?== F.pure(f(a))
       },
-      "applicative 3" -> forAll { (a: A, ff: F[A => C]) =>
+      "applicative interchange" -> forAll { (a: A, ff: F[A => C]) =>
         F.apply(F.pure(a))(ff) ?== F.apply(ff)(F.pure(f => f(a)))
       },
-      "applicative 4" -> forAll { (fa: F[A], f: A => C) =>
+      "applicative map" -> forAll { (fa: F[A], f: A => C) =>
         F.map(fa)(f) ?== F.apply(fa)(F.pure(f))
+      },
+      "applicative composition" -> forAll { (fa: F[A], fab: F[A => B], fbc: F[B => C]) =>
+        // helping out type inference
+        val compose: (B => C) => (A => B) => (A => C) = _.compose
+
+        F.apply(fa)(F.apply(fab)(F.apply(fbc)(F.pure(compose)))) ?==
+          F.apply((F.apply(fa)(fab)))(fbc)
       })
     }
 

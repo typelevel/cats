@@ -1,8 +1,6 @@
 package cats
 package arrow
 
-import algebra.Semigroup
-
 trait Compose[F[_, _]] { self =>
   def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]
 

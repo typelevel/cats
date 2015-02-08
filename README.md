@@ -21,10 +21,12 @@ installed. Run `sbt`, and then use any of the following commands:
  * `console`: launch a REPL
  * `test`: run the tests
  * `unidoc`: generate the documentation
+ * `scalastyle`: run the style-checker on the code
+ * `validate`: run tests, style-checker, and doc generation
 
-[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
-
+[![Build Status](https://api.travis-ci.org/non/cats.png)](https://travis-ci.org/non/cats)
 [![Workflow](https://badge.waffle.io/non/cats.png?label=ready&title=Ready)](https://waffle.io/non/cats)
+[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
 
 ### Design
 
@@ -142,7 +144,7 @@ via [Waffle.io](https://waffle.io/non/cats).
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also
-gladly accepted.
+gladly accepted. For more information, check out the [contributor guide](CONTRIBUTING.md).
 
 People are expected to follow the
 [Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
