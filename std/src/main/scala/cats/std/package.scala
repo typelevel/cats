@@ -3,6 +3,7 @@ package cats
 package object std {
   object all      extends AllInstances
 
+  object either extends EitherInstances
   object function extends FunctionInstances
   object list       extends ListInstances
   object option     extends OptionInstances
