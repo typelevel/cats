@@ -8,5 +8,6 @@ trait AllInstances
   with    StreamInstances
   with    VectorInstances
   with    AnyValInstances
-  with    AnyRefInstances
   with    MapInstances
+  with    BigIntInstances
+  with    BigDecimalInstances
