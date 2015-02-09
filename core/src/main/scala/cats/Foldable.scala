@@ -21,7 +21,7 @@ import simulacrum._
 
   /**
    * Right associative lazy fold on `F` using the folding function 'f'.
-   * 
+   *
    * This method evaluates `b` lazily (in some cases it will not be
    * needed), and returns a lazy value. For more information about how
    * this method works see the documentation for Fold[_].
