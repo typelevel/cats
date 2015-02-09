@@ -28,6 +28,14 @@ object Free {
   type Trampoline[A] = Free[Function0, A]
 
   type FreeC[S[_], A] = Free[Coyoneda[S, ?], A]
+
+
+  /** TODO Where to put those instances ??? */
+  implicit def freeFreeLike[F[_]: Functor]: FreeLike[F, Free[F, ?]] =
+    new FreeLike[F, Free[F, ?]] {
+      def wrap[A](fa: F[Free[F, A]]): Free[F, A] = Suspend(fa)
+    }
+
 }
 
 import Free._
