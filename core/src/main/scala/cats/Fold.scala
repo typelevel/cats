@@ -111,9 +111,7 @@ object Fold {
       fs.foldLeft(b)((b, f) => f(b))
     def loop(it: Iterator[A], fs: List[B => B]): B =
       if (it.hasNext) {
-        val a: A = it.next
-        val fb: Fold[B] = f(it.next)
-        fb match {
+        f(it.next) match {
           case Return(b) => unroll(b, fs)
           case Continue(f) => loop(it, f :: fs)
           case _ => loop(it, fs)
