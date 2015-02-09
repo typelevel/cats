@@ -178,10 +178,4 @@ trait OrFunctions {
     case Failure(e) => left(e)
     case Success(v) => right(v)
   }
-
-
 }
-
-
-
-
