@@ -24,10 +24,6 @@ object Free {
       val a = a0
       val f = f0
     }
-
-  type Trampoline[A] = Free[Function0, A]
-
-  type FreeC[S[_], A] = Free[Coyoneda[S, ?], A]
 }
 
 import Free._
@@ -118,13 +114,3 @@ sealed abstract class Free[S[_], A] {
     }
 }
 
-object Trampoline {
-  def done[A](a: A): Trampoline[A] =
-    Free.Pure[Function0,A](a)
-
-  def suspend[A](a: => Trampoline[A]): Trampoline[A] =
-    Free.Suspend[Function0, A](() => a)
-
-  def delay[A](a: => A): Trampoline[A] =
-    suspend(done(a))
-}
