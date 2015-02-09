@@ -1,5 +1,19 @@
 package cats
 
+/**
+ * Identity, encoded as `type Id[A] = A`.
+ *
+ * The identity monad can be seen as the ambient monad that encodes
+ * the effect of having no effect. It is ambient in the sense that
+ * plain pure values are values of `Id`.
+ *
+ * For instance, the [[cats.Functor]] instance for `[[cats.Id]]`
+ * allows us to apply a function `A => B` to an `Id[A]` and get an
+ * `Id[B]`. However, an `Id[A]` is the same as `A`, so all we're doing
+ * is applying a pure function of type `A => B` to a pure value  of
+ * type `A` to get a pure value of type `B`. That is, the instance
+ * encodes pure unary function application.
+ */
 object Id {
   implicit val id: Bimonad[Id] =
     new Bimonad[Id] {
