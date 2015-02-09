@@ -25,16 +25,7 @@ trait MapInstances {
       override def foldRight[A, B](fa: Map[K, A], b: B)(f: (A, B) => B): B =
         fa.foldRight(b) { case ((k, a), z) => f(a, z)}
 
-      override def foldRight[A, B](fa: Map[K, A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] = {
-        // we use Lazy.byName(...) to avoid memoizing intermediate values.
-        def loop(as: Map[K, A], b: Lazy[B]): Lazy[B] =
-          as.toList match {
-            case Nil => b
-            case a :: rest => Lazy.byName(f(a._2, foldRight(rest.toMap, b)(f)))
-          }
-        // we memoize the first "step" with Lazy(...).
-        Lazy(loop(fa, b).force)
-      }
+      override def foldLazy[A, B](fa: Map[K, A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
+        Fold.iterateRight(fa.values, b)(f)
     }
-
 }

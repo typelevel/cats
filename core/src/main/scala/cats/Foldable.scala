@@ -20,9 +20,13 @@ import simulacrum._
   def foldRight[A, B](fa: F[A], b: B)(f: (A, B) => B): B
 
   /**
-   * Left for issue #62
+   * Right associative lazy fold on `F` using the folding function 'f'.
+   * 
+   * This method evaluates `b` lazily (in some cases it will not be
+   * needed), and returns a lazy value. For more information about how
+   * this method works see the documentation for Fold[_].
    */
-  def foldRight[A, B](fa: F[A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B]
+  def foldLazy[A, B](fa: F[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B]
 
   /**
    * Apply f to each element of F and combine them using the Monoid[B].
@@ -84,8 +88,10 @@ trait CompositeFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] {
     F.foldRight(fa, b)((a, b) => G.foldRight(a, b)(f))
 
   /**
-   * Left for issue #62
+   * Right associative lazy fold on `F` using the folding function 'f'.
    */
-  def foldRight[A, B](fa: F[G[A]], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] =
-    F.foldRight(fa, b)((a, b) => G.foldRight(a, b)(f).force)
+  def foldLazy[A, B](fa: F[G[A]], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
+    F.foldLazy(fa, b) { ga =>
+      Fold.Continue(b => G.foldLazy(ga, Lazy.eager(b))(a => f(a)).force)
+    }
 }

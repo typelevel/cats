@@ -40,16 +40,8 @@ trait ListInstances {
       def foldRight[A, B](fa: List[A], b: B)(f: (A, B) => B): B =
         fa.foldRight(b)(f)
 
-      def foldRight[A, B](fa: List[A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] = {
-        // we use Lazy.byName(...) to avoid memoizing intermediate values.
-        def loop(as: List[A], b: Lazy[B]): Lazy[B] =
-          as match {
-            case Nil => b
-            case a :: rest => Lazy.byName(f(a, foldRight(rest, b)(f)))
-          }
-        // we memoize the first "step" with Lazy(...).
-        Lazy(loop(fa, b).force)
-      }
+      def foldLazy[A, B](fa: List[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
+        Fold.iterateRight(fa, b)(f)
 
       def traverse[G[_]: Applicative, A, B](fa: List[A])(f: A => G[B]): G[List[B]] = {
         val G = Applicative[G]
