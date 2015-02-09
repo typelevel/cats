@@ -1,7 +1,7 @@
-package cats.laws
+package cats.laws.discipline
 
 import cats.data.{Or, Const}
-import org.scalacheck.{Gen, Arbitrary}
+import org.scalacheck.{Arbitrary, Gen}
 
 /**
  * Arbitrary instances for cats.data
