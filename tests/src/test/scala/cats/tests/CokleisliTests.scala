@@ -19,18 +19,4 @@ class CokleisliTests extends CatsSuite {
 
   checkAll("Cokleisli[Option, Int, Int]", ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[Int, Int, Int, Int, Int, Int])
   checkAll("Profunctor[Cokleisli[Option, ?, ?]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
-
-  {
-    // Ceremony to help scalac to do the right thing, see also #267.
-    type CokleisliNEL[A, B] = Cokleisli[NonEmptyList, A, B]
-
-    implicit def ev0[A: Arbitrary, B: Arbitrary]: Arbitrary[CokleisliNEL[A, B]] =
-      cokleisliArbitrary
-
-    implicit def ev1[A: Arbitrary, B: Eq]: Eq[CokleisliNEL[A, B]] =
-      cokleisliEq[NonEmptyList, A, B](oneAndArbitrary, Eq[B])
-
-    checkAll("Cokleisli[NonEmptyList, Int, Int]", ArrowTests[CokleisliNEL].arrow[Int, Int, Int, Int, Int, Int])
-    checkAll("Arrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(Arrow[CokleisliNEL]))
-  }
 }

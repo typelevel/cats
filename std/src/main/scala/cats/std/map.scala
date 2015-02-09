@@ -21,9 +21,6 @@ trait MapInstances extends algebra.std.MapInstances {
       def foldLeft[A, B](fa: Map[K, A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b) { case (x, (k, a)) => f(x, a)}
 
-      override def foldRight[A, B](fa: Map[K, A], b: B)(f: (A, B) => B): B =
-        fa.foldRight(b) { case ((k, a), z) => f(a, z)}
-
       def partialFold[A, B](fa: Map[K, A])(f: A => Fold[B]): Fold[B] =
         Fold.partialIterate(fa.values)(f)
     }

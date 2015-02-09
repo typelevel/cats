@@ -1,7 +1,7 @@
 package cats
 
 /**
- * Fold is designed to allow laziness/short-circuiting in foldLazy.
+ * Fold is designed to allow laziness/short-circuiting in foldRight.
  *
  * It is a sum type that has three possible subtypes:
  *
@@ -10,14 +10,14 @@ package cats
  *   - `Pass`: continue the fold, with no computation for this step.
  *
  * The meaning of these types can be made more clear with an example
- * of the foldLazy method in action. Here's a method to count how many
+ * of the foldRight method in action. Here's a method to count how many
  * elements appear in a list before the value 3:
  *
  * {{{
  *     def f(n: Int): Fold[Int] =
  *       if (n == 3) Fold.Return(0) else Fold.Continue(_ + 1)
  *
- *     val count: Lazy[Int] = List(1,2,3,4).foldLazy(Lazy(0))(f)
+ *     val count: Lazy[Int] = List(1,2,3,4).foldRight(Lazy(0))(f)
  * }}}
  *
  * When we call `count.value`, the following occurs:
@@ -38,7 +38,7 @@ package cats
  *
  * {{{
  *    val found: Lazy[Boolean] =
- *      Stream.from(0).foldLazy(Lazy(false)) { n =>
+ *      Stream.from(0).foldRight(Lazy(false)) { n =>
  *        if (n == 77) Fold.Return(true) else Fold.Pass
  *      }
  * }}}
@@ -48,7 +48,7 @@ package cats
  *
  * {{{
  *    val sum: Lazy[Double] =
- *      numbers.foldLazy(Lazy(0.0)) { n =>
+ *      numbers.foldRight(Lazy(0.0)) { n =>
  *        if (n < 0) Fold.Return(0.0) else Fold.Continue(n + _)
  *      }
  * }}}
@@ -58,16 +58,16 @@ package cats
  *
  * {{{
  *    val count: Lazy[Long] =
- *      Stream.from(0).foldLazy(Lazy(0L)) { _ =>
+ *      Stream.from(0).foldRight(Lazy(0L)) { _ =>
  *        Fold.Continue(_ + 1L)
  *      }
  * }}}
  *
- * You can even implement foldLeft in terms of foldLazy (!):
+ * You can even implement foldLeft in terms of foldRight (!):
  *
  * {{{
  *    def foldl[A, B](as: List[A], b: B)(f: (B, A) => B): B =
- *      as.foldLazy(Lazy((b: B) => b)) { a =>
+ *      as.foldRight(Lazy((b: B) => b)) { a =>
  *        Fold.Continue(g => (b: B) => g(f(b, a)))
  *      }.value(b)
  * }}}
@@ -76,7 +76,21 @@ package cats
  * not stack-safe.)
  */
 sealed abstract class Fold[A] extends Product with Serializable {
-  import Fold.{Return, Continue}
+  import Fold.{Return, Continue, Pass}
+
+  def imap[B](f: A => B)(g: B => A): Fold[B] =
+    this match {
+      case Return(a) => Return(f(a))
+      case Continue(h) => Continue(b => f(g(b)))
+      case _ => Pass
+    }
+
+  def compose(f: A => A): Fold[A] =
+    this match {
+      case Return(a) => Return(f(a))
+      case Continue(g) => Continue(f andThen g)
+      case _ => Continue(f)
+    }
 
   def complete(la: Lazy[A]): A =
     this match {
@@ -92,7 +106,7 @@ object Fold {
    * Return signals that the "rest" of a fold can be ignored.
    *
    * Crucially, the `a` value here is not necessarily the value that
-   * will be returned from foldLazy, but instead it is the value that
+   * will be returned from foldRight, but instead it is the value that
    * will be returned to the previous functions provided by any Continue
    * instances.
    */

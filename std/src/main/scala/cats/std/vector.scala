@@ -25,9 +25,6 @@ trait VectorInstances {
       def foldLeft[A, B](fa: Vector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
-      override def foldRight[A, B](fa: Vector[A], b: B)(f: (A, B) => B): B =
-        fa.foldRight(b)(f)
-
       def partialFold[A, B](fa: Vector[A])(f: A => Fold[B]): Fold[B] =
         Fold.partialIterate(fa)(f)
 
