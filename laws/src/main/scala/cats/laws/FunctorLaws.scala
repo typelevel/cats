@@ -11,5 +11,5 @@ class FunctorLaws[F[_]](implicit F: Functor[F]) extends InvariantLaws[F] {
     fa.map(identity) -> fa
 
   def covariantComposition[A, B, C](fa: F[A], f: A => B, g: B => C): (F[C], F[C]) =
-    fa.map(f).map(g) -> fa.map(f andThen g)
+    fa.map(f).map(g) -> fa.map(g compose f)
 }
