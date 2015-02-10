@@ -67,7 +67,7 @@ package cats
  *
  * {{{
  *    def foldl[A, B](as: List[A], b: B)(f: (B, A) => B): B =
- *      as.foldLazy(Lazy.byName((b: B) => b)) { a =>
+ *      as.foldLazy(Lazy((b: B) => b)) { a =>
  *        Fold.Continue(g => (b: B) => g(f(b, a)))
  *      }.force(b)
  * }}}
