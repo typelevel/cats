@@ -21,7 +21,7 @@ trait SetInstances extends algebra.std.SetInstances {
         val it = fa.iterator
         def loop(b: Lazy[B]): Lazy[B] =
           if (it.hasNext) Lazy.byName(f(it.next, b)) else b
-        Lazy(loop(b).force)
+        Lazy(loop(b).value)
       }
     }
 }

@@ -48,7 +48,7 @@ trait ListInstances {
             case a :: rest => Lazy.byName(f(a, foldRight(rest, b)(f)))
           }
         // we memoize the first "step" with Lazy(...).
-        Lazy(loop(fa, b).force)
+        Lazy(loop(fa, b).value)
       }
 
       def traverse[G[_]: Applicative, A, B](fa: List[A])(f: A => G[B]): G[List[B]] = {

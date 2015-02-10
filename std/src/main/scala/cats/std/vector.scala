@@ -33,7 +33,7 @@ trait VectorInstances {
         val it = fa.iterator
         def loop(b: Lazy[B]): Lazy[B] =
           if (it.hasNext) Lazy.byName(f(it.next, b)) else b
-        Lazy(loop(b).force)
+        Lazy(loop(b).value)
       }
 
       def traverse[G[_]: Applicative, A, B](fa: Vector[A])(f: A => G[B]): G[Vector[B]] = {

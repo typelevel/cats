@@ -85,5 +85,5 @@ trait CompositeFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] {
    * Left for issue #62
    */
   def foldRight[A, B](fa: F[G[A]], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] =
-    F.foldRight(fa, b)((a, b) => G.foldRight(a, b)(f).force)
+    F.foldRight(fa, b)((a, b) => G.foldRight(a, b)(f).value)
 }
