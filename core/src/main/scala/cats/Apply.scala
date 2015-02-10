@@ -39,10 +39,10 @@ trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
    * val y = Some(List(10, 20))
    * ap.map2(x, y)(_ + _) == Some(List(11, 12, 21, 22))
    */
-  def compose[G[_]](implicit GG: Apply[G]): Apply[({type λ[α] = F[G[α]]})#λ] =
-    new CompositeApply[F,G] {
-      implicit def F: Apply[F] = self
-      implicit def G: Apply[G] = GG
+  def compose[G[_]: Apply]: Apply[({ type λ[α] = F[G[α]] })#λ] =
+    new CompositeApply[F, G] {
+      def F: Apply[F] = self
+      def G: Apply[G] = Apply[G]
     }
 }
 
@@ -50,13 +50,12 @@ object Apply {
   def apply[F[_]](implicit ev: Apply[F]): Apply[F] = ev
 }
 
+trait CompositeApply[F[_], G[_]]
+  extends Apply[λ[α => F[G[α]]]] with Functor.Composite[F, G] {
 
-trait CompositeApply[F[_],G[_]]
-    extends Apply[λ[α => F[G[α]]]] with CompositeFunctor[F,G] {
+  def F: Apply[F]
+  def G: Apply[G]
 
-  implicit def F: Apply[F]
-  implicit def G: Apply[G]
-
-  def apply[A,B](fa: F[G[A]])(f: F[G[A => B]]): F[G[B]] =
+  def apply[A, B](fa: F[G[A]])(f: F[G[A => B]]): F[G[B]] =
     F.apply(fa)(F.map(f)(gab => G.apply(_)(gab)))
 }
