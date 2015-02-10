@@ -53,9 +53,11 @@ trait ListInstances {
 
       def traverse[G[_]: Applicative, A, B](fa: List[A])(f: A => G[B]): G[List[B]] = {
         val G = Applicative[G]
-        val gba = G.pure(ListBuffer.empty[B])
-        val gbb = fa.foldLeft(gba)((buf, a) => G.map2(buf, f(a))(_ += _))
-        G.map(gbb)(_.toList)
+        val init = G.pure(ListBuffer.empty[B])
+        val gbuf = fa.foldLeft(init) { (gbuf, a) =>
+          G.map2(f(a), gbuf)((b, buf) => buf += b)
+        }
+        G.map(gbuf)(_.toList)
       }
     }
 
