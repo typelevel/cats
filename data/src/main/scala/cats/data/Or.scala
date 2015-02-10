@@ -178,4 +178,10 @@ trait OrFunctions {
     case Failure(e) => left(e)
     case Success(v) => right(v)
   }
+
+  /**
+   * Convert an `Either[A, B]` to `A Or B`
+   *
+   */
+  def fromEither[A, B](e: Either[A, B]): A Or B = e.fold(left(_), right(_))
 }
