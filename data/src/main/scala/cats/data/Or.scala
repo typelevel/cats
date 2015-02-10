@@ -4,6 +4,7 @@ package data
 import cats.data.Or.{LeftOr, RightOr}
 
 import scala.reflect.ClassTag
+import scala.util.{Success, Failure, Try}
 
 /** Represents a right-biased disjunction that is either an `A` or a `B`.
  *
@@ -168,5 +169,18 @@ trait OrFunctions {
       }
     }
   }
-}
 
+  /**
+   * Convert a `Try[A]` to a `Throwable Or A`,
+   * where A is the successfully computed value
+   */
+  def fromTry[A](t: Try[A]): Throwable Or A = t match {
+    case Failure(e) => left(e)
+    case Success(v) => right(v)
+  }
+
+  /**
+   * Convert an `Either[A, B]` to `A Or B`
+   */
+  def fromEither[A, B](e: Either[A, B]): A Or B = e.fold(left, right)
+}

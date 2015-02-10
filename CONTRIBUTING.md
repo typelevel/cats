@@ -112,6 +112,8 @@ issue number in the body of your pull request or commit message. For
 example, if your pull request addresses issue number 52, please
 include "fixes #52".
 
+If you make changes after you have opened your pull request, please add them as separate commits and avoid squashing or rebasing. Squashing and rebasing can lead to a tidier git history, but they can also be a hassle if somebody else has done work based on your branch.
+
 ## How did we do?
 
 Getting involved in an open source project can be tough. As a

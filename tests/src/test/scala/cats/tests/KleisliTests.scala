@@ -2,7 +2,7 @@ package cats.tests
 
 import algebra.Eq
 import cats.data.Kleisli
-import cats.laws.FunctorLaws
+import cats.laws.discipline.FunctorTests
 import org.scalacheck.Arbitrary
 import org.scalatest.FunSuite
 import org.typelevel.discipline.scalatest.Discipline
@@ -24,5 +24,5 @@ class KleisliTests extends FunSuite with Discipline {
 
   }
 
-  checkAll("Kleisli[Option,Int, Int]", FunctorLaws[Kleisli[Option, Int, ?], Int].applicative[Int, Int])
+  checkAll("Kleisli[Option,Int, Int]", FunctorTests[Kleisli[Option, Int, ?], Int].applicative[Int, Int])
 }

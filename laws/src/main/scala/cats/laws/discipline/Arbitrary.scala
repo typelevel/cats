@@ -1,4 +1,4 @@
-package cats.laws
+package cats.laws.discipline
 
 import cats.data.{Kleisli, Or, Const}
 import org.scalacheck.{Gen, Arbitrary}

@@ -7,9 +7,7 @@ import simulacrum._
  *
  * The name is short for "covariant functor".
  *
- * Must obey the following laws:
- *  - map(fa)(identity) = fa
- *  - map(map(fa)(f1))(f2) = map(fa)(f2 compose f1)
+ * Must obey the laws defined in [[laws.FunctorLaws]].
  */
 @typeclass trait Functor[F[_]] extends functor.Invariant[F] { self =>
   def map[A, B](fa: F[A])(f: A => B): F[B]
