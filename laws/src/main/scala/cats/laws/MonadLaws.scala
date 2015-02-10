@@ -1,0 +1,30 @@
+package cats.laws
+
+import cats.Monad
+import cats.arrow.Kleisli
+import cats.syntax.flatMap._
+
+/**
+ * Laws that must be obeyed by any [[Monad]].
+ */
+class MonadLaws[F[_]](implicit F: Monad[F]) extends FlatMapLaws[F] {
+  def monadLeftIdentity[A, B](a: A, f: A => F[B]): (F[B], F[B]) =
+    F.pure(a).flatMap(f) -> f(a)
+
+  def monadRightIdentity[A](fa: F[A]): (F[A], F[A]) =
+    fa.flatMap(F.pure) -> fa
+
+  /**
+   * `pure` is the left identity element under composition of
+   * [[cats.arrow.Kleisli]] arrows. This is analogous to [[monadLeftIdentity]].
+   */
+  def kleisliLeftIdentity[A, B](a: A, f: A => F[B]): (F[B], F[B]) =
+    (Kleisli(F.pure[B]) compose Kleisli(f)).run(a) -> f(a)
+
+  /**
+   * `pure` is the right identity element under composition of
+   * [[cats.arrow.Kleisli]] arrows. This is analogous to [[monadRightIdentity]].
+   */
+  def kleisliRightIdentity[A, B](a: A, f: A => F[B]): (F[B], F[B]) =
+    (Kleisli(f) compose Kleisli(F.pure[A])).run(a) -> f(a)
+}
