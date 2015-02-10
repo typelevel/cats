@@ -71,6 +71,9 @@ package cats
  *        Fold.Continue(g => (b: B) => g(f(b, a)))
  *      }.force(b)
  * }}}
+ *
+ * (In practice you would not want to use the `foldl` because it is
+ * not stack-safe.)
  */
 sealed abstract class Fold[A] {
   import Fold.{Return, Continue, Pass}
