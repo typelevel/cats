@@ -126,6 +126,7 @@ lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/non/cats")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
   publishMavenStyle := true,
+  publishArtifact in packageDoc := false,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ => false },
   publishTo <<= version { (v: String) =>
