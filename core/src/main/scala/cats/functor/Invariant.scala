@@ -12,25 +12,25 @@ import simulacrum._
   /**
    * Compose 2 invariant Functors F and G to get a new Invariant Functor for F[G[_]].
    */
-  def compose[G[_]: Invariant]: Invariant[Lambda[X => F[G[X]]]] = new Invariant.Composite[F, G] {
+  def compose[G[_]: Invariant](implicit GG: Invariant[G]): Invariant[Lambda[X => F[G[X]]]] = new Invariant.Composite[F, G] {
     def F: Invariant[F] = self
-    def G: Invariant[G] = Invariant[G]
+    def G: Invariant[G] = GG
   }
 
   /**
    * Compose the Invariant Functor F with a normal (Covariant) Functor to get a new Invariant Functor for [F[G[_]].
    */
-  def composeWithFunctor[G[_]: Functor]: Invariant[Lambda[X => F[G[X]]]] = new Invariant.CovariantComposite[F, G] {
+  def composeWithFunctor[G[_]](implicit GG: Functor[G]): Invariant[Lambda[X => F[G[X]]]] = new Invariant.CovariantComposite[F, G] {
     def F: Invariant[F] = self
-    def G: Functor[G] = Functor[G]
+    def G: Functor[G] = GG
   }
 
   /**
    * Compose the Invariant Functor F with a Contravariant Functor to get a new Invariant Functor for [F[G[_]]].
    */
-  def composeWithContravariant[G[_]: Contravariant]: Invariant[Lambda[X => F[G[X]]]] = new Invariant.ContravariantComposite[F, G] {
+  def composeWithContravariant[G[_]](implicit GG: Contravariant[G]): Invariant[Lambda[X => F[G[X]]]] = new Invariant.ContravariantComposite[F, G] {
     def F: Invariant[F] = self
-    def G: Contravariant[G] = Contravariant[G]
+    def G: Contravariant[G] = GG
   }
 }
 
