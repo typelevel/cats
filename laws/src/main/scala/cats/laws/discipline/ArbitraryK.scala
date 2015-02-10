@@ -1,6 +1,6 @@
 package cats.laws.discipline
 
-import cats.data.{Kleisli, Or, Const}
+import cats.data.{Cokleisli, Kleisli, Or, Const}
 import org.scalacheck.Arbitrary
 import cats.laws.discipline.arbitrary._
 
@@ -38,4 +38,7 @@ object ArbitraryK {
 
   implicit def kleisliA[F[_], A](implicit F: ArbitraryK[F]): ArbitraryK[Kleisli[F, A, ?]] =
     new ArbitraryK[Kleisli[F, A, ?]]{ def synthesize[B: Arbitrary]: Arbitrary[Kleisli[F, A, B]] = implicitly }
+
+  implicit def cokleisliA[F[_], A]: ArbitraryK[Cokleisli[F, A, ?]] =
+    new ArbitraryK[Cokleisli[F, A, ?]]{ def synthesize[B: Arbitrary]: Arbitrary[Cokleisli[F, A, B]] = implicitly }
 }
