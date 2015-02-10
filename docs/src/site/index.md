@@ -13,12 +13,10 @@ Cats is an experimental library proof-of-concept library intended to provide abs
   <p><strong>Cats is currently an experimental project under active development</strong>. Feedback and contributions are welcomed as we look to improve the project. This are evolving quickly and we currently make no guarantees about what might drastically change in the near future.</p>
 </div>
 
-There are libraries that aim to foster Functional Programming in the Scala programming language which Cats has a relationship to:
+There are other libraries that aim to foster Functional Programming in the Scala programming language which Cats has a relationship to:
 
 * [scalaz](https://github.com/scalaz/scalaz) The project which directly inspires Cats. Currently Cats borrows some code directly from scalaz.
 * [Structures](https://github.com/mpilquist) A project very similar in nature to Cats, also derived from scalaz.
-* [algebra](https://github.com/non/algebra) A project unifying algebraic type classes from Spire and Algebird. Cats depends directly on algebra for typeclasses such as Semigroup, Monoid, Eq, Order.
-* [simulacrum](htts://github.com/mpilquist/simulacrum) An attempt to unify how typeclasses are represented in Scala, and which help in drastically reducing the boilerplate involved in encoding them in scala.
 
 <a name="project-structor"></a>
 # Project Structure

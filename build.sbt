@@ -60,7 +60,7 @@ lazy val docSettings = Seq(
   ghpagesNoJekyll := false,
   scalacOptions in (ScalaUnidoc, unidoc) ++=
     Opts.doc.sourceUrl(scmInfo.value.get.browseUrl + "/tree/master${FILE_PATH}.scala"),
-  git.remoteRepo := "git@github.com:non/cats.git",
+  git.remoteRepo := "git@github.com:stew/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
 

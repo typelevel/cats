@@ -57,3 +57,117 @@ section img {
   padding: 10px;
   margin: 0;
 }
+
+div#container {
+    text-align:left;
+}
+div#content p {
+    line-height:1.4
+}
+div#navigation ol {
+    margin:15px 0;
+    padding:0;
+    list-style-type:none;
+}
+
+div#navigation li {
+    margin-bottom:5px;
+}
+
+div#navigation {
+    float:left;
+    width:200px;
+    margin-top:50px;
+    margin-left:-100%;
+}
+
+div#footer p{
+    margin:0;padding:5px 10px;
+}
+
+div#wrapper{
+    width:100%;
+    float:left;
+}
+
+div#content {
+    margin-left: 200px;
+}
+
+div#extra {
+    float:right;
+    width:150px;
+    margin-left:-150px;
+}
+
+div#footer {
+    clear:left;
+    width:100%;
+}
+
+div#content h1 {
+    text-align: left;
+}
+
+div#commute {
+    float: left;
+    with: 200px;
+}
+
+div#commute {
+    height: 80px;
+}
+
+div#commute img {
+    max-height:100%;
+}
+
+div#navbar {
+    height: 25px;
+    background: #EEEEEE;
+    margin-left: 200px;
+}
+
+div#navbar ul {
+    margin-left: 100px;
+    display: block;
+    text-align: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+div#navbar li {
+    float: left;
+    diplay: inline-block;
+}
+
+div#navbar a {
+    margin-left: 10px;
+    margin-right: 10px;
+    display: block;
+
+}
+
+div#banner {
+    text-style: upper;
+}
+
+h1 {
+    text-align: center;
+}
+
+body {
+    padding: 0;
+}
+
+div#tagline {
+    font-style: italic;
+    text-align: center;
+}
+
+hr {
+    margin: 0;
+    margin-left: 200px;
+}

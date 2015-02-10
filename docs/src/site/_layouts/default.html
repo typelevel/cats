@@ -10,68 +10,96 @@
     <link rel="stylesheet" href="{{ site.baseurl }}css/syntax.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
   </head>
   <body>
-    <a name="top"></a>
-    <div class="wrapper">
-      <header>
-        <h1>Cats</h1>
-	<img src="http://plastic-idolatry.com/erik/cats2.png"></img>
-        <p>Last updated on <em>{{ site.time | date: '%B %d, %Y' }}</em></p>
-
-        <ul>
-          <li><a href="https://github.com/non/cats/zipball/master">Download <strong>.zip File</strong></a></li>
-          <li><a href="https://github.com/non/cats/tarball/master">Download <strong>.tar.gz</strong></a></li>
-          <li><a href="https://github.com/non/cats">View On <strong>GitHub</strong></a></li>
-        </ul>
-	Browse the <a href="https://non.github.com/cats/api">API documentation</a>
-	
-        <hr />
-
-        <ol id="top">
+    <div id="container">
+      <div id="header">
+	<div id="commute"><img src="http://plastic-idolatry.com/erik/cats2.png"/></div>
+	<div id="banner">
+          <h1>Cats</h1>
+	  <div id="tagline">
+	    A Library for Functional Programming in Scala
+	  </div>
+	</div>
+      </div>
+      <hr/>
+      <div id="navbar">
+	<ul>
+	  <li><a href="index.html">About</a></li>
+	  <li><a href="https://non.github.com/cats/api">API</a></li>
+	  <li><a href="https://github.com/non/cats">Source</a></li>
+	  <li><a href="https://gitter.im/non/cats">Chat with us!</a></li>
+	  <li><a href="https://travis-ci.org/non/cats">Jenkins</a></li>
+	  <li><a href="colophon.html">Colophon</a></li>
+      </div>
+      <hr/>
+      <div id="wrapper">
+	<div id="content">
+          {{ content }}
+	</div>
+      </div>
+      <div id="navigation">
+        <ol>
           <!-- home -->
           <li><a href="{{ site.baseurl }}">Introduction</a></li>
           {% if page.section == 'home' %}
-            <li>
-              <ol class="menu">
-                <li><a href="{{ site.baseurl }}#Introduction">Introduction</a></li>
-                <li><a href="{{ site.baseurl }}#project-structure">Project Structure</a></li>
-                <li><a href="{{ site.baseurl }}#getting-started">Getting Started</a></li>
-              </ol>
-            </li>
+          <li>
+            <ol>
+              <li><a href="{{ site.baseurl }}#Introduction">Introduction</a></li>
+              <li><a href="{{ site.baseurl }}#project-structure">Project Structure</a></li>
+              <li><a href="{{ site.baseurl }}#getting-started">Getting Started</a></li>
+            </ol>
+          </li>
           {% endif %}
 
           <li><a href="{{ site.baseurl }}typeclasses.html">Typeclasses</a></li>
           {% if page.section == 'typeclasses' %}
-            <li>
-              <ol class="menu">
-                <li><a href="{{ site.baseurl }}functor.html">Functor</a></li>
-                <li><a href="{{ site.baseurl }}apply.html">Apply</a></li>
-                <li><a href="{{ site.baseurl }}applicative.html">Applicative</a></li>
-                <li><a href="{{ site.baseurl }}monad.html">Monad</a></li>
-              </ol>
-            </li>
+          <li>
+            <ol class="menu">
+              <li><a href="{{ site.baseurl }}functor.html">Functor</a></li>
+              <li><a href="{{ site.baseurl }}apply.html">Apply</a></li>
+              <li><a href="{{ site.baseurl }}applicative.html">Applicative</a></li>
+              <li><a href="{{ site.baseurl }}monad.html">Monad</a></li>
+              <li><a href="{{ site.baseurl }}id.html">Id</a></li>
+              <li><a href="{{ site.baseurl }}monadcombine.html">MonadCombine</a></li>
+              <li><a href="{{ site.baseurl }}monadfilter.html">MonadFilter</a></li>
+              <li><a href="{{ site.baseurl }}monoidk.html">MonoidK</a></li>
+              <li><a href="{{ site.baseurl }}semigroupk.html">SemigroupK</a></li>
+              <li><a href="{{ site.baseurl }}show.html">Show</a></li>
+              <li><a href="{{ site.baseurl }}traverse.html">Traverse</a></li>
+            </ol>
+          </li>
           {% endif %}
+          <li><a href="{{ site.baseurl }}datatypes.html">Data types</a></li>
+          {% if page.section == 'datatypes' %}
+          <li>
+            <ol class="menu">
+              <li><a href="{{ site.baseurl }}.html">Functor</a></li>
+	    </ol>
+	  </li>
+          {% endif %}
+	  
+	  <li><a href="{{ site.baseurl }}colophon.html">Colophon</a></li>
         </ol>
-
-        <hr />
-
-      </header>
-      <section>
-        {{ content }}
-      </section>
+      </div>
+      <div id="extra">
+      </div>
+      <div id="footer">
+	<p>Last updated on <em>{{ site.time | date: '%B %d, %Y' }}</em></p>
+      </div>
     </div>
+
     <script src="{{ site.baseurl }}js/scale.fix.js" type="text/javascript"></script>
     <script type="text/javascript">
-    //<![CDATA[
+      //<![CDATA[
       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
       document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
     //]]>
     </script>
     <script type="text/javascript">
-    //<![CDATA[
+      //<![CDATA[
       try {
         var pageTracker = _gat._getTracker("UA-57263411-1");
         pageTracker._trackPageview();
