@@ -23,8 +23,11 @@ import simulacrum._
    * Right associative lazy fold on `F` using the folding function 'f'.
    *
    * This method evaluates `b` lazily (in some cases it will not be
-   * needed), and returns a lazy value. For more information about how
-   * this method works see the documentation for Fold[_].
+   * needed), and returns a lazy value. We are using `A => Fold[B]` to
+   * support laziness in a stack-safe way.
+   *
+   * For more detailed information about how this method works see the
+   * documentation for `Fold[_]`.
    */
   def foldLazy[A, B](fa: F[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B]
 

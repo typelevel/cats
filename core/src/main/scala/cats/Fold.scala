@@ -5,62 +5,72 @@ package cats
  *
  * It is a sum type that has three possible subtypes:
  *
- *   - Return(a): stop the fold with a value of `a`.
- *   - Continue(f): continue the fold, suspending the computation `f`.
- *   - Pass: continue the fold, with no additional computation.
+ *   - `Return(a)`: stop the fold with a value of `a`.
+ *   - `Continue(f)`: continue the fold, suspending the computation `f`.
+ *   - `Pass`: continue the fold, with no additional computation.
  *
  * The meaning of these types can be made more clear with an example
  * of the foldLazy method in action. Here's a method to count how many
- * elements appear in a list before 3:
+ * elements appear in a list before the value 3:
  *
+ * {{{
  *     def f(n: Int): Fold[Int] =
  *       if (n == 3) Fold.Return(0) else Fold.Continue(_ + 1)
  *
  *     val count: Lazy[Int] = List(1,2,3,4).foldLazy(Lazy(0))(f)
+ * }}}
  *
  * When we call `count.force`, the following occurs:
  *
- *  - f(1) produces res0: Continue(_ + 1)
- *  - f(2) produces res1: Continue(_ + 1)
- *  - f(3) produces res2: Return(0)
+ *  - `f(1)` produces `res0: Continue(_ + 1)`
+ *  - `f(2)` produces `res1: Continue(_ + 1)`
+ *  - `f(3)` produces `res2: Return(0)`
  *
  * Now we unwind back through the continue instances:
  *
- *  - res2 produces 0
- *  - res1(0) produces 1
- *  - res0(1) produces 2
+ *  - `res2` returns `0`
+ *  - `res1(0)` returns `1`
+ *  - `res0(1)` returns `2`
  *
  * And so the result is 2.
  *
  * This code searches an infinite stream for 77:
  *
+ * {{{
  *    val found: Lazy[Boolean] =
  *      Stream.from(0).foldLazy(Lazy(false)) { n =>
  *        if (n == 77) Fold.Return(true) else Fold.Pass
  *      }
+ * }}}
  *
  * Here's another example that sums the list until it reaches a
  * negative number:
  *
+ * {{{
  *    val sum: Lazy[Double] =
  *      numbers.foldLazy(Lazy(0.0)) { n =>
  *        if (n < 0) Fold.Return(0.0) else Fold.Continue(n + _)
  *      }
+ * }}}
  *
  * This strange example counts an infinite stream. Since the result is
  * lazy, it will only hang the program once `count.force` is called:
  *
+ * {{{
  *    val count: Lazy[Long] =
  *      Stream.from(0).foldLazy(Lazy(0L)) { _ =>
  *        Fold.Continue(_ + 1L)
  *      }
+ * }}}
  *
  * You can even implement foldLeft in terms of foldLazy (!):
  *
+ * {{{
  *    def foldl[A, B](as: List[A], b: B)(f: (B, A) => B): B =
  *      as.foldLazy(Lazy.byName((b: B) => b)) { a =>
  *        Fold.Continue(g => (b: B) => g(f(b, a)))
  *      }.force(b)
+ * }}}
  */
 sealed abstract class Fold[A] {
   import Fold.{Return, Continue, Pass}
@@ -96,7 +106,7 @@ object Fold {
   /**
    * Pass allows the fold to continue, without modifying the result.
    *
-   * Pass' behavior is identical to Continue(identity[A]), but it may be
+   * Pass' behavior is identical to `Continue(identity[A])`, but it may be
    * more efficient.
    */
   final def Pass[A]: Fold[A] = pass.asInstanceOf[Fold[A]]
@@ -104,7 +114,7 @@ object Fold {
   final case object pass extends Fold[Nothing]
 
   /**
-   * iteratRight provides a sample right-fold for Iterable[A] values.
+   * iterateRight provides a sample right-fold for `Iterable[A]` values.
    */
   def iterateRight[A, B](as: Iterable[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] = {
     def unroll(b: B, fs: List[B => B]): B =
