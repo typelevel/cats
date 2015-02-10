@@ -8,15 +8,15 @@ package cats
  *
  *  - `Lazy(...)`: call-by-need semantics; the value of `...` will not
  *     be calculated until needed, but will be calculated at most once
- *     (and saved via memoization). This corresponds to Scala's vals.
+ *     (and saved via memoization). Corresponds to Scala's `lazy val`.
  *
  *  - `Lazy.eager(...)`: call-by-value semantics; the value of `...`
  *    will be immediately calculated and saved. This is the default
- *    strategy used by Scala. This correponds to Scala's lazy vals.
+ *    strategy used by Scala. Corresponds to Scala's `val`.
  *
  *  - `Lazy.byName(...)`: call-by-name semantics; the value of `...`
  *    will not be calculated until needed, and will be calculated
- *    every time it is needed. This corresponds to Scala's defs.
+ *    every time it is needed. Corresponds to Scala's `def`.
  *
  * Every Lazy[A] value has (or can calculate) a corresponding A
  * value. You can obtain this value by calling the `.value` method.
