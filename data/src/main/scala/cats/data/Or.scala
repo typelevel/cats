@@ -181,7 +181,6 @@ trait OrFunctions {
 
   /**
    * Convert an `Either[A, B]` to `A Or B`
-   *
    */
-  def fromEither[A, B](e: Either[A, B]): A Or B = e.fold(left(_), right(_))
+  def fromEither[A, B](e: Either[A, B]): A Or B = e.fold(left, right)
 }
