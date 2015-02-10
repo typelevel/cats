@@ -6,8 +6,8 @@ package cats
  * It is a sum type that has three possible subtypes:
  *
  *   - `Return(a)`: stop the fold with a value of `a`.
- *   - `Continue(f)`: continue the fold, suspending the computation `f`.
- *   - `Pass`: continue the fold, with no additional computation.
+ *   - `Continue(f)`: continue the fold, suspending the computation `f` for this step.
+ *   - `Pass`: continue the fold, with no computation for this step.
  *
  * The meaning of these types can be made more clear with an example
  * of the foldLazy method in action. Here's a method to count how many
