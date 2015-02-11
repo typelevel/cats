@@ -39,7 +39,7 @@ trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
    * val y = Some(List(10, 20))
    * ap.map2(x, y)(_ + _) == Some(List(11, 12, 21, 22))
    */
-  def compose[G[_]](implicit GG: Apply[G]): Apply[({type λ[α] = F[G[α]]})#λ] =
+  def compose[G[_]](implicit GG: Apply[G]): Apply[λ[ A => F[G[A]] ]] =
     new CompositeApply[F,G] {
       implicit def F: Apply[F] = self
       implicit def G: Apply[G] = GG
