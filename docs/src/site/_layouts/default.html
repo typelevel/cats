@@ -10,40 +10,40 @@
     <link rel="stylesheet" href="{{ site.baseurl }}css/syntax.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
-	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
   </head>
   <body>
     <div id="container">
       <div id="header">
-	<div id="commute"><img src="http://plastic-idolatry.com/erik/cats2.png"/></div>
-	<div id="banner">
+  <div id="commute"><img src="http://plastic-idolatry.com/erik/cats2.png"/></div>
+  <div id="banner">
           <h1>Cats</h1>
-	  <div id="tagline">
-	    A Library for Functional Programming in Scala
-	  </div>
-	</div>
+    <div id="tagline">
+      A Library for Functional Programming in Scala
+    </div>
+  </div>
       </div>
       <hr/>
       <div id="navbar">
-	<ul>
-	  <li><a href="index.html">About</a></li>
-	  <li><a href="https://non.github.com/cats/api">API</a></li>
-	  <li><a href="https://github.com/non/cats">Source</a></li>
-	  <li><a href="https://gitter.im/non/cats">Chat with us!</a></li>
-	  <li><a href="https://travis-ci.org/non/cats">Jenkins</a></li>
-	  <li><a href="colophon.html">Colophon</a></li>
+  <ul>
+    <li><a href="index.html">About</a></li>
+    <li><a href="https://non.github.com/cats/api">API</a></li>
+    <li><a href="https://github.com/non/cats">Source</a></li>
+    <li><a href="https://gitter.im/non/cats">Chat with us!</a></li>
+    <li><a href="https://travis-ci.org/non/cats">Jenkins</a></li>
+    <li><a href="colophon.html">Colophon</a></li>
       </div>
       <hr/>
       <div id="wrapper">
-	<div id="content">
+  <div id="content">
           {{ content }}
-	</div>
+  </div>
       </div>
       <div id="navigation">
         <ol>
           <!-- home -->
-          <li><a href="{{ site.baseurl }}">Introduction</a></li>
+          <li><a href="{{ site.baseurl }}"><b>Introduction</b></a></li>
           {% if page.section == 'home' %}
           <li>
             <ol>
@@ -54,40 +54,42 @@
           </li>
           {% endif %}
 
-          <li><a href="{{ site.baseurl }}typeclasses.html">Typeclasses</a></li>
+          <!-- typeclasses, from tut -->
+          <li><a href="{{ site.baseurl }}typeclasses.html"><b>Typeclasses</b></a></li>
           {% if page.section == 'typeclasses' %}
           <li>
             <ol class="menu">
-              <li><a href="{{ site.baseurl }}functor.html">Functor</a></li>
-              <li><a href="{{ site.baseurl }}apply.html">Apply</a></li>
-              <li><a href="{{ site.baseurl }}applicative.html">Applicative</a></li>
-              <li><a href="{{ site.baseurl }}monad.html">Monad</a></li>
-              <li><a href="{{ site.baseurl }}id.html">Id</a></li>
-              <li><a href="{{ site.baseurl }}monadcombine.html">MonadCombine</a></li>
-              <li><a href="{{ site.baseurl }}monadfilter.html">MonadFilter</a></li>
-              <li><a href="{{ site.baseurl }}monoidk.html">MonoidK</a></li>
-              <li><a href="{{ site.baseurl }}semigroupk.html">SemigroupK</a></li>
-              <li><a href="{{ site.baseurl }}show.html">Show</a></li>
-              <li><a href="{{ site.baseurl }}traverse.html">Traverse</a></li>
+              {% for x in site.tut %}
+                {% if x.section == 'typeclasses' %}
+                  <li><a href="{{ site.baseurl }}{{ x.url }}">{{ x.title }}</a></li>
+                {% endif %}
+              {% endfor %}
             </ol>
           </li>
           {% endif %}
-          <li><a href="{{ site.baseurl }}datatypes.html">Data types</a></li>
-          {% if page.section == 'datatypes' %}
+
+          <!-- data types, from tut -->
+          <li><a href="{{ site.baseurl }}datatypes.html"><b>Data Types</b></a></li>
+          {% if page.section == 'data' %}
           <li>
             <ol class="menu">
-              <li><a href="{{ site.baseurl }}.html">Functor</a></li>
-	    </ol>
-	  </li>
+              {% for x in site.tut %}
+                {% if x.section == 'data' %}
+                  <li><a href="{{ site.baseurl }}{{ x.url }}">{{ x.title }}</a></li>
+                {% endif %}
+              {% endfor %}
+            </ol>
+          </li>
           {% endif %}
-	  
-	  <li><a href="{{ site.baseurl }}colophon.html">Colophon</a></li>
+
+
+    <li><a href="{{ site.baseurl }}colophon.html"><b>Colophon</b></a></li>
         </ol>
       </div>
       <div id="extra">
       </div>
       <div id="footer">
-	<p>Last updated on <em>{{ site.time | date: '%B %d, %Y' }}</em></p>
+  <p>Last updated on <em>{{ site.time | date: '%B %d, %Y' }}</em></p>
       </div>
     </div>
 
