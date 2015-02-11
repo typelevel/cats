@@ -7,29 +7,75 @@ section: "home"
 <a name="Introduction"></a>
 # Introduction
 
-Cats is an experimental library proof-of-concept library intended to provide abstractions for functional programming in the [Scala programming language](https://scala-lang.org).
+Cats is an experimental library proof-of-concept library intended to
+provide abstractions for functional programming in the [Scala
+programming language](https://scala-lang.org). The name is a playful
+shortening of the word *category*.
 
-<div class="msg warn">
-  <p><strong>Cats is currently an experimental project under active development</strong>. Feedback and contributions are welcomed as we look to improve the project. This are evolving quickly and we currently make no guarantees about what might drastically change in the near future.</p>
-</div>
 
-There are libraries that aim to foster Functional Programming in the Scala programming language which Cats has a relationship to:
+<div class="msg warn"> <p><strong> Cats is currently an experimental
+  project under active development</strong>. Feedback and
+  contributions are welcomed as we look to improve the project. This
+  are evolving quickly and we currently make no guarantees about what
+  might drastically change in the near future.</p> </div>
 
-* [scalaz](https://github.com/scalaz/scalaz) The project which directly inspires Cats. Currently Cats borrows some code directly from scalaz.
-* [Structures](https://github.com/mpilquist) A project very similar in nature to Cats, also derived from scalaz.
-* [algebra](https://github.com/non/algebra) A project unifying algebraic type classes from Spire and Algebird. Cats depends directly on algebra for typeclasses such as Semigroup, Monoid, Eq, Order.
-* [simulacrum](htts://github.com/mpilquist/simulacrum) An attempt to unify how typeclasses are represented in Scala, and which help in drastically reducing the boilerplate involved in encoding them in scala.
 
-<a name="project-structor"></a>
+<a name "motivations"></a>
+# Motivations
+
+### Approachability
+
+As this library evolves, we are placing a lot of emphasis on trying to
+make decisions which will help keep this library approachable for
+people new to the concepts in this library. We are collecting
+anecdotes from successes and failures we have experienced in the past
+in trying to teach others about these concepts, and trying to make
+decisions which will help ease the process of getting acquainted to
+the library for a newcomer. If you have any feedback for us in this
+regard, we would love to hear from you. See the [Contributing
+page](contributing.html) to find out ways to give us feedback.
+
+### Modularity
+
+We are trying to make the library modular. It will have a tight
+core which will contain only the [typeclasses](typeclasses.html) and
+the bare minimum of data structures that are needed to support
+them. Support for using these typeclasses with the Scala standard library
+will be in the `std` project. 
+
+### Documentation
+
+We feel that having lots of documentation is a very important goal for
+our project. It will be a big win towards our goal of
+approachability. We will strive to have the code well documented, we
+will strive to have lots of documentation external to the code, and We
+will strive to have a large corpus of compiler verified examples of
+how the software can be used.
+
+Writing documentation is a huge part of developing software, and one
+that is often neglected. It is also a very easy way to get started
+with [contributing](contributing.html) to the project
+
+### Efficiency
+
+Although, unfortunately there are times when programming only with
+pure functions and writing efficient code in Scala can be at odds, we
+are attempting to do our best at keeping our library as efficient as
+we can without making unnecessary sacrifices of purity and
+usability. Where sacrifices have to be made, we will strive to make
+these obvious, and will keep the well documented.
+
+<a name="project-structure"></a>
 # Project Structure
 
 In an attempt to be more modular, Cats is broken up into a number of sub-projects:
 
 * *core* - contains typeclass definitions, such as Functor, Applicative, Monad
+* *std* - contains typeclass instances for Scala standard library types
 * *data* - contains datatypes
 * *laws* - laws for the typeclasses, used to validate typeclass instances
-* *std* - contains typeclass instances for Scala standard library types
 * *tests* - tests that check instances from *std* with laws from *laws*
+* *docs* - The source for this website
 
 <a name="getting-started"></a>
 # Getting Started
@@ -40,3 +86,12 @@ Then in your project, add to your build.sbt
 
     libraryDependencies += "org.spire-math" %% "cats-core" % "0.1.0-SNAPSHOT"
 
+<a name="copyright"></a>
+# Copyright and License
+
+All code is available to you under the MIT license, available at
+http://opensource.org/licenses/mit-license.php and also in the
+[COPYING](COPYING) file. The design is informed by many other
+projects, in particular Scalaz.
+
+Copyright the maintainers, 2015.
