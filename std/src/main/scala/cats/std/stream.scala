@@ -29,11 +29,8 @@ trait StreamInstances {
         fa.foldLeft(b)(f)
 
       // note: this foldRight variant is eager not lazy
-      def foldRight[A, B](fa: Stream[A], b: B)(f: (A, B) => B): B =
-        fa match {
-          case Stream.Empty => b
-          case a #:: rest => f(a, foldRight(rest, b)(f))
-        }
+      override def foldRight[A, B](fa: Stream[A], b: B)(f: (A, B) => B): B =
+        fa.foldRight(b)(f)
 
       // this foldRight variant is lazy
       def foldLazy[A, B](fa: Stream[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =

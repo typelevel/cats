@@ -52,7 +52,7 @@ sealed abstract class ConstInstances extends ConstInstances0 {
 
     def foldLeft[A, B](fa: Const[C, A], b: B)(f: (B, A) => B): B = b
 
-    def foldRight[A, B](fa: Const[C, A], b: B)(f: (A, B) => B): B = b
+    override def foldRight[A, B](fa: Const[C, A], b: B)(f: (A, B) => B): B = b
 
     def foldLazy[A, B](fa: Const[C, A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] = b
   }

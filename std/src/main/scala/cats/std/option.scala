@@ -31,7 +31,7 @@ trait OptionInstances {
           case Some(a) => f(b, a)
         }
 
-      def foldRight[A, B](fa: Option[A], b: B)(f: (A, B) => B): B =
+      override def foldRight[A, B](fa: Option[A], b: B)(f: (A, B) => B): B =
         fa match {
           case None => b
           case Some(a) => f(a, b)

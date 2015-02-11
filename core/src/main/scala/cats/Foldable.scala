@@ -15,11 +15,6 @@ import simulacrum._
   def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B
 
   /**
-   * Right associative fold on 'F' using the function 'f'.
-   */
-  def foldRight[A, B](fa: F[A], b: B)(f: (A, B) => B): B
-
-  /**
    * Right associative lazy fold on `F` using the folding function 'f'.
    *
    * This method evaluates `b` lazily (in some cases it will not be
@@ -32,16 +27,28 @@ import simulacrum._
   def foldLazy[A, B](fa: F[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B]
 
   /**
+   * Right associative fold on 'F' using the function 'f'.
+   */
+  def foldRight[A, B](fa: F[A], b: B)(f: (A, B) => B): B =
+    foldLazy(fa, Lazy.eager(b)) { a =>
+      Fold.Continue(b => f(a, b))
+    }.force
+
+  /**
    * Apply f to each element of F and combine them using the Monoid[B].
    */
-  def foldMap[A, B: Monoid](fa: F[A])(f: A => B): B = foldLeft(fa, Monoid[B].empty) { (b, a) =>
-    Monoid[B].combine(b, f(a))
-  }
+  def foldMap[A, B](fa: F[A])(f: A => B)(implicit B: Monoid[B]): B =
+    foldLeft(fa, B.empty) { (b, a) =>
+      B.combine(b, f(a))
+    }
 
   /**
    * Fold up F using the Monoid[A]
    */
-  def fold[A: Monoid](fa: F[A]): A = foldMap(fa)(x => x)
+  def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
+    foldLeft(fa, A.empty) { (acc, a) =>
+      A.combine(acc, a)
+    }
 
   /**
    * Traverse F in the Applicative G and ignore the return values of 'f'.
@@ -54,12 +61,14 @@ import simulacrum._
   /**
    * Traverse F in the Applicative G ignoring all values in fga.
    */
-  def sequence_[G[_]: Applicative, A, B](fga: F[G[A]]): G[Unit] = traverse_(fga)(identity)
+  def sequence_[G[_]: Applicative, A, B](fga: F[G[A]]): G[Unit] =
+    traverse_(fga)(identity)
 
   /**
    * Fold up F using the MonoidK instance for G. Like fold, but the value is of kind * -> *.
    */
-  def foldK[G[_]: MonoidK, A](fga: F[G[A]]): G[A] = foldMap(fga)(identity)(MonoidK[G].algebra)
+  def foldK[G[_], A](fga: F[G[A]])(implicit G: MonoidK[G]): G[A] =
+    fold(fga)(G.algebra)
 
   /**
    * Compose this foldable instance with one for G creating Foldable[F[G]]
@@ -87,7 +96,7 @@ trait CompositeFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] {
   /**
    * Left assocative fold on F[G[A]] using 'f'
    */
-  def foldRight[A, B](fa: F[G[A]], b: B)(f: (A, B) => B): B =
+  override def foldRight[A, B](fa: F[G[A]], b: B)(f: (A, B) => B): B =
     F.foldRight(fa, b)((a, b) => G.foldRight(a, b)(f))
 
   /**

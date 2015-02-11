@@ -9,23 +9,23 @@ trait MapInstances {
 
   implicit def mapInstance[K]: Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] =
     new Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] {
-      override def traverse[G[_] : Applicative, A, B](fa: Map[K, A])(f: (A) => G[B]): G[Map[K, B]] = {
+      def traverse[G[_] : Applicative, A, B](fa: Map[K, A])(f: (A) => G[B]): G[Map[K, B]] = {
         val G = Applicative[G]
         val gba = G.pure(Map.empty[K, B])
         val gbb = fa.foldLeft(gba)((buf, a) => G.map2(buf, f(a._2))({ case(x, y) => x + (a._1 -> y)}))
         G.map(gbb)(_.toMap)
       }
 
-      override def flatMap[A, B](fa: Map[K, A])(f: (A) => Map[K, B]): Map[K, B] =
+      def flatMap[A, B](fa: Map[K, A])(f: (A) => Map[K, B]): Map[K, B] =
         fa.flatMap { case (_, a) => f(a) }
 
-      override def foldLeft[A, B](fa: Map[K, A], b: B)(f: (B, A) => B): B =
+      def foldLeft[A, B](fa: Map[K, A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b) { case (x, (k, a)) => f(x, a)}
 
       override def foldRight[A, B](fa: Map[K, A], b: B)(f: (A, B) => B): B =
         fa.foldRight(b) { case ((k, a), z) => f(a, z)}
 
-      override def foldLazy[A, B](fa: Map[K, A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
+      def foldLazy[A, B](fa: Map[K, A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
         Fold.iterateRight(fa.values, b)(f)
     }
 }
