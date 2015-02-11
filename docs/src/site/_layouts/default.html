@@ -82,19 +82,19 @@
         </ol>
         {% endif %}
       </div>
+      {% if (page.section == 'data') or (page.section == 'typeclasses') and ((page.source != null) or (page.scaladoc != null))%}
       <div id="extra">
-	{% if (page.section == 'data') or (page.section == 'typeclasses') %}
 	<h5>useful links</h5>
 	<ul>
-	{% if page.source != '' %}
+	{% if page.source != null %}
 	<li><a href="{{page.source}}">Source</a></li>
 	{% endif %}
-	{% if page.scaladoc != '' %}
+	{% if page.scaladoc != null %}
 	<li><a href="{{site.apidocs}}{{ page.scaladoc }}">Scaladoc</a></li>
 	{% endif %}
 	</ul>
-	{% endif %}
       </div>
+      {% endif %}
       <div id="footer">
 	<p>Last updated on <em>{{ site.time | date: '%B %d, %Y' }}</em></p>
       </div>
