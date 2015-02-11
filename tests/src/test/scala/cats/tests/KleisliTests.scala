@@ -14,7 +14,7 @@ import org.typelevel.discipline.scalatest.Discipline
 class KleisliTests extends FunSuite with Discipline {
 
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
-    Eq.by[Kleisli[F, A, B], A => F[B]](_.runKleisli)
+    Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
   checkAll("Kleisli[Option,Int, Int]", FunctorTests[Kleisli[Option, Int, ?], Int].applicative[Int, Int])
 }

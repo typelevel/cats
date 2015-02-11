@@ -3,25 +3,25 @@ package cats.data
 import cats.functor.Profunctor
 import cats.{Monad, CoFlatMap, Functor}
 
-final case class Cokleisli[F[_], A, B](runCokleisli: F[A] => B) { self =>
+final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
 
   def dimap[C, D](f: C => A)(g: B => D)(implicit b: Functor[F]): Cokleisli[F, C, D] =
-    Cokleisli(fc => g(runCokleisli(b.map(fc)(f))))
+    Cokleisli(fc => g(run(b.map(fc)(f))))
 
   def lmap[C](f: C => A)(implicit F: Functor[F]): Cokleisli[F, C, B] =
-    Cokleisli(fc => runCokleisli(F.map(fc)(f)))
+    Cokleisli(fc => run(F.map(fc)(f)))
 
   def map[C](f: B => C): Cokleisli[F, A, C] =
-    Cokleisli(f compose runCokleisli)
+    Cokleisli(f compose run)
 
   def contramapValue[C](f: F[C] => F[A]): Cokleisli[F, C,  B] =
-    Cokleisli(runCokleisli compose f)
+    Cokleisli(run compose f)
 
   def flatMap[C](f: B => Cokleisli[F, A, C]): Cokleisli[F, A, C] =
-    Cokleisli(fa => f(self.runCokleisli(fa)).runCokleisli(fa))
+    Cokleisli(fa => f(self.run(fa)).run(fa))
 
   def compose[C](c: Cokleisli[F, B, C])(implicit F: CoFlatMap[F]): Cokleisli[F, A, C] =
-    Cokleisli(fa => c.runCokleisli(F.coflatMap(fa)(runCokleisli)))
+    Cokleisli(fa => c.run(F.coflatMap(fa)(run)))
 
   def andThen[C](c: Cokleisli[F, C, A])(implicit F: CoFlatMap[F]): Cokleisli[F, C, B] =
     c compose this

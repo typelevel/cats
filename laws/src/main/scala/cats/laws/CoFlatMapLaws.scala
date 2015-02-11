@@ -17,6 +17,6 @@ class CoFlatMapLaws[F[_]](implicit F: CoFlatMap[F]) extends FunctorLaws[F] {
    */
   def cokleisliAssociativity[A, B, C, D](f: F[A] => B, g: F[B] => C, h: F[C] => D, fa: F[A]): (D, D) = {
     val (cf, cg, ch) = (Cokleisli(f), Cokleisli(g), Cokleisli(h))
-    (cf compose (cg compose ch)).runCokleisli(fa) -> ((cf compose cg) compose ch).runCokleisli(fa)
+    (cf compose (cg compose ch)).run(fa) -> ((cf compose cg) compose ch).run(fa)
   }
 }

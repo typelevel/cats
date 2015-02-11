@@ -22,6 +22,6 @@ class FlatMapLaws[F[_]](implicit F: FlatMap[F]) extends ApplyLaws[F] {
    */
   def kleisliAssociativity[A, B, C, D](f: A => F[B], g: B => F[C], h: C => F[D], a: A): (F[D], F[D]) = {
     val (kf, kg, kh) = (Kleisli(f), Kleisli(g), Kleisli(h))
-    (kh compose (kg compose kf)).runKleisli(a) -> ((kh compose kg) compose kf).runKleisli(a)
+    (kh compose (kg compose kf)).run(a) -> ((kh compose kg) compose kf).run(a)
   }
 }
