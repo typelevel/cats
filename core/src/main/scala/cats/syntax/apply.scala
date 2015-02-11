@@ -17,3 +17,14 @@ class ApplyOps[F[_], A](fa: F[A])(implicit F: Apply[F]) {
   }) |@| fb
 
 }
+
+trait ApplyBuilder[F[_], A] {
+  val a: F[A]
+  @macros.apply.Builders trait ApplyBuilder2
+
+  def |@|[B](b0: F[B]): ApplyBuilder2[B] = new ApplyBuilder2[B] {
+    val b: F[B] = b0
+  }
+
+}
+

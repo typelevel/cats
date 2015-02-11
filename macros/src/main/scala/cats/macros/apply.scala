@@ -5,21 +5,18 @@ import scala.language.experimental.macros
 import scala.reflect.macros.whitebox.Context
 import scala.annotation.StaticAnnotation
 
-
-class Impl(val c: Context) {
-  import c._
-  import universe._
-
+object Builders {
   val Identifiers = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toList.map(_.toString) map { c => if (c == "F") { "FF"} else { c } }
-
   val MaxArity = 12
 
-  def builderName(arity: Int) = TypeName(s"ApplyBuilder$arity")
-  def id(arity: Int) = Identifiers(arity - 1)
-  def termName(arity: Int) = TermName(id(arity).toLowerCase)
-  def typeName(arity: Int) = TypeName(id(arity))
+  def build(c: Context)(annottees: c.Expr[Any]*):c.Expr[Any] = {
+    import c._; import universe._
 
-  def builders(annottees: Tree*):c.Expr[Any] = {
+    def builderName(arity: Int) = TypeName(s"ApplyBuilder$arity")
+    def id(arity: Int) = Identifiers(arity - 1)
+    def termName(arity: Int) = TermName(id(arity).toLowerCase)
+    def typeName(arity: Int) = TypeName(id(arity))
+
     def impl(arity: Int):ClassDef = {
       val T = typeName(arity)
       val i = termName(arity)
@@ -45,8 +42,8 @@ class Impl(val c: Context) {
       val callApply = TermName(s"apply$arity")
       val callTuple = TermName(s"tuple$arity")
 
-      val termArgs = (1 to arity) map termName
-      val typeArgs = (1 to arity) map typeName
+      val termArgs = (1 to arity) map { termName(_) }
+      val typeArgs = (1 to arity) map { typeName(_) }
 
       q"""
         trait ${name}[$T] {
@@ -60,13 +57,12 @@ class Impl(val c: Context) {
           $nextType
         }"""
     }
-
     c.Expr(impl(2))
   }
 }
 
-class builders extends StaticAnnotation {
-  def macroTransform(annottees: Any*):Any = macro Impl.builders
+class Builders extends StaticAnnotation {
+  def macroTransform(annottees: Any*):Any = macro Builders.build
 }
 
 
