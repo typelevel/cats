@@ -33,7 +33,7 @@ object Cokleisli extends CokleisliInstances with CokleisliFunctions {
 }
 
 sealed trait CokleisliFunctions {
-  /** creates a [[Kleisli]] from a [[Function1]] */
+  /** creates a [[Kleisli]] from a function */
   def cokleisli[F[_], A, B](f: F[A] => B): Cokleisli[F, A, B] =
     Cokleisli(f)
 }

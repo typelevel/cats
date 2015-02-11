@@ -60,7 +60,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
 object Kleisli extends KleisliInstances with KleisliFunctions
 
 sealed trait KleisliFunctions {
-  /** creates a [[Kleisli]] from a [[Function1]] */
+  /** creates a [[Kleisli]] from a function */
   def kleisli[F[_], A, B](f: A => F[B]): Kleisli[F, A, B] =
     Kleisli(f)
 
