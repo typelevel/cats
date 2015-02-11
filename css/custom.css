@@ -92,12 +92,24 @@ div#wrapper{
 
 div#content {
     margin-left: 200px;
+    margin-right: 300px;
 }
 
 div#extra {
-    float:right;
-    width:150px;
-    margin-left:-150px;
+    background: #EEEEFF;
+    width: 150px;
+    margin-right: 50px;
+    margin-left: -100%;
+    margin-top: 50px;
+    float: right;
+    padding: 10px;
+}
+
+div#extra ul {
+    list-style-type: none;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 div#footer {
@@ -112,28 +124,36 @@ div#content h1 {
 div#commute {
     float: left;
     with: 200px;
-}
-
-div#commute {
     height: 80px;
+    margin-left: 50px;
 }
 
 div#commute img {
     max-height:100%;
 }
 
+div#toolbox {
+    float: right;
+    width: 200px;
+    margin-right: 50px;
+}
+
+div#toolbox ul {
+    text-align: right;
+    list-style-type: none;
+}
+
 div#navbar {
     height: 25px;
     background: #EEEEEE;
-    margin-left: 200px;
 }
 
 div#navbar ul {
-    margin-left: 100px;
+    width: 70%;
+    margin: auto;
     display: block;
     text-align: center;
     list-style-type: none;
-    margin: 0;
     padding: 0;
     overflow: hidden;
 }
@@ -152,6 +172,11 @@ div#navbar a {
 
 div#banner {
     text-style: upper;
+}
+
+
+h5 {
+    text-align: center;
 }
 
 h1 {

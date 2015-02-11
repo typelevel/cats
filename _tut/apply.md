@@ -2,6 +2,8 @@
 layout: default
 title:  "Apply"
 section: "typeclasses"
+source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Apply.scala"
+scaladoc: "#cats.Apply"
 ---
 # Apply
 
@@ -30,14 +32,14 @@ scala> implicit val optionApply: Apply[Option] = new Apply[Option] {
      |     fa.flatMap (a => f.map (ff => ff(a)))
      |   def map[A,B](fa: Option[A])(f: A => B) = fa map f
      | }
-optionApply: cats.Apply[Option] = $anon$1@2cba36a8
+optionApply: cats.Apply[Option] = $anon$1@22cd6a6e
 
 scala> implicit val listApply: Apply[List] = new Apply[List] {
      |   def apply[A, B](fa: List[A])(f: List[A => B]): List[B] =
      |     fa.flatMap (a => f.map (ff => ff(a)))
      |   def map[A,B](fa: List[A])(f: A => B) = fa map f
      | }
-listApply: cats.Apply[List] = $anon$1@51ddd1ed
+listApply: cats.Apply[List] = $anon$1@c03676a
 ```
 
 ### map
@@ -109,7 +111,7 @@ res10: Option[Nothing] = None
 Like Functors, Apply instances also compose:
 ```scala
 scala> val listOpt = Apply[List] compose Apply[Option]
-listOpt: cats.Apply[[α]List[Option[α]]] = cats.Apply$$anon$1@588d9f6d
+listOpt: cats.Apply[[α]List[Option[α]]] = cats.Apply$$anon$1@124161d7
 
 scala> val plusOne = (x:Int) => x + 1
 plusOne: Int => Int = <function1>

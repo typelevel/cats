@@ -19,4 +19,12 @@ integrating them into your own projects.
  * [discipline](https://github.com/typelevel/discipline) for encoding and testing laws
  * [kind-projector](https://github.com/non/kind-projector) for type lambda syntax
  * [algebra](https://github.com/non/algebra) for algebraic structures shared between Cats, [Spire](https://github.com/non/spire), and [Algebird](https://github.com/twitter/algebird)
- * [tut](https://github.com/tpolecat/tut) typechecked example code makes sure that our examples stay in sync with the rest of our source
+ * [tut](https://github.com/tpolecat/tut) type-checked example code makes sure that our examples stay in sync with the rest of our source
+
+There are other libraries that aim to foster Functional Programming in the Scala programming language which Cats has a relationship to:
+
+* [scalaz](https://github.com/scalaz/scalaz) The project which directly inspires Cats. Currently Cats borrows some code directly from scalaz.
+* [Structures](https://github.com/mpilquist) A project very similar in
+nature to Cats, also derived from scalaz. The Structures and Cats
+projects have had a healthy relationship of sharing both ideas and code.
+ 
