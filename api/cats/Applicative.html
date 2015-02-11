@@ -52,8 +52,8 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Applicative functor.</p><p>Allows application of a function in an Applicative context to a value in an Applicative context</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
-Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_blank">Applicative programming with effects</a></p><p>Must obey the following laws:</p><ul><li>apply(fa)(pure(a =&gt; a)) = fa</li><li>apply(pure(a))(pure(f)) = pure(f(a))</li><li>apply(pure(a))(ff) = apply(ff)(pure(f =&gt; f(a)))</li><li>map(fa)(f) = apply(fa)(pure(f))</li><li>apply(fa)(apply(fab)(apply(fbc)(pure(compose)))) = apply(apply(fa)(fab))(fbc)
-</li></ul></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Applicative.F">F</span>]</dd></dl><div class="toggleContainer block">
+Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_blank">Applicative programming with effects</a></p><p>Must obey the laws defined in <a href="laws/ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">laws.ApplicativeLaws</a>.
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Applicative.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">Applicative.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Applicative.F">F</span>], <a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a>[<span class="extype" name="cats.Applicative.F">F</span>], <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Applicative.F">F</span>], <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Applicative.F">F</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
@@ -459,18 +459,18 @@ function to the value.
       <p class="shortcomment cmt">Two sequentially dependent Applicatives can be composed.</p><div class="fullcomment"><div class="comment cmt"><p>Two sequentially dependent Applicatives can be composed.</p><p>The composition of Applicatives <code>F</code> and <code>G</code>, <code>F[G[x]]</code>, is also an Applicative</p><p>Applicative[Option].compose[List].pure(10) = Some(List(10))
 </p></div></div>
     </li><li name="cats.Apply#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compose[G[_]](implicitGG:cats.Apply[G]):cats.Apply[[α]F[G[α]]]"></a>
-      <a id="compose[G[_]](Apply[G]):Apply[[α]F[G[α]]]"></a>
+      <a id="compose[G[_]](implicitGG:cats.Apply[G]):cats.Apply[[A]F[G[A]]]"></a>
+      <a id="compose[G[_]](Apply[G]):Apply[[A]F[G[A]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Apply.compose.G">G</span>]</span>)</span><span class="result">: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[[α]<span class="extype" name="cats.Applicative.F">F</span>[<span class="extype" name="cats.Apply.compose.G">G</span>[<span class="extype" name="cats.Apply.&lt;refinement&gt;.λ.α">α</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Apply.compose.G">G</span>]</span>)</span><span class="result">: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[[A]<span class="extype" name="cats.Applicative.F">F</span>[<span class="extype" name="cats.Apply.compose.G">G</span>[<span class="extype" name="cats.Apply.&lt;refinement&gt;.L_kp.A">A</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Applicative@compose[G[_]](implicitGG:cats.Apply[G]):cats.Apply[[α]F[G[α]]]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Applicative@compose[G[_]](implicitGG:cats.Apply[G]):cats.Apply[[A]F[G[A]]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>

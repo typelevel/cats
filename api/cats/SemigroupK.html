@@ -51,7 +51,13 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.SemigroupK.F">F</span>]</dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>SemigroupK is a universal semigroup which operates on kinds.</p><p>This type class is useful when its type parameter F[_] has a
+structure that can be combined for any particular type. Thus,
+SemigroupK is like a Semigroup for kinds (i.e. parameterized
+types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><p>Here's how to distinguish Semigroup and SemigroupK:</p><ul><li>Semigroup[A] allows two A values to be combined.</li><li>SemigroupK[F] allows two F[A] values to be combined, for any A.
+   The combination operation just depends on the structure of F,
+   but not the structure of A.
+</li></ul></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.SemigroupK.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">SemigroupK.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
@@ -114,7 +120,7 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Combine two F[A] values.</p>
     </li></ol>
             </div>
 
@@ -187,7 +193,7 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Given a type A, create a concrete Semigroup[F[A]].</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -244,7 +250,7 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Compose two SemigroupK intsances.</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>

@@ -28,12 +28,10 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="ComonadLaws$.html" title="Go to companion"><img src="../../lib/trait_to_object_big.png" /></a>
+        <img src="../../lib/class_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.laws">laws</a></p>
-        <h1><a href="ComonadLaws$.html" title="Go to companion">ComonadLaws</a></h1><h3><span class="morelinks"><div>
-            Related Docs:
-            <a href="ComonadLaws$.html" title="See companion">object ComonadLaws</a>
-            | <a href="package.html" class="extype" name="cats.laws">package laws</a>
+        <h1>ComonadLaws</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="cats.laws">package laws</a>
           </div></span></h3><span class="permalink">
       <a href="../../index.html#cats.laws.ComonadLaws" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
@@ -44,16 +42,17 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ComonadLaws</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <span class="extype" name="org.typelevel.discipline.Laws">Laws</span></span>
+        <span class="name">ComonadLaws</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="CoFlatMapLaws.html" class="extype" name="cats.laws.CoFlatMapLaws">CoFlatMapLaws</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Laws that must be obeyed by any <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">ComonadLaws.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="org.typelevel.discipline.Laws">Laws</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="CoFlatMapLaws.html" class="extype" name="cats.laws.CoFlatMapLaws">CoFlatMapLaws</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>], <a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>], <a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -71,7 +70,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.laws.ComonadLaws"><span>ComonadLaws</span></li><li class="in" name="org.typelevel.discipline.Laws"><span>Laws</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.laws.ComonadLaws"><span>ComonadLaws</span></li><li class="in" name="cats.laws.CoFlatMapLaws"><span>CoFlatMapLaws</span></li><li class="in" name="cats.laws.FunctorLaws"><span>FunctorLaws</span></li><li class="in" name="cats.laws.InvariantLaws"><span>InvariantLaws</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,173 +88,34 @@
 
       <div id="template">
         <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="cats.laws.ComonadLaws#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;()(implicitF:cats.Comonad[F]):cats.laws.ComonadLaws[F]"></a>
+      <a id="&lt;init&gt;:ComonadLaws[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ComonadLaws</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>]</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.ComonadLaws@&lt;init&gt;()(implicitF:cats.Comonad[F]):cats.laws.ComonadLaws[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
         
 
-        <div id="types" class="types members">
-              <h3>Type Members</h3>
-              <ol><li name="cats.laws.ComonadLaws.ComonadProperties" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ComonadPropertiesextendsComonadLaws.this.RuleSet"></a>
-      <a id="ComonadProperties:ComonadProperties"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="ComonadLaws$ComonadProperties.html"><span class="name">ComonadProperties</span></a><span class="result"> extends <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.ComonadLaws.RuleSet">RuleSet</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@ComonadPropertiesextendsComonadLaws.this.RuleSet" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="org.typelevel.discipline.Laws.DefaultRuleSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="DefaultRuleSetextendsLaws.this.RuleSetwithLaws.this.HasOneParent"></a>
-      <a id="DefaultRuleSet:DefaultRuleSet"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <span class="name">DefaultRuleSet</span><span class="result"> extends <span class="extype" name="org.typelevel.discipline.Laws.RuleSet">RuleSet</span> with <span class="extype" name="org.typelevel.discipline.Laws.HasOneParent">HasOneParent</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@DefaultRuleSetextendsLaws.this.RuleSetwithLaws.this.HasOneParent" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Laws</dd></dl></div>
-    </li><li name="org.typelevel.discipline.Laws.HasOneParent" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="HasOneParentextendsAnyRef"></a>
-      <a id="HasOneParent:HasOneParent"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <span class="name">HasOneParent</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@HasOneParentextendsAnyRef" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Laws</dd></dl></div>
-    </li><li name="org.typelevel.discipline.Laws.RuleSet" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="RuleSetextendsAnyRef"></a>
-      <a id="RuleSet:RuleSet"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <span class="name">RuleSet</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@RuleSetextendsAnyRef" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Laws</dd></dl></div>
-    </li><li name="org.typelevel.discipline.Laws.SimpleRuleSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="SimpleRuleSetextendsLaws.this.DefaultRuleSet"></a>
-      <a id="SimpleRuleSet:SimpleRuleSet"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <span class="name">SimpleRuleSet</span><span class="result"> extends <span class="extype" name="org.typelevel.discipline.Laws.DefaultRuleSet">DefaultRuleSet</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@SimpleRuleSetextendsLaws.this.DefaultRuleSet" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Laws</dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="cats.laws.ComonadLaws#ArbA" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ArbA:org.scalacheck.Arbitrary[A]"></a>
-      <a id="ArbA:Arbitrary[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ArbA</span><span class="result">: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.ComonadLaws.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@ArbA:org.scalacheck.Arbitrary[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="cats.laws.ComonadLaws#ArbB" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ArbB:org.scalacheck.Arbitrary[B]"></a>
-      <a id="ArbB:Arbitrary[B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ArbB</span><span class="result">: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.ComonadLaws.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@ArbB:org.scalacheck.Arbitrary[B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="cats.laws.ComonadLaws#ArbF" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ArbF:cats.laws.ArbitraryK[F]"></a>
-      <a id="ArbF:ArbitraryK[F]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ArbF</span><span class="result">: <a href="ArbitraryK.html" class="extype" name="cats.laws.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@ArbF:cats.laws.ArbitraryK[F]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="cats.laws.ComonadLaws#EqFA" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="EqFA:cats.Eq[F[A]]"></a>
-      <a id="EqFA:Eq[F[A]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">EqFA</span><span class="result">: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.ComonadLaws.A">A</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@EqFA:cats.Eq[F[A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
-
-        <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -307,40 +167,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.laws.ComonadLaws#ArbFA" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ArbFA:org.scalacheck.Arbitrary[F[A]]"></a>
-      <a id="ArbFA:Arbitrary[F[A]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ArbFA</span><span class="result">: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.ComonadLaws.A">A</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@ArbFA:org.scalacheck.Arbitrary[F[A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="cats.laws.ComonadLaws#ArbFB" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ArbFB:org.scalacheck.Arbitrary[F[B]]"></a>
-      <a id="ArbFB:Arbitrary[F[B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ArbFB</span><span class="result">: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.ComonadLaws.B">B</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@ArbFB:org.scalacheck.Arbitrary[F[B]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -381,57 +207,110 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.laws.ComonadLaws#coflatmap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="coflatmap[C](implicitevidence$4:org.scalacheck.Arbitrary[C],implicitF:cats.CoFlatMap[F],implicitFC:cats.Eq[F[C]]):ComonadLaws.this.ComonadProperties"></a>
-      <a id="coflatmap[C](Arbitrary[C],CoFlatMap[F],Eq[F[C]]):ComonadProperties"></a>
+    </li><li name="cats.laws.CoFlatMapLaws#coFlatMapAssociativity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="coFlatMapAssociativity[A,B,C](fa:F[A],f:F[A]=&gt;B,g:F[B]=&gt;C):(F[C],F[C])"></a>
+      <a id="coFlatMapAssociativity[A,B,C](F[A],(F[A])⇒B,(F[B])⇒C):(F[C],F[C])"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">coflatmap</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.ComonadLaws.coflatmap.C">C</span>]</span>, <span name="F">F: <a href="../CoFlatMap.html" class="extype" name="cats.CoFlatMap">CoFlatMap</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>]</span>, <span name="FC">FC: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.ComonadLaws.coflatmap.C">C</span>]]</span>)</span><span class="result">: <a href="ComonadLaws$ComonadProperties.html" class="extype" name="cats.laws.ComonadLaws.ComonadProperties">ComonadProperties</a></span>
+        <span class="name">coFlatMapAssociativity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.CoFlatMapLaws.coFlatMapAssociativity.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.CoFlatMapLaws.coFlatMapAssociativity.A">A</span>]) ⇒ <span class="extype" name="cats.laws.CoFlatMapLaws.coFlatMapAssociativity.B">B</span></span>, <span name="g">g: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.CoFlatMapLaws.coFlatMapAssociativity.B">B</span>]) ⇒ <span class="extype" name="cats.laws.CoFlatMapLaws.coFlatMapAssociativity.C">C</span></span>)</span><span class="result">: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.CoFlatMapLaws.coFlatMapAssociativity.C">C</span>], <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.CoFlatMapLaws.coFlatMapAssociativity.C">C</span>])</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@coflatmap[C](implicitevidence$4:org.scalacheck.Arbitrary[C],implicitF:cats.CoFlatMap[F],implicitFC:cats.Eq[F[C]]):ComonadLaws.this.ComonadProperties" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ComonadLaws@coFlatMapAssociativity[A,B,C](fa:F[A],f:F[A]=&gt;B,g:F[B]=&gt;C):(F[C],F[C])" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CoFlatMapLaws.html" class="extype" name="cats.laws.CoFlatMapLaws">CoFlatMapLaws</a></dd></dl></div>
+    </li><li name="cats.laws.CoFlatMapLaws#cokleisliAssociativity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cokleisliAssociativity[A,B,C,D](f:F[A]=&gt;B,g:F[B]=&gt;C,h:F[C]=&gt;D,fa:F[A]):(D,D)"></a>
+      <a id="cokleisliAssociativity[A,B,C,D]((F[A])⇒B,(F[B])⇒C,(F[C])⇒D,F[A]):(D,D)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cokleisliAssociativity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.CoFlatMapLaws.cokleisliAssociativity.A">A</span>]) ⇒ <span class="extype" name="cats.laws.CoFlatMapLaws.cokleisliAssociativity.B">B</span></span>, <span name="g">g: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.CoFlatMapLaws.cokleisliAssociativity.B">B</span>]) ⇒ <span class="extype" name="cats.laws.CoFlatMapLaws.cokleisliAssociativity.C">C</span></span>, <span name="h">h: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.CoFlatMapLaws.cokleisliAssociativity.C">C</span>]) ⇒ <span class="extype" name="cats.laws.CoFlatMapLaws.cokleisliAssociativity.D">D</span></span>, <span name="fa">fa: <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.CoFlatMapLaws.cokleisliAssociativity.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.CoFlatMapLaws.cokleisliAssociativity.D">D</span>, <span class="extype" name="cats.laws.CoFlatMapLaws.cokleisliAssociativity.D">D</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.ComonadLaws@cokleisliAssociativity[A,B,C,D](f:F[A]=&gt;B,g:F[B]=&gt;C,h:F[C]=&gt;D,fa:F[A]):(D,D)" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The composition of <a href="../arrow/Cokleisli.html" class="extype" name="cats.arrow.Cokleisli">cats.arrow.Cokleisli</a> arrows is associative.</p><div class="fullcomment"><div class="comment cmt"><p>The composition of <a href="../arrow/Cokleisli.html" class="extype" name="cats.arrow.Cokleisli">cats.arrow.Cokleisli</a> arrows is associative. This is
+analogous to the associativity law of <a href="../CoFlatMap.html#coflatMap[A,B](fa:F[A])(f:F[A]=&gt;B):F[B]" class="extmbr" name="cats.CoFlatMap#coflatMap">CoFlatMap.coflatMap</a>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CoFlatMapLaws.html" class="extype" name="cats.laws.CoFlatMapLaws">CoFlatMapLaws</a></dd></dl></div>
+    </li><li name="cats.laws.ComonadLaws#comonadLeftIdentity" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="comonadLeftIdentity[A](fa:F[A]):(F[A],F[A])"></a>
+      <a id="comonadLeftIdentity[A](F[A]):(F[A],F[A])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">comonadLeftIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.ComonadLaws.comonadLeftIdentity.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.ComonadLaws.comonadLeftIdentity.A">A</span>], <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.ComonadLaws.comonadLeftIdentity.A">A</span>])</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.ComonadLaws@comonadLeftIdentity[A](fa:F[A]):(F[A],F[A])" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       
-    </li><li name="cats.laws.ComonadLaws#comonad" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="comonad[C](implicitevidence$5:org.scalacheck.Arbitrary[C],implicitF:cats.Comonad[F],implicitFC:cats.Eq[F[C]],implicitB:cats.Eq[B]):ComonadLaws.this.ComonadProperties"></a>
-      <a id="comonad[C](Arbitrary[C],Comonad[F],Eq[F[C]],Eq[B]):ComonadProperties"></a>
+    </li><li name="cats.laws.ComonadLaws#comonadRightIdentity" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="comonadRightIdentity[A,B](fa:F[A],f:F[A]=&gt;B):(B,B)"></a>
+      <a id="comonadRightIdentity[A,B](F[A],(F[A])⇒B):(B,B)"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">comonad</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.ComonadLaws.comonad.C">C</span>]</span>, <span name="F">F: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>]</span>, <span name="FC">FC: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.ComonadLaws.comonad.C">C</span>]]</span>, <span name="B">B: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.ComonadLaws.B">B</span>]</span>)</span><span class="result">: <a href="ComonadLaws$ComonadProperties.html" class="extype" name="cats.laws.ComonadLaws.ComonadProperties">ComonadProperties</a></span>
+        <span class="name">comonadRightIdentity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.ComonadLaws.comonadRightIdentity.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.ComonadLaws.comonadRightIdentity.A">A</span>]) ⇒ <span class="extype" name="cats.laws.ComonadLaws.comonadRightIdentity.B">B</span></span>)</span><span class="result">: (<span class="extype" name="cats.laws.ComonadLaws.comonadRightIdentity.B">B</span>, <span class="extype" name="cats.laws.ComonadLaws.comonadRightIdentity.B">B</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@comonad[C](implicitevidence$5:org.scalacheck.Arbitrary[C],implicitF:cats.Comonad[F],implicitFC:cats.Eq[F[C]],implicitB:cats.Eq[B]):ComonadLaws.this.ComonadProperties" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ComonadLaws@comonadRightIdentity[A,B](fa:F[A],f:F[A]=&gt;B):(B,B)" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       
-    </li><li name="org.typelevel.discipline.Laws#emptyRuleSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="emptyRuleSet:Laws.this.RuleSet"></a>
-      <a id="emptyRuleSet:RuleSet"></a>
+    </li><li name="cats.laws.FunctorLaws#covariantComposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="covariantComposition[A,B,C](fa:F[A],f:A=&gt;B,g:B=&gt;C):(F[C],F[C])"></a>
+      <a id="covariantComposition[A,B,C](F[A],(A)⇒B,(B)⇒C):(F[C],F[C])"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">emptyRuleSet</span><span class="result">: <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.ComonadLaws.RuleSet">RuleSet</a></span>
+        <span class="name">covariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.FunctorLaws.covariantComposition.B">B</span></span>, <span name="g">g: (<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.FunctorLaws.covariantComposition.C">C</span></span>)</span><span class="result">: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.C">C</span>], <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.C">C</span>])</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ComonadLaws@emptyRuleSet:Laws.this.RuleSet" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ComonadLaws@covariantComposition[A,B,C](fa:F[A],f:A=&gt;B,g:B=&gt;C):(F[C],F[C])" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Laws</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a></dd></dl></div>
+    </li><li name="cats.laws.FunctorLaws#covariantIdentity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="covariantIdentity[A](fa:F[A]):(F[A],F[A])"></a>
+      <a id="covariantIdentity[A](F[A]):(F[A],F[A])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">covariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantIdentity.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantIdentity.A">A</span>], <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantIdentity.A">A</span>])</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.ComonadLaws@covariantIdentity[A](fa:F[A]):(F[A],F[A])" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -523,6 +402,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.laws.InvariantLaws#invariantComposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):(F[C],F[C])"></a>
+      <a id="invariantComposition[A,B,C](F[A],(A)⇒B,(B)⇒A,(B)⇒C,(C)⇒B):(F[C],F[C])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>]</span>, <span name="f1">f1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>, <span name="f2">f2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span></span>, <span name="g1">g1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span></span>, <span name="g2">g2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>)</span><span class="result">: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>], <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>])</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.ComonadLaws@invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):(F[C],F[C])" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a></dd></dl></div>
+    </li><li name="cats.laws.InvariantLaws#invariantIdentity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="invariantIdentity[A](fa:F[A]):(F[A],F[A])"></a>
+      <a id="invariantIdentity[A](F[A]):(F[A],F[A])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>], <span class="extype" name="cats.laws.ComonadLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>])</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.ComonadLaws@invariantIdentity[A](fa:F[A]):(F[A],F[A])" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -703,8 +616,12 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="org.typelevel.discipline.Laws">
-              <h3>Inherited from <span class="extype" name="org.typelevel.discipline.Laws">Laws</span></h3>
+        <div class="parent" name="cats.laws.CoFlatMapLaws">
+              <h3>Inherited from <a href="CoFlatMapLaws.html" class="extype" name="cats.laws.CoFlatMapLaws">CoFlatMapLaws</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>]</h3>
+            </div><div class="parent" name="cats.laws.FunctorLaws">
+              <h3>Inherited from <a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>]</h3>
+            </div><div class="parent" name="cats.laws.InvariantLaws">
+              <h3>Inherited from <a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

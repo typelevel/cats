@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">Or.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
@@ -266,6 +266,43 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.OrFunctions#fromEither" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fromEither[A,B](e:Either[A,B]):cats.data.Or[A,B]"></a>
+      <a id="fromEither[A,B](Either[A,B]):Or[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromEither</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="e">e: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.OrFunctions.fromEither.A">A</span>, <span class="extype" name="cats.data.OrFunctions.fromEither.B">B</span>]</span>)</span><span class="result">: <a href="Or.html" class="extype" name="cats.data.Or">Or</a>[<span class="extype" name="cats.data.OrFunctions.fromEither.A">A</span>, <span class="extype" name="cats.data.OrFunctions.fromEither.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OrFunctions@fromEither[A,B](e:Either[A,B]):cats.data.Or[A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Convert an <code>Either[A, B]</code> to <code>A Or B</code>
+</p>
+    </li><li name="cats.data.OrFunctions#fromTry" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fromTry[A](t:scala.util.Try[A]):cats.data.Or[Throwable,A]"></a>
+      <a id="fromTry[A](Try[A]):Or[Throwable,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromTry</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="t">t: <span class="extype" name="scala.util.Try">Try</span>[<span class="extype" name="cats.data.OrFunctions.fromTry.A">A</span>]</span>)</span><span class="result">: <a href="Or.html" class="extype" name="cats.data.Or">Or</a>[<span class="extype" name="scala.Throwable">Throwable</span>, <span class="extype" name="cats.data.OrFunctions.fromTry.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OrFunctions@fromTry[A](t:scala.util.Try[A]):cats.data.Or[Throwable,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Convert a <code>Try[A]</code> to a <code>Throwable Or A</code>,
+where A is the successfully computed value
+</p>
     </li><li name="cats.data.OrFunctions#fromTryCatch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="fromTryCatch[T&gt;:Null&lt;:Throwable]:OrFunctions.this.FromTryCatchAux[T]"></a>
       <a id="fromTryCatch[T&lt;:Throwable&gt;:Null]:FromTryCatchAux[T]"></a>
