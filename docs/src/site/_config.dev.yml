@@ -1,4 +1,8 @@
 name: Cats Documentation
 markdown: redcarpet
 highlighter: pygments
-baseurl: "/"
+baseurl: /
+
+collections:
+  tut:
+    output: true
