@@ -56,7 +56,7 @@ lazy val disciplineDependencies = Seq(
 lazy val docSettings = Seq(
   unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, laws, data, std),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
-  site.addMappingsToSiteDir(tut, ""),
+  site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
   scalacOptions in (ScalaUnidoc, unidoc) ++=
     Opts.doc.sourceUrl(scmInfo.value.get.browseUrl + "/tree/master${FILE_PATH}.scala"),
