@@ -7,7 +7,9 @@ import cats.syntax.flatMap._
 /**
  * Laws that must be obeyed by any [[Monad]].
  */
-class MonadLaws[F[_]](implicit F: Monad[F]) extends FlatMapLaws[F] {
+trait MonadLaws[F[_]] extends ApplicativeLaws[F] with FlatMapLaws[F] {
+  implicit override def F: Monad[F]
+
   def monadLeftIdentity[A, B](a: A, f: A => F[B]): (F[B], F[B]) =
     F.pure(a).flatMap(f) -> f(a)
 
@@ -27,4 +29,9 @@ class MonadLaws[F[_]](implicit F: Monad[F]) extends FlatMapLaws[F] {
    */
   def kleisliRightIdentity[A, B](a: A, f: A => F[B]): (F[B], F[B]) =
     (Kleisli(f) compose Kleisli(F.pure[A])).run(a) -> f(a)
+}
+
+object MonadLaws {
+  def apply[F[_]](implicit ev: Monad[F]): MonadLaws[F] =
+    new MonadLaws[F] { def F = ev }
 }

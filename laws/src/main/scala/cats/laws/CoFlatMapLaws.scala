@@ -7,7 +7,9 @@ import cats.syntax.coflatMap._
 /**
  * Laws that must be obeyed by any [[CoFlatMap]].
  */
-class CoFlatMapLaws[F[_]](implicit F: CoFlatMap[F]) extends FunctorLaws[F] {
+trait CoFlatMapLaws[F[_]] extends FunctorLaws[F] {
+  implicit override def F: CoFlatMap[F]
+
   def coFlatMapAssociativity[A, B, C](fa: F[A], f: F[A] => B, g: F[B] => C): (F[C], F[C]) =
     fa.coflatMap(f).coflatMap(g) -> fa.coflatMap(x => g(x.coflatMap(f)))
 
@@ -19,4 +21,9 @@ class CoFlatMapLaws[F[_]](implicit F: CoFlatMap[F]) extends FunctorLaws[F] {
     val (cf, cg, ch) = (Cokleisli(f), Cokleisli(g), Cokleisli(h))
     (cf compose (cg compose ch)).run(fa) -> ((cf compose cg) compose ch).run(fa)
   }
+}
+
+object CoFlatMapLaws {
+  def apply[F[_]](implicit ev: CoFlatMap[F]): CoFlatMapLaws[F] =
+    new CoFlatMapLaws[F] { def F = ev }
 }
