@@ -49,7 +49,16 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">Id.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Identity, encoded as <code>type Id[A] = A</code>, a convenient alias to make
+identity instances well-kinded.</p><p>The identity monad can be seen as the ambient monad that encodes
+the effect of having no effect. It is ambient in the sense that
+plain pure values are values of <code>Id</code>.</p><p>For instance, the <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a> instance for <code><a href="" class="extype" name="cats.Id">cats.Id</a></code>
+allows us to apply a function <code>A =&gt; B</code> to an <code>Id[A]</code> and get an
+<code>Id[B]</code>. However, an <code>Id[A]</code> is the same as <code>A</code>, so all we're doing
+is applying a pure function of type <code>A =&gt; B</code> to a pure value  of
+type <code>A</code> to get a pure value of type <code>B</code>. That is, the instance
+encodes pure unary function application.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">Id.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -89,7 +98,27 @@
         <div id="allMembers">
         
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="cats.Id.Id" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Id[A]=A"></a>
+      <a id="Id[A]:Id[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Id</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.Id.Id.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Id$@Id[A]=A" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
 
         
 
@@ -278,7 +307,7 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.Id#id" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="id:cats.Bimonad[cats.Id]"></a>
+      <a id="id:cats.Bimonad[cats.Id.Id]"></a>
       <a id="id:Bimonad[Id]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -286,10 +315,10 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">id</span><span class="result">: <a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<a href="package.html#Id[A]=A" class="extmbr" name="cats.Id">Id</a>]</span>
+        <span class="name">id</span><span class="result">: <a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id.Id">Id</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Id$@id:cats.Bimonad[cats.Id]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Id$@id:cats.Bimonad[cats.Id.Id]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>

@@ -51,7 +51,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.functor.Profunctor.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">Profunctor.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A <a href="" class="extype" name="cats.functor.Profunctor">Profunctor</a> is a <a href="Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a> functor on its first type parameter
+and a <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a> on its second type parameter.</p><p>Must obey the laws defined in <a href="../laws/ProfunctorLaws.html" class="extype" name="cats.laws.ProfunctorLaws">laws.ProfunctorLaws</a>.
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.functor.Profunctor.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">Profunctor.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
@@ -98,40 +100,24 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="cats.functor.Profunctor#lmap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="lmap[A,B,C](fab:F[A,B])(f:C=&gt;A):F[C,B]"></a>
-      <a id="lmap[A,B,C](F[A,B])((C)⇒A):F[C,B]"></a>
+              <ol><li name="cats.functor.Profunctor#dimap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="dimap[A,B,C,D](fab:F[A,B])(f:C=&gt;A)(g:B=&gt;D):F[C,D]"></a>
+      <a id="dimap[A,B,C,D](F[A,B])((C)⇒A)((B)⇒D):F[C,D]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">lmap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.lmap.A">A</span>, <span class="extype" name="cats.functor.Profunctor.lmap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Profunctor.lmap.C">C</span>) ⇒ <span class="extype" name="cats.functor.Profunctor.lmap.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.lmap.C">C</span>, <span class="extype" name="cats.functor.Profunctor.lmap.B">B</span>]</span>
+        <span class="name">dimap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.dimap.A">A</span>, <span class="extype" name="cats.functor.Profunctor.dimap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Profunctor.dimap.C">C</span>) ⇒ <span class="extype" name="cats.functor.Profunctor.dimap.A">A</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.functor.Profunctor.dimap.B">B</span>) ⇒ <span class="extype" name="cats.functor.Profunctor.dimap.D">D</span></span>)</span><span class="result">: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.dimap.C">C</span>, <span class="extype" name="cats.functor.Profunctor.dimap.D">D</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Profunctor@lmap[A,B,C](fab:F[A,B])(f:C=&gt;A):F[C,B]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.Profunctor@dimap[A,B,C,D](fab:F[A,B])(f:C=&gt;A)(g:B=&gt;D):F[C,D]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="cats.functor.Profunctor#rmap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="rmap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]"></a>
-      <a id="rmap[A,B,C](F[A,B])((B)⇒C):F[A,C]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">rmap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.rmap.A">A</span>, <span class="extype" name="cats.functor.Profunctor.rmap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Profunctor.rmap.B">B</span>) ⇒ <span class="extype" name="cats.functor.Profunctor.rmap.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.rmap.A">A</span>, <span class="extype" name="cats.functor.Profunctor.rmap.C">C</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Profunctor@rmap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
+      <p class="shortcomment cmt">contramap on the first type parameter and map on the second type parameter
+</p>
     </li></ol>
             </div>
 
@@ -228,23 +214,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.functor.Profunctor#dimap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="dimap[A,B,C,D](fab:F[A,B])(f:C=&gt;A)(g:B=&gt;D):F[C,D]"></a>
-      <a id="dimap[A,B,C,D](F[A,B])((C)⇒A)((B)⇒D):F[C,D]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">dimap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.dimap.A">A</span>, <span class="extype" name="cats.functor.Profunctor.dimap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Profunctor.dimap.C">C</span>) ⇒ <span class="extype" name="cats.functor.Profunctor.dimap.A">A</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.functor.Profunctor.dimap.B">B</span>) ⇒ <span class="extype" name="cats.functor.Profunctor.dimap.D">D</span></span>)</span><span class="result">: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.dimap.C">C</span>, <span class="extype" name="cats.functor.Profunctor.dimap.D">D</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Profunctor@dimap[A,B,C,D](fab:F[A,B])(f:C=&gt;A)(g:B=&gt;D):F[C,D]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -353,6 +322,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.functor.Profunctor#lmap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lmap[A,B,C](fab:F[A,B])(f:C=&gt;A):F[C,B]"></a>
+      <a id="lmap[A,B,C](F[A,B])((C)⇒A):F[C,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lmap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.lmap.A">A</span>, <span class="extype" name="cats.functor.Profunctor.lmap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Profunctor.lmap.C">C</span>) ⇒ <span class="extype" name="cats.functor.Profunctor.lmap.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.lmap.C">C</span>, <span class="extype" name="cats.functor.Profunctor.lmap.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.Profunctor@lmap[A,B,C](fab:F[A,B])(f:C=&gt;A):F[C,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">contramap on the first type parameter
+</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -404,6 +391,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.functor.Profunctor#rmap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="rmap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]"></a>
+      <a id="rmap[A,B,C](F[A,B])((B)⇒C):F[A,C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rmap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.rmap.A">A</span>, <span class="extype" name="cats.functor.Profunctor.rmap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Profunctor.rmap.B">B</span>) ⇒ <span class="extype" name="cats.functor.Profunctor.rmap.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.functor.Profunctor.F">F</span>[<span class="extype" name="cats.functor.Profunctor.rmap.A">A</span>, <span class="extype" name="cats.functor.Profunctor.rmap.C">C</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.Profunctor@rmap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">map on the second type parameter
+</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

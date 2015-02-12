@@ -82,38 +82,24 @@
         </ol>
         {% endif %}
       </div>
+      {% if (page.section == 'data') or (page.section == 'typeclasses') and ((page.source != null) or (page.scaladoc != null))%}
       <div id="extra">
-	{% if (page.section == 'data') or (page.section == 'typeclasses') %}
 	<h5>useful links</h5>
 	<ul>
-	{% if page.source != '' %}
+	{% if page.source != null %}
 	<li><a href="{{page.source}}">Source</a></li>
 	{% endif %}
-	{% if page.scaladoc != '' %}
+	{% if page.scaladoc != null %}
 	<li><a href="{{site.apidocs}}{{ page.scaladoc }}">Scaladoc</a></li>
 	{% endif %}
 	</ul>
-	{% endif %}
       </div>
+      {% endif %}
       <div id="footer">
 	<p>Last updated on <em>{{ site.time | date: '%B %d, %Y' }}</em></p>
       </div>
     </div>
 
     <script src="{{ site.baseurl }}js/scale.fix.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      //<![CDATA[
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    //]]>
-    </script>
-    <script type="text/javascript">
-      //<![CDATA[
-      try {
-        var pageTracker = _gat._getTracker("UA-57263411-1");
-        pageTracker._trackPageview();
-      } catch(err) {}
-    //]]>
-    </script>
   </body>
 </html>

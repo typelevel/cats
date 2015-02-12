@@ -124,8 +124,8 @@
       </a>
     </span>
       <p class="shortcomment cmt">Applicative functor.</p><div class="fullcomment"><div class="comment cmt"><p>Applicative functor.</p><p>Allows application of a function in an Applicative context to a value in an Applicative context</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
-Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_blank">Applicative programming with effects</a></p><p>Must obey the following laws:</p><ul><li>apply(fa)(pure(a =&gt; a)) = fa</li><li>apply(pure(a))(pure(f)) = pure(f(a))</li><li>apply(pure(a))(ff) = apply(ff)(pure(f =&gt; f(a)))</li><li>map(fa)(f) = apply(fa)(pure(f))</li><li>apply(fa)(apply(fab)(apply(fbc)(pure(compose)))) = apply(apply(fa)(fab))(fbc)
-</li></ul></div></div>
+Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_blank">Applicative programming with effects</a></p><p>Must obey the laws defined in <a href="laws/ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">laws.ApplicativeLaws</a>.
+</p></div></div>
     </li><li name="cats.Apply" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Apply[F[_]]extendsFunctor[F]withApplyArityFunctions[F]"></a>
       <a id="Apply[F[_]]:Apply[F]"></a>
@@ -142,8 +142,8 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Weaker version of Applicative[F]; has apply but not pure.</p><div class="fullcomment"><div class="comment cmt"><p>Weaker version of Applicative[F]; has apply but not pure.</p><p>Laws:</p><ul><li>apply(apply(fa)(fab))(fbc) = apply(fa)(apply(fab)(map(fbc)(bc =&gt; ab =&gt; ab andThen bc)))
-</li></ul></div></div>
+      <p class="shortcomment cmt">Weaker version of Applicative[F]; has apply but not pure.</p><div class="fullcomment"><div class="comment cmt"><p>Weaker version of Applicative[F]; has apply but not pure.</p><p>Must obey the laws defined in <a href="laws/ApplyLaws.html" class="extype" name="cats.laws.ApplyLaws">laws.ApplyLaws</a>.
+</p></div></div>
     </li><li name="cats.ApplyArityFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ApplyArityFunctions[F[_]]extendsAnyRef"></a>
       <a id="ApplyArityFunctions[F[_]]:ApplyArityFunctions[F]"></a>
@@ -194,7 +194,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Must obey the laws defined in <a href="laws/CoFlatMapLaws.html" class="extype" name="cats.laws.CoFlatMapLaws">laws.CoFlatMapLaws</a>.</p>
     </li><li name="cats.Comonad" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Comonad[F[_]]extendsCoFlatMap[F]"></a>
       <a id="Comonad[F[_]]:Comonad[F]"></a>
@@ -211,7 +211,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Must obey the laws defined in <a href="laws/ComonadLaws.html" class="extype" name="cats.laws.ComonadLaws">laws.ComonadLaws</a>.</p>
     </li><li name="cats.CompositeApplicative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="CompositeApplicative[F[_],G[_]]extendsApplicative[[α]F[G[α]]]withCompositeApply[F,G]"></a>
       <a id="CompositeApplicative[F[_],G[_]]:CompositeApplicative[F,G]"></a>
@@ -323,7 +323,46 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
  we can implement map or flatMap that transforms the values of Map[K, ?],
  but we can't implement pure (because we wouldn't know what key to use
  when instantiating the new Map).
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>See <a href="https://github.com/non/cats/issues/3" target="_blank">https://github.com/non/cats/issues/3</a> for some discussion.</p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>See <a href="https://github.com/non/cats/issues/3" target="_blank">https://github.com/non/cats/issues/3</a> for some discussion.</p><p>Must obey the laws defined in <a href="laws/FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">laws.FlatMapLaws</a>.
+</p></span></dd></dl></div>
+    </li><li name="cats.Fold" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Fold[A]extendsAnyRef"></a>
+      <a id="Fold[A]:Fold[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Fold.html"><span class="name">Fold</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Fold[A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Fold is designed to allow laziness/short-circuiting in foldLazy.</p><div class="fullcomment"><div class="comment cmt"><p>Fold is designed to allow laziness/short-circuiting in foldLazy.</p><p>It is a sum type that has three possible subtypes:</p><ul><li><code>Return(a)</code>: stop the fold with a value of <code>a</code>.</li><li><code>Continue(f)</code>: continue the fold, suspending the computation <code>f</code> for this step.</li><li><code>Pass</code>: continue the fold, with no computation for this step.</li></ul><p>The meaning of these types can be made more clear with an example
+of the foldLazy method in action. Here's a method to count how many
+elements appear in a list before the value 3:</p><pre><span class="kw">def</span> f(n: <span class="std">Int</span>): Fold[<span class="std">Int</span>] =
+  <span class="kw">if</span> (n == <span class="num">3</span>) Fold.Return(<span class="num">0</span>) <span class="kw">else</span> Fold.Continue(_ + <span class="num">1</span>)
+
+<span class="kw">val</span> count: Lazy[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>).foldLazy(Lazy(<span class="num">0</span>))(f)</pre><p>When we call <code>count.force</code>, the following occurs:</p><ul><li><code>f(1)</code> produces <code>res0: Continue(_ + 1)</code></li><li><code>f(2)</code> produces <code>res1: Continue(_ + 1)</code></li><li><code>f(3)</code> produces <code>res2: Return(0)</code></li></ul><p>Now we unwind back through the continue instances:</p><ul><li><code>res2</code> returns <code>0</code></li><li><code>res1(0)</code> returns <code>1</code></li><li><code>res0(1)</code> returns <code>2</code></li></ul><p>And so the result is 2.</p><p>This code searches an infinite stream for 77:</p><pre><span class="kw">val</span> found: Lazy[<span class="std">Boolean</span>] =
+  Stream.from(<span class="num">0</span>).foldLazy(Lazy(<span class="kw">false</span>)) { n <span class="kw">=&gt;</span>
+    <span class="kw">if</span> (n == <span class="num">77</span>) Fold.Return(<span class="kw">true</span>) <span class="kw">else</span> Fold.Pass
+  }</pre><p>Here's another example that sums the list until it reaches a
+negative number:</p><pre><span class="kw">val</span> sum: Lazy[<span class="std">Double</span>] =
+  numbers.foldLazy(Lazy(<span class="num">0.0</span>)) { n <span class="kw">=&gt;</span>
+    <span class="kw">if</span> (n &lt; <span class="num">0</span>) Fold.Return(<span class="num">0.0</span>) <span class="kw">else</span> Fold.Continue(n + _)
+  }</pre><p>This strange example counts an infinite stream. Since the result is
+lazy, it will only hang the program once <code>count.force</code> is called:</p><pre><span class="kw">val</span> count: Lazy[<span class="std">Long</span>] =
+  Stream.from(<span class="num">0</span>).foldLazy(Lazy(<span class="num">0</span>L)) { _ <span class="kw">=&gt;</span>
+    Fold.Continue(_ + <span class="num">1</span>L)
+  }</pre><p>You can even implement foldLeft in terms of foldLazy (!):</p><pre><span class="kw">def</span> foldl[A, B](as: <span class="std">List</span>[A], b: B)(f: (B, A) <span class="kw">=&gt;</span> B): B =
+  as.foldLazy(Lazy((b: B) <span class="kw">=&gt;</span> b)) { a <span class="kw">=&gt;</span>
+    Fold.Continue(g <span class="kw">=&gt;</span> (b: B) <span class="kw">=&gt;</span> g(f(b, a)))
+  }.force(b)</pre><p>(In practice you would not want to use the <code>foldl</code> because it is
+not stack-safe.)
+</p></div></div>
     </li><li name="cats.Foldable" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Foldable[F[_]]extendsAnyRef"></a>
       <a id="Foldable[F[_]]:Foldable[F]"></a>
@@ -340,7 +379,12 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Data structures that can be folded to a summary value.</p><div class="fullcomment"><div class="comment cmt"><p>Data structures that can be folded to a summary value.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fold.pdf" target="_blank">A tutorial on the universality and expressiveness of fold</a>
+      <p class="shortcomment cmt">Data structures that can be folded to a summary value.</p><div class="fullcomment"><div class="comment cmt"><p>Data structures that can be folded to a summary value.</p><p>In the case of a collection (such as <code>List</code> or <code>Set</code>), these
+methods will fold together (combine) the values contained in the
+collection to produce a single result. Most collection types have
+<code>foldLeft</code> methods, which will usually be used by the associationed
+<code>Fold[_]</code> instance.</p><p>Foldable[F] is implemented in terms of two basic methods:</p><ul><li><code>foldLeft(fa, b)(f)</code> eagerly folds <code>fa</code> from left-to-right.</li><li><code>foldLazy(fa, lb)(f)</code> lazily folds <code>fa</code> from right-to-left.</li></ul><p>Beyond these it provides many other useful methods related to
+folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fold.pdf" target="_blank">A tutorial on the universality and expressiveness of fold</a>
 </p></div></div>
     </li><li name="cats.Functor" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Functor[F[_]]extendsInvariant[F]"></a>
@@ -358,25 +402,8 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Functor.</p><div class="fullcomment"><div class="comment cmt"><p>Functor.</p><p>The name is short for &quot;covariant functor&quot;.</p><p>Must obey the following laws:</p><ul><li>map(fa)(identity) = fa</li><li>map(map(fa)(f1))(f2) = map(fa)(f2 compose f1)
-</li></ul></div></div>
-    </li><li name="cats.Id" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Id[A]=A"></a>
-      <a id="Id[A]:Id[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name">Id</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.Id.A">A</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@Id[A]=A" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      
+      <p class="shortcomment cmt">Functor.</p><div class="fullcomment"><div class="comment cmt"><p>Functor.</p><p>The name is short for &quot;covariant functor&quot;.</p><p>Must obey the laws defined in <a href="laws/FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">laws.FunctorLaws</a>.
+</p></div></div>
     </li><li name="cats.Lazy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Lazy[A]extendsAnyRef"></a>
       <a id="Lazy[A]:Lazy[A]"></a>
@@ -463,7 +490,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
       </a>
     </span>
       
-    </li><li name="cats.MonoidK" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="cats.MonoidK" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="MonoidK[F[_]]extendsSemigroupK[F]"></a>
       <a id="MonoidK[F[_]]:MonoidK[F]"></a>
       <h4 class="signature">
@@ -479,7 +506,15 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">MonoidK is a universal monoid which operates on kinds.</p><div class="fullcomment"><div class="comment cmt"><p>MonoidK is a universal monoid which operates on kinds.</p><p>This type class is useful when its type parameter F[_] has a
+structure that can be combined for any particular type, and which
+also has an &quot;empty&quot; representation. Thus, MonoidK is like a Monoid
+for kinds (i.e. parameterized types).</p><p>A MonoidK[F] can produce a Monoid[F[A]] for any type A.</p><p>Here's how to distinguish Monoid and MonoidK:</p><ul><li>Monoid[A] allows A values to be combined, and also means there
+   is an &quot;empty&quot; A value that functions as an identity.</li><li>MonoidK[F] allows two F[A] values to be combined, for any A.  It
+   also means that for any A, there is an &quot;empty&quot; F[A] value. The
+   combination operation and empty value just depend on the
+   structure of F, but not on the structure of A.
+</li></ul></div></div>
     </li><li name="cats.Order" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Order[A]=algebra.Order[A]"></a>
       <a id="Order[A]:Order[A]"></a>
@@ -531,7 +566,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
       </a>
     </span>
       
-    </li><li name="cats.SemigroupK" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="cats.SemigroupK" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="SemigroupK[F[_]]extendsAnyRef"></a>
       <a id="SemigroupK[F[_]]:SemigroupK[F]"></a>
       <h4 class="signature">
@@ -547,7 +582,13 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">SemigroupK is a universal semigroup which operates on kinds.</p><div class="fullcomment"><div class="comment cmt"><p>SemigroupK is a universal semigroup which operates on kinds.</p><p>This type class is useful when its type parameter F[_] has a
+structure that can be combined for any particular type. Thus,
+SemigroupK is like a Semigroup for kinds (i.e. parameterized
+types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><p>Here's how to distinguish Semigroup and SemigroupK:</p><ul><li>Semigroup[A] allows two A values to be combined.</li><li>SemigroupK[F] allows two F[A] values to be combined, for any A.
+   The combination operation just depends on the structure of F,
+   but not the structure of A.
+</li></ul></div></div>
     </li><li name="cats.Show" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Show[T]extendsAnyRef"></a>
       <a id="Show[T]:Show[T]"></a>
@@ -582,7 +623,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Traverse, also known as Traversable.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse, also known as Traversable.</p><p>Traversal over a structure with an effect.</p><p>Traversing with the <a href="#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a> effect is equivalent to <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
+      <p class="shortcomment cmt">Traverse, also known as Traversable.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse, also known as Traversable.</p><p>Traversal over a structure with an effect.</p><p>Traversing with the <a href="Id$.html" class="extype" name="cats.Id">cats.Id</a> effect is equivalent to <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
 Traversing with the <a href="data/Const.html" class="extype" name="cats.data.Const">cats.data.Const</a> effect where the first type parameter has
 a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a> instance is equivalent to <a href="Foldable.html" class="extype" name="cats.Foldable">cats.Foldable</a>#fold.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
 </p></div></div>
@@ -763,6 +804,23 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
       </a>
     </span>
       
+    </li><li name="cats.Fold" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Fold"></a>
+      <a id="Fold:Fold"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Fold$.html"><span class="name">Fold</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Fold" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.Foldable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Foldable"></a>
       <a id="Foldable:Foldable"></a>
@@ -797,7 +855,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
       </a>
     </span>
       
-    </li><li name="cats.Id" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.Id" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Id"></a>
       <a id="Id:Id"></a>
       <h4 class="signature">
@@ -813,7 +871,17 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Identity, encoded as <code>type Id[A] = A</code>, a convenient alias to make
+identity instances well-kinded.</p><div class="fullcomment"><div class="comment cmt"><p>Identity, encoded as <code>type Id[A] = A</code>, a convenient alias to make
+identity instances well-kinded.</p><p>The identity monad can be seen as the ambient monad that encodes
+the effect of having no effect. It is ambient in the sense that
+plain pure values are values of <code>Id</code>.</p><p>For instance, the <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a> instance for <code><a href="Id$.html" class="extype" name="cats.Id">cats.Id</a></code>
+allows us to apply a function <code>A =&gt; B</code> to an <code>Id[A]</code> and get an
+<code>Id[B]</code>. However, an <code>Id[A]</code> is the same as <code>A</code>, so all we're doing
+is applying a pure function of type <code>A =&gt; B</code> to a pure value  of
+type <code>A</code> to get a pure value of type <code>B</code>. That is, the instance
+encodes pure unary function application.
+</p></div></div>
     </li><li name="cats.Lazy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Lazy"></a>
       <a id="Lazy:Lazy"></a>
