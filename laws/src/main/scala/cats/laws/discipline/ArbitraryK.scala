@@ -1,9 +1,9 @@
 package cats
-package laws
+package laws.discipline
 
 import cats.data.{Or, Const}
 import org.scalacheck.Arbitrary
-import cats.laws.arbitrary._
+import cats.laws.discipline.arbitrary._
 
 trait ArbitraryK[F[_]] {
   def synthesize[A: Arbitrary]: Arbitrary[F[A]]

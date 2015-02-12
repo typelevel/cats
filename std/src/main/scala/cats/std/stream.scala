@@ -29,23 +29,12 @@ trait StreamInstances {
         fa.foldLeft(b)(f)
 
       // note: this foldRight variant is eager not lazy
-      def foldRight[A, B](fa: Stream[A], b: B)(f: (A, B) => B): B =
-        fa match {
-          case Stream.Empty => b
-          case a #:: rest => f(a, foldRight(rest, b)(f))
-        }
+      override def foldRight[A, B](fa: Stream[A], b: B)(f: (A, B) => B): B =
+        fa.foldRight(b)(f)
 
       // this foldRight variant is lazy
-      def foldRight[A, B](fa: Stream[A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] = {
-        // we use Lazy.byName(...) to avoid memoizing intermediate values.
-        def loop(as: Stream[A], b: Lazy[B]): Lazy[B] =
-          as match {
-            case Stream.Empty => b
-            case a #:: rest => Lazy.byName(f(a, foldRight(rest, b)(f)))
-          }
-        // we memoize the first "step" with Lazy(...).
-        Lazy(loop(fa, b).value)
-      }
+      def foldLazy[A, B](fa: Stream[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
+        Fold.iterateRight(fa, b)(f)
 
       def traverse[G[_]: Applicative, A, B](fa: Stream[A])(f: A => G[B]): G[Stream[B]] = {
         val G = Applicative[G]

@@ -3,7 +3,7 @@ package syntax
 
 trait ApplySyntax {
   // TODO: use simulacrum instances eventually
-  implicit def applySyntax[F[_]: Apply, A](fa: F[A]) =
+  implicit def applySyntax[F[_]: Apply, A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps[F, A](fa)
 }
 

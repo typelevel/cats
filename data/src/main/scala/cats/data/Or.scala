@@ -1,10 +1,10 @@
 package cats
 package data
 
-import Or.{LeftOr, RightOr}
-import cats.functor.Invariant
+import cats.data.Or.{LeftOr, RightOr}
 
 import scala.reflect.ClassTag
+import scala.util.{Success, Failure, Try}
 
 /** Represents a right-biased disjunction that is either an `A` or a `B`.
  *
@@ -27,19 +27,19 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
     case RightOr(b) => fb(b)
   }
 
-  def isLeft = fold(_ => true, _ => false)
+  def isLeft: Boolean = fold(_ => true, _ => false)
 
-  def isRight = fold(_ => false, _ => true)
+  def isRight: Boolean = fold(_ => false, _ => true)
 
   def swap: B Or A = fold(RightOr(_), LeftOr(_))
 
-  def foreach(f: B => Unit): Unit = fold(_ => (), f(_))
+  def foreach(f: B => Unit): Unit = fold(_ => (), f)
 
   def getOrElse[BB >: B](default: => BB): BB = fold(_ => default, identity)
 
-  def forall(f: B => Boolean) = fold(_ => true, f)
+  def forall(f: B => Boolean): Boolean = fold(_ => true, f)
 
-  def exists(f: B => Boolean) = fold(_ => false, f)
+  def exists(f: B => Boolean): Boolean = fold(_ => false, f)
 
   def filter[AA >: A](f: B => Boolean)(implicit M: Monoid[AA]): AA Or B = this match {
     case LeftOr(_) => this
@@ -93,7 +93,8 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
 
   def foldRight[C](c: C)(f: (B, C) => C): C = fold(_ => c, f(_, c))
 
-  def foldRight[C](c: Lazy[C])(f: (B, Lazy[C]) => C): Lazy[C] = fold(_ => c, b => Lazy(f(b, c)))
+  def foldLazy[C](c: Lazy[C])(f: B => Fold[C]): Lazy[C] =
+    fold(_ => c, b => c.map(f(b).complete))
 
   def merge[AA >: A](implicit ev: B <:< AA): AA = fold(identity, ev.apply)
 
@@ -112,24 +113,24 @@ object Or extends OrInstances with OrFunctions {
 
 sealed abstract class OrInstances extends OrInstances1 {
   implicit def orOrder[A: Order, B: Order]: Order[A Or B] = new Order[A Or B] {
-    override def compare(x: A Or B, y: A Or B): Int = x compare y
+    def compare(x: A Or B, y: A Or B): Int = x compare y
     override def partialCompare(x: A Or B, y: A Or B): Double = x partialCompare y
     override def eqv(x: A Or B, y: A Or B): Boolean = x === y
   }
 
   implicit def orShow[A, B](implicit A: Show[A], B: Show[B]): Show[A Or B] = new Show[A Or B] {
-    override def show(f: A Or B): String = f.show
+    def show(f: A Or B): String = f.show
   }
 
   implicit def orInstances[A] = new OrInstances[A]
   class OrInstances[A] extends Traverse[A Or ?] with Monad[A Or ?] {
-    override def traverse[F[_]: Applicative, B, C](fa: A Or B)(f: B => F[C]): F[A Or C] = fa.traverse(f)
-    override def foldLeft[B, C](fa: A Or B, b: C)(f: (C, B) => C): C = fa.foldLeft(b)(f)
+    def traverse[F[_]: Applicative, B, C](fa: A Or B)(f: B => F[C]): F[A Or C] = fa.traverse(f)
+    def foldLeft[B, C](fa: A Or B, b: C)(f: (C, B) => C): C = fa.foldLeft(b)(f)
     override def foldRight[B, C](fa: A Or B, b: C)(f: (B, C) => C): C = fa.foldRight(b)(f)
-    override def foldRight[B, C](fa: A Or B, b: Lazy[C])(f: (B, Lazy[C]) => C): Lazy[C] = fa.foldRight(b)(f)
+    def foldLazy[B, C](fa: A Or B, b: Lazy[C])(f: B => Fold[C]): Lazy[C] = fa.foldLazy(b)(f)
 
-    override def flatMap[B, C](fa: A Or B)(f: B => A Or C): A Or C = fa.flatMap(f)
-    override def pure[B](b: B): A Or B = Or.right(b)
+    def flatMap[B, C](fa: A Or B)(f: B => A Or C): A Or C = fa.flatMap(f)
+    def pure[B](b: B): A Or B = Or.right(b)
 
     override def map[B, C](fa: A Or B)(f: B => C): A Or C = fa.map(f)
   }
@@ -137,14 +138,14 @@ sealed abstract class OrInstances extends OrInstances1 {
 
 sealed abstract class OrInstances1 extends OrInstances2 {
   implicit def orPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[A Or B] = new PartialOrder[A Or B] {
-    override def partialCompare(x: A Or B, y: A Or B): Double = x partialCompare y
+    def partialCompare(x: A Or B, y: A Or B): Double = x partialCompare y
     override def eqv(x: A Or B, y: Or[A, B]): Boolean = x === y
   }
 }
 
 sealed abstract class OrInstances2 {
   implicit def orEq[A: Eq, B: Eq]: Eq[A Or B] = new Eq[A Or B] {
-    override def eqv(x: A Or B, y: Or[A, B]): Boolean = x === y
+    def eqv(x: A Or B, y: Or[A, B]): Boolean = x === y
   }
 }
 
@@ -152,7 +153,6 @@ trait OrFunctions {
   def left[A, B](a: A): A Or B = LeftOr(a)
 
   def right[A, B](b: B): A Or B = RightOr(b)
-
 
   /**
    * Catch a specified `Throwable` ('`T`') instance and return it wrapped in an `Or[T, A]`,
@@ -170,5 +170,18 @@ trait OrFunctions {
       }
     }
   }
-}
 
+  /**
+   * Convert a `Try[A]` to a `Throwable Or A`,
+   * where A is the successfully computed value
+   */
+  def fromTry[A](t: Try[A]): Throwable Or A = t match {
+    case Failure(e) => left(e)
+    case Success(v) => right(v)
+  }
+
+  /**
+   * Convert an `Either[A, B]` to `A Or B`
+   */
+  def fromEither[A, B](e: Either[A, B]): A Or B = e.fold(left, right)
+}

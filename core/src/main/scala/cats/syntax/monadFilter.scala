@@ -3,7 +3,7 @@ package syntax
 
 trait MonadFilterSyntax {
   // TODO: use simulacrum instances eventually
-  implicit def monadFilterSyntax[F[_]: MonadFilter, A](fa: F[A]) =
+  implicit def monadFilterSyntax[F[_]: MonadFilter, A](fa: F[A]): MonadFilterOps[F, A] =
     new MonadFilterOps[F, A](fa)
 }
 

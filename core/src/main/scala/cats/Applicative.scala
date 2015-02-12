@@ -7,17 +7,12 @@ import simulacrum._
  *
  * Allows application of a function in an Applicative context to a value in an Applicative context
  *
- * See: http://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf
- * Also: http://staff.city.ac.uk/~ross/papers/Applicative.pdf
+ * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
+ * Also: [[http://staff.city.ac.uk/~ross/papers/Applicative.pdf Applicative programming with effects]]
  *
- * Must obey the following laws:
- *  - apply(fa)(pure(a => a)) = fa
- *  - apply(pure(a))(pure(f)) = pure(f(a))
- *  - apply(pure(a))(ff) = apply(ff)(pure(f => f(a)))
- *  - map(fa)(f) = apply(fa)(pure(f))
+ * Must obey the laws defined in [[laws.ApplicativeLaws]].
  */
-@typeclass trait Applicative[F[_]] extends Apply[F] { self =>
-
+trait Applicative[F[_]] extends Apply[F] { self =>
   /**
    * `pure` lifts any value into the Applicative Functor
    *
@@ -38,7 +33,12 @@ import simulacrum._
     new CompositeApplicative[F,G] {
       implicit def F: Applicative[F] = self
       implicit def G: Applicative[G] = GG
+
     }
+}
+
+object Applicative {
+  def apply[F[_]](implicit ev: Applicative[F]): Applicative[F] = ev
 }
 
 trait CompositeApplicative[F[_],G[_]]

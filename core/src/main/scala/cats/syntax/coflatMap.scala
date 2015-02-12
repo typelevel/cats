@@ -3,7 +3,7 @@ package syntax
 
 trait CoFlatMapSyntax {
   // TODO: use simulacrum instances eventually
-  implicit def coflatMapSyntax[F[_]: CoFlatMap, A](fa: F[A]) =
+  implicit def coflatMapSyntax[F[_]: CoFlatMap, A](fa: F[A]): CoFlatMapOps[F, A] =
     new CoFlatMapOps[F, A](fa)
 }
 

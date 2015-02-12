@@ -2,7 +2,7 @@ package cats
 
 import simulacrum._
 
-@typeclass trait MonadFilter[F[_]] extends Monad[F] {
+trait MonadFilter[F[_]] extends Monad[F] {
 
   def empty[A]: F[A]
 
@@ -11,4 +11,9 @@ import simulacrum._
 
   def filterM[A](fa: F[A])(f: A => F[Boolean]): F[A] =
     flatMap(fa)(a => flatMap(f(a))(b => if (b) pure(a) else empty[A]))
+}
+
+
+object MonadFilter {
+  def apply[F[_]](implicit ev: MonadFilter[F]): MonadFilter[F] = ev
 }
