@@ -41,7 +41,7 @@ val one: Int = 1
 Functor[Id].map(one)(_ + 1)
 ```
 
-When you compare the signatures of `map` and `flatMap` and `coflatMap`:
+Compare the signatures of `map` and `flatMap` and `coflatMap`:
 
 ```scala
   def map[A, B](fa: Id[A])(f: A => B): Id[B]
@@ -49,10 +49,10 @@ When you compare the signatures of `map` and `flatMap` and `coflatMap`:
   def coflatMap[A, B](a: Id[A])(f: Id[A] => B): Id[B]
 ```
 
-But then realize that in the flatMap signature, since `Id[B]` is the
-same as `B` for all B, we can rewrite the type of the `f` parameter to
-be `A => B` instead of `A => Id[B]`, and this makes the signatures of
-the two functions the same, and, in fact, they can have the same
+You'll notice that in the flatMap signature, since `Id[B]` is the same
+as `B` for all B, we can rewrite the type of the `f` parameter to be
+`A => B` instead of `A => Id[B]`, and this makes the signatures of the
+two functions the same, and, in fact, they can have the same
 implementation, meaning that for `Id`, `flatMap` is also just function
 application:
 
