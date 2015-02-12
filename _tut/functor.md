@@ -45,12 +45,12 @@ import cats._
 scala> implicit val optionFunctor: Functor[Option] = new Functor[Option] {
      |   def map[A,B](fa: Option[A])(f: A => B) = fa map f
      | }
-optionFunctor: cats.Functor[Option] = $anon$1@c96c047
+optionFunctor: cats.Functor[Option] = $anon$1@45da8866
 
 scala> implicit val listFunctor: Functor[List] = new Functor[List] {
      |   def map[A,B](fa: List[A])(f: A => B) = fa map f
      | }
-listFunctor: cats.Functor[List] = $anon$1@13c67244
+listFunctor: cats.Functor[List] = $anon$1@3182ccc
 ```
 
 However Functors can also be creted for types which don't have a map
@@ -124,7 +124,7 @@ compose the two Functors to create a new Functor on F[G[_]]:
 
 ```scala
 scala> val listOpt = Functor[List] compose Functor[Option]
-listOpt: cats.Functor[[α]List[Option[α]]] = cats.Functor$$anon$1@5c753d76
+listOpt: cats.Functor[[α]List[Option[α]]] = cats.Functor$$anon$1@420b91d1
 
 scala> listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
 res9: List[Option[Int]] = List(Some(2), None, Some(4))

@@ -404,6 +404,26 @@ folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fol
     </span>
       <p class="shortcomment cmt">Functor.</p><div class="fullcomment"><div class="comment cmt"><p>Functor.</p><p>The name is short for &quot;covariant functor&quot;.</p><p>Must obey the laws defined in <a href="laws/FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">laws.FunctorLaws</a>.
 </p></div></div>
+    </li><li name="cats.Id" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Id[A]=A"></a>
+      <a id="Id[A]:Id[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Id</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.Id.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Id[A]=A" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Convenient alias to make identity instances well-kinded.</p><div class="fullcomment"><div class="comment cmt"><p>Convenient alias to make identity instances well-kinded.</p><p>For instance, <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a> expects a type of kind
+<code>* -&gt; *</code>, but values have a type of kind <code>*</code>. This alias
+allows us to define <code>Functor[Id]</code> which means the same thing.
+</p></div></div>
     </li><li name="cats.Lazy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Lazy[A]extendsAnyRef"></a>
       <a id="Lazy[A]:Lazy[A]"></a>
@@ -623,7 +643,7 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Traverse, also known as Traversable.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse, also known as Traversable.</p><p>Traversal over a structure with an effect.</p><p>Traversing with the <a href="Id$.html" class="extype" name="cats.Id">cats.Id</a> effect is equivalent to <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
+      <p class="shortcomment cmt">Traverse, also known as Traversable.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse, also known as Traversable.</p><p>Traversal over a structure with an effect.</p><p>Traversing with the <a href="#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a> effect is equivalent to <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
 Traversing with the <a href="data/Const.html" class="extype" name="cats.data.Const">cats.data.Const</a> effect where the first type parameter has
 a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a> instance is equivalent to <a href="Foldable.html" class="extype" name="cats.Foldable">cats.Foldable</a>#fold.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
 </p></div></div>
@@ -871,11 +891,9 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Identity, encoded as <code>type Id[A] = A</code>, a convenient alias to make
-identity instances well-kinded.</p><div class="fullcomment"><div class="comment cmt"><p>Identity, encoded as <code>type Id[A] = A</code>, a convenient alias to make
-identity instances well-kinded.</p><p>The identity monad can be seen as the ambient monad that encodes
+      <p class="shortcomment cmt">Identity, encoded as <code>type Id[A] = A</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Identity, encoded as <code>type Id[A] = A</code>.</p><p>The identity monad can be seen as the ambient monad that encodes
 the effect of having no effect. It is ambient in the sense that
-plain pure values are values of <code>Id</code>.</p><p>For instance, the <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a> instance for <code><a href="Id$.html" class="extype" name="cats.Id">cats.Id</a></code>
+plain pure values are values of <code>Id</code>.</p><p>For instance, the <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a> instance for <code><a href="#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a></code>
 allows us to apply a function <code>A =&gt; B</code> to an <code>Id[A]</code> and get an
 <code>Id[B]</code>. However, an <code>Id[A]</code> is the same as <code>A</code>, so all we're doing
 is applying a pure function of type <code>A =&gt; B</code> to a pure value  of

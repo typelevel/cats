@@ -184,6 +184,8 @@ h1 {
 }
 
 body {
+    color: #000;
+    font:16px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
     padding: 0;
 }
 
