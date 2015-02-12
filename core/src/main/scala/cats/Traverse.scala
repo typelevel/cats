@@ -1,6 +1,6 @@
 package cats
 
-import Id.id
+import Id._
 import simulacrum._
 
 /**

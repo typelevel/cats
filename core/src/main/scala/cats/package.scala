@@ -2,14 +2,6 @@
  * Symbolic aliases for various types are defined here.
  */
 package object cats {
-  /**
-   * Convenient alias to make identity instances well-kinded.
-   *
-   * For instance, [[cats.Functor]] expects a type of kind
-   * `* -> *`, but values have a type of kind `*`. This alias
-   * allows us to define `Functor[Id]` which means the same thing.
-   */
-  type Id[A] = A
 
   type ~>[F[_], G[_]] = arrow.NaturalTransformation[F, G]
   type <~[F[_], G[_]] = arrow.NaturalTransformation[G, F]
