@@ -13,7 +13,7 @@ trait FoldableSyntax {
 class FoldableOps[F[_], A](fa: F[A])(implicit F: Foldable[F]) {
   def foldLeft[B](b: B)(f: (B, A) => B): B = F.foldLeft(fa, b)(f)
   def foldRight[B](b: B)(f: (A, B) => B): B = F.foldRight(fa, b)(f)
-  def foldRight[B](b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] = F.foldRight(fa, b)(f)
+  def foldLazy[B](b: Lazy[B])(f: A => Fold[B]): Lazy[B] = F.foldLazy(fa, b)(f)
   def foldMap[B: Monoid](f: A => B): B = F.foldMap(fa)(f)
   def fold(implicit A: Monoid[A]): A = F.fold(fa)
   def traverse_[G[_]: Applicative, B](f: A => G[B]): G[Unit] = F.traverse_(fa)(f)

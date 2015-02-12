@@ -1,7 +1,7 @@
 package cats.laws
 
 import cats.CoFlatMap
-import cats.arrow.Cokleisli
+import cats.data.Cokleisli
 import cats.syntax.coflatMap._
 
 /**
@@ -12,7 +12,7 @@ class CoFlatMapLaws[F[_]](implicit F: CoFlatMap[F]) extends FunctorLaws[F] {
     fa.coflatMap(f).coflatMap(g) -> fa.coflatMap(x => g(x.coflatMap(f)))
 
   /**
-   * The composition of [[cats.arrow.Cokleisli]] arrows is associative. This is
+   * The composition of [[cats.data.Cokleisli]] arrows is associative. This is
    * analogous to the associativity law of [[CoFlatMap.coflatMap]].
    */
   def cokleisliAssociativity[A, B, C, D](f: F[A] => B, g: F[B] => C, h: F[C] => D, fa: F[A]): (D, D) = {

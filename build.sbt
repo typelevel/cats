@@ -55,10 +55,9 @@ lazy val disciplineDependencies = Seq(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  apiURL := Some(url("https://non.github.io/cats/api/")),
   unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, laws, data, std),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
-  site.addMappingsToSiteDir(tut, ""),
+  site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
   scalacOptions in (ScalaUnidoc, unidoc) ++=
     Opts.doc.sourceUrl(scmInfo.value.get.browseUrl + "/tree/master${FILE_PATH}.scala"),
@@ -125,7 +124,10 @@ lazy val data = project.dependsOn(macros, core)
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/non/cats")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+  autoAPIMappings := true,
+  apiURL := Some(url("https://non.github.io/cats/api/")),
   publishMavenStyle := true,
+  publishArtifact in packageDoc := false,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ => false },
   publishTo <<= version { (v: String) =>

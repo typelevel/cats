@@ -2,6 +2,8 @@
 layout: default
 title:  "Functors"
 section: "typeclasses"
+source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Functor.scala"
+scaladoc: "#cats.Functor"
 ---
 # Functor
 
@@ -94,8 +96,8 @@ Functor[List].fproduct(source)(len).toMap
 
 ## Composition
 
-Functors compose! Given any Functor F[_] and any Functor G[_] we can
-compose the two Functors to create a new Functor on F[G[_]]:
+Functors compose! Given any Functor F[\_] and any Functor G[\_] we can
+compose the two Functors to create a new Functor on F[G[\_]]:
 
 ```tut
 val listOpt = Functor[List] compose Functor[Option]
