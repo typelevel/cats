@@ -1,6 +1,7 @@
 import com.typesafe.sbt.pgp.PgpKeys.publishSigned
 import com.typesafe.sbt.SbtSite.SiteKeys._
 import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
+import pl.project13.scala.sbt.SbtJmh._
 import sbtrelease.ReleaseStep
 import sbtrelease.ReleasePlugin.ReleaseKeys.releaseProcess
 import sbtrelease.ReleaseStateTransformations._
@@ -80,8 +81,8 @@ lazy val docs = project
 lazy val aggregate = project.in(file("."))
   .settings(catsSettings: _*)
   .settings(noPublishSettings: _*)
-  .aggregate(macros, core, laws, tests, docs, data, std)
-  .dependsOn(macros, core, laws, tests, docs, data, std)
+  .aggregate(macros, core, laws, tests, docs, data, std, bench)
+  .dependsOn(macros, core, laws, tests, docs, data, std, bench)
 
 lazy val macros = project
   .settings(moduleName := "cats-macros")
@@ -116,6 +117,12 @@ lazy val tests = project.dependsOn(macros, core, data, std, laws)
       "org.scalatest" %% "scalatest" % "2.1.3" % "test"
     )
   )
+
+lazy val bench = project.dependsOn(macros, core, data, std, laws)
+  .settings(moduleName := "cats-bench")
+  .settings(catsSettings: _*)
+  .settings(noPublishSettings: _*)
+  .settings(jmhSettings: _*)
 
 lazy val data = project.dependsOn(macros, core)
   .settings(moduleName := "cats-data")
