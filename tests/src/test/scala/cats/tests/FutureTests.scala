@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.Eq
+import cats.{Comonad, Eq}
 import cats.std.int._
 import cats.std.future._
 import cats.laws.discipline._
@@ -14,6 +14,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class FutureTests extends FunSuite with Discipline {
 
   implicit val eqv: Eq[Future[Int]] = futureEq(1.second)
+  implicit val comonad: Comonad[Future] = futureComonad(1.second)
 
   checkAll("Future[Int]", FunctorTests[Future, Int].applicative[Int, Int])
+  checkAll("Future[Int]", ComonadTests[Future, Int, Int].comonad[Int])
 }
