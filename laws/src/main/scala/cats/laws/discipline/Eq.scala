@@ -2,7 +2,8 @@ package cats.laws.discipline
 
 import algebra.Eq
 import org.scalacheck.Arbitrary
-
+import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.duration.FiniteDuration
 
 object eq {
 
@@ -18,4 +19,9 @@ object eq {
     }
   }
 
+  def futureEq[A](atMost: FiniteDuration)(implicit ev: Eq[A], ec: ExecutionContext): Eq[Future[A]] =
+    new Eq[Future[A]] {
+      def eqv(x: Future[A], y: Future[A]): Boolean =
+        Await.result((x zip y).map((ev.eqv _).tupled), atMost)
+    }
 }
