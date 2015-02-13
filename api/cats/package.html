@@ -50,7 +50,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
 </p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -153,7 +153,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ApplyArityFunctions.html"><span class="name">ApplyArityFunctions</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="ApplyArityFunctions.html"><span class="name">ApplyArityFunctions</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@ApplyArityFunctions[F[_]]extendsAnyRef" title="Permalink" target="_top">
@@ -230,7 +230,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
     </span>
       
     </li><li name="cats.CompositeApply" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CompositeApply[F[_],G[_]]extendsApply[[α]F[G[α]]]withCompositeFunctor[F,G]"></a>
+      <a id="CompositeApply[F[_],G[_]]extendsApply[[X]F[G[X]]]withFunctor.Composite[F,G]"></a>
       <a id="CompositeApply[F[_],G[_]]:CompositeApply[F,G]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -238,10 +238,10 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="CompositeApply.html"><span class="name">CompositeApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[[α]<span class="extype" name="cats.CompositeApply.F">F</span>[<span class="extype" name="cats.CompositeApply.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.α">α</span>]]] with <a href="CompositeFunctor.html" class="extype" name="cats.CompositeFunctor">CompositeFunctor</a>[<span class="extype" name="cats.CompositeApply.F">F</span>, <span class="extype" name="cats.CompositeApply.G">G</span>]</span>
+        <a href="CompositeApply.html"><span class="name">CompositeApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[[X]<span class="extype" name="cats.CompositeApply.F">F</span>[<span class="extype" name="cats.CompositeApply.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.X">X</span>]]] with <a href="Functor$$Composite.html" class="extype" name="cats.Functor.Composite">Composite</a>[<span class="extype" name="cats.CompositeApply.F">F</span>, <span class="extype" name="cats.CompositeApply.G">G</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@CompositeApply[F[_],G[_]]extendsApply[[α]F[G[α]]]withCompositeFunctor[F,G]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@CompositeApply[F[_],G[_]]extendsApply[[X]F[G[X]]]withFunctor.Composite[F,G]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -264,23 +264,6 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
     </span>
       <p class="shortcomment cmt">Methods that apply to 2 nested Foldable instances
 </p>
-    </li><li name="cats.CompositeFunctor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CompositeFunctor[F[_],G[_]]extendsFunctor[[α]F[G[α]]]"></a>
-      <a id="CompositeFunctor[F[_],G[_]]:CompositeFunctor[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="CompositeFunctor.html"><span class="name">CompositeFunctor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[[α]<span class="extype" name="cats.CompositeFunctor.F">F</span>[<span class="extype" name="cats.CompositeFunctor.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.α">α</span>]]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@CompositeFunctor[F[_],G[_]]extendsFunctor[[α]F[G[α]]]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="cats.Eq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Eq[A]=algebra.Eq[A]"></a>
       <a id="Eq[A]:Eq[A]"></a>
@@ -325,6 +308,44 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
  when instantiating the new Map).
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>See <a href="https://github.com/non/cats/issues/3" target="_blank">https://github.com/non/cats/issues/3</a> for some discussion.</p><p>Must obey the laws defined in <a href="laws/FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">laws.FlatMapLaws</a>.
 </p></span></dd></dl></div>
+    </li><li name="cats.Fold" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Fold[A]extendsAnyRef"></a>
+      <a id="Fold[A]:Fold[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Fold.html"><span class="name">Fold</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Fold[A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Fold is designed to allow laziness/short-circuiting in foldLazy.</p><div class="fullcomment"><div class="comment cmt"><p>Fold is designed to allow laziness/short-circuiting in foldLazy.</p><p>It is a sum type that has three possible subtypes:</p><ul><li><code>Return(a)</code>: stop the fold with a value of <code>a</code>.</li><li><code>Continue(f)</code>: continue the fold, suspending the computation <code>f</code> for this step.</li><li><code>Pass</code>: continue the fold, with no computation for this step.</li></ul><p>The meaning of these types can be made more clear with an example
+of the foldLazy method in action. Here's a method to count how many
+elements appear in a list before the value 3:</p><pre><span class="kw">def</span> f(n: <span class="std">Int</span>): Fold[<span class="std">Int</span>] =
+  <span class="kw">if</span> (n == <span class="num">3</span>) Fold.Return(<span class="num">0</span>) <span class="kw">else</span> Fold.Continue(_ + <span class="num">1</span>)
+
+<span class="kw">val</span> count: Lazy[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>).foldLazy(Lazy(<span class="num">0</span>))(f)</pre><p>When we call <code>count.force</code>, the following occurs:</p><ul><li><code>f(1)</code> produces <code>res0: Continue(_ + 1)</code></li><li><code>f(2)</code> produces <code>res1: Continue(_ + 1)</code></li><li><code>f(3)</code> produces <code>res2: Return(0)</code></li></ul><p>Now we unwind back through the continue instances:</p><ul><li><code>res2</code> returns <code>0</code></li><li><code>res1(0)</code> returns <code>1</code></li><li><code>res0(1)</code> returns <code>2</code></li></ul><p>And so the result is 2.</p><p>This code searches an infinite stream for 77:</p><pre><span class="kw">val</span> found: Lazy[<span class="std">Boolean</span>] =
+  Stream.from(<span class="num">0</span>).foldLazy(Lazy(<span class="kw">false</span>)) { n <span class="kw">=&gt;</span>
+    <span class="kw">if</span> (n == <span class="num">77</span>) Fold.Return(<span class="kw">true</span>) <span class="kw">else</span> Fold.Pass
+  }</pre><p>Here's another example that sums the list until it reaches a
+negative number:</p><pre><span class="kw">val</span> sum: Lazy[<span class="std">Double</span>] =
+  numbers.foldLazy(Lazy(<span class="num">0.0</span>)) { n <span class="kw">=&gt;</span>
+    <span class="kw">if</span> (n &lt; <span class="num">0</span>) Fold.Return(<span class="num">0.0</span>) <span class="kw">else</span> Fold.Continue(n + _)
+  }</pre><p>This strange example counts an infinite stream. Since the result is
+lazy, it will only hang the program once <code>count.force</code> is called:</p><pre><span class="kw">val</span> count: Lazy[<span class="std">Long</span>] =
+  Stream.from(<span class="num">0</span>).foldLazy(Lazy(<span class="num">0</span>L)) { _ <span class="kw">=&gt;</span>
+    Fold.Continue(_ + <span class="num">1</span>L)
+  }</pre><p>You can even implement foldLeft in terms of foldLazy (!):</p><pre><span class="kw">def</span> foldl[A, B](as: <span class="std">List</span>[A], b: B)(f: (B, A) <span class="kw">=&gt;</span> B): B =
+  as.foldLazy(Lazy((b: B) <span class="kw">=&gt;</span> b)) { a <span class="kw">=&gt;</span>
+    Fold.Continue(g <span class="kw">=&gt;</span> (b: B) <span class="kw">=&gt;</span> g(f(b, a)))
+  }.force(b)</pre><p>(In practice you would not want to use the <code>foldl</code> because it is
+not stack-safe.)
+</p></div></div>
     </li><li name="cats.Foldable" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Foldable[F[_]]extendsAnyRef"></a>
       <a id="Foldable[F[_]]:Foldable[F]"></a>
@@ -334,14 +355,19 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Foldable.html"><span class="name">Foldable</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Foldable.html"><span class="name">Foldable</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Foldable[F[_]]extendsAnyRef" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Data structures that can be folded to a summary value.</p><div class="fullcomment"><div class="comment cmt"><p>Data structures that can be folded to a summary value.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fold.pdf" target="_blank">A tutorial on the universality and expressiveness of fold</a>
+      <p class="shortcomment cmt">Data structures that can be folded to a summary value.</p><div class="fullcomment"><div class="comment cmt"><p>Data structures that can be folded to a summary value.</p><p>In the case of a collection (such as <code>List</code> or <code>Set</code>), these
+methods will fold together (combine) the values contained in the
+collection to produce a single result. Most collection types have
+<code>foldLeft</code> methods, which will usually be used by the associationed
+<code>Fold[_]</code> instance.</p><p>Foldable[F] is implemented in terms of two basic methods:</p><ul><li><code>foldLeft(fa, b)(f)</code> eagerly folds <code>fa</code> from left-to-right.</li><li><code>foldLazy(fa, lb)(f)</code> lazily folds <code>fa</code> from right-to-left.</li></ul><p>Beyond these it provides many other useful methods related to
+folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fold.pdf" target="_blank">A tutorial on the universality and expressiveness of fold</a>
 </p></div></div>
     </li><li name="cats.Functor" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Functor[F[_]]extendsInvariant[F]"></a>
@@ -377,9 +403,16 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Convenient alias to make identity instances well-kinded.</p><div class="fullcomment"><div class="comment cmt"><p>Convenient alias to make identity instances well-kinded.</p><p>For instance, <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a> expects a type of kind
-<code>* -&gt; *</code>, but values have a type of kind <code>*</code>. This alias
-allows us to define <code>Functor[Id]</code> which means the same thing.
+      <p class="shortcomment cmt">Identity, encoded as <code>type Id[A] = A</code>, a convenient alias to make
+identity instances well-kinded.</p><div class="fullcomment"><div class="comment cmt"><p>Identity, encoded as <code>type Id[A] = A</code>, a convenient alias to make
+identity instances well-kinded.</p><p>The identity monad can be seen as the ambient monad that encodes
+the effect of having no effect. It is ambient in the sense that
+plain pure values are values of <code>Id</code>.</p><p>For instance, the <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a> instance for <code><a href="#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a></code>
+allows us to apply a function <code>A =&gt; B</code> to an <code>Id[A]</code> and get an
+<code>Id[B]</code>. However, an <code>Id[A]</code> is the same as <code>A</code>, so all we're doing
+is applying a pure function of type <code>A =&gt; B</code> to a pure value  of
+type <code>A</code> to get a pure value of type <code>B</code>. That is, the instance
+encodes pure unary function application.
 </p></div></div>
     </li><li name="cats.Lazy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Lazy[A]extendsAnyRef"></a>
@@ -390,7 +423,7 @@ allows us to define <code>Functor[Id]</code> which means the same thing.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Lazy.html"><span class="name">Lazy</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Lazy.html"><span class="name">Lazy</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Lazy[A]extendsAnyRef" title="Permalink" target="_top">
@@ -414,8 +447,8 @@ allows us to define <code>Functor[Id]</code> which means the same thing.
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Monad.</p><div class="fullcomment"><div class="comment cmt"><p>Monad.</p><p>Allows composition of dependent effectful functions.</p><p>See: <a href="http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf" target="_blank">Monads for functional programming</a></p><p>Must obey the following laws:</p><ul><li>flatMap(pure(a))(f) = f(a)</li><li>flatMap(fa)(identity) = fa</li><li>flatMap(flatMap(fa)(f))(g) = flatMap(fa)(a =&gt; flatMap(f(a))(g))
-</li></ul></div></div>
+      <p class="shortcomment cmt">Monad.</p><div class="fullcomment"><div class="comment cmt"><p>Monad.</p><p>Allows composition of dependent effectful functions.</p><p>See: <a href="http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf" target="_blank">Monads for functional programming</a></p><p>Must obey the laws defined in <a href="laws/MonadLaws.html" class="extype" name="cats.laws.MonadLaws">laws.MonadLaws</a>.
+</p></div></div>
     </li><li name="cats.MonadCombine" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="MonadCombine[F[_]]extendsMonadFilter[F]withMonoidK[F]"></a>
       <a id="MonadCombine[F[_]]:MonadCombine[F]"></a>
@@ -552,7 +585,7 @@ for kinds (i.e. parameterized types).</p><p>A MonoidK[F] can produce a Monoid[F[
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SemigroupK.html"><span class="name">SemigroupK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="SemigroupK.html"><span class="name">SemigroupK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@SemigroupK[F[_]]extendsAnyRef" title="Permalink" target="_top">
@@ -575,7 +608,7 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Show.html"><span class="name">Show</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Show.html"><span class="name">Show</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Show[T]extendsAnyRef" title="Permalink" target="_top">
@@ -630,7 +663,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $u22A4" class="name">⊤</span><span class="result"> = <span class="extype" name="scala.Any">Any</span></span>
+        <span title="gt4s: $u22A4" class="name">⊤</span><span class="result"> = <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@⊤=Any" title="Permalink" target="_top">
@@ -647,7 +680,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $u22A5" class="name">⊥</span><span class="result"> = <span class="extype" name="scala.Nothing">Nothing</span></span>
+        <span title="gt4s: $u22A5" class="name">⊥</span><span class="result"> = <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Nothing" class="extype" target="_top">Nothing</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@⊥=Nothing" title="Permalink" target="_top">
@@ -781,6 +814,23 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
       </a>
     </span>
       
+    </li><li name="cats.Fold" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Fold"></a>
+      <a id="Fold:Fold"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Fold$.html"><span class="name">Fold</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Fold" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.Foldable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Foldable"></a>
       <a id="Foldable:Foldable"></a>
@@ -815,31 +865,23 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
       </a>
     </span>
       
-    </li><li name="cats.Id" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Id"></a>
-      <a id="Id:Id"></a>
+    </li><li name="cats#Id" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Id:cats.Bimonad[cats.package.Id]"></a>
+      <a id="Id:Bimonad[Id]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <a href="Id$.html"><span class="name">Id</span></a>
+        <span class="name">Id</span><span class="result">: <a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Id" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Id:cats.Bimonad[cats.package.Id]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Identity, encoded as <code>type Id[A] = A</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Identity, encoded as <code>type Id[A] = A</code>.</p><p>The identity monad can be seen as the ambient monad that encodes
-the effect of having no effect. It is ambient in the sense that
-plain pure values are values of <code>Id</code>.</p><p>For instance, the <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a> instance for <code><a href="#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a></code>
-allows us to apply a function <code>A =&gt; B</code> to an <code>Id[A]</code> and get an
-<code>Id[B]</code>. However, an <code>Id[A]</code> is the same as <code>A</code>, so all we're doing
-is applying a pure function of type <code>A =&gt; B</code> to a pure value  of
-type <code>A</code> to get a pure value of type <code>B</code>. That is, the instance
-encodes pure unary function application.
-</p></div></div>
+      
     </li><li name="cats.Lazy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Lazy"></a>
       <a id="Lazy:Lazy"></a>
@@ -1190,9 +1232,9 @@ encodes pure unary function application.
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>
