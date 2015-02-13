@@ -26,15 +26,11 @@ trait VectorInstances {
       def foldLeft[A, B](fa: Vector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
-      def foldRight[A, B](fa: Vector[A], b: B)(f: (A, B) => B): B =
+      override def foldRight[A, B](fa: Vector[A], b: B)(f: (A, B) => B): B =
         fa.foldRight(b)(f)
 
-      def foldRight[A, B](fa: Vector[A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] = {
-        val it = fa.iterator
-        def loop(b: Lazy[B]): Lazy[B] =
-          if (it.hasNext) Lazy.byName(f(it.next, b)) else b
-        Lazy(loop(b).force)
-      }
+      def foldLazy[A, B](fa: Vector[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
+        Fold.iterateRight(fa, b)(f)
 
       def traverse[G[_]: Applicative, A, B](fa: Vector[A])(f: A => G[B]): G[Vector[B]] = {
         val G = Applicative[G]

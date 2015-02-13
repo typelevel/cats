@@ -15,6 +15,7 @@ import simulacrum._
  *
  *  @see See [[https://github.com/non/cats/issues/3]] for some discussion.
  *
+ * Must obey the laws defined in [[laws.FlatMapLaws]].
  */
 trait FlatMap[F[_]] extends Apply[F] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]

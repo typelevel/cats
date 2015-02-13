@@ -1,4 +1,7 @@
 import com.typesafe.sbt.pgp.PgpKeys.publishSigned
+import com.typesafe.sbt.SbtSite.SiteKeys._
+import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
+import pl.project13.scala.sbt.SbtJmh._
 import sbtrelease.ReleaseStep
 import sbtrelease.ReleasePlugin.ReleaseKeys.releaseProcess
 import sbtrelease.ReleaseStateTransformations._
@@ -39,7 +42,9 @@ lazy val commonSettings = Seq(
     "org.typelevel" %% "machinist" % "0.3.0",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.2")
-  )
+  ),
+  scmInfo := Some(ScmInfo(url("https://github.com/non/cats"),
+    "git@github.com:non/cats.git"))
 )
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ releaseSettings
@@ -49,16 +54,35 @@ lazy val disciplineDependencies = Seq(
   "org.typelevel" %% "discipline" % "0.2.1"
 )
 
-lazy val docSettings = unidocSettings ++ Seq(
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(examples, tests)
+lazy val docSettings = Seq(
+  autoAPIMappings := true,
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, laws, data, std),
+  site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
+  site.addMappingsToSiteDir(tut, "_tut"),
+  ghpagesNoJekyll := false,
+  scalacOptions in (ScalaUnidoc, unidoc) ++=
+    Opts.doc.sourceUrl(scmInfo.value.get.browseUrl + "/tree/master${FILE_PATH}.scala"),
+  git.remoteRepo := "git@github.com:non/cats.git",
+  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
+
+lazy val docs = project
+  .settings(moduleName := "cats-docs")
+  .settings(catsSettings: _*)
+  .settings(noPublishSettings: _*)
+  .settings(unidocSettings: _*)
+  .settings(site.settings: _*)
+  .settings(ghpages.settings: _*)
+  .settings(tutSettings: _*)
+  .settings(docSettings: _*)
+  .settings(tutSettings: _*)
+  .dependsOn(core)
 
 lazy val aggregate = project.in(file("."))
   .settings(catsSettings: _*)
-  .settings(docSettings: _*)
   .settings(noPublishSettings: _*)
-  .aggregate(macros, core, laws, tests, data, std, examples)
-  .dependsOn(macros, core, laws, tests, data, std, examples)
+  .aggregate(macros, core, laws, tests, docs, data, std, bench)
+  .dependsOn(macros, core, laws, tests, docs, data, std, bench)
 
 lazy val macros = project
   .settings(moduleName := "cats-macros")
@@ -94,20 +118,23 @@ lazy val tests = project.dependsOn(macros, core, data, std, laws)
     )
   )
 
+lazy val bench = project.dependsOn(macros, core, data, std, laws)
+  .settings(moduleName := "cats-bench")
+  .settings(catsSettings: _*)
+  .settings(noPublishSettings: _*)
+  .settings(jmhSettings: _*)
+
 lazy val data = project.dependsOn(macros, core)
   .settings(moduleName := "cats-data")
   .settings(catsSettings: _*)
 
-lazy val examples = project.dependsOn(macros, core)
-  .settings(moduleName := "cats-examples")
-  .settings(scalaSource in Compile := baseDirectory.value)
-  .settings(catsSettings: _*)
-  .settings(noPublishSettings: _*)
-
 lazy val publishSettings = Seq(
-  homepage := Some(url("http://github.com/non/cats")),
+  homepage := Some(url("https://github.com/non/cats")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+  autoAPIMappings := true,
+  apiURL := Some(url("https://non.github.io/cats/api/")),
   publishMavenStyle := true,
+  publishArtifact in packageDoc := false,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ => false },
   publishTo <<= version { (v: String) =>
@@ -166,3 +193,5 @@ lazy val noPublishSettings = Seq(
   publishLocal := (),
   publishArtifact := false
 )
+
+addCommandAlias("validate", ";compile;test;scalastyle;test:scalastyle;unidoc;tut")

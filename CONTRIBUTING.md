@@ -103,15 +103,16 @@ TODO
 
 ### Submit a pull request
 
-Before you open a pull request, you should make sure that `compile`,
-`unidoc`, and `scalastyle` all run successfully. Travis will run these
-as well, but it may save you some time to be alerted to style problems
-earlier.
+Before you open a pull request, you should make sure that `sbt
+validate` runs successfully. Travis will run this as well, but it may
+save you some time to be alerted to style problems earlier.
 
 If your pull request addresses an existing issue, please tag that
 issue number in the body of your pull request or commit message. For
 example, if your pull request addresses issue number 52, please
 include "fixes #52".
+
+If you make changes after you have opened your pull request, please add them as separate commits and avoid squashing or rebasing. Squashing and rebasing can lead to a tidier git history, but they can also be a hassle if somebody else has done work based on your branch.
 
 ## How did we do?
 

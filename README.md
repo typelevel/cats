@@ -22,10 +22,11 @@ installed. Run `sbt`, and then use any of the following commands:
  * `test`: run the tests
  * `unidoc`: generate the documentation
  * `scalastyle`: run the style-checker on the code
+ * `validate`: run tests, style-checker, and doc generation
 
-[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
-
+[![Build Status](https://api.travis-ci.org/non/cats.png)](https://travis-ci.org/non/cats)
 [![Workflow](https://badge.waffle.io/non/cats.png?label=ready&title=Ready)](https://waffle.io/non/cats)
+[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
 
 ### Design
 
@@ -129,6 +130,7 @@ The current maintainers (people who can merge pull requests) are:
  * [milessabin](https://github.com/milessabin) Miles Sabin
  * [tpolecat](https://github.com/tpolecat) Rob Norris
  * [travisbrown](https://github.com/travisbrown) Travis Brown
+ * [julien-truffaut](https://github.com/julien-truffaut) Julien Truffaut
  
 We are currently following a practice of requiring at least two
 sign-offs to merge PRs (and for large or contentious issues we may
