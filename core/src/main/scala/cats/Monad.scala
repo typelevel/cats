@@ -9,10 +9,7 @@ import simulacrum._
  *
  * See: [[http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf Monads for functional programming]]
  *
- * Must obey the following laws:
- *  - flatMap(pure(a))(f) = f(a)
- *  - flatMap(fa)(identity) = fa
- *  - flatMap(flatMap(fa)(f))(g) = flatMap(fa)(a => flatMap(f(a))(g))
+ * Must obey the laws defined in [[laws.MonadLaws]].
  */
 trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   override def map[A, B](fa: F[A])(f: A => B): F[B] =

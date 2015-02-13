@@ -7,7 +7,9 @@ import cats.syntax.functor._
 /**
  * Laws that must be obeyed by any [[Applicative]].
  */
-class ApplicativeLaws[F[_]](implicit F: Applicative[F]) extends ApplyLaws[F] {
+trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
+  implicit override def F: Applicative[F]
+
   def applicativeIdentity[A](fa: F[A]): (F[A], F[A]) =
     fa.apply(F.pure((a: A) => a)) -> fa
 
@@ -29,4 +31,9 @@ class ApplicativeLaws[F[_]](implicit F: Applicative[F]) extends ApplyLaws[F] {
     val compose: (B => C) => (A => B) => (A => C) = _.compose
     fa.apply(fab.apply(fbc.apply(F.pure(compose)))) -> fa.apply(fab).apply(fbc)
   }
+}
+
+object ApplicativeLaws {
+  def apply[F[_]](implicit ev: Applicative[F]): ApplicativeLaws[F] =
+    new ApplicativeLaws[F] { def F = ev }
 }
