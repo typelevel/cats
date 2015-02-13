@@ -1,7 +1,7 @@
 package cats.laws
 
 import cats.Monad
-import cats.arrow.Kleisli
+import cats.data.Kleisli
 import cats.syntax.flatMap._
 
 /**
