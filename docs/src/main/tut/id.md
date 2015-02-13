@@ -22,7 +22,7 @@ freely treat values of type `A` as values of type `Id[A]`, and
 vice-versa.
 
 ```tut
-import cats.Id._
+import cats._
 
 val x: Id[Int] = 1
 val y: Int = x
