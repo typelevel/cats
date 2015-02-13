@@ -37,10 +37,10 @@ trait OptionInstances {
           case Some(a) => f(a, b)
         }
 
-      def foldLazy[A, B](fa: Option[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
+      def partialFold[A, B](fa: Option[A])(f: A => Fold[B]): Fold[B] =
         fa match {
-          case None => b
-          case Some(a) => b.map(f(a).complete)
+          case None => Fold.Pass
+          case Some(a) => f(a)
         }
 
       def traverse[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =

@@ -54,7 +54,7 @@ sealed abstract class ConstInstances extends ConstInstances0 {
 
     override def foldRight[A, B](fa: Const[C, A], b: B)(f: (A, B) => B): B = b
 
-    def foldLazy[A, B](fa: Const[C, A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] = b
+    def partialFold[A, B](fa: Const[C, A])(f: A => Fold[B]): Fold[B] = Fold.Pass
   }
 
   implicit def constMonoid[A: Monoid, B]: Monoid[Const[A, B]] = new Monoid[Const[A, B]]{
