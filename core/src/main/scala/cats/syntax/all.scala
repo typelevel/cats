@@ -5,6 +5,7 @@ trait AllSyntax
     with BifunctorSyntax
     with CoFlatMapSyntax
     with ComonadSyntax
+    with ComposeSyntax
     with ContravariantSyntax
     with EqSyntax
     with FlatMapSyntax
