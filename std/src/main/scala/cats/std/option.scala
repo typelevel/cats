@@ -31,16 +31,16 @@ trait OptionInstances {
           case Some(a) => f(b, a)
         }
 
-      def foldRight[A, B](fa: Option[A], b: B)(f: (A, B) => B): B =
+      override def foldRight[A, B](fa: Option[A], b: B)(f: (A, B) => B): B =
         fa match {
           case None => b
           case Some(a) => f(a, b)
         }
 
-      def foldRight[A, B](fa: Option[A], b: Lazy[B])(f: (A, Lazy[B]) => B): Lazy[B] =
+      def foldLazy[A, B](fa: Option[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
         fa match {
           case None => b
-          case Some(a) => Lazy(f(a, b))
+          case Some(a) => b.map(f(a).complete)
         }
 
       def traverse[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =

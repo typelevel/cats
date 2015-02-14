@@ -21,10 +21,12 @@ installed. Run `sbt`, and then use any of the following commands:
  * `console`: launch a REPL
  * `test`: run the tests
  * `unidoc`: generate the documentation
+ * `scalastyle`: run the style-checker on the code
+ * `validate`: run tests, style-checker, and doc generation
 
-[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
-
+[![Build Status](https://api.travis-ci.org/non/cats.png)](https://travis-ci.org/non/cats)
 [![Workflow](https://badge.waffle.io/non/cats.png?label=ready&title=Ready)](https://waffle.io/non/cats)
+[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
 
 ### Design
 
@@ -76,6 +78,13 @@ will be added as well. Modules which depend on other libraries
 
 There are many ways to support Cats' development:
 
+ * Fix bugs: Despite using static types, law-checking, and
+   property-based testing bugs can happen. Reporting problems you
+   encounter (with the documentation, code, or anything else) helps us
+   to improve. Look for issues labelled "ready" as good targets, but 
+   **please add a comment to the issue** if you start working on one. 
+   We want to avoid any duplicated effort.
+
  * Write ScalaDoc comments: One of our goals is to have ScalaDoc
    comments for all types in Cats. The documentation should describe
    the type and give a basic usage (it may also link to relevant
@@ -91,11 +100,6 @@ There are many ways to support Cats' development:
    notice laws or tests which are missing (or could be improved)
    you can open an issue (or send a pull request).
 
- * Fix bugs: Despite using static types, law-checking, and
-   property-based testing bugs can happen. Reporting problems you
-   encounter (with the documentation, code, or anything else) helps us
-   to improve.
-   
  * Help with code review: Most of our design decisions are made
    through conversations on issues and pull requests. You can
    participate in these conversations to help guide the future of
@@ -126,6 +130,7 @@ The current maintainers (people who can merge pull requests) are:
  * [milessabin](https://github.com/milessabin) Miles Sabin
  * [tpolecat](https://github.com/tpolecat) Rob Norris
  * [travisbrown](https://github.com/travisbrown) Travis Brown
+ * [julien-truffaut](https://github.com/julien-truffaut) Julien Truffaut
  
 We are currently following a practice of requiring at least two
 sign-offs to merge PRs (and for large or contentious issues we may
@@ -140,7 +145,7 @@ via [Waffle.io](https://waffle.io/non/cats).
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also
-gladly accepted.
+gladly accepted. For more information, check out the [contributor guide](CONTRIBUTING.md).
 
 People are expected to follow the
 [Typelevel Code of Conduct](http://typelevel.org/conduct.html) when

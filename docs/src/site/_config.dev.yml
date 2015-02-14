@@ -1,0 +1,9 @@
+name: Cats Documentation
+markdown: redcarpet
+highlighter: pygments
+baseurl: /
+apidocs: /api/
+
+collections:
+  tut:
+    output: true

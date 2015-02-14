@@ -1,8 +1,19 @@
 package cats
 
-import Id.id
+import Id._
 import simulacrum._
 
+/**
+ * Traverse, also known as Traversable.
+ *
+ * Traversal over a structure with an effect.
+ *
+ * Traversing with the [[cats.Id]] effect is equivalent to [[cats.Functor]]#map.
+ * Traversing with the [[cats.data.Const]] effect where the first type parameter has
+ * a [[cats.Monoid]] instance is equivalent to [[cats.Foldable]]#fold.
+ *
+ * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
+ */
 @typeclass trait Traverse[F[_]] extends Functor[F] with Foldable[F] { self =>
 
   def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
