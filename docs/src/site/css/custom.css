@@ -57,3 +57,144 @@ section img {
   padding: 10px;
   margin: 0;
 }
+
+div#container {
+    text-align:left;
+}
+div#content p {
+    line-height:1.4
+}
+div#navigation ol {
+    margin:15px 0;
+    padding:0;
+    list-style-type:none;
+}
+
+div#navigation li {
+    margin-bottom:5px;
+}
+
+div#navigation {
+    float:left;
+    width:200px;
+    margin-top:50px;
+    margin-left:-100%;
+}
+
+div#footer p{
+    margin:0;padding:5px 10px;
+}
+
+div#wrapper{
+    width:100%;
+    float:left;
+}
+
+div#content {
+    margin-left: 200px;
+    margin-right: 300px;
+}
+
+div#extra {
+    background: #EEEEFF;
+    width: 150px;
+    margin-right: 50px;
+    margin-left: -100%;
+    margin-top: 50px;
+    float: right;
+    padding: 10px;
+}
+
+div#extra ul {
+    list-style-type: none;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+div#footer {
+    clear:left;
+    width:100%;
+}
+
+div#content h1 {
+    text-align: left;
+}
+
+div#commute {
+    float: left;
+    with: 200px;
+    height: 80px;
+    margin-left: 50px;
+}
+
+div#commute img {
+    max-height:100%;
+}
+
+div#toolbox {
+    float: right;
+    width: 200px;
+    margin-right: 50px;
+}
+
+div#toolbox ul {
+    text-align: right;
+    list-style-type: none;
+}
+
+div#navbar {
+    height: 25px;
+    background: #EEEEEE;
+}
+
+div#navbar ul {
+    width: 70%;
+    margin: auto;
+    display: block;
+    text-align: center;
+    list-style-type: none;
+    padding: 0;
+    overflow: hidden;
+}
+
+div#navbar li {
+    float: left;
+    diplay: inline-block;
+}
+
+div#navbar a {
+    margin-left: 10px;
+    margin-right: 10px;
+    display: block;
+
+}
+
+div#banner {
+    text-style: upper;
+}
+
+
+h5 {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+body {
+    color: #000;
+    font:16px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding: 0;
+}
+
+div#tagline {
+    font-style: italic;
+    text-align: center;
+}
+
+hr {
+    margin: 0;
+    margin-left: 200px;
+}

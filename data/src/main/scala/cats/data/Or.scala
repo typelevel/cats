@@ -93,7 +93,8 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
 
   def foldRight[C](c: C)(f: (B, C) => C): C = fold(_ => c, f(_, c))
 
-  def foldRight[C](c: Lazy[C])(f: (B, Lazy[C]) => C): Lazy[C] = fold(_ => c, b => Lazy(f(b, c)))
+  def foldLazy[C](c: Lazy[C])(f: B => Fold[C]): Lazy[C] =
+    fold(_ => c, b => c.map(f(b).complete))
 
   def merge[AA >: A](implicit ev: B <:< AA): AA = fold(identity, ev.apply)
 
@@ -125,8 +126,8 @@ sealed abstract class OrInstances extends OrInstances1 {
   class OrInstances[A] extends Traverse[A Or ?] with Monad[A Or ?] {
     def traverse[F[_]: Applicative, B, C](fa: A Or B)(f: B => F[C]): F[A Or C] = fa.traverse(f)
     def foldLeft[B, C](fa: A Or B, b: C)(f: (C, B) => C): C = fa.foldLeft(b)(f)
-    def foldRight[B, C](fa: A Or B, b: C)(f: (B, C) => C): C = fa.foldRight(b)(f)
-    def foldRight[B, C](fa: A Or B, b: Lazy[C])(f: (B, Lazy[C]) => C): Lazy[C] = fa.foldRight(b)(f)
+    override def foldRight[B, C](fa: A Or B, b: C)(f: (B, C) => C): C = fa.foldRight(b)(f)
+    def foldLazy[B, C](fa: A Or B, b: Lazy[C])(f: B => Fold[C]): Lazy[C] = fa.foldLazy(b)(f)
 
     def flatMap[B, C](fa: A Or B)(f: B => A Or C): A Or C = fa.flatMap(f)
     def pure[B](b: B): A Or B = Or.right(b)

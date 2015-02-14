@@ -1,6 +1,7 @@
 import com.typesafe.sbt.pgp.PgpKeys.publishSigned
 import com.typesafe.sbt.SbtSite.SiteKeys._
 import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
+import pl.project13.scala.sbt.SbtJmh._
 import sbtrelease.ReleaseStep
 import sbtrelease.ReleasePlugin.ReleaseKeys.releaseProcess
 import sbtrelease.ReleaseStateTransformations._
@@ -55,10 +56,9 @@ lazy val disciplineDependencies = Seq(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  apiURL := Some(url("https://non.github.io/cats/api/")),
   unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, laws, data, std),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
-  site.addMappingsToSiteDir(tut, ""),
+  site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
   scalacOptions in (ScalaUnidoc, unidoc) ++=
     Opts.doc.sourceUrl(scmInfo.value.get.browseUrl + "/tree/master${FILE_PATH}.scala"),
@@ -81,8 +81,8 @@ lazy val docs = project
 lazy val aggregate = project.in(file("."))
   .settings(catsSettings: _*)
   .settings(noPublishSettings: _*)
-  .aggregate(macros, core, laws, tests, docs, data, std)
-  .dependsOn(macros, core, laws, tests, docs, data, std)
+  .aggregate(macros, core, laws, tests, docs, data, std, bench)
+  .dependsOn(macros, core, laws, tests, docs, data, std, bench)
 
 lazy val macros = project
   .settings(moduleName := "cats-macros")
@@ -118,6 +118,12 @@ lazy val tests = project.dependsOn(macros, core, data, std, laws)
     )
   )
 
+lazy val bench = project.dependsOn(macros, core, data, std, laws)
+  .settings(moduleName := "cats-bench")
+  .settings(catsSettings: _*)
+  .settings(noPublishSettings: _*)
+  .settings(jmhSettings: _*)
+
 lazy val data = project.dependsOn(macros, core)
   .settings(moduleName := "cats-data")
   .settings(catsSettings: _*)
@@ -125,6 +131,8 @@ lazy val data = project.dependsOn(macros, core)
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/non/cats")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+  autoAPIMappings := true,
+  apiURL := Some(url("https://non.github.io/cats/api/")),
   publishMavenStyle := true,
   publishArtifact in packageDoc := false,
   publishArtifact in Test := false,
