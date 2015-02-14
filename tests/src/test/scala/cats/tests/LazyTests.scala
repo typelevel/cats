@@ -1,21 +1,16 @@
 package cats
 package tests
 
-import cats.laws.discipline.{ComonadTests, FunctorTests}
 import cats.implicits._
 import org.scalatest.FunSuite
-import org.typelevel.discipline.scalatest.Discipline
 import scala.math.min
 
 // TODO: monad laws
 
-class LazyTests extends FunSuite with Discipline {
+class LazyTests extends FunSuite {
 
   // disable scalatest ===
   override def convertToEqualizer[T](left: T) = ???
-
-  checkAll("Lazy[Int]", FunctorTests[Lazy, Int].applicative[Int, Int])
-  checkAll("Lazy[Int]", ComonadTests[Lazy, Int, Int].comonad[Int])
 
   /**
    * Class for spooky side-effects and action-at-a-distance.

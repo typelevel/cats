@@ -33,37 +33,35 @@ sealed abstract class Lazy[A] { self =>
   def value: A
 
   /**
-   * Lazily-apply the given function to this lazy value.
-   *
-   * The resulting `Lazy[B]` value is call-by-need.
-   */
-  def map[B](f: A => B): Lazy[B] =
-    ByNeed(() => f(self.value))
-
-  /**
-   * Lazily-apply the given function to this lazy value.
-   *
-   * The resulting `Lazy[B]` value is call-by-need.
-   */
-  def flatMap[B](f: A => Lazy[B]): Lazy[B] =
-    ByNeed(() => f(self.value).value)
-
-  /**
-   * Given a lazy value, create a new one which will memoize its
-   * value.
+   * Given a lazy value, create a new one which will cached
+   * (i.e. memoize) its value.
    *
    * The practical effect of this method is to convert by-name
    * instances to by-need (since eager instances already have a
    * memoized value).
    */
-  def memoize: Lazy[A] =
+  def cached: Lazy[A] =
     this match {
       case ByName(f) => ByNeed(f)
       case _ => this
     }
+
+  /**
+   * Given a lazy value, create a new one which will not cache its
+   * value (forgetting a cached value if any).
+   *
+   * The practical effect of this method is to convert by-need
+   * instances to by-name (eager instances have no way to recalculate
+   * their value so they are unaffected).
+   */
+  def uncached: Lazy[A] =
+    this match {
+      case ByNeed(f) => ByName(f)
+      case _ => this
+    }
 }
 
-object Lazy extends LazyInstances {
+object Lazy {
 
   case class Eager[A](value: A) extends Lazy[A]
 
@@ -108,59 +106,4 @@ object Lazy extends LazyInstances {
    */
   def byNeed[A](body: => A): Lazy[A] =
     ByNeed(body _)
-}
-
-trait LazyInstances extends LazyInstances1 {
-  implicit val lazyInstance: Bimonad[Lazy] =
-    new Bimonad[Lazy] {
-
-      def pure[A](a: A): Lazy[A] = Lazy.eager(a)
-
-      def extract[A](fa: Lazy[A]): A =
-        fa.value
-
-      def flatMap[A, B](fa: Lazy[A])(f: A => Lazy[B]): Lazy[B] =
-        fa.flatMap(f)
-
-      def coflatMap[A, B](fa: Lazy[A])(f: Lazy[A] => B): Lazy[B] =
-        Lazy(f(fa))
-
-      override def map[A, B](fa: Lazy[A])(f: A => B): Lazy[B] =
-        fa.map(f)
-
-      override def apply[A, B](fa: Lazy[A])(ff: Lazy[A => B]): Lazy[B] =
-        Lazy(ff.value(fa.value))
-
-      override def flatten[A](ffa: Lazy[Lazy[A]]): Lazy[A] =
-        Lazy.byName(ffa.value.value)
-
-      override def map2[A, B, Z](fa: Lazy[A], fb: Lazy[B])(f: (A, B) => Z): Lazy[Z] =
-        Lazy(f(fa.value, fb.value))
-
-      override def fmap[A, B](f: A => B): Lazy[A] => Lazy[B] =
-        la => la.map(f)
-
-      override def imap[A, B](fa: Lazy[A])(f: A => B)(fi: B => A): Lazy[B] =
-        fa.map(f)
-    }
-
-  implicit def lazyOrder[A](implicit A: Order[A]): Order[Lazy[A]] =
-    new Order[Lazy[A]] {
-      def compare(x: Lazy[A], y: Lazy[A]): Int = A.compare(x.value, y.value)
-    }
-}
-
-trait LazyInstances1 extends LazyInstances0 {
-  implicit def lazyPartialOrder[A](implicit A: PartialOrder[A]): PartialOrder[Lazy[A]] =
-    new PartialOrder[Lazy[A]] {
-      def partialCompare(x: Lazy[A], y: Lazy[A]): Double =
-        A.partialCompare(x.value, y.value)
-    }
-}
-
-trait LazyInstances0 {
-  implicit def lazyEq[A](implicit A: Eq[A]): Eq[Lazy[A]] =
-    new Eq[Lazy[A]] {
-      def eqv(x: Lazy[A], y: Lazy[A]): Boolean = A.eqv(x.value, y.value)
-    }
 }
