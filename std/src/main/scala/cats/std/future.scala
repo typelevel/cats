@@ -19,10 +19,10 @@ trait FutureInstances extends FutureInstances1 {
   implicit def futureSemigroup[A](implicit A: Semigroup[A], ec: ExecutionContext): Semigroup[Future[A]] =
     new FutureSemigroup[A]() {}
 
-  def futureEq[A](atMost: FiniteDuration)(implicit ev: Eq[A], ec: ExecutionContext): Eq[Future[A]] =
+  def futureEq[A](atMost: FiniteDuration)(implicit A: Eq[A], ec: ExecutionContext): Eq[Future[A]] =
     new Eq[Future[A]] {
 
-      def eqv(x: Future[A], y: Future[A]): Boolean = Await.result((x zip y).map((ev.eqv _).tupled), atMost)
+      def eqv(x: Future[A], y: Future[A]): Boolean = Await.result((x zip y).map((A.eqv _).tupled), atMost)
     }
 }
 
