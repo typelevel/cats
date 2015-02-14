@@ -21,8 +21,8 @@ trait FutureInstances extends FutureInstances1 {
 
   def futureEq[A](atMost: FiniteDuration)(implicit ev: Eq[A], ec: ExecutionContext): Eq[Future[A]] =
     new Eq[Future[A]] {
-      def eqv(x: Future[A], y: Future[A]): Boolean =
-        Await.result((x zip y).map((ev.eqv _).tupled), atMost)
+
+      def eqv(x: Future[A], y: Future[A]): Boolean = Await.result((x zip y).map((ev.eqv _).tupled), atMost)
     }
 }
 
