@@ -1,6 +1,5 @@
 package cats.laws.discipline
 
-import algebra.laws._
 import cats._
 import cats.laws.{CoFlatMapLaws, ComonadLaws}
 import org.scalacheck.Prop._

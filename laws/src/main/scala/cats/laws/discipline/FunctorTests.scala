@@ -1,6 +1,5 @@
 package cats.laws.discipline
 
-import algebra.laws._
 import cats._
 import cats.functor._
 import cats.laws.{ApplicativeLaws, ApplyLaws, FunctorLaws, InvariantLaws}
