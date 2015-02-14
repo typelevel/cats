@@ -19,14 +19,6 @@ trait FutureInstances extends FutureInstances1 {
   implicit def futureSemigroup[A](implicit A: Semigroup[A], ec: ExecutionContext): Semigroup[Future[A]] =
     new FutureSemigroup[A]() {}
 
-  def futureComonad(atMost: FiniteDuration)(implicit ec: ExecutionContext): Comonad[Future] =
-    new FutureCoFlatMap with Comonad[Future] {
-
-      def extract[A](x: Future[A]): A = Await.result(x, atMost)
-
-      def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
-    }
-
   def futureEq[A](atMost: FiniteDuration)(implicit ev: Eq[A], ec: ExecutionContext): Eq[Future[A]] =
     new Eq[Future[A]] {
       def eqv(x: Future[A], y: Future[A]): Boolean =
@@ -35,6 +27,14 @@ trait FutureInstances extends FutureInstances1 {
 }
 
 trait FutureInstances1 {
+
+  def futureComonad(atMost: FiniteDuration)(implicit ec: ExecutionContext): Comonad[Future] =
+    new FutureCoFlatMap with Comonad[Future] {
+
+      def extract[A](x: Future[A]): A = Await.result(x, atMost)
+
+      def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
+    }
 
   implicit def futureMonoid[A](implicit A: Monoid[A], ec: ExecutionContext): Monoid[Future[A]] =
     new FutureSemigroup[A] with Monoid[Future[A]] {
