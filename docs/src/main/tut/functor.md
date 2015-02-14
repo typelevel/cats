@@ -17,9 +17,9 @@ The Functor category involves a single operation, named `map`:
 def map[A, B](fa: F[A])(f: A => B): F[B]
 ```
 
-This method takes a Function from A => B and turns an F[A] into an
+This method takes a function from A => B and turns an F[A] into an
 F[B].  The name of the method `map` should remind you of the `map`
-method that exists on many classes in the scala standard library. some
+method that exists on many classes in the Scala standard library. some
 Examples of map functions:
 
 ```tut
@@ -43,7 +43,7 @@ implicit val listFunctor: Functor[List] = new Functor[List] {
 }
 ```
 
-However Functors can also be creted for types which don't have a map
+However Functors can also be created for types which don't have a map
 method. An example of this would be that Functions which take a String
 form a functor using andThen as the map operation:
 
