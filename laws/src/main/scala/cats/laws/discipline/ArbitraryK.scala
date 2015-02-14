@@ -41,4 +41,10 @@ object ArbitraryK {
 
   implicit def cokleisliA[F[_], A]: ArbitraryK[Cokleisli[F, A, ?]] =
     new ArbitraryK[Cokleisli[F, A, ?]]{ def synthesize[B: Arbitrary]: Arbitrary[Cokleisli[F, A, B]] = implicitly }
+
+  implicit val stream: ArbitraryK[Stream] =
+    new ArbitraryK[Stream] { def synthesize[A: Arbitrary]: Arbitrary[Stream[A]] = implicitly }
+
+  implicit val vector: ArbitraryK[Vector] =
+    new ArbitraryK[Vector] { def synthesize[A: Arbitrary]: Arbitrary[Vector[A]] = implicitly }
 }
