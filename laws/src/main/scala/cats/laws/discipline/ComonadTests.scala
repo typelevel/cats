@@ -27,7 +27,7 @@ trait ComonadTests[F[_], A, B] extends Laws {
   implicit def ArbFB: Arbitrary[F[B]] = ArbF.synthesize[B](ArbB)
 
   def coflatmap[C: Arbitrary](implicit F: CoFlatMap[F], FC: Eq[F[C]]) = {
-    val laws = new CoFlatMapLaws[F]
+    val laws = CoFlatMapLaws[F]
     new ComonadProperties(
       name = "coflatmap",
       parents = Nil,
@@ -39,7 +39,7 @@ trait ComonadTests[F[_], A, B] extends Laws {
   }
 
   def comonad[C: Arbitrary](implicit F: Comonad[F], FC: Eq[F[C]], B: Eq[B]) = {
-    val laws = new ComonadLaws[F]
+    val laws = ComonadLaws[F]
     new ComonadProperties(
       name = "comonad",
       parents = Seq(coflatmap[C]),
