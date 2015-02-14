@@ -25,7 +25,7 @@ trait FunctorTests[F[_], A] extends Laws {
   implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A](ArbA)
 
   def invariant[B: Arbitrary, C: Arbitrary](implicit F: Invariant[F], FC: Eq[F[C]]) = {
-    val laws = new InvariantLaws[F]
+    val laws = InvariantLaws[F]
     new FunctorProperties(
       name = "functor",
       parents = Nil,
@@ -40,7 +40,7 @@ trait FunctorTests[F[_], A] extends Laws {
   }
 
   def covariant[B: Arbitrary, C: Arbitrary](implicit F: Functor[F], FC: Eq[F[C]]) = {
-    val laws = new FunctorLaws[F]
+    val laws = FunctorLaws[F]
     new FunctorProperties(
       name = "functor",
       parents = Seq(invariant[B, C]),
@@ -57,7 +57,7 @@ trait FunctorTests[F[_], A] extends Laws {
   def apply[B: Arbitrary, C: Arbitrary](implicit F: Apply[F], FC: Eq[F[C]]) = {
     implicit val ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
     implicit val ArbFBC: Arbitrary[F[B => C]] = ArbF.synthesize[B => C]
-    val laws = new ApplyLaws[F]
+    val laws = ApplyLaws[F]
     new FunctorProperties(
       name = "apply",
       parents = Seq(covariant[B, C]),
@@ -76,7 +76,7 @@ trait FunctorTests[F[_], A] extends Laws {
     implicit val ArbFAC: Arbitrary[F[A => C]] = ArbF.synthesize[A => C]
     implicit val ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
     implicit val ArbFBC: Arbitrary[F[B => C]] = ArbF.synthesize[B => C]
-    val laws = new ApplicativeLaws[F]
+    val laws = ApplicativeLaws[F]
     new FunctorProperties(
       name = "applicative",
       parents = Seq(apply[B, C]),
