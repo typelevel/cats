@@ -29,14 +29,8 @@ trait FunctorTests[F[_], A] extends Laws {
     new FunctorProperties(
       name = "functor",
       parents = Nil,
-      "invariant identity" -> forAll { (fa: F[A]) =>
-        val (lhs, rhs) = laws.invariantIdentity(fa)
-        lhs ?== rhs
-      },
-      "invariant composition" -> forAll { (fa: F[A], f1: A => B, f2: B => A, g1: B => C, g2: C => B) =>
-        val (lhs, rhs) = laws.invariantComposition(fa, f1, f2, g1, g2)
-        lhs ?== rhs
-      })
+      "invariant identity" -> forAll(laws.invariantIdentity[A] _),
+      "invariant composition" -> forAll(laws.invariantComposition[A, B, C] _))
   }
 
   def covariant[B: Arbitrary, C: Arbitrary](implicit F: Functor[F], FC: Eq[F[C]]) = {
@@ -44,14 +38,8 @@ trait FunctorTests[F[_], A] extends Laws {
     new FunctorProperties(
       name = "functor",
       parents = Seq(invariant[B, C]),
-      "covariant identity" -> forAll { (fa: F[A]) =>
-        val (lhs, rhs) = laws.covariantIdentity(fa)
-        lhs ?== rhs
-      },
-      "covariant composition" -> forAll { (fa: F[A], f: A => B, g: B => C) =>
-        val (lhs, rhs) = laws.covariantComposition(fa, f, g)
-        lhs ?== rhs
-      })
+      "covariant identity" -> forAll(laws.covariantIdentity[A] _),
+      "covariant composition" -> forAll(laws.covariantComposition[A, B, C] _))
   }
 
   def apply[B: Arbitrary, C: Arbitrary](implicit F: Apply[F], FC: Eq[F[C]]) = {
@@ -61,15 +49,7 @@ trait FunctorTests[F[_], A] extends Laws {
     new FunctorProperties(
       name = "apply",
       parents = Seq(covariant[B, C]),
-      "apply composition" -> forAll { (fa: F[A], fab: F[A => B], fbc: F[B => C]) =>
-        try {
-          val (lhs, rhs) = laws.applyComposition(fa, fab, fbc)
-          lhs ?== rhs
-        } catch { case (e: StackOverflowError) =>
-            e.printStackTrace
-            throw e
-        }
-      })
+      "apply composition" -> forAll(laws.applyComposition[A, B, C] _))
   }
 
   def applicative[B: Arbitrary, C: Arbitrary](implicit F: Applicative[F], FC: Eq[F[C]]) = {
@@ -80,26 +60,11 @@ trait FunctorTests[F[_], A] extends Laws {
     new FunctorProperties(
       name = "applicative",
       parents = Seq(apply[B, C]),
-      "applicative identity" -> forAll { (fa: F[A]) =>
-        val (lhs, rhs) = laws.applicativeIdentity(fa)
-        lhs ?== rhs
-      },
-      "applicative homomorphism" -> forAll { (a: A, f: A => C) =>
-        val (lhs, rhs) = laws.applicativeHomomorphism(a, f)
-        lhs ?== rhs
-      },
-      "applicative interchange" -> forAll { (a: A, ff: F[A => C]) =>
-        val (lhs, rhs) = laws.applicativeInterchange(a, ff)
-        lhs ?== rhs
-      },
-      "applicative map" -> forAll { (fa: F[A], f: A => C) =>
-        val (lhs, rhs) = laws.applicativeMap(fa, f)
-        lhs ?== rhs
-      },
-      "applicative composition" -> forAll { (fa: F[A], fab: F[A => B], fbc: F[B => C]) =>
-        val (lhs, rhs) = laws.applicativeComposition(fa, fab, fbc)
-        lhs ?== rhs
-      })
+      "applicative identity" -> forAll(laws.applicativeIdentity[A] _),
+      "applicative homomorphism" -> forAll(laws.applicativeHomomorphism[A, C] _),
+      "applicative interchange" -> forAll(laws.applicativeInterchange[A, C] _),
+      "applicative map" -> forAll(laws.applicativeMap[A, C] _),
+      "applicative composition" -> forAll(laws.applicativeComposition[A, B, C] _))
     }
 
   class FunctorProperties(
