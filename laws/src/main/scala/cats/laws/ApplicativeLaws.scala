@@ -23,9 +23,9 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
     fa.map(f) <-> fa.apply(F.pure(f))
 
   /**
-   * This law is [[applyComposition]] stated in terms of [[Applicative.pure]].
-   * It is a combination of [[applyComposition]] and [[applicativeMap]] and
-   * hence not strictly necessary.
+   * This law is [[applyComposition]] stated in terms of `pure`. It is a
+   * combination of [[applyComposition]] and [[applicativeMap]] and hence not
+   * strictly necessary.
    */
   def applicativeComposition[A, B, C](fa: F[A], fab: F[A => B], fbc: F[B => C]): IsEq[F[C]] = {
     val compose: (B => C) => (A => B) => (A => C) = _.compose
