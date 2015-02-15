@@ -10,7 +10,7 @@ import cats.syntax.coflatMap._
 trait CoflatMapLaws[F[_]] extends FunctorLaws[F] {
   implicit override def F: CoflatMap[F]
 
-  def coFlatMapAssociativity[A, B, C](fa: F[A], f: F[A] => B, g: F[B] => C): IsEq[F[C]] =
+  def coflatMapAssociativity[A, B, C](fa: F[A], f: F[A] => B, g: F[B] => C): IsEq[F[C]] =
     fa.coflatMap(f).coflatMap(g) <-> fa.coflatMap(x => g(x.coflatMap(f)))
 
   /**

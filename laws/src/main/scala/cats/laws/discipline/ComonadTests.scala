@@ -30,7 +30,7 @@ trait ComonadTests[F[_], A, B] extends Laws {
     new ComonadProperties(
       name = "coflatMap",
       parents = Nil,
-      "associativity" -> forAll(laws.coFlatMapAssociativity[A, B, C] _))
+      "associativity" -> forAll(laws.coflatMapAssociativity[A, B, C] _))
   }
 
   def comonad[C: Arbitrary](implicit F: Comonad[F], FC: Eq[F[C]], B: Eq[B]) = {
