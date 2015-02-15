@@ -10,11 +10,11 @@ import cats.syntax.comonad._
 trait ComonadLaws[F[_]] extends CoflatMapLaws[F] {
   implicit override def F: Comonad[F]
 
-  def comonadLeftIdentity[A](fa: F[A]): (F[A], F[A]) =
-    fa.coflatMap(_.extract) -> fa
+  def comonadLeftIdentity[A](fa: F[A]): IsEq[F[A]] =
+    fa.coflatMap(_.extract) <-> fa
 
-  def comonadRightIdentity[A, B](fa: F[A], f: F[A] => B): (B, B) =
-    fa.coflatMap(f).extract -> f(fa)
+  def comonadRightIdentity[A, B](fa: F[A], f: F[A] => B): IsEq[B] =
+    fa.coflatMap(f).extract <-> f(fa)
 }
 
 object ComonadLaws {

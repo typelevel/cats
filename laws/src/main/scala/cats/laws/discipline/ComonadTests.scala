@@ -1,6 +1,5 @@
 package cats.laws.discipline
 
-import algebra.laws._
 import cats._
 import cats.laws.{CoflatMapLaws, ComonadLaws}
 import org.scalacheck.Prop._
@@ -31,11 +30,7 @@ trait ComonadTests[F[_], A, B] extends Laws {
     new ComonadProperties(
       name = "coflatMap",
       parents = Nil,
-      "associativity" -> forAll { (fa: F[A], f: F[A] => B, g: F[B] => C) =>
-        val (lhs, rhs) = laws.coFlatMapAssociativity(fa, f, g)
-        lhs ?== rhs
-      }
-    )
+      "associativity" -> forAll(laws.coflatMapAssociativity[A, B, C] _))
   }
 
   def comonad[C: Arbitrary](implicit F: Comonad[F], FC: Eq[F[C]], B: Eq[B]) = {
@@ -43,15 +38,8 @@ trait ComonadTests[F[_], A, B] extends Laws {
     new ComonadProperties(
       name = "comonad",
       parents = Seq(coflatmap[C]),
-      "left identity" -> forAll { (fa: F[A]) =>
-        val (lhs, rhs) = laws.comonadLeftIdentity(fa)
-        lhs ?== rhs
-      },
-      "right identity" -> forAll { (fa: F[A], f: F[A] => B) =>
-        val (lhs, rhs) = laws.comonadRightIdentity(fa, f)
-        lhs ?== rhs
-      }
-    )
+      "left identity" -> forAll(laws.comonadLeftIdentity[A] _),
+      "right identity" -> forAll(laws.comonadRightIdentity[A, B] _))
   }
 
   class ComonadProperties(

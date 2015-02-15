@@ -9,11 +9,11 @@ import cats.syntax.contravariant._
 trait ContravariantLaws[F[_]] extends InvariantLaws[F] {
   implicit override def F: Contravariant[F]
 
-  def contravariantIdentity[A](fa: F[A]): (F[A], F[A]) =
-    fa.contramap(identity[A]) -> fa
+  def contravariantIdentity[A](fa: F[A]): IsEq[F[A]] =
+    fa.contramap(identity[A]) <-> fa
 
-  def contravariantComposition[A, B, C](fa: F[A], f: B => A, g: C => B): (F[C], F[C]) =
-    fa.contramap(f).contramap(g) -> fa.contramap(f compose g)
+  def contravariantComposition[A, B, C](fa: F[A], f: B => A, g: C => B): IsEq[F[C]] =
+    fa.contramap(f).contramap(g) <-> fa.contramap(f compose g)
 }
 
 object ContravariantLaws {

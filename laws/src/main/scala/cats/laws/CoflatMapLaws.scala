@@ -10,16 +10,16 @@ import cats.syntax.coflatMap._
 trait CoflatMapLaws[F[_]] extends FunctorLaws[F] {
   implicit override def F: CoflatMap[F]
 
-  def coFlatMapAssociativity[A, B, C](fa: F[A], f: F[A] => B, g: F[B] => C): (F[C], F[C]) =
-    fa.coflatMap(f).coflatMap(g) -> fa.coflatMap(x => g(x.coflatMap(f)))
+  def coflatMapAssociativity[A, B, C](fa: F[A], f: F[A] => B, g: F[B] => C): IsEq[F[C]] =
+    fa.coflatMap(f).coflatMap(g) <-> fa.coflatMap(x => g(x.coflatMap(f)))
 
   /**
    * The composition of [[cats.data.Cokleisli]] arrows is associative. This is
    * analogous to the associativity law of [[CoflatMap.coflatMap]].
    */
-  def cokleisliAssociativity[A, B, C, D](f: F[A] => B, g: F[B] => C, h: F[C] => D, fa: F[A]): (D, D) = {
+  def cokleisliAssociativity[A, B, C, D](f: F[A] => B, g: F[B] => C, h: F[C] => D, fa: F[A]): IsEq[D] = {
     val (cf, cg, ch) = (Cokleisli(f), Cokleisli(g), Cokleisli(h))
-    ((ch compose cg) compose cf).run(fa) -> (ch compose (cg compose cf)).run(fa)
+    ((ch compose cg) compose cf).run(fa) <-> (ch compose (cg compose cf)).run(fa)
   }
 }
 
