@@ -1,7 +1,7 @@
 package cats.laws.discipline
 
 import cats._
-import cats.laws.{CoFlatMapLaws, ComonadLaws}
+import cats.laws.{CoflatMapLaws, ComonadLaws}
 import org.scalacheck.Prop._
 import org.scalacheck.{Arbitrary, Prop}
 import org.typelevel.discipline.Laws
@@ -25,10 +25,10 @@ trait ComonadTests[F[_], A, B] extends Laws {
   implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A](ArbA)
   implicit def ArbFB: Arbitrary[F[B]] = ArbF.synthesize[B](ArbB)
 
-  def coflatmap[C: Arbitrary](implicit F: CoFlatMap[F], FC: Eq[F[C]]) = {
-    val laws = CoFlatMapLaws[F]
+  def coflatmap[C: Arbitrary](implicit F: CoflatMap[F], FC: Eq[F[C]]) = {
+    val laws = CoflatMapLaws[F]
     new ComonadProperties(
-      name = "coflatmap",
+      name = "coflatMap",
       parents = Nil,
       "associativity" -> forAll(laws.coFlatMapAssociativity[A, B, C] _))
   }
