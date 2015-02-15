@@ -82,6 +82,7 @@ Apply[Option].apply2(Some(1), Some(2))(None)
 ## composition
 
 Like Functors, Apply instances also compose:
+
 ```tut
 val listOpt = Apply[List] compose Apply[Option]
 val plusOne = (x:Int) => x + 1
