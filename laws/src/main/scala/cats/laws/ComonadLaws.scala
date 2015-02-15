@@ -7,7 +7,7 @@ import cats.syntax.comonad._
 /**
  * Laws that must be obeyed by any [[Comonad]].
  */
-trait ComonadLaws[F[_]] extends CoFlatMapLaws[F] {
+trait ComonadLaws[F[_]] extends CoflatMapLaws[F] {
   implicit override def F: Comonad[F]
 
   def comonadLeftIdentity[A](fa: F[A]): (F[A], F[A]) =

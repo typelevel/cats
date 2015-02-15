@@ -4,8 +4,8 @@ package std
 import scala.annotation.tailrec
 
 trait StreamInstances {
-  implicit val streamInstance: Traverse[Stream] with MonadCombine[Stream] with CoFlatMap[Stream] =
-    new Traverse[Stream] with MonadCombine[Stream] with CoFlatMap[Stream] {
+  implicit val streamInstance: Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] =
+    new Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
 
