@@ -1,7 +1,10 @@
 package cats
 package data
 
-final case class OneAnd[A, F[_]](head: A, tail: F[A])
+final case class OneAnd[A, F[_]](head: A, tail: F[A]){
+  def reduceLeft[B](f: A => B)(g: (B, A) => B)(implicit F: Foldable[F]): B =
+    F.foldLeft(tail, f(head))(g)
+}
 
 trait OneAndInstances {
 
