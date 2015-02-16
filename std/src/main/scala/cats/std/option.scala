@@ -40,7 +40,7 @@ trait OptionInstances {
       def foldLazy[A, B](fa: Option[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
         fa match {
           case None => b
-          case Some(a) => b.map(f(a).complete)
+          case Some(a) => Lazy(f(a).complete(b.value))
         }
 
       def traverse[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =

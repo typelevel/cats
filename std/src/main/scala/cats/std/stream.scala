@@ -42,12 +42,12 @@ trait StreamInstances {
         // until we are ready to prepend the stream's head with #::
         val gslb = G.pure(Lazy.byName(Stream.empty[B]))
         val gsb = foldRight(fa, gslb) { (a, lacc) =>
-          G.map2(f(a), lacc)((b, acc) => Lazy.byName(b #:: acc.force))
+          G.map2(f(a), lacc)((b, acc) => Lazy.byName(b #:: acc.value))
         }
         // this only forces the first element of the stream, so we get
         // G[Stream[B]] instead of G[Lazy[Stream[B]]]. the rest of the
         // stream will be properly lazy.
-        G.map(gsb)(_.force)
+        G.map(gsb)(_.value)
       }
     }
 }

@@ -94,7 +94,7 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   def foldRight[C](c: C)(f: (B, C) => C): C = fold(_ => c, f(_, c))
 
   def foldLazy[C](c: Lazy[C])(f: B => Fold[C]): Lazy[C] =
-    fold(_ => c, b => c.map(f(b).complete))
+    fold(_ => c, b => Lazy(f(b).complete(c.value)))
 
   def merge[AA >: A](implicit ev: B <:< AA): AA = fold(identity, ev.apply)
 
