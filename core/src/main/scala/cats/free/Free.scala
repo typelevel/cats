@@ -24,6 +24,10 @@ object Free {
       val a = a0
       val f = f0
     }
+
+  /** Suspends a value within a functor lifting it to a Free */
+  def liftF[F[_], A](value: => F[A])(implicit F: Functor[F]): Free[F, A] =
+    Suspend(F.map(value)(Pure[F, A]))
 }
 
 import Free._
