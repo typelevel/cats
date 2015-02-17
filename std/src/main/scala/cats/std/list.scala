@@ -2,6 +2,7 @@ package cats
 package std
 
 import algebra.Eq
+import algebra.std.ListMonoid
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
@@ -71,4 +72,6 @@ trait ListInstances {
         loop(x, y)
       }
     }
+
+  implicit def listAlgebra[A]: Monoid[List[A]] = new ListMonoid[A]
 }
