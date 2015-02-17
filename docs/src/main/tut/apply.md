@@ -87,9 +87,9 @@ First, import `cats.syntax.all._` or `cats.syntax.apply._`. Here we see that fol
 import cats.syntax.apply._
 
 def f1(a: Option[Int], b: Option[Int], c: Option[Int]) =
-  a |@| b |@| c map { _ * _ * _ }
+  (a |@| b |@| c) map { _ * _ * _ }
 def f2(a: Option[Int], b: Option[Int], c: Option[Int]) =
-  Apply[Option].map3(a, b, c )(_ * _ * _)
+  Apply[Option].map3(a, b, c)(_ * _ * _)
 
 f1(Some(1), Some(2), Some(3))
 
