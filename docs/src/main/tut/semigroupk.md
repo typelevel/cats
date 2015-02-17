@@ -54,7 +54,7 @@ are type constructors in that you can think of them as "functions" in
 the type space. You can think of the list type as a function which
 takes a concrete type, like `Int` and returns a concrete type:
 `List[Int]`. This pattern would also be referred to having `kind: * ->
-*`, whereas Int would have kind `*` and Map would have kind *,* -> *,
+*`, whereas Int would have kind `*` and Map would have kind `*,* -> *`,
 and, in fact, the `K` in `SemigroupK` stands for `Kind`.
 
 For list, the `SemigroupK` instance behaves the same, it is still just
