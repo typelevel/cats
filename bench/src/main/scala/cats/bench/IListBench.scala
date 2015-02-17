@@ -16,6 +16,11 @@ class IListBench {
   val fixList: List[Int] = (1 to 100).toList
   val fixIList: IList[Int] = IList(1 to 100: _*)
 
+  @Benchmark def prependIList(in: IListInput): IList[Int] =
+    3 :: in.iList
+
+  @Benchmark def prependList(in: ListInput): List[Int] =
+    3 :: in.list
 
   @Benchmark def mapIList(in: IListInput): IList[Int] =
     in.iList.map(_ + 1)
@@ -51,10 +56,10 @@ class IListBench {
   @Benchmark def lastOptionList(in: ListInput): Option[Int] =
     in.list.lastOption
 
-@Benchmark def appendIList(in1: IListInput, in2: IListInput): IList[Int] =
+@Benchmark def concatIList(in1: IListInput, in2: IListInput): IList[Int] =
   in1.iList ::: in2.iList
 
-  @Benchmark def appendList(in1: ListInput, in2: ListInput): List[Int] =
+  @Benchmark def concatList(in1: ListInput, in2: ListInput): List[Int] =
     in1.list ::: in2.list
 
   @Benchmark def flatMapIList(in: IListInput): IList[Int] =

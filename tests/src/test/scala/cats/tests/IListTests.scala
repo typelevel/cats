@@ -31,7 +31,7 @@ class IListTests extends FunSuite with Checkers with Discipline {
 
   test("foldLeft with cons reverse the list") {
     check((as: IList[Int]) =>
-      as.foldLeft(IList.empty[Int])(_.cons(_)).toList === as.toList.reverse
+      as.foldLeft(IList.empty[Int])(_.prepend(_)).toList === as.toList.reverse
     )
   }
 
@@ -61,7 +61,7 @@ class IListTests extends FunSuite with Checkers with Discipline {
     )
   }
 
-  test("append") {
+  test(":::") {
     check((xs: IList[Int], ys: IList[Int]) =>
       xs ::: ys === IList.fromFoldable(xs.toList ::: ys.toList)
     )

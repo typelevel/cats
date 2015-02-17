@@ -13,21 +13,13 @@ import scala.annotation.tailrec
 sealed abstract class IList[A] extends Product with Serializable {
   import cats.data.IList._
 
-  /** append an [[IList]] to the front */
-  final def append(as: IList[A]): IList[A] =
+  /** add an [[IList]] to the front */
+  final def concat(as: IList[A]): IList[A] =
     as.reverse.foldLeft(this)((acc, a) => ICons(a, acc))
 
-  /** alias for append */
+  /** alias for concat */
   final def :::(as: IList[A]): IList[A] =
     as.reverse.foldLeft(this)((acc, a) => ICons(a, acc))
-
-  /** append an element to the head of an [[IList]] */
-  final def cons(a: A): IList[A] =
-    ICons(a, this)
-
-  /** alias for cons */
-  final def ::(a: A): IList[A] =
-    ICons(a, this)
 
   /** drop the `n` first elements */
   @tailrec final def drop(n: Int): IList[A] = this match {
@@ -117,6 +109,14 @@ sealed abstract class IList[A] extends Product with Serializable {
   final def map[B](f: A => B): IList[B] =
     reverse.foldLeft(empty[B])((acc, a) => ICons(f(a), acc))
 
+  /** add an element to the head of an [[IList]] */
+  final def prepend(a: A): IList[A] =
+    ICons(a, this)
+
+  /** alias for prepend */
+  final def ::(a: A): IList[A] =
+    ICons(a, this)
+
   /** reverse an [[IList]] */
   final def reverse: IList[A] =
     foldLeft(empty[A])((acc, a) => ICons(a, acc))
@@ -176,7 +176,7 @@ sealed abstract class IList[A] extends Product with Serializable {
     "[" + toNel.fold("")(_.reduceLeft(_.toString)((acc, a) => a.toString + "," + acc)) + "]"
 
   final def traverse[G[_], B](f: A => G[B])(implicit G: Applicative[G]): G[IList[B]] =
-    reverse.foldLeft(G.pure(empty[B]))((acc, a) => G.map2(acc, f(a))(_.cons(_)))
+    reverse.foldLeft(G.pure(empty[B]))((acc, a) => G.map2(acc, f(a))(_.prepend(_)))
 
   /** attempt to get head and tail of an [[IList]] */
   final def uncons: Option[(A, IList[A])] = this match {
@@ -263,7 +263,7 @@ sealed abstract class IListInstances {
       IList.empty
 
     def combine[A](x: IList[A], y: IList[A]): IList[A] =
-      x append y
+      x concat y
   }
 
   implicit def ilistMonoid[A]: Monoid[IList[A]] = new Monoid[IList[A]] {
@@ -271,6 +271,6 @@ sealed abstract class IListInstances {
       IList.empty
 
     def combine(x: IList[A], y: IList[A]): IList[A] =
-      x append y
+      x concat y
   }
 }
