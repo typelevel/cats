@@ -1,4 +1,5 @@
-package cats.laws.discipline
+package cats
+package laws.discipline
 
 import cats.data.{Cokleisli, Kleisli, Or, Const}
 import org.scalacheck.Arbitrary
@@ -27,6 +28,12 @@ object ArbitraryK {
 
   implicit val list: ArbitraryK[List] =
     new ArbitraryK[List] { def synthesize[A: Arbitrary]: Arbitrary[List[A]] = implicitly }
+
+  implicit val lazy_ : ArbitraryK[Lazy] =
+    new ArbitraryK[Lazy] {
+      def synthesize[A](implicit A: Arbitrary[A]): Arbitrary[Lazy[A]] =
+        Arbitrary(A.arbitrary.map(Lazy(_)))
+    }
 
   implicit def constA[A](implicit A: Arbitrary[A]): ArbitraryK[Const[A, ?]] =
     new ArbitraryK[Const[A, ?]] { def synthesize[B: Arbitrary]: Arbitrary[Const[A, B]] = implicitly }

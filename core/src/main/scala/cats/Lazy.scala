@@ -1,69 +1,109 @@
 package cats
 
+/**
+ * Represents a value which may not yet be evaluated.
+ *
+ * Lazy provides a method to abstract across the evaluation strategy
+ * in Scala. There are three supported strategies:
+ *
+ *  - `Lazy(...)`: call-by-need semantics; the value of `...` will not
+ *     be calculated until needed, but will be calculated at most once
+ *     (and saved via memoization). Corresponds to Scala's `lazy val`.
+ *
+ *  - `Lazy.eager(...)`: call-by-value semantics; the value of `...`
+ *    will be immediately calculated and saved. This is the default
+ *    strategy used by Scala. Corresponds to Scala's `val`.
+ *
+ *  - `Lazy.byName(...)`: call-by-name semantics; the value of `...`
+ *    will not be calculated until needed, and will be calculated
+ *    every time it is needed. Corresponds to Scala's `def`.
+ *
+ * Every Lazy[A] value has (or can calculate) a corresponding A
+ * value. You can obtain this value by calling the `.value` method.
+ */
 sealed abstract class Lazy[A] { self =>
-  def force: A
 
-  def map[B](f: A => B): Lazy[B] =
-    new Lazy[B] {
-      def force: B = f(self.force)
+  import Lazy.{ByNeed, ByName, Eager}
+
+  /**
+   * Obtain the underlying value from this lazy instance. If the value
+   * has already been calculated, it will be returned. Otherwise, it
+   * will be calculated and returned (and optionally memoized).
+   */
+  def value: A
+
+  /**
+   * Given a lazy value, create a new one which will cached
+   * (i.e. memoize) its value.
+   *
+   * The practical effect of this method is to convert by-name
+   * instances to by-need (since eager instances already have a
+   * memoized value).
+   */
+  def cached: Lazy[A] =
+    this match {
+      case ByName(f) => ByNeed(f)
+      case _ => this
     }
 
-  def flatMap[B](f: A => Lazy[B]): Lazy[B] =
-    new Lazy[B] {
-      def force: B = f(self.force).force
+  /**
+   * Given a lazy value, create a new one which will not cache its
+   * value (forgetting a cached value if any).
+   *
+   * The practical effect of this method is to convert by-need
+   * instances to by-name (eager instances have no way to recalculate
+   * their value so they are unaffected).
+   */
+  def uncached: Lazy[A] =
+    this match {
+      case ByNeed(f) => ByName(f)
+      case _ => this
     }
 }
 
 object Lazy {
-  def apply[A](a: => A): Lazy[A] =
-    new Lazy[A] {
-      lazy val memo = a
-      def force: A = memo
-    }
 
-  def memo[A](a: => A): Lazy[A] =
-    apply(a)
+  case class Eager[A](value: A) extends Lazy[A]
 
+  case class ByName[A](f: () => A) extends Lazy[A] {
+    def value: A = f()
+  }
+
+  case class ByNeed[A](f: () => A) extends Lazy[A] {
+    lazy val memo = f()
+    def value: A = memo
+  }
+
+  /**
+   * Construct a lazy value.
+   *
+   * This instance will be call-by-need (`body` will not be evaluated
+   * until needed).
+   */
+  def apply[A](body: => A): Lazy[A] =
+    ByNeed(body _)
+
+  /**
+   * Construct a lazy value.
+   *
+   * This instance will be call-by-value (`a` will have already been
+   * evaluated).
+   */
   def eager[A](a: A): Lazy[A] =
-    new Lazy[A] {
-      def force: A = a
-    }
+    Eager(a)
 
-  def byName[A](a: => A): Lazy[A] =
-    new Lazy[A] {
-      def force: A = a
-    }
+  /**
+   * Construct a lazy value.
+   *
+   * This instance will be call-by-name (`body` will not be evaluated
+   * until needed).
+   */
+  def byName[A](body: => A): Lazy[A] =
+    ByName(body _)
 
-  implicit val lazyInstance: Bimonad[Lazy] =
-    new Bimonad[Lazy] {
-
-      def pure[A](a: A): Lazy[A] = Lazy.eager(a)
-
-      def extract[A](fa: Lazy[A]): A =
-        fa.force
-
-      def flatMap[A, B](fa: Lazy[A])(f: A => Lazy[B]): Lazy[B] =
-        fa.flatMap(f)
-
-      def coflatMap[A, B](fa: Lazy[A])(f: Lazy[A] => B): Lazy[B] =
-        Lazy(f(fa))
-
-      override def map[A, B](fa: Lazy[A])(f: A => B): Lazy[B] =
-        fa.map(f)
-
-      override def apply[A, B](fa: Lazy[A])(ff: Lazy[A => B]): Lazy[B] =
-        Lazy(ff.force(fa.force))
-
-      override def flatten[A](ffa: Lazy[Lazy[A]]): Lazy[A] =
-        Lazy.byName(ffa.force.force)
-
-      override def map2[A, B, Z](fa: Lazy[A], fb: Lazy[B])(f: (A, B) => Z): Lazy[Z] =
-        Lazy(f(fa.force, fb.force))
-
-      override def fmap[A, B](f: A => B): Lazy[A] => Lazy[B] =
-        la => la.map(f)
-
-      override def imap[A, B](fa: Lazy[A])(f: A => B)(fi: B => A): Lazy[B] =
-        fa.map(f)
-    }
+  /**
+   * Alias for `apply`, to mirror the `byName` method.
+   */
+  def byNeed[A](body: => A): Lazy[A] =
+    ByNeed(body _)
 }

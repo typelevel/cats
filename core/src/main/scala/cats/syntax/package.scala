@@ -4,7 +4,7 @@ package object syntax {
   object all extends AllSyntax
   object apply extends ApplySyntax
   object bifunctor extends BifunctorSyntax
-  object coflatMap extends CoFlatMapSyntax
+  object coflatMap extends CoflatMapSyntax
   object comonad extends ComonadSyntax
   object compose extends ComposeSyntax
   object contravariant extends ContravariantSyntax

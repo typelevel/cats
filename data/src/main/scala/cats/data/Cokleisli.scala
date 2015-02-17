@@ -1,7 +1,7 @@
 package cats.data
 
 import cats.functor.Profunctor
-import cats.{Monad, CoFlatMap, Functor}
+import cats.{Monad, CoflatMap, Functor}
 
 final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
 
@@ -20,10 +20,10 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
   def flatMap[C](f: B => Cokleisli[F, A, C]): Cokleisli[F, A, C] =
     Cokleisli(fa => f(self.run(fa)).run(fa))
 
-  def compose[C](c: Cokleisli[F, B, C])(implicit F: CoFlatMap[F]): Cokleisli[F, A, C] =
-    Cokleisli(fa => c.run(F.coflatMap(fa)(run)))
+  def compose[C](c: Cokleisli[F, C, A])(implicit F: CoflatMap[F]): Cokleisli[F, C, B] =
+    Cokleisli(fc => run(F.coflatMap(fc)(c.run)))
 
-  def andThen[C](c: Cokleisli[F, C, A])(implicit F: CoFlatMap[F]): Cokleisli[F, C, B] =
+  def andThen[C](c: Cokleisli[F, B, C])(implicit F: CoflatMap[F]): Cokleisli[F, A, C] =
     c compose this
 }
 

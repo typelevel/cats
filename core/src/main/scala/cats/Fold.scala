@@ -20,7 +20,7 @@ package cats
  *     val count: Lazy[Int] = List(1,2,3,4).foldLazy(Lazy(0))(f)
  * }}}
  *
- * When we call `count.force`, the following occurs:
+ * When we call `count.value`, the following occurs:
  *
  *  - `f(1)` produces `res0: Continue(_ + 1)`
  *  - `f(2)` produces `res1: Continue(_ + 1)`
@@ -54,7 +54,7 @@ package cats
  * }}}
  *
  * This strange example counts an infinite stream. Since the result is
- * lazy, it will only hang the program once `count.force` is called:
+ * lazy, it will only hang the program once `count.value` is called:
  *
  * {{{
  *    val count: Lazy[Long] =
@@ -69,7 +69,7 @@ package cats
  *    def foldl[A, B](as: List[A], b: B)(f: (B, A) => B): B =
  *      as.foldLazy(Lazy((b: B) => b)) { a =>
  *        Fold.Continue(g => (b: B) => g(f(b, a)))
- *      }.force(b)
+ *      }.value(b)
  * }}}
  *
  * (In practice you would not want to use the `foldl` because it is
@@ -129,7 +129,7 @@ object Fold {
           case Continue(f) => loop(it, f :: fs)
           case _ => loop(it, fs)
         }
-      } else unroll(b.force, fs)
+      } else unroll(b.value, fs)
     Lazy(loop(as.iterator, Nil))
   }
 }

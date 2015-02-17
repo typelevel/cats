@@ -26,4 +26,7 @@ object Show {
       show[B](fa.show _ compose f)
   }
 
+  class ToStringShow[A] extends Show[A] {
+    def show(a: A): String = a.toString
+  }
 }

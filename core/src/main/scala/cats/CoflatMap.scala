@@ -3,9 +3,9 @@ package cats
 import simulacrum._
 
 /**
- * Must obey the laws defined in [[laws.CoFlatMapLaws]].
+ * Must obey the laws defined in [[laws.CoflatMapLaws]].
  */
-@typeclass trait CoFlatMap[F[_]] extends Functor[F] {
+@typeclass trait CoflatMap[F[_]] extends Functor[F] {
   def coflatMap[A, B](fa: F[A])(f: F[A] => B): F[B]
 
   def coflatten[A](fa: F[A]): F[F[A]] =
