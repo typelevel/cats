@@ -16,6 +16,6 @@ class FutureTests extends FunSuite with Discipline {
   implicit val eqv: Eq[Future[Int]] = futureEq(1.second)
   implicit val comonad: Comonad[Future] = futureComonad(1.second)
 
-  checkAll("Future[Int]", FunctorTests[Future, Int].applicative[Int, Int])
-  checkAll("Future[Int]", ComonadTests[Future, Int, Int].comonad[Int])
+  checkAll("Future[Int]", ApplicativeTests[Future].applicative[Int, Int, Int])
+  checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
 }
