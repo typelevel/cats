@@ -6,8 +6,8 @@ import scala.concurrent.duration.FiniteDuration
 
 trait FutureInstances extends FutureInstances1 {
 
-  implicit def futureInstance(implicit ec: ExecutionContext): Monad[Future] with CoFlatMap[Future] =
-    new FutureCoFlatMap with Monad[Future]{
+  implicit def futureInstance(implicit ec: ExecutionContext): Monad[Future] with CoflatMap[Future] =
+    new FutureCoflatMap with Monad[Future]{
 
       def pure[A](x: A): Future[A] = Future.successful(x)
 
@@ -29,7 +29,7 @@ trait FutureInstances extends FutureInstances1 {
 trait FutureInstances1 {
 
   def futureComonad(atMost: FiniteDuration)(implicit ec: ExecutionContext): Comonad[Future] =
-    new FutureCoFlatMap with Comonad[Future] {
+    new FutureCoflatMap with Comonad[Future] {
 
       def extract[A](x: Future[A]): A = Await.result(x, atMost)
 
@@ -43,7 +43,7 @@ trait FutureInstances1 {
     }
 }
 
-private[std] abstract class FutureCoFlatMap(implicit ec: ExecutionContext) extends CoFlatMap[Future] {
+private[std] abstract class FutureCoflatMap(implicit ec: ExecutionContext) extends CoflatMap[Future] {
 
   def coflatMap[A, B](fa: Future[A])(f: Future[A] => B): Future[B] = Future(f(fa))
 }
