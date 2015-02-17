@@ -21,13 +21,8 @@ trait MonoidKTests[F[_], A] extends SemigroupKTests[F, A] {
     new SemigroupKProperties(
       name = "monoidK",
       parents = Seq(associative),
-      "left identity" -> forAll { (a: F[A]) =>
-        val (lhs, rhs) = laws.leftIdentity(a)
-        lhs ?== rhs
-      },
-      "right identity" -> forAll { (a: F[A]) =>
-        val (lhs, rhs) = laws.rightIdentity(a)
-        lhs ?== rhs
-      })
+      "left identity" -> forAll(laws.leftIdentity[A] _),
+      "right identity" -> forAll(laws.rightIdentity[A] _)
+    )
   }
 }

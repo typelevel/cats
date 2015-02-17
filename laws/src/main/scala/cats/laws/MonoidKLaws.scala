@@ -7,11 +7,11 @@ package laws
 trait MonoidKLaws[F[_]] extends SemigroupKLaws[F] {
   override implicit def F: MonoidK[F]
 
-  def leftIdentity[A](a: F[A]): (F[A], F[A]) =
-    F.combine(F.empty, a) -> a
+  def leftIdentity[A](a: F[A]): IsEq[F[A]] =
+    F.combine(F.empty, a) <-> a
 
-  def rightIdentity[A](a: F[A]): (F[A], F[A]) =
-    F.combine(a, F.empty) -> a
+  def rightIdentity[A](a: F[A]): IsEq[F[A]] =
+    F.combine(a, F.empty) <-> a
 }
 
 object MonoidKLaws {

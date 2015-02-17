@@ -27,10 +27,8 @@ trait SemigroupKTests[F[_], A] extends Laws {
     new SemigroupKProperties(
       name = "semigroupK",
       parents = Nil,
-      "associative" -> forAll { (a: F[A], b: F[A], c: F[A]) =>
-        val (lhs, rhs) = laws.associative(a, b, c)
-        lhs ?== rhs
-      })
+      "associative" -> forAll(laws.associative[A] _)
+    )
   }
 
   class SemigroupKProperties(
