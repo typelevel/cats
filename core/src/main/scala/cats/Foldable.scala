@@ -50,7 +50,7 @@ import simulacrum._
   def foldRight[A, B](fa: F[A], b: B)(f: (A, B) => B): B =
     foldLazy(fa, Lazy.eager(b)) { a =>
       Fold.Continue(b => f(a, b))
-    }.force
+    }.value
 
   /**
    * Fold implemented using the given Monoid[A] instance.
@@ -162,7 +162,7 @@ trait CompositeFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] {
   def foldLazy[A, B](fa: F[G[A]], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
     F.foldLazy(fa, b) { ga =>
       Fold.Continue { b =>
-        G.foldLazy(ga, Lazy.eager(b))(f).force
+        G.foldLazy(ga, Lazy.eager(b))(f).value
       }
     }
 }

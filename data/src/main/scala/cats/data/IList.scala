@@ -54,7 +54,7 @@ sealed abstract class IList[A] extends Product with Serializable {
   final def foldLazy[B](zero: Lazy[B])(f: A => Fold[B]): Lazy[B] = {
     @tailrec
     def loop(as: IList[A], fs: IList[B => B]): B = as match {
-      case INil()      => fs.foldLeft(zero.force)((acc, f) => f(acc))
+      case INil()      => fs.foldLeft(zero.value)((acc, f) => f(acc))
       case ICons(h, t) => f(h) match {
         case Return(b)   => fs.foldLeft(b)((acc, f) => f(acc))
         case Continue(g) => loop(t, g :: fs)

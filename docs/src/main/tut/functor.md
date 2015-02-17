@@ -60,7 +60,7 @@ implicit def function1Functor[In]: Functor[({type λ[α] = Function1[In,α]})#λ
 
 Option is a functor which always returns a Some with the function
 applied when the Option value is a Some.
-g
+
 ```tut
 val len: String => Int = _.length
 Functor[Option].map(Some("adsf"))(len)

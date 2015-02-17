@@ -53,7 +53,7 @@ class IListTests extends FunSuite with Checkers with Discipline {
   }
 
   test("foldLazy") {
-    assert(IList(1,2,3).foldLazy(Lazy.eager(0))(i => Continue[Int](_ + i)).force == 6)
+    assert(IList(1,2,3).foldLazy(Lazy.eager(0))(i => Continue[Int](_ + i)).value == 6)
   }
 
   test("show") {
