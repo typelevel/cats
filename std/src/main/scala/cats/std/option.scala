@@ -58,4 +58,17 @@ trait OptionInstances {
       def eqv(x: Option[A], y: Option[A]): Boolean =
         x.fold(y == None)(a => y.fold(false)(ev.eqv(_, a)))
     }
+
+  implicit def optionMonoid[A](implicit ev: Monoid[A]): Monoid[Option[A]] =
+    new Monoid[Option[A]] {
+      def empty: Option[A] = None
+      def combine(x: Option[A], y: Option[A]): Option[A] =
+        x match {
+          case None => y
+          case Some(xx) => y match {
+            case None => x
+            case Some(yy) => Some(ev.combine(xx,yy))
+          }
+        }
+    }
 }
