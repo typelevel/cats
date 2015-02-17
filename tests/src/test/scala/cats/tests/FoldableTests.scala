@@ -31,7 +31,7 @@ class FoldableTests extends FunSuite {
     val total = ns.sum
     assert(F.foldLeft(ns, 0)(_ + _) == total)
     assert(F.foldRight(ns, 0)(_ + _) == total)
-    assert(F.foldLazy(ns, Lazy(0))(x => Continue(x + _)).force == total)
+    assert(F.foldLazy(ns, Lazy(0))(x => Continue(x + _)).value == total)
     assert(F.fold(ns) == total)
 
     // more basic checks
@@ -40,11 +40,11 @@ class FoldableTests extends FunSuite {
 
     // test trampolining
     val large = (1 to 10000).toList
-    assert(exists(large, 10000).force)
+    assert(exists(large, 10000).value)
 
     // safely build large lists
     val larger = F.foldLazy(large, Lazy(List.empty[Int]))(x => Continue((x + 1) :: _))
-    assert(larger.force == large.map(_ + 1))
+    assert(larger.value == large.map(_ + 1))
   }
 
   test("Foldable[Stream]") {
@@ -54,9 +54,9 @@ class FoldableTests extends FunSuite {
     val dangerous = 0 #:: 1 #:: 2 #:: bomb[Stream[Int]]
 
     // doesn't blow up - this also ensures it works for infinite streams.
-    assert(exists(dangerous, 2).force)
+    assert(exists(dangerous, 2).value)
 
-    // lazy results don't blow up unless you call .force on them.
+    // lazy results don't blow up unless you call .value on them.
     val doom: Lazy[Boolean] = exists(dangerous, -1)
 
     // ensure that the Lazy[B] param to foldLazy is actually being
@@ -66,6 +66,6 @@ class FoldableTests extends FunSuite {
     val result = F.foldLazy(1 #:: 2 #:: Stream.Empty, trap) { n =>
       if (n == 2) Return(true) else Pass
     }
-    assert(result.force)
+    assert(result.value)
   }
 }

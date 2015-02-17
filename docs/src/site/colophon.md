@@ -24,7 +24,7 @@ integrating them into your own projects.
 There are other libraries that aim to foster Functional Programming in the Scala programming language which Cats has a relationship to:
 
 * [scalaz](https://github.com/scalaz/scalaz) The project which directly inspires Cats. Currently Cats borrows some code directly from scalaz.
-* [Structures](https://github.com/mpilquist) A project very similar in
+* [Structures](https://github.com/mpilquist/Structures) A project very similar in
 nature to Cats, also derived from scalaz. The Structures and Cats
 projects have had a healthy relationship of sharing both ideas and code.
  

@@ -25,7 +25,7 @@ trait EitherInstances extends EitherInstances1 {
         fa.fold(_ => c, f(_, c))
 
       def foldLazy[B, C](fa: Either[A, B], c: Lazy[C])(f: B => Fold[C]): Lazy[C] =
-        fa.fold(_ => c, b => c.map(f(b).complete))
+        fa.fold(_ => c, b => Lazy(f(b).complete(c.value)))
     }
 
   implicit def eitherOrder[A, B](implicit A: Order[A], B: Order[B]): Order[Either[A, B]] = new Order[Either[A, B]] {
