@@ -116,5 +116,18 @@ sealed abstract class Free[S[_], A] {
       case Left(s) => Monad[M].flatMap(f(s))(_.foldMap(f))
       case Right(r) => Monad[M].pure(r)
     }
+
+  /** Compiles your Free into another language by changing the suspension functor
+   *  using the given natural transformation.
+   */
+  final def mapSuspension[T[_]](f: S ~> T)(implicit S: Functor[S], T: Functor[T]): Free[T, A] =
+    resume match {
+      case Left(s)  => Suspend(f(S.map(s)(((_: Free[S, A]) mapSuspension f))))
+      case Right(r) => Pure(r)
+    }
+
+  final def compile[T[_]](f: S ~> T)(implicit S: Functor[S], T: Functor[T]): Free[T, A] = mapSuspension(f)
+  
+  
 }
 

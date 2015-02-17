@@ -166,9 +166,19 @@ def program: KVStore[Unit] = for {
 } yield ()
 ```
 
-5. Compile your program
+5. Write a compiler to your program
 
 TODO
+
+As you may have understood now, `Free` used as an embedded DSL doesn't do anything else than describing a sequence of operations. It just becomes a programming language inside your programming language. So as any programming language, you need to compile it into an _effective_ language that will do the job.
+
+To compile your abstract language into an effective one, you can use a `NaturalTransformation` between your `Functor` and another type container (not necessarily a Functor)
+
+
+def compile = new (KVStoreA ~> Id) {
+  def apply[A](fa: KVStoreA[A]): KVStoreA[A] = {
+  }
+}
 
 Natural Transformations = interpreters = compiling to another language
 
@@ -176,6 +186,8 @@ Natural Transformations = interpreters = compiling to another language
 6. Run your program stack-safe
 
 TODO
+
+The final step is naturally running your program
 
 Running a Free means folding the structure
 
