@@ -41,6 +41,11 @@ class IListTests extends FunSuite with Checkers with Discipline {
     )
   }
 
+  test("foldMap order") {
+    import algebra.std.string._
+    assert(IList(1,2,3).foldMap("")(_.toString) == "123")
+  }
+
   test("flatMap") {
     check((as: IList[Int]) =>
       as.flatMap(IList.singleton) === as
@@ -61,10 +66,14 @@ class IListTests extends FunSuite with Checkers with Discipline {
     )
   }
 
-  test(":::") {
+  test("++") {
     check((xs: IList[Int], ys: IList[Int]) =>
-      xs ::: ys === IList.fromFoldable(xs.toList ::: ys.toList)
+      xs ++ ys === IList.fromFoldable(xs.toList ++ ys.toList)
     )
+  }
+
+  test("append") {
+    assert(IList(1,2,3).append(4) === IList(1,2,3,4))
   }
 
   test("filter"){

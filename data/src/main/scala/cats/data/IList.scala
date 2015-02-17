@@ -5,6 +5,7 @@ import cats.Fold.{Continue, Return}
 import cats._
 
 import scala.annotation.tailrec
+import scala.collection.mutable.ListBuffer
 
 /**
  * Purely functional single linked list
@@ -13,13 +14,17 @@ import scala.annotation.tailrec
 sealed abstract class IList[A] extends Product with Serializable {
   import cats.data.IList._
 
-  /** add an [[IList]] to the front */
+  /** add an element to the back */
+  final def append(a: A): IList[A] =
+    reverse.foldLeft(IList.singleton(a))((acc, a) => ICons(a, acc))
+
+  /** add an [[IList]] to the back */
   final def concat(as: IList[A]): IList[A] =
-    as.reverse.foldLeft(this)((acc, a) => ICons(a, acc))
+    reverse.foldLeft(as)((acc, a) => ICons(a, acc))
 
   /** alias for concat */
-  final def :::(as: IList[A]): IList[A] =
-    as.reverse.foldLeft(this)((acc, a) => ICons(a, acc))
+  final def ++(as: IList[A]): IList[A] =
+    reverse.foldLeft(as)((acc, a) => ICons(a, acc))
 
   /** drop the `n` first elements */
   @tailrec final def drop(n: Int): IList[A] = this match {
@@ -44,7 +49,7 @@ sealed abstract class IList[A] extends Product with Serializable {
   }
 
   final def flatMap[B](f: A => IList[B]): IList[B] =
-    reverse.foldLeft(empty[B])((acc, a) => f(a) ::: acc )
+    reverse.foldLeft(empty[B])((acc, a) => f(a) ++ acc )
 
   final def foldLazy[B](zero: Lazy[B])(f: A => Fold[B]): Lazy[B] = {
     @tailrec
@@ -66,7 +71,7 @@ sealed abstract class IList[A] extends Product with Serializable {
   }
 
   final def foldMap[B](b: B)(f: A => B)(implicit B: Monoid[B]): B =
-    foldLeft(b)((acc, a) => B.combine(f(a), acc))
+    reverse.foldLeft(b)((acc, a) => B.combine(f(a), acc))
 
   final def foldRight[B](b: B)(f: (A, B) => B): B =
     reverse.foldLeft(b)((b, a) => f(a, b))
@@ -109,7 +114,7 @@ sealed abstract class IList[A] extends Product with Serializable {
   final def map[B](f: A => B): IList[B] =
     reverse.foldLeft(empty[B])((acc, a) => ICons(f(a), acc))
 
-  /** add an element to the head of an [[IList]] */
+  /** add an element to the front */
   final def prepend(a: A): IList[A] =
     ICons(a, this)
 
@@ -162,7 +167,7 @@ sealed abstract class IList[A] extends Product with Serializable {
 
   /** transform an [[IList]] into a [[scala.List]] */
   final def toList: List[A] =
-    reverse.foldLeft(List.empty[A])((acc, a) => a :: acc)
+    foldLeft(ListBuffer.empty[A])(_ += _).toList
 
   /** attempt to transform an [[IList]] into a [[NonEmptyList]] */
   final def toNel: Option[NonEmptyList[A]] =
@@ -209,7 +214,7 @@ object IList extends IListInstances {
 
   /** create an [[IList]] with a single element */
   def singleton[A](a: A): IList[A] =
-    ICons(a, INil())
+    ICons(a, empty)
 
   /** create an empty [[IList]] */
   def empty[A]: IList[A] =

@@ -16,11 +16,23 @@ class IListBench {
   val fixList: List[Int] = (1 to 100).toList
   val fixIList: IList[Int] = IList(1 to 100: _*)
 
-  @Benchmark def prependIList(in: IListInput): IList[Int] =
-    3 :: in.iList
+  @Benchmark def appendIList(in: IListInput): IList[Int] =
+    in.iList.append(5)
 
-  @Benchmark def prependList(in: ListInput): List[Int] =
-    3 :: in.list
+  @Benchmark def appendList(in: ListInput): List[Int] =
+    in.list :+ 5
+
+  @Benchmark def toList(in: IListInput): List[Int] =
+    in.iList.toList
+
+  @Benchmark def copy(in: IListInput): IList[Int] =
+    in.iList.foldRight(IList.empty[Int])(_ :: _)
+
+  @Benchmark def prependIList: IList[Int] =
+    3 :: fixIList
+
+  @Benchmark def prependList: List[Int] =
+    3 :: fixList
 
   @Benchmark def mapIList(in: IListInput): IList[Int] =
     in.iList.map(_ + 1)
@@ -57,10 +69,10 @@ class IListBench {
     in.list.lastOption
 
 @Benchmark def concatIList(in1: IListInput, in2: IListInput): IList[Int] =
-  in1.iList ::: in2.iList
+  in1.iList ++ in2.iList
 
   @Benchmark def concatList(in1: ListInput, in2: ListInput): List[Int] =
-    in1.list ::: in2.list
+    in1.list ++ in2.list
 
   @Benchmark def flatMapIList(in: IListInput): IList[Int] =
     in.iList.flatMap(i => IList(i - 1, i, i + 1))
