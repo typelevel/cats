@@ -59,7 +59,7 @@ trait OptionInstances {
         x.fold(y == None)(a => y.fold(false)(ev.eqv(_, a)))
     }
 
-  implicit def optionMonoid[A](implicit ev: Monoid[A]): Monoid[Option[A]] =
+  implicit def optionMonoid[A](implicit ev: Semigroup[A]): Monoid[Option[A]] =
     new Monoid[Option[A]] {
       def empty: Option[A] = None
       def combine(x: Option[A], y: Option[A]): Option[A] =
