@@ -15,11 +15,11 @@ trait CoflatMapLaws[F[_]] extends FunctorLaws[F] {
 
   /**
    * The composition of [[cats.data.Cokleisli]] arrows is associative. This is
-   * analogous to the associativity law of [[CoflatMap.coflatMap]].
+   * analogous to [[coflatMapAssociativity]].
    */
   def cokleisliAssociativity[A, B, C, D](f: F[A] => B, g: F[B] => C, h: F[C] => D, fa: F[A]): IsEq[D] = {
     val (cf, cg, ch) = (Cokleisli(f), Cokleisli(g), Cokleisli(h))
-    ((ch compose cg) compose cf).run(fa) <-> (ch compose (cg compose cf)).run(fa)
+    ((cf andThen cg) andThen ch).run(fa) <-> (cf andThen (cg andThen ch)).run(fa)
   }
 }
 
