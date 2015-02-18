@@ -1,7 +1,9 @@
 package cats
 
-package object data {
-  type NonEmptyList[A] = OneAnd[A, List]
+import cats.data.IList.INil
 
-  def NonEmptyList[A](head: A, tail: List[A] = Nil) = OneAnd[A, List](head, tail)
+package object data {
+  type NonEmptyList[A] = OneAnd[A, IList]
+
+  def NonEmptyList[A](head: A, tail: IList[A] = INil()) = OneAnd[A, IList](head, tail)
 }

@@ -1,6 +1,6 @@
 package cats.laws.discipline
 
-import cats.data.{Cokleisli, Const, Kleisli, Or}
+import cats.data._
 import org.scalacheck.{Arbitrary, Gen}
 
 /**
@@ -19,4 +19,7 @@ object arbitrary {
 
   implicit def cokleisliArbitrary[F[_], A, B](implicit B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
     Arbitrary(B.arbitrary.map(b => Cokleisli[F, A, B](_ => b)))
+
+  implicit def iListArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[IList[A]] =
+    Arbitrary(Gen.listOf(A.arbitrary).map(as => IList(as: _*)))
 }
