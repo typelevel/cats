@@ -3,7 +3,6 @@ package cats.laws.discipline
 import algebra.Eq
 import org.scalacheck.Arbitrary
 
-
 object eq {
 
   // create an approximation of Eq[A => B] by generating 100 values for A
@@ -17,5 +16,4 @@ object eq {
       samples.forall(s => B.eqv(f(s), g(s)) )
     }
   }
-
 }
