@@ -17,7 +17,7 @@ trait FutureInstances extends FutureInstances1 {
     }
 
   implicit def futureSemigroup[A](implicit A: Semigroup[A], ec: ExecutionContext): Semigroup[Future[A]] =
-    new FutureSemigroup[A]() {}
+    new FutureSemigroup[A]()
 
   def futureEq[A](atMost: FiniteDuration)(implicit A: Eq[A], ec: ExecutionContext): Eq[Future[A]] =
     new Eq[Future[A]] {
