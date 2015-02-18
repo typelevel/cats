@@ -2,17 +2,16 @@ package cats
 package laws
 package discipline
 
-import algebra.laws._
 import org.scalacheck.Prop._
 import org.scalacheck.{Arbitrary, Prop}
 import org.typelevel.discipline.Laws
 
 object SemigroupKTests {
-  def apply[F[_]: ArbitraryK, A: Arbitrary](implicit eqfa: Eq[F[A]]): SemigroupKTests[F, A] =
+  def apply[F[_]: ArbitraryK, A: Arbitrary](implicit eqfa: Eq[F[A]], arba: Arbitrary[A], arbf: ArbitraryK[F]): SemigroupKTests[F, A] =
     new SemigroupKTests[F, A] {
       def EqFA = eqfa
-      def ArbA = implicitly[Arbitrary[A]]
-      def ArbF = implicitly[ArbitraryK[F]]
+      def ArbA = arba
+      def ArbF = arbf
     }
 }
 
