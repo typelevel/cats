@@ -2,13 +2,14 @@ package cats
 package std
 
 import algebra.Eq
+import algebra.std.ListMonoid
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
 
 trait ListInstances {
-  implicit val listInstance: Traverse[List] with MonadCombine[List] with CoFlatMap[List] =
-    new Traverse[List] with MonadCombine[List] with CoFlatMap[List] {
+  implicit val listInstance: Traverse[List] with MonadCombine[List] with CoflatMap[List] =
+    new Traverse[List] with MonadCombine[List] with CoflatMap[List] {
 
       def empty[A]: List[A] = Nil
 
@@ -71,4 +72,6 @@ trait ListInstances {
         loop(x, y)
       }
     }
+
+  implicit def listAlgebra[A]: Monoid[List[A]] = new ListMonoid[A]
 }

@@ -3,8 +3,9 @@ package cats.syntax
 trait AllSyntax
     extends ApplySyntax
     with BifunctorSyntax
-    with CoFlatMapSyntax
+    with CoflatMapSyntax
     with ComonadSyntax
+    with ComposeSyntax
     with ContravariantSyntax
     with EqSyntax
     with FlatMapSyntax

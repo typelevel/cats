@@ -4,8 +4,8 @@ package std
 import algebra.Eq
 
 trait OptionInstances {
-  implicit val optionInstance: Traverse[Option] with MonadCombine[Option] with CoFlatMap[Option] =
-    new Traverse[Option] with MonadCombine[Option] with CoFlatMap[Option] {
+  implicit val optionInstance: Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] =
+    new Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] {
 
       def empty[A]: Option[A] = None
 
@@ -57,5 +57,18 @@ trait OptionInstances {
     new Eq[Option[A]] {
       def eqv(x: Option[A], y: Option[A]): Boolean =
         x.fold(y == None)(a => y.fold(false)(ev.eqv(_, a)))
+    }
+
+  implicit def optionMonoid[A](implicit ev: Semigroup[A]): Monoid[Option[A]] =
+    new Monoid[Option[A]] {
+      def empty: Option[A] = None
+      def combine(x: Option[A], y: Option[A]): Option[A] =
+        x match {
+          case None => y
+          case Some(xx) => y match {
+            case None => x
+            case Some(yy) => Some(ev.combine(xx,yy))
+          }
+        }
     }
 }

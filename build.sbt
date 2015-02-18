@@ -60,8 +60,10 @@ lazy val docSettings = Seq(
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
-  scalacOptions in (ScalaUnidoc, unidoc) ++=
-    Opts.doc.sourceUrl(scmInfo.value.get.browseUrl + "/tree/master${FILE_PATH}.scala"),
+  scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
+    "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
+    "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath
+  ),
   git.remoteRepo := "git@github.com:non/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
@@ -76,7 +78,7 @@ lazy val docs = project
   .settings(tutSettings: _*)
   .settings(docSettings: _*)
   .settings(tutSettings: _*)
-  .dependsOn(core)
+  .dependsOn(core, std, data)
 
 lazy val aggregate = project.in(file("."))
   .settings(catsSettings: _*)

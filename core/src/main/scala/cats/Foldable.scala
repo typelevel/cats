@@ -56,7 +56,7 @@ import simulacrum._
   def foldRight[A, B](fa: F[A], b: B)(f: (A, B) => B): B =
     foldLazy(fa, Lazy.eager(b)) { a =>
       Fold.Continue(b => f(a, b))
-    }.force
+    }.value
 
   /**
    * Fold implemented using the given Monoid[A] instance.
