@@ -82,6 +82,7 @@ lazy val cats = project.in(file("."))
   .settings(catsSettings: _*)
   .settings(noPublishSettings: _*)
   .aggregate(macros, core, laws, tests, docs, data, std, bench)
+  .dependsOn(macros, core, laws, tests, docs, data, std, bench)
 
 lazy val macros = project
   .settings(moduleName := "cats-macros")
