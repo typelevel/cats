@@ -89,7 +89,7 @@ lazy val macros = project
   .settings(catsSettings: _*)
 
 lazy val core = project.dependsOn(macros)
-  .settings(moduleName := "cats")
+  .settings(moduleName := "cats-core")
   .settings(catsSettings: _*)
 
 lazy val laws = project.dependsOn(macros, core, data)
