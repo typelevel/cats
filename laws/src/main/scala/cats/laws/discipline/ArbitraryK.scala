@@ -4,6 +4,7 @@ package laws.discipline
 import cats.data.{Cokleisli, Kleisli, Or, Const}
 import org.scalacheck.Arbitrary
 import cats.laws.discipline.arbitrary._
+import scala.concurrent.Future
 
 trait ArbitraryK[F[_]] {
   def synthesize[A: Arbitrary]: Arbitrary[F[A]]
@@ -48,6 +49,12 @@ object ArbitraryK {
 
   implicit def cokleisliA[F[_], A]: ArbitraryK[Cokleisli[F, A, ?]] =
     new ArbitraryK[Cokleisli[F, A, ?]]{ def synthesize[B: Arbitrary]: Arbitrary[Cokleisli[F, A, B]] = implicitly }
+
+  implicit def futureArbitraryK: ArbitraryK[Future] =
+    new ArbitraryK[Future] {
+      def synthesize[A](implicit A: Arbitrary[A]): Arbitrary[Future[A]] =
+        Arbitrary(A.arbitrary.map(Future.successful))
+    }
 
   implicit val stream: ArbitraryK[Stream] =
     new ArbitraryK[Stream] { def synthesize[A: Arbitrary]: Arbitrary[Stream[A]] = implicitly }

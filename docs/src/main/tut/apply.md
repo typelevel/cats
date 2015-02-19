@@ -79,6 +79,25 @@ Apply[Option].apply2(Some(1), None)(Some(add2))
 Apply[Option].apply2(Some(1), Some(2))(None)
 ```
 
+## apply builder syntax
+
+The `|@|` operator offers an alternative syntax for the higher-arity `Apply` functions (`applyN`, `mapN`).
+First, import `cats.syntax.all._` or `cats.syntax.apply._`. Here we see that following two functions, `f1` and `f2`, are equivalent:
+```tut
+import cats.syntax.apply._
+
+def f1(a: Option[Int], b: Option[Int], c: Option[Int]) =
+  (a |@| b |@| c) map { _ * _ * _ }
+def f2(a: Option[Int], b: Option[Int], c: Option[Int]) =
+  Apply[Option].map3(a, b, c)(_ * _ * _)
+
+f1(Some(1), Some(2), Some(3))
+
+f2(Some(1), Some(2), Some(3))
+```
+
+All instances created by `|@|` have `map`, `apply`, and `tupled` methods of the appropriate arity.
+
 ## composition
 
 Like Functors, Apply instances also compose:
