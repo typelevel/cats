@@ -3,6 +3,7 @@ package cats.laws.discipline
 import cats.laws.MonadCombineLaws
 import cats.{MonadCombine, Eq}
 import org.scalacheck.Arbitrary
+import org.scalacheck.Prop._
 
 trait MonadCombineTests[F[_]] extends MonadFilterTests[F] with MonoidKTests[F] {
   def laws: MonadCombineLaws[F]
@@ -20,7 +21,9 @@ trait MonadCombineTests[F[_]] extends MonadFilterTests[F] with MonoidKTests[F] {
       def name = "monadCombine"
       def bases = Nil
       def parents = Seq(monadFilter[A, B, C], monoidK[A])
-      def props = Seq.empty // TODO
+      def props = Seq(
+        "monadCombine left distributivity" -> forAll(laws.monadCombineLeftDistributivity[A, B] _)
+      )
     }
   }
 }
