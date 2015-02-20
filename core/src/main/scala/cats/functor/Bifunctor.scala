@@ -8,7 +8,7 @@ package functor
 trait Bifunctor[F[_, _]] { self =>
 
   /**
-   * The quientessential method of the Bifunctor trait, it applies a
+   * The quintessential method of the Bifunctor trait, it applies a
    * function to each "side" of the bifunctor.
    */
   def bimap[A, B, C, D](fab: F[A, B])(f: A => C, g: B => D): F[C, D]
