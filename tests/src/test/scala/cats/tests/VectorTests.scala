@@ -1,7 +1,7 @@
 package cats.tests
 
-import cats.laws.discipline.MonoidKTests
+import cats.laws.discipline.MonadCombineTests
 
 class VectorTests extends CatsSuite {
-  checkAll("Vector[Int]", MonoidKTests[Vector].monoidK[Int])
+  checkAll("Vector[Int]", MonadCombineTests[Vector].monadCombine[Int, Int, Int])
 }

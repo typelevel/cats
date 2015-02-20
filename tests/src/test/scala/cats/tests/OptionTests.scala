@@ -1,8 +1,8 @@
 package cats.tests
 
-import cats.laws.discipline.{MonoidKTests, MonadFilterTests}
+import cats.laws.discipline.{CoflatMapTests, MonadCombineTests}
 
 class OptionTests extends CatsSuite {
-  checkAll("Option[Int]", MonadFilterTests[Option].monadFilter[Int, Int, Int])
-  checkAll("Option[Int]", MonoidKTests[Option].monoidK[Int])
+  checkAll("Option[Int]", CoflatMapTests[Option].coflatMap[Int, Int, Int])
+  checkAll("Option[Int]", MonadCombineTests[Option].monadCombine[Int, Int, Int])
 }
