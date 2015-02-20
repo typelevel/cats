@@ -85,6 +85,11 @@ Write about https://github.com/non/cats/pull/36#issuecomment-72892359
 
 ### Write tests
 
+Tests go into the tests module, under the `cats.tests` package.  Cats tests
+should extend `CatsSuite`.  `CatsSuite` integrates ScalaTest with Discipline
+for law checking, and imports all syntax and standard instances for
+convenience.
+
 TODO
 
 Write about checking laws
