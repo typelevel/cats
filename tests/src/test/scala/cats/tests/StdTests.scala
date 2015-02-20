@@ -19,6 +19,7 @@ class StdTests extends FunSuite with Discipline {
   checkAll("Function0[Int]", MonadTests[Function0].monad[Int, Int, Int])
   checkAll("Option[Int]", MonadFilterTests[Option].monadFilter[Int, Int, Int])
   checkAll("Option[String]", MonadFilterTests[Option].monadFilter[String, Int, Int])
+  checkAll("Option[Int]", MonoidKTests[Option].monoidK[Int])
   checkAll("List[Int]", MonadFilterTests[List].monadFilter[Int, Int, Int])
   checkAll("List[Int]", MonoidKTests[List].monoidK[Int])
   checkAll("Stream[Int]", MonoidKTests[Stream].monoidK[Int])
