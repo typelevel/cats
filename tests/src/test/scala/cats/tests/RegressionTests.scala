@@ -1,11 +1,9 @@
 package cats.tests
 
 import cats._
-import cats.implicits._
-import org.scalatest.FunSuite
 import scala.collection.mutable
 
-class RegressionTests extends FunSuite {
+class RegressionTests extends CatsSuite {
 
   // toy state class
   // not stack safe, very minimal, not for actual use

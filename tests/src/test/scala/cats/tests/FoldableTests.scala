@@ -1,21 +1,12 @@
 package cats.tests
 
-import org.scalatest.FunSuite
-
 import cats._
-import cats.implicits._
 
-class FoldableTests extends FunSuite {
+class FoldableTests extends CatsSuite {
   import Fold.{Continue, Return, Pass}
 
   // disable scalatest ===
   override def convertToEqualizer[T](left: T) = ???
-
-  // TODO: remove this eventually
-  implicit val M: Monoid[Int] = new Monoid[Int] {
-    def empty: Int = 0
-    def combine(x: Int, y: Int): Int = x + y
-  }
 
   // exists method written in terms of foldLazy
   def exists[F[_]: Foldable, A: Eq](as: F[A], goal: A): Lazy[Boolean] =
