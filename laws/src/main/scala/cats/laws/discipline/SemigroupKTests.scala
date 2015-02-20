@@ -9,7 +9,7 @@ import org.typelevel.discipline.Laws
 trait SemigroupKTests[F[_]] extends Laws {
   def laws: SemigroupKLaws[F]
 
-  def associative[A: Arbitrary](implicit
+  def semigroupK[A: Arbitrary](implicit
     ArbF: ArbitraryK[F],
     EqFA: Eq[F[A]]
   ): RuleSet = {

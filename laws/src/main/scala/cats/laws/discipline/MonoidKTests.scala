@@ -8,7 +8,7 @@ import org.scalacheck.Arbitrary
 trait MonoidKTests[F[_]] extends SemigroupKTests[F] {
   def laws: MonoidKLaws[F]
 
-  def identity[A: Arbitrary](implicit
+  def monoidK[A: Arbitrary](implicit
     ArbF: ArbitraryK[F],
     EqFA: Eq[F[A]]
   ): RuleSet = {
@@ -17,7 +17,7 @@ trait MonoidKTests[F[_]] extends SemigroupKTests[F] {
     new RuleSet {
       val name = "monoidK"
       val bases = Nil
-      val parents = Seq(associative[A])
+      val parents = Seq(semigroupK[A])
       val props = Seq(
         "left identity" -> forAll(laws.leftIdentity[A] _),
         "right identity" -> forAll(laws.rightIdentity[A] _)
