@@ -55,4 +55,10 @@ object ArbitraryK {
       def synthesize[A](implicit A: Arbitrary[A]): Arbitrary[Future[A]] =
         Arbitrary(A.arbitrary.map(Future.successful))
     }
+
+  implicit val stream: ArbitraryK[Stream] =
+    new ArbitraryK[Stream] { def synthesize[A: Arbitrary]: Arbitrary[Stream[A]] = implicitly }
+
+  implicit val vector: ArbitraryK[Vector] =
+    new ArbitraryK[Vector] { def synthesize[A: Arbitrary]: Arbitrary[Vector[A]] = implicitly }
 }
