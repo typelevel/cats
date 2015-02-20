@@ -43,7 +43,7 @@ import functor.Contravariant
   override def composeWithFunctor[G[_]: Functor]: Functor[Lambda[X => F[G[X]]]] = compose[G]
 
 
-  // derived functions
+  // derived methods
 
   /**
    * Lift a function f to operate on Functors
