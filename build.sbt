@@ -80,7 +80,7 @@ lazy val docs = project
   .settings(tutSettings: _*)
   .dependsOn(core, std, data)
 
-lazy val aggregate = project.in(file("."))
+lazy val cats = project.in(file("."))
   .settings(catsSettings: _*)
   .settings(noPublishSettings: _*)
   .aggregate(macros, core, laws, tests, docs, data, std, bench)
@@ -91,7 +91,7 @@ lazy val macros = project
   .settings(catsSettings: _*)
 
 lazy val core = project.dependsOn(macros)
-  .settings(moduleName := "cats")
+  .settings(moduleName := "cats-core")
   .settings(catsSettings: _*)
 
 lazy val laws = project.dependsOn(macros, core, data)
