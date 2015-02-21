@@ -11,7 +11,7 @@ trait AlternativeTests[F[_]] extends ApplicativeTests[F] with MonoidKTests[F]  {
 
   def alternative[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     ArbF: ArbitraryK[F],
-    arfFAB: Arbitrary[F[A => B]],
+    arbFAB: Arbitrary[F[A => B]],
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]]
@@ -23,9 +23,9 @@ trait AlternativeTests[F[_]] extends ApplicativeTests[F] with MonoidKTests[F]  {
       val bases = Nil
       val parents = Seq(monoidK[A], applicative[A,B,C])
       val props = Seq(
-        "left distributivity" -> forAll(laws.leftDistributivity[A,B](_, _, _)),
-        "right distributivity" -> forAll(laws.rightDistributivity[A,B](_, _, _)),
-        "right absorbtion" -> forAll(laws.rightAbsorption[A,B](_))
+        "left distributivity" -> forAll(laws.alternativeLeftDistributivity[A,B](_, _, _)),
+        "right distributivity" -> forAll(laws.alternativeRightDistributivity[A,B](_, _, _)),
+        "right absorption" -> forAll(laws.alternativeRightAbsorption[A,B](_))
       )
     }
 }
