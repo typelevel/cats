@@ -252,7 +252,7 @@ Previous sample used a effectful natural transformation but you might prefer fol
 Using an immutable `Map`, it's impossible to write a Natural Transformation using `foldMap` because you need to know the previous state of the `Map` and you don't have it. For this, you need to use the lower level `fold` function and fold the `Free` by yourself.
 
 // Pure computation
-def compilePure[A](program: KVStore[A], m: Map[String, A] = Map.empty[String, A]): Map[String, A] = program.fold(
+def runPure[A](program: KVStore[A], m: Map[String, A] = Map.empty[String, A]): Map[String, A] = program.fold(
   _ => m,
   {
     // help a bit scalac due to type erasure
