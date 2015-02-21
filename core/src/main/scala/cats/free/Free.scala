@@ -119,6 +119,7 @@ sealed abstract class Free[S[_], A] {
 
   /** Compiles your Free into another language by changing the suspension functor
    *  using the given natural transformation.
+   *  Be careful if your natural transformation is effectful, effects are applied by mapSuspension
    */
   final def mapSuspension[T[_]](f: S ~> T)(implicit S: Functor[S], T: Functor[T]): Free[T, A] =
     resume match {
@@ -127,7 +128,6 @@ sealed abstract class Free[S[_], A] {
     }
 
   final def compile[T[_]](f: S ~> T)(implicit S: Functor[S], T: Functor[T]): Free[T, A] = mapSuspension(f)
-  
-  
+
 }
 
