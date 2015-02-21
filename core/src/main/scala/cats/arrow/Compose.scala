@@ -1,6 +1,9 @@
 package cats
 package arrow
 
+/**
+ * Must obey the laws defined in [[laws.ComposeLaws]].
+ */
 trait Compose[F[_, _]] { self =>
   def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]
 
