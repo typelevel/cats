@@ -20,5 +20,6 @@ package object syntax {
   object profunctor extends ProfunctorSyntax
   object semigroup extends SemigroupSyntax
   object show extends ShowSyntax
+  object split extends SplitSyntax
   object strong extends StrongSyntax
 }
