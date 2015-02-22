@@ -10,14 +10,12 @@ import org.typelevel.discipline.Laws
 trait ComposeTests[F[_, _]] extends Laws {
   def laws: ComposeLaws[F]
 
-  def compose[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary](implicit
-    ArbF: ArbitraryK2[F],
+  def compose[A, B, C, D](implicit
+    ArbFAB: Arbitrary[F[A, B]],
+    ArbFBC: Arbitrary[F[B, C]],
+    ArbFCD: Arbitrary[F[C, D]],
     EqFAD: Eq[F[A, D]]
-  ): RuleSet = {
-    implicit val ArbFAB = ArbF.synthesize[A, B]
-    implicit val ArbFBC = ArbF.synthesize[B, C]
-    implicit val ArbFCD = ArbF.synthesize[C, D]
-
+  ): RuleSet =
     new RuleSet {
       def name = "compose"
       def bases = Nil
@@ -26,7 +24,6 @@ trait ComposeTests[F[_, _]] extends Laws {
         "compose associativity" -> forAll(laws.composeAssociativity[A, B, C, D] _)
       )
     }
-  }
 }
 
 object ComposeTests {
