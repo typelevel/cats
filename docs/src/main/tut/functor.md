@@ -48,8 +48,8 @@ method. An example of this would be that Functions which take a String
 form a functor using andThen as the map operation:
 
 ```tut
-implicit def function1Functor[In]: Functor[({type λ[α] = Function1[In,α]})#λ] =
-  new Functor[({type λ[α] = Function1[In,α]})#λ] {
+implicit def function1Functor[In]: Functor[Function1[In, ?]] =
+  new Functor[Function1[In, ?]] {
     def map[A,B](fa: In => A)(f: A => B): Function1[In,B] = fa andThen f
   }
 ```
