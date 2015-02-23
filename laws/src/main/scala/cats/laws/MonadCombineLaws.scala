@@ -6,7 +6,7 @@ import cats.syntax.all._
 /**
  * Laws that must be obeyed by any [[MonadCombine]].
  */
-trait MonadCombineLaws[F[_]] extends MonadFilterLaws[F] with MonoidKLaws[F] {
+trait MonadCombineLaws[F[_]] extends MonadFilterLaws[F] with MonoidKLaws[F] with AlternativeLaws[F] {
   implicit override def F: MonadCombine[F]
 
   def monadCombineLeftDistributivity[A, B](fa: F[A], fa2: F[A], f: A => F[B]): IsEq[F[B]] =
