@@ -57,6 +57,7 @@ sealed abstract class Free[S[_], A] {
   /**
    * Evaluates a single layer of the free monad.
    */
+  @tailrec
   final def resume(implicit S: Functor[S]): (Either[S[Free[S, A]], A]) = this match {
     case Pure(a) =>
       Right(a)
