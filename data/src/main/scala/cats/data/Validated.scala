@@ -67,7 +67,8 @@ sealed abstract class Validated[+E, +A] extends Serializable {
          fa andThen Valid.apply)
 
   /**
-   * 
+   * From Apply:
+   * if both the function and this value are Valid, apply the function
    */
   def apply[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE,B] =
     (this, f) match {
@@ -78,7 +79,7 @@ sealed abstract class Validated[+E, +A] extends Serializable {
 
     }
 
-  
+
 
   /**
    * A monadic bind which applies a function if the value is Valid.
