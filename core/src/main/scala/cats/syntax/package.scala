@@ -2,6 +2,7 @@ package cats
 
 package object syntax {
   object all extends AllSyntax
+  object any extends AnySyntax
   object apply extends ApplySyntax
   object bifunctor extends BifunctorSyntax
   object coflatMap extends CoflatMapSyntax
@@ -16,6 +17,7 @@ package object syntax {
   object monadCombine extends MonadCombineSyntax
   object monadFilter extends MonadFilterSyntax
   object order extends OrderSyntax
+  object option extends OptionSyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object semigroup extends SemigroupSyntax
