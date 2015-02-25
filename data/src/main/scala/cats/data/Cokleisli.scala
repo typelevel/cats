@@ -5,8 +5,8 @@ import cats.{Monad, CoflatMap, Functor}
 
 final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
 
-  def dimap[C, D](f: C => A)(g: B => D)(implicit b: Functor[F]): Cokleisli[F, C, D] =
-    Cokleisli(fc => g(run(b.map(fc)(f))))
+  def dimap[C, D](f: C => A)(g: B => D)(implicit F: Functor[F]): Cokleisli[F, C, D] =
+    Cokleisli(fc => g(run(F.map(fc)(f))))
 
   def lmap[C](f: C => A)(implicit F: Functor[F]): Cokleisli[F, C, B] =
     Cokleisli(fc => run(F.map(fc)(f)))
@@ -42,6 +42,7 @@ sealed abstract class CokleisliInstances {
   implicit def cokleisliProfunctor[F[_]: Functor]: Profunctor[Cokleisli[F, ?, ?]] = new Profunctor[Cokleisli[F, ?, ?]] {
     def dimap[A, B, C, D](fab: Cokleisli[F, A, B])(f: C => A)(g: B => D): Cokleisli[F, C, D] =
       fab.dimap(f)(g)
+
     override def lmap[A, B, C](fab: Cokleisli[F, A, B])(f: C => A): Cokleisli[F, C, B] =
       fab.lmap(f)
 
