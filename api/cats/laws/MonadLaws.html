@@ -1,0 +1,819 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>MonadLaws - cats.laws.MonadLaws</title>
+          <meta name="description" content="MonadLaws - cats.laws.MonadLaws" />
+          <meta name="keywords" content="MonadLaws cats.laws.MonadLaws" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'cats.laws.MonadLaws';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="MonadLaws$.html" title="Go to companion"><img src="../../lib/trait_to_object_big.png" /></a>
+        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.laws">laws</a></p>
+        <h1><a href="MonadLaws$.html" title="Go to companion">MonadLaws</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="MonadLaws$.html" title="See companion">object MonadLaws</a>
+            | <a href="package.html" class="extype" name="cats.laws">package laws</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MonadLaws</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">ApplicativeLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>] with <a href="FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">FlatMapLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>]</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Laws that must be obeyed by any <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/laws/src/main/scala/cats/laws/MonadLaws.scala" target="_blank">MonadLaws.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">FlatMapLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>], <a href="ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">ApplicativeLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>], <a href="ApplyLaws.html" class="extype" name="cats.laws.ApplyLaws">ApplyLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>], <a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>], <a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="MonadCombineLaws.html" class="extype" name="cats.laws.MonadCombineLaws">MonadCombineLaws</a>, <a href="MonadFilterLaws.html" class="extype" name="cats.laws.MonadFilterLaws">MonadFilterLaws</a></div>
+          </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="cats.laws.MonadLaws"><span>MonadLaws</span></li><li class="in" name="cats.laws.FlatMapLaws"><span>FlatMapLaws</span></li><li class="in" name="cats.laws.ApplicativeLaws"><span>ApplicativeLaws</span></li><li class="in" name="cats.laws.ApplyLaws"><span>ApplyLaws</span></li><li class="in" name="cats.laws.FunctorLaws"><span>FunctorLaws</span></li><li class="in" name="cats.laws.InvariantLaws"><span>InvariantLaws</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="cats.laws.MonadLaws#F" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="F:cats.Monad[F]"></a>
+      <a id="F:Monad[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">F</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@F:cats.Monad[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.laws.MonadLaws">MonadLaws</a> → <a href="FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">FlatMapLaws</a> → <a href="ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">ApplicativeLaws</a> → <a href="ApplyLaws.html" class="extype" name="cats.laws.ApplyLaws">ApplyLaws</a> → <a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a> → <a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.laws.ApplicativeLaws#applicativeComposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="applicativeComposition[A,B,C](fa:F[A],fab:F[A=&gt;B],fbc:F[B=&gt;C]):cats.laws.IsEq[F[C]]"></a>
+      <a id="applicativeComposition[A,B,C](F[A],F[(A)⇒B],F[(B)⇒C]):IsEq[F[C]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applicativeComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.ApplicativeLaws.applicativeComposition.A">A</span>]</span>, <span name="fab">fab: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[(<span class="extype" name="cats.laws.ApplicativeLaws.applicativeComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.ApplicativeLaws.applicativeComposition.B">B</span>]</span>, <span name="fbc">fbc: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[(<span class="extype" name="cats.laws.ApplicativeLaws.applicativeComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.ApplicativeLaws.applicativeComposition.C">C</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.ApplicativeLaws.applicativeComposition.C">C</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@applicativeComposition[A,B,C](fa:F[A],fab:F[A=&gt;B],fbc:F[B=&gt;C]):cats.laws.IsEq[F[C]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This law is <a href="ApplicativeLaws.html#applyComposition[A,B,C](fa:F[A],fab:F[A=&gt;B],fbc:F[B=&gt;C]):cats.laws.IsEq[F[C]]" class="extmbr" name="cats.laws.ApplicativeLaws#applyComposition">applyComposition</a> stated in terms of <code>pure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>This law is <a href="ApplicativeLaws.html#applyComposition[A,B,C](fa:F[A],fab:F[A=&gt;B],fbc:F[B=&gt;C]):cats.laws.IsEq[F[C]]" class="extmbr" name="cats.laws.ApplicativeLaws#applyComposition">applyComposition</a> stated in terms of <code>pure</code>. It is a
+combination of <a href="ApplicativeLaws.html#applyComposition[A,B,C](fa:F[A],fab:F[A=&gt;B],fbc:F[B=&gt;C]):cats.laws.IsEq[F[C]]" class="extmbr" name="cats.laws.ApplicativeLaws#applyComposition">applyComposition</a> and <a href="ApplicativeLaws.html#applicativeMap[A,B](fa:F[A],f:A=&gt;B):cats.laws.IsEq[F[B]]" class="extmbr" name="cats.laws.ApplicativeLaws#applicativeMap">applicativeMap</a> and hence not
+strictly necessary.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">ApplicativeLaws</a></dd></dl></div>
+    </li><li name="cats.laws.ApplicativeLaws#applicativeHomomorphism" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="applicativeHomomorphism[A,B](a:A,f:A=&gt;B):cats.laws.IsEq[F[B]]"></a>
+      <a id="applicativeHomomorphism[A,B](A,(A)⇒B):IsEq[F[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applicativeHomomorphism</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.laws.ApplicativeLaws.applicativeHomomorphism.A">A</span></span>, <span name="f">f: (<span class="extype" name="cats.laws.ApplicativeLaws.applicativeHomomorphism.A">A</span>) ⇒ <span class="extype" name="cats.laws.ApplicativeLaws.applicativeHomomorphism.B">B</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.ApplicativeLaws.applicativeHomomorphism.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@applicativeHomomorphism[A,B](a:A,f:A=&gt;B):cats.laws.IsEq[F[B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">ApplicativeLaws</a></dd></dl></div>
+    </li><li name="cats.laws.ApplicativeLaws#applicativeIdentity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="applicativeIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]"></a>
+      <a id="applicativeIdentity[A](F[A]):IsEq[F[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applicativeIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.ApplicativeLaws.applicativeIdentity.A">A</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.ApplicativeLaws.applicativeIdentity.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@applicativeIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">ApplicativeLaws</a></dd></dl></div>
+    </li><li name="cats.laws.ApplicativeLaws#applicativeInterchange" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="applicativeInterchange[A,B](a:A,ff:F[A=&gt;B]):cats.laws.IsEq[F[B]]"></a>
+      <a id="applicativeInterchange[A,B](A,F[(A)⇒B]):IsEq[F[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applicativeInterchange</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.laws.ApplicativeLaws.applicativeInterchange.A">A</span></span>, <span name="ff">ff: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[(<span class="extype" name="cats.laws.ApplicativeLaws.applicativeInterchange.A">A</span>) ⇒ <span class="extype" name="cats.laws.ApplicativeLaws.applicativeInterchange.B">B</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.ApplicativeLaws.applicativeInterchange.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@applicativeInterchange[A,B](a:A,ff:F[A=&gt;B]):cats.laws.IsEq[F[B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">ApplicativeLaws</a></dd></dl></div>
+    </li><li name="cats.laws.ApplicativeLaws#applicativeMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="applicativeMap[A,B](fa:F[A],f:A=&gt;B):cats.laws.IsEq[F[B]]"></a>
+      <a id="applicativeMap[A,B](F[A],(A)⇒B):IsEq[F[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applicativeMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.ApplicativeLaws.applicativeMap.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.ApplicativeLaws.applicativeMap.A">A</span>) ⇒ <span class="extype" name="cats.laws.ApplicativeLaws.applicativeMap.B">B</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.ApplicativeLaws.applicativeMap.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@applicativeMap[A,B](fa:F[A],f:A=&gt;B):cats.laws.IsEq[F[B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">ApplicativeLaws</a></dd></dl></div>
+    </li><li name="cats.laws.ApplyLaws#applyComposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="applyComposition[A,B,C](fa:F[A],fab:F[A=&gt;B],fbc:F[B=&gt;C]):cats.laws.IsEq[F[C]]"></a>
+      <a id="applyComposition[A,B,C](F[A],F[(A)⇒B],F[(B)⇒C]):IsEq[F[C]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applyComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.ApplyLaws.applyComposition.A">A</span>]</span>, <span name="fab">fab: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[(<span class="extype" name="cats.laws.ApplyLaws.applyComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.ApplyLaws.applyComposition.B">B</span>]</span>, <span name="fbc">fbc: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[(<span class="extype" name="cats.laws.ApplyLaws.applyComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.ApplyLaws.applyComposition.C">C</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.ApplyLaws.applyComposition.C">C</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@applyComposition[A,B,C](fa:F[A],fab:F[A=&gt;B],fbc:F[B=&gt;C]):cats.laws.IsEq[F[C]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyLaws.html" class="extype" name="cats.laws.ApplyLaws">ApplyLaws</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.laws.FunctorLaws#covariantComposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="covariantComposition[A,B,C](fa:F[A],f:A=&gt;B,g:B=&gt;C):cats.laws.IsEq[F[C]]"></a>
+      <a id="covariantComposition[A,B,C](F[A],(A)⇒B,(B)⇒C):IsEq[F[C]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">covariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.FunctorLaws.covariantComposition.B">B</span></span>, <span name="g">g: (<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.FunctorLaws.covariantComposition.C">C</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.C">C</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@covariantComposition[A,B,C](fa:F[A],f:A=&gt;B,g:B=&gt;C):cats.laws.IsEq[F[C]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a></dd></dl></div>
+    </li><li name="cats.laws.FunctorLaws#covariantIdentity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="covariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]"></a>
+      <a id="covariantIdentity[A](F[A]):IsEq[F[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">covariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantIdentity.A">A</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantIdentity.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@covariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.laws.FlatMapLaws#flatMapAssociativity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flatMapAssociativity[A,B,C](fa:F[A],f:A=&gt;F[B],g:B=&gt;F[C]):cats.laws.IsEq[F[C]]"></a>
+      <a id="flatMapAssociativity[A,B,C](F[A],(A)⇒F[B],(B)⇒F[C]):IsEq[F[C]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatMapAssociativity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.A">A</span>) ⇒ <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.B">B</span>]</span>, <span name="g">g: (<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.B">B</span>) ⇒ <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.C">C</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.C">C</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@flatMapAssociativity[A,B,C](fa:F[A],f:A=&gt;F[B],g:B=&gt;F[C]):cats.laws.IsEq[F[C]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">FlatMapLaws</a></dd></dl></div>
+    </li><li name="cats.laws.FlatMapLaws#flatMapConsistentApply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flatMapConsistentApply[A,B](fa:F[A],fab:F[A=&gt;B]):cats.laws.IsEq[F[B]]"></a>
+      <a id="flatMapConsistentApply[A,B](F[A],F[(A)⇒B]):IsEq[F[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatMapConsistentApply</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.A">A</span>]</span>, <span name="fab">fab: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[(<span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.A">A</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.B">B</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@flatMapConsistentApply[A,B](fa:F[A],fab:F[A=&gt;B]):cats.laws.IsEq[F[B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">FlatMapLaws</a></dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.laws.InvariantLaws#invariantComposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):cats.laws.IsEq[F[C]]"></a>
+      <a id="invariantComposition[A,B,C](F[A],(A)⇒B,(B)⇒A,(B)⇒C,(C)⇒B):IsEq[F[C]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>]</span>, <span name="f1">f1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>, <span name="f2">f2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span></span>, <span name="g1">g1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span></span>, <span name="g2">g2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):cats.laws.IsEq[F[C]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a></dd></dl></div>
+    </li><li name="cats.laws.InvariantLaws#invariantIdentity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="invariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]"></a>
+      <a id="invariantIdentity[A](F[A]):IsEq[F[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@invariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.laws.FlatMapLaws#kleisliAssociativity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="kleisliAssociativity[A,B,C,D](f:A=&gt;F[B],g:B=&gt;F[C],h:C=&gt;F[D],a:A):cats.laws.IsEq[F[D]]"></a>
+      <a id="kleisliAssociativity[A,B,C,D]((A)⇒F[B],(B)⇒F[C],(C)⇒F[D],A):IsEq[F[D]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kleisliAssociativity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.A">A</span>) ⇒ <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.B">B</span>]</span>, <span name="g">g: (<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.B">B</span>) ⇒ <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.C">C</span>]</span>, <span name="h">h: (<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.C">C</span>) ⇒ <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.D">D</span>]</span>, <span name="a">a: <span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.A">A</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.D">D</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@kleisliAssociativity[A,B,C,D](f:A=&gt;F[B],g:B=&gt;F[C],h:C=&gt;F[D],a:A):cats.laws.IsEq[F[D]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The composition of <a href="../data/Kleisli.html" class="extype" name="cats.data.Kleisli">cats.data.Kleisli</a> arrows is associative.</p><div class="fullcomment"><div class="comment cmt"><p>The composition of <a href="../data/Kleisli.html" class="extype" name="cats.data.Kleisli">cats.data.Kleisli</a> arrows is associative. This is
+analogous to <a href="FlatMapLaws.html#flatMapAssociativity[A,B,C](fa:F[A],f:A=&gt;F[B],g:B=&gt;F[C]):cats.laws.IsEq[F[C]]" class="extmbr" name="cats.laws.FlatMapLaws#flatMapAssociativity">flatMapAssociativity</a>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">FlatMapLaws</a></dd></dl></div>
+    </li><li name="cats.laws.MonadLaws#kleisliLeftIdentity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="kleisliLeftIdentity[A,B](a:A,f:A=&gt;F[B]):cats.laws.IsEq[F[B]]"></a>
+      <a id="kleisliLeftIdentity[A,B](A,(A)⇒F[B]):IsEq[F[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kleisliLeftIdentity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.laws.MonadLaws.kleisliLeftIdentity.A">A</span></span>, <span name="f">f: (<span class="extype" name="cats.laws.MonadLaws.kleisliLeftIdentity.A">A</span>) ⇒ <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.MonadLaws.kleisliLeftIdentity.B">B</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.MonadLaws.kleisliLeftIdentity.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@kleisliLeftIdentity[A,B](a:A,f:A=&gt;F[B]):cats.laws.IsEq[F[B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>pure</code> is the left identity element under left-to-right composition of
+<a href="../data/Kleisli.html" class="extype" name="cats.data.Kleisli">cats.data.Kleisli</a> arrows.</p><div class="fullcomment"><div class="comment cmt"><p><code>pure</code> is the left identity element under left-to-right composition of
+<a href="../data/Kleisli.html" class="extype" name="cats.data.Kleisli">cats.data.Kleisli</a> arrows. This is analogous to <a href="#monadLeftIdentity[A,B](a:A,f:A=&gt;F[B]):cats.laws.IsEq[F[B]]" class="extmbr" name="cats.laws.MonadLaws#monadLeftIdentity">monadLeftIdentity</a>.
+</p></div></div>
+    </li><li name="cats.laws.MonadLaws#kleisliRightIdentity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="kleisliRightIdentity[A,B](a:A,f:A=&gt;F[B]):cats.laws.IsEq[F[B]]"></a>
+      <a id="kleisliRightIdentity[A,B](A,(A)⇒F[B]):IsEq[F[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kleisliRightIdentity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.laws.MonadLaws.kleisliRightIdentity.A">A</span></span>, <span name="f">f: (<span class="extype" name="cats.laws.MonadLaws.kleisliRightIdentity.A">A</span>) ⇒ <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.MonadLaws.kleisliRightIdentity.B">B</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.MonadLaws.kleisliRightIdentity.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@kleisliRightIdentity[A,B](a:A,f:A=&gt;F[B]):cats.laws.IsEq[F[B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>pure</code> is the right identity element under left-to-right composition of
+<a href="../data/Kleisli.html" class="extype" name="cats.data.Kleisli">cats.data.Kleisli</a> arrows.</p><div class="fullcomment"><div class="comment cmt"><p><code>pure</code> is the right identity element under left-to-right composition of
+<a href="../data/Kleisli.html" class="extype" name="cats.data.Kleisli">cats.data.Kleisli</a> arrows. This is analogous to <a href="#monadRightIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]" class="extmbr" name="cats.laws.MonadLaws#monadRightIdentity">monadRightIdentity</a>.
+</p></div></div>
+    </li><li name="cats.laws.MonadLaws#monadLeftIdentity" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="monadLeftIdentity[A,B](a:A,f:A=&gt;F[B]):cats.laws.IsEq[F[B]]"></a>
+      <a id="monadLeftIdentity[A,B](A,(A)⇒F[B]):IsEq[F[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">monadLeftIdentity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.laws.MonadLaws.monadLeftIdentity.A">A</span></span>, <span name="f">f: (<span class="extype" name="cats.laws.MonadLaws.monadLeftIdentity.A">A</span>) ⇒ <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.MonadLaws.monadLeftIdentity.B">B</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.MonadLaws.monadLeftIdentity.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@monadLeftIdentity[A,B](a:A,f:A=&gt;F[B]):cats.laws.IsEq[F[B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.MonadLaws#monadRightIdentity" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="monadRightIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]"></a>
+      <a id="monadRightIdentity[A](F[A]):IsEq[F[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">monadRightIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.MonadLaws.monadRightIdentity.A">A</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>[<span class="extype" name="cats.laws.MonadLaws.monadRightIdentity.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@monadRightIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.MonadLaws@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="cats.laws.FlatMapLaws">
+              <h3>Inherited from <a href="FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">FlatMapLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>]</h3>
+            </div><div class="parent" name="cats.laws.ApplicativeLaws">
+              <h3>Inherited from <a href="ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">ApplicativeLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>]</h3>
+            </div><div class="parent" name="cats.laws.ApplyLaws">
+              <h3>Inherited from <a href="ApplyLaws.html" class="extype" name="cats.laws.ApplyLaws">ApplyLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>]</h3>
+            </div><div class="parent" name="cats.laws.FunctorLaws">
+              <h3>Inherited from <a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>]</h3>
+            </div><div class="parent" name="cats.laws.InvariantLaws">
+              <h3>Inherited from <a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

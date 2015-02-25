@@ -99,24 +99,7 @@
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="cats.arrow.Cokleisli" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Cokleisli[F[_],A,B]extendsProductwithSerializable"></a>
-      <a id="Cokleisli[F[_],A,B]:Cokleisli[F,A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Cokleisli.html"><span class="name">Cokleisli</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="run">run: (<span class="extype" name="cats.arrow.Cokleisli.F">F</span>[<span class="extype" name="cats.arrow.Cokleisli.A">A</span>]) ⇒ <span class="extype" name="cats.arrow.Cokleisli.B">B</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.arrow.package@Cokleisli[F[_],A,B]extendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
+      <p class="shortcomment cmt">Must obey the laws defined in <a href="../laws/CategoryLaws.html" class="extype" name="cats.laws.CategoryLaws">laws.CategoryLaws</a>.</p>
     </li><li name="cats.arrow.Compose" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Compose[F[_,_]]extendsAnyRef"></a>
       <a id="Compose[F[_,_]]:Compose[F]"></a>
@@ -126,31 +109,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Compose.html"><span class="name">Compose</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Compose.html"><span class="name">Compose</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.arrow.package@Compose[F[_,_]]extendsAnyRef" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="cats.arrow.Kleisli" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Kleisli[M[_],A,B]extendsProductwithSerializable"></a>
-      <a id="Kleisli[M[_],A,B]:Kleisli[M,A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Kleisli.html"><span class="name">Kleisli</span></a><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="run">run: (<span class="extype" name="cats.arrow.Kleisli.A">A</span>) ⇒ <span class="extype" name="cats.arrow.Kleisli.M">M</span>[<span class="extype" name="cats.arrow.Kleisli.B">B</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.arrow.package@Kleisli[M[_],A,B]extendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Represents a function <code>A =&gt; M[B]</code>.</p>
+      <p class="shortcomment cmt">Must obey the laws defined in <a href="../laws/ComposeLaws.html" class="extype" name="cats.laws.ComposeLaws">laws.ComposeLaws</a>.</p>
     </li><li name="cats.arrow.NaturalTransformation" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="NaturalTransformation[F[_],G[_]]extendsAnyRef"></a>
       <a id="NaturalTransformation[F[_],G[_]]:NaturalTransformation[F,G]"></a>
@@ -160,7 +126,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="NaturalTransformation.html"><span class="name">NaturalTransformation</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="NaturalTransformation.html"><span class="name">NaturalTransformation</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.arrow.package@NaturalTransformation[F[_],G[_]]extendsAnyRef" title="Permalink" target="_top">
@@ -239,23 +205,6 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.arrow.package@Compose" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="cats.arrow.Kleisli" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Kleisli"></a>
-      <a id="Kleisli:Kleisli"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="Kleisli$.html"><span class="name">Kleisli</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.arrow.package@Kleisli" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>

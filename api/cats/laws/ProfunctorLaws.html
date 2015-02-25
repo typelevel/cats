@@ -28,10 +28,12 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../lib/class_big.png" />
+        <a href="ProfunctorLaws$.html" title="Go to companion"><img src="../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.laws">laws</a></p>
-        <h1>ProfunctorLaws</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="cats.laws">package laws</a>
+        <h1><a href="ProfunctorLaws$.html" title="Go to companion">ProfunctorLaws</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="ProfunctorLaws$.html" title="See companion">object ProfunctorLaws</a>
+            | <a href="package.html" class="extype" name="cats.laws">package laws</a>
           </div></span></h3><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
@@ -42,17 +44,17 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ProfunctorLaws</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">ProfunctorLaws</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Laws that must be obeyed by any <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">cats.functor.Profunctor</a>.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">ProfunctorLaws.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/laws/src/main/scala/cats/laws/ProfunctorLaws.scala" target="_blank">ProfunctorLaws.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -88,21 +90,25 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="cats.laws.ProfunctorLaws#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;()(implicitF:cats.functor.Profunctor[F]):cats.laws.ProfunctorLaws[F]"></a>
-      <a id="&lt;init&gt;:ProfunctorLaws[F]"></a>
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="cats.laws.ProfunctorLaws#F" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="F:cats.functor.Profunctor[F]"></a>
+      <a id="F:Profunctor[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
+        <span class="modifier">implicit abstract </span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ProfunctorLaws</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>]</span>)</span>
+        <span class="name">F</span><span class="result">: <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ProfunctorLaws@&lt;init&gt;()(implicitF:cats.functor.Profunctor[F]):cats.laws.ProfunctorLaws[F]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ProfunctorLaws@F:cats.functor.Profunctor[F]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -110,12 +116,8 @@
     </li></ol>
             </div>
 
-        
-
-        
-
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -125,7 +127,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@!=(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -142,7 +144,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@##():Int" title="Permalink" target="_top">
@@ -159,7 +161,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@==(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -193,7 +195,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@clone():Object" title="Permalink" target="_top">
@@ -216,7 +218,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -233,7 +235,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@equals(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -250,7 +252,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@finalize():Unit" title="Permalink" target="_top">
@@ -290,7 +292,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@hashCode():Int" title="Permalink" target="_top">
@@ -307,7 +309,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
@@ -324,7 +326,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -341,7 +343,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@notify():Unit" title="Permalink" target="_top">
@@ -358,7 +360,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@notifyAll():Unit" title="Permalink" target="_top">
@@ -367,35 +369,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.laws.ProfunctorLaws#profunctorComposition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="profunctorComposition[A2,A1,A0,B0,B1,B2](fab:F[A0,B0],f2:A2=&gt;A1,f1:A1=&gt;A0,g1:B0=&gt;B1,g2:B1=&gt;B2):(F[A2,B2],F[A2,B2])"></a>
-      <a id="profunctorComposition[A2,A1,A0,B0,B1,B2](F[A0,B0],(A2)⇒A1,(A1)⇒A0,(B0)⇒B1,(B1)⇒B2):(F[A2,B2],F[A2,B2])"></a>
+      <a id="profunctorComposition[A2,A1,A0,B0,B1,B2](fab:F[A0,B0],f2:A2=&gt;A1,f1:A1=&gt;A0,g1:B0=&gt;B1,g2:B1=&gt;B2):cats.laws.IsEq[F[A2,B2]]"></a>
+      <a id="profunctorComposition[A2,A1,A0,B0,B1,B2](F[A0,B0],(A2)⇒A1,(A1)⇒A0,(B0)⇒B1,(B1)⇒B2):IsEq[F[A2,B2]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">profunctorComposition</span><span class="tparams">[<span name="A2">A2</span>, <span name="A1">A1</span>, <span name="A0">A0</span>, <span name="B0">B0</span>, <span name="B1">B1</span>, <span name="B2">B2</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A0">A0</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B0">B0</span>]</span>, <span name="f2">f2: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A2">A2</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A1">A1</span></span>, <span name="f1">f1: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A1">A1</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A0">A0</span></span>, <span name="g1">g1: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B0">B0</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B1">B1</span></span>, <span name="g2">g2: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B1">B1</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B2">B2</span></span>)</span><span class="result">: (<span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A2">A2</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B2">B2</span>], <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A2">A2</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B2">B2</span>])</span>
+        <span class="name">profunctorComposition</span><span class="tparams">[<span name="A2">A2</span>, <span name="A1">A1</span>, <span name="A0">A0</span>, <span name="B0">B0</span>, <span name="B1">B1</span>, <span name="B2">B2</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A0">A0</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B0">B0</span>]</span>, <span name="f2">f2: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A2">A2</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A1">A1</span></span>, <span name="f1">f1: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A1">A1</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A0">A0</span></span>, <span name="g1">g1: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B0">B0</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B1">B1</span></span>, <span name="g2">g2: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B1">B1</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B2">B2</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A2">A2</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B2">B2</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ProfunctorLaws@profunctorComposition[A2,A1,A0,B0,B1,B2](fab:F[A0,B0],f2:A2=&gt;A1,f1:A1=&gt;A0,g1:B0=&gt;B1,g2:B1=&gt;B2):(F[A2,B2],F[A2,B2])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ProfunctorLaws@profunctorComposition[A2,A1,A0,B0,B1,B2](fab:F[A0,B0],f2:A2=&gt;A1,f1:A1=&gt;A0,g1:B0=&gt;B1,g2:B1=&gt;B2):cats.laws.IsEq[F[A2,B2]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       
     </li><li name="cats.laws.ProfunctorLaws#profunctorIdentity" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="profunctorIdentity[A,B](fab:F[A,B]):(F[A,B],F[A,B])"></a>
-      <a id="profunctorIdentity[A,B](F[A,B]):(F[A,B],F[A,B])"></a>
+      <a id="profunctorIdentity[A,B](fab:F[A,B]):cats.laws.IsEq[F[A,B]]"></a>
+      <a id="profunctorIdentity[A,B](F[A,B]):IsEq[F[A,B]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">profunctorIdentity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.A">A</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.B">B</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.A">A</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.B">B</span>], <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.A">A</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.B">B</span>])</span>
+        <span class="name">profunctorIdentity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.A">A</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.B">B</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.A">A</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.B">B</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ProfunctorLaws@profunctorIdentity[A,B](fab:F[A,B]):(F[A,B],F[A,B])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ProfunctorLaws@profunctorIdentity[A,B](fab:F[A,B]):cats.laws.IsEq[F[A,B]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -443,7 +445,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@wait():Unit" title="Permalink" target="_top">
@@ -466,7 +468,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
@@ -489,7 +491,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.ProfunctorLaws@wait(x$1:Long):Unit" title="Permalink" target="_top">
@@ -513,9 +515,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>

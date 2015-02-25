@@ -47,13 +47,36 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"></div>
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/laws/src/main/scala/cats/laws/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
         
 
       <div id="mbrsel">
         <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
-        
-        
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="cats.laws"><span>laws</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
             <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
@@ -66,13 +89,30 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.laws.ApplicativeLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="cats.laws.AlternativeLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AlternativeLaws[F[_]]extendsApplicativeLaws[F]withMonoidKLaws[F]"></a>
+      <a id="AlternativeLaws[F[_]]:AlternativeLaws[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AlternativeLaws.html"><span class="name">AlternativeLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">ApplicativeLaws</a>[<span class="extype" name="cats.laws.AlternativeLaws.F">F</span>] with <a href="MonoidKLaws.html" class="extype" name="cats.laws.MonoidKLaws">MonoidKLaws</a>[<span class="extype" name="cats.laws.AlternativeLaws.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@AlternativeLaws[F[_]]extendsApplicativeLaws[F]withMonoidKLaws[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.ApplicativeLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ApplicativeLaws[F[_]]extendsApplyLaws[F]"></a>
       <a id="ApplicativeLaws[F[_]]:ApplicativeLaws[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
         <a href="ApplicativeLaws.html"><span class="name">ApplicativeLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="ApplyLaws.html" class="extype" name="cats.laws.ApplyLaws">ApplyLaws</a>[<span class="extype" name="cats.laws.ApplicativeLaws.F">F</span>]</span>
@@ -83,13 +123,13 @@
       </a>
     </span>
       <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>.</p>
-    </li><li name="cats.laws.ApplyLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.laws.ApplyLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ApplyLaws[F[_]]extendsFunctorLaws[F]"></a>
       <a id="ApplyLaws[F[_]]:ApplyLaws[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
         <a href="ApplyLaws.html"><span class="name">ApplyLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a>[<span class="extype" name="cats.laws.ApplyLaws.F">F</span>]</span>
@@ -100,47 +140,81 @@
       </a>
     </span>
       <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>.</p>
-    </li><li name="cats.laws.CoFlatMapLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CoFlatMapLaws[F[_]]extendsFunctorLaws[F]"></a>
-      <a id="CoFlatMapLaws[F[_]]:CoFlatMapLaws[F]"></a>
+    </li><li name="cats.laws.CategoryLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CategoryLaws[F[_,_]]extendsComposeLaws[F]"></a>
+      <a id="CategoryLaws[F[_,_]]:CategoryLaws[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="CoFlatMapLaws.html"><span class="name">CoFlatMapLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a>[<span class="extype" name="cats.laws.CoFlatMapLaws.F">F</span>]</span>
+        <a href="CategoryLaws.html"><span class="name">CategoryLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="ComposeLaws.html" class="extype" name="cats.laws.ComposeLaws">ComposeLaws</a>[<span class="extype" name="cats.laws.CategoryLaws.F">F</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.package@CoFlatMapLaws[F[_]]extendsFunctorLaws[F]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.package@CategoryLaws[F[_,_]]extendsComposeLaws[F]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../CoFlatMap.html" class="extype" name="cats.CoFlatMap">CoFlatMap</a>.</p>
-    </li><li name="cats.laws.ComonadLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ComonadLaws[F[_]]extendsCoFlatMapLaws[F]"></a>
+      <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../arrow/Category.html" class="extype" name="cats.arrow.Category">cats.arrow.Category</a>.</p>
+    </li><li name="cats.laws.CoflatMapLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CoflatMapLaws[F[_]]extendsFunctorLaws[F]"></a>
+      <a id="CoflatMapLaws[F[_]]:CoflatMapLaws[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CoflatMapLaws.html"><span class="name">CoflatMapLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a>[<span class="extype" name="cats.laws.CoflatMapLaws.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@CoflatMapLaws[F[_]]extendsFunctorLaws[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>.</p>
+    </li><li name="cats.laws.ComonadLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ComonadLaws[F[_]]extendsCoflatMapLaws[F]"></a>
       <a id="ComonadLaws[F[_]]:ComonadLaws[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ComonadLaws.html"><span class="name">ComonadLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="CoFlatMapLaws.html" class="extype" name="cats.laws.CoFlatMapLaws">CoFlatMapLaws</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>]</span>
+        <a href="ComonadLaws.html"><span class="name">ComonadLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="CoflatMapLaws.html" class="extype" name="cats.laws.CoflatMapLaws">CoflatMapLaws</a>[<span class="extype" name="cats.laws.ComonadLaws.F">F</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.package@ComonadLaws[F[_]]extendsCoFlatMapLaws[F]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.package@ComonadLaws[F[_]]extendsCoflatMapLaws[F]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>.</p>
-    </li><li name="cats.laws.ContravariantLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.laws.ComposeLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ComposeLaws[F[_,_]]extendsAnyRef"></a>
+      <a id="ComposeLaws[F[_,_]]:ComposeLaws[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ComposeLaws.html"><span class="name">ComposeLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@ComposeLaws[F[_,_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../arrow/Compose.html" class="extype" name="cats.arrow.Compose">cats.arrow.Compose</a>.</p>
+    </li><li name="cats.laws.ContravariantLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ContravariantLaws[F[_]]extendsInvariantLaws[F]"></a>
       <a id="ContravariantLaws[F[_]]:ContravariantLaws[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
         <a href="ContravariantLaws.html"><span class="name">ContravariantLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a>[<span class="extype" name="cats.laws.ContravariantLaws.F">F</span>]</span>
@@ -151,13 +225,13 @@
       </a>
     </span>
       <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">cats.functor.Contravariant</a>.</p>
-    </li><li name="cats.laws.FlatMapLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.laws.FlatMapLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="FlatMapLaws[F[_]]extendsApplyLaws[F]"></a>
       <a id="FlatMapLaws[F[_]]:FlatMapLaws[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
         <a href="FlatMapLaws.html"><span class="name">FlatMapLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="ApplyLaws.html" class="extype" name="cats.laws.ApplyLaws">ApplyLaws</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>]</span>
@@ -168,13 +242,13 @@
       </a>
     </span>
       <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>.</p>
-    </li><li name="cats.laws.FunctorLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.laws.FunctorLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="FunctorLaws[F[_]]extendsInvariantLaws[F]"></a>
       <a id="FunctorLaws[F[_]]:FunctorLaws[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
         <a href="FunctorLaws.html"><span class="name">FunctorLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a>[<span class="extype" name="cats.laws.FunctorLaws.F">F</span>]</span>
@@ -185,16 +259,16 @@
       </a>
     </span>
       <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>.</p>
-    </li><li name="cats.laws.InvariantLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.laws.InvariantLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="InvariantLaws[F[_]]extendsAnyRef"></a>
       <a id="InvariantLaws[F[_]]:InvariantLaws[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="InvariantLaws.html"><span class="name">InvariantLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="InvariantLaws.html"><span class="name">InvariantLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.package@InvariantLaws[F[_]]extendsAnyRef" title="Permalink" target="_top">
@@ -202,16 +276,118 @@
       </a>
     </span>
       <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../functor/Invariant.html" class="extype" name="cats.functor.Invariant">cats.functor.Invariant</a>.</p>
-    </li><li name="cats.laws.ProfunctorLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.laws.IsEq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IsEq[A]extendsProductwithSerializable"></a>
+      <a id="IsEq[A]:IsEq[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IsEq.html"><span class="name">IsEq</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="lhs">lhs: <span class="extype" name="cats.laws.IsEq.A">A</span></span>, <span name="rhs">rhs: <span class="extype" name="cats.laws.IsEq.A">A</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@IsEq[A]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents two values of the same type that are expected to be equal.</p>
+    </li><li name="cats.laws.IsEqArrow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IsEqArrow[A]extendsAnyVal"></a>
+      <a id="IsEqArrow[A]:IsEqArrow[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$IsEqArrow.html"><span class="name">IsEqArrow</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@IsEqArrow[A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.MonadCombineLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MonadCombineLaws[F[_]]extendsMonadFilterLaws[F]withAlternativeLaws[F]"></a>
+      <a id="MonadCombineLaws[F[_]]:MonadCombineLaws[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="MonadCombineLaws.html"><span class="name">MonadCombineLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="MonadFilterLaws.html" class="extype" name="cats.laws.MonadFilterLaws">MonadFilterLaws</a>[<span class="extype" name="cats.laws.MonadCombineLaws.F">F</span>] with <a href="AlternativeLaws.html" class="extype" name="cats.laws.AlternativeLaws">AlternativeLaws</a>[<span class="extype" name="cats.laws.MonadCombineLaws.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@MonadCombineLaws[F[_]]extendsMonadFilterLaws[F]withAlternativeLaws[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>.</p>
+    </li><li name="cats.laws.MonadFilterLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MonadFilterLaws[F[_]]extendsMonadLaws[F]"></a>
+      <a id="MonadFilterLaws[F[_]]:MonadFilterLaws[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="MonadFilterLaws.html"><span class="name">MonadFilterLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="MonadLaws.html" class="extype" name="cats.laws.MonadLaws">MonadLaws</a>[<span class="extype" name="cats.laws.MonadFilterLaws.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@MonadFilterLaws[F[_]]extendsMonadLaws[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../MonadFilter.html" class="extype" name="cats.MonadFilter">MonadFilter</a>.</p>
+    </li><li name="cats.laws.MonadLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MonadLaws[F[_]]extendsApplicativeLaws[F]withFlatMapLaws[F]"></a>
+      <a id="MonadLaws[F[_]]:MonadLaws[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="MonadLaws.html"><span class="name">MonadLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">ApplicativeLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>] with <a href="FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">FlatMapLaws</a>[<span class="extype" name="cats.laws.MonadLaws.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@MonadLaws[F[_]]extendsApplicativeLaws[F]withFlatMapLaws[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>.</p>
+    </li><li name="cats.laws.MonoidKLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MonoidKLaws[F[_]]extendsSemigroupKLaws[F]"></a>
+      <a id="MonoidKLaws[F[_]]:MonoidKLaws[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="MonoidKLaws.html"><span class="name">MonoidKLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="SemigroupKLaws.html" class="extype" name="cats.laws.SemigroupKLaws">SemigroupKLaws</a>[<span class="extype" name="cats.laws.MonoidKLaws.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@MonoidKLaws[F[_]]extendsSemigroupKLaws[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../MonoidK.html" class="extype" name="cats.MonoidK">cats.MonoidK</a>.</p>
+    </li><li name="cats.laws.ProfunctorLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ProfunctorLaws[F[_,_]]extendsAnyRef"></a>
       <a id="ProfunctorLaws[F[_,_]]:ProfunctorLaws[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ProfunctorLaws.html"><span class="name">ProfunctorLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="ProfunctorLaws.html"><span class="name">ProfunctorLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.laws.package@ProfunctorLaws[F[_,_]]extendsAnyRef" title="Permalink" target="_top">
@@ -219,6 +395,23 @@
       </a>
     </span>
       <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">cats.functor.Profunctor</a>.</p>
+    </li><li name="cats.laws.SemigroupKLaws" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SemigroupKLaws[F[_]]extendsAnyRef"></a>
+      <a id="SemigroupKLaws[F[_]]:SemigroupKLaws[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SemigroupKLaws.html"><span class="name">SemigroupKLaws</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@SemigroupKLaws[F[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Laws that must be obeyed by any <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">cats.SemigroupK</a>.</p>
     </li></ol>
             </div>
 
@@ -226,7 +419,296 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="cats.laws.discipline" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="cats.laws.AlternativeLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AlternativeLaws"></a>
+      <a id="AlternativeLaws:AlternativeLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AlternativeLaws$.html"><span class="name">AlternativeLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@AlternativeLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.ApplicativeLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ApplicativeLaws"></a>
+      <a id="ApplicativeLaws:ApplicativeLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ApplicativeLaws$.html"><span class="name">ApplicativeLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@ApplicativeLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.ApplyLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ApplyLaws"></a>
+      <a id="ApplyLaws:ApplyLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ApplyLaws$.html"><span class="name">ApplyLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@ApplyLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.CategoryLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CategoryLaws"></a>
+      <a id="CategoryLaws:CategoryLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CategoryLaws$.html"><span class="name">CategoryLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@CategoryLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.CoflatMapLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CoflatMapLaws"></a>
+      <a id="CoflatMapLaws:CoflatMapLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CoflatMapLaws$.html"><span class="name">CoflatMapLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@CoflatMapLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.ComonadLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ComonadLaws"></a>
+      <a id="ComonadLaws:ComonadLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ComonadLaws$.html"><span class="name">ComonadLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@ComonadLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.ComposeLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ComposeLaws"></a>
+      <a id="ComposeLaws:ComposeLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ComposeLaws$.html"><span class="name">ComposeLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@ComposeLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.ContravariantLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ContravariantLaws"></a>
+      <a id="ContravariantLaws:ContravariantLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ContravariantLaws$.html"><span class="name">ContravariantLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@ContravariantLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.FlatMapLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FlatMapLaws"></a>
+      <a id="FlatMapLaws:FlatMapLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FlatMapLaws$.html"><span class="name">FlatMapLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@FlatMapLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.FunctorLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FunctorLaws"></a>
+      <a id="FunctorLaws:FunctorLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FunctorLaws$.html"><span class="name">FunctorLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@FunctorLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.InvariantLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InvariantLaws"></a>
+      <a id="InvariantLaws:InvariantLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="InvariantLaws$.html"><span class="name">InvariantLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@InvariantLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.MonadCombineLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MonadCombineLaws"></a>
+      <a id="MonadCombineLaws:MonadCombineLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MonadCombineLaws$.html"><span class="name">MonadCombineLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@MonadCombineLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.MonadFilterLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MonadFilterLaws"></a>
+      <a id="MonadFilterLaws:MonadFilterLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MonadFilterLaws$.html"><span class="name">MonadFilterLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@MonadFilterLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.MonadLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MonadLaws"></a>
+      <a id="MonadLaws:MonadLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MonadLaws$.html"><span class="name">MonadLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@MonadLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.MonoidKLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MonoidKLaws"></a>
+      <a id="MonoidKLaws:MonoidKLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MonoidKLaws$.html"><span class="name">MonoidKLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@MonoidKLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.ProfunctorLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ProfunctorLaws"></a>
+      <a id="ProfunctorLaws:ProfunctorLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ProfunctorLaws$.html"><span class="name">ProfunctorLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@ProfunctorLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.SemigroupKLaws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SemigroupKLaws"></a>
+      <a id="SemigroupKLaws:SemigroupKLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SemigroupKLaws$.html"><span class="name">SemigroupKLaws</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.laws.package@SemigroupKLaws" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.discipline" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="discipline"></a>
       <a id="discipline:discipline"></a>
       <h4 class="signature">
@@ -252,7 +734,11 @@
         </div>
 
         <div id="inheritedMembers">
-        
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
         
         </div>
 

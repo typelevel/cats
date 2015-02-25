@@ -91,7 +91,7 @@ Then in your project, add to your build.sbt
 
 All code is available to you under the MIT license, available at
 http://opensource.org/licenses/mit-license.php and also in the
-[COPYING](COPYING) file. The design is informed by many other
+[COPYING](https://raw.githubusercontent.com/non/cats/master/COPYING) file. The design is informed by many other
 projects, in particular Scalaz.
 
 Copyright the maintainers, 2015.

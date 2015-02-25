@@ -17,9 +17,9 @@ The Functor category involves a single operation, named `map`:
 def map[A, B](fa: F[A])(f: A => B): F[B]
 ```
 
-This method takes a Function from A => B and turns an F[A] into an
+This method takes a function from A => B and turns an F[A] into an
 F[B].  The name of the method `map` should remind you of the `map`
-method that exists on many classes in the scala standard library. some
+method that exists on many classes in the Scala standard library. some
 Examples of map functions:
 
 ```scala
@@ -45,24 +45,24 @@ import cats._
 scala> implicit val optionFunctor: Functor[Option] = new Functor[Option] {
      |   def map[A,B](fa: Option[A])(f: A => B) = fa map f
      | }
-optionFunctor: cats.Functor[Option] = $anon$1@45da8866
+optionFunctor: cats.Functor[Option] = $anon$1@54ad5198
 
 scala> implicit val listFunctor: Functor[List] = new Functor[List] {
      |   def map[A,B](fa: List[A])(f: A => B) = fa map f
      | }
-listFunctor: cats.Functor[List] = $anon$1@3182ccc
+listFunctor: cats.Functor[List] = $anon$1@6151e9ce
 ```
 
-However Functors can also be creted for types which don't have a map
+However Functors can also be created for types which don't have a map
 method. An example of this would be that Functions which take a String
 form a functor using andThen as the map operation:
 
 ```scala
-scala> implicit def function1Functor[In]: Functor[({type λ[α] = Function1[In,α]})#λ] =
-     |   new Functor[({type λ[α] = Function1[In,α]})#λ] {
+scala> implicit def function1Functor[In]: Functor[Function1[In, ?]] =
+     |   new Functor[Function1[In, ?]] {
      |     def map[A,B](fa: In => A)(f: A => B): Function1[In,B] = fa andThen f
      |   }
-function1Functor: [In]=> cats.Functor[[α]In => α]
+function1Functor: [In]=> cats.Functor[[X_kp1]In => X_kp1]
 ```
 
 ## Using functor
@@ -71,7 +71,7 @@ function1Functor: [In]=> cats.Functor[[α]In => α]
 
 Option is a functor which always returns a Some with the function
 applied when the Option value is a Some.
-g
+
 ```scala
 scala> val len: String => Int = _.length
 len: String => Int = <function1>
@@ -119,12 +119,12 @@ res8: scala.collection.immutable.Map[String,Int] = Map(a -> 1, aa -> 2, b -> 1, 
 
 ## Composition
 
-Functors compose! Given any Functor F[_] and any Functor G[_] we can
-compose the two Functors to create a new Functor on F[G[_]]:
+Functors compose! Given any Functor F[\_] and any Functor G[\_] we can
+compose the two Functors to create a new Functor on F[G[\_]]:
 
 ```scala
 scala> val listOpt = Functor[List] compose Functor[Option]
-listOpt: cats.Functor[[α]List[Option[α]]] = cats.Functor$$anon$1@420b91d1
+listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@34127902
 
 scala> listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
 res9: List[Option[Int]] = List(Some(2), None, Some(4))

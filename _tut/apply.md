@@ -32,14 +32,14 @@ scala> implicit val optionApply: Apply[Option] = new Apply[Option] {
      |     fa.flatMap (a => f.map (ff => ff(a)))
      |   def map[A,B](fa: Option[A])(f: A => B) = fa map f
      | }
-optionApply: cats.Apply[Option] = $anon$1@70ed3144
+optionApply: cats.Apply[Option] = $anon$1@7020bf11
 
 scala> implicit val listApply: Apply[List] = new Apply[List] {
      |   def apply[A, B](fa: List[A])(f: List[A => B]): List[B] =
      |     fa.flatMap (a => f.map (ff => ff(a)))
      |   def map[A,B](fa: List[A])(f: A => B) = fa map f
      | }
-listApply: cats.Apply[List] = $anon$1@2a8a7286
+listApply: cats.Apply[List] = $anon$1@69dd7afe
 ```
 
 ### map
@@ -106,16 +106,42 @@ scala> Apply[Option].apply2(Some(1), Some(2))(None)
 res10: Option[Nothing] = None
 ```
 
+## apply builder syntax
+
+The `|@|` operator offers an alternative syntax for the higher-arity `Apply` functions (`applyN`, `mapN`).
+First, import `cats.syntax.all._` or `cats.syntax.apply._`. Here we see that following two functions, `f1` and `f2`, are equivalent:
+```scala
+scala> import cats.syntax.apply._
+import cats.syntax.apply._
+
+scala> def f1(a: Option[Int], b: Option[Int], c: Option[Int]) =
+     |   (a |@| b |@| c) map { _ * _ * _ }
+f1: (a: Option[Int], b: Option[Int], c: Option[Int])Option[Int]
+
+scala> def f2(a: Option[Int], b: Option[Int], c: Option[Int]) =
+     |   Apply[Option].map3(a, b, c)(_ * _ * _)
+f2: (a: Option[Int], b: Option[Int], c: Option[Int])Option[Int]
+
+scala> f1(Some(1), Some(2), Some(3))
+res11: Option[Int] = Some(6)
+
+scala> f2(Some(1), Some(2), Some(3))
+res12: Option[Int] = Some(6)
+```
+
+All instances created by `|@|` have `map`, `apply`, and `tupled` methods of the appropriate arity.
+
 ## composition
 
 Like Functors, Apply instances also compose:
+
 ```scala
 scala> val listOpt = Apply[List] compose Apply[Option]
-listOpt: cats.Apply[[A]List[Option[A]]] = cats.Apply$$anon$1@60c862ef
+listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@34d45559
 
 scala> val plusOne = (x:Int) => x + 1
 plusOne: Int => Int = <function1>
 
 scala> listOpt.apply(List(Some(1), None, Some(3)))(List(Some(plusOne)))
-res11: List[Option[Int]] = List(Some(2), None, Some(4))
+res13: List[Option[Int]] = List(Some(2), None, Some(4))
 ```
