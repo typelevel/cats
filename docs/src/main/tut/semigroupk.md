@@ -79,3 +79,37 @@ SemigroupK[Option].combine(Some(1), Some(2))
 SemigroupK[Option].combine(Some(1), None)
 SemigroupK[Option].combine(None, Some(2))
 ```
+
+There is inline syntax available for both Semigroup and
+SemigroupK. Here we are following the convention from scalaz, that
+`|+|` is the operator from semigroup and that `<+>` is the operator
+from SemigroupK (called Plus in scalaz).
+
+```tut
+import cats.syntax.all._
+import cats.implicits._
+import cats.std._
+
+val one = Option(1)
+val two = Option(2)
+val n: Option[Int] = None
+
+one |+| two
+one <+> two
+n |+| two
+n <+> two
+n |+| n
+n <+> n
+two |+| n
+two <+> n
+```
+
+You'll notice that instead of declaring `one` as `Some(1)`, I chose
+`Option(1)`, and I added an explicit type declaration for `n`. This is
+because there aren't typeclass instances for Some or None, but for
+Option. If we try to use Some and None, we'll get errors:
+
+```tut:nofail
+Some(1) <+> None
+None <+> Some(1)
+```

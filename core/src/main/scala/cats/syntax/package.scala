@@ -19,6 +19,7 @@ package object syntax {
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object semigroup extends SemigroupSyntax
+  object semigroupk extends SemigroupKSyntax
   object show extends ShowSyntax
   object strong extends StrongSyntax
 }
