@@ -4,8 +4,8 @@ package std
 import algebra.Eq
 
 trait OptionInstances {
-  implicit val optionInstance: Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] =
-    new Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] {
+  implicit val optionInstance: Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] =
+    new Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] {
 
       def empty[A]: Option[A] = None
 

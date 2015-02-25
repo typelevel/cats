@@ -93,6 +93,9 @@ lazy val macros = project
 lazy val core = project.dependsOn(macros)
   .settings(moduleName := "cats-core")
   .settings(catsSettings: _*)
+  .settings(
+    sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
+  )
 
 lazy val laws = project.dependsOn(macros, core, data)
   .settings(moduleName := "cats-laws")
