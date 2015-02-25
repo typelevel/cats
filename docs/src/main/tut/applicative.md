@@ -29,7 +29,7 @@ Applicative[List].pure(1)
 ```
 
 Like [Functor](functor.html) and [Apply](apply.html), Applicative
-functors also composes naturally with other Applicative functors, when
+functors also composes naturally with other Applicative functors. When
 you compose one Applicative with another, the resulting `pure`
 operation will lift the passed value into one context, and the result
 into the other context:
