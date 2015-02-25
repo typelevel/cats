@@ -2,6 +2,7 @@ package cats
 package data
 
 import cats.data.Or.{LeftOr, RightOr}
+import cats.data.Validated.{Valid, Invalid}
 
 import scala.reflect.ClassTag
 import scala.util.{Success, Failure, Try}
@@ -47,6 +48,8 @@ sealed abstract class Or[+A, +B] extends Product with Serializable {
   }
 
   def toEither: Either[A, B] = fold(Left(_), Right(_))
+
+  def toValidated: Validated[A,B] = fold(Invalid(_), Valid(_))
 
   def toOption: Option[B] = fold(_ => None, Some(_))
 
