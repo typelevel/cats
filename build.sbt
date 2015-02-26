@@ -106,7 +106,7 @@ lazy val laws = project.dependsOn(macros, core, data)
     )
   )
 
-lazy val std = project.dependsOn(macros, core, laws)
+lazy val std = project.dependsOn(macros, core)
   .settings(moduleName := "cats-std")
   .settings(catsSettings: _*)
   .settings(
