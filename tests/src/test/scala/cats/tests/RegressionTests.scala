@@ -65,4 +65,13 @@ class RegressionTests extends CatsSuite {
     )((_: Unit, _: Unit) => ()).run("")._2
     assert(twelve == "12")
   }
+
+  test("#167: confirm map3 order") {
+    val oneTwoThree = Apply[State[String, ?]].map3(
+      State[String, Unit](s => ((), s + "1")),
+      State[String, Unit](s => ((), s + "2")),
+      State[String, Unit](s => ((), s + "3"))
+    )((_: Unit, _: Unit, _: Unit) => ()).run("")._2
+    assert(oneTwoThree == "123")
+  }
 }
