@@ -19,7 +19,7 @@ trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
    * apply2 is a binary version of apply, defined in terms of apply.
    */
   def apply2[A, B, Z](fa: F[A], fb: F[B])(f: F[(A, B) => Z]): F[Z] =
-    apply(fa)(apply(fb)(map(f)(f => (b: B) => (a: A) => f(a, b))))
+    apply(fb)(apply(fa)(map(f)(f => (a: A) => (b: B) => f(a, b))))
 
   /**
    * Applies the pure (binary) function f to the effectful values fa and fb.
@@ -27,7 +27,7 @@ trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
    * map2 can be seen as a binary version of [[cats.Functor]]#map.
    */
   def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
-    apply(fa)(map(fb)(b => (a: A) => f(a, b)))
+    apply(fb)(map(fa)(a => (b: B) => f(a, b)))
 
   /**
    * Two sequentially dependent Applys can be composed.
