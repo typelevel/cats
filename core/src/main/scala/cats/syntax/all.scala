@@ -19,4 +19,5 @@ trait AllSyntax
     with ProfunctorSyntax
     with SemigroupSyntax
     with ShowSyntax
+    with SplitSyntax
     with StrongSyntax
