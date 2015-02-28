@@ -97,3 +97,67 @@ res7: Option[Int] = Some(1)
 scala> SemigroupK[Option].combine(None, Some(2))
 res8: Option[Int] = Some(2)
 ```
+
+There is inline syntax available for both Semigroup and
+SemigroupK. Here we are following the convention from scalaz, that
+`|+|` is the operator from semigroup and that `<+>` is the operator
+from SemigroupK (called Plus in scalaz).
+
+```scala
+scala> import cats.syntax.all._
+import cats.syntax.all._
+
+scala> import cats.implicits._
+import cats.implicits._
+
+scala> import cats.std._
+import cats.std._
+
+scala> val one = Option(1)
+one: Option[Int] = Some(1)
+
+scala> val two = Option(2)
+two: Option[Int] = Some(2)
+
+scala> val n: Option[Int] = None
+n: Option[Int] = None
+
+scala> one |+| two
+res9: Option[Int] = Some(3)
+
+scala> one <+> two
+res10: Option[Int] = Some(1)
+
+scala> n |+| two
+res11: Option[Int] = Some(2)
+
+scala> n <+> two
+res12: Option[Int] = Some(2)
+
+scala> n |+| n
+res13: Option[Int] = None
+
+scala> n <+> n
+res14: Option[Int] = None
+
+scala> two |+| n
+res15: Option[Int] = Some(2)
+
+scala> two <+> n
+res16: Option[Int] = Some(2)
+```
+
+You'll notice that instead of declaring `one` as `Some(1)`, I chose
+`Option(1)`, and I added an explicit type declaration for `n`. This is
+because there aren't typeclass instances for Some or None, but for
+Option. If we try to use Some and None, we'll get errors:
+
+```scala
+scala> Some(1) <+> None
+<console>:24: error: value <+> is not a member of Some[Int]
+              Some(1) <+> None
+                      ^
+
+scala> None <+> Some(1)
+res18: Option[Int] = Some(1)
+```
