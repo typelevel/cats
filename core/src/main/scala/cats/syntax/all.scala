@@ -1,7 +1,8 @@
 package cats.syntax
 
 trait AllSyntax
-    extends ApplySyntax
+    extends AnySyntax
+    with ApplySyntax
     with BifunctorSyntax
     with CoflatMapSyntax
     with ComonadSyntax
@@ -15,6 +16,7 @@ trait AllSyntax
     with MonadCombineSyntax
     with MonadFilterSyntax
     with OrderSyntax
+    with OptionSyntax
     with PartialOrderSyntax
     with ProfunctorSyntax
     with SemigroupSyntax
