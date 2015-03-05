@@ -38,7 +38,7 @@ It is trivial to supply a Show instance for String:
 scala> implicit val stringShow = new Show[String] {
      |   def show(s: String) = s
      | }
-stringShow: Show[String] = $anon$1@65457e1f
+stringShow: Show[String] = $anon$1@51b6cc25
 
 scala> // and now our call to Log succeeds
      | log("a string")
