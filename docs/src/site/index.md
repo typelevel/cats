@@ -3,10 +3,6 @@ layout: default
 title:  "Home"
 section: "home"
 ---
-
-<a name="Introduction"></a>
-# Introduction
-
 Cats is an experimental library proof-of-concept library intended to
 provide abstractions for functional programming in the [Scala
 programming language](https://scala-lang.org). The name is a playful
@@ -19,6 +15,15 @@ shortening of the word *category*.
   are evolving quickly and we currently make no guarantees about what
   might drastically change in the near future.</p> </div>
 
+
+<a name="getting-started"></a>
+# Getting Started
+
+Cats has not yet published artifacts, so in order to use Cats you will have to get the Cats source code, and publish jars locally, with `sbt publish-local`
+
+Then in your project, add to your build.sbt
+
+    libraryDependencies += "org.spire-math" %% "cats-core" % "0.1.0-SNAPSHOT"
 
 <a name "motivations"></a>
 # Motivations
@@ -76,15 +81,6 @@ In an attempt to be more modular, Cats is broken up into a number of sub-project
 * *laws* - laws for the typeclasses, used to validate typeclass instances
 * *tests* - tests that check instances from *std* with laws from *laws*
 * *docs* - The source for this website
-
-<a name="getting-started"></a>
-# Getting Started
-
-Cats has not yet published artifacts, so in order to use Cats you will have to get the Cats source code, and publish jars locally, with `sbt publish-local`
-
-Then in your project, add to your build.sbt
-
-    libraryDependencies += "org.spire-math" %% "cats-core" % "0.1.0-SNAPSHOT"
 
 <a name="copyright"></a>
 # Copyright and License
