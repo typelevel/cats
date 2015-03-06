@@ -64,7 +64,7 @@ lazy val docSettings = Seq(
     "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
     "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath
   ),
-  git.remoteRepo := "git@github.com:stew/cats.git",
+  git.remoteRepo := "git@github.com:non/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
 
