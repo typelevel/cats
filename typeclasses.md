@@ -7,7 +7,7 @@ section: "typeclasses"
 
 {% for x in site.tut %}
 {% if x.section == 'typeclasses' %}
-- [{{x.title}}]({{x.url}})
+- [{{x.title}}]({{site.baseurl}}{{x.url}})
 {% endif %}
 {% endfor %}
 

@@ -22,7 +22,6 @@ header ol li {
   padding: 5px 0 5px 0;
 }
 header ol li, header ol {
-  width: auto;
   white-space: nowrap !important;
   height: auto;
 }
@@ -58,12 +57,11 @@ div#header  {
 }
 
 div#container {
-    margin-left: auto;
-    margin-right: auto;
     text-align:left;
 }
 div#content p {
-    line-height:1.4
+    line-height:1.4;
+    margin: 10px;
 }
 div#navigation ol {
     margin:15px 0;
@@ -84,12 +82,6 @@ div#navigation {
 
 div#footer p{
     margin:0;padding:5px 10px;
-}
-
-div#wrapper{
-#    width:100%;
-#    width:700px;
-#    float:left;
 }
 
 div#content {
@@ -115,7 +107,6 @@ div#extra ul {
 
 div#footer {
     clear:left;
-    #width:100%;
 }
 
 div#content h1 {
@@ -181,7 +172,6 @@ div#navbar {
 }
 
 div#navbar ul {
-#    width: 70%;
     margin: auto;
     display: block;
     text-align: center;
