@@ -8,7 +8,6 @@ provide abstractions for functional programming in the [Scala
 programming language](https://scala-lang.org). The name is a playful
 shortening of the word *category*.
 
-
 <div class="msg warn"> <p><strong> Cats is currently an experimental
   project under active development</strong>. Feedback and
   contributions are welcomed as we look to improve the project. This

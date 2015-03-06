@@ -44,7 +44,7 @@
 	    <li {%if page.section =="datatypes" %} class="active" {% else %} class="inactive" {% endif %}>
 	      <a  href="{{ site.baseurl }}/datatypes.html">Data Types</a>
 	    </li>
-	    <li {%if page.section =="colophone" %} class="active" {% else %} class="inactive" {% endif %}>
+	    <li {%if page.section =="colophon" %} class="active" {% else %} class="inactive" {% endif %}>
 	      <a href="{{ site.baseurl }}/colophon.html">Colophon</a>
 	    </li>
 	  </ul>
@@ -52,40 +52,6 @@
 	<div id="content">
           {{ content }}
 	</div>
-      </div>
-      <div id="navigation">
-        <!-- home -->
-        {% if page.section == 'home' %}
-        <ol>
-          <li><a href="#Introduction">Introduction</a></li>
-          <li><a href="#motivations">Motivations</a></li>
-          <li><a href="#project-structure">Project Structure</a></li>
-          <li><a href="#getting-started">Getting Started</a></li>
-          <li><a href="#copyright">Copyright and License</a></li>
-        </ol>
-        {% endif %}
-
-        <!-- typeclasses, from tut -->
-        {% if page.section == 'typeclasses' %}
-        <ol class="menu">
-          {% for x in site.tut %}
-          {% if x.section == 'typeclasses' %}
-          <li><a href="{{ site.baseurl }}{{ x.url }}">{{ x.title }}</a></li>
-          {% endif %}
-          {% endfor %}
-        </ol>
-        {% endif %}
-
-        <!-- data types, from tut -->
-        {% if page.section == 'data' %}
-        <ol class="menu">
-          {% for x in site.tut %}
-          {% if x.section == 'data' %}
-          <li><a href="{{ site.baseurl }}{{ x.url }}">{{ x.title }}</a></li>
-          {% endif %}
-          {% endfor %}
-        </ol>
-        {% endif %}
       </div>
       {% if (page.section == 'data') or (page.section == 'typeclasses') and ((page.source != null) or (page.scaladoc != null))%}
       <div id="extra">
