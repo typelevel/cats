@@ -97,7 +97,7 @@ lazy val core = project.dependsOn(macros)
     sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
   )
 
-lazy val laws = project.dependsOn(macros, core, data)
+lazy val laws = project.dependsOn(macros, core, data, std)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings: _*)
   .settings(
