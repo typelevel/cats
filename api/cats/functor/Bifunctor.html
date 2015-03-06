@@ -51,7 +51,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.functor.Bifunctor.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">Bifunctor.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A typeclass of types which give rise to two independent, covariant
+functors.
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.functor.Bifunctor.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/functor/Bifunctor.scala" target="_blank">Bifunctor.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -111,7 +113,8 @@
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">The quintessential method of the Bifunctor trait, it applies a
+function to each &quot;side&quot; of the bifunctor.</p>
     </li></ol>
             </div>
 
@@ -316,6 +319,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.functor.Bifunctor#leftMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="leftMap[A,B,C](fab:F[A,B])(f:A=&gt;C):F[C,B]"></a>
+      <a id="leftMap[A,B,C](F[A,B])((A)⇒C):F[C,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.functor.Bifunctor.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.leftMap.A">A</span>, <span class="extype" name="cats.functor.Bifunctor.leftMap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Bifunctor.leftMap.A">A</span>) ⇒ <span class="extype" name="cats.functor.Bifunctor.leftMap.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.functor.Bifunctor.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.leftMap.C">C</span>, <span class="extype" name="cats.functor.Bifunctor.leftMap.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.Bifunctor@leftMap[A,B,C](fab:F[A,B])(f:A=&gt;C):F[C,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">apply a function to the &quot;left&quot; functor
+</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -367,6 +388,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.functor.Bifunctor#rightMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="rightMap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]"></a>
+      <a id="rightMap[A,B,C](F[A,B])((B)⇒C):F[A,C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rightMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.functor.Bifunctor.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.rightMap.A">A</span>, <span class="extype" name="cats.functor.Bifunctor.rightMap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Bifunctor.rightMap.B">B</span>) ⇒ <span class="extype" name="cats.functor.Bifunctor.rightMap.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.functor.Bifunctor.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.rightMap.A">A</span>, <span class="extype" name="cats.functor.Bifunctor.rightMap.C">C</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.Bifunctor@rightMap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">apply a function ro the &quot;right&quot; functor
+</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

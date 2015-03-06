@@ -18,69 +18,40 @@
       <div id="header">
 	<div id="commute"><img src="http://plastic-idolatry.com/erik/cats2.png"/></div>
 	<div id="toolbox">
-	  <ul>
-	    <li>Source: <a href="https://github.com/non/cats">Github</a></li>
-	    <li>Chat: <a href="https://gitter.im/non/cats">Gitter</a></li>
-	    <li>Build: <a href="https://travis-ci.org/non/cats">Travis</a></li>
-	    <li>API: <a href="{{site.apidocs}}">Scaladoc</a></li>
-	  </ul>
+	  <table id="tooltable">
+	    <tr><td class="label">Source:</td><td class="link"><a href="https://github.com/non/cats">Github</a></td></tr>
+	    <tr><td class="label">Chat:</td><td class="link"><a href="https://gitter.im/non/cats">Gitter</a></td></tr>
+	    <tr><td class="label">Build:</td><td class="link"><a href="https://travis-ci.org/non/cats">Travis</a></td></tr>
+	    <tr><td class="label">Api:</td><td class="link"><a href="{{site.apidocs}}">Scaladoc</a></td></tr>
+	  </table>
 	</div>
 	<div id="banner">
           <h1>Cats</h1>
-	  <div id="tagline">
-	    A Library for Functional Programming in Scala
-	  </div>
 	</div>
       </div>
-      <hr/>
-      <div id="navbar">
-	<ul>
-	  <li><a href="{{ site.baseurl }}/index.html">About</a></li>
-	  <li><a href="{{ site.baseurl }}/contributing.html">Contributing</a></li>
-	  <li><a href="{{ site.baseurl }}/typeclasses.html">Typeclasses</a></li>
-	  <li><a href="{{ site.baseurl }}/datatypes.html">Data Types</a></li>
-	  <li><a href="{{ site.baseurl }}/colophon.html">Colophon</a></li>
-	</ul>
-      </div>
-      <hr/>
       <div id="wrapper">
+	<div id="navbar">
+	  <ul>
+	    <li {%if page.section =="home" %} class="active" {% else %} class="inactive" {% endif %}>
+	      <a href="{{ site.baseurl }}/index.html">About</a>
+	    </li>
+	    <li {%if page.section =="contributing" %} class="active" {% else %} class="inactive"{% endif %}>
+	      <a href="{{ site.baseurl }}/contributing.html">Contributing</a>
+	    </li>
+	    <li {%if page.section =="typeclasses" %} class="active" {% else %} class="inactive" {% endif%}>
+	      <a href="{{ site.baseurl }}/typeclasses.html">Typeclasses</a>
+	    </li>
+	    <li {%if page.section =="datatypes" %} class="active" {% else %} class="inactive" {% endif %}>
+	      <a  href="{{ site.baseurl }}/datatypes.html">Data Types</a>
+	    </li>
+	    <li {%if page.section =="colophon" %} class="active" {% else %} class="inactive" {% endif %}>
+	      <a href="{{ site.baseurl }}/colophon.html">Colophon</a>
+	    </li>
+	  </ul>
+	</div>
 	<div id="content">
           {{ content }}
 	</div>
-      </div>
-      <div id="navigation">
-        <!-- home -->
-        {% if page.section == 'home' %}
-        <ol>
-          <li><a href="#Introduction">Introduction</a></li>
-          <li><a href="#motivations">Motivations</a></li>
-          <li><a href="#project-structure">Project Structure</a></li>
-          <li><a href="#getting-started">Getting Started</a></li>
-          <li><a href="#copyright">Copyright and License</a></li>
-        </ol>
-        {% endif %}
-
-        <!-- typeclasses, from tut -->
-        {% if page.section == 'typeclasses' %}
-        <ol class="menu">
-          {% for x in site.tut %}
-          {% if x.section == 'typeclasses' %}
-          <li><a href="{{ site.baseurl }}{{ x.url }}">{{ x.title }}</a></li>
-          {% endif %}
-          {% endfor %}
-        </ol>
-        {% endif %}
-
-        <!-- data types, from tut -->
-        {% if page.section == 'data' %}
-        <ol class="menu">
-          {% for x in site.tut %}
-          {% if x.section == 'data' %}
-          <li><a href="{{ site.baseurl }}{{ x.url }}">{{ x.title }}</a></li>
-          {% endif %}
-          {% endfor %}
-        </ol>
-        {% endif %}
       </div>
       {% if (page.section == 'data') or (page.section == 'typeclasses') and ((page.source != null) or (page.scaladoc != null))%}
       <div id="extra">

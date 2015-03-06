@@ -56,7 +56,7 @@ of the foldLazy method in action. Here's a method to count how many
 elements appear in a list before the value 3:</p><pre><span class="kw">def</span> f(n: <span class="std">Int</span>): Fold[<span class="std">Int</span>] =
   <span class="kw">if</span> (n == <span class="num">3</span>) Fold.Return(<span class="num">0</span>) <span class="kw">else</span> Fold.Continue(_ + <span class="num">1</span>)
 
-<span class="kw">val</span> count: Lazy[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>).foldLazy(Lazy(<span class="num">0</span>))(f)</pre><p>When we call <code>count.force</code>, the following occurs:</p><ul><li><code>f(1)</code> produces <code>res0: Continue(_ + 1)</code></li><li><code>f(2)</code> produces <code>res1: Continue(_ + 1)</code></li><li><code>f(3)</code> produces <code>res2: Return(0)</code></li></ul><p>Now we unwind back through the continue instances:</p><ul><li><code>res2</code> returns <code>0</code></li><li><code>res1(0)</code> returns <code>1</code></li><li><code>res0(1)</code> returns <code>2</code></li></ul><p>And so the result is 2.</p><p>This code searches an infinite stream for 77:</p><pre><span class="kw">val</span> found: Lazy[<span class="std">Boolean</span>] =
+<span class="kw">val</span> count: Lazy[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>).foldLazy(Lazy(<span class="num">0</span>))(f)</pre><p>When we call <code>count.value</code>, the following occurs:</p><ul><li><code>f(1)</code> produces <code>res0: Continue(_ + 1)</code></li><li><code>f(2)</code> produces <code>res1: Continue(_ + 1)</code></li><li><code>f(3)</code> produces <code>res2: Return(0)</code></li></ul><p>Now we unwind back through the continue instances:</p><ul><li><code>res2</code> returns <code>0</code></li><li><code>res1(0)</code> returns <code>1</code></li><li><code>res0(1)</code> returns <code>2</code></li></ul><p>And so the result is 2.</p><p>This code searches an infinite stream for 77:</p><pre><span class="kw">val</span> found: Lazy[<span class="std">Boolean</span>] =
   Stream.from(<span class="num">0</span>).foldLazy(Lazy(<span class="kw">false</span>)) { n <span class="kw">=&gt;</span>
     <span class="kw">if</span> (n == <span class="num">77</span>) Fold.Return(<span class="kw">true</span>) <span class="kw">else</span> Fold.Pass
   }</pre><p>Here's another example that sums the list until it reaches a
@@ -64,15 +64,15 @@ negative number:</p><pre><span class="kw">val</span> sum: Lazy[<span class="std"
   numbers.foldLazy(Lazy(<span class="num">0.0</span>)) { n <span class="kw">=&gt;</span>
     <span class="kw">if</span> (n &lt; <span class="num">0</span>) Fold.Return(<span class="num">0.0</span>) <span class="kw">else</span> Fold.Continue(n + _)
   }</pre><p>This strange example counts an infinite stream. Since the result is
-lazy, it will only hang the program once <code>count.force</code> is called:</p><pre><span class="kw">val</span> count: Lazy[<span class="std">Long</span>] =
+lazy, it will only hang the program once <code>count.value</code> is called:</p><pre><span class="kw">val</span> count: Lazy[<span class="std">Long</span>] =
   Stream.from(<span class="num">0</span>).foldLazy(Lazy(<span class="num">0</span>L)) { _ <span class="kw">=&gt;</span>
     Fold.Continue(_ + <span class="num">1</span>L)
   }</pre><p>You can even implement foldLeft in terms of foldLazy (!):</p><pre><span class="kw">def</span> foldl[A, B](as: <span class="std">List</span>[A], b: B)(f: (B, A) <span class="kw">=&gt;</span> B): B =
   as.foldLazy(Lazy((b: B) <span class="kw">=&gt;</span> b)) { a <span class="kw">=&gt;</span>
     Fold.Continue(g <span class="kw">=&gt;</span> (b: B) <span class="kw">=&gt;</span> g(f(b, a)))
-  }.force(b)</pre><p>(In practice you would not want to use the <code>foldl</code> because it is
+  }.value(b)</pre><p>(In practice you would not want to use the <code>foldl</code> because it is
 not stack-safe.)
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">Fold.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Fold.scala" target="_blank">Fold.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">

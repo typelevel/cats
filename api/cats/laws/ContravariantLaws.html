@@ -52,7 +52,7 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Laws that must be obeyed by any <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">cats.functor.Contravariant</a>.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">ContravariantLaws.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/laws/src/main/scala/cats/laws/ContravariantLaws.scala" target="_blank">ContravariantLaws.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a>[<span class="extype" name="cats.laws.ContravariantLaws.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -210,35 +210,35 @@
               
         </dd></dl></div>
     </li><li name="cats.laws.ContravariantLaws#contravariantComposition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contravariantComposition[A,B,C](fa:F[A],f:B=&gt;A,g:C=&gt;B):(F[C],F[C])"></a>
-      <a id="contravariantComposition[A,B,C](F[A],(B)⇒A,(C)⇒B):(F[C],F[C])"></a>
+      <a id="contravariantComposition[A,B,C](fa:F[A],f:B=&gt;A,g:C=&gt;B):cats.laws.IsEq[F[C]]"></a>
+      <a id="contravariantComposition[A,B,C](F[A],(B)⇒A,(C)⇒B):IsEq[F[C]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contravariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.A">A</span></span>, <span name="g">g: (<span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.C">C</span>) ⇒ <span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.B">B</span></span>)</span><span class="result">: (<span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.C">C</span>], <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.C">C</span>])</span>
+        <span class="name">contravariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.A">A</span></span>, <span name="g">g: (<span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.C">C</span>) ⇒ <span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.B">B</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.ContravariantLaws.contravariantComposition.C">C</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ContravariantLaws@contravariantComposition[A,B,C](fa:F[A],f:B=&gt;A,g:C=&gt;B):(F[C],F[C])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ContravariantLaws@contravariantComposition[A,B,C](fa:F[A],f:B=&gt;A,g:C=&gt;B):cats.laws.IsEq[F[C]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       
     </li><li name="cats.laws.ContravariantLaws#contravariantIdentity" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contravariantIdentity[A](fa:F[A]):(F[A],F[A])"></a>
-      <a id="contravariantIdentity[A](F[A]):(F[A],F[A])"></a>
+      <a id="contravariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]"></a>
+      <a id="contravariantIdentity[A](F[A]):IsEq[F[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contravariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.ContravariantLaws.contravariantIdentity.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.ContravariantLaws.contravariantIdentity.A">A</span>], <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.ContravariantLaws.contravariantIdentity.A">A</span>])</span>
+        <span class="name">contravariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.ContravariantLaws.contravariantIdentity.A">A</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.ContravariantLaws.contravariantIdentity.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ContravariantLaws@contravariantIdentity[A](fa:F[A]):(F[A],F[A])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ContravariantLaws@contravariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -335,35 +335,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.laws.InvariantLaws#invariantComposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):(F[C],F[C])"></a>
-      <a id="invariantComposition[A,B,C](F[A],(A)⇒B,(B)⇒A,(B)⇒C,(C)⇒B):(F[C],F[C])"></a>
+      <a id="invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):cats.laws.IsEq[F[C]]"></a>
+      <a id="invariantComposition[A,B,C](F[A],(A)⇒B,(B)⇒A,(B)⇒C,(C)⇒B):IsEq[F[C]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">invariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>]</span>, <span name="f1">f1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>, <span name="f2">f2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span></span>, <span name="g1">g1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span></span>, <span name="g2">g2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>)</span><span class="result">: (<span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>], <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>])</span>
+        <span class="name">invariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>]</span>, <span name="f1">f1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>, <span name="f2">f2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span></span>, <span name="g1">g1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span></span>, <span name="g2">g2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ContravariantLaws@invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):(F[C],F[C])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ContravariantLaws@invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):cats.laws.IsEq[F[C]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a></dd></dl></div>
     </li><li name="cats.laws.InvariantLaws#invariantIdentity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="invariantIdentity[A](fa:F[A]):(F[A],F[A])"></a>
-      <a id="invariantIdentity[A](F[A]):(F[A],F[A])"></a>
+      <a id="invariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]"></a>
+      <a id="invariantIdentity[A](F[A]):IsEq[F[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">invariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>], <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>])</span>
+        <span class="name">invariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.ContravariantLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ContravariantLaws@invariantIdentity[A](fa:F[A]):(F[A],F[A])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ContravariantLaws@invariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>

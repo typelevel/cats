@@ -52,12 +52,12 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Laws that must be obeyed by any <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">FlatMapLaws.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/laws/src/main/scala/cats/laws/FlatMapLaws.scala" target="_blank">FlatMapLaws.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="ApplyLaws.html" class="extype" name="cats.laws.ApplyLaws">ApplyLaws</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>], <a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>], <a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="MonadLaws.html" class="extype" name="cats.laws.MonadLaws">MonadLaws</a></div>
+            <div class="subClasses hiddenContent"><a href="MonadCombineLaws.html" class="extype" name="cats.laws.MonadCombineLaws">MonadCombineLaws</a>, <a href="MonadFilterLaws.html" class="extype" name="cats.laws.MonadFilterLaws">MonadFilterLaws</a>, <a href="MonadLaws.html" class="extype" name="cats.laws.MonadLaws">MonadLaws</a></div>
           </div></div>
         
 
@@ -173,18 +173,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.laws.ApplyLaws#applyComposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="applyComposition[A,B,C](fa:F[A],fab:F[A=&gt;B],fbc:F[B=&gt;C]):(F[C],F[C])"></a>
-      <a id="applyComposition[A,B,C](F[A],F[(A)⇒B],F[(B)⇒C]):(F[C],F[C])"></a>
+      <a id="applyComposition[A,B,C](fa:F[A],fab:F[A=&gt;B],fbc:F[B=&gt;C]):cats.laws.IsEq[F[C]]"></a>
+      <a id="applyComposition[A,B,C](F[A],F[(A)⇒B],F[(B)⇒C]):IsEq[F[C]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">applyComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.ApplyLaws.applyComposition.A">A</span>]</span>, <span name="fab">fab: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[(<span class="extype" name="cats.laws.ApplyLaws.applyComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.ApplyLaws.applyComposition.B">B</span>]</span>, <span name="fbc">fbc: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[(<span class="extype" name="cats.laws.ApplyLaws.applyComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.ApplyLaws.applyComposition.C">C</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.ApplyLaws.applyComposition.C">C</span>], <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.ApplyLaws.applyComposition.C">C</span>])</span>
+        <span class="name">applyComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.ApplyLaws.applyComposition.A">A</span>]</span>, <span name="fab">fab: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[(<span class="extype" name="cats.laws.ApplyLaws.applyComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.ApplyLaws.applyComposition.B">B</span>]</span>, <span name="fbc">fbc: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[(<span class="extype" name="cats.laws.ApplyLaws.applyComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.ApplyLaws.applyComposition.C">C</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.ApplyLaws.applyComposition.C">C</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.FlatMapLaws@applyComposition[A,B,C](fa:F[A],fab:F[A=&gt;B],fbc:F[B=&gt;C]):(F[C],F[C])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.FlatMapLaws@applyComposition[A,B,C](fa:F[A],fab:F[A=&gt;B],fbc:F[B=&gt;C]):cats.laws.IsEq[F[C]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -230,35 +230,35 @@
               
         </dd></dl></div>
     </li><li name="cats.laws.FunctorLaws#covariantComposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="covariantComposition[A,B,C](fa:F[A],f:A=&gt;B,g:B=&gt;C):(F[C],F[C])"></a>
-      <a id="covariantComposition[A,B,C](F[A],(A)⇒B,(B)⇒C):(F[C],F[C])"></a>
+      <a id="covariantComposition[A,B,C](fa:F[A],f:A=&gt;B,g:B=&gt;C):cats.laws.IsEq[F[C]]"></a>
+      <a id="covariantComposition[A,B,C](F[A],(A)⇒B,(B)⇒C):IsEq[F[C]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">covariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.FunctorLaws.covariantComposition.B">B</span></span>, <span name="g">g: (<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.FunctorLaws.covariantComposition.C">C</span></span>)</span><span class="result">: (<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.C">C</span>], <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.C">C</span>])</span>
+        <span class="name">covariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.FunctorLaws.covariantComposition.B">B</span></span>, <span name="g">g: (<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.FunctorLaws.covariantComposition.C">C</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantComposition.C">C</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.FlatMapLaws@covariantComposition[A,B,C](fa:F[A],f:A=&gt;B,g:B=&gt;C):(F[C],F[C])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.FlatMapLaws@covariantComposition[A,B,C](fa:F[A],f:A=&gt;B,g:B=&gt;C):cats.laws.IsEq[F[C]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">FunctorLaws</a></dd></dl></div>
     </li><li name="cats.laws.FunctorLaws#covariantIdentity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="covariantIdentity[A](fa:F[A]):(F[A],F[A])"></a>
-      <a id="covariantIdentity[A](F[A]):(F[A],F[A])"></a>
+      <a id="covariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]"></a>
+      <a id="covariantIdentity[A](F[A]):IsEq[F[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">covariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantIdentity.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantIdentity.A">A</span>], <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantIdentity.A">A</span>])</span>
+        <span class="name">covariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantIdentity.A">A</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FunctorLaws.covariantIdentity.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.FlatMapLaws@covariantIdentity[A](fa:F[A]):(F[A],F[A])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.FlatMapLaws@covariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -321,35 +321,35 @@
               
         </dd></dl></div>
     </li><li name="cats.laws.FlatMapLaws#flatMapAssociativity" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="flatMapAssociativity[A,B,C](fa:F[A],f:A=&gt;F[B],g:B=&gt;F[C]):(F[C],F[C])"></a>
-      <a id="flatMapAssociativity[A,B,C](F[A],(A)⇒F[B],(B)⇒F[C]):(F[C],F[C])"></a>
+      <a id="flatMapAssociativity[A,B,C](fa:F[A],f:A=&gt;F[B],g:B=&gt;F[C]):cats.laws.IsEq[F[C]]"></a>
+      <a id="flatMapAssociativity[A,B,C](F[A],(A)⇒F[B],(B)⇒F[C]):IsEq[F[C]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">flatMapAssociativity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.A">A</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.B">B</span>]</span>, <span name="g">g: (<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.B">B</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.C">C</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.C">C</span>], <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.C">C</span>])</span>
+        <span class="name">flatMapAssociativity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.A">A</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.B">B</span>]</span>, <span name="g">g: (<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.B">B</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.C">C</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapAssociativity.C">C</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.FlatMapLaws@flatMapAssociativity[A,B,C](fa:F[A],f:A=&gt;F[B],g:B=&gt;F[C]):(F[C],F[C])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.FlatMapLaws@flatMapAssociativity[A,B,C](fa:F[A],f:A=&gt;F[B],g:B=&gt;F[C]):cats.laws.IsEq[F[C]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       
     </li><li name="cats.laws.FlatMapLaws#flatMapConsistentApply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="flatMapConsistentApply[A,B](fa:F[A],fab:F[A=&gt;B]):(F[B],F[B])"></a>
-      <a id="flatMapConsistentApply[A,B](F[A],F[(A)⇒B]):(F[B],F[B])"></a>
+      <a id="flatMapConsistentApply[A,B](fa:F[A],fab:F[A=&gt;B]):cats.laws.IsEq[F[B]]"></a>
+      <a id="flatMapConsistentApply[A,B](F[A],F[(A)⇒B]):IsEq[F[B]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">flatMapConsistentApply</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.A">A</span>]</span>, <span name="fab">fab: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[(<span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.A">A</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.B">B</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.B">B</span>], <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.B">B</span>])</span>
+        <span class="name">flatMapConsistentApply</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.A">A</span>]</span>, <span name="fab">fab: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[(<span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.A">A</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.B">B</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.flatMapConsistentApply.B">B</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.FlatMapLaws@flatMapConsistentApply[A,B](fa:F[A],fab:F[A=&gt;B]):(F[B],F[B])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.FlatMapLaws@flatMapConsistentApply[A,B](fa:F[A],fab:F[A=&gt;B]):cats.laws.IsEq[F[B]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -389,35 +389,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.laws.InvariantLaws#invariantComposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):(F[C],F[C])"></a>
-      <a id="invariantComposition[A,B,C](F[A],(A)⇒B,(B)⇒A,(B)⇒C,(C)⇒B):(F[C],F[C])"></a>
+      <a id="invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):cats.laws.IsEq[F[C]]"></a>
+      <a id="invariantComposition[A,B,C](F[A],(A)⇒B,(B)⇒A,(B)⇒C,(C)⇒B):IsEq[F[C]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">invariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>]</span>, <span name="f1">f1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>, <span name="f2">f2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span></span>, <span name="g1">g1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span></span>, <span name="g2">g2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>)</span><span class="result">: (<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>], <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>])</span>
+        <span class="name">invariantComposition</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>]</span>, <span name="f1">f1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>, <span name="f2">f2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.A">A</span></span>, <span name="g1">g1: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span></span>, <span name="g2">g2: (<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>) ⇒ <span class="extype" name="cats.laws.InvariantLaws.invariantComposition.B">B</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantComposition.C">C</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.FlatMapLaws@invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):(F[C],F[C])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.FlatMapLaws@invariantComposition[A,B,C](fa:F[A],f1:A=&gt;B,f2:B=&gt;A,g1:B=&gt;C,g2:C=&gt;B):cats.laws.IsEq[F[C]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="InvariantLaws.html" class="extype" name="cats.laws.InvariantLaws">InvariantLaws</a></dd></dl></div>
     </li><li name="cats.laws.InvariantLaws#invariantIdentity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="invariantIdentity[A](fa:F[A]):(F[A],F[A])"></a>
-      <a id="invariantIdentity[A](F[A]):(F[A],F[A])"></a>
+      <a id="invariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]"></a>
+      <a id="invariantIdentity[A](F[A]):IsEq[F[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">invariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>], <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>])</span>
+        <span class="name">invariantIdentity</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.InvariantLaws.invariantIdentity.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.FlatMapLaws@invariantIdentity[A](fa:F[A]):(F[A],F[A])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.FlatMapLaws@invariantIdentity[A](fa:F[A]):cats.laws.IsEq[F[A]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -440,23 +440,23 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="cats.laws.FlatMapLaws#kleisliAssociativity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="kleisliAssociativity[A,B,C,D](f:A=&gt;F[B],g:B=&gt;F[C],h:C=&gt;F[D],a:A):(F[D],F[D])"></a>
-      <a id="kleisliAssociativity[A,B,C,D]((A)⇒F[B],(B)⇒F[C],(C)⇒F[D],A):(F[D],F[D])"></a>
+      <a id="kleisliAssociativity[A,B,C,D](f:A=&gt;F[B],g:B=&gt;F[C],h:C=&gt;F[D],a:A):cats.laws.IsEq[F[D]]"></a>
+      <a id="kleisliAssociativity[A,B,C,D]((A)⇒F[B],(B)⇒F[C],(C)⇒F[D],A):IsEq[F[D]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">kleisliAssociativity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.A">A</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.B">B</span>]</span>, <span name="g">g: (<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.B">B</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.C">C</span>]</span>, <span name="h">h: (<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.C">C</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.D">D</span>]</span>, <span name="a">a: <span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.A">A</span></span>)</span><span class="result">: (<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.D">D</span>], <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.D">D</span>])</span>
+        <span class="name">kleisliAssociativity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.A">A</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.B">B</span>]</span>, <span name="g">g: (<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.B">B</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.C">C</span>]</span>, <span name="h">h: (<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.C">C</span>) ⇒ <span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.D">D</span>]</span>, <span name="a">a: <span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.A">A</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.FlatMapLaws.F">F</span>[<span class="extype" name="cats.laws.FlatMapLaws.kleisliAssociativity.D">D</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.FlatMapLaws@kleisliAssociativity[A,B,C,D](f:A=&gt;F[B],g:B=&gt;F[C],h:C=&gt;F[D],a:A):(F[D],F[D])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.FlatMapLaws@kleisliAssociativity[A,B,C,D](f:A=&gt;F[B],g:B=&gt;F[C],h:C=&gt;F[D],a:A):cats.laws.IsEq[F[D]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">The composition of <a href="../data/Kleisli.html" class="extype" name="cats.data.Kleisli">cats.data.Kleisli</a> arrows is associative.</p><div class="fullcomment"><div class="comment cmt"><p>The composition of <a href="../data/Kleisli.html" class="extype" name="cats.data.Kleisli">cats.data.Kleisli</a> arrows is associative. This is
-analogous to the associativity law of <a href="../FlatMap.html#flatMap[A,B](fa:F[A])(f:A=&gt;F[B]):F[B]" class="extmbr" name="cats.FlatMap#flatMap">FlatMap.flatMap</a>.
+analogous to <a href="#flatMapAssociativity[A,B,C](fa:F[A],f:A=&gt;F[B],g:B=&gt;F[C]):cats.laws.IsEq[F[C]]" class="extmbr" name="cats.laws.FlatMapLaws#flatMapAssociativity">flatMapAssociativity</a>.
 </p></div></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>

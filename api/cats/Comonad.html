@@ -47,14 +47,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Comonad</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="CoFlatMap.html" class="extype" name="cats.CoFlatMap">CoFlatMap</a>[<span class="extype" name="cats.Comonad.F">F</span>]</span>
+        <span class="name">Comonad</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.Comonad.F">F</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Must obey the laws defined in <a href="laws/ComonadLaws.html" class="extype" name="cats.laws.ComonadLaws">laws.ComonadLaws</a>.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">Comonad.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Comonad.scala" target="_blank">Comonad.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="CoFlatMap.html" class="extype" name="cats.CoFlatMap">CoFlatMap</a>[<span class="extype" name="cats.Comonad.F">F</span>], <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Comonad.F">F</span>], <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Comonad.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.Comonad.F">F</span>], <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Comonad.F">F</span>], <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Comonad.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a></div>
@@ -75,7 +75,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.Comonad"><span>Comonad</span></li><li class="in" name="cats.CoFlatMap"><span>CoFlatMap</span></li><li class="in" name="cats.Functor"><span>Functor</span></li><li class="in" name="cats.functor.Invariant"><span>Invariant</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.Comonad"><span>Comonad</span></li><li class="in" name="cats.CoflatMap"><span>CoflatMap</span></li><li class="in" name="cats.Functor"><span>Functor</span></li><li class="in" name="cats.functor.Invariant"><span>Invariant</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -99,7 +99,7 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="cats.CoFlatMap#coflatMap" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="cats.CoflatMap#coflatMap" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="coflatMap[A,B](fa:F[A])(f:F[A]=&gt;B):F[B]"></a>
       <a id="coflatMap[A,B](F[A])((F[A])⇒B):F[B]"></a>
       <h4 class="signature">
@@ -108,14 +108,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">coflatMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.CoFlatMap.coflatMap.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.CoFlatMap.coflatMap.A">A</span>]) ⇒ <span class="extype" name="cats.CoFlatMap.coflatMap.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.CoFlatMap.coflatMap.B">B</span>]</span>
+        <span class="name">coflatMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.CoflatMap.coflatMap.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.CoflatMap.coflatMap.A">A</span>]) ⇒ <span class="extype" name="cats.CoflatMap.coflatMap.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.CoflatMap.coflatMap.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Comonad@coflatMap[A,B](fa:F[A])(f:F[A]=&gt;B):F[B]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CoFlatMap.html" class="extype" name="cats.CoFlatMap">CoFlatMap</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a></dd></dl></div>
     </li><li name="cats.Comonad#extract" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="extract[A](x:F[A]):A"></a>
       <a id="extract[A](F[A]):A"></a>
@@ -264,7 +264,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.CoFlatMap#coflatten" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="cats.CoflatMap#coflatten" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="coflatten[A](fa:F[A]):F[F[A]]"></a>
       <a id="coflatten[A](F[A]):F[F[A]]"></a>
       <h4 class="signature">
@@ -273,14 +273,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">coflatten</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.CoFlatMap.coflatten.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.CoFlatMap.coflatten.A">A</span>]]</span>
+        <span class="name">coflatten</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.CoflatMap.coflatten.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.Comonad.F">F</span>[<span class="extype" name="cats.CoflatMap.coflatten.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Comonad@coflatten[A](fa:F[A]):F[F[A]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CoFlatMap.html" class="extype" name="cats.CoFlatMap">CoFlatMap</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a></dd></dl></div>
     </li><li name="cats.Functor#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose[G[_]](implicitGG:cats.Functor[G]):cats.Functor[[X]F[G[X]]]"></a>
       <a id="compose[G[_]](Functor[G]):Functor[[X]F[G[X]]]"></a>
@@ -725,8 +725,8 @@ with the value
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="cats.CoFlatMap">
-              <h3>Inherited from <a href="CoFlatMap.html" class="extype" name="cats.CoFlatMap">CoFlatMap</a>[<span class="extype" name="cats.Comonad.F">F</span>]</h3>
+        <div class="parent" name="cats.CoflatMap">
+              <h3>Inherited from <a href="CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.Comonad.F">F</span>]</h3>
             </div><div class="parent" name="cats.Functor">
               <h3>Inherited from <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Comonad.F">F</span>]</h3>
             </div><div class="parent" name="cats.functor.Invariant">

@@ -1,0 +1,729 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>AlternativeTests - cats.laws.discipline.AlternativeTests</title>
+          <meta name="description" content="AlternativeTests - cats.laws.discipline.AlternativeTests" />
+          <meta name="keywords" content="AlternativeTests cats.laws.discipline.AlternativeTests" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'cats.laws.discipline.AlternativeTests';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="AlternativeTests$.html" title="Go to companion"><img src="../../../lib/trait_to_object_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="cats">cats</a>.<a href="../package.html" class="extype" name="cats.laws">laws</a>.<a href="package.html" class="extype" name="cats.laws.discipline">discipline</a></p>
+        <h1><a href="AlternativeTests$.html" title="Go to companion">AlternativeTests</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="AlternativeTests$.html" title="See companion">object AlternativeTests</a>
+            | <a href="package.html" class="extype" name="cats.laws.discipline">package discipline</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">AlternativeTests</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="ApplicativeTests.html" class="extype" name="cats.laws.discipline.ApplicativeTests">ApplicativeTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>] with <a href="MonoidKTests.html" class="extype" name="cats.laws.discipline.MonoidKTests">MonoidKTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/laws/src/main/scala/cats/laws/discipline/AlternativeTests.scala" target="_blank">AlternativeTests.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="MonoidKTests.html" class="extype" name="cats.laws.discipline.MonoidKTests">MonoidKTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>], <a href="SemigroupKTests.html" class="extype" name="cats.laws.discipline.SemigroupKTests">SemigroupKTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>], <a href="ApplicativeTests.html" class="extype" name="cats.laws.discipline.ApplicativeTests">ApplicativeTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>], <a href="ApplyTests.html" class="extype" name="cats.laws.discipline.ApplyTests">ApplyTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>], <a href="FunctorTests.html" class="extype" name="cats.laws.discipline.FunctorTests">FunctorTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>], <a href="InvariantTests.html" class="extype" name="cats.laws.discipline.InvariantTests">InvariantTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>], <span class="extype" name="org.typelevel.discipline.Laws">Laws</span>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="MonadCombineTests.html" class="extype" name="cats.laws.discipline.MonadCombineTests">MonadCombineTests</a></div>
+          </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="cats.laws.discipline.AlternativeTests"><span>AlternativeTests</span></li><li class="in" name="cats.laws.discipline.MonoidKTests"><span>MonoidKTests</span></li><li class="in" name="cats.laws.discipline.SemigroupKTests"><span>SemigroupKTests</span></li><li class="in" name="cats.laws.discipline.ApplicativeTests"><span>ApplicativeTests</span></li><li class="in" name="cats.laws.discipline.ApplyTests"><span>ApplyTests</span></li><li class="in" name="cats.laws.discipline.FunctorTests"><span>FunctorTests</span></li><li class="in" name="cats.laws.discipline.InvariantTests"><span>InvariantTests</span></li><li class="in" name="org.typelevel.discipline.Laws"><span>Laws</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.typelevel.discipline.Laws.DefaultRuleSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DefaultRuleSetextendsLaws.this.RuleSetwithLaws.this.HasOneParent"></a>
+      <a id="DefaultRuleSet:DefaultRuleSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DefaultRuleSet</span><span class="result"> extends <span class="extype" name="org.typelevel.discipline.Laws.RuleSet">RuleSet</span> with <span class="extype" name="org.typelevel.discipline.Laws.HasOneParent">HasOneParent</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@DefaultRuleSetextendsLaws.this.RuleSetwithLaws.this.HasOneParent" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Laws</dd></dl></div>
+    </li><li name="org.typelevel.discipline.Laws.HasOneParent" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="HasOneParentextendsAnyRef"></a>
+      <a id="HasOneParent:HasOneParent"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">HasOneParent</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@HasOneParentextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Laws</dd></dl></div>
+    </li><li name="org.typelevel.discipline.Laws.RuleSet" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="RuleSetextendsAnyRef"></a>
+      <a id="RuleSet:RuleSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">RuleSet</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@RuleSetextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Laws</dd></dl></div>
+    </li><li name="org.typelevel.discipline.Laws.SimpleRuleSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SimpleRuleSetextendsLaws.this.DefaultRuleSet"></a>
+      <a id="SimpleRuleSet:SimpleRuleSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SimpleRuleSet</span><span class="result"> extends <span class="extype" name="org.typelevel.discipline.Laws.DefaultRuleSet">DefaultRuleSet</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@SimpleRuleSetextendsLaws.this.DefaultRuleSet" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Laws</dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="cats.laws.discipline.AlternativeTests#laws" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="laws:cats.laws.AlternativeLaws[F]"></a>
+      <a id="laws:AlternativeLaws[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">laws</span><span class="result">: <a href="../AlternativeLaws.html" class="extype" name="cats.laws.AlternativeLaws">AlternativeLaws</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@laws:cats.laws.AlternativeLaws[F]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.laws.discipline.AlternativeTests">AlternativeTests</a> → <a href="MonoidKTests.html" class="extype" name="cats.laws.discipline.MonoidKTests">MonoidKTests</a> → <a href="SemigroupKTests.html" class="extype" name="cats.laws.discipline.SemigroupKTests">SemigroupKTests</a> → <a href="ApplicativeTests.html" class="extype" name="cats.laws.discipline.ApplicativeTests">ApplicativeTests</a> → <a href="ApplyTests.html" class="extype" name="cats.laws.discipline.ApplyTests">ApplyTests</a> → <a href="FunctorTests.html" class="extype" name="cats.laws.discipline.FunctorTests">FunctorTests</a> → <a href="InvariantTests.html" class="extype" name="cats.laws.discipline.InvariantTests">InvariantTests</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.laws.discipline.AlternativeTests#alternative" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="alternative[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitarbFAB:org.scalacheck.Arbitrary[F[A=&gt;B]],implicitEqFA:cats.Eq[F[A]],implicitEqFB:cats.Eq[F[B]],implicitEqFC:cats.Eq[F[C]]):AlternativeTests.this.RuleSet"></a>
+      <a id="alternative[A,B,C](Arbitrary[A],Arbitrary[B],Arbitrary[C],ArbitraryK[F],Arbitrary[F[(A)⇒B]],Eq[F[A]],Eq[F[B]],Eq[F[C]]):RuleSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">alternative</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.AlternativeTests.alternative.A">A</span>]</span>, <span name="arg1">arg1: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.AlternativeTests.alternative.B">B</span>]</span>, <span name="arg2">arg2: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.AlternativeTests.alternative.C">C</span>]</span>, <span name="ArbF">ArbF: <a href="ArbitraryK.html" class="extype" name="cats.laws.discipline.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</span>, <span name="arbFAB">arbFAB: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[(<span class="extype" name="cats.laws.discipline.AlternativeTests.alternative.A">A</span>) ⇒ <span class="extype" name="cats.laws.discipline.AlternativeTests.alternative.B">B</span>]]</span>, <span name="EqFA">EqFA: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.AlternativeTests.alternative.A">A</span>]]</span>, <span name="EqFB">EqFB: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.AlternativeTests.alternative.B">B</span>]]</span>, <span name="EqFC">EqFC: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.AlternativeTests.alternative.C">C</span>]]</span>)</span><span class="result">: <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.discipline.AlternativeTests.RuleSet">RuleSet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@alternative[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitarbFAB:org.scalacheck.Arbitrary[F[A=&gt;B]],implicitEqFA:cats.Eq[F[A]],implicitEqFB:cats.Eq[F[B]],implicitEqFC:cats.Eq[F[C]]):AlternativeTests.this.RuleSet" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.laws.discipline.ApplicativeTests#applicative" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="applicative[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]],implicitEqFB:cats.Eq[F[B]],implicitEqFC:cats.Eq[F[C]]):ApplicativeTests.this.RuleSet"></a>
+      <a id="applicative[A,B,C](Arbitrary[A],Arbitrary[B],Arbitrary[C],ArbitraryK[F],Eq[F[A]],Eq[F[B]],Eq[F[C]]):RuleSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applicative</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ApplicativeTests.applicative.A">A</span>]</span>, <span name="arg1">arg1: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ApplicativeTests.applicative.B">B</span>]</span>, <span name="arg2">arg2: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ApplicativeTests.applicative.C">C</span>]</span>, <span name="ArbF">ArbF: <a href="ArbitraryK.html" class="extype" name="cats.laws.discipline.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</span>, <span name="EqFA">EqFA: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ApplicativeTests.applicative.A">A</span>]]</span>, <span name="EqFB">EqFB: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ApplicativeTests.applicative.B">B</span>]]</span>, <span name="EqFC">EqFC: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ApplicativeTests.applicative.C">C</span>]]</span>)</span><span class="result">: <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.discipline.AlternativeTests.RuleSet">RuleSet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@applicative[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]],implicitEqFB:cats.Eq[F[B]],implicitEqFC:cats.Eq[F[C]]):ApplicativeTests.this.RuleSet" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplicativeTests.html" class="extype" name="cats.laws.discipline.ApplicativeTests">ApplicativeTests</a></dd></dl></div>
+    </li><li name="cats.laws.discipline.ApplyTests#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]],implicitEqFC:cats.Eq[F[C]]):ApplyTests.this.RuleSet"></a>
+      <a id="apply[A,B,C](Arbitrary[A],Arbitrary[B],Arbitrary[C],ArbitraryK[F],Eq[F[A]],Eq[F[C]]):RuleSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ApplyTests.apply.A">A</span>]</span>, <span name="arg1">arg1: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ApplyTests.apply.B">B</span>]</span>, <span name="arg2">arg2: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ApplyTests.apply.C">C</span>]</span>, <span name="ArbF">ArbF: <a href="ArbitraryK.html" class="extype" name="cats.laws.discipline.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</span>, <span name="EqFA">EqFA: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ApplyTests.apply.A">A</span>]]</span>, <span name="EqFC">EqFC: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ApplyTests.apply.C">C</span>]]</span>)</span><span class="result">: <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.discipline.AlternativeTests.RuleSet">RuleSet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@apply[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]],implicitEqFC:cats.Eq[F[C]]):ApplyTests.this.RuleSet" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyTests.html" class="extype" name="cats.laws.discipline.ApplyTests">ApplyTests</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.typelevel.discipline.Laws#emptyRuleSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="emptyRuleSet:Laws.this.RuleSet"></a>
+      <a id="emptyRuleSet:RuleSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">emptyRuleSet</span><span class="result">: <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.discipline.AlternativeTests.RuleSet">RuleSet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@emptyRuleSet:Laws.this.RuleSet" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Laws</dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.laws.discipline.FunctorTests#functor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="functor[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]],implicitEqFC:cats.Eq[F[C]]):FunctorTests.this.RuleSet"></a>
+      <a id="functor[A,B,C](Arbitrary[A],Arbitrary[B],Arbitrary[C],ArbitraryK[F],Eq[F[A]],Eq[F[C]]):RuleSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">functor</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.FunctorTests.functor.A">A</span>]</span>, <span name="arg1">arg1: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.FunctorTests.functor.B">B</span>]</span>, <span name="arg2">arg2: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.FunctorTests.functor.C">C</span>]</span>, <span name="ArbF">ArbF: <a href="ArbitraryK.html" class="extype" name="cats.laws.discipline.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</span>, <span name="EqFA">EqFA: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.FunctorTests.functor.A">A</span>]]</span>, <span name="EqFC">EqFC: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.FunctorTests.functor.C">C</span>]]</span>)</span><span class="result">: <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.discipline.AlternativeTests.RuleSet">RuleSet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@functor[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]],implicitEqFC:cats.Eq[F[C]]):FunctorTests.this.RuleSet" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FunctorTests.html" class="extype" name="cats.laws.discipline.FunctorTests">FunctorTests</a></dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.laws.discipline.InvariantTests#invariant" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="invariant[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]],implicitEqFC:cats.Eq[F[C]]):InvariantTests.this.RuleSet"></a>
+      <a id="invariant[A,B,C](Arbitrary[A],Arbitrary[B],Arbitrary[C],ArbitraryK[F],Eq[F[A]],Eq[F[C]]):RuleSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invariant</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.InvariantTests.invariant.A">A</span>]</span>, <span name="arg1">arg1: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.InvariantTests.invariant.B">B</span>]</span>, <span name="arg2">arg2: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.InvariantTests.invariant.C">C</span>]</span>, <span name="ArbF">ArbF: <a href="ArbitraryK.html" class="extype" name="cats.laws.discipline.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</span>, <span name="EqFA">EqFA: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.InvariantTests.invariant.A">A</span>]]</span>, <span name="EqFC">EqFC: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.InvariantTests.invariant.C">C</span>]]</span>)</span><span class="result">: <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.discipline.AlternativeTests.RuleSet">RuleSet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@invariant[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]],implicitEqFC:cats.Eq[F[C]]):InvariantTests.this.RuleSet" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="InvariantTests.html" class="extype" name="cats.laws.discipline.InvariantTests">InvariantTests</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.laws.discipline.MonoidKTests#monoidK" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="monoidK[A](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]]):MonoidKTests.this.RuleSet"></a>
+      <a id="monoidK[A](Arbitrary[A],ArbitraryK[F],Eq[F[A]]):RuleSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">monoidK</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.MonoidKTests.monoidK.A">A</span>]</span>, <span name="ArbF">ArbF: <a href="ArbitraryK.html" class="extype" name="cats.laws.discipline.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</span>, <span name="EqFA">EqFA: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.MonoidKTests.monoidK.A">A</span>]]</span>)</span><span class="result">: <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.discipline.AlternativeTests.RuleSet">RuleSet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@monoidK[A](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]]):MonoidKTests.this.RuleSet" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MonoidKTests.html" class="extype" name="cats.laws.discipline.MonoidKTests">MonoidKTests</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.laws.discipline.SemigroupKTests#semigroupK" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="semigroupK[A](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]]):SemigroupKTests.this.RuleSet"></a>
+      <a id="semigroupK[A](Arbitrary[A],ArbitraryK[F],Eq[F[A]]):RuleSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">semigroupK</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.SemigroupKTests.semigroupK.A">A</span>]</span>, <span name="ArbF">ArbF: <a href="ArbitraryK.html" class="extype" name="cats.laws.discipline.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</span>, <span name="EqFA">EqFA: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>[<span class="extype" name="cats.laws.discipline.SemigroupKTests.semigroupK.A">A</span>]]</span>)</span><span class="result">: <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.discipline.AlternativeTests.RuleSet">RuleSet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@semigroupK[A](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]]):SemigroupKTests.this.RuleSet" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SemigroupKTests.html" class="extype" name="cats.laws.discipline.SemigroupKTests">SemigroupKTests</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.AlternativeTests@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="cats.laws.discipline.MonoidKTests">
+              <h3>Inherited from <a href="MonoidKTests.html" class="extype" name="cats.laws.discipline.MonoidKTests">MonoidKTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</h3>
+            </div><div class="parent" name="cats.laws.discipline.SemigroupKTests">
+              <h3>Inherited from <a href="SemigroupKTests.html" class="extype" name="cats.laws.discipline.SemigroupKTests">SemigroupKTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</h3>
+            </div><div class="parent" name="cats.laws.discipline.ApplicativeTests">
+              <h3>Inherited from <a href="ApplicativeTests.html" class="extype" name="cats.laws.discipline.ApplicativeTests">ApplicativeTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</h3>
+            </div><div class="parent" name="cats.laws.discipline.ApplyTests">
+              <h3>Inherited from <a href="ApplyTests.html" class="extype" name="cats.laws.discipline.ApplyTests">ApplyTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</h3>
+            </div><div class="parent" name="cats.laws.discipline.FunctorTests">
+              <h3>Inherited from <a href="FunctorTests.html" class="extype" name="cats.laws.discipline.FunctorTests">FunctorTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</h3>
+            </div><div class="parent" name="cats.laws.discipline.InvariantTests">
+              <h3>Inherited from <a href="InvariantTests.html" class="extype" name="cats.laws.discipline.InvariantTests">InvariantTests</a>[<span class="extype" name="cats.laws.discipline.AlternativeTests.F">F</span>]</h3>
+            </div><div class="parent" name="org.typelevel.discipline.Laws">
+              <h3>Inherited from <span class="extype" name="org.typelevel.discipline.Laws">Laws</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

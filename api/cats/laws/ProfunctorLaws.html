@@ -52,10 +52,13 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Laws that must be obeyed by any <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">cats.functor.Profunctor</a>.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">ProfunctorLaws.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/laws/src/main/scala/cats/laws/ProfunctorLaws.scala" target="_blank">ProfunctorLaws.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="StrongLaws.html" class="extype" name="cats.laws.StrongLaws">StrongLaws</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -369,35 +372,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.laws.ProfunctorLaws#profunctorComposition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="profunctorComposition[A2,A1,A0,B0,B1,B2](fab:F[A0,B0],f2:A2=&gt;A1,f1:A1=&gt;A0,g1:B0=&gt;B1,g2:B1=&gt;B2):(F[A2,B2],F[A2,B2])"></a>
-      <a id="profunctorComposition[A2,A1,A0,B0,B1,B2](F[A0,B0],(A2)⇒A1,(A1)⇒A0,(B0)⇒B1,(B1)⇒B2):(F[A2,B2],F[A2,B2])"></a>
+      <a id="profunctorComposition[A2,A1,A0,B0,B1,B2](fab:F[A0,B0],f2:A2=&gt;A1,f1:A1=&gt;A0,g1:B0=&gt;B1,g2:B1=&gt;B2):cats.laws.IsEq[F[A2,B2]]"></a>
+      <a id="profunctorComposition[A2,A1,A0,B0,B1,B2](F[A0,B0],(A2)⇒A1,(A1)⇒A0,(B0)⇒B1,(B1)⇒B2):IsEq[F[A2,B2]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">profunctorComposition</span><span class="tparams">[<span name="A2">A2</span>, <span name="A1">A1</span>, <span name="A0">A0</span>, <span name="B0">B0</span>, <span name="B1">B1</span>, <span name="B2">B2</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A0">A0</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B0">B0</span>]</span>, <span name="f2">f2: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A2">A2</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A1">A1</span></span>, <span name="f1">f1: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A1">A1</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A0">A0</span></span>, <span name="g1">g1: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B0">B0</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B1">B1</span></span>, <span name="g2">g2: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B1">B1</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B2">B2</span></span>)</span><span class="result">: (<span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A2">A2</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B2">B2</span>], <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A2">A2</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B2">B2</span>])</span>
+        <span class="name">profunctorComposition</span><span class="tparams">[<span name="A2">A2</span>, <span name="A1">A1</span>, <span name="A0">A0</span>, <span name="B0">B0</span>, <span name="B1">B1</span>, <span name="B2">B2</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A0">A0</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B0">B0</span>]</span>, <span name="f2">f2: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A2">A2</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A1">A1</span></span>, <span name="f1">f1: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A1">A1</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A0">A0</span></span>, <span name="g1">g1: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B0">B0</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B1">B1</span></span>, <span name="g2">g2: (<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B1">B1</span>) ⇒ <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B2">B2</span></span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.A2">A2</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorComposition.B2">B2</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ProfunctorLaws@profunctorComposition[A2,A1,A0,B0,B1,B2](fab:F[A0,B0],f2:A2=&gt;A1,f1:A1=&gt;A0,g1:B0=&gt;B1,g2:B1=&gt;B2):(F[A2,B2],F[A2,B2])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ProfunctorLaws@profunctorComposition[A2,A1,A0,B0,B1,B2](fab:F[A0,B0],f2:A2=&gt;A1,f1:A1=&gt;A0,g1:B0=&gt;B1,g2:B1=&gt;B2):cats.laws.IsEq[F[A2,B2]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       
     </li><li name="cats.laws.ProfunctorLaws#profunctorIdentity" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="profunctorIdentity[A,B](fab:F[A,B]):(F[A,B],F[A,B])"></a>
-      <a id="profunctorIdentity[A,B](F[A,B]):(F[A,B],F[A,B])"></a>
+      <a id="profunctorIdentity[A,B](fab:F[A,B]):cats.laws.IsEq[F[A,B]]"></a>
+      <a id="profunctorIdentity[A,B](F[A,B]):IsEq[F[A,B]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">profunctorIdentity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.A">A</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.B">B</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.A">A</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.B">B</span>], <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.A">A</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.B">B</span>])</span>
+        <span class="name">profunctorIdentity</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.A">A</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.B">B</span>]</span>)</span><span class="result">: <a href="IsEq.html" class="extype" name="cats.laws.IsEq">IsEq</a>[<span class="extype" name="cats.laws.ProfunctorLaws.F">F</span>[<span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.A">A</span>, <span class="extype" name="cats.laws.ProfunctorLaws.profunctorIdentity.B">B</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.laws.ProfunctorLaws@profunctorIdentity[A,B](fab:F[A,B]):(F[A,B],F[A,B])" title="Permalink" target="_top">
+      <a href="../../index.html#cats.laws.ProfunctorLaws@profunctorIdentity[A,B](fab:F[A,B]):cats.laws.IsEq[F[A,B]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>

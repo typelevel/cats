@@ -54,7 +54,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A free operational monad for some functor <code>S</code>. Binding is done
 using the heap instead of the stack, allowing tail-call
 elimination.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">Free.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/free/Free.scala" target="_blank">Free.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
@@ -445,7 +445,7 @@ from its suspension functor.</p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.free.Free#resume" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.free.Free#resume" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="resume(implicitS:cats.Functor[S]):Either[S[cats.free.Free[S,A]],A]"></a>
       <a id="resume(Functor[S]):Either[S[Free[S,A]],A]"></a>
       <h4 class="signature">
@@ -461,7 +461,11 @@ from its suspension functor.</p>
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Evaluates a single layer of the free monad.</p>
+      <p class="shortcomment cmt">Evaluates a single layer of the free monad.</p><div class="fullcomment"><div class="comment cmt"><p>Evaluates a single layer of the free monad.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@tailrec</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="cats.free.Free#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="run(implicitS:cats.Comonad[S]):A"></a>
       <a id="run(Comonad[S]):A"></a>

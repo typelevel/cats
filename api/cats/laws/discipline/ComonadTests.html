@@ -47,13 +47,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ComonadTests</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <span class="extype" name="org.typelevel.discipline.Laws">Laws</span></span>
+        <span class="name">ComonadTests</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="CoflatMapTests.html" class="extype" name="cats.laws.discipline.CoflatMapTests">CoflatMapTests</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master${FILE_PATH}.scala" target="_blank">ComonadTests.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/laws/src/main/scala/cats/laws/discipline/ComonadTests.scala" target="_blank">ComonadTests.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="org.typelevel.discipline.Laws">Laws</span>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="CoflatMapTests.html" class="extype" name="cats.laws.discipline.CoflatMapTests">CoflatMapTests</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>], <span class="extype" name="org.typelevel.discipline.Laws">Laws</span>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.laws.discipline.ComonadTests"><span>ComonadTests</span></li><li class="in" name="org.typelevel.discipline.Laws"><span>Laws</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.laws.discipline.ComonadTests"><span>ComonadTests</span></li><li class="in" name="cats.laws.discipline.CoflatMapTests"><span>CoflatMapTests</span></li><li class="in" name="org.typelevel.discipline.Laws"><span>Laws</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -93,24 +93,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.laws.discipline.ComonadTests.ComonadProperties" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ComonadPropertiesextendsComonadTests.this.RuleSet"></a>
-      <a id="ComonadProperties:ComonadProperties"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="ComonadTests$ComonadProperties.html"><span class="name">ComonadProperties</span></a><span class="result"> extends <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.discipline.ComonadTests.RuleSet">RuleSet</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#cats.laws.discipline.ComonadTests@ComonadPropertiesextendsComonadTests.this.RuleSet" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="org.typelevel.discipline.Laws.DefaultRuleSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="org.typelevel.discipline.Laws.DefaultRuleSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DefaultRuleSetextendsLaws.this.RuleSetwithLaws.this.HasOneParent"></a>
       <a id="DefaultRuleSet:DefaultRuleSet"></a>
       <h4 class="signature">
@@ -183,74 +166,23 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="cats.laws.discipline.ComonadTests#ArbA" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ArbA:org.scalacheck.Arbitrary[A]"></a>
-      <a id="ArbA:Arbitrary[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ArbA</span><span class="result">: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#cats.laws.discipline.ComonadTests@ArbA:org.scalacheck.Arbitrary[A]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="cats.laws.discipline.ComonadTests#ArbB" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ArbB:org.scalacheck.Arbitrary[B]"></a>
-      <a id="ArbB:Arbitrary[B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ArbB</span><span class="result">: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#cats.laws.discipline.ComonadTests@ArbB:org.scalacheck.Arbitrary[B]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="cats.laws.discipline.ComonadTests#ArbF" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ArbF:cats.laws.discipline.ArbitraryK[F]"></a>
-      <a id="ArbF:ArbitraryK[F]"></a>
+              <ol><li name="cats.laws.discipline.ComonadTests#laws" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="laws:cats.laws.ComonadLaws[F]"></a>
+      <a id="laws:ComonadLaws[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ArbF</span><span class="result">: <a href="ArbitraryK.html" class="extype" name="cats.laws.discipline.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>]</span>
+        <span class="name">laws</span><span class="result">: <a href="../ComonadLaws.html" class="extype" name="cats.laws.ComonadLaws">ComonadLaws</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#cats.laws.discipline.ComonadTests@ArbF:cats.laws.discipline.ArbitraryK[F]" title="Permalink" target="_top">
+      <a href="../../../index.html#cats.laws.discipline.ComonadTests@laws:cats.laws.ComonadLaws[F]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="cats.laws.discipline.ComonadTests#EqFA" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="EqFA:cats.Eq[F[A]]"></a>
-      <a id="EqFA:Eq[F[A]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">EqFA</span><span class="result">: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.A">A</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#cats.laws.discipline.ComonadTests@EqFA:cats.Eq[F[A]]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
-      </a>
-    </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.laws.discipline.ComonadTests">ComonadTests</a> → <a href="CoflatMapTests.html" class="extype" name="cats.laws.discipline.CoflatMapTests">CoflatMapTests</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -307,40 +239,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.laws.discipline.ComonadTests#ArbFA" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ArbFA:org.scalacheck.Arbitrary[F[A]]"></a>
-      <a id="ArbFA:Arbitrary[F[A]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ArbFA</span><span class="result">: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.A">A</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#cats.laws.discipline.ComonadTests@ArbFA:org.scalacheck.Arbitrary[F[A]]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="cats.laws.discipline.ComonadTests#ArbFB" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ArbFB:org.scalacheck.Arbitrary[F[B]]"></a>
-      <a id="ArbFB:Arbitrary[F[B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ArbFB</span><span class="result">: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.B">B</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#cats.laws.discipline.ComonadTests@ArbFB:org.scalacheck.Arbitrary[F[B]]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -381,36 +279,36 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.laws.discipline.ComonadTests#coflatmap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="coflatmap[C](implicitevidence$4:org.scalacheck.Arbitrary[C],implicitF:cats.CoFlatMap[F],implicitFC:cats.Eq[F[C]]):ComonadTests.this.ComonadProperties"></a>
-      <a id="coflatmap[C](Arbitrary[C],CoFlatMap[F],Eq[F[C]]):ComonadProperties"></a>
+    </li><li name="cats.laws.discipline.CoflatMapTests#coflatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="coflatMap[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]],implicitEqFC:cats.Eq[F[C]]):CoflatMapTests.this.RuleSet"></a>
+      <a id="coflatMap[A,B,C](Arbitrary[A],Arbitrary[B],Arbitrary[C],ArbitraryK[F],Eq[F[A]],Eq[F[C]]):RuleSet"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">coflatmap</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.coflatmap.C">C</span>]</span>, <span name="F">F: <a href="../../CoFlatMap.html" class="extype" name="cats.CoFlatMap">CoFlatMap</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>]</span>, <span name="FC">FC: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.coflatmap.C">C</span>]]</span>)</span><span class="result">: <a href="ComonadTests$ComonadProperties.html" class="extype" name="cats.laws.discipline.ComonadTests.ComonadProperties">ComonadProperties</a></span>
+        <span class="name">coflatMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.CoflatMapTests.coflatMap.A">A</span>]</span>, <span name="arg1">arg1: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.CoflatMapTests.coflatMap.B">B</span>]</span>, <span name="arg2">arg2: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.CoflatMapTests.coflatMap.C">C</span>]</span>, <span name="ArbF">ArbF: <a href="ArbitraryK.html" class="extype" name="cats.laws.discipline.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>]</span>, <span name="EqFA">EqFA: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>[<span class="extype" name="cats.laws.discipline.CoflatMapTests.coflatMap.A">A</span>]]</span>, <span name="EqFC">EqFC: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>[<span class="extype" name="cats.laws.discipline.CoflatMapTests.coflatMap.C">C</span>]]</span>)</span><span class="result">: <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.discipline.ComonadTests.RuleSet">RuleSet</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#cats.laws.discipline.ComonadTests@coflatmap[C](implicitevidence$4:org.scalacheck.Arbitrary[C],implicitF:cats.CoFlatMap[F],implicitFC:cats.Eq[F[C]]):ComonadTests.this.ComonadProperties" title="Permalink" target="_top">
+      <a href="../../../index.html#cats.laws.discipline.ComonadTests@coflatMap[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqFA:cats.Eq[F[A]],implicitEqFC:cats.Eq[F[C]]):CoflatMapTests.this.RuleSet" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CoflatMapTests.html" class="extype" name="cats.laws.discipline.CoflatMapTests">CoflatMapTests</a></dd></dl></div>
     </li><li name="cats.laws.discipline.ComonadTests#comonad" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="comonad[C](implicitevidence$5:org.scalacheck.Arbitrary[C],implicitF:cats.Comonad[F],implicitFC:cats.Eq[F[C]],implicitB:cats.Eq[B]):ComonadTests.this.ComonadProperties"></a>
-      <a id="comonad[C](Arbitrary[C],Comonad[F],Eq[F[C]],Eq[B]):ComonadProperties"></a>
+      <a id="comonad[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqB:cats.Eq[B],implicitEqFA:cats.Eq[F[A]],implicitEqFC:cats.Eq[F[C]]):ComonadTests.this.RuleSet"></a>
+      <a id="comonad[A,B,C](Arbitrary[A],Arbitrary[B],Arbitrary[C],ArbitraryK[F],Eq[B],Eq[F[A]],Eq[F[C]]):RuleSet"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">comonad</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.comonad.C">C</span>]</span>, <span name="F">F: <a href="../../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>]</span>, <span name="FC">FC: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.comonad.C">C</span>]]</span>, <span name="B">B: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.B">B</span>]</span>)</span><span class="result">: <a href="ComonadTests$ComonadProperties.html" class="extype" name="cats.laws.discipline.ComonadTests.ComonadProperties">ComonadProperties</a></span>
+        <span class="name">comonad</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.comonad.A">A</span>]</span>, <span name="arg1">arg1: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.comonad.B">B</span>]</span>, <span name="arg2">arg2: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.comonad.C">C</span>]</span>, <span name="ArbF">ArbF: <a href="ArbitraryK.html" class="extype" name="cats.laws.discipline.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>]</span>, <span name="EqB">EqB: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.comonad.B">B</span>]</span>, <span name="EqFA">EqFA: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.comonad.A">A</span>]]</span>, <span name="EqFC">EqFC: <a href="../../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>[<span class="extype" name="cats.laws.discipline.ComonadTests.comonad.C">C</span>]]</span>)</span><span class="result">: <a href="#RuleSetextendsAnyRef" class="extmbr" name="cats.laws.discipline.ComonadTests.RuleSet">RuleSet</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#cats.laws.discipline.ComonadTests@comonad[C](implicitevidence$5:org.scalacheck.Arbitrary[C],implicitF:cats.Comonad[F],implicitFC:cats.Eq[F[C]],implicitB:cats.Eq[B]):ComonadTests.this.ComonadProperties" title="Permalink" target="_top">
+      <a href="../../../index.html#cats.laws.discipline.ComonadTests@comonad[A,B,C](implicitevidence$1:org.scalacheck.Arbitrary[A],implicitevidence$2:org.scalacheck.Arbitrary[B],implicitevidence$3:org.scalacheck.Arbitrary[C],implicitArbF:cats.laws.discipline.ArbitraryK[F],implicitEqB:cats.Eq[B],implicitEqFA:cats.Eq[F[A]],implicitEqFC:cats.Eq[F[C]]):ComonadTests.this.RuleSet" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
@@ -703,7 +601,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="org.typelevel.discipline.Laws">
+        <div class="parent" name="cats.laws.discipline.CoflatMapTests">
+              <h3>Inherited from <a href="CoflatMapTests.html" class="extype" name="cats.laws.discipline.CoflatMapTests">CoflatMapTests</a>[<span class="extype" name="cats.laws.discipline.ComonadTests.F">F</span>]</h3>
+            </div><div class="parent" name="org.typelevel.discipline.Laws">
               <h3>Inherited from <span class="extype" name="org.typelevel.discipline.Laws">Laws</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
