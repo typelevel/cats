@@ -22,15 +22,34 @@ final case class OneAnd[A, F[_]](head: A, tail: F[A]) {
       rest
   }
 
+  /**
+   * Append another OneAnd to this
+   */
   def combine(other: OneAnd[A,F])(implicit monad: MonadCombine[F]): OneAnd[A,F] =
     OneAnd(head, monad.combine(tail, monad.combine(monad.pure(other.head), other.tail)))
 
+  /**
+   * find the first element matching the predicate, if one exists
+   */
+  def find(f: A => Boolean)(implicit foldable: Foldable[F]): Option[A] =
+    if(f(head)) Some(head) else foldable.find(tail)(f)
+
+  /**
+   * Left associative fold on the structure using f, the F 
+   */
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit foldable: Foldable[F]): B =
     foldable.foldLeft(tail, f(b, head))(f)
 
+  /**
+   * Right associative fold on the structure using f
+   */
   def foldRight[B](b: B)(f: (A,B) => B)(implicit foldable: Foldable[F]): B =
     f(head, foldable.foldRight(tail, b)(f))
 
+  /**
+   * Right associative lazy fold on the structure using f. See the
+   * discussion in [[Foldable]] about foldLazy for more information
+   */
   def foldLazy[B](b: Lazy[B])(f: A => Fold[B])(implicit foldable: Foldable[F]): Lazy[B] = {
     import Fold._
     f(head) match {
