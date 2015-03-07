@@ -20,11 +20,11 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
 
   /**
    * The composition of [[cats.data.Kleisli]] arrows is associative. This is
-   * analogous to the associativity law of [[FlatMap.flatMap]].
+   * analogous to [[flatMapAssociativity]].
    */
   def kleisliAssociativity[A, B, C, D](f: A => F[B], g: B => F[C], h: C => F[D], a: A): IsEq[F[D]] = {
     val (kf, kg, kh) = (Kleisli(f), Kleisli(g), Kleisli(h))
-    (kh compose (kg compose kf)).run(a) <-> ((kh compose kg) compose kf).run(a)
+    ((kf andThen kg) andThen kh).run(a) <-> (kf andThen (kg andThen kh)).run(a)
   }
 }
 

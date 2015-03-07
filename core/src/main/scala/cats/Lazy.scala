@@ -23,7 +23,7 @@ package cats
  */
 sealed abstract class Lazy[A] { self =>
 
-  import Lazy.{ByNeed, ByName, Eager}
+  import Lazy.{byNeed, ByNeed, ByName, Eager}
 
   /**
    * Obtain the underlying value from this lazy instance. If the value
@@ -42,7 +42,7 @@ sealed abstract class Lazy[A] { self =>
    */
   def cached: Lazy[A] =
     this match {
-      case ByName(f) => ByNeed(f)
+      case ByName(f) => byNeed(f())
       case _ => this
     }
 
@@ -56,7 +56,7 @@ sealed abstract class Lazy[A] { self =>
    */
   def uncached: Lazy[A] =
     this match {
-      case ByNeed(f) => ByName(f)
+      case need @ ByNeed() => ByName(() => need.value)
       case _ => this
     }
 }
@@ -69,10 +69,7 @@ object Lazy {
     def value: A = f()
   }
 
-  case class ByNeed[A](f: () => A) extends Lazy[A] {
-    lazy val memo = f()
-    def value: A = memo
-  }
+  private abstract case class ByNeed[A]() extends Lazy[A]
 
   /**
    * Construct a lazy value.
@@ -81,7 +78,7 @@ object Lazy {
    * until needed).
    */
   def apply[A](body: => A): Lazy[A] =
-    ByNeed(body _)
+    byNeed(body)
 
   /**
    * Construct a lazy value.
@@ -105,5 +102,7 @@ object Lazy {
    * Alias for `apply`, to mirror the `byName` method.
    */
   def byNeed[A](body: => A): Lazy[A] =
-    ByNeed(body _)
+    new ByNeed[A]{
+      override lazy val value = body
+    }
 }

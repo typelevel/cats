@@ -1,13 +1,11 @@
 package cats
 package tests
 
-import cats.implicits._
-import org.scalatest.FunSuite
 import scala.math.min
 
 // TODO: monad laws
 
-class LazyTests extends FunSuite {
+class LazyTests extends CatsSuite {
 
   // disable scalatest ===
   override def convertToEqualizer[T](left: T) = ???

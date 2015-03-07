@@ -13,3 +13,4 @@ trait AllInstances
   with    MapInstances
   with    BigIntInstances
   with    BigDecimalInstances
+  with    FutureInstances

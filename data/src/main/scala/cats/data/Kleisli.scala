@@ -17,38 +17,38 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def lmap[C](f: C => A): Kleisli[F, C, B] =
     Kleisli(run compose f)
 
-  def map[C](f: B => C)(implicit M: Functor[F]): Kleisli[F, A, C] =
-    Kleisli(a => M.map(run(a))(f))
+  def map[C](f: B => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
+    Kleisli(a => F.map(run(a))(f))
 
   def mapK[N[_], C](f: F[B] => N[C]): Kleisli[N, A, C] =
     Kleisli(run andThen f)
 
-  def flatMap[C](f: B => F[C])(implicit M: FlatMap[F]): Kleisli[F, A, C] =
-    Kleisli(a => M.flatMap(run(a))(f))
+  def flatMap[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
+    Kleisli(a => F.flatMap(run(a))(f))
 
-  def flatMapK[C](f: B => Kleisli[F, A, C])(implicit M: FlatMap[F]): Kleisli[F, A, C] =
-    Kleisli((r: A) => M.flatMap[B, C](run(r))((b: B) => f(b).run(r)))
+  def flatMapK[C](f: B => Kleisli[F, A, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
+    Kleisli((r: A) => F.flatMap[B, C](run(r))((b: B) => f(b).run(r)))
 
-  def andThen[C](f: B => F[C])(implicit b: FlatMap[F]): Kleisli[F, A, C] =
-    Kleisli((a: A) => b.flatMap(run(a))(f))
+  def andThen[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
+    Kleisli((a: A) => F.flatMap(run(a))(f))
 
-  def andThen[C](k: Kleisli[F, B, C])(implicit b: FlatMap[F]): Kleisli[F, A, C] =
+  def andThen[C](k: Kleisli[F, B, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     this andThen k.run
 
-  def compose[Z](f: Z => F[A])(implicit M: FlatMap[F]): Kleisli[F, Z, B] =
-    Kleisli((z: Z) => M.flatMap(f(z))(run))
+  def compose[Z](f: Z => F[A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
+    Kleisli((z: Z) => F.flatMap(f(z))(run))
 
-  def compose[Z](k: Kleisli[F, Z, A])(implicit b: FlatMap[F]): Kleisli[F, Z, B] =
+  def compose[Z](k: Kleisli[F, Z, A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
     this compose k.run
 
-  def traverse[G[_]](f: G[A])(implicit M: Applicative[F], F: Traverse[G]): F[G[B]] =
-    F.traverse(f)(run)
+  def traverse[G[_]](f: G[A])(implicit F: Applicative[F], G: Traverse[G]): F[G[B]] =
+    G.traverse(f)(run)
 
   def lift[G[_]](implicit F: Applicative[F]): Kleisli[λ[α => F[F[α]]], A, B] =
     Kleisli[λ[α => F[F[α]]], A, B](a => Applicative[F].pure(run(a)))
 
-  def lower(implicit M: Monad[F]): Kleisli[F, A, F[B]] =
-    Kleisli(a => M.pure(run(a)))
+  def lower(implicit F: Monad[F]): Kleisli[F, A, F[B]] =
+    Kleisli(a => F.pure(run(a)))
 
   def first[C](implicit F: Functor[F]): Kleisli[F, (A, C), (B, C)] =
     Kleisli{ case (a, c) => F.fproduct(run(a))(_ => c)}

@@ -1,7 +1,7 @@
 package cats
 package std
 
-import scala.annotation.tailrec
+import scala.collection.immutable.Stream.Empty
 
 trait StreamInstances {
   implicit val streamInstance: Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] =
@@ -49,4 +49,24 @@ trait StreamInstances {
         G.map(gsb)(_.value)
       }
     }
+
+  // TODO: eventually use algebra's instances (which will deal with
+  // implicit priority between Eq/PartialOrder/Order).
+
+  implicit def eqStream[A](implicit ev: Eq[A]): Eq[Stream[A]] =
+    new Eq[Stream[A]] {
+      def eqv(x: Stream[A], y: Stream[A]): Boolean = {
+        def loop(xs: Stream[A], ys: Stream[A]): Boolean =
+          xs match {
+            case Empty => ys.isEmpty
+            case a #:: xs =>
+              ys match {
+                case Empty => false
+                case b #:: ys => if (ev.neqv(a, b)) false else loop(xs, ys)
+              }
+          }
+        loop(x, y)
+      }
+    }
+
 }

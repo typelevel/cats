@@ -1,9 +1,8 @@
 ---
 layout: default
 title:  "Colophon"
-section: "Colophon"
+section: "colophon"
 ---
-
 Cats has been made a much better project, and is a much more enjoyable
 project to work on because of many of the other projects on which Cats
 is built. Many of these projects have had enhancements made in order

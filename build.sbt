@@ -80,7 +80,7 @@ lazy val docs = project
   .settings(tutSettings: _*)
   .dependsOn(core, std, data)
 
-lazy val aggregate = project.in(file("."))
+lazy val cats = project.in(file("."))
   .settings(catsSettings: _*)
   .settings(noPublishSettings: _*)
   .aggregate(macros, core, laws, tests, docs, data, std, bench)
@@ -91,10 +91,13 @@ lazy val macros = project
   .settings(catsSettings: _*)
 
 lazy val core = project.dependsOn(macros)
-  .settings(moduleName := "cats")
+  .settings(moduleName := "cats-core")
   .settings(catsSettings: _*)
+  .settings(
+    sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
+  )
 
-lazy val laws = project.dependsOn(macros, core, data)
+lazy val laws = project.dependsOn(macros, core, data, std)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings: _*)
   .settings(
@@ -103,7 +106,7 @@ lazy val laws = project.dependsOn(macros, core, data)
     )
   )
 
-lazy val std = project.dependsOn(macros, core, laws)
+lazy val std = project.dependsOn(macros, core)
   .settings(moduleName := "cats-std")
   .settings(catsSettings: _*)
   .settings(

@@ -2,7 +2,7 @@ package cats
 package std
 
 
-trait MapInstances {
+trait MapInstances extends algebra.std.MapInstances {
 
   implicit def MapShow[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =
     Show.show[Map[A, B]](m => s"Map(${m.map(a => s"${showA.show(a._1)} -> ${showB.show(a._2)})").mkString(",")})")

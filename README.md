@@ -124,14 +124,16 @@ There are many ways to support Cats' development:
 The current maintainers (people who can merge pull requests) are:
 
  * [ceedubs](https://github.com/ceedubs) Cody Allen
+ * [rossabaker](https://github.com/rossabaker) Ross Baker
+ * [travisbrown](https://github.com/travisbrown) Travis Brown
+ * [tpolecat](https://github.com/tpolecat) Rob Norris
+ * [stew](https://github.com/stew) Mike O'Connor
  * [non](https://github.com/non) Erik Osheim
  * [mpilquist](https://github.com/mpilquist) Michael Pilquist
- * [stew](https://github.com/stew) Mike O'Connor
  * [milessabin](https://github.com/milessabin) Miles Sabin
- * [tpolecat](https://github.com/tpolecat) Rob Norris
- * [travisbrown](https://github.com/travisbrown) Travis Brown
+ * [fthomas](https://github.com/fthomas) Frank Thomas
  * [julien-truffaut](https://github.com/julien-truffaut) Julien Truffaut
- 
+
 We are currently following a practice of requiring at least two
 sign-offs to merge PRs (and for large or contentious issues we may
 wait for more).
