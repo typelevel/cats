@@ -14,7 +14,7 @@ import simulacrum._
  * Foldable[F] is implemented in terms of two basic methods:
  *
  *  - `foldLeft(fa, b)(f)` eagerly folds `fa` from left-to-right.
- *  - `foldLazy(fa, lb)(f)` lazily folds `fa` from right-to-left.
+ *  - `foldLazy(fa, b)(f)` lazily folds `fa` from right-to-left.
  *
  * Beyond these it provides many other useful methods related to
  * folding over F[A] values.
@@ -38,7 +38,13 @@ import simulacrum._
    * For more detailed information about how this method works see the
    * documentation for `Fold[_]`.
    */
-  def foldLazy[A, B](fa: F[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B]
+  def foldLazy[A, B](fa: F[A], lb: Lazy[B])(f: A => Fold[B]): Lazy[B] =
+    Lazy(partialFold[A, B](fa)(f).complete(lb))
+
+  /**
+   * Low-level method that powers `foldLazy`.
+   */
+  def partialFold[A, B](fa: F[A])(f: A => Fold[B]): Fold[B]
 
   /**
    * Right associative fold on 'F' using the function 'f'.
@@ -147,22 +153,18 @@ trait CompositeFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] {
   /**
    * Left assocative fold on F[G[A]] using 'f'
    */
-  def foldLeft[A, B](fa: F[G[A]], b: B)(f: (B, A) => B): B =
-    F.foldLeft(fa, b)((b, a) => G.foldLeft(a, b)(f))
+  def foldLeft[A, B](fga: F[G[A]], b: B)(f: (B, A) => B): B =
+    F.foldLeft(fga, b)((b, a) => G.foldLeft(a, b)(f))
 
   /**
    * Left assocative fold on F[G[A]] using 'f'
    */
-  override def foldRight[A, B](fa: F[G[A]], b: B)(f: (A, B) => B): B =
-    F.foldRight(fa, b)((a, b) => G.foldRight(a, b)(f))
+  override def foldRight[A, B](fga: F[G[A]], b: B)(f: (A, B) => B): B =
+    F.foldRight(fga, b)((a, b) => G.foldRight(a, b)(f))
 
   /**
    * Right associative lazy fold on `F` using the folding function 'f'.
    */
-  def foldLazy[A, B](fa: F[G[A]], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
-    F.foldLazy(fa, b) { ga =>
-      Fold.Continue { b =>
-        G.foldLazy(ga, Lazy.eager(b))(f).value
-      }
-    }
+  def partialFold[A, B](fga: F[G[A]])(f: A => Fold[B]): Fold[B] =
+    F.partialFold(fga)(ga => G.partialFold(ga)(f))
 }
