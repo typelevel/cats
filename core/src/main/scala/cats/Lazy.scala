@@ -59,25 +59,9 @@ sealed abstract class Lazy[A] { self =>
       case need @ ByNeed() => ByName(() => need.value)
       case _ => this
     }
-
-  def map[B](f: A => B): Lazy[B] = this match {
-    case Eager(a) => Lazy(f(a))
-    case ByName(ff) => ByName(() => f(ff()))
-    case need @ ByNeed() => new ByNeed[B] {
-      override lazy val value = f(need.value)
-    }
-  }
-
-  def flatMap[B](f: A => Lazy[B]): Lazy[B] = this match {
-    case Eager(a) => f(a)
-    case ByName(ff) => ByName(() => f(ff()).value)
-    case need @ ByNeed() => new ByNeed[B] {
-      override lazy val value = f(need.value).value
-    }
-  }
 }
 
-object Lazy extends LazyInstances {
+object Lazy {
 
   case class Eager[A](value: A) extends Lazy[A]
 
@@ -120,18 +104,5 @@ object Lazy extends LazyInstances {
   def byNeed[A](body: => A): Lazy[A] =
     new ByNeed[A]{
       override lazy val value = body
-    }
-}
-
-trait LazyInstances {
-  implicit val lazyMonad: Monad[Lazy] = new Monad[Lazy] {
-    override def map[A,B](fa: Lazy[A])(f: A => B): Lazy[B] = fa map f
-    def flatMap[A,B](fa: Lazy[A])(f: A => Lazy[B]): Lazy[B] = fa flatMap f
-    def pure[A](a: A): Lazy[A] = Lazy.eager(a)
-  }
-
-  implicit def eqLazy[A](implicit ev: Eq[A]): Eq[Lazy[A]] =
-    new Eq[Lazy[A]] {
-      def eqv(x: Lazy[A], y: Lazy[A]) = ev.eqv(x.value, y.value)
     }
 }

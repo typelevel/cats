@@ -2,8 +2,8 @@ package cats
 package tests
 
 import scala.math.min
-import cats.laws.discipline._
-import cats.laws.discipline.eq._
+
+// TODO: monad laws
 
 class LazyTests extends CatsSuite {
 
@@ -77,6 +77,4 @@ class LazyTests extends CatsSuite {
   test("by-name: Lazy.byName(_)") {
     runValue(999)(byName)(n => n)
   }
-
-  checkAll("Lazy[Int]", MonadTests[Lazy].monad[Int, Int, Int])
 }
