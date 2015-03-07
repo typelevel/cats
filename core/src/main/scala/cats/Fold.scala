@@ -78,11 +78,11 @@ package cats
 sealed abstract class Fold[A] {
   import Fold.{Return, Continue, Pass}
 
-  def complete(a: A): A =
+  def complete(la: Lazy[A]): A =
     this match {
       case Return(a) => a
-      case Continue(f) => f(a)
-      case _ => a
+      case Continue(f) => f(la.value)
+      case _ => la.value
     }
 }
 
@@ -117,19 +117,19 @@ object Fold {
   final case object pass extends Fold[Nothing]
 
   /**
-   * iterateRight provides a sample right-fold for `Iterable[A]` values.
+   * partialIterate provides a partialFold for `Iterable[A]` values.
    */
-  def iterateRight[A, B](as: Iterable[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] = {
+  def partialIterate[A, B](as: Iterable[A])(f: A => Fold[B]): Fold[B] = {
     def unroll(b: B, fs: List[B => B]): B =
       fs.foldLeft(b)((b, f) => f(b))
-    def loop(it: Iterator[A], fs: List[B => B]): B =
+    def loop(it: Iterator[A], fs: List[B => B]): Fold[B] =
       if (it.hasNext) {
         f(it.next) match {
-          case Return(b) => unroll(b, fs)
+          case Return(b) => Return(unroll(b, fs))
           case Continue(f) => loop(it, f :: fs)
           case _ => loop(it, fs)
         }
-      } else unroll(b.value, fs)
-    Lazy(loop(as.iterator, Nil))
+      } else Continue(b => unroll(b, fs))
+    loop(as.iterator, Nil)
   }
 }
