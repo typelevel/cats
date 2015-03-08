@@ -10,7 +10,7 @@ scaladoc: "#cats.Functor"
 A Functor is a ubiquitous typeclass involving types that have "one
 hole"; that is types which have the shape: `F[?]`, such as `Option`,
 `List`, `Future`. (This is in contrast to a type like `Int` which has
-no hole, or `Tuple2` which has two "holes" (`Tuple2[?,?]`).
+no hole, or `Tuple2` which has two "holes" (`Tuple2[?,?]`), etc.
 
 The Functor category involves a single operation, named `map`:
 
@@ -55,13 +55,13 @@ implicit def function1Functor[In]: Functor[Function1[In, ?]] =
   }
 ```
 
-Also of not in the above example, is that we created a functor for
+Also of note in the above example, is that we created a functor for
 Function1, which is a type which normally has two type holes. We
 however constrained one of the holes to be the `In` type, leaving just
 one hole for the return type. In this above example, we are
 demonstrating the use of the
 [kind-projector compiler plugin](https://github.com/non/kind-projector),
-This compile plugin lets us more easily change the number of type
+This compiler plugin lets us more easily change the number of type
 holes a type has. In this case, we took a type which normally has two
 type holes, `Function1` and filled one of the holes, leaving the other
 hole open. `Function1[In,?]` has the first type parameter filled,
