@@ -52,7 +52,7 @@ trait OneAndInstances {
   implicit def oneAndShow[A, F[_]](implicit showHead: Show[A], showTail: Show[F[A]]): Show[OneAnd[A, F]] =
     Show.show[OneAnd[A, F]](x => s"OneAnd(${showHead.show(x.head)}, ${showTail.show(x.tail)})")
 
-  implicit def oneAndFunctor[F[_]](F: Functor[F]) = new Functor[OneAnd[?,F]] {
+  implicit def oneAndFunctor[F[_]](F: Functor[F]): Functor[OneAnd[?,F]] = new Functor[OneAnd[?,F]] {
     override def map[A, B](fa: OneAnd[A,F])(f: A => B) =
       OneAnd(f(fa.head), F.map(fa.tail)(f))
   }
