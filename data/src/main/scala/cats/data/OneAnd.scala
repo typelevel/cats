@@ -35,7 +35,7 @@ final case class OneAnd[A, F[_]](head: A, tail: F[A]) {
     if(f(head)) Some(head) else foldable.find(tail)(f)
 
   /**
-   * Left associative fold on the structure using f, the F 
+   * Left associative fold on the structure using f, the F
    */
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit foldable: Foldable[F]): B =
     foldable.foldLeft(tail, f(b, head))(f)
