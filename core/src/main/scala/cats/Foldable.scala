@@ -133,6 +133,17 @@ import simulacrum._
     fold(fga)(G.algebra)
 
   /**
+   * find the first element matching the predicate, if one exists
+   */
+  def find[A](fa: F[A])(f: A => Boolean): Option[A] =
+    foldLazy[A,Option[A]](fa, Lazy.eager(None)){ a =>
+      if(f(a))
+        Fold.Return(Some(a))
+      else
+        Fold.Pass
+    }.value
+
+  /**
    * Compose this `Foldable[F]` with a `Foldable[G]` to create
    * a `Foldable[F[G]]` instance.
    */
