@@ -11,11 +11,10 @@ trait InvariantTests[F[_]] extends Laws {
   def laws: InvariantLaws[F]
 
   def invariant[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-    ArbF: ArbitraryK[F],
+    ArbFA: Arbitrary[F[A]],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]]
   ): RuleSet = {
-    implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
 
     new RuleSet {
       def name = "invariant"
