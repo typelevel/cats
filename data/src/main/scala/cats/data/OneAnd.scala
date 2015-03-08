@@ -45,19 +45,6 @@ final case class OneAnd[A, F[_]](head: A, tail: F[A]) {
    */
   def foldRight[B](b: B)(f: (A,B) => B)(implicit foldable: Foldable[F]): B =
     f(head, foldable.foldRight(tail, b)(f))
-
-  /**
-   * Right associative lazy fold on the structure using f. See the
-   * discussion in [[Foldable]] about foldLazy for more information
-   */
-  def foldLazy[B](b: Lazy[B])(f: A => Fold[B])(implicit foldable: Foldable[F]): Lazy[B] = {
-    import Fold._
-    f(head) match {
-      case Return(b) => Lazy.eager(b)
-      case Continue(c) => foldable.foldLazy(tail, b)(f).map(c)
-      case _ => foldable.foldLazy(tail, b)(f)
-    }
-  }
 }
 
 trait OneAndInstances {
@@ -79,8 +66,19 @@ trait OneAndInstances {
       fa.foldLeft(b)(f)
     override def foldRight[A,B](fa: OneAnd[A,F], b: B)(f: (A,B) => B): B =
       fa.foldRight(b)(f)
-    override def foldLazy[A,B](fa: OneAnd[A,F], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
-      fa.foldLazy(b)(f)
+
+    override def partialFold[A, B](fa: OneAnd[A,F])(f: A => Fold[B]): Fold[B] = {
+      import Fold._
+      f(fa.head) match {
+        case b @ Return(_) => b
+        case Continue(c) => foldable.partialFold(fa.tail)(f) match {
+          case Return(b) => Return(c(b))
+          case Continue(cc) => Continue { b => c(cc(b)) }
+          case _ => Continue(c)
+        }
+        case _ => foldable.partialFold(fa.tail)(f)
+      }
+    }
   }
 
   implicit def oneAndMonad[F[_]](implicit monad: MonadCombine[F]): Comonad[OneAnd[?, F]] with Monad[OneAnd[?, F]] = new Comonad[OneAnd[?, F]] with Monad[OneAnd[?, F]] {
