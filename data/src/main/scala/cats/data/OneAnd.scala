@@ -35,7 +35,7 @@ final case class OneAnd[A, F[_]](head: A, tail: F[A]) {
     if(f(head)) Some(head) else foldable.find(tail)(f)
 
   /**
-   * Left associative fold on the structure using f, the F
+   * Left associative fold on the structure using f
    */
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit foldable: Foldable[F]): B =
     foldable.foldLeft(tail, f(b, head))(f)
@@ -57,11 +57,11 @@ trait OneAndInstances {
       OneAnd(f(fa.head), F.map(fa.tail)(f))
   }
 
-  implicit def oneAndSemigroupK[F[_]](implicit monad: MonadCombine[F]): SemigroupK[OneAnd[?,F]] = new SemigroupK[OneAnd[?,F]] {
+  implicit def oneAndSemigroupK[F[_] : MonadCombine]: SemigroupK[OneAnd[?,F]] = new SemigroupK[OneAnd[?,F]] {
     def combine[A](a: OneAnd[A, F], b: OneAnd[A, F]) = a combine b
   }
 
-  implicit def onAndFoldable[F[_]](implicit foldable: Foldable[F]): Foldable[OneAnd[?,F]] = new Foldable[OneAnd[?,F]] {
+  implicit def oneAndFoldable[F[_]](implicit foldable: Foldable[F]): Foldable[OneAnd[?,F]] = new Foldable[OneAnd[?,F]] {
     override def foldLeft[A,B](fa: OneAnd[A,F], b: B)(f: (B,A) => B): B =
       fa.foldLeft(b)(f)
     override def foldRight[A,B](fa: OneAnd[A,F], b: B)(f: (A,B) => B): B =
