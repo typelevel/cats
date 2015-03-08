@@ -37,11 +37,12 @@ log("a string")
 ```
 
 This example demonstrates a powerful property of the typeclass
-pattern, which distinguishes it from a Java interface, which is that
-we have been able to provide an implementation of this interface for
-String, some already existing type which we don't ourselves
-control. We are able to retrofit existing types with new behaviors
-with this pattern. This is usually referred to as "ad-hoc
+pattern. We have been able to provide an implementation of Show for
+String, without needing to change the definition of java.lang.String
+to extend a new Java-style interface; something we couldn't have done
+even if we wanted to, since we don't control the implementation of
+java.lang.Sting. We use this pattern to retrofit existing
+types with new behaviors. This is usually referred to as "ad-hoc
 polymorphism".
 
 For some types, providing a Show instance might depend on having some
