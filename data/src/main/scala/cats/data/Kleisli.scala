@@ -1,6 +1,7 @@
 package cats.data
 
 import cats._
+import cats.arrow.Arrow
 import cats.functor.Strong
 
 /**
@@ -75,6 +76,45 @@ sealed trait KleisliFunctions {
 }
 
 sealed abstract class KleisliInstances extends KleisliInstances0 {
+  implicit def kleisliArrow[F[_]](implicit F: Monad[F]): Arrow[Kleisli[F, ?, ?]] = new Arrow[Kleisli[F, ?, ?]] {
+    def lift[A, B](f: A => B): Kleisli[F, A, B] =
+      Kleisli(a => F.pure(f(a)))
+
+    def id[A]: Kleisli[F, A, A] =
+      Kleisli(a => F.pure(a))
+
+    def split[A, B, C, D](f: Kleisli[F, A, B], g: Kleisli[F, C, D]): Kleisli[F, (A, C), (B, D)] =
+      Kleisli{ case (a, c) => F.flatMap(f.run(a))(b => F.map(g.run(c))(d => (b, d))) }
+
+    def compose[A, B, C](f: Kleisli[F, B, C], g: Kleisli[F, A, B]): Kleisli[F, A, C] =
+      f.compose(g)
+
+    def first[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (A, C), (B, C)] =
+      fa.first[C]
+
+    override def second[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (C, A), (C, B)] =
+      fa.second[C]
+
+    override def lmap[A, B, C](fab: Kleisli[F, A, B])(f: C => A): Kleisli[F, C, B] =
+      fab.lmap(f)
+
+    override def rmap[A, B, C](fab: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
+      fab.map(f)
+
+    override def dimap[A, B, C, D](fab: Kleisli[F, A, B])(f: C => A)(g: B => D): Kleisli[F, C, D] =
+      fab.dimap(f)(g)
+  }
+
+  implicit def kleisliMonad[F[_]: Monad, A]: Monad[Kleisli[F, A, ?]] = new Monad[Kleisli[F, A, ?]] {
+    def pure[B](x: B): Kleisli[F, A, B] =
+      Kleisli.pure[F, A, B](x)
+
+    def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
+      fa.flatMapK(f)
+  }
+}
+
+sealed abstract class KleisliInstances0 extends KleisliInstances1 {
   implicit def kleisliStrong[F[_]: Functor]: Strong[Kleisli[F, ?, ?]] = new Strong[Kleisli[F, ?, ?]]{
     override def lmap[A, B, C](fab: Kleisli[F, A, B])(f: C => A): Kleisli[F, C, B] =
       fab.lmap(f)
@@ -92,16 +132,6 @@ sealed abstract class KleisliInstances extends KleisliInstances0 {
       fa.second[C]
   }
 
-  implicit def kleisliMonad[F[_]: Monad, A]: Monad[Kleisli[F, A, ?]] = new Monad[Kleisli[F, A, ?]] {
-    def pure[B](x: B): Kleisli[F, A, B] =
-      Kleisli.pure[F, A, B](x)
-
-    def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
-      fa.flatMapK(f)
-  }
-}
-
-sealed abstract class KleisliInstances0 extends KleisliInstances1 {
   implicit def kleisliFlatMap[F[_]: FlatMap, A]: FlatMap[Kleisli[F, A, ?]] = new FlatMap[Kleisli[F, A, ?]] {
     def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
       fa.flatMapK(f)
