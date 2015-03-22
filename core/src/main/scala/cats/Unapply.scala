@@ -69,7 +69,7 @@ object Unapply {
      def TC: TC[F[?, B]] = tc
      def subst = identity
    }
- 
+
    implicit def unapply2right[TC[_[_]], F[_,_], AA, B](implicit tc: TC[F[AA,?]]): Aux2Right[TC,F[AA,B], F, AA, B] = new Unapply[TC, F[AA,B]] {
      type M[X] = F[AA, X]
      type A = B
@@ -86,7 +86,7 @@ object Unapply {
      def TC: TC[F[?, Nothing]] = tc
      def subst = identity
    }
- 
+
   implicit def unapply2rightN[TC[_[_]], F[+_,_], B](implicit tc: TC[F[Nothing,?]]): Aux2Right[TC,F[Nothing,B], F, Nothing, B] = new Unapply[TC, F[Nothing,B]] {
      type M[X] = F[Nothing, X]
      type A = B
