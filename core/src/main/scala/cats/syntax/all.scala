@@ -22,3 +22,4 @@ trait AllSyntax
     with ShowSyntax
     with SplitSyntax
     with StrongSyntax
+    with TraverseSyntax

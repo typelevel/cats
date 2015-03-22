@@ -12,6 +12,13 @@ trait TraverseSyntax {
 
 class TraverseOps[F[_], A](fa: F[A])(implicit F: Traverse[F]) {
   def traverse[G[_]: Applicative, B](f: A => G[B]): G[F[B]] = F.traverse(fa)(f)
+
+  def traverseU[GB](f: A => GB)(implicit U: Unapply[Applicative, GB]): U.M[F[U.A]] =
+    F.traverseU[A, GB](fa)(f)(U)
+
+  def sequenceU(implicit U: Unapply[Applicative,A]): U.M[F[U.A]] =
+    F.sequenceU[A](fa)(U)
+
 }
 
 class NestedTraverseOps[F[_], G[_], A](fga: F[G[A]])(implicit F: Traverse[F]) {

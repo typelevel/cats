@@ -24,6 +24,9 @@ import simulacrum._
   def sequence[G[_]: Applicative, A](fga: F[G[A]]): G[F[A]] =
     traverse(fga)(ga => ga)
 
+  def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative,GA]): U.M[F[U.A]] = 
+    traverse(fga)(U.subst)(U.TC)
+
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     traverse[Id, A, B](fa)(f)
 
