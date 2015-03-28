@@ -7,7 +7,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws
 
-trait ComposeTests[F[_, _]] extends Laws {
+trait ComposeTests[F[_, _]] extends SerializableTests {
   def laws: ComposeLaws[F]
 
   def compose[A, B, C, D](implicit
@@ -19,7 +19,7 @@ trait ComposeTests[F[_, _]] extends Laws {
     new RuleSet {
       def name = "compose"
       def bases = Nil
-      def parents = Nil
+      def parents = Seq(serializable[F[A, B]])
       def props = Seq(
         "compose associativity" -> forAll(laws.composeAssociativity[A, B, C, D] _)
       )

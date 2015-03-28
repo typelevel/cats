@@ -7,7 +7,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws
 
-trait ProfunctorTests[F[_, _]] extends Laws {
+trait ProfunctorTests[F[_, _]] extends SerializableTests {
   def laws: ProfunctorLaws[F]
 
   def profunctor[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
@@ -19,7 +19,7 @@ trait ProfunctorTests[F[_, _]] extends Laws {
     new RuleSet {
       def name = "profunctor"
       def bases = Nil
-      def parents = Nil
+      def parents = Seq(serializable[F[A, B]])
       def props = Seq(
         "profunctor identity" -> forAll(laws.profunctorIdentity[A, B] _),
         "profunctor composition" -> forAll(laws.profunctorComposition[A, B, C, D, E, G] _)
