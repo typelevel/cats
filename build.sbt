@@ -71,36 +71,36 @@ lazy val docSettings = Seq(
 
 lazy val docs = project
   .settings(moduleName := "cats-docs")
-  .settings(catsSettings: _*)
-  .settings(noPublishSettings: _*)
-  .settings(unidocSettings: _*)
-  .settings(site.settings: _*)
-  .settings(ghpages.settings: _*)
-  .settings(tutSettings: _*)
-  .settings(docSettings: _*)
-  .settings(tutSettings: _*)
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .settings(unidocSettings)
+  .settings(site.settings)
+  .settings(ghpages.settings)
+  .settings(tutSettings)
+  .settings(docSettings)
+  .settings(tutSettings)
   .dependsOn(core, std, data)
 
 lazy val cats = project.in(file("."))
-  .settings(catsSettings: _*)
-  .settings(noPublishSettings: _*)
+  .settings(catsSettings)
+  .settings(noPublishSettings)
   .aggregate(macros, core, laws, tests, docs, data, std, bench)
   .dependsOn(macros, core, laws, tests, docs, data, std, bench)
 
 lazy val macros = project
   .settings(moduleName := "cats-macros")
-  .settings(catsSettings: _*)
+  .settings(catsSettings)
 
 lazy val core = project.dependsOn(macros)
   .settings(moduleName := "cats-core")
-  .settings(catsSettings: _*)
+  .settings(catsSettings)
   .settings(
     sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
   )
 
 lazy val laws = project.dependsOn(macros, core, data, std)
   .settings(moduleName := "cats-laws")
-  .settings(catsSettings: _*)
+  .settings(catsSettings)
   .settings(
     libraryDependencies ++= disciplineDependencies ++ Seq(
       "org.spire-math" %% "algebra-laws" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra-laws_2.11-0.2.0-SNAPSHOT.jar"
@@ -109,15 +109,15 @@ lazy val laws = project.dependsOn(macros, core, data, std)
 
 lazy val std = project.dependsOn(macros, core)
   .settings(moduleName := "cats-std")
-  .settings(catsSettings: _*)
+  .settings(catsSettings)
   .settings(
     libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra-std_2.11-0.2.0-SNAPSHOT.jar"
   )
 
 lazy val tests = project.dependsOn(macros, core, data, std, laws)
   .settings(moduleName := "cats-tests")
-  .settings(catsSettings: _*)
-  .settings(noPublishSettings: _*)
+  .settings(catsSettings)
+  .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= disciplineDependencies ++ Seq(
       "org.scalatest" %% "scalatest" % "2.1.3" % "test"
@@ -126,13 +126,13 @@ lazy val tests = project.dependsOn(macros, core, data, std, laws)
 
 lazy val bench = project.dependsOn(macros, core, data, std, laws)
   .settings(moduleName := "cats-bench")
-  .settings(catsSettings: _*)
-  .settings(noPublishSettings: _*)
-  .settings(jmhSettings: _*)
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .settings(jmhSettings)
 
 lazy val data = project.dependsOn(macros, core)
   .settings(moduleName := "cats-data")
-  .settings(catsSettings: _*)
+  .settings(catsSettings)
 
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/non/cats")),
