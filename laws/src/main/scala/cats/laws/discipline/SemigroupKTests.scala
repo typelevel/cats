@@ -6,7 +6,7 @@ import org.scalacheck.Prop._
 import org.scalacheck.Arbitrary
 import org.typelevel.discipline.Laws
 
-trait SemigroupKTests[F[_]] extends SerializableTests {
+trait SemigroupKTests[F[_]] extends Laws {
   def laws: SemigroupKLaws[F]
 
   def semigroupK[A: Arbitrary](implicit
@@ -18,7 +18,7 @@ trait SemigroupKTests[F[_]] extends SerializableTests {
     new RuleSet {
       val name = "semigroupK"
       val bases = Nil
-      val parents = Seq(serializable[F[A]])
+      val parents = Nil
       val props = Seq(
         "associative" -> forAll(laws.associative[A] _)
       )

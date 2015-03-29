@@ -7,7 +7,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws
 
-trait InvariantTests[F[_]] extends SerializableTests {
+trait InvariantTests[F[_]] extends Laws {
   def laws: InvariantLaws[F]
 
   def invariant[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
@@ -19,7 +19,7 @@ trait InvariantTests[F[_]] extends SerializableTests {
     new RuleSet {
       def name = "invariant"
       def bases = Nil
-      def parents = Seq(serializable[F[A]])
+      def parents = Nil
       def props = Seq(
         "invariant identity" -> forAll(laws.invariantIdentity[A] _),
         "invariant composition" -> forAll(laws.invariantComposition[A, B, C] _)
