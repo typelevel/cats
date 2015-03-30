@@ -9,6 +9,7 @@ import org.scalacheck.Prop.{ False, Proof, Result }
  * Check for Java Serializability.
  */
 object SerializableLaws {
+  // scalastyle:off null
   def serializable[A](a: A): Prop =
     Prop { _ =>
       val baos = new ByteArrayOutputStream()
@@ -29,4 +30,5 @@ object SerializableLaws {
         if (ois != null) ois.close()
       }
     }
+  // scalastyle:on null
 }
