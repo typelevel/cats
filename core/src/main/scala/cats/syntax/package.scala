@@ -23,4 +23,5 @@ package object syntax {
   object show extends ShowSyntax
   object split extends SplitSyntax
   object strong extends StrongSyntax
+  object traverse extends TraverseSyntax
 }

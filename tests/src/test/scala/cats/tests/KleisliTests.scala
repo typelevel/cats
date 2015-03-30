@@ -1,6 +1,7 @@
 package cats.tests
 
 import cats.{Applicative, Eq}
+import cats.arrow.Arrow
 import cats.data.Kleisli
 import cats.functor.Strong
 import cats.laws.discipline._
@@ -17,4 +18,7 @@ class KleisliTests extends CatsSuite {
 
   checkAll("Kleisli[Option, Int, Int]", StrongTests[Kleisli[Option, ?, ?]].strong[Int, Int, Int, Int, Int, Int])
   checkAll("Strong[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Strong[Kleisli[Option, ?, ?]]))
+
+  checkAll("Kleisli[Option, Int, Int]", ArrowTests[Kleisli[Option, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
+  checkAll("Arrow[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Arrow[Kleisli[Option, ?, ?]]))
 }

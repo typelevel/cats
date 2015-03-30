@@ -18,7 +18,7 @@ trait AnyValInstances
 trait IntInstances extends algebra.std.IntInstances {
 
   implicit val intShow: Show[Int] =
-    new Show.ToStringShow[Int]
+    Show.fromToString[Int]
 
   implicit val intGroup: CommutativeGroup[Int] =
     AdditiveCommutativeGroup[Int].additive
@@ -28,7 +28,7 @@ trait IntInstances extends algebra.std.IntInstances {
 trait ByteInstances /* missing algebra typeclasses */ {
 
   implicit val byteShow: Show[Byte] =
-    new Show.ToStringShow[Byte]
+    Show.fromToString[Byte]
 
   // TODO: replace this minimal algebra with one from the algebra project
   implicit val byteAlgebra: CommutativeGroup[Byte] with Order[Byte] =
@@ -44,7 +44,7 @@ trait ByteInstances /* missing algebra typeclasses */ {
 trait CharInstances /* missing algebra typeclasses */ {
 
   implicit val charShow: Show[Char] =
-    new Show.ToStringShow[Char]
+    Show.fromToString[Char]
 
   implicit val charOrder: Order[Char] =
     new Order[Char] {
@@ -56,7 +56,7 @@ trait CharInstances /* missing algebra typeclasses */ {
 trait ShortInstances /* missing algebra typeclasses */ {
 
   implicit val shortShow: Show[Short] =
-    new Show.ToStringShow[Short]
+    Show.fromToString[Short]
 
   // TODO: replace this minimal algebra with one from the algebra project
   implicit val shortAlgebra: CommutativeGroup[Short] with Order[Short] =
@@ -73,7 +73,7 @@ trait ShortInstances /* missing algebra typeclasses */ {
 trait LongInstances /* missing algebra typeclasses */ {
 
   implicit val longShow: Show[Long] =
-    new Show.ToStringShow[Long]
+    Show.fromToString[Long]
 
   // TODO: replace this minimal algebra with one from the algebra project
   implicit val longAlgebra: CommutativeGroup[Long] with Order[Long] =
@@ -89,7 +89,7 @@ trait LongInstances /* missing algebra typeclasses */ {
 trait FloatInstances /* missing algebra typeclasses */ {
 
   implicit val floatShow: Show[Float] =
-    new Show.ToStringShow[Float]
+    Show.fromToString[Float]
 
   // TODO: replace this minimal algebra with one from the algebra project
   implicit val floatAlgebra: CommutativeGroup[Float] with Order[Float] =
@@ -106,7 +106,7 @@ trait FloatInstances /* missing algebra typeclasses */ {
 trait DoubleInstances /* missing algebra typeclasses */ {
 
   implicit val doubleShow: Show[Double] =
-    new Show.ToStringShow[Double]
+    Show.fromToString[Double]
 
   // TODO: replace this minimal algebra with one from the algebra project
   implicit val doubleAlgebra: CommutativeGroup[Double] with Order[Double] =
@@ -123,14 +123,14 @@ trait DoubleInstances /* missing algebra typeclasses */ {
 trait BooleanInstances extends algebra.std.BooleanInstances {
 
   implicit val booleanShow: Show[Boolean] =
-    new Show.ToStringShow[Boolean]
+    Show.fromToString[Boolean]
 
 }
 
 trait UnitInstances /* missing algebra typeclasses */ {
 
   implicit val unitShow: Show[Unit] =
-    new Show.ToStringShow[Unit]
+    Show.fromToString[Unit]
 
   implicit val unitAlgebra: CommutativeGroup[Unit] with Order[Unit] =
     new CommutativeGroup[Unit] with Order[Unit] {
