@@ -18,7 +18,7 @@ class CokleisliTests extends CatsSuite {
     type CokleisliNEL[A, B] = Cokleisli[NonEmptyList, A, B]
 
     implicit def ev0[A: Arbitrary, B: Arbitrary]: Arbitrary[CokleisliNEL[A, B]] =
-      cokleisliArbitrary[NonEmptyList, A, B]
+      cokleisliArbitrary
 
     implicit def ev1[A: Arbitrary, B: Eq]: Eq[CokleisliNEL[A, B]] =
       cokleisliEq[NonEmptyList, A, B](oneAndArbitrary, Eq[B])
