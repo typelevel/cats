@@ -15,6 +15,7 @@ class CokleisliTests extends CatsSuite {
   checkAll("Cokleisli[Option, Int, Int]", ApplicativeTests[Cokleisli[Option, Int, ?]].applicative[Int, Int, Int])
 
   {
+    // Ceremony to help scalac to do the right thing, see also #267.
     type CokleisliNEL[A, B] = Cokleisli[NonEmptyList, A, B]
 
     implicit def ev0[A: Arbitrary, B: Arbitrary]: Arbitrary[CokleisliNEL[A, B]] =
