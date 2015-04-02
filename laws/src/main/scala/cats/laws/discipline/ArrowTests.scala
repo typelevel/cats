@@ -42,7 +42,7 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with Stron
         "arrow composition" -> forAll(laws.arrowComposition[A, B, C] _),
         "arrow extension" -> forAll(laws.arrowExtension[A, B, C] _),
         "arrow functor" -> forAll(laws.arrowFunctor[A, B, C, D] _),
-        "arrow exchange" -> forAll(laws.arrowExchange[A, B, C, D, E] _),
+        "arrow exchange" -> forAll(laws.arrowExchange[A, B, C, D] _),
         "arrow unit" -> forAll(laws.arrowUnit[A, B, C] _),
         "arrow association" -> forAll(laws.arrowAssociation[A, B, C, D] _)
       )
