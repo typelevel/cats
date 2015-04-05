@@ -4,8 +4,9 @@ package object syntax {
   object all extends AllSyntax
   object apply extends ApplySyntax
   object bifunctor extends BifunctorSyntax
-  object coflatMap extends CoFlatMapSyntax
+  object coflatMap extends CoflatMapSyntax
   object comonad extends ComonadSyntax
+  object compose extends ComposeSyntax
   object contravariant extends ContravariantSyntax
   object eq extends EqSyntax
   object flatMap extends FlatMapSyntax
@@ -18,6 +19,9 @@ package object syntax {
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object semigroup extends SemigroupSyntax
+  object semigroupk extends SemigroupKSyntax
   object show extends ShowSyntax
+  object split extends SplitSyntax
   object strong extends StrongSyntax
+  object traverse extends TraverseSyntax
 }

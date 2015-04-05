@@ -1,11 +1,9 @@
 package cats.tests
 
 import cats._
-import cats.implicits._
-import org.scalatest.FunSuite
 import scala.collection.mutable
 
-class RegressionTests extends FunSuite {
+class RegressionTests extends CatsSuite {
 
   // toy state class
   // not stack safe, very minimal, not for actual use
@@ -50,5 +48,30 @@ class RegressionTests extends FunSuite {
 
     // ensure that side-effects occurred in "correct" order
     assert(buf.toList == names)
+  }
+
+  test("#167: confirm apply2 order") {
+    val twelve = Apply[State[String, ?]].apply2(
+      State[String, Unit](s => ((), s + "1")),
+      State[String, Unit](s => ((), s + "2"))
+    )(State.instance[String].pure((_: Unit, _: Unit) => ())).run("")._2
+    assert(twelve == "12")
+  }
+
+  test("#167: confirm map2 order") {
+    val twelve = Apply[State[String, ?]].map2(
+      State[String, Unit](s => ((), s + "1")),
+      State[String, Unit](s => ((), s + "2"))
+    )((_: Unit, _: Unit) => ()).run("")._2
+    assert(twelve == "12")
+  }
+
+  test("#167: confirm map3 order") {
+    val oneTwoThree = Apply[State[String, ?]].map3(
+      State[String, Unit](s => ((), s + "1")),
+      State[String, Unit](s => ((), s + "2")),
+      State[String, Unit](s => ((), s + "3"))
+    )((_: Unit, _: Unit, _: Unit) => ()).run("")._2
+    assert(oneTwoThree == "123")
   }
 }

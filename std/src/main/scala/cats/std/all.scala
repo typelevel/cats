@@ -2,6 +2,7 @@ package cats.std
 
 trait AllInstances
   extends FunctionInstances
+  with    StringInstances
   with    EitherInstances
   with    ListInstances
   with    OptionInstances
@@ -12,3 +13,4 @@ trait AllInstances
   with    MapInstances
   with    BigIntInstances
   with    BigDecimalInstances
+  with    FutureInstances

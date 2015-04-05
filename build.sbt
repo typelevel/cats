@@ -10,8 +10,8 @@ import sbtunidoc.Plugin.UnidocKeys._
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
-  scalaVersion := "2.11.5",
-  crossScalaVersions := Seq("2.11.5")
+  scalaVersion := "2.11.6",
+  crossScalaVersions := Seq("2.11.6")
 )
 
 lazy val commonSettings = Seq(
@@ -56,77 +56,87 @@ lazy val disciplineDependencies = Seq(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, laws, data, std),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, laws, data, free, std),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
-  scalacOptions in (ScalaUnidoc, unidoc) ++=
-    Opts.doc.sourceUrl(scmInfo.value.get.browseUrl + "/tree/master${FILE_PATH}.scala"),
+  siteMappings += file("CONTRIBUTING.md") -> "contributing.md",
+  scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
+    "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
+    "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath
+  ),
   git.remoteRepo := "git@github.com:non/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
 
 lazy val docs = project
   .settings(moduleName := "cats-docs")
-  .settings(catsSettings: _*)
-  .settings(noPublishSettings: _*)
-  .settings(unidocSettings: _*)
-  .settings(site.settings: _*)
-  .settings(ghpages.settings: _*)
-  .settings(tutSettings: _*)
-  .settings(docSettings: _*)
-  .settings(tutSettings: _*)
-  .dependsOn(core)
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .settings(unidocSettings)
+  .settings(site.settings)
+  .settings(ghpages.settings)
+  .settings(tutSettings)
+  .settings(docSettings)
+  .settings(tutSettings)
+  .dependsOn(core, std, data, free)
 
-lazy val aggregate = project.in(file("."))
-  .settings(catsSettings: _*)
-  .settings(noPublishSettings: _*)
-  .aggregate(macros, core, laws, tests, docs, data, std, bench)
-  .dependsOn(macros, core, laws, tests, docs, data, std, bench)
+lazy val cats = project.in(file("."))
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .aggregate(macros, core, laws, tests, docs, data, free, std, bench)
+  .dependsOn(macros, core, laws, tests, docs, data, free, std, bench)
 
 lazy val macros = project
   .settings(moduleName := "cats-macros")
-  .settings(catsSettings: _*)
+  .settings(catsSettings)
 
 lazy val core = project.dependsOn(macros)
-  .settings(moduleName := "cats")
-  .settings(catsSettings: _*)
+  .settings(moduleName := "cats-core")
+  .settings(catsSettings)
+  .settings(
+    sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
+  )
 
-lazy val laws = project.dependsOn(macros, core, data)
+lazy val laws = project.dependsOn(macros, core, data, free, std)
   .settings(moduleName := "cats-laws")
-  .settings(catsSettings: _*)
+  .settings(catsSettings)
   .settings(
     libraryDependencies ++= disciplineDependencies ++ Seq(
       "org.spire-math" %% "algebra-laws" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra-laws_2.11-0.2.0-SNAPSHOT.jar"
     )
   )
 
-lazy val std = project.dependsOn(macros, core, laws)
+lazy val std = project.dependsOn(macros, core)
   .settings(moduleName := "cats-std")
-  .settings(catsSettings: _*)
+  .settings(catsSettings)
   .settings(
     libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra-std_2.11-0.2.0-SNAPSHOT.jar"
   )
 
-lazy val tests = project.dependsOn(macros, core, data, std, laws)
+lazy val tests = project.dependsOn(macros, core, data, free, std, laws)
   .settings(moduleName := "cats-tests")
-  .settings(catsSettings: _*)
-  .settings(noPublishSettings: _*)
+  .settings(catsSettings)
+  .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= disciplineDependencies ++ Seq(
       "org.scalatest" %% "scalatest" % "2.1.3" % "test"
     )
   )
 
-lazy val bench = project.dependsOn(macros, core, data, std, laws)
+lazy val bench = project.dependsOn(macros, core, data, free, std, laws)
   .settings(moduleName := "cats-bench")
-  .settings(catsSettings: _*)
-  .settings(noPublishSettings: _*)
-  .settings(jmhSettings: _*)
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .settings(jmhSettings)
 
 lazy val data = project.dependsOn(macros, core)
   .settings(moduleName := "cats-data")
-  .settings(catsSettings: _*)
+  .settings(catsSettings)
+
+lazy val free = project.dependsOn(macros, core)
+  .settings(moduleName := "cats-free")
+  .settings(catsSettings)
 
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/non/cats")),

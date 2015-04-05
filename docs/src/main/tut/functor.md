@@ -7,9 +7,10 @@ scaladoc: "#cats.Functor"
 ---
 # Functor
 
-A Functor is a ubiquitous typeclass involving type constructors of
-kind * → *, which is another way of saying types that have a single
-type variable. Examples might be Option, List, Future.
+A Functor is a ubiquitous typeclass involving types that have "one
+hole"; that is types which have the shape: `F[?]`, such as `Option`,
+`List`, `Future`. (This is in contrast to a type like `Int` which has
+no hole, or `Tuple2` which has two "holes" (`Tuple2[?,?]`), etc.
 
 The Functor category involves a single operation, named `map`:
 
@@ -17,9 +18,9 @@ The Functor category involves a single operation, named `map`:
 def map[A, B](fa: F[A])(f: A => B): F[B]
 ```
 
-This method takes a Function from A => B and turns an F[A] into an
+This method takes a function from A => B and turns an F[A] into an
 F[B].  The name of the method `map` should remind you of the `map`
-method that exists on many classes in the scala standard library. some
+method that exists on many classes in the Scala standard library. some
 Examples of map functions:
 
 ```tut
@@ -43,16 +44,30 @@ implicit val listFunctor: Functor[List] = new Functor[List] {
 }
 ```
 
-However Functors can also be creted for types which don't have a map
+However, functors can also be created for types which don't have a map
 method. An example of this would be that Functions which take a String
 form a functor using andThen as the map operation:
 
 ```tut
-implicit def function1Functor[In]: Functor[({type λ[α] = Function1[In,α]})#λ] =
-  new Functor[({type λ[α] = Function1[In,α]})#λ] {
+implicit def function1Functor[In]: Functor[Function1[In, ?]] =
+  new Functor[Function1[In, ?]] {
     def map[A,B](fa: In => A)(f: A => B): Function1[In,B] = fa andThen f
   }
 ```
+
+Also of note in the above example, is that we created a functor for
+Function1, which is a type which normally has two type holes. We
+however constrained one of the holes to be the `In` type, leaving just
+one hole for the return type. In this above example, we are
+demonstrating the use of the
+[kind-projector compiler plugin](https://github.com/non/kind-projector),
+This compiler plugin lets us more easily change the number of type
+holes a type has. In this case, we took a type which normally has two
+type holes, `Function1` and filled one of the holes, leaving the other
+hole open. `Function1[In,?]` has the first type parameter filled,
+while the second is still open. Without kind-projector, we'd have to
+write this as something like: `({type F[A] = Function1[In,A]})#F`,
+which is much harder to read and understand.
 
 ## Using functor
 
@@ -60,7 +75,7 @@ implicit def function1Functor[In]: Functor[({type λ[α] = Function1[In,α]})#λ
 
 Option is a functor which always returns a Some with the function
 applied when the Option value is a Some.
-g
+
 ```tut
 val len: String => Int = _.length
 Functor[Option].map(Some("adsf"))(len)

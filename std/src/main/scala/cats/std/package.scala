@@ -5,13 +5,16 @@ package object std {
 
   object either extends EitherInstances
   object function extends FunctionInstances
+
   object list       extends ListInstances
   object option     extends OptionInstances
   object set        extends SetInstances
   object stream     extends StreamInstances
   object vector     extends VectorInstances
   object map        extends MapInstances
+  object future     extends FutureInstances
 
+  object string     extends StringInstances
   object int        extends IntInstances
   object byte       extends ByteInstances
   object long       extends LongInstances

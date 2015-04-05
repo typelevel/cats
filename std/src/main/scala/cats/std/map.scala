@@ -2,7 +2,7 @@ package cats
 package std
 
 
-trait MapInstances {
+trait MapInstances extends algebra.std.MapInstances {
 
   implicit def MapShow[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =
     Show.show[Map[A, B]](m => s"Map(${m.map(a => s"${showA.show(a._1)} -> ${showB.show(a._2)})").mkString(",")})")
@@ -25,7 +25,7 @@ trait MapInstances {
       override def foldRight[A, B](fa: Map[K, A], b: B)(f: (A, B) => B): B =
         fa.foldRight(b) { case ((k, a), z) => f(a, z)}
 
-      def foldLazy[A, B](fa: Map[K, A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
-        Fold.iterateRight(fa.values, b)(f)
+      def partialFold[A, B](fa: Map[K, A])(f: A => Fold[B]): Fold[B] =
+        Fold.partialIterate(fa.values)(f)
     }
 }

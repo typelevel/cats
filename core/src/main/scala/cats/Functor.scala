@@ -13,11 +13,6 @@ import functor.Contravariant
 @typeclass trait Functor[F[_]] extends functor.Invariant[F] { self =>
   def map[A, B](fa: F[A])(f: A => B): F[B]
 
-  /**
-   * Alias for map
-   */
-  def fmap[A, B](f: A => B): F[A] => F[B] = fa => map(fa)(f)
-
   def imap[A, B](fa: F[A])(f: A => B)(fi: B => A): F[B] = map(fa)(f)
 
   /**
@@ -43,7 +38,7 @@ import functor.Contravariant
   override def composeWithFunctor[G[_]: Functor]: Functor[Lambda[X => F[G[X]]]] = compose[G]
 
 
-  // derived functions
+  // derived methods
 
   /**
    * Lift a function f to operate on Functors
@@ -64,8 +59,7 @@ import functor.Contravariant
   /**
    * Replaces the `A` value in `F[A]` with the supplied value.
    */
-  def as[A, B](fa: F[A], b: B): F[B] =
-    map(fa)(_ => b)
+  def as[A, B](fa: F[A], b: B): F[B] = map(fa)(_ => b)
 }
 
 object Functor {

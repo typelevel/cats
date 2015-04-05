@@ -20,7 +20,7 @@ package cats
  *     val count: Lazy[Int] = List(1,2,3,4).foldLazy(Lazy(0))(f)
  * }}}
  *
- * When we call `count.force`, the following occurs:
+ * When we call `count.value`, the following occurs:
  *
  *  - `f(1)` produces `res0: Continue(_ + 1)`
  *  - `f(2)` produces `res1: Continue(_ + 1)`
@@ -54,7 +54,7 @@ package cats
  * }}}
  *
  * This strange example counts an infinite stream. Since the result is
- * lazy, it will only hang the program once `count.force` is called:
+ * lazy, it will only hang the program once `count.value` is called:
  *
  * {{{
  *    val count: Lazy[Long] =
@@ -69,7 +69,7 @@ package cats
  *    def foldl[A, B](as: List[A], b: B)(f: (B, A) => B): B =
  *      as.foldLazy(Lazy((b: B) => b)) { a =>
  *        Fold.Continue(g => (b: B) => g(f(b, a)))
- *      }.force(b)
+ *      }.value(b)
  * }}}
  *
  * (In practice you would not want to use the `foldl` because it is
@@ -78,11 +78,11 @@ package cats
 sealed abstract class Fold[A] {
   import Fold.{Return, Continue, Pass}
 
-  def complete(a: A): A =
+  def complete(la: Lazy[A]): A =
     this match {
       case Return(a) => a
-      case Continue(f) => f(a)
-      case _ => a
+      case Continue(f) => f(la.value)
+      case _ => la.value
     }
 }
 
@@ -117,19 +117,19 @@ object Fold {
   final case object pass extends Fold[Nothing]
 
   /**
-   * iterateRight provides a sample right-fold for `Iterable[A]` values.
+   * partialIterate provides a partialFold for `Iterable[A]` values.
    */
-  def iterateRight[A, B](as: Iterable[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] = {
+  def partialIterate[A, B](as: Iterable[A])(f: A => Fold[B]): Fold[B] = {
     def unroll(b: B, fs: List[B => B]): B =
       fs.foldLeft(b)((b, f) => f(b))
-    def loop(it: Iterator[A], fs: List[B => B]): B =
+    def loop(it: Iterator[A], fs: List[B => B]): Fold[B] =
       if (it.hasNext) {
         f(it.next) match {
-          case Return(b) => unroll(b, fs)
+          case Return(b) => Return(unroll(b, fs))
           case Continue(f) => loop(it, f :: fs)
           case _ => loop(it, fs)
         }
-      } else unroll(b.force, fs)
-    Lazy(loop(as.iterator, Nil))
+      } else Continue(b => unroll(b, fs))
+    loop(as.iterator, Nil)
   }
 }

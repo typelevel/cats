@@ -1,11 +1,11 @@
 package cats
 package std
 
-import scala.annotation.tailrec
+import scala.collection.immutable.Stream.Empty
 
 trait StreamInstances {
-  implicit val streamInstance: Traverse[Stream] with MonadCombine[Stream] with CoFlatMap[Stream] =
-    new Traverse[Stream] with MonadCombine[Stream] with CoFlatMap[Stream] {
+  implicit val streamInstance: Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] =
+    new Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
 
@@ -32,9 +32,8 @@ trait StreamInstances {
       override def foldRight[A, B](fa: Stream[A], b: B)(f: (A, B) => B): B =
         fa.foldRight(b)(f)
 
-      // this foldRight variant is lazy
-      def foldLazy[A, B](fa: Stream[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
-        Fold.iterateRight(fa, b)(f)
+      def partialFold[A, B](fa: Stream[A])(f: A => Fold[B]): Fold[B] =
+        Fold.partialIterate(fa)(f)
 
       def traverse[G[_]: Applicative, A, B](fa: Stream[A])(f: A => G[B]): G[Stream[B]] = {
         val G = Applicative[G]
@@ -42,12 +41,32 @@ trait StreamInstances {
         // until we are ready to prepend the stream's head with #::
         val gslb = G.pure(Lazy.byName(Stream.empty[B]))
         val gsb = foldRight(fa, gslb) { (a, lacc) =>
-          G.map2(f(a), lacc)((b, acc) => Lazy.byName(b #:: acc.force))
+          G.map2(f(a), lacc)((b, acc) => Lazy.byName(b #:: acc.value))
         }
         // this only forces the first element of the stream, so we get
         // G[Stream[B]] instead of G[Lazy[Stream[B]]]. the rest of the
         // stream will be properly lazy.
-        G.map(gsb)(_.force)
+        G.map(gsb)(_.value)
       }
     }
+
+  // TODO: eventually use algebra's instances (which will deal with
+  // implicit priority between Eq/PartialOrder/Order).
+
+  implicit def eqStream[A](implicit ev: Eq[A]): Eq[Stream[A]] =
+    new Eq[Stream[A]] {
+      def eqv(x: Stream[A], y: Stream[A]): Boolean = {
+        def loop(xs: Stream[A], ys: Stream[A]): Boolean =
+          xs match {
+            case Empty => ys.isEmpty
+            case a #:: xs =>
+              ys match {
+                case Empty => false
+                case b #:: ys => if (ev.neqv(a, b)) false else loop(xs, ys)
+              }
+          }
+        loop(x, y)
+      }
+    }
+
 }

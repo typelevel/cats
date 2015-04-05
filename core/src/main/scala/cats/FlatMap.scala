@@ -25,6 +25,19 @@ trait FlatMap[F[_]] extends Apply[F] {
 
   override def apply[A, B](fa: F[A])(ff: F[A => B]): F[B] =
     flatMap(ff)(f => map(fa)(f))
+
+  /**
+   *  Pair `A` with the result of function application.
+   */
+  def mproduct[A, B](fa: F[A])(f: A => F[B]): F[(A, B)] =
+    flatMap(fa)(a => map(f(a))((a, _)))
+
+  /**
+   * `if` lifted into monad.
+   */
+  def ifM[B](fa: F[Boolean])(ifTrue: => F[B], ifFalse: => F[B]): F[B] = {
+    flatMap(fa)(if (_) ifTrue else ifFalse)
+  }
 }
 
 object FlatMap {

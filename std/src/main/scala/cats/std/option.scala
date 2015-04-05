@@ -4,8 +4,8 @@ package std
 import algebra.Eq
 
 trait OptionInstances {
-  implicit val optionInstance: Traverse[Option] with MonadCombine[Option] with CoFlatMap[Option] =
-    new Traverse[Option] with MonadCombine[Option] with CoFlatMap[Option] {
+  implicit val optionInstance: Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] =
+    new Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] {
 
       def empty[A]: Option[A] = None
 
@@ -37,10 +37,10 @@ trait OptionInstances {
           case Some(a) => f(a, b)
         }
 
-      def foldLazy[A, B](fa: Option[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
+      def partialFold[A, B](fa: Option[A])(f: A => Fold[B]): Fold[B] =
         fa match {
-          case None => b
-          case Some(a) => b.map(f(a).complete)
+          case None => Fold.Pass
+          case Some(a) => f(a)
         }
 
       def traverse[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =
@@ -57,5 +57,18 @@ trait OptionInstances {
     new Eq[Option[A]] {
       def eqv(x: Option[A], y: Option[A]): Boolean =
         x.fold(y == None)(a => y.fold(false)(ev.eqv(_, a)))
+    }
+
+  implicit def optionMonoid[A](implicit ev: Semigroup[A]): Monoid[Option[A]] =
+    new Monoid[Option[A]] {
+      def empty: Option[A] = None
+      def combine(x: Option[A], y: Option[A]): Option[A] =
+        x match {
+          case None => y
+          case Some(xx) => y match {
+            case None => x
+            case Some(yy) => Some(ev.combine(xx,yy))
+          }
+        }
     }
 }

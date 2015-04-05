@@ -20,70 +20,39 @@ In real life, `FreeMonad` is very useful & practical to:
 > In cats, `FreeMonad` is abbreviated to `Free` as in most languages.
 
 
-## What is it in theory?
-
-Mathematically speaking, `FreeMonad` (at least in the programming language context) is a construction that is left adjoint to a forgetful functor whose domain is the category of Monads and whose co-domain is the category of Endofunctors. Hmmmm...
- all
-Concretely, **it is just a clever construction allowing to build a _very simple_ Monad from any `Functor`**.
-
-For the curious ones, the above forgetful functor takes a `Monad` and _forgets_ its monadic part (ie `flatMap` function) and applicative part (ie `pure` functions) to finally keep the `Functor` part (ie the `map` function). So, by reversing all arrows, the left-adjoint to this forgetful functor is basically a construction that takes a `Functor` and adds the applicative behavior (ie `pure`) and monadic behavior (ie `flatMap`) to it.
-
-In terms of implementation, to build a `Monad` from a `Functor`, we use the following classic & quite simple inductive definition (_this generalizes the concept of fixed point functor_):
-
-```scala
-sealed abstract class Free[F[_], A]
-case class Pure[F[_], A](a: A) extends Free[F, A]
-case class Suspend[F[_], A](a: F[Free[F, A]]) extends Free[F, A]
-```
-
-In this representation:
-
-- `Pure` allows to build a `Free` from a pure value and is a _reification_ of the applicative `pure` function.
-- `Suspend` allows to build a new `Free` by applying the `Functor F` to previous `Free` and permits the monadic `flatMap`.
-
-So typically, a `Free` structure looks like:
-
-```scala
-Suspend(F(Suspend(F(Suspend(F(....(Pure(a))))))))
-```
-
-It is obvious that `Free` is a recursive structure using `A` in `F[A]` as the recursion carrier with a terminal element `Pure`.
-
-From a computational point of view, `Free` recursive structure can be seen as a sequence of operations:
-
-- `Pure` is a simple operation returning a value `A` and it ends the whole computation.
-- `Suspend` is a continuation operation that suspends current computation with the suspension `Functor F` (that can represent a command for example) and hands control to the caller. `A` represents a value bound to this computation.
-
-
-Please note this `Free` construction has the interesting quality of _encoding_ the recursion on the heap instead of the stack as classic functions. This allows to run those `Free` computations in a stack-safe way.
-
-
-### For the curious ones
-
-If you look at implementation, you will see another member in `Free` representation:
-
-```scala
-sealed abstract case class Gosub[S[_], B]() extends Free[S, B] {
-  type C
-  val a: () => Free[S, C]
-  val f: C => Free[S, B]
-}
-```
-
-`Gosub` represents a call to a subroutine `a` and when `a` is finished, it continues the computation by calling the function `f` with the result of `a`.
-
-It is actually an optimization of `Free` structure allowing to solve the well-known problem of quadratic complexity implied by very deep recursive Free computations. It is exactly the same problem as List appending: the longer the sequence of operations, the longer the `flatMap`. With `Gosub`, `Free` becomes a right associated structure not subject to quadratic complexity.
-
 
 ## Using Free Monad
 
-As said before, `Free` is very useful to create embedded DSL.
+If you're interested in the theory behind `Free`, go down, there are a few deeper aspects in terms of Algebra.
 
-Let's show a sample representing a program to interact with a KeyValue Store.
+If you want to learn by the example, let's start by using `Free` to create embedded DSL (Domain Specific Language).
+
+
+
+### Study your topic
+
+So, we want to create a DSL to interact with a KeyValue Store.
+
+The idea is be able to write a static program regrouping a sequence of operations to interact with a KeyValue store,
+then compile it and finally execute the program.
+
+
+For example:
+
+```
+put("toto", 3)
+get("toto")
+delete("toto")
+```
+
+But we want:
+- the computation to be monadic & pure functionally speaking
+- separate the program creation from its compiling from its execution (to be able to choose how we execute it, to debug it etc...)
+
 
 ### Study your grammar
 
-We have 3 commands:
+We have 3 commands to interact with our KeyValue store:
 
 - `Put` a value associated to a key
 - `Get` a value associated to a key
@@ -92,7 +61,7 @@ We have 3 commands:
 
 ### Create ADT representing your grammar
 
-`ADT` is the Algebraic Data Type corresponding to your grammar.
+`ADT` is the Algebraic Data Type corresponding to your program grammar.
 
 ```tut
 // 1. create your ADT
@@ -102,7 +71,16 @@ case class Get[T, Next](key: String, onResult: T => Next) extends KVStoreA[Next]
 case class Delete[Next](key: String, next: Next) extends KVStoreA[Next]
 ```
 
-> Please note the `next: Next` in each command allowing `KVStoreA[_]` to be a `Functor` and providing a carrier for the `Free` recursion.
+> Please note the `next: Next` in each command providing a carrier for the `Free` recursion (and also allowing `KVStoreA[_]` to be a `Functor`).
+
+
+### Import Free in your `build.sbt`
+
+```
+libraryDependencies +=
+  "cats" %% "cats-free" % "0.1.0-SNAPSHOT"
+)
+```
 
 
 ### Free your ADT
@@ -117,6 +95,10 @@ type KVStore[A] = Free[KVStoreA, A]
 ```
 
 2. Prove your carrier is a `Functor`.
+
+One important thing to remark is that `Free[F[_], A]` gives you a **Monad for Free from any Functor F**.
+
+Therefore, we need to prove `KVStoreA` is a functor.
 
 ```tut
 import cats.Functor
@@ -159,6 +141,8 @@ def update[T](key: String, f: T => T): KVStore[Unit] = for {
 
 4. Build a program
 
+so it also means you can use your `Free` structure in a pure monadic way with `for-comprehension`:
+
 ```tut
 // 5. Write program
 def program: KVStore[Int] = for {
@@ -169,13 +153,33 @@ def program: KVStore[Int] = for {
 } yield (id)
 ```
 
+This looks like a Monadic flow but in fact, it just builds a recursive data structure representing our sequence of operations. Here is a simplification of it:
+
+```
+Put("wild-cats", 2, 
+  Get("wild-cats",
+    Put("wild-cats", f(2),
+      Get("wild-cats",
+        Delete("wild-cats",
+          Return // to significate the end
+        )
+      )
+    )
+  )
+)
+```
+
 5. Write a compiler for your program
 
-As you may have understood now, `Free` used as an embedded DSL doesn't do anything else than describing a sequence of operations. But it doesn't produce anything by itself. `Free` is nothing else than a programming language inside your programming language.
+As you may have understood now, `Free` used to create embedded DSL doesn't do anything else than representing your sequence of operations by a recursive data structure.
+
+But, it doesn't produce anything by itself. `Free` is nothing else than a programming language inside your programming language (here a DSL in Scala).
 
 **So as any programming language, you need to compile/interprete it into an _effective_ language and then run it.**
 
 To compile/interprete your abstract language into an effective one, you use a `NaturalTransformation F ~> G` between your `Functor F` to another type container `G`.
+
+Let's write a very simple Natural Transformation that logs & puts our keys/values in a mutable map:
 
 ```tut
 // A very dummy state
@@ -193,18 +197,19 @@ def impureCompiler = new (KVStoreA ~> Id) {
 
 ```
 
-This `impureCompiler` is impure as it produces side-effects in a mutable `Map`. But as any program, it has side-effects sometimes. The whole purpose of Functional Programming isn't to prevent side-effects, it is just to push side-effects to the boundaries of your system in very well known & controlled parts of your program.
+Please note this `impureCompiler` is impure as it produces side-effects in a mutable `Map`. As any program, it has side-effects sometimes. The whole purpose of Functional Programming isn't to prevent side-effects, it is just to push side-effects to the boundaries of your system in very well known & controlled parts of your program.
 
-FYI, `Id` represents the simplest type container that can be extracted (it's a _Comonad_) to retrieve a final result but you can imagine using any container like:
+FYI, `Id` represents the simplest type container to extract a final result but you can imagine using any container such as:
 - `Future` for asynchronous computation
 - `List` for gathering multiple results
+- etc...
 
 
 6. Run your program stack-safe
 
 The final step is naturally running your program after compiling it.
 
-`Free` is just a recursive structure that can be seen as sequence of operations producing other operations. To obtain a result from a sequence, one may think of catamorphing/folding it.
+`Free` is just a recursive structure that can be seen as sequence of operations producing other operations. To obtain a result from a sequence, one may think of folding/catamorphing it.
 
 
 The idea behind running a `Free` is exactly the same. We fold the recursive structure by:
@@ -242,8 +247,6 @@ result: cats.Id[Int] = 14
 
 **An important aspect of `foldMap` is its stack-safety**: it evaluates each step of computation on the stack then unstack and restart. It will never overflow your stack (except if you do it yourself in your natural transformations). It's heap-intensive but stack-safety allows to use `Free` to represent infinite processes such as streams. 
 
-> By the way, `scalaz-stream` is just actually an optimized version of `Free`.
-
 
 7. Run program with pure compiler
 
@@ -270,6 +273,70 @@ Here you can see a few of scalac limits with respect to pattern matching & JVM t
 scala> val result: Map[String, Int] = compilePure(program)
 result: Map[String,Int] = Map(wild-cats -> 14)
 ```
+
+## For the curious ones: what is Free in theory?
+
+Mathematically speaking, `FreeMonad` (at least in the programming language context) is a construction that is left adjoint to a forgetful functor whose domain is the category of Monads and whose co-domain is the category of Endofunctors. Hmmmm...
+
+Concretely, **it is just a clever construction allowing to build a _very simple_ Monad from any `Functor`**.
+
+The above forgetful functor takes a `Monad` and:
+- forgets its monadic part (ie `flatMap` function)
+- forgets its applicative part (ie `pure` functions)
+- finally keep the `Functor` part (ie the `map` function).
+
+By reversing all arrows to build the left-adjoint, we deduce that the forgetful functor is basically a construction that:
+- takes a `Functor`
+- adds the applicative behavior (ie `pure`)
+- adds the monadic behavior (ie `flatMap`).
+
+In terms of implementation, to build a `Monad` from a `Functor`, we use the following classic & quite simple inductive definition (_this generalizes the concept of fixed point functor_):
+
+```scala
+sealed abstract class Free[F[_], A]
+case class Pure[F[_], A](a: A) extends Free[F, A]
+case class Suspend[F[_], A](a: F[Free[F, A]]) extends Free[F, A]
+```
+
+In this representation:
+
+- `Pure` allows to build a `Free` from a pure value and is a _reification_ of the applicative `pure` function.
+- `Suspend` allows to build a new `Free` by applying the `Functor F` to previous `Free` and permits the monadic `flatMap`.
+
+So typically, a `Free` structure looks like:
+
+```scala
+Suspend(F(Suspend(F(Suspend(F(....(Pure(a))))))))
+```
+
+It is obvious that `Free` is a recursive structure using `A` in `F[A]` as the recursion carrier with a terminal element `Pure`.
+
+From a computational point of view, `Free` recursive structure can be seen as a sequence of operations:
+
+- `Pure` is a simple operation returning a value `A` and it ends the whole computation.
+- `Suspend` is a continuation operation that suspends current computation with the suspension `Functor F` (that can represent a command for example) and hands control to the caller. `A` represents a value bound to this computation.
+
+
+Please note this `Free` construction has the interesting quality of _encoding_ the recursion on the heap instead of the stack as classic functions. This allows to run those `Free` computations in a stack-safe way.
+
+
+### For the very curious ones
+
+If you look at implementation in cats, you will see another member in `Free` representation:
+
+```scala
+sealed abstract case class Gosub[S[_], B]() extends Free[S, B] {
+  type C
+  val a: () => Free[S, C]
+  val f: C => Free[S, B]
+}
+```
+
+`Gosub` represents a call to a subroutine `a` and when `a` is finished, it continues the computation by calling the function `f` with the result of `a`.
+
+It is actually an optimization of `Free` structure allowing to solve the well-known problem of quadratic complexity implied by very deep recursive Free computations. It is exactly the same problem as List appending: the longer the sequence of operations, the longer the `flatMap`. With `Gosub`, `Free` becomes a right associated structure not subject to quadratic complexity.
+
+
 
 
 ## Remarkable kinds of Free

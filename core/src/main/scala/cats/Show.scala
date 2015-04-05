@@ -19,11 +19,12 @@ object Show {
   }
 
   /** creates an instance of [[Show]] using object toString */
-  def fromToString[A]: Show[A] = show(_.toString)
+  def fromToString[A]: Show[A] = new Show[A] {
+    def show(a: A): String = a.toString
+  }
 
   implicit val showContravariant: Contravariant[Show] = new Contravariant[Show] {
     def contramap[A, B](fa: Show[A])(f: B => A): Show[B] =
       show[B](fa.show _ compose f)
   }
-
 }

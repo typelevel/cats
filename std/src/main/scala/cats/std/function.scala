@@ -59,6 +59,14 @@ trait Function1Instances {
 
       def compose[A, B, C](f: B => C, g: A => B): A => C = f.compose(g)
     }
+
+  implicit def function1Monoid[A,B](implicit B: Monoid[B]): Monoid[A => B] =
+    new Monoid[A => B] {
+      def empty: A => B = _ => B.empty
+      def combine(x: A => B, y: A => B): A => B = { a =>
+        B.combine(x(a), y(a))
+      }
+    }
 }
 
 trait FunctionInstances
