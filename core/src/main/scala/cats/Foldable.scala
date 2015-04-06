@@ -21,7 +21,7 @@ import simulacrum._
  *
  * See: [[https://www.cs.nott.ac.uk/~gmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@typeclass trait Foldable[F[_]] { self =>
+@typeclass trait Foldable[F[_]] extends Serializable { self =>
 
   /**
    * Left associative fold on 'F' using the function 'f'.

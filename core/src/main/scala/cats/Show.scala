@@ -5,7 +5,7 @@ import cats.functor.Contravariant
 /**
  * A typeclass to provide textual representation
  */
-trait Show[T] {
+trait Show[T] extends Serializable {
   def show(f: T): String
 }
 

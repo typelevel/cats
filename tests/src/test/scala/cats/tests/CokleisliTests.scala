@@ -1,7 +1,8 @@
 package cats.tests
 
-import algebra.Eq
+import cats.{Applicative, Eq}
 import cats.data.{Cokleisli, NonEmptyList}
+import cats.functor.{Profunctor, Strong}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -13,6 +14,10 @@ class CokleisliTests extends CatsSuite {
     Eq.by[Cokleisli[F, A, B], F[A] => B](_.run)
 
   checkAll("Cokleisli[Option, Int, Int]", ApplicativeTests[Cokleisli[Option, Int, ?]].applicative[Int, Int, Int])
+  checkAll("Applicative[Cokleisli[Option, Int, ?]", SerializableTests.serializable(Applicative[Cokleisli[Option, Int, ?]]))
+
+  checkAll("Cokleisli[Option, Int, Int]", ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[Int, Int, Int, Int, Int, Int])
+  checkAll("Profunctor[Cokleisli[Option, ?, ?]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
 
   {
     // Ceremony to help scalac to do the right thing, see also #267.
@@ -25,5 +30,6 @@ class CokleisliTests extends CatsSuite {
       cokleisliEq[NonEmptyList, A, B](oneAndArbitrary, Eq[B])
 
     checkAll("Cokleisli[NonEmptyList, Int, Int]", StrongTests[CokleisliNEL].strong[Int, Int, Int, Int, Int, Int])
+    checkAll("Strong[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(Strong[CokleisliNEL]))
   }
 }
