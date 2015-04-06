@@ -1,7 +1,7 @@
 package cats.data
 
 import cats._
-import cats.arrow.Arrow
+import cats.arrow.{Arrow, Split}
 import cats.functor.Strong
 
 /**
@@ -89,6 +89,9 @@ sealed abstract class KleisliInstances extends KleisliInstances0 {
 }
 
 sealed abstract class KleisliInstances0 extends KleisliInstances1 {
+  implicit def kleisliSplit[F[_]](implicit ev: FlatMap[F]): Split[Kleisli[F, ?, ?]] =
+    new KleisliSplit[F] { def F: FlatMap[F] = ev }
+
   implicit def kleisliStrong[F[_]](implicit ev: Functor[F]): Strong[Kleisli[F, ?, ?]] =
     new KleisliStrong[F] { def F: Functor[F] = ev }
 
@@ -128,7 +131,7 @@ sealed abstract class KleisliInstances3 {
   }
 }
 
-private trait KleisliArrow[F[_]] extends Arrow[Kleisli[F, ?, ?]] with KleisliStrong[F] {
+private trait KleisliArrow[F[_]] extends Arrow[Kleisli[F, ?, ?]] with KleisliSplit[F] with KleisliStrong[F] {
   implicit def F: Monad[F]
 
   def lift[A, B](f: A => B): Kleisli[F, A, B] =
@@ -137,14 +140,18 @@ private trait KleisliArrow[F[_]] extends Arrow[Kleisli[F, ?, ?]] with KleisliStr
   def id[A]: Kleisli[F, A, A] =
     Kleisli(a => F.pure(a))
 
+  override def second[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (C, A), (C, B)] =
+    super[KleisliStrong].second(fa)
+}
+
+private trait KleisliSplit[F[_]] extends Split[Kleisli[F, ?, ?]] {
+  implicit def F: FlatMap[F]
+
   def split[A, B, C, D](f: Kleisli[F, A, B], g: Kleisli[F, C, D]): Kleisli[F, (A, C), (B, D)] =
     Kleisli{ case (a, c) => F.flatMap(f.run(a))(b => F.map(g.run(c))(d => (b, d))) }
 
   def compose[A, B, C](f: Kleisli[F, B, C], g: Kleisli[F, A, B]): Kleisli[F, A, C] =
     f.compose(g)
-
-  override def second[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (C, A), (C, B)] =
-    super[KleisliStrong].second(fa)
 }
 
 private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] {
