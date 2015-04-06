@@ -1,6 +1,6 @@
 package cats.laws.discipline
 
-import cats.data.{Cokleisli, Const, Kleisli, Or}
+import cats.data._
 import org.scalacheck.{Arbitrary, Gen}
 
 /**
@@ -10,6 +10,9 @@ object arbitrary {
 
   implicit def constArbitrary[A, B](implicit A: Arbitrary[A]): Arbitrary[Const[A, B]] =
     Arbitrary(A.arbitrary.map(Const[A, B]))
+
+  implicit def oneAndArbitrary[F[_], A](implicit A: Arbitrary[A], F: ArbitraryK[F]): Arbitrary[OneAnd[A, F]] =
+    Arbitrary(F.synthesize[A].arbitrary.flatMap(fa => A.arbitrary.map(a => OneAnd(a, fa))))
 
   implicit def orArbitrary[A, B](implicit A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[A Or B] =
     Arbitrary(Gen.oneOf(A.arbitrary.map(Or.left), B.arbitrary.map(Or.right)))

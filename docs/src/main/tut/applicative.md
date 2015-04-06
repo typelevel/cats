@@ -37,3 +37,12 @@ into the other context:
 ```tut
 (Applicative[List] compose Applicative[Option]).pure(1)
 ```
+
+## Applicative Functors & Monads
+
+Applicative functors are a generalization of Monads thus allowing to express 
+effectful computations into a pure functional way.
+
+Applicative functors are generally preferred to monads when the structure 
+of a computation is fixed a priori. That makes it possible to perform certain
+kinds of static analysis on applicative values.
