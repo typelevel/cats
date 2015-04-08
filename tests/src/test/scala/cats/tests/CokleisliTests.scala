@@ -1,11 +1,12 @@
 package cats.tests
 
-import cats.{Applicative, Eq}
+import cats.arrow.Arrow
 import cats.data.{Cokleisli, NonEmptyList}
-import cats.functor.{Profunctor, Strong}
+import cats.functor.Profunctor
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.{Applicative, Eq}
 import org.scalacheck.Arbitrary
 
 class CokleisliTests extends CatsSuite {
@@ -29,7 +30,7 @@ class CokleisliTests extends CatsSuite {
     implicit def ev1[A: Arbitrary, B: Eq]: Eq[CokleisliNEL[A, B]] =
       cokleisliEq[NonEmptyList, A, B](oneAndArbitrary, Eq[B])
 
-    checkAll("Cokleisli[NonEmptyList, Int, Int]", StrongTests[CokleisliNEL].strong[Int, Int, Int, Int, Int, Int])
-    checkAll("Strong[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(Strong[CokleisliNEL]))
+    checkAll("Cokleisli[NonEmptyList, Int, Int]", ArrowTests[CokleisliNEL].arrow[Int, Int, Int, Int, Int, Int])
+    checkAll("Arrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(Arrow[CokleisliNEL]))
   }
 }
