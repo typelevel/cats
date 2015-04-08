@@ -50,10 +50,10 @@ object ArbitraryK {
   implicit def constA[A](implicit A: Arbitrary[A]): ArbitraryK[Const[A, ?]] =
     new ArbitraryK[Const[A, ?]] { def synthesize[B: Arbitrary]: Arbitrary[Const[A, B]] = implicitly }
 
-  implicit def orA[A](implicit A: Arbitrary[A]): ArbitraryK[A Xor ?] =
+  implicit def xorA[A](implicit A: Arbitrary[A]): ArbitraryK[A Xor ?] =
     new ArbitraryK[A Xor ?] { def synthesize[B: Arbitrary]: Arbitrary[A Xor B] = implicitly }
 
-  implicit def orB[B](implicit B: Arbitrary[B]): ArbitraryK[? Xor B] =
+  implicit def xorB[B](implicit B: Arbitrary[B]): ArbitraryK[? Xor B] =
     new ArbitraryK[? Xor B] { def synthesize[A: Arbitrary]: Arbitrary[A Xor B] = implicitly }
 
   implicit def kleisliA[F[_], A](implicit F: ArbitraryK[F]): ArbitraryK[Kleisli[F, A, ?]] =
