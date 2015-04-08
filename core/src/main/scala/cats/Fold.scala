@@ -75,7 +75,7 @@ package cats
  * (In practice you would not want to use the `foldl` because it is
  * not stack-safe.)
  */
-sealed abstract class Fold[A] {
+sealed abstract class Fold[A] extends Product with Serializable {
   import Fold.{Return, Continue, Pass}
 
   def complete(la: Lazy[A]): A =

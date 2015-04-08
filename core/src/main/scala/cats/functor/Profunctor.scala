@@ -7,7 +7,7 @@ package functor
  *
  * Must obey the laws defined in [[laws.ProfunctorLaws]].
  */
-trait Profunctor[F[_, _]] { self =>
+trait Profunctor[F[_, _]] extends Serializable { self =>
   /**
    * contramap on the first type parameter and map on the second type parameter
    */

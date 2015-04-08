@@ -37,7 +37,7 @@ import Free._
  * using the heap instead of the stack, allowing tail-call
  * elimination.
  */
-sealed abstract class Free[S[_], A] {
+sealed abstract class Free[S[_], A] extends Serializable {
 
   final def map[B](f: A => B): Free[S, B] =
     flatMap(a => Pure(f(a)))
