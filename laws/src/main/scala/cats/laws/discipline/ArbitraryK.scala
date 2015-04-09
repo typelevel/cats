@@ -1,7 +1,7 @@
 package cats
 package laws.discipline
 
-import cats.data.{Cokleisli, Kleisli, Or, Const}
+import cats.data.{Cokleisli, Kleisli, Xor, Const}
 import org.scalacheck.Arbitrary
 import cats.laws.discipline.arbitrary._
 import scala.concurrent.Future
@@ -50,11 +50,11 @@ object ArbitraryK {
   implicit def constA[A](implicit A: Arbitrary[A]): ArbitraryK[Const[A, ?]] =
     new ArbitraryK[Const[A, ?]] { def synthesize[B: Arbitrary]: Arbitrary[Const[A, B]] = implicitly }
 
-  implicit def orA[A](implicit A: Arbitrary[A]): ArbitraryK[A Or ?] =
-    new ArbitraryK[A Or ?] { def synthesize[B: Arbitrary]: Arbitrary[A Or B] = implicitly }
+  implicit def xorA[A](implicit A: Arbitrary[A]): ArbitraryK[A Xor ?] =
+    new ArbitraryK[A Xor ?] { def synthesize[B: Arbitrary]: Arbitrary[A Xor B] = implicitly }
 
-  implicit def orB[B](implicit B: Arbitrary[B]): ArbitraryK[? Or B] =
-    new ArbitraryK[? Or B] { def synthesize[A: Arbitrary]: Arbitrary[A Or B] = implicitly }
+  implicit def xorB[B](implicit B: Arbitrary[B]): ArbitraryK[? Xor B] =
+    new ArbitraryK[? Xor B] { def synthesize[A: Arbitrary]: Arbitrary[A Xor B] = implicitly }
 
   implicit def kleisliA[F[_], A](implicit F: ArbitraryK[F]): ArbitraryK[Kleisli[F, A, ?]] =
     new ArbitraryK[Kleisli[F, A, ?]]{ def synthesize[B: Arbitrary]: Arbitrary[Kleisli[F, A, B]] = implicitly }
