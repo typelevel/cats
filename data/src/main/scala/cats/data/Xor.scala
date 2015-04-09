@@ -20,6 +20,7 @@ import scala.util.{Success, Failure, Try}
  * that `scala.Either` exposes through left projections.
  */
 sealed abstract class Xor[+A, +B] extends Product with Serializable {
+
   def fold[C](fa: A => C, fb: B => C): C = this match {
     case Xor.Left(a) => fa(a)
     case Xor.Right(b) => fb(b)
@@ -29,20 +30,23 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def isRight: Boolean = fold(_ => false, _ => true)
 
-  def swap: B Xor A = fold(Xor.Right(_), Xor.Left(_))
+  def swap: B Xor A = fold(Xor.right, Xor.left)
 
   def foreach(f: B => Unit): Unit = fold(_ => (), f)
 
   def getOrElse[BB >: B](default: => BB): BB = fold(_ => default, identity)
 
+  def orElse[AA >: A, BB >: B](fallback: => AA Xor BB): AA Xor BB =
+    fold(_ => fallback, _ => this)
+
+  def valueOr[BB >: B](f: A => BB): BB = fold(f, identity)
+
   def forall(f: B => Boolean): Boolean = fold(_ => true, f)
 
   def exists(f: B => Boolean): Boolean = fold(_ => false, f)
 
-  def filter[AA >: A](f: B => Boolean)(implicit M: Monoid[AA]): AA Xor B = this match {
-    case Xor.Left(_) => this
-    case Xor.Right(b) => if (f(b)) this else Xor.Left(M.empty)
-  }
+  def ensure[AA >: A](ifLeft: => AA)(f: B => Boolean): AA Xor B =
+    fold(_ => this, b => if (f(b)) this else Xor.Left(ifLeft))
 
   def toEither: Either[A, B] = fold(Left(_), Right(_))
 
@@ -58,14 +62,14 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
     case Xor.Right(b) => Xor.Right(fb(b))
   }
 
+  def map[D](f: B => D): A Xor D = bimap(identity, f)
+
+  def leftMap[C](f: A => C): C Xor B = bimap(f, identity)
+
   def flatMap[AA >: A, D](f: B => AA Xor D): AA Xor D = this match {
     case l @ Xor.Left(_) => l
     case Xor.Right(b) => f(b)
   }
-
-  def map[D](f: B => D): A Xor D = bimap(identity, f)
-
-  def leftMap[C](f: A => C): C Xor B = bimap(f, identity)
 
   def compare[AA >: A, BB >: B](that: AA Xor BB)(implicit AA: Order[AA], BB: Order[BB]): Int = fold(
     a => that.fold(AA.compare(a, _), _ => -1),
@@ -100,12 +104,10 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
     a => s"Xor.Left(${AA.show(a)})",
     b => s"Xor.Right(${BB.show(b)})"
   )
-
 }
 
 object Xor extends XorInstances with XorFunctions {
   final case class Left[+A](a: A) extends (A Xor Nothing)
-
   final case class Right[+B](b: B) extends (Nothing Xor B)
 }
 
@@ -120,16 +122,14 @@ sealed abstract class XorInstances extends XorInstances1 {
     def show(f: A Xor B): String = f.show
   }
 
-  implicit def xorInstances[A] = new XorInstances[A]
+  implicit def xorInstances[A]: XorInstances[A] = new XorInstances[A]
   class XorInstances[A] extends Traverse[A Xor ?] with Monad[A Xor ?] {
     def traverse[F[_]: Applicative, B, C](fa: A Xor B)(f: B => F[C]): F[A Xor C] = fa.traverse(f)
     def foldLeft[B, C](fa: A Xor B, b: C)(f: (C, B) => C): C = fa.foldLeft(b)(f)
     override def foldRight[B, C](fa: A Xor B, b: C)(f: (B, C) => C): C = fa.foldRight(b)(f)
     def partialFold[B, C](fa: A Xor B)(f: B => Fold[C]): Fold[C] = fa.partialFold(f)
-
     def flatMap[B, C](fa: A Xor B)(f: B => A Xor C): A Xor C = fa.flatMap(f)
     def pure[B](b: B): A Xor B = Xor.right(b)
-
     override def map[B, C](fa: A Xor B)(f: B => C): A Xor C = fa.map(f)
   }
 }
@@ -153,25 +153,28 @@ trait XorFunctions {
   def right[A, B](b: B): A Xor B = Xor.Right(b)
 
   /**
-   * Catch a specified `Throwable` ('`T`') instance and return it wrapped in an `Xor[T, A]`,
-   * where `A` is the valid return value (inferred from function block)
+   * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
+   * the resulting `Xor`. Uncaught exceptions are propagated.
+   *
+   * For example: {{{
+   * val result: NumberFormatException Xor Int = fromTryCatch[NumberFormatException] { "foo".toInt }
+   * }}}
    */
   def fromTryCatch[T >: Null <: Throwable]: FromTryCatchAux[T] = new FromTryCatchAux[T]
 
   final class FromTryCatchAux[T] private[XorFunctions] {
     def apply[A](f: => A)(implicit T: ClassTag[T]): T Xor A = {
       try {
-        Xor.Right(f)
+        right(f)
       } catch {
         case t if T.runtimeClass.isInstance(t) =>
-          Xor.Left(t.asInstanceOf[T])
+          left(t.asInstanceOf[T])
       }
     }
   }
 
   /**
-   * Convert a `Try[A]` to a `Throwable Xor A`,
-   * where A is the successfully computed value
+   * Converts a `Try[A]` to a `Throwable Xor A`.
    */
   def fromTry[A](t: Try[A]): Throwable Xor A = t match {
     case Failure(e) => left(e)
@@ -179,7 +182,13 @@ trait XorFunctions {
   }
 
   /**
-   * Convert an `Either[A, B]` to `A Xor B`
+   * Converts an `Either[A, B]` to an `A Xor B`.
    */
   def fromEither[A, B](e: Either[A, B]): A Xor B = e.fold(left, right)
+
+  /**
+   * Converts an `Option[B]` to an `A Xor B`, where the provided `ifNone` values is returned on
+   * the left of the `Xor` when the specified `Option` is `None`.
+   */
+  def fromOption[A, B](o: Option[B], ifNone: => A): A Xor B = o.fold(left[A, B](ifNone))(right)
 }
