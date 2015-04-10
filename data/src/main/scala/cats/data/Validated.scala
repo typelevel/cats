@@ -24,9 +24,14 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def getOrElse[B >: A](default: => B): B = fold(_ => default, identity)
 
   /**
-   * Is the value Valid and matching the given predicate
+   * Is this Valid and matching the given predicate
    */
   def exists(predicate: A => Boolean): Boolean = fold(_ => false, predicate)
+
+  /**
+   * Is this Invalid or matching the predicate
+   */
+  def forAll(f: A => Boolean): Boolean = fold(_ => true, f)
 
   /**
    * If the value is Valid but the predicate fails, return an empty
@@ -36,6 +41,12 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    */
   def filter[EE >: E](pred: A => Boolean)(implicit M: Monoid[EE]): Validated[EE,A] =
     fold(Invalid.apply, a => if(pred(a)) this else Invalid(M.empty))
+
+  /**
+   * Return this if it is Valid, or else fall back to the given default.
+   */
+  def orElse[EE >: E, AA >: A](default: => Validated[EE,AA]): Validated[EE,AA] =
+    fold(_ => default, _ => this)
 
   /**
    * Converts the value to an Either[E,A]
@@ -59,6 +70,13 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def toXor: Xor[E,A] = fold(Xor.Left.apply,Xor.Right.apply)
 
   /**
+   * Convert to an Xor, apply a function, convert back.  This is handy
+   * when you want to use the Monadic properties of the Xor type.
+   */
+  def withXor[EE,B](f: (E Xor A) => (EE Xor B)): Validated[EE,B] =
+    f(toXor).toValidated
+
+  /**
    * Validated is a [[functor.Bifunctor]], this method applies one of the
    * given functions.
    */
@@ -76,7 +94,6 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e1,e2))
       case (e @ Invalid(_), _) => e
       case (_, e @ Invalid(_)) => e
-
     }
 
   /**
