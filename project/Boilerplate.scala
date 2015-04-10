@@ -148,7 +148,7 @@ object Boilerplate {
       def allArgs = (0 until arity) map { "a" + _ } mkString ","
 
       val map = if (arity == 3) {
-        "- apply(f0)(map2(f1, f2)((b, c) => a => f(a, b, c)))"
+        "- apply(f2)(map2(f0, f1)((a, b) => c => f(a, b, c)))"
       }  else {
         block"""
           -    map2(tuple$a($fArgsA), tuple$b($fArgsB)) {

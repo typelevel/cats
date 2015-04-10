@@ -21,7 +21,7 @@ package cats
  * Every Lazy[A] value has (or can calculate) a corresponding A
  * value. You can obtain this value by calling the `.value` method.
  */
-sealed abstract class Lazy[A] { self =>
+sealed abstract class Lazy[A] extends Product with Serializable { self =>
 
   import Lazy.{byNeed, ByNeed, ByName, Eager}
 

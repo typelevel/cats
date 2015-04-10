@@ -18,5 +18,8 @@ trait AllSyntax
     with PartialOrderSyntax
     with ProfunctorSyntax
     with SemigroupSyntax
+    with SemigroupKSyntax
     with ShowSyntax
+    with SplitSyntax
     with StrongSyntax
+    with TraverseSyntax

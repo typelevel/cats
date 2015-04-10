@@ -1,9 +1,12 @@
 package cats.tests
 
-import cats.laws.discipline.{CoflatMapTests, MonadCombineTests, AlternativeTests}
+import cats.{CoflatMap, MonadCombine}
+import cats.laws.discipline.{CoflatMapTests, MonadCombineTests, SerializableTests}
 
 class OptionTests extends CatsSuite {
   checkAll("Option[Int]", CoflatMapTests[Option].coflatMap[Int, Int, Int])
+  checkAll("CoflatMap[Option]", SerializableTests.serializable(CoflatMap[Option]))
+
   checkAll("Option[Int]", MonadCombineTests[Option].monadCombine[Int, Int, Int])
-  checkAll("Option[Int]", AlternativeTests[Option].alternative[Int, String, Int])
+  checkAll("MonadCombine[Option]", SerializableTests.serializable(MonadCombine[Option]))
 }

@@ -28,8 +28,8 @@ trait VectorInstances {
       override def foldRight[A, B](fa: Vector[A], b: B)(f: (A, B) => B): B =
         fa.foldRight(b)(f)
 
-      def foldLazy[A, B](fa: Vector[A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
-        Fold.iterateRight(fa, b)(f)
+      def partialFold[A, B](fa: Vector[A])(f: A => Fold[B]): Fold[B] =
+        Fold.partialIterate(fa)(f)
 
       def traverse[G[_]: Applicative, A, B](fa: Vector[A])(f: A => G[B]): G[Vector[B]] = {
         val G = Applicative[G]

@@ -6,7 +6,7 @@ import simulacrum._
 /**
  * Must obey the laws defined in [[laws.InvariantLaws]].
  */
-@typeclass trait Invariant[F[_]] extends Any { self =>
+@typeclass trait Invariant[F[_]] extends Any with Serializable { self =>
   def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
 
   /**
@@ -34,7 +34,7 @@ import simulacrum._
   }
 }
 
-object Invariant {
+object Invariant extends AlgebraInvariantInstances {
   trait Composite[F[_], G[_]] extends Invariant[Lambda[X => F[G[X]]]] {
     def F: Invariant[F]
     def G: Invariant[G]
@@ -57,5 +57,27 @@ object Invariant {
 
     override def imap[A, B](fga: F[G[A]])(f: A => B)(g: B => A): F[G[B]] =
       F.imap(fga)(ga => G.contramap(ga)(g))(gb => G.contramap(gb)(f))
+  }
+}
+
+/**
+ * Invariant instances for types that are housed in Algebra and therefore
+ * can't have instances for Cats type classes in their companion objects.
+ */
+trait AlgebraInvariantInstances {
+
+  implicit val invariantSemigroup: Invariant[Semigroup] = new Invariant[Semigroup] {
+    def imap[A, B](fa: Semigroup[A])(f: A => B)(g: B => A): Semigroup[B] = new Semigroup[B] {
+
+      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+    }
+  }
+
+  implicit val invariantMonoid: Invariant[Monoid] = new Invariant[Monoid] {
+    def imap[A, B](fa: Monoid[A])(f: A => B)(g: B => A): Monoid[B] = new Monoid[B] {
+      val empty = f(fa.empty)
+
+      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+    }
   }
 }

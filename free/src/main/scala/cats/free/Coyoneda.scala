@@ -7,7 +7,7 @@ package free
  * The homomorphism from `F[A]` to `Coyoneda[F,A]` exists even when
  * `F` is not a functor.
  */
-sealed abstract class Coyoneda[F[_], A] { self =>
+sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
 
   /** The pivot between `fi` and `k`, usually existential. */
   type Pivot

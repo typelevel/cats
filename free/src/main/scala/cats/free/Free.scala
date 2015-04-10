@@ -24,6 +24,10 @@ object Free {
       val a = a0
       val f = f0
     }
+
+  /** Suspends a value within a functor lifting it to a Free */
+  def liftF[F[_], A](value: => F[A])(implicit F: Functor[F]): Free[F, A] =
+    Suspend(F.map(value)(Pure[F, A]))
 }
 
 import Free._
@@ -33,7 +37,7 @@ import Free._
  * using the heap instead of the stack, allowing tail-call
  * elimination.
  */
-sealed abstract class Free[S[_], A] {
+sealed abstract class Free[S[_], A] extends Serializable {
 
   final def map[B](f: A => B): Free[S, B] =
     flatMap(a => Pure(f(a)))
@@ -113,5 +117,18 @@ sealed abstract class Free[S[_], A] {
       case Left(s) => Monad[M].flatMap(f(s))(_.foldMap(f))
       case Right(r) => Monad[M].pure(r)
     }
+
+  /** Compiles your Free into another language by changing the suspension functor
+   *  using the given natural transformation.
+   *  Be careful if your natural transformation is effectful, effects are applied by mapSuspension
+   */
+  final def mapSuspension[T[_]](f: S ~> T)(implicit S: Functor[S], T: Functor[T]): Free[T, A] =
+    resume match {
+      case Left(s)  => Suspend(f(S.map(s)(((_: Free[S, A]) mapSuspension f))))
+      case Right(r) => Pure(r)
+    }
+
+  final def compile[T[_]](f: S ~> T)(implicit S: Functor[S], T: Functor[T]): Free[T, A] = mapSuspension(f)
+
 }
 

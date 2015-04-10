@@ -20,7 +20,7 @@ trait SemigroupKTests[F[_]] extends Laws {
       val bases = Nil
       val parents = Nil
       val props = Seq(
-        "associative" -> forAll(laws.associative[A] _)
+        "semigroupK associative" -> forAll(laws.semigroupKAssociative[A] _)
       )
     }
   }

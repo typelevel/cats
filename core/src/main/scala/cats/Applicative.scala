@@ -35,6 +35,13 @@ trait Applicative[F[_]] extends Apply[F] { self =>
       implicit def G: Applicative[G] = GG
 
     }
+
+  def traverse[A, G[_], B](value: G[A])(f: A => F[B])(implicit G: Traverse[G]): F[G[B]] =
+    G.traverse(value)(f)(this)
+
+  def sequence[A, G[_]: Traverse](as: G[F[A]]): F[G[A]] =
+    traverse(as)(a => a)
+
 }
 
 object Applicative {
