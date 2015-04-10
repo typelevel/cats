@@ -1,10 +1,10 @@
 package cats
 package data
 
-import cats.data.Or.{LeftOr, RightOr}
 import cats.data.Validated.{Valid, Invalid}
 
-sealed abstract class Validated[+E, +A] extends Serializable {
+sealed abstract class Validated[+E, +A] extends Product with Serializable {
+
   def fold[B](fe: E => B, fa: A => B): B = this match {
     case Invalid(e) => fe(e)
     case Valid(a) => fa(a)
@@ -56,10 +56,10 @@ sealed abstract class Validated[+E, +A] extends Serializable {
   /**
    * Convert this value to RightOr if Valid or LeftOr if Invalid
    */
-  def toOr: Or[E,A] = fold(LeftOr.apply,RightOr.apply)
+  def toXor: Xor[E,A] = fold(Xor.Left.apply,Xor.Right.apply)
 
   /**
-   * Validated is a [[Bifunctor]], this method applies one of the
+   * Validated is a [[functor.Bifunctor]], this method applies one of the
    * given functions.
    */
   def bimap[EE, AA](fe: E => EE, fa: A => AA): Validated[EE, AA] =
@@ -78,14 +78,6 @@ sealed abstract class Validated[+E, +A] extends Serializable {
       case (_, e @ Invalid(_)) => e
 
     }
-
-
-
-  /**
-   * A monadic bind which applies a function if the value is Valid.
-   */
-  def flatMap[EE >: E, B](f: A => Validated[EE,B]): Validated[EE,B] =
-    fold(Invalid.apply, f)
 
   /**
    * Apply a function to a Valid value, returning a new Valid value
@@ -113,12 +105,8 @@ sealed abstract class Validated[+E, +A] extends Serializable {
    */
   def foldRight[B](b: B)(f: (A, B) => B): B = fold(_ => b, f(_, b))
 
-  /**
-   * lazily apply the given function to the value with the given B when
-   * valid, otherwise return the given B
-   */
-  def foldLazy[B](b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
-    fold(_ => b, a => Lazy(f(a).complete(b.value)))
+  def partialFold[B](f: A => Fold[B]): Fold[B] =
+    fold(_ => Fold.Pass, f)
 
   def show[EE >: E, AA >: A](implicit EE: Show[EE], AA: Show[AA]): String =
     fold(e => s"Invalid(${EE.show(e)})",
@@ -135,9 +123,17 @@ sealed abstract class ValidatedInstances {
     def show(f: Validated[E,A]) = f.show
   }
 
-  def validatedInstances[E]: Monad[Validated[E,?]] = new Monad[Validated[E,?]] {
+  def validatedInstances[E](E : Semigroup[E]): Applicative[Validated[E,?]] = new Applicative[Validated[E,?]] {
     override def map[A,B](fa: Validated[E,A])(f: A => B) = fa map f
-    override def flatMap[A,B](fa: Validated[E,A])(f: A => Validated[E,B]) = fa flatMap f
+
+    override def apply[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]) =
+      (fa,f) match {
+        case (Valid(a),Valid(f)) => Valid(f(a))
+        case (e @ Invalid(_), Valid(_)) => e
+        case (Valid(_), e @ Invalid(_)) => e
+        case (Invalid(e1), Invalid(e2)) => Invalid(E.combine(e1, e2))
+      }
+
     override def pure[A](a: A): Validated[Nothing, A] = Valid(a)
   }
 }
