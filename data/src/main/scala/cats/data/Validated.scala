@@ -54,7 +54,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Converts the value to an Either[E,A]
    */
-  def toEither = fold(Left.apply, Right.apply)
+  def toEither: Either[E,A] = fold(Left.apply, Right.apply)
 
   /**
    * Returns Valid values wrapped in Some, and None for Invalid values
