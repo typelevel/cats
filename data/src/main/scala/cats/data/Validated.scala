@@ -1,14 +1,17 @@
 package cats
 package data
 
+import scala.reflect.ClassTag
 import cats.data.Validated.{Valid, Invalid}
+import scala.util.{Success, Failure, Try}
 
 sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
-  def fold[B](fe: E => B, fa: A => B): B = this match {
-    case Invalid(e) => fe(e)
-    case Valid(a) => fa(a)
-  }
+  def fold[B](fe: E => B, fa: A => B): B =
+    this match {
+      case Invalid(e) => fe(e)
+      case Valid(a) => fa(a)
+    }
 
   def isValid: Boolean = fold(_ => false, _ => true)
   def isInvalid: Boolean = fold(_ => true, _ => false)
@@ -84,6 +87,22 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     fold(fe andThen Invalid.apply,
          fa andThen Valid.apply)
 
+  def compare[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Order[EE], AA: Order[AA]): Int = fold(
+    a => that.fold(EE.compare(a, _), _ => -1),
+    b => that.fold(_ => 1, AA.compare(b, _))
+  )
+
+  def partialCompare[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: PartialOrder[EE], AA: PartialOrder[AA]): Double = fold(
+    a => that.fold(EE.partialCompare(a, _), _ => -1),
+    b => that.fold(_ => 1, AA.partialCompare(b, _))
+  )
+
+  def ===[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Eq[EE], AA: Eq[AA]): Boolean = fold(
+    a => that.fold(EE.eqv(a, _), _ => false),
+    b => that.fold(_ => false, AA.eqv(b, _))
+  )
+
+
   /**
    * From Apply:
    * if both the function and this value are Valid, apply the function
@@ -130,18 +149,33 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
          a => s"Valid(${AA.show(a)})")
 }
 
-object Validated extends ValidatedInstances {
+object Validated extends ValidatedInstances with ValidatedFunctions{
   final case class Valid[+A](a: A) extends Validated[Nothing, A]
   final case class Invalid[+E](e: E) extends Validated[E, Nothing]
 }
 
-sealed abstract class ValidatedInstances {
-  def validatedShow[E,A](implicit E: Show[E], A: Show[A]): Show[Validated[E,A]] = new Show[Validated[E,A]] {
-    def show(f: Validated[E,A]) = f.show
+
+sealed abstract class ValidatedInstances extends ValidatedInstances1 {
+  implicit def validatedOrder[A: Order, B: Order]: Order[A Validated B] = new Order[A Validated B] {
+    def compare(x: A Validated B, y: A Validated B): Int = x compare y
+    override def partialCompare(x: A Validated B, y: A Validated B): Double = x partialCompare y
+    override def eqv(x: A Validated B, y: A Validated B): Boolean = x === y
   }
 
-  def validatedInstances[E](E : Semigroup[E]): Applicative[Validated[E,?]] = new Applicative[Validated[E,?]] {
-    override def map[A,B](fa: Validated[E,A])(f: A => B) = fa map f
+  implicit def validatedShow[A, B](implicit A: Show[A], B: Show[B]): Show[A Validated B] = new Show[A Validated B] {
+    def show(f: A Validated B): String = f.show
+  }
+
+  implicit def validatedInstances[E: Semigroup]: ValidatedInstances[E] = new ValidatedInstances[E]
+
+  class ValidatedInstances[E](implicit E: Semigroup[E]) extends Traverse[Validated[E, ?]] with Applicative[Validated[E,?]] {
+    def traverse[F[_]: Applicative, A, B](fa: Validated[E,A])(f: A => F[B]): F[Validated[E,B]] = fa.traverse(f)
+    def foldLeft[A, B](fa: Validated[E,A], b: B)(f: (B, A) => B): B = fa.foldLeft(b)(f)
+    override def foldRight[A, B](fa: Validated[E,A], b: B)(f: (A, B) => B): B = fa.foldRight(b)(f)
+    def partialFold[A,B](fa: Validated[E,A])(f: A => Fold[B]): Fold[B] = fa.partialFold(f)
+
+    def pure[A](a: A): Validated[E,A] = Validated.valid(a)
+    override def map[A, B](fa: Validated[E,A])(f: A => B): Validated[E, B] = fa.map(f)
 
     override def apply[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]) =
       (fa,f) match {
@@ -151,6 +185,66 @@ sealed abstract class ValidatedInstances {
         case (Invalid(e1), Invalid(e2)) => Invalid(E.combine(e1, e2))
       }
 
-    override def pure[A](a: A): Validated[Nothing, A] = Valid(a)
+
   }
 }
+
+sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
+  implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[A Validated B] = new PartialOrder[A Validated B] {
+    def partialCompare(x: A Validated B, y: A Validated B): Double = x partialCompare y
+    override def eqv(x: A Validated B, y: A Validated B): Boolean = x === y
+  }
+}
+
+sealed abstract class ValidatedInstances2 {
+  implicit def xorEq[A: Eq, B: Eq]: Eq[A Validated B] = new Eq[A Validated B] {
+    def eqv(x: A Validated B, y: A Validated B): Boolean = x === y
+  }
+}
+
+trait ValidatedFunctions {
+  def invalid[A, B](a: A): A Validated B = Validated.Invalid(a)
+
+  def valid[A, B](b: B): A Validated B = Validated.Valid(b)
+
+  /**
+   * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
+   * the resulting `Validated`. Uncaught exceptions are propagated.
+   *
+   * For example: {{{
+   * val result: NumberFormatException Validated Int = fromTryCatch[NumberFormatException] { "foo".toInt }
+   * }}}
+   */
+  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchAux[T] = new FromTryCatchAux[T]
+
+  final class FromTryCatchAux[T] private[ValidatedFunctions] {
+    def apply[A](f: => A)(implicit T: ClassTag[T]): T Validated A = {
+      try {
+        valid(f)
+      } catch {
+        case t if T.runtimeClass.isInstance(t) =>
+          invalid(t.asInstanceOf[T])
+      }
+    }
+  }
+
+  /**
+   * Converts a `Try[A]` to a `Throwable Validated A`.
+   */
+  def fromTry[A](t: Try[A]): Throwable Validated A = t match {
+    case Failure(e) => invalid(e)
+    case Success(v) => valid(v)
+  }
+
+  /**
+   * Converts an `Either[A, B]` to an `A Validated B`.
+   */
+  def fromEither[A, B](e: Either[A, B]): A Validated B = e.fold(invalid, valid)
+
+  /**
+   * Converts an `Option[B]` to an `A Validated B`, where the provided `ifNone` values is returned on
+   * the invalid of the `Validated` when the specified `Option` is `None`.
+   */
+  def fromOption[A, B](o: Option[B], ifNone: => A): A Validated B = o.fold(invalid[A, B](ifNone))(valid)
+}
+
