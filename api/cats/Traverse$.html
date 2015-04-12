@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Traverse</span>
+        <span class="name">Traverse</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Traverse.scala" target="_blank">Traverse.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.Traverse"><span>Traverse</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.Traverse"><span>Traverse</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -94,18 +94,18 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="cats.Traverse.Ops" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Ops[F[_],fresh$macro$9]extendsFunctor.Ops[F,fresh$macro$9]withFoldable.Ops[F,fresh$macro$9]"></a>
-      <a id="Ops[F[_],fresh$macro$9]:Ops[F,fresh$macro$9]"></a>
+      <a id="Ops[F[_],fresh$macro$8]extendsFunctor.Ops[F,fresh$macro$8]withFoldable.Ops[F,fresh$macro$8]"></a>
+      <a id="Ops[F[_],fresh$macro$8]:Ops[F,fresh$macro$8]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Traverse$$Ops.html"><span class="name">Ops</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="fresh$macro$9">fresh$macro$9</span>]</span><span class="result"> extends <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Functor.Ops</a>[<span class="extype" name="cats.Traverse.Ops.F">F</span>, <span class="extype" name="cats.Traverse.Ops.fresh$macro$9">fresh$macro$9</span>] with <a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Foldable.Ops</a>[<span class="extype" name="cats.Traverse.Ops.F">F</span>, <span class="extype" name="cats.Traverse.Ops.fresh$macro$9">fresh$macro$9</span>]</span>
+        <a href="Traverse$$Ops.html"><span class="name">Ops</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="fresh$macro$8">fresh$macro$8</span>]</span><span class="result"> extends <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Functor.Ops</a>[<span class="extype" name="cats.Traverse.Ops.F">F</span>, <span class="extype" name="cats.Traverse.Ops.fresh$macro$8">fresh$macro$8</span>] with <a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Foldable.Ops</a>[<span class="extype" name="cats.Traverse.Ops.F">F</span>, <span class="extype" name="cats.Traverse.Ops.fresh$macro$8">fresh$macro$8</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Traverse$@Ops[F[_],fresh$macro$9]extendsFunctor.Ops[F,fresh$macro$9]withFoldable.Ops[F,fresh$macro$9]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Traverse$@Ops[F[_],fresh$macro$8]extendsFunctor.Ops[F,fresh$macro$8]withFoldable.Ops[F,fresh$macro$8]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -530,7 +530,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

@@ -105,7 +105,7 @@
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Represents a function <code>F[A] =&gt; B</code>.</p>
     </li><li name="cats.data.CokleisliFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="CokleisliFunctionsextendsAnyRef"></a>
       <a id="CokleisliFunctions:CokleisliFunctions"></a>
@@ -124,7 +124,7 @@
     </span>
       
     </li><li name="cats.data.CokleisliInstances" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CokleisliInstancesextendsAnyRef"></a>
+      <a id="CokleisliInstancesextendsCokleisliInstances0"></a>
       <a id="CokleisliInstances:CokleisliInstances"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -132,10 +132,27 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="CokleisliInstances.html"><span class="name">CokleisliInstances</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="CokleisliInstances.html"><span class="name">CokleisliInstances</span></a><span class="result"> extends <a href="CokleisliInstances0.html" class="extype" name="cats.data.CokleisliInstances0">CokleisliInstances0</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@CokleisliInstancesextendsAnyRef" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@CokleisliInstancesextendsCokleisliInstances0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.CokleisliInstances0" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CokleisliInstances0extendsAnyRef"></a>
+      <a id="CokleisliInstances0:CokleisliInstances0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CokleisliInstances0.html"><span class="name">CokleisliInstances0</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@CokleisliInstances0extendsAnyRef" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -417,95 +434,95 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
       </a>
     </span>
       
-    </li><li name="cats.data.Or" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Or[+A,+B]extendsProductwithSerializable"></a>
-      <a id="Or[+A,+B]:Or[A,B]"></a>
+    </li><li name="cats.data.Xor" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Xor[+A,+B]extendsProductwithSerializable"></a>
+      <a id="Xor[+A,+B]:Xor[A,B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">sealed abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Or.html"><span class="name">Or</span></a><span class="tparams">[<span name="A">+A</span>, <span name="B">+B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Xor.html"><span class="name">Xor</span></a><span class="tparams">[<span name="A">+A</span>, <span name="B">+B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@Or[+A,+B]extendsProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@Xor[+A,+B]extendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Represents a right-biased disjunction that is either an <code>A</code> or a <code>B</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a right-biased disjunction that is either an <code>A</code> or a <code>B</code>.</p><p>An instance of <code>A</code> <a href="Or.html" class="extype" name="cats.data.Or">Or</a> <code>B</code> is either a <a href="Or$$LeftOr.html" class="extype" name="cats.data.Or.LeftOr">LeftOr</a><code>[A]</code> or a <a href="Or$$RightOr.html" class="extype" name="cats.data.Or.RightOr">RightOr</a><code>[B]</code>.</p><p>A common use of <a href="Or.html" class="extype" name="cats.data.Or">Or</a> is to explicitly represent the possibility of failure in a result as opposed to
-throwing an exception.  By convention, <a href="Or$$LeftOr.html" class="extype" name="cats.data.Or.LeftOr">LeftOr</a> is used for errors and <a href="Or$$RightOr.html" class="extype" name="cats.data.Or.RightOr">RightOr</a> is reserved for successes.
+      <p class="shortcomment cmt">Represents a right-biased disjunction that is either an <code>A</code> or a <code>B</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a right-biased disjunction that is either an <code>A</code> or a <code>B</code>.</p><p>An instance of <code>A</code> <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> <code>B</code> is either a <a href="Xor$$Left.html" class="extype" name="cats.data.Xor.Left">Left</a><code>[A]</code> or a <a href="Xor$$Right.html" class="extype" name="cats.data.Xor.Right">Right</a><code>[B]</code>.</p><p>A common use of <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> is to explicitly represent the possibility of failure in a result as opposed to
+throwing an exception.  By convention, <a href="Xor$$Left.html" class="extype" name="cats.data.Xor.Left">Left</a> is used for errors and <a href="Xor$$Right.html" class="extype" name="cats.data.Xor.Right">Right</a> is reserved for successes.
 For example, a function that attempts to parse an integer from a string may have a return type of
-<code>NumberFormatException</code> <a href="Or.html" class="extype" name="cats.data.Or">Or</a> <code>Int</code>. However, since there is no need to actually throw an exception, the type (<code>A</code>)
-chosen for the &quot;left&quot; could be any type representing an error and has no need to actually extend <code>Exception</code>.</p><p><code>A</code> <a href="Or.html" class="extype" name="cats.data.Or">Or</a> <code>B</code> is isomorphic to <code>scala.Either[A, B]</code>, but <a href="Or.html" class="extype" name="cats.data.Or">Or</a> is right-biased, so methods such as <code>map</code> and
-<code>flatMap</code> apply only in the context of the &quot;right&quot; case. This right bias makes <a href="Or.html" class="extype" name="cats.data.Or">Or</a> more convenient to use
+<code>NumberFormatException</code> <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> <code>Int</code>. However, since there is no need to actually throw an exception, the type (<code>A</code>)
+chosen for the &quot;left&quot; could be any type representing an error and has no need to actually extend <code>Exception</code>.</p><p><code>A</code> <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> <code>B</code> is isomorphic to <code>scala.Either[A, B]</code>, but <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> is right-biased, so methods such as <code>map</code> and
+<code>flatMap</code> apply only in the context of the &quot;right&quot; case. This right bias makes <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> more convenient to use
 than <code>scala.Either</code> in a monadic context. Methods such as <code>swap</code>, and <code>leftMap</code> provide functionality
 that <code>scala.Either</code> exposes through left projections.
 </p></div></div>
-    </li><li name="cats.data.OrFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OrFunctionsextendsAnyRef"></a>
-      <a id="OrFunctions:OrFunctions"></a>
+    </li><li name="cats.data.XorFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="XorFunctionsextendsAnyRef"></a>
+      <a id="XorFunctions:XorFunctions"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="OrFunctions.html"><span class="name">OrFunctions</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="XorFunctions.html"><span class="name">XorFunctions</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@OrFunctionsextendsAnyRef" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@XorFunctionsextendsAnyRef" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       
-    </li><li name="cats.data.OrInstances" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OrInstancesextendsOrInstances1"></a>
-      <a id="OrInstances:OrInstances"></a>
+    </li><li name="cats.data.XorInstances" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="XorInstancesextendsXorInstances1"></a>
+      <a id="XorInstances:XorInstances"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">sealed abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="OrInstances.html"><span class="name">OrInstances</span></a><span class="result"> extends <a href="OrInstances1.html" class="extype" name="cats.data.OrInstances1">OrInstances1</a></span>
+        <a href="XorInstances.html"><span class="name">XorInstances</span></a><span class="result"> extends <a href="XorInstances1.html" class="extype" name="cats.data.XorInstances1">XorInstances1</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@OrInstancesextendsOrInstances1" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@XorInstancesextendsXorInstances1" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       
-    </li><li name="cats.data.OrInstances1" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OrInstances1extendsOrInstances2"></a>
-      <a id="OrInstances1:OrInstances1"></a>
+    </li><li name="cats.data.XorInstances1" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="XorInstances1extendsXorInstances2"></a>
+      <a id="XorInstances1:XorInstances1"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">sealed abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="OrInstances1.html"><span class="name">OrInstances1</span></a><span class="result"> extends <a href="OrInstances2.html" class="extype" name="cats.data.OrInstances2">OrInstances2</a></span>
+        <a href="XorInstances1.html"><span class="name">XorInstances1</span></a><span class="result"> extends <a href="XorInstances2.html" class="extype" name="cats.data.XorInstances2">XorInstances2</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@OrInstances1extendsOrInstances2" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@XorInstances1extendsXorInstances2" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       
-    </li><li name="cats.data.OrInstances2" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OrInstances2extendsAnyRef"></a>
-      <a id="OrInstances2:OrInstances2"></a>
+    </li><li name="cats.data.XorInstances2" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="XorInstances2extendsAnyRef"></a>
+      <a id="XorInstances2:XorInstances2"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">sealed abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="OrInstances2.html"><span class="name">OrInstances2</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="XorInstances2.html"><span class="name">XorInstances2</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@OrInstances2extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@XorInstances2extendsAnyRef" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -687,19 +704,19 @@ that <code>scala.Either</code> exposes through left projections.
       </a>
     </span>
       
-    </li><li name="cats.data.Or" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Or"></a>
-      <a id="Or:Or"></a>
+    </li><li name="cats.data.Xor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Xor"></a>
+      <a id="Xor:Xor"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Or$.html"><span class="name">Or</span></a><span class="result"> extends <a href="OrInstances.html" class="extype" name="cats.data.OrInstances">OrInstances</a> with <a href="OrFunctions.html" class="extype" name="cats.data.OrFunctions">OrFunctions</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Xor$.html"><span class="name">Xor</span></a><span class="result"> extends <a href="XorInstances.html" class="extype" name="cats.data.XorInstances">XorInstances</a> with <a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@Or" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@Xor" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>

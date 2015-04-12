@@ -397,19 +397,19 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.laws.discipline.arbitrary#orArbitrary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="orArbitrary[A,B](implicitA:org.scalacheck.Arbitrary[A],implicitB:org.scalacheck.Arbitrary[B]):org.scalacheck.Arbitrary[cats.data.Or[A,B]]"></a>
-      <a id="orArbitrary[A,B](Arbitrary[A],Arbitrary[B]):Arbitrary[Or[A,B]]"></a>
+    </li><li name="cats.laws.discipline.arbitrary#oneAndArbitrary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="oneAndArbitrary[F[_],A](implicitA:org.scalacheck.Arbitrary[A],implicitF:cats.laws.discipline.ArbitraryK[F]):org.scalacheck.Arbitrary[cats.data.OneAnd[A,F]]"></a>
+      <a id="oneAndArbitrary[F[_],A](Arbitrary[A],ArbitraryK[F]):Arbitrary[OneAnd[A,F]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">orArbitrary</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.arbitrary.orArbitrary.A">A</span>]</span>, <span name="B">B: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.arbitrary.orArbitrary.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<a href="../../data/Or.html" class="extype" name="cats.data.Or">Or</a>[<span class="extype" name="cats.laws.discipline.arbitrary.orArbitrary.A">A</span>, <span class="extype" name="cats.laws.discipline.arbitrary.orArbitrary.B">B</span>]]</span>
+        <span class="name">oneAndArbitrary</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.arbitrary.oneAndArbitrary.A">A</span>]</span>, <span name="F">F: <a href="ArbitraryK.html" class="extype" name="cats.laws.discipline.ArbitraryK">ArbitraryK</a>[<span class="extype" name="cats.laws.discipline.arbitrary.oneAndArbitrary.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<a href="../../data/OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.laws.discipline.arbitrary.oneAndArbitrary.A">A</span>, <span class="extype" name="cats.laws.discipline.arbitrary.oneAndArbitrary.F">F</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#cats.laws.discipline.arbitrary$@orArbitrary[A,B](implicitA:org.scalacheck.Arbitrary[A],implicitB:org.scalacheck.Arbitrary[B]):org.scalacheck.Arbitrary[cats.data.Or[A,B]]" title="Permalink" target="_top">
+      <a href="../../../index.html#cats.laws.discipline.arbitrary$@oneAndArbitrary[F[_],A](implicitA:org.scalacheck.Arbitrary[A],implicitF:cats.laws.discipline.ArbitraryK[F]):org.scalacheck.Arbitrary[cats.data.OneAnd[A,F]]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
@@ -517,6 +517,23 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.laws.discipline.arbitrary#xorArbitrary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="xorArbitrary[A,B](implicitA:org.scalacheck.Arbitrary[A],implicitB:org.scalacheck.Arbitrary[B]):org.scalacheck.Arbitrary[cats.data.Xor[A,B]]"></a>
+      <a id="xorArbitrary[A,B](Arbitrary[A],Arbitrary[B]):Arbitrary[Xor[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">xorArbitrary</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.arbitrary.xorArbitrary.A">A</span>]</span>, <span name="B">B: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<span class="extype" name="cats.laws.discipline.arbitrary.xorArbitrary.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="org.scalacheck.Arbitrary">Arbitrary</span>[<a href="../../data/Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.laws.discipline.arbitrary.xorArbitrary.A">A</span>, <span class="extype" name="cats.laws.discipline.arbitrary.xorArbitrary.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#cats.laws.discipline.arbitrary$@xorArbitrary[A,B](implicitA:org.scalacheck.Arbitrary[A],implicitB:org.scalacheck.Arbitrary[B]):org.scalacheck.Arbitrary[cats.data.Xor[A,B]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
 

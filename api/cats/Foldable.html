@@ -47,7 +47,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Foldable</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">Foldable</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -59,10 +59,10 @@ collection to produce a single result. Most collection types have
 folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fold.pdf" target="_blank">A tutorial on the universality and expressiveness of fold</a>
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Foldable.scala" target="_blank">Foldable.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>, <a href="data/OrInstances$OrInstances.html" class="extype" name="cats.data.OrInstances.OrInstances">OrInstances</a>, <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a></div>
+            <div class="subClasses hiddenContent"><a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>, <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>, <a href="data/XorInstances$XorInstances.html" class="extype" name="cats.data.XorInstances.XorInstances">XorInstances</a></div>
           </div></div>
         
 
@@ -80,7 +80,7 @@ folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fol
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.Foldable"><span>Foldable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.Foldable"><span>Foldable</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -681,7 +681,11 @@ needed.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

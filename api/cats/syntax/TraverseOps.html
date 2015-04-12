@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>OrInstances1 - cats.data.OrInstances1</title>
-          <meta name="description" content="OrInstances1 - cats.data.OrInstances1" />
-          <meta name="keywords" content="OrInstances1 cats.data.OrInstances1" />
+          <title>TraverseOps - cats.syntax.TraverseOps</title>
+          <meta name="description" content="TraverseOps - cats.syntax.TraverseOps" />
+          <meta name="keywords" content="TraverseOps cats.syntax.TraverseOps" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'cats.data.OrInstances1';
+            var hash = 'cats.syntax.TraverseOps';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -29,11 +29,11 @@
         <body class="type">
       <div id="definition">
         <img src="../../lib/class_big.png" />
-        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.data">data</a></p>
-        <h1>OrInstances1</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="cats.data">package data</a>
+        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.syntax">syntax</a></p>
+        <h1>TraverseOps</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="cats.syntax">package syntax</a>
           </div></span></h3><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -41,21 +41,18 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier">sealed abstract </span>
+        <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">OrInstances1</span><span class="result"> extends <a href="OrInstances2.html" class="extype" name="cats.data.OrInstances2">OrInstances2</a></span>
+        <span class="name">TraverseOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/data/src/main/scala/cats/data/Or.scala" target="_blank">Or.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/syntax/traverse.scala" target="_blank">traverse.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="OrInstances2.html" class="extype" name="cats.data.OrInstances2">OrInstances2</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="Or$.html" class="extype" name="cats.data.Or">Or</a>, <a href="OrInstances.html" class="extype" name="cats.data.OrInstances">OrInstances</a></div>
-          </div></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -72,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.data.OrInstances1"><span>OrInstances1</span></li><li class="in" name="cats.data.OrInstances2"><span>OrInstances2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.TraverseOps"><span>TraverseOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -90,7 +87,27 @@
 
       <div id="template">
         <div id="allMembers">
-        
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="cats.syntax.TraverseOps#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(fa:F[A])(implicitF:cats.Traverse[F]):cats.syntax.TraverseOps[F,A]"></a>
+      <a id="&lt;init&gt;:TraverseOps[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">TraverseOps</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.TraverseOps.F">F</span>[<span class="extype" name="cats.syntax.TraverseOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.syntax.TraverseOps.F">F</span>]</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.TraverseOps@&lt;init&gt;(fa:F[A])(implicitF:cats.Traverse[F]):cats.syntax.TraverseOps[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
 
         
 
@@ -110,7 +127,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -127,7 +144,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@##():Int" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@##():Int" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -144,7 +161,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -161,7 +178,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -178,7 +195,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@clone():Object" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@clone():Object" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -201,7 +218,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -218,7 +235,7 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -235,7 +252,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@finalize():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -258,7 +275,7 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -275,7 +292,7 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@hashCode():Int" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -292,7 +309,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -309,7 +326,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -326,7 +343,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@notify():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@notify():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -343,41 +360,24 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.data.OrInstances2#orEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="orEq[A,B](implicitevidence$6:cats.Eq[A],implicitevidence$7:cats.Eq[B]):cats.Eq[cats.data.Or[A,B]]"></a>
-      <a id="orEq[A,B](Eq[A],Eq[B]):Eq[Or[A,B]]"></a>
+    </li><li name="cats.syntax.TraverseOps#sequenceU" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sequenceU(implicitU:cats.Unapply[cats.Applicative,A]):U.M[F[U.A]]"></a>
+      <a id="sequenceU(Unapply[Applicative,A]):M[F[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">orEq</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OrInstances2.orEq.A">A</span>]</span>, <span name="arg1">arg1: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OrInstances2.orEq.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="Or.html" class="extype" name="cats.data.Or">Or</a>[<span class="extype" name="cats.data.OrInstances2.orEq.A">A</span>, <span class="extype" name="cats.data.OrInstances2.orEq.B">B</span>]]</span>
+        <span class="name">sequenceU</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="../Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.syntax.TraverseOps.A">A</span>]</span>)</span><span class="result">: <a href="../Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<span class="extype" name="cats.syntax.TraverseOps.F">F</span>[<a href="../Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@orEq[A,B](implicitevidence$6:cats.Eq[A],implicitevidence$7:cats.Eq[B]):cats.Eq[cats.data.Or[A,B]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrInstances2.html" class="extype" name="cats.data.OrInstances2">OrInstances2</a></dd></dl></div>
-    </li><li name="cats.data.OrInstances1#orPartialOrder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="orPartialOrder[A,B](implicitevidence$4:cats.PartialOrder[A],implicitevidence$5:cats.PartialOrder[B]):cats.PartialOrder[cats.data.Or[A,B]]"></a>
-      <a id="orPartialOrder[A,B](PartialOrder[A],PartialOrder[B]):PartialOrder[Or[A,B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">orPartialOrder</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#PartialOrder[A]=algebra.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.OrInstances1.orPartialOrder.A">A</span>]</span>, <span name="arg1">arg1: <a href="../package.html#PartialOrder[A]=algebra.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.OrInstances1.orPartialOrder.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#PartialOrder[A]=algebra.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<a href="Or.html" class="extype" name="cats.data.Or">Or</a>[<span class="extype" name="cats.data.OrInstances1.orPartialOrder.A">A</span>, <span class="extype" name="cats.data.OrInstances1.orPartialOrder.B">B</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@orPartialOrder[A,B](implicitevidence$4:cats.PartialOrder[A],implicitevidence$5:cats.PartialOrder[B]):cats.PartialOrder[cats.data.Or[A,B]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@sequenceU(implicitU:cats.Unapply[cats.Applicative,A]):U.M[F[U.A]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -394,7 +394,7 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -411,11 +411,45 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@toString():String" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@toString():String" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.syntax.TraverseOps#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="traverse[G[_],B](f:A=&gt;G[B])(implicitevidence$3:cats.Applicative[G]):G[F[B]]"></a>
+      <a id="traverse[G[_],B]((A)⇒G[B])(Applicative[G]):G[F[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.syntax.TraverseOps.A">A</span>) ⇒ <span class="extype" name="cats.syntax.TraverseOps.traverse.G">G</span>[<span class="extype" name="cats.syntax.TraverseOps.traverse.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.syntax.TraverseOps.traverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.TraverseOps.traverse.G">G</span>[<span class="extype" name="cats.syntax.TraverseOps.F">F</span>[<span class="extype" name="cats.syntax.TraverseOps.traverse.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.TraverseOps@traverse[G[_],B](f:A=&gt;G[B])(implicitevidence$3:cats.Applicative[G]):G[F[B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.syntax.TraverseOps#traverseU" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="traverseU[GB](f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[F[U.A]]"></a>
+      <a id="traverseU[GB]((A)⇒GB)(Unapply[Applicative,GB]):M[F[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverseU</span><span class="tparams">[<span name="GB">GB</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.syntax.TraverseOps.A">A</span>) ⇒ <span class="extype" name="cats.syntax.TraverseOps.traverseU.GB">GB</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="../Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.syntax.TraverseOps.traverseU.GB">GB</span>]</span>)</span><span class="result">: <a href="../Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<span class="extype" name="cats.syntax.TraverseOps.F">F</span>[<a href="../Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.TraverseOps@traverseU[GB](f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[F[U.A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -428,7 +462,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@wait():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@wait():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -451,7 +485,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -474,7 +508,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrInstances1@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseOps@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -494,9 +528,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="cats.data.OrInstances2">
-              <h3>Inherited from <a href="OrInstances2.html" class="extype" name="cats.data.OrInstances2">OrInstances2</a></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

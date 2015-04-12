@@ -326,7 +326,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>See <a href="https://github.com/non/cats/issues/3" target="_blank">https://github.com/non/cats/issues/3</a> for some discussion.</p><p>Must obey the laws defined in <a href="laws/FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">laws.FlatMapLaws</a>.
 </p></span></dd></dl></div>
     </li><li name="cats.Fold" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Fold[A]extendsAnyRef"></a>
+      <a id="Fold[A]extendsProductwithSerializable"></a>
       <a id="Fold[A]:Fold[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -334,10 +334,10 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Fold.html"><span class="name">Fold</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="Fold.html"><span class="name">Fold</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Fold[A]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Fold[A]extendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -364,7 +364,7 @@ lazy, it will only hang the program once <code>count.value</code> is called:</p>
 not stack-safe.)
 </p></div></div>
     </li><li name="cats.Foldable" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Foldable[F[_]]extendsAnyRef"></a>
+      <a id="Foldable[F[_]]extendsSerializable"></a>
       <a id="Foldable[F[_]]:Foldable[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -372,10 +372,10 @@ not stack-safe.)
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Foldable.html"><span class="name">Foldable</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="Foldable.html"><span class="name">Foldable</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Foldable[F[_]]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Foldable[F[_]]extendsSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -432,7 +432,7 @@ type <code>A</code> to get a pure value of type <code>B</code>. That is, the ins
 encodes pure unary function application.
 </p></div></div>
     </li><li name="cats.Lazy" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Lazy[A]extendsAnyRef"></a>
+      <a id="Lazy[A]extendsProductwithSerializable"></a>
       <a id="Lazy[A]:Lazy[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -440,10 +440,10 @@ encodes pure unary function application.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Lazy.html"><span class="name">Lazy</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="Lazy.html"><span class="name">Lazy</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Lazy[A]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Lazy[A]extendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -603,7 +603,7 @@ for kinds (i.e. parameterized types).</p><p>A MonoidK[F] can produce a Monoid[F[
     </span>
       
     </li><li name="cats.SemigroupK" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="SemigroupK[F[_]]extendsAnyRef"></a>
+      <a id="SemigroupK[F[_]]extendsSerializable"></a>
       <a id="SemigroupK[F[_]]:SemigroupK[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -611,10 +611,10 @@ for kinds (i.e. parameterized types).</p><p>A MonoidK[F] can produce a Monoid[F[
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SemigroupK.html"><span class="name">SemigroupK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="SemigroupK.html"><span class="name">SemigroupK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@SemigroupK[F[_]]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@SemigroupK[F[_]]extendsSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -626,7 +626,7 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
    but not the structure of A.
 </li></ul></div></div>
     </li><li name="cats.Show" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Show[T]extendsAnyRef"></a>
+      <a id="Show[T]extendsSerializable"></a>
       <a id="Show[T]:Show[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -634,10 +634,10 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Show.html"><span class="name">Show</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="Show.html"><span class="name">Show</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Show[T]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Show[T]extendsSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -662,6 +662,34 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
       <p class="shortcomment cmt">Traverse, also known as Traversable.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse, also known as Traversable.</p><p>Traversal over a structure with an effect.</p><p>Traversing with the <a href="#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a> effect is equivalent to <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
 Traversing with the <a href="data/Const.html" class="extype" name="cats.data.Const">cats.data.Const</a> effect where the first type parameter has
 a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a> instance is equivalent to <a href="Foldable.html" class="extype" name="cats.Foldable">cats.Foldable</a>#fold.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
+</p></div></div>
+    </li><li name="cats.Unapply" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Unapply[TC[_[_]],MA]extendsAnyRef"></a>
+      <a id="Unapply[TC[_[_]],MA]:Unapply[TC,MA]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Unapply.html"><span class="name">Unapply</span></a><span class="tparams">[<span name="TC">TC<span class="tparams">[<span name="_">_<span class="tparams">[<span name="_">_</span>]</span></span>]</span></span>, <span name="MA">MA</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Unapply[TC[_[_]],MA]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A typeclass that is used to help guide scala's type inference to
+find typeclass instances for types which have shapes which differ
+from what their typeclasses are looking for.</p><div class="fullcomment"><div class="comment cmt"><p>A typeclass that is used to help guide scala's type inference to
+find typeclass instances for types which have shapes which differ
+from what their typeclasses are looking for.</p><p>For example, <a href="Functor.html" class="extype" name="cats.Functor">Functor</a> is defined for types in the shape
+F[_]. Scala has no problem finding instance of Functor which match
+this shape, such as Functor[Option], Functor[List], etc. There is
+also a functor defined for some types which have the Shape F[_,_]
+when one of the two 'holes' is fixed. For example. there is a
+Functor for Map[A,?] for any A, and for Either[A,?] for any A,
+however the scala compiler will not find them without some coercing.
 </p></div></div>
     </li><li name="cats.~&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="~&gt;[F[_],G[_]]=cats.arrow.NaturalTransformation[F,G]"></a>
@@ -730,7 +758,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Alternative$.html"><span class="name">Alternative</span></a>
+        <a href="Alternative$.html"><span class="name">Alternative</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Alternative" title="Permalink" target="_top">
@@ -747,7 +775,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Applicative$.html"><span class="name">Applicative</span></a>
+        <a href="Applicative$.html"><span class="name">Applicative</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Applicative" title="Permalink" target="_top">
@@ -764,7 +792,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Apply$.html"><span class="name">Apply</span></a>
+        <a href="Apply$.html"><span class="name">Apply</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Apply" title="Permalink" target="_top">
@@ -781,7 +809,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Bimonad$.html"><span class="name">Bimonad</span></a>
+        <a href="Bimonad$.html"><span class="name">Bimonad</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Bimonad" title="Permalink" target="_top">
@@ -798,7 +826,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="CoflatMap$.html"><span class="name">CoflatMap</span></a>
+        <a href="CoflatMap$.html"><span class="name">CoflatMap</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@CoflatMap" title="Permalink" target="_top">
@@ -815,7 +843,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Comonad$.html"><span class="name">Comonad</span></a>
+        <a href="Comonad$.html"><span class="name">Comonad</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Comonad" title="Permalink" target="_top">
@@ -849,7 +877,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="FlatMap$.html"><span class="name">FlatMap</span></a>
+        <a href="FlatMap$.html"><span class="name">FlatMap</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@FlatMap" title="Permalink" target="_top">
@@ -866,7 +894,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Fold$.html"><span class="name">Fold</span></a>
+        <a href="Fold$.html"><span class="name">Fold</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Fold" title="Permalink" target="_top">
@@ -883,7 +911,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Foldable$.html"><span class="name">Foldable</span></a>
+        <a href="Foldable$.html"><span class="name">Foldable</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Foldable" title="Permalink" target="_top">
@@ -900,7 +928,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Functor$.html"><span class="name">Functor</span></a>
+        <a href="Functor$.html"><span class="name">Functor</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Functor" title="Permalink" target="_top">
@@ -934,7 +962,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Lazy$.html"><span class="name">Lazy</span></a>
+        <a href="Lazy$.html"><span class="name">Lazy</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Lazy" title="Permalink" target="_top">
@@ -951,7 +979,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Monad$.html"><span class="name">Monad</span></a>
+        <a href="Monad$.html"><span class="name">Monad</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Monad" title="Permalink" target="_top">
@@ -968,7 +996,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="MonadCombine$.html"><span class="name">MonadCombine</span></a>
+        <a href="MonadCombine$.html"><span class="name">MonadCombine</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@MonadCombine" title="Permalink" target="_top">
@@ -985,7 +1013,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="MonadFilter$.html"><span class="name">MonadFilter</span></a>
+        <a href="MonadFilter$.html"><span class="name">MonadFilter</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@MonadFilter" title="Permalink" target="_top">
@@ -1019,7 +1047,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="MonoidK$.html"><span class="name">MonoidK</span></a>
+        <a href="MonoidK$.html"><span class="name">MonoidK</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@MonoidK" title="Permalink" target="_top">
@@ -1087,7 +1115,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="SemigroupK$.html"><span class="name">SemigroupK</span></a>
+        <a href="SemigroupK$.html"><span class="name">SemigroupK</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@SemigroupK" title="Permalink" target="_top">
@@ -1104,7 +1132,7 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Show$.html"><span class="name">Show</span></a>
+        <a href="Show$.html"><span class="name">Show</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Show" title="Permalink" target="_top">
@@ -1121,10 +1149,27 @@ a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Traverse$.html"><span class="name">Traverse</span></a>
+        <a href="Traverse$.html"><span class="name">Traverse</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Traverse" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.Unapply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Unapply"></a>
+      <a id="Unapply:Unapply"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Unapply$.html"><span class="name">Unapply</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Unapply" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>

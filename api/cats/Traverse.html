@@ -56,10 +56,10 @@ Traversing with the <a href="data/Const.html" class="extype" name="cats.data.Con
 a <a href="package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a> instance is equivalent to <a href="Foldable.html" class="extype" name="cats.Foldable">cats.Foldable</a>#fold.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.Traverse.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Traverse.scala" target="_blank">Traverse.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Traverse.F">F</span>], <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Traverse.F">F</span>], <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Traverse.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Traverse.F">F</span>], <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Traverse.F">F</span>], <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Traverse.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="data/OrInstances$OrInstances.html" class="extype" name="cats.data.OrInstances.OrInstances">OrInstances</a></div>
+            <div class="subClasses hiddenContent"><a href="data/XorInstances$XorInstances.html" class="extype" name="cats.data.XorInstances.XorInstances">XorInstances</a></div>
           </div></div>
         
 
@@ -77,7 +77,7 @@ a <a href="package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.M
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.Traverse"><span>Traverse</span></li><li class="in" name="cats.Foldable"><span>Foldable</span></li><li class="in" name="cats.Functor"><span>Functor</span></li><li class="in" name="cats.functor.Invariant"><span>Invariant</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.Traverse"><span>Traverse</span></li><li class="in" name="cats.Foldable"><span>Foldable</span></li><li class="in" name="cats.Functor"><span>Functor</span></li><li class="in" name="cats.functor.Invariant"><span>Invariant</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -462,25 +462,6 @@ on F[G[_]].
       <p class="shortcomment cmt">find the first element matching the predicate, if one exists
 </p><div class="fullcomment"><div class="comment cmt"><p>find the first element matching the predicate, if one exists
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
-    </li><li name="cats.Functor#fmap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fmap[A,B](f:A=&gt;B):F[A]=&gt;F[B]"></a>
-      <a id="fmap[A,B]((A)⇒B):(F[A])⇒F[B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fmap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Functor.fmap.A">A</span>) ⇒ <span class="extype" name="cats.Functor.fmap.B">B</span></span>)</span><span class="result">: (<span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Functor.fmap.A">A</span>]) ⇒ <span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Functor.fmap.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.Traverse@fmap[A,B](f:A=&gt;B):F[A]=&gt;F[B]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Alias for map
-</p><div class="fullcomment"><div class="comment cmt"><p>Alias for map
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="cats.Foldable#fold" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fold[A](fa:F[A])(implicitA:cats.Monoid[A]):A"></a>
       <a id="fold[A](F[A])(Monoid[A]):A"></a>
@@ -773,6 +754,23 @@ with the value
       </a>
     </span>
       
+    </li><li name="cats.Traverse#sequenceU" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sequenceU[GA](fga:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[F[U.A]]"></a>
+      <a id="sequenceU[GA](F[GA])(Unapply[Applicative,GA]):M[F[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sequenceU</span><span class="tparams">[<span name="GA">GA</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Traverse.sequenceU.GA">GA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.Traverse.sequenceU.GA">GA</span>]</span>)</span><span class="result">: <a href="Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<span class="extype" name="cats.Traverse.F">F</span>[<a href="Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Traverse@sequenceU[GA](fga:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[F[U.A]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.Foldable#sequence_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$1:cats.Applicative[G]):G[Unit]"></a>
       <a id="sequence_[G[_],A,B](F[G[A]])(Applicative[G]):G[Unit]"></a>
@@ -840,6 +838,23 @@ F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span 
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Traverse@traversal[G[_]](implicitevidence$3:cats.Applicative[G]):Traverse.this.Traversal[G]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.Traverse#traverseU" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="traverseU[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[F[U.A]]"></a>
+      <a id="traverseU[A,GB](F[A])((A)⇒GB)(Unapply[Applicative,GB]):M[F[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverseU</span><span class="tparams">[<span name="A">A</span>, <span name="GB">GB</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Traverse.traverseU.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.traverseU.A">A</span>) ⇒ <span class="extype" name="cats.Traverse.traverseU.GB">GB</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.Traverse.traverseU.GB">GB</span>]</span>)</span><span class="result">: <a href="Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<span class="extype" name="cats.Traverse.F">F</span>[<a href="Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Traverse@traverseU[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[F[U.A]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -971,6 +986,10 @@ needed.
               <h3>Inherited from <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Traverse.F">F</span>]</h3>
             </div><div class="parent" name="cats.functor.Invariant">
               <h3>Inherited from <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Traverse.F">F</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

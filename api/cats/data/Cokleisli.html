@@ -51,7 +51,8 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.data.Cokleisli">Cokleisli</a>[<span class="extype" name="cats.data.Cokleisli.F">F</span>, <span class="extype" name="cats.data.Cokleisli.A">A</span>, <span class="extype" name="cats.data.Cokleisli.B">B</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/data/src/main/scala/cats/data/Cokleisli.scala" target="_blank">Cokleisli.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents a function <code>F[A] =&gt; B</code>.
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.data.Cokleisli">Cokleisli</a>[<span class="extype" name="cats.data.Cokleisli.F">F</span>, <span class="extype" name="cats.data.Cokleisli.A">A</span>, <span class="extype" name="cats.data.Cokleisli.B">B</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/data/src/main/scala/cats/data/Cokleisli.scala" target="_blank">Cokleisli.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -316,6 +317,23 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.Cokleisli#first" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="first[C](implicitF:cats.Comonad[F]):cats.data.Cokleisli[F,(A,C),(B,C)]"></a>
+      <a id="first[C](Comonad[F]):Cokleisli[F,(A,C),(B,C)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">first</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.data.Cokleisli.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Cokleisli">Cokleisli</a>[<span class="extype" name="cats.data.Cokleisli.F">F</span>, (<span class="extype" name="cats.data.Cokleisli.A">A</span>, <span class="extype" name="cats.data.Cokleisli.first.C">C</span>), (<span class="extype" name="cats.data.Cokleisli.B">B</span>, <span class="extype" name="cats.data.Cokleisli.first.C">C</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Cokleisli@first[C](implicitF:cats.Comonad[F]):cats.data.Cokleisli[F,(A,C),(B,C)]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.Cokleisli#flatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="flatMap[C](f:B=&gt;cats.data.Cokleisli[F,A,C]):cats.data.Cokleisli[F,A,C]"></a>
       <a id="flatMap[C]((B)⇒Cokleisli[F,A,C]):Cokleisli[F,A,C]"></a>
@@ -465,6 +483,23 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Cokleisli@run:F[A]=&gt;B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.Cokleisli#second" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="second[C](implicitF:cats.Comonad[F]):cats.data.Cokleisli[F,(C,A),(C,B)]"></a>
+      <a id="second[C](Comonad[F]):Cokleisli[F,(C,A),(C,B)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">second</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.data.Cokleisli.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Cokleisli">Cokleisli</a>[<span class="extype" name="cats.data.Cokleisli.F">F</span>, (<span class="extype" name="cats.data.Cokleisli.second.C">C</span>, <span class="extype" name="cats.data.Cokleisli.A">A</span>), (<span class="extype" name="cats.data.Cokleisli.second.C">C</span>, <span class="extype" name="cats.data.Cokleisli.B">B</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Cokleisli@second[C](implicitF:cats.Comonad[F]):cats.data.Cokleisli[F,(C,A),(C,B)]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>

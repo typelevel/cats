@@ -45,13 +45,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">CokleisliInstances</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">CokleisliInstances</span><span class="result"> extends <a href="CokleisliInstances0.html" class="extype" name="cats.data.CokleisliInstances0">CokleisliInstances0</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/data/src/main/scala/cats/data/Cokleisli.scala" target="_blank">Cokleisli.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="CokleisliInstances0.html" class="extype" name="cats.data.CokleisliInstances0">CokleisliInstances0</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="Cokleisli$.html" class="extype" name="cats.data.Cokleisli">Cokleisli</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.data.CokleisliInstances"><span>CokleisliInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.data.CokleisliInstances"><span>CokleisliInstances</span></li><li class="in" name="cats.data.CokleisliInstances0"><span>CokleisliInstances0</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -189,6 +189,23 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.CokleisliInstances#cokleisliArrow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="cokleisliArrow[F[_]](implicitev:cats.Comonad[F]):cats.arrow.Arrow[[X_kp1,X_kp2]cats.data.Cokleisli[F,X_kp1,X_kp2]]"></a>
+      <a id="cokleisliArrow[F[_]](Comonad[F]):Arrow[[X_kp1,X_kp2]Cokleisli[F,X_kp1,X_kp2]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cokleisliArrow</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.data.CokleisliInstances.cokleisliArrow.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a>[[X_kp1, X_kp2]<a href="Cokleisli.html" class="extype" name="cats.data.Cokleisli">Cokleisli</a>[<span class="extype" name="cats.data.CokleisliInstances.cokleisliArrow.F">F</span>, <span class="extype" name="cats.data.CokleisliInstances.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>, <span class="extype" name="cats.data.CokleisliInstances.&lt;refinement&gt;.L_kp.X_kp2">X_kp2</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.CokleisliInstances@cokleisliArrow[F[_]](implicitev:cats.Comonad[F]):cats.arrow.Arrow[[X_kp1,X_kp2]cats.data.Cokleisli[F,X_kp1,X_kp2]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.CokleisliInstances#cokleisliMonad" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="cokleisliMonad[F[_],A]:cats.Monad[[X_kp2]cats.data.Cokleisli[F,A,X_kp2]]"></a>
       <a id="cokleisliMonad[F[_],A]:Monad[[X_kp2]Cokleisli[F,A,X_kp2]]"></a>
@@ -206,8 +223,8 @@
       </a>
     </span>
       
-    </li><li name="cats.data.CokleisliInstances#cokleisliProfunctor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="cokleisliProfunctor[F[_]](implicitevidence$1:cats.Functor[F]):cats.functor.Profunctor[[X_kp1,X_kp2]cats.data.Cokleisli[F,X_kp1,X_kp2]]"></a>
+    </li><li name="cats.data.CokleisliInstances0#cokleisliProfunctor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cokleisliProfunctor[F[_]](implicitev:cats.Functor[F]):cats.functor.Profunctor[[X_kp1,X_kp2]cats.data.Cokleisli[F,X_kp1,X_kp2]]"></a>
       <a id="cokleisliProfunctor[F[_]](Functor[F]):Profunctor[[X_kp1,X_kp2]Cokleisli[F,X_kp1,X_kp2]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -215,14 +232,31 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">cokleisliProfunctor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.CokleisliInstances.cokleisliProfunctor.F">F</span>]</span>)</span><span class="result">: <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[[X_kp1, X_kp2]<a href="Cokleisli.html" class="extype" name="cats.data.Cokleisli">Cokleisli</a>[<span class="extype" name="cats.data.CokleisliInstances.cokleisliProfunctor.F">F</span>, <span class="extype" name="cats.data.CokleisliInstances.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>, <span class="extype" name="cats.data.CokleisliInstances.&lt;refinement&gt;.L_kp.X_kp2">X_kp2</span>]]</span>
+        <span class="name">cokleisliProfunctor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.CokleisliInstances0.cokleisliProfunctor.F">F</span>]</span>)</span><span class="result">: <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[[X_kp1, X_kp2]<a href="Cokleisli.html" class="extype" name="cats.data.Cokleisli">Cokleisli</a>[<span class="extype" name="cats.data.CokleisliInstances0.cokleisliProfunctor.F">F</span>, <span class="extype" name="cats.data.CokleisliInstances0.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>, <span class="extype" name="cats.data.CokleisliInstances0.&lt;refinement&gt;.L_kp.X_kp2">X_kp2</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.CokleisliInstances@cokleisliProfunctor[F[_]](implicitevidence$1:cats.Functor[F]):cats.functor.Profunctor[[X_kp1,X_kp2]cats.data.Cokleisli[F,X_kp1,X_kp2]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.CokleisliInstances@cokleisliProfunctor[F[_]](implicitev:cats.Functor[F]):cats.functor.Profunctor[[X_kp1,X_kp2]cats.data.Cokleisli[F,X_kp1,X_kp2]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CokleisliInstances0.html" class="extype" name="cats.data.CokleisliInstances0">CokleisliInstances0</a></dd></dl></div>
+    </li><li name="cats.data.CokleisliInstances0#cokleisliSplit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cokleisliSplit[F[_]](implicitev:cats.CoflatMap[F]):cats.arrow.Split[[X_kp1,X_kp2]cats.data.Cokleisli[F,X_kp1,X_kp2]]"></a>
+      <a id="cokleisliSplit[F[_]](CoflatMap[F]):Split[[X_kp1,X_kp2]Cokleisli[F,X_kp1,X_kp2]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cokleisliSplit</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.data.CokleisliInstances0.cokleisliSplit.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Split.html" class="extype" name="cats.arrow.Split">Split</a>[[X_kp1, X_kp2]<a href="Cokleisli.html" class="extype" name="cats.data.Cokleisli">Cokleisli</a>[<span class="extype" name="cats.data.CokleisliInstances0.cokleisliSplit.F">F</span>, <span class="extype" name="cats.data.CokleisliInstances0.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>, <span class="extype" name="cats.data.CokleisliInstances0.&lt;refinement&gt;.L_kp.X_kp2">X_kp2</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.CokleisliInstances@cokleisliSplit[F[_]](implicitev:cats.CoflatMap[F]):cats.arrow.Split[[X_kp1,X_kp2]cats.data.Cokleisli[F,X_kp1,X_kp2]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CokleisliInstances0.html" class="extype" name="cats.data.CokleisliInstances0">CokleisliInstances0</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -494,7 +528,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="cats.data.CokleisliInstances0">
+              <h3>Inherited from <a href="CokleisliInstances0.html" class="extype" name="cats.data.CokleisliInstances0">CokleisliInstances0</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
