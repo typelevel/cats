@@ -3,8 +3,8 @@ package syntax
 
 trait FunctorSyntax {
   // TODO: use simulacrum instances eventually
-  implicit def functorSyntax[F[_]: Functor, A](fa: F[A]): FunctorOps[F, A] =
-    new FunctorOps[F, A](fa)
+  implicit def functorSyntax[FA](fa: FA)(implicit U: Unapply[Functor,FA]): FunctorOps[U.M, U.A] =
+    new FunctorOps[U.M, U.A](U.subst(fa))(U.TC)
 }
 
 class FunctorOps[F[_], A](fa: F[A])(implicit F: Functor[F]) {

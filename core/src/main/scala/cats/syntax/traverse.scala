@@ -3,8 +3,8 @@ package syntax
 
 trait TraverseSyntax {
   // TODO: use simulacrum instances eventually
-  implicit def traverseSyntax[F[_]: Traverse, A](fa: F[A]): TraverseOps[F, A] =
-    new TraverseOps[F, A](fa)
+  implicit def traverseSyntax[FA](fa: FA)(implicit U: Unapply[Traverse,FA]): TraverseOps[U.M, U.A] =
+    new TraverseOps[U.M, U.A](U.subst(fa))(U.TC)
 
   implicit def nestedTraverseSyntax[F[_]: Traverse, G[_], A](fga: F[G[A]]): NestedTraverseOps[F, G, A] =
     new NestedTraverseOps[F, G, A](fga)
