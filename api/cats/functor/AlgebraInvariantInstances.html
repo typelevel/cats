@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>OrFunctions - cats.data.OrFunctions</title>
-          <meta name="description" content="OrFunctions - cats.data.OrFunctions" />
-          <meta name="keywords" content="OrFunctions cats.data.OrFunctions" />
+          <title>AlgebraInvariantInstances - cats.functor.AlgebraInvariantInstances</title>
+          <meta name="description" content="AlgebraInvariantInstances - cats.functor.AlgebraInvariantInstances" />
+          <meta name="keywords" content="AlgebraInvariantInstances cats.functor.AlgebraInvariantInstances" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'cats.data.OrFunctions';
+            var hash = 'cats.functor.AlgebraInvariantInstances';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -29,11 +29,11 @@
         <body class="type">
       <div id="definition">
         <img src="../../lib/trait_big.png" />
-        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.data">data</a></p>
-        <h1>OrFunctions</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="cats.data">package data</a>
+        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.functor">functor</a></p>
+        <h1>AlgebraInvariantInstances</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="cats.functor">package functor</a>
           </div></span></h3><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -45,16 +45,18 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">OrFunctions</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">AlgebraInvariantInstances</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/data/src/main/scala/cats/data/Or.scala" target="_blank">Or.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Invariant instances for types that are housed in Algebra and therefore
+can't have instances for Cats type classes in their companion objects.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/functor/Invariant.scala" target="_blank">Invariant.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="Or$.html" class="extype" name="cats.data.Or">Or</a></div>
+            <div class="subClasses hiddenContent"><a href="Invariant$.html" class="extype" name="cats.functor.Invariant">Invariant</a></div>
           </div></div>
         
 
@@ -72,7 +74,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.data.OrFunctions"><span>OrFunctions</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.functor.AlgebraInvariantInstances"><span>AlgebraInvariantInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -92,27 +94,7 @@
         <div id="allMembers">
         
 
-        <div id="types" class="types members">
-              <h3>Type Members</h3>
-              <ol><li name="cats.data.OrFunctions.FromTryCatchAux" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FromTryCatchAux[T]extendsAnyRef"></a>
-      <a id="FromTryCatchAux[T]:FromTryCatchAux[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="OrFunctions$FromTryCatchAux.html"><span class="name">FromTryCatchAux</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@FromTryCatchAux[T]extendsAnyRef" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
+        
 
         
 
@@ -127,10 +109,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -144,10 +126,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@##():Int" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@##():Int" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -161,10 +143,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -181,7 +163,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -195,10 +177,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@clone():Object" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@clone():Object" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -218,10 +200,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -235,10 +217,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -252,10 +234,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@finalize():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -266,62 +248,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.data.OrFunctions#fromEither" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fromEither[A,B](e:Either[A,B]):cats.data.Or[A,B]"></a>
-      <a id="fromEither[A,B](Either[A,B]):Or[A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fromEither</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="e">e: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.OrFunctions.fromEither.A">A</span>, <span class="extype" name="cats.data.OrFunctions.fromEither.B">B</span>]</span>)</span><span class="result">: <a href="Or.html" class="extype" name="cats.data.Or">Or</a>[<span class="extype" name="cats.data.OrFunctions.fromEither.A">A</span>, <span class="extype" name="cats.data.OrFunctions.fromEither.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@fromEither[A,B](e:Either[A,B]):cats.data.Or[A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Convert an <code>Either[A, B]</code> to <code>A Or B</code>
-</p>
-    </li><li name="cats.data.OrFunctions#fromTry" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fromTry[A](t:scala.util.Try[A]):cats.data.Or[Throwable,A]"></a>
-      <a id="fromTry[A](Try[A]):Or[Throwable,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fromTry</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="t">t: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="cats.data.OrFunctions.fromTry.A">A</span>]</span>)</span><span class="result">: <a href="Or.html" class="extype" name="cats.data.Or">Or</a>[<span class="extype" name="scala.Throwable">Throwable</span>, <span class="extype" name="cats.data.OrFunctions.fromTry.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@fromTry[A](t:scala.util.Try[A]):cats.data.Or[Throwable,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Convert a <code>Try[A]</code> to a <code>Throwable Or A</code>,
-where A is the successfully computed value
-</p>
-    </li><li name="cats.data.OrFunctions#fromTryCatch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fromTryCatch[T&gt;:Null&lt;:Throwable]:OrFunctions.this.FromTryCatchAux[T]"></a>
-      <a id="fromTryCatch[T&lt;:Throwable&gt;:Null]:FromTryCatchAux[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fromTryCatch</span><span class="tparams">[<span name="T">T &gt;: <span class="extype" name="scala.Null">Null</span> &lt;: <span class="extype" name="scala.Throwable">Throwable</span></span>]</span><span class="result">: <a href="OrFunctions$FromTryCatchAux.html" class="extype" name="cats.data.OrFunctions.FromTryCatchAux">FromTryCatchAux</a>[<span class="extype" name="cats.data.OrFunctions.fromTryCatch.T">T</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@fromTryCatch[T&gt;:Null&lt;:Throwable]:OrFunctions.this.FromTryCatchAux[T]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Catch a specified <code>Throwable</code> ('<code>T</code>') instance and return it wrapped in an <code>Or[T, A]</code>,
-where <code>A</code> is the valid return value (inferred from function block)
-</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -334,7 +260,7 @@ where <code>A</code> is the valid return value (inferred from function block)
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -348,14 +274,48 @@ where <code>A</code> is the valid return value (inferred from function block)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@hashCode():Int" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.functor.AlgebraInvariantInstances#invariantMonoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="invariantMonoid:cats.functor.Invariant[cats.Monoid]"></a>
+      <a id="invariantMonoid:Invariant[Monoid]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invariantMonoid</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@invariantMonoid:cats.functor.Invariant[cats.Monoid]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.functor.AlgebraInvariantInstances#invariantSemigroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="invariantSemigroup:cats.functor.Invariant[cats.Semigroup]"></a>
+      <a id="invariantSemigroup:Invariant[Semigroup]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invariantSemigroup</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@invariantSemigroup:cats.functor.Invariant[cats.Semigroup]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -365,31 +325,14 @@ where <code>A</code> is the valid return value (inferred from function block)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.data.OrFunctions#left" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="left[A,B](a:A):cats.data.Or[A,B]"></a>
-      <a id="left[A,B](A):Or[A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">left</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.OrFunctions.left.A">A</span></span>)</span><span class="result">: <a href="Or.html" class="extype" name="cats.data.Or">Or</a>[<span class="extype" name="cats.data.OrFunctions.left.A">A</span>, <span class="extype" name="cats.data.OrFunctions.left.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@left[A,B](a:A):cats.data.Or[A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -399,10 +342,10 @@ where <code>A</code> is the valid return value (inferred from function block)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -416,10 +359,10 @@ where <code>A</code> is the valid return value (inferred from function block)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@notify():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@notify():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -433,31 +376,14 @@ where <code>A</code> is the valid return value (inferred from function block)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.data.OrFunctions#right" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="right[A,B](b:B):cats.data.Or[A,B]"></a>
-      <a id="right[A,B](B):Or[A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">right</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.OrFunctions.right.B">B</span></span>)</span><span class="result">: <a href="Or.html" class="extype" name="cats.data.Or">Or</a>[<span class="extype" name="cats.data.OrFunctions.right.A">A</span>, <span class="extype" name="cats.data.OrFunctions.right.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@right[A,B](b:B):cats.data.Or[A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -470,7 +396,7 @@ where <code>A</code> is the valid return value (inferred from function block)
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -487,7 +413,7 @@ where <code>A</code> is the valid return value (inferred from function block)
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@toString():String" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@toString():String" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -501,10 +427,10 @@ where <code>A</code> is the valid return value (inferred from function block)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@wait():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@wait():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -524,10 +450,10 @@ where <code>A</code> is the valid return value (inferred from function block)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -547,10 +473,10 @@ where <code>A</code> is the valid return value (inferred from function block)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OrFunctions@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.AlgebraInvariantInstances@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -571,9 +497,9 @@ where <code>A</code> is the valid return value (inferred from function block)
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>

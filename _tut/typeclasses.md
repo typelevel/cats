@@ -1,7 +1,6 @@
-The typeclass pattern is a technique borrowed from haskell. You can
-think of it as an "interface" in the java sense, but universally
-quantified over some type. In scala they are encoded as a trait that
-has one type variable, such as:
+The typeclass pattern is a ubiquitous pattern in Scala, its function
+is to provide a behavior for some type. You think of it as an
+"interface" in the Java sense. Here's an example.
 
 ```scala
 scala> /**
@@ -38,12 +37,21 @@ It is trivial to supply a Show instance for String:
 scala> implicit val stringShow = new Show[String] {
      |   def show(s: String) = s
      | }
-stringShow: Show[String] = $anon$1@246666ba
+stringShow: Show[String] = $anon$1@ff494e2
 
 scala> // and now our call to Log succeeds
      | log("a string")
 a string
 ```
+
+This example demonstrates a powerful property of the typeclass
+pattern. We have been able to provide an implementation of Show for
+String, without needing to change the definition of java.lang.String
+to extend a new Java-style interface; something we couldn't have done
+even if we wanted to, since we don't control the implementation of
+java.lang.Sting. We use this pattern to retrofit existing
+types with new behaviors. This is usually referred to as "ad-hoc
+polymorphism".
 
 For some types, providing a Show instance might depend on having some
 implicit Show instance of some other type, for instance, we could

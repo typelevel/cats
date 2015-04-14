@@ -7,9 +7,10 @@ scaladoc: "#cats.Functor"
 ---
 # Functor
 
-A Functor is a ubiquitous typeclass involving type constructors of
-kind * → *, which is another way of saying types that have a single
-type variable. Examples might be Option, List, Future.
+A Functor is a ubiquitous typeclass involving types that have "one
+hole"; that is types which have the shape: `F[?]`, such as `Option`,
+`List`, `Future`. (This is in contrast to a type like `Int` which has
+no hole, or `Tuple2` which has two "holes" (`Tuple2[?,?]`), etc.
 
 The Functor category involves a single operation, named `map`:
 
@@ -45,15 +46,15 @@ import cats._
 scala> implicit val optionFunctor: Functor[Option] = new Functor[Option] {
      |   def map[A,B](fa: Option[A])(f: A => B) = fa map f
      | }
-optionFunctor: cats.Functor[Option] = $anon$1@60ada0b3
+optionFunctor: cats.Functor[Option] = $anon$1@3c75d634
 
 scala> implicit val listFunctor: Functor[List] = new Functor[List] {
      |   def map[A,B](fa: List[A])(f: A => B) = fa map f
      | }
-listFunctor: cats.Functor[List] = $anon$1@4c36b646
+listFunctor: cats.Functor[List] = $anon$1@3adf68aa
 ```
 
-However Functors can also be created for types which don't have a map
+However, functors can also be created for types which don't have a map
 method. An example of this would be that Functions which take a String
 form a functor using andThen as the map operation:
 
@@ -64,6 +65,20 @@ scala> implicit def function1Functor[In]: Functor[Function1[In, ?]] =
      |   }
 function1Functor: [In]=> cats.Functor[[X_kp1]In => X_kp1]
 ```
+
+Also of note in the above example, is that we created a functor for
+Function1, which is a type which normally has two type holes. We
+however constrained one of the holes to be the `In` type, leaving just
+one hole for the return type. In this above example, we are
+demonstrating the use of the
+[kind-projector compiler plugin](https://github.com/non/kind-projector),
+This compiler plugin lets us more easily change the number of type
+holes a type has. In this case, we took a type which normally has two
+type holes, `Function1` and filled one of the holes, leaving the other
+hole open. `Function1[In,?]` has the first type parameter filled,
+while the second is still open. Without kind-projector, we'd have to
+write this as something like: `({type F[A] = Function1[In,A]})#F`,
+which is much harder to read and understand.
 
 ## Using functor
 
@@ -124,7 +139,7 @@ compose the two Functors to create a new Functor on F[G[\_]]:
 
 ```scala
 scala> val listOpt = Functor[List] compose Functor[Option]
-listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@6b742853
+listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@6841dc37
 
 scala> listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
 res9: List[Option[Int]] = List(Some(2), None, Some(4))

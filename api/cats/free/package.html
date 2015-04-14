@@ -47,9 +47,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/free/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/free/src/main/scala/cats/free/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -90,7 +90,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="cats.free.Coyoneda" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Coyoneda[F[_],A]extendsAnyRef"></a>
+      <a id="Coyoneda[F[_],A]extendsSerializable"></a>
       <a id="Coyoneda[F[_],A]:Coyoneda[F,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,10 +98,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Coyoneda.html"><span class="name">Coyoneda</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="Coyoneda.html"><span class="name">Coyoneda</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.package@Coyoneda[F[_],A]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.package@Coyoneda[F[_],A]extendsSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -111,7 +111,7 @@ The homomorphism from <code>F[A]</code> to <code>Coyoneda[F,A]</code> exists eve
 <code>F</code> is not a functor.
 </p></div></div>
     </li><li name="cats.free.Free" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Free[S[_],A]extendsAnyRef"></a>
+      <a id="Free[S[_],A]extendsSerializable"></a>
       <a id="Free[S[_],A]:Free[S,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -119,10 +119,10 @@ The homomorphism from <code>F[A]</code> to <code>Coyoneda[F,A]</code> exists eve
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Free.html"><span class="name">Free</span></a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="Free.html"><span class="name">Free</span></a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.package@Free[S[_],A]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.package@Free[S[_],A]extendsSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -130,6 +130,23 @@ The homomorphism from <code>F[A]</code> to <code>Coyoneda[F,A]</code> exists eve
 using the heap instead of the stack, allowing tail-call
 elimination.
 </p></div></div>
+    </li><li name="cats.free.FreeApplicative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FreeApplicative[F[_],A]extendsAnyRef"></a>
+      <a id="FreeApplicative[F[_],A]:FreeApplicative[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FreeApplicative.html"><span class="name">FreeApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.package@FreeApplicative[F[_],A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Applicative Functor for Free</p>
     </li><li name="cats.free.FreeC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="FreeC[S[_],A]=cats.free.Free[[X_kp1]cats.free.Coyoneda[S,X_kp1],A]"></a>
       <a id="FreeC[S[_],A]:FreeC[S,A]"></a>
@@ -156,7 +173,7 @@ elimination.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Trampoline</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Function0" class="extype" target="_top">Function0</a>, <span class="extype" name="cats.free.Trampoline.A">A</span>]</span>
+        <span class="name">Trampoline</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Function0" class="extype" target="_top">Function0</a>, <span class="extype" name="cats.free.Trampoline.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.free.package@Trampoline[A]=cats.free.Free[Function0,A]" title="Permalink" target="_top">
@@ -165,7 +182,7 @@ elimination.
     </span>
       <p class="shortcomment cmt">Alias for the free monad over the <code>Function0</code> functor.</p>
     </li><li name="cats.free.Yoneda" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Yoneda[F[_],A]extendsAnyRef"></a>
+      <a id="Yoneda[F[_],A]extendsSerializable"></a>
       <a id="Yoneda[F[_],A]:Yoneda[F,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -173,10 +190,10 @@ elimination.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Yoneda.html"><span class="name">Yoneda</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="Yoneda.html"><span class="name">Yoneda</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.package@Yoneda[F[_],A]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.package@Yoneda[F[_],A]extendsSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -202,7 +219,7 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Coyoneda$.html"><span class="name">Coyoneda</span></a>
+        <a href="Coyoneda$.html"><span class="name">Coyoneda</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.free.package@Coyoneda" title="Permalink" target="_top">
@@ -219,10 +236,27 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Free$.html"><span class="name">Free</span></a>
+        <a href="Free$.html"><span class="name">Free</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.free.package@Free" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.free.FreeApplicative" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FreeApplicative"></a>
+      <a id="FreeApplicative:FreeApplicative"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FreeApplicative$.html"><span class="name">FreeApplicative</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.package@FreeApplicative" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -253,7 +287,7 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Yoneda$.html"><span class="name">Yoneda</span></a>
+        <a href="Yoneda$.html"><span class="name">Yoneda</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.free.package@Yoneda" title="Permalink" target="_top">
@@ -271,9 +305,9 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>

@@ -28,11 +28,11 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="Foldable$.html" title="Go to companion"><img src="../lib/trait_to_object_big.png" /></a>
+        <a href="Foldable$.html" title="See companion object"><img src="../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="package.html" class="extype" name="cats">cats</a></p>
-        <h1><a href="Foldable$.html" title="Go to companion">Foldable</a></h1><h3><span class="morelinks"><div>
+        <h1><a href="Foldable$.html" title="See companion object">Foldable</a></h1><h3><span class="morelinks"><div>
             Related Docs:
-            <a href="Foldable$.html" title="See companion">object Foldable</a>
+            <a href="Foldable$.html" title="See companion object">object Foldable</a>
             | <a href="package.html" class="extype" name="cats">package cats</a>
           </div></span></h3><span class="permalink">
       <a href="../index.html#cats.Foldable" title="Permalink" target="_top">
@@ -47,7 +47,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Foldable</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">Foldable</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -55,14 +55,14 @@
 methods will fold together (combine) the values contained in the
 collection to produce a single result. Most collection types have
 <code>foldLeft</code> methods, which will usually be used by the associationed
-<code>Fold[_]</code> instance.</p><p>Foldable[F] is implemented in terms of two basic methods:</p><ul><li><code>foldLeft(fa, b)(f)</code> eagerly folds <code>fa</code> from left-to-right.</li><li><code>foldLazy(fa, lb)(f)</code> lazily folds <code>fa</code> from right-to-left.</li></ul><p>Beyond these it provides many other useful methods related to
+<code>Fold[_]</code> instance.</p><p>Foldable[F] is implemented in terms of two basic methods:</p><ul><li><code>foldLeft(fa, b)(f)</code> eagerly folds <code>fa</code> from left-to-right.</li><li><code>foldLazy(fa, b)(f)</code> lazily folds <code>fa</code> from right-to-left.</li></ul><p>Beyond these it provides many other useful methods related to
 folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fold.pdf" target="_blank">A tutorial on the universality and expressiveness of fold</a>
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Foldable.scala" target="_blank">Foldable.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>, <a href="data/OrInstances$OrInstances.html" class="extype" name="cats.data.OrInstances.OrInstances">OrInstances</a>, <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a></div>
+            <div class="subClasses hiddenContent"><a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>, <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>, <a href="data/XorInstances$XorInstances.html" class="extype" name="cats.data.XorInstances.XorInstances">XorInstances</a></div>
           </div></div>
         
 
@@ -80,7 +80,7 @@ folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fol
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.Foldable"><span>Foldable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.Foldable"><span>Foldable</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -104,28 +104,7 @@ folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fol
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="cats.Foldable#foldLazy" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="foldLazy[A,B](fa:F[A],b:cats.Lazy[B])(f:A=&gt;cats.Fold[B]):cats.Lazy[B]"></a>
-      <a id="foldLazy[A,B](F[A],Lazy[B])((A)⇒Fold[B]):Lazy[B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">foldLazy</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.foldLazy.A">A</span>]</span>, <span name="b">b: <a href="Lazy.html" class="extype" name="cats.Lazy">Lazy</a>[<span class="extype" name="cats.Foldable.foldLazy.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.foldLazy.A">A</span>) ⇒ <a href="Fold.html" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.Foldable.foldLazy.B">B</span>]</span>)</span><span class="result">: <a href="Lazy.html" class="extype" name="cats.Lazy">Lazy</a>[<span class="extype" name="cats.Foldable.foldLazy.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.Foldable@foldLazy[A,B](fa:F[A],b:cats.Lazy[B])(f:A=&gt;cats.Fold[B]):cats.Lazy[B]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Right associative lazy fold on <code>F</code> using the folding function 'f'.</p><div class="fullcomment"><div class="comment cmt"><p>Right associative lazy fold on <code>F</code> using the folding function 'f'.</p><p>This method evaluates <code>b</code> lazily (in some cases it will not be
-needed), and returns a lazy value. We are using <code>A =&gt; Fold[B]</code> to
-support laziness in a stack-safe way.</p><p>For more detailed information about how this method works see the
-documentation for <code>Fold[_]</code>.
-</p></div></div>
-    </li><li name="cats.Foldable#foldLeft" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="cats.Foldable#foldLeft" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="foldLeft[A,B](fa:F[A],b:B)(f:(B,A)=&gt;B):B"></a>
       <a id="foldLeft[A,B](F[A],B)((B,A)⇒B):B"></a>
       <h4 class="signature">
@@ -142,6 +121,23 @@ documentation for <code>Fold[_]</code>.
       </a>
     </span>
       <p class="shortcomment cmt">Left associative fold on 'F' using the function 'f'.</p>
+    </li><li name="cats.Foldable#partialFold" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="partialFold[A,B](fa:F[A])(f:A=&gt;cats.Fold[B]):cats.Fold[B]"></a>
+      <a id="partialFold[A,B](F[A])((A)⇒Fold[B]):Fold[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partialFold</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.partialFold.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.partialFold.A">A</span>) ⇒ <a href="Fold.html" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.Foldable.partialFold.B">B</span>]</span>)</span><span class="result">: <a href="Fold.html" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.Foldable.partialFold.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Foldable@partialFold[A,B](fa:F[A])(f:A=&gt;cats.Fold[B]):cats.Fold[B]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Low-level method that powers <code>foldLazy</code>.</p>
     </li></ol>
             </div>
 
@@ -156,7 +152,7 @@ documentation for <code>Fold[_]</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@!=(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -173,7 +169,7 @@ documentation for <code>Fold[_]</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@##():Int" title="Permalink" target="_top">
@@ -190,7 +186,7 @@ documentation for <code>Fold[_]</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@==(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -224,7 +220,7 @@ documentation for <code>Fold[_]</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@clone():Object" title="Permalink" target="_top">
@@ -265,7 +261,7 @@ a <code>Foldable[F[G]]</code> instance.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -282,7 +278,7 @@ a <code>Foldable[F[G]]</code> instance.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@equals(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -299,7 +295,7 @@ a <code>Foldable[F[G]]</code> instance.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@finalize():Unit" title="Permalink" target="_top">
@@ -313,6 +309,24 @@ a <code>Foldable[F[G]]</code> instance.</p>
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.Foldable#find" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="find[A](fa:F[A])(f:A=&gt;Boolean):Option[A]"></a>
+      <a id="find[A](F[A])((A)⇒Boolean):Option[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">find</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.find.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.find.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.Foldable.find.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Foldable@find[A](fa:F[A])(f:A=&gt;Boolean):Option[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">find the first element matching the predicate, if one exists
+</p>
     </li><li name="cats.Foldable#fold" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="fold[A](fa:F[A])(implicitA:cats.Monoid[A]):A"></a>
       <a id="fold[A](F[A])(Monoid[A]):A"></a>
@@ -350,6 +364,27 @@ a <code>Foldable[F[G]]</code> instance.</p>
 to get a <code>Monoid[G[A]]</code> instance.</p><p>For example:</p><pre><span class="kw">val</span> F = Foldable[<span class="std">List</span>]
 F.foldK(<span class="std">List</span>(<span class="num">1</span> :: <span class="num">2</span> :: Nil, <span class="num">3</span> :: <span class="num">4</span> :: <span class="num">5</span> :: Nil))
 <span class="cmt">// List(1, 2, 3, 4, 5)</span></pre></div></div>
+    </li><li name="cats.Foldable#foldLazy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldLazy[A,B](fa:F[A],lb:cats.Lazy[B])(f:A=&gt;cats.Fold[B]):cats.Lazy[B]"></a>
+      <a id="foldLazy[A,B](F[A],Lazy[B])((A)⇒Fold[B]):Lazy[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldLazy</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.foldLazy.A">A</span>]</span>, <span name="lb">lb: <a href="Lazy.html" class="extype" name="cats.Lazy">Lazy</a>[<span class="extype" name="cats.Foldable.foldLazy.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.foldLazy.A">A</span>) ⇒ <a href="Fold.html" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.Foldable.foldLazy.B">B</span>]</span>)</span><span class="result">: <a href="Lazy.html" class="extype" name="cats.Lazy">Lazy</a>[<span class="extype" name="cats.Foldable.foldLazy.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Foldable@foldLazy[A,B](fa:F[A],lb:cats.Lazy[B])(f:A=&gt;cats.Fold[B]):cats.Lazy[B]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Right associative lazy fold on <code>F</code> using the folding function 'f'.</p><div class="fullcomment"><div class="comment cmt"><p>Right associative lazy fold on <code>F</code> using the folding function 'f'.</p><p>This method evaluates <code>b</code> lazily (in some cases it will not be
+needed), and returns a lazy value. We are using <code>A =&gt; Fold[B]</code> to
+support laziness in a stack-safe way.</p><p>For more detailed information about how this method works see the
+documentation for <code>Fold[_]</code>.
+</p></div></div>
     </li><li name="cats.Foldable#foldMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="foldMap[A,B](fa:F[A])(f:A=&gt;B)(implicitB:cats.Monoid[B]):B"></a>
       <a id="foldMap[A,B](F[A])((A)⇒B)(Monoid[B]):B"></a>
@@ -414,7 +449,7 @@ performance reasons.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@hashCode():Int" title="Permalink" target="_top">
@@ -431,7 +466,7 @@ performance reasons.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
@@ -448,7 +483,7 @@ performance reasons.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -465,7 +500,7 @@ performance reasons.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@notify():Unit" title="Permalink" target="_top">
@@ -482,7 +517,7 @@ performance reasons.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@notifyAll():Unit" title="Permalink" target="_top">
@@ -499,7 +534,7 @@ performance reasons.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">sequence_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>[<span class="extype" name="cats.Foldable.sequence_.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.sequence_.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">sequence_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>[<span class="extype" name="cats.Foldable.sequence_.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.sequence_.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$1:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
@@ -553,7 +588,7 @@ F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span 
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">traverse_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.traverse_.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.traverse_.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.traverse_.G">G</span>[<span class="extype" name="cats.Foldable.traverse_.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.traverse_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.traverse_.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">traverse_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.traverse_.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.traverse_.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.traverse_.G">G</span>[<span class="extype" name="cats.Foldable.traverse_.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.traverse_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.traverse_.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@traverse_[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitG:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
@@ -577,7 +612,7 @@ needed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@wait():Unit" title="Permalink" target="_top">
@@ -600,7 +635,7 @@ needed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
@@ -623,7 +658,7 @@ needed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@wait(x$1:Long):Unit" title="Permalink" target="_top">
@@ -646,10 +681,14 @@ needed.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.5/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>
