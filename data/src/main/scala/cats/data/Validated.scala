@@ -156,14 +156,14 @@ object Validated extends ValidatedInstances with ValidatedFunctions{
 
 
 sealed abstract class ValidatedInstances extends ValidatedInstances1 {
-  implicit def validatedOrder[A: Order, B: Order]: Order[A Validated B] = new Order[A Validated B] {
-    def compare(x: A Validated B, y: A Validated B): Int = x compare y
-    override def partialCompare(x: A Validated B, y: A Validated B): Double = x partialCompare y
-    override def eqv(x: A Validated B, y: A Validated B): Boolean = x === y
+  implicit def validatedOrder[A: Order, B: Order]: Order[Validated[A,B]] = new Order[Validated[A,B]] {
+    def compare(x: Validated[A,B], y: Validated[A,B]): Int = x compare y
+    override def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
+    override def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
   }
 
-  implicit def validatedShow[A, B](implicit A: Show[A], B: Show[B]): Show[A Validated B] = new Show[A Validated B] {
-    def show(f: A Validated B): String = f.show
+  implicit def validatedShow[A, B](implicit A: Show[A], B: Show[B]): Show[Validated[A,B]] = new Show[Validated[A,B]] {
+    def show(f: Validated[A,B]): String = f.show
   }
 
   implicit def validatedInstances[E: Semigroup]: ValidatedInstances[E] = new ValidatedInstances[E]
@@ -190,35 +190,35 @@ sealed abstract class ValidatedInstances extends ValidatedInstances1 {
 }
 
 sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
-  implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[A Validated B] = new PartialOrder[A Validated B] {
-    def partialCompare(x: A Validated B, y: A Validated B): Double = x partialCompare y
-    override def eqv(x: A Validated B, y: A Validated B): Boolean = x === y
+  implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A,B]] = new PartialOrder[Validated[A,B]] {
+    def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
+    override def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
   }
 }
 
 sealed abstract class ValidatedInstances2 {
-  implicit def xorEq[A: Eq, B: Eq]: Eq[A Validated B] = new Eq[A Validated B] {
-    def eqv(x: A Validated B, y: A Validated B): Boolean = x === y
+  implicit def xorEq[A: Eq, B: Eq]: Eq[Validated[A,B]] = new Eq[Validated[A,B]] {
+    def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
   }
 }
 
 trait ValidatedFunctions {
-  def invalid[A, B](a: A): A Validated B = Validated.Invalid(a)
+  def invalid[A, B](a: A): Validated[A,B] = Validated.Invalid(a)
 
-  def valid[A, B](b: B): A Validated B = Validated.Valid(b)
+  def valid[A, B](b: B): Validated[A,B] = Validated.Valid(b)
 
   /**
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
    * the resulting `Validated`. Uncaught exceptions are propagated.
    *
    * For example: {{{
-   * val result: NumberFormatException Validated Int = fromTryCatch[NumberFormatException] { "foo".toInt }
+   * val result: Validated[NumberFormatException, Int] = fromTryCatch[NumberFormatException] { "foo".toInt }
    * }}}
    */
   def fromTryCatch[T >: Null <: Throwable]: FromTryCatchAux[T] = new FromTryCatchAux[T]
 
   final class FromTryCatchAux[T] private[ValidatedFunctions] {
-    def apply[A](f: => A)(implicit T: ClassTag[T]): T Validated A = {
+    def apply[A](f: => A)(implicit T: ClassTag[T]): Validated[T, A] = {
       try {
         valid(f)
       } catch {
@@ -229,22 +229,22 @@ trait ValidatedFunctions {
   }
 
   /**
-   * Converts a `Try[A]` to a `Throwable Validated A`.
+   * Converts a `Try[A]` to a `Validated[Throwable, A]`.
    */
-  def fromTry[A](t: Try[A]): Throwable Validated A = t match {
+  def fromTry[A](t: Try[A]): Validated[Throwable, A] = t match {
     case Failure(e) => invalid(e)
     case Success(v) => valid(v)
   }
 
   /**
-   * Converts an `Either[A, B]` to an `A Validated B`.
+   * Converts an `Either[A, B]` to an `Validated[A,B]`.
    */
-  def fromEither[A, B](e: Either[A, B]): A Validated B = e.fold(invalid, valid)
+  def fromEither[A, B](e: Either[A, B]): Validated[A,B] = e.fold(invalid, valid)
 
   /**
-   * Converts an `Option[B]` to an `A Validated B`, where the provided `ifNone` values is returned on
+   * Converts an `Option[B]` to an `Validated[A,B]`, where the provided `ifNone` values is returned on
    * the invalid of the `Validated` when the specified `Option` is `None`.
    */
-  def fromOption[A, B](o: Option[B], ifNone: => A): A Validated B = o.fold(invalid[A, B](ifNone))(valid)
+  def fromOption[A, B](o: Option[B], ifNone: => A): Validated[A,B] = o.fold(invalid[A, B](ifNone))(valid)
 }
 
