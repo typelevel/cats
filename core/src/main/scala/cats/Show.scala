@@ -3,7 +3,11 @@ package cats
 import cats.functor.Contravariant
 
 /**
- * A typeclass to provide textual representation
+ * A typeclass to provide textual representation. It is meant to be a
+ * better "toString". Whereas toString exists for any Object,
+ * regardless of whether or not the creator of the class explicitly
+ * made a toString method, a Show instance will only exist if someone
+b * explicitly provided one.
  */
 trait Show[T] extends Serializable {
   def show(f: T): String
