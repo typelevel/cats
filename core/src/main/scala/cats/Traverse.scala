@@ -19,7 +19,7 @@ import simulacrum._
   /**
    * given a function which returns a G effect, thread this effect
    * through the running of this function on all the values in F,
-   * returning an F[A] in a F context
+   * returning an F[A] in a G context
    */
   def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
 
@@ -37,7 +37,7 @@ def traverseU[A, GB](fa: F[A])(f: A => GB)(implicit U: Unapply[Applicative, GB])
     traverse(fga)(ga => ga)
 
   /**
-   * behaves just like sequence, but uses [[Unapply]] to find the Applicative instace for G
+   * behaves just like sequence, but uses [[Unapply]] to find the Applicative instance for G
    */
   def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative,GA]): U.M[F[U.A]] =
     traverse(fga)(U.subst)(U.TC)

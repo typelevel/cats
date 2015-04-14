@@ -7,7 +7,7 @@ import cats.functor.Contravariant
  * better "toString". Whereas toString exists for any Object,
  * regardless of whether or not the creator of the class explicitly
  * made a toString method, a Show instance will only exist if someone
-b * explicitly provided one.
+ * explicitly provided one.
  */
 trait Show[T] extends Serializable {
   def show(f: T): String
