@@ -33,7 +33,7 @@ sealed abstract class Lazy[A] extends Product with Serializable { self =>
   def value: A
 
   /**
-   * Given a lazy value, create a new one which will cached
+   * Given a lazy value, create a new one which will cache
    * (i.e. memoize) its value.
    *
    * The practical effect of this method is to convert by-name
