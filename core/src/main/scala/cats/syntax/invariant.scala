@@ -3,8 +3,13 @@ package syntax
 
 import cats.functor.Invariant
 
-trait InvariantSyntax {
-  implicit def invariantSyntax[F[_]: Invariant, A](fa: F[A]): InvariantOps[F, A] =
+trait InvariantSyntax1 {
+  implicit def invariantSyntaxU[FA](fa: FA)(implicit U: Unapply[Invariant, FA]): InvariantOps[U.M, U.A] =
+    new InvariantOps(U.subst(fa))(U.TC)
+}
+
+trait InvariantSyntax extends InvariantSyntax1 {
+  implicit def invariantSyntax[F[_] : Invariant, A](fa: F[A]): InvariantOps[F, A] =
     new InvariantOps(fa)
 }
 
