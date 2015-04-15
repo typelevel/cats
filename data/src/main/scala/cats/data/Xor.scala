@@ -6,15 +6,15 @@ import scala.util.{Success, Failure, Try}
 
 /** Represents a right-biased disjunction that is either an `A` or a `B`.
  *
- * An instance of `A` [[Xor]] `B` is either a [[Xor.Left Left]]`[A]` or a [[Xor.Right Right]]`[B]`.
+ * An instance of `A [[Xor]] B` is either a `[[Xor.Left Left]][A]` or a `[[Xor.Right Right]][B]`.
  *
  * A common use of [[Xor]] is to explicitly represent the possibility of failure in a result as opposed to
  * throwing an exception.  By convention, [[Xor.Left Left]] is used for errors and [[Xor.Right Right]] is reserved for successes.
  * For example, a function that attempts to parse an integer from a string may have a return type of
- * `NumberFormatException` [[Xor]] `Int`. However, since there is no need to actually throw an exception, the type (`A`)
+ * `NumberFormatException [[Xor]] Int`. However, since there is no need to actually throw an exception, the type (`A`)
  * chosen for the "left" could be any type representing an error and has no need to actually extend `Exception`.
  *
- * `A` [[Xor]] `B` is isomorphic to `scala.Either[A, B]`, but [[Xor]] is right-biased, so methods such as `map` and
+ * `A [[Xor]] B` is isomorphic to `scala.Either[A, B]`, but [[Xor]] is right-biased, so methods such as `map` and
  * `flatMap` apply only in the context of the "right" case. This right bias makes [[Xor]] more convenient to use
  * than `scala.Either` in a monadic context. Methods such as `swap`, and `leftMap` provide functionality
  * that `scala.Either` exposes through left projections.
@@ -47,6 +47,8 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def ensure[AA >: A](ifLeft: => AA)(f: B => Boolean): AA Xor B =
     fold(_ => this, b => if (f(b)) this else Xor.Left(ifLeft))
+
+  def toIor: A Ior B = fold(Ior.left, Ior.right)
 
   def toEither: Either[A, B] = fold(Left(_), Right(_))
 
@@ -104,6 +106,17 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
     fold(_ => Fold.Pass, f)
 
   def merge[AA >: A](implicit ev: B <:< AA): AA = fold(identity, ev.apply)
+
+  final def append[AA >: A, BB >: B](that: AA Xor BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Xor BB = this match {
+    case Xor.Left(a1) => that match {
+      case Xor.Left(a2) => Xor.Left(AA.combine(a1, a2))
+      case Xor.Right(b2) => Xor.Left(a1)
+    }
+    case Xor.Right(b1) => that match {
+      case Xor.Left(a2) => Xor.Left(a2)
+      case Xor.Right(b2) => Xor.Right(BB.combine(b1, b2))
+    }
+  }
 
   def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String = fold(
     a => s"Xor.Left(${AA.show(a)})",

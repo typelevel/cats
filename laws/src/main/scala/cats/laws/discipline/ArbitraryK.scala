@@ -1,7 +1,7 @@
 package cats
 package laws.discipline
 
-import cats.data.{Cokleisli, Kleisli, Validated, Xor, Const}
+import cats.data.{Cokleisli, Kleisli, Validated, Xor, Ior, Const}
 import org.scalacheck.Arbitrary
 import cats.laws.discipline.arbitrary._
 import scala.concurrent.Future
@@ -61,6 +61,12 @@ object ArbitraryK {
 
   implicit def validB[B](implicit B: Arbitrary[B]): ArbitraryK[Validated[?, B]] =
     new ArbitraryK[Validated[?, B]] { def synthesize[A: Arbitrary]: Arbitrary[Validated[A, B]] = implicitly }
+
+  implicit def iorA[A](implicit A: Arbitrary[A]): ArbitraryK[A Ior ?] =
+    new ArbitraryK[A Ior ?] { def synthesize[B: Arbitrary]: Arbitrary[A Ior B] = implicitly }
+
+  implicit def iorB[B](implicit B: Arbitrary[B]): ArbitraryK[? Ior B] =
+    new ArbitraryK[? Ior B] { def synthesize[A: Arbitrary]: Arbitrary[A Ior B] = implicitly }
 
   implicit def kleisliA[F[_], A](implicit F: ArbitraryK[F]): ArbitraryK[Kleisli[F, A, ?]] =
     new ArbitraryK[Kleisli[F, A, ?]]{ def synthesize[B: Arbitrary]: Arbitrary[Kleisli[F, A, B]] = implicitly }
