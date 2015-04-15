@@ -1,10 +1,14 @@
 package cats
 package syntax
 
-trait FlatMapSyntax {
-  // TODO: use simulacrum instances eventually
-  implicit def flatMapSyntax[FA](fa: FA)(implicit U: Unapply[FlatMap, FA]): FlatMapOps[U.M, U.A] =
+trait FlatMapSyntax1 {
+  implicit def flatMapSyntaxU[FA](fa: FA)(implicit U: Unapply[FlatMap, FA]): FlatMapOps[U.M, U.A] =
     new FlatMapOps[U.M, U.A](U.subst(fa))(U.TC)
+}
+
+trait FlatMapSyntax extends FlatMapSyntax1 {
+  implicit def flatMapSyntax[F[_]: FlatMap, A](fa: F[A]): FlatMapOps[F, A] =
+    new FlatMapOps(fa)
 
   implicit def flattenSyntax[F[_]: FlatMap, A](ffa: F[F[A]]): FlattenOps[F, A] =
     new FlattenOps[F, A](ffa)

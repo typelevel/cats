@@ -1,10 +1,14 @@
 package cats
 package syntax
 
-trait FoldableSyntax {
-  // TODO: use simulacrum instances eventually
-  implicit def foldableSyntax[FA](fa: FA)(implicit U: Unapply[Foldable,FA]): FoldableOps[U.M, U.A] =
+trait FoldableSyntax1 {
+  implicit def foldableSyntaxU[FA](fa: FA)(implicit U: Unapply[Foldable,FA]): FoldableOps[U.M, U.A] =
     new FoldableOps[U.M, U.A](U.subst(fa))(U.TC)
+}
+
+trait FoldableSyntax extends FoldableSyntax1 {
+  implicit def foldableSyntax[F[_] : Foldable, A](fa: F[A]): FoldableOps[F, A] =
+    new FoldableOps(fa)
 
   implicit def nestedFoldableSyntax[F[_]: Foldable, G[_], A](fga: F[G[A]]): NestedFoldableOps[F, G, A] =
     new NestedFoldableOps[F, G, A](fga)

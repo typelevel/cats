@@ -1,10 +1,15 @@
 package cats
 package syntax
 
-trait ApplySyntax {
-  // TODO: use simulacrum instances eventually
-  implicit def applySyntax[A](a: A)(implicit U: Unapply[Apply, A]) =
+trait ApplySyntax1 {
+  implicit def applySyntaxU[A](a: A)(implicit U: Unapply[Apply, A]): ApplyOps[U.M, U.A] =
     new ApplyOps[U.M, U.A](U.subst(a))(U.TC)
+}
+
+trait ApplySyntax extends ApplySyntax1 {
+  // TODO: use simulacrum instances eventually
+  implicit def applySyntax[F[_]: Apply, A](fa: F[A]): ApplyOps[F, A] = 
+    new ApplyOps(fa)
 }
 
 class ApplyOps[F[_], A](fa: F[A])(implicit F: Apply[F]) {
