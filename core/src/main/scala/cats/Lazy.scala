@@ -23,7 +23,7 @@ package cats
  */
 sealed abstract class Lazy[A] extends Product with Serializable { self =>
 
-  import Lazy.{byNeed, ByNeed, ByName, Eager}
+  import Lazy.{byNeed, ByNeed, ByName}
 
   /**
    * Obtain the underlying value from this lazy instance. If the value
