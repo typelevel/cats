@@ -8,7 +8,7 @@ trait ApplySyntax1 {
 
 trait ApplySyntax extends ApplySyntax1 {
   // TODO: use simulacrum instances eventually
-  implicit def applySyntax[F[_]: Apply, A](fa: F[A]): ApplyOps[F, A] = 
+  implicit def applySyntax[F[_]: Apply, A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps(fa)
 }
 
