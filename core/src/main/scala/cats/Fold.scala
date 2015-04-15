@@ -76,7 +76,7 @@ package cats
  * not stack-safe.)
  */
 sealed abstract class Fold[A] extends Product with Serializable {
-  import Fold.{Return, Continue, Pass}
+  import Fold.{Return, Continue}
 
   def complete(la: Lazy[A]): A =
     this match {
