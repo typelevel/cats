@@ -45,12 +45,22 @@ final case class OneAnd[A, F[_]](head: A, tail: F[A]) {
    */
   def foldRight[B](b: B)(f: (A,B) => B)(implicit foldable: Foldable[F]): B =
     f(head, foldable.foldRight(tail, b)(f))
+
+  def ===(that: OneAnd[A, F])(implicit A: Eq[A], FA: Eq[F[A]]): Boolean =
+    A.eqv(head, that.head) && FA.eqv(tail, that.tail)
+
+  def show(implicit A: Show[A], FA: Show[F[A]]): String =
+    s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
 trait OneAndInstances {
 
-  implicit def oneAndShow[A, F[_]](implicit showHead: Show[A], showTail: Show[F[A]]): Show[OneAnd[A, F]] =
-    Show.show[OneAnd[A, F]](x => s"OneAnd(${showHead.show(x.head)}, ${showTail.show(x.tail)})")
+  implicit def oneAndEq[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[A, F]] = new Eq[OneAnd[A, F]]{
+    def eqv(x: OneAnd[A, F], y: OneAnd[A, F]): Boolean = x === y
+  }
+
+  implicit def oneAndShow[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[A, F]] =
+    Show.show[OneAnd[A, F]](_.show)
 
   implicit def oneAndFunctor[F[_]](F: Functor[F]): Functor[OneAnd[?,F]] = new Functor[OneAnd[?,F]] {
     override def map[A, B](fa: OneAnd[A,F])(f: A => B) =
