@@ -64,9 +64,8 @@ type classes and data types.
 
 Initially Cats will support the following modules:
 
- * `core`: Almost exclusively definitions for widely-used type classes.
+ * `core`: Definitions for widely-used type classes and data types
  * `std`: Standard type class instances and other useful data types.
- * `data`: Data types and corresponding type class instances.
  * `laws`: The encoded laws for type classes, exported to assist third-party testing.
  * `tests`: Verifies the laws, and runs any other tests. Not published.
 

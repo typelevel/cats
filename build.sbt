@@ -57,7 +57,7 @@ lazy val disciplineDependencies = Seq(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, laws, data, free, std),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, laws, free, std),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -80,13 +80,13 @@ lazy val docs = project
   .settings(tutSettings)
   .settings(docSettings)
   .settings(tutSettings)
-  .dependsOn(core, std, data, free)
+  .dependsOn(core, std, free)
 
 lazy val cats = project.in(file("."))
   .settings(catsSettings)
   .settings(noPublishSettings)
-  .aggregate(macros, core, laws, tests, docs, data, free, std, bench)
-  .dependsOn(macros, core, laws, tests, docs, data, free, std, bench)
+  .aggregate(macros, core, laws, tests, docs, free, std, bench)
+  .dependsOn(macros, core, laws, tests, docs, free, std, bench)
 
 lazy val macros = project
   .settings(moduleName := "cats-macros")
@@ -99,7 +99,7 @@ lazy val core = project.dependsOn(macros)
     sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
   )
 
-lazy val laws = project.dependsOn(macros, core, data, free, std)
+lazy val laws = project.dependsOn(macros, core, free, std)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings)
   .settings(
@@ -115,7 +115,7 @@ lazy val std = project.dependsOn(macros, core)
     libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra-std_2.11-0.2.0-SNAPSHOT.jar"
   )
 
-lazy val tests = project.dependsOn(macros, core, data, free, std, laws)
+lazy val tests = project.dependsOn(macros, core, free, std, laws)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
@@ -125,15 +125,11 @@ lazy val tests = project.dependsOn(macros, core, data, free, std, laws)
     )
   )
 
-lazy val bench = project.dependsOn(macros, core, data, free, std, laws)
+lazy val bench = project.dependsOn(macros, core, free, std, laws)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
   .settings(noPublishSettings)
   .settings(jmhSettings)
-
-lazy val data = project.dependsOn(macros, core)
-  .settings(moduleName := "cats-data")
-  .settings(catsSettings)
 
 lazy val free = project.dependsOn(macros, core)
   .settings(moduleName := "cats-free")
