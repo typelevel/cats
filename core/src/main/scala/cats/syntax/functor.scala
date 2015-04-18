@@ -1,7 +1,12 @@
 package cats
 package syntax
 
-trait FunctorSyntax {
+trait FunctorSyntax1 {
+  implicit def functorSyntaxU[FA](fa: FA)(implicit U: Unapply[Functor,FA]): FunctorOps[U.M, U.A] =
+    new FunctorOps(U.subst(fa))(U.TC)
+}
+
+trait FunctorSyntax extends FunctorSyntax1 {
   // TODO: use simulacrum instances eventually
   implicit def functorSyntax[F[_]: Functor, A](fa: F[A]): FunctorOps[F, A] =
     new FunctorOps[F, A](fa)

@@ -1,10 +1,14 @@
 package cats
 package syntax
 
-trait CoflatMapSyntax {
-  // TODO: use simulacrum instances eventually
+trait CoflatMapSyntax1 {
+  implicit def coflatMapSyntaxU[FA](fa: FA)(implicit U: Unapply[CoflatMap, FA]): CoflatMapOps[U.M, U.A] =
+    new CoflatMapOps[U.M, U.A](U.subst(fa))(U.TC)
+}
+
+trait CoflatMapSyntax extends CoflatMapSyntax1 {
   implicit def coflatMapSyntax[F[_]: CoflatMap, A](fa: F[A]): CoflatMapOps[F, A] =
-    new CoflatMapOps[F, A](fa)
+    new CoflatMapOps(fa)
 }
 
 class CoflatMapOps[F[_], A](fa: F[A])(implicit F: CoflatMap[F]) {

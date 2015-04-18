@@ -1,8 +1,9 @@
-package cats
-package data
+package cats.data
+
+import cats._
 
 import scala.reflect.ClassTag
-import scala.util.{Success, Failure, Try}
+import scala.util.{Failure, Success, Try}
 
 /** Represents a right-biased disjunction that is either an `A` or a `B`.
  *
