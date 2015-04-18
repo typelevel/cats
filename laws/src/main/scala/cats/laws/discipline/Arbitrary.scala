@@ -19,6 +19,9 @@ object arbitrary {
   implicit def xorArbitrary[A, B](implicit A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[A Xor B] =
     Arbitrary(Gen.oneOf(A.arbitrary.map(Xor.left), B.arbitrary.map(Xor.right)))
 
+  implicit def xorTArbitrary[F[_], A, B](implicit F: ArbitraryK[F], A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[XorT[F, A, B]] =
+    Arbitrary(F.synthesize[A Xor B].arbitrary.map(XorT(_)))
+
   implicit def validatedArbitrary[A, B](implicit A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[Validated[A, B]] =
     Arbitrary(Gen.oneOf(A.arbitrary.map(Validated.invalid), B.arbitrary.map(Validated.valid)))
 
