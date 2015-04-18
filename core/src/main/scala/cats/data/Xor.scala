@@ -65,9 +65,15 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
     case Xor.Right(b) => Xor.Right(fb(b))
   }
 
-  def map[D](f: B => D): A Xor D = bimap(identity, f)
+  def map[D](f: B => D): A Xor D = this match {
+    case l @ Xor.Left(_) => l
+    case Xor.Right(b)    => Xor.Right(f(b))
+  }
 
-  def leftMap[C](f: A => C): C Xor B = bimap(f, identity)
+  def leftMap[C](f: A => C): C Xor B = this match {
+    case Xor.Left(a)      => Xor.Left(f(a))
+    case r @ Xor.Right(_) => r
+  }
 
   def flatMap[AA >: A, D](f: B => AA Xor D): AA Xor D = this match {
     case l @ Xor.Left(_) => l
