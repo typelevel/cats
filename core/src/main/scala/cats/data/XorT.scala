@@ -93,11 +93,14 @@ trait XorTFunctions {
 }
 
 abstract class XorTInstances extends XorTInstances1 {
+
+  /* TODO violates right absorbtion, right distributivity, and left distributivity -- re-enable when MonadCombine laws are split in to weak/strong
   implicit def xorTMonadCombine[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadCombine[XorT[F, L, ?]] = {
     implicit val F0 = F
     implicit val L0 = L
     new XorTMonadCombine[F, L] { implicit val F = F0; implicit val L = L0 }
   }
+  */
 
   implicit def xorTEq[F[_], L, R](implicit e: Eq[F[L Xor R]]): Eq[XorT[F, L, R]] =
     // TODO Use Eq.instance on next algebra upgrade
@@ -110,10 +113,22 @@ abstract class XorTInstances extends XorTInstances1 {
 }
 
 private[data] abstract class XorTInstances1 extends XorTInstances2 {
+  /* TODO violates monadFilter right empty law -- re-enable when MonadFilter laws are split in to weak/strong
   implicit def xorTMonadFilter[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadFilter[XorT[F, L, ?]] = {
     implicit val F0 = F
     implicit val L0 = L
     new XorTMonadFilter[F, L] { implicit val F = F0; implicit val L = L0 }
+  }
+  */
+
+ /* TODO delete this when MonadCombine instance is re-enabled */
+ implicit def xorTMonoidK[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonoidK[XorT[F, L, ?]] = {
+    implicit val F0 = F
+    implicit val L0 = L
+    new MonoidK[XorT[F, L, ?]] with XorTSemigroupK[F, L] {
+      implicit val F = F0; implicit val L = L0
+      def empty[A] = XorT.left(F.pure(L.empty))(F)
+    }
   }
 }
 
