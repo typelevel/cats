@@ -20,6 +20,9 @@ import simulacrum._
 trait FlatMap[F[_]] extends Apply[F] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
+  /**
+   * also commonly called join
+   */
   def flatten[A](ffa: F[F[A]]): F[A] =
     flatMap(ffa)(fa => fa)
 
