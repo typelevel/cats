@@ -1,4 +1,5 @@
-package cats.macros
+package cats
+package macros
 
 object Ops extends machinist.Ops {
 

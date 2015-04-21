@@ -1,8 +1,8 @@
 package cats
 package tests
 
-import std.all._
-import data._
+import cats.std.all._
+import cats.data._
 
 // the things we assert here are not so much important, what is
 // important is that this stuff compiles at all.

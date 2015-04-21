@@ -1,6 +1,6 @@
-package cats.tests
+package cats
+package tests
 
-import cats.Applicative
 import cats.data.Const
 import cats.laws.discipline.{ApplicativeTests, SerializableTests}
 

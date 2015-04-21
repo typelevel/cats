@@ -1,9 +1,11 @@
 package cats
-package laws.discipline
+package laws
+package discipline
 
 import cats.data.{Cokleisli, Kleisli, Validated, Xor, Ior, Const}
-import org.scalacheck.Arbitrary
 import cats.laws.discipline.arbitrary._
+import org.scalacheck.Arbitrary
+
 import scala.concurrent.Future
 
 trait ArbitraryK[F[_]] {

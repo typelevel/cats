@@ -1,6 +1,6 @@
-package cats.laws
+package cats
+package laws
 
-import cats.Comonad
 import cats.data.Cokleisli
 import cats.syntax.coflatMap._
 import cats.syntax.comonad._

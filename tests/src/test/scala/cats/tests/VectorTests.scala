@@ -1,6 +1,6 @@
-package cats.tests
+package cats
+package tests
 
-import cats.MonadCombine
 import cats.laws.discipline.{MonadCombineTests, SerializableTests}
 
 class VectorTests extends CatsSuite {

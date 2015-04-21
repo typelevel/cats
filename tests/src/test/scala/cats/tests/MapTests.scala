@@ -1,6 +1,6 @@
-package cats.tests
+package cats
+package tests
 
-import cats.FlatMap
 import cats.laws.discipline.{FlatMapTests, SerializableTests}
 
 class MapTests extends CatsSuite {

@@ -1,7 +1,7 @@
-package cats.laws
+package cats
+package laws
 package discipline
 
-import cats.{CoflatMap, Eq}
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws

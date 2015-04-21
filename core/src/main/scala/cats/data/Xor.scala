@@ -1,6 +1,5 @@
-package cats.data
-
-import cats._
+package cats
+package data
 
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}

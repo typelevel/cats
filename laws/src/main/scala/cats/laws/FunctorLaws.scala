@@ -1,6 +1,6 @@
-package cats.laws
+package cats
+package laws
 
-import cats.Functor
 import cats.syntax.functor._
 
 /**

@@ -1,6 +1,6 @@
-package cats.laws
+package cats
+package laws
 
-import cats.MonadFilter
 import cats.syntax.flatMap._
 
 /**

@@ -1,7 +1,6 @@
 package cats
 package std
 
-
 trait MapInstances extends algebra.std.MapInstances {
 
   implicit def MapShow[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =

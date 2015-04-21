@@ -1,4 +1,5 @@
-package cats.tests
+package cats
+package tests
 
 import cats.arrow.Arrow
 import cats.data.{Cokleisli, NonEmptyList}
@@ -6,7 +7,6 @@ import cats.functor.Profunctor
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.{Applicative, Eq}
 import org.scalacheck.Arbitrary
 
 class CokleisliTests extends CatsSuite {

@@ -1,4 +1,5 @@
-package cats.syntax
+package cats
+package syntax
 
 trait AllSyntax
     extends ApplySyntax

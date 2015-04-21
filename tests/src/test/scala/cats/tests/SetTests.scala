@@ -1,6 +1,6 @@
-package cats.tests
+package cats
+package tests
 
-import cats.MonoidK
 import cats.laws.discipline.{MonoidKTests, SerializableTests}
 
 class SetTests extends CatsSuite {

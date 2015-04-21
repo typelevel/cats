@@ -1,6 +1,5 @@
-package cats.laws
-
-import cats.Alternative
+package cats
+package laws
 
 import cats.syntax.all._
 

@@ -1,4 +1,5 @@
-package cats.std
+package cats
+package std
 
 trait AllInstances
   extends FunctionInstances

@@ -1,4 +1,5 @@
-package cats.data
+package cats
+package data
 
 import cats.arrow.{Arrow, Split}
 import cats.functor.Profunctor
