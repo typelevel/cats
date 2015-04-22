@@ -1,4 +1,5 @@
-package cats.laws
+package cats
+package laws
 
 import cats.functor.Invariant
 import cats.syntax.invariant._

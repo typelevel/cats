@@ -1,6 +1,6 @@
-package cats.laws
+package cats
+package laws
 
-import cats.FlatMap
 import cats.data.Kleisli
 import cats.syntax.apply._
 import cats.syntax.flatMap._

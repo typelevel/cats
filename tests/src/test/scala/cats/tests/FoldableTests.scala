@@ -1,6 +1,5 @@
-package cats.tests
-
-import cats._
+package cats
+package tests
 
 class FoldableTests extends CatsSuite {
   import Fold.{Continue, Return, Pass}

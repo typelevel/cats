@@ -1,12 +1,11 @@
-package cats.tests
+package cats
+package tests
 
-import cats.Applicative
 import cats.data.Validated
 import cats.std.string._
 import cats.laws.discipline.{ApplicativeTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
-import cats._
 
 class ValidatedTests extends CatsSuite {
 

@@ -1,4 +1,5 @@
-package cats.tests
+package cats
+package tests
 
 import cats.std.AllInstances
 import cats.syntax.AllSyntax

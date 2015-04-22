@@ -1,4 +1,5 @@
-package cats.laws
+package cats
+package laws
 
 import cats.arrow.Arrow
 import cats.std.function._

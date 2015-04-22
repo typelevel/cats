@@ -1,4 +1,5 @@
-package cats.laws
+package cats
+package laws
 package discipline
 
 import org.typelevel.discipline.Laws

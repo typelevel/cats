@@ -1,6 +1,6 @@
-package cats.laws
+package cats
+package laws
 
-import cats.MonadCombine
 import cats.syntax.all._
 
 /**

@@ -1,5 +1,6 @@
 package cats
-package laws.discipline
+package laws
+package discipline
 
 import algebra.Eq
 import org.scalacheck.Arbitrary

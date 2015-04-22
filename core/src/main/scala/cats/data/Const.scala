@@ -1,6 +1,5 @@
-package cats.data
-
-import cats._
+package cats
+package data
 
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`

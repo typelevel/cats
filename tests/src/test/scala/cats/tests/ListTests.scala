@@ -1,6 +1,6 @@
-package cats.tests
+package cats
+package tests
 
-import cats.{CoflatMap, MonadCombine}
 import cats.laws.discipline.{CoflatMapTests, MonadCombineTests, SerializableTests}
 
 class ListTests extends CatsSuite {

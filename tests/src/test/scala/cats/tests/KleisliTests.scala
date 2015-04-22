@@ -1,6 +1,6 @@
-package cats.tests
+package cats
+package tests
 
-import cats.{Applicative, Eq}
 import cats.arrow.Arrow
 import cats.data.Kleisli
 import cats.functor.Strong

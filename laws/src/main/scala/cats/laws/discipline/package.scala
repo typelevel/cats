@@ -1,7 +1,7 @@
-package cats.laws
+package cats
+package laws
 
 import algebra.laws._
-import cats.Eq
 import org.scalacheck.Prop
 
 package object discipline {

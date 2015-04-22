@@ -1,4 +1,6 @@
-package cats.laws.discipline
+package cats
+package laws
+package discipline
 
 import cats.data._
 import org.scalacheck.{Arbitrary, Gen}

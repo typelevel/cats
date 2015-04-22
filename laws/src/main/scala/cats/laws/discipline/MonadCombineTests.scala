@@ -1,7 +1,7 @@
-package cats.laws.discipline
+package cats
+package laws
+package discipline
 
-import cats.laws.MonadCombineLaws
-import cats.{MonadCombine, Eq}
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 

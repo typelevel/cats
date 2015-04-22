@@ -1,6 +1,6 @@
-package cats.tests
+package cats
+package tests
 
-import cats.Monad
 import cats.laws.discipline.{MonadTests, SerializableTests}
 
 class EitherTests extends CatsSuite {

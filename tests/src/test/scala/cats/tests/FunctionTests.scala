@@ -1,6 +1,6 @@
-package cats.tests
+package cats
+package tests
 
-import cats.{Comonad, Monad}
 import cats.arrow.Arrow
 import cats.laws.discipline._
 import cats.laws.discipline.eq._

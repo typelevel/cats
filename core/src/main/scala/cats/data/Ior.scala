@@ -1,6 +1,5 @@
-package cats.data
-
-import cats._
+package cats
+package data
 
 /** Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
  *

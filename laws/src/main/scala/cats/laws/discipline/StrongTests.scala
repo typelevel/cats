@@ -1,7 +1,7 @@
-package cats.laws
+package cats
+package laws
 package discipline
 
-import cats.Eq
 import cats.functor.Strong
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._

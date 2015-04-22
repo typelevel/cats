@@ -1,6 +1,6 @@
-package cats.tests
+package cats
+package tests
 
-import cats.{Comonad, Eq}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import scala.concurrent.Future

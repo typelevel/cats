@@ -1,4 +1,5 @@
-package cats.laws
+package cats
+package laws
 
 import java.io.{ ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream }
 
