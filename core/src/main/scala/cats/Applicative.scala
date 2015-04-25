@@ -12,7 +12,7 @@ import simulacrum._
  *
  * Must obey the laws defined in [[laws.ApplicativeLaws]].
  */
-trait Applicative[F[_]] extends Apply[F] { self =>
+@typeclass trait Applicative[F[_]] extends Apply[F] { self =>
   /**
    * `pure` lifts any value into the Applicative Functor
    *
@@ -42,10 +42,6 @@ trait Applicative[F[_]] extends Apply[F] { self =>
   def sequence[A, G[_]: Traverse](as: G[F[A]]): F[G[A]] =
     traverse(as)(a => a)
 
-}
-
-object Applicative {
-  def apply[F[_]](implicit ev: Applicative[F]): Applicative[F] = ev
 }
 
 trait CompositeApplicative[F[_],G[_]]

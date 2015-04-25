@@ -7,6 +7,7 @@ import simulacrum._
  *
  * Must obey the laws defined in [[laws.ApplyLaws]].
  */
+@typeclass(excludeParents=List("ApplyArityFunctions"))
 trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
 
   /**
@@ -44,10 +45,6 @@ trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
       def F: Apply[F] = self
       def G: Apply[G] = GG
     }
-}
-
-object Apply {
-  def apply[F[_]](implicit ev: Apply[F]): Apply[F] = ev
 }
 
 trait CompositeApply[F[_], G[_]]

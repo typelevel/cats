@@ -1,5 +1,6 @@
 package cats
 
+import simulacrum._
 import cats.functor.Contravariant
 
 /**
@@ -9,14 +10,11 @@ import cats.functor.Contravariant
  * made a toString method, a Show instance will only exist if someone
  * explicitly provided one.
  */
-trait Show[T] extends Serializable {
+@typeclass trait Show[T] extends Serializable {
   def show(f: T): String
 }
 
-
 object Show {
-  def apply[T](implicit ev: Show[T]): Show[T] = ev
-
   /** creates an instance of [[Show]] using the provided function */
   def show[A](f: A => String): Show[A] = new Show[A] {
     def show(a: A): String = f(a)

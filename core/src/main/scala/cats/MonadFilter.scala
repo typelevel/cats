@@ -9,7 +9,7 @@ import simulacrum._
  * us since it allows us to add a `filter` method to a Monad, which is
  * used when pattern matching or using guards in for comprehensions.
  */
-trait MonadFilter[F[_]] extends Monad[F] {
+@typeclass trait MonadFilter[F[_]] extends Monad[F] {
 
   def empty[A]: F[A]
 
@@ -18,9 +18,4 @@ trait MonadFilter[F[_]] extends Monad[F] {
 
   def filterM[A](fa: F[A])(f: A => F[Boolean]): F[A] =
     flatMap(fa)(a => flatMap(f(a))(b => if (b) pure(a) else empty[A]))
-}
-
-
-object MonadFilter {
-  def apply[F[_]](implicit ev: MonadFilter[F]): MonadFilter[F] = ev
 }

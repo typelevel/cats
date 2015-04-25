@@ -17,7 +17,7 @@ import simulacrum._
  *
  * Must obey the laws defined in [[laws.FlatMapLaws]].
  */
-trait FlatMap[F[_]] extends Apply[F] {
+@typeclass trait FlatMap[F[_]] extends Apply[F] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
   /**
@@ -41,8 +41,4 @@ trait FlatMap[F[_]] extends Apply[F] {
   def ifM[B](fa: F[Boolean])(ifTrue: => F[B], ifFalse: => F[B]): F[B] = {
     flatMap(fa)(if (_) ifTrue else ifFalse)
   }
-}
-
-object FlatMap {
-  def apply[F[_]](implicit ev: FlatMap[F]): FlatMap[F] = ev
 }
