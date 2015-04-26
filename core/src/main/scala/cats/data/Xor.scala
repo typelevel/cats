@@ -113,7 +113,7 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def merge[AA >: A](implicit ev: B <:< AA): AA = fold(identity, ev.apply)
 
-  final def append[AA >: A, BB >: B](that: AA Xor BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Xor BB = this match {
+  final def combine[AA >: A, BB >: B](that: AA Xor BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Xor BB = this match {
     case Xor.Left(a1) => that match {
       case Xor.Left(a2) => Xor.Left(AA.combine(a1, a2))
       case Xor.Right(b2) => Xor.Left(a1)
