@@ -20,7 +20,7 @@ trait AllSyntax
     with ProfunctorSyntax
     with SemigroupSyntax
     with SemigroupKSyntax
-    with ShowSyntax
+    with Show.ToShowOps
     with SplitSyntax
     with StrongSyntax
     with TraverseSyntax

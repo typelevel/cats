@@ -25,6 +25,7 @@ import simulacrum._
   /**
    * Combine two F[A] values.
    */
+  @op("<+>", alias=true)
   def combine[A](x: F[A], y: F[A]): F[A]
 
   /**
