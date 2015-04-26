@@ -12,46 +12,41 @@ trait MapInstances extends algebra.std.MapInstances {
     }
 
   implicit def mapInstance[K]: Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] =
-    new MapInstance[K]
-}
+    new Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] {
 
-class MapInstance[K]
-    extends Traverse[Map[K, ?]]
-    with FlatMap[Map[K, ?]]
-    with Apply[Map[K, ?]] {
+      def traverse[G[_] : Applicative, A, B](fa: Map[K, A])(f: (A) => G[B]): G[Map[K, B]] = {
+        val G = Applicative[G]
+        val gba = G.pure(Map.empty[K, B])
+        val gbb = fa.foldLeft(gba) { (buf, a) =>
+          G.map2(buf, f(a._2))({ case(x, y) => x + (a._1 -> y)})
+        }
+        G.map(gbb)(_.toMap)
+      }
 
-  def traverse[G[_] : Applicative, A, B](fa: Map[K, A])(f: (A) => G[B]): G[Map[K, B]] = {
-    val G = Applicative[G]
-    val gba = G.pure(Map.empty[K, B])
-    val gbb = fa.foldLeft(gba) { (buf, a) =>
-      G.map2(buf, f(a._2))({ case(x, y) => x + (a._1 -> y)})
+      override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =
+        fa.map { case (k, a) => (k, f(a)) }
+
+      override def map2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: (A, B) => Z): Map[K, Z] =
+        fa.flatMap { case (k, a) => fb.get(k).map(b => (k, f(a, b))) }
+
+      override def apply[A, B](fa: Map[K, A])(ff: Map[K, A => B]): Map[K, B] =
+        fa.flatMap { case (k, a) => ff.get(k).map(f => (k, f(a))) }
+
+      override def apply2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: Map[K, (A, B) => Z]): Map[K, Z] =
+        f.flatMap { case (k, f) =>
+          for { a <- fa.get(k); b <- fb.get(k) } yield (k, f(a, b))
+        }
+
+      def flatMap[A, B](fa: Map[K, A])(f: (A) => Map[K, B]): Map[K, B] =
+        fa.flatMap { case (k, a) => f(a).get(k).map((k, _)) }
+
+      def foldLeft[A, B](fa: Map[K, A], b: B)(f: (B, A) => B): B =
+        fa.foldLeft(b) { case (x, (k, a)) => f(x, a)}
+
+      override def foldRight[A, B](fa: Map[K, A], b: B)(f: (A, B) => B): B =
+        fa.foldRight(b) { case ((k, a), z) => f(a, z)}
+
+      def partialFold[A, B](fa: Map[K, A])(f: A => Fold[B]): Fold[B] =
+        Fold.partialIterate(fa.values)(f)
     }
-    G.map(gbb)(_.toMap)
-  }
-
-  override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =
-    fa.map { case (k, a) => (k, f(a)) }
-
-  override def map2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: (A, B) => Z): Map[K, Z] =
-    fa.flatMap { case (k, a) => fb.get(k).map(b => (k, f(a, b))) }
-
-  override def apply[A, B](fa: Map[K, A])(ff: Map[K, A => B]): Map[K, B] =
-    fa.flatMap { case (k, a) => ff.get(k).map(f => (k, f(a))) }
-
-  override def apply2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: Map[K, (A, B) => Z]): Map[K, Z] =
-    f.flatMap { case (k, f) =>
-      for { a <- fa.get(k); b <- fb.get(k) } yield (k, f(a, b))
-    }
-
-  def flatMap[A, B](fa: Map[K, A])(f: (A) => Map[K, B]): Map[K, B] =
-    fa.flatMap { case (k, a) => f(a).get(k).map((k, _)) }
-
-  def foldLeft[A, B](fa: Map[K, A], b: B)(f: (B, A) => B): B =
-    fa.foldLeft(b) { case (x, (k, a)) => f(x, a)}
-
-  override def foldRight[A, B](fa: Map[K, A], b: B)(f: (A, B) => B): B =
-    fa.foldRight(b) { case ((k, a), z) => f(a, z)}
-
-  def partialFold[A, B](fa: Map[K, A])(f: A => Fold[B]): Fold[B] =
-    Fold.partialIterate(fa.values)(f)
 }
