@@ -11,7 +11,7 @@ import simulacrum._
  * `foldLeft` methods, which will usually be used by the associationed
  * `Fold[_]` instance.
  *
-b * Foldable[F] is implemented in terms of two basic methods:
+ * Foldable[F] is implemented in terms of two basic methods:
  *
  *  - `foldLeft(fa, b)(f)` eagerly folds `fa` from left-to-right.
  *  - `foldLazy(fa, b)(f)` lazily folds `fa` from right-to-left.
