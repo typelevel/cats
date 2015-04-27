@@ -254,8 +254,9 @@ Previous sample used a effectful natural transformation but you might prefer fol
 
 Using an immutable `Map`, it's impossible to write a Natural Transformation using `foldMap` because you need to know the previous state of the `Map` and you don't have it. For this, you need to use the lower level `fold` function and fold the `Free` by yourself.
 
+```tut
 // Pure computation
-def runPure[A](program: KVStore[A], m: Map[String, A] = Map.empty[String, A]): Map[String, A] = program.fold(
+def compilePure[A](program: KVStore[A], m: Map[String, A] = Map.empty[String, A]): Map[String, A] = program.fold(
   _ => m,
   {
     // help a bit scalac due to type erasure
@@ -265,13 +266,13 @@ def runPure[A](program: KVStore[A], m: Map[String, A] = Map.empty[String, A]): M
     case Delete(key, next) => compilePure(next, m - key)
   }
 )
+```
 
 Here you can see a few of scalac limits with respect to pattern matching & JVM type erasure but nothing too hard to go around...
 
 
-```
-scala> val result: Map[String, Int] = compilePure(program)
-result: Map[String,Int] = Map(wild-cats -> 14)
+```tut
+val result: Map[String, Int] = compilePure(program)
 ```
 
 ## For the curious ones: what is Free in theory?
