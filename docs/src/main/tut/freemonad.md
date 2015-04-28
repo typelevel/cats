@@ -148,8 +148,9 @@ so it also means you can use your `Free` structure in a pure monadic way with `f
 def program: KVStore[Int] = for {
   _   <- put("wild-cats", 2)
   _   <- update[Int]("wild-cats", (_ + 12))
+  _   <- put("tame-cats", 5)
   id  <- get[Int]("wild-cats")
-  _   <- delete("wild-cats")
+  _   <- delete("tame-cats")
 } yield (id)
 ```
 
@@ -159,9 +160,11 @@ This looks like a Monadic flow but in fact, it just builds a recursive data stru
 Put("wild-cats", 2, 
   Get("wild-cats",
     Put("wild-cats", f(2),
-      Get("wild-cats",
-        Delete("wild-cats",
-          Return // to significate the end
+      Put("tame-cats", 5
+        Get("wild-cats",
+          Delete("tame-cats",
+            Return // to significate the end
+          )
         )
       )
     )
@@ -230,19 +233,6 @@ To run your `Free` with previous `impureCompiler`:
 
 ```tut
 val result: Id[Int] = program.foldMap(impureCompiler)
-```
-
-Let's run it for real:
-
-```
-scala> val result: Id[Int] = program.foldMap(impureCompiler)
-OP:Put(wild-cats,2,cats.free.Free$$anon$1@73541f26)
-OP:Put(alley-cats,23,cats.free.Free$$anon$1@7eb37763)
-OP:Get(wild-cats,<function1>)
-OP:Put(wild-cats,14,cats.free.Free$$anon$1@719c0f5b)
-OP:Get(wild-cats,<function1>)
-OP:Delete(alley-cats,cats.free.Free$$anon$1@3a55fa44)
-result: cats.Id[Int] = 14
 ```
 
 **An important aspect of `foldMap` is its stack-safety**: it evaluates each step of computation on the stack then unstack and restart. It will never overflow your stack (except if you do it yourself in your natural transformations). It's heap-intensive but stack-safety allows to use `Free` to represent infinite processes such as streams. 
