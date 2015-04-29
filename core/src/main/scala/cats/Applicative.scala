@@ -10,7 +10,7 @@ import simulacrum._
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  * Also: [[http://staff.city.ac.uk/~ross/papers/Applicative.pdf Applicative programming with effects]]
  *
- * Must obey the laws defined in [[laws.ApplicativeLaws]].
+ * Must obey the laws defined in cats.laws.ApplicativeLaws.
  */
 @typeclass trait Applicative[F[_]] extends Apply[F] { self =>
   /**

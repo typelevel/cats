@@ -5,7 +5,7 @@ import simulacrum._
 /**
  * Weaker version of Applicative[F]; has apply but not pure.
  *
- * Must obey the laws defined in [[laws.ApplyLaws]].
+ * Must obey the laws defined in cats.laws.ApplyLaws.
  */
 @typeclass(excludeParents=List("ApplyArityFunctions"))
 trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
