@@ -21,14 +21,14 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def map[C](f: B => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
     Kleisli(a => F.map(run(a))(f))
 
-  def mapK[N[_], C](f: F[B] => N[C]): Kleisli[N, A, C] =
+  def mapF[N[_], C](f: F[B] => N[C]): Kleisli[N, A, C] =
     Kleisli(run andThen f)
 
-  def flatMap[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
-    Kleisli(a => F.flatMap(run(a))(f))
-
-  def flatMapK[C](f: B => Kleisli[F, A, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
+  def flatMap[C](f: B => Kleisli[F, A, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     Kleisli((r: A) => F.flatMap[B, C](run(r))((b: B) => f(b).run(r)))
+
+  def flatMapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
+    Kleisli(a => F.flatMap(run(a))(f))
 
   def andThen[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     Kleisli((a: A) => F.flatMap(run(a))(f))
@@ -84,7 +84,7 @@ sealed abstract class KleisliInstances extends KleisliInstances0 {
       Kleisli.pure[F, A, B](x)
 
     def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
-      fa.flatMapK(f)
+      fa.flatMap(f)
   }
 }
 
@@ -97,7 +97,7 @@ sealed abstract class KleisliInstances0 extends KleisliInstances1 {
 
   implicit def kleisliFlatMap[F[_]: FlatMap, A]: FlatMap[Kleisli[F, A, ?]] = new FlatMap[Kleisli[F, A, ?]] {
     def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
-      fa.flatMapK(f)
+      fa.flatMap(f)
 
     def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
       fa.map(f)
