@@ -18,6 +18,13 @@ object Free {
     val f: C => Free[S, B]
   }
 
+  /** Free monad of the free functor (Coyoneda) of S.
+   *
+   * This can be useful because the monad for `Free` requires a functor, and
+   * Coyoneda provides a free functor.
+   */
+  type FreeC[S[_], A] = Free[Coyoneda[S, ?], A]
+
   def gosub[S[_], A, B](a0: () => Free[S, A])(f0: A => Free[S, B]): Free[S, B] =
     new Gosub[S, B] {
       type C = A
@@ -28,6 +35,24 @@ object Free {
   /** Suspends a value within a functor lifting it to a Free */
   def liftF[F[_], A](value: => F[A])(implicit F: Functor[F]): Free[F, A] =
     Suspend(F.map(value)(Pure[F, A]))
+
+  /** Lift a value into the free functor and then suspend it in `Free` */
+  def liftFC[F[_], A](value: => F[A]): FreeC[F, A] =
+    liftF[Coyoneda[F, ?], A](Coyoneda.lift(value))
+
+  /** Interpret a free monad over a free functor of `S` via natural transformation to monad `M`. */
+  def runFC[S[_], M[_], A](fa: FreeC[S, A])(f: S ~> M)(implicit M: Monad[M]): M[A] =
+    fa.foldMap[M](new (Coyoneda[S, ?] ~> M) {
+      def apply[B](ca: Coyoneda[S, B]): M[B] = M.map(f(ca.fi))(ca.k)
+    })
+
+  /** `Free[S, ?]` has a monad if `S` has a `Functor`. */
+  implicit def freeMonad[S[_]:Functor]: Monad[Free[S, ?]] =
+    new Monad[Free[S, ?]] {
+      def pure[A](a: A) = Pure(a)
+      override def map[A, B](fa: Free[S, A])(f: A => B) = fa map f
+      def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]) = a flatMap f
+    }
 }
 
 import Free._
