@@ -2,7 +2,7 @@ package cats
 package arrow
 
 /**
- * Must obey the laws defined in [[laws.ComposeLaws]].
+ * Must obey the laws defined in cats.laws.ComposeLaws.
  */
 trait Compose[F[_, _]] extends Serializable { self =>
   def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]

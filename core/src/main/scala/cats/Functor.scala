@@ -8,7 +8,7 @@ import functor.Contravariant
  *
  * The name is short for "covariant functor".
  *
- * Must obey the laws defined in [[laws.FunctorLaws]].
+ * Must obey the laws defined in cats.laws.FunctorLaws.
  */
 @typeclass trait Functor[F[_]] extends functor.Invariant[F] { self =>
   def map[A, B](fa: F[A])(f: A => B): F[B]
