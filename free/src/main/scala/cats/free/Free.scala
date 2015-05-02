@@ -33,11 +33,11 @@ object Free {
     }
 
   /** Suspends a value within a functor lifting it to a Free */
-  def liftF[F[_], A](value: => F[A])(implicit F: Functor[F]): Free[F, A] =
+  def liftF[F[_], A](value: F[A])(implicit F: Functor[F]): Free[F, A] =
     Suspend(F.map(value)(Pure[F, A]))
 
   /** Lift a value into the free functor and then suspend it in `Free` */
-  def liftFC[F[_], A](value: => F[A]): FreeC[F, A] =
+  def liftFC[F[_], A](value: F[A]): FreeC[F, A] =
     liftF[Coyoneda[F, ?], A](Coyoneda.lift(value))
 
   /** Interpret a free monad over a free functor of `S` via natural transformation to monad `M`. */
