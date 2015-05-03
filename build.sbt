@@ -85,8 +85,8 @@ lazy val docs = project
 lazy val cats = project.in(file("."))
   .settings(catsSettings)
   .settings(noPublishSettings)
-  .aggregate(macros, core, laws, tests, docs, free, std, bench)
-  .dependsOn(macros, core, laws, tests, docs, free, std, bench)
+  .aggregate(macros, core, laws, tests, docs, free, std, bench, state)
+  .dependsOn(macros, core, laws, tests, docs, free, std, bench, state)
 
 lazy val macros = project
   .settings(moduleName := "cats-macros")
@@ -134,6 +134,11 @@ lazy val bench = project.dependsOn(macros, core, free, std, laws)
 lazy val free = project.dependsOn(macros, core)
   .settings(moduleName := "cats-free")
   .settings(catsSettings)
+
+lazy val state = project.dependsOn(macros, core, free, tests % "test -> test")
+  .settings(moduleName := "cats-state")
+  .settings(catsSettings)
+  .settings(noPublishSettings)
 
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/non/cats")),
