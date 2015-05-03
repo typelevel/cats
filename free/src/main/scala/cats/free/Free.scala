@@ -20,14 +20,6 @@ object Free {
     val f: C => Free[S, B]
   }
 
-  /**
-   * Free monad of the free functor (Coyoneda) of S.
-   *
-   * This can be useful because the monad for `Free` requires a functor, and
-   * Coyoneda provides a free functor.
-   */
-  type FreeC[S[_], A] = Free[Coyoneda[S, ?], A]
-
   def gosub[S[_], A, B](a0: () => Free[S, A])(f0: A => Free[S, B]): Free[S, B] =
     new Gosub[S, B] {
       type C = A
