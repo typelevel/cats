@@ -16,5 +16,5 @@ trait MonoidKLaws[F[_]] extends SemigroupKLaws[F] {
 
 object MonoidKLaws {
   def apply[F[_]](implicit ev: MonoidK[F]): MonoidKLaws[F] =
-    new MonoidKLaws[F] { def F = ev }
+    new MonoidKLaws[F] { def F: MonoidK[F] = ev }
 }

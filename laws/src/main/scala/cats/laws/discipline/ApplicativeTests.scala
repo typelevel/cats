@@ -3,7 +3,8 @@ package laws
 package discipline
 
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 
 trait ApplicativeTests[F[_]] extends ApplyTests[F] {
   def laws: ApplicativeLaws[F]
@@ -18,10 +19,10 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
     implicit def ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
 
     new RuleSet {
-      def name = "applicative"
-      def bases = Nil
-      def parents = Seq(apply[A, B, C])
-      def props = Seq(
+      def name: String = "applicative"
+      def bases: Seq[(String, RuleSet)] = Nil
+      def parents: Seq[RuleSet] = Seq(apply[A, B, C])
+      def props: Seq[(String, Prop)] = Seq(
         "applicative identity" -> forAll(laws.applicativeIdentity[A] _),
         "applicative homomorphism" -> forAll(laws.applicativeHomomorphism[A, B] _),
         "applicative interchange" -> forAll(laws.applicativeInterchange[A, B] _),
@@ -33,5 +34,5 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
 
 object ApplicativeTests {
   def apply[F[_]: Applicative]: ApplicativeTests[F] =
-    new ApplicativeTests[F] { def laws = ApplicativeLaws[F] }
+    new ApplicativeTests[F] { def laws: ApplicativeLaws[F] = ApplicativeLaws[F] }
 }

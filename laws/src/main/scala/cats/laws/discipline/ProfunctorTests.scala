@@ -4,7 +4,8 @@ package discipline
 
 import cats.functor.Profunctor
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 import org.typelevel.discipline.Laws
 
 trait ProfunctorTests[F[_, _]] extends Laws {
@@ -17,10 +18,10 @@ trait ProfunctorTests[F[_, _]] extends Laws {
     EqFAG: Eq[F[A, G]]
   ): RuleSet =
     new RuleSet {
-      def name = "profunctor"
-      def bases = Nil
-      def parents = Nil
-      def props = Seq(
+      def name: String = "profunctor"
+      def bases: Seq[(String, RuleSet)] = Nil
+      def parents: Seq[RuleSet] = Nil
+      def props: Seq[(String, Prop)] = Seq(
         "profunctor identity" -> forAll(laws.profunctorIdentity[A, B] _),
         "profunctor composition" -> forAll(laws.profunctorComposition[A, B, C, D, E, G] _)
       )
@@ -29,5 +30,5 @@ trait ProfunctorTests[F[_, _]] extends Laws {
 
 object ProfunctorTests {
   def apply[F[_, _]: Profunctor]: ProfunctorTests[F] =
-    new ProfunctorTests[F] { def laws = ProfunctorLaws[F] }
+    new ProfunctorTests[F] { def laws: ProfunctorLaws[F] = ProfunctorLaws[F] }
 }

@@ -3,7 +3,8 @@ package laws
 package discipline
 
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 
 trait FunctorTests[F[_]] extends InvariantTests[F] {
   def laws: FunctorLaws[F]
@@ -16,10 +17,10 @@ trait FunctorTests[F[_]] extends InvariantTests[F] {
     implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
 
     new RuleSet {
-      def name = "functor"
-      def bases = Nil
-      def parents = Seq(invariant[A, B, C])
-      def props = Seq(
+      def name: String = "functor"
+      def bases: Seq[(String, RuleSet)] = Nil
+      def parents: Seq[RuleSet] = Seq(invariant[A, B, C])
+      def props: Seq[(String, Prop)] = Seq(
         "covariant identity" -> forAll(laws.covariantIdentity[A] _),
         "covariant composition" -> forAll(laws.covariantComposition[A, B, C] _)
       )
@@ -29,5 +30,5 @@ trait FunctorTests[F[_]] extends InvariantTests[F] {
 
 object FunctorTests {
   def apply[F[_]: Functor]: FunctorTests[F] =
-    new FunctorTests[F] { def laws = FunctorLaws[F] }
+    new FunctorTests[F] { def laws: FunctorLaws[F] = FunctorLaws[F] }
 }

@@ -15,5 +15,5 @@ trait MonadCombineLaws[F[_]] extends MonadFilterLaws[F] with AlternativeLaws[F] 
 
 object MonadCombineLaws {
   def apply[F[_]](implicit ev: MonadCombine[F]): MonadCombineLaws[F] =
-    new MonadCombineLaws[F] { def F = ev }
+    new MonadCombineLaws[F] { def F: MonadCombine[F] = ev }
 }

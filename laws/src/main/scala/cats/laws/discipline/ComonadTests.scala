@@ -3,7 +3,8 @@ package laws
 package discipline
 
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 
 trait ComonadTests[F[_]] extends CoflatMapTests[F] {
   def laws: ComonadLaws[F]
@@ -17,10 +18,10 @@ trait ComonadTests[F[_]] extends CoflatMapTests[F] {
     implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
 
     new RuleSet {
-      def name = "comonad"
-      def bases = Nil
-      def parents = Seq(coflatMap[A, B, C])
-      def props = Seq(
+      def name: String = "comonad"
+      def bases: Seq[(String, RuleSet)] = Nil
+      def parents: Seq[RuleSet] = Seq(coflatMap[A, B, C])
+      def props: Seq[(String, Prop)] = Seq(
         "comonad left identity" -> forAll(laws.comonadLeftIdentity[A] _),
         "comonad right identity" -> forAll(laws.comonadRightIdentity[A, B] _)
       )
@@ -30,5 +31,5 @@ trait ComonadTests[F[_]] extends CoflatMapTests[F] {
 
 object ComonadTests {
   def apply[F[_]: Comonad]: ComonadTests[F] =
-    new ComonadTests[F] { def laws = ComonadLaws[F] }
+    new ComonadTests[F] { def laws: ComonadLaws[F] = ComonadLaws[F] }
 }

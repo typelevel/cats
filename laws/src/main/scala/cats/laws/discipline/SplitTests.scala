@@ -4,7 +4,8 @@ package discipline
 
 import cats.arrow.Split
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 
 trait SplitTests[F[_, _]] extends ComposeTests[F] {
   def laws: SplitLaws[F]
@@ -19,10 +20,10 @@ trait SplitTests[F[_, _]] extends ComposeTests[F] {
     EqFADCG: Eq[F[(A, D), (C, G)]]
   ): RuleSet =
     new RuleSet {
-      def name = "split"
-      def bases = Nil
-      def parents = Seq(compose[A, B, C, D])
-      def props = Seq(
+      def name: String = "split"
+      def bases: Seq[(String, RuleSet)] = Nil
+      def parents: Seq[RuleSet] = Seq(compose[A, B, C, D])
+      def props: Seq[(String, Prop)] = Seq(
         "split interchange" -> forAll(laws.splitInterchange[A, B, C, D, E, G] _)
       )
     }
@@ -30,5 +31,5 @@ trait SplitTests[F[_, _]] extends ComposeTests[F] {
 
 object SplitTests {
   def apply[F[_, _]: Split]: SplitTests[F] =
-    new SplitTests[F] { def laws = SplitLaws[F] }
+    new SplitTests[F] { def laws: SplitLaws[F] = SplitLaws[F] }
 }

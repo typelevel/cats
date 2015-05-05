@@ -18,5 +18,5 @@ trait SplitLaws[F[_, _]] extends ComposeLaws[F] {
 
 object SplitLaws {
   def apply[F[_, _]](implicit ev: Split[F]): SplitLaws[F] =
-    new SplitLaws[F] { def F = ev }
+    new SplitLaws[F] { def F: Split[F] = ev }
 }

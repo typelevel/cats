@@ -3,7 +3,8 @@ package laws
 package discipline
 
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 import org.typelevel.discipline.Laws
 
 trait CoflatMapTests[F[_]] extends Laws {
@@ -17,10 +18,10 @@ trait CoflatMapTests[F[_]] extends Laws {
     implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
 
     new RuleSet {
-      def name = "coflatMap"
-      def bases = Nil
-      def parents = Nil
-      def props = Seq(
+      def name: String = "coflatMap"
+      def bases: Seq[(String, RuleSet)] = Nil
+      def parents: Seq[RuleSet] = Nil
+      def props: Seq[(String, Prop)] = Seq(
         "coflatMap associativity" -> forAll(laws.coflatMapAssociativity[A, B, C] _)
       )
     }
@@ -29,5 +30,5 @@ trait CoflatMapTests[F[_]] extends Laws {
 
 object CoflatMapTests {
   def apply[F[_]: CoflatMap]: CoflatMapTests[F] =
-    new CoflatMapTests[F] { def laws = CoflatMapLaws[F] }
+    new CoflatMapTests[F] { def laws: CoflatMapLaws[F] = CoflatMapLaws[F] }
 }
