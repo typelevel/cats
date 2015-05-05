@@ -85,7 +85,7 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) {
 
 }
 
-object StateT {
+object StateT extends StateTInstances {
   def apply[F[_], S, A](f: S => F[(S, A)])(implicit F: Applicative[F]): StateT[F, S, A] =
     new StateT(F.pure(f))
 
@@ -94,7 +94,9 @@ object StateT {
 
   def pure[F[_], S, A](a: A)(implicit F: Applicative[F]): StateT[F, S, A] =
     StateT(s => F.pure((s, a)))
+}
 
+sealed abstract class StateTInstances extends StateTInstances0 {
   implicit def stateTMonad[F[_], S](implicit F: Monad[F]): Monad[StateT[F, S, ?]] = new Monad[StateT[F, S, ?]] {
 
     def pure[A](a: A) = StateT.pure(a)
@@ -104,6 +106,13 @@ object StateT {
 
     override def map[A, B](fa: StateT[F, S, A])(f: A => B) = fa.map(f)
   }
+}
+
+sealed abstract class StateTInstances0 {
+  // The Functor[Function0] is currently in std.
+  // Should we move it to core? Issue #258
+  implicit def stateMonad[S](implicit F: Functor[Function0]): Monad[State[S, ?]] =
+    StateT.stateTMonad[Trampoline, S]
 }
 
 object State {
