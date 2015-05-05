@@ -5,7 +5,7 @@ package functor
  * A [[Profunctor]] is a [[Contravariant]] functor on its first type parameter
  * and a [[Functor]] on its second type parameter.
  *
- * Must obey the laws defined in [[laws.ProfunctorLaws]].
+ * Must obey the laws defined in cats.laws.ProfunctorLaws.
  */
 trait Profunctor[F[_, _]] extends Serializable { self =>
   /**

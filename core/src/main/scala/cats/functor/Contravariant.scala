@@ -4,7 +4,7 @@ package functor
 import simulacrum._
 
 /**
- * Must obey the laws defined in [[laws.ContravariantLaws]].
+ * Must obey the laws defined in cats.laws.ContravariantLaws.
  */
 @typeclass trait Contravariant[F[_]] extends Invariant[F] { self =>
   def contramap[A, B](fa: F[A])(f: B => A): F[B]

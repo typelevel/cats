@@ -83,6 +83,7 @@ Apply[Option].apply2(Some(1), Some(2))(None)
 
 The `|@|` operator offers an alternative syntax for the higher-arity `Apply` functions (`applyN`, `mapN`).
 First, import `cats.syntax.all._` or `cats.syntax.apply._`. Here we see that following two functions, `f1` and `f2`, are equivalent:
+
 ```tut
 import cats.syntax.apply._
 

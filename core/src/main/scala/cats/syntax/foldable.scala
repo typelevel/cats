@@ -2,14 +2,14 @@ package cats
 package syntax
 
 trait FoldableSyntax1 {
-  implicit def foldableSyntaxU[FA](fa: FA)(implicit U: Unapply[Foldable,FA]): FoldableOps[U.M, U.A] =
-    new FoldableOps[U.M, U.A](U.subst(fa))(U.TC)
+  implicit def foldableSyntaxU[FA](fa: FA)(implicit U: Unapply[Foldable,FA]): Foldable.Ops[U.M, U.A] =
+    new Foldable.Ops[U.M, U.A] {
+      val self = U.subst(fa)
+      val typeClassInstance = U.TC
+      }
 }
 
-trait FoldableSyntax extends FoldableSyntax1 {
-  implicit def foldableSyntax[F[_] : Foldable, A](fa: F[A]): FoldableOps[F, A] =
-    new FoldableOps(fa)
-
+trait FoldableSyntax extends Foldable.ToFoldableOps with FoldableSyntax1 {
   implicit def nestedFoldableSyntax[F[_]: Foldable, G[_], A](fga: F[G[A]]): NestedFoldableOps[F, G, A] =
     new NestedFoldableOps[F, G, A](fga)
 }

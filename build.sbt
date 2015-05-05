@@ -38,7 +38,7 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("releases")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %% "simulacrum" % "0.2.0",
+    "com.github.mpilquist" %% "simulacrum" % "0.3.0",
     "org.spire-math" %% "algebra" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra_2.11-0.2.0-SNAPSHOT.jar",
     "org.typelevel" %% "machinist" % "0.3.0",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
@@ -57,7 +57,7 @@ lazy val disciplineDependencies = Seq(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, laws, free, std),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, free, std),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,

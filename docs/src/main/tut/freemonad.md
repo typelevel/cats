@@ -148,8 +148,9 @@ so it also means you can use your `Free` structure in a pure monadic way with `f
 def program: KVStore[Int] = for {
   _   <- put("wild-cats", 2)
   _   <- update[Int]("wild-cats", (_ + 12))
+  _   <- put("tame-cats", 5)
   id  <- get[Int]("wild-cats")
-  _   <- delete("wild-cats")
+  _   <- delete("tame-cats")
 } yield (id)
 ```
 
@@ -159,9 +160,11 @@ This looks like a Monadic flow but in fact, it just builds a recursive data stru
 Put("wild-cats", 2, 
   Get("wild-cats",
     Put("wild-cats", f(2),
-      Get("wild-cats",
-        Delete("wild-cats",
-          Return // to significate the end
+      Put("tame-cats", 5
+        Get("wild-cats",
+          Delete("tame-cats",
+            Return // to significate the end
+          )
         )
       )
     )
@@ -232,19 +235,6 @@ To run your `Free` with previous `impureCompiler`:
 val result: Id[Int] = program.foldMap(impureCompiler)
 ```
 
-Let's run it for real:
-
-```
-scala> val result: Id[Int] = program.foldMap(impureCompiler)
-OP:Put(wild-cats,2,cats.free.Free$$anon$1@73541f26)
-OP:Put(alley-cats,23,cats.free.Free$$anon$1@7eb37763)
-OP:Get(wild-cats,<function1>)
-OP:Put(wild-cats,14,cats.free.Free$$anon$1@719c0f5b)
-OP:Get(wild-cats,<function1>)
-OP:Delete(alley-cats,cats.free.Free$$anon$1@3a55fa44)
-result: cats.Id[Int] = 14
-```
-
 **An important aspect of `foldMap` is its stack-safety**: it evaluates each step of computation on the stack then unstack and restart. It will never overflow your stack (except if you do it yourself in your natural transformations). It's heap-intensive but stack-safety allows to use `Free` to represent infinite processes such as streams. 
 
 
@@ -254,8 +244,9 @@ Previous sample used a effectful natural transformation but you might prefer fol
 
 Using an immutable `Map`, it's impossible to write a Natural Transformation using `foldMap` because you need to know the previous state of the `Map` and you don't have it. For this, you need to use the lower level `fold` function and fold the `Free` by yourself.
 
+```tut
 // Pure computation
-def runPure[A](program: KVStore[A], m: Map[String, A] = Map.empty[String, A]): Map[String, A] = program.fold(
+def compilePure[A](program: KVStore[A], m: Map[String, A] = Map.empty[String, A]): Map[String, A] = program.fold(
   _ => m,
   {
     // help a bit scalac due to type erasure
@@ -265,13 +256,13 @@ def runPure[A](program: KVStore[A], m: Map[String, A] = Map.empty[String, A]): M
     case Delete(key, next) => compilePure(next, m - key)
   }
 )
+```
 
 Here you can see a few of scalac limits with respect to pattern matching & JVM type erasure but nothing too hard to go around...
 
 
-```
-scala> val result: Map[String, Int] = compilePure(program)
-result: Map[String,Int] = Map(wild-cats -> 14)
+```tut
+val result: Map[String, Int] = compilePure(program)
 ```
 
 ## For the curious ones: what is Free in theory?

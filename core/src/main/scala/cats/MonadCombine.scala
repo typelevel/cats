@@ -5,7 +5,7 @@ import simulacrum._
 /**
  * The combination of a Monad with a MonoidK
  */
-trait MonadCombine[F[_]] extends MonadFilter[F] with Alternative[F] {
+@typeclass trait MonadCombine[F[_]] extends MonadFilter[F] with Alternative[F] {
 
   /**
    * fold over the inner structure to combining all the values with
@@ -18,8 +18,4 @@ trait MonadCombine[F[_]] extends MonadFilter[F] with Alternative[F] {
     flatMap(fga) { ga =>
       G.foldLeft(ga, empty[A])((acc, a) => combine(acc, pure(a)))
     }
-}
-
-object MonadCombine {
-  def apply[F[_]](implicit ev: MonadCombine[F]): MonadCombine[F] = ev
 }
