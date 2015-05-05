@@ -19,15 +19,15 @@ trait ApplySyntax extends ApplySyntax1 {
 }
 
 abstract class ApplyOps[F[_], A] extends Apply.Ops[F, A] {
-  def |@|[B](fb: F[B]) = new ApplyBuilder[F] |@| self |@| fb
+  def |@|[B](fb: F[B]): ApplyBuilder[F]#ApplyBuilder2[A, B] = new ApplyBuilder[F] |@| self |@| fb
 
   /**
    * combine both contexts but only return the right value
    */
-  def *>[B](fb: F[B]) = typeClassInstance.map2(self, fb)((a,b) => b)
+  def *>[B](fb: F[B]): F[B] = typeClassInstance.map2(self, fb)((a,b) => b)
 
   /**
    * combine both contexts but only return the left value
    */
-  def <*[B](fb: F[B]) = typeClassInstance.map2(self, fb)((a,b) => a)
+  def <*[B](fb: F[B]): F[A] = typeClassInstance.map2(self, fb)((a,b) => a)
 }

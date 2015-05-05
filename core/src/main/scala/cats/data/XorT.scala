@@ -105,7 +105,7 @@ abstract class XorTInstances extends XorTInstances1 {
   implicit def xorTEq[F[_], L, R](implicit e: Eq[F[L Xor R]]): Eq[XorT[F, L, R]] =
     // TODO Use Eq.instance on next algebra upgrade
     new Eq[XorT[F, L, R]] {
-      def eqv(x: XorT[F, L, R], y: XorT[F, L, R]) = e.eqv(x.value, y.value)
+      def eqv(x: XorT[F, L, R], y: XorT[F, L, R]): Boolean = e.eqv(x.value, y.value)
     }
 
   implicit def xorTShow[F[_], L, R](implicit sh: Show[F[L Xor R]]): Show[XorT[F, L, R]] =
@@ -127,7 +127,7 @@ private[data] abstract class XorTInstances1 extends XorTInstances2 {
     implicit val L0 = L
     new MonoidK[XorT[F, L, ?]] with XorTSemigroupK[F, L] {
       implicit val F = F0; implicit val L = L0
-      def empty[A] = XorT.left(F.pure(L.empty))(F)
+      def empty[A]: XorT[F, L, A] = XorT.left(F.pure(L.empty))(F)
     }
   }
 }

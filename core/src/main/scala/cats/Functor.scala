@@ -31,8 +31,8 @@ import functor.Contravariant
    */
   override def composeWithContravariant[G[_]](implicit GG: Contravariant[G]): Contravariant[Lambda[X => F[G[X]]]] =
     new Functor.ContravariantComposite[F, G] {
-      def F = self
-      def G = GG
+      def F: Functor[F] = self
+      def G: Contravariant[G] = GG
     }
 
   override def composeWithFunctor[G[_]: Functor]: Functor[Lambda[X => F[G[X]]]] = compose[G]
