@@ -20,13 +20,8 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) {
         }
       })
 
-  def map[B](fab: A => B)(implicit F: Monad[F]): StateT[F, S, B] =
-    StateT(s =>
-      F.flatMap(runF) { f =>
-        F.map(f(s)) { case (s, a) =>
-          (s, fab(a))
-        }
-      })
+  def map[B](f: A => B)(implicit F: Monad[F]): StateT[F, S, B] =
+    transform { case (s, a) => (s, f(a)) }
 
   /**
    * Run with the provided initial state value
@@ -49,19 +44,19 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) {
   /**
    * Run with `S`'s empty monoid value as the initial state.
    */
-  def runEmpty(implicit S: Monoid[S], F: FlatMap[F]) = run(S.empty)
+  def runEmpty(implicit S: Monoid[S], F: FlatMap[F]): F[(S, A)] = run(S.empty)
 
   /**
    * Run with `S`'s empty monoid value as the initial state and return the final
    * state (discarding the final value).
    */
-  def runEmptyS(implicit S: Monoid[S], F: FlatMap[F]) = runS(S.empty)
+  def runEmptyS(implicit S: Monoid[S], F: FlatMap[F]): F[S] = runS(S.empty)
 
   /**
    * Run with `S`'s empty monoid value as the initial state and return the final
    * state (discarding the final value).
    */
-  def runEmptyA(implicit S: Monoid[S], F: FlatMap[F]) = runA(S.empty)
+  def runEmptyA(implicit S: Monoid[S], F: FlatMap[F]): F[A] = runA(S.empty)
 
   /**
    * Like [[map]], but also allows the state (`S`) value to be modified.
