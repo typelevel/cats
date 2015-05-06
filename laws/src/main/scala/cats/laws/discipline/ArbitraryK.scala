@@ -3,6 +3,7 @@ package laws
 package discipline
 
 import cats.data.{Cokleisli, Kleisli, Validated, Xor, XorT, Ior, Const}
+import cats.std.OptionT
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 
@@ -96,4 +97,7 @@ object ArbitraryK {
 
   implicit val vector: ArbitraryK[Vector] =
     new ArbitraryK[Vector] { def synthesize[A: Arbitrary]: Arbitrary[Vector[A]] = implicitly }
+
+  implicit def optionT[F[_]](implicit F: ArbitraryK[F]): ArbitraryK[OptionT[F, ?]] =
+    new ArbitraryK[OptionT[F, ?]] { def synthesize[A: Arbitrary]: Arbitrary[OptionT[F, A]] = implicitly }
 }

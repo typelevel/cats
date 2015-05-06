@@ -3,6 +3,7 @@ package laws
 package discipline
 
 import cats.data._
+import cats.std.OptionT
 import org.scalacheck.{Arbitrary, Gen}
 
 /**
@@ -33,4 +34,7 @@ object arbitrary {
 
   implicit def cokleisliArbitrary[F[_], A, B](implicit B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
     Arbitrary(B.arbitrary.map(b => Cokleisli[F, A, B](_ => b)))
+
+  implicit def optionTArbitrary[F[_], A](implicit F: ArbitraryK[F], A: Arbitrary[A]): Arbitrary[OptionT[F, A]] =
+    Arbitrary(F.synthesize[Option[A]].arbitrary.map(OptionT.apply))
 }
