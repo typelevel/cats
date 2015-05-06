@@ -19,14 +19,10 @@ trait SplitTests[F[_, _]] extends ComposeTests[F] {
     EqFAD: Eq[F[A, D]],
     EqFADCG: Eq[F[(A, D), (C, G)]]
   ): RuleSet =
-    new RuleSet {
-      def name: String = "split"
-      def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(compose[A, B, C, D])
-      def props: Seq[(String, Prop)] = Seq(
-        "split interchange" -> forAll(laws.splitInterchange[A, B, C, D, E, G] _)
-      )
-    }
+    new DefaultRuleSet(
+      name =  "split",
+      parent = Some(compose[A, B, C, D]),
+      "split interchange" -> forAll(laws.splitInterchange[A, B, C, D, E, G] _))
 }
 
 object SplitTests {

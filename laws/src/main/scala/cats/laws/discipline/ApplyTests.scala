@@ -18,14 +18,10 @@ trait ApplyTests[F[_]] extends FunctorTests[F] {
     implicit def ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
     implicit def ArbFBC: Arbitrary[F[B => C]] = ArbF.synthesize[B => C]
 
-    new RuleSet {
-      def name: String = "apply"
-      def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(functor[A, B, C])
-      def props: Seq[(String, Prop)] = Seq(
-        "apply composition" -> forAll(laws.applyComposition[A, B, C] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "apply",
+      parent = Some(functor[A, B, C]),
+      "apply composition" -> forAll(laws.applyComposition[A, B, C] _))
   }
 }
 

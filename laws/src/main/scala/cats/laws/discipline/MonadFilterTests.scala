@@ -18,15 +18,11 @@ trait MonadFilterTests[F[_]] extends MonadTests[F] {
     implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
     implicit def ArbFB: Arbitrary[F[B]] = ArbF.synthesize[B]
 
-    new RuleSet {
-      def name: String = "monadFilter"
-      def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(monad[A, B, C])
-      def props: Seq[(String, Prop)] = Seq(
-        "monadFilter left empty" -> forAll(laws.monadFilterLeftEmpty[A, B] _),
-        "monadFilter right empty" -> forAll(laws.monadFilterRightEmpty[A, B] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "monadFilter",
+      parent = Some(monad[A, B, C]),
+      "monadFilter left empty" -> forAll(laws.monadFilterLeftEmpty[A, B] _),
+      "monadFilter right empty" -> forAll(laws.monadFilterRightEmpty[A, B] _))
   }
 }
 

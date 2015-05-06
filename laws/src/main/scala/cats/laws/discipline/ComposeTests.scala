@@ -17,14 +17,10 @@ trait ComposeTests[F[_, _]] extends Laws {
     ArbFCD: Arbitrary[F[C, D]],
     EqFAD: Eq[F[A, D]]
   ): RuleSet =
-    new RuleSet {
-      def name: String = "compose"
-      def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Nil
-      def props: Seq[(String, Prop)] = Seq(
-        "compose associativity" -> forAll(laws.composeAssociativity[A, B, C, D] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "compose",
+      parent = None,
+      "compose associativity" -> forAll(laws.composeAssociativity[A, B, C, D] _))
 }
 
 object ComposeTests {

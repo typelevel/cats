@@ -17,15 +17,11 @@ trait InvariantTests[F[_]] extends Laws {
     EqFC: Eq[F[C]]
   ): RuleSet = {
 
-    new RuleSet {
-      def name: String = "invariant"
-      def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Nil
-      def props: Seq[(String, Prop)] = Seq(
-        "invariant identity" -> forAll(laws.invariantIdentity[A] _),
-        "invariant composition" -> forAll(laws.invariantComposition[A, B, C] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "invariant",
+      parent = None,
+      "invariant identity" -> forAll(laws.invariantIdentity[A] _),
+      "invariant composition" -> forAll(laws.invariantComposition[A, B, C] _))
   }
 }
 

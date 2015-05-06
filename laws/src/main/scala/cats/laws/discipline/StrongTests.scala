@@ -19,15 +19,11 @@ trait StrongTests[F[_, _]] extends ProfunctorTests[F] {
     EqFAEDE: Eq[F[(A, E), (D, E)]],
     EqFEAED: Eq[F[(E, A), (E, D)]]
   ): RuleSet =
-    new RuleSet {
-      def name: String = "strong"
-      def bases: Seq[(String, RuleSet)]  = Nil
-      def parents: Seq[RuleSet] = Seq(profunctor[A, B, C, D, E, G])
-      def props: Seq[(String, Prop)] = Seq(
-        "strong first distributivity" -> forAll(laws.strongFirstDistributivity[A, B, C, D, E] _),
-        "strong second distributivity" -> forAll(laws.strongSecondDistributivity[A, B, C, D, E] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "strong",
+      parent = Some(profunctor[A, B, C, D, E, G]),
+      "strong first distributivity" -> forAll(laws.strongFirstDistributivity[A, B, C, D, E] _),
+      "strong second distributivity" -> forAll(laws.strongSecondDistributivity[A, B, C, D, E] _))
 }
 
 object StrongTests {

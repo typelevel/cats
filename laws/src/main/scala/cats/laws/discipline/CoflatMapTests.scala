@@ -17,14 +17,10 @@ trait CoflatMapTests[F[_]] extends Laws {
   ): RuleSet = {
     implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
 
-    new RuleSet {
-      def name: String = "coflatMap"
-      def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Nil
-      def props: Seq[(String, Prop)] = Seq(
-        "coflatMap associativity" -> forAll(laws.coflatMapAssociativity[A, B, C] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "coflatMap",
+      parent = None,
+      "coflatMap associativity" -> forAll(laws.coflatMapAssociativity[A, B, C] _))
   }
 }
 

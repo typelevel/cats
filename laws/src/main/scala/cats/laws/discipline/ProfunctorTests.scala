@@ -17,15 +17,11 @@ trait ProfunctorTests[F[_, _]] extends Laws {
     EqFAB: Eq[F[A, B]],
     EqFAG: Eq[F[A, G]]
   ): RuleSet =
-    new RuleSet {
-      def name: String = "profunctor"
-      def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Nil
-      def props: Seq[(String, Prop)] = Seq(
-        "profunctor identity" -> forAll(laws.profunctorIdentity[A, B] _),
-        "profunctor composition" -> forAll(laws.profunctorComposition[A, B, C, D, E, G] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "profunctor",
+      parent = None,
+      "profunctor identity" -> forAll(laws.profunctorIdentity[A, B] _),
+      "profunctor composition" -> forAll(laws.profunctorComposition[A, B, C, D, E, G] _))
 }
 
 object ProfunctorTests {

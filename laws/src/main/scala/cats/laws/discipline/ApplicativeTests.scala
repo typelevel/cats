@@ -18,17 +18,13 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
     implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
     implicit def ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
 
-    new RuleSet {
-      def name: String = "applicative"
-      def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(apply[A, B, C])
-      def props: Seq[(String, Prop)] = Seq(
-        "applicative identity" -> forAll(laws.applicativeIdentity[A] _),
-        "applicative homomorphism" -> forAll(laws.applicativeHomomorphism[A, B] _),
-        "applicative interchange" -> forAll(laws.applicativeInterchange[A, B] _),
-        "applicative map" -> forAll(laws.applicativeMap[A, B] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "applicative",
+      parent = Some(apply[A, B, C]),
+      "applicative identity" -> forAll(laws.applicativeIdentity[A] _),
+      "applicative homomorphism" -> forAll(laws.applicativeHomomorphism[A, B] _),
+      "applicative interchange" -> forAll(laws.applicativeInterchange[A, B] _),
+      "applicative map" -> forAll(laws.applicativeMap[A, B] _))
   }
 }
 

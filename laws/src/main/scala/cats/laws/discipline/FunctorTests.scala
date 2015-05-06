@@ -16,15 +16,11 @@ trait FunctorTests[F[_]] extends InvariantTests[F] {
   ): RuleSet = {
     implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
 
-    new RuleSet {
-      def name: String = "functor"
-      def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(invariant[A, B, C])
-      def props: Seq[(String, Prop)] = Seq(
-        "covariant identity" -> forAll(laws.covariantIdentity[A] _),
-        "covariant composition" -> forAll(laws.covariantComposition[A, B, C] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "functor",
+      parent = Some(invariant[A, B, C]),
+      "covariant identity" -> forAll(laws.covariantIdentity[A] _),
+      "covariant composition" -> forAll(laws.covariantComposition[A, B, C] _))
   }
 }
 
