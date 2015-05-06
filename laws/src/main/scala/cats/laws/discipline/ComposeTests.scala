@@ -4,7 +4,8 @@ package discipline
 
 import cats.arrow.Compose
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 import org.typelevel.discipline.Laws
 
 trait ComposeTests[F[_, _]] extends Laws {
@@ -16,17 +17,13 @@ trait ComposeTests[F[_, _]] extends Laws {
     ArbFCD: Arbitrary[F[C, D]],
     EqFAD: Eq[F[A, D]]
   ): RuleSet =
-    new RuleSet {
-      def name = "compose"
-      def bases = Nil
-      def parents = Nil
-      def props = Seq(
-        "compose associativity" -> forAll(laws.composeAssociativity[A, B, C, D] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "compose",
+      parent = None,
+      "compose associativity" -> forAll(laws.composeAssociativity[A, B, C, D] _))
 }
 
 object ComposeTests {
   def apply[F[_, _]: Compose]: ComposeTests[F] =
-    new ComposeTests[F] { def laws = ComposeLaws[F] }
+    new ComposeTests[F] { def laws: ComposeLaws[F] = ComposeLaws[F] }
 }

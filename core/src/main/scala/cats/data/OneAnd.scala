@@ -63,12 +63,12 @@ trait OneAndInstances {
     Show.show[OneAnd[A, F]](_.show)
 
   implicit def oneAndFunctor[F[_]](F: Functor[F]): Functor[OneAnd[?,F]] = new Functor[OneAnd[?,F]] {
-    override def map[A, B](fa: OneAnd[A,F])(f: A => B) =
+    override def map[A, B](fa: OneAnd[A,F])(f: A => B): OneAnd[B, F] =
       OneAnd(f(fa.head), F.map(fa.tail)(f))
   }
 
   implicit def oneAndSemigroupK[F[_] : MonadCombine]: SemigroupK[OneAnd[?,F]] = new SemigroupK[OneAnd[?,F]] {
-    def combine[A](a: OneAnd[A, F], b: OneAnd[A, F]) = a combine b
+    def combine[A](a: OneAnd[A, F], b: OneAnd[A, F]): OneAnd[A, F] = a combine b
   }
 
   implicit def oneAndFoldable[F[_]](implicit foldable: Foldable[F]): Foldable[OneAnd[?,F]] = new Foldable[OneAnd[?,F]] {
@@ -92,15 +92,15 @@ trait OneAndInstances {
   }
 
   implicit def oneAndMonad[F[_]](implicit monad: MonadCombine[F]): Comonad[OneAnd[?, F]] with Monad[OneAnd[?, F]] = new Comonad[OneAnd[?, F]] with Monad[OneAnd[?, F]] {
-    def extract[A](x: OneAnd[A,F]) = x.head
+    def extract[A](x: OneAnd[A,F]): A = x.head
 
-    def coflatMap[A, B](fa: OneAnd[A,F])(f: OneAnd[A,F] => B) =
+    def coflatMap[A, B](fa: OneAnd[A,F])(f: OneAnd[A,F] => B): OneAnd[B, F] =
       OneAnd(f(fa), monad.empty)
 
-    override def map[A, B](fa: OneAnd[A,F])(f: A => B) =
+    override def map[A, B](fa: OneAnd[A,F])(f: A => B): OneAnd[B, F] =
       OneAnd(f(fa.head), monad.map(fa.tail)(f))
 
-    def pure[A](x: A) = OneAnd(x, monad.empty)
+    def pure[A](x: A): OneAnd[A, F] = OneAnd(x, monad.empty)
 
     private def unwrap[A](fa: OneAnd[A, F]) = monad.combine(monad.pure(fa.head), fa.tail)
 

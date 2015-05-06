@@ -26,7 +26,7 @@ abstract class Yoneda[F[_], A] extends Serializable { self =>
    */
   def map[B](f: A => B): Yoneda[F, B] =
     new Yoneda[F, B] {
-      def apply[C](g: B => C) = self(f andThen g)
+      def apply[C](g: B => C): F[C] = self(f andThen g)
     }
 
   // import Id._
@@ -44,15 +44,15 @@ object Yoneda {
    */
   implicit def yonedaFunctor[F[_]]: Functor[Yoneda[F, ?]] =
     new Functor[Yoneda[F, ?]] {
-      def map[A, B](ya: Yoneda[F,A])(f: A => B) = ya map f
+      def map[A, B](ya: Yoneda[F,A])(f: A => B): Yoneda[F, B] = ya map f
     }
 
   /**
    * `F[A]` converts to `Yoneda[F, A]` for any functor `F`.
    */
-  def apply[F[_]: Functor, A](fa: F[A]): Yoneda[F, A] =
+  def apply[F[_], A](fa: F[A])(implicit F: Functor[F]): Yoneda[F, A] =
     new Yoneda[F, A] {
-      def apply[B](f: A => B) = Functor[F].map(fa)(f)
+      def apply[B](f: A => B): F[B] = F.map(fa)(f)
     }
 }
 

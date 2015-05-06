@@ -4,7 +4,8 @@ package discipline
 
 import cats.arrow.Arrow
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 
 trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with StrongTests[F] {
   def laws: ArrowLaws[F]
@@ -30,14 +31,14 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with Stron
     EqFACDBCD: Eq[F[((A, C), D),(B, (C, D))]]
   ): RuleSet =
     new RuleSet {
-      def name = "arrow"
-      def bases = Nil
-      def parents = Seq(
+      def name: String = "arrow"
+      def bases: Seq[(String, RuleSet)] = Nil
+      def parents: Seq[RuleSet] = Seq(
         category[A, B, C, D],
         split[A, B, C, D, E, G],
         strong[A, B, C, D, E, G]
       )
-      def props = Seq(
+      def props: Seq[(String, Prop)] = Seq(
         "arrow identity" -> laws.arrowIdentity[A],
         "arrow composition" -> forAll(laws.arrowComposition[A, B, C] _),
         "arrow extension" -> forAll(laws.arrowExtension[A, B, C] _),
@@ -51,5 +52,5 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with Stron
 
 object ArrowTests {
   def apply[F[_, _]: Arrow]: ArrowTests[F] =
-    new ArrowTests[F] { def laws = ArrowLaws[F] }
+    new ArrowTests[F] { def laws: ArrowLaws[F] = ArrowLaws[F] }
 }
