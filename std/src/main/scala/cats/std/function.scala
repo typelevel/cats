@@ -53,7 +53,7 @@ trait Function1Instances {
 
       def id[A]: A => A = a => a
 
-      def split[A, B, C, D](f: A => B, g: C => D): ((A, C)) => (B, D) = {
+      override def split[A, B, C, D](f: A => B, g: C => D): ((A, C)) => (B, D) = {
         case (a, c) => (f(a), g(c))
       }
 
