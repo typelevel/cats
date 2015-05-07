@@ -17,7 +17,7 @@ trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
   def ap[A, B](fa: F[A])(f: F[A => B]): F[B]
 
   /**
-   * apply2 is a binary version of ap, defined in terms of ap.
+   * ap2 is a binary version of ap, defined in terms of ap.
    */
   def ap2[A, B, Z](fa: F[A], fb: F[B])(f: F[(A, B) => Z]): F[Z] =
     ap(fb)(ap(fa)(map(f)(f => (a: A) => (b: B) => f(a, b))))
