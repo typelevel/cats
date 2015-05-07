@@ -26,7 +26,7 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
   /** Converts to `Yoneda[F,A]` given that `F` is a functor */
   final def toYoneda(implicit F: Functor[F]): Yoneda[F, A] =
     new Yoneda[F, A] {
-      def apply[B](f: A => B) = F.map(fi)(k andThen f)
+      def apply[B](f: A => B): F[B] = F.map(fi)(k andThen f)
     }
 
   /**
@@ -72,5 +72,13 @@ object Coyoneda {
       type Pivot = A
       val k = k0
       val fi = fa
+    }
+
+  /**
+   * As the free functor, `Coyoneda[F, ?]` provides a functor for any `F`.
+   */
+  implicit def coyonedaFunctor[F[_]]: Functor[Coyoneda[F, ?]] =
+    new Functor[Coyoneda[F, ?]] {
+      def map[A, B](cfa: Coyoneda[F, A])(f: A => B): Coyoneda[F, B] = cfa map f
     }
 }

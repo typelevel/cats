@@ -39,7 +39,7 @@ import simulacrum._
   def traverse[A, G[_], B](value: G[A])(f: A => F[B])(implicit G: Traverse[G]): F[G[B]] =
     G.traverse(value)(f)(this)
 
-  def sequence[A, G[_]: Traverse](as: G[F[A]]): F[G[A]] =
+  def sequence[G[_]: Traverse, A](as: G[F[A]]): F[G[A]] =
     traverse(as)(a => a)
 
 }

@@ -41,7 +41,7 @@ pattern. We have been able to provide an implementation of Show for
 String, without needing to change the definition of java.lang.String
 to extend a new Java-style interface; something we couldn't have done
 even if we wanted to, since we don't control the implementation of
-java.lang.Sting. We use this pattern to retrofit existing
+java.lang.String. We use this pattern to retrofit existing
 types with new behaviors. This is usually referred to as "ad-hoc
 polymorphism".
 

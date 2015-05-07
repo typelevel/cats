@@ -28,5 +28,5 @@ trait SemigroupKTests[F[_]] extends Laws {
 
 object SemigroupKTests {
   def apply[F[_]: SemigroupK]: SemigroupKTests[F] =
-    new SemigroupKTests[F] { def laws = SemigroupKLaws[F] }
+    new SemigroupKTests[F] { def laws: SemigroupKLaws[F] = SemigroupKLaws[F] }
 }

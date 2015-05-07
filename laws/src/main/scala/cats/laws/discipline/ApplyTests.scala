@@ -3,7 +3,8 @@ package laws
 package discipline
 
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 
 trait ApplyTests[F[_]] extends FunctorTests[F] {
   def laws: ApplyLaws[F]
@@ -17,18 +18,14 @@ trait ApplyTests[F[_]] extends FunctorTests[F] {
     implicit def ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
     implicit def ArbFBC: Arbitrary[F[B => C]] = ArbF.synthesize[B => C]
 
-    new RuleSet {
-      def name = "apply"
-      def bases = Nil
-      def parents = Seq(functor[A, B, C])
-      def props = Seq(
-        "apply composition" -> forAll(laws.applyComposition[A, B, C] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "apply",
+      parent = Some(functor[A, B, C]),
+      "apply composition" -> forAll(laws.applyComposition[A, B, C] _))
   }
 }
 
 object ApplyTests {
   def apply[F[_]: Apply]: ApplyTests[F] =
-    new ApplyTests[F] { def laws = ApplyLaws[F] }
+    new ApplyTests[F] { def laws: ApplyLaws[F] = ApplyLaws[F] }
 }

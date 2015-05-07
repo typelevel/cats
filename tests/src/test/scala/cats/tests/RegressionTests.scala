@@ -8,16 +8,16 @@ class RegressionTests extends CatsSuite {
   // toy state class
   // not stack safe, very minimal, not for actual use
   case class State[S, A](run: S => (A, S)) { self =>
-    def map[B](f: A => B) =
-      State[S, B]({ s => val (a, s2) = self.run(s); (f(a), s2) })
-    def flatMap[B](f: A => State[S, B]) =
-      State[S, B]({ s => val (a, s2) = self.run(s); f(a).run(s2) })
+    def map[B](f: A => B): State[S, B] =
+      State({ s => val (a, s2) = self.run(s); (f(a), s2) })
+    def flatMap[B](f: A => State[S, B]): State[S, B] =
+      State({ s => val (a, s2) = self.run(s); f(a).run(s2) })
   }
 
   object State {
-    implicit def instance[S] = new Monad[State[S, ?]] {
-      def pure[A](a: A) = State[S, A](s => (a, s))
-      def flatMap[A, B](sa: State[S, A])(f: A => State[S, B]) = sa.flatMap(f)
+    implicit def instance[S]: Monad[State[S, ?]] = new Monad[State[S, ?]] {
+      def pure[A](a: A): State[S, A] = State(s => (a, s))
+      def flatMap[A, B](sa: State[S, A])(f: A => State[S, B]): State[S, B] = sa.flatMap(f)
     }
   }
 

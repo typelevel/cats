@@ -18,5 +18,5 @@ trait ApplyLaws[F[_]] extends FunctorLaws[F] {
 
 object ApplyLaws {
   def apply[F[_]](implicit ev: Apply[F]): ApplyLaws[F] =
-    new ApplyLaws[F] { def F = ev }
+    new ApplyLaws[F] { def F: Apply[F] = ev }
 }

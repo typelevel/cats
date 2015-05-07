@@ -177,7 +177,7 @@ sealed abstract class ValidatedInstances extends ValidatedInstances1 {
     def pure[A](a: A): Validated[E,A] = Validated.valid(a)
     override def map[A, B](fa: Validated[E,A])(f: A => B): Validated[E, B] = fa.map(f)
 
-    override def ap[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]) =
+    override def ap[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]): Validated[E, B] =
       (fa,f) match {
         case (Valid(a),Valid(f)) => Valid(f(a))
         case (e @ Invalid(_), Valid(_)) => e

@@ -34,5 +34,5 @@ trait ComonadLaws[F[_]] extends CoflatMapLaws[F] {
 
 object ComonadLaws {
   def apply[F[_]](implicit ev: Comonad[F]): ComonadLaws[F] =
-    new ComonadLaws[F] { def F = ev }
+    new ComonadLaws[F] { def F: Comonad[F] = ev }
 }

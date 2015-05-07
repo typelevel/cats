@@ -5,7 +5,9 @@ import scala.annotation.tailrec
 
 object Free {
 
-  /** Return from the computation with the given value. */
+  /**
+   * Return from the computation with the given value.
+   */
   case class Pure[S[_], A](a: A) extends Free[S, A]
 
   /** Suspend the computation with the given suspension. */
@@ -25,9 +27,36 @@ object Free {
       val f = f0
     }
 
-  /** Suspends a value within a functor lifting it to a Free */
-  def liftF[F[_], A](value: => F[A])(implicit F: Functor[F]): Free[F, A] =
+  /**
+   * Suspend a value within a functor lifting it to a Free
+   */
+  def liftF[F[_], A](value: F[A])(implicit F: Functor[F]): Free[F, A] =
     Suspend(F.map(value)(Pure[F, A]))
+
+  /**
+   * Lift a value into the free functor and then suspend it in `Free`
+   */
+  def liftFC[F[_], A](value: F[A]): FreeC[F, A] =
+    liftF[Coyoneda[F, ?], A](Coyoneda.lift(value))
+
+  /**
+   * Interpret a free monad over a free functor of `S` via natural
+   * transformation to monad `M`.
+   */
+  def runFC[S[_], M[_], A](fa: FreeC[S, A])(f: S ~> M)(implicit M: Monad[M]): M[A] =
+    fa.foldMap[M](new (Coyoneda[S, ?] ~> M) {
+      def apply[B](ca: Coyoneda[S, B]): M[B] = M.map(f(ca.fi))(ca.k)
+    })
+
+  /**
+   * `Free[S, ?]` has a monad if `S` has a `Functor`.
+   */
+  implicit def freeMonad[S[_]:Functor]: Monad[Free[S, ?]] =
+    new Monad[Free[S, ?]] {
+      def pure[A](a: A): Free[S, A] = Pure(a)
+      override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa map f
+      def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a flatMap f
+    }
 }
 
 import Free._
@@ -43,7 +72,7 @@ sealed abstract class Free[S[_], A] extends Serializable {
     flatMap(a => Pure(f(a)))
 
   /**
-   * Binds the given continuation to the result of this computation.
+   * Bind the given continuation to the result of this computation.
    * All left-associated binds are reassociated to the right.
    */
   final def flatMap[B](f: A => Free[S, B]): Free[S, B] = this match {
@@ -59,7 +88,7 @@ sealed abstract class Free[S[_], A] extends Serializable {
     resume.fold(s, r)
 
   /**
-   * Evaluates a single layer of the free monad.
+   * Evaluate a single layer of the free monad.
    */
   @tailrec
   final def resume(implicit S: Functor[S]): (Either[S[Free[S, A]], A]) = this match {
@@ -80,7 +109,7 @@ sealed abstract class Free[S[_], A] extends Serializable {
   }
 
   /**
-   * Runs to completion, using a function that extracts the resumption
+   * Run to completion, using a function that extracts the resumption
    * from its suspension functor.
    */
   final def go(f: S[Free[S, A]] => Free[S, A])(implicit S: Functor[S]): A = {
@@ -95,7 +124,7 @@ sealed abstract class Free[S[_], A] extends Serializable {
   def run(implicit S: Comonad[S]): A = go(S.extract)
 
   /**
-   * Runs to completion, using a function that maps the resumption
+   * Run to completion, using a function that maps the resumption
    * from `S` to a monad `M`.
    */
   final def runM[M[_]](f: S[Free[S, A]] => M[Free[S, A]])(implicit S: Functor[S], M: Monad[M]): M[A] = {
@@ -109,7 +138,7 @@ sealed abstract class Free[S[_], A] extends Serializable {
   /**
    * Catamorphism for `Free`.
    *
-   * Runs to completion, mapping the suspension with the given transformation at each step and
+   * Run to completion, mapping the suspension with the given transformation at each step and
    * accumulating into the monad `M`.
    */
   final def foldMap[M[_]](f: S ~> M)(implicit S: Functor[S], M: Monad[M]): M[A] =
@@ -118,9 +147,10 @@ sealed abstract class Free[S[_], A] extends Serializable {
       case Right(r) => Monad[M].pure(r)
     }
 
-  /** Compiles your Free into another language by changing the suspension functor
-   *  using the given natural transformation.
-   *  Be careful if your natural transformation is effectful, effects are applied by mapSuspension
+  /**
+   * Compile your Free into another language by changing the suspension functor
+   * using the given natural transformation.
+   * Be careful if your natural transformation is effectful, effects are applied by mapSuspension.
    */
   final def mapSuspension[T[_]](f: S ~> T)(implicit S: Functor[S], T: Functor[T]): Free[T, A] =
     resume match {
