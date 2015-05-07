@@ -42,7 +42,7 @@ lazy val commonSettings = Seq(
     "org.spire-math" %% "algebra" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra_2.11-0.2.0-SNAPSHOT.jar",
     "org.typelevel" %% "machinist" % "0.3.0",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.2")
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.4")
   ),
   scmInfo := Some(ScmInfo(url("https://github.com/non/cats"),
     "git@github.com:non/cats.git"))
