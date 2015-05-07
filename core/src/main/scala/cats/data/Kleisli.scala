@@ -142,6 +142,9 @@ private trait KleisliArrow[F[_]] extends Arrow[Kleisli[F, ?, ?]] with KleisliSpl
 
   override def second[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (C, A), (C, B)] =
     super[KleisliStrong].second(fa)
+
+  override def split[A, B, C, D](f: Kleisli[F, A, B], g: Kleisli[F, C, D]): Kleisli[F, (A, C), (B, D)] =
+    super[KleisliSplit].split(f, g)
 }
 
 private trait KleisliSplit[F[_]] extends Split[Kleisli[F, ?, ?]] {
