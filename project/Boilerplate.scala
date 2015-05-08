@@ -116,7 +116,7 @@ object Boilerplate {
         |
         -  private[syntax] class ApplyBuilder$arity[${`A..N`}](${params}) {
         -    $next
-        -    def apply[Z](f: F[(${`A..N`}) => Z])(implicit F: Apply[F]): F[Z] = F.apply$n(${`a..n`})(f)
+        -    def ap[Z](f: F[(${`A..N`}) => Z])(implicit F: Apply[F]): F[Z] = F.ap$n(${`a..n`})(f)
         -    def map[Z](f: (${`A..N`}) => Z)(implicit F: Apply[F]): F[Z] = F.map$n(${`a..n`})(f)
         -    $tupled
         - }
@@ -144,11 +144,11 @@ object Boilerplate {
       val fArgsB = (a until arity) map { "f" + _ } mkString ","
       val argsA = (0 until a) map { "a" + _ } mkString ","
       val argsB = (a until arity) map { "a" + _ } mkString ","
-      def applyN(n: Int) = if (n == 1) { "apply" } else { s"apply$n" }
+      def apN(n: Int) = if (n == 1) { "ap" } else { s"ap$n" }
       def allArgs = (0 until arity) map { "a" + _ } mkString ","
 
       val map = if (arity == 3) {
-        "- apply(f2)(map2(f0, f1)((a, b) => c => f(a, b, c)))"
+        " ap(f2)(map2(f0, f1)((a, b) => c => f(a, b, c)))"
       }  else {
         block"""
           -    map2(tuple$a($fArgsA), tuple$b($fArgsB)) {
@@ -158,7 +158,7 @@ object Boilerplate {
       }
       val apply =
         block"""
-          -    ${applyN(b)}($fArgsB)(${applyN(a)}($fArgsA)(map(f)(f =>
+          -    ${apN(b)}($fArgsB)(${apN(a)}($fArgsA)(map(f)(f =>
           -      ($argsA) => ($argsB) => f($allArgs)
           -    )))
           """
@@ -168,11 +168,9 @@ object Boilerplate {
         |trait ApplyArityFunctions[F[_]] { self: Apply[F] =>
         |  def tuple2[A, B](fa: F[A], fb: F[B]): F[(A, B)] = map2(fa, fb)((_, _))
         |
-        -  def apply$arity[${`A..N`}, Z]($fparams)(f: F[(${`A..N`}) => Z]):F[Z] =
-              $apply
-        -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z):F[Z] =
-               $map
-        -  def tuple$arity[${`A..N`}]($fparams):F[(${`A..N`})] =
+        -  def ap$arity[${`A..N`}, Z]($fparams)(f: F[(${`A..N`}) => Z]):F[Z] = $apply
+        -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z):F[Z] = $map
+        -  def tuple$arity[${`A..N`}]($fparams):F[(${`A..N`})] = 
         -    map$arity($fargsS)((${`_.._`}))
         |}
       """

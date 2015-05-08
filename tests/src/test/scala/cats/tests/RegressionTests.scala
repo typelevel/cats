@@ -50,8 +50,8 @@ class RegressionTests extends CatsSuite {
     assert(buf.toList == names)
   }
 
-  test("#167: confirm apply2 order") {
-    val twelve = Apply[State[String, ?]].apply2(
+  test("#167: confirm ap2 order") {
+    val twelve = Apply[State[String, ?]].ap2(
       State[String, Unit](s => ((), s + "1")),
       State[String, Unit](s => ((), s + "2"))
     )(State.instance[String].pure((_: Unit, _: Unit) => ())).run("")._2

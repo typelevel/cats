@@ -10,7 +10,6 @@ trait ApplySyntax1 {
 }
 
 trait ApplySyntax extends ApplySyntax1 {
-  // TODO: use simulacrum instances eventually
   implicit def applySyntax[F[_], A](fa: F[A])(implicit F: Apply[F]): ApplyOps[F, A] =
     new ApplyOps[F,A] {
       val self = fa

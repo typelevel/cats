@@ -14,13 +14,13 @@ trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
    * Given a value and a function in the Apply context, applies the
    * function to the value.
    */
-  def apply[A, B](fa: F[A])(f: F[A => B]): F[B]
+  def ap[A, B](fa: F[A])(f: F[A => B]): F[B]
 
   /**
-   * apply2 is a binary version of apply, defined in terms of apply.
+   * ap2 is a binary version of ap, defined in terms of ap.
    */
-  def apply2[A, B, Z](fa: F[A], fb: F[B])(f: F[(A, B) => Z]): F[Z] =
-    apply(fb)(apply(fa)(map(f)(f => (a: A) => (b: B) => f(a, b))))
+  def ap2[A, B, Z](fa: F[A], fb: F[B])(f: F[(A, B) => Z]): F[Z] =
+    ap(fb)(ap(fa)(map(f)(f => (a: A) => (b: B) => f(a, b))))
 
   /**
    * Applies the pure (binary) function f to the effectful values fa and fb.
@@ -28,7 +28,7 @@ trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
    * map2 can be seen as a binary version of [[cats.Functor]]#map.
    */
   def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
-    apply(fb)(map(fa)(a => (b: B) => f(a, b)))
+    ap(fb)(map(fa)(a => (b: B) => f(a, b)))
 
   /**
    * Two sequentially dependent Applys can be composed.
@@ -52,6 +52,6 @@ trait CompositeApply[F[_], G[_]]
   def F: Apply[F]
   def G: Apply[G]
 
-  def apply[A, B](fa: F[G[A]])(f: F[G[A => B]]): F[G[B]] =
-    F.apply(fa)(F.map(f)(gab => G.apply(_)(gab)))
+  def ap[A, B](fa: F[G[A]])(f: F[G[A => B]]): F[G[B]] =
+    F.ap(fa)(F.map(f)(gab => G.ap(_)(gab)))
 }
