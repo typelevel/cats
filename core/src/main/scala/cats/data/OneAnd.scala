@@ -93,28 +93,42 @@ trait OneAndInstances {
       def combine[A](a: OneAnd[A, F], b: OneAnd[A, F]) = a combine b
     }
 
-  implicit def oneAndReducible[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[?, F]] =
-    new NonEmptyReducible[OneAnd[?, F], F] {
-      def split[A](fa: OneAnd[A, F]): (A, F[A]) =
-        (fa.head, fa.tail)
+  implicit def oneAndFoldable[F[_]](implicit foldable: Foldable[F]): Foldable[OneAnd[?,F]] =
+    new Foldable[OneAnd[?,F]] {
+      override def foldLeft[A, B](fa: OneAnd[A, F], b: B)(f: (B, A) => B): B =
+        fa.foldLeft(b)(f)
+      override def foldRight[A, B](fa: OneAnd[A, F], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
+        fa.foldRight(b)(f)
+
+      override def partialFold[A, B](fa: OneAnd[A,F])(f: A => Fold[B]): Fold[B] = {
+        import Fold._
+        f(fa.head) match {
+          case b @ Return(_) => b
+          case Continue(c) => foldable.partialFold(fa.tail)(f) match {
+            case Return(b) => Return(c(b))
+            case Continue(cc) => Continue { b => c(cc(b)) }
+            case _ => Continue(c)
+          }
+          case _ => foldable.partialFold(fa.tail)(f)
+        }
+      }
     }
 
-  implicit def oneAndMonad[F[_]](implicit F: MonadCombine[F]): Monad[OneAnd[?, F]] =
+  implicit def oneAndMonad[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[?, F]] =
     new Monad[OneAnd[?, F]] {
-
-      override def map[A, B](fa: OneAnd[A, F])(f: A => B): OneAnd[B, F] =
-        OneAnd(f(fa.head), F.map(fa.tail)(f))
+      override def map[A, B](fa: OneAnd[A,F])(f: A => B): OneAnd[B, F] =
+        OneAnd(f(fa.head), monad.map(fa.tail)(f))
 
       def pure[A](x: A): OneAnd[A, F] =
-        OneAnd(x, F.empty)
+        OneAnd(x, monad.empty)
 
       def flatMap[A, B](fa: OneAnd[A, F])(f: A => OneAnd[B, F]): OneAnd[B, F] = {
-        val end = F.flatMap(fa.tail) { a =>
+        val end = monad.flatMap(fa.tail) { a =>
           val fa = f(a)
-          F.combine(F.pure(fa.head), fa.tail)
+          monad.combine(monad.pure(fa.head), fa.tail)
         }
         val fst = f(fa.head)
-        OneAnd(fst.head, F.combine(fst.tail, end))
+        OneAnd(fst.head, monad.combine(fst.tail, end))
       }
     }
 }

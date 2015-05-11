@@ -37,7 +37,7 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): XorT[F, C, D] = XorT(F.map(value)(_.bimap(fa, fb)))
 
   def applyAlt[D](ff: XorT[F, A, B => D])(implicit F: Apply[F]): XorT[F, A, D] =
-    XorT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[A Xor ?].apply(xb)(xbd)))
+    XorT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[A Xor ?].ap(xb)(xbd)))
 
   def flatMap[AA >: A, D](f: B => XorT[F, AA, D])(implicit F: Monad[F]): XorT[F, AA, D] =
     XorT(F.flatMap(value) {
@@ -107,7 +107,7 @@ abstract class XorTInstances extends XorTInstances1 {
   implicit def xorTEq[F[_], L, R](implicit e: Eq[F[L Xor R]]): Eq[XorT[F, L, R]] =
     // TODO Use Eq.instance on next algebra upgrade
     new Eq[XorT[F, L, R]] {
-      def eqv(x: XorT[F, L, R], y: XorT[F, L, R]) = e.eqv(x.value, y.value)
+      def eqv(x: XorT[F, L, R], y: XorT[F, L, R]): Boolean = e.eqv(x.value, y.value)
     }
 
   implicit def xorTShow[F[_], L, R](implicit sh: Show[F[L Xor R]]): Show[XorT[F, L, R]] =
@@ -129,7 +129,7 @@ private[data] abstract class XorTInstances1 extends XorTInstances2 {
     implicit val L0 = L
     new MonoidK[XorT[F, L, ?]] with XorTSemigroupK[F, L] {
       implicit val F = F0; implicit val L = L0
-      def empty[A] = XorT.left(F.pure(L.empty))(F)
+      def empty[A]: XorT[F, L, A] = XorT.left(F.pure(L.empty))(F)
     }
   }
 }

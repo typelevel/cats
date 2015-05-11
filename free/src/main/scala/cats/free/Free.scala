@@ -53,9 +53,9 @@ object Free {
    */
   implicit def freeMonad[S[_]:Functor]: Monad[Free[S, ?]] =
     new Monad[Free[S, ?]] {
-      def pure[A](a: A) = Pure(a)
-      override def map[A, B](fa: Free[S, A])(f: A => B) = fa map f
-      def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]) = a flatMap f
+      def pure[A](a: A): Free[S, A] = Pure(a)
+      override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa map f
+      def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a flatMap f
     }
 }
 

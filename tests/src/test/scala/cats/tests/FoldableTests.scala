@@ -5,7 +5,7 @@ class FoldableTests extends CatsSuite {
   import Fold.{Continue, Return, Pass}
 
   // disable scalatest ===
-  override def convertToEqualizer[T](left: T) = ???
+  override def convertToEqualizer[T](left: T): Equalizer[T] = ???
 
   // exists method written in terms of foldRight
   def exists[F[_]: Foldable, A: Eq](as: F[A], goal: A): Lazy[Boolean] =

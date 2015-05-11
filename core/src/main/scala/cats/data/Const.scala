@@ -74,7 +74,7 @@ sealed abstract class ConstInstances0 extends ConstInstances1 {
     def pure[A](x: A): Const[C, A] =
       Const.empty
 
-    def apply[A, B](fa: Const[C, A])(f: Const[C, A => B]): Const[C, B] =
+    def ap[A, B](fa: Const[C, A])(f: Const[C, A => B]): Const[C, B] =
       fa.retag[B] combine f.retag[B]
   }
 }
@@ -86,7 +86,7 @@ sealed abstract class ConstInstances1 {
   }
 
   implicit def constApply[C: Semigroup]: Apply[Const[C, ?]] = new Apply[Const[C, ?]] {
-    def apply[A, B](fa: Const[C, A])(f: Const[C, A => B]): Const[C, B] =
+    def ap[A, B](fa: Const[C, A])(f: Const[C, A => B]): Const[C, B] =
       fa.retag[B] combine f.retag[B]
 
     def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =

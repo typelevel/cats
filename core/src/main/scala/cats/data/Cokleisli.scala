@@ -90,6 +90,9 @@ private trait CokleisliArrow[F[_]] extends Arrow[Cokleisli[F, ?, ?]] with Coklei
 
   override def dimap[A, B, C, D](fab: Cokleisli[F, A, B])(f: C => A)(g: B => D): Cokleisli[F, C, D] =
     super[CokleisliProfunctor].dimap(fab)(f)(g)
+
+  override def split[A, B, C, D](f: Cokleisli[F, A, B], g: Cokleisli[F, C, D]): Cokleisli[F, (A, C), (B, D)] =
+    super[CokleisliSplit].split(f, g)
 }
 
 private trait CokleisliSplit[F[_]] extends Split[Cokleisli[F, ?, ?]] {

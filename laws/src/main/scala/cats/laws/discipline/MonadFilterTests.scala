@@ -3,7 +3,8 @@ package laws
 package discipline
 
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 
 trait MonadFilterTests[F[_]] extends MonadTests[F] {
   def laws: MonadFilterLaws[F]
@@ -17,19 +18,15 @@ trait MonadFilterTests[F[_]] extends MonadTests[F] {
     implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
     implicit def ArbFB: Arbitrary[F[B]] = ArbF.synthesize[B]
 
-    new RuleSet {
-      def name = "monadFilter"
-      def bases = Nil
-      def parents = Seq(monad[A, B, C])
-      def props = Seq(
-        "monadFilter left empty" -> forAll(laws.monadFilterLeftEmpty[A, B] _),
-        "monadFilter right empty" -> forAll(laws.monadFilterRightEmpty[A, B] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "monadFilter",
+      parent = Some(monad[A, B, C]),
+      "monadFilter left empty" -> forAll(laws.monadFilterLeftEmpty[A, B] _),
+      "monadFilter right empty" -> forAll(laws.monadFilterRightEmpty[A, B] _))
   }
 }
 
 object MonadFilterTests {
   def apply[F[_]: MonadFilter]: MonadFilterTests[F] =
-    new MonadFilterTests[F] { def laws = MonadFilterLaws[F] }
+    new MonadFilterTests[F] { def laws: MonadFilterLaws[F] = MonadFilterLaws[F] }
 }

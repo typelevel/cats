@@ -107,7 +107,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * From Apply:
    * if both the function and this value are Valid, apply the function
    */
-  def apply[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE,B] =
+  def ap[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE,B] =
     (this, f) match {
       case (Valid(a), Valid(f)) => Valid(f(a))
       case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e1,e2))
@@ -184,7 +184,7 @@ sealed abstract class ValidatedInstances extends ValidatedInstances1 {
       override def map[A, B](fa: Validated[E,A])(f: A => B): Validated[E, B] =
         fa.map(f)
 
-      override def apply[A,B](fa: Validated[E,A])(f: Validated[E, A => B]): Validated[E, B] =
+      override def ap[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]): Validated[E, B] =
         (fa,f) match {
           case (Valid(a),Valid(f)) => Valid(f(a))
           case (e @ Invalid(_), Valid(_)) => e

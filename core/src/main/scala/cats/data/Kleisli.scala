@@ -10,7 +10,7 @@ import cats.functor.Strong
 final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
 
   def apply[C](f: Kleisli[F, A, B => C])(implicit F: Apply[F]): Kleisli[F, A, C] =
-    Kleisli(a => F.apply(run(a))(f.run(a)))
+    Kleisli(a => F.ap(run(a))(f.run(a)))
 
   def dimap[C, D](f: C => A)(g: B => D)(implicit F: Functor[F]): Kleisli[F, C, D] =
     Kleisli(c => F.map(run(f(c)))(g))
@@ -109,15 +109,15 @@ sealed abstract class KleisliInstances1 extends KleisliInstances2 {
     def pure[B](x: B): Kleisli[F, A, B] =
       Kleisli.pure[F, A, B](x)
 
-    def apply[B, C](fa: Kleisli[F, A, B])(f: Kleisli[F, A, B => C]): Kleisli[F, A, C] =
-      fa.apply(f)
+    def ap[B, C](fa: Kleisli[F, A, B])(f: Kleisli[F, A, B => C]): Kleisli[F, A, C] =
+      fa(f)
   }
 }
 
 sealed abstract class KleisliInstances2 extends KleisliInstances3 {
   implicit def kleisliApply[F[_]: Apply, A]: Apply[Kleisli[F, A, ?]] = new Apply[Kleisli[F, A, ?]] {
-    def apply[B, C](fa: Kleisli[F, A, B])(f: Kleisli[F, A, B => C]): Kleisli[F, A, C] =
-      fa.apply(f)
+    def ap[B, C](fa: Kleisli[F, A, B])(f: Kleisli[F, A, B => C]): Kleisli[F, A, C] =
+      fa(f)
 
     def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
       fa.map(f)
@@ -142,6 +142,9 @@ private trait KleisliArrow[F[_]] extends Arrow[Kleisli[F, ?, ?]] with KleisliSpl
 
   override def second[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (C, A), (C, B)] =
     super[KleisliStrong].second(fa)
+
+  override def split[A, B, C, D](f: Kleisli[F, A, B], g: Kleisli[F, C, D]): Kleisli[F, (A, C), (B, D)] =
+    super[KleisliSplit].split(f, g)
 }
 
 private trait KleisliSplit[F[_]] extends Split[Kleisli[F, ?, ?]] {

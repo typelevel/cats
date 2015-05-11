@@ -16,7 +16,7 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
     fa.flatMap(f).flatMap(g) <-> fa.flatMap(a => f(a).flatMap(g))
 
   def flatMapConsistentApply[A, B](fa: F[A], fab: F[A => B]): IsEq[F[B]] =
-    fa.apply(fab) <-> fab.flatMap(f => fa.map(f))
+    fa.ap(fab) <-> fab.flatMap(f => fa.map(f))
 
   /**
    * The composition of [[cats.data.Kleisli]] arrows is associative. This is
@@ -30,5 +30,5 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
 
 object FlatMapLaws {
   def apply[F[_]](implicit ev: FlatMap[F]): FlatMapLaws[F] =
-    new FlatMapLaws[F] { def F = ev }
+    new FlatMapLaws[F] { def F: FlatMap[F] = ev }
 }
