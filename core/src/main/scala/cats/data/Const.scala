@@ -52,7 +52,7 @@ sealed abstract class ConstInstances extends ConstInstances0 {
 
     def foldLeft[A, B](fa: Const[C, A], b: B)(f: (B, A) => B): B = b
 
-    override def foldRight[A, B](fa: Const[C, A], b: B)(f: (A, B) => B): B = b
+    override def foldRight[A, B](fa: Const[C, A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] = b
 
     def partialFold[A, B](fa: Const[C, A])(f: A => Fold[B]): Fold[B] = Fold.Pass
   }

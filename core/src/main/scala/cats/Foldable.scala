@@ -137,21 +137,43 @@ import simulacrum._
   def foldK[G[_], A](fga: F[G[A]])(implicit G: MonoidK[G]): G[A] =
     fold(fga)(G.algebra)
 
+
   /**
-   * find the first element matching the predicate, if one exists
+   * Find the first element matching the predicate, if one exists.
    */
   def find[A](fa: F[A])(f: A => Boolean): Option[A] =
     foldRight(fa, Lazy.eager(None: Option[A])) { a =>
       if (f(a)) Fold.Return(Some(a)) else Fold.Pass
     }.value
 
+
   /**
-   * Convert F[A] to List[A].
+   * Convert F[A] to a List[A].
    */
   def toList[A](fa: F[A]): List[A] =
     foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
-      buf.append(a); buf
+      buf += a
     }.toList
+
+
+  /**
+   * Convert F[A] to a List[A], only including elements which match `p`.
+   */
+  def filter_[A](fa: F[A])(p: A => Boolean): List[A] =
+    foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
+      if (p(a)) buf += a else buf
+    }.toList
+
+
+  /**
+   * Convert F[A] to a List[A], dropping all initial elements which
+   * match `p`.
+   */
+  def dropWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
+    foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
+      if (buf.nonEmpty || p(a)) buf += a else buf
+    }.toList
+
 
   /**
    * Compose this `Foldable[F]` with a `Foldable[G]` to create

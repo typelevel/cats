@@ -35,12 +35,12 @@ trait StreamInstances {
         val G = Applicative[G]
         val init = G.pure(Stream.empty[B])
 
-        // we use foldRight here to avoid possible stack overflows.
-        // since we don't want to return a Lazy[_] instance, we
-        // call .value at the end.
+        // We use foldRight to avoid possible stack overflows. Since
+        // we don't want to return a Lazy[_] instance, we call .value
+        // at the end.
         //
-        // (we don't worry about laziness here because traverse
-        // has to evaluate the entire stream.)
+        // (We don't worry about internal laziness because traverse
+        // has to evaluate the entire stream anyway.)
         foldRight(fa, Lazy(init)) { a =>
           Fold.Continue(gsb => G.map2(f(a), gsb)(_ #:: _))
         }.value
