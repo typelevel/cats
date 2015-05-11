@@ -84,13 +84,14 @@ trait OneAndInstances {
 
   implicit def oneAndFunctor[F[_]](F: Functor[F]): Functor[OneAnd[?, F]] =
     new Functor[OneAnd[?, F]] {
-      def map[A, B](fa: OneAnd[A, F])(f: A => B) =
+      def map[A, B](fa: OneAnd[A, F])(f: A => B): OneAnd[B, F] =
         OneAnd(f(fa.head), F.map(fa.tail)(f))
     }
 
   implicit def oneAndSemigroupK[F[_]: MonadCombine]: SemigroupK[OneAnd[?, F]] =
     new SemigroupK[OneAnd[?, F]] {
-      def combine[A](a: OneAnd[A, F], b: OneAnd[A, F]) = a combine b
+      def combine[A](a: OneAnd[A, F], b: OneAnd[A, F]): OneAnd[A, F] =
+        a combine b
     }
 
   implicit def oneAndFoldable[F[_]](implicit foldable: Foldable[F]): Foldable[OneAnd[?,F]] =
