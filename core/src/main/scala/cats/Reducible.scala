@@ -2,7 +2,6 @@ package cats
 
 import simulacrum._
 
-import Reducible.EmptyReduceError
 import Fold.{Return, Pass, Continue}
 
 /**
@@ -13,34 +12,38 @@ import Fold.{Return, Pass, Continue}
  * value.
  *
  * In addition to the methods needed by `Foldable`, `Reducible` is
- * implemented in terms of three methods:
+ * implemented in terms of two methods:
  *
- *  - `reduceLeft(fa)(f)` eagerly reduces `fa` from left-to-right
- *  - `reduceRight(fa)(f)` lazily reduces `fa` from right-to-left
- *  - `reduceTo(fa)(f)(g)` eagerly reduces with an additional mapping function
+ *  - `reduceLeftTo(fa)(f)(g)` eagerly reduces with an additional mapping function
+ *  - `reduceRightTo(fa)(f)(g)` lazily reduces with an additional mapping function
  */
 @typeclass trait Reducible[F[_]] extends Foldable[F] { self =>
 
   /**
-   * Left associative reduction on 'F' using the function 'f'.
+   * Left-associative reduction on 'F' using the function 'f'.
    *
    * Implementations should override this method when possible.
    */
-  def reduceLeft[A](fa: F[A])(f: (A, A) => A): A
+  def reduceLeft[A](fa: F[A])(f: (A, A) => A): A =
+    reduceLeftTo(fa)(identity)(f)
 
   /**
-   * Right associative reduction on 'F' using the function 'f'.
+   * Right-associative reduction on 'F' using the function 'f'.
    */
-  def reduceRight[A](fa: F[A])(f: A => Fold[A]): Lazy[A]
+  def reduceRight[A](fa: F[A])(f: A => Fold[A]): Lazy[A] =
+    reduceRightTo(fa)(identity)(f)
 
   /**
-   * Apply f to each element of F and combine them using the Semigroup[B].
+   * Reduce a `F[A]` value using the given semigroup.
    */
   def reduce[A](fa: F[A])(implicit A: Semigroup[A]): A =
     reduceLeft(fa)(A.combine)
 
   /**
-   * Fold up F using the SemigroupK instance for G. Like fold, but the value is of kind * -> *.
+   * Reduce a `F[G[A]]` value using `SemigroupK[G]`, a universal
+   * semigroup for `G[_]`.
+   *
+   * This method is a generalization of `reduce`.
    */
   def reduceK[G[_], A](fga: F[G[A]])(implicit G: SemigroupK[G]): G[A] =
     reduce(fga)(G.algebra)
@@ -50,13 +53,31 @@ import Fold.{Return, Pass, Continue}
    * Semigroup[B].
    */
   def reduceMap[A, B](fa: F[A])(f: A => B)(implicit B: Semigroup[B]): B =
-    reduceTo(fa)(f)(B.combine)
+    reduceLeftTo(fa)(f)((b, a) => B.combine(b, f(a)))
 
   /**
    * Apply f to each element of fa and combine them with the given
    * associative function g.
    */
-  def reduceTo[A, B](fa: F[A])(f: A => B)(g: (B, B) => B): B
+  def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B
+
+  /**
+   * Overriden from Foldable[_] for efficiency.
+   */
+  override def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
+    Some(reduceLeftTo(fa)(f)(g))
+
+  /**
+   * Apply f to each element of fa and lazily combine them with the
+   * given associative function `g`.
+   */
+  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[B]
+
+  /**
+   * Overriden from Foldable[_] for efficiency.
+   */
+  override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[Option[B]] =
+    Lazy(Some(reduceRightTo(fa)(f)(g).value))
 
   /**
    * Traverse `F[A]` using `Apply[G]`.
@@ -69,7 +90,7 @@ import Fold.{Return, Pass, Continue}
    * need to call `Applicative#pure` for a starting value.
    */
   def traverse1_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
-    G.map(reduceTo(fa)(f)((x, y) => G.map2(x, y)((_, b) => b)))(_ => ())
+    G.map(reduceLeftTo(fa)(f)((x, y) => G.map2(x, f(y))((_, b) => b)))(_ => ())
 
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.
@@ -91,72 +112,42 @@ import Fold.{Return, Pass, Continue}
     }
 }
 
-object Reducible {
-  case class EmptyReduceError() extends IllegalArgumentException("empty reduce")
-
-  /**
-   * Given a `Foldable[F]` instance, create a `Reducible[F]` instance
-   * that will work for `F[X]` values that are non-empty.
-   *
-   * This method is unsafe -- if it was used with an empty `F[X]`
-   * value an exception would be thrown.
-   */
-  def fromFoldableUnsafe[F[_]: Foldable]: Reducible[F] =
-    new UnsafeFoldable[F]
-}
 
 /**
- * Methods that apply to 2 nested Reducible instances
+ * This class composes two `Reducible` instances to provide an
+ * instance for the nested types.
+ *
+ * In other words, given a `Reducible[F]` instance (which can reduce
+ * `F[A]`) and a `Reducible[G]` instance (which can reduce `G[A]`
+ * values), this class is able to reduce `F[G[A]]` values.
  */
 trait CompositeReducible[F[_], G[_]] extends Reducible[λ[α => F[G[α]]]] with CompositeFoldable[F, G] {
   implicit def F: Reducible[F]
   implicit def G: Reducible[G]
 
-  override def reduceLeft[A](fga: F[G[A]])(f: (A, A) => A): A =
-    F.reduceTo(fga)(ga => G.reduceLeft(ga)(f))(f)
+  override def reduceLeftTo[A, B](fga: F[G[A]])(f: A => B)(g: (B, A) => B): B = {
+    def toB(ga: G[A]): B = G.reduceLeftTo(ga)(f)(g)
+    F.reduceLeftTo(fga)(toB) { (b, ga) =>
+      G.foldLeft(ga, b)(g)
+    }
+  }
 
-  override def reduceRight[A](fga: F[G[A]])(f: A => Fold[A]): Lazy[A] =
-    Lazy(foldRight(fga, Lazy(Option.empty[A])) { a =>
-      f(a) match {
-        case Return(a) => Return(Some(a))
-        case Continue(f) => Continue(_.map(f))
-        case _ => Pass
-      }
-    }.value.getOrElse(throw EmptyReduceError()))
-
-  override def reduceTo[A, B](fga: F[G[A]])(f: A => B)(g: (B, B) => B): B =
-    F.reduceTo(fga)(ga => G.reduceTo(ga)(f)(g))(g)
+  override def reduceRightTo[A, B](fga: F[G[A]])(f: A => B)(g: A => Fold[B]): Lazy[B] = {
+    def toB(ga: G[A]): B = G.reduceRightTo(ga)(f)(g).value
+    F.reduceRightTo(fga)(toB) { ga =>
+      Fold.Continue(b => G.foldRight(ga, Lazy(b))(g).value)
+    }
+  }
 }
 
-class UnsafeFoldable[F[_]](implicit F: Foldable[F]) extends Reducible[F] {
-  def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B =
-    F.foldLeft(fa, b)(f)
 
-  def partialFold[A, B](fa: F[A])(f: A => Fold[B]): Fold[B] =
-    F.partialFold(fa)(f)
-
-  def reduceLeft[A](fa: F[A])(f: (A, A) => A): A =
-    F.foldLeft(fa, Option.empty[A]) {
-      case (None, a2) => Some(a2)
-      case (Some(a1), a2) => Some(f(a1, a2))
-    }.getOrElse(throw EmptyReduceError())
-
-  def reduceRight[A](fa: F[A])(f: A => Fold[A]): Lazy[A] =
-    Lazy(F.foldRight(fa, Lazy(Option.empty[A])) { a =>
-      f(a) match {
-        case Return(a) => Return(Some(a))
-        case Continue(f) => Continue(_.map(f))
-        case _ => Pass
-      }
-    }.value.getOrElse(throw EmptyReduceError()))
-
-  def reduceTo[A, B](fa: F[A])(f: A => B)(g: (B, B) => B): B =
-    F.foldLeft(fa, Option.empty[B]) {
-      case (Some(b), a) => Some(g(b, f(a)))
-      case (None, a) => Some(f(a))
-    }.getOrElse(throw EmptyReduceError())
-}
-
+/**
+ * This class defines a `Reducible[F]` in terms of a `Foldable[G]`
+ * together with a `split method, `F[A]` => `(A, G[A])`.
+ *
+ * This class can be used on any type where the first value (`A`) and
+ * the "rest" of the values (`G[A]`) can be easily found.
+ */
 abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Reducible[F] {
   def split[A](fa: F[A]): (A, G[A])
 
@@ -175,19 +166,18 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
     }
   }
 
-  override def reduceLeft[A](fa: F[A])(f: (A, A) => A): A = {
+  def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B = {
     val (a, ga) = split(fa)
-    G.foldLeft(ga, a)(f)
+    G.foldLeft(ga, f(a))((b, a) => g(b, a))
   }
 
-  override def reduceRight[A](fa: F[A])(f: A => Fold[A]): Lazy[A] =
-    Lazy {
-      val (a, ga) = split(fa)
-      G.foldRight(ga, Lazy.eager(a))(f).value
-    }
-
-  override def reduceTo[A, B](fa: F[A])(f: A => B)(g: (B, B) => B): B = {
+  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[B] = {
     val (a, ga) = split(fa)
-    G.foldLeft(ga, f(a))((b, a) => g(b, f(a)))
+    Lazy {
+      G.reduceRightToOption(ga)(f)(g).value match {
+        case None => f(a)
+        case Some(b) => g(a).complete(Lazy.eager(b))
+      }
+    }
   }
 }

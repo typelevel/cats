@@ -1,5 +1,6 @@
 package cats
 
+import scala.collection.mutable
 import simulacrum._
 
 /**
@@ -15,6 +16,8 @@ import simulacrum._
  *
  *  - `foldLeft(fa, b)(f)` eagerly folds `fa` from left-to-right.
  *  - `foldRight(fa, b)(f)` lazily folds `fa` from right-to-left.
+ *
+ * (Actually `foldRight` is implemented in terms of `partialFold`.)
  *
  * Beyond these it provides many other useful methods related to
  * folding over F[A] values.
@@ -45,6 +48,21 @@ import simulacrum._
    * Low-level method that powers `foldRight`.
    */
   def partialFold[A, B](fa: F[A])(f: A => Fold[B]): Fold[B]
+
+
+  def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
+    foldLeft(fa, Option.empty[B]) {
+      case (Some(b), a) => Some(g(b, a))
+      case (None, a) => Some(f(a))
+    }
+
+  def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[Option[B]] =
+    foldRight(fa, Lazy.eager(Option.empty[B])) { a =>
+      Fold.Continue {
+        case None => Some(f(a))
+        case Some(b) => Some(g(a).complete(Lazy.eager(f(a))))
+      }
+    }
 
   /**
    * Fold implemented using the given Monoid[A] instance.
@@ -123,9 +141,17 @@ import simulacrum._
    * find the first element matching the predicate, if one exists
    */
   def find[A](fa: F[A])(f: A => Boolean): Option[A] =
-    foldRight[A,Option[A]](fa, Lazy.eager(None)) { a =>
+    foldRight(fa, Lazy.eager(None: Option[A])) { a =>
       if (f(a)) Fold.Return(Some(a)) else Fold.Pass
     }.value
+
+  /**
+   * Convert F[A] to List[A].
+   */
+  def toList[A](fa: F[A]): List[A] =
+    foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
+      buf.append(a); buf
+    }.toList
 
   /**
    * Compose this `Foldable[F]` with a `Foldable[G]` to create
