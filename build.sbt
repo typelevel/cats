@@ -36,7 +36,7 @@ lazy val commonSettings = Seq(
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshot")
+    Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %% "simulacrum" % "0.3.0",
