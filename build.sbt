@@ -35,11 +35,12 @@ lazy val commonSettings = Seq(
   ),
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
-    Resolver.sonatypeRepo("releases")
+    Resolver.sonatypeRepo("releases"),
+    Resolver.sonatypeRepo("snapshot")
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %% "simulacrum" % "0.3.0",
-    "org.spire-math" %% "algebra" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra_2.11-0.2.0-SNAPSHOT.jar",
+    "org.spire-math" %% "algebra" % "0.2.0-SNAPSHOT",
     "org.typelevel" %% "machinist" % "0.3.0",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.2")
