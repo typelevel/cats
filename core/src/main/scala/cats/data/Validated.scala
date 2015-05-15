@@ -34,7 +34,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Is this Invalid or matching the predicate
    */
-  def forAll(f: A => Boolean): Boolean = fold(_ => true, f)
+  def forall(f: A => Boolean): Boolean = fold(_ => true, f)
 
   /**
    * If the value is Valid but the predicate fails, return an empty
