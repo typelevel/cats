@@ -139,7 +139,6 @@ lazy val free = project.dependsOn(macros, core)
 lazy val state = project.dependsOn(macros, core, free, tests % "test -> test")
   .settings(moduleName := "cats-state")
   .settings(catsSettings)
-  .settings(noPublishSettings)
 
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/non/cats")),
