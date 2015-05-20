@@ -46,7 +46,7 @@ lazy val commonSettings = Seq(
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.4")
   ),
   scmInfo := Some(ScmInfo(url("https://github.com/non/cats"),
-    "git@github.com:non/cats.git"))
+    "scm:git:git@github.com:non/cats.git"))
 )
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ releaseSettings
@@ -159,10 +159,6 @@ lazy val publishSettings = Seq(
       Some("releases"  at nexus + "service/local/staging/deploy/maven2")
   },
   pomExtra := (
-    <scm>
-      <url>git@github.com:non/cats.git</url>
-      <connection>scm:git:git@github.com:non/cats.git</connection>
-    </scm>
     <developers>
       <developer>
         <id>non</id>
