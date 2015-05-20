@@ -20,7 +20,7 @@ import Fold.{Return, Pass, Continue}
 @typeclass trait Reducible[F[_]] extends Foldable[F] { self =>
 
   /**
-   * Left-associative reduction on 'F' using the function 'f'.
+   * Left-associative reduction on `F` using the function `f`.
    *
    * Implementations should override this method when possible.
    */
@@ -28,13 +28,13 @@ import Fold.{Return, Pass, Continue}
     reduceLeftTo(fa)(identity)(f)
 
   /**
-   * Right-associative reduction on 'F' using the function 'f'.
+   * Right-associative reduction on `F` using the function `f`.
    */
   def reduceRight[A](fa: F[A])(f: A => Fold[A]): Lazy[A] =
     reduceRightTo(fa)(identity)(f)
 
   /**
-   * Reduce a `F[A]` value using the given semigroup.
+   * Reduce a `F[A]` value using the given `Semigroup[A]`.
    */
   def reduce[A](fa: F[A])(implicit A: Semigroup[A]): A =
     reduceLeft(fa)(A.combine)
@@ -49,15 +49,15 @@ import Fold.{Return, Pass, Continue}
     reduce(fga)(G.algebra)
 
   /**
-   * Apply f to each element of fa and combine them using the given
-   * Semigroup[B].
+   * Apply `f` to each element of `fa` and combine them using the
+   * given `Semigroup[B]`.
    */
   def reduceMap[A, B](fa: F[A])(f: A => B)(implicit B: Semigroup[B]): B =
     reduceLeftTo(fa)(f)((b, a) => B.combine(b, f(a)))
 
   /**
-   * Apply f to each element of fa and combine them with the given
-   * associative function g.
+   * Apply `f` to the "initial element" of `fa` and combine it with
+   * every other value using the given function `g`.
    */
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B
 
@@ -68,13 +68,13 @@ import Fold.{Return, Pass, Continue}
     Some(reduceLeftTo(fa)(f)(g))
 
   /**
-   * Apply f to each element of fa and lazily combine them with the
-   * given associative function `g`.
+   * Apply `f` to the "initial element" of `fa` and lazily combine it
+   * with every other value using the given function `g`.
    */
   def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[B]
 
   /**
-   * Overriden from Foldable[_] for efficiency.
+   * Overriden from `Foldable[_]` for efficiency.
    */
   override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[Option[B]] =
     Lazy(Some(reduceRightTo(fa)(f)(g).value))

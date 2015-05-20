@@ -14,6 +14,6 @@ trait ReducibleSyntax extends Reducible.ToReducibleOps with ReducibleSyntax1 {
     new NestedReducibleOps[F, G, A](fga)
 }
 
-class NestedReducibleOps[F[_], G[_], A](fga: F[G[A]])(implicit F: Reducible[F]) {
+final class NestedReducibleOps[F[_], G[_], A](fga: F[G[A]])(implicit F: Reducible[F]) {
   def reduceK(fga: F[G[A]])(implicit G: MonoidK[G]): G[A] = F.foldK(fga)
 }

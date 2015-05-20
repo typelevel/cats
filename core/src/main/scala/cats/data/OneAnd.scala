@@ -1,6 +1,9 @@
 package cats
 package data
 
+import scala.annotation.tailrec
+import scala.collection.mutable.ListBuffer
+
 /**
  * A data type which represents a single element (head) and some other
  * structure (tail). As we have done in package.scala, this can be
@@ -134,4 +137,25 @@ trait OneAndInstances {
     }
 }
 
-object OneAnd extends OneAndInstances
+trait OneAndLowPriority {
+  implicit val nelComonad: Comonad[OneAnd[?, List]] =
+    new Comonad[OneAnd[?, List]] {
+
+      def coflatMap[A, B](fa: OneAnd[A, List])(f: OneAnd[A, List] => B): OneAnd[B, List] = {
+        @tailrec def consume(as: List[A], buf: ListBuffer[B]): List[B] =
+          as match {
+            case Nil => buf.toList
+            case a :: as => consume(as, buf += f(OneAnd(a, as)))
+          }
+        OneAnd(f(fa), consume(fa.tail, ListBuffer.empty))
+      }
+
+      def extract[A](fa: OneAnd[A, List]): A =
+        fa.head
+
+      def map[A, B](fa: OneAnd[A, List])(f: A => B): OneAnd[B, List] =
+        OneAnd(f(fa.head), fa.tail.map(f))
+    }
+}
+
+object OneAnd extends OneAndInstances with OneAndLowPriority
