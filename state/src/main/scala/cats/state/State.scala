@@ -94,12 +94,14 @@ object StateT extends StateTInstances {
 sealed abstract class StateTInstances extends StateTInstances0 {
   implicit def stateTMonad[F[_], S](implicit F: Monad[F]): Monad[StateT[F, S, ?]] = new Monad[StateT[F, S, ?]] {
 
-    def pure[A](a: A) = StateT.pure(a)
+    def pure[A](a: A): StateT[F, S, A] =
+      StateT.pure(a)
 
-    def flatMap[A, B](fa: StateT[F, S, A])(f: A => StateT[F, S, B]) =
+    def flatMap[A, B](fa: StateT[F, S, A])(f: A => StateT[F, S, B]): StateT[F, S, B] =
       fa.flatMap(f)
 
-    override def map[A, B](fa: StateT[F, S, A])(f: A => B) = fa.map(f)
+    override def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] =
+      fa.map(f)
   }
 }
 
