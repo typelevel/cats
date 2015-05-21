@@ -7,9 +7,9 @@ class FoldableTests extends CatsSuite {
   // disable scalatest ===
   override def convertToEqualizer[T](left: T): Equalizer[T] = ???
 
-  // exists method written in terms of foldLazy
+  // exists method written in terms of foldRight
   def exists[F[_]: Foldable, A: Eq](as: F[A], goal: A): Lazy[Boolean] =
-    Foldable[F].foldLazy(as, Lazy(false)) { a =>
+    Foldable[F].foldRight(as, Lazy(false)) { a =>
       if (a === goal) Return(true) else Pass
     }
 
@@ -20,8 +20,7 @@ class FoldableTests extends CatsSuite {
     val ns = (1 to 10).toList
     val total = ns.sum
     assert(F.foldLeft(ns, 0)(_ + _) == total)
-    assert(F.foldRight(ns, 0)(_ + _) == total)
-    assert(F.foldLazy(ns, Lazy(0))(x => Continue(x + _)).value == total)
+    assert(F.foldRight(ns, Lazy(0))(x => Continue(x + _)).value == total)
     assert(F.fold(ns) == total)
 
     // more basic checks
@@ -33,7 +32,7 @@ class FoldableTests extends CatsSuite {
     assert(exists(large, 10000).value)
 
     // safely build large lists
-    val larger = F.foldLazy(large, Lazy(List.empty[Int]))(x => Continue((x + 1) :: _))
+    val larger = F.foldRight(large, Lazy(List.empty[Int]))(x => Continue((x + 1) :: _))
     assert(larger.value == large.map(_ + 1))
   }
 
@@ -49,11 +48,11 @@ class FoldableTests extends CatsSuite {
     // lazy results don't blow up unless you call .value on them.
     val doom: Lazy[Boolean] = exists(dangerous, -1)
 
-    // ensure that the Lazy[B] param to foldLazy is actually being
+    // ensure that the Lazy[B] param to foldRight is actually being
     // handled lazily. it only needs to be evaluated if we reach the
     // "end" of the fold.
     val trap = Lazy(bomb[Boolean])
-    val result = F.foldLazy(1 #:: 2 #:: Stream.Empty, trap) { n =>
+    val result = F.foldRight(1 #:: 2 #:: Stream.Empty, trap) { n =>
       if (n == 2) Return(true) else Pass
     }
     assert(result.value)

@@ -14,9 +14,6 @@ trait SetInstances extends algebra.std.SetInstances {
       def foldLeft[A, B](fa: Set[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
-      override def foldRight[A, B](fa: Set[A], b: B)(f: (A, B) => B): B =
-        fa.foldRight(b)(f)
-
       def partialFold[A, B](fa: Set[A])(f: A => Fold[B]): Fold[B] =
         Fold.partialIterate(fa)(f)
     }
