@@ -20,8 +20,8 @@ def map[A, B](fa: F[A])(f: A => B): F[B]
 
 This method takes a function from A => B and turns an F[A] into an
 F[B].  The name of the method `map` should remind you of the `map`
-method that exists on many classes in the Scala standard library. some
-Examples of map functions:
+method that exists on many classes in the Scala standard library. Some
+examples of map functions:
 
 ```tut
 Option(1).map(_ + 1)
