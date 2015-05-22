@@ -5,6 +5,6 @@ import cats.data.Ior
 import cats.laws.discipline.{MonadTests, SerializableTests}
 
 class IorTests extends CatsSuite {
-  checkAll("Ior[String, Int]", MonadTests[String Ior ?].monad[Int, Int, Int])
-  checkAll("Monad[String Ior ?]]", SerializableTests.serializable(Monad[String Ior ?]))
+  checkAll("Monad[Ior[String, ?]]", MonadTests[String Ior ?].monad[Int, Int, Int])
+  checkAll("Serializable[Ior[String,?]]", SerializableTests.serializable(Monad[String Ior ?]))
 }

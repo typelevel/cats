@@ -9,6 +9,6 @@ import org.scalacheck.Arbitrary
 
 class ValidatedTests extends CatsSuite {
 
-  checkAll("Validated[String, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
-  checkAll("Applicative[Validated[String,?]]", SerializableTests.serializable(Applicative[Validated[String,?]]))
+  checkAll("Applicative[Validated[String, Int]]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
+  checkAll("Serializable[Applicative[Validated[String,?]]]", SerializableTests.serializable(Applicative[Validated[String,?]]))
 }

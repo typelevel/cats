@@ -13,12 +13,12 @@ class KleisliTests extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
     Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
-  checkAll("Kleisli[Option, Int, Int]", ApplicativeTests[Kleisli[Option, Int, ?]].applicative[Int, Int, Int])
-  checkAll("Applicative[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Applicative[Kleisli[Option, Int, ?]]))
+  checkAll("Applicative[Kleisli[Option, Int, Int]]", ApplicativeTests[Kleisli[Option, Int, ?]].applicative[Int, Int, Int])
+  checkAll("Serializable[[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Applicative[Kleisli[Option, Int, ?]]))
 
-  checkAll("Kleisli[Option, Int, Int]", StrongTests[Kleisli[Option, ?, ?]].strong[Int, Int, Int, Int, Int, Int])
-  checkAll("Strong[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Strong[Kleisli[Option, ?, ?]]))
+  checkAll("Strong[Kleisli[Option, Int, Int]]", StrongTests[Kleisli[Option, ?, ?]].strong[Int, Int, Int, Int, Int, Int])
+  checkAll("Serializable[Strong[Kleisli[Option, ?, ?]]]", SerializableTests.serializable(Strong[Kleisli[Option, ?, ?]]))
 
-  checkAll("Kleisli[Option, Int, Int]", ArrowTests[Kleisli[Option, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
-  checkAll("Arrow[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Arrow[Kleisli[Option, ?, ?]]))
+  checkAll("Arrow[Kleisli[Option, Int, Int]]", ArrowTests[Kleisli[Option, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
+  checkAll("Serializable[Arrow[Kleisli[Option, ?, ?]]]", SerializableTests.serializable(Arrow[Kleisli[Option, ?, ?]]))
 }
