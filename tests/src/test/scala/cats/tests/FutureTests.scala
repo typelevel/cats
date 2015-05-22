@@ -11,6 +11,6 @@ class FutureTests extends CatsSuite {
   implicit val eqv: Eq[Future[Int]] = futureEq(1.second)
   implicit val comonad: Comonad[Future] = futureComonad(1.second)
 
-  checkAll("Future[Int]", MonadTests[Future].monad[Int, Int, Int])
-  checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
+  checkAll("Monad[Future[Int]]", MonadTests[Future].monad[Int, Int, Int])
+  checkAll("Comonad[Future[Int]]", ComonadTests[Future].comonad[Int, Int, Int])
 }
