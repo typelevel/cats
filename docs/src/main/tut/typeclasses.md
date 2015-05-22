@@ -1,3 +1,5 @@
+# Typeclasses
+
 The typeclass pattern is a ubiquitous pattern in Scala, its function
 is to provide a behavior for some type. You think of it as an
 "interface" in the Java sense. Here's an example.
@@ -53,7 +55,7 @@ implement Show for Option:
 implicit def optionShow[A](implicit sa: Show[A]) = new Show[Option[A]] {
   def show(oa: Option[A]): String = oa match {
     case None => "None"
-    case Some(a) => "Some("+ sa.show(a) + ")" 
+    case Some(a) => "Some("+ sa.show(a) + ")"
   }
 }
 ```
