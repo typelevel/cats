@@ -78,7 +78,6 @@ lazy val docs = project
   .settings(unidocSettings)
   .settings(site.settings)
   .settings(ghpages.settings)
-  .settings(tutSettings)
   .settings(docSettings)
   .settings(tutSettings)
   .dependsOn(core, std, free)
