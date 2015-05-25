@@ -4,8 +4,7 @@ package discipline
 
 import cats.functor.Profunctor
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
-import Prop._
+import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws
 
 trait ProfunctorTests[F[_, _]] extends Laws {

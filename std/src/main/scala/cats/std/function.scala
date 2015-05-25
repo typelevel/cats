@@ -3,7 +3,8 @@ package std
 
 import algebra.Eq
 import cats.arrow.Arrow
-import cats.functor.Contravariant
+import cats.data.Xor
+import cats.functor.{ProChoice, Contravariant}
 
 trait Function0Instances {
   implicit val function0Instance: Bimonad[Function0] =
@@ -25,7 +26,7 @@ trait Function0Instances {
     }
 }
 
-trait Function1Instances {
+trait Function1Instances extends Function1Instances0 {
   implicit def function1Contravariant[R]: Contravariant[? => R] =
     new Contravariant[? => R] {
       def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
@@ -43,7 +44,7 @@ trait Function1Instances {
         f.compose(fa)
     }
 
-  implicit val function1Instance: Arrow[Function1] =
+  implicit val function1Arrow: Arrow[Function1] =
     new Arrow[Function1] {
       def lift[A, B](f: A => B): A => B = f
 
@@ -67,6 +68,17 @@ trait Function1Instances {
         B.combine(x(a), y(a))
       }
     }
+}
+
+sealed trait Function1Instances0 {
+  implicit val function1ProChoice: ProChoice[Function1] = new ProChoice[Function1] {
+    override def left[A, B, C](fab: A => B): Xor[A, C] => Xor[B, C] =
+      _.leftMap(fab)
+    override def right[A, B, C](fab: A => B): Xor[C, A] => Xor[C, B] =
+      _.map(fab)
+    override def dimap[A, B, C, D](fab: A => B)(f: C => A)(g: B => D): C => D =
+      g compose fab compose f
+  }
 }
 
 trait FunctionInstances
