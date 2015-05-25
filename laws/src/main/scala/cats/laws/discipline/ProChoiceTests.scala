@@ -10,7 +10,7 @@ import org.scalacheck.Prop._
 trait ProChoiceTests[F[_, _]] extends ProfunctorTests[F] {
   def laws: ProChoiceLaws[F]
 
-  def strong[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
+  def prochoice[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFBC: Arbitrary[F[B, C]],
     ArbFCD: Arbitrary[F[C, D]],
