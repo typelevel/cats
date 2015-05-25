@@ -2,7 +2,6 @@ package cats
 package tests
 
 import cats.arrow.Arrow
-import cats.data.Xor
 import cats.functor.ProChoice
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -17,10 +16,7 @@ class FunctionTests extends CatsSuite {
 
   checkAll("Function1[Int, Int]", ArrowTests[Function1].arrow[Int, Int, Int, Int, Int, Int])
   checkAll("Arrow[Function1]", SerializableTests.serializable(Arrow[Function1]))
-
-  implicit val function1XorEq: Eq[(Int Xor Int) => (Int Xor Int)] =
-    function1Eq(xorArbitrary[Int, Int], Xor.xorEq[Int, Int])
-
+  
   checkAll("Function1[Int, Int]", ProChoiceTests[Function1].prochoice[Int, Int, Int, Int, Int, Int])
   checkAll("ProChoice[Function1]", SerializableTests.serializable(ProChoice[Function1]))
 }
