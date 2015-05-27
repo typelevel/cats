@@ -192,13 +192,13 @@ data structure representing the sequence of operations. Here is a
 similar program represented explicitly:
 
 ```tut
-val programA: KVStoreA[Int] =
+val programA =
   Put("wild-cats", 2,
     Get("wild-cats", { (n0: Int) =>
       Put("wild-cats", n0 + 12,
-        Put("tame-cats", 5
+        Put("tame-cats", 5,
           Get("wild-cats", { (n1: Int) =>
-            Delete("tame-cats", n)
+            Delete("tame-cats", n1)
           })
         )
       )
