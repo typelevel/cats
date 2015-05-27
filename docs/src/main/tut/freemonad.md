@@ -26,7 +26,7 @@ In particular, *free monads* provide a practical way to:
 ## Using Free Monads
 
 A good way to get a sense for how *free monads* work is to see them in
-action. The next section uses `Free[_]` to create create embedded DSL
+action. The next section uses `Free[_]` to create an embedded DSL
 (Domain Specific Language).
 
 If you're interested in the theory behind *free monads*, the
@@ -85,7 +85,7 @@ case class Delete[Next](key: String, next: Next) extends KVStoreA[Next]
 
 The `next` field in each of the types provides a way to link an
 operation with successive values. The `Next` type parameter can be
-anything at all, including `Unit`. It can be through of as a carrier,
+anything at all, including `Unit`. It can be thought of as a carrier,
 a way to link a single operation with successive operations.
 
 As we will see, the `next` field is also necessary to allowing us to
@@ -134,8 +134,8 @@ implicit val functor: Functor[KVStoreA] =
       kvs match {
         case Put(key, value, next) =>
           Put(key, value, f(next))
-        case g: Get[T, A] => // help scalac with parametric type
-          Get[T, B](g.key, g.onResult andThen f)
+        case g: Get[t, A] => // help scalac with parametric type
+          Get[t, B](g.key, g.onResult andThen f)
         case Delete(key, next) =>
           Delete(key, f(next))
       }
