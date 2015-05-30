@@ -10,6 +10,6 @@ class ListTests extends CatsSuite {
   checkAll("List[Int]", MonadCombineTests[List].monadCombine[Int, Int, Int])
   checkAll("MonadCombine[List]", SerializableTests.serializable(MonadCombine[List]))
 
-  checkAll("List[Int] with Option", TraverseTests[List].traverse[Int, Int, Int, Option, Option])
+  checkAll("List[Int] with Option", TraverseTests[List].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[List]", SerializableTests.serializable(Traverse[List]))
 }

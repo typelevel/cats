@@ -1,7 +1,7 @@
 package cats
 package tests
 
-class FoldableTests extends CatsSuite {
+class FoldableTestsAdditional extends CatsSuite {
   import Fold.{Continue, Return, Pass}
 
   // disable scalatest ===

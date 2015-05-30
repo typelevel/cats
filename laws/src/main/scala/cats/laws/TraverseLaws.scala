@@ -2,6 +2,7 @@ package cats
 package laws
 
 import cats.Id
+import cats.arrow.Compose
 import cats.syntax.functor._
 import cats.syntax.traverse._
 
@@ -12,7 +13,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
     fa.traverse[Id, B](f) <-> F.map(fa)(f)
   }
 
-  def traverseComposition[A, B, C, M[_], N[_]](
+  def traverseSequentialComposition[A, B, C, M[_], N[_]](
     fa: F[A],
     f: A => M[B],
     g: B => N[C]
@@ -24,6 +25,28 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
     type MN[Z] = M[N[Z]]
     val lhs: MN[F[C]] = M.map(fa.traverse(f))(fb => fb.traverse(g))
     val rhs: MN[F[C]] = fa.traverse[MN, C](a => M.map(f(a))(g))
+    lhs <-> rhs
+  }
+
+  def traverseParallelComposition[A, B, M[_], N[_]](
+    fa: F[A],
+    f: A => M[B],
+    g: A => N[B]
+  )(implicit
+    N: Applicative[N],
+    M: Applicative[M]
+  ): IsEq[(M[F[B]], N[F[B]])] = {
+    type MN[Z] = (M[Z], N[Z])
+    implicit val MN = new Applicative[MN] {
+      override def pure[X](x: X): (M[X], N[X]) = (M.pure(x), N.pure(x))
+      override def ap[X, Y](fa: (M[X], N[X]))(f: (M[X => Y], N[X => Y])): (M[Y], N[Y]) = {
+        val (fam, fan) = fa
+        val (fm, fn) = f
+        (M.ap(fam)(fm), N.ap(fan)(fn))
+      }
+    }
+    val lhs: MN[F[B]] = fa.traverse[MN, B](a => (f(a), g(a)))
+    val rhs: MN[F[B]] = (fa.traverse(f), fa.traverse(g))
     lhs <-> rhs
   }
 }

@@ -10,6 +10,6 @@ class StreamTests extends CatsSuite {
   checkAll("Stream[Int]", MonadCombineTests[Stream].monadCombine[Int, Int, Int])
   checkAll("MonadCombine[Stream]", SerializableTests.serializable(MonadCombine[Stream]))
 
-  checkAll("Stream[Int] with Option", TraverseTests[Stream].traverse[Int, Int, Int, Option, Option])
+  checkAll("Stream[Int] with Option", TraverseTests[Stream].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Stream]", SerializableTests.serializable(Traverse[Stream]))
 }
