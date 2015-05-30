@@ -110,7 +110,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def ap[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE,B] =
     (this, f) match {
       case (Valid(a), Valid(f)) => Valid(f(a))
-      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e1,e2))
+      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e2,e1))
       case (e @ Invalid(_), _) => e
       case (_, e @ Invalid(_)) => e
     }
@@ -185,12 +185,7 @@ sealed abstract class ValidatedInstances extends ValidatedInstances1 {
         fa.map(f)
 
       override def ap[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]): Validated[E, B] =
-        (fa,f) match {
-          case (Valid(a),Valid(f)) => Valid(f(a))
-          case (e @ Invalid(_), Valid(_)) => e
-          case (Valid(_), e @ Invalid(_)) => e
-          case (Invalid(e1), Invalid(e2)) => Invalid(E.combine(e1, e2))
-        }
+        fa.ap(f)(E)
     }
 }
 
