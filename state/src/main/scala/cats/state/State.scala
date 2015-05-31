@@ -112,8 +112,9 @@ sealed abstract class StateTInstances0 {
     StateT.stateTMonad[Trampoline, S]
 }
 
-// To workaround SI-7139, define `object State` inside the package object.
-abstract class StateCompanion {
+// To workaround SI-7139 `object State` needs to be defined inside the package object
+// together with the type alias.
+abstract class StateFunctions {
   def apply[S, A](f: S => (S, A)): State[S, A] =
     StateT.applyF(Trampoline.done((s: S) => Trampoline.done(f(s))))
 

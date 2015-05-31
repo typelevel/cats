@@ -4,5 +4,5 @@ import free.Trampoline
 
 package object state {
   type State[S, A] = StateT[Trampoline, S, A]
-  object State extends StateCompanion
+  object State extends StateFunctions
 }
