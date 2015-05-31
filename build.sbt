@@ -7,6 +7,14 @@ import sbtrelease.ReleasePlugin.ReleaseKeys.releaseProcess
 import sbtrelease.ReleaseStateTransformations._
 import sbtrelease.Utilities._
 import sbtunidoc.Plugin.UnidocKeys._
+import ScoverageSbtPlugin._
+
+lazy val scoverageSettings = Seq(
+  ScoverageKeys.coverageMinimum := 60,
+  ScoverageKeys.coverageFailOnMinimum := false,
+  ScoverageKeys.coverageHighlighting := scalaBinaryVersion.value != "2.10",
+  ScoverageKeys.coverageExcludedPackages := "cats\\.bench\\..*"
+)
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
@@ -49,7 +57,7 @@ lazy val commonSettings = Seq(
     "scm:git:git@github.com:non/cats.git"))
 )
 
-lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ releaseSettings
+lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ releaseSettings ++ scoverageSettings
 
 lazy val disciplineDependencies = Seq(
   "org.scalacheck" %% "scalacheck" % "1.11.3",
