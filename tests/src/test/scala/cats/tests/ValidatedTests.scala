@@ -15,7 +15,7 @@ class ValidatedTests extends CatsSuite {
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)
-    assert(Validated.validatedInstances[String].ap2(Invalid("1"), Invalid("2"))(Valid(plus)) == Invalid("12"))
+    assert(Applicative[Validated[String, ?]].ap2(Invalid("1"), Invalid("2"))(Valid(plus)) == Invalid("12"))
   }
 
   test("fromTryCatch catches matching exceptions") {
@@ -29,9 +29,10 @@ class ValidatedTests extends CatsSuite {
   }
 
   test("filter makes non-matching entries invalid") {
-    for {
-      x <- Valid(1).filter[String](_ % 2 == 0)
-    } fail("1 is not even")
+    assert(
+      (for {
+        x <- Valid(1).filter[String](_ % 2 == 0)
+      } yield ()).isInvalid)
   }
 
   test("filter leaves matching entries valid") {
