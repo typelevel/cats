@@ -7,8 +7,17 @@ import sbtrelease.ReleasePlugin.ReleaseKeys.releaseProcess
 import sbtrelease.ReleaseStateTransformations._
 import sbtrelease.Utilities._
 import sbtunidoc.Plugin.UnidocKeys._
+import ScoverageSbtPlugin._
 
 enablePlugins(GitBranchPrompt)
+
+ScoverageKeys.coverageMinimum := 60
+ScoverageKeys.coverageFailOnMinimum := false
+ScoverageKeys.coverageHighlighting := {
+  if (scalaBinaryVersion.value == "2.10") false
+  else true
+}
+ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages := "docs;bench"
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",

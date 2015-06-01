@@ -6,7 +6,7 @@ script:
           "${TRAVIS_BRANCH}" == "master" &&
           ! $(cat version.sbt) =~ "-SNAPSHOT"
     ]]; then
-      sbt ++${TRAVIS_SCALA_VERSION} validate publish ;
+      sbt ++${TRAVIS_SCALA_VERSION} coverage validate coverageReport coverageAggregate && bash <(curl -s https://codecov.io/bash) && sbt clean validate publish ;
     else
       sbt ++${TRAVIS_SCALA_VERSION} validate publishLocal ;
     fi
@@ -21,3 +21,4 @@ env:
   global:
   - secure: STYk3FPnQwBHT25T.../O2SWbVYIL74K...XQAw=
   - secure: MwRqcAgpBGrmyRY6.../lB/sjDhMk67Y...Xjgk=
+  - CODECOV_TOKEN=:d85ca588-9328-471a-b563-7a885a85759c
