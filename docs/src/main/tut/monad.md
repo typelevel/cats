@@ -101,3 +101,4 @@ implicit def optionT[F[_]](implicit F : Monad[F]) = {
 ```
 
 This sort of construction is called a monad transformer.
+
