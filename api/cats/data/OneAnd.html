@@ -53,7 +53,7 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A data type which represents a single element (head) and some other
 structure (tail). As we have done in package.scala, this can be
-used to represent a List which is guaranteed to not be empty:</p><pre><span class="kw">type</span> NonEmptyList[A] = OneAnd[A, <span class="std">List</span>]</pre></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/data/src/main/scala/cats/data/OneAnd.scala" target="_blank">OneAnd.scala</a></dd></dl><div class="toggleContainer block">
+used to represent a List which is guaranteed to not be empty:</p><pre><span class="kw">type</span> NonEmptyList[A] = OneAnd[A, <span class="std">List</span>]</pre></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/OneAnd.scala" target="_blank">OneAnd.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -170,6 +170,27 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.OneAnd#===" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="===(that:cats.data.OneAnd[A,F])(implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):Boolean"></a>
+      <a id="===(OneAnd[A,F])(Eq[A],Eq[F[A]]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>, <span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>, <span name="FA">FA: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd@===(that:cats.data.OneAnd[A,F])(implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Typesafe equality operator.</p><div class="fullcomment"><div class="comment cmt"><p>Typesafe equality operator.</p><p>This method is similar to == except that it only allows two
+OneAnd[A, F] values to be compared to each other, and uses
+equality provided by Eq[_] instances, rather than using the
+universal equality provided by .equals.
+</p></div></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -211,7 +232,7 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
               
         </dd></dl></div>
     </li><li name="cats.data.OneAnd#combine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="combine(other:cats.data.OneAnd[A,F])(implicitmonad:cats.MonadCombine[F]):cats.data.OneAnd[A,F]"></a>
+      <a id="combine(other:cats.data.OneAnd[A,F])(implicitF:cats.MonadCombine[F]):cats.data.OneAnd[A,F]"></a>
       <a id="combine(OneAnd[A,F])(MonadCombine[F]):OneAnd[A,F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -219,10 +240,10 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">combine</span><span class="params">(<span name="other">other: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>, <span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="monad">monad: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>, <span class="extype" name="cats.data.OneAnd.F">F</span>]</span>
+        <span class="name">combine</span><span class="params">(<span name="other">other: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>, <span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>, <span class="extype" name="cats.data.OneAnd.F">F</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd@combine(other:cats.data.OneAnd[A,F])(implicitmonad:cats.MonadCombine[F]):cats.data.OneAnd[A,F]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OneAnd@combine(other:cats.data.OneAnd[A,F])(implicitF:cats.MonadCombine[F]):cats.data.OneAnd[A,F]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -246,7 +267,7 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.data.OneAnd#filter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="filter(f:A=&gt;Boolean)(implicitmonad:cats.MonadCombine[F]):F[A]"></a>
+      <a id="filter(f:A=&gt;Boolean)(implicitF:cats.MonadCombine[F]):F[A]"></a>
       <a id="filter((A)⇒Boolean)(MonadCombine[F]):F[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -254,10 +275,10 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filter</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OneAnd.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="monad">monad: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>
+        <span class="name">filter</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OneAnd.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd@filter(f:A=&gt;Boolean)(implicitmonad:cats.MonadCombine[F]):F[A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OneAnd@filter(f:A=&gt;Boolean)(implicitF:cats.MonadCombine[F]):F[A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -287,7 +308,7 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
               
         </dd></dl></div>
     </li><li name="cats.data.OneAnd#find" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="find(f:A=&gt;Boolean)(implicitfoldable:cats.Foldable[F]):Option[A]"></a>
+      <a id="find(f:A=&gt;Boolean)(implicitF:cats.Foldable[F]):Option[A]"></a>
       <a id="find((A)⇒Boolean)(Foldable[F]):Option[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -295,17 +316,17 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">find</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OneAnd.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="foldable">foldable: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>
+        <span class="name">find</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OneAnd.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd@find(f:A=&gt;Boolean)(implicitfoldable:cats.Foldable[F]):Option[A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OneAnd@find(f:A=&gt;Boolean)(implicitF:cats.Foldable[F]):Option[A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">find the first element matching the predicate, if one exists
 </p>
     </li><li name="cats.data.OneAnd#foldLeft" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="foldLeft[B](b:B)(f:(B,A)=&gt;B)(implicitfoldable:cats.Foldable[F]):B"></a>
+      <a id="foldLeft[B](b:B)(f:(B,A)=&gt;B)(implicitF:cats.Foldable[F]):B"></a>
       <a id="foldLeft[B](B)((B,A)⇒B)(Foldable[F]):B"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -313,33 +334,31 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.OneAnd.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OneAnd.foldLeft.B">B</span>, <span class="extype" name="cats.data.OneAnd.A">A</span>) ⇒ <span class="extype" name="cats.data.OneAnd.foldLeft.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="foldable">foldable: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OneAnd.foldLeft.B">B</span></span>
+        <span class="name">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.OneAnd.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OneAnd.foldLeft.B">B</span>, <span class="extype" name="cats.data.OneAnd.A">A</span>) ⇒ <span class="extype" name="cats.data.OneAnd.foldLeft.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OneAnd.foldLeft.B">B</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd@foldLeft[B](b:B)(f:(B,A)=&gt;B)(implicitfoldable:cats.Foldable[F]):B" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OneAnd@foldLeft[B](b:B)(f:(B,A)=&gt;B)(implicitF:cats.Foldable[F]):B" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Left associative fold on the structure using f
-</p>
+      <p class="shortcomment cmt">Left-associative fold on the structure using f.</p>
     </li><li name="cats.data.OneAnd#foldRight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="foldRight[B](b:B)(f:(A,B)=&gt;B)(implicitfoldable:cats.Foldable[F]):B"></a>
-      <a id="foldRight[B](B)((A,B)⇒B)(Foldable[F]):B"></a>
+      <a id="foldRight[B](b:cats.Lazy[B])(f:A=&gt;cats.Fold[B])(implicitF:cats.Foldable[F]):cats.Lazy[B]"></a>
+      <a id="foldRight[B](Lazy[B])((A)⇒Fold[B])(Foldable[F]):Lazy[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldRight</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.OneAnd.foldRight.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OneAnd.A">A</span>, <span class="extype" name="cats.data.OneAnd.foldRight.B">B</span>) ⇒ <span class="extype" name="cats.data.OneAnd.foldRight.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="foldable">foldable: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OneAnd.foldRight.B">B</span></span>
+        <span class="name">foldRight</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <a href="../Lazy.html" class="extype" name="cats.Lazy">Lazy</a>[<span class="extype" name="cats.data.OneAnd.foldRight.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OneAnd.A">A</span>) ⇒ <a href="../Fold.html" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.data.OneAnd.foldRight.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Lazy.html" class="extype" name="cats.Lazy">Lazy</a>[<span class="extype" name="cats.data.OneAnd.foldRight.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd@foldRight[B](b:B)(f:(A,B)=&gt;B)(implicitfoldable:cats.Foldable[F]):B" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OneAnd@foldRight[B](b:cats.Lazy[B])(f:A=&gt;cats.Fold[B])(implicitF:cats.Foldable[F]):cats.Lazy[B]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Right associative fold on the structure using f
-</p>
+      <p class="shortcomment cmt">Right-associative fold on the structure using f.</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -442,6 +461,26 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.OneAnd#show" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="show(implicitA:cats.Show[A],implicitFA:cats.Show[F[A]]):String"></a>
+      <a id="show(Show[A],Show[F[A]]):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">show</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>, <span name="FA">FA: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd@show(implicitA:cats.Show[A],implicitFA:cats.Show[F[A]]):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Typesafe stringification method.</p><div class="fullcomment"><div class="comment cmt"><p>Typesafe stringification method.</p><p>This method is similar to .toString except that it stringifies
+values according to Show[_] instances, rather than using the
+universal .toString method.
+</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -476,6 +515,23 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
       </a>
     </span>
       
+    </li><li name="cats.data.OneAnd#unwrap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="unwrap(implicitF:cats.MonadCombine[F]):F[A]"></a>
+      <a id="unwrap(MonadCombine[F]):F[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unwrap</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd@unwrap(implicitF:cats.MonadCombine[F]):F[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Combine the head and tail into a single <code>F[A]</code> value.</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

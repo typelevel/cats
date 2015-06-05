@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">FunctorSyntax</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">FunctorSyntax</span><span class="result"> extends <a href="../Functor$$ToFunctorOps.html" class="extype" name="cats.Functor.ToFunctorOps">ToFunctorOps</a> with <a href="FunctorSyntax1.html" class="extype" name="cats.syntax.FunctorSyntax1">FunctorSyntax1</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/syntax/functor.scala" target="_blank">functor.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="FunctorSyntax1.html" class="extype" name="cats.syntax.FunctorSyntax1">FunctorSyntax1</a>, <a href="../Functor$$ToFunctorOps.html" class="extype" name="cats.Functor.ToFunctorOps">ToFunctorOps</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a>, <a href="package$$all$.html" class="extype" name="cats.syntax.all">all</a>, <a href="package$$functor$.html" class="extype" name="cats.syntax.functor">functor</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.FunctorSyntax"><span>FunctorSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.FunctorSyntax"><span>FunctorSyntax</span></li><li class="in" name="cats.syntax.FunctorSyntax1"><span>FunctorSyntax1</span></li><li class="in" name="cats.Functor.ToFunctorOps"><span>ToFunctorOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -246,23 +246,23 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.syntax.FunctorSyntax#functorSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="functorSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.Functor[F]):cats.syntax.FunctorOps[F,A]"></a>
-      <a id="functorSyntax[F[_],A](F[A])(Functor[F]):FunctorOps[F,A]"></a>
+    </li><li name="cats.syntax.FunctorSyntax1#functorSyntaxU" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="functorSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.Functor,FA]):cats.Functor.Ops[U.M,U.A]"></a>
+      <a id="functorSyntaxU[FA](FA)(Unapply[Functor,FA]):Ops[M,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">functorSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.FunctorSyntax.functorSyntax.F">F</span>[<span class="extype" name="cats.syntax.FunctorSyntax.functorSyntax.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.syntax.FunctorSyntax.functorSyntax.F">F</span>]</span>)</span><span class="result">: <a href="FunctorOps.html" class="extype" name="cats.syntax.FunctorOps">FunctorOps</a>[<span class="extype" name="cats.syntax.FunctorSyntax.functorSyntax.F">F</span>, <span class="extype" name="cats.syntax.FunctorSyntax.functorSyntax.A">A</span>]</span>
+        <span class="name">functorSyntaxU</span><span class="tparams">[<span name="FA">FA</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.FunctorSyntax1.functorSyntaxU.FA">FA</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="../Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>, <span class="extype" name="cats.syntax.FunctorSyntax1.functorSyntaxU.FA">FA</span>]</span>)</span><span class="result">: <a href="../Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a>[<a href="../Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>, <a href="../Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.FunctorSyntax@functorSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.Functor[F]):cats.syntax.FunctorOps[F,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.FunctorSyntax@functorSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.Functor,FA]):cats.Functor.Ops[U.M,U.A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FunctorSyntax1.html" class="extype" name="cats.syntax.FunctorSyntax1">FunctorSyntax1</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -382,6 +382,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Functor.ToFunctorOps#toFunctorOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toFunctorOps[F[_],A](target:F[A])(implicittc:cats.Functor[F]):cats.Functor.Ops[F,A]"></a>
+      <a id="toFunctorOps[F[_],A](F[A])(Functor[F]):Ops[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFunctorOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Functor.ToFunctorOps.toFunctorOps.F">F</span>[<span class="extype" name="cats.Functor.ToFunctorOps.toFunctorOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Functor.ToFunctorOps.toFunctorOps.F">F</span>]</span>)</span><span class="result">: <a href="../Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a>[<span class="extype" name="cats.Functor.ToFunctorOps.toFunctorOps.F">F</span>, <span class="extype" name="cats.Functor.ToFunctorOps.toFunctorOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.FunctorSyntax@toFunctorOps[F[_],A](target:F[A])(implicittc:cats.Functor[F]):cats.Functor.Ops[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Functor$$ToFunctorOps.html" class="extype" name="cats.Functor.ToFunctorOps">ToFunctorOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -477,7 +494,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="cats.syntax.FunctorSyntax1">
+              <h3>Inherited from <a href="FunctorSyntax1.html" class="extype" name="cats.syntax.FunctorSyntax1">FunctorSyntax1</a></h3>
+            </div><div class="parent" name="cats.Functor.ToFunctorOps">
+              <h3>Inherited from <a href="../Functor$$ToFunctorOps.html" class="extype" name="cats.Functor.ToFunctorOps">ToFunctorOps</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

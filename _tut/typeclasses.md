@@ -1,3 +1,5 @@
+# Typeclasses
+
 The typeclass pattern is a ubiquitous pattern in Scala, its function
 is to provide a behavior for some type. You think of it as an
 "interface" in the Java sense. Here's an example.
@@ -37,7 +39,7 @@ It is trivial to supply a Show instance for String:
 scala> implicit val stringShow = new Show[String] {
      |   def show(s: String) = s
      | }
-stringShow: Show[String] = $anon$1@ff494e2
+stringShow: Show[String] = $anon$1@4daf36b9
 
 scala> // and now our call to Log succeeds
      | log("a string")
@@ -49,7 +51,7 @@ pattern. We have been able to provide an implementation of Show for
 String, without needing to change the definition of java.lang.String
 to extend a new Java-style interface; something we couldn't have done
 even if we wanted to, since we don't control the implementation of
-java.lang.Sting. We use this pattern to retrofit existing
+java.lang.String. We use this pattern to retrofit existing
 types with new behaviors. This is usually referred to as "ad-hoc
 polymorphism".
 
@@ -61,7 +63,7 @@ implement Show for Option:
 scala> implicit def optionShow[A](implicit sa: Show[A]) = new Show[Option[A]] {
      |   def show(oa: Option[A]): String = oa match {
      |     case None => "None"
-     |     case Some(a) => "Some("+ sa.show(a) + ")" 
+     |     case Some(a) => "Some("+ sa.show(a) + ")"
      |   }
      | }
 optionShow: [A](implicit sa: Show[A])Show[Option[A]]

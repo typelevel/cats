@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/syntax/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="FoldableSyntax.html" class="extype" name="cats.syntax.FoldableSyntax">FoldableSyntax</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="FoldableSyntax.html" class="extype" name="cats.syntax.FoldableSyntax">FoldableSyntax</a>, <a href="FoldableSyntax1.html" class="extype" name="cats.syntax.FoldableSyntax1">FoldableSyntax1</a>, <a href="../Foldable$$ToFoldableOps.html" class="extype" name="cats.Foldable.ToFoldableOps">ToFoldableOps</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.foldable"><span>foldable</span></li><li class="in" name="cats.syntax.FoldableSyntax"><span>FoldableSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.foldable"><span>foldable</span></li><li class="in" name="cats.syntax.FoldableSyntax"><span>FoldableSyntax</span></li><li class="in" name="cats.syntax.FoldableSyntax1"><span>FoldableSyntax1</span></li><li class="in" name="cats.Foldable.ToFoldableOps"><span>ToFoldableOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -243,23 +243,23 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.syntax.FoldableSyntax#foldableSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldableSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.Foldable[F]):cats.syntax.FoldableOps[F,A]"></a>
-      <a id="foldableSyntax[F[_],A](F[A])(Foldable[F]):FoldableOps[F,A]"></a>
+    </li><li name="cats.syntax.FoldableSyntax1#foldableSyntaxU" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldableSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.Foldable,FA]):cats.Foldable.Ops[U.M,U.A]"></a>
+      <a id="foldableSyntaxU[FA](FA)(Unapply[Foldable,FA]):Ops[M,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldableSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.FoldableSyntax.foldableSyntax.F">F</span>[<span class="extype" name="cats.syntax.FoldableSyntax.foldableSyntax.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.syntax.FoldableSyntax.foldableSyntax.F">F</span>]</span>)</span><span class="result">: <a href="FoldableOps.html" class="extype" name="cats.syntax.FoldableOps">FoldableOps</a>[<span class="extype" name="cats.syntax.FoldableSyntax.foldableSyntax.F">F</span>, <span class="extype" name="cats.syntax.FoldableSyntax.foldableSyntax.A">A</span>]</span>
+        <span class="name">foldableSyntaxU</span><span class="tparams">[<span name="FA">FA</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.FoldableSyntax1.foldableSyntaxU.FA">FA</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="../Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>, <span class="extype" name="cats.syntax.FoldableSyntax1.foldableSyntaxU.FA">FA</span>]</span>)</span><span class="result">: <a href="../Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a>[<a href="../Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>, <a href="../Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.package$$foldable$@foldableSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.Foldable[F]):cats.syntax.FoldableOps[F,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.package$$foldable$@foldableSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.Foldable,FA]):cats.Foldable.Ops[U.M,U.A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FoldableSyntax.html" class="extype" name="cats.syntax.FoldableSyntax">FoldableSyntax</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FoldableSyntax1.html" class="extype" name="cats.syntax.FoldableSyntax1">FoldableSyntax1</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -329,7 +329,7 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.syntax.FoldableSyntax#nestedFoldableSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="nestedFoldableSyntax[F[_],G[_],A](fga:F[G[A]])(implicitevidence$2:cats.Foldable[F]):cats.syntax.NestedFoldableOps[F,G,A]"></a>
+      <a id="nestedFoldableSyntax[F[_],G[_],A](fga:F[G[A]])(implicitevidence$1:cats.Foldable[F]):cats.syntax.NestedFoldableOps[F,G,A]"></a>
       <a id="nestedFoldableSyntax[F[_],G[_],A](F[G[A]])(Foldable[F]):NestedFoldableOps[F,G,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -340,7 +340,7 @@
         <span class="name">nestedFoldableSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.syntax.FoldableSyntax.nestedFoldableSyntax.F">F</span>[<span class="extype" name="cats.syntax.FoldableSyntax.nestedFoldableSyntax.G">G</span>[<span class="extype" name="cats.syntax.FoldableSyntax.nestedFoldableSyntax.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.syntax.FoldableSyntax.nestedFoldableSyntax.F">F</span>]</span>)</span><span class="result">: <a href="NestedFoldableOps.html" class="extype" name="cats.syntax.NestedFoldableOps">NestedFoldableOps</a>[<span class="extype" name="cats.syntax.FoldableSyntax.nestedFoldableSyntax.F">F</span>, <span class="extype" name="cats.syntax.FoldableSyntax.nestedFoldableSyntax.G">G</span>, <span class="extype" name="cats.syntax.FoldableSyntax.nestedFoldableSyntax.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.package$$foldable$@nestedFoldableSyntax[F[_],G[_],A](fga:F[G[A]])(implicitevidence$2:cats.Foldable[F]):cats.syntax.NestedFoldableOps[F,G,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.package$$foldable$@nestedFoldableSyntax[F[_],G[_],A](fga:F[G[A]])(implicitevidence$1:cats.Foldable[F]):cats.syntax.NestedFoldableOps[F,G,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -396,6 +396,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Foldable.ToFoldableOps#toFoldableOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toFoldableOps[F[_],A](target:F[A])(implicittc:cats.Foldable[F]):cats.Foldable.Ops[F,A]"></a>
+      <a id="toFoldableOps[F[_],A](F[A])(Foldable[F]):Ops[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFoldableOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.F">F</span>[<span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.F">F</span>]</span>)</span><span class="result">: <a href="../Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a>[<span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.F">F</span>, <span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.package$$foldable$@toFoldableOps[F[_],A](target:F[A])(implicittc:cats.Foldable[F]):cats.Foldable.Ops[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Foldable$$ToFoldableOps.html" class="extype" name="cats.Foldable.ToFoldableOps">ToFoldableOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -493,6 +510,10 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.syntax.FoldableSyntax">
               <h3>Inherited from <a href="FoldableSyntax.html" class="extype" name="cats.syntax.FoldableSyntax">FoldableSyntax</a></h3>
+            </div><div class="parent" name="cats.syntax.FoldableSyntax1">
+              <h3>Inherited from <a href="FoldableSyntax1.html" class="extype" name="cats.syntax.FoldableSyntax1">FoldableSyntax1</a></h3>
+            </div><div class="parent" name="cats.Foldable.ToFoldableOps">
+              <h3>Inherited from <a href="../Foldable$$ToFoldableOps.html" class="extype" name="cats.Foldable.ToFoldableOps">ToFoldableOps</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

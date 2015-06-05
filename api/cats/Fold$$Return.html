@@ -50,7 +50,7 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Return signals that the &quot;rest&quot; of a fold can be ignored.</p><p>Crucially, the <code>a</code> value here is not necessarily the value that
-will be returned from foldLazy, but instead it is the value that
+will be returned from foldRight, but instead it is the value that
 will be returned to the previous functions provided by any Continue
 instances.
 </p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Fold.scala" target="_blank">Fold.scala</a></dd></dl><div class="toggleContainer block">
@@ -244,6 +244,23 @@ instances.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Fold.html" class="extype" name="cats.Fold">Fold</a></dd></dl></div>
+    </li><li name="cats.Fold#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose(f:A=&gt;A):cats.Fold[A]"></a>
+      <a id="compose((A)⇒A):Fold[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Fold.Return.A">A</span>) ⇒ <span class="extype" name="cats.Fold.Return.A">A</span></span>)</span><span class="result">: <a href="Fold.html" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.Fold.Return.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Fold$$Return@compose(f:A=&gt;A):cats.Fold[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Fold.html" class="extype" name="cats.Fold">Fold</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -301,6 +318,23 @@ instances.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.Fold#imap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="imap[B](f:A=&gt;B)(g:B=&gt;A):cats.Fold[B]"></a>
+      <a id="imap[B]((A)⇒B)((B)⇒A):Fold[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">imap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Fold.Return.A">A</span>) ⇒ <span class="extype" name="cats.Fold.imap.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Fold.imap.B">B</span>) ⇒ <span class="extype" name="cats.Fold.Return.A">A</span></span>)</span><span class="result">: <a href="Fold.html" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.Fold.imap.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Fold$$Return@imap[B](f:A=&gt;B)(g:B=&gt;A):cats.Fold[B]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Fold.html" class="extype" name="cats.Fold">Fold</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

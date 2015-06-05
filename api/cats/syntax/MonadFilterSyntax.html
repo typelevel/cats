@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">MonadFilterSyntax</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">MonadFilterSyntax</span><span class="result"> extends <a href="../MonadFilter$$ToMonadFilterOps.html" class="extype" name="cats.MonadFilter.ToMonadFilterOps">ToMonadFilterOps</a> with <a href="MonadFilterSyntax1.html" class="extype" name="cats.syntax.MonadFilterSyntax1">MonadFilterSyntax1</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/syntax/monadFilter.scala" target="_blank">monadFilter.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="MonadFilterSyntax1.html" class="extype" name="cats.syntax.MonadFilterSyntax1">MonadFilterSyntax1</a>, <a href="../MonadFilter$$ToMonadFilterOps.html" class="extype" name="cats.MonadFilter.ToMonadFilterOps">ToMonadFilterOps</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a>, <a href="package$$all$.html" class="extype" name="cats.syntax.all">all</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a>, <a href="package$$monadFilter$.html" class="extype" name="cats.syntax.monadFilter">monadFilter</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.MonadFilterSyntax"><span>MonadFilterSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.MonadFilterSyntax"><span>MonadFilterSyntax</span></li><li class="in" name="cats.syntax.MonadFilterSyntax1"><span>MonadFilterSyntax1</span></li><li class="in" name="cats.MonadFilter.ToMonadFilterOps"><span>ToMonadFilterOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -297,23 +297,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.syntax.MonadFilterSyntax#monadFilterSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="monadFilterSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.MonadFilter[F]):cats.syntax.MonadFilterOps[F,A]"></a>
-      <a id="monadFilterSyntax[F[_],A](F[A])(MonadFilter[F]):MonadFilterOps[F,A]"></a>
+    </li><li name="cats.syntax.MonadFilterSyntax1#monadFilterSyntaxU" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="monadFilterSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.MonadFilter,FA]):cats.MonadFilter.Ops[U.M,U.A]"></a>
+      <a id="monadFilterSyntaxU[FA](FA)(Unapply[MonadFilter,FA]):Ops[M,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">monadFilterSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.MonadFilterSyntax.monadFilterSyntax.F">F</span>[<span class="extype" name="cats.syntax.MonadFilterSyntax.monadFilterSyntax.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../MonadFilter.html" class="extype" name="cats.MonadFilter">MonadFilter</a>[<span class="extype" name="cats.syntax.MonadFilterSyntax.monadFilterSyntax.F">F</span>]</span>)</span><span class="result">: <a href="MonadFilterOps.html" class="extype" name="cats.syntax.MonadFilterOps">MonadFilterOps</a>[<span class="extype" name="cats.syntax.MonadFilterSyntax.monadFilterSyntax.F">F</span>, <span class="extype" name="cats.syntax.MonadFilterSyntax.monadFilterSyntax.A">A</span>]</span>
+        <span class="name">monadFilterSyntaxU</span><span class="tparams">[<span name="FA">FA</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.MonadFilterSyntax1.monadFilterSyntaxU.FA">FA</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="../Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="../MonadFilter.html" class="extype" name="cats.MonadFilter">MonadFilter</a>, <span class="extype" name="cats.syntax.MonadFilterSyntax1.monadFilterSyntaxU.FA">FA</span>]</span>)</span><span class="result">: <a href="../MonadFilter$$Ops.html" class="extype" name="cats.MonadFilter.Ops">Ops</a>[<a href="../Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>, <a href="../Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.MonadFilterSyntax@monadFilterSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.MonadFilter[F]):cats.syntax.MonadFilterOps[F,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.MonadFilterSyntax@monadFilterSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.MonadFilter,FA]):cats.MonadFilter.Ops[U.M,U.A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MonadFilterSyntax1.html" class="extype" name="cats.syntax.MonadFilterSyntax1">MonadFilterSyntax1</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -382,6 +382,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.MonadFilter.ToMonadFilterOps#toMonadFilterOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toMonadFilterOps[F[_],A](target:F[A])(implicittc:cats.MonadFilter[F]):cats.MonadFilter.Ops[F,A]"></a>
+      <a id="toMonadFilterOps[F[_],A](F[A])(MonadFilter[F]):Ops[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toMonadFilterOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.MonadFilter.ToMonadFilterOps.toMonadFilterOps.F">F</span>[<span class="extype" name="cats.MonadFilter.ToMonadFilterOps.toMonadFilterOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../MonadFilter.html" class="extype" name="cats.MonadFilter">MonadFilter</a>[<span class="extype" name="cats.MonadFilter.ToMonadFilterOps.toMonadFilterOps.F">F</span>]</span>)</span><span class="result">: <a href="../MonadFilter$$Ops.html" class="extype" name="cats.MonadFilter.Ops">Ops</a>[<span class="extype" name="cats.MonadFilter.ToMonadFilterOps.toMonadFilterOps.F">F</span>, <span class="extype" name="cats.MonadFilter.ToMonadFilterOps.toMonadFilterOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.MonadFilterSyntax@toMonadFilterOps[F[_],A](target:F[A])(implicittc:cats.MonadFilter[F]):cats.MonadFilter.Ops[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../MonadFilter$$ToMonadFilterOps.html" class="extype" name="cats.MonadFilter.ToMonadFilterOps">ToMonadFilterOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -477,7 +494,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="cats.syntax.MonadFilterSyntax1">
+              <h3>Inherited from <a href="MonadFilterSyntax1.html" class="extype" name="cats.syntax.MonadFilterSyntax1">MonadFilterSyntax1</a></h3>
+            </div><div class="parent" name="cats.MonadFilter.ToMonadFilterOps">
+              <h3>Inherited from <a href="../MonadFilter$$ToMonadFilterOps.html" class="extype" name="cats.MonadFilter.ToMonadFilterOps">ToMonadFilterOps</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

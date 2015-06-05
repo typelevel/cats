@@ -74,9 +74,8 @@ these obvious, and will keep the well documented.
 
 In an attempt to be more modular, Cats is broken up into a number of sub-projects:
 
-* *core* - contains typeclass definitions, such as Functor, Applicative, Monad
+* *core* - contains typeclass definitions, such as Functor, Applicative, Monad and essential datatypes
 * *std* - contains typeclass instances for Scala standard library types
-* *data* - contains datatypes
 * *laws* - laws for the typeclasses, used to validate typeclass instances
 * *tests* - tests that check instances from *std* with laws from *laws*
 * *docs* - The source for this website

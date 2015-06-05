@@ -147,7 +147,7 @@ elimination.
       </a>
     </span>
       <p class="shortcomment cmt">Applicative Functor for Free</p>
-    </li><li name="cats.free.FreeC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.free.FreeC" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="FreeC[S[_],A]=cats.free.Free[[X_kp1]cats.free.Coyoneda[S,X_kp1],A]"></a>
       <a id="FreeC[S[_],A]:FreeC[S,A]"></a>
       <h4 class="signature">
@@ -163,7 +163,9 @@ elimination.
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Free monad of the free functor (Coyoneda) of S.</p><div class="fullcomment"><div class="comment cmt"><p>Free monad of the free functor (Coyoneda) of S.</p><p>This can be useful because the monad for <code>Free</code> requires a functor, and
+Coyoneda provides a free functor.
+</p></div></div>
     </li><li name="cats.free.Trampoline" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Trampoline[A]=cats.free.Free[Function0,A]"></a>
       <a id="Trampoline[A]:Trampoline[A]"></a>
@@ -181,6 +183,23 @@ elimination.
       </a>
     </span>
       <p class="shortcomment cmt">Alias for the free monad over the <code>Function0</code> functor.</p>
+    </li><li name="cats.free.TrampolineFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TrampolineFunctionsextendsAnyRef"></a>
+      <a id="TrampolineFunctions:TrampolineFunctions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TrampolineFunctions.html"><span class="name">TrampolineFunctions</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.package@TrampolineFunctionsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.free.Yoneda" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Yoneda[F[_],A]extendsSerializable"></a>
       <a id="Yoneda[F[_],A]:Yoneda[F,A]"></a>
@@ -270,7 +289,7 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Trampoline$.html"><span class="name">Trampoline</span></a>
+        <a href="package$$Trampoline$.html"><span class="name">Trampoline</span></a><span class="result"> extends <a href="TrampolineFunctions.html" class="extype" name="cats.free.TrampolineFunctions">TrampolineFunctions</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.free.package@Trampoline" title="Permalink" target="_top">

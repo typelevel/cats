@@ -51,24 +51,24 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Fold is designed to allow laziness/short-circuiting in foldLazy.</p><p>It is a sum type that has three possible subtypes:</p><ul><li><code>Return(a)</code>: stop the fold with a value of <code>a</code>.</li><li><code>Continue(f)</code>: continue the fold, suspending the computation <code>f</code> for this step.</li><li><code>Pass</code>: continue the fold, with no computation for this step.</li></ul><p>The meaning of these types can be made more clear with an example
-of the foldLazy method in action. Here's a method to count how many
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Fold is designed to allow laziness/short-circuiting in foldRight.</p><p>It is a sum type that has three possible subtypes:</p><ul><li><code>Return(a)</code>: stop the fold with a value of <code>a</code>.</li><li><code>Continue(f)</code>: continue the fold, suspending the computation <code>f</code> for this step.</li><li><code>Pass</code>: continue the fold, with no computation for this step.</li></ul><p>The meaning of these types can be made more clear with an example
+of the foldRight method in action. Here's a method to count how many
 elements appear in a list before the value 3:</p><pre><span class="kw">def</span> f(n: <span class="std">Int</span>): Fold[<span class="std">Int</span>] =
   <span class="kw">if</span> (n == <span class="num">3</span>) Fold.Return(<span class="num">0</span>) <span class="kw">else</span> Fold.Continue(_ + <span class="num">1</span>)
 
-<span class="kw">val</span> count: Lazy[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>).foldLazy(Lazy(<span class="num">0</span>))(f)</pre><p>When we call <code>count.value</code>, the following occurs:</p><ul><li><code>f(1)</code> produces <code>res0: Continue(_ + 1)</code></li><li><code>f(2)</code> produces <code>res1: Continue(_ + 1)</code></li><li><code>f(3)</code> produces <code>res2: Return(0)</code></li></ul><p>Now we unwind back through the continue instances:</p><ul><li><code>res2</code> returns <code>0</code></li><li><code>res1(0)</code> returns <code>1</code></li><li><code>res0(1)</code> returns <code>2</code></li></ul><p>And so the result is 2.</p><p>This code searches an infinite stream for 77:</p><pre><span class="kw">val</span> found: Lazy[<span class="std">Boolean</span>] =
-  Stream.from(<span class="num">0</span>).foldLazy(Lazy(<span class="kw">false</span>)) { n <span class="kw">=&gt;</span>
+<span class="kw">val</span> count: Lazy[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>).foldRight(Lazy(<span class="num">0</span>))(f)</pre><p>When we call <code>count.value</code>, the following occurs:</p><ul><li><code>f(1)</code> produces <code>res0: Continue(_ + 1)</code></li><li><code>f(2)</code> produces <code>res1: Continue(_ + 1)</code></li><li><code>f(3)</code> produces <code>res2: Return(0)</code></li></ul><p>Now we unwind back through the continue instances:</p><ul><li><code>res2</code> returns <code>0</code></li><li><code>res1(0)</code> returns <code>1</code></li><li><code>res0(1)</code> returns <code>2</code></li></ul><p>And so the result is 2.</p><p>This code searches an infinite stream for 77:</p><pre><span class="kw">val</span> found: Lazy[<span class="std">Boolean</span>] =
+  Stream.from(<span class="num">0</span>).foldRight(Lazy(<span class="kw">false</span>)) { n <span class="kw">=&gt;</span>
     <span class="kw">if</span> (n == <span class="num">77</span>) Fold.Return(<span class="kw">true</span>) <span class="kw">else</span> Fold.Pass
   }</pre><p>Here's another example that sums the list until it reaches a
 negative number:</p><pre><span class="kw">val</span> sum: Lazy[<span class="std">Double</span>] =
-  numbers.foldLazy(Lazy(<span class="num">0.0</span>)) { n <span class="kw">=&gt;</span>
+  numbers.foldRight(Lazy(<span class="num">0.0</span>)) { n <span class="kw">=&gt;</span>
     <span class="kw">if</span> (n &lt; <span class="num">0</span>) Fold.Return(<span class="num">0.0</span>) <span class="kw">else</span> Fold.Continue(n + _)
   }</pre><p>This strange example counts an infinite stream. Since the result is
 lazy, it will only hang the program once <code>count.value</code> is called:</p><pre><span class="kw">val</span> count: Lazy[<span class="std">Long</span>] =
-  Stream.from(<span class="num">0</span>).foldLazy(Lazy(<span class="num">0</span>L)) { _ <span class="kw">=&gt;</span>
+  Stream.from(<span class="num">0</span>).foldRight(Lazy(<span class="num">0</span>L)) { _ <span class="kw">=&gt;</span>
     Fold.Continue(_ + <span class="num">1</span>L)
-  }</pre><p>You can even implement foldLeft in terms of foldLazy (!):</p><pre><span class="kw">def</span> foldl[A, B](as: <span class="std">List</span>[A], b: B)(f: (B, A) <span class="kw">=&gt;</span> B): B =
-  as.foldLazy(Lazy((b: B) <span class="kw">=&gt;</span> b)) { a <span class="kw">=&gt;</span>
+  }</pre><p>You can even implement foldLeft in terms of foldRight (!):</p><pre><span class="kw">def</span> foldl[A, B](as: <span class="std">List</span>[A], b: B)(f: (B, A) <span class="kw">=&gt;</span> B): B =
+  as.foldRight(Lazy((b: B) <span class="kw">=&gt;</span> b)) { a <span class="kw">=&gt;</span>
     Fold.Continue(g <span class="kw">=&gt;</span> (b: B) <span class="kw">=&gt;</span> g(f(b, a)))
   }.value(b)</pre><p>(In practice you would not want to use the <code>foldl</code> because it is
 not stack-safe.)
@@ -283,6 +283,23 @@ not stack-safe.)
       </a>
     </span>
       
+    </li><li name="cats.Fold#compose" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="compose(f:A=&gt;A):cats.Fold[A]"></a>
+      <a id="compose((A)⇒A):Fold[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Fold.A">A</span>) ⇒ <span class="extype" name="cats.Fold.A">A</span></span>)</span><span class="result">: <a href="" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.Fold.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Fold@compose(f:A=&gt;A):cats.Fold[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -374,6 +391,23 @@ not stack-safe.)
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.Fold#imap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="imap[B](f:A=&gt;B)(g:B=&gt;A):cats.Fold[B]"></a>
+      <a id="imap[B]((A)⇒B)((B)⇒A):Fold[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">imap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Fold.A">A</span>) ⇒ <span class="extype" name="cats.Fold.imap.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Fold.imap.B">B</span>) ⇒ <span class="extype" name="cats.Fold.A">A</span></span>)</span><span class="result">: <a href="" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.Fold.imap.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Fold@imap[B](f:A=&gt;B)(g:B=&gt;A):cats.Fold[B]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

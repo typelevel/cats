@@ -45,7 +45,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="fresh$macro$1">fresh$macro$1</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4>
       
@@ -54,7 +54,7 @@
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="CoflatMap$$Ops.html" class="extype" name="cats.CoflatMap.Ops">Ops</a>, <a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a>, <a href="Comonad$$Ops.html" class="extype" name="cats.Comonad.Ops">Ops</a></div>
+            <div class="subClasses hiddenContent"><a href="Traverse$$AllOps.html" class="extype" name="cats.Traverse.AllOps">AllOps</a>, <a href="Monad$$AllOps.html" class="extype" name="cats.Monad.AllOps">AllOps</a>, <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">AllOps</a>, <a href="Apply$$AllOps.html" class="extype" name="cats.Apply.AllOps">AllOps</a>, <a href="Bimonad$$AllOps.html" class="extype" name="cats.Bimonad.AllOps">AllOps</a>, <a href="MonadCombine$$AllOps.html" class="extype" name="cats.MonadCombine.AllOps">AllOps</a>, <a href="Applicative$$AllOps.html" class="extype" name="cats.Applicative.AllOps">AllOps</a>, <a href="Alternative$$AllOps.html" class="extype" name="cats.Alternative.AllOps">AllOps</a>, <a href="Comonad$$AllOps.html" class="extype" name="cats.Comonad.AllOps">AllOps</a>, <a href="CoflatMap$$AllOps.html" class="extype" name="cats.CoflatMap.AllOps">AllOps</a>, <a href="FlatMap$$AllOps.html" class="extype" name="cats.FlatMap.AllOps">AllOps</a>, <a href="MonadFilter$$AllOps.html" class="extype" name="cats.MonadFilter.AllOps">AllOps</a></div>
           </div></div>
         
 
@@ -97,18 +97,18 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="cats.Functor.Ops#self" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="self:F[fresh$macro$1]"></a>
-      <a id="self:F[fresh$macro$1]"></a>
+      <a id="self:F[A]"></a>
+      <a id="self:F[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Functor.Ops.F">F</span>[<span class="extype" name="cats.Functor.Ops.fresh$macro$1">fresh$macro$1</span>]</span>
+        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Functor.Ops.F">F</span>[<span class="extype" name="cats.Functor.Ops.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Functor$$Ops@self:F[fresh$macro$1]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Functor$$Ops@self:F[A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -318,18 +318,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.Functor.Ops#imap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="imap[B](f:fresh$macro$1=&gt;B)(fi:B=&gt;fresh$macro$1):F[B]"></a>
-      <a id="imap[B]((fresh$macro$1)⇒B)((B)⇒fresh$macro$1):F[B]"></a>
+      <a id="imap[B](f:A=&gt;B)(fi:B=&gt;A):F[B]"></a>
+      <a id="imap[B]((A)⇒B)((B)⇒A):F[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">imap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Functor.Ops.fresh$macro$1">fresh$macro$1</span>) ⇒ <span class="extype" name="cats.Functor.Ops.imap.B">B</span></span>)</span><span class="params">(<span name="fi">fi: (<span class="extype" name="cats.Functor.Ops.imap.B">B</span>) ⇒ <span class="extype" name="cats.Functor.Ops.fresh$macro$1">fresh$macro$1</span></span>)</span><span class="result">: <span class="extype" name="cats.Functor.Ops.F">F</span>[<span class="extype" name="cats.Functor.Ops.imap.B">B</span>]</span>
+        <span class="name">imap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Functor.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Functor.Ops.imap.B">B</span></span>)</span><span class="params">(<span name="fi">fi: (<span class="extype" name="cats.Functor.Ops.imap.B">B</span>) ⇒ <span class="extype" name="cats.Functor.Ops.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.Functor.Ops.F">F</span>[<span class="extype" name="cats.Functor.Ops.imap.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Functor$$Ops@imap[B](f:fresh$macro$1=&gt;B)(fi:B=&gt;fresh$macro$1):F[B]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Functor$$Ops@imap[B](f:A=&gt;B)(fi:B=&gt;A):F[B]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -352,18 +352,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="cats.Functor.Ops#map" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="map[B](f:fresh$macro$1=&gt;B):F[B]"></a>
-      <a id="map[B]((fresh$macro$1)⇒B):F[B]"></a>
+      <a id="map[B](f:A=&gt;B):F[B]"></a>
+      <a id="map[B]((A)⇒B):F[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Functor.Ops.fresh$macro$1">fresh$macro$1</span>) ⇒ <span class="extype" name="cats.Functor.Ops.map.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Functor.Ops.F">F</span>[<span class="extype" name="cats.Functor.Ops.map.B">B</span>]</span>
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Functor.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Functor.Ops.map.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Functor.Ops.F">F</span>[<span class="extype" name="cats.Functor.Ops.map.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Functor$$Ops@map[B](f:fresh$macro$1=&gt;B):F[B]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Functor$$Ops@map[B](f:A=&gt;B):F[B]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>

@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ComonadSyntax</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">ComonadSyntax</span><span class="result"> extends <a href="../Comonad$$ToComonadOps.html" class="extype" name="cats.Comonad.ToComonadOps">ToComonadOps</a> with <a href="ComonadSyntax1.html" class="extype" name="cats.syntax.ComonadSyntax1">ComonadSyntax1</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/syntax/comonad.scala" target="_blank">comonad.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="ComonadSyntax1.html" class="extype" name="cats.syntax.ComonadSyntax1">ComonadSyntax1</a>, <a href="../Comonad$$ToComonadOps.html" class="extype" name="cats.Comonad.ToComonadOps">ToComonadOps</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a>, <a href="package$$all$.html" class="extype" name="cats.syntax.all">all</a>, <a href="package$$comonad$.html" class="extype" name="cats.syntax.comonad">comonad</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.ComonadSyntax"><span>ComonadSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.ComonadSyntax"><span>ComonadSyntax</span></li><li class="in" name="cats.syntax.ComonadSyntax1"><span>ComonadSyntax1</span></li><li class="in" name="cats.Comonad.ToComonadOps"><span>ToComonadOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -189,23 +189,23 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.syntax.ComonadSyntax#comonadSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="comonadSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.Comonad[F]):cats.syntax.ComonadOps[F,A]"></a>
-      <a id="comonadSyntax[F[_],A](F[A])(Comonad[F]):ComonadOps[F,A]"></a>
+    </li><li name="cats.syntax.ComonadSyntax1#comonadSyntaxU" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="comonadSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.Comonad,FA]):cats.Comonad.Ops[U.M,U.A]"></a>
+      <a id="comonadSyntaxU[FA](FA)(Unapply[Comonad,FA]):Ops[M,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">comonadSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.ComonadSyntax.comonadSyntax.F">F</span>[<span class="extype" name="cats.syntax.ComonadSyntax.comonadSyntax.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.syntax.ComonadSyntax.comonadSyntax.F">F</span>]</span>)</span><span class="result">: <a href="ComonadOps.html" class="extype" name="cats.syntax.ComonadOps">ComonadOps</a>[<span class="extype" name="cats.syntax.ComonadSyntax.comonadSyntax.F">F</span>, <span class="extype" name="cats.syntax.ComonadSyntax.comonadSyntax.A">A</span>]</span>
+        <span class="name">comonadSyntaxU</span><span class="tparams">[<span name="FA">FA</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.ComonadSyntax1.comonadSyntaxU.FA">FA</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="../Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>, <span class="extype" name="cats.syntax.ComonadSyntax1.comonadSyntaxU.FA">FA</span>]</span>)</span><span class="result">: <a href="../Comonad$$Ops.html" class="extype" name="cats.Comonad.Ops">Ops</a>[<a href="../Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>, <a href="../Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.ComonadSyntax@comonadSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.Comonad[F]):cats.syntax.ComonadOps[F,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.ComonadSyntax@comonadSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.Comonad,FA]):cats.Comonad.Ops[U.M,U.A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ComonadSyntax1.html" class="extype" name="cats.syntax.ComonadSyntax1">ComonadSyntax1</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -382,6 +382,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Comonad.ToComonadOps#toComonadOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toComonadOps[F[_],A](target:F[A])(implicittc:cats.Comonad[F]):cats.Comonad.Ops[F,A]"></a>
+      <a id="toComonadOps[F[_],A](F[A])(Comonad[F]):Ops[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toComonadOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Comonad.ToComonadOps.toComonadOps.F">F</span>[<span class="extype" name="cats.Comonad.ToComonadOps.toComonadOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.Comonad.ToComonadOps.toComonadOps.F">F</span>]</span>)</span><span class="result">: <a href="../Comonad$$Ops.html" class="extype" name="cats.Comonad.Ops">Ops</a>[<span class="extype" name="cats.Comonad.ToComonadOps.toComonadOps.F">F</span>, <span class="extype" name="cats.Comonad.ToComonadOps.toComonadOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.ComonadSyntax@toComonadOps[F[_],A](target:F[A])(implicittc:cats.Comonad[F]):cats.Comonad.Ops[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Comonad$$ToComonadOps.html" class="extype" name="cats.Comonad.ToComonadOps">ToComonadOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -477,7 +494,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="cats.syntax.ComonadSyntax1">
+              <h3>Inherited from <a href="ComonadSyntax1.html" class="extype" name="cats.syntax.ComonadSyntax1">ComonadSyntax1</a></h3>
+            </div><div class="parent" name="cats.Comonad.ToComonadOps">
+              <h3>Inherited from <a href="../Comonad$$ToComonadOps.html" class="extype" name="cats.Comonad.ToComonadOps">ToComonadOps</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

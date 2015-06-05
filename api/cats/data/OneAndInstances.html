@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/data/src/main/scala/cats/data/OneAnd.scala" target="_blank">OneAnd.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/OneAnd.scala" target="_blank">OneAnd.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
@@ -348,6 +348,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.OneAndInstances#oneAndEq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="oneAndEq[A,F[_]](implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):cats.Eq[cats.data.OneAnd[A,F]]"></a>
+      <a id="oneAndEq[A,F[_]](Eq[A],Eq[F[A]]):Eq[OneAnd[A,F]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">oneAndEq</span><span class="tparams">[<span name="A">A</span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndEq.A">A</span>]</span>, <span name="FA">FA: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndEq.F">F</span>[<span class="extype" name="cats.data.OneAndInstances.oneAndEq.A">A</span>]]</span>)</span><span class="result">: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndEq.A">A</span>, <span class="extype" name="cats.data.OneAndInstances.oneAndEq.F">F</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAndInstances@oneAndEq[A,F[_]](implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):cats.Eq[cats.data.OneAnd[A,F]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.OneAndInstances#oneAndFoldable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="oneAndFoldable[F[_]](implicitfoldable:cats.Foldable[F]):cats.Foldable[[X_kp0]cats.data.OneAnd[X_kp0,F]]"></a>
       <a id="oneAndFoldable[F[_]](Foldable[F]):Foldable[[X_kp0]OneAnd[X_kp0,F]]"></a>
@@ -383,18 +400,18 @@
     </span>
       
     </li><li name="cats.data.OneAndInstances#oneAndMonad" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="oneAndMonad[F[_]](implicitmonad:cats.MonadCombine[F]):cats.Comonad[[X_kp0]cats.data.OneAnd[X_kp0,F]]withcats.Monad[[X_kp0]cats.data.OneAnd[X_kp0,F]]"></a>
-      <a id="oneAndMonad[F[_]](MonadCombine[F]):Comonad[[X_kp0]OneAnd[X_kp0,F]]withMonad[[X_kp0]OneAnd[X_kp0,F]]"></a>
+      <a id="oneAndMonad[F[_]](implicitmonad:cats.MonadCombine[F]):cats.Monad[[X_kp0]cats.data.OneAnd[X_kp0,F]]"></a>
+      <a id="oneAndMonad[F[_]](MonadCombine[F]):Monad[[X_kp0]OneAnd[X_kp0,F]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">oneAndMonad</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="monad">monad: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndMonad.F">F</span>]</span>)</span><span class="result">: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[[X_kp0]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.L_kp.X_kp0">X_kp0</span>, <span class="extype" name="cats.data.OneAndInstances.oneAndMonad.F">F</span>]] with <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[X_kp0]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.L_kp.X_kp0">X_kp0</span>, <span class="extype" name="cats.data.OneAndInstances.oneAndMonad.F">F</span>]]</span>
+        <span class="name">oneAndMonad</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="monad">monad: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndMonad.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[X_kp0]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.L_kp.X_kp0">X_kp0</span>, <span class="extype" name="cats.data.OneAndInstances.oneAndMonad.F">F</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAndInstances@oneAndMonad[F[_]](implicitmonad:cats.MonadCombine[F]):cats.Comonad[[X_kp0]cats.data.OneAnd[X_kp0,F]]withcats.Monad[[X_kp0]cats.data.OneAnd[X_kp0,F]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OneAndInstances@oneAndMonad[F[_]](implicitmonad:cats.MonadCombine[F]):cats.Monad[[X_kp0]cats.data.OneAnd[X_kp0,F]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -417,7 +434,7 @@
     </span>
       
     </li><li name="cats.data.OneAndInstances#oneAndShow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="oneAndShow[A,F[_]](implicitshowHead:cats.Show[A],implicitshowTail:cats.Show[F[A]]):cats.Show[cats.data.OneAnd[A,F]]"></a>
+      <a id="oneAndShow[A,F[_]](implicitA:cats.Show[A],implicitFA:cats.Show[F[A]]):cats.Show[cats.data.OneAnd[A,F]]"></a>
       <a id="oneAndShow[A,F[_]](Show[A],Show[F[A]]):Show[OneAnd[A,F]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -425,10 +442,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">oneAndShow</span><span class="tparams">[<span name="A">A</span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="showHead">showHead: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.A">A</span>]</span>, <span name="showTail">showTail: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.F">F</span>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.A">A</span>]]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.A">A</span>, <span class="extype" name="cats.data.OneAndInstances.oneAndShow.F">F</span>]]</span>
+        <span class="name">oneAndShow</span><span class="tparams">[<span name="A">A</span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.A">A</span>]</span>, <span name="FA">FA: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.F">F</span>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.A">A</span>]]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.A">A</span>, <span class="extype" name="cats.data.OneAndInstances.oneAndShow.F">F</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAndInstances@oneAndShow[A,F[_]](implicitshowHead:cats.Show[A],implicitshowTail:cats.Show[F[A]]):cats.Show[cats.data.OneAnd[A,F]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OneAndInstances@oneAndShow[A,F[_]](implicitA:cats.Show[A],implicitFA:cats.Show[F[A]]):cats.Show[cats.data.OneAnd[A,F]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>

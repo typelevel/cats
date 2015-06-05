@@ -7,12 +7,12 @@ scaladoc: "#cats.Apply"
 ---
 # Apply
 
-Apply extends the Functor typeclass (which features the familiar
-"map" function) with a new function "apply".  The apply function
-is similar to map in that we are transforming a value in a context,
-e.g. F[A] where F is the context (e.g. Option, List, Future) and A
-is the type of the value.  But the function A => B is now in the
-context itself, e.g. F[A => B] such as Option[A => B] or List[A => B].
+Apply extends the Functor typeclass (which features the familiar "map"
+function) with a new function "ap".  The ap function is similar to map
+in that we are transforming a value in a context, e.g. F[A] where F is
+the context (e.g. Option, List, Future) and A is the type of the
+value.  But the function A => B is now in the context itself,
+e.g. F[A => B] such as Option[A => B] or List[A => B].
 
 ```scala
 scala> import cats._
@@ -28,18 +28,18 @@ scala> val addTwo: Int => Int = _ + 2
 addTwo: Int => Int = <function1>
 
 scala> implicit val optionApply: Apply[Option] = new Apply[Option] {
-     |   def apply[A, B](fa: Option[A])(f: Option[A => B]): Option[B] =
+     |   def ap[A, B](fa: Option[A])(f: Option[A => B]): Option[B] =
      |     fa.flatMap (a => f.map (ff => ff(a)))
      |   def map[A,B](fa: Option[A])(f: A => B) = fa map f
      | }
-optionApply: cats.Apply[Option] = $anon$1@29985a90
+optionApply: cats.Apply[Option] = $anon$1@582a52c0
 
 scala> implicit val listApply: Apply[List] = new Apply[List] {
-     |   def apply[A, B](fa: List[A])(f: List[A => B]): List[B] =
+     |   def ap[A, B](fa: List[A])(f: List[A => B]): List[B] =
      |     fa.flatMap (a => f.map (ff => ff(a)))
      |   def map[A,B](fa: List[A])(f: A => B) = fa map f
      | }
-listApply: cats.Apply[List] = $anon$1@5bf8d073
+listApply: cats.Apply[List] = $anon$1@5b502e29
 ```
 
 ### map
@@ -63,25 +63,25 @@ res2: Option[Int] = None
 But also the new apply method, which applies functions from the functor
 
 ```scala
-scala> Apply[Option].apply(Some(1))(Some(intToString))
+scala> Apply[Option].ap(Some(1))(Some(intToString))
 res3: Option[String] = Some(1)
 
-scala> Apply[Option].apply(Some(1))(Some(double))
+scala> Apply[Option].ap(Some(1))(Some(double))
 res4: Option[Int] = Some(2)
 
-scala> Apply[Option].apply(None)(Some(double))
+scala> Apply[Option].ap(None)(Some(double))
 res5: Option[Int] = None
 
-scala> Apply[Option].apply(Some(1))(None)
+scala> Apply[Option].ap(Some(1))(None)
 res6: Option[Nothing] = None
 
-scala> Apply[Option].apply(None)(None)
+scala> Apply[Option].ap(None)(None)
 res7: Option[Nothing] = None
 ```
 
-### apply3, etc
+### ap3, etc
 
-Apply's apply function made it possible to build useful functions that
+Apply's ap function made it possible to build useful functions that
 "lift" a function that takes multiple arguments into a context.
 
 For example:
@@ -90,7 +90,7 @@ For example:
 scala> val add2 = (a: Int, b: Int) => a + b
 add2: (Int, Int) => Int = <function2>
 
-scala> Apply[Option].apply2(Some(1), Some(2))(Some(add2))
+scala> Apply[Option].ap2(Some(1), Some(2))(Some(add2))
 res8: Option[Int] = Some(3)
 ```
 
@@ -99,17 +99,18 @@ final result is None.  The effects of the context we are operating on
 are carried through the entire computation.
 
 ```scala
-scala> Apply[Option].apply2(Some(1), None)(Some(add2))
+scala> Apply[Option].ap2(Some(1), None)(Some(add2))
 res9: Option[Int] = None
 
-scala> Apply[Option].apply2(Some(1), Some(2))(None)
+scala> Apply[Option].ap2(Some(1), Some(2))(None)
 res10: Option[Nothing] = None
 ```
 
 ## apply builder syntax
 
-The `|@|` operator offers an alternative syntax for the higher-arity `Apply` functions (`applyN`, `mapN`).
+The `|@|` operator offers an alternative syntax for the higher-arity `Apply` functions (`apN`, `mapN`).
 First, import `cats.syntax.all._` or `cats.syntax.apply._`. Here we see that following two functions, `f1` and `f2`, are equivalent:
+
 ```scala
 scala> import cats.syntax.apply._
 import cats.syntax.apply._
@@ -129,7 +130,7 @@ scala> f2(Some(1), Some(2), Some(3))
 res12: Option[Int] = Some(6)
 ```
 
-All instances created by `|@|` have `map`, `apply`, and `tupled` methods of the appropriate arity.
+All instances created by `|@|` have `map`, `ap`, and `tupled` methods of the appropriate arity.
 
 ## composition
 
@@ -137,11 +138,11 @@ Like Functors, Apply instances also compose:
 
 ```scala
 scala> val listOpt = Apply[List] compose Apply[Option]
-listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@4039a5c1
+listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@1ff4b86a
 
 scala> val plusOne = (x:Int) => x + 1
 plusOne: Int => Int = <function1>
 
-scala> listOpt.apply(List(Some(1), None, Some(3)))(List(Some(plusOne)))
+scala> listOpt.ap(List(Some(1), None, Some(3)))(List(Some(plusOne)))
 res13: List[Option[Int]] = List(Some(2), None, Some(4))
 ```

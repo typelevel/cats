@@ -20,8 +20,8 @@ def map[A, B](fa: F[A])(f: A => B): F[B]
 
 This method takes a function from A => B and turns an F[A] into an
 F[B].  The name of the method `map` should remind you of the `map`
-method that exists on many classes in the Scala standard library. some
-Examples of map functions:
+method that exists on many classes in the Scala standard library. Some
+examples of map functions:
 
 ```scala
 scala> Option(1).map(_ + 1)
@@ -46,12 +46,12 @@ import cats._
 scala> implicit val optionFunctor: Functor[Option] = new Functor[Option] {
      |   def map[A,B](fa: Option[A])(f: A => B) = fa map f
      | }
-optionFunctor: cats.Functor[Option] = $anon$1@3c75d634
+optionFunctor: cats.Functor[Option] = $anon$1@23d96658
 
 scala> implicit val listFunctor: Functor[List] = new Functor[List] {
      |   def map[A,B](fa: List[A])(f: A => B) = fa map f
      | }
-listFunctor: cats.Functor[List] = $anon$1@3adf68aa
+listFunctor: cats.Functor[List] = $anon$1@4947c0c5
 ```
 
 However, functors can also be created for types which don't have a map
@@ -139,7 +139,7 @@ compose the two Functors to create a new Functor on F[G[\_]]:
 
 ```scala
 scala> val listOpt = Functor[List] compose Functor[Option]
-listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@6841dc37
+listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@3bbbf4ed
 
 scala> listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
 res9: List[Option[Int]] = List(Some(2), None, Some(4))

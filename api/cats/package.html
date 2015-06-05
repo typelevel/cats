@@ -141,7 +141,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">Applicative functor.</p><div class="fullcomment"><div class="comment cmt"><p>Applicative functor.</p><p>Allows application of a function in an Applicative context to a value in an Applicative context</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
-Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_blank">Applicative programming with effects</a></p><p>Must obey the laws defined in <a href="laws/ApplicativeLaws.html" class="extype" name="cats.laws.ApplicativeLaws">laws.ApplicativeLaws</a>.
+Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_blank">Applicative programming with effects</a></p><p>Must obey the laws defined in cats.laws.ApplicativeLaws.
 </p></div></div>
     </li><li name="cats.Apply" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Apply[F[_]]extendsFunctor[F]withApplyArityFunctions[F]"></a>
@@ -159,7 +159,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Weaker version of Applicative[F]; has apply but not pure.</p><div class="fullcomment"><div class="comment cmt"><p>Weaker version of Applicative[F]; has apply but not pure.</p><p>Must obey the laws defined in <a href="laws/ApplyLaws.html" class="extype" name="cats.laws.ApplyLaws">laws.ApplyLaws</a>.
+      <p class="shortcomment cmt">Weaker version of Applicative[F]; has apply but not pure.</p><div class="fullcomment"><div class="comment cmt"><p>Weaker version of Applicative[F]; has apply but not pure.</p><p>Must obey the laws defined in cats.laws.ApplyLaws.
 </p></div></div>
     </li><li name="cats.ApplyArityFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ApplyArityFunctions[F[_]]extendsAnyRef"></a>
@@ -211,7 +211,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Must obey the laws defined in <a href="laws/CoflatMapLaws.html" class="extype" name="cats.laws.CoflatMapLaws">laws.CoflatMapLaws</a>.</p>
+      <p class="shortcomment cmt">Must obey the laws defined in cats.laws.CoflatMapLaws.</p>
     </li><li name="cats.Comonad" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Comonad[F[_]]extendsCoflatMap[F]"></a>
       <a id="Comonad[F[_]]:Comonad[F]"></a>
@@ -228,7 +228,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Must obey the laws defined in <a href="laws/ComonadLaws.html" class="extype" name="cats.laws.ComonadLaws">laws.ComonadLaws</a>.</p>
+      <p class="shortcomment cmt">Must obey the laws defined in cats.laws.ComonadLaws.</p>
     </li><li name="cats.CompositeApplicative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="CompositeApplicative[F[_],G[_]]extendsApplicative[[α]F[G[α]]]withCompositeApply[F,G]"></a>
       <a id="CompositeApplicative[F[_],G[_]]:CompositeApplicative[F,G]"></a>
@@ -281,6 +281,28 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
     </span>
       <p class="shortcomment cmt">Methods that apply to 2 nested Foldable instances
 </p>
+    </li><li name="cats.CompositeReducible" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="CompositeReducible[F[_],G[_]]extendsReducible[[α]F[G[α]]]withCompositeFoldable[F,G]"></a>
+      <a id="CompositeReducible[F[_],G[_]]:CompositeReducible[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CompositeReducible.html"><span class="name">CompositeReducible</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.α">α</span>]]] with <a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>[<span class="extype" name="cats.CompositeReducible.F">F</span>, <span class="extype" name="cats.CompositeReducible.G">G</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@CompositeReducible[F[_],G[_]]extendsReducible[[α]F[G[α]]]withCompositeFoldable[F,G]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class composes two <code>Reducible</code> instances to provide an
+instance for the nested types.</p><div class="fullcomment"><div class="comment cmt"><p>This class composes two <code>Reducible</code> instances to provide an
+instance for the nested types.</p><p>In other words, given a <code>Reducible[F]</code> instance (which can reduce
+<code>F[A]</code>) and a <code>Reducible[G]</code> instance (which can reduce <code>G[A]</code>
+values), this class is able to reduce <code>F[G[A]]</code> values.
+</p></div></div>
     </li><li name="cats.Eq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Eq[A]=algebra.Eq[A]"></a>
       <a id="Eq[A]:Eq[A]"></a>
@@ -323,7 +345,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
  we can implement map or flatMap that transforms the values of Map[K, ?],
  but we can't implement pure (because we wouldn't know what key to use
  when instantiating the new Map).
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>See <a href="https://github.com/non/cats/issues/3" target="_blank">https://github.com/non/cats/issues/3</a> for some discussion.</p><p>Must obey the laws defined in <a href="laws/FlatMapLaws.html" class="extype" name="cats.laws.FlatMapLaws">laws.FlatMapLaws</a>.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>See <a href="https://github.com/non/cats/issues/3" target="_blank">https://github.com/non/cats/issues/3</a> for some discussion.</p><p>Must obey the laws defined in cats.laws.FlatMapLaws.
 </p></span></dd></dl></div>
     </li><li name="cats.Fold" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Fold[A]extendsProductwithSerializable"></a>
@@ -341,24 +363,24 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Fold is designed to allow laziness/short-circuiting in foldLazy.</p><div class="fullcomment"><div class="comment cmt"><p>Fold is designed to allow laziness/short-circuiting in foldLazy.</p><p>It is a sum type that has three possible subtypes:</p><ul><li><code>Return(a)</code>: stop the fold with a value of <code>a</code>.</li><li><code>Continue(f)</code>: continue the fold, suspending the computation <code>f</code> for this step.</li><li><code>Pass</code>: continue the fold, with no computation for this step.</li></ul><p>The meaning of these types can be made more clear with an example
-of the foldLazy method in action. Here's a method to count how many
+      <p class="shortcomment cmt">Fold is designed to allow laziness/short-circuiting in foldRight.</p><div class="fullcomment"><div class="comment cmt"><p>Fold is designed to allow laziness/short-circuiting in foldRight.</p><p>It is a sum type that has three possible subtypes:</p><ul><li><code>Return(a)</code>: stop the fold with a value of <code>a</code>.</li><li><code>Continue(f)</code>: continue the fold, suspending the computation <code>f</code> for this step.</li><li><code>Pass</code>: continue the fold, with no computation for this step.</li></ul><p>The meaning of these types can be made more clear with an example
+of the foldRight method in action. Here's a method to count how many
 elements appear in a list before the value 3:</p><pre><span class="kw">def</span> f(n: <span class="std">Int</span>): Fold[<span class="std">Int</span>] =
   <span class="kw">if</span> (n == <span class="num">3</span>) Fold.Return(<span class="num">0</span>) <span class="kw">else</span> Fold.Continue(_ + <span class="num">1</span>)
 
-<span class="kw">val</span> count: Lazy[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>).foldLazy(Lazy(<span class="num">0</span>))(f)</pre><p>When we call <code>count.value</code>, the following occurs:</p><ul><li><code>f(1)</code> produces <code>res0: Continue(_ + 1)</code></li><li><code>f(2)</code> produces <code>res1: Continue(_ + 1)</code></li><li><code>f(3)</code> produces <code>res2: Return(0)</code></li></ul><p>Now we unwind back through the continue instances:</p><ul><li><code>res2</code> returns <code>0</code></li><li><code>res1(0)</code> returns <code>1</code></li><li><code>res0(1)</code> returns <code>2</code></li></ul><p>And so the result is 2.</p><p>This code searches an infinite stream for 77:</p><pre><span class="kw">val</span> found: Lazy[<span class="std">Boolean</span>] =
-  Stream.from(<span class="num">0</span>).foldLazy(Lazy(<span class="kw">false</span>)) { n <span class="kw">=&gt;</span>
+<span class="kw">val</span> count: Lazy[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>).foldRight(Lazy(<span class="num">0</span>))(f)</pre><p>When we call <code>count.value</code>, the following occurs:</p><ul><li><code>f(1)</code> produces <code>res0: Continue(_ + 1)</code></li><li><code>f(2)</code> produces <code>res1: Continue(_ + 1)</code></li><li><code>f(3)</code> produces <code>res2: Return(0)</code></li></ul><p>Now we unwind back through the continue instances:</p><ul><li><code>res2</code> returns <code>0</code></li><li><code>res1(0)</code> returns <code>1</code></li><li><code>res0(1)</code> returns <code>2</code></li></ul><p>And so the result is 2.</p><p>This code searches an infinite stream for 77:</p><pre><span class="kw">val</span> found: Lazy[<span class="std">Boolean</span>] =
+  Stream.from(<span class="num">0</span>).foldRight(Lazy(<span class="kw">false</span>)) { n <span class="kw">=&gt;</span>
     <span class="kw">if</span> (n == <span class="num">77</span>) Fold.Return(<span class="kw">true</span>) <span class="kw">else</span> Fold.Pass
   }</pre><p>Here's another example that sums the list until it reaches a
 negative number:</p><pre><span class="kw">val</span> sum: Lazy[<span class="std">Double</span>] =
-  numbers.foldLazy(Lazy(<span class="num">0.0</span>)) { n <span class="kw">=&gt;</span>
+  numbers.foldRight(Lazy(<span class="num">0.0</span>)) { n <span class="kw">=&gt;</span>
     <span class="kw">if</span> (n &lt; <span class="num">0</span>) Fold.Return(<span class="num">0.0</span>) <span class="kw">else</span> Fold.Continue(n + _)
   }</pre><p>This strange example counts an infinite stream. Since the result is
 lazy, it will only hang the program once <code>count.value</code> is called:</p><pre><span class="kw">val</span> count: Lazy[<span class="std">Long</span>] =
-  Stream.from(<span class="num">0</span>).foldLazy(Lazy(<span class="num">0</span>L)) { _ <span class="kw">=&gt;</span>
+  Stream.from(<span class="num">0</span>).foldRight(Lazy(<span class="num">0</span>L)) { _ <span class="kw">=&gt;</span>
     Fold.Continue(_ + <span class="num">1</span>L)
-  }</pre><p>You can even implement foldLeft in terms of foldLazy (!):</p><pre><span class="kw">def</span> foldl[A, B](as: <span class="std">List</span>[A], b: B)(f: (B, A) <span class="kw">=&gt;</span> B): B =
-  as.foldLazy(Lazy((b: B) <span class="kw">=&gt;</span> b)) { a <span class="kw">=&gt;</span>
+  }</pre><p>You can even implement foldLeft in terms of foldRight (!):</p><pre><span class="kw">def</span> foldl[A, B](as: <span class="std">List</span>[A], b: B)(f: (B, A) <span class="kw">=&gt;</span> B): B =
+  as.foldRight(Lazy((b: B) <span class="kw">=&gt;</span> b)) { a <span class="kw">=&gt;</span>
     Fold.Continue(g <span class="kw">=&gt;</span> (b: B) <span class="kw">=&gt;</span> g(f(b, a)))
   }.value(b)</pre><p>(In practice you would not want to use the <code>foldl</code> because it is
 not stack-safe.)
@@ -383,7 +405,7 @@ not stack-safe.)
 methods will fold together (combine) the values contained in the
 collection to produce a single result. Most collection types have
 <code>foldLeft</code> methods, which will usually be used by the associationed
-<code>Fold[_]</code> instance.</p><p>Foldable[F] is implemented in terms of two basic methods:</p><ul><li><code>foldLeft(fa, b)(f)</code> eagerly folds <code>fa</code> from left-to-right.</li><li><code>foldLazy(fa, b)(f)</code> lazily folds <code>fa</code> from right-to-left.</li></ul><p>Beyond these it provides many other useful methods related to
+<code>Fold[_]</code> instance.</p><p>Foldable[F] is implemented in terms of two basic methods:</p><ul><li><code>foldLeft(fa, b)(f)</code> eagerly folds <code>fa</code> from left-to-right.</li><li><code>foldRight(fa, b)(f)</code> lazily folds <code>fa</code> from right-to-left.</li></ul><p>(Actually <code>foldRight</code> is implemented in terms of <code>partialFold</code>.)</p><p>Beyond these it provides many other useful methods related to
 folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fold.pdf" target="_blank">A tutorial on the universality and expressiveness of fold</a>
 </p></div></div>
     </li><li name="cats.Functor" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
@@ -402,7 +424,7 @@ folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fol
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Functor.</p><div class="fullcomment"><div class="comment cmt"><p>Functor.</p><p>The name is short for &quot;covariant functor&quot;.</p><p>Must obey the laws defined in <a href="laws/FunctorLaws.html" class="extype" name="cats.laws.FunctorLaws">laws.FunctorLaws</a>.
+      <p class="shortcomment cmt">Functor.</p><div class="fullcomment"><div class="comment cmt"><p>Functor.</p><p>The name is short for &quot;covariant functor&quot;.</p><p>Must obey the laws defined in cats.laws.FunctorLaws.
 </p></div></div>
     </li><li name="cats.Id" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Id[A]=A"></a>
@@ -473,7 +495,7 @@ value. You can obtain this value by calling the <code>.value</code> method.
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Monad.</p><div class="fullcomment"><div class="comment cmt"><p>Monad.</p><p>Allows composition of dependent effectful functions.</p><p>See: <a href="http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf" target="_blank">Monads for functional programming</a></p><p>Must obey the laws defined in <a href="laws/MonadLaws.html" class="extype" name="cats.laws.MonadLaws">laws.MonadLaws</a>.
+      <p class="shortcomment cmt">Monad.</p><div class="fullcomment"><div class="comment cmt"><p>Monad.</p><p>Allows composition of dependent effectful functions.</p><p>See: <a href="http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf" target="_blank">Monads for functional programming</a></p><p>Must obey the laws defined in cats.laws.MonadLaws.
 </p></div></div>
     </li><li name="cats.MonadCombine" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="MonadCombine[F[_]]extendsMonadFilter[F]withAlternative[F]"></a>
@@ -491,8 +513,9 @@ value. You can obtain this value by calling the <code>.value</code> method.
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="cats.MonadFilter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">The combination of a Monad with a MonoidK
+</p>
+    </li><li name="cats.MonadFilter" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="MonadFilter[F[_]]extendsMonad[F]"></a>
       <a id="MonadFilter[F[_]]:MonadFilter[F]"></a>
       <h4 class="signature">
@@ -508,7 +531,14 @@ value. You can obtain this value by calling the <code>.value</code> method.
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">a Monad equipped with an additional method which allows us to
+create an &quot;Empty&quot; value for the Monad (for whatever &quot;empty&quot; makes
+sense for that particular monad).</p><div class="fullcomment"><div class="comment cmt"><p>a Monad equipped with an additional method which allows us to
+create an &quot;Empty&quot; value for the Monad (for whatever &quot;empty&quot; makes
+sense for that particular monad). This is of particular interest to
+us since it allows us to add a <code>filter</code> method to a Monad, which is
+used when pattern matching or using guards in for comprehensions.
+</p></div></div>
     </li><li name="cats.Monoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Monoid[A]=algebra.Monoid[A]"></a>
       <a id="Monoid[A]:Monoid[A]"></a>
@@ -551,6 +581,27 @@ for kinds (i.e. parameterized types).</p><p>A MonoidK[F] can produce a Monoid[F[
    combination operation and empty value just depend on the
    structure of F, but not on the structure of A.
 </li></ul></div></div>
+    </li><li name="cats.NonEmptyReducible" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="NonEmptyReducible[F[_],G[_]]extendsReducible[F]"></a>
+      <a id="NonEmptyReducible[F[_],G[_]]:NonEmptyReducible[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonEmptyReducible.html"><span class="name">NonEmptyReducible</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[<span class="extype" name="cats.NonEmptyReducible.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@NonEmptyReducible[F[_],G[_]]extendsReducible[F]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class defines a <code>Reducible[F]</code> in terms of a <code>Foldable[G]</code>
+together with a <code>split method, </code>F[A]<code> =&gt; </code>(A, G[A])<code>.</code></p><div class="fullcomment"><div class="comment cmt"><p>This class defines a <code>Reducible[F]</code> in terms of a <code>Foldable[G]</code>
+together with a <code>split method, </code>F[A]<code> =&gt; </code>(A, G[A])<code>.</code></p><p>This class can be used on any type where the first value (<code>A</code>) and
+the &quot;rest&quot; of the values (<code>G[A]</code>) can be easily found.
+</p></div></div>
     </li><li name="cats.Order" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Order[A]=algebra.Order[A]"></a>
       <a id="Order[A]:Order[A]"></a>
@@ -585,6 +636,27 @@ for kinds (i.e. parameterized types).</p><p>A MonoidK[F] can produce a Monoid[F[
       </a>
     </span>
       
+    </li><li name="cats.Reducible" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Reducible[F[_]]extendsFoldable[F]"></a>
+      <a id="Reducible[F[_]]:Reducible[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Reducible.html"><span class="name">Reducible</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Reducible.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Reducible[F[_]]extendsFoldable[F]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Data structures that can be reduced to a summary value.</p><div class="fullcomment"><div class="comment cmt"><p>Data structures that can be reduced to a summary value.</p><p><code>Reducible</code> is like a non-empty <code>Foldable</code>. In addition to the fold
+methods it provides reduce methods which do not require an initial
+value.</p><p>In addition to the methods needed by <code>Foldable</code>, <code>Reducible</code> is
+implemented in terms of two methods:</p><ul><li><code>reduceLeftTo(fa)(f)(g)</code> eagerly reduces with an additional mapping function</li><li><code>reduceRightTo(fa)(f)(g)</code> lazily reduces with an additional mapping function
+</li></ul></div></div>
     </li><li name="cats.Semigroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Semigroup[A]=algebra.Semigroup[A]"></a>
       <a id="Semigroup[A]:Semigroup[A]"></a>
@@ -625,7 +697,7 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
    The combination operation just depends on the structure of F,
    but not the structure of A.
 </li></ul></div></div>
-    </li><li name="cats.Show" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="cats.Show" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Show[T]extendsSerializable"></a>
       <a id="Show[T]:Show[T]"></a>
       <h4 class="signature">
@@ -641,8 +713,12 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">A typeclass to provide textual representation
-</p>
+      <p class="shortcomment cmt">A typeclass to provide textual representation.</p><div class="fullcomment"><div class="comment cmt"><p>A typeclass to provide textual representation. It is meant to be a
+better &quot;toString&quot;. Whereas toString exists for any Object,
+regardless of whether or not the creator of the class explicitly
+made a toString method, a Show instance will only exist if someone
+explicitly provided one.
+</p></div></div>
     </li><li name="cats.Traverse" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Traverse[F[_]]extendsFunctor[F]withFoldable[F]"></a>
       <a id="Traverse[F[_]]:Traverse[F]"></a>
@@ -1089,6 +1165,23 @@ however the scala compiler will not find them without some coercing.
       </a>
     </span>
       
+    </li><li name="cats.Reducible" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Reducible"></a>
+      <a id="Reducible:Reducible"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Reducible$.html"><span class="name">Reducible</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@Reducible" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats#Semigroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Semigroup:algebra.Semigroup.type"></a>
       <a id="Semigroup:algebra.Semigroup.type"></a>
@@ -1255,23 +1348,6 @@ however the scala compiler will not find them without some coercing.
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@implicits" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="cats.laws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="laws"></a>
-      <a id="laws:laws"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">package</span>
-      </span>
-      <span class="symbol">
-        <a href="laws/package.html"><span class="name">laws</span></a>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@laws" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>

@@ -45,13 +45,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">show</span><span class="result"> extends <a href="ShowSyntax.html" class="extype" name="cats.syntax.ShowSyntax">ShowSyntax</a></span>
+        <span class="name">show</span><span class="result"> extends <a href="../Show$$ToShowOps.html" class="extype" name="cats.Show.ToShowOps">ToShowOps</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/syntax/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="ShowSyntax.html" class="extype" name="cats.syntax.ShowSyntax">ShowSyntax</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../Show$$ToShowOps.html" class="extype" name="cats.Show.ToShowOps">ToShowOps</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.show"><span>show</span></li><li class="in" name="cats.syntax.ShowSyntax"><span>ShowSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.show"><span>show</span></li><li class="in" name="cats.Show.ToShowOps"><span>ToShowOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -345,23 +345,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.syntax.ShowSyntax#showSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="showSyntax[A](a:A)(implicitevidence$1:cats.Show[A]):cats.syntax.ShowOps[A]"></a>
-      <a id="showSyntax[A](A)(Show[A]):ShowOps[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">showSyntax</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.syntax.ShowSyntax.showSyntax.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.syntax.ShowSyntax.showSyntax.A">A</span>]</span>)</span><span class="result">: <a href="ShowOps.html" class="extype" name="cats.syntax.ShowOps">ShowOps</a>[<span class="extype" name="cats.syntax.ShowSyntax.showSyntax.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.package$$show$@showSyntax[A](a:A)(implicitevidence$1:cats.Show[A]):cats.syntax.ShowOps[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ShowSyntax.html" class="extype" name="cats.syntax.ShowSyntax">ShowSyntax</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -379,6 +362,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Show.ToShowOps#toShowOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toShowOps[T](target:T)(implicittc:cats.Show[T]):cats.Show.Ops[T]"></a>
+      <a id="toShowOps[T](T)(Show[T]):Ops[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toShowOps</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Show.ToShowOps.toShowOps.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.ToShowOps.toShowOps.T">T</span>]</span>)</span><span class="result">: <a href="../Show$$Ops.html" class="extype" name="cats.Show.Ops">Ops</a>[<span class="extype" name="cats.Show.ToShowOps.toShowOps.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.package$$show$@toShowOps[T](target:T)(implicittc:cats.Show[T]):cats.Show.Ops[T]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Show$$ToShowOps.html" class="extype" name="cats.Show.ToShowOps">ToShowOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -474,8 +474,8 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="cats.syntax.ShowSyntax">
-              <h3>Inherited from <a href="ShowSyntax.html" class="extype" name="cats.syntax.ShowSyntax">ShowSyntax</a></h3>
+        <div class="parent" name="cats.Show.ToShowOps">
+              <h3>Inherited from <a href="../Show$$ToShowOps.html" class="extype" name="cats.Show.ToShowOps">ToShowOps</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

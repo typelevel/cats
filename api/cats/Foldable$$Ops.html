@@ -45,7 +45,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="fresh$macro$10">fresh$macro$10</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4>
       
@@ -54,7 +54,7 @@
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a></div>
+            <div class="subClasses hiddenContent"><a href="Traverse$$AllOps.html" class="extype" name="cats.Traverse.AllOps">AllOps</a>, <a href="Reducible$$AllOps.html" class="extype" name="cats.Reducible.AllOps">AllOps</a>, <a href="Foldable$$AllOps.html" class="extype" name="cats.Foldable.AllOps">AllOps</a></div>
           </div></div>
         
 
@@ -97,18 +97,18 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="cats.Foldable.Ops#self" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="self:F[fresh$macro$10]"></a>
-      <a id="self:F[fresh$macro$10]"></a>
+      <a id="self:F[A]"></a>
+      <a id="self:F[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.F">F</span>[<span class="extype" name="cats.Foldable.Ops.fresh$macro$10">fresh$macro$10</span>]</span>
+        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.F">F</span>[<span class="extype" name="cats.Foldable.Ops.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Foldable$$Ops@self:F[fresh$macro$10]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Foldable$$Ops@self:F[A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -385,6 +385,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Foldable.Ops#reduceLeftToOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceLeftToOption[B](f:A=&gt;B)(g:(B,A)=&gt;B):Option[B]"></a>
+      <a id="reduceLeftToOption[B]((A)⇒B)((B,A)⇒B):Option[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceLeftToOption</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span>, <span class="extype" name="cats.Foldable.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Foldable$$Ops@reduceLeftToOption[B](f:A=&gt;B)(g:(B,A)=&gt;B):Option[B]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.Foldable.Ops#reduceRightToOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceRightToOption[B](f:A=&gt;B)(g:A=&gt;cats.Fold[B]):cats.Lazy[Option[B]]"></a>
+      <a id="reduceRightToOption[B]((A)⇒B)((A)⇒Fold[B]):Lazy[Option[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceRightToOption</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.reduceRightToOption.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Foldable.Ops.A">A</span>) ⇒ <a href="Fold.html" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.Foldable.Ops.reduceRightToOption.B">B</span>]</span>)</span><span class="result">: <a href="Lazy.html" class="extype" name="cats.Lazy">Lazy</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.Foldable.Ops.reduceRightToOption.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Foldable$$Ops@reduceRightToOption[B](f:A=&gt;B)(g:A=&gt;cats.Fold[B]):cats.Lazy[Option[B]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

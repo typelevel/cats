@@ -59,7 +59,7 @@ chosen for the &quot;left&quot; could be any type representing an error and has 
 <code>flatMap</code> apply only in the context of the &quot;right&quot; case. This right bias makes <a href="" class="extype" name="cats.data.Xor">Xor</a> more convenient to use
 than <code>scala.Either</code> in a monadic context. Methods such as <code>swap</code>, and <code>leftMap</code> provide functionality
 that <code>scala.Either</code> exposes through left projections.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/data/src/main/scala/cats/data/Xor.scala" target="_blank">Xor.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/Xor.scala" target="_blank">Xor.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
@@ -230,23 +230,6 @@ that <code>scala.Either</code> exposes through left projections.
       </a>
     </span>
       
-    </li><li name="cats.data.Xor#append" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="append[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]"></a>
-      <a id="append[AA&gt;:A,BB&gt;:B](Xor[AA,BB])(Semigroup[AA],Semigroup[BB]):Xor[AA,BB]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">append</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.append.AA">AA</span>, <span class="extype" name="cats.data.Xor.append.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Xor.append.AA">AA</span>]</span>, <span name="BB">BB: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Xor.append.BB">BB</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.append.AA">AA</span>, <span class="extype" name="cats.data.Xor.append.BB">BB</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor@append[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -304,6 +287,23 @@ that <code>scala.Either</code> exposes through left projections.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.Xor#combine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="combine[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]"></a>
+      <a id="combine[AA&gt;:A,BB&gt;:B](Xor[AA,BB])(Semigroup[AA],Semigroup[BB]):Xor[AA,BB]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">combine</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.combine.AA">AA</span>, <span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Xor.combine.AA">AA</span>]</span>, <span name="BB">BB: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.combine.AA">AA</span>, <span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor@combine[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.Xor#compare" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="compare[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Order[AA],implicitBB:cats.Order[BB]):Int"></a>
       <a id="compare[AA&gt;:A,BB&gt;:B](Xor[AA,BB])(Order[AA],Order[BB]):Int"></a>
@@ -459,23 +459,6 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@foldLeft[C](c:C)(f:(C,B)=&gt;C):C" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="cats.data.Xor#foldRight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="foldRight[C](c:C)(f:(B,C)=&gt;C):C"></a>
-      <a id="foldRight[C](C)((B,C)⇒C):C"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">foldRight</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="c">c: <span class="extype" name="cats.data.Xor.foldRight.C">C</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>, <span class="extype" name="cats.data.Xor.foldRight.C">C</span>) ⇒ <span class="extype" name="cats.data.Xor.foldRight.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.data.Xor.foldRight.C">C</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor@foldRight[C](c:C)(f:(B,C)=&gt;C):C" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -956,6 +939,23 @@ that <code>scala.Either</code> exposes through left projections.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.Xor#toValidated" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toValidated:cats.data.Validated[A,B]"></a>
+      <a id="toValidated:Validated[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toValidated</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Xor.A">A</span>, <span class="extype" name="cats.data.Xor.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor@toValidated:cats.data.Validated[A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.Xor#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="traverse[F[_],AA&gt;:A,D](f:B=&gt;F[D])(implicitF:cats.Applicative[F]):F[cats.data.Xor[AA,D]]"></a>
       <a id="traverse[F[_],AA&gt;:A,D]((B)⇒F[D])(Applicative[F]):F[Xor[AA,D]]"></a>
@@ -1059,6 +1059,23 @@ that <code>scala.Either</code> exposes through left projections.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.Xor#withValidated" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="withValidated[AA,BB](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[AA,BB]):cats.data.Xor[AA,BB]"></a>
+      <a id="withValidated[AA,BB]((Validated[A,B])⇒Validated[AA,BB]):Xor[AA,BB]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withValidated</span><span class="tparams">[<span name="AA">AA</span>, <span name="BB">BB</span>]</span><span class="params">(<span name="f">f: (<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Xor.A">A</span>, <span class="extype" name="cats.data.Xor.B">B</span>]) ⇒ <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Xor.withValidated.AA">AA</span>, <span class="extype" name="cats.data.Xor.withValidated.BB">BB</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.withValidated.AA">AA</span>, <span class="extype" name="cats.data.Xor.withValidated.BB">BB</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor@withValidated[AA,BB](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[AA,BB]):cats.data.Xor[AA,BB]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
 
