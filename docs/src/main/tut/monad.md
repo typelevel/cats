@@ -82,26 +82,22 @@ Monad[List].ifM(List(true, false, true))(List(1, 2), List(3, 4))
 ### Composition
 Unlike Functors and Applicatives, Monads in general do not compose.
 
-However, many common cases do - for example, if the inner Monad can be
-traversed, we can `sequence` to invert the contexts (from F[G[F[G_]]]]
-to F[F[G[G[_]]]]) and then `flatten` F and G independently:
+However, many common cases do. One way of expressing this is to provide
+instructions on how to compose any outer monad with a specific inner monad.
 
 ```tut
-implicit def traverseMonadCompose[F[_], G[_]](implicit
-  FM: Monad[F],
-  GM: Monad[G],
-  GT: Traverse[G]
-) = {
-  type FG[A] = F[G[A]]
-  val appFG = FM.compose[G]
-  new Monad[FG] {
-    override def flatten[A](ffa: FG[FG[A]]): FG[A] =
-      FM.map(FM.flatten(FM.map(ffa)(GT.sequence(_)(appFG))))(GM.flatten)
-
-    override def flatMap[A, B](fa: FG[A])(f: (A) => FG[B]): FG[B] =
-      flatten(FM.map(fa)(x => GM.map(x)(f)))
-
-    override def pure[A](x: A): FG[A] = FM.pure(GM.pure(x))
+implicit def optionT[F[_]](implicit F : Monad[F]) = {
+  type FOption[A] = F[Option[A]]
+  new Monad[FOption] {
+    def pure[A](a: A): FOption[A] = F.pure(Some(a))
+    def flatMap[A, B](fa: FOption[A])(f: A => FOption[B]): FOption[B] = {
+      F.flatMap(fa) { 
+        case None => F.pure(None)
+        case Some(a) => f(a)
+      }
+    }
   }
 }
 ```
+
+This sort of construction is called a monad transformer.
