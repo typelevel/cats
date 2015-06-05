@@ -4,7 +4,7 @@ package tests
 import cats.data.Validated
 import cats.data.Validated.{Valid, Invalid}
 import cats.std.string._
-import cats.laws.discipline.{ApplicativeTests, SerializableTests}
+import cats.laws.discipline.{TraverseTests, ApplicativeTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
@@ -12,6 +12,9 @@ import org.scalacheck.Prop._
 class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
   checkAll("Applicative[Validated[String,?]]", SerializableTests.serializable(Applicative[Validated[String,?]]))
+
+  checkAll("Validated[String, Int] with Option", TraverseTests[Validated[String,?]].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[Validated[String,?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)

@@ -30,9 +30,8 @@ trait VectorInstances {
 
       def traverse[G[_]: Applicative, A, B](fa: Vector[A])(f: A => G[B]): G[Vector[B]] = {
         val G = Applicative[G]
-        val gba = G.pure(new VectorBuilder[B])
-        val gbb = fa.foldLeft(gba)((buf, a) => G.map2(buf, f(a))(_ += _))
-        G.map(gbb)(_.result)
+        val gba = G.pure(Vector.empty[B])
+        fa.foldLeft(gba)((buf, a) => G.map2(buf, f(a))(_ :+ _))
       }
     }
 
