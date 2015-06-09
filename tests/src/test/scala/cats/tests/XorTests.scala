@@ -29,7 +29,7 @@ class XorTests extends CatsSuite {
     for {
       success <- arbitrary[Boolean]
       t <- if (success) arbitrary[Int].map(Success(_))
-      else Gen.const(Failure(new Throwable {}))
+           else Gen.const(Failure(new Throwable {}))
     } yield t
   }
 
