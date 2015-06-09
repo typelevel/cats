@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.data.Xor
+import cats.data.Xor._
 import cats.laws.discipline.{TraverseTests, MonadTests, SerializableTests}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Prop._
@@ -135,6 +136,30 @@ class XorTests extends CatsSuite {
   check {
     forAll { (x: Int Xor String, y: Int Xor String) =>
       x.combine(y).isRight == (x.isRight && y.isRight)
+    }
+  }
+
+  check {
+    forAll { (x: Int Xor String) =>
+      val equality = implicitly[Eq[Int Xor String]]
+      equality.eqv(x, x)
+    }
+  }
+
+  check {
+    forAll { (x: Int Xor String) =>
+      val partialOrder = implicitly[PartialOrder[Int Xor String]]
+      partialOrder.partialCompare(x, x) == 0 &&
+      partialOrder.eqv(x, x)
+    }
+  }
+
+  check {
+    forAll { (x: Int Xor String) =>
+      val order = implicitly[Order[Int Xor String]]
+      order.compare(x, x) == 0 &&
+      order.partialCompare(x, x) == 0 &&
+      order.eqv(x, x)
     }
   }
 }
