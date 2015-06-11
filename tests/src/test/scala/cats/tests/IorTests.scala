@@ -3,6 +3,7 @@ package tests
 
 import cats.data.{Xor, Ior}
 import cats.laws.discipline.{TraverseTests, MonadTests, SerializableTests}
+import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Prop._
@@ -14,16 +15,6 @@ class IorTests extends CatsSuite {
 
   checkAll("Ior[String, Int] with Option", TraverseTests[String Ior ?].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[String Ior ?]", SerializableTests.serializable(Traverse[String Ior ?]))
-
-  implicit val arbitraryIor: Arbitrary[Ior[Int, String]] = Arbitrary {
-    for {
-      left <- arbitrary[Boolean]
-      right <- arbitrary[Boolean]
-      ior <- if (left && right) arbitrary[(Int, String)].map((Ior.both[Int, String] _).tupled)
-             else if (left) arbitrary[Int].map(Ior.left)
-             else arbitrary[String].map(Ior.right)
-    } yield ior
-  }
 
   check {
     forAll { (i: Int Ior String) =>
