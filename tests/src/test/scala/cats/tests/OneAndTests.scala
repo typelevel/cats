@@ -5,7 +5,11 @@ import algebra.laws.OrderLaws
 
 import cats.data.{NonEmptyList, OneAnd}
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests}
-import cats.laws.discipline.arbitrary.oneAndArbitrary
+import cats.laws.discipline.arbitrary.{foldArbitrary, lazyArbitrary, oneAndArbitrary}
+
+import org.scalacheck.Prop._
+
+import scala.util.Random
 
 class OneAndTests extends CatsSuite {
   checkAll("OneAnd[Int, List]", OrderLaws[OneAnd[Int, List]].eqv)
@@ -34,4 +38,30 @@ class OneAndTests extends CatsSuite {
 
   checkAll("NonEmptyList[Int]", ComonadTests[NonEmptyList].comonad[Int, Int, Int])
   checkAll("Comonad[NonEmptyList[A]]", SerializableTests.serializable(Comonad[NonEmptyList]))
+
+  test("partialFold is consistent with foldRight")(check {
+    forAll { (nel: NonEmptyList[Int], b: Lazy[String], f: Int => Fold[String]) =>
+      val F = Foldable[NonEmptyList]
+      val partial = F.partialFold(nel)(f).complete(b)
+      val foldr = F.foldRight(nel, b)(f).value
+      partial == foldr
+    }
+  })
+
+  test("Creating OneAnd + unwrap is identity")(check {
+    forAll { (list: List[Int]) => (list.size >= 1) ==> {
+      val oneAnd = NonEmptyList(list.head, list.tail: _*)
+      list == oneAnd.unwrap
+    }}
+  })
+
+  test("NonEmptyList#filter is consistent with List#filter")(check {
+    forAll { (nel: NonEmptyList[Int]) =>
+      val list = nel.unwrap
+      val randomElement = list(Random.nextInt(list.size))
+      val predicate: Int => Boolean = _ == randomElement
+
+      nel.filter(predicate) == list.filter(predicate)
+    }
+  })
 }

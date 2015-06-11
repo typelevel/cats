@@ -4,6 +4,7 @@ package discipline
 
 import cats.data._
 import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
 
 /**
  * Arbitrary instances for cats.data
@@ -33,4 +34,10 @@ object arbitrary {
 
   implicit def cokleisliArbitrary[F[_], A, B](implicit B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
     Arbitrary(B.arbitrary.map(b => Cokleisli[F, A, B](_ => b)))
+
+  implicit def foldArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Fold[A]] =
+    Arbitrary(Gen.oneOf(getArbitrary[A].map(Fold.Return(_)), getArbitrary[A => A].map(Fold.Continue(_)), Gen.const(Fold.Pass[A])))
+
+  implicit def lazyArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Lazy[A]] =
+    Arbitrary(Gen.oneOf(A.arbitrary.map(Lazy.eager), A.arbitrary.map(a => Lazy.byName(a)), A.arbitrary.map(a => Lazy.byNeed(a))))
 }
