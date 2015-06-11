@@ -8,6 +8,7 @@ import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Prop._
 import org.scalacheck.Prop.BooleanOperators
+import cats.laws.discipline.arbitrary._
 
 import scala.util.{Failure, Success, Try}
 
@@ -18,19 +19,11 @@ class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int] with Option", TraverseTests[Validated[String,?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Validated[String,?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
 
-  implicit val arbitraryValidated: Arbitrary[Validated[String, Int]] = Arbitrary {
-    for {
-      valid <- arbitrary[Boolean]
-      validated <- if (valid) arbitrary[Int].map(Valid(_))
-                   else arbitrary[String].map(Invalid(_))
-    } yield validated
-  }
-
   implicit val arbitraryTryInt: Arbitrary[Try[Int]] = Arbitrary {
     for {
       success <- arbitrary[Boolean]
       t <- if (success) arbitrary[Int].map(Success(_))
-      else Gen.const(Failure(new Throwable {}))
+           else arbitrary[Throwable].map(Failure(_))
     } yield t
   }
 
