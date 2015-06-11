@@ -56,12 +56,16 @@ class OneAndTests extends CatsSuite {
   })
 
   test("NonEmptyList#filter is consistent with List#filter")(check {
-    forAll { (nel: NonEmptyList[Int]) =>
+    forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.unwrap
-      val randomElement = list(Random.nextInt(list.size))
-      val predicate: Int => Boolean = _ == randomElement
+      nel.filter(p) == list.filter(p)
+    }
+  })
 
-      nel.filter(predicate) == list.filter(predicate)
+  test("NonEmptyList#find is consistent with List#find")(check {
+    forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
+      val list = nel.unwrap
+      nel.find(p) == list.find(p)
     }
   })
 }
