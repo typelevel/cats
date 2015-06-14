@@ -96,5 +96,5 @@ object ListWrapper {
       def synthesize[A: Arbitrary]: Arbitrary[OneAnd[A, ListWrapper]] = implicitly
     }
 
-  implicit def listWrapper[A: Eq]: Eq[ListWrapper[A]] = Eq.by(_.list)
+  implicit def listWrapperEq[A: Eq]: Eq[ListWrapper[A]] = Eq.by(_.list)
 }

@@ -5,7 +5,7 @@ import cats.free.Trampoline
 import cats.data.Kleisli
 
 /**
- * `State[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S`
+ * `StateT[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S`
  * argument and produces an `A` value wrapped in `F`. However, it also produces
  * an `S` value representing the updated state (which is wrapped in the `F`
  * context along with the `A` value.
