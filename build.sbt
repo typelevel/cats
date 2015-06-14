@@ -112,7 +112,7 @@ lazy val laws = project.dependsOn(macros, core, free, std)
   .settings(catsSettings)
   .settings(
     libraryDependencies ++= disciplineDependencies ++ Seq(
-      "org.spire-math" %% "algebra-laws" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra-laws_2.11-0.2.0-SNAPSHOT.jar"
+      "org.spire-math" %% "algebra-laws" % "0.2.0-SNAPSHOT"
     )
   )
 
@@ -120,7 +120,7 @@ lazy val std = project.dependsOn(macros, core)
   .settings(moduleName := "cats-std")
   .settings(catsSettings)
   .settings(
-    libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT" from "http://plastic-idolatry.com/jars/algebra-std_2.11-0.2.0-SNAPSHOT.jar"
+    libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT"
   )
 
 lazy val tests = project.dependsOn(macros, core, free, std, laws)
