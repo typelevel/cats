@@ -13,6 +13,9 @@ trait ArbitraryK[F[_]] {
 }
 
 object ArbitraryK {
+
+  def apply[F[_]](implicit arbk: ArbitraryK[F]): ArbitraryK[F] = arbk
+
   implicit val option: ArbitraryK[Option] =
     new ArbitraryK[Option] { def synthesize[A: Arbitrary]: Arbitrary[Option[A]] = implicitly }
 
