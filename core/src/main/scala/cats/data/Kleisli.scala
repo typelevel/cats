@@ -2,7 +2,7 @@ package cats
 package data
 
 import cats.arrow.{Arrow, Split}
-import cats.functor.Strong
+import cats.functor.{ProChoice, Profunctor, Strong}
 
 /**
  * Represents a function `A => F[B]`.
@@ -56,6 +56,12 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
 
   def second[C](implicit F: Functor[F]): Kleisli[F, (C, A), (C, B)] =
     Kleisli{ case (c, a) => F.map(run(a))(c -> _)}
+
+  def left[C](implicit F: Applicative[F]): Kleisli[F, A Xor C, B Xor C] =
+    Kleisli(_.fold(a => F.map(run(a))(Xor.left[B, C]), c => F.pure(Xor.right(c))))
+
+  def right[C](implicit F: Applicative[F]): Kleisli[F, C Xor A, C Xor B] =
+    Kleisli(_.fold(c => F.pure(Xor.left(c)), a => F.map(run(a))(Xor.right[C, B])))
 }
 
 object Kleisli extends KleisliInstances with KleisliFunctions
@@ -94,6 +100,9 @@ sealed abstract class KleisliInstances0 extends KleisliInstances1 {
 
   implicit def kleisliStrong[F[_]](implicit ev: Functor[F]): Strong[Kleisli[F, ?, ?]] =
     new KleisliStrong[F] { def F: Functor[F] = ev }
+
+  implicit def kleisliProChoice[F[_]](implicit ev: Applicative[F]): ProChoice[Kleisli[F, ?, ?]] =
+    new KleisliProChoice[F] { def F: Applicative[F] = ev }
 
   implicit def kleisliFlatMap[F[_]: FlatMap, A]: FlatMap[Kleisli[F, A, ?]] = new FlatMap[Kleisli[F, A, ?]] {
     def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
@@ -157,7 +166,27 @@ private trait KleisliSplit[F[_]] extends Split[Kleisli[F, ?, ?]] {
     f.compose(g)
 }
 
-private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] {
+private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] with KleisliProFunctor[F] {
+  implicit def F: Functor[F]
+
+  override def first[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (A, C), (B, C)] =
+    fa.first[C]
+
+  override def second[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (C, A), (C, B)] =
+    fa.second[C]
+}
+
+private trait KleisliProChoice[F[_]] extends ProChoice[Kleisli[F, ?, ?]] with KleisliProFunctor[F] {
+  implicit def F: Applicative[F]
+
+  override def left[A, B, C](fab: Kleisli[F, A, B]): Kleisli[F, A Xor C, B Xor C] =
+    fab.left
+
+  override def right[A, B, C](fab: Kleisli[F, A, B]): Kleisli[F, C Xor A, C Xor B] =
+    fab.right
+}
+
+private trait KleisliProFunctor[F[_]] extends Profunctor[Kleisli[F, ?, ?]] {
   implicit def F: Functor[F]
 
   override def lmap[A, B, C](fab: Kleisli[F, A, B])(f: C => A): Kleisli[F, C, B] =
@@ -168,10 +197,4 @@ private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] {
 
   override def dimap[A, B, C, D](fab: Kleisli[F, A, B])(f: C => A)(g: B => D): Kleisli[F, C, D] =
     fab.dimap(f)(g)
-
-  def first[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (A, C), (B, C)] =
-    fa.first[C]
-
-  def second[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (C, A), (C, B)] =
-    fa.second[C]
 }

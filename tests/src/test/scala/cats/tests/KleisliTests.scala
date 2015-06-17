@@ -3,7 +3,7 @@ package tests
 
 import cats.arrow.Arrow
 import cats.data.Kleisli
-import cats.functor.Strong
+import cats.functor.{ProChoice, Strong}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -21,4 +21,7 @@ class KleisliTests extends CatsSuite {
 
   checkAll("Kleisli[Option, Int, Int]", ArrowTests[Kleisli[Option, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
   checkAll("Arrow[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Arrow[Kleisli[Option, ?, ?]]))
+
+  checkAll("Kleisli[Option, Int, Int]", ProChoiceTests[Kleisli[Option, ?, ?]].prochoice[Int, Int, Int, Int, Int, Int])
+  checkAll("ProChoice[Kleisli[Option, ?, ?]]", SerializableTests.serializable(ProChoice[Kleisli[Option, ?, ?]]))
 }
