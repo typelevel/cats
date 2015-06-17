@@ -137,6 +137,7 @@ sealed abstract class IorInstances extends IorInstances0 {
 
   implicit def iorMonad[A: Semigroup]: Monad[A Ior ?] = new Monad[A Ior ?] {
     def pure[B](b: B): A Ior B = Ior.right(b)
+    def map[B, C](fa: A Ior B)(f: B => C): A Ior C = fa.map(f)
     def flatMap[B, C](fa: A Ior B)(f: B => A Ior C): A Ior C = fa.flatMap(f)
   }
 }

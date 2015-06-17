@@ -15,6 +15,9 @@ trait Function0Instances {
 
       def pure[A](x: A): () => A = () => x
 
+      override def map[A, B](fa: () => A)(f: (A) => B): () => B =
+        () => f(fa())
+
       def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
         () => f(fa())()
     }

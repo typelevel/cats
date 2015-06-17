@@ -20,8 +20,6 @@ import simulacrum._
    */
   def pure[A](x: A): F[A]
 
-  override def map[A, B](fa: F[A])(f: A => B): F[B] = ap(fa)(pure(f))
-
   /**
    * Two sequentially dependent Applicatives can be composed.
    *

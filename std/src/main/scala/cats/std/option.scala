@@ -13,7 +13,7 @@ trait OptionInstances {
 
       def pure[A](x: A): Option[A] = Some(x)
 
-      override def map[A, B](fa: Option[A])(f: A => B): Option[B] =
+      def map[A, B](fa: Option[A])(f: A => B): Option[B] =
         fa.map(f)
 
       def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =

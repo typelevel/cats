@@ -50,6 +50,8 @@ sealed abstract class ConstInstances extends ConstInstances0 {
     def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
       fa.traverse(f)
 
+    def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] = fa.retag[B]
+
     def foldLeft[A, B](fa: Const[C, A], b: B)(f: (B, A) => B): B = b
 
     override def foldRight[A, B](fa: Const[C, A], b: Lazy[B])(f: A => Fold[B]): Lazy[B] = b
@@ -75,6 +77,8 @@ sealed abstract class ConstInstances0 extends ConstInstances1 {
   implicit def constApplicative[C: Monoid]: Applicative[Const[C, ?]] = new Applicative[Const[C, ?]] {
     def pure[A](x: A): Const[C, A] =
       Const.empty
+
+    def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] = fa.retag[B]
 
     def ap[A, B](fa: Const[C, A])(f: Const[C, A => B]): Const[C, B] =
       fa.retag[B] combine f.retag[B]

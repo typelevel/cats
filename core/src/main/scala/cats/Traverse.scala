@@ -42,9 +42,6 @@ def traverseU[A, GB](fa: F[A])(f: A => GB)(implicit U: Unapply[Applicative, GB])
   def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative,GA]): U.M[F[U.A]] =
     traverse(fga)(U.subst)(U.TC)
 
-  override def map[A, B](fa: F[A])(f: A => B): F[B] =
-    traverse[Id, A, B](fa)(f)
-
   def traversal[G[_]: Applicative]: Traversal[G] =
     new Traversal[G]
 

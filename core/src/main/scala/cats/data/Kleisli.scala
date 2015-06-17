@@ -83,6 +83,9 @@ sealed abstract class KleisliInstances extends KleisliInstances0 {
     def pure[B](x: B): Kleisli[F, A, B] =
       Kleisli.pure[F, A, B](x)
 
+    def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
+      fa.map(f)
+
     def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
       fa.flatMap(f)
   }
@@ -108,6 +111,9 @@ sealed abstract class KleisliInstances1 extends KleisliInstances2 {
   implicit def kleisliApplicative[F[_]: Applicative, A]: Applicative[Kleisli[F, A, ?]] = new Applicative[Kleisli[F, A, ?]] {
     def pure[B](x: B): Kleisli[F, A, B] =
       Kleisli.pure[F, A, B](x)
+
+    override def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
+      fa.map(f)
 
     def ap[B, C](fa: Kleisli[F, A, B])(f: Kleisli[F, A, B => C]): Kleisli[F, A, C] =
       fa(f)

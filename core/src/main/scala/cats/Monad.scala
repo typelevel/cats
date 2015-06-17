@@ -11,7 +11,4 @@ import simulacrum._
  *
  * Must obey the laws defined in cats.laws.MonadLaws.
  */
-@typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
-  override def map[A, B](fa: F[A])(f: A => B): F[B] =
-    flatMap(fa)(a => pure(f(a)))
-}
+@typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F]

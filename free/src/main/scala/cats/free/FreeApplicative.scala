@@ -65,6 +65,7 @@ object FreeApplicative {
   implicit final def freeApplicative[S[_]]: Applicative[FA[S, ?]] = {
     new Applicative[FA[S, ?]] {
       def ap[A, B](fa: FA[S, A])(f: FA[S, A => B]): FA[S, B] = fa.ap(f)
+      override def map[A, B](fa: FA[S, A])(f: A => B): FA[S, B] = fa.map(f)
       def pure[A](a: A): FA[S, A] = Pure(a)
     }
   }
