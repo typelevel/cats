@@ -63,6 +63,12 @@ class FoldableTestsAdditional extends CatsSuite {
     // more basic checks
     val names = List("Aaron", "Betty", "Calvin", "Deirdra")
     F.foldMap(names)(_.length) should === (names.map(_.length).sum)
+    val sumM = F.foldM(names, "") { (acc, x) => (Some(acc + x): Option[String]) }
+    assert(sumM == Some("AaronBettyCalvinDeirdra"))
+    val notCalvin = F.foldM(names, "") { (acc, x) =>
+      if (x == "Calvin") (None: Option[String])
+      else (Some(acc + x): Option[String]) }
+    assert(notCalvin == None)
 
     // test trampolining
     val large = (1 to 10000).toList
