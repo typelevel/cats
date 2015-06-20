@@ -5,7 +5,7 @@ import cats.tests.CatsSuite
 import cats.laws.discipline.{ArbitraryK, MonadTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{Arbitrary, Gen, Prop}, Prop.forAll
 
 class StateTests extends CatsSuite {
   import StateTests._
@@ -20,6 +20,14 @@ class StateTests extends CatsSuite {
     val x = Traverse[List].traverse[State[Int, ?], Int, Int](ns)(_ => add1)
     assert(x.runS(0).run == 100001)
   }
+
+  test("State.pure and StateT.pure are consistent")(check {
+    forAll { (s: String, i: Int) =>
+      val state: State[String, Int] = State.pure(i)
+      val stateT: State[String, Int] = StateT.pure(i)
+      state.run(s).run == stateT.run(s).run
+    }
+  })
 
   checkAll("StateT[Option, Int, Int]", MonadTests[StateT[Option, Int, ?]].monad[Int, Int, Int])
   checkAll("Monad[StateT[Option, Int, ?]]", SerializableTests.serializable(Monad[StateT[Option, Int, ?]]))
