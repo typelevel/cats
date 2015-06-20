@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import cats.data.{Cokleisli, Kleisli, Validated, Xor, XorT, Ior, Const}
+import cats.data.{Cokleisli, Kleisli, NonEmptyList, Validated, Xor, XorT, Ior, Const}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 
@@ -15,8 +15,10 @@ trait EqK[F[_]] {
 }
 
 object EqK {
-
   def apply[F[_]](implicit eqk: EqK[F]): EqK[F] = eqk
+
+  implicit val nonEmptyList: EqK[NonEmptyList] =
+    new EqK[NonEmptyList] { def synthesize[A: Eq]: Eq[NonEmptyList[A]] = implicitly }
 
   implicit val option: EqK[Option] =
     new EqK[Option] { def synthesize[A: Eq]: Eq[Option[A]] = implicitly }
