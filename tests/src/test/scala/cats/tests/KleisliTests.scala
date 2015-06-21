@@ -3,6 +3,7 @@ package tests
 
 import cats.arrow.Arrow
 import cats.data.Kleisli
+import Kleisli.kleisli
 import cats.functor.Strong
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -21,4 +22,10 @@ class KleisliTests extends CatsSuite {
 
   checkAll("Kleisli[Option, Int, Int]", ArrowTests[Kleisli[Option, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
   checkAll("Arrow[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Arrow[Kleisli[Option, ?, ?]]))
+
+  test("lift") {
+    val f = kleisli { (x: Int) => (Some(x + 1): Option[Int]) }
+    val l = f.lift[List]
+    assert((List(1, 2, 3) >>= l.run) == List(Some(2), Some(3), Some(4)))
+  }
 }
