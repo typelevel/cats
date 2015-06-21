@@ -11,7 +11,7 @@ playful shortening of the word *category*.
 <div class="msg warn"> <p><strong> Cats is currently an experimental
   project under active development</strong>. Feedback and
   contributions are welcomed as we look to improve the project. This
-  are evolving quickly and we currently make no guarantees about what
+  project is evolving quickly and we currently make no guarantees about what
   might drastically change in the near future.</p> </div>
 
 
@@ -52,7 +52,7 @@ will be in the `std` project.
 We feel that having lots of documentation is a very important goal for
 our project. It will be a big win towards our goal of
 approachability. We will strive to have the code well documented, we
-will strive to have lots of documentation external to the code, and We
+will strive to have lots of documentation external to the code, and we
 will strive to have a large corpus of compiler verified examples of
 how the software can be used.
 
@@ -62,12 +62,12 @@ with [contributing](contributing.html) to the project
 
 ### Efficiency
 
-Although, unfortunately there are times when programming only with
+Although unfortunately there are times when programming only with
 pure functions and writing efficient code in Scala can be at odds, we
 are attempting to do our best at keeping our library as efficient as
 we can without making unnecessary sacrifices of purity and
 usability. Where sacrifices have to be made, we will strive to make
-these obvious, and will keep the well documented.
+these obvious, and will keep them well documented.
 
 <a name="project-structure"></a>
 # Project Structure
