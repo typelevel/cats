@@ -1,4 +1,6 @@
 language: scala
+git:
+  depth: 9999
 scala:
 - 2.11.6
 script:
