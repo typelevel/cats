@@ -16,9 +16,13 @@ class StateTests extends CatsSuite {
 
   test("traversing state is stack-safe"){
     val ns = (0 to 100000).toList
-    // syntax doesn't work here. Should look into why
-    val x = Traverse[List].traverse[State[Int, ?], Int, Int](ns)(_ => add1)
+    val x = ns.traverseU(_ => add1)
     assert(x.runS(0).run == 100001)
+  }
+
+  test("Apply syntax is usable on State") {
+    val x = add1 *> add1
+    assert(x.runS(0).run == 2)
   }
 
   checkAll("StateT[Option, Int, Int]", MonadTests[StateT[Option, Int, ?]].monad[Int, Int, Int])
