@@ -102,7 +102,10 @@ object Lazy {
    * Alias for `apply`, to mirror the `byName` method.
    */
   def byNeed[A](body: => A): Lazy[A] =
-    new ByNeed[A]{
+    new ByNeed[A] {
       override lazy val value = body
     }
+
+  implicit def lazyEq[A: Eq]: Eq[Lazy[A]] =
+    Eq.by(_.value)
 }

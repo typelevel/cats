@@ -85,7 +85,7 @@ trait OneAndInstances {
   implicit def oneAndShow[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[A, F]] =
     Show.show[OneAnd[A, F]](_.show)
 
-  implicit def oneAndFunctor[F[_]](F: Functor[F]): Functor[OneAnd[?, F]] =
+  implicit def oneAndFunctor[F[_]](implicit F: Functor[F]): Functor[OneAnd[?, F]] =
     new Functor[OneAnd[?, F]] {
       def map[A, B](fa: OneAnd[A, F])(f: A => B): OneAnd[B, F] =
         OneAnd(f(fa.head), F.map(fa.tail)(f))
