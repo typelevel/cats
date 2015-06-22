@@ -33,12 +33,12 @@ import cats._
 
 implicit def optionMonad(implicit app: Applicative[Option]) =
   new Monad[Option] {
-  override def flatten[A](ffa: Option[Option[A]]): Option[A] = ffa.flatten
-  override def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =
-    app.map(fa)(f).flatten
-  // Reuse this definition from Applicative.
-  override def pure[A](a: A): Option[A] = app.pure(a)
-}
+    override def flatten[A](ffa: Option[Option[A]]): Option[A] = ffa.flatten
+    override def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =
+      app.map(fa)(f).flatten
+    // Reuse this definition from Applicative.
+    override def pure[A](a: A): Option[A] = app.pure(a)
+  }
 ```
 
 ### flatMap
@@ -86,16 +86,18 @@ However, many common cases do. One way of expressing this is to provide
 instructions on how to compose any outer monad with a specific inner monad.
 
 ```tut
-implicit def optionT[F[_]](implicit F : Monad[F]) = {
-  type FOption[A] = F[Option[A]]
-  new Monad[FOption] {
-    def pure[A](a: A): FOption[A] = F.pure(Some(a))
-    def flatMap[A, B](fa: FOption[A])(f: A => FOption[B]): FOption[B] = {
-      F.flatMap(fa) { 
-        case None => F.pure(None)
-        case Some(a) => f(a)
+case class OptionT[F[_], A](value: F[Option[A]])
+
+implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
+  new Monad[OptionT[F, ?]] {
+    def pure[A](a: A): OptionT[F, A] = OptionT(F.pure(Some(a)))
+    def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
+      OptionT {
+        F.flatMap(fa.value) {
+          case None => F.pure(None)
+          case Some(a) => f(a).value
+        }
       }
-    }
   }
 }
 ```
