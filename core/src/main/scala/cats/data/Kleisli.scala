@@ -45,8 +45,8 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def traverse[G[_]](f: G[A])(implicit F: Applicative[F], G: Traverse[G]): F[G[B]] =
     G.traverse(f)(run)
 
-  def lift[G[_]](implicit F: Applicative[F]): Kleisli[λ[α => F[F[α]]], A, B] =
-    Kleisli[λ[α => F[F[α]]], A, B](a => Applicative[F].pure(run(a)))
+  def lift[G[_]](implicit G: Applicative[G]): Kleisli[λ[α => G[F[α]]], A, B] =
+    Kleisli[λ[α => G[F[α]]], A, B](a => Applicative[G].pure(run(a)))
 
   def lower(implicit F: Monad[F]): Kleisli[F, A, F[B]] =
     Kleisli(a => F.pure(run(a)))
