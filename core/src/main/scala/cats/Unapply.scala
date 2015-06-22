@@ -28,7 +28,7 @@ trait Unapply[TC[_[_]], MA] {
   def subst: MA => M[A]
 }
 
-object Unapply {
+object Unapply extends Unapply2Instances {
   // a convenience method for summoning Unapply instances
   def apply[TC[_[_]], MA](implicit ev: Unapply[TC,MA]): Unapply[TC, MA] = implicitly
 
@@ -47,6 +47,9 @@ object Unapply {
       override def TC: TC[F] = tc
       override def subst: F[AA] => M[A] = identity
   }
+}
+
+sealed abstract class Unapply2Instances extends Unapply3Instances {
 
   // the type we will instantiate when we find a typeclass instance
   // for a type in the shape F[_,_] when we fix the left type
@@ -100,6 +103,9 @@ object Unapply {
     type M[X] = F[AA,X]
     type A = B
   }
+}
+
+sealed abstract class Unapply3Instances {
 
   // the type we will instantiate when we find a typeclass instance
   // for a type in the shape of a Monad Transformer with 3 type params
