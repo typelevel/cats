@@ -1,6 +1,8 @@
 package cats
 package std
 
+import cats.syntax.eq._
+
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration.FiniteDuration
 
@@ -26,8 +28,8 @@ trait FutureInstances extends FutureInstances1 {
 
   def futureEq[A](atMost: FiniteDuration)(implicit A: Eq[A], ec: ExecutionContext): Eq[Future[A]] =
     new Eq[Future[A]] {
-
-      def eqv(x: Future[A], y: Future[A]): Boolean = Await.result((x zip y).map((A.eqv _).tupled), atMost)
+      def eqv(fx: Future[A], fy: Future[A]): Boolean =
+        Await.result((fx zip fy).map { case (x, y) => x === y }, atMost)
     }
 }
 

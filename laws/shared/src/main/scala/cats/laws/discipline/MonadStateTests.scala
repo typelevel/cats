@@ -8,7 +8,10 @@ import org.scalacheck.Prop.forAll
 trait MonadStateTests[F[_, _], S] extends MonadTests[F[S, ?]] {
   def laws: MonadStateLaws[F, S]
 
-  def monadState[A : Arbitrary, B : Arbitrary, C : Arbitrary](implicit
+  implicit def arbitraryK: ArbitraryK[F[S, ?]]
+  implicit def eqK: EqK[F[S, ?]]
+
+  def monadState[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
     ArbF: ArbitraryK[F[S, ?]],
     EqFA: Eq[F[S, A]],
     EqFB: Eq[F[S, B]],
@@ -35,6 +38,10 @@ trait MonadStateTests[F[_, _], S] extends MonadTests[F[S, ?]] {
 }
 
 object MonadStateTests {
-  def apply[F[_, _], S](implicit FS: MonadState[F, S]): MonadStateTests[F, S] =
-    new MonadStateTests[F, S] { def laws: MonadStateLaws[F, S] = MonadStateLaws[F, S] }
+  def apply[F[_, _], S](implicit FS: MonadState[F, S], arbKFS: ArbitraryK[F[S, ?]], eqKFS: EqK[F[S, ?]]): MonadStateTests[F, S] =
+    new MonadStateTests[F, S] {
+      def arbitraryK: ArbitraryK[F[S, ?]] = arbKFS
+      def eqK: EqK[F[S, ?]] = eqKFS
+      def laws: MonadStateLaws[F, S] = MonadStateLaws[F, S]
+    }
 }
