@@ -94,8 +94,9 @@ lazy val docs = project
 lazy val cats = project.in(file("."))
   .settings(moduleName := "cats")
   .settings(catsSettings)
-  .aggregate(macros, core, laws, tests, docs, free, std, bench, state)
-  .dependsOn(macros, core, laws, tests, docs, free, std, bench, state)
+  .aggregate(macros, core, laws, free, std, state, tests, docs, bench)
+  .dependsOn(macros, core, laws, free, std, state % "compile;test-internal -> test",
+             tests % "test-internal -> test", bench % "compile-internal;test-internal -> test")
 
 lazy val macros = project
   .settings(moduleName := "cats-macros")
@@ -144,7 +145,7 @@ lazy val free = project.dependsOn(macros, core)
   .settings(moduleName := "cats-free")
   .settings(catsSettings)
 
-lazy val state = project.dependsOn(macros, core, free, tests % "test -> test")
+lazy val state = project.dependsOn(macros, core, free, tests % "test-internal -> test")
   .settings(moduleName := "cats-state")
   .settings(catsSettings)
 
