@@ -3,6 +3,7 @@ package tests
 
 import cats.arrow.{Split, Arrow}
 import cats.data.Kleisli
+import Kleisli.kleisli
 import cats.functor.Strong
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -72,5 +73,11 @@ class KleisliTests extends CatsSuite {
     forAll { (i: Int) =>
       Kleisli.pure[Option, Int, Int](i).run(i) == Kleisli.ask[Option, Int].run(i)
     }
+  }
+
+  test("lift") {
+    val f = kleisli { (x: Int) => (Some(x + 1): Option[Int]) }
+    val l = f.lift[List]
+    assert((List(1, 2, 3) >>= l.run) == List(Some(2), Some(3), Some(4)))
   }
 }

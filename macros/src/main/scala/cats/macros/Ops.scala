@@ -1,19 +1,23 @@
 package cats
 package macros
 
+import scala.reflect.NameTransformer
+
 object Ops extends machinist.Ops {
 
   def uesc(c: Char): String = "$u%04X".format(c.toInt)
 
   val operatorNames: Map[String, String] =
-    Map(
-      ("$eq$eq$eq", "eqv"),
-      ("$eq$bang$eq", "neqv"),
-      ("$greater", "gt"),
-      ("$greater$eq", "gteqv"),
-      ("$less", "lt"),
-      ("$less$eq", "lteqv"),
-      ("$bar$plus$bar", "combine"),
-      ("$bar$minus$bar", "remove")
-    )
+    List(
+      ("===", "eqv"),
+      ("=!=", "neqv"),
+      (">", "gt"),
+      (">=", "gteqv"),
+      ("<", "lt"),
+      ("<=", "lteqv"),
+      ("|+|", "combine"),
+      ("|-|", "remove")
+    ).map{ case (k, v) =>
+      (NameTransformer.encode(k), v)
+    }.toMap
 }
