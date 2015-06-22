@@ -13,8 +13,11 @@ trait StreamInstances {
 
       def pure[A](x: A): Stream[A] = x #:: Stream.Empty
 
-      override def map[A, B](fa: Stream[A])(f: A => B): Stream[B] =
+      def map[A, B](fa: Stream[A])(f: A => B): Stream[B] =
         fa.map(f)
+
+      def ap[A, B](fa: Stream[A])(f: Stream[A => B]): Stream[B] =
+        f.flatMap(ff => fa.map(a => ff(a)))
 
       def flatMap[A, B](fa: Stream[A])(f: A => Stream[B]): Stream[B] =
         fa.flatMap(f)

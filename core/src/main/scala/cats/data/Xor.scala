@@ -79,6 +79,15 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
     case r @ Xor.Right(_) => r
   }
 
+  def ap[AA >: A, D](f: AA Xor (B => D)): AA Xor D = f match {
+    case l @ Xor.Left(_) => l
+    case Xor.Right(ff) =>
+      this match {
+        case l @ Xor.Left(_) => l
+        case Xor.Right(b) => Xor.Right(ff(b))
+      }
+  }
+
   def flatMap[AA >: A, D](f: B => AA Xor D): AA Xor D = this match {
     case l @ Xor.Left(_) => l
     case Xor.Right(b) => f(b)
@@ -153,7 +162,8 @@ sealed abstract class XorInstances extends XorInstances1 {
       def partialFold[B, C](fa: A Xor B)(f: B => Fold[C]): Fold[C] = fa.partialFold(f)
       def flatMap[B, C](fa: A Xor B)(f: B => A Xor C): A Xor C = fa.flatMap(f)
       def pure[B](b: B): A Xor B = Xor.right(b)
-      override def map[B, C](fa: A Xor B)(f: B => C): A Xor C = fa.map(f)
+      def map[B, C](fa: A Xor B)(f: B => C): A Xor C = fa.map(f)
+      def ap[B, C](fa: A Xor B)(f: A Xor (B => C)): A Xor C = fa.ap(f)
     }
 }
 

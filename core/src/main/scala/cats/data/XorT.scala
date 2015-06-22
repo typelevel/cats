@@ -36,7 +36,7 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): XorT[F, C, D] = XorT(F.map(value)(_.bimap(fa, fb)))
 
-  def applyAlt[D](ff: XorT[F, A, B => D])(implicit F: Apply[F]): XorT[F, A, D] =
+  def ap[D](ff: XorT[F, A, B => D])(implicit F: Apply[F]): XorT[F, A, D] =
     XorT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[A Xor ?].ap(xb)(xbd)))
 
   def flatMap[AA >: A, D](f: B => XorT[F, AA, D])(implicit F: Monad[F]): XorT[F, AA, D] =
@@ -156,12 +156,13 @@ private[data] abstract class XorTInstances3 {
 
 private[data] trait XorTFunctor[F[_], L] extends Functor[XorT[F, L, ?]] {
   implicit val F: Functor[F]
-  override def map[A, B](fa: XorT[F, L, A])(f: A => B): XorT[F, L, B] = fa map f
+  def map[A, B](fa: XorT[F, L, A])(f: A => B): XorT[F, L, B] = fa map f
 }
 
 private[data] trait XorTMonad[F[_], L] extends Monad[XorT[F, L, ?]] with XorTFunctor[F, L] {
   implicit val F: Monad[F]
   def pure[A](a: A): XorT[F, L, A] = XorT.pure[F, L, A](a)
+  def ap[A, B](fa: XorT[F, L, A])(f: XorT[F, L, A => B]): XorT[F, L, B] = fa ap f
   def flatMap[A, B](fa: XorT[F, L, A])(f: A => XorT[F, L, B]): XorT[F, L, B] = fa flatMap f
 }
 

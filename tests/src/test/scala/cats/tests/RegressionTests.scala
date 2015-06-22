@@ -1,6 +1,8 @@
 package cats
 package tests
 
+import cats.canon.{CanonicalApplicativeFromMonad}
+
 import scala.collection.mutable
 
 class RegressionTests extends CatsSuite {
@@ -15,9 +17,10 @@ class RegressionTests extends CatsSuite {
   }
 
   object State {
-    implicit def instance[S]: Monad[State[S, ?]] = new Monad[State[S, ?]] {
+    implicit def instance[S]: Monad[State[S, ?]] = new Monad[State[S, ?]]
+        with CanonicalApplicativeFromMonad[State[S, ?]] {
       def pure[A](a: A): State[S, A] = State(s => (a, s))
-      def map[A, B](sa: State[S, A])(f: A => B): State[S, B] = sa.map(f)
+      override def map[A, B](sa: State[S, A])(f: A => B): State[S, B] = sa.map(f)
       def flatMap[A, B](sa: State[S, A])(f: A => State[S, B]): State[S, B] = sa.flatMap(f)
     }
   }

@@ -60,6 +60,18 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def map[D](f: B => D): A Ior D = bimap(identity, f)
   final def leftMap[C](f: A => C): C Ior B = bimap(f, identity)
 
+  final def ap[AA >: A, D](f: AA Ior (B => D))(implicit AA: Semigroup[AA]): AA Ior D = {
+    (f, this) match {
+      case (Ior.Left(fl), _) => Ior.Left(fl)
+      case (Ior.Right(fr), Ior.Left(l)) => Ior.Left(l)
+      case (Ior.Right(fr), Ior.Right(r)) => Ior.Right(fr(r))
+      case (Ior.Right(fr), Ior.Both(l, r)) => Ior.Both(l, fr(r))
+      case (Ior.Both(fl, fr), Ior.Left(l)) => Ior.Left(AA.combine(fl, l))
+      case (Ior.Both(fl, fr), Ior.Right(r)) => Ior.Both(fl, fr(r))
+      case (Ior.Both(fl, fr), Ior.Both(l, r)) => Ior.Both(AA.combine(fl, l), fr(r))
+    }
+  }
+
   final def flatMap[AA >: A, D](f: B => AA Ior D)(implicit AA: Semigroup[AA]): AA Ior D = this match {
     case l @ Ior.Left(_) => l
     case Ior.Right(b) => f(b)
@@ -138,6 +150,7 @@ sealed abstract class IorInstances extends IorInstances0 {
   implicit def iorMonad[A: Semigroup]: Monad[A Ior ?] = new Monad[A Ior ?] {
     def pure[B](b: B): A Ior B = Ior.right(b)
     def map[B, C](fa: A Ior B)(f: B => C): A Ior C = fa.map(f)
+    def ap[B, C](fa: A Ior B)(f: A Ior (B => C)): A Ior C = fa.ap(f)
     def flatMap[B, C](fa: A Ior B)(f: B => A Ior C): A Ior C = fa.flatMap(f)
   }
 }

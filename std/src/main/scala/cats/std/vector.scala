@@ -13,8 +13,11 @@ trait VectorInstances {
 
       def pure[A](x: A): Vector[A] = Vector(x)
 
-      override def map[A, B](fa: Vector[A])(f: A => B): Vector[B] =
+      def map[A, B](fa: Vector[A])(f: A => B): Vector[B] =
         fa.map(f)
+
+      def ap[A, B](fa: Vector[A])(f: Vector[A => B]): Vector[B] =
+        f.flatMap(ff => fa.map(a => ff(a)))
 
       def flatMap[A, B](fa: Vector[A])(f: A => Vector[B]): Vector[B] =
         fa.flatMap(f)

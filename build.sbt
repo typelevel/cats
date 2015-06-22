@@ -93,8 +93,8 @@ lazy val docs = project
 lazy val cats = project.in(file("."))
   .settings(catsSettings)
   .settings(noPublishSettings)
-  .aggregate(macros, core, laws, tests, docs, free, std, bench, state)
-  .dependsOn(macros, core, laws, tests, docs, free, std, bench, state)
+  .aggregate(macros, core, canon, laws, tests, docs, free, std, bench, state)
+  .dependsOn(macros, core, canon, laws, tests, docs, free, std, bench, state)
 
 lazy val macros = project
   .settings(moduleName := "cats-macros")
@@ -107,7 +107,11 @@ lazy val core = project.dependsOn(macros)
     sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
   )
 
-lazy val laws = project.dependsOn(macros, core, free, std)
+lazy val canon = project.dependsOn(macros, core)
+  .settings(moduleName := "cats-canon")
+  .settings(catsSettings)
+
+lazy val laws = project.dependsOn(macros, core, canon, free, std)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings)
   .settings(
@@ -123,7 +127,7 @@ lazy val std = project.dependsOn(macros, core)
     libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT"
   )
 
-lazy val tests = project.dependsOn(macros, core, free, std, laws)
+lazy val tests = project.dependsOn(macros, core, canon, free, std, laws)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)

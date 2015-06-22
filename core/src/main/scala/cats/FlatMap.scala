@@ -26,9 +26,6 @@ import simulacrum._
   def flatten[A](ffa: F[F[A]]): F[A] =
     flatMap(ffa)(fa => fa)
 
-  override def ap[A, B](fa: F[A])(ff: F[A => B]): F[B] =
-    flatMap(ff)(f => map(fa)(f))
-
   /**
    *  Pair `A` with the result of function application.
    */

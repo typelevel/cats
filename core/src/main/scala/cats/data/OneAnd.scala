@@ -126,6 +126,9 @@ trait OneAndInstances {
       def pure[A](x: A): OneAnd[A, F] =
         OneAnd(x, monad.empty)
 
+      override def ap[A, B](fa: OneAnd[A, F])(f: OneAnd[A => B, F]): OneAnd[B, F] =
+        flatMap(f)(ff => map(fa)(ff))
+
       def flatMap[A, B](fa: OneAnd[A, F])(f: A => OneAnd[B, F]): OneAnd[B, F] = {
         val end = monad.flatMap(fa.tail) { a =>
           val fa = f(a)

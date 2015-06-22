@@ -9,7 +9,10 @@ trait EitherInstances extends EitherInstances1 {
       def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =
         fa.right.flatMap(f)
 
-      override def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
+      def ap[B, C](fa: Either[A, B])(f: Either[A, B => C]): Either[A, C] =
+        f.fold(Left(_), ff => fa.fold(Left(_), b => Right(ff(b))))
+
+      def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
         fa.right.map(f)
 
       def traverse[F[_], B, C](fa: Either[A, B])(f: B => F[C])(implicit F: Applicative[F]): F[Either[A, C]] =

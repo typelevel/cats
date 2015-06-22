@@ -54,7 +54,8 @@ object Free {
   implicit def freeMonad[S[_]:Functor]: Monad[Free[S, ?]] =
     new Monad[Free[S, ?]] {
       def pure[A](a: A): Free[S, A] = Pure(a)
-      override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa map f
+      def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa map f
+      def ap[A, B](fa: Free[S, A])(f: Free[S, A => B]): Free[S, B] = fa ap f
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a flatMap f
     }
 }
@@ -70,6 +71,9 @@ sealed abstract class Free[S[_], A] extends Serializable {
 
   final def map[B](f: A => B): Free[S, B] =
     flatMap(a => Pure(f(a)))
+
+  final def ap[B](f: Free[S, A => B]): Free[S, B] =
+    f.flatMap(ff => map(ff))
 
   /**
    * Bind the given continuation to the result of this computation.

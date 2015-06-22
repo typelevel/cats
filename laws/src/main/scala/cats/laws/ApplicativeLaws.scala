@@ -1,6 +1,7 @@
 package cats
 package laws
 
+import cats.canon.CanonicalFunctorFromApplicative
 import cats.syntax.apply._
 import cats.syntax.functor._
 
@@ -19,8 +20,10 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
   def applicativeInterchange[A, B](a: A, ff: F[A => B]): IsEq[F[B]] =
     F.pure(a).ap(ff) <-> ff.ap(F.pure(f => f(a)))
 
+  // Test that implementation matches the canonical one (except for performance)
+  val canon = CanonicalFunctorFromApplicative[F]
   def applicativeMap[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
-    fa.map(f) <-> fa.ap(F.pure(f))
+    fa.map(f) <-> canon.map(fa)(f)
 
   /**
    * This law is [[applyComposition]] stated in terms of `pure`. It is a

@@ -15,8 +15,11 @@ trait Function0Instances {
 
       def pure[A](x: A): () => A = () => x
 
-      override def map[A, B](fa: () => A)(f: (A) => B): () => B =
+      def map[A, B](fa: () => A)(f: A => B): () => B =
         () => f(fa())
+
+      def ap[A, B](fa: () => A)(f: () => A => B): () => B =
+        () => f()(fa())
 
       def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
         () => f(fa())()
@@ -42,7 +45,10 @@ trait Function1Instances {
       def flatMap[R1, R2](fa: T1 => R1)(f: R1 => T1 => R2): T1 => R2 =
         t => f(fa(t))(t)
 
-      override def map[R1, R2](fa: T1 => R1)(f: R1 => R2): T1 => R2 =
+      def ap[R1, R2](fa: T1 => R1)(f: T1 => R1 => R2): T1 => R2 =
+        t => f(t)(fa(t))
+
+      def map[R1, R2](fa: T1 => R1)(f: R1 => R2): T1 => R2 =
         f.compose(fa)
     }
 

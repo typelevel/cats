@@ -20,6 +20,13 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) {
         }
       })
 
+  def ap[B](sf: StateT[F, S, A => B])(implicit F: Monad[F]): StateT[F, S, B] =
+    StateT( s =>
+      F.flatMap(sf.run(s)){ case (s1, f) =>
+        F.map(run(s1)){ case (s2, a) => (s2, f(a)) }
+      }
+    )
+
   def map[B](f: A => B)(implicit F: Monad[F]): StateT[F, S, B] =
     transform { case (s, a) => (s, f(a)) }
 
@@ -100,7 +107,10 @@ sealed abstract class StateTInstances extends StateTInstances0 {
     def flatMap[A, B](fa: StateT[F, S, A])(f: A => StateT[F, S, B]): StateT[F, S, B] =
       fa.flatMap(f)
 
-    override def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] =
+    def ap[A, B](fa: StateT[F, S, A])(f: StateT[F, S, A => B]): StateT[F, S, B] =
+      fa.ap(f)
+
+    def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] =
       fa.map(f)
   }
 }

@@ -17,8 +17,11 @@ trait ListInstances {
 
       def pure[A](x: A): List[A] = x :: Nil
 
-      override def map[A, B](fa: List[A])(f: A => B): List[B] =
+      def map[A, B](fa: List[A])(f: A => B): List[B] =
         fa.map(f)
+
+      def ap[A, B](fa: List[A])(f: List[A => B]): List[B] =
+        f.flatMap(ff => fa.map(ff))
 
       def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] =
         fa.flatMap(f)

@@ -11,9 +11,12 @@ trait FutureInstances extends FutureInstances1 {
 
       def pure[A](x: A): Future[A] = Future.successful(x)
 
-      def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
+      def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
 
-      override def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
+      def ap[A, B](fa: Future[A])(f: Future[A => B]): Future[B] =
+        fa.zip(f).map { case (a, ff) => ff(a) }
+
+      def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
     }
 
   implicit def futureSemigroup[A](implicit A: Semigroup[A], ec: ExecutionContext): Semigroup[Future[A]] =

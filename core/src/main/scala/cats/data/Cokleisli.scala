@@ -19,6 +19,9 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
   def map[C](f: B => C): Cokleisli[F, A, C] =
     Cokleisli(f compose run)
 
+  def ap[C](f: Cokleisli[F, A, B => C]): Cokleisli[F, A, C] =
+    Cokleisli(fa => f.run(fa)(self.run(fa)))
+
   def contramapValue[C](f: F[C] => F[A]): Cokleisli[F, C,  B] =
     Cokleisli(run compose f)
 
@@ -62,6 +65,8 @@ sealed abstract class CokleisliInstances extends CokleisliInstances0 {
 
     override def map[B, C](fa: Cokleisli[F, A, B])(f: B => C): Cokleisli[F, A, C] =
       fa.map(f)
+
+    override def ap[B, C](fa: Cokleisli[F, A, B])(f: Cokleisli[F, A, B => C]): Cokleisli[F, A, C] = fa.ap(f)
   }
 }
 

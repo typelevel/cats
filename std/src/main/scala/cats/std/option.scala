@@ -16,6 +16,12 @@ trait OptionInstances {
       def map[A, B](fa: Option[A])(f: A => B): Option[B] =
         fa.map(f)
 
+      def ap[A, B](fa: Option[A])(f: Option[A => B]): Option[B] =
+        (fa, f) match {
+          case (Some(a), Some(ff)) => Some(ff(a))
+          case _ => None
+        }
+
       def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =
         fa.flatMap(f)
 
