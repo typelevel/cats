@@ -80,6 +80,12 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
   def combine(that: XorT[F, A, B])(implicit F: Apply[F], A: Semigroup[A], B: Semigroup[B]): XorT[F, A, B] =
     XorT(F.map2(this.value, that.value)(_ combine _))
 
+  def toValidated(implicit F: Functor[F]): F[Validated[A, B]] =
+    F.map(value)(_.toValidated)
+
+  def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB])(implicit F: Functor[F]): XorT[F, AA, BB] =
+    XorT(F.map(value)(xor => f(xor.toValidated).toXor))
+
   def show(implicit show: Show[F[A Xor B]]): String = show.show(value)
 }
 
