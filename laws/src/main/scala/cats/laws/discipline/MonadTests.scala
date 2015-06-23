@@ -17,6 +17,7 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
   ): RuleSet = {
     implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
     implicit def ArbFB: Arbitrary[F[B]] = ArbF.synthesize[B]
+    implicit def ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
 
     new RuleSet {
       def name: String = "monad"
@@ -24,7 +25,8 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
       def parents: Seq[RuleSet] = Seq(applicative[A, B, C], flatMap[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
         "monad left identity" -> forAll(laws.monadLeftIdentity[A, B] _),
-        "monad right identity" -> forAll(laws.monadRightIdentity[A] _)
+        "monad right identity" -> forAll(laws.monadRightIdentity[A] _),
+        "monad ap" -> forAll(laws.monadAp[A,B] _)
       )
     }
   }

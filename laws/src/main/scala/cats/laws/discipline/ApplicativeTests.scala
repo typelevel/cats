@@ -16,6 +16,7 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
     EqFC: Eq[F[C]]
   ): RuleSet = {
     implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
+    implicit def ARBFB: Arbitrary[F[B]] = ArbF.synthesize[B]
     implicit def ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
 
     new DefaultRuleSet(
@@ -24,7 +25,8 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
       "applicative identity" -> forAll(laws.applicativeIdentity[A] _),
       "applicative homomorphism" -> forAll(laws.applicativeHomomorphism[A, B] _),
       "applicative interchange" -> forAll(laws.applicativeInterchange[A, B] _),
-      "applicative map" -> forAll(laws.applicativeMap[A, B] _))
+      "applicative map" -> forAll(laws.applicativeMap[A, B] _),
+      "applicative map2" -> forAll(laws.applicativeMap2[A, B, C] _))
   }
 }
 
