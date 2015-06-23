@@ -54,7 +54,8 @@ lazy val commonSettings = Seq(
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.4")
   ),
   scmInfo := Some(ScmInfo(url("https://github.com/non/cats"),
-    "scm:git:git@github.com:non/cats.git"))
+    "scm:git:git@github.com:non/cats.git")),
+  commands += gitSnapshots
 )
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ releaseSettings ++ scoverageSettings
@@ -91,8 +92,8 @@ lazy val docs = project
   .dependsOn(core, std, free)
 
 lazy val cats = project.in(file("."))
+  .settings(moduleName := "cats")
   .settings(catsSettings)
-  .settings(noPublishSettings)
   .aggregate(macros, core, canon, laws, tests, docs, free, std, bench, state)
   .dependsOn(macros, core, canon, laws, tests, docs, free, std, bench, state)
 
@@ -162,7 +163,6 @@ lazy val publishSettings = Seq(
   pomIncludeRepository := { _ => false },
   publishTo <<= version { (v: String) =>
     val nexus = "https://oss.sonatype.org/"
-
     if (v.trim.endsWith("SNAPSHOT"))
       Some("snapshots" at nexus + "content/repositories/snapshots")
     else
@@ -214,3 +214,15 @@ lazy val noPublishSettings = Seq(
 )
 
 addCommandAlias("validate", ";compile;test;scalastyle;test:scalastyle;unidoc;tut")
+
+def gitSnapshots = Command.command("gitSnapshots") { state =>
+  val extracted = Project extract state
+  val newVersion = Seq(version in ThisBuild := git.gitDescribedVersion.value.get + "-SNAPSHOT")
+  extracted.append(newVersion, state)
+}
+
+// For Travis CI - see http://www.cakesolutions.net/teamblogs/publishing-artefacts-to-oss-sonatype-nexus-using-sbt-and-travis-ci
+credentials ++= (for {
+  username <- Option(System.getenv().get("SONATYPE_USERNAME"))
+  password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
+} yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
