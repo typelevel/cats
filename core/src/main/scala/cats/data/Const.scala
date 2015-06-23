@@ -28,7 +28,7 @@ final case class Const[A, B](getConst: A) {
     A.compare(getConst, that.getConst)
 
   def show(implicit A: Show[A]): String =
-    s"Const(${A.show(getConst)}})"
+    s"Const(${A.show(getConst)})"
 }
 
 object Const extends ConstInstances {
