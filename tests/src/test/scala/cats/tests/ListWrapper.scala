@@ -1,6 +1,7 @@
 package cats
 package tests
 
+import cats.canon.ApplicativeFromMonad
 import cats.data.OneAnd
 import cats.std.list._
 import cats.laws.discipline.ArbitraryK
@@ -70,7 +71,7 @@ object ListWrapper {
   def monadCombine: MonadCombine[ListWrapper] = {
     val M = MonadCombine[List]
 
-    new MonadCombine[ListWrapper] {
+    new MonadCombine[ListWrapper] with ApplicativeFromMonad[ListWrapper] {
       def pure[A](x: A): ListWrapper[A] = ListWrapper(M.pure(x))
 
       def flatMap[A, B](fa: ListWrapper[A])(f: A => ListWrapper[B]): ListWrapper[B] =

@@ -3,6 +3,7 @@ package laws
 
 import cats.Id
 import cats.arrow.Compose
+import cats.canon.FunctorFromApplicative
 import cats.syntax.functor._
 import cats.syntax.traverse._
 
@@ -37,13 +38,8 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
     M: Applicative[M]
   ): IsEq[(M[F[B]], N[F[B]])] = {
     type MN[Z] = (M[Z], N[Z])
-    implicit val MN = new Applicative[MN] {
+    implicit val MN = new Applicative[MN] with FunctorFromApplicative[MN] {
       override def pure[X](x: X): MN[X] = (M.pure(x), N.pure(x))
-
-      override def map[X, Y](fa: MN[X])(f: X => Y): MN[Y] = {
-        val (fam, fan) = fa
-        (M.map(fam)(f), N.map(fan)(f))
-      }
 
       override def ap[X, Y](fa: MN[X])(f: MN[X => Y]): MN[Y] = {
         val (fam, fan) = fa

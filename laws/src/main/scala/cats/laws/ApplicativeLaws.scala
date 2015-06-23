@@ -21,11 +21,10 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
     F.pure(a).ap(ff) <-> ff.ap(F.pure(f => f(a)))
 
   // Test that implementation matches the canonical one (except for performance)
-  private val canon = canonicalApplicative[F]
   def applicativeMap[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
-    fa.map(f) <-> canon.map(fa)(f)
+    fa.map(f) <-> canonicalApplicative[F].map(fa)(f)
   def applicativeMap2[A, B, C](fa: F[A], fb: F[B], f: (A, B) => C): IsEq[F[C]] =
-    F.map2(fa, fb)(f) <-> canon.map2(fa, fb)(f)
+    F.map2(fa, fb)(f) <-> canonicalApplicative[F].map2(fa, fb)(f)
 
   /**
    * This law is [[applyComposition]] stated in terms of `pure`. It is a
