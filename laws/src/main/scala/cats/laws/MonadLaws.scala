@@ -1,7 +1,7 @@
 package cats
 package laws
 
-import cats.canon.CanonicalApplicativeFromMonad
+import cats.canon.canonicalMonad
 import cats.data.Kleisli
 import cats.syntax.flatMap._
 
@@ -17,9 +17,10 @@ trait MonadLaws[F[_]] extends ApplicativeLaws[F] with FlatMapLaws[F] {
   def monadRightIdentity[A](fa: F[A]): IsEq[F[A]] =
     fa.flatMap(F.pure) <-> fa
 
-  private val canon = CanonicalApplicativeFromMonad[F]
+  private val canon = canonicalMonad[F]
   def monadAp[A, B](fa: F[A], ff: F[A => B]): IsEq[F[B]] =
     F.ap(fa)(ff) <-> canon.ap(fa)(ff)
+
   /**
    * `pure` is the left identity element under left-to-right composition of
    * [[cats.data.Kleisli]] arrows. This is analogous to [[monadLeftIdentity]].

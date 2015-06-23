@@ -1,7 +1,7 @@
 package cats
 package laws
 
-import cats.canon.CanonicalFunctorFromApplicative
+import cats.canon.canonicalApplicative
 import cats.syntax.apply._
 import cats.syntax.functor._
 
@@ -21,7 +21,7 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
     F.pure(a).ap(ff) <-> ff.ap(F.pure(f => f(a)))
 
   // Test that implementation matches the canonical one (except for performance)
-  private val canon = CanonicalFunctorFromApplicative[F]
+  private val canon = canonicalApplicative[F]
   def applicativeMap[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
     fa.map(f) <-> canon.map(fa)(f)
   def applicativeMap2[A, B, C](fa: F[A], fb: F[B], f: (A, B) => C): IsEq[F[C]] =
