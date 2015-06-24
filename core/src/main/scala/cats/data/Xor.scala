@@ -146,13 +146,19 @@ sealed abstract class XorInstances extends XorInstances1 {
       def show(f: A Xor B): String = f.show
     }
 
-  implicit def xorInstances[A]: Traverse[A Xor ?] with Monad[A Xor ?] =
-    new Traverse[A Xor ?] with Monad[A Xor ?] {
+  implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor, A ]=
+    new Traverse[A Xor ?] with MonadError[Xor, A] {
       def traverse[F[_]: Applicative, B, C](fa: A Xor B)(f: B => F[C]): F[A Xor C] = fa.traverse(f)
       def foldLeft[B, C](fa: A Xor B, b: C)(f: (C, B) => C): C = fa.foldLeft(b)(f)
       def partialFold[B, C](fa: A Xor B)(f: B => Fold[C]): Fold[C] = fa.partialFold(f)
       def flatMap[B, C](fa: A Xor B)(f: B => A Xor C): A Xor C = fa.flatMap(f)
       def pure[B](b: B): A Xor B = Xor.right(b)
+      def handleError[B](fea: Xor[A, B])(f: A => Xor[A, B]): Xor[A, B] =
+        fea match {
+          case Xor.Left(e) => f(e)
+          case r @ Xor.Right(_) => r
+        }
+      def raiseError[B](e: A): Xor[A, B] = Xor.left(e)
       override def map[B, C](fa: A Xor B)(f: B => C): A Xor C = fa.map(f)
     }
 }
