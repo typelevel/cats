@@ -4,6 +4,7 @@ package object data {
   type NonEmptyList[A] = OneAnd[A, List]
   type NonEmptyVector[A] = OneAnd[A, Vector]
   type NonEmptyStream[A] = OneAnd[A, Stream]
+  type ValidatedNel[E, A] = Validated[NonEmptyList[E], A]
 
   def NonEmptyList[A](head: A, tail: List[A] = Nil): NonEmptyList[A] =
     OneAnd(head, tail)
