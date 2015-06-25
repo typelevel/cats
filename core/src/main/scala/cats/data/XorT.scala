@@ -214,9 +214,9 @@ private[data] abstract class XorTInstances1 extends XorTInstances2 {
 }
 
 private[data] abstract class XorTInstances2 extends XorTInstances3 {
-  implicit def xorTMonad[F[_], L](implicit F: Monad[F]): Monad[XorT[F, L, ?]] = {
+  implicit def xorTMonadError[F[_], L](implicit F: Monad[F]): MonadError[XorT[F, ?, ?], L] = {
     implicit val F0 = F
-    new XorTMonad[F, L] { implicit val F = F0 }
+    new XorTMonadError[F, L] { implicit val F = F0 }
   }
 
   implicit def xorTSemigroupK[F[_], L](implicit F: Monad[F], L: Semigroup[L]): SemigroupK[XorT[F, L, ?]] = {
@@ -238,10 +238,18 @@ private[data] trait XorTFunctor[F[_], L] extends Functor[XorT[F, L, ?]] {
   override def map[A, B](fa: XorT[F, L, A])(f: A => B): XorT[F, L, B] = fa map f
 }
 
-private[data] trait XorTMonad[F[_], L] extends Monad[XorT[F, L, ?]] with XorTFunctor[F, L] {
+private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, ?, ?], L] with XorTFunctor[F, L] {
   implicit val F: Monad[F]
   def pure[A](a: A): XorT[F, L, A] = XorT.pure[F, L, A](a)
   def flatMap[A, B](fa: XorT[F, L, A])(f: A => XorT[F, L, B]): XorT[F, L, B] = fa flatMap f
+  def handleError[A](fea: XorT[F, L, A])(f: L => XorT[F, L, A]): XorT[F, L, A] =
+    XorT(F.flatMap(fea.value) {
+      _ match {
+        case Xor.Left(e) => f(e).value
+        case r @ Xor.Right(_) => F.pure(r)
+      }
+    })
+  def raiseError[A](e: L): XorT[F, L, A] = XorT.left(F.pure(e))
 }
 
 private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
@@ -257,7 +265,7 @@ private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
     })
 }
 
-private[data] trait XorTMonadFilter[F[_], L] extends MonadFilter[XorT[F, L, ?]] with XorTMonad[F, L] {
+private[data] trait XorTMonadFilter[F[_], L] extends MonadFilter[XorT[F, L, ?]] with XorTMonadError[F, L] {
   implicit val F: Monad[F]
   implicit val L: Monoid[L]
   def empty[A]: XorT[F, L, A] = XorT(F.pure(Xor.left(L.empty)))

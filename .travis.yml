@@ -2,6 +2,7 @@ language: scala
 git:
   depth: 9999
 scala:
+- 2.10.5
 - 2.11.6
 script:
 - if [[ "$TRAVIS_PULL_REQUEST" == "false" &&

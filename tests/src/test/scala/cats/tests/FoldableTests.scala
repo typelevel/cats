@@ -52,7 +52,7 @@ class FoldableTestsAdditional extends CatsSuite {
     // handled lazily. it only needs to be evaluated if we reach the
     // "end" of the fold.
     val trap = Lazy(bomb[Boolean])
-    val result = F.foldRight(1 #:: 2 #:: Stream.Empty, trap) { n =>
+    val result = F.foldRight(1 #:: 2 #:: Stream.empty, trap) { n =>
       if (n == 2) Return(true) else Pass
     }
     assert(result.value)
