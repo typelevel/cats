@@ -1,6 +1,10 @@
 package cats
 package data
 
+import scala.reflect.ClassTag
+
+import scala.util.Try
+
 /**
  * Transformer for `Xor`, allowing the effect of an arbitrary type constructor `F` to be combined with the
  * fail-fast effect of `Xor`.
@@ -86,12 +90,33 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
 object XorT extends XorTInstances with XorTFunctions
 
 trait XorTFunctions {
-
   final def left[F[_], A, B](fa: F[A])(implicit F: Functor[F]): XorT[F, A, B] = XorT(F.map(fa)(Xor.left))
 
   final def right[F[_], A, B](fb: F[B])(implicit F: Functor[F]): XorT[F, A, B] = XorT(F.map(fb)(Xor.right))
 
   final def pure[F[_], A, B](b: B)(implicit F: Applicative[F]): XorT[F, A, B] = right(F.pure(b))
+
+  final def fromXor[F[_]]: FromXorAux[F] = new FromXorAux
+
+  final class FromXorAux[F[_]] {
+    def apply[E, A](xor: Xor[E, A])(implicit F: Applicative[F]): XorT[F, E, A] =
+      XorT(F.pure(xor))
+  }
+
+  final def fromTryCatch[F[_], T >: Null <: Throwable]: FromTryCatchAux[F, T] =
+    new FromTryCatchAux[F, T]
+
+  final class FromTryCatchAux[F[_], T >: Null <: Throwable] private[XorTFunctions] {
+    def apply[A](f: => A)(implicit F: Applicative[F], T: ClassTag[T]): XorT[F, T, A] =
+      fromXor(Xor.fromTryCatch[T](f))
+  }
+
+  final def fromTry[F[_]]: FromTryAux[F] = new FromTryAux
+
+  final class FromTryAux[F[_]] {
+    def apply[A](t: Try[A])(implicit F: Applicative[F]): XorT[F, Throwable, A] =
+      fromXor(Xor.fromTry(t))
+  }
 }
 
 abstract class XorTInstances extends XorTInstances1 {
