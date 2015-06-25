@@ -16,6 +16,18 @@ class XorTTests extends CatsSuite {
   checkAll("XorT[List, String, Int]", MonoidKTests[XorT[List, String, ?]].monoidK[Int])
   checkAll("Monad[XorT[List, String, ?]]", SerializableTests.serializable(Monad[XorT[List, String, ?]]))
 
+  test("toValidated")(check {
+    forAll { (xort: XorT[List, String, Int]) =>
+      xort.toValidated.map(_.toXor) == xort.value
+    }
+  })
+
+  test("withValidated")(check {
+    forAll { (xort: XorT[List, String, Int], f: String => Char, g: Int => Double) =>
+      xort.withValidated(_.bimap(f, g)) == xort.bimap(f, g)
+    }
+  })
+
   test("fromTryCatch catches matching exceptions") {
     assert(XorT.fromTryCatch[Option, NumberFormatException]("foo".toInt).isInstanceOf[XorT[Option, NumberFormatException, Int]])
   }
@@ -26,6 +38,12 @@ class XorTTests extends CatsSuite {
     }
   }
 
+  test("fromXor")(check {
+    forAll { (xor: Xor[String, Int]) =>
+      Some(xor.isLeft) == XorT.fromXor[Option](xor).isLeft
+    }
+  })
+
   implicit val arbitraryTryInt: Arbitrary[Try[Int]] = Arbitrary {
     for {
       success <- arbitrary[Boolean]
@@ -33,12 +51,6 @@ class XorTTests extends CatsSuite {
            else Gen.const(Failure(new Throwable {}))
     } yield t
   }
-
-  test("fromXor")(check {
-    forAll { (xor: Xor[String, Int]) =>
-      Some(xor.isLeft) == XorT.fromXor[Option](xor).isLeft
-    }
-  })
 
   test("fromTry")(check {
     forAll { (t: Try[Int]) =>

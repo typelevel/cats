@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.Validated
+import cats.data.{NonEmptyList, Validated, ValidatedNel}
 import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{TraverseTests, ApplicativeTests, SerializableTests}
 import org.scalacheck.{Gen, Arbitrary}
@@ -61,6 +61,14 @@ class ValidatedTests extends CatsSuite {
         _ <- Valid(2).filter[String](_ % 2 == 0)
       } yield ()).isValid)
   }
+
+  test("ValidatedNel")(check {
+    forAll { (e: String) =>
+      val manual = Validated.invalid[NonEmptyList[String], Int](NonEmptyList(e))
+      Validated.invalidNel[String, Int](e) == manual &&
+      Validated.invalid(e).toValidatedNel == manual
+    }
+  })
 
   check {
     forAll { (v: Validated[String, Int], p: Int => Boolean) =>

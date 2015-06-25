@@ -84,6 +84,27 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
   def combine(that: XorT[F, A, B])(implicit F: Apply[F], A: Semigroup[A], B: Semigroup[B]): XorT[F, A, B] =
     XorT(F.map2(this.value, that.value)(_ combine _))
 
+  def toValidated(implicit F: Functor[F]): F[Validated[A, B]] =
+    F.map(value)(_.toValidated)
+
+  /** Run this value as a `[[Validated]]` against the function and convert it back to an `[[XorT]]`.
+   *
+   * The [[Applicative]] instance for `XorT` "fails fast" - it is often useful to "momentarily" have
+   * it accumulate errors instead, which is what the `[[Validated]]` data type gives us.
+   *
+   * Example:
+   * {{{
+   * val v1: Validated[NonEmptyList[Error], Int] = ...
+   * val v2: Validated[NonEmptyList[Error], Int] = ...
+   * val xort: XorT[Error, Int] = ...
+   *
+   * val result: XorT[NonEmptyList[Error], Int] =
+   *   xort.withValidated { v3 => (v1 |@| v2 |@| v3.leftMap(NonEmptyList(_))) { case (i, j, k) => i + j + k } }
+   * }}}
+   */
+  def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB])(implicit F: Functor[F]): XorT[F, AA, BB] =
+    XorT(F.map(value)(xor => f(xor.toValidated).toXor))
+
   def show(implicit show: Show[F[A Xor B]]): String = show.show(value)
 }
 
