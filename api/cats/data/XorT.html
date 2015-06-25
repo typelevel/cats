@@ -795,6 +795,23 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </a>
     </span>
       
+    </li><li name="cats.data.XorT#toValidated" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toValidated(implicitF:cats.Functor[F]):F[cats.data.Validated[A,B]]"></a>
+      <a id="toValidated(Functor[F]):F[Validated[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toValidated</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.XorT.F">F</span>[<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT@toValidated(implicitF:cats.Functor[F]):F[cats.data.Validated[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.XorT#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="traverse[G[_],D](f:B=&gt;G[D])(implicittraverseF:cats.Traverse[F],implicittraverseXorA:cats.Traverse[[X_kp1]cats.data.Xor[A,X_kp1]],implicitapplicativeG:cats.Applicative[G]):G[cats.data.XorT[F,A,D]]"></a>
       <a id="traverse[G[_],D]((B)⇒G[D])(Traverse[F],Traverse[[X_kp1]Xor[A,X_kp1]],Applicative[G]):G[XorT[F,A,D]]"></a>
@@ -898,6 +915,29 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.XorT#withValidated" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withValidated[AA,BB](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[AA,BB])(implicitF:cats.Functor[F]):cats.data.XorT[F,AA,BB]"></a>
+      <a id="withValidated[AA,BB]((Validated[A,B])⇒Validated[AA,BB])(Functor[F]):XorT[F,AA,BB]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withValidated</span><span class="tparams">[<span name="AA">AA</span>, <span name="BB">BB</span>]</span><span class="params">(<span name="f">f: (<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.B">B</span>]) ⇒ <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.XorT.withValidated.AA">AA</span>, <span class="extype" name="cats.data.XorT.withValidated.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.withValidated.AA">AA</span>, <span class="extype" name="cats.data.XorT.withValidated.BB">BB</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT@withValidated[AA,BB](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[AA,BB])(implicitF:cats.Functor[F]):cats.data.XorT[F,AA,BB]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Run this value as a <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> against the function and convert it back to an <code><a href="" class="extype" name="cats.data.XorT">XorT</a></code>.</p><div class="fullcomment"><div class="comment cmt"><p>Run this value as a <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> against the function and convert it back to an <code><a href="" class="extype" name="cats.data.XorT">XorT</a></code>.</p><p>The <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>XorT</code> &quot;fails fast&quot; - it is often useful to &quot;momentarily&quot; have
+it accumulate errors instead, which is what the <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> data type gives us.</p><p>Example:</p><pre><span class="kw">val</span> v1: Validated[NonEmptyList[Error], <span class="std">Int</span>] = ...
+<span class="kw">val</span> v2: Validated[NonEmptyList[Error], <span class="std">Int</span>] = ...
+<span class="kw">val</span> xort: XorT[Error, <span class="std">Int</span>] = ...
+
+<span class="kw">val</span> result: XorT[NonEmptyList[Error], <span class="std">Int</span>] =
+  xort.withValidated { v3 <span class="kw">=&gt;</span> (v1 |@| v2 |@| v3.leftMap(NonEmptyList(_))) { <span class="kw">case</span> (i, j, k) <span class="kw">=&gt;</span> i + j + k } }</pre></div></div>
     </li></ol>
             </div>
 

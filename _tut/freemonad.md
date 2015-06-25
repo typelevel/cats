@@ -150,7 +150,7 @@ scala> implicit val functor: Functor[KVStoreA] =
      |           Delete(key, f(next))
      |       }
      |   }
-functor: cats.Functor[KVStoreA] = $anon$1@716a4cd0
+functor: cats.Functor[KVStoreA] = $anon$1@3a0b549c
 ```
 
 #### 3. Create smart constructors using `liftF`
