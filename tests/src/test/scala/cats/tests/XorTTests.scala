@@ -44,14 +44,6 @@ class XorTTests extends CatsSuite {
     }
   })
 
-  implicit val arbitraryTryInt: Arbitrary[Try[Int]] = Arbitrary {
-    for {
-      success <- arbitrary[Boolean]
-      t <- if (success) arbitrary[Int].map(Success(_))
-           else Gen.const(Failure(new Throwable {}))
-    } yield t
-  }
-
   test("fromTry")(check {
     forAll { (t: Try[Int]) =>
       Some(t.isFailure) == XorT.fromTry[Option](t).isLeft

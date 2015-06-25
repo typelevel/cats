@@ -9,7 +9,7 @@ import org.scalacheck.Prop._
 import org.scalacheck.Prop.BooleanOperators
 import org.scalacheck.Arbitrary._
 
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
 class XorTests extends CatsSuite {
   checkAll("Xor[String, Int]", MonadTests[String Xor ?].monad[Int, Int, Int])
@@ -24,14 +24,6 @@ class XorTests extends CatsSuite {
       xor <- if (left) arbitrary[Int].map(Xor.left)
              else arbitrary[String].map(Xor.right)
     } yield xor
-  }
-
-  implicit val arbitraryTryInt: Arbitrary[Try[Int]] = Arbitrary {
-    for {
-      success <- arbitrary[Boolean]
-      t <- if (success) arbitrary[Int].map(Success(_))
-           else Gen.const(Failure(new Throwable {}))
-    } yield t
   }
 
   test("fromTryCatch catches matching exceptions") {

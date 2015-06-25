@@ -10,7 +10,7 @@ import org.scalacheck.Prop._
 import org.scalacheck.Prop.BooleanOperators
 import cats.laws.discipline.arbitrary._
 
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
 class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
@@ -18,14 +18,6 @@ class ValidatedTests extends CatsSuite {
 
   checkAll("Validated[String, Int] with Option", TraverseTests[Validated[String,?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Validated[String,?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
-
-  implicit val arbitraryTryInt: Arbitrary[Try[Int]] = Arbitrary {
-    for {
-      success <- arbitrary[Boolean]
-      t <- if (success) arbitrary[Int].map(Success(_))
-           else arbitrary[Throwable].map(Failure(_))
-    } yield t
-  }
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)

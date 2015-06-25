@@ -117,6 +117,17 @@ trait XorTFunctions {
 
   final def pure[F[_], A, B](b: B)(implicit F: Applicative[F]): XorT[F, A, B] = right(F.pure(b))
 
+  /** Transforms an `Xor` into an `XorT`, lifted into the specified `Applicative`.
+   *
+   * Note: The return type is a FromXorAux[F], which has an apply method on it, allowing
+   * you to call fromTry like this:
+   * {{{
+   * val t: Xor[String, Int] = ...
+   * val x: XorT[Option, String, Int] = fromXor[Option](t)
+   * }}}
+   *
+   * The reason for the indirection is to emulate currying type parameters.
+   */
   final def fromXor[F[_]]: FromXorAux[F] = new FromXorAux
 
   final class FromXorAux[F[_]] private[XorTFunctions] {
@@ -124,6 +135,17 @@ trait XorTFunctions {
       XorT(F.pure(xor))
   }
 
+  /**
+   * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
+   * the resulting `XorT`. Uncaught exceptions are propagated.
+   *
+   * For example: {{{
+   * val result: XorT[Option, NumberFormatException, Int] =
+   *   fromTryCatch[Option, NumberFormatException] { "foo".toInt }
+   * }}}
+   *
+   * The reason for the indirection is to emulate currying type parameters.
+   */
   final def fromTryCatch[F[_], T >: Null <: Throwable]: FromTryCatchAux[F, T] =
     new FromTryCatchAux[F, T]
 
@@ -132,6 +154,17 @@ trait XorTFunctions {
       fromXor(Xor.fromTryCatch[T](f))
   }
 
+  /** Transforms a `Try` into an `XorT`, lifted into the specified `Applicative`.
+   *
+   * Note: The return type is a FromTryAux[F], which has an apply method on it, allowing
+   * you to call fromTry like this:
+   * {{{
+   * val t: Try[Int] = ...
+   * val x: XorT[Option, Throwable, Int] = fromTry[Option](t)
+   * }}}
+   *
+   * The reason for the indirection is to emulate currying type parameters.
+   */
   final def fromTry[F[_]]: FromTryAux[F] = new FromTryAux
 
   final class FromTryAux[F[_]] private[XorTFunctions] {
