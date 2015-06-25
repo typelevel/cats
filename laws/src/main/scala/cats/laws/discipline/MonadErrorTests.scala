@@ -15,8 +15,8 @@ trait MonadErrorTests[F[_, _], E] extends MonadTests[F[E, ?]] {
     EqFC: Eq[F[E, C]],
     ArbE: Arbitrary[E]
   ): RuleSet = {
-    implicit def ArbFEA = ArbF.synthesize[A]
-    implicit def ArbFEB = ArbF.synthesize[B]
+    implicit def ArbFEA: Arbitrary[F[E, A]] = ArbF.synthesize[A]
+    implicit def ArbFEB: Arbitrary[F[E, B]] = ArbF.synthesize[B]
 
     new RuleSet {
       def name: String = "monadError"
