@@ -7,9 +7,6 @@ import scala.math.min
 
 class LazyTests extends CatsSuite {
 
-  // disable scalatest ===
-  override def convertToEqualizer[T](left: T): Equalizer[T] = ???
-
   /**
    * Class for spooky side-effects and action-at-a-distance.
    *
