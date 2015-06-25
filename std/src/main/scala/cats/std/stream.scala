@@ -11,7 +11,7 @@ trait StreamInstances {
 
       def combine[A](x: Stream[A], y: Stream[A]): Stream[A] = x #::: y
 
-      def pure[A](x: A): Stream[A] = x #:: Stream.Empty
+      def pure[A](x: A): Stream[A] = Stream(x)
 
       override def map[A, B](fa: Stream[A])(f: A => B): Stream[B] =
         fa.map(f)
