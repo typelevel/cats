@@ -67,6 +67,13 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    */
   def toList: List[A] = fold(_ => Nil, List(_))
 
+  /** Lift the Invalid value into a NonEmptyList. */
+  def toValidatedNel[EE >: E, AA >: A]: ValidatedNel[EE, AA] =
+    this match {
+      case v @ Valid(_) => v
+      case Invalid(e)   => Validated.invalidNel(e)
+    }
+
   /**
    * Convert this value to RightOr if Valid or LeftOr if Invalid
    */
@@ -206,6 +213,8 @@ sealed abstract class ValidatedInstances2 {
 
 trait ValidatedFunctions {
   def invalid[A, B](a: A): Validated[A,B] = Validated.Invalid(a)
+
+  def invalidNel[A, B](a: A): ValidatedNel[A, B] = Validated.Invalid(NonEmptyList(a))
 
   def valid[A, B](b: B): Validated[A,B] = Validated.Valid(b)
 
