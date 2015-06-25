@@ -8,7 +8,7 @@ trait MonadErrorLaws[F[_, _], E] extends MonadLaws[F[E, ?]] {
   def monadErrorLeftZero[A, B](e: E, f: A => F[E, B]): IsEq[F[E, B]] =
     F.flatMap(F.raiseError[A](e))(f) <-> F.raiseError[B](e)
 
-  def monadErrorCatch[A](e: E, f: E => F[E, A]): IsEq[F[E, A]] =
+  def monadErrorHandle[A](e: E, f: E => F[E, A]): IsEq[F[E, A]] =
     F.handleError(F.raiseError[A](e))(f) <-> f(e)
 
   def monadErrorPure[A](a: A, f: E => F[E, A]): IsEq[F[E, A]] =
