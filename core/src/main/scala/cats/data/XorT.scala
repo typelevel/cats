@@ -119,7 +119,7 @@ trait XorTFunctions {
 
   final def fromXor[F[_]]: FromXorAux[F] = new FromXorAux
 
-  final class FromXorAux[F[_]] {
+  final class FromXorAux[F[_]] private[XorTFunctions] {
     def apply[E, A](xor: Xor[E, A])(implicit F: Applicative[F]): XorT[F, E, A] =
       XorT(F.pure(xor))
   }
@@ -134,7 +134,7 @@ trait XorTFunctions {
 
   final def fromTry[F[_]]: FromTryAux[F] = new FromTryAux
 
-  final class FromTryAux[F[_]] {
+  final class FromTryAux[F[_]] private[XorTFunctions] {
     def apply[A](t: Try[A])(implicit F: Applicative[F]): XorT[F, Throwable, A] =
       fromXor(Xor.fromTry(t))
   }
