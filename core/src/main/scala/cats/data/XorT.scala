@@ -120,7 +120,7 @@ trait XorTFunctions {
   /** Transforms an `Xor` into an `XorT`, lifted into the specified `Applicative`.
    *
    * Note: The return type is a FromXorAux[F], which has an apply method on it, allowing
-   * you to call fromTry like this:
+   * you to call fromXor like this:
    * {{{
    * val t: Xor[String, Int] = ...
    * val x: XorT[Option, String, Int] = fromXor[Option](t)
@@ -133,43 +133,6 @@ trait XorTFunctions {
   final class FromXorAux[F[_]] private[XorTFunctions] {
     def apply[E, A](xor: Xor[E, A])(implicit F: Applicative[F]): XorT[F, E, A] =
       XorT(F.pure(xor))
-  }
-
-  /**
-   * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
-   * the resulting `XorT`. Uncaught exceptions are propagated.
-   *
-   * For example: {{{
-   * val result: XorT[Option, NumberFormatException, Int] =
-   *   fromTryCatch[Option, NumberFormatException] { "foo".toInt }
-   * }}}
-   *
-   * The reason for the indirection is to emulate currying type parameters.
-   */
-  final def fromTryCatch[F[_], T >: Null <: Throwable]: FromTryCatchAux[F, T] =
-    new FromTryCatchAux[F, T]
-
-  final class FromTryCatchAux[F[_], T >: Null <: Throwable] private[XorTFunctions] {
-    def apply[A](f: => A)(implicit F: Applicative[F], T: ClassTag[T]): XorT[F, T, A] =
-      fromXor(Xor.fromTryCatch[T](f))
-  }
-
-  /** Transforms a `Try` into an `XorT`, lifted into the specified `Applicative`.
-   *
-   * Note: The return type is a FromTryAux[F], which has an apply method on it, allowing
-   * you to call fromTry like this:
-   * {{{
-   * val t: Try[Int] = ...
-   * val x: XorT[Option, Throwable, Int] = fromTry[Option](t)
-   * }}}
-   *
-   * The reason for the indirection is to emulate currying type parameters.
-   */
-  final def fromTry[F[_]]: FromTryAux[F] = new FromTryAux
-
-  final class FromTryAux[F[_]] private[XorTFunctions] {
-    def apply[A](t: Try[A])(implicit F: Applicative[F]): XorT[F, Throwable, A] =
-      fromXor(Xor.fromTry(t))
   }
 }
 

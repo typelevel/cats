@@ -28,25 +28,9 @@ class XorTTests extends CatsSuite {
     }
   })
 
-  test("fromTryCatch catches matching exceptions") {
-    assert(XorT.fromTryCatch[Option, NumberFormatException]("foo".toInt).isInstanceOf[XorT[Option, NumberFormatException, Int]])
-  }
-
-  test("fromTryCatch lets non-matching exceptions escape") {
-    val _ = intercept[NumberFormatException] {
-      XorT.fromTryCatch[Option, IndexOutOfBoundsException]{ "foo".toInt }
-    }
-  }
-
   test("fromXor")(check {
     forAll { (xor: Xor[String, Int]) =>
       Some(xor.isLeft) == XorT.fromXor[Option](xor).isLeft
-    }
-  })
-
-  test("fromTry")(check {
-    forAll { (t: Try[Int]) =>
-      Some(t.isFailure) == XorT.fromTry[Option](t).isLeft
     }
   })
 }
