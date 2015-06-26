@@ -13,9 +13,11 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 
 class FutureTests extends CatsSuite {
+  val timeout = 3.seconds
+
   implicit val eqkf: EqK[Future] =
     new EqK[Future] {
-      def synthesize[A: Eq]: Eq[Future[A]] = futureEq(1.second)
+      def synthesize[A: Eq]: Eq[Future[A]] = futureEq(timeout)
     }
 
   def futureXor[A](f: Future[A]): Future[Xor[Throwable, A]] =
@@ -26,10 +28,10 @@ class FutureTests extends CatsSuite {
       implicit val throwableEq: Eq[Throwable] = Eq.fromUniversalEquals
 
       def eqv(x: Future[Int], y: Future[Int]): Boolean =
-        futureEq[Xor[Throwable, Int]](1.second).eqv(futureXor(x), futureXor(y))
+        futureEq[Xor[Throwable, Int]](timeout).eqv(futureXor(x), futureXor(y))
     }
 
-  implicit val comonad: Comonad[Future] = futureComonad(1.second)
+  implicit val comonad: Comonad[Future] = futureComonad(timeout)
 
   // Need non-fatal Throwables for Future recoverWith/handleError
   implicit val nonFatalArbitrary: Arbitrary[Throwable] =

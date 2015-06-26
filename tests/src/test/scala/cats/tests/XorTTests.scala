@@ -1,7 +1,7 @@
 package cats.tests
 
 import cats.MonadError
-import cats.data.XorT
+import cats.data.{Xor, XorT}
 import cats.laws.discipline.{MonadErrorTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
@@ -21,6 +21,12 @@ class XorTTests extends CatsSuite {
   test("withValidated")(check {
     forAll { (xort: XorT[List, String, Int], f: String => Char, g: Int => Double) =>
       xort.withValidated(_.bimap(f, g)) == xort.bimap(f, g)
+    }
+  })
+
+  test("fromXor")(check {
+    forAll { (xor: Xor[String, Int]) =>
+      Some(xor.isLeft) == XorT.fromXor[Option](xor).isLeft
     }
   })
 }

@@ -107,12 +107,29 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
 object XorT extends XorTInstances with XorTFunctions
 
 trait XorTFunctions {
-
   final def left[F[_], A, B](fa: F[A])(implicit F: Functor[F]): XorT[F, A, B] = XorT(F.map(fa)(Xor.left))
 
   final def right[F[_], A, B](fb: F[B])(implicit F: Functor[F]): XorT[F, A, B] = XorT(F.map(fb)(Xor.right))
 
   final def pure[F[_], A, B](b: B)(implicit F: Applicative[F]): XorT[F, A, B] = right(F.pure(b))
+
+  /** Transforms an `Xor` into an `XorT`, lifted into the specified `Applicative`.
+   *
+   * Note: The return type is a FromXorAux[F], which has an apply method on it, allowing
+   * you to call fromXor like this:
+   * {{{
+   * val t: Xor[String, Int] = ...
+   * val x: XorT[Option, String, Int] = fromXor[Option](t)
+   * }}}
+   *
+   * The reason for the indirection is to emulate currying type parameters.
+   */
+  final def fromXor[F[_]]: FromXorAux[F] = new FromXorAux
+
+  final class FromXorAux[F[_]] private[XorTFunctions] {
+    def apply[E, A](xor: Xor[E, A])(implicit F: Applicative[F]): XorT[F, E, A] =
+      XorT(F.pure(xor))
+  }
 }
 
 abstract class XorTInstances extends XorTInstances1 {
