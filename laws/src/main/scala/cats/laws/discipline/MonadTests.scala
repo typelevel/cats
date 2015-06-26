@@ -3,7 +3,8 @@ package laws
 package discipline
 
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 
 trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
   def laws: MonadLaws[F]
@@ -18,10 +19,10 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
     implicit def ArbFB: Arbitrary[F[B]] = ArbF.synthesize[B]
 
     new RuleSet {
-      def name = "monad"
-      def bases = Nil
-      def parents = Seq(applicative[A, B, C], flatMap[A, B, C])
-      def props = Seq(
+      def name: String = "monad"
+      def bases: Seq[(String, RuleSet)] = Nil
+      def parents: Seq[RuleSet] = Seq(applicative[A, B, C], flatMap[A, B, C])
+      def props: Seq[(String, Prop)] = Seq(
         "monad left identity" -> forAll(laws.monadLeftIdentity[A, B] _),
         "monad right identity" -> forAll(laws.monadRightIdentity[A] _)
       )
@@ -31,5 +32,5 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
 
 object MonadTests {
   def apply[F[_]: Monad]: MonadTests[F] =
-    new MonadTests[F] { def laws = MonadLaws[F] }
+    new MonadTests[F] { def laws: MonadLaws[F] = MonadLaws[F] }
 }

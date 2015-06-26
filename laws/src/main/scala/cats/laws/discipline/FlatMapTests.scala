@@ -3,7 +3,8 @@ package laws
 package discipline
 
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 
 trait FlatMapTests[F[_]] extends ApplyTests[F] {
   def laws: FlatMapLaws[F]
@@ -19,19 +20,15 @@ trait FlatMapTests[F[_]] extends ApplyTests[F] {
     implicit def ArbFC: Arbitrary[F[C]] = ArbF.synthesize[C]
     implicit def ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
 
-    new RuleSet {
-      def name = "flatMap"
-      def bases = Nil
-      def parents = Seq(apply[A, B, C])
-      def props = Seq(
-        "flatMap associativity" -> forAll(laws.flatMapAssociativity[A, B, C] _),
-        "flatMap consistent apply" -> forAll(laws.flatMapConsistentApply[A, B] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "flatMap",
+      parent = Some(apply[A, B, C]),
+      "flatMap associativity" -> forAll(laws.flatMapAssociativity[A, B, C] _),
+      "flatMap consistent apply" -> forAll(laws.flatMapConsistentApply[A, B] _))
   }
 }
 
 object FlatMapTests {
   def apply[F[_]: FlatMap]: FlatMapTests[F] =
-    new FlatMapTests[F] { def laws = FlatMapLaws[F] }
+    new FlatMapTests[F] { def laws: FlatMapLaws[F] = FlatMapLaws[F] }
 }

@@ -4,7 +4,8 @@ package discipline
 
 import cats.functor.Strong
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop
+import Prop._
 
 trait StrongTests[F[_, _]] extends ProfunctorTests[F] {
   def laws: StrongLaws[F]
@@ -18,18 +19,14 @@ trait StrongTests[F[_, _]] extends ProfunctorTests[F] {
     EqFAEDE: Eq[F[(A, E), (D, E)]],
     EqFEAED: Eq[F[(E, A), (E, D)]]
   ): RuleSet =
-    new RuleSet {
-      def name = "strong"
-      def bases = Nil
-      def parents = Seq(profunctor[A, B, C, D, E, G])
-      def props = Seq(
-        "strong first distributivity" -> forAll(laws.strongFirstDistributivity[A, B, C, D, E] _),
-        "strong second distributivity" -> forAll(laws.strongSecondDistributivity[A, B, C, D, E] _)
-      )
-    }
+    new DefaultRuleSet(
+      name = "strong",
+      parent = Some(profunctor[A, B, C, D, E, G]),
+      "strong first distributivity" -> forAll(laws.strongFirstDistributivity[A, B, C, D, E] _),
+      "strong second distributivity" -> forAll(laws.strongSecondDistributivity[A, B, C, D, E] _))
 }
 
 object StrongTests {
   def apply[F[_, _]: Strong]: StrongTests[F] =
-    new StrongTests[F] { def laws = StrongLaws[F] }
+    new StrongTests[F] { def laws: StrongLaws[F] = StrongLaws[F] }
 }

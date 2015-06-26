@@ -34,7 +34,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Is this Invalid or matching the predicate
    */
-  def forAll(f: A => Boolean): Boolean = fold(_ => true, f)
+  def forall(f: A => Boolean): Boolean = fold(_ => true, f)
 
   /**
    * If the value is Valid but the predicate fails, return an empty
@@ -66,6 +66,13 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * otherwise return an empty List
    */
   def toList: List[A] = fold(_ => Nil, List(_))
+
+  /** Lift the Invalid value into a NonEmptyList. */
+  def toValidatedNel[EE >: E, AA >: A]: ValidatedNel[EE, AA] =
+    this match {
+      case v @ Valid(_) => v
+      case Invalid(e)   => Validated.invalidNel(e)
+    }
 
   /**
    * Convert this value to RightOr if Valid or LeftOr if Invalid
@@ -107,10 +114,10 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * From Apply:
    * if both the function and this value are Valid, apply the function
    */
-  def apply[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE,B] =
+  def ap[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE,B] =
     (this, f) match {
       case (Valid(a), Valid(f)) => Valid(f(a))
-      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e1,e2))
+      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e2,e1))
       case (e @ Invalid(_), _) => e
       case (_, e @ Invalid(_)) => e
     }
@@ -136,10 +143,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def foldLeft[B](b: B)(f: (B, A) => B): B = fold(_ => b, f(b, _))
 
   /**
-   * apply the given function to the value with the given B when
-   * valid, otherwise return the given B
+   * Lazily-apply the given function to the value with the given B
+   * when valid, otherwise return the given B.
    */
-  def foldRight[B](b: B)(f: (A, B) => B): B = fold(_ => b, f(_, b))
+  def foldRight[B](lb: Lazy[B])(f: A => Fold[B]): Lazy[B] =
+    Lazy(partialFold(f).complete(lb))
 
   def partialFold[B](f: A => Fold[B]): Fold[B] =
     fold(_ => Fold.Pass, f)
@@ -166,44 +174,47 @@ sealed abstract class ValidatedInstances extends ValidatedInstances1 {
     def show(f: Validated[A,B]): String = f.show
   }
 
-  implicit def validatedInstances[E: Semigroup]: ValidatedInstances[E] = new ValidatedInstances[E]
+  implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with Applicative[Validated[E, ?]] =
+    new Traverse[Validated[E, ?]] with Applicative[Validated[E,?]] {
+      def traverse[F[_]: Applicative, A, B](fa: Validated[E,A])(f: A => F[B]): F[Validated[E,B]] =
+        fa.traverse(f)
 
-  class ValidatedInstances[E](implicit E: Semigroup[E]) extends Traverse[Validated[E, ?]] with Applicative[Validated[E,?]] {
-    def traverse[F[_]: Applicative, A, B](fa: Validated[E,A])(f: A => F[B]): F[Validated[E,B]] = fa.traverse(f)
-    def foldLeft[A, B](fa: Validated[E,A], b: B)(f: (B, A) => B): B = fa.foldLeft(b)(f)
-    override def foldRight[A, B](fa: Validated[E,A], b: B)(f: (A, B) => B): B = fa.foldRight(b)(f)
-    def partialFold[A,B](fa: Validated[E,A])(f: A => Fold[B]): Fold[B] = fa.partialFold(f)
+      def foldLeft[A, B](fa: Validated[E,A], b: B)(f: (B, A) => B): B =
+        fa.foldLeft(b)(f)
 
-    def pure[A](a: A): Validated[E,A] = Validated.valid(a)
-    override def map[A, B](fa: Validated[E,A])(f: A => B): Validated[E, B] = fa.map(f)
+      def partialFold[A,B](fa: Validated[E,A])(f: A => Fold[B]): Fold[B] =
+        fa.partialFold(f)
 
-    override def apply[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]) =
-      (fa,f) match {
-        case (Valid(a),Valid(f)) => Valid(f(a))
-        case (e @ Invalid(_), Valid(_)) => e
-        case (Valid(_), e @ Invalid(_)) => e
-        case (Invalid(e1), Invalid(e2)) => Invalid(E.combine(e1, e2))
-      }
+      def pure[A](a: A): Validated[E,A] =
+        Validated.valid(a)
 
+      override def map[A, B](fa: Validated[E,A])(f: A => B): Validated[E, B] =
+        fa.map(f)
 
-  }
+      override def ap[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]): Validated[E, B] =
+        fa.ap(f)(E)
+    }
 }
 
 sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
-  implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A,B]] = new PartialOrder[Validated[A,B]] {
-    def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
-    override def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
-  }
+  implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A,B]] =
+    new PartialOrder[Validated[A,B]] {
+      def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
+      override def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
+    }
 }
 
 sealed abstract class ValidatedInstances2 {
-  implicit def xorEq[A: Eq, B: Eq]: Eq[Validated[A,B]] = new Eq[Validated[A,B]] {
-    def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
-  }
+  implicit def xorEq[A: Eq, B: Eq]: Eq[Validated[A,B]] =
+    new Eq[Validated[A,B]] {
+      def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
+    }
 }
 
 trait ValidatedFunctions {
   def invalid[A, B](a: A): Validated[A,B] = Validated.Invalid(a)
+
+  def invalidNel[A, B](a: A): ValidatedNel[A, B] = Validated.Invalid(NonEmptyList(a))
 
   def valid[A, B](b: B): Validated[A,B] = Validated.Valid(b)
 

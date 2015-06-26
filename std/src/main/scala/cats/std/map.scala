@@ -1,7 +1,23 @@
 package cats
 package std
 
+import cats.syntax.eq._
+
 trait MapInstances extends algebra.std.MapInstances {
+
+  implicit def MapEq[A, B: Eq]: Eq[Map[A, B]] =
+    new Eq[Map[A, B]] {
+      def eqv(lhs: Map[A, B], rhs: Map[A, B]): Boolean = {
+        def checkKeys: Boolean =
+          lhs.forall { case (k, v1) =>
+            rhs.get(k) match {
+              case Some(v2) => v1 === v2
+              case None => false
+            }
+          }
+        (lhs eq rhs) || (lhs.size == rhs.size && checkKeys)
+      }
+    }
 
   implicit def MapShow[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =
     Show.show[Map[A, B]] { m =>
@@ -29,10 +45,10 @@ trait MapInstances extends algebra.std.MapInstances {
       override def map2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: (A, B) => Z): Map[K, Z] =
         fa.flatMap { case (k, a) => fb.get(k).map(b => (k, f(a, b))) }
 
-      override def apply[A, B](fa: Map[K, A])(ff: Map[K, A => B]): Map[K, B] =
+      override def ap[A, B](fa: Map[K, A])(ff: Map[K, A => B]): Map[K, B] =
         fa.flatMap { case (k, a) => ff.get(k).map(f => (k, f(a))) }
 
-      override def apply2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: Map[K, (A, B) => Z]): Map[K, Z] =
+      override def ap2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: Map[K, (A, B) => Z]): Map[K, Z] =
         f.flatMap { case (k, f) =>
           for { a <- fa.get(k); b <- fb.get(k) } yield (k, f(a, b))
         }
@@ -42,9 +58,6 @@ trait MapInstances extends algebra.std.MapInstances {
 
       def foldLeft[A, B](fa: Map[K, A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b) { case (x, (k, a)) => f(x, a)}
-
-      override def foldRight[A, B](fa: Map[K, A], b: B)(f: (A, B) => B): B =
-        fa.foldRight(b) { case ((k, a), z) => f(a, z)}
 
       def partialFold[A, B](fa: Map[K, A])(f: A => Fold[B]): Fold[B] =
         Fold.partialIterate(fa.values)(f)

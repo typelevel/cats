@@ -11,7 +11,7 @@ trait StreamInstances {
 
       def combine[A](x: Stream[A], y: Stream[A]): Stream[A] = x #::: y
 
-      def pure[A](x: A): Stream[A] = x #:: Stream.Empty
+      def pure[A](x: A): Stream[A] = Stream(x)
 
       override def map[A, B](fa: Stream[A])(f: A => B): Stream[B] =
         fa.map(f)
@@ -28,25 +28,22 @@ trait StreamInstances {
       def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
-      // note: this foldRight variant is eager not lazy
-      override def foldRight[A, B](fa: Stream[A], b: B)(f: (A, B) => B): B =
-        fa.foldRight(b)(f)
-
       def partialFold[A, B](fa: Stream[A])(f: A => Fold[B]): Fold[B] =
         Fold.partialIterate(fa)(f)
 
       def traverse[G[_]: Applicative, A, B](fa: Stream[A])(f: A => G[B]): G[Stream[B]] = {
         val G = Applicative[G]
-        // we use lazy to defer the creation of the stream's tail
-        // until we are ready to prepend the stream's head with #::
-        val gslb = G.pure(Lazy.byName(Stream.empty[B]))
-        val gsb = foldRight(fa, gslb) { (a, lacc) =>
-          G.map2(f(a), lacc)((b, acc) => Lazy.byName(b #:: acc.value))
-        }
-        // this only forces the first element of the stream, so we get
-        // G[Stream[B]] instead of G[Lazy[Stream[B]]]. the rest of the
-        // stream will be properly lazy.
-        G.map(gsb)(_.value)
+        val init = G.pure(Stream.empty[B])
+
+        // We use foldRight to avoid possible stack overflows. Since
+        // we don't want to return a Lazy[_] instance, we call .value
+        // at the end.
+        //
+        // (We don't worry about internal laziness because traverse
+        // has to evaluate the entire stream anyway.)
+        foldRight(fa, Lazy(init)) { a =>
+          Fold.Continue(gsb => G.map2(f(a), gsb)(_ #:: _))
+        }.value
       }
     }
 

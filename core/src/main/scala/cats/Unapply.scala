@@ -28,7 +28,7 @@ trait Unapply[TC[_[_]], MA] {
   def subst: MA => M[A]
 }
 
-object Unapply {
+object Unapply extends Unapply2Instances {
   // a convenience method for summoning Unapply instances
   def apply[TC[_[_]], MA](implicit ev: Unapply[TC,MA]): Unapply[TC, MA] = implicitly
 
@@ -45,8 +45,11 @@ object Unapply {
       type M[X] = F[X]
       type A = AA
       override def TC: TC[F] = tc
-      override def subst = identity
+      override def subst: F[AA] => M[A] = identity
   }
+}
+
+sealed abstract class Unapply2Instances extends Unapply3Instances {
 
   // the type we will instantiate when we find a typeclass instance
   // for a type in the shape F[_,_] when we fix the left type
@@ -67,14 +70,14 @@ object Unapply {
      type M[X] = F[X, B]
      type A = AA
      def TC: TC[F[?, B]] = tc
-     def subst = identity
+     def subst: F[AA, B] => M[A] = identity
    }
 
    implicit def unapply2right[TC[_[_]], F[_,_], AA, B](implicit tc: TC[F[AA,?]]): Aux2Right[TC,F[AA,B], F, AA, B] = new Unapply[TC, F[AA,B]] {
      type M[X] = F[AA, X]
      type A = B
      def TC: TC[F[AA, ?]] = tc
-     def subst = identity
+     def subst: F[AA, B] => M[A] = identity
    }
 
   // STEW: I'm not sure why these Nothing cases are needed and aren't
@@ -84,14 +87,14 @@ object Unapply {
      type M[X] = F[X, Nothing]
      type A = AA
      def TC: TC[F[?, Nothing]] = tc
-     def subst = identity
+     def subst: F[AA, Nothing] => M[A] = identity
    }
 
   implicit def unapply2rightN[TC[_[_]], F[+_,_], B](implicit tc: TC[F[Nothing,?]]): Aux2Right[TC,F[Nothing,B], F, Nothing, B] = new Unapply[TC, F[Nothing,B]] {
      type M[X] = F[Nothing, X]
      type A = B
      def TC: TC[F[Nothing, ?]] = tc
-     def subst = identity
+     def subst: F[Nothing, B] => M[A] = identity
    }
 
   // the type we will instantiate when we find a typeclass instance
@@ -100,6 +103,9 @@ object Unapply {
     type M[X] = F[AA,X]
     type A = B
   }
+}
+
+sealed abstract class Unapply3Instances {
 
   // the type we will instantiate when we find a typeclass instance
   // for a type in the shape of a Monad Transformer with 3 type params
@@ -122,13 +128,13 @@ object Unapply {
      type M[X] = F[AA, X, C]
      type A = B
      def TC: TC[F[AA, ?, C]] = tc
-     def subst = identity
+     def subst: F[AA, B, C] => M[A] = identity
    }
 
   implicit def unapply3MTright[TC[_[_]], F[_[_],_,_], AA[_], B, C](implicit tc: TC[F[AA,B,?]]): Aux3MTRight[TC,F[AA,B,C], F, AA, B, C] = new Unapply[TC, F[AA,B,C]] {
      type M[X] = F[AA, B, X]
      type A = C
      def TC: TC[F[AA, B, ?]] = tc
-     def subst = identity
+     def subst: F[AA, B, C] => M[A] = identity
    }
 }

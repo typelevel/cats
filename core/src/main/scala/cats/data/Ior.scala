@@ -144,11 +144,14 @@ sealed abstract class IorInstances extends IorInstances0 {
 sealed abstract class IorInstances0 {
 
   implicit def iorInstances[A]: Traverse[A Ior ?] with Functor[A Ior ?] = new Traverse[A Ior ?] with Functor[A Ior ?] {
-    def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] = fa.traverse(f)
-    def foldLeft[B, C](fa: A Ior B, b: C)(f: (C, B) => C): C = fa.foldLeft(b)(f)
-    override def foldRight[B, C](fa: A Ior B, b: C)(f: (B, C) => C): C = fa.foldRight(b)(f)
-    def partialFold[B, C](fa: A Ior B)(f: B => Fold[C]): Fold[C] = fa.partialFold(f)
-    override def map[B, C](fa: A Ior B)(f: B => C): A Ior C = fa.map(f)
+    def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =
+      fa.traverse(f)
+    def foldLeft[B, C](fa: A Ior B, b: C)(f: (C, B) => C): C =
+      fa.foldLeft(b)(f)
+    def partialFold[B, C](fa: A Ior B)(f: B => Fold[C]): Fold[C] =
+      fa.partialFold(f)
+    override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
+      fa.map(f)
   }
 }
 

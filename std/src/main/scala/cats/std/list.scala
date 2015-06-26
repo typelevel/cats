@@ -38,15 +38,12 @@ trait ListInstances {
       def foldLeft[A, B](fa: List[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
-      override def foldRight[A, B](fa: List[A], b: B)(f: (A, B) => B): B =
-        fa.foldRight(b)(f)
-
       def partialFold[A, B](fa: List[A])(f: A => Fold[B]): Fold[B] =
         Fold.partialIterate(fa)(f)
 
       def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] = {
-        val gba = G.pure(ListBuffer.empty[B])
-        val gbb = fa.foldLeft(gba)((buf, a) => G.map2(buf, f(a))(_ += _))
+        val gba = G.pure(Vector.empty[B])
+        val gbb = fa.foldLeft(gba)((buf, a) => G.map2(buf, f(a))(_ :+ _))
         G.map(gbb)(_.toList)
       }
     }

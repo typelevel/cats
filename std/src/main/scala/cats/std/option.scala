@@ -31,12 +31,6 @@ trait OptionInstances {
           case Some(a) => f(b, a)
         }
 
-      override def foldRight[A, B](fa: Option[A], b: B)(f: (A, B) => B): B =
-        fa match {
-          case None => b
-          case Some(a) => f(a, b)
-        }
-
       def partialFold[A, B](fa: Option[A])(f: A => Fold[B]): Fold[B] =
         fa match {
           case None => Fold.Pass

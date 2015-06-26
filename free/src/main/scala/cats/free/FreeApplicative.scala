@@ -33,7 +33,7 @@ sealed abstract class FreeApplicative[F[_], A] { self =>
   final def run[G[_]](f: F ~> G)(implicit G: Applicative[G]): G[A] =
     this match {
       case Pure(a) => G.pure(a)
-      case x: Ap[F, A] => G.apply(f(x.pivot))(x.fn.run(f))
+      case x: Ap[F, A] => G.ap(f(x.pivot))(x.fn.run(f))
     }
 }
 
@@ -64,7 +64,7 @@ object FreeApplicative {
 
   implicit final def freeApplicative[S[_]]: Applicative[FA[S, ?]] = {
     new Applicative[FA[S, ?]] {
-      def apply[A, B](fa: FA[S, A])(f: FA[S, A => B]): FA[S, B] = fa.ap(f)
+      def ap[A, B](fa: FA[S, A])(f: FA[S, A => B]): FA[S, B] = fa.ap(f)
       def pure[A](a: A): FA[S, A] = Pure(a)
     }
   }

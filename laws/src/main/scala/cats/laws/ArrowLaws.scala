@@ -41,5 +41,5 @@ trait ArrowLaws[F[_, _]] extends CategoryLaws[F] with SplitLaws[F] with StrongLa
 
 object ArrowLaws {
   def apply[F[_, _]](implicit ev: Arrow[F]): ArrowLaws[F] =
-    new ArrowLaws[F] { def F = ev }
+    new ArrowLaws[F] { def F: Arrow[F] = ev }
 }

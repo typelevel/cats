@@ -10,17 +10,21 @@ import simulacrum._
   def contramap[A, B](fa: F[A])(f: B => A): F[B]
   override def imap[A, B](fa: F[A])(f: A => B)(fi: B => A): F[B] = contramap(fa)(fi)
 
-  def compose[G[_]: Contravariant]: Functor[Lambda[X => F[G[X]]]] =
+  def compose[G[_]](implicit G: Contravariant[G]): Functor[Lambda[X => F[G[X]]]] = {
+    val G0 = G
     new Contravariant.Composite[F, G] {
-      def F = self
-      def G = Contravariant[G]
+      def F: Contravariant[F] = self
+      def G: Contravariant[G] = G0
     }
+  }
 
-  override def composeWithFunctor[G[_]: Functor]: Contravariant[Lambda[X => F[G[X]]]] =
+  override def composeWithFunctor[G[_]](implicit G: Functor[G]): Contravariant[Lambda[X => F[G[X]]]] = {
+    val G0 = G
     new Contravariant.CovariantComposite[F, G] {
-      def F = self
-      def G = Functor[G]
+      def F: Contravariant[F] = self
+      def G: Functor[G] = G0
     }
+  }
 }
 
 object Contravariant {
