@@ -1,10 +1,6 @@
 package cats
 package data
 
-import scala.reflect.ClassTag
-
-import scala.util.Try
-
 /**
  * Transformer for `Xor`, allowing the effect of an arbitrary type constructor `F` to be combined with the
  * fail-fast effect of `Xor`.

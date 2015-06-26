@@ -5,11 +5,7 @@ import cats.data.{Xor, XorT}
 import cats.laws.discipline.{MonadErrorTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
-import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Prop.forAll
-
-import scala.util.{Failure, Success, Try}
 
 class XorTTests extends CatsSuite {
   checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, ?, ?], String].monadError[Int, Int, Int])
