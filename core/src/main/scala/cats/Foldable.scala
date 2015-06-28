@@ -148,6 +148,14 @@ import simulacrum._
 
 
   /**
+   * Check whether at least one element satisfies the predicate.
+   */
+  def exists[A](fa: F[A])(p: A => Boolean): Boolean =
+    foldRight(fa, Lazy.eager(false)) { a =>
+      if (p(a)) Fold.Return(true) else Fold.Pass
+    }.value
+
+  /**
    * Convert F[A] to a List[A].
    */
   def toList[A](fa: F[A]): List[A] =

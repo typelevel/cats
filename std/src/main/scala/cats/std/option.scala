@@ -42,6 +42,9 @@ trait OptionInstances {
           case None => Applicative[G].pure(None)
           case Some(a) => Applicative[G].map(f(a))(Some(_))
         }
+
+      override def exists[A](fa: Option[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
     }
 
   // TODO: eventually use algebra's instances (which will deal with

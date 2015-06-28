@@ -68,4 +68,11 @@ class OneAndTests extends CatsSuite {
       nel.find(p) == list.find(p)
     }
   })
+
+  test("NonEmptyList#exists is consistent with List#exists")(check {
+    forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
+      val list = nel.unwrap
+      nel.exists(p) == list.exists(p)
+    }
+  })
 }

@@ -42,6 +42,12 @@ final case class OneAnd[A, F[_]](head: A, tail: F[A]) {
     if (f(head)) Some(head) else F.find(tail)(f)
 
   /**
+   * Check whether at least one element satisfies the predicate.
+   */
+  def exists(p: A => Boolean)(implicit F: Foldable[F]): Boolean =
+    p(head) || F.exists(tail)(p)
+
+  /**
    * Left-associative fold on the structure using f.
    */
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =

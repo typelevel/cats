@@ -21,6 +21,13 @@ trait FoldableLaws[F[_]] {
   ): IsEq[B] = {
     F.foldMap(fa)(f) <-> F.foldRight(fa, Lazy(M.empty)){ a => Fold.Continue(M.combine(_, f(a)))}.value
   }
+
+  def existsConsistentWithFind[A](
+    fa: F[A],
+    p: A => Boolean
+  ): Boolean = {
+    F.exists(fa)(p) == F.find(fa)(p).isDefined
+  }
 }
 
 object FoldableLaws {

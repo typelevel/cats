@@ -45,6 +45,9 @@ trait StreamInstances {
           Fold.Continue(gsb => G.map2(f(a), gsb)(_ #:: _))
         }.value
       }
+
+      override def exists[A](fa: Stream[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
     }
 
   // TODO: eventually use algebra's instances (which will deal with
