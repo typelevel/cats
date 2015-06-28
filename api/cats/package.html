@@ -515,6 +515,24 @@ value. You can obtain this value by calling the <code>.value</code> method.
     </span>
       <p class="shortcomment cmt">The combination of a Monad with a MonoidK
 </p>
+    </li><li name="cats.MonadError" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="MonadError[F[_,_],E]extendsMonad[[X_kp1]F[E,X_kp1]]"></a>
+      <a id="MonadError[F[_,_],E]:MonadError[F,E]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="MonadError.html"><span class="name">MonadError</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[[X_kp1]<span class="extype" name="cats.MonadError.F">F</span>[<span class="extype" name="cats.MonadError.E">E</span>, <span class="extype" name="cats.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@MonadError[F[_,_],E]extendsMonad[[X_kp1]F[E,X_kp1]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A monad that also allows you to raise and or handle an error value.</p><div class="fullcomment"><div class="comment cmt"><p>A monad that also allows you to raise and or handle an error value.</p><p>This type class allows one to abstract over error-handling monads.
+</p></div></div>
     </li><li name="cats.MonadFilter" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="MonadFilter[F[_]]extendsMonad[F]"></a>
       <a id="MonadFilter[F[_]]:MonadFilter[F]"></a>
@@ -1110,6 +1128,23 @@ however the scala compiler will not find them without some coercing.
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@MonadCombine" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="cats.MonadError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MonadError"></a>
+      <a id="MonadError:MonadError"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MonadError$.html"><span class="name">MonadError</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@MonadError" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>

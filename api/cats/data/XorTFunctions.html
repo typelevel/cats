@@ -92,7 +92,27 @@
         <div id="allMembers">
         
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="cats.data.XorTFunctions.FromXorAux" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FromXorAux[F[_]]extendsAnyRef"></a>
+      <a id="FromXorAux[F[_]]:FromXorAux[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="XorTFunctions$FromXorAux.html"><span class="name">FromXorAux</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorTFunctions@FromXorAux[F[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
 
         
 
@@ -246,6 +266,26 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.XorTFunctions#fromXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromXor[F[_]]:XorTFunctions.this.FromXorAux[F]"></a>
+      <a id="fromXor[F[_]]:FromXorAux[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromXor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="XorTFunctions$FromXorAux.html" class="extype" name="cats.data.XorTFunctions.FromXorAux">FromXorAux</a>[<span class="extype" name="cats.data.XorTFunctions.fromXor.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorTFunctions@fromXor[F[_]]:XorTFunctions.this.FromXorAux[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Transforms an <code>Xor</code> into an <code>XorT</code>, lifted into the specified <code>Applicative</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transforms an <code>Xor</code> into an <code>XorT</code>, lifted into the specified <code>Applicative</code>.</p><p>Note: The return type is a FromXorAux[F], which has an apply method on it, allowing
+you to call fromXor like this:</p><pre><span class="kw">val</span> t: Xor[<span class="std">String</span>, <span class="std">Int</span>] = ...
+<span class="kw">val</span> x: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = fromXor[<span class="std">Option</span>](t)</pre><p>The reason for the indirection is to emulate currying type parameters.
+</p></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>

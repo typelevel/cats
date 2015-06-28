@@ -9,186 +9,198 @@ scaladoc: "#cats.state.StateT"
 
 `State` is a structure that provides a functional approach to handling application state. `State[S, A]` is basically a function `S => (S, A)`, where `S` is the type that represents your state and `A` is the result the function produces. In addition to returning the result of type `A`, the function returns a new `S` value, which is the updated state.
 
-## Pseudorandom values
+## Robots
 
-Let's try to make this more concrete with an example. We want to generate pseudorandom values.
-
-Scala's standard library has a built-in `Random` class that provides this functionality:
+Let's try to make this more concrete with an example. We have this `Robot` model:
 
 ```scala
-scala> val rng = new scala.util.Random(0L)
-rng: scala.util.Random = scala.util.Random@34ae34a2
-
-scala> val x = rng.nextLong()
-x: Long = -4962768465676381896
-
-scala> val y = rng.nextLong()
-y: Long = 4437113781045784766
-
-scala> val b = rng.nextBoolean()
-b: Boolean = true
-
-scala> val z = if (b) x else y
-z: Long = -4962768465676381896
+final case class Robot(
+  id: Long,
+  sentient: Boolean,
+  name: String,
+  model: String)
 ```
 
-We create a single `Random` instance, which is mutated as a side-effect each time that we call `nextX` on it. Because of this mutation, `x` and `y` have different values, even though they both are created with `rng.nextLong()`. This isn't ideal, because it's easier to test and reason about code if calling a function with the same input values (in this case no input values) always generates the same output.
+We would like to generate some random `Robot` instances for test data.
+
+## Pseudorandom values
+
+Scala's standard library has a built-in `Random` class that provides a (pseudo)random number generator (RNG). Let's use it to write a method that creates robots.
+
+```scala
+val rng = new scala.util.Random(0L)
+
+def createRobot(): Robot = {
+  val id = rng.nextLong()
+  val sentient = rng.nextBoolean()
+  val isCatherine = rng.nextBoolean()
+  val name = if (isCatherine) "Catherine" else "Carlos"
+  val isReplicant = rng.nextBoolean()
+  val model = if (isReplicant) "replicant" else "borg"
+  Robot(id, sentient, name, model)
+}
+```
+
+```scala
+scala> val robot = createRobot()
+robot: Robot = Robot(-4962768465676381896,false,Catherine,replicant)
+```
+
+We create a single `Random` instance, which is mutated as a side-effect each time that we call `nextLong` or `nextBoolean` on it. This mutation makes it more difficult to reason about our code. Someone might come along and see that we have `rng.nextBoolean` repeated three times within a single method. They might cleverly avoid repeated code and method invocations by extracting the common code into a variable:
+
+```scala
+val rng = new scala.util.Random(0L)
+
+def createRobot(): Robot = {
+  val id = rng.nextLong()
+  val b = rng.nextBoolean()
+  val sentient = b
+  val isCatherine = b
+  val name = if (isCatherine) "Catherine" else "Carlos"
+  val isReplicant = b
+  val model = if (isReplicant) "replicant" else "borg"
+  Robot(id, sentient, name, model)
+}
+```
+
+```scala
+scala> val robot = createRobot()
+robot: Robot = Robot(-4962768465676381896,false,Carlos,borg)
+```
+
+But now the output of our program has changed! We used to have a replicant robot named Catherine, but now we have a borg robot named Carlos. It might not have been obvious, but the `nextBoolean` calls we were making had the side effect of mutating internal RNG state, and we were depending on that behavior.
+
+When we can't freely refactor identical code into a common variable, the code becomes harder to reason about. In functional programming lingo, one might say that such code lacks [referential transparency](https://en.wikipedia.org/wiki/Referential_transparency_(computer_science)).
 
 ## Purely functional pseudorandom values
 
-We can achieve a similar effect without mutation and side-effects using `State`.
+Since mutating state caused us trouble, let's create an RNG that is immutable.
 
-### Create a generator
+We'll use a simple RNG that can generate pseudorandom `Long` values based only on the previous "seed" value and some carefully chosen constants. You don't need to understand the details of this implementation for the purposes of this example, but if you'd like to know more, this is Knuth's 64-bit [linear congruential generator](https://en.wikipedia.org/wiki/Linear_congruential_generator).
 
-First, let's create our own pseudorandom number generator. For simplicity, we will use a [linear congruential generator](https://en.wikipedia.org/wiki/Linear_congruential_generator). This generator is just meant for demo purposes, so please don't use it in the real world!
+```scala
+final case class Seed(long: Long) {
+  def next = Seed(long * 6364136223846793005L + 1442695040888963407L)
+}
+```
+
+Instead of mutating the existing `long` value, calling `next` returns a _new_ `Seed` instance with an updated `long` value.
+
+Since the RNG isn't updating state internally, we will need to keep track of state outside of the RNG. When we call `nextBoolean` we will want it to return a `Boolean` as it did before, but we will also want it to return an updated `Seed` that we can use to generate our next random value.
+
+```scala
+  def nextBoolean(seed: Seed): (Seed, Boolean) =
+    (seed.next, seed.long >= 0L)
+```
+
+Similarly, `nextLong` will return an updated `Seed` along with a `Long` value.
+
+```scala
+  def nextLong(seed: Seed): (Seed, Long) =
+    (seed.next, seed.long)
+```
+
+Now we need to explicitly pass in the updated state as we generate each new value.
+
+```scala
+def createRobot(seed: Seed): Robot = {
+  val (seed1, id) = nextLong(seed)
+  val (seed2, sentient) = nextBoolean(seed1)
+  val (seed3, isCatherine) = nextBoolean(seed2)
+  val name = if (isCatherine) "Catherine" else "Carlos"
+  val (seed4, isReplicant) = nextBoolean(seed3)
+  val model = if (isReplicant) "replicant" else "borg"
+  Robot(id, sentient, name, model)
+}
+
+val initialSeed = Seed(13L)
+```
+
+```scala
+scala> val robot = createRobot(initialSeed)
+robot: Robot = Robot(13,false,Catherine,replicant)
+```
+
+Now it is a bit more obvious that we can't extract the three `nextBoolean` calls into a single variable, because we are passing each one a different seed value.
+
+However, it is a bit cumbersome to explicitly pass around all of this intermediate state. It's also a bit error-prone. It would have been easy to acceidentally call `nextBoolean(seed2)` for both the name generation and the model generation, instead of remembering to use `nextBoolean(seed3)` the second time.
+
+## Cleaning it up with State
+
+State's special power is keeping track of state and passing it along. Recall the description of `State` at the beginning of this document. It is basically a function `S` => `(S, A)`, where `S` is a type representing state.
+
+Our `nextLong` function takes a `Seed` and returns an updated `Seed` and a `Long`. It can be represented as `Seed => (Seed, Long)`, and therefore matches the pattern `S => (S, A)` where `S` is `Seed` and `A` is `Long`.
+
+Let's write a new version of `nextLong` using `State`:
 
 ```scala
 import cats.state.State
-
 import cats.std.function._
+
+val nextLong: State[Seed, Long] = State(seed =>
+  (seed.next, seed.long))
 ```
 
-```scala
-/** our generator will need a seed value to initialize generation */
-type Seed = Long
+The `map` method on `State` allows us to transform the `A` value without affecting the `S` (state) value. This is perfect for implementing `nextBoolean` in terms of `nextLong`.
 
-final case class Lcg(modulus: Double, multiplier: Long, increment: Int) {
-  /**
-   * The pseudorandom function at the heart of the LCG.
-   */
-  def nextSeed(currentSeed: Seed): Seed =
-    ((multiplier * currentSeed + increment.toLong) % modulus).toLong
-  /**
-   * Transition to the next seed value and also return that value.
-   */
-  def nextLong: State[Seed, Long] = State { seed =>
-    val n = nextSeed(seed)
-    (n, n)
-  }
-  /**
-   * Transition to the next seed value and return a Boolean derived from that
-   * value
-   */
-  def nextBoolean: State[Seed, Boolean] = nextLong.map(_ > 0)
+```scala
+val nextBoolean: State[Seed, Boolean] = nextLong.map(long =>
+  long > 0)
+```
+
+The `flatMap` method on `State[S, A]` lets you use the result of one `State` in a subsequent `State`. The updated state (`S`) after the first call is passed into the second call. These `flatMap` and `map` methods allow us to use `State` in for-comprehensions:
+
+```scala
+val createRobot: State[Seed, Robot] =
+  for {
+    id <- nextLong
+    sentient <- nextBoolean
+    isCatherine <- nextBoolean
+    name = if (isCatherine) "Catherine" else "Carlos"
+    isReplicant <- nextBoolean
+    model = if (isReplicant) "replicant" else "borg"
+  } yield Robot(id, sentient, name, model)
+```
+
+At this point, we have not yet created a robot; we have written instructions for creating a robot. We need to pass in an initial seed value, and then we can call `run` to actually create the robot:
+
+```scala
+scala> val (finalState, robot) = createRobot.run(initialSeed).run
+finalState: Seed = Seed(2999987205171331217)
+robot: Robot = Robot(13,false,Catherine,replicant)
+```
+
+If we only care about the robot and not the final state, then we can use `runA`:
+
+```scala
+scala> val robot = createRobot.runA(initialSeed).run
+robot: Robot = Robot(13,false,Catherine,replicant)
+```
+
+The `createRobot` implementation reads much like the imperative code we initially wrote for the mutable RNG. However, this implementation is free of mutation and side-effects. Since this code is referentially transparent, we can perform the refactoring that we tried earlier without affecting the result:
+
+```scala
+val createRobot: State[Seed, Robot] = {
+  val b = nextBoolean
+
+  for {
+    id <- nextLong
+    sentient <- b
+    isCatherine <- b
+    name = if (isCatherine) "Catherine" else "Carlos"
+    isReplicant <- b
+    model = if (isReplicant) "replicant" else "borg"
+  } yield Robot(id, sentient, name, model)
 }
-
-object Lcg {
-  /**
-   * An LCG instance with some reasonable default values.
-   */
-  val default: Lcg = new Lcg(math.pow(2, 32), 22695477L, 1)
-}
 ```
-
-### Use our generator
-
-Let's call `nextLong` a couple times like we did with the mutable generator.
 
 ```scala
-scala> /** our "random" number generator */
-     | val rng = Lcg.default
-rng: Lcg = Lcg(4.294967296E9,22695477,1)
-
-scala> val x: State[Seed, Long] = rng.nextLong
-x: cats.state.State[Seed,Long] = cats.state.StateT@7e1b573
-
-scala> val y: State[Seed, Long] = rng.nextLong
-y: cats.state.State[Seed,Long] = cats.state.StateT@159c27bd
-
-scala> val b: State[Seed, Boolean] = rng.nextBoolean
-b: cats.state.State[Seed,Boolean] = cats.state.StateT@75b4a37b
+scala> val robot = createRobot.runA(initialSeed).run
+robot: Robot = Robot(13,false,Catherine,replicant)
 ```
 
-As you can see, `x` and `y` aren't `Long` values. They are `State` values. We can provide them with an initial seed value and then run the calculation to obtain the result.
-
-```scala
-scala> val seed: Seed = 13L
-seed: Seed = 13
-
-scala> x.run(seed).run
-res2: (Seed, Long) = (295041202,295041202)
-
-scala> y.run(seed).run
-res3: (Seed, Long) = (295041202,295041202)
-
-scala> b.run(seed).run
-res4: (Seed, Boolean) = (295041202,true)
-```
-
-There are a couple things to notice. The first is that for each of `x`, `y`, and `z`, we actually got two values back when we ran the computation. They represent the updated state value (`S`, or in this case `Seed`), and the requested value (`Long` for `x` and `y`, and `Boolean` for `b`).
-
-The next thing to notice is that the updated state value is the same in all cases, and the generated `Long` values for `x` and `y` are the same! With the mutable generator, calling `rng.nextLong` multiple times generated different values, but with our functional generator, repeated calls will always return the same result. This makes it easier to reason about behavior and to write deterministic tests, but what's the use of a "random" number generator that always produces the same result?
-
-### Update state
-
-The secret is that you want to chain your calls such that each time you pass in the updated state from the previous call.
-
-```scala
-scala> val (seed1, x) = rng.nextLong.run(seed).run
-seed1: Seed = 295041202
-x: Long = 295041202
-
-scala> val (seed2, y) = rng.nextLong.run(seed1).run
-seed2: Seed = 1986443483
-y: Long = 1986443483
-
-scala> val (seed3, b) = rng.nextBoolean.run(seed2).run
-seed3: Seed = 2811559768
-b: Boolean = true
-```
-
-### Tidy it up (part 1: flatMap)
-
-Now our values are changing on subsequent calls, as we'd like. However, this approach is pretty verbose and error-prone. It would have been really easy to accidentally write `val (seed3, b) = rng.nextBoolean.run(seed1).run` instead of passing in `seed2`. Luckily, the `flatMap` method on `State` provides an easy way to thread the output state of one computation into the next.
-
-```scala
-scala> val z: State[Seed, Long] = rng.nextLong flatMap { x =>
-     |   rng.nextLong flatMap { y =>
-     |     rng.nextBoolean map { b =>
-     |       if (b) x else y
-     |     }
-     |   }
-     | }
-z: cats.state.State[Seed,Long] = cats.state.StateT@37bff78b
-
-scala> z.run(seed).run
-res5: (Seed, Long) = (2811559768,295041202)
-```
-
-### Tidy it up (part 2: for-comprehensions)
-
-Now we don't have to worry about explicitly passing through the updated state, but it's still not the prettiest code. We can make it look a little more tidy by using Scala's for-comprehensions, which are syntax sugar for `flatMap` and `map` calls.
-
-```scala
-scala> val z: State[Seed, Long] = for {
-     |   x <- rng.nextLong
-     |   y <- rng.nextLong
-     |   b <- rng.nextBoolean
-     | } yield if (b) x else y
-z: cats.state.State[Seed,Long] = cats.state.StateT@52174ead
-
-scala> z.run(seed).run
-res6: (Seed, Long) = (2811559768,295041202)
-```
-
-This now looks quite a bit like the initial mutable approach, but it's completely free of mutation and side-effects.
-
-### Convenient methods
-
-If we are only interested in the final `A` value, we can grab it by itself:
-
-```scala
-scala> z.runA(seed).run
-res7: Long = 295041202
-```
-
-Alternatively, if we just care about the final seed (`S`) value, we can just grab it:
-
-```scala
-scala> z.runS(seed).run
-res8: Seed = 2811559768
-```
+This may seem surprising, but keep in mind that `b` isn't simply a `Boolean`. It is a function that takes a seed and _returns_ a `Boolean`, threading state along the way. Since the seed that is being passed into `b` changes from line to line, so do the returned `Boolean` values.
 
 ## Fine print
 
-TODO explain `StateT` and the fact that `State` is an alias for `StateT` with trampolining.
+TODO explain StateT and the fact that State is an alias for StateT with trampolining.

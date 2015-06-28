@@ -30,16 +30,18 @@ addTwo: Int => Int = <function1>
 scala> implicit val optionApply: Apply[Option] = new Apply[Option] {
      |   def ap[A, B](fa: Option[A])(f: Option[A => B]): Option[B] =
      |     fa.flatMap (a => f.map (ff => ff(a)))
+     | 
      |   def map[A,B](fa: Option[A])(f: A => B) = fa map f
      | }
-optionApply: cats.Apply[Option] = $anon$1@35df312f
+optionApply: cats.Apply[Option] = $anon$1@cf6638a
 
 scala> implicit val listApply: Apply[List] = new Apply[List] {
      |   def ap[A, B](fa: List[A])(f: List[A => B]): List[B] =
      |     fa.flatMap (a => f.map (ff => ff(a)))
+     | 
      |   def map[A,B](fa: List[A])(f: A => B) = fa map f
      | }
-listApply: cats.Apply[List] = $anon$1@4c12b0b1
+listApply: cats.Apply[List] = $anon$1@1c8ddf43
 ```
 
 ### map
@@ -138,7 +140,7 @@ Like Functors, Apply instances also compose:
 
 ```scala
 scala> val listOpt = Apply[List] compose Apply[Option]
-listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@325e6b62
+listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@1a022ac7
 
 scala> val plusOne = (x:Int) => x + 1
 plusOne: Int => Int = <function1>

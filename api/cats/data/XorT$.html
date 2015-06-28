@@ -91,7 +91,27 @@
         <div id="allMembers">
         
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="cats.data.XorTFunctions.FromXorAux" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FromXorAux[F[_]]extendsAnyRef"></a>
+      <a id="FromXorAux[F[_]]:FromXorAux[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="XorTFunctions$FromXorAux.html"><span class="name">FromXorAux</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorTFunctions@FromXorAux[F[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorTFunctions.html" class="extype" name="cats.data.XorTFunctions">XorTFunctions</a></dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
@@ -245,6 +265,26 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.XorTFunctions#fromXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromXor[F[_]]:XorTFunctions.this.FromXorAux[F]"></a>
+      <a id="fromXor[F[_]]:FromXorAux[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromXor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="#FromXorAux[F[_]]extendsAnyRef" class="extmbr" name="cats.data.XorTFunctions.FromXorAux">FromXorAux</a>[<span class="extype" name="cats.data.XorTFunctions.fromXor.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT$@fromXor[F[_]]:XorTFunctions.this.FromXorAux[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Transforms an <code>Xor</code> into an <code>XorT</code>, lifted into the specified <code>Applicative</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transforms an <code>Xor</code> into an <code>XorT</code>, lifted into the specified <code>Applicative</code>.</p><p>Note: The return type is a FromXorAux[F], which has an apply method on it, allowing
+you to call fromXor like this:</p><pre><span class="kw">val</span> t: Xor[<span class="std">String</span>, <span class="std">Int</span>] = ...
+<span class="kw">val</span> x: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = fromXor[<span class="std">Option</span>](t)</pre><p>The reason for the indirection is to emulate currying type parameters.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorTFunctions.html" class="extype" name="cats.data.XorTFunctions">XorTFunctions</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -535,19 +575,19 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorTInstances3</dd></dl></div>
-    </li><li name="cats.data.XorTInstances2#xorTMonad" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorTMonad[F[_],L](implicitF:cats.Monad[F]):cats.Monad[[X_kp2]cats.data.XorT[F,L,X_kp2]]"></a>
-      <a id="xorTMonad[F[_],L](Monad[F]):Monad[[X_kp2]XorT[F,L,X_kp2]]"></a>
+    </li><li name="cats.data.XorTInstances2#xorTMonadError" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="xorTMonadError[F[_],L](implicitF:cats.Monad[F]):cats.MonadError[[X_kp1,X_kp2]cats.data.XorT[F,X_kp1,X_kp2],L]"></a>
+      <a id="xorTMonadError[F[_],L](Monad[F]):MonadError[[X_kp1,X_kp2]XorT[F,X_kp1,X_kp2],L]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">xorTMonad</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.XorTInstances2.xorTMonad.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[X_kp2]<a href="XorT.html" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorTInstances2.xorTMonad.F">F</span>, <span class="extype" name="cats.data.XorTInstances2.xorTMonad.L">L</span>, <span class="extype" name="cats.data.XorTInstances2.&lt;refinement&gt;.L_kp.X_kp2">X_kp2</span>]]</span>
+        <span class="name">xorTMonadError</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.XorTInstances2.xorTMonadError.F">F</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[X_kp1, X_kp2]<a href="XorT.html" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorTInstances2.xorTMonadError.F">F</span>, <span class="extype" name="cats.data.XorTInstances2.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>, <span class="extype" name="cats.data.XorTInstances2.&lt;refinement&gt;.L_kp.X_kp2">X_kp2</span>], <span class="extype" name="cats.data.XorTInstances2.xorTMonadError.L">L</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.XorT$@xorTMonad[F[_],L](implicitF:cats.Monad[F]):cats.Monad[[X_kp2]cats.data.XorT[F,L,X_kp2]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.XorT$@xorTMonadError[F[_],L](implicitF:cats.Monad[F]):cats.MonadError[[X_kp1,X_kp2]cats.data.XorT[F,X_kp1,X_kp2],L]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
