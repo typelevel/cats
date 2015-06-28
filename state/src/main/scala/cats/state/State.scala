@@ -78,6 +78,12 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) {
   def modify(f: S => S)(implicit F: Monad[F]): StateT[F, S, A] =
     transform((s, a) => (f(s), a))
 
+  /**
+   * Extract a value from the input state, without modifying the state.
+   */
+  def extract[B](f: S => B)(implicit F: Monad[F]): StateT[F, S, B] =
+    transform((s, _) => (s, f(s)))
+
 }
 
 object StateT extends StateTInstances {
@@ -115,6 +121,7 @@ sealed abstract class StateTInstances0 {
 // To workaround SI-7139 `object State` needs to be defined inside the package object
 // together with the type alias.
 abstract class StateFunctions {
+
   def apply[S, A](f: S => (S, A)): State[S, A] =
     StateT.applyF(Trampoline.done((s: S) => Trampoline.done(f(s))))
 
