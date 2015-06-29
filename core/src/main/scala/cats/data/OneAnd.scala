@@ -48,6 +48,12 @@ final case class OneAnd[A, F[_]](head: A, tail: F[A]) {
     p(head) || F.exists(tail)(p)
 
   /**
+   * Check whether all elements satisfy the predicate.
+   */
+  def forall(p: A => Boolean)(implicit F: Foldable[F]): Boolean =
+    p(head) && F.forall(tail)(p)
+
+  /**
    * Left-associative fold on the structure using f.
    */
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =

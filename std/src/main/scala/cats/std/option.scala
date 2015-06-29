@@ -45,6 +45,9 @@ trait OptionInstances {
 
       override def exists[A](fa: Option[A])(p: A => Boolean): Boolean =
         fa.exists(p)
+
+      override def forall[A](fa: Option[A])(p: A => Boolean): Boolean =
+        fa.forall(p)
     }
 
   // TODO: eventually use algebra's instances (which will deal with

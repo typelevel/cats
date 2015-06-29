@@ -19,5 +19,8 @@ trait SetInstances extends algebra.std.SetInstances {
 
       override def exists[A](fa: Set[A])(p: A => Boolean): Boolean =
         fa.exists(p)
+
+      override def forall[A](fa: Set[A])(p: A => Boolean): Boolean =
+        fa.forall(p)
     }
 }
