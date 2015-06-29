@@ -33,10 +33,10 @@ class StateTests extends CatsSuite {
     assert(x.runS(0).run == 2)
   }
 
-  test("Singleton and instance extract are consistent")(check {
+  test("Singleton and instance inspect are consistent")(check {
     forAll { (s: String, i: Int) =>
-      State.extract[Int, String](_.toString).run(i).run ==
-        State.pure[Int, Unit](()).extract(_.toString).run(i).run
+      State.inspect[Int, String](_.toString).run(i).run ==
+        State.pure[Int, Unit](()).inspect(_.toString).run(i).run
     }
   })
 

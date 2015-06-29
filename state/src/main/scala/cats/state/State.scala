@@ -81,7 +81,7 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) {
   /**
    * Extract a value from the input state, without modifying the state.
    */
-  def extract[B](f: S => B)(implicit F: Monad[F]): StateT[F, S, B] =
+  def inspect[B](f: S => B)(implicit F: Monad[F]): StateT[F, S, B] =
     transform((s, _) => (s, f(s)))
 
 }
@@ -138,12 +138,12 @@ abstract class StateFunctions {
   /**
    * Extract a value from the input state, without modifying the state.
    */
-  def extract[S, T](f: S => T): State[S, T] = State(s => (s, f(s)))
+  def inspect[S, T](f: S => T): State[S, T] = State(s => (s, f(s)))
 
   /**
    * Return the input state without modifying it.
    */
-  def get[S]: State[S, S] = extract(identity)
+  def get[S]: State[S, S] = inspect(identity)
 
   /**
    * Set the state to `s` and return Unit.
