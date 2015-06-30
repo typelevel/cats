@@ -52,6 +52,8 @@ trait ListInstances {
 
       override def forall[A](fa: List[A])(p: A => Boolean): Boolean =
         fa.forall(p)
+
+      override def empty[A](fa: List[A]): Boolean = fa.isEmpty
     }
 
   // TODO: eventually use algebra's instances (which will deal with

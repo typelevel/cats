@@ -51,6 +51,8 @@ trait StreamInstances {
 
       override def forall[A](fa: Stream[A])(p: A => Boolean): Boolean =
         fa.forall(p)
+
+      override def empty[A](fa: Stream[A]): Boolean = fa.isEmpty
     }
 
   // TODO: eventually use algebra's instances (which will deal with

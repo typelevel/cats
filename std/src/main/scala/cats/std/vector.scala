@@ -36,6 +36,8 @@ trait VectorInstances {
 
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)
+
+      override def empty[A](fa: Vector[A]): Boolean = fa.isEmpty
     }
 
   // TODO: eventually use algebra's instances (which will deal with

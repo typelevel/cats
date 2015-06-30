@@ -48,6 +48,8 @@ trait OptionInstances {
 
       override def forall[A](fa: Option[A])(p: A => Boolean): Boolean =
         fa.forall(p)
+
+      override def empty[A](fa: Option[A]): Boolean = fa.isEmpty
     }
 
   // TODO: eventually use algebra's instances (which will deal with

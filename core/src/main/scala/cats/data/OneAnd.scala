@@ -128,6 +128,8 @@ trait OneAndInstances {
           case _ => foldable.partialFold(fa.tail)(f)
         }
       }
+
+      override def empty[A](fa: OneAnd[A, F]): Boolean = false
     }
 
   implicit def oneAndMonad[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[?, F]] =
