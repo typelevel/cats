@@ -1,7 +1,5 @@
 package cats
-package std
-
-import data.{Xor, XorT}
+package data
 
 final case class OptionT[F[_], A](value: F[Option[A]]) {
 

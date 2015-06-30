@@ -1,7 +1,7 @@
 package cats.tests
 
 import cats.Monad
-import cats.std.OptionT
+import cats.data.OptionT
 import cats.laws.discipline.{MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 

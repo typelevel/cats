@@ -2,8 +2,7 @@ package cats
 package laws
 package discipline
 
-import cats.data.{Cokleisli, Kleisli, NonEmptyList, Validated, Xor, XorT, Ior, Const}
-import cats.std.OptionT
+import cats.data.{Cokleisli, Kleisli, NonEmptyList, Validated, Xor, XorT, Ior, Const, OptionT}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 

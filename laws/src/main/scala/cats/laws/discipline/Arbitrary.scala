@@ -3,7 +3,6 @@ package laws
 package discipline
 
 import cats.data._
-import cats.std.OptionT
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
 
