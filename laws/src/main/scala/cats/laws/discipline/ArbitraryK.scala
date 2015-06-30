@@ -15,6 +15,9 @@ trait ArbitraryK[F[_]] {
 object ArbitraryK {
   def apply[F[_]](implicit arbk: ArbitraryK[F]): ArbitraryK[F] = arbk
 
+  implicit val id: ArbitraryK[Id] =
+    new ArbitraryK[Id] { def synthesize[A: Arbitrary]: Arbitrary[A] = implicitly }
+
   implicit val nonEmptyList: ArbitraryK[NonEmptyList] =
     new ArbitraryK[NonEmptyList] { def synthesize[A: Arbitrary]: Arbitrary[NonEmptyList[A]] = implicitly }
 
