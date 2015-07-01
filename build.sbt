@@ -44,6 +44,8 @@ lazy val commonSettings = Seq(
     case Some((2, 11)) => Seq("-Ywarn-unused-import")
     case _             => Seq.empty
   }),
+  scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
+  scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
@@ -92,7 +94,7 @@ lazy val docs = project
   .settings(ghpages.settings)
   .settings(docSettings)
   .settings(tutSettings)
-  .settings(tutScalacOptions := tutScalacOptions.value.filterNot(_ == "-Ywarn-unused-import"))
+  .settings(tutScalacOptions ~= (_.filterNot(_ == "-Ywarn-unused-import")))
   .dependsOn(core, std, free, state)
 
 lazy val cats = project.in(file("."))
