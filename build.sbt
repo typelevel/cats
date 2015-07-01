@@ -70,7 +70,7 @@ lazy val disciplineDependencies = Seq(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, free, std),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, free, std, state),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -93,7 +93,7 @@ lazy val docs = project
   .settings(docSettings)
   .settings(tutSettings)
   .settings(tutScalacOptions := tutScalacOptions.value.filterNot(_ == "-Ywarn-unused-import"))
-  .dependsOn(core, std, free)
+  .dependsOn(core, std, free, state)
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "cats")
