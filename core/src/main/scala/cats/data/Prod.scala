@@ -6,7 +6,7 @@ package data
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
-final case class Prod[F[_], G[_], A](first: F[A], second: G[A]) extends Serializable
+final case class Prod[F[_], G[_], A](first: F[A], second: G[A])
 
 object Prod extends ProdInstances
 
@@ -16,7 +16,7 @@ sealed abstract class ProdInstances extends ProdInstance0 {
     def G: Alternative[G] = GG
   }
 
-  implicit def prodEq[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]], AA: Eq[A]): Eq[Prod[F, G, A]] = new Eq[Prod[F, G, A]] {
+  implicit def prodEq[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]]): Eq[Prod[F, G, A]] = new Eq[Prod[F, G, A]] {
     def eqv(x: Prod[F, G, A], y: Prod[F, G, A]): Boolean =
       FF.eqv(x.first, y.first) && GG.eqv(x.second, y.second)
   }
