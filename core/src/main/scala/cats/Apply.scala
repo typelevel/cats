@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum._
+import simulacrum.typeclass
 
 /**
  * Weaker version of Applicative[F]; has apply but not pure.

@@ -3,7 +3,6 @@ package state
 
 import cats.tests.CatsSuite
 import cats.laws.discipline.{ArbitraryK, MonadTests, MonoidKTests, SerializableTests}
-import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen, Prop}, Prop.forAll
 

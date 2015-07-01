@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum._
+import simulacrum.typeclass
 
 /**
  *  FlatMap typeclass gives us flatMap, which allows us to have a value

@@ -3,7 +3,6 @@ package laws
 
 import cats.Id
 import cats.arrow.Compose
-import cats.syntax.functor._
 import cats.syntax.traverse._
 
 trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {

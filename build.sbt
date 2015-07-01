@@ -40,7 +40,10 @@ lazy val commonSettings = Seq(
     "-Ywarn-numeric-widen",
     "-Ywarn-value-discard",
     "-Xfuture"
-  ),
+  ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 11)) => Seq("-Ywarn-unused-import")
+    case _             => Seq.empty
+  }),
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
@@ -89,6 +92,7 @@ lazy val docs = project
   .settings(ghpages.settings)
   .settings(docSettings)
   .settings(tutSettings)
+  .settings(tutScalacOptions := tutScalacOptions.value.filterNot(_ == "-Ywarn-unused-import"))
   .dependsOn(core, std, free)
 
 lazy val cats = project.in(file("."))

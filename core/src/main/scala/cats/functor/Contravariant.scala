@@ -1,7 +1,7 @@
 package cats
 package functor
 
-import simulacrum._
+import simulacrum.typeclass
 
 /**
  * Must obey the laws defined in cats.laws.ContravariantLaws.

@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{NonEmptyList, Validated, ValidatedNel}
+import cats.data.{NonEmptyList, Validated}
 import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{TraverseTests, ApplicativeTests, SerializableTests}
 import org.scalacheck.{Gen, Arbitrary}
