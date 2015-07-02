@@ -6,9 +6,18 @@ package data
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
-final case class Prod[F[_], G[_], A](first: F[A], second: G[A])
-
-object Prod extends ProdInstances
+sealed trait Prod[F[_], G[_], A] {
+  def first: F[A]
+  def second: G[A]
+}
+object Prod extends ProdInstances {
+  def apply[F[_], G[_], A](first0: => F[A], second0: => G[A]): Prod[F, G, A] = new Prod[F, G, A] {
+    lazy val firstThunk: Lazy[F[A]] = Lazy(first0)
+    lazy val secondThunk: Lazy[G[A]] = Lazy(second0)
+    def first: F[A] = firstThunk.value
+    def second: G[A] = secondThunk.value
+  }
+}
 
 sealed abstract class ProdInstances extends ProdInstance0 {
   implicit def prodAlternative[F[_], G[_]](implicit FF: Alternative[F], GG: Alternative[G]): Alternative[Lambda[X => Prod[F, G, X]]] = new ProdAlternative[F, G] {
