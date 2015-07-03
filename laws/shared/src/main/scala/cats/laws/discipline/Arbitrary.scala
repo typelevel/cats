@@ -47,6 +47,12 @@ object arbitrary {
   implicit def prodArbitrary[F[_], G[_], A](implicit F: ArbitraryK[F], G: ArbitraryK[G], A: Arbitrary[A]): Arbitrary[Prod[F, G, A]] =
     Arbitrary(F.synthesize[A].arbitrary.flatMap(fa => G.synthesize[A].arbitrary.map(ga =>  Prod[F, G, A](fa, ga))))
 
+  implicit def funcArbitrary[F[_], A, B](implicit F: ArbitraryK[F], B: Arbitrary[B]): Arbitrary[Func[F, A, B]] =
+    Arbitrary(F.synthesize[B].arbitrary.map(fb => Func.func[F, A, B](_ => fb)))
+
+  implicit def appFuncArbitrary[F[_], A, B](implicit F: ArbitraryK[F], B: Arbitrary[B], FF: Applicative[F]): Arbitrary[AppFunc[F, A, B]] =
+    Arbitrary(F.synthesize[B].arbitrary.map(fb => Func.appFunc[F, A, B](_ => fb)))
+
   implicit def foldArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Fold[A]] =
     Arbitrary(Gen.oneOf(getArbitrary[A].map(Fold.Return(_)), getArbitrary[A => A].map(Fold.Continue(_)), Gen.const(Fold.Pass[A])))
 
