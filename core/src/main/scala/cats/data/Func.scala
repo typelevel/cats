@@ -8,20 +8,6 @@ package data
  */
 sealed abstract class Func[F[_], A, B] { self =>
   def run: A => F[B]
-
-  def product[G[_]](g: Func[G, A, B]): Func[Lambda[X => Prod[F, G, X]], A, B] =
-    Func.func[Lambda[X => Prod[F, G, X]], A, B]{
-      a: A => Prod(self.run(a), g.run(a))
-    }
-  def compose[G[_], C](g: Func[G, C, A])
-    (implicit FF: Functor[F], GG: Functor[G]): Func[Lambda[X => G[F[X]]], C, B] =
-    Func.func[Lambda[X => G[F[X]]], C, B]({
-      c: C => GG.map(g.run(c))(self.run)
-    })
-  def andThen[G[_], C](g: Func[G, B, C])
-    (implicit FF: Functor[F], GG: Functor[G]): Func[Lambda[X => F[G[X]]], A, C] =
-    g compose self
-
   def map[C](f: B => C)(implicit FF: Functor[F]): Func[F, A, C] =
     Func.func(a => FF.map(self.run(a))(f))
 }
@@ -90,7 +76,7 @@ sealed trait FuncApplicative[F[_], C] extends Applicative[Lambda[X => Func[F, C,
 sealed abstract class AppFunc[F[_], A, B] extends Func[F, A, B] { self =>
   def F: Applicative[F]
 
-  def product[G[_]](g: AppFunc[G, A, B]): Func[Lambda[X => Prod[F, G, X]], A, B] =
+  def product[G[_]](g: AppFunc[G, A, B]): AppFunc[Lambda[X => Prod[F, G, X]], A, B] =
     {
       implicit val FF: Applicative[F] = self.F
       implicit val GG: Applicative[G] = g.F

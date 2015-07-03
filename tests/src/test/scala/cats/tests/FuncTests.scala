@@ -1,7 +1,8 @@
 package cats
 package tests
 
-import cats.data.{ Func, AppFunc }
+import cats.data.{ Func, AppFunc, Const }
+import Func.{ appFunc, appFuncU }
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -39,8 +40,8 @@ class FuncTests extends CatsSuite {
   }
 
   test("product") {
-    val f = Func.appFunc { (x: Int) => (Some(x + 10): Option[Int]) }
-    val g = Func.appFunc { (x: Int) => List(x * 2) }
+    val f = appFunc { (x: Int) => (Some(x + 10): Option[Int]) }
+    val g = appFunc { (x: Int) => List(x * 2) }
     val h = f product g
     val x = h.run(1)
     assert((x.first, x.second) == ((Some(11), List(2))))

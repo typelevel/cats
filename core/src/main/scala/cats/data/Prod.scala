@@ -17,6 +17,8 @@ object Prod extends ProdInstances {
     def first: F[A] = firstThunk.value
     def second: G[A] = secondThunk.value
   }
+  def unapply[F[_], G[_], A](x: Prod[F, G, A]): Option[(F[A], G[A])] =
+    Some((x.first, x.second))
 }
 
 sealed abstract class ProdInstances extends ProdInstance0 {
