@@ -1,7 +1,6 @@
 package cats
 
-import Id._
-import simulacrum._
+import simulacrum.typeclass
 
 /**
  * Traverse, also known as Traversable.

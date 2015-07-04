@@ -1,7 +1,7 @@
 package cats
 
 import scala.collection.mutable
-import simulacrum._
+import simulacrum.typeclass
 
 /**
  * Data structures that can be folded to a summary value.

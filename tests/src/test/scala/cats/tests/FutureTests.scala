@@ -3,7 +3,6 @@ package tests
 
 import cats.data.Xor
 import cats.laws.discipline._
-import cats.laws.discipline.eq._
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global

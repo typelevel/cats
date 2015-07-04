@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats.std.all._
 import cats.data._
 
 // the things we assert here are not so much important, what is

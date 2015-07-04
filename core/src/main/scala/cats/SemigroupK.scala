@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum._
+import simulacrum.{op, typeclass}
 
 /**
  * SemigroupK is a universal semigroup which operates on kinds.

@@ -3,8 +3,6 @@ package laws
 package discipline
 
 import org.typelevel.discipline.Laws
-import org.scalacheck.Prop
-import Prop._
 
 object SerializableTests extends Laws {
   def serializable[A](a: A): RuleSet =

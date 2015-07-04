@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum._
+import simulacrum.typeclass
 
 /**
  * MonoidK is a universal monoid which operates on kinds.
