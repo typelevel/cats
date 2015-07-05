@@ -94,12 +94,6 @@ sealed abstract class Fold[A] extends Product with Serializable {
           case Composed(gs) => Composed(fs ::: gs)
         }
     }
-
-  def compose(f: A => A): Fold[A] =
-    this match {
-      case Return(a) => Return(f(a))
-      case Composed(gs) => Composed(gs ::: (f :: Nil))
-    }
 }
 
 object Fold {
@@ -124,15 +118,20 @@ object Fold {
     Composed(f :: Nil)
 
   /**
-   * 
+   * Composed allows functions to be composed in a stack-safe way.
+   *
+   * The functions are applied first-to-last.
+   *
+   * That is `List(f1, f2, f3)` will be applied to `a` as
+   * `f3(f2(f1(a)))`.
    */
   final case class Composed[A](fs: List[A => A]) extends Fold[A]
 
   /**
    * Pass allows the fold to continue, without modifying the result.
    *
-   * Pass' behavior is identical to `Continue(identity[A])`, but it may be
-   * more efficient.
+   * Pass' behavior is identical to `Continue(identity[A])`, but it
+   * may be more efficient.
    */
   final def Pass[A]: Fold[A] = Composed(Nil)
 
