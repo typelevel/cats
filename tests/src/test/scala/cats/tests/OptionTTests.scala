@@ -35,7 +35,7 @@ class OptionTTests extends CatsSuite {
   test("OptionT[Id, A].collect consistent with Option.collect")(check {
     forAll { (o: Option[Int], f: Int => Option[String]) =>
       val p = Function.unlift(f)
-      o.collect(p) == OptionT[Id, Int](o).collect(p)
+      o.collect(p) == OptionT[Id, Int](o).collect(p).value
     }
   })
 
@@ -47,13 +47,13 @@ class OptionTTests extends CatsSuite {
 
   test("OptionT[Id, A].filter consistent with Option.filter")(check {
     forAll { (o: Option[Int], f: Int => Boolean) =>
-      o.filter(f) == OptionT[Id, Int](o).filter(f)
+      o.filter(f) == OptionT[Id, Int](o).filter(f).value
     }
   })
 
   test("OptionT[Id, A].filterNot consistent with Option.filterNot")(check {
     forAll { (o: Option[Int], f: Int => Boolean) =>
-      o.filterNot(f) == OptionT[Id, Int](o).filterNot(f)
+      o.filterNot(f) == OptionT[Id, Int](o).filterNot(f).value
     }
   })
 

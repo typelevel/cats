@@ -40,17 +40,17 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
       case None => default
     }
 
-  def collect[B](f: PartialFunction[A, B])(implicit F: Functor[F]): F[Option[B]] =
-    F.map(value)(_.collect(f))
+  def collect[B](f: PartialFunction[A, B])(implicit F: Functor[F]): OptionT[F, B] =
+    OptionT(F.map(value)(_.collect(f)))
 
   def exists(f: A => Boolean)(implicit F: Functor[F]): F[Boolean] =
     F.map(value)(_.exists(f))
 
-  def filter(p: A => Boolean)(implicit F: Functor[F]): F[Option[A]] =
-    F.map(value)(_.filter(p))
+  def filter(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
+    OptionT(F.map(value)(_.filter(p)))
 
-  def filterNot(p: A => Boolean)(implicit F: Functor[F]): F[Option[A]] =
-    F.map(value)(_.filterNot(p))
+  def filterNot(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
+    OptionT(F.map(value)(_.filterNot(p)))
 
   def forall(f: A => Boolean)(implicit F: Functor[F]): F[Boolean] =
     F.map(value)(_.forall(f))
