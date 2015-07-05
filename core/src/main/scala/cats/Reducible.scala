@@ -2,7 +2,7 @@ package cats
 
 import simulacrum._
 
-import Fold.{Return, Pass, Continue}
+import Fold.{Return, Pass, Continue, Composed}
 
 /**
  * Data structures that can be reduced to a summary value.
@@ -161,8 +161,7 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
     def right: Fold[B] = G.partialFold(ga)(f)
     f(a) match {
       case Return(b) => Return(b)
-      case Continue(g) => right compose g
-      case _ => right
+      case fold => fold andThen right
     }
   }
 

@@ -104,18 +104,8 @@ trait OneAndInstances {
       override def foldRight[A, B](fa: OneAnd[A, F], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
         fa.foldRight(b)(f)
 
-      override def partialFold[A, B](fa: OneAnd[A,F])(f: A => Fold[B]): Fold[B] = {
-        import Fold._
-        f(fa.head) match {
-          case b @ Return(_) => b
-          case Continue(c) => foldable.partialFold(fa.tail)(f) match {
-            case Return(b) => Return(c(b))
-            case Continue(cc) => Continue { b => c(cc(b)) }
-            case _ => Continue(c)
-          }
-          case _ => foldable.partialFold(fa.tail)(f)
-        }
-      }
+      override def partialFold[A, B](fa: OneAnd[A,F])(f: A => Fold[B]): Fold[B] =
+        f(fa.head) andThen foldable.partialFold(fa.tail)(f)
     }
 
   implicit def oneAndMonad[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[?, F]] =
