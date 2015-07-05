@@ -1,6 +1,14 @@
 package cats
 package data
 
+/**
+ * `OptionT[F[_], A` is a light wrapper on an `F[Option[A]]` with some
+ * convenient methods for working with this nested structure.
+ *
+ * It may also be said that `OptionT` is a monad transformer for `Option`.
+ *
+ * For more information, see the [[http://non.github.io/cats/tut/optiont.html documentation]].
+ */
 final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def fold[B](default: => B)(f: A => B)(implicit F: Functor[F]): F[B] =
