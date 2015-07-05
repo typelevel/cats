@@ -46,7 +46,7 @@ import Fold.{Return, Pass, Continue}
    * This method is a generalization of `reduce`.
    */
   def reduceK[G[_], A](fga: F[G[A]])(implicit G: SemigroupK[G]): G[A] =
-    reduce(fga)(G.algebra)
+    reduce(fga)(G[A])
 
   /**
    * Apply `f` to each element of `fa` and combine them using the

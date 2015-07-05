@@ -135,7 +135,7 @@ import simulacrum.typeclass
    * }}}
    */
   def foldK[G[_], A](fga: F[G[A]])(implicit G: MonoidK[G]): G[A] =
-    fold(fga)(G.algebra)
+    fold(fga)(G[A])
 
 
   /**

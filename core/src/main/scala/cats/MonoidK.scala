@@ -22,7 +22,7 @@ import simulacrum.typeclass
  *    combination operation and empty value just depend on the
  *    structure of F, but not on the structure of A.
  */
-@typeclass trait MonoidK[F[_]] extends SemigroupK[F] { self =>
+@typeclass trait MonoidK[F[_]] extends SemigroupK[F] with AlgebraK[Monoid, F] { self =>
 
   /**
    * Given a type A, create an "empty" F[A] value.
@@ -32,7 +32,7 @@ import simulacrum.typeclass
   /**
    * Given a type A, create a concrete Monoid[F[A]].
    */
-  override def algebra[A]: Monoid[F[A]] =
+  override def apply[A]: Monoid[F[A]] =
     new Monoid[F[A]] {
       def empty: F[A] = self.empty
       def combine(x: F[A], y: F[A]): F[A] = self.combine(x, y)
