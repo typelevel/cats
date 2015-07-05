@@ -25,8 +25,11 @@ trait VectorInstances {
       def foldLeft[A, B](fa: Vector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
-      def partialFold[A, B](fa: Vector[A])(f: A => Fold[B]): Fold[B] =
-        Fold.partialIterate(fa)(f)
+      def foldRight[A, B](fa: Vector[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+        def loop(i: Int): Eval[B] =
+          if (i < fa.length) f(fa(i), Eval.defer(loop(i + 1))) else lb
+        Eval.defer(loop(0))
+      }
 
       def traverse[G[_]: Applicative, A, B](fa: Vector[A])(f: A => G[B]): G[Vector[B]] = {
         val G = Applicative[G]
@@ -37,7 +40,7 @@ trait VectorInstances {
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)
 
-      override def empty[A](fa: Vector[A]): Boolean = fa.isEmpty
+      override def isEmpty[A](fa: Vector[A]): Boolean = fa.isEmpty
     }
 
   // TODO: eventually use algebra's instances (which will deal with

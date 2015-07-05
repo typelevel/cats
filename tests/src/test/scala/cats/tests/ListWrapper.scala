@@ -51,8 +51,8 @@ object ListWrapper {
       def foldLeft[A, B](fa: ListWrapper[A], b: B)(f: (B, A) => B): B =
         Foldable[List].foldLeft(fa.list, b)(f)
 
-      def partialFold[A, B](fa: ListWrapper[A])(f: A => Fold[B]): Fold[B] =
-        Foldable[List].partialFold(fa.list)(f)
+      def foldRight[A, B](fa: ListWrapper[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Foldable[List].foldRight(fa.list, lb)(f)
     }
 
   def functor: Functor[ListWrapper] =

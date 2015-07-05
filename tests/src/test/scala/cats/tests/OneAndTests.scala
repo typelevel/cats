@@ -5,7 +5,7 @@ import algebra.laws.OrderLaws
 
 import cats.data.{NonEmptyList, OneAnd}
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests}
-import cats.laws.discipline.arbitrary.{foldArbitrary, lazyArbitrary, oneAndArbitrary}
+import cats.laws.discipline.arbitrary.{lazyArbitrary, oneAndArbitrary}
 
 import org.scalacheck.Prop._
 
@@ -38,15 +38,6 @@ class OneAndTests extends CatsSuite {
 
   checkAll("NonEmptyList[Int]", ComonadTests[NonEmptyList].comonad[Int, Int, Int])
   checkAll("Comonad[NonEmptyList[A]]", SerializableTests.serializable(Comonad[NonEmptyList]))
-
-  test("partialFold is consistent with foldRight")(check {
-    forAll { (nel: NonEmptyList[Int], b: Lazy[String], f: Int => Fold[String]) =>
-      val F = Foldable[NonEmptyList]
-      val partial = F.partialFold(nel)(f).complete(b)
-      val foldr = F.foldRight(nel, b)(f).value
-      partial == foldr
-    }
-  })
 
   test("Creating OneAnd + unwrap is identity")(check {
     forAll { (list: List[Int]) => (list.size >= 1) ==> {

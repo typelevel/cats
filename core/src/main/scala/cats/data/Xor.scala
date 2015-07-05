@@ -106,8 +106,8 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def foldLeft[C](c: C)(f: (C, B) => C): C = fold(_ => c, f(c, _))
 
-  def partialFold[C](f: B => Fold[C]): Fold[C] =
-    fold(_ => Fold.Pass, f)
+  def foldRight[C](lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
+    fold(_ => lc, b => f(b, lc))
 
   def merge[AA >: A](implicit ev: B <:< AA): AA = fold(identity, ev.apply)
 
@@ -149,8 +149,8 @@ sealed abstract class XorInstances extends XorInstances1 {
   implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor, A ]=
     new Traverse[A Xor ?] with MonadError[Xor, A] {
       def traverse[F[_]: Applicative, B, C](fa: A Xor B)(f: B => F[C]): F[A Xor C] = fa.traverse(f)
-      def foldLeft[B, C](fa: A Xor B, b: C)(f: (C, B) => C): C = fa.foldLeft(b)(f)
-      def partialFold[B, C](fa: A Xor B)(f: B => Fold[C]): Fold[C] = fa.partialFold(f)
+      def foldLeft[B, C](fa: A Xor B, c: C)(f: (C, B) => C): C = fa.foldLeft(c)(f)
+      def foldRight[B, C](fa: A Xor B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] = fa.foldRight(lc)(f)
       def flatMap[B, C](fa: A Xor B)(f: B => A Xor C): A Xor C = fa.flatMap(f)
       def pure[B](b: B): A Xor B = Xor.right(b)
       def handleError[B](fea: Xor[A, B])(f: A => Xor[A, B]): Xor[A, B] =

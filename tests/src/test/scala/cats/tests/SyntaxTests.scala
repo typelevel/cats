@@ -92,8 +92,8 @@ class SyntaxTests extends CatsSuite with PropertyChecks {
     val b0: B = fa.foldLeft(b)(f1)
     val a0: A = fa.fold
 
-    val f2 = mock[A => Fold[B]]
-    val lb0: Lazy[B] = fa.foldRight(Lazy(b))(f2)
+    val f2 = mock[(A, Eval[B]) => Eval[B]]
+    val lb0: Eval[B] = fa.foldRight(Eager(b))(f2)
 
     val fz = mock[F[Z]]
     val f3 = mock[Z => A]
@@ -119,8 +119,8 @@ class SyntaxTests extends CatsSuite with PropertyChecks {
     val f1 = mock[(A, A) => A]
     val a1: A = fa.reduceLeft(f1)
 
-    val f2 = mock[A => Fold[A]]
-    val la: Lazy[A] = fa.reduceRight(f2)
+    val f2 = mock[(A, Eval[A]) => Eval[A]]
+    val la: Eval[A] = fa.reduceRight(f2)
 
     val a2: A = fa.reduce
 
@@ -135,8 +135,8 @@ class SyntaxTests extends CatsSuite with PropertyChecks {
     val f5 = mock[(B, A) => B]
     val b1: B = fa.reduceLeftTo(f4)(f5)
 
-    val f6 = mock[A => Fold[B]]
-    val lb: Lazy[B] = fa.reduceRightTo(f4)(f6)
+    val f6 = mock[(A, Eval[B]) => Eval[B]]
+    val lb: Eval[B] = fa.reduceRightTo(f4)(f6)
 
     val f7 = mock[A => G[B]]
     val gu1: G[Unit] = fa.traverse1_(f7)
