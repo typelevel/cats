@@ -62,7 +62,7 @@ object Kleisli extends KleisliInstances with KleisliFunctions
 
 sealed trait KleisliFunctions {
   /** creates a [[Kleisli]] from a function */
-  def kleisli[F[_], A, B](f: A => F[B]): Kleisli[F, A, B] =
+  def function[F[_], A, B](f: A => F[B]): Kleisli[F, A, B] =
     Kleisli(f)
 
   def pure[F[_], A, B](x: B)(implicit F: Applicative[F]): Kleisli[F, A, B] =
