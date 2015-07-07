@@ -4,6 +4,7 @@ package object data {
   type NonEmptyList[A] = OneAnd[A, List]
   type NonEmptyVector[A] = OneAnd[A, Vector]
   type NonEmptyStream[A] = OneAnd[A, Stream]
+  type ValidatedNel[E, A] = Validated[NonEmptyList[E], A]
 
   def NonEmptyList[A](head: A, tail: List[A] = Nil): NonEmptyList[A] =
     OneAnd(head, tail)
@@ -25,5 +26,13 @@ package object data {
       F.reduceRightTo(fa)(a => NonEmptyList(a, Nil)) { a =>
         Fold.Continue { case OneAnd(h, t) => OneAnd(a, h :: t) }
       }
+  }
+
+  type ReaderT[F[_], A, B] = Kleisli[F, A, B]
+  val ReaderT = Kleisli
+
+  type Reader[A, B] = ReaderT[Id, A, B]
+  object Reader {
+    def apply[A, B](f: A => B): Reader[A, B] = ReaderT.function[Id, A, B](f)
   }
 }

@@ -19,7 +19,7 @@ lazy val scoverageSettings = Seq(
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
   scalaVersion := "2.11.6",
-  crossScalaVersions := Seq("2.11.6")
+  crossScalaVersions := Seq("2.10.5", "2.11.6")
 )
 
 lazy val commonSettings = Seq(
@@ -40,7 +40,12 @@ lazy val commonSettings = Seq(
     "-Ywarn-numeric-widen",
     "-Ywarn-value-discard",
     "-Xfuture"
-  ),
+  ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 11)) => Seq("-Ywarn-unused-import")
+    case _             => Seq.empty
+  }),
+  scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
+  scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
@@ -67,7 +72,7 @@ lazy val disciplineDependencies = Seq(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, free, std),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, free, std, state),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -89,13 +94,15 @@ lazy val docs = project
   .settings(ghpages.settings)
   .settings(docSettings)
   .settings(tutSettings)
-  .dependsOn(core, std, free)
+  .settings(tutScalacOptions ~= (_.filterNot(_ == "-Ywarn-unused-import")))
+  .dependsOn(core, std, free, state)
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "cats")
   .settings(catsSettings)
-  .aggregate(macros, core, laws, tests, docs, free, std, bench, state)
-  .dependsOn(macros, core, laws, tests, docs, free, std, bench, state)
+  .aggregate(macros, core, laws, free, std, state, tests, docs, bench)
+  .dependsOn(macros, core, laws, free, std, state % "compile;test-internal -> test",
+             tests % "test-internal -> test", bench % "compile-internal;test-internal -> test")
 
 lazy val macros = project
   .settings(moduleName := "cats-macros")
@@ -144,7 +151,7 @@ lazy val free = project.dependsOn(macros, core)
   .settings(moduleName := "cats-free")
   .settings(catsSettings)
 
-lazy val state = project.dependsOn(macros, core, free, tests % "test -> test")
+lazy val state = project.dependsOn(macros, core, free, tests % "test-internal -> test")
   .settings(moduleName := "cats-state")
   .settings(catsSettings)
 

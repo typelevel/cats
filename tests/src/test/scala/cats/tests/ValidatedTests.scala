@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.Validated
+import cats.data.{NonEmptyList, Validated}
 import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{TraverseTests, ApplicativeTests, SerializableTests}
 import org.scalacheck.{Gen, Arbitrary}
@@ -10,7 +10,7 @@ import org.scalacheck.Prop._
 import org.scalacheck.Prop.BooleanOperators
 import cats.laws.discipline.arbitrary._
 
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
 class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
@@ -18,14 +18,6 @@ class ValidatedTests extends CatsSuite {
 
   checkAll("Validated[String, Int] with Option", TraverseTests[Validated[String,?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Validated[String,?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
-
-  implicit val arbitraryTryInt: Arbitrary[Try[Int]] = Arbitrary {
-    for {
-      success <- arbitrary[Boolean]
-      t <- if (success) arbitrary[Int].map(Success(_))
-           else arbitrary[Throwable].map(Failure(_))
-    } yield t
-  }
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)
@@ -61,6 +53,14 @@ class ValidatedTests extends CatsSuite {
         _ <- Valid(2).filter[String](_ % 2 == 0)
       } yield ()).isValid)
   }
+
+  test("ValidatedNel")(check {
+    forAll { (e: String) =>
+      val manual = Validated.invalid[NonEmptyList[String], Int](NonEmptyList(e))
+      Validated.invalidNel[String, Int](e) == manual &&
+      Validated.invalid(e).toValidatedNel == manual
+    }
+  })
 
   check {
     forAll { (v: Validated[String, Int], p: Int => Boolean) =>

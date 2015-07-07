@@ -3,9 +3,8 @@ package state
 
 import cats.tests.CatsSuite
 import cats.laws.discipline.{ArbitraryK, MonadTests, MonoidKTests, SerializableTests}
-import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{Arbitrary, Gen, Prop}, Prop.forAll
 
 class StateTests extends CatsSuite {
   import StateTests._
@@ -19,6 +18,14 @@ class StateTests extends CatsSuite {
     val x = ns.traverseU(_ => add1)
     assert(x.runS(0).run == 100001)
   }
+
+  test("State.pure and StateT.pure are consistent")(check {
+    forAll { (s: String, i: Int) =>
+      val state: State[String, Int] = State.pure(i)
+      val stateT: State[String, Int] = StateT.pure(i)
+      state.run(s).run == stateT.run(s).run
+    }
+  })
 
   test("Apply syntax is usable on State") {
     val x = add1 *> add1

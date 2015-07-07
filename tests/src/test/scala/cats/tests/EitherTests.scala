@@ -2,7 +2,6 @@ package cats
 package tests
 
 import cats.laws.discipline.{TraverseTests, MonadTests, SerializableTests}
-import cats.laws.discipline.arbitrary._
 import org.scalacheck.Prop._
 
 class EitherTests extends CatsSuite {

@@ -3,7 +3,6 @@ package laws
 package discipline
 
 import cats.data.{Cokleisli, Kleisli, NonEmptyList, Validated, Xor, XorT, Ior, Const}
-import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 
 import cats.implicits._

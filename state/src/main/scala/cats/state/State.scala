@@ -119,6 +119,11 @@ abstract class StateFunctions {
     StateT.applyF(Trampoline.done((s: S) => Trampoline.done(f(s))))
 
   /**
+   * Return `a` and maintain the input state.
+   */
+  def pure[S, A](a: A): State[S, A] = State(s => (s, a))
+
+  /**
    * Modify the input state and return Unit.
    */
   def modify[S](f: S => S): State[S, Unit] = State(s => (f(s), ()))
