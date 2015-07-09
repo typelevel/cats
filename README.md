@@ -81,15 +81,15 @@ There are many ways to support Cats' development:
  * Fix bugs: Despite using static types, law-checking, and
    property-based testing bugs can happen. Reporting problems you
    encounter (with the documentation, code, or anything else) helps us
-   to improve. Look for issues labelled "ready" as good targets, but 
-   **please add a comment to the issue** if you start working on one. 
+   to improve. Look for issues labelled "ready" as good targets, but
+   **please add a comment to the issue** if you start working on one.
    We want to avoid any duplicated effort.
 
  * Write ScalaDoc comments: One of our goals is to have ScalaDoc
    comments for all types in Cats. The documentation should describe
    the type and give a basic usage (it may also link to relevant
    papers).
-   
+
  * Write tutorials and examples: In addition to inline ScalaDoc
    comments, we hope to provide Markdown-based tutorials which can
    demonstrate how to use all the provided types. These should be
@@ -104,7 +104,7 @@ There are many ways to support Cats' development:
    through conversations on issues and pull requests. You can
    participate in these conversations to help guide the future of
    Cats.
-   
+
    We will be using the **meta** label for large design decisions, and
    your input on these is especially appreciated.
 
@@ -113,7 +113,7 @@ There are many ways to support Cats' development:
    can open an issue to discuss your idea, or start hacking and submit
    a pull request. One advantage of opening an issue is that it may
    save you time to get other opinions on your approach.
-   
+
  * Ask questions: we are hoping to make Cats (and functional
    programming in Scala) accessible to the largest number of
    people. If you have questions it is likely many other people do as
@@ -126,6 +126,7 @@ The current maintainers (people who can merge pull requests) are:
  * [ceedubs](https://github.com/ceedubs) Cody Allen
  * [rossabaker](https://github.com/rossabaker) Ross Baker
  * [travisbrown](https://github.com/travisbrown) Travis Brown
+ * [adelbertc](https://github.com/adelbertc) Adelbert Chang
  * [tpolecat](https://github.com/tpolecat) Rob Norris
  * [stew](https://github.com/stew) Mike O'Connor
  * [non](https://github.com/non) Erik Osheim
