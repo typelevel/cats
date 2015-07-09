@@ -79,4 +79,13 @@ class KleisliTests extends CatsSuite {
     val l = f.lift[List]
     assert((List(1, 2, 3) >>= l.run) == List(Some(2), Some(3), Some(4)))
   }
+
+  test("transform") {
+    val opt = Kleisli.function { (x: Int) => Option(x.toDouble) }
+    val optToList = new (Option ~> List) { def apply[A](fa: Option[A]): List[A] = fa.toList }
+    val list = opt.transform(optToList)
+
+    val is = 0.to(10).toList
+    assert(is.map(list.run) == is.map(Kleisli.function { (x: Int) => List(x.toDouble) }.run))
+  }
 }
