@@ -25,10 +25,10 @@ trait MonadStateTests[F[_, _], S] extends MonadTests[F[S, ?]] {
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(monad[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
-        "monadState get idempotent" -> Prop({ val l = laws.monadStateGetIdempotent; EqFS.eqv(l.lhs, l.rhs) }),
+        "monadState get idempotent" -> laws.monadStateGetIdempotent,
         "monadState set twice"      -> forAll(laws.monadStateSetTwice _),
         "monadState set get"        -> forAll(laws.monadStateSetGet _),
-        "monadState get set"        -> Prop({ val l = laws.monadStateGetSet; EqFU.eqv(l.lhs, l.rhs) })
+        "monadState get set"        -> laws.monadStateGetSet
       )
     }
   }
