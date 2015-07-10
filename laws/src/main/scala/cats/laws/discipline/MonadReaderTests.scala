@@ -24,7 +24,7 @@ trait MonadReaderTests[F[_, _], R] extends MonadTests[F[R, ?]] {
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(monad[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
-        "monadReader ask idempotent" -> Prop({ val l = laws.monadReaderAskIdempotent; EqFR.eqv(l.lhs, l.rhs) }),
+        "monadReader ask idempotent" -> laws.monadReaderAskIdempotent,
         "monadReader local ask" -> forAll(laws.monadReaderLocalAsk _),
         "monadReader local pure" -> forAll(laws.monadReaderLocalPure[A] _),
         "monadReader local flatMap" -> forAll(laws.monadReaderLocalFlatMap[A, B] _)
