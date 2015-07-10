@@ -32,12 +32,16 @@ trait Function1Instances {
         fa.compose(f)
     }
 
-  implicit def function1Covariant[T1]: Monad[T1 => ?] =
-    new Monad[T1 => ?] {
+  implicit def function1Covariant[T1]: MonadReader[? => ?, T1] =
+    new MonadReader[? => ?, T1] {
       def pure[R](r: R): T1 => R = _ => r
 
       def flatMap[R1, R2](fa: T1 => R1)(f: R1 => T1 => R2): T1 => R2 =
         t => f(fa(t))(t)
+
+      val ask: T1 => T1 = identity
+
+      def local[A](f: T1 => T1)(fa: T1 => A): T1 => A = f.andThen(fa)
 
       override def map[R1, R2](fa: T1 => R1)(f: R1 => R2): T1 => R2 =
         f.compose(fa)

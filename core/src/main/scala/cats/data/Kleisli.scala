@@ -79,13 +79,19 @@ sealed abstract class KleisliInstances extends KleisliInstances0 {
   implicit def kleisliArrow[F[_]](implicit ev: Monad[F]): Arrow[Kleisli[F, ?, ?]] =
     new KleisliArrow[F] { def F: Monad[F] = ev }
 
-  implicit def kleisliMonad[F[_]: Monad, A]: Monad[Kleisli[F, A, ?]] = new Monad[Kleisli[F, A, ?]] {
-    def pure[B](x: B): Kleisli[F, A, B] =
-      Kleisli.pure[F, A, B](x)
+  implicit def kleisliMonadReader[F[_]: Monad, A]: MonadReader[Kleisli[F, ?, ?], A] =
+    new MonadReader[Kleisli[F, ?, ?], A] {
+      def pure[B](x: B): Kleisli[F, A, B] =
+        Kleisli.pure[F, A, B](x)
 
-    def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
-      fa.flatMap(f)
-  }
+      def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
+        fa.flatMap(f)
+
+      val ask: Kleisli[F, A, A] = Kleisli(Monad[F].pure)
+
+      def local[B](f: A => A)(fa: Kleisli[F, A, B]): Kleisli[F, A, B] =
+        Kleisli(f.andThen(fa.run))
+    }
 }
 
 sealed abstract class KleisliInstances0 extends KleisliInstances1 {
