@@ -2,7 +2,7 @@ package cats
 package state
 
 import cats.tests.CatsSuite
-import cats.laws.discipline.{ArbitraryK, MonadTests, MonoidKTests, SerializableTests}
+import cats.laws.discipline.{ArbitraryK, MonadStateTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen, Prop}, Prop.forAll
 
@@ -32,8 +32,8 @@ class StateTests extends CatsSuite {
     assert(x.runS(0).run == 2)
   }
 
-  checkAll("StateT[Option, Int, Int]", MonadTests[StateT[Option, Int, ?]].monad[Int, Int, Int])
-  checkAll("Monad[StateT[Option, Int, ?]]", SerializableTests.serializable(Monad[StateT[Option, Int, ?]]))
+  checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, ?, ?], Int].monadState[Int, Int, Int])
+  checkAll("MonadState[StateT[Option, ?, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, ?, ?], Int]))
 }
 
 object StateTests {

@@ -92,24 +92,29 @@ object StateT extends StateTInstances {
 }
 
 sealed abstract class StateTInstances extends StateTInstances0 {
-  implicit def stateTMonad[F[_], S](implicit F: Monad[F]): Monad[StateT[F, S, ?]] = new Monad[StateT[F, S, ?]] {
+  implicit def stateTMonadState[F[_], S](implicit F: Monad[F]): MonadState[StateT[F, ?, ?], S] =
+    new MonadState[StateT[F, ?, ?], S] {
+      def pure[A](a: A): StateT[F, S, A] =
+        StateT.pure(a)
 
-    def pure[A](a: A): StateT[F, S, A] =
-      StateT.pure(a)
+      def flatMap[A, B](fa: StateT[F, S, A])(f: A => StateT[F, S, B]): StateT[F, S, B] =
+        fa.flatMap(f)
 
-    def flatMap[A, B](fa: StateT[F, S, A])(f: A => StateT[F, S, B]): StateT[F, S, B] =
-      fa.flatMap(f)
+      // Must be `def` otherwise the instance is not Serializable
+      def get: StateT[F, S, S] = StateT(a => F.pure((a, a)))
 
-    override def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] =
-      fa.map(f)
-  }
+      def set(s: S): StateT[F, S, Unit] = StateT(_ => F.pure((s, ())))
+
+      override def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] =
+        fa.map(f)
+    }
 }
 
 sealed abstract class StateTInstances0 {
   // The Functor[Function0] is currently in std.
   // Should we move it to core? Issue #258
-  implicit def stateMonad[S](implicit F: Functor[Function0]): Monad[State[S, ?]] =
-    StateT.stateTMonad[Trampoline, S]
+  implicit def stateMonadState[S](implicit F: Functor[Function0]): MonadState[State[?, ?], S] =
+    StateT.stateTMonadState[Trampoline, S]
 }
 
 // To workaround SI-7139 `object State` needs to be defined inside the package object
