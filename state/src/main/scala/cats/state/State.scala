@@ -10,7 +10,7 @@ import cats.data.Kleisli
  * an `S` value representing the updated state (which is wrapped in the `F`
  * context along with the `A` value.
  */
-final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) {
+final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable {
 
   def flatMap[B](fas: A => StateT[F, S, B])(implicit F: Monad[F]): StateT[F, S, B] =
     StateT(s =>
@@ -100,8 +100,7 @@ sealed abstract class StateTInstances extends StateTInstances0 {
       def flatMap[A, B](fa: StateT[F, S, A])(f: A => StateT[F, S, B]): StateT[F, S, B] =
         fa.flatMap(f)
 
-      // Must be `def` otherwise the instance is not Serializable
-      def get: StateT[F, S, S] = StateT(a => F.pure((a, a)))
+      val get: StateT[F, S, S] = StateT(a => F.pure((a, a)))
 
       def set(s: S): StateT[F, S, Unit] = StateT(_ => F.pure((s, ())))
 
