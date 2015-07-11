@@ -92,7 +92,7 @@ Functor[List].map(List("qwer", "adsfg"))(len)
 
 ### lift
 
- We can use the Funtor to "lift" a function to operate on the Functor type:
+We can use the Functor to "lift" a function to operate on the Functor type:
 
 ```tut
 val lenOption: Option[String] => Option[Int] = Functor[Option].lift(len)
