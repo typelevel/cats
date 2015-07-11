@@ -76,27 +76,23 @@ package cats
  * not stack-safe.)
  */
 sealed abstract class Fold[A] extends Product with Serializable {
-  import Fold.{Return, Continue, Pass}
-
-  def imap[B](f: A => B)(g: B => A): Fold[B] =
-    this match {
-      case Return(a) => Return(f(a))
-      case Continue(h) => Continue(b => f(g(b)))
-      case _ => Pass
-    }
-
-  def compose(f: A => A): Fold[A] =
-    this match {
-      case Return(a) => Return(f(a))
-      case Continue(g) => Continue(f andThen g)
-      case _ => Continue(f)
-    }
+  import Fold.{Return, Composed}
 
   def complete(la: Lazy[A]): A =
     this match {
       case Return(a) => a
-      case Continue(f) => f(la.value)
-      case _ => la.value
+      case Composed(fs) => fs.foldLeft(la.value)((a, f) => f(a))
+    }
+
+  def andThen(that: => Fold[A]): Fold[A] =
+    this match {
+      case Return(a) =>
+        Return(a)
+      case Composed(fs) =>
+        that match {
+          case Return(a) => Return(complete(Lazy.eager(a)))
+          case Composed(gs) => Composed(fs ::: gs)
+        }
     }
 }
 
@@ -118,32 +114,38 @@ object Fold {
    * When the end of the fold is reached, the final A value will
    * propagate back through these functions, producing a final result.
    */
-  final case class Continue[A](f: A => A) extends Fold[A]
+  final def Continue[A](f: A => A): Fold[A] =
+    Composed(f :: Nil)
+
+  /**
+   * Composed allows functions to be composed in a stack-safe way.
+   *
+   * The functions are applied first-to-last.
+   *
+   * That is `List(f1, f2, f3)` will be applied to `a` as
+   * `f3(f2(f1(a)))`.
+   */
+  final case class Composed[A](fs: List[A => A]) extends Fold[A]
 
   /**
    * Pass allows the fold to continue, without modifying the result.
    *
-   * Pass' behavior is identical to `Continue(identity[A])`, but it may be
-   * more efficient.
+   * Pass' behavior is identical to `Continue(identity[A])`, but it
+   * may be more efficient.
    */
-  final def Pass[A]: Fold[A] = pass.asInstanceOf[Fold[A]]
-
-  final case object pass extends Fold[Nothing]
+  final def Pass[A]: Fold[A] = Composed(Nil)
 
   /**
    * partialIterate provides a partialFold for `Iterable[A]` values.
    */
   def partialIterate[A, B](as: Iterable[A])(f: A => Fold[B]): Fold[B] = {
-    def unroll(b: B, fs: List[B => B]): B =
-      fs.foldLeft(b)((b, f) => f(b))
     def loop(it: Iterator[A], fs: List[B => B]): Fold[B] =
       if (it.hasNext) {
         f(it.next) match {
-          case Return(b) => Return(unroll(b, fs))
-          case Continue(f) => loop(it, f :: fs)
-          case _ => loop(it, fs)
+          case Composed(gs) => loop(it, gs ::: fs)
+          case fold => Composed(fs) andThen fold
         }
-      } else Continue(b => unroll(b, fs))
+      } else Composed(fs)
     loop(as.iterator, Nil)
   }
 }
