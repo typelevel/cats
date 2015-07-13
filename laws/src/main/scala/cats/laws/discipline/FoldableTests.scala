@@ -20,7 +20,12 @@ trait FoldableTests[F[_]] extends Laws {
       name = "foldable",
       parent = None,
       "foldLeft consistent with foldMap" -> forAll(laws.leftFoldConsistentWithFoldMap[A, B] _),
-      "foldRight consistent with foldMap" -> forAll(laws.rightFoldConsistentWithFoldMap[A, B] _)
+      "foldRight consistent with foldMap" -> forAll(laws.rightFoldConsistentWithFoldMap[A, B] _),
+      "exists consistent with find" -> forAll(laws.existsConsistentWithFind[A] _),
+      "forall consistent with exists" -> forAll(laws.forallConsistentWithExists[A] _),
+      "forall true if empty" -> forAll(laws.forallEmpty[A] _),
+      "exists is lazy" -> forAll(laws.existsLazy[A] _),
+      "forall is lazy" -> forAll(laws.forallLazy[A] _)
     )
   }
 }

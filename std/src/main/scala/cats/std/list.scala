@@ -46,6 +46,14 @@ trait ListInstances {
         val gbb = fa.foldLeft(gba)((buf, a) => G.map2(buf, f(a))(_ :+ _))
         G.map(gbb)(_.toList)
       }
+
+      override def exists[A](fa: List[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
+
+      override def forall[A](fa: List[A])(p: A => Boolean): Boolean =
+        fa.forall(p)
+
+      override def empty[A](fa: List[A]): Boolean = fa.isEmpty
     }
 
   // TODO: eventually use algebra's instances (which will deal with

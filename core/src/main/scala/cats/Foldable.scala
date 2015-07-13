@@ -148,6 +148,26 @@ import simulacrum.typeclass
 
 
   /**
+   * Check whether at least one element satisfies the predicate.
+   *
+   * If there are no elements, the result is `false`.
+   */
+  def exists[A](fa: F[A])(p: A => Boolean): Boolean =
+    foldRight(fa, Lazy.eager(false)) { a =>
+      if (p(a)) Fold.Return(true) else Fold.Pass
+    }.value
+
+  /**
+   * Check whether all elements satisfy the predicate.
+   *
+   * If there are no elements, the result is `true`.
+   */
+  def forall[A](fa: F[A])(p: A => Boolean): Boolean =
+    foldRight(fa, Lazy.eager(true)) { a =>
+      if (p(a)) Fold.Pass[Boolean] else Fold.Return(false)
+    }.value
+
+  /**
    * Convert F[A] to a List[A].
    */
   def toList[A](fa: F[A]): List[A] =
@@ -184,6 +204,14 @@ import simulacrum.typeclass
       implicit def F: Foldable[F] = self
       implicit def G: Foldable[G] = G0
     }
+
+  /**
+   * Returns true if there are no elements. Otherwise false.
+   */
+  def empty[A](fa: F[A]): Boolean =
+    foldRight(fa, Lazy.eager(true)) { _ =>
+      Fold.Return(false)
+    }.value
 }
 
 /**

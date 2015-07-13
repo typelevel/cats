@@ -42,6 +42,18 @@ final case class OneAnd[A, F[_]](head: A, tail: F[A]) {
     if (f(head)) Some(head) else F.find(tail)(f)
 
   /**
+   * Check whether at least one element satisfies the predicate.
+   */
+  def exists(p: A => Boolean)(implicit F: Foldable[F]): Boolean =
+    p(head) || F.exists(tail)(p)
+
+  /**
+   * Check whether all elements satisfy the predicate.
+   */
+  def forall(p: A => Boolean)(implicit F: Foldable[F]): Boolean =
+    p(head) && F.forall(tail)(p)
+
+  /**
    * Left-associative fold on the structure using f.
    */
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =
@@ -116,6 +128,8 @@ trait OneAndInstances {
           case _ => foldable.partialFold(fa.tail)(f)
         }
       }
+
+      override def empty[A](fa: OneAnd[A, F]): Boolean = false
     }
 
   implicit def oneAndMonad[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[?, F]] =
