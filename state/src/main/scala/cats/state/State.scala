@@ -136,7 +136,7 @@ abstract class StateFunctions {
   def modify[S](f: S => S): State[S, Unit] = State(s => (f(s), ()))
 
   /**
-   * Extract a value from the input state, without modifying the state.
+   * Inspect a value from the input state, without modifying the state.
    */
   def inspect[S, T](f: S => T): State[S, T] = State(s => (s, f(s)))
 
