@@ -29,4 +29,34 @@ class XorTTests extends CatsSuite {
       Some(xor.isLeft) == XorT.fromXor[Option](xor).isLeft
     }
   })
+
+  test("isLeft negation of isRight")(check {
+    forAll { (xort: XorT[List, String, Int]) =>
+      xort.isLeft == xort.isRight.map(! _)
+    }
+  })
+
+  test("double swap is noop")(check {
+    forAll { (xort: XorT[List, String, Int]) =>
+      xort.swap.swap === xort
+    }
+  })
+
+  test("swap negates isRight")(check {
+    forAll { (xort: XorT[List, String, Int]) =>
+      xort.swap.isRight == xort.isRight.map(! _)
+    }
+  })
+
+  test("toOption on Right returns Some")(check {
+    forAll { (xort: XorT[List, String, Int]) =>
+      xort.toOption.map(_.isDefined) == xort.isRight
+    }
+  })
+
+  test("toEither preserves isRight")(check {
+    forAll { (xort: XorT[List, String, Int]) =>
+      xort.toEither.map(_.isRight) == xort.isRight
+    }
+  })
 }
