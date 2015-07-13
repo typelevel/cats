@@ -79,7 +79,7 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) {
     transform((s, a) => (f(s), a))
 
   /**
-   * Extract a value from the input state, without modifying the state.
+   * Inspect a value from the input state, without modifying the state.
    */
   def inspect[B](f: S => B)(implicit F: Monad[F]): StateT[F, S, B] =
     transform((s, _) => (s, f(s)))
