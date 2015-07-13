@@ -115,7 +115,7 @@ lazy val core = project.dependsOn(macros)
     sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
   )
 
-lazy val laws = project.dependsOn(macros, core, free, std)
+lazy val laws = project.dependsOn(macros, core, std)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings)
   .settings(
@@ -131,7 +131,7 @@ lazy val std = project.dependsOn(macros, core)
     libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT"
   )
 
-lazy val tests = project.dependsOn(macros, core, free, std, laws)
+lazy val tests = project.dependsOn(macros, core, std, laws)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
@@ -147,7 +147,7 @@ lazy val bench = project.dependsOn(macros, core, free, std, laws)
   .settings(noPublishSettings)
   .settings(jmhSettings)
 
-lazy val free = project.dependsOn(macros, core)
+lazy val free = project.dependsOn(macros, core, tests % "test-internal -> test")
   .settings(moduleName := "cats-free")
   .settings(catsSettings)
 

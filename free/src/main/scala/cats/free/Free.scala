@@ -57,6 +57,9 @@ object Free {
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa map f
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a flatMap f
     }
+
+  implicit def freeCMonad[S[_]]: Monad[FreeC[S, ?]] =
+    freeMonad[Coyoneda[S, ?]]
 }
 
 import Free._
