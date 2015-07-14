@@ -35,6 +35,9 @@ object arbitrary {
   implicit def cokleisliArbitrary[F[_], A, B](implicit B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
     Arbitrary(B.arbitrary.map(b => Cokleisli[F, A, B](_ => b)))
 
+  implicit def optionTArbitrary[F[_], A](implicit F: ArbitraryK[F], A: Arbitrary[A]): Arbitrary[OptionT[F, A]] =
+    Arbitrary(F.synthesize[Option[A]].arbitrary.map(OptionT.apply))
+
   implicit def foldArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Fold[A]] =
     Arbitrary(Gen.oneOf(getArbitrary[A].map(Fold.Return(_)), getArbitrary[A => A].map(Fold.Continue(_)), Gen.const(Fold.Pass[A])))
 

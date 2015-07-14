@@ -61,5 +61,7 @@ trait MapInstances extends algebra.std.MapInstances {
 
       def partialFold[A, B](fa: Map[K, A])(f: A => Fold[B]): Fold[B] =
         Fold.partialIterate(fa.values)(f)
+
+      override def empty[A](fa: Map[K, A]): Boolean = fa.isEmpty
     }
 }

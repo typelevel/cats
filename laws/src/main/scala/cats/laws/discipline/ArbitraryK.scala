@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import cats.data.{Cokleisli, Kleisli, NonEmptyList, Validated, Xor, XorT, Ior, Const}
+import cats.data.{Cokleisli, Kleisli, NonEmptyList, Validated, Xor, XorT, Ior, Const, OptionT}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 
@@ -14,6 +14,9 @@ trait ArbitraryK[F[_]] {
 
 object ArbitraryK {
   def apply[F[_]](implicit arbk: ArbitraryK[F]): ArbitraryK[F] = arbk
+
+  implicit val id: ArbitraryK[Id] =
+    new ArbitraryK[Id] { def synthesize[A: Arbitrary]: Arbitrary[A] = implicitly }
 
   implicit val nonEmptyList: ArbitraryK[NonEmptyList] =
     new ArbitraryK[NonEmptyList] { def synthesize[A: Arbitrary]: Arbitrary[NonEmptyList[A]] = implicitly }
@@ -101,4 +104,7 @@ object ArbitraryK {
 
   implicit val vector: ArbitraryK[Vector] =
     new ArbitraryK[Vector] { def synthesize[A: Arbitrary]: Arbitrary[Vector[A]] = implicitly }
+
+  implicit def optionT[F[_]](implicit F: ArbitraryK[F]): ArbitraryK[OptionT[F, ?]] =
+    new ArbitraryK[OptionT[F, ?]] { def synthesize[A: Arbitrary]: Arbitrary[OptionT[F, A]] = implicitly }
 }

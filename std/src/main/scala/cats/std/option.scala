@@ -42,6 +42,14 @@ trait OptionInstances {
           case None => Applicative[G].pure(None)
           case Some(a) => Applicative[G].map(f(a))(Some(_))
         }
+
+      override def exists[A](fa: Option[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
+
+      override def forall[A](fa: Option[A])(p: A => Boolean): Boolean =
+        fa.forall(p)
+
+      override def empty[A](fa: Option[A]): Boolean = fa.isEmpty
     }
 
   // TODO: eventually use algebra's instances (which will deal with

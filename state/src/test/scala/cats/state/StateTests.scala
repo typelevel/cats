@@ -32,6 +32,13 @@ class StateTests extends CatsSuite {
     assert(x.runS(0).run == 2)
   }
 
+  test("Singleton and instance inspect are consistent")(check {
+    forAll { (s: String, i: Int) =>
+      State.inspect[Int, String](_.toString).run(i).run ==
+        State.pure[Int, Unit](()).inspect(_.toString).run(i).run
+    }
+  })
+
   checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, ?, ?], Int].monadState[Int, Int, Int])
   checkAll("MonadState[StateT[Option, ?, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, ?, ?], Int]))
 }

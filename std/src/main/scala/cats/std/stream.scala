@@ -45,6 +45,14 @@ trait StreamInstances {
           Fold.Continue(gsb => G.map2(f(a), gsb)(_ #:: _))
         }.value
       }
+
+      override def exists[A](fa: Stream[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
+
+      override def forall[A](fa: Stream[A])(p: A => Boolean): Boolean =
+        fa.forall(p)
+
+      override def empty[A](fa: Stream[A]): Boolean = fa.isEmpty
     }
 
   // TODO: eventually use algebra's instances (which will deal with

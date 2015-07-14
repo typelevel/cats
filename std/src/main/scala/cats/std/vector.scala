@@ -33,6 +33,11 @@ trait VectorInstances {
         val gba = G.pure(Vector.empty[B])
         fa.foldLeft(gba)((buf, a) => G.map2(buf, f(a))(_ :+ _))
       }
+
+      override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
+
+      override def empty[A](fa: Vector[A]): Boolean = fa.isEmpty
     }
 
   // TODO: eventually use algebra's instances (which will deal with

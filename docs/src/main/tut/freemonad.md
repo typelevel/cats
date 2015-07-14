@@ -30,7 +30,7 @@ action. The next section uses `Free[_]` to create an embedded DSL
 (Domain Specific Language).
 
 If you're interested in the theory behind *free monads*, the
-[What is Free in theory?]() section discusses free moands in terms of
+[What is Free in theory?]() section discusses free monads in terms of
 category theory.
 
 ### Study your topic
@@ -346,8 +346,8 @@ def compilePure[A](program: KVStore[A], kvs: Map[String, A]): Map[String, A] =
     })
 ```
 
-(You can see that we are again running into some places where scala's
-support for pattern matching is limited by the JVM's type erausre, but
+(You can see that we are again running into some places where Scala's
+support for pattern matching is limited by the JVM's type erasure, but
 it's not too hard to get around.)
 
 ```tut

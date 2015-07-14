@@ -46,7 +46,7 @@ Semigroup[Int => Int].combine({(x: Int) => x + 1},{(x: Int) => x * 10}).apply(6)
 ```
 
 SemigroupK has a very similar structure to Semigroup, the difference
-is that it operates on type constructors of one arguement. So, for
+is that it operates on type constructors of one argument. So, for
 example, whereas you can find a Semigroup for types which are fully
 specified like `Int` or `List[Int]` or `Option[Int]`, you will find
 SemigroupK for type constructors like `List` and `Option`. These types
