@@ -6,8 +6,8 @@ import cats.laws.discipline.{ArbitraryK, MonadTests, MonoidKTests, SerializableT
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen, Prop}, Prop.forAll
 
-class StateTests extends CatsSuite {
-  import StateTests._
+class StateTTests extends CatsSuite {
+  import StateTTests._
 
   test("basic state usage"){
     assert(add1.run(1).run == (2 -> 1))
@@ -43,7 +43,7 @@ class StateTests extends CatsSuite {
   checkAll("Monad[StateT[Option, Int, ?]]", SerializableTests.serializable(Monad[StateT[Option, Int, ?]]))
 }
 
-object StateTests {
+object StateTTests {
 
   // This seems unnecessarily complicated. I think having our laws require
   // ArbitraryK is overly constraining.
