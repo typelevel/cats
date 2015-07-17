@@ -18,8 +18,8 @@ lazy val scoverageSettings = Seq(
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
-  scalaVersion := "2.11.6",
-  crossScalaVersions := Seq("2.10.5", "2.11.6")
+  scalaVersion := "2.11.7",
+  crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
 
 lazy val commonSettings = Seq(
@@ -53,7 +53,7 @@ lazy val commonSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %% "simulacrum" % "0.3.0",
-    "org.spire-math" %% "algebra" % "0.2.0-SNAPSHOT",
+    "org.spire-math" %% "algebra" % "0.2.1",
     "org.typelevel" %% "machinist" % "0.3.0",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.4")
@@ -66,8 +66,8 @@ lazy val commonSettings = Seq(
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ releaseSettings ++ scoverageSettings
 
 lazy val disciplineDependencies = Seq(
-  "org.scalacheck" %% "scalacheck" % "1.11.3",
-  "org.typelevel" %% "discipline" % "0.2.1"
+  "org.scalacheck" %% "scalacheck" % "1.12.4",
+  "org.typelevel" %% "discipline" % "0.3"
 )
 
 lazy val docSettings = Seq(
@@ -120,7 +120,7 @@ lazy val laws = project.dependsOn(macros, core, std)
   .settings(catsSettings)
   .settings(
     libraryDependencies ++= disciplineDependencies ++ Seq(
-      "org.spire-math" %% "algebra-laws" % "0.2.0-SNAPSHOT"
+      "org.spire-math" %% "algebra-laws" % "0.2.1"
     )
   )
 
@@ -128,7 +128,7 @@ lazy val std = project.dependsOn(macros, core)
   .settings(moduleName := "cats-std")
   .settings(catsSettings)
   .settings(
-    libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.0-SNAPSHOT"
+    libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.1"
   )
 
 lazy val tests = project.dependsOn(macros, core, std, laws)
@@ -137,7 +137,7 @@ lazy val tests = project.dependsOn(macros, core, std, laws)
   .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= disciplineDependencies ++ Seq(
-      "org.scalatest" %% "scalatest" % "2.1.3" % "test"
+      "org.scalatest" %% "scalatest" % "2.2.5" % "test"
     )
   )
 
