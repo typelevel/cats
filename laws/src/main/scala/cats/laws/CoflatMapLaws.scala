@@ -5,7 +5,7 @@ import cats.data.Cokleisli
 import cats.syntax.coflatMap._
 
 /**
- * Laws that must be obeyed by any [[CoflatMap]].
+ * Laws that must be obeyed by any `CoflatMap`.
  */
 trait CoflatMapLaws[F[_]] extends FunctorLaws[F] {
   implicit override def F: CoflatMap[F]
@@ -14,7 +14,7 @@ trait CoflatMapLaws[F[_]] extends FunctorLaws[F] {
     fa.coflatMap(f).coflatMap(g) <-> fa.coflatMap(x => g(x.coflatMap(f)))
 
   /**
-   * The composition of [[cats.data.Cokleisli]] arrows is associative. This is
+   * The composition of `cats.data.Cokleisli` arrows is associative. This is
    * analogous to [[coflatMapAssociativity]].
    */
   def cokleisliAssociativity[A, B, C, D](f: F[A] => B, g: F[B] => C, h: F[C] => D, fa: F[A]): IsEq[D] = {

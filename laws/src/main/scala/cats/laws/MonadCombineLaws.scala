@@ -4,7 +4,7 @@ package laws
 import cats.syntax.all._
 
 /**
- * Laws that must be obeyed by any [[MonadCombine]].
+ * Laws that must be obeyed by any `MonadCombine`.
  */
 trait MonadCombineLaws[F[_]] extends MonadFilterLaws[F] with AlternativeLaws[F] {
   implicit override def F: MonadCombine[F]

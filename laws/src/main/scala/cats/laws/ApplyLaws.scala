@@ -5,7 +5,7 @@ import cats.syntax.apply._
 import cats.syntax.functor._
 
 /**
- * Laws that must be obeyed by any [[Apply]].
+ * Laws that must be obeyed by any `Apply`.
  */
 trait ApplyLaws[F[_]] extends FunctorLaws[F] {
   implicit override def F: Apply[F]

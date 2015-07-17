@@ -5,7 +5,7 @@ import cats.arrow.Category
 import cats.syntax.compose._
 
 /**
- * Laws that must be obeyed by any [[cats.arrow.Category]].
+ * Laws that must be obeyed by any `cats.arrow.Category`.
  */
 trait CategoryLaws[F[_, _]] extends ComposeLaws[F] {
   implicit override def F: Category[F]

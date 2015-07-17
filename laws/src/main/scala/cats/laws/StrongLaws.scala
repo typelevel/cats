@@ -7,7 +7,7 @@ import cats.syntax.strong._
 import cats.std.function._
 
 /**
- * Laws that must be obeyed by any [[cats.functor.Strong]].
+ * Laws that must be obeyed by any `cats.functor.Strong`.
  */
 trait StrongLaws[F[_, _]] extends ProfunctorLaws[F] {
   implicit override def F: Strong[F]

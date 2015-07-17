@@ -4,7 +4,7 @@ package laws
 import cats.syntax.flatMap._
 
 /**
- * Laws that must be obeyed by any [[MonadFilter]].
+ * Laws that must be obeyed by any `MonadFilter`.
  */
 trait MonadFilterLaws[F[_]] extends MonadLaws[F] {
   implicit override def F: MonadFilter[F]

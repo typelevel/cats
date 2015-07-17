@@ -2,7 +2,7 @@ package cats
 package laws
 
 /**
- * Laws that must be obeyed by any [[cats.MonoidK]].
+ * Laws that must be obeyed by any `cats.MonoidK`.
  */
 trait MonoidKLaws[F[_]] extends SemigroupKLaws[F] {
   override implicit def F: MonoidK[F]

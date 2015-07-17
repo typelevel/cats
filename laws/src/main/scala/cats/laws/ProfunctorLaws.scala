@@ -5,7 +5,7 @@ import cats.functor.Profunctor
 import cats.syntax.profunctor._
 
 /**
- * Laws that must be obeyed by any [[cats.functor.Profunctor]].
+ * Laws that must be obeyed by any `cats.functor.Profunctor`.
  */
 trait ProfunctorLaws[F[_, _]] {
   implicit def F: Profunctor[F]

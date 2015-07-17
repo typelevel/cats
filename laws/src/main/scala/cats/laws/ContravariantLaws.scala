@@ -5,7 +5,7 @@ import cats.functor.Contravariant
 import cats.syntax.contravariant._
 
 /**
- * Laws that must be obeyed by any [[cats.functor.Contravariant]].
+ * Laws that must be obeyed by any `cats.functor.Contravariant`.
  */
 trait ContravariantLaws[F[_]] extends InvariantLaws[F] {
   implicit override def F: Contravariant[F]

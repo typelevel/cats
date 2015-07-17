@@ -2,7 +2,7 @@ package cats
 package laws
 
 /**
- * Laws that must be obeyed by any [[cats.SemigroupK]].
+ * Laws that must be obeyed by any `cats.SemigroupK`.
  */
 trait SemigroupKLaws[F[_]] {
   implicit def F: SemigroupK[F]
