@@ -18,8 +18,6 @@ possible:
  * Amir Mohammad Saied
  * Andrew Jones
  * Arya Irani
- * Derek Wickern
- * Frank S. Thomas
  * Benjamin Thuillier
  * Bobby
  * Brendan McAdams
@@ -27,9 +25,11 @@ possible:
  * Colt Frederickson
  * Dale Wijnand
  * David Allsopp
+ * Derek Wickern
  * Erik Osheim
  * Eugene Burmako
  * Eugene Yokota
+ * Frank S. Thomas
  * Josh Marcus
  * Julien Truffaut
  * Kenji Yoshida

@@ -6,7 +6,7 @@
 
 Version 0.1.2 is the first non-snapshot version of the Cats library!
 It is intended to assist the creation of dependent libraries and to be
-an early look at Cats design.
+an early look at Cats' design.
 
 Much of the library is quite mature, but there are no source- or
 binary-compatibility guarantees at this time. The overarching design
