@@ -11,8 +11,32 @@ The name is a playful shortening of the word *category*.
 
 ### Getting Started
 
-Cats is not currently published, so you'll need to check out this
-repository to try it out.
+Cats is currently available for Scala 2.10 and 2.11.
+
+To get started with SBT, simply add the following to your `build.sbt`
+file:
+
+```scala
+libraryDependencies += "org.spire-math" %% "cats" % "0.1.2"
+```
+
+This will pull in all of Cats' modules. If you only require some
+functionality, you can pick-and-choose from amongst these modules
+(used in place of `"cats"`):
+
+ * `cats-macros`: Macros used by Cats syntax (*required*).
+ * `cats-core`: Core type classes and functionality (*required*).
+ * `cats-std`: Type class instances for the standard library (*recommended*).
+ * `cats-laws`: Laws for testing type class instances.
+ * `cats-free`: "Free" data constructors for various type classes.
+ * `cats-state`: Monad and transformer support for state.
+
+Release notes for Cats are available in [CHANGES.md](CHANGES.md).
+
+*Cats 0.1.2 is a pre-release: there are not currently source- or
+binary-compatibility guarantees.*
+
+### Building Cats
 
 To build Cats you should have [sbt](http://www.scala-sbt.org/0.13/tutorial/Setup.html)
 installed. Run `sbt`, and then use any of the following commands:
@@ -148,7 +172,9 @@ via [Waffle.io](https://waffle.io/non/cats).
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also
-gladly accepted. For more information, check out the [contributor guide](CONTRIBUTING.md).
+gladly accepted. For more information, check out the
+[contributor guide](CONTRIBUTING.md). You can also see a list of past
+contributors in [AUTHORS.md](AUTHORS.md).
 
 People are expected to follow the
 [Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
