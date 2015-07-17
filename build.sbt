@@ -2,10 +2,6 @@ import com.typesafe.sbt.pgp.PgpKeys.publishSigned
 import com.typesafe.sbt.SbtSite.SiteKeys._
 import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import pl.project13.scala.sbt.SbtJmh._
-import sbtrelease.ReleaseStep
-import sbtrelease.ReleasePlugin.ReleaseKeys.releaseProcess
-import sbtrelease.ReleaseStateTransformations._
-import sbtrelease.Utilities._
 import sbtunidoc.Plugin.UnidocKeys._
 import ScoverageSbtPlugin._
 
@@ -63,7 +59,7 @@ lazy val commonSettings = Seq(
   commands += gitSnapshots
 )
 
-lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ releaseSettings ++ scoverageSettings
+lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
 lazy val disciplineDependencies = Seq(
   "org.scalacheck" %% "scalacheck" % "1.12.4",
@@ -160,6 +156,8 @@ lazy val publishSettings = Seq(
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
   autoAPIMappings := true,
   apiURL := Some(url("https://non.github.io/cats/api/")),
+  releaseCrossBuild := true,
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
   publishArtifact in packageDoc := false,
   publishArtifact in Test := false,
@@ -179,35 +177,7 @@ lazy val publishSettings = Seq(
         <url>http://github.com/non/</url>
       </developer>
     </developers>
-  ),
-  releaseProcess := Seq[ReleaseStep](
-    checkSnapshotDependencies,
-    inquireVersions,
-    runTest,
-    setReleaseVersion,
-    commitReleaseVersion,
-    tagRelease,
-    publishSignedArtifacts,
-    setNextVersion,
-    commitNextVersion,
-    pushChanges
   )
-)
-
-lazy val publishSignedArtifacts = ReleaseStep(
-  action = { st =>
-    val extracted = st.extract
-    val ref = extracted.get(thisProjectRef)
-    extracted.runAggregated(publishSigned in Global in ref, st)
-  },
-  check = { st =>
-    // getPublishTo fails if no publish repository is set up.
-    val ex = st.extract
-    val ref = ex.get(thisProjectRef)
-    Classpaths.getPublishTo(ex.get(publishTo in Global in ref))
-    st
-  },
-  enableCrossBuild = true
 )
 
 lazy val noPublishSettings = Seq(
