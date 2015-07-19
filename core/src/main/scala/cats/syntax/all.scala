@@ -12,12 +12,14 @@ trait AllSyntax
     with FlatMapSyntax
     with FoldableSyntax
     with FunctorSyntax
+    with GroupSyntax
     with InvariantSyntax
     with MonadCombineSyntax
     with MonadFilterSyntax
     with OrderSyntax
     with PartialOrderSyntax
     with ProfunctorSyntax
+    with ReducibleSyntax
     with SemigroupSyntax
     with SemigroupKSyntax
     with Show.ToShowOps
