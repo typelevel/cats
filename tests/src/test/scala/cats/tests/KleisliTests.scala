@@ -9,6 +9,7 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
+import algebra.laws.GroupLaws
 
 class KleisliTests extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
@@ -60,6 +61,18 @@ class KleisliTests extends CatsSuite {
     implicit val kleisliFunctor = Kleisli.kleisliFunctor[Option, Int]
     checkAll("Kleisli[Option, Int, Int]", FunctorTests[Kleisli[Option, Int, ?]].functor[Int, Int, Int])
     checkAll("Functor[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Functor[Kleisli[Option, Int, ?]]))
+  }
+
+  {
+    implicit val kleisliMonoid = Kleisli.kleisliMonoid[Option, Int]
+    checkAll("Kleisli[Option, Int, Int]", GroupLaws[Kleisli[Option, Int, Int]].monoid)
+    checkAll("Monoid[Kleisli[Option, Int, Int]]", SerializableTests.serializable(kleisliMonoid))
+  }
+
+  {
+    implicit val kleisliSemigroup = Kleisli.kleisliSemigroup[Option, Int]
+    checkAll("Kleisli[Option, Int, Int]", GroupLaws[Kleisli[Option, Int, Int]].semigroup)
+    checkAll("Semigroup[Kleisli[Option, Int, Int]]", SerializableTests.serializable(kleisliSemigroup))
   }
 
   check {

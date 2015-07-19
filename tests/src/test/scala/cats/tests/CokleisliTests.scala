@@ -8,6 +8,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
+import algebra.laws.GroupLaws
 
 class CokleisliTests extends CatsSuite {
 
@@ -19,6 +20,18 @@ class CokleisliTests extends CatsSuite {
 
   checkAll("Cokleisli[Option, Int, Int]", ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[Int, Int, Int, Int, Int, Int])
   checkAll("Profunctor[Cokleisli[Option, ?, ?]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
+
+  {
+    implicit val cokleisliMonoid = Monoid[Cokleisli[NonEmptyList, Int, Int]]
+    checkAll("Cokleisli[NonEmptyList, Int, Int]", GroupLaws[Cokleisli[NonEmptyList, Int, Int]].monoid)
+    checkAll("Monoid[Cokleisli[NonEmptyList, Int, Int]", SerializableTests.serializable(cokleisliMonoid))
+  }
+
+  {
+    implicit val cokleisliSemigroup = Semigroup[Cokleisli[NonEmptyList, Int, Int]]
+    checkAll("Cokleisli[NonEmptyList, Int, Int]", GroupLaws[Cokleisli[NonEmptyList, Int, Int]].semigroup)
+    checkAll("Semigroup[Cokleisli[NonEmptyList, Int, Int]]", SerializableTests.serializable(cokleisliSemigroup))
+  }
 
   {
     // Ceremony to help scalac to do the right thing, see also #267.
