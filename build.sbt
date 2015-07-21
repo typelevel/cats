@@ -55,8 +55,7 @@ lazy val commonSettings = Seq(
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.4")
   ),
   scmInfo := Some(ScmInfo(url("https://github.com/non/cats"),
-    "scm:git:git@github.com:non/cats.git")),
-  commands += gitSnapshots
+    "scm:git:git@github.com:non/cats.git"))
 )
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
@@ -187,11 +186,7 @@ lazy val noPublishSettings = Seq(
 
 addCommandAlias("validate", ";compile;test;scalastyle;test:scalastyle;unidoc;tut")
 
-def gitSnapshots = Command.command("gitSnapshots") { state =>
-  val extracted = Project extract state
-  val newVersion = Seq(version in ThisBuild := git.gitDescribedVersion.value.get + "-SNAPSHOT")
-  extracted.append(newVersion, state)
-}
+addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
 
 // For Travis CI - see http://www.cakesolutions.net/teamblogs/publishing-artefacts-to-oss-sonatype-nexus-using-sbt-and-travis-ci
 credentials ++= (for {
