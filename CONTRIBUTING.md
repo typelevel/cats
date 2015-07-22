@@ -149,7 +149,7 @@ run `sbt docs/makeSite`
 
 3. Start jekyll with `jekyll serve`
 
-4. Navigate to http://localhost:4000/indoctrinate/ in your browser
+4. Navigate to http://localhost:4000/cats/ in your browser
 
 5. Make changes to your site, and run `sbt makeSite` to regenerate the site. The changes should be reflected as soon as you run `makeSite`.
 
