@@ -22,7 +22,7 @@ Cats has not yet published artifacts, so in order to use Cats you will have to g
 
 Then in your project, add to your build.sbt
 
-    libraryDependencies += "org.spire-math" %% "cats-core" % "0.1.0-SNAPSHOT"
+    libraryDependencies += "org.spire-math" %% "cats-core" % "0.1.2"
 
 <a name "motivations"></a>
 # Motivations
