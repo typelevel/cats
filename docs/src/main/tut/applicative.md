@@ -29,7 +29,7 @@ Applicative[List].pure(1)
 ```
 
 Like [Functor](functor.md) and [Apply](apply.md), Applicative
-functors also composes naturally with other Applicative functors. When
+functors also compose naturally with other Applicative functors. When
 you compose one Applicative with another, the resulting `pure`
 operation will lift the passed value into one context, and the result
 into the other context:
@@ -43,6 +43,6 @@ into the other context:
 Applicative functors are a generalization of Monads thus allowing to express 
 effectful computations into a pure functional way.
 
-Applicative functors are generally preferred to monads when the structure 
+Applicative functors are generally preferred to Monads when the structure 
 of a computation is fixed a priori. That makes it possible to perform certain
 kinds of static analysis on applicative values.
