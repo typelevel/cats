@@ -16,7 +16,7 @@ functor](apply.md) which adds a single method, `pure`:
 
 This method takes any value and returns the value in the context of
 the functor. For many familiar functors, how to do this is
-obvious. For Option, the `pure` operation wraps the value in
+obvious. For `Option`, the `pure` operation wraps the value in
 `Some`. For `List`, the `pure` operation returns a single element
 `List`:
 
@@ -29,7 +29,7 @@ Applicative[List].pure(1)
 ```
 
 Like [Functor](functor.md) and [Apply](apply.md), Applicative
-functors also composes naturally with other Applicative functors. When
+functors also compose naturally with other Applicative functors. When
 you compose one Applicative with another, the resulting `pure`
 operation will lift the passed value into one context, and the result
 into the other context:
@@ -40,7 +40,7 @@ into the other context:
 
 ## Applicative Functors & Monads
 
-Applicative functors are a generalization of Monads thus allowing to express 
+Applicative functors are a generalization of monads thus allowing to express 
 effectful computations into a pure functional way.
 
 Applicative functors are generally preferred to monads when the structure 
