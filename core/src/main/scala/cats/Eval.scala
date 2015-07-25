@@ -212,9 +212,9 @@ object Eval extends EvalInstances {
   }
 }
 
-trait EvalInstances {
+trait EvalInstances extends EvalInstances0 {
 
-  implicit val lazyBimonad: Bimonad[Eval] =
+  implicit val evalBimonad: Bimonad[Eval] =
     new Bimonad[Eval] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
       def pure[A](a: A): Eval[A] = Eager(a)
@@ -223,21 +223,53 @@ trait EvalInstances {
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Lazy(f(fa))
     }
 
-  implicit def lazyEq[A: Eq]: Eq[Eval[A]] =
-    new Eq[Eval[A]] {
-      def eqv(lx: Eval[A], ly: Eval[A]): Boolean =
-        lx.value === ly.value
+  implicit def evalOrder[A: Order]: Eq[Eval[A]] =
+    new Order[Eval[A]] {
+      def compare(lx: Eval[A], ly: Eval[A]): Int =
+        lx.value compare ly.value
     }
 
-  implicit def lazyPartialOrder[A: PartialOrder]: Eq[Eval[A]] =
+  implicit def evalGroup[A: Group]: Group[Eval[A]] =
+    new EvalGroup[A] { val algebra = Group[A] }
+}
+
+trait EvalInstances0 extends EvalInstances1 {
+  implicit def evalPartialOrder[A: PartialOrder]: Eq[Eval[A]] =
     new PartialOrder[Eval[A]] {
       def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
         lx.value partialCompare ly.value
     }
 
-  implicit def lazyOrder[A: Order]: Eq[Eval[A]] =
-    new Order[Eval[A]] {
-      def compare(lx: Eval[A], ly: Eval[A]): Int =
-        lx.value compare ly.value
+  implicit def evalMonoid[A: Monoid]: Monoid[Eval[A]] =
+    new EvalMonoid[A] { val algebra = Monoid[A] }
+}
+
+trait EvalInstances1 {
+  implicit def evalEq[A: Eq]: Eq[Eval[A]] =
+    new Eq[Eval[A]] {
+      def eqv(lx: Eval[A], ly: Eval[A]): Boolean =
+        lx.value === ly.value
     }
+
+  implicit def evalSemigroup[A: Semigroup]: Semigroup[Eval[A]] =
+    new EvalSemigroup[A] { val algebra = Semigroup[A] }
+}
+
+trait EvalSemigroup[A] extends Semigroup[Eval[A]] {
+  implicit def algebra: Semigroup[A]
+  def combine(lx: Eval[A], ly: Eval[A]): Eval[A] =
+    for { x <- lx; y <- ly } yield x |+| y
+}
+
+trait EvalMonoid[A] extends Monoid[Eval[A]] with EvalSemigroup[A] {
+  implicit def algebra: Monoid[A]
+  lazy val empty: Eval[A] = Eval.byNeed(algebra.empty)
+}
+
+trait EvalGroup[A] extends Group[Eval[A]] with EvalMonoid[A] {
+  implicit def algebra: Group[A]
+  def inverse(lx: Eval[A]): Eval[A] =
+    lx.map(_.inverse)
+  override def remove(lx: Eval[A], ly: Eval[A]): Eval[A] =
+    for { x <- lx; y <- ly } yield x |-| y
 }
