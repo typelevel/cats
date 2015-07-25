@@ -94,7 +94,7 @@ provide a `Functor` instance for `KVStoreA[_]`.
 ### Import Free in your `build.sbt`
 
 ```scala
-libraryDependencies += "cats" %% "cats-free" % "0.1.0-SNAPSHOT"
+libraryDependencies += "cats" %% "cats-free" % "0.1.2"
 ```
 
 ### Free your ADT
