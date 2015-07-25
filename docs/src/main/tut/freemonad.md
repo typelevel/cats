@@ -88,7 +88,7 @@ operation with successive values. The `Next` type parameter can be
 anything at all, including `Unit`. It can be thought of as a carrier,
 a way to link a single operation with successive operations.
 
-As we will see, the `next` field is also necessary to allowing us to
+As we will see, the `next` field is also necessary to allow us to
 provide a `Functor` instance for `KVStoreA[_]`.
 
 ### Import Free in your `build.sbt`
@@ -213,7 +213,7 @@ ten thousand operations, we might run out of stack space and trigger a
 
 #### 5. Write a compiler for your program
 
-As you may have understood now, `Free[_]` used to create an embedded
+As you may have understood now, `Free[_]` is used to create an embedded
 DSL. By itself, this DSL only represents a sequence of operations
 (defined by a recursive data structure); it doesn't produce anything.
 
