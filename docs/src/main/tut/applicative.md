@@ -16,7 +16,7 @@ functor](apply.md) which adds a single method, `pure`:
 
 This method takes any value and returns the value in the context of
 the functor. For many familiar functors, how to do this is
-obvious. For Option, the `pure` operation wraps the value in
+obvious. For `Option`, the `pure` operation wraps the value in
 `Some`. For `List`, the `pure` operation returns a single element
 `List`:
 
