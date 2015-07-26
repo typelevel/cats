@@ -56,7 +56,7 @@ implicit def function1Functor[In]: Functor[Function1[In, ?]] =
 ```
 
 This example demonstrates the use of the
-[kind-projector compiler plugin](https://github.com/non/kind-projector),
+[kind-projector compiler plugin](https://github.com/non/kind-projector).
 This compiler plugin can help us when we need to change the number of type
 holes. In the example above, we took a type which normally has two type holes, 
 `Function1[?,?]` and constrained one of the holes to be the `In` type, 
