@@ -48,7 +48,7 @@ object ArbitraryK {
   implicit val eval : ArbitraryK[Eval] =
     new ArbitraryK[Eval] {
       def synthesize[A](implicit A: Arbitrary[A]): Arbitrary[Eval[A]] =
-        Arbitrary(A.arbitrary.map(Eval.eagerly(_)))
+        Arbitrary(A.arbitrary.map(Eval.now(_)))
     }
 
   implicit def mapA[A](implicit A: Arbitrary[A]): ArbitraryK[Map[A, ?]] =

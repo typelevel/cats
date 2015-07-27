@@ -17,7 +17,7 @@ abstract class FoldableCheck[F[_]: ArbitraryK: Foldable](name: String) extends C
     forAll { (fa: F[Int]) =>
       val total = iterator(fa).sum
       fa.foldLeft(0)(_ + _) shouldBe total
-      fa.foldRight(Eager(0))((x, ly) => ly.map(x + _)).value shouldBe total
+      fa.foldRight(Now(0))((x, ly) => ly.map(x + _)).value shouldBe total
       fa.fold shouldBe total
       fa.foldMap(identity) shouldBe total
     }
@@ -46,8 +46,8 @@ class FoldableTestsAdditional extends CatsSuite {
 
   // exists method written in terms of foldRight
   def contains[F[_]: Foldable, A: Eq](as: F[A], goal: A): Eval[Boolean] =
-    as.foldRight(Eager(false)) { (a, lb) =>
-      if (a === goal) Eager(true) else lb
+    as.foldRight(Now(false)) { (a, lb) =>
+      if (a === goal) Now(true) else lb
     }
 
 
@@ -58,7 +58,7 @@ class FoldableTestsAdditional extends CatsSuite {
     val ns = (1 to 10).toList
     val total = ns.sum
     assert(F.foldLeft(ns, 0)(_ + _) == total)
-    assert(F.foldRight(ns, Eager(0))((x, ly) => ly.map(x + _)).value == total)
+    assert(F.foldRight(ns, Now(0))((x, ly) => ly.map(x + _)).value == total)
     assert(F.fold(ns) == total)
 
     // more basic checks
@@ -70,7 +70,7 @@ class FoldableTestsAdditional extends CatsSuite {
     assert(contains(large, 10000).value)
 
     // safely build large lists
-    val larger = F.foldRight(large, Eager(List.empty[Int]))((x, lxs) => lxs.map((x + 1) :: _))
+    val larger = F.foldRight(large, Now(List.empty[Int]))((x, lxs) => lxs.map((x + 1) :: _))
     assert(larger.value == large.map(_ + 1))
   }
 
@@ -89,9 +89,9 @@ class FoldableTestsAdditional extends CatsSuite {
     // ensure that the Lazy[B] param to foldRight is actually being
     // handled lazily. it only needs to be evaluated if we reach the
     // "end" of the fold.
-    val trap = Eval.byNeed(bomb[Boolean])
+    val trap = Eval.later(bomb[Boolean])
     val result = F.foldRight(1 #:: 2 #:: Stream.empty, trap) { (n, lb) =>
-      if (n == 2) Eager(true) else lb
+      if (n == 2) Now(true) else lb
     }
     assert(result.value)
   }

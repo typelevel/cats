@@ -40,7 +40,7 @@ object arbitrary {
 
   implicit def evalArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Eval[A]] =
     Arbitrary(Gen.oneOf(
-      A.arbitrary.map(a => Eval.eagerly(a)),
-      A.arbitrary.map(a => Eval.byName(a)),
-      A.arbitrary.map(a => Eval.byNeed(a))))
+      A.arbitrary.map(a => Eval.now(a)),
+      A.arbitrary.map(a => Eval.later(a)),
+      A.arbitrary.map(a => Eval.always(a))))
 }

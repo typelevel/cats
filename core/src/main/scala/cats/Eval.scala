@@ -11,20 +11,20 @@ import cats.syntax.all._
  *
  * There are three basic evaluation strategies:
  *
- *  - Eager:  evaluated immediately
- *  - Lazy:   evaluated once when value is needed
- *  - ByName: evaluated every time value is needed
+ *  - Now:    evaluated immediately
+ *  - Later:  evaluated once when value is needed
+ *  - Always: evaluated every time value is needed
  *
- * The Lazy and ByName are both lazy strategies while Eager is strict.
- * Lazy and ByName are distinguished from each other only by
- * memoization: once evaluated Lazy will save the value to be returned
- * immediately if it is needed again. ByName will run its computation
+ * The Later and Always are both lazy strategies while Now is eager.
+ * Later and Always are distinguished from each other only by
+ * memoization: once evaluated Later will save the value to be returned
+ * immediately if it is needed again. Always will run its computation
  * every time.
  *
  * Eval supports stack-safe lazy computation via the .map and .flatMap
  * methods, which use an internal trampoline to avoid stack overflows.
  * Computation done within .map and .flatMap is always done lazily,
- * even when applied to an Eager instance.
+ * even when applied to a Now instance.
  *
  * It is not generally good style to pattern-match on Eval instances.
  * Rather, use .map and .flatMap to chain computation, and use .value
@@ -38,9 +38,9 @@ sealed abstract class Eval[A] { self =>
   /**
    * Evaluate the computation and return an A value.
    *
-   * For lazy instances, any necessary computation will be performed
-   * at this point. For eager instances, a value will be immediately
-   * returned.
+   * For lazy instances (Later, Always), any necessary computation
+   * will be performed at this point. For eager instances (Now), a
+   * value will be immediately returned.
    */
   def value: A
 
@@ -50,9 +50,12 @@ sealed abstract class Eval[A] { self =>
    *
    * This call is stack-safe -- many .map calls may be chained without
    * consumed additional stack during evaluation.
+   *
+   * Computation performed in f is always lazy, even when called on an
+   * eager (Now) instance.
    */
   def map[B](f: A => B): Eval[B] =
-    flatMap(a => Eager(f(a)))
+    flatMap(a => Now(f(a)))
 
   /**
    * Lazily perform a computation based on an Eval[A], using the
@@ -62,6 +65,9 @@ sealed abstract class Eval[A] { self =>
    * without consumed additional stack during evaluation. It is also
    * written to avoid left-association problems, so that repeated
    * calls to .flatMap will be efficiently applied.
+   *
+   * Computation performed in f is always lazy, even when called on an
+   * eager (Now) instance.
    */
   def flatMap[B](f: A => Eval[B]): Eval[B] =
     this match {
@@ -93,7 +99,7 @@ sealed abstract class Eval[A] { self =>
  * This type should be used when an A value is already in hand, or
  * when the computation to produce an A value is pure and very fast.
  */
-case class Eager[A](value: A) extends Eval[A]
+case class Now[A](value: A) extends Eval[A]
 
 /**
  * Construct a lazy Eval[A] instance.
@@ -102,15 +108,15 @@ case class Eager[A](value: A) extends Eval[A]
  * is equivalent to using a lazy val.
  *
  * When caching is not required or desired (e.g. if the value produced
- * may be large) prefer ByName. When there is no computation
- * necessary, prefer Eager.
+ * may be large) prefer Always. When there is no computation
+ * necessary, prefer Now.
  */
-class Lazy[A](f: () => A) extends Eval[A] {
+class Later[A](f: () => A) extends Eval[A] {
   lazy val value: A = f()
 }
 
-object Lazy {
-  def apply[A](a: => A): Lazy[A] = new Lazy(a _)
+object Later {
+  def apply[A](a: => A): Later[A] = new Later(a _)
 }
 
 /**
@@ -121,32 +127,32 @@ object Lazy {
  *
  * This type will evaluate the computation every time the value is
  * required. It should be avoided except when laziness is required and
- * caching must be avoided. Generally, prefer Lazy.
+ * caching must be avoided. Generally, prefer Later.
  */
-class ByName[A](f: () => A) extends Eval[A] {
+class Always[A](f: () => A) extends Eval[A] {
   def value: A = f()
 }
 
-object ByName {
-  def apply[A](a: => A): ByName[A] = new ByName(a _)
+object Always {
+  def apply[A](a: => A): Always[A] = new Always(a _)
 }
 
 object Eval extends EvalInstances {
 
   /**
-   * Construct an eager Eval[A] value (i.e. Eager[A]).
+   * Construct an eager Eval[A] value (i.e. Now[A]).
    */
-  def eagerly[A](a: A): Eval[A] = Eager(a)
+  def now[A](a: A): Eval[A] = Now(a)
 
   /**
-   * Construct a lazy Eval[A] value with caching (i.e. Lazy[A]).
+   * Construct a lazy Eval[A] value with caching (i.e. Later[A]).
    */
-  def byNeed[A](a: => A): Eval[A] = new Lazy(a _)
+  def later[A](a: => A): Eval[A] = new Later(a _)
 
   /**
-   * Construct a lazy Eval[A] value without caching (i.e. ByName[A]).
+   * Construct a lazy Eval[A] value without caching (i.e. Always[A]).
    */
-  def byName[A](a: => A): Eval[A] = new ByName(a _)
+  def always[A](a: => A): Eval[A] = new Always(a _)
 
   /**
    * Defer a computation which produces an Eval[A] value.
@@ -163,11 +169,11 @@ object Eval extends EvalInstances {
    * These can be useful in cases where the same values may be needed
    * many times.
    */
-  val Unit: Eval[Unit] = Eager(())
-  val True: Eval[Boolean] = Eager(true)
-  val False: Eval[Boolean] = Eager(false)
-  val Zero: Eval[Int] = Eager(0)
-  val One: Eval[Int] = Eager(1)
+  val Unit: Eval[Unit] = Now(())
+  val True: Eval[Boolean] = Now(true)
+  val False: Eval[Boolean] = Now(false)
+  val Zero: Eval[Int] = Now(0)
+  val One: Eval[Int] = Now(1)
 
   /**
    * Compute is a type of Eval[A] that is used to chain computations
@@ -217,10 +223,10 @@ trait EvalInstances extends EvalInstances0 {
   implicit val evalBimonad: Bimonad[Eval] =
     new Bimonad[Eval] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
-      def pure[A](a: A): Eval[A] = Eager(a)
+      def pure[A](a: A): Eval[A] = Now(a)
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
       def extract[A](la: Eval[A]): A = la.value
-      def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Lazy(f(fa))
+      def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
     }
 
   implicit def evalOrder[A: Order]: Eq[Eval[A]] =
@@ -263,7 +269,7 @@ trait EvalSemigroup[A] extends Semigroup[Eval[A]] {
 
 trait EvalMonoid[A] extends Monoid[Eval[A]] with EvalSemigroup[A] {
   implicit def algebra: Monoid[A]
-  lazy val empty: Eval[A] = Eval.byNeed(algebra.empty)
+  lazy val empty: Eval[A] = Eval.later(algebra.empty)
 }
 
 trait EvalGroup[A] extends Group[Eval[A]] with EvalMonoid[A] {

@@ -93,7 +93,7 @@ class SyntaxTests extends CatsSuite with PropertyChecks {
     val a0: A = fa.fold
 
     val f2 = mock[(A, Eval[B]) => Eval[B]]
-    val lb0: Eval[B] = fa.foldRight(Eager(b))(f2)
+    val lb0: Eval[B] = fa.foldRight(Now(b))(f2)
 
     val fz = mock[F[Z]]
     val f3 = mock[Z => A]

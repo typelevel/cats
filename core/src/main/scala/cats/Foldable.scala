@@ -33,12 +33,12 @@ import simulacrum.typeclass
    * Right associative lazy fold on `F` using the folding function 'f'.
    *
    * This method evaluates `lb` lazily (in some cases it will not be
-   * needed), and returns a lazy value. We are using `(A, Lazy[B]) =>
-   * Lazy[B]` to support laziness in a stack-safe way. Chained
+   * needed), and returns a lazy value. We are using `(A, Eval[B]) =>
+   * Eval[B]` to support laziness in a stack-safe way. Chained
    * computation should be performed via .map and .flatMap.
    *
    * For more detailed information about how this method works see the
-   * documentation for `Lazy[_]`.
+   * documentation for `Eval[_]`.
    */
   def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B]
 
@@ -49,10 +49,10 @@ import simulacrum.typeclass
     }
 
   def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
-    foldRight(fa, Eager(Option.empty[B])) { (a, lb) =>
+    foldRight(fa, Now(Option.empty[B])) { (a, lb) =>
       lb.flatMap {
-        case Some(b) => g(a, Eager(b)).map(Some(_))
-        case None => Lazy(Some(f(a)))
+        case Some(b) => g(a, Now(b)).map(Some(_))
+        case None => Later(Some(f(a)))
       }
     }
 
@@ -134,8 +134,8 @@ import simulacrum.typeclass
    * Find the first element matching the predicate, if one exists.
    */
   def find[A](fa: F[A])(f: A => Boolean): Option[A] =
-    foldRight(fa, Eager(Option.empty[A])) { (a, lb) =>
-      if (f(a)) Eager(Some(a)) else lb
+    foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
+      if (f(a)) Now(Some(a)) else lb
     }.value
 
   /**
