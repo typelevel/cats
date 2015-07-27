@@ -5,7 +5,7 @@ import algebra.laws.OrderLaws
 
 import cats.data.{NonEmptyList, OneAnd}
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests}
-import cats.laws.discipline.arbitrary.{lazyArbitrary, oneAndArbitrary}
+import cats.laws.discipline.arbitrary.{evalArbitrary, oneAndArbitrary}
 
 import org.scalacheck.Prop._
 

@@ -28,8 +28,8 @@ class EvalTests extends CatsSuite {
    * In other words, each invocation of run says:
    *
    *  1. What underlying `value` to use.
-   *  2. How to create lazy values (memoized, eager, or by-name).
-   *  3. How many times we expect the lazy value to be calculated.
+   *  2. How to create Eval instances (memoized, eager, or by-name).
+   *  3. How many times we expect the value to be computed.
    */
   def runValue[A: Eq](value: A)(init: A => (Spooky, Eval[A]))(numCalls: Int => Int): Unit = {
     var spin = 0

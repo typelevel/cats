@@ -6,7 +6,7 @@ import cats.syntax.all._
 /**
  * Eval is a monad which controls evaluation.
  *
- * This types wraps a value (or a computation that produces a value)
+ * This type wraps a value (or a computation that produces a value)
  * and can produce it on command via the `.value` method.
  *
  * There are three basic evaluation strategies:

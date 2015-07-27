@@ -34,15 +34,10 @@ abstract class FoldableCheck[F[_]: ArbitraryK: Foldable](name: String) extends C
   }
 
   test("toList/isEmpty/nonEmpty") {
-    forAll { (fa: F[Int], n: Int) =>
+    forAll { (fa: F[Int]) =>
       fa.toList shouldBe iterator(fa).toList
       fa.isEmpty shouldBe iterator(fa).isEmpty
       fa.nonEmpty shouldBe iterator(fa).nonEmpty
-    }
-  }
-
-  test("exists") {
-    forAll { (fa: F[Int], n: Int) =>
     }
   }
 }

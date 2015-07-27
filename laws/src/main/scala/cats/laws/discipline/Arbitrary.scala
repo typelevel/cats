@@ -38,7 +38,7 @@ object arbitrary {
   implicit def optionTArbitrary[F[_], A](implicit F: ArbitraryK[F], A: Arbitrary[A]): Arbitrary[OptionT[F, A]] =
     Arbitrary(F.synthesize[Option[A]].arbitrary.map(OptionT.apply))
 
-  implicit def lazyArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Eval[A]] =
+  implicit def evalArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Eval[A]] =
     Arbitrary(Gen.oneOf(
       A.arbitrary.map(a => Eval.eagerly(a)),
       A.arbitrary.map(a => Eval.byName(a)),
