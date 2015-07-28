@@ -4,12 +4,10 @@ package tests
 import cats.data.{ Func, AppFunc, Const }
 import Func.{ appFunc, appFuncU }
 import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
 
 class FuncTests extends CatsSuite {
+  import cats.laws.discipline.eq._
   implicit def funcEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Func[F, A, B]] =
     Eq.by[Func[F, A, B], A => F[B]](_.run)
   implicit def appFuncEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[AppFunc[F, A, B]] =
