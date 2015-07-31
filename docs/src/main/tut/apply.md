@@ -9,8 +9,8 @@ scaladoc: "#cats.Apply"
 
 `Apply` extends the [`Functor`](functor.md) typeclass (which features the familiar `map`
 function) with a new function `ap`. The `ap` function is similar to `map`
-in that we are transforming a value in a context, the context being the `F` in `F[A]`
-(examples of a context are `Option`, `List` and `Future`).
+in that we are transforming a value in a context (a context being the `F` in `F[A]`;
+a context can be `Option`, `List` or `Future` for example).
 However, the difference between `ap` and `map` is that for `ap` the function that 
 takes care of the transformation is of type `F[A => B]`, whereas for `map` it is `A => B`:
 
