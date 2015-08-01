@@ -26,7 +26,6 @@ functionality, you can pick-and-choose from amongst these modules
 
  * `cats-macros`: Macros used by Cats syntax (*required*).
  * `cats-core`: Core type classes and functionality (*required*).
- * `cats-std`: Type class instances for the standard library (*recommended*).
  * `cats-laws`: Laws for testing type class instances.
  * `cats-free`: "Free" data constructors for various type classes.
  * `cats-state`: Monad and transformer support for state.
@@ -89,9 +88,11 @@ type classes and data types.
 
 Initially Cats will support the following modules:
 
- * `core`: Definitions for widely-used type classes and data types
- * `std`: Standard type class instances and other useful data types.
+ * `macros`: Macro definitions needed for `core` and other projects.
+ * `core`: Definitions for widely-used type classes and data types.
  * `laws`: The encoded laws for type classes, exported to assist third-party testing.
+ * `free`: "Free" data constructors for various type classes.
+ * `state`: Monad and transformer support for state.
  * `tests`: Verifies the laws, and runs any other tests. Not published.
 
 As the type class families grow, it's possible that additional modules

@@ -50,6 +50,7 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %% "simulacrum" % "0.3.0",
     "org.spire-math" %% "algebra" % "0.2.1",
+    "org.spire-math" %% "algebra-std" % "0.2.1",
     "org.typelevel" %% "machinist" % "0.3.0",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.4")
@@ -67,7 +68,7 @@ lazy val disciplineDependencies = Seq(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, free, std, state),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, free, state),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -90,13 +91,13 @@ lazy val docs = project
   .settings(docSettings)
   .settings(tutSettings)
   .settings(tutScalacOptions ~= (_.filterNot(_ == "-Ywarn-unused-import")))
-  .dependsOn(core, std, free, state)
+  .dependsOn(core, free, state)
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "cats")
   .settings(catsSettings)
-  .aggregate(macros, core, laws, free, std, state, tests, docs, bench)
-  .dependsOn(macros, core, laws, free, std, state % "compile;test-internal -> test",
+  .aggregate(macros, core, laws, free, state, tests, docs, bench)
+  .dependsOn(macros, core, laws, free, state % "compile;test-internal -> test",
              tests % "test-internal -> test", bench % "compile-internal;test-internal -> test")
 
 lazy val macros = project
@@ -110,7 +111,7 @@ lazy val core = project.dependsOn(macros)
     sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
   )
 
-lazy val laws = project.dependsOn(macros, core, std)
+lazy val laws = project.dependsOn(macros, core)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings)
   .settings(
@@ -119,14 +120,7 @@ lazy val laws = project.dependsOn(macros, core, std)
     )
   )
 
-lazy val std = project.dependsOn(macros, core)
-  .settings(moduleName := "cats-std")
-  .settings(catsSettings)
-  .settings(
-    libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.1"
-  )
-
-lazy val tests = project.dependsOn(macros, core, std, laws)
+lazy val tests = project.dependsOn(macros, core, laws)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
@@ -136,7 +130,7 @@ lazy val tests = project.dependsOn(macros, core, std, laws)
     )
   )
 
-lazy val bench = project.dependsOn(macros, core, free, std, laws)
+lazy val bench = project.dependsOn(macros, core, free, laws)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
   .settings(noPublishSettings)
