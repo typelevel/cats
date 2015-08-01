@@ -21,8 +21,8 @@ trait EitherInstances extends EitherInstances1 {
       def foldLeft[B, C](fa: Either[A, B], c: C)(f: (C, B) => C): C =
         fa.fold(_ => c, f(c, _))
 
-      def partialFold[B, C](fa: Either[A, B])(f: B => Fold[C]): Fold[C] =
-        fa.fold(_ => Fold.Pass, f)
+      def foldRight[B, C](fa: Either[A, B], lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
+        fa.fold(_ => lc, b => f(b, lc))
     }
 
   implicit def eitherOrder[A, B](implicit A: Order[A], B: Order[B]): Order[Either[A, B]] = new Order[Either[A, B]] {

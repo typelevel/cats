@@ -28,21 +28,25 @@ trait StreamInstances {
       def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
-      def partialFold[A, B](fa: Stream[A])(f: A => Fold[B]): Fold[B] =
-        Fold.partialIterate(fa)(f)
+      def foldRight[A, B](fa: Stream[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Now(fa).flatMap { s =>
+          // Note that we don't use pattern matching to deconstruct the
+          // stream, since that would needlessly force the tail.
+          if (s.isEmpty) lb else f(s.head, Eval.defer(foldRight(s.tail, lb)(f)))
+        }
 
       def traverse[G[_]: Applicative, A, B](fa: Stream[A])(f: A => G[B]): G[Stream[B]] = {
         val G = Applicative[G]
-        val init = G.pure(Stream.empty[B])
+        def init: G[Stream[B]] = G.pure(Stream.empty[B])
 
         // We use foldRight to avoid possible stack overflows. Since
-        // we don't want to return a Lazy[_] instance, we call .value
+        // we don't want to return a Eval[_] instance, we call .value
         // at the end.
         //
         // (We don't worry about internal laziness because traverse
         // has to evaluate the entire stream anyway.)
-        foldRight(fa, Lazy(init)) { a =>
-          Fold.Continue(gsb => G.map2(f(a), gsb)(_ #:: _))
+        foldRight(fa, Later(init)) { (a, lgsb) =>
+          lgsb.map(gsb => G.map2(f(a), gsb)(_ #:: _))
         }.value
       }
 
@@ -52,7 +56,7 @@ trait StreamInstances {
       override def forall[A](fa: Stream[A])(p: A => Boolean): Boolean =
         fa.forall(p)
 
-      override def empty[A](fa: Stream[A]): Boolean = fa.isEmpty
+      override def isEmpty[A](fa: Stream[A]): Boolean = fa.isEmpty
     }
 
   // TODO: eventually use algebra's instances (which will deal with

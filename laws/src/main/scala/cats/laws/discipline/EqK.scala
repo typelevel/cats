@@ -34,8 +34,8 @@ object EqK {
   implicit val list: EqK[List] =
     new EqK[List] { def synthesize[A: Eq]: Eq[List[A]] = implicitly }
 
-  implicit val lazy_ : EqK[Lazy] =
-    new EqK[Lazy] { def synthesize[A: Eq]: Eq[Lazy[A]] = implicitly }
+  implicit val eval: EqK[Eval] =
+    new EqK[Eval] { def synthesize[A: Eq]: Eq[Eval[A]] = implicitly }
 
   implicit def mapA[B: Eq]: EqK[Map[?, B]] =
     new EqK[Map[?, B]] { def synthesize[A: Eq]: Eq[Map[A, B]] = implicitly }

@@ -62,8 +62,8 @@ final case class OneAnd[A, F[_]](head: A, tail: F[A]) {
   /**
    * Right-associative fold on the structure using f.
    */
-  def foldRight[B](b: Lazy[B])(f: A => Fold[B])(implicit F: Foldable[F]): Lazy[B] =
-    Lazy(f(head).complete(F.foldRight(tail, b)(f)))
+  def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
+    Eval.defer(f(head, F.foldRight(tail, lb)(f)))
 
   /**
    * Typesafe equality operator.
@@ -113,23 +113,9 @@ trait OneAndInstances {
     new Foldable[OneAnd[?,F]] {
       override def foldLeft[A, B](fa: OneAnd[A, F], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
-      override def foldRight[A, B](fa: OneAnd[A, F], b: Lazy[B])(f: A => Fold[B]): Lazy[B] =
-        fa.foldRight(b)(f)
-
-      override def partialFold[A, B](fa: OneAnd[A,F])(f: A => Fold[B]): Fold[B] = {
-        import Fold._
-        f(fa.head) match {
-          case b @ Return(_) => b
-          case Continue(c) => foldable.partialFold(fa.tail)(f) match {
-            case Return(b) => Return(c(b))
-            case Continue(cc) => Continue { b => c(cc(b)) }
-            case _ => Continue(c)
-          }
-          case _ => foldable.partialFold(fa.tail)(f)
-        }
-      }
-
-      override def empty[A](fa: OneAnd[A, F]): Boolean = false
+      override def foldRight[A, B](fa: OneAnd[A, F], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa.foldRight(lb)(f)
+      override def isEmpty[A](fa: OneAnd[A, F]): Boolean = false
     }
 
   implicit def oneAndMonad[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[?, F]] =

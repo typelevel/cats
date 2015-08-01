@@ -12,8 +12,8 @@ trait SetInstances extends algebra.std.SetInstances {
       def foldLeft[A, B](fa: Set[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
-      def partialFold[A, B](fa: Set[A])(f: A => Fold[B]): Fold[B] =
-        Fold.partialIterate(fa)(f)
+      def foldRight[A, B](fa: Set[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Foldable.iterateRight(fa.iterator, lb)(f)
 
       override def exists[A](fa: Set[A])(p: A => Boolean): Boolean =
         fa.exists(p)
@@ -21,6 +21,6 @@ trait SetInstances extends algebra.std.SetInstances {
       override def forall[A](fa: Set[A])(p: A => Boolean): Boolean =
         fa.forall(p)
 
-      override def empty[A](fa: Set[A]): Boolean = fa.isEmpty
+      override def isEmpty[A](fa: Set[A]): Boolean = fa.isEmpty
     }
 }

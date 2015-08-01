@@ -38,8 +38,14 @@ trait ListInstances {
       def foldLeft[A, B](fa: List[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
-      def partialFold[A, B](fa: List[A])(f: A => Fold[B]): Fold[B] =
-        Fold.partialIterate(fa)(f)
+      def foldRight[A, B](fa: List[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+        def loop(as: List[A]): Eval[B] =
+          as match {
+            case Nil => lb
+            case h :: t => f(h, Eval.defer(loop(t)))
+          }
+        Eval.defer(loop(fa))
+      }
 
       def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] = {
         val gba = G.pure(Vector.empty[B])
@@ -53,7 +59,7 @@ trait ListInstances {
       override def forall[A](fa: List[A])(p: A => Boolean): Boolean =
         fa.forall(p)
 
-      override def empty[A](fa: List[A]): Boolean = fa.isEmpty
+      override def isEmpty[A](fa: List[A]): Boolean = fa.isEmpty
     }
 
   // TODO: eventually use algebra's instances (which will deal with

@@ -65,15 +65,10 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
     applicativeG.map(traverseF.traverse(value)(axb => traverseXorA.traverse(axb)(f)))(XorT.apply)
 
   def foldLeft[C](c: C)(f: (C, B) => C)(implicit F: Foldable[F]): C =
-    F.foldLeft(value, c)((c, axb) => axb.fold(_ => c, f(c, _)))
+    F.foldLeft(value, c)((c, axb) => axb.foldLeft(c)(f))
 
-  import Fold.{Return, Continue, Pass}
-
-  def foldRight[C](c: Lazy[C])(f: B => Fold[C])(implicit F: Foldable[F]): Lazy[C] =
-    Lazy(partialFold(f).complete(c))
-
-  def partialFold[C](f: B => Fold[C])(implicit F: Foldable[F]): Fold[C] =
-    F.partialFold(value)(axb => axb.fold(_ => Pass, f))
+  def foldRight[C](lc: Eval[C])(f: (B, Eval[C]) => Eval[C])(implicit F: Foldable[F]): Eval[C] =
+    F.foldRight(value, lc)((axb, lc) => axb.foldRight(lc)(f))
 
   def merge[AA >: A](implicit ev: B <:< AA, F: Functor[F]): F[AA] = F.map(value)(_.fold(identity, ev.apply))
 

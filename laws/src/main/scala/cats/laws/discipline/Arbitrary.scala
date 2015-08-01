@@ -38,9 +38,9 @@ object arbitrary {
   implicit def optionTArbitrary[F[_], A](implicit F: ArbitraryK[F], A: Arbitrary[A]): Arbitrary[OptionT[F, A]] =
     Arbitrary(F.synthesize[Option[A]].arbitrary.map(OptionT.apply))
 
-  implicit def foldArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Fold[A]] =
-    Arbitrary(Gen.oneOf(getArbitrary[A].map(Fold.Return(_)), getArbitrary[A => A].map(Fold.Continue(_)), Gen.const(Fold.Pass[A])))
-
-  implicit def lazyArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Lazy[A]] =
-    Arbitrary(Gen.oneOf(A.arbitrary.map(Lazy.eager), A.arbitrary.map(a => Lazy.byName(a)), A.arbitrary.map(a => Lazy.byNeed(a))))
+  implicit def evalArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Eval[A]] =
+    Arbitrary(Gen.oneOf(
+      A.arbitrary.map(a => Eval.now(a)),
+      A.arbitrary.map(a => Eval.later(a)),
+      A.arbitrary.map(a => Eval.always(a))))
 }

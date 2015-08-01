@@ -2,8 +2,6 @@ package cats
 
 import simulacrum.typeclass
 
-import Fold.{Return, Pass, Continue}
-
 /**
  * Data structures that can be reduced to a summary value.
  *
@@ -30,7 +28,7 @@ import Fold.{Return, Pass, Continue}
   /**
    * Right-associative reduction on `F` using the function `f`.
    */
-  def reduceRight[A](fa: F[A])(f: A => Fold[A]): Lazy[A] =
+  def reduceRight[A](fa: F[A])(f: (A, Eval[A]) => Eval[A]): Eval[A] =
     reduceRightTo(fa)(identity)(f)
 
   /**
@@ -71,13 +69,13 @@ import Fold.{Return, Pass, Continue}
    * Apply `f` to the "initial element" of `fa` and lazily combine it
    * with every other value using the given function `g`.
    */
-  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[B]
+  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B]
 
   /**
    * Overriden from `Foldable[_]` for efficiency.
    */
-  override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[Option[B]] =
-    Lazy(Some(reduceRightTo(fa)(f)(g).value))
+  override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+    reduceRightTo(fa)(f)(g).map(Option(_))
 
   /**
    * Traverse `F[A]` using `Apply[G]`.
@@ -132,10 +130,10 @@ trait CompositeReducible[F[_], G[_]] extends Reducible[λ[α => F[G[α]]]] with 
     }
   }
 
-  override def reduceRightTo[A, B](fga: F[G[A]])(f: A => B)(g: A => Fold[B]): Lazy[B] = {
+  override def reduceRightTo[A, B](fga: F[G[A]])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def toB(ga: G[A]): B = G.reduceRightTo(ga)(f)(g).value
-    F.reduceRightTo(fga)(toB) { ga =>
-      Fold.Continue(b => G.foldRight(ga, Lazy(b))(g).value)
+    F.reduceRightTo(fga)(toB) { (ga, lb) =>
+      G.foldRight(ga, lb)(g)
     }
   }
 }
@@ -156,28 +154,21 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
     G.foldLeft(ga, f(b, a))(f)
   }
 
-  def partialFold[A, B](fa: F[A])(f: A => Fold[B]): Fold[B] = {
-    val (a, ga) = split(fa)
-    def right: Fold[B] = G.partialFold(ga)(f)
-    f(a) match {
-      case Return(b) => Return(b)
-      case Continue(g) => right compose g
-      case _ => right
+  def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    Always(split(fa)).flatMap { case (a, ga) =>
+      f(a, G.foldRight(ga, lb)(f))
     }
-  }
 
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B = {
     val (a, ga) = split(fa)
     G.foldLeft(ga, f(a))((b, a) => g(b, a))
   }
 
-  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[B] = {
-    val (a, ga) = split(fa)
-    Lazy {
-      G.reduceRightToOption(ga)(f)(g).value match {
-        case None => f(a)
-        case Some(b) => g(a).complete(Lazy.eager(b))
+  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+    Always(split(fa)).flatMap { case (a, ga) =>
+      G.reduceRightToOption(ga)(f)(g).flatMap {
+        case Some(b) => g(a, Now(b))
+        case None => Later(f(a))
       }
     }
-  }
 }

@@ -10,14 +10,12 @@ import simulacrum.typeclass
  * methods will fold together (combine) the values contained in the
  * collection to produce a single result. Most collection types have
  * `foldLeft` methods, which will usually be used by the associationed
- * `Fold[_]` instance.
+ * `Foldable[_]` instance.
  *
  * Foldable[F] is implemented in terms of two basic methods:
  *
  *  - `foldLeft(fa, b)(f)` eagerly folds `fa` from left-to-right.
  *  - `foldRight(fa, b)(f)` lazily folds `fa` from right-to-left.
- *
- * (Actually `foldRight` is implemented in terms of `partialFold`.)
  *
  * Beyond these it provides many other useful methods related to
  * folding over F[A] values.
@@ -34,21 +32,15 @@ import simulacrum.typeclass
   /**
    * Right associative lazy fold on `F` using the folding function 'f'.
    *
-   * This method evaluates `b` lazily (in some cases it will not be
-   * needed), and returns a lazy value. We are using `A => Fold[B]` to
-   * support laziness in a stack-safe way.
+   * This method evaluates `lb` lazily (in some cases it will not be
+   * needed), and returns a lazy value. We are using `(A, Eval[B]) =>
+   * Eval[B]` to support laziness in a stack-safe way. Chained
+   * computation should be performed via .map and .flatMap.
    *
    * For more detailed information about how this method works see the
-   * documentation for `Fold[_]`.
+   * documentation for `Eval[_]`.
    */
-  def foldRight[A, B](fa: F[A], lb: Lazy[B])(f: A => Fold[B]): Lazy[B] =
-    Lazy(partialFold[A, B](fa)(f).complete(lb))
-
-  /**
-   * Low-level method that powers `foldRight`.
-   */
-  def partialFold[A, B](fa: F[A])(f: A => Fold[B]): Fold[B]
-
+  def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B]
 
   def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
     foldLeft(fa, Option.empty[B]) {
@@ -56,11 +48,11 @@ import simulacrum.typeclass
       case (None, a) => Some(f(a))
     }
 
-  def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[Option[B]] =
-    foldRight(fa, Lazy.eager(Option.empty[B])) { a =>
-      Fold.Continue {
-        case None => Some(f(a))
-        case Some(b) => Some(g(a).complete(Lazy.eager(f(a))))
+  def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+    foldRight(fa, Now(Option.empty[B])) { (a, lb) =>
+      lb.flatMap {
+        case Some(b) => g(a, Now(b)).map(Some(_))
+        case None => Later(Some(f(a)))
       }
     }
 
@@ -142,10 +134,9 @@ import simulacrum.typeclass
    * Find the first element matching the predicate, if one exists.
    */
   def find[A](fa: F[A])(f: A => Boolean): Option[A] =
-    foldRight(fa, Lazy.eager(None: Option[A])) { a =>
-      if (f(a)) Fold.Return(Some(a)) else Fold.Pass
+    foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
+      if (f(a)) Now(Some(a)) else lb
     }.value
-
 
   /**
    * Check whether at least one element satisfies the predicate.
@@ -153,8 +144,8 @@ import simulacrum.typeclass
    * If there are no elements, the result is `false`.
    */
   def exists[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Lazy.eager(false)) { a =>
-      if (p(a)) Fold.Return(true) else Fold.Pass
+    foldRight(fa, Eval.False) { (a, lb) =>
+      if (p(a)) Eval.True else lb
     }.value
 
   /**
@@ -163,8 +154,8 @@ import simulacrum.typeclass
    * If there are no elements, the result is `true`.
    */
   def forall[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Lazy.eager(true)) { a =>
-      if (p(a)) Fold.Pass[Boolean] else Fold.Return(false)
+    foldRight(fa, Eval.True) { (a, lb) =>
+      if (p(a)) lb else Eval.False
     }.value
 
   /**
@@ -175,7 +166,6 @@ import simulacrum.typeclass
       buf += a
     }.toList
 
-
   /**
    * Convert F[A] to a List[A], only including elements which match `p`.
    */
@@ -183,7 +173,6 @@ import simulacrum.typeclass
     foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
       if (p(a)) buf += a else buf
     }.toList
-
 
   /**
    * Convert F[A] to a List[A], dropping all initial elements which
@@ -194,42 +183,50 @@ import simulacrum.typeclass
       if (buf.nonEmpty || p(a)) buf += a else buf
     }.toList
 
+  /**
+   * Returns true if there are no elements. Otherwise false.
+   */
+  def isEmpty[A](fa: F[A]): Boolean =
+    foldRight(fa, Eval.True)((_, _) => Eval.False).value
+
+  def nonEmpty[A](fa: F[A]): Boolean =
+    !isEmpty(fa)
 
   /**
    * Compose this `Foldable[F]` with a `Foldable[G]` to create
    * a `Foldable[F[G]]` instance.
    */
-  def compose[G[_]](implicit G0: Foldable[G]): Foldable[λ[α => F[G[α]]]] =
+  def compose[G[_]](implicit ev: Foldable[G]): Foldable[λ[α => F[G[α]]]] =
     new CompositeFoldable[F, G] {
-      implicit def F: Foldable[F] = self
-      implicit def G: Foldable[G] = G0
+      val F = self
+      val G = ev
     }
-
-  /**
-   * Returns true if there are no elements. Otherwise false.
-   */
-  def empty[A](fa: F[A]): Boolean =
-    foldRight(fa, Lazy.eager(true)) { _ =>
-      Fold.Return(false)
-    }.value
 }
 
 /**
- * Methods that apply to 2 nested Foldable instances
+ *  Methods that apply to 2 nested Foldable instances
  */
 trait CompositeFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] {
   implicit def F: Foldable[F]
   implicit def G: Foldable[G]
 
   /**
-   * Left assocative fold on F[G[A]] using 'f'
+   *  Left assocative fold on F[G[A]] using 'f'
    */
   def foldLeft[A, B](fga: F[G[A]], b: B)(f: (B, A) => B): B =
     F.foldLeft(fga, b)((b, a) => G.foldLeft(a, b)(f))
 
   /**
-   * Right associative lazy fold on `F` using the folding function 'f'.
+   *  Right associative lazy fold on `F` using the folding function 'f'.
    */
-  def partialFold[A, B](fga: F[G[A]])(f: A => Fold[B]): Fold[B] =
-    F.partialFold(fga)(ga => G.partialFold(ga)(f))
+  def foldRight[A, B](fga: F[G[A]], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    F.foldRight(fga, lb)((ga, lb) => G.foldRight(ga, lb)(f))
+}
+
+object Foldable {
+  def iterateRight[A, B](it: Iterator[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+    def loop(): Eval[B] =
+      Eval.defer(if (it.hasNext) f(it.next, loop()) else lb)
+    loop()
+  }
 }

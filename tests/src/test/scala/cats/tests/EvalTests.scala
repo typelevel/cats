@@ -5,7 +5,7 @@ import scala.math.min
 
 // TODO: monad laws
 
-class LazyTests extends CatsSuite {
+class EvalTests extends CatsSuite {
 
   /**
    * Class for spooky side-effects and action-at-a-distance.
@@ -16,7 +16,7 @@ class LazyTests extends CatsSuite {
   class Spooky(var counter: Int = 0)
 
   /**
-   * This method creates a Lazy[A] instance (along with a
+   * This method creates a Eval[A] instance (along with a
    * corresponding Spooky instance) from an initial `value` using the
    * given `init` function.
    *
@@ -28,10 +28,10 @@ class LazyTests extends CatsSuite {
    * In other words, each invocation of run says:
    *
    *  1. What underlying `value` to use.
-   *  2. How to create lazy values (memoized, eager, or by-name).
-   *  3. How many times we expect the lazy value to be calculated.
+   *  2. How to create Eval instances (memoized, eager, or by-name).
+   *  3. How many times we expect the value to be computed.
    */
-  def runValue[A: Eq](value: A)(init: A => (Spooky, Lazy[A]))(numCalls: Int => Int): Unit = {
+  def runValue[A: Eq](value: A)(init: A => (Spooky, Eval[A]))(numCalls: Int => Int): Unit = {
     var spin = 0
     def nTimes(n: Int, numEvals: Int): Unit = {
       val (spooky, lz) = init(value)
@@ -46,32 +46,32 @@ class LazyTests extends CatsSuite {
   }
 
   // has the semantics of lazy val: 0 or 1 evaluations
-  def memoized[A](value: A): (Spooky, Lazy[A]) = {
+  def memoized[A](value: A): (Spooky, Eval[A]) = {
     val spooky = new Spooky
-    (spooky, Lazy { spooky.counter += 1; value })
+    (spooky, Eval.later { spooky.counter += 1; value })
   }
 
-  test("memoized: Lazy(_)") {
+  test("memoized: Eval.later(_)") {
     runValue(999)(memoized)(n => min(n, 1))
   }
 
   // has the semantics of val: 1 evaluation
-  def eager[A](value: A): (Spooky, Lazy[A]) = {
+  def eager[A](value: A): (Spooky, Eval[A]) = {
     val spooky = new Spooky
-    (spooky, Lazy.eager { spooky.counter += 1; value })
+    (spooky, Eval.now { spooky.counter += 1; value })
   }
 
-  test("eager: Lazy.eager(_)") {
+  test("eager: Eval.now(_)") {
     runValue(999)(eager)(n => 1)
   }
 
   // has the semantics of def: N evaluations
-  def byName[A](value: A): (Spooky, Lazy[A]) = {
+  def always[A](value: A): (Spooky, Eval[A]) = {
     val spooky = new Spooky
-    (spooky, Lazy.byName { spooky.counter += 1; value })
+    (spooky, Eval.always { spooky.counter += 1; value })
   }
 
-  test("by-name: Lazy.byName(_)") {
-    runValue(999)(byName)(n => n)
+  test("by-name: Eval.always(_)") {
+    runValue(999)(always)(n => n)
   }
 }
