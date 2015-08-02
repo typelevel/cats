@@ -6,11 +6,11 @@ import java.io.{ ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream,
 import org.scalacheck.Prop
 import org.scalacheck.Prop.{ False, Proof, Result }
 
-/**
- * Check for Java Serializability.
- */
-object SerializableLaws {
+private[laws] object Platform {
+
   // scalastyle:off null
+  // Scala-js does not implement the Serializable interface, so the real test is for JVM only.
+  @inline
   def serializable[A](a: A): Prop =
     Prop { _ =>
       val baos = new ByteArrayOutputStream()

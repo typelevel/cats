@@ -10,7 +10,7 @@ import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import algebra.laws.GroupLaws
 
-class CokleisliTests extends CatsSuite {
+class CokleisliTests extends Platform.UltraSlowCatsSuite {
 
   implicit def cokleisliEq[F[_], A, B](implicit A: Arbitrary[F[A]], FB: Eq[B]): Eq[Cokleisli[F, A, B]] =
     Eq.by[Cokleisli[F, A, B], F[A] => B](_.run)

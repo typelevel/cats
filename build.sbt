@@ -3,7 +3,10 @@ import com.typesafe.sbt.SbtSite.SiteKeys._
 import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import pl.project13.scala.sbt.SbtJmh._
 import sbtunidoc.Plugin.UnidocKeys._
+import ReleaseTransformations._
 import ScoverageSbtPlugin._
+
+import org.scalajs.sbtplugin.cross.CrossProject
 
 lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageMinimum := 60,
@@ -19,37 +22,15 @@ lazy val buildSettings = Seq(
 )
 
 lazy val commonSettings = Seq(
-  scalacOptions ++= Seq(
-    "-deprecation",
-    "-encoding", "UTF-8",
-    "-feature",
-    "-language:existentials",
-    "-language:higherKinds",
-    "-language:implicitConversions",
-    "-language:experimental.macros",
-    "-unchecked",
-    "-Xfatal-warnings",
-    "-Xlint",
-    "-Yinline-warnings",
-    "-Yno-adapted-args",
-    "-Ywarn-dead-code",
-    "-Ywarn-numeric-widen",
-    "-Ywarn-value-discard",
-    "-Xfuture"
-  ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 11)) => Seq("-Ywarn-unused-import")
-    case _             => Seq.empty
-  }),
-  scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
-  scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
+  scalacOptions ++= commonScalacOptions,
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %% "simulacrum" % "0.3.0",
-    "org.spire-math" %% "algebra" % "0.2.1",
+    "com.github.mpilquist" %% "simulacrum" % "0.4.0",
+    "org.spire-math" %% "algebra" % "0.3.1",
     "org.typelevel" %% "machinist" % "0.3.0",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.4")
@@ -58,16 +39,25 @@ lazy val commonSettings = Seq(
     "scm:git:git@github.com:non/cats.git"))
 )
 
+lazy val commonJsSettings = Seq(
+  scalaJSStage in Global := FastOptStage,
+  parallelExecution in Test := false
+)
+
+lazy val commonJvmSettings = Seq(
+  parallelExecution in Test := false
+)
+
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
 lazy val disciplineDependencies = Seq(
-  "org.scalacheck" %% "scalacheck" % "1.12.4",
-  "org.typelevel" %% "discipline" % "0.3"
+  libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.12.4",
+  libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
 )
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, free, std, state),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM, freeJVM, stdJVM, stateJVM),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -90,65 +80,113 @@ lazy val docs = project
   .settings(docSettings)
   .settings(tutSettings)
   .settings(tutScalacOptions ~= (_.filterNot(_ == "-Ywarn-unused-import")))
-  .dependsOn(core, std, free, state)
+  .settings(commonJvmSettings)
+  .dependsOn(coreJVM, stdJVM, freeJVM, stateJVM)
 
 lazy val cats = project.in(file("."))
+  .settings(moduleName := "root")
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .aggregate(catsJVM, catsJS)
+  .dependsOn(catsJVM, catsJS, testsJVM % "test-internal -> test", stdJVM % "compile;test-internal -> test", bench % "compile-internal;test-internal -> test")
+
+lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
-  .aggregate(macros, core, laws, free, std, state, tests, docs, bench)
-  .dependsOn(macros, core, laws, free, std, state % "compile;test-internal -> test",
-             tests % "test-internal -> test", bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, coreJVM, lawsJVM, testsJVM, docs, freeJVM, stdJVM, bench, stateJVM)
+  .dependsOn(macrosJVM, coreJVM, lawsJVM, testsJVM, docs, freeJVM, stdJVM, bench, stateJVM)
+  
+lazy val catsJS = project.in(file(".catsJS"))
+  .settings(moduleName := "cats")
+  .settings(catsSettings)
+  .aggregate(macrosJS, coreJS, lawsJS, testsJS, freeJS, stdJS, stateJS)
+  .dependsOn(macrosJS, coreJS, lawsJS, testsJS, freeJS, stdJS, stateJS)
+  .enablePlugins(ScalaJSPlugin)
 
-lazy val macros = project
+lazy val macros = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-macros")
-  .settings(catsSettings)
+  .settings(catsSettings:_*)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
 
-lazy val core = project.dependsOn(macros)
+lazy val macrosJVM = macros.jvm 
+lazy val macrosJS = macros.js
+
+lazy val core = crossProject.crossType(CrossType.Pure)
+  .dependsOn(macros)
   .settings(moduleName := "cats-core")
-  .settings(catsSettings)
+  .settings(catsSettings:_*)
   .settings(
     sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
   )
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
 
-lazy val laws = project.dependsOn(macros, core, std)
+lazy val coreJVM = core.jvm
+lazy val coreJS = core.js
+
+lazy val laws = crossProject
+  .dependsOn(macros, core, std)
   .settings(moduleName := "cats-laws")
-  .settings(catsSettings)
-  .settings(
-    libraryDependencies ++= disciplineDependencies ++ Seq(
-      "org.spire-math" %% "algebra-laws" % "0.2.1"
-    )
-  )
+  .settings(catsSettings:_*)
+  .settings(disciplineDependencies:_*)
+  .settings(libraryDependencies += "org.spire-math" %%% "algebra-laws" % "0.3.1")
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
 
-lazy val std = project.dependsOn(macros, core)
+lazy val lawsJVM = laws.jvm
+lazy val lawsJS = laws.js
+
+
+lazy val std = crossProject.crossType(CrossType.Pure)
+  .dependsOn(macros, core)
   .settings(moduleName := "cats-std")
-  .settings(catsSettings)
-  .settings(
-    libraryDependencies += "org.spire-math" %% "algebra-std" % "0.2.1"
-  )
+  .settings(catsSettings:_*)
+  .settings(libraryDependencies += "org.spire-math" %%% "algebra-std" % "0.3.1")
 
-lazy val tests = project.dependsOn(macros, core, std, laws)
-  .settings(moduleName := "cats-tests")
-  .settings(catsSettings)
-  .settings(noPublishSettings)
-  .settings(
-    libraryDependencies ++= disciplineDependencies ++ Seq(
-      "org.scalatest" %% "scalatest" % "2.2.5" % "test"
-    )
-  )
+lazy val stdJVM = std.jvm
+lazy val stdJS = std.js
 
-lazy val bench = project.dependsOn(macros, core, free, std, laws)
+
+lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, stdJVM, lawsJVM)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
   .settings(noPublishSettings)
   .settings(jmhSettings)
+  .settings(commonJvmSettings)
 
-lazy val free = project.dependsOn(macros, core, tests % "test-internal -> test")
+lazy val free = crossProject.crossType(CrossType.Pure)
+  .dependsOn(macros, core, tests % "test-internal -> test")
   .settings(moduleName := "cats-free")
-  .settings(catsSettings)
+  .settings(catsSettings:_*)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
 
-lazy val state = project.dependsOn(macros, core, free, tests % "test-internal -> test")
+lazy val freeJVM = free.jvm
+lazy val freeJS = free.js
+
+lazy val state = crossProject.crossType(CrossType.Pure)
+  .dependsOn(macros, core, free, tests % "test-internal -> test")
   .settings(moduleName := "cats-state")
-  .settings(catsSettings)
+  .settings(catsSettings:_*)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val stateJVM = state.jvm
+lazy val stateJS = state.js
+
+lazy val tests = crossProject
+  .dependsOn(macros, core, std, laws)
+  .settings(moduleName := "cats-tests")
+  .settings(catsSettings:_*)
+  .settings(disciplineDependencies:_*)
+  .settings(noPublishSettings:_*)
+  .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test")
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val testsJVM = tests.jvm
+lazy val testsJS = tests.js
 
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/non/cats")),
@@ -178,15 +216,116 @@ lazy val publishSettings = Seq(
   )
 )
 
+// These aliases serialise the build for the benefit of Travis-CI.
+addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;freeJVM/test;stdJVM/compile;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;docs/test;bench/test")
+
+addCommandAlias("validateJVM", ";buildJVM;scalastyle;buildJVM;scalastyle;unidoc;tut")
+
+addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;freeJS/compile;freeJS/test;stdJS/compile;stateJS/compile;stateJS/test;lawsJS/compile;testsJS/test")
+
+addCommandAlias("validate", ";validateJVM;validateJS")
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Base Build Settings - Should not need to edit below this line. 
+// These settings could also come from another file or a plugin.
+// The only issue if coming from a plugin is that the Macro lib versions 
+// are hard coded, so an overided facility would be required.
+
+addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
+
 lazy val noPublishSettings = Seq(
   publish := (),
   publishLocal := (),
   publishArtifact := false
 )
 
-addCommandAlias("validate", ";compile;test;scalastyle;test:scalastyle;unidoc;tut")
+lazy val crossVersionSharedSources: Seq[Setting[_]] =
+  Seq(Compile, Test).map { sc =>
+    (unmanagedSourceDirectories in sc) ++= {
+      (unmanagedSourceDirectories in sc ).value.map {
+        dir:File => new File(dir.getPath + "_" + scalaBinaryVersion.value)
+      }
+    }
+  }
 
-addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
+lazy val scalaMacroDependencies: Seq[Setting[_]] = Seq(
+  libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value % "provided",
+  libraryDependencies ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      // if scala 2.11+ is used, quasiquotes are merged into scala-reflect
+      case Some((2, scalaMajor)) if scalaMajor >= 11 => Seq()
+      // in Scala 2.10, quasiquotes are provided by macro paradise
+      case Some((2, 10)) =>
+        Seq(
+          compilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full),
+              "org.scalamacros" %% "quasiquotes" % "2.0.1" cross CrossVersion.binary
+        )
+    }
+  }
+)
+
+lazy val commonScalacOptions = Seq(
+  "-deprecation",
+  "-encoding", "UTF-8",
+  "-feature",
+  "-language:existentials",
+  "-language:higherKinds",
+  "-language:implicitConversions",
+  "-language:experimental.macros",
+  "-unchecked",
+  "-Xfatal-warnings",
+  "-Xlint",
+  "-Yinline-warnings",
+  "-Yno-adapted-args",
+  "-Ywarn-dead-code",
+  "-Ywarn-numeric-widen",
+  "-Ywarn-value-discard",
+  "-Xfuture"
+)
+
+lazy val sharedPublishSettings = Seq(
+  releaseCrossBuild := true,
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
+  publishMavenStyle := true,
+  publishArtifact in Test := false,
+  pomIncludeRepository := Function.const(false),
+  publishTo := {
+    val nexus = "https://oss.sonatype.org/"
+    if (isSnapshot.value)
+      Some("Snapshots" at nexus + "content/repositories/snapshots")
+    else
+      Some("Releases" at nexus + "service/local/staging/deploy/maven2")
+  }
+)
+ 
+lazy val sharedReleaseProcess = Seq(
+  releaseProcess := Seq[ReleaseStep](
+    checkSnapshotDependencies,
+    inquireVersions,
+    runClean,
+    runTest,
+    setReleaseVersion,
+    commitReleaseVersion,
+    tagRelease,
+    publishArtifacts,
+    setNextVersion,
+    commitNextVersion,
+    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
+    pushChanges)
+)
+
+lazy val warnUnusedImport = Seq(
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 10)) =>
+        Seq()
+      case Some((2, n)) if n >= 11 =>
+        Seq("-Ywarn-unused-import")
+    }
+  },
+  scalacOptions in (Compile, console) ~= {_.filterNot("-Ywarn-unused-import" == _)},
+  scalacOptions in (Test, console) <<= (scalacOptions in (Compile, console))
+)
 
 // For Travis CI - see http://www.cakesolutions.net/teamblogs/publishing-artefacts-to-oss-sonatype-nexus-using-sbt-and-travis-ci
 credentials ++= (for {
