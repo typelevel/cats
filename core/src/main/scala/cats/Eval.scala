@@ -91,6 +91,7 @@ sealed abstract class Eval[A] { self =>
     }
 }
 
+
 /**
  * Construct an eager Eval[A] instance.
  *
@@ -101,6 +102,7 @@ sealed abstract class Eval[A] { self =>
  */
 case class Now[A](value: A) extends Eval[A]
 
+
 /**
  * Construct a lazy Eval[A] instance.
  *
@@ -110,9 +112,26 @@ case class Now[A](value: A) extends Eval[A]
  * When caching is not required or desired (e.g. if the value produced
  * may be large) prefer Always. When there is no computation
  * necessary, prefer Now.
+ *
+ * Once Later has been evaluated, the closure (and any values captured
+ * by the closure) will not be retained, and will be available for
+ * garbage collection.
  */
 class Later[A](f: () => A) extends Eval[A] {
-  lazy val value: A = f()
+  private[this] var thunk: Function0[A] = f
+
+  // The idea here is that `f` may have captured very large
+  // structures, but produce a very small result. In this case, once
+  // we've calculated a value, we would prefer to be able to free
+  // everything else.
+  //
+  // (For situations where `f` is small, but the output will be very
+  // expensive to store, consider using `Always`.)
+  lazy val value: A = {
+    val result = thunk()
+    thunk = null // scalastyle:off
+    result
+  }
 }
 
 object Later {
