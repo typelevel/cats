@@ -118,7 +118,7 @@ case class Now[A](value: A) extends Eval[A]
  * garbage collection.
  */
 class Later[A](f: () => A) extends Eval[A] {
-  private[this] var thunk: Function0[A] = f
+  private[this] var thunk: () => A = f
 
   // The idea here is that `f` may have captured very large
   // structures, but produce a very small result. In this case, once
