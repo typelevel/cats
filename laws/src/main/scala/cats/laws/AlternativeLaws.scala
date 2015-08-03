@@ -5,7 +5,7 @@ import cats.syntax.all._
 
 trait AlternativeLaws[F[_]] extends ApplicativeLaws[F] with MonoidKLaws[F] {
   implicit override def F: Alternative[F]
-  implicit def algebra[A]: Monoid[F[A]] = F.algebra[A]
+  implicit def algebra[A]: Monoid[F[A]] = F[A]
 
   def alternativeRightAbsorption[A, B](ff: F[A => B]): IsEq[F[B]] =
     (F.empty[A] ap ff) <-> F.empty[B]

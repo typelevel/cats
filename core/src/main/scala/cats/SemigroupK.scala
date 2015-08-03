@@ -20,7 +20,7 @@ import simulacrum.{op, typeclass}
  *    The combination operation just depends on the structure of F,
  *    but not the structure of A.
  */
-@typeclass trait SemigroupK[F[_]] extends Serializable { self =>
+@typeclass trait SemigroupK[F[_]] extends AlgebraK[Semigroup, F] with Serializable { self =>
 
   /**
    * Combine two F[A] values.
@@ -39,7 +39,7 @@ import simulacrum.{op, typeclass}
   /**
    * Given a type A, create a concrete Semigroup[F[A]].
    */
-  def algebra[A]: Semigroup[F[A]] =
+  def apply[A]: Semigroup[F[A]] =
     new Semigroup[F[A]] {
       def combine(x: F[A], y: F[A]): F[A] = self.combine(x, y)
     }
