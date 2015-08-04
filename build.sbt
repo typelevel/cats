@@ -17,8 +17,8 @@ lazy val scoverageSettings = Seq(
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
-  scalaVersion := "2.11.7",
-  crossScalaVersions := Seq("2.10.5", "2.11.7")
+  scalaVersion := "2.11.6",
+  crossScalaVersions := Seq("2.10.5", "2.11.6")
 )
 
 lazy val commonSettings = Seq(
