@@ -9,9 +9,9 @@ script:
         "$TRAVIS_BRANCH" == "master" &&
         $(cat version.sbt) =~ "-SNAPSHOT"
   ]]; then
-    sbt ++$TRAVIS_SCALA_VERSION coverage validate coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean validate publish gitSnapshots publish ;
+    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean validate publish gitSnapshots publish ;
   else
-    sbt ++$TRAVIS_SCALA_VERSION coverage validate coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean validate publishLocal ;
+    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean validate publishLocal ;
   fi
 notifications:
   webhooks:
