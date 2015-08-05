@@ -37,7 +37,7 @@ lazy val commonSettings = Seq(
   ),
   scmInfo := Some(ScmInfo(url("https://github.com/non/cats"),
     "scm:git:git@github.com:non/cats.git"))
-)
+) ++ warnUnusedImport
 
 lazy val commonJsSettings = Seq(
   scalaJSStage in Global := FastOptStage,
@@ -45,7 +45,8 @@ lazy val commonJsSettings = Seq(
 )
 
 lazy val commonJvmSettings = Seq(
-  parallelExecution in Test := false
+  parallelExecution in Test := false,
+  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
 )
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
