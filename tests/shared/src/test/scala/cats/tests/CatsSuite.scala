@@ -16,6 +16,10 @@ import scala.util.{Failure, Success, Try}
  * boilerplate in Cats tests.
  */
 trait CatsSuite extends FunSuite with Matchers with Discipline with AllInstances with AllSyntax with TestInstances {
+
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration = PropertyCheckConfiguration(
+      minSuccessful = Platform.minSuccessful, maxDiscardedFactor = Platform.maxDiscardedFactor)
+
   // disable scalatest's ===
   override def convertToEqualizer[T](left: T): Equalizer[T] = ???
 }
