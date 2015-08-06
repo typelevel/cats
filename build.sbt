@@ -17,8 +17,8 @@ lazy val scoverageSettings = Seq(
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
-  scalaVersion := "2.11.7",
-  crossScalaVersions := Seq("2.10.5", "2.11.7")
+  scalaVersion := "2.11.6",
+  crossScalaVersions := Seq("2.10.5", "2.11.6")
 )
 
 lazy val commonSettings = Seq(
@@ -31,6 +31,7 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %% "simulacrum" % "0.4.0",
     "org.spire-math" %% "algebra" % "0.3.1",
+    "org.spire-math" %% "algebra-std" % "0.3.1",
     "org.typelevel" %% "machinist" % "0.3.0",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.4")
@@ -58,7 +59,7 @@ lazy val disciplineDependencies = Seq(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM, freeJVM, stdJVM, stateJVM),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM, freeJVM, stateJVM),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -82,26 +83,26 @@ lazy val docs = project
   .settings(tutSettings)
   .settings(tutScalacOptions ~= (_.filterNot(_ == "-Ywarn-unused-import")))
   .settings(commonJvmSettings)
-  .dependsOn(coreJVM, stdJVM, freeJVM, stateJVM)
+  .dependsOn(coreJVM, freeJVM, stateJVM)
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "root")
   .settings(catsSettings)
   .settings(noPublishSettings)
   .aggregate(catsJVM, catsJS)
-  .dependsOn(catsJVM, catsJS, testsJVM % "test-internal -> test", stdJVM % "compile;test-internal -> test", bench % "compile-internal;test-internal -> test")
+  .dependsOn(catsJVM, catsJS, testsJVM % "test-internal -> test", bench % "compile-internal;test-internal -> test")
 
 lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
-  .aggregate(macrosJVM, coreJVM, lawsJVM, testsJVM, docs, freeJVM, stdJVM, bench, stateJVM)
-  .dependsOn(macrosJVM, coreJVM, lawsJVM, testsJVM, docs, freeJVM, stdJVM, bench, stateJVM)
-  
+  .aggregate(macrosJVM, coreJVM, lawsJVM, testsJVM, docs, freeJVM, bench, stateJVM)
+  .dependsOn(macrosJVM, coreJVM, lawsJVM, testsJVM, docs, freeJVM, bench, stateJVM)
+
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
-  .aggregate(macrosJS, coreJS, lawsJS, testsJS, freeJS, stdJS, stateJS)
-  .dependsOn(macrosJS, coreJS, lawsJS, testsJS, freeJS, stdJS, stateJS)
+  .aggregate(macrosJS, coreJS, lawsJS, testsJS, freeJS, stateJS)
+  .dependsOn(macrosJS, coreJS, lawsJS, testsJS, freeJS, stateJS)
   .enablePlugins(ScalaJSPlugin)
 
 lazy val macros = crossProject.crossType(CrossType.Pure)
@@ -127,7 +128,7 @@ lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
 lazy val laws = crossProject
-  .dependsOn(macros, core, std)
+  .dependsOn(macros, core)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
@@ -138,18 +139,7 @@ lazy val laws = crossProject
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
 
-
-lazy val std = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core)
-  .settings(moduleName := "cats-std")
-  .settings(catsSettings:_*)
-  .settings(libraryDependencies += "org.spire-math" %%% "algebra-std" % "0.3.1")
-
-lazy val stdJVM = std.jvm
-lazy val stdJS = std.js
-
-
-lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, stdJVM, lawsJVM)
+lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
   .settings(noPublishSettings)
@@ -177,7 +167,7 @@ lazy val stateJVM = state.jvm
 lazy val stateJS = state.js
 
 lazy val tests = crossProject
-  .dependsOn(macros, core, std, laws)
+  .dependsOn(macros, core, laws)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
@@ -218,11 +208,11 @@ lazy val publishSettings = Seq(
 )
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;freeJVM/test;stdJVM/compile;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;docs/test;bench/test")
+addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;freeJVM/test;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;docs/test;bench/test")
 
 addCommandAlias("validateJVM", ";buildJVM;scalastyle;buildJVM;scalastyle;unidoc;tut")
 
-addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;freeJS/compile;freeJS/test;stdJS/compile;stateJS/compile;stateJS/test;lawsJS/compile;testsJS/test")
+addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;freeJS/compile;freeJS/test;stateJS/compile;stateJS/test;lawsJS/compile;testsJS/test")
 
 addCommandAlias("validate", ";validateJVM;validateJS")
 
