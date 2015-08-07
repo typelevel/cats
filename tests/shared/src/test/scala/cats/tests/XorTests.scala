@@ -80,6 +80,48 @@ class XorTests extends CatsSuite {
     }
   }
 
+  test("recover recovers handled values") {
+    assert {
+      val xor = Xor.left[String, Int]("xor")
+      xor.recover { case "xor" => 5 }.isRight
+    }
+  }
+
+  test("recover ignores unhandled values") {
+    assert {
+      val xor = Xor.left[String, Int]("xor")
+      xor.recover { case "notxor" => 5 } === xor
+    }
+  }
+
+  test("recover ignores the right side") {
+    assert {
+      val xor = Xor.right[String, Int](10)
+      xor.recover { case "xor" => 5 } === xor
+    }
+  }
+
+  test("recoverWith recovers handled values") {
+    assert {
+      val xor = Xor.left[String, Int]("xor")
+      xor.recoverWith { case "xor" => Xor.right[String, Int](5) }.isRight
+    }
+  }
+
+  test("recoverWith ignores unhandled values") {
+    assert {
+      val xor = Xor.left[String, Int]("xor")
+      xor.recoverWith { case "notxor" => Xor.right[String, Int](5) } === xor
+    }
+  }
+
+  test("recoverWith ignores the right side") {
+    assert {
+      val xor = Xor.right[String, Int](10)
+      xor.recoverWith { case "xor" => Xor.right[String, Int](5) } === xor
+    }
+  }
+
   check {
     forAll { (x: Int Xor String, f: Int => String) =>
       x.valueOr(f) == x.swap.map(f).merge

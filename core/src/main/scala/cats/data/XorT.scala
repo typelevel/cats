@@ -20,6 +20,17 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def getOrElse[BB >: B](default: => BB)(implicit F: Functor[F]): F[BB] = F.map(value)(_.getOrElse(default))
 
+  def recover(pf: PartialFunction[A, B])(implicit F: Functor[F]): XorT[F, A, B] =
+    XorT(F.map(value)(_.recover(pf)))
+
+  def recoverWith(pf: PartialFunction[A, XorT[F, A, B]])(implicit F: Monad[F]): XorT[F, A, B] =
+    XorT(F.flatMap(value) { xor =>
+      xor match {
+        case Xor.Left(a) if pf.isDefinedAt(a) => pf(a).value
+        case _                                => F.pure(xor)
+      }
+    })
+
   def forall(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.forall(f))
 
   def exists(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.exists(f))
