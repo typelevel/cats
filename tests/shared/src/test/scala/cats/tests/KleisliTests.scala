@@ -101,4 +101,15 @@ class KleisliTests extends CatsSuite {
     val is = 0.to(10).toList
     assert(is.map(list.run) == is.map(Kleisli.function { (x: Int) => List(x.toDouble) }.run))
   }
+
+  test("local") {
+    case class Config(i: Int, s: String)
+
+    val kint = Kleisli.function { (x: Int) => Option(x.toDouble) }
+    val kconfig1 = kint.local[Config](_.i)
+    val kconfig2 = Kleisli.function { (c: Config) => Option(c.i.toDouble) }
+
+    val config = Config(0, "cats")
+    assert(kconfig1.run(config) == kconfig2.run(config))
+  }
 }
