@@ -212,7 +212,7 @@ addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;
 
 addCommandAlias("validateJVM", ";buildJVM;scalastyle;buildJVM;scalastyle;unidoc;tut")
 
-addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;freeJS/compile;freeJS/test;stateJS/compile;stateJS/test;lawsJS/compile;testsJS/test")
+addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;freeJS/compile;freeJS/test;stateJS/compile;stateJS/test")
 
 addCommandAlias("validate", ";validateJS;validateJVM")
 
