@@ -9,12 +9,12 @@ scaladoc: "#cats.data.Kleisli"
 Kleisli is a data type that will come in handy often, especially if you are working with monadic functions.
 
 ## Functions
-One of the most useful properties of functions is that functions **compose**. That is, given a function
-`A => B` and a function `B => C`, we can compose them to create a new function `A => C`. It is through
+One of the most useful properties of functions is that they **compose**. That is, given a function
+`A => B` and a function `B => C`, we can combine them to create a new function `A => C`. It is through
 this compositional property that we are able to write many small functions and compose them together
 to create a larger one that suits our needs.
 
-Often times, our functions will return monadic values. For instance, consider the following set of functions.
+Sometimes, our functions will need to return monadic values. For instance, consider the following set of functions.
 
 ```tut
 val parse: String => Option[Int] = s =>
@@ -36,7 +36,7 @@ This is where `Kleisli` comes into play.
 ## Kleisli
 At it's core, `Kleisli[F[_], A, B]` is just a wrapper around the function `A => F[B]`. Depending on the
 properties of the `F[_]`, we can do different things with `Kleisli`s. For instance, if `F[_]` has a
-`FlatMap[F]` instance (e.g. is equipped with a `flatMap: F[A] => (A => F[B]) => F[B]` function), we can
+`FlatMap[F]` instance (we can call `flatMap` on `F[A]` values), we can
 compose two `Kleisli`s much like we can two functions.
 
 ```tut
@@ -76,6 +76,18 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) {
 }
 ```
 
+Below are some more methods on `Kleisli` that can be used so long as the constraint on `F[_]`
+is satisfied.
+
+Method    | Constraint on `F[_]`
+--------- | -------------------
+andThen   | FlatMap
+compose   | FlatMap
+flatMap   | FlatMap
+lower     | Monad
+map       | Functor
+traverse  | Applicative
+
 ### Type class instances
 The type class instances for `Kleisli`, like that for functions, fix the input type (and the `F[_]`) and leave
 the output type free. What type class instances it has tends to depend on what instances the `F[_]` has. For
@@ -98,12 +110,25 @@ implicit def kleisliFlatMap[F[_], Z](implicit F: FlatMap[F]): FlatMap[Kleisli[F,
   }
 ```
 
+Below is a table of some of the type class instances `Kleisli` can have depending on what instances `F[_]` has.
+
+Type class    | Constraint on `F[_]`
+------------- | -------------------
+Functor       | Functor
+Apply         | Apply
+Applicative   | Applicative
+FlatMap       | FlatMap
+Monad         | Monad
+Arrow         | Monad
+Split         | FlatMap
+Strong        | Functor
+
 ## Other uses
-### Monad Transformer
+### Monad Transformers
 Many data types have a monad transformer equivalent that allows us to compose the `Monad` instance of the data
 type with any other `Monad` instance. For instance, `OptionT[F[_], A]` allows us to compose the monadic properties
 of `Option` with any other `F[_]`, such as a `List`. This allows us to work with nested contexts/effects in a
-nice way, say, in for comprehensions.
+nice way (for example, in for-comprehensions).
 
 `Kleisli` can be viewed as the monad transformer for functions. Recall that at its essence, `Kleisli[F, A, B]`
 is just a function `A => F[B]`, with niceties to make working with the value we actually care about, the `B`, easy.
@@ -112,10 +137,11 @@ is just a function `A => F[B]`, with niceties to make working with the value we 
 This may raise the question, what exactly is the "effect" of a function?
 
 Well, if we take a look at any function, we can see it takes some input and produces some output with it, without
-having touched the input (assuming a functional environment). That is, we take a read-only value, and produce some
-value with it. For this reason, the type class instances for functions often refer to the function as a `Reader`.
-For instance, it is common to hear about the `Reader` monad. In the same spirit, Cats defines a `Reader` type alias
-along the lines of:
+having touched the input (assuming the function is pure, i.e.
+[referentially transparent](https://en.wikipedia.org/wiki/Referential_transparency_%28computer_science%29)).
+That is, we take a read-only value, and produce some value with it. For this reason, the type class instances for
+functions often refer to the function as a `Reader`. For instance, it is common to hear about the `Reader` monad.
+In the same spirit, Cats defines a `Reader` type alias along the lines of:
 
 ```tut
 // We want A => B, but Kleisli provides A => F[B]. To make the types/shapes match,
@@ -140,15 +166,13 @@ they were so inclined.
 The topic of functions as a read-only environment brings us to our next common use case of `Kleisli` - configuration.
 
 ### Configuration
-In functional programming it is often advocated to build many small modules, and then compose them together to
-make larger and larger ones until you have the module you want (the overall program). This philosophy (not
-accidentally) mirrors that of function composition - write many small functions, and compose them to build larger ones.
-After all, our programs are just functions.
+Functional programming advocates the creation of programs and modules by composing smaller, simpler modules. This
+philosophy intentionally mirrors that of function composition - write many small functions, and compose them
+to build larger ones. After all, our programs are just functions.
 
 Let's look at some example modules, where each module has it's own configuration that is validated by a function.
-If the configuration is good, we return a `Some` of the module, otherwise a `None` (you can/should use `Xor` or similar
-to provide more detailed errors - `Option` was chosen for simplicity). Due to the nature of this, we use
-`Kleisli` to define the function.
+If the configuration is good, we return a `Some` of the module, otherwise a `None`. This example uses `Option` for
+simplicity - if you want to provide error messages or other failure context, consider using `Xor` instead.
 
 ```tut
 case class DbConfig(url: String, user: String, pass: String)
@@ -164,10 +188,10 @@ object Service {
 }
 ```
 
-We have two independent modules, a `Db` and a `Service` (presumably this is a service that will read from a
-database and expose the data at some endpoint). Both depend on their own configuration parameters. Neither know
-or care about the other, as it should be. However our application needs both of these modules to work. It is
-plausible we then have a more global application configuration.
+We have two independent modules, a `Db` (allowing access to a database) and a `Service` (supporting an API to provide
+data over the web). Both depend on their own configuration parameters. Neither know or care about the other, as it
+should be. However our application needs both of these modules to work. It is plausible we then have a more global
+application configuration.
 
 ```tut
 case class AppConfig(dbConfig: DbConfig, serviceConfig: ServiceConfig)
