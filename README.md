@@ -35,6 +35,13 @@ Release notes for Cats are available in [CHANGES.md](CHANGES.md).
 *Cats 0.1.2 is a pre-release: there are not currently source- or
 binary-compatibility guarantees.*
 
+### Documentation
+Among the goals of Cats is to provide approachable and useful documentation.
+Documentation is available in the form of tutorials on the Cats
+[website](http://non.github.io/cats/), as well as through
+[Scaladoc](http://non.github.io/cats/api/#package) (also reachable through
+the website).
+
 ### Building Cats
 
 To build Cats you should have [sbt](http://www.scala-sbt.org/0.13/tutorial/Setup.html)
