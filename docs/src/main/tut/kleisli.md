@@ -7,6 +7,18 @@ scaladoc: "#cats.data.Kleisli"
 ---
 # Kleisli
 Kleisli is a data type that will come in handy often, especially if you are working with monadic functions.
+Monadic functions are functions that return a monadic value - for instance, a function may return an
+`Option[Int]` or an `Xor[String, List[Double]]`.
+
+How then do we compose these functions together nicely? We cannot use the usual `compose` or `andThen` methods
+without having functions take an `Option` or `Xor` as a parameter, which can be strange and unwieldy.
+
+We may also have several functions which depend on some environment and want a nice way to compose these functions
+to ensure they all receive the same environment. Or perhaps we have functions which depend on their own "local"
+configuration and all the configurations together make up a "global" application configuration. How do we
+have these functions play nice with each other despite each only knowing about their own local requirements?
+
+These situations are where `Kleisli` is immensely helpful.
 
 ## Functions
 One of the most useful properties of functions is that they **compose**. That is, given a function
