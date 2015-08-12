@@ -18,11 +18,23 @@ playful shortening of the word *category*.
 <a name="getting-started"></a>
 # Getting Started
 
-Cats has not yet published artifacts, so in order to use Cats you will have to get the Cats source code, and publish jars locally, with `sbt publish-local`
+Cats is currently available for Scala 2.10 and 2.11.
 
-Then in your project, add to your build.sbt
+To get started with SBT, simply add the following to your build.sbt file:
 
-    libraryDependencies += "org.spire-math" %% "cats-core" % "0.1.2"
+    libraryDependencies += "org.spire-math" %% "cats" % "0.1.2"
+
+This will pull in all of Cats' modules. If you only require some
+functionality, you can pick-and-choose from amongst these modules
+(used in place of `"cats"`):
+
+ * `cats-macros`: Macros used by Cats syntax (*required*).
+ * `cats-core`: Core type classes and functionality (*required*).
+ * `cats-laws`: Laws for testing type class instances.
+ * `cats-free`: "Free" data constructors for various type classes.
+ * `cats-state`: Monad and transformer support for state.
+
+Release notes for Cats are available in [CHANGES.md](https://github.com/non/cats/blob/master/CHANGES.md).
 
 <a name "motivations"></a>
 # Motivations
