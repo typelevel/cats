@@ -26,15 +26,25 @@ One of the most useful properties of functions is that they **compose**. That is
 this compositional property that we are able to write many small functions and compose them together
 to create a larger one that suits our needs.
 
+```tut
+val twice: Int => Int =
+  x => x * 2
+
+val countCats: Int => String =
+  x => if (x == 1) "1 cat" else s"$x cats"
+
+val twiceAsManyCats: Int => String =
+  twice andThen countCats
+  // equivalent to: countCats compose twice
+
+twiceAsManyCats(1) // "2 cats"
+```
+
 Sometimes, our functions will need to return monadic values. For instance, consider the following set of functions.
 
 ```tut
-val parse: String => Option[Int] = s =>
-  try {
-    Some(s.toInt)
-  } catch {
-    case _: NumberFormatException => None
-  }
+val parse: String => Option[Int] =
+  s => if (s.matches("-?[0-9]+")) Some(s.toInt) else None
 
 val reciprocal: Int => Option[Double] =
   i => if (i != 0) Some(1.0 / i) else None
@@ -53,10 +63,11 @@ compose two `Kleisli`s much like we can two functions.
 
 ```tut
 import cats.FlatMap
+import cats.syntax.flatMap._
 
 final case class Kleisli[F[_], A, B](run: A => F[B]) {
   def compose[Z](k: Kleisli[F, Z, A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
-    Kleisli[F, Z, B](z => F.flatMap(k.run(z))(run))
+    Kleisli[F, Z, B](z => k.run(z).flatMap(run))
 }
 ```
 
@@ -110,15 +121,20 @@ resolution will pick up the most specific instance it can (depending on the `F[_
 An example of a `Monad` instance for `Kleisli` would be:
 
 ```tut
+import cats.syntax.flatMap._
+import cats.syntax.functor._
+// Alternatively we can import cats.implicits._ to bring in all the
+// syntax at once (as well as all type class instances)
+
 // We can define a FlatMap instance for Kleisli if the F[_] we chose has a FlatMap instance
 // Note the input type and F are fixed, with the output type left free
 implicit def kleisliFlatMap[F[_], Z](implicit F: FlatMap[F]): FlatMap[Kleisli[F, Z, ?]] =
   new FlatMap[Kleisli[F, Z, ?]] {
     def flatMap[A, B](fa: Kleisli[F, Z, A])(f: A => Kleisli[F, Z, B]): Kleisli[F, Z, B] =
-      Kleisli(z => F.flatMap(fa.run(z))(a => f(a).run(z)))
+      Kleisli(z => fa.run(z).flatMap(a => f(a).run(z)))
 
     def map[A, B](fa: Kleisli[F, Z, A])(f: A => B): Kleisli[F, Z, B] =
-      Kleisli(z => F.map(fa.run(z))(f))
+      Kleisli(z => fa.run(z).map(f))
   }
 ```
 
