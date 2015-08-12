@@ -3,15 +3,15 @@ git:
   depth: 9999
 scala:
 - 2.10.5
-- 2.11.6
+- 2.11.7
 script:
 - if [[ "$TRAVIS_PULL_REQUEST" == "false" &&
         "$TRAVIS_BRANCH" == "master" &&
         $(cat version.sbt) =~ "-SNAPSHOT"
   ]]; then
-    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean validate publish gitSnapshots publish ;
+    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean macrosJS/compile coreJS/compile lawsJS/compile && sbt testsJS/test && sbt freeJS/test && sbt stateJS/test && sbt validateJVM publish gitSnapshots publish ;
   else
-    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean validate publishLocal ;
+    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean macrosJS/compile coreJS/compile lawsJS/compile && sbt testsJS/test && sbt freeJS/test && sbt stateJS/test && sbt validateJVM publishLocal ;
   fi
 notifications:
   webhooks:

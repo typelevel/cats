@@ -17,8 +17,8 @@ lazy val scoverageSettings = Seq(
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
-  scalaVersion := "2.11.6",
-  crossScalaVersions := Seq("2.10.5", "2.11.6")
+  scalaVersion := "2.11.7",
+  crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
 
 lazy val commonSettings = Seq(
@@ -29,10 +29,10 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %% "simulacrum" % "0.4.0",
-    "org.spire-math" %% "algebra" % "0.3.1",
-    "org.spire-math" %% "algebra-std" % "0.3.1",
-    "org.typelevel" %% "machinist" % "0.3.0",
+    "com.github.mpilquist" %%% "simulacrum" % "0.4.0",
+    "org.spire-math" %%% "algebra" % "0.3.1",
+    "org.spire-math" %%% "algebra-std" % "0.3.1",
+    "org.typelevel" %%% "machinist" % "0.4.1",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.4")
   ),
@@ -212,14 +212,14 @@ addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;
 
 addCommandAlias("validateJVM", ";buildJVM;scalastyle;buildJVM;scalastyle;unidoc;tut")
 
-addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;freeJS/compile;freeJS/test;stateJS/compile;stateJS/test;lawsJS/compile;testsJS/test")
+addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;freeJS/compile;freeJS/test;stateJS/compile;stateJS/test")
 
-addCommandAlias("validate", ";validateJVM;validateJS")
+addCommandAlias("validate", ";validateJS;validateJVM")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line. 
 // These settings could also come from another file or a plugin.
-// The only issue if coming from a plugin is that the Macro lib versions 
+// The only issue if coming from a plugin is that the Macro lib versions
 // are hard coded, so an overided facility would be required.
 
 addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
