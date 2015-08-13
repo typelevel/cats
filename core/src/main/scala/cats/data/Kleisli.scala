@@ -48,6 +48,9 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def lift[G[_]](implicit G: Applicative[G]): Kleisli[λ[α => G[F[α]]], A, B] =
     Kleisli[λ[α => G[F[α]]], A, B](a => Applicative[G].pure(run(a)))
 
+  def local[AA](f: AA => A): Kleisli[F, AA, B] =
+    Kleisli(f.andThen(run))
+
   def transform[G[_]](f: F ~> G): Kleisli[G, A, B] =
     Kleisli(a => f(run(a)))
 
