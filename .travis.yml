@@ -9,9 +9,9 @@ script:
         "$TRAVIS_BRANCH" == "master" &&
         $(cat version.sbt) =~ "-SNAPSHOT"
   ]]; then
-    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean macrosJS/compile coreJS/compile lawsJS/compile && sbt testsJS/test && sbt freeJS/test && sbt stateJS/test && sbt validateJVM publish gitSnapshots publish ;
+    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt ++$TRAVIS_SCALA_VERSION clean macrosJS/compile coreJS/compile lawsJS/compile && sbt ++$TRAVIS_SCALA_VERSION testsJS/test && sbt ++$TRAVIS_SCALA_VERSION freeJS/test && sbt ++$TRAVIS_SCALA_VERSION stateJS/test && sbt ++$TRAVIS_SCALA_VERSION validateJVM publish gitSnapshots publish ;
   else
-    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean macrosJS/compile coreJS/compile lawsJS/compile && sbt testsJS/test && sbt freeJS/test && sbt stateJS/test && sbt validateJVM publishLocal ;
+    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt ++$TRAVIS_SCALA_VERSION clean macrosJS/compile coreJS/compile lawsJS/compile && sbt ++$TRAVIS_SCALA_VERSION testsJS/test && sbt ++$TRAVIS_SCALA_VERSION freeJS/test && sbt ++$TRAVIS_SCALA_VERSION stateJS/test && sbt ++$TRAVIS_SCALA_VERSION validateJVM publishLocal ;
   fi
 notifications:
   webhooks:
