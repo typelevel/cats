@@ -81,7 +81,7 @@ lazy val docs = project
   .settings(ghpages.settings)
   .settings(docSettings)
   .settings(tutSettings)
-  .settings(tutScalacOptions ~= (_.filterNot(_ == "-Ywarn-unused-import")))
+  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
   .dependsOn(coreJVM, freeJVM, stateJVM)
 
