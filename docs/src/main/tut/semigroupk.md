@@ -21,7 +21,7 @@ must be the same as
 
 for all possible values of a,b,c.
 
-Cats does not define a Semigroup typeclass itself, we use the
+Cats does not define a Semigroup type class itself, we use the
 [Semigroup
 trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala)
 which is defined in the [algebra
@@ -106,7 +106,7 @@ two <+> n
 
 You'll notice that instead of declaring `one` as `Some(1)`, I chose
 `Option(1)`, and I added an explicit type declaration for `n`. This is
-because there aren't typeclass instances for Some or None, but for
+because there aren't type class instances for Some or None, but for
 Option. If we try to use Some and None, we'll get errors:
 
 ```tut:nofail

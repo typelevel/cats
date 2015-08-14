@@ -68,7 +68,7 @@ ensure correctness.
 
 Cats will be designed to use modern *best practices*:
 
- * [simulacrum](https://github.com/mpilquist/simulacrum) for minimizing typeclass boilerplate
+ * [simulacrum](https://github.com/mpilquist/simulacrum) for minimizing type class boilerplate
  * [machinist](https://github.com/typelevel/machinist) for optimizing implicit operators
  * [scalacheck](http://scalacheck.org) for property-based testing
  * [discipline](https://github.com/typelevel/discipline) for encoding and testing laws

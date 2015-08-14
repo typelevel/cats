@@ -54,9 +54,9 @@ page](contributing.html) to find out ways to give us feedback.
 ### Modularity
 
 We are trying to make the library modular. It will have a tight
-core which will contain only the [typeclasses](typeclasses.html),
+core which will contain only the [type classes](typeclasses.html),
 the bare minimum of data structures that are needed to support
-them, and typeclass instances for those data structures and standard
+them, and type class instances for those data structures and standard
 library types.
 
 ### Documentation
@@ -86,10 +86,10 @@ these obvious, and will keep them well documented.
 
 In an attempt to be more modular, Cats is broken up into a number of sub-projects:
 
-* *core* - contains typeclass definitions (e.g. Functor, Applicative, Monad), essential datatypes, and
-  typeclass instances for those datatypes and standard library types
-* *laws* - laws for the typeclasses, used to validate typeclass instances
-* *tests* - tests that check typeclass instances with laws from *laws*
+* *core* - contains type class definitions (e.g. Functor, Applicative, Monad), essential datatypes, and
+  type class instances for those datatypes and standard library types
+* *laws* - laws for the type classes, used to validate type class instances
+* *tests* - tests that check type class instances with laws from *laws*
 * *docs* - The source for this website
 
 <a name="copyright"></a>

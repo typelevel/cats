@@ -25,7 +25,7 @@ trait IntInstances extends algebra.std.IntInstances {
 
 }
 
-trait ByteInstances /* missing algebra typeclasses */ {
+trait ByteInstances /* missing algebra type classes */ {
 
   implicit val byteShow: Show[Byte] =
     Show.fromToString[Byte]
@@ -41,7 +41,7 @@ trait ByteInstances /* missing algebra typeclasses */ {
     }
 }
 
-trait CharInstances /* missing algebra typeclasses */ {
+trait CharInstances /* missing algebra type classes */ {
 
   implicit val charShow: Show[Char] =
     Show.fromToString[Char]
@@ -53,7 +53,7 @@ trait CharInstances /* missing algebra typeclasses */ {
     }
 }
 
-trait ShortInstances /* missing algebra typeclasses */ {
+trait ShortInstances /* missing algebra type classes */ {
 
   implicit val shortShow: Show[Short] =
     Show.fromToString[Short]
@@ -70,7 +70,7 @@ trait ShortInstances /* missing algebra typeclasses */ {
 
 }
 
-trait LongInstances /* missing algebra typeclasses */ {
+trait LongInstances /* missing algebra type classes */ {
 
   implicit val longShow: Show[Long] =
     Show.fromToString[Long]
@@ -86,7 +86,7 @@ trait LongInstances /* missing algebra typeclasses */ {
     }
 }
 
-trait FloatInstances /* missing algebra typeclasses */ {
+trait FloatInstances /* missing algebra type classes */ {
 
   implicit val floatShow: Show[Float] =
     Show.fromToString[Float]
@@ -103,7 +103,7 @@ trait FloatInstances /* missing algebra typeclasses */ {
 
 }
 
-trait DoubleInstances /* missing algebra typeclasses */ {
+trait DoubleInstances /* missing algebra type classes */ {
 
   implicit val doubleShow: Show[Double] =
     Show.fromToString[Double]
@@ -127,7 +127,7 @@ trait BooleanInstances extends algebra.std.BooleanInstances {
 
 }
 
-trait UnitInstances /* missing algebra typeclasses */ {
+trait UnitInstances /* missing algebra type classes */ {
 
   implicit val unitShow: Show[Unit] =
     Show.fromToString[Unit]
