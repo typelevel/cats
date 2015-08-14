@@ -7,7 +7,7 @@ scaladoc: "#cats.Monad"
 ---
 # Monad
 
-Monad extends the Applicative typeclass with a new function `flatten`. Flatten
+Monad extends the Applicative type class with a new function `flatten`. Flatten
 takes a value in a nested context (eg. `F[F[A]]` where F is the context) and
 "joins" the contexts together so that we have a single context (ie. F[A]).
 

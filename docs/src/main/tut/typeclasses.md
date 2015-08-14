@@ -1,12 +1,12 @@
-# Typeclasses
+# Type classes
 
-The typeclass pattern is a ubiquitous pattern in Scala, its function
+The type class pattern is a ubiquitous pattern in Scala, its function
 is to provide a behavior for some type. You think of it as an
 "interface" in the Java sense. Here's an example.
 
 ```tut
 /**
- * A typeclass to provide textual representation
+ * A type class to provide textual representation
  */
 trait Show[A] {
   def show(f: A): String
@@ -38,7 +38,7 @@ implicit val stringShow = new Show[String] {
 log("a string")
 ```
 
-This example demonstrates a powerful property of the typeclass
+This example demonstrates a powerful property of the type class
 pattern. We have been able to provide an implementation of Show for
 String, without needing to change the definition of java.lang.String
 to extend a new Java-style interface; something we couldn't have done

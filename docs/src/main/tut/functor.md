@@ -7,7 +7,7 @@ scaladoc: "#cats.Functor"
 ---
 # Functor
 
-A `Functor` is a ubiquitous typeclass involving types that have one
+A `Functor` is a ubiquitous type class involving types that have one
 "hole", i.e. types which have the shape `F[?]`, such as `Option`,
 `List` and `Future`. (This is in contrast to a type like `Int` which has
 no hole, or `Tuple2` which has two holes (`Tuple2[?,?]`)).
