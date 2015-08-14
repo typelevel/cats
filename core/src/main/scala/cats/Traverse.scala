@@ -45,11 +45,4 @@ def traverseU[A, GB](fa: F[A])(f: A => GB)(implicit U: Unapply[Applicative, GB])
 
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     traverse[Id, A, B](fa)(f)
-
-  def traversal[G[_]: Applicative]: Traversal[G] =
-    new Traversal[G]
-
-  class Traversal[G[_]: Applicative] {
-    def run[A, B](fa: F[A])(f: A => G[B]): G[F[B]] = traverse[G, A, B](fa)(f)
-  }
 }
