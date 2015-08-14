@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.MonadError
+import cats.{Id, MonadError}
 import cats.data.{Xor, XorT}
 import cats.laws.discipline.{MonadErrorTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
@@ -59,4 +59,46 @@ class XorTTests extends CatsSuite {
       xort.toEither.map(_.isRight) == xort.isRight
     }
   })
+
+  test("recover recovers handled values") {
+    assert {
+      val xort = XorT.left[Id, String, Int]("xort")
+      xort.recover { case "xort" => 5 }.isRight
+    }
+  }
+
+  test("recover ignores unhandled values") {
+    assert {
+      val xort = XorT.left[Id, String, Int]("xort")
+      xort.recover { case "notxort" => 5 } === xort
+    }
+  }
+
+  test("recover ignores the right side") {
+    assert {
+      val xort = XorT.right[Id, String, Int](10)
+      xort.recover { case "xort" => 5 } === xort
+    }
+  }
+
+  test("recoverWith recovers handled values") {
+    assert {
+      val xort = XorT.left[Id, String, Int]("xort")
+      xort.recoverWith { case "xort" => XorT.right[Id, String, Int](5) }.isRight
+    }
+  }
+
+  test("recoverWith ignores unhandled values") {
+    assert {
+      val xort = XorT.left[Id, String, Int]("xort")
+      xort.recoverWith { case "notxort" => XorT.right[Id, String, Int](5) } === xort
+    }
+  }
+
+  test("recoverWith ignores the right side") {
+    assert {
+      val xort = XorT.right[Id, String, Int](10)
+      xort.recoverWith { case "xort" => XorT.right[Id, String, Int](5) } === xort
+    }
+  }
 }
