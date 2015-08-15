@@ -7,7 +7,7 @@ scaladoc: "#cats.Apply"
 ---
 # Apply
 
-`Apply` extends the [`Functor`](functor.md) type class (which features the familiar `map`
+`Apply` extends the [`Functor`](functor.html) type class (which features the familiar `map`
 function) with a new function `ap`. The `ap` function is similar to `map`
 in that we are transforming a value in a context (a context being the `F` in `F[A]`;
 a context can be `Option`, `List` or `Future` for example).
