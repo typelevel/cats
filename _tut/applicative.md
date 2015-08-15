@@ -8,7 +8,7 @@ scaladoc: "#cats.Applicative"
 # Applicative
 
 Applicative functors are a simple extension of the [Apply
-functor](apply.md) which adds a single method, `pure`:
+functor](apply.html) which adds a single method, `pure`:
 
 ```scala
     def pure[A](x: A): F[A]
@@ -34,7 +34,7 @@ scala> Applicative[List].pure(1)
 res1: List[Int] = List(1)
 ```
 
-Like [Functor](functor.md) and [Apply](apply.md), Applicative
+Like [Functor](functor.html) and [Apply](apply.html), Applicative
 functors also compose naturally with other Applicative functors. When
 you compose one Applicative with another, the resulting `pure`
 operation will lift the passed value into one context, and the result

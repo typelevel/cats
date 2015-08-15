@@ -7,7 +7,7 @@ scaladoc: "#cats.Apply"
 ---
 # Apply
 
-`Apply` extends the [`Functor`](functor.md) type class (which features the familiar `map`
+`Apply` extends the [`Functor`](functor.html) type class (which features the familiar `map`
 function) with a new function `ap`. The `ap` function is similar to `map`
 in that we are transforming a value in a context (a context being the `F` in `F[A]`;
 a context can be `Option`, `List` or `Future` for example).
@@ -33,7 +33,7 @@ scala> implicit val optionApply: Apply[Option] = new Apply[Option] {
      | 
      |   def map[A,B](fa: Option[A])(f: A => B): Option[B] = fa map f
      | }
-optionApply: cats.Apply[Option] = $anon$1@78de841f
+optionApply: cats.Apply[Option] = $anon$1@28b1f7b1
 
 scala> implicit val listApply: Apply[List] = new Apply[List] {
      |   def ap[A, B](fa: List[A])(f: List[A => B]): List[B] =
@@ -41,7 +41,7 @@ scala> implicit val listApply: Apply[List] = new Apply[List] {
      | 
      |   def map[A,B](fa: List[A])(f: A => B): List[B] = fa map f
      | }
-listApply: cats.Apply[List] = $anon$1@47efe572
+listApply: cats.Apply[List] = $anon$1@65b18bc7
 ```
 
 ### map
@@ -65,7 +65,7 @@ And like functors, `Apply` instances also compose:
 
 ```scala
 scala> val listOpt = Apply[List] compose Apply[Option]
-listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@407a954c
+listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@4a691a7e
 
 scala> val plusOne = (x:Int) => x + 1
 plusOne: Int => Int = <function1>
@@ -184,10 +184,10 @@ scala> import cats.syntax.apply._
 import cats.syntax.apply._
 
 scala> val option2 = Option(1) |@| Option(2)
-option2: cats.syntax.ApplyBuilder[Option]#ApplyBuilder2[Int,Int] = cats.syntax.ApplyBuilder$ApplyBuilder2@9e8198e
+option2: cats.syntax.ApplyBuilder[Option]#ApplyBuilder2[Int,Int] = cats.syntax.ApplyBuilder$ApplyBuilder2@5bc9fb0
 
 scala> val option3 = option2 |@| Option.empty[Int]
-option3: cats.syntax.ApplyBuilder[Option]#ApplyBuilder3[Int,Int,Int] = cats.syntax.ApplyBuilder$ApplyBuilder3@5f440211
+option3: cats.syntax.ApplyBuilder[Option]#ApplyBuilder3[Int,Int,Int] = cats.syntax.ApplyBuilder$ApplyBuilder3@4d100b40
 
 scala> option2 map addArity2
 res19: Option[Int] = Some(3)
