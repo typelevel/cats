@@ -11,18 +11,30 @@ playful shortening of the word *category*.
 <div class="msg warn"> <p><strong> Cats is currently an experimental
   project under active development</strong>. Feedback and
   contributions are welcomed as we look to improve the project. This
-  are evolving quickly and we currently make no guarantees about what
+  project is evolving quickly and we currently make no guarantees about what
   might drastically change in the near future.</p> </div>
 
 
 <a name="getting-started"></a>
 # Getting Started
 
-Cats has not yet published artifacts, so in order to use Cats you will have to get the Cats source code, and publish jars locally, with `sbt publish-local`
+Cats is currently available for Scala 2.10 and 2.11.
 
-Then in your project, add to your build.sbt
+To get started with SBT, simply add the following to your build.sbt file:
 
-    libraryDependencies += "org.spire-math" %% "cats-core" % "0.1.0-SNAPSHOT"
+    libraryDependencies += "org.spire-math" %% "cats" % "0.1.2"
+
+This will pull in all of Cats' modules. If you only require some
+functionality, you can pick-and-choose from amongst these modules
+(used in place of `"cats"`):
+
+ * `cats-macros`: Macros used by Cats syntax (*required*).
+ * `cats-core`: Core type classes and functionality (*required*).
+ * `cats-laws`: Laws for testing type class instances.
+ * `cats-free`: "Free" data constructors for various type classes.
+ * `cats-state`: Monad and transformer support for state.
+
+Release notes for Cats are available in [CHANGES.md](https://github.com/non/cats/blob/master/CHANGES.md).
 
 <a name "motivations"></a>
 # Motivations
@@ -42,17 +54,17 @@ page](contributing.html) to find out ways to give us feedback.
 ### Modularity
 
 We are trying to make the library modular. It will have a tight
-core which will contain only the [typeclasses](_tut/typeclasses.html) and
+core which will contain only the [type classes](typeclasses.html),
 the bare minimum of data structures that are needed to support
-them. Support for using these typeclasses with the Scala standard library
-will be in the `std` project. 
+them, and type class instances for those data structures and standard
+library types.
 
 ### Documentation
 
 We feel that having lots of documentation is a very important goal for
 our project. It will be a big win towards our goal of
 approachability. We will strive to have the code well documented, we
-will strive to have lots of documentation external to the code, and We
+will strive to have lots of documentation external to the code, and we
 will strive to have a large corpus of compiler verified examples of
 how the software can be used.
 
@@ -62,23 +74,22 @@ with [contributing](contributing.html) to the project
 
 ### Efficiency
 
-Although, unfortunately there are times when programming only with
+Although unfortunately there are times when programming only with
 pure functions and writing efficient code in Scala can be at odds, we
 are attempting to do our best at keeping our library as efficient as
 we can without making unnecessary sacrifices of purity and
 usability. Where sacrifices have to be made, we will strive to make
-these obvious, and will keep the well documented.
+these obvious, and will keep them well documented.
 
 <a name="project-structure"></a>
 # Project Structure
 
 In an attempt to be more modular, Cats is broken up into a number of sub-projects:
 
-* *core* - contains typeclass definitions, such as Functor, Applicative, Monad
-* *std* - contains typeclass instances for Scala standard library types
-* *data* - contains datatypes
-* *laws* - laws for the typeclasses, used to validate typeclass instances
-* *tests* - tests that check instances from *std* with laws from *laws*
+* *core* - contains type class definitions (e.g. Functor, Applicative, Monad), essential datatypes, and
+  type class instances for those datatypes and standard library types
+* *laws* - laws for the type classes, used to validate type class instances
+* *tests* - tests that check type class instances with laws from *laws*
 * *docs* - The source for this website
 
 <a name="copyright"></a>

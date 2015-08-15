@@ -12,7 +12,7 @@ We would like to thank the maintainers of these supporting projects,
 and we'd encourage you to check out these projects and consider
 integrating them into your own projects.
 
- * [simulacrum](https://github.com/mpilquist/simulacrum) for minimizing typeclass boilerplate
+ * [simulacrum](https://github.com/mpilquist/simulacrum) for minimizing type class boilerplate
  * [machinist](https://github.com/typelevel/machinist) for optimizing implicit operators
  * [scalacheck](http://scalacheck.org) for property-based testing
  * [discipline](https://github.com/typelevel/discipline) for encoding and testing laws

@@ -21,7 +21,7 @@ must be the same as
 
 for all possible values of a,b,c.
 
-Cats does not define a Semigroup typeclass itself, we use the
+Cats does not define a Semigroup type class itself, we use the
 [Semigroup
 trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala)
 which is defined in the [algebra
@@ -58,7 +58,7 @@ res4: Int = 67
 ```
 
 SemigroupK has a very similar structure to Semigroup, the difference
-is that it operates on type constructors of one arguement. So, for
+is that it operates on type constructors of one argument. So, for
 example, whereas you can find a Semigroup for types which are fully
 specified like `Int` or `List[Int]` or `Option[Int]`, you will find
 SemigroupK for type constructors like `List` and `Option`. These types
@@ -149,14 +149,14 @@ res16: Option[Int] = Some(2)
 
 You'll notice that instead of declaring `one` as `Some(1)`, I chose
 `Option(1)`, and I added an explicit type declaration for `n`. This is
-because there aren't typeclass instances for Some or None, but for
+because there aren't type class instances for Some or None, but for
 Option. If we try to use Some and None, we'll get errors:
 
 ```scala
 scala> Some(1) <+> None
-<console>:24: error: value <+> is not a member of Some[Int]
-              Some(1) <+> None
-                      ^
+<console>:27: error: value <+> is not a member of Some[Int]
+       Some(1) <+> None
+               ^
 
 scala> None <+> Some(1)
 res18: Option[Int] = Some(1)

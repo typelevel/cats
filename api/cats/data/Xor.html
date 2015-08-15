@@ -28,7 +28,7 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="Xor$.html" title="See companion object"><img src="../../lib/class_to_object_big.png" /></a>
+        <a href="Xor$.html" title="See companion object"><img alt="Class/Object" src="../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.data">data</a></p>
         <h1><a href="Xor$.html" title="See companion object">Xor</a></h1><h3><span class="morelinks"><div>
             Related Docs:
@@ -36,7 +36,7 @@
             | <a href="package.html" class="extype" name="cats.data">package data</a>
           </div></span></h3><span class="permalink">
       <a href="../../index.html#cats.data.Xor" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -47,21 +47,21 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Xor</span><span class="tparams">[<span name="A">+A</span>, <span name="B">+B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Xor</span><span class="tparams">[<span name="A">+A</span>, <span name="B">+B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents a right-biased disjunction that is either an <code>A</code> or a <code>B</code>.</p><p>An instance of <code>A</code> <a href="" class="extype" name="cats.data.Xor">Xor</a> <code>B</code> is either a <a href="Xor$$Left.html" class="extype" name="cats.data.Xor.Left">Left</a><code>[A]</code> or a <a href="Xor$$Right.html" class="extype" name="cats.data.Xor.Right">Right</a><code>[B]</code>.</p><p>A common use of <a href="" class="extype" name="cats.data.Xor">Xor</a> is to explicitly represent the possibility of failure in a result as opposed to
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents a right-biased disjunction that is either an <code>A</code> or a <code>B</code>.</p><p>An instance of <code>A <a href="" class="extype" name="cats.data.Xor">Xor</a> B</code> is either a <code><a href="Xor$$Left.html" class="extype" name="cats.data.Xor.Left">Left</a>[A]</code> or a <code><a href="Xor$$Right.html" class="extype" name="cats.data.Xor.Right">Right</a>[B]</code>.</p><p>A common use of <a href="" class="extype" name="cats.data.Xor">Xor</a> is to explicitly represent the possibility of failure in a result as opposed to
 throwing an exception.  By convention, <a href="Xor$$Left.html" class="extype" name="cats.data.Xor.Left">Left</a> is used for errors and <a href="Xor$$Right.html" class="extype" name="cats.data.Xor.Right">Right</a> is reserved for successes.
 For example, a function that attempts to parse an integer from a string may have a return type of
-<code>NumberFormatException</code> <a href="" class="extype" name="cats.data.Xor">Xor</a> <code>Int</code>. However, since there is no need to actually throw an exception, the type (<code>A</code>)
-chosen for the &quot;left&quot; could be any type representing an error and has no need to actually extend <code>Exception</code>.</p><p><code>A</code> <a href="" class="extype" name="cats.data.Xor">Xor</a> <code>B</code> is isomorphic to <code>scala.Either[A, B]</code>, but <a href="" class="extype" name="cats.data.Xor">Xor</a> is right-biased, so methods such as <code>map</code> and
+<code>NumberFormatException <a href="" class="extype" name="cats.data.Xor">Xor</a> Int</code>. However, since there is no need to actually throw an exception, the type (<code>A</code>)
+chosen for the &quot;left&quot; could be any type representing an error and has no need to actually extend <code>Exception</code>.</p><p><code>A <a href="" class="extype" name="cats.data.Xor">Xor</a> B</code> is isomorphic to <code>scala.Either[A, B]</code>, but <a href="" class="extype" name="cats.data.Xor">Xor</a> is right-biased, so methods such as <code>map</code> and
 <code>flatMap</code> apply only in the context of the &quot;right&quot; case. This right bias makes <a href="" class="extype" name="cats.data.Xor">Xor</a> more convenient to use
 than <code>scala.Either</code> in a monadic context. Methods such as <code>swap</code>, and <code>leftMap</code> provide functionality
 that <code>scala.Either</code> exposes through left projections.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/data/src/main/scala/cats/data/Xor.scala" target="_blank">Xor.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/Xor.scala" target="_blank">Xor.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="Xor$$Left.html" class="extype" name="cats.data.Xor.Left">Left</a>, <a href="Xor$$Right.html" class="extype" name="cats.data.Xor.Right">Right</a></div>
@@ -90,7 +90,6 @@ that <code>scala.Either</code> exposes through left projections.
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -115,11 +114,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">canEqual</span><span class="params">(<span name="that">that: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">canEqual</span><span class="params">(<span name="that">that: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@canEqual(that:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Equals</dd></dl></div>
@@ -132,11 +131,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">productArity</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">productArity</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@productArity:Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
@@ -149,11 +148,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">productElement</span><span class="params">(<span name="n">n: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>
+        <span class="name">productElement</span><span class="params">(<span name="n">n: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@productElement(n:Int):Any" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
@@ -171,11 +170,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -188,11 +187,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@##():Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -205,11 +204,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -222,11 +221,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.===.AA">AA</span>, <span class="extype" name="cats.data.Xor.===.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Xor.===.AA">AA</span>]</span>, <span name="BB">BB: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Xor.===.BB">BB</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.===.AA">AA</span>, <span class="extype" name="cats.data.Xor.===.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Xor.===.AA">AA</span>]</span>, <span name="BB">BB: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Xor.===.BB">BB</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@===[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Eq[AA],implicitBB:cats.Eq[BB]):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -243,7 +242,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -260,7 +259,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@bimap[C,D](fa:A=&gt;C,fb:B=&gt;D):cats.data.Xor[C,D]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -273,11 +272,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@clone():Object" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -287,6 +286,23 @@ that <code>scala.Either</code> exposes through left projections.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.Xor#combine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="combine[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]"></a>
+      <a id="combine[AA&gt;:A,BB&gt;:B](Xor[AA,BB])(Semigroup[AA],Semigroup[BB]):Xor[AA,BB]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">combine</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.combine.AA">AA</span>, <span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Xor.combine.AA">AA</span>]</span>, <span name="BB">BB: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.combine.AA">AA</span>, <span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor@combine[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.Xor#compare" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="compare[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Order[AA],implicitBB:cats.Order[BB]):Int"></a>
       <a id="compare[AA&gt;:A,BB&gt;:B](Xor[AA,BB])(Order[AA],Order[BB]):Int"></a>
@@ -296,11 +312,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compare</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.compare.AA">AA</span>, <span class="extype" name="cats.data.Xor.compare.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Xor.compare.AA">AA</span>]</span>, <span name="BB">BB: <a href="../package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Xor.compare.BB">BB</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">compare</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.compare.AA">AA</span>, <span class="extype" name="cats.data.Xor.compare.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Xor.compare.AA">AA</span>]</span>, <span name="BB">BB: <a href="../package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Xor.compare.BB">BB</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@compare[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Order[AA],implicitBB:cats.Order[BB]):Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -313,11 +329,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ensure</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>]</span><span class="params">(<span name="ifLeft">ifLeft: ⇒ <span class="extype" name="cats.data.Xor.ensure.AA">AA</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.ensure.AA">AA</span>, <span class="extype" name="cats.data.Xor.B">B</span>]</span>
+        <span class="name">ensure</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>]</span><span class="params">(<span name="ifLeft">ifLeft: ⇒ <span class="extype" name="cats.data.Xor.ensure.AA">AA</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.ensure.AA">AA</span>, <span class="extype" name="cats.data.Xor.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@ensure[AA&gt;:A](ifLeft:=&gt;AA)(f:B=&gt;Boolean):cats.data.Xor[AA,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -330,11 +346,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -347,11 +363,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -364,11 +380,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exists</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">exists</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@exists(f:B=&gt;Boolean):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -381,11 +397,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -408,7 +424,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@flatMap[AA&gt;:A,D](f:B=&gt;cats.data.Xor[AA,D]):cats.data.Xor[AA,D]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -425,7 +441,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@fold[C](fa:A=&gt;C,fb:B=&gt;C):C" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -442,24 +458,24 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@foldLeft[C](c:C)(f:(C,B)=&gt;C):C" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="cats.data.Xor#foldRight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="foldRight[C](c:C)(f:(B,C)=&gt;C):C"></a>
-      <a id="foldRight[C](C)((B,C)⇒C):C"></a>
+      <a id="foldRight[C](lc:cats.Eval[C])(f:(B,cats.Eval[C])=&gt;cats.Eval[C]):cats.Eval[C]"></a>
+      <a id="foldRight[C](Eval[C])((B,Eval[C])⇒Eval[C]):Eval[C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldRight</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="c">c: <span class="extype" name="cats.data.Xor.foldRight.C">C</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>, <span class="extype" name="cats.data.Xor.foldRight.C">C</span>) ⇒ <span class="extype" name="cats.data.Xor.foldRight.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.data.Xor.foldRight.C">C</span></span>
+        <span class="name">foldRight</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="lc">lc: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.Xor.foldRight.C">C</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>, <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.Xor.foldRight.C">C</span>]) ⇒ <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.Xor.foldRight.C">C</span>]</span>)</span><span class="result">: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.Xor.foldRight.C">C</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor@foldRight[C](c:C)(f:(B,C)=&gt;C):C" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../../index.html#cats.data.Xor@foldRight[C](lc:cats.Eval[C])(f:(B,cats.Eval[C])=&gt;cats.Eval[C]):cats.Eval[C]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -472,11 +488,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">forall</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">forall</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@forall(f:B=&gt;Boolean):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -489,11 +505,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foreach</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">foreach</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@foreach(f:B=&gt;Unit):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -510,7 +526,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -527,7 +543,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@getOrElse[BB&gt;:B](default:=&gt;BB):BB" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -540,11 +556,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -557,11 +573,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -574,11 +590,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isLeft</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isLeft</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@isLeft:Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -591,11 +607,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isRight</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isRight</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@isRight:Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -612,7 +628,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@leftMap[C](f:A=&gt;C):cats.data.Xor[C,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -629,7 +645,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@map[D](f:B=&gt;D):cats.data.Xor[A,D]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -646,7 +662,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@merge[AA&gt;:A](implicitev:&lt;:&lt;[B,AA]):AA" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -659,11 +675,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -676,11 +692,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@notify():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -693,11 +709,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -714,7 +730,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@orElse[AA&gt;:A,BB&gt;:B](fallback:=&gt;cats.data.Xor[AA,BB]):cats.data.Xor[AA,BB]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -727,28 +743,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">partialCompare</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.partialCompare.AA">AA</span>, <span class="extype" name="cats.data.Xor.partialCompare.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../package.html#PartialOrder[A]=algebra.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.Xor.partialCompare.AA">AA</span>]</span>, <span name="BB">BB: <a href="../package.html#PartialOrder[A]=algebra.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.Xor.partialCompare.BB">BB</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Double" class="extype" target="_top">Double</a></span>
+        <span class="name">partialCompare</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.partialCompare.AA">AA</span>, <span class="extype" name="cats.data.Xor.partialCompare.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../package.html#PartialOrder[A]=algebra.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.Xor.partialCompare.AA">AA</span>]</span>, <span name="BB">BB: <a href="../package.html#PartialOrder[A]=algebra.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.Xor.partialCompare.BB">BB</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Double" class="extype" target="_top">Double</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@partialCompare[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.PartialOrder[AA],implicitBB:cats.PartialOrder[BB]):Double" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="cats.data.Xor#partialFold" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="partialFold[C](f:B=&gt;cats.Fold[C]):cats.Fold[C]"></a>
-      <a id="partialFold[C]((B)⇒Fold[C]):Fold[C]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">partialFold</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.B">B</span>) ⇒ <a href="../Fold.html" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.data.Xor.partialFold.C">C</span>]</span>)</span><span class="result">: <a href="../Fold.html" class="extype" name="cats.Fold">Fold</a>[<span class="extype" name="cats.data.Xor.partialFold.C">C</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor@partialFold[C](f:B=&gt;cats.Fold[C]):cats.Fold[C]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -761,11 +760,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">productIterator</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
+        <span class="name">productIterator</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@productIterator:Iterator[Any]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
@@ -782,10 +781,44 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@productPrefix:String" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
+    </li><li name="cats.data.Xor#recover" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="recover[BB&gt;:B](pf:PartialFunction[A,BB]):cats.data.Xor[A,BB]"></a>
+      <a id="recover[BB&gt;:B](PartialFunction[A,BB]):Xor[A,BB]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recover</span><span class="tparams">[<span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.B">B</span></span>]</span><span class="params">(<span name="pf">pf: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="cats.data.Xor.A">A</span>, <span class="extype" name="cats.data.Xor.recover.BB">BB</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.A">A</span>, <span class="extype" name="cats.data.Xor.recover.BB">BB</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor@recover[BB&gt;:B](pf:PartialFunction[A,BB]):cats.data.Xor[A,BB]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.Xor#recoverWith" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="recoverWith[AA&gt;:A,BB&gt;:B](pf:PartialFunction[A,cats.data.Xor[AA,BB]]):cats.data.Xor[AA,BB]"></a>
+      <a id="recoverWith[AA&gt;:A,BB&gt;:B](PartialFunction[A,Xor[AA,BB]]):Xor[AA,BB]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recoverWith</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.B">B</span></span>]</span><span class="params">(<span name="pf">pf: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="cats.data.Xor.A">A</span>, <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.recoverWith.AA">AA</span>, <span class="extype" name="cats.data.Xor.recoverWith.BB">BB</span>]]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.recoverWith.AA">AA</span>, <span class="extype" name="cats.data.Xor.recoverWith.BB">BB</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor@recoverWith[AA&gt;:A,BB&gt;:B](pf:PartialFunction[A,cats.data.Xor[AA,BB]]):cats.data.Xor[AA,BB]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.Xor#show" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="show[AA&gt;:A,BB&gt;:B](implicitAA:cats.Show[AA],implicitBB:cats.Show[BB]):String"></a>
       <a id="show[AA&gt;:A,BB&gt;:B](Show[AA],Show[BB]):String"></a>
@@ -799,7 +832,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@show[AA&gt;:A,BB&gt;:B](implicitAA:cats.Show[AA],implicitBB:cats.Show[BB]):String" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -816,7 +849,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@swap:cats.data.Xor[B,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -833,7 +866,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -850,7 +883,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@to[F[_],BB&gt;:B](implicitmonoidKF:cats.MonoidK[F],implicitapplicativeF:cats.Applicative[F]):F[BB]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -867,7 +900,24 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@toEither:Either[A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.Xor#toIor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toIor:cats.data.Ior[A,B]"></a>
+      <a id="toIor:Ior[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toIor</span><span class="result">: <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.Xor.A">A</span>, <span class="extype" name="cats.data.Xor.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor@toIor:cats.data.Ior[A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -884,7 +934,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@toList:List[B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -897,11 +947,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toOption</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.Xor.B">B</span>]</span>
+        <span class="name">toOption</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.Xor.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@toOption:Option[B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -918,10 +968,27 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@toString():String" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.Xor#toValidated" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toValidated:cats.data.Validated[A,B]"></a>
+      <a id="toValidated:Validated[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toValidated</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Xor.A">A</span>, <span class="extype" name="cats.data.Xor.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor@toValidated:cats.data.Validated[A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.Xor#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="traverse[F[_],AA&gt;:A,D](f:B=&gt;F[D])(implicitF:cats.Applicative[F]):F[cats.data.Xor[AA,D]]"></a>
       <a id="traverse[F[_],AA&gt;:A,D]((B)⇒F[D])(Applicative[F]):F[Xor[AA,D]]"></a>
@@ -935,7 +1002,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@traverse[F[_],AA&gt;:A,D](f:B=&gt;F[D])(implicitF:cats.Applicative[F]):F[cats.data.Xor[AA,D]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -952,7 +1019,7 @@ that <code>scala.Either</code> exposes through left projections.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@valueOr[BB&gt;:B](f:A=&gt;BB):BB" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -965,11 +1032,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@wait():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -988,11 +1055,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1011,11 +1078,11 @@ that <code>scala.Either</code> exposes through left projections.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+        <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1025,6 +1092,23 @@ that <code>scala.Either</code> exposes through left projections.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.Xor#withValidated" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="withValidated[AA,BB](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[AA,BB]):cats.data.Xor[AA,BB]"></a>
+      <a id="withValidated[AA,BB]((Validated[A,B])⇒Validated[AA,BB]):Xor[AA,BB]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withValidated</span><span class="tparams">[<span name="AA">AA</span>, <span name="BB">BB</span>]</span><span class="params">(<span name="f">f: (<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Xor.A">A</span>, <span class="extype" name="cats.data.Xor.B">B</span>]) ⇒ <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Xor.withValidated.AA">AA</span>, <span class="extype" name="cats.data.Xor.withValidated.BB">BB</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.withValidated.AA">AA</span>, <span class="extype" name="cats.data.Xor.withValidated.BB">BB</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor@withValidated[AA,BB](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[AA,BB]):cats.data.Xor[AA,BB]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
 
@@ -1035,17 +1119,17 @@ that <code>scala.Either</code> exposes through left projections.
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.Product">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
             </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>

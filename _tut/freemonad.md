@@ -5,67 +5,79 @@ section: "data"
 source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/free/FreeMonad.scala"
 scaladoc: "#cats.free.FreeMonad"
 ---
+
 # Free Monad
 
 ## What is it?
 
-`FreeMonad` is a construction allowing to build a `Monad` from any `Functor` and then, as any `Monad`, it can be 
-used to represent a computation and manipulate it in a pure way.
+A *free monad* is a construction which allows you to build a *monad*
+from any *Functor*. Like other *monads*, it is a pure way to represent
+and manipulate computations.
 
-In real life, `FreeMonad` is very useful & practical to:
+In particular, *free monads* provide a practical way to:
 
-- represent recursive computations that can be run in a stack-safe way,
-- build embedded DSL that can be compiled to other languages using natural transformations.
+ - represent stateful computations as data, and run them
+ - run recursive computations in a stack-safe way
+ - build an embedded DSL (domain-specific language)
+ - retarget a computation to another interpreter using natural transformations
 
-> In cats, `FreeMonad` is abbreviated to `Free` as in most languages.
+> (In cats, the type representing a *free monad* is abbreviated as `Free[_]`.)
 
+## Using Free Monads
 
+A good way to get a sense for how *free monads* work is to see them in
+action. The next section uses `Free[_]` to create an embedded DSL
+(Domain Specific Language).
 
-## Using Free Monad
-
-If you're interested in the theory behind `Free`, go down, there are a few deeper aspects in terms of Algebra.
-
-If you want to learn by the example, let's start by using `Free` to create embedded DSL (Domain Specific Language).
-
-
+If you're interested in the theory behind *free monads*, the
+[What is Free in theory?](#what-is-free-in-theory) section discusses free monads
+in terms of category theory.
 
 ### Study your topic
 
-So, we want to create a DSL to interact with a KeyValue Store.
+Let's imagine that we want to create a DSL for a key-value store. We
+want to be able to do three things with keys:
 
-The idea is be able to write a static program regrouping a sequence of operations to interact with a KeyValue store,
-then compile it and finally execute the program.
+ - *put* a `value` into the store associate with its `key`.
+ - *get* a `value` from the store given its `key`.
+ - *delete* a value from the store given its `key`.
 
+The idea is to write a sequence of these operations in the embedded
+DSL as a "program", compile the "program", and finally execute the
+"program" to interact with the actual key-value store.
 
 For example:
 
-```
+```scala
 put("toto", 3)
-get("toto")
+get("toto") // returns 3
 delete("toto")
 ```
 
 But we want:
-- the computation to be monadic & pure functionally speaking
-- separate the program creation from its compiling from its execution (to be able to choose how we execute it, to debug it etc...)
 
+ - the computation to be represented as a pure, immutable value
+ - to separate the creation and execution of the program
+ - to be able to support many different methods of execution
 
 ### Study your grammar
 
 We have 3 commands to interact with our KeyValue store:
 
-- `Put` a value associated to a key
-- `Get` a value associated to a key
-- `Delete` a value associated to a key
+- `Put` a value associated with a key into the store
+- `Get` a value associated with a key out of the store
+- `Delete` a value associated with a key from the store
 
+### Create an ADT representing your grammar
 
-### Create ADT representing your grammar
+ADT stands for *Algebraic Data Type*. In this context, it refers to a
+closed set of types which can be combined to build up complex,
+recursive values.
 
-`ADT` is the Algebraic Data Type corresponding to your program grammar.
+We need to create an ADT to represent our key-value operations:
 
 ```scala
-scala> // 1. create your ADT
-     | sealed trait KVStoreA[+Next]
+scala> sealed trait KVStoreA[+Next]
 defined trait KVStoreA
 
 scala> case class Put[T, Next](key: String, value: T, next: Next) extends KVStoreA[Next]
@@ -78,243 +90,327 @@ scala> case class Delete[Next](key: String, next: Next) extends KVStoreA[Next]
 defined class Delete
 ```
 
-> Please note the `next: Next` in each command providing a carrier for the `Free` recursion (and also allowing `KVStoreA[_]` to be a `Functor`).
+The `next` field in each of the types provides a way to link an
+operation with successive values. The `Next` type parameter can be
+anything at all, including `Unit`. It can be thought of as a carrier,
+a way to link a single operation with successive operations.
 
+As we will see, the `next` field is also necessary to allow us to
+provide a `Functor` instance for `KVStoreA[_]`.
 
 ### Import Free in your `build.sbt`
 
+```scala
+libraryDependencies += "cats" %% "cats-free" % "0.1.2"
 ```
-libraryDependencies +=
-  "cats" %% "cats-free" % "0.1.0-SNAPSHOT"
-)
-```
-
 
 ### Free your ADT
 
-1. Create a `Free` type based on your ADT.
+There are six basic steps to "freeing" the ADT:
+
+1. Create a type based on `Free[_]` and `KVStoreA[_]`.
+2. Prove `KVStoreA[_]` has a functor.
+3. Create smart constructors for `KVStore[_]` using `liftF`.
+4. Build a program out of key-value DSL operations.
+5. Build a compiler for programs of DSL operations.
+6. Execute our compiled program.
+
+#### 1. Create a `Free` type based on your ADT
 
 ```scala
 scala> import cats.free.Free
 import cats.free.Free
 
-scala> // 1. Free type definition
-     | type KVStore[A] = Free[KVStoreA, A]
+scala> type KVStore[A] = Free[KVStoreA, A]
 defined type alias KVStore
 ```
 
-2. Prove your carrier is a `Functor`.
+#### 2. Prove `KVStoreA[_]` has a `Functor`.
 
-One important thing to remark is that `Free[F[_], A]` gives you a **Monad for Free from any Functor F**.
+One important thing to remark is that `Free[F[_], A]` automatically
+gives us a monad for `F`, if `F` has a functor (i.e. if we can find or
+construct a `Functor[F]` instance). It is described as a *free monad*
+since we get this monad "for free."
 
-Therefore, we need to prove `KVStoreA` is a functor.
+Therefore, we need to prove `KVStoreA[_]` has a functor.
 
 ```scala
 scala> import cats.Functor
 import cats.Functor
 
-scala> // 2. Functor definition
-     | implicit val functor: Functor[KVStoreA] = new Functor[KVStoreA] {
-     |   def map[A, B](kvs: KVStoreA[A])(f: A => B): KVStoreA[B] = kvs match {
-     |     case Put(key, value, next) => Put(key, value, f(next))
-     |     // we need to help a bit scalac here with parametric type
-     |     case g:Get[t, A] => Get[t, B](g.key, g.onResult andThen f)
-     |     case Delete(key, next) => Delete(key, f(next))
+scala> implicit val functor: Functor[KVStoreA] =
+     |   new Functor[KVStoreA] {
+     |     def map[A, B](kvs: KVStoreA[A])(f: A => B): KVStoreA[B] =
+     |       kvs match {
+     |         case Put(key, value, next) =>
+     |           Put(key, value, f(next))
+     |         case g: Get[t, A] => // help scalac with parametric type
+     |           Get[t, B](g.key, g.onResult andThen f)
+     |         case Delete(key, next) =>
+     |           Delete(key, f(next))
+     |       }
      |   }
-     | }
-functor: cats.Functor[KVStoreA] = $anon$1@2b5348fc
+functor: cats.Functor[KVStoreA] = $anon$1@5a742dda
 ```
 
+#### 3. Create smart constructors using `liftF`
 
-3. Create smart constructors using `liftF`
+These methods will make working with our DSL a lot nicer, and will
+lift `KVStoreA[_]` values into our `KVStore[_]` monad (note the
+missing "A" in the second type).
 
 ```scala
 scala> import cats.free.Free.liftF
 import cats.free.Free.liftF
 
-scala> import cats.{Id, ~>}
-import cats.{Id, $tilde$greater}
-
-scala> // 3. smart constructors
-     | // Put is a command returning nothing so its return type is Unit
-     | def put[T](key: String, value: T): KVStore[Unit] = liftF(Put(key, value, ()))
+scala> // Put returns nothing (i.e. Unit).
+     | def put[T](key: String, value: T): KVStore[Unit] =
+     |   liftF(Put(key, value, ()))
 put: [T](key: String, value: T)KVStore[Unit]
 
-scala> // Get returns a T
-     | def get[T](key: String): KVStore[T] = liftF(Get[T, T](key, identity))
+scala> // Get returns a T value.
+     | def get[T](key: String): KVStore[T] =
+     |   liftF(Get[T, T](key, identity))
 get: [T](key: String)KVStore[T]
 
-scala> // Delete is a command returning nothing so its return type is Unit
-     | def delete(key: String): KVStore[Unit] = liftF(Delete(key, ()))
+scala> // Delete returns nothing (i.e. Unit).
+     | def delete(key: String): KVStore[Unit] =
+     |   liftF(Delete(key, ()))
 delete: (key: String)KVStore[Unit]
 
-scala> // Update an existing value composing two operations
-     | def update[T](key: String, f: T => T): KVStore[Unit] = for {
-     |   v <- get[T](key)
-     |   _ <- put[T](key, f(v))
-     | } yield ()
+scala> // Update composes get and set, and returns nothing.
+     | def update[T](key: String, f: T => T): KVStore[Unit] =
+     |   for {
+     |     v <- get[T](key)
+     |     _ <- put[T](key, f(v))
+     |   } yield ()
 update: [T](key: String, f: T => T)KVStore[Unit]
 ```
 
-4. Build a program
+#### 4. Build a program
 
-so it also means you can use your `Free` structure in a pure monadic way with `for-comprehension`:
+Now that we can construct `KVStore[_]` values we can use our DSL to
+write "programs" using a *for-comprehension*:
 
 ```scala
-scala> // 5. Write program
-     | def program: KVStore[Int] = for {
-     |   _   <- put("wild-cats", 2)
-     |   _   <- update[Int]("wild-cats", (_ + 12))
-     |   id  <- get[Int]("wild-cats")
-     |   _   <- delete("wild-cats")
-     | } yield (id)
+scala> def program: KVStore[Int] =
+     |   for {
+     |     _ <- put("wild-cats", 2)
+     |     _ <- update[Int]("wild-cats", (_ + 12))
+     |     _ <- put("tame-cats", 5)
+     |     n <- get[Int]("wild-cats")
+     |     _ <- delete("tame-cats")
+     |   } yield n
 program: KVStore[Int]
 ```
 
-This looks like a Monadic flow but in fact, it just builds a recursive data structure representing our sequence of operations. Here is a simplification of it:
-
-```
-Put("wild-cats", 2, 
-  Get("wild-cats",
-    Put("wild-cats", f(2),
-      Get("wild-cats",
-        Delete("wild-cats",
-          Return // to significate the end
-        )
-      )
-    )
-  )
-)
-```
-
-5. Write a compiler for your program
-
-As you may have understood now, `Free` used to create embedded DSL doesn't do anything else than representing your sequence of operations by a recursive data structure.
-
-But, it doesn't produce anything by itself. `Free` is nothing else than a programming language inside your programming language (here a DSL in Scala).
-
-**So as any programming language, you need to compile/interprete it into an _effective_ language and then run it.**
-
-To compile/interprete your abstract language into an effective one, you use a `NaturalTransformation F ~> G` between your `Functor F` to another type container `G`.
-
-Let's write a very simple Natural Transformation that logs & puts our keys/values in a mutable map:
+This looks like a Monadic flow. However, it just builds a recursive
+data structure representing the sequence of operations. Here is a
+similar program represented explicitly:
 
 ```scala
-scala> // A very dummy state
-     | val m = scala.collection.mutable.Map.empty[String, Any]
-m: scala.collection.mutable.Map[String,Any] = Map()
+scala> val programA =
+     |   Put("wild-cats", 2,
+     |     Get("wild-cats", { (n0: Int) =>
+     |       Put("wild-cats", n0 + 12,
+     |         Put("tame-cats", 5,
+     |           Get("wild-cats", { (n1: Int) =>
+     |             Delete("tame-cats", n1)
+     |           })
+     |         )
+     |       )
+     |     })
+     |   )
+programA: Put[Int,Get[Int,Put[Int,Put[Int,Get[Int,Delete[Int]]]]]] = Put(wild-cats,2,Get(wild-cats,<function1>))
+```
 
-scala> // 6. Write compiler
-     | def impureCompiler = new (KVStoreA ~> Id) {
-     |   def apply[A](fa: KVStoreA[A]): Id[A] = fa match {
-     |     case p@Put(key, value, next) => println(s"OP:$p"); m += key -> value; next
-     |     case g:Get[t, A] => println(s"OP:$g"); g.onResult(m(g.key).asInstanceOf[t])
-     |     case d@Delete(key, next) => println(s"OP:$d"); m -= key; next
+One problem with `programA` you may have noticed is that the
+constructor and function calls are all nested. If we had to sequence
+ten thousand operations, we might run out of stack space and trigger a
+`StackOverflowException`.
+
+#### 5. Write a compiler for your program
+
+As you may have understood now, `Free[_]` is used to create an embedded
+DSL. By itself, this DSL only represents a sequence of operations
+(defined by a recursive data structure); it doesn't produce anything.
+
+`Free[_]` is a programming language inside your programming language!
+
+**So, like any other programming language, we need to compile our
+  abstract language into an _effective_ language and then run it.**
+
+To do this, we will use a *natural transformation* between type
+containers.  Natural transformations go between types like `F[_]` and
+`G[_]` (this particular transformation would be written as `F ~> G`).
+
+In our case, we will use a simple mutable map to represent our key
+value store:
+
+```scala
+scala> import cats.{Id, ~>}
+import cats.{Id, $tilde$greater}
+
+scala> import scala.collection.mutable
+import scala.collection.mutable
+
+scala> // a very simple (and imprecise) key-value store
+     | val kvs = mutable.Map.empty[String, Any]
+kvs: scala.collection.mutable.Map[String,Any] = Map()
+
+scala> // the program will crash if a key is not found,
+     | // or if a type is incorrectly specified.
+     | def impureCompiler =
+     |   new (KVStoreA ~> Id) {
+     |     def apply[A](fa: KVStoreA[A]): Id[A] =
+     |       fa match {
+     |         case Put(key, value, next) =>
+     |           println(s"put($key, $value)")
+     |           kvs(key) = value
+     |           next
+     |         case g: Get[t, A] =>
+     |           println(s"get(${g.key})")
+     |           g.onResult(kvs(g.key).asInstanceOf[t])
+     |         case Delete(key, next) =>
+     |           println(s"delete($key)")
+     |           kvs.remove(key)
+     |           next
+     |       }
      |   }
-     | }
 impureCompiler: cats.~>[KVStoreA,cats.Id]
 ```
 
-Please note this `impureCompiler` is impure as it produces side-effects in a mutable `Map`. As any program, it has side-effects sometimes. The whole purpose of Functional Programming isn't to prevent side-effects, it is just to push side-effects to the boundaries of your system in very well known & controlled parts of your program.
+Please note this `impureCompiler` is impure -- it mutates `kvs` and
+also produces logging output using `println`.  The whole purpose of
+functional programming isn't to prevent side-effects, it is just to
+push side-effects to the boundaries of your system in a well-known and
+controlled way.
 
-FYI, `Id` represents the simplest type container to extract a final result but you can imagine using any container such as:
-- `Future` for asynchronous computation
-- `List` for gathering multiple results
-- etc...
+`Id[_]` represents the simplest type container: the type itself. Thus,
+`Id[Int]` is just `Int`. This means that our program will execute
+immediately, and block until the final value can be returned.
 
+However, we could easily use other type containers for different
+behavior, such as:
 
-6. Run your program stack-safe
+ - `Future[_]` for asynchronous computation
+ - `List[_]` for gathering multiple results
+ - `Option[_]` to support optional results
+ - `Validated[_]` (or `Xor[E, ?]`) to support failure
+ - a pseudo-random monad to support non-determinism
+ - and so on...
+
+#### 6. Run your program
 
 The final step is naturally running your program after compiling it.
 
-`Free` is just a recursive structure that can be seen as sequence of operations producing other operations. To obtain a result from a sequence, one may think of folding/catamorphing it.
+`Free[_]` is just a recursive structure that can be seen as sequence
+of operations producing other operations. In this way it is similar to
+`List[_]`. We often use folds (e.g. `foldRight`) to obtain a single
+value from a list; this recurses over the structure, combining its
+contents.
 
+The idea behind running a `Free[_]` is exactly the same. We fold the
+recursive structure by:
 
-The idea behind running a `Free` is exactly the same. We fold the recursive structure by:
-- consuming each operation,
-- compiling the operation into our effective language using `impureCompiler` potentially applying its effects,
-- computing next operation,
-- do it recursively until reaching a `Pure` state.
+ - consuming each operation.
+ - compiling the operation into our effective language using
+  `impureCompiler` (applying its effects if any).
+ - computing next operation.
+ - continue recursively until reaching a `Pure` state, and returning it.
 
 This operation is called `Free.foldMap`:
 
 ```scala
-  final def foldMap[M[_]](f: S ~> M)(implicit S: Functor[S], M: Monad[M]): M[A] = ...
+final def foldMap[M[_]](f: S ~> M)(implicit S: Functor[S], M: Monad[M]): M[A] = ...
 ```
 
-`M` must be a `Monad` to be flattenable (the famous monoid aspect under `Monad`). As `Id` is a `Monad`, we can use `foldMap`.
+`M` must be a `Monad` to be flattenable (the famous monoid aspect
+under `Monad`). As `Id` is a `Monad`, we can use `foldMap`.
 
 To run your `Free` with previous `impureCompiler`:
 
 ```scala
 scala> val result: Id[Int] = program.foldMap(impureCompiler)
-OP:Put(wild-cats,2,cats.free.Free$$anon$1@1cf4eaed)
-OP:Get(wild-cats,<function1>)
-OP:Put(wild-cats,14,cats.free.Free$$anon$1@3162f7f5)
-OP:Get(wild-cats,<function1>)
-OP:Delete(wild-cats,cats.free.Free$$anon$1@73848dd7)
+put(wild-cats, 2)
+get(wild-cats)
+put(wild-cats, 14)
+put(tame-cats, 5)
+get(wild-cats)
+delete(tame-cats)
 result: cats.Id[Int] = 14
 ```
 
-Let's run it for real:
+An important aspect of `foldMap` is its **stack-safety**. It evaluates
+each step of computation on the stack then unstack and restart. This
+process is known as trampolining.
 
+As long as your natural transformation is stack-safe, `foldMap` will
+never overflow your stack.  Trampolining is heap-intensive but
+stack-safety provides the reliability required to use `Free[_]` for
+data-intensive tasks, as well as infinite processes such as streams.
+
+#### 7. Use a pure compiler (optional)
+
+The previous examples used a effectful natural transformation. This
+works, but you might prefer folding your `Free` in a "purer" way.
+
+Using an immutable `Map`, it's impossible to write a Natural
+Transformation using `foldMap` because you would need to know the
+previous state of the `Map` and you don't have it. For this, you need
+to use the lower level `fold` function and fold the `Free[_]` by
+yourself:
+
+```scala
+scala> // Pure computation
+     | def compilePure[A](program: KVStore[A], kvs: Map[String, A]): Map[String, A] =
+     |   program.fold(
+     |     _ => kvs,
+     |     {
+     |       case Put(key, value, next) => // help scalac past type erasure
+     |         compilePure[A](next, kvs + (key -> value.asInstanceOf[A]))
+     |       case g: Get[a, f] => // a bit more help for scalac
+     |         compilePure(g.onResult(kvs(g.key).asInstanceOf[a]), kvs)
+     |       case Delete(key, next) =>
+     |         compilePure(next, kvs - key)
+     |     })
+compilePure: [A](program: KVStore[A], kvs: Map[String,A])Map[String,A]
 ```
-scala> val result: Id[Int] = program.foldMap(impureCompiler)
-OP:Put(wild-cats,2,cats.free.Free$$anon$1@73541f26)
-OP:Put(alley-cats,23,cats.free.Free$$anon$1@7eb37763)
-OP:Get(wild-cats,<function1>)
-OP:Put(wild-cats,14,cats.free.Free$$anon$1@719c0f5b)
-OP:Get(wild-cats,<function1>)
-OP:Delete(alley-cats,cats.free.Free$$anon$1@3a55fa44)
-result: cats.Id[Int] = 14
-```
 
-**An important aspect of `foldMap` is its stack-safety**: it evaluates each step of computation on the stack then unstack and restart. It will never overflow your stack (except if you do it yourself in your natural transformations). It's heap-intensive but stack-safety allows to use `Free` to represent infinite processes such as streams. 
+(You can see that we are again running into some places where Scala's
+support for pattern matching is limited by the JVM's type erasure, but
+it's not too hard to get around.)
 
-
-7. Run program with pure compiler
-
-Previous sample used a effectful natural transformation but you might prefer folding your `Free` in a purer way.
-
-Using an immutable `Map`, it's impossible to write a Natural Transformation using `foldMap` because you need to know the previous state of the `Map` and you don't have it. For this, you need to use the lower level `fold` function and fold the `Free` by yourself.
-
-// Pure computation
-def runPure[A](program: KVStore[A], m: Map[String, A] = Map.empty[String, A]): Map[String, A] = program.fold(
-  _ => m,
-  {
-    // help a bit scalac due to type erasure
-    case Put(key, value, next) => compilePure[A](next, m + (key -> value.asInstanceOf[A]))
-    // help a bit more scalac here
-    case g:Get[a, f] => compilePure(g.onResult(m(g.key).asInstanceOf[a]), m)
-    case Delete(key, next) => compilePure(next, m - key)
-  }
-)
-
-Here you can see a few of scalac limits with respect to pattern matching & JVM type erasure but nothing too hard to go around...
-
-
-```
-scala> val result: Map[String, Int] = compilePure(program)
+```scala
+scala> val result: Map[String, Int] = compilePure(program, Map.empty)
 result: Map[String,Int] = Map(wild-cats -> 14)
 ```
 
-## For the curious ones: what is Free in theory?
+## <a name="what-is-free-in-theory"></a>For the curious ones: what is Free in theory?
 
-Mathematically speaking, `FreeMonad` (at least in the programming language context) is a construction that is left adjoint to a forgetful functor whose domain is the category of Monads and whose co-domain is the category of Endofunctors. Hmmmm...
+Mathematically-speaking, a *free monad* (at least in the programming
+language context) is a construction that is left adjoint to a
+forgetful functor whose domain is the category of Monads and whose
+co-domain is the category of Endofunctors. Huh?
 
-Concretely, **it is just a clever construction allowing to build a _very simple_ Monad from any `Functor`**.
+Concretely, **it is just a clever construction that allows us to build a
+_very simple_ Monad from any _functor_**.
 
 The above forgetful functor takes a `Monad` and:
-- forgets its monadic part (ie `flatMap` function)
-- forgets its applicative part (ie `pure` functions)
-- finally keep the `Functor` part (ie the `map` function).
 
-By reversing all arrows to build the left-adjoint, we deduce that the forgetful functor is basically a construction that:
-- takes a `Functor`
-- adds the applicative behavior (ie `pure`)
-- adds the monadic behavior (ie `flatMap`).
+ - forgets its *monadic* part (e.g. the `flatMap` function)
+ - forgets its *applicative* part (e.g. the `pure` function)
+ - finally keep the *functor* part (e.g. the `map` function)
 
-In terms of implementation, to build a `Monad` from a `Functor`, we use the following classic & quite simple inductive definition (_this generalizes the concept of fixed point functor_):
+By reversing all arrows to build the left-adjoint, we deduce that the
+forgetful functor is basically a construction that:
+
+ - takes a *functor*
+ - adds the *applicative* part (e.g. `pure`)
+ - adds the *monadic* behavior (e.g. `flatMap`)
+
+In terms of implementation, to build a *monad* from a *functor* we use
+the following classic inductive definition:
 
 ```scala
 sealed abstract class Free[F[_], A]
@@ -322,31 +418,42 @@ case class Pure[F[_], A](a: A) extends Free[F, A]
 case class Suspend[F[_], A](a: F[Free[F, A]]) extends Free[F, A]
 ```
 
+(_This generalizes the concept of fixed point functor_.)
+
 In this representation:
 
-- `Pure` allows to build a `Free` from a pure value and is a _reification_ of the applicative `pure` function.
-- `Suspend` allows to build a new `Free` by applying the `Functor F` to previous `Free` and permits the monadic `flatMap`.
+ - `Pure` builds a `Free` instance from an `A` value (it _reifies_ the
+   `pure` function)
+ - `Suspend` build a new `Free` by applying `F` to a previous `Free`
+   (it _reifies_ the `flatMap` function)
 
-So typically, a `Free` structure looks like:
+So a typical `Free` structure might look like:
 
 ```scala
 Suspend(F(Suspend(F(Suspend(F(....(Pure(a))))))))
 ```
 
-It is obvious that `Free` is a recursive structure using `A` in `F[A]` as the recursion carrier with a terminal element `Pure`.
+`Free` is a recursive structure. It uses `A` in `F[A]` as the
+recursion "carrier" with a terminal element `Pure`.
 
-From a computational point of view, `Free` recursive structure can be seen as a sequence of operations:
+From a computational point of view, `Free` recursive structure can be
+seen as a sequence of operations.
 
-- `Pure` is a simple operation returning a value `A` and it ends the whole computation.
-- `Suspend` is a continuation operation that suspends current computation with the suspension `Functor F` (that can represent a command for example) and hands control to the caller. `A` represents a value bound to this computation.
+ - `Pure` returns an `A` value and ends the entire computation.
+- `Suspend` is a continuation; it suspends the current computation
+  with the suspension functor `F` (which can represent a command for
+  example) and hands control to the caller. `A` represents a value
+  bound to this computation.
 
-
-Please note this `Free` construction has the interesting quality of _encoding_ the recursion on the heap instead of the stack as classic functions. This allows to run those `Free` computations in a stack-safe way.
-
+Please note this `Free` construction has the interesting quality of
+_encoding_ the recursion on the heap instead of the stack as classic
+function calls would. This provides the stack-safety we heard about
+earlier, allowing very large `Free` structures to be evaluated safely.
 
 ### For the very curious ones
 
-If you look at implementation in cats, you will see another member in `Free` representation:
+If you look at implementation in cats, you will see another member of
+the `Free[_]` ADT:
 
 ```scala
 sealed abstract case class Gosub[S[_], B]() extends Free[S, B] {
@@ -356,24 +463,34 @@ sealed abstract case class Gosub[S[_], B]() extends Free[S, B] {
 }
 ```
 
-`Gosub` represents a call to a subroutine `a` and when `a` is finished, it continues the computation by calling the function `f` with the result of `a`.
+`Gosub` represents a call to a subroutine `a` and when `a` is
+finished, it continues the computation by calling the function `f`
+with the result of `a`.
 
-It is actually an optimization of `Free` structure allowing to solve the well-known problem of quadratic complexity implied by very deep recursive Free computations. It is exactly the same problem as List appending: the longer the sequence of operations, the longer the `flatMap`. With `Gosub`, `Free` becomes a right associated structure not subject to quadratic complexity.
+It is actually an optimization of `Free` structure allowing to solve a
+problem of quadratic complexity implied by very deep recursive Free
+computations.
 
+It is exactly the same problem as repeatedly appending to a `List[_]`.
+As the sequence of operations becomes longer, the slower a `flatMap`
+"through" the structure will be. With `Gosub`, `Free` becomes a
+right-associated structure not subject to quadratic complexity.
 
+## Future Work (TODO)
 
+There are many remarkable uses of `Free[_]`. In the future, we will
+include some here, such as:
 
-## Remarkable kinds of Free
+ - Trampoline
+ - Option
+ - Iteratee
+ - Source
+ - etc...
 
-TODO
+We will also discuss the *Coyoneda Trick*.
 
-Trampoline
-Option
-Iteratee
-Source
-etc...
+## Credits
 
-
-## Coyoneda Trick
-
-TODO
+This article was written by
+[Pascal Voitot](https://github.com/mandubian) and edited by other
+members of the Cats community.
