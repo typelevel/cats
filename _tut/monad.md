@@ -59,7 +59,7 @@ scala> implicit val listMonad = new Monad[List] {
      |   def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] = fa.flatMap(f)
      |   def pure[A](a: A): List[A] = List(a)
      | }
-listMonad: cats.Monad[List] = $anon$1@158c165c
+listMonad: cats.Monad[List] = $anon$1@3f5159fa
 ```
 
 Part of the reason for this is that name `flatMap` has special significance in

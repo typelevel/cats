@@ -46,12 +46,12 @@ import cats._
 scala> implicit val optionFunctor: Functor[Option] = new Functor[Option] {
      |   def map[A,B](fa: Option[A])(f: A => B) = fa map f
      | }
-optionFunctor: cats.Functor[Option] = $anon$1@4bdf3b9e
+optionFunctor: cats.Functor[Option] = $anon$1@590439e3
 
 scala> implicit val listFunctor: Functor[List] = new Functor[List] {
      |   def map[A,B](fa: List[A])(f: A => B) = fa map f
      | }
-listFunctor: cats.Functor[List] = $anon$1@f347999
+listFunctor: cats.Functor[List] = $anon$1@27510058
 ```
 
 However, functors can also be created for types which don't have a `map`
@@ -136,19 +136,19 @@ create a new functor `F[G[_]]` by composing them:
 
 ```scala
 scala> val listOpt = Functor[List] compose Functor[Option]
-listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@211ad45c
+listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@80b3087
 
 scala> listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
 res10: List[Option[Int]] = List(Some(2), None, Some(4))
 
 scala> val optList = Functor[Option] compose Functor[List]
-optList: cats.Functor[[X]Option[List[X]]] = cats.Functor$$anon$1@5335896e
+optList: cats.Functor[[X]Option[List[X]]] = cats.Functor$$anon$1@b266a49
 
 scala> optList.map(Some(List(1, 2, 3)))(_ + 1)
 res11: Option[List[Int]] = Some(List(2, 3, 4))
 
 scala> val listOptList = listOpt compose Functor[List]
-listOptList: cats.Functor[[X]List[Option[List[X]]]] = cats.Functor$$anon$1@57ac69b7
+listOptList: cats.Functor[[X]List[Option[List[X]]]] = cats.Functor$$anon$1@6ac053d5
 
 scala> listOptList.map(List(Some(List(1,2)), None, Some(List(3,4))))(_ + 1)
 res12: List[Option[List[Int]]] = List(Some(List(2, 3)), None, Some(List(4, 5)))
