@@ -18,11 +18,11 @@ playful shortening of the word *category*.
 <a name="getting-started"></a>
 # Getting Started
 
-Cats has not yet published artifacts, so in order to use Cats you will have to get the Cats source code, and publish jars locally, with `sbt publish-local`
+Cats has not yet published artifacts, so in order to use Cats you will have to get the Cats source code, and publish jars locally, with `sbt catsJVM/publishLocal`
 
 Then in your project, add to your build.sbt
 
-    libraryDependencies += "org.spire-math" %% "cats-core" % "0.1.0-SNAPSHOT"
+    libraryDependencies += "org.spire-math" %% "cats-core" % "0.1.3-SNAPSHOT"
 
 <a name "motivations"></a>
 # Motivations
