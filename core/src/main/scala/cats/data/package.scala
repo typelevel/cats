@@ -1,9 +1,11 @@
 package cats
 
+import scala.collection.immutable.{Stream => SStream}
+
 package object data {
   type NonEmptyList[A] = OneAnd[A, List]
   type NonEmptyVector[A] = OneAnd[A, Vector]
-  type NonEmptyStream[A] = OneAnd[A, Stream]
+  type NonEmptyStream[A] = OneAnd[A, SStream]
   type ValidatedNel[E, A] = Validated[NonEmptyList[E], A]
 
   def NonEmptyList[A](head: A, tail: List[A] = Nil): NonEmptyList[A] =
@@ -16,7 +18,7 @@ package object data {
   def NonEmptyVector[A](head: A, tail: A*): NonEmptyVector[A] =
     OneAnd(head, tail.toVector)
 
-  def NonEmptyStream[A](head: A, tail: Stream[A] = Stream.empty): NonEmptyStream[A] =
+  def NonEmptyStream[A](head: A, tail: SStream[A] = SStream.empty): NonEmptyStream[A] =
     OneAnd(head, tail)
   def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
     OneAnd(head, tail.toStream)

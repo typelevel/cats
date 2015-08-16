@@ -89,6 +89,15 @@ sealed abstract class Eval[A] { self =>
           val run = f
         }
     }
+
+  /**
+   * Ensure that the result of the computation (if any) will be
+   * memoized.
+   *
+   * Practically, this means that when called on an Always[A] a
+   * Later[A] with an equivalent computation will be returned.
+   */
+  def memoize: Eval[A]
 }
 
 
@@ -100,7 +109,9 @@ sealed abstract class Eval[A] { self =>
  * This type should be used when an A value is already in hand, or
  * when the computation to produce an A value is pure and very fast.
  */
-case class Now[A](value: A) extends Eval[A]
+case class Now[A](value: A) extends Eval[A] {
+  def memoize: Eval[A] = this
+}
 
 
 /**
@@ -132,6 +143,8 @@ class Later[A](f: () => A) extends Eval[A] {
     thunk = null // scalastyle:off
     result
   }
+
+  def memoize: Eval[A] = this
 }
 
 object Later {
@@ -150,6 +163,7 @@ object Later {
  */
 class Always[A](f: () => A) extends Eval[A] {
   def value: A = f()
+  def memoize: Eval[A] = new Later(f)
 }
 
 object Always {
@@ -211,6 +225,8 @@ object Eval extends EvalInstances {
     type Start
     val start: () => Eval[Start]
     val run: Start => Eval[A]
+
+    def memoize: Eval[A] = Later(value)
 
     def value: A = {
       type L = Eval[Any]

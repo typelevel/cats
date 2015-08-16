@@ -3,7 +3,8 @@ package tests
 
 import cats.std.AllInstances
 import cats.syntax.AllSyntax
-import org.scalatest.{ FunSuite, Matchers }
+import org.scalatest.{ FunSuite, PropSpec, Matchers }
+import org.scalatest.prop.PropertyChecks
 import org.typelevel.discipline.scalatest.Discipline
 
 import org.scalacheck.{Arbitrary, Gen}
@@ -16,10 +17,19 @@ import scala.util.{Failure, Success, Try}
  * boilerplate in Cats tests.
  */
 trait CatsSuite extends FunSuite with Matchers with Discipline with AllInstances with AllSyntax with TestInstances {
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfiguration(
+      minSuccessful = Platform.minSuccessful,
+      maxDiscardedFactor = Platform.maxDiscardedFactor)
+  // disable scalatest's ===
+  override def convertToEqualizer[T](left: T): Equalizer[T] = ???
+}
 
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration = PropertyCheckConfiguration(
-      minSuccessful = Platform.minSuccessful, maxDiscardedFactor = Platform.maxDiscardedFactor)
-
+trait CatsProps extends PropSpec with Matchers with PropertyChecks with TestInstances {
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfiguration(
+      minSuccessful = Platform.minSuccessful,
+      maxDiscardedFactor = Platform.maxDiscardedFactor)
   // disable scalatest's ===
   override def convertToEqualizer[T](left: T): Equalizer[T] = ???
 }

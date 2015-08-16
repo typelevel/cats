@@ -166,6 +166,16 @@ lazy val state = crossProject.crossType(CrossType.Pure)
 lazy val stateJVM = state.jvm
 lazy val stateJS = state.js
 
+lazy val task = crossProject.crossType(CrossType.Pure)
+  .dependsOn(macros, core, tests % "test-internal -> test")
+  .settings(moduleName := "cats-task")
+  .settings(catsSettings:_*)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val taskJVM = task.jvm
+lazy val taskJS = task.js
+
 lazy val tests = crossProject
   .dependsOn(macros, core, laws)
   .settings(moduleName := "cats-tests")
