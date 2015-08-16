@@ -7,9 +7,10 @@ scaladoc: "#cats.Monad"
 ---
 # Monad
 
-Monad extends the Applicative type class with a new function `flatten`. Flatten
-takes a value in a nested context (eg. `F[F[A]]` where F is the context) and
-"joins" the contexts together so that we have a single context (ie. F[A]).
+`Monad` extends the [Applicative](applicative.html) type class with a
+new function `flatten`. Flatten takes a value in a nested context (eg.
+`F[F[A]]` where F is the context) and "joins" the contexts together so
+that we have a single context (ie. F[A]).
 
 The name `flatten` should remind you of the functions of the same name on many
 classes in the standard library.
@@ -22,7 +23,7 @@ List(List(1),List(2,3)).flatten
 
 ### Monad instances
 
-If Applicative is already present and `flatten` is well-behaved, extending to
+If `Applicative` is already present and `flatten` is well-behaved, extending to
 Monad is trivial. The catch in cats' implementation is that we have to override
 `flatMap` as well.
 
