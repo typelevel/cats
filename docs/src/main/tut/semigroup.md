@@ -80,8 +80,8 @@ because there aren't typeclass instances for Some or None, but for
 Option. If we try to use Some and None, we'll get errors:
 
 ```tut:nofail
-Some(1) <+> None
-None <+> Some(1)
+Some(1) |+| None
+None |+| Some(1)
 ```
 
 N.B.
