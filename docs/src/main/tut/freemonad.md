@@ -91,12 +91,6 @@ a way to link a single operation with successive operations.
 As we will see, the `next` field is also necessary to allow us to
 provide a `Functor` instance for `KVStoreA[_]`.
 
-### Import Free in your `build.sbt`
-
-```scala
-libraryDependencies += "cats" %% "cats-free" % "0.1.2"
-```
-
 ### Free your ADT
 
 There are six basic steps to "freeing" the ADT:
