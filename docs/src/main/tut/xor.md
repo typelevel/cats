@@ -7,16 +7,15 @@ scaladoc: "#cats.data.Xor"
 ---
 # Xor
 
-In day to day programming, it is fairly common to find ourselves writing functions that
+In day-to-day programming, it is fairly common to find ourselves writing functions that
 can fail. For instance, querying a service may result in a connection issue, or some
 unexpected JSON response.
 
 To communicate these errors it has become common practice to throw exceptions. However,
 exceptions are not tracked in any way, shape, or form by the Scala compiler. To see
-if a function throws an exception, and moreover what kind of exception it throws, we
-have to dig through the source code. Then to handle these exceptions, we have to make sure
-we catch them at the call site. This all becomes even more unwieldy when we try to compose
-exception-throwing procedures.
+what kind of exceptions (if any) a function may throw, we have to dig through the source code.
+Then to handle these exceptions, we have to make sure we catch them at the call site.
+This all becomes even more unwieldy when we try to compose exception-throwing procedures.
 
 ```scala
 val throwsSomeStuff: Int => Double = ???
@@ -39,7 +38,8 @@ How then do we communicate an error? By making it explicit in the data type we r
 ## Xor
 
 ### Why not `Either`
-`Xor` is very similar to `scala.util.Either` - in fact, they are isomorphic.
+`Xor` is very similar to `scala.util.Either` - in fact, they are *isomorphic* (that is,
+any `Either` value can be rewritten as an `Xor` value, and vice versa).
 
 ```scala
 sealed abstract class Xor[+A, +B]
@@ -53,11 +53,12 @@ object Xor {
 Just like `Either`, it has two type parameters. Instances of `Xor` either hold a value
 of one type parameter, or the other. Why then does it exist at all?
 
-Taking a look at `Either`, we notice immediately there is no `flatMap` or `map` method on
-it. Instead, we must call `Either#right` (or `Either#left`) and then call `flatMap` or `map`
-on the result of that. The result of calling `Either#right` is a `RightProjection`, the name
-indicating what direction the `Either` is "biased" in. `RightProjection` is "right-biased", so
-calling `flatMap` or `map` on a `RightProjection` acts on the right type-parameter.
+Taking a look at `Either`, we notice it lacks `flatMap` and `map` methods. In order to map
+over an `Either[A, B]` value, we have to state which side we want to map over. For example,
+if we want to map `Either[A, B]` to `Either[A, C]` we would need to map over the right side.
+This can be accomplished by using the `Either#right` method, which returns a `RightProjection`
+instance. `RightProjection` does have `flatMap` and `map` on it, which acts on the right side
+and ignores the left - this property is referred to as "right-bias."
 
 ```tut
 val e1: Either[String, Int] = Right(5)
@@ -72,7 +73,7 @@ Note the return types are themselves back to `Either`, so if we want to make mor
 
 More often than not we want to just bias towards one side and call it a day - by convention,
 the right side is most often chosen. This is the primary difference between `Xor` and `Either` -
-it is right-biased by default. `Xor` also has some more convenient methods on it, but the most
+`Xor` is right-biased. `Xor` also has some more convenient methods on it, but the most
 crucial one is the right-biased being built-in.
 
 ```tut
@@ -85,11 +86,15 @@ val xor2: Xor[String, Int] = Xor.left("hello")
 xor2.map(_ + 1)
 ```
 
-Because `Xor` is right-biased by default, it is easy to define a `Monad` instance for it (you
-could also define one for `Either` but due to how its encoded it may seem strange to fix a
-bias direction despite it intending to be flexible in that regard). Since we only ever want
-the computation to continue in the case of `Xor.Right` (as captured by the right-bias nature),
-we fix the left type parameter and leave the right one free.
+Because `Xor` is right-biased, it is possible to define a `Monad` instance for it. You
+could also define one for `Either` but due to how it's encoded it may seem strange to fix a
+bias direction despite it intending to be flexible in that regard. The `Monad` instance for
+`Xor` is consistent with the behavior of the data type itself, whereas the one for `Either`
+would only introduce bias when `Either` is used in a generic context (a function abstracted
+over `M[_] : Monad`).
+
+Since we only ever want the computation to continue in the case of `Xor.Right` (as captured
+by the right-bias nature), we fix the left type parameter and leave the right one free.
 
 ```tut
 import cats.Monad
@@ -110,7 +115,7 @@ take the reciprocal, and then turn the reciprocal into a string.
 In exception-throwing code, we would have something like this:
 
 ```tut
-object Exceptiony {
+object ExceptionStyle {
   def parse(s: String): Int =
     if (s.matches("-?[0-9]+")) s.toInt
     else throw new NumberFormatException(s"${s} is not a valid integer.")
@@ -126,7 +131,7 @@ object Exceptiony {
 Instead, let's make the fact that some of our functions can fail explicit in the return type.
 
 ```tut
-object Xory {
+object XorStyle {
   def parse(s: String): Xor[NumberFormatException, Int] =
     if (s.matches("-?[0-9]+")) Xor.right(s.toInt)
     else Xor.left(new NumberFormatException(s"${s} is not a valid integer."))
@@ -142,7 +147,7 @@ object Xory {
 Now, using combinators like `flatMap` and `map`, we can compose our functions together.
 
 ```tut
-import Xory._
+import XorStyle._
 
 def magic(s: String): Xor[Exception, String] =
   parse(s).flatMap(reciprocal).map(stringify)
@@ -166,14 +171,14 @@ note the `Xor.Left(_)` clause - the compiler will complain if we leave that out 
 that given the type `Xor[Exception, String]`, there can be inhabitants of `Xor.Left` that are not
 `NumberFormatException` or `IllegalArgumentException`. However, we "know" by inspection of the source
 that those will be the only exceptions thrown, so it seems strange to have to account for other exceptions.
-This implies that our choice of type is not strong enough.
+This implies that there is still room to improve.
 
 ### Example usage: Round 2
 Instead of using exceptions as our error value, let's instead enumerate explicitly the things that
 can go wrong in our program.
 
 ```tut
-object Xory2 {
+object XorStyle {
   sealed abstract class Error
   final case class NotANumber(string: String) extends Error
   final case object NoZeroReciprocal extends Error
@@ -195,10 +200,11 @@ object Xory2 {
 
 For our little module, we enumerate any and all errors that can occur. Then, instead of using
 exception classes as error values, we use one of the enumerated cases. Now when we pattern
-match, we get much nicer matching.
+match, we get much nicer matching. Moreover, since `Error` is `sealed`, no outside code can
+add additional subtypes which we might fail to handle.
 
 ```tut
-import Xory2._
+import XorStyle._
 
 magic("123") match {
   case Xor.Left(NotANumber(_)) => println("not a number!")
