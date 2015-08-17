@@ -38,9 +38,9 @@ in terms of category theory.
 Let's imagine that we want to create a DSL for a key-value store. We
 want to be able to do three things with keys:
 
- - *put* a `value` into the store associate with its `key`.
+ - *put* a `value` into the store, associated with its `key`.
  - *get* a `value` from the store given its `key`.
- - *delete* a value from the store given its `key`.
+ - *delete* a `value` from the store given its `key`.
 
 The idea is to write a sequence of these operations in the embedded
 DSL as a "program", compile the "program", and finally execute the
@@ -90,12 +90,6 @@ a way to link a single operation with successive operations.
 
 As we will see, the `next` field is also necessary to allow us to
 provide a `Functor` instance for `KVStoreA[_]`.
-
-### Import Free in your `build.sbt`
-
-```scala
-libraryDependencies += "cats" %% "cats-free" % "0.1.2"
-```
 
 ### Free your ADT
 
@@ -187,7 +181,7 @@ def program: KVStore[Int] =
   } yield n
 ```
 
-This looks like a Monadic flow. However, it just builds a recursive
+This looks like a monadic flow. However, it just builds a recursive
 data structure representing the sequence of operations. Here is a
 similar program represented explicitly:
 
@@ -325,8 +319,8 @@ data-intensive tasks, as well as infinite processes such as streams.
 The previous examples used a effectful natural transformation. This
 works, but you might prefer folding your `Free` in a "purer" way.
 
-Using an immutable `Map`, it's impossible to write a Natural
-Transformation using `foldMap` because you would need to know the
+Using an immutable `Map`, it's impossible to write a natural
+transformation using `foldMap` because you would need to know the
 previous state of the `Map` and you don't have it. For this, you need
 to use the lower level `fold` function and fold the `Free[_]` by
 yourself:
@@ -368,7 +362,7 @@ The above forgetful functor takes a `Monad` and:
 
  - forgets its *monadic* part (e.g. the `flatMap` function)
  - forgets its *applicative* part (e.g. the `pure` function)
- - finally keep the *functor* part (e.g. the `map` function)
+ - finally keeps the *functor* part (e.g. the `map` function)
 
 By reversing all arrows to build the left-adjoint, we deduce that the
 forgetful functor is basically a construction that:
@@ -436,7 +430,7 @@ finished, it continues the computation by calling the function `f`
 with the result of `a`.
 
 It is actually an optimization of `Free` structure allowing to solve a
-problem of quadratic complexity implied by very deep recursive Free
+problem of quadratic complexity implied by very deep recursive `Free`
 computations.
 
 It is exactly the same problem as repeatedly appending to a `List[_]`.

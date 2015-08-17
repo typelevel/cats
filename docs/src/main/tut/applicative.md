@@ -28,9 +28,9 @@ Applicative[Option].pure(1)
 Applicative[List].pure(1)
 ```
 
-Like [Functor](functor.html) and [Apply](apply.html), Applicative
-functors also compose naturally with other Applicative functors. When
-you compose one Applicative with another, the resulting `pure`
+Like [`Functor`](functor.html) and [`Apply`](apply.html), `Applicative`
+functors also compose naturally with each other. When
+you compose one `Applicative` with another, the resulting `pure`
 operation will lift the passed value into one context, and the result
 into the other context:
 
