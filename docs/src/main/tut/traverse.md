@@ -223,16 +223,16 @@ We end up with a `Future[List[Unit]]`! A `List[Unit]` is not of any use to us, a
 same amount of information as a single `Unit` does.
 
 Traversing solely for the sake of the effect (ignoring any values that may be produced, `Unit` or otherwise)
-is common, so `Traverse` provides `traverse_` and `sequence_` methods that do the same thing as
-`traverse` and `sequence` but ignores any value produced along the way, returning `Unit` at the end.
+is common, so `Foldable` (superclass of `Traverse`) provides `traverse_` and `sequence_` methods that do the
+same thing as `traverse` and `sequence` but ignores any value produced along the way, returning `Unit` at the end.
 
 ```tut
-import cats.Traverse
+import cats.syntax.foldable._
 
-def writeManyToStore(data: List[Data]) = Traverse[List].traverse_(data)(writeToStore)
+def writeManyToStore(data: List[Data]) = data.traverse_(writeToStore)
 
 // Int values are ignored with traverse_
 def writeToStoreV2(data: Data): Future[Int] = ???
 
-def writeManyToStoreV2(data: List[Data]) = Traverse[List].traverse_(data)(writeToStoreV2)
+def writeManyToStoreV2(data: List[Data]) = data.traverse_(writeToStoreV2)
 ```
