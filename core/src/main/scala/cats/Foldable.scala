@@ -9,7 +9,7 @@ import simulacrum.typeclass
  * In the case of a collection (such as `List` or `Set`), these
  * methods will fold together (combine) the values contained in the
  * collection to produce a single result. Most collection types have
- * `foldLeft` methods, which will usually be used by the associationed
+ * `foldLeft` methods, which will usually be used by the associated
  * `Foldable[_]` instance.
  *
  * Foldable[F] is implemented in terms of two basic methods:
