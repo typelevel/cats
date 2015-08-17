@@ -8,12 +8,12 @@ source: "https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/
 # Monoid
 
 `Monoid` extends the [`Semigroup`](semigroup.html) typeclass, adding an `empty` method to semigroup's 
-`combine`. The `empty` method must return a value that combined with any other instance of that type
+`combine`. The `empty` method must return a value that when combined with any other instance of that type
 returns the other instance, i.e.
 
     (combine(x, empty) == combine(empty, x) == x)
     
-For example, if we have `Monoid[String]` with `combine` as string concatenation, then `empty = ""`.
+For example, if we have a `Monoid[String]` with `combine` defined as string concatenation, then `empty = ""`.
 
 Having an `empty` defined allows us to combine all the elements of some potentially empty collection
 of `T` for which a `Monoid[T]` is defined and return a `T`, rather than an `Option[T]` as we have a
@@ -29,7 +29,7 @@ Monoid[String].combineAll(List())
 ```
 
 The advantage of using these typeclass provided methods, rather than the specific ones for each
-type is that we can compose monoids to allow us to operate on more complex types, e.g.
+type, is that we can compose monoids to allow us to operate on more complex types, e.g.
  
 ```tut
 import cats._
