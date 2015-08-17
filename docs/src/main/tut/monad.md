@@ -7,10 +7,10 @@ scaladoc: "#cats.Monad"
 ---
 # Monad
 
-`Monad` extends the [Applicative](applicative.html) type class with a
+`Monad` extends the [`Applicative`](applicative.html) type class with a
 new function `flatten`. Flatten takes a value in a nested context (eg.
 `F[F[A]]` where F is the context) and "joins" the contexts together so
-that we have a single context (ie. F[A]).
+that we have a single context (ie. `F[A]`).
 
 The name `flatten` should remind you of the functions of the same name on many
 classes in the standard library.
@@ -85,7 +85,7 @@ Monad[List].ifM(List(true, false, true))(List(1, 2), List(3, 4))
 ```
 
 ### Composition
-Unlike [Functors](functor.html) and [Applicatives](applicative.html),
+Unlike [`Functor`s](functor.html) and [`Applicative`s](applicative.html),
 not all `Monad`s compose. This means that even if `M[_]` and `N[_]` are
 both `Monad`s, `M[N[_]]` is not guaranteed to be a `Monad`.
 

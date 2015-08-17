@@ -22,7 +22,7 @@ must be the same as
 for all possible values of `a`, `b`, `c`.
 
 Cats does not define a `Semigroup` type class itself. Instead, we use the
-[Semigroup
+[`Semigroup`
 trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala)
 which is defined in the [algebra
 project](https://github.com/non/algebra). The [`cats` package

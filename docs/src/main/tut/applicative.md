@@ -7,7 +7,7 @@ scaladoc: "#cats.Applicative"
 ---
 # Applicative
 
-`Applicative` extends [Apply](apply.html) by adding a single method,
+`Applicative` extends [`Apply`](apply.html) by adding a single method,
 `pure`:
 
 ```scala
@@ -40,7 +40,7 @@ into the other context:
 
 ## Applicative Functors & Monads
 
-`Applicative` is a generalization of [Monad](monad.html), allowing expression
+`Applicative` is a generalization of [`Monad`](monad.html), allowing expression
 of effectful computations in a pure functional way.
 
 `Applicative` is generally preferred to `Monad` when the structure of a
