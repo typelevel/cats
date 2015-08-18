@@ -43,4 +43,14 @@ object arbitrary {
       A.arbitrary.map(a => Eval.now(a)),
       A.arbitrary.map(a => Eval.later(a)),
       A.arbitrary.map(a => Eval.always(a))))
+
+  import cats.data.{Streaming, StreamingT}
+
+  implicit def streamingArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Streaming[A]] =
+    Arbitrary(Gen.listOf(A.arbitrary).map(Streaming.fromList))
+
+  implicit def streamKArbitrary[F[_], A](implicit F: Monad[F], A: Arbitrary[A]): Arbitrary[StreamingT[F, A]] =
+    Arbitrary(for {
+      as <- Gen.listOf(A.arbitrary)
+    } yield as.foldLeft(StreamingT.empty[F, A])((s, a) => StreamingT.This(a, F.pure(s))))
 }

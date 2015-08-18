@@ -42,4 +42,13 @@ object eq {
     }
   }
 
+  import cats.data.StreamingT
+
+  implicit def streamTEq[F[_]: EqK: Monad, A: Eq]: Eq[StreamingT[F, A]] =
+    new Eq[StreamingT[F, A]] {
+      def eqv(lhs: StreamingT[F, A], rhs: StreamingT[F, A]): Boolean = {
+        val e = EqK[F].synthesize[List[A]](EqK[List].synthesize[A])
+        e.eqv(lhs.toList, rhs.toList)
+      }
+    }
 }

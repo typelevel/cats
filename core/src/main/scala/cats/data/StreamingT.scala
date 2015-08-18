@@ -8,9 +8,9 @@ import scala.reflect.ClassTag
 import scala.annotation.tailrec
 import scala.collection.mutable
 
-sealed abstract class StreamT[F[_], A] { lhs =>
+sealed abstract class StreamingT[F[_], A] { lhs =>
 
-  import StreamT.{Empty, Next, This}
+  import StreamingT.{Empty, Next, This}
 
   /**
    * Deconstruct a stream into a head and tail (if available).
@@ -18,7 +18,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
    * This method will evaluate the stream until it finds a head and
    * tail, or until the stream is exhausted.
    */
-  def uncons(implicit ev: Monad[F]): F[Option[(A, StreamT[F, A])]] =
+  def uncons(implicit ev: Monad[F]): F[Option[(A, StreamingT[F, A])]] =
     this match {
       case Empty() => ev.pure(None)
       case Next(ft) => ft.flatMap(_.uncons)
@@ -28,7 +28,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
   /**
    * Lazily transform the stream given a function `f`.
    */
-  def map[B](f: A => B)(implicit ev: Functor[F]): StreamT[F, B] =
+  def map[B](f: A => B)(implicit ev: Functor[F]): StreamingT[F, B] =
     this match {
       case Empty() => Empty()
       case Next(ft) => Next(ft.map(_.map(f)))
@@ -38,7 +38,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
   /**
    * Lazily transform the stream given a function `f`.
    */
-  def flatMap[B](f: A => StreamT[F, B])(implicit ev: Functor[F]): StreamT[F, B] =
+  def flatMap[B](f: A => StreamingT[F, B])(implicit ev: Functor[F]): StreamingT[F, B] =
     this match {
       case Empty() => Empty()
       case Next(ft) => Next(ft.map(_.flatMap(f)))
@@ -48,7 +48,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
   /**
    * Lazily filter the stream given the predicate `f`.
    */
-  def filter(f: A => Boolean)(implicit ev: Functor[F]): StreamT[F, A] =
+  def filter(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
       case Empty() => this
       case Next(ft) => Next(ft.map(_.filter(f)))
@@ -86,7 +86,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
   /**
    * Lazily concatenate two streams.
    */
-  def concat(rhs: StreamT[F, A])(implicit ev: Functor[F]): StreamT[F, A] =
+  def concat(rhs: StreamingT[F, A])(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
       case Empty() => rhs
       case Next(ft) => Next(ft.map(_ concat rhs))
@@ -98,7 +98,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
    *
    * In this case the evaluation of the second stream may be deferred.
    */
-  def concat(rhs: F[StreamT[F, A]])(implicit ev: Functor[F]): StreamT[F, A] =
+  def concat(rhs: F[StreamingT[F, A]])(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
       case Empty() => Next(rhs)
       case Next(ft) => Next(ft.map(_ concat rhs))
@@ -111,7 +111,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
    * The lenght of the result will be the shorter of the two
    * arguments.
    */
-  def zip[B](rhs: StreamT[F, B])(implicit ev: Monad[F]): StreamT[F, (A, B)] =
+  def zip[B](rhs: StreamingT[F, B])(implicit ev: Monad[F]): StreamingT[F, (A, B)] =
     Next(for {
       lo <- lhs.uncons; ro <- rhs.uncons
     } yield (lo, ro) match {
@@ -127,7 +127,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
    * Unlike `zip`, the length of the result will be the longer of the
    * two arguments.
    */
-  def izip[B](rhs: StreamT[F, B])(implicit ev: Monad[F]): StreamT[F, Ior[A, B]] =
+  def izip[B](rhs: StreamingT[F, B])(implicit ev: Monad[F]): StreamingT[F, Ior[A, B]] =
     Next(for {
       lo <- lhs.uncons; ro <- rhs.uncons
     } yield (lo, ro) match {
@@ -170,7 +170,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
    * If the current stream has `n` or fewer elements, the entire
    * stream will be returned.
    */
-  def take(n: Int)(implicit ev: Functor[F]): StreamT[F, A] =
+  def take(n: Int)(implicit ev: Functor[F]): StreamingT[F, A] =
     if (n <= 0) Empty() else this match {
       case Empty() => Empty()
       case Next(ft) => Next(ft.map(_.take(n)))
@@ -184,7 +184,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
    * If the current stream has `n` or fewer elements, an empty stream
    * will be returned.
    */
-  def drop(n: Int)(implicit ev: Functor[F]): StreamT[F, A] =
+  def drop(n: Int)(implicit ev: Functor[F]): StreamingT[F, A] =
     if (n <= 0) this else this match {
       case Empty() => Empty()
       case Next(ft) => Next(ft.map(_.drop(n)))
@@ -206,7 +206,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
    *
    * Will result in: Stream(1, 2, 3)
    */
-  def takeWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamT[F, A] =
+  def takeWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
       case Empty() => Empty()
       case Next(ft) => Next(ft.map(_.takeWhile(f)))
@@ -228,7 +228,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
    *
    * Will result in: Stream(4, 5, 6, 7)
    */
-  def dropWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamT[F, A] =
+  def dropWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
       case Empty() => Empty()
       case Next(ft) => Next(ft.map(_.dropWhile(f)))
@@ -265,7 +265,7 @@ sealed abstract class StreamT[F[_], A] { lhs =>
     }
 }
 
-object StreamT {
+object StreamingT {
 
   /**
    * Concrete Stream[A] types:
@@ -279,23 +279,23 @@ object StreamT {
    * and Always). The head of `This` is eager -- a lazy head can be
    * represented using `Next(Always(...))` or `Next(Later(...))`.
    */
-  case class Empty[F[_], A]() extends StreamT[F, A]
-  case class Next[F[_], A](next: F[StreamT[F, A]]) extends StreamT[F, A]
-  case class This[F[_], A](a: A, tail: F[StreamT[F, A]]) extends StreamT[F, A]
+  case class Empty[F[_], A]() extends StreamingT[F, A]
+  case class Next[F[_], A](next: F[StreamingT[F, A]]) extends StreamingT[F, A]
+  case class This[F[_], A](a: A, tail: F[StreamingT[F, A]]) extends StreamingT[F, A]
 
   /**
    * Create an empty stream of type A.
    */
-  def empty[F[_], A]: StreamT[F, A] =
+  def empty[F[_], A]: StreamingT[F, A] =
     Empty()
 
   /**
    * Create a stream consisting of a single value.
    */
-  def apply[F[_], A](a: A)(implicit ev: Applicative[F]): StreamT[F, A] =
+  def apply[F[_], A](a: A)(implicit ev: Applicative[F]): StreamingT[F, A] =
     This(a, ev.pure(Empty()))
 
-  def cons[F[_], A](a: A, fs: F[StreamT[F, A]]): StreamT[F, A] =
+  def cons[F[_], A](a: A, fs: F[StreamingT[F, A]]): StreamingT[F, A] =
     This(a, fs)
 
   /**
@@ -304,9 +304,17 @@ object StreamT {
    * None represents an empty stream. Some(a) reprsents an initial
    * element, and we can compute the tail (if any) via f(a).
    */
-  def unfold[F[_], A](o: Option[A])(f: A => F[Option[A]])(implicit ev: Functor[F]): StreamT[F, A] =
+  def unfold[F[_], A](o: Option[A])(f: A => F[Option[A]])(implicit ev: Functor[F]): StreamingT[F, A] =
     o match {
       case None => Empty()
       case Some(a) => This(a, f(a).map(o => unfold(o)(f)))
+    }
+
+  implicit def streamTMonad[F[_]: Applicative]: Monad[StreamingT[F, ?]] =
+    new Monad[StreamingT[F, ?]] {
+      def pure[A](a: A): StreamingT[F, A] =
+        StreamingT(a)
+      def flatMap[A, B](fa: StreamingT[F, A])(f: A => StreamingT[F, B]): StreamingT[F, B] =
+        fa.flatMap(f)
     }
 }

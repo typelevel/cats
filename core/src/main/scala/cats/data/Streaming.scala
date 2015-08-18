@@ -1,15 +1,16 @@
 package cats
 package data
 
+import cats.syntax.eq._
 import cats.syntax.order._
 import scala.reflect.ClassTag
 
 import scala.annotation.tailrec
 import scala.collection.mutable
 
-sealed abstract class Stream[A] { lhs =>
+sealed abstract class Streaming[A] { lhs =>
 
-  import Stream.{Empty, Next, This}
+  import Streaming.{Empty, Next, This}
 
   /**
    * The stream's catamorphism.
@@ -25,8 +26,8 @@ sealed abstract class Stream[A] { lhs =>
    * these nodes will be evaluated until an empty or non-empty stream
    * is found (i.e. until Empty() or This() is found).
    */
-  def fold[B](b: => B, f: (A, Eval[Stream[A]]) => B): B = {
-    @tailrec def unroll(s: Stream[A]): B =
+  def fold[B](b: => B, f: (A, Eval[Streaming[A]]) => B): B = {
+    @tailrec def unroll(s: Streaming[A]): B =
       s match {
         case Empty() => b
         case Next(lt) => unroll(lt.value)
@@ -42,10 +43,10 @@ sealed abstract class Stream[A] { lhs =>
    * streams. This makes it more appropriate to use in situations
    * where the stream's laziness must be preserved.
    */
-  def foldStream[B](bs: => Stream[B], f: (A, Eval[Stream[A]]) => Stream[B]): Stream[B] =
+  def foldStreaming[B](bs: => Streaming[B], f: (A, Eval[Streaming[A]]) => Streaming[B]): Streaming[B] =
     this match {
       case Empty() => bs
-      case Next(lt) => Next(lt.map(_.foldStream(bs, f)))
+      case Next(lt) => Next(lt.map(_.foldStreaming(bs, f)))
       case This(a, lt) => f(a, lt)
     }
 
@@ -55,8 +56,8 @@ sealed abstract class Stream[A] { lhs =>
    * This method will evaluate the stream until it finds a head and
    * tail, or until the stream is exhausted.
    */
-  def uncons: Option[(A, Eval[Stream[A]])] = {
-    @tailrec def unroll(s: Stream[A]): Option[(A, Eval[Stream[A]])] =
+  def uncons: Option[(A, Eval[Streaming[A]])] = {
+    @tailrec def unroll(s: Streaming[A]): Option[(A, Eval[Streaming[A]])] =
       s match {
         case Empty() => None
         case Next(lt) => unroll(lt.value)
@@ -68,7 +69,7 @@ sealed abstract class Stream[A] { lhs =>
   /**
    * Lazily transform the stream given a function `f`.
    */
-  def map[B](f: A => B): Stream[B] =
+  def map[B](f: A => B): Streaming[B] =
     this match {
       case Empty() => Empty()
       case Next(lt) => Next(lt.map(_.map(f)))
@@ -78,7 +79,7 @@ sealed abstract class Stream[A] { lhs =>
   /**
    * Lazily transform the stream given a function `f`.
    */
-  def flatMap[B](f: A => Stream[B]): Stream[B] =
+  def flatMap[B](f: A => Streaming[B]): Streaming[B] =
     this match {
       case Empty() => Empty()
       case Next(lt) => Next(lt.map(_.flatMap(f)))
@@ -88,18 +89,22 @@ sealed abstract class Stream[A] { lhs =>
   /**
    * Lazily filter the stream given the predicate `f`.
    */
-  def filter(f: A => Boolean): Stream[A] =
+  def filter(f: A => Boolean): Streaming[A] =
     this match {
-      case Empty() => this
-      case Next(lt) => Next(lt.map(_.filter(f)))
-      case This(a, lt) => if (f(a)) this else Next(lt.map(_.filter(f)))
+      case Empty() =>
+        this
+      case Next(lt) =>
+        Next(lt.map(_.filter(f)))
+      case This(a, lt) =>
+        val ft = lt.map(_.filter(f))
+        if (f(a)) This(a, ft) else Next(ft)
     }
 
   /**
    * Eagerly fold the stream to a single value from the left.
    */
   def foldLeft[B](b: B)(f: (B, A) => B): B = {
-    @tailrec def unroll(s: Stream[A], b: B): B =
+    @tailrec def unroll(s: Streaming[A], b: B): B =
       s match {
         case Empty() => b
         case Next(lt) => unroll(lt.value, b)
@@ -125,7 +130,7 @@ sealed abstract class Stream[A] { lhs =>
    * element to be calculated.
    */
   def isEmpty: Boolean = {
-    @tailrec def unroll(s: Stream[A]): Boolean =
+    @tailrec def unroll(s: Streaming[A]): Boolean =
       s match {
         case This(_, _) => false
         case Empty() => true
@@ -161,7 +166,7 @@ sealed abstract class Stream[A] { lhs =>
   /**
    * Lazily concatenate two streams.
    */
-  def concat(rhs: Stream[A]): Stream[A] =
+  def concat(rhs: Streaming[A]): Streaming[A] =
     this match {
       case Empty() => rhs
       case Next(lt) => Next(lt.map(_ concat rhs))
@@ -173,7 +178,7 @@ sealed abstract class Stream[A] { lhs =>
    *
    * In this case the evaluation of the second stream may be deferred.
    */
-  def concat(rhs: Eval[Stream[A]]): Stream[A] =
+  def concat(rhs: Eval[Streaming[A]]): Streaming[A] =
     this match {
       case Empty() => Next(rhs)
       case Next(lt) => Next(lt.map(_ concat rhs))
@@ -186,7 +191,7 @@ sealed abstract class Stream[A] { lhs =>
    * The lenght of the result will be the shorter of the two
    * arguments.
    */
-  def zip[B](rhs: Stream[B]): Stream[(A, B)] =
+  def zip[B](rhs: Streaming[B]): Streaming[(A, B)] =
     (lhs.uncons, rhs.uncons) match {
       case (Some((a, lta)), Some((b, ltb))) =>
         This((a, b), Always(lta.value zip ltb.value))
@@ -194,8 +199,8 @@ sealed abstract class Stream[A] { lhs =>
         Empty()
     }
 
-  def zipWithIndex: Stream[(A, Int)] = {
-    def loop(s: Stream[A], i: Int): Stream[(A, Int)] =
+  def zipWithIndex: Streaming[(A, Int)] = {
+    def loop(s: Streaming[A], i: Int): Streaming[(A, Int)] =
       s match {
         case Empty() => Empty()
         case Next(lt) => Next(lt.map(s => loop(s, i)))
@@ -210,7 +215,7 @@ sealed abstract class Stream[A] { lhs =>
    * Unlike `zip`, the length of the result will be the longer of the
    * two arguments.
    */
-  def izip[B](rhs: Stream[B]): Stream[Ior[A, B]] =
+  def izip[B](rhs: Streaming[B]): Streaming[Ior[A, B]] =
     (lhs.uncons, rhs.uncons) match {
       case (Some((a, lta)), Some((b, ltb))) =>
         This(Ior.both(a, b), Always(lta.value izip ltb.value))
@@ -225,7 +230,7 @@ sealed abstract class Stream[A] { lhs =>
   /**
    * Unzip this stream of tuples into two distinct streams.
    */
-  def unzip[B, C](implicit ev: A =:= (B, C)): (Stream[B], Stream[C]) =
+  def unzip[B, C](implicit ev: A =:= (B, C)): (Streaming[B], Streaming[C]) =
     (this.map(_._1), this.map(_._2))
 
   /**
@@ -234,7 +239,7 @@ sealed abstract class Stream[A] { lhs =>
    * The streams are assumed to already be sorted. If they are not,
    * the resulting order is not defined.
    */
-  def merge(rhs: Stream[A])(implicit ev: Order[A]): Stream[A] =
+  def merge(rhs: Streaming[A])(implicit ev: Order[A]): Streaming[A] =
     (lhs.uncons, rhs.uncons) match {
       case (Some((a0, lt0)), Some((a1, lt1))) =>
         if (a0 < a1) This(a0, Always(lt0.value merge rhs))
@@ -253,7 +258,7 @@ sealed abstract class Stream[A] { lhs =>
    * If one stream is longer than the other, the rest of its elements
    * will appear after the other stream is exhausted.
    */
-  def interleave(rhs: Stream[A]): Stream[A] =
+  def interleave(rhs: Streaming[A]): Streaming[A] =
     lhs.uncons match {
       case None => rhs
       case Some((a, lt)) => This(a, Always(rhs interleave lt.value))
@@ -274,11 +279,11 @@ sealed abstract class Stream[A] { lhs =>
    * time and space limitations of evaluating an infinite stream may
    * make it impossible to reach very distant elements.
    */
-  def product[B](rhs: Stream[B]): Stream[(A, B)] = {
-    def loop(i: Int): Stream[(A, B)] = {
-      val xs = lhs.take(i + 1).asInstanceOf[Stream[AnyRef]].toArray
-      val ys = rhs.take(i + 1).asInstanceOf[Stream[AnyRef]].toArray
-      def build(j: Int): Stream[(A, B)] =
+  def product[B](rhs: Streaming[B]): Streaming[(A, B)] = {
+    def loop(i: Int): Streaming[(A, B)] = {
+      val xs = lhs.take(i + 1).asInstanceOf[Streaming[AnyRef]].toArray
+      val ys = rhs.take(i + 1).asInstanceOf[Streaming[AnyRef]].toArray
+      def build(j: Int): Streaming[(A, B)] =
         if (j > i) Empty() else {
           val k = i - j
           if (j >= xs.length || k >= ys.length) build(j + 1) else {
@@ -298,7 +303,7 @@ sealed abstract class Stream[A] { lhs =>
    * predicate, false otherwise.
    */
   def exists(f: A => Boolean): Boolean = {
-    @tailrec def unroll(s: Stream[A]): Boolean =
+    @tailrec def unroll(s: Streaming[A]): Boolean =
       s match {
         case Empty() => false
         case Next(lt) => unroll(lt.value)
@@ -312,7 +317,7 @@ sealed abstract class Stream[A] { lhs =>
    * predicate, false otherwise.
    */
   def forall(f: A => Boolean): Boolean = {
-    @tailrec def unroll(s: Stream[A]): Boolean =
+    @tailrec def unroll(s: Streaming[A]): Boolean =
       s match {
         case Empty() => true
         case Next(lt) => unroll(lt.value)
@@ -328,7 +333,7 @@ sealed abstract class Stream[A] { lhs =>
    * If the current stream has `n` or fewer elements, the entire
    * stream will be returned.
    */
-  def take(n: Int): Stream[A] =
+  def take(n: Int): Streaming[A] =
     if (n <= 0) Empty() else this match {
       case Empty() => Empty()
       case Next(lt) => Next(lt.map(_.take(n)))
@@ -342,7 +347,7 @@ sealed abstract class Stream[A] { lhs =>
    * If the current stream has `n` or fewer elements, an empty stream
    * will be returned.
    */
-  def drop(n: Int): Stream[A] =
+  def drop(n: Int): Streaming[A] =
     if (n <= 0) this else this match {
       case Empty() => Empty()
       case Next(lt) => Next(lt.map(_.drop(n)))
@@ -364,7 +369,7 @@ sealed abstract class Stream[A] { lhs =>
    *
    * Will result in: Stream(1, 2, 3)
    */
-  def takeWhile(f: A => Boolean): Stream[A] =
+  def takeWhile(f: A => Boolean): Streaming[A] =
     this match {
       case Empty() => Empty()
       case Next(lt) => Next(lt.map(_.takeWhile(f)))
@@ -386,7 +391,7 @@ sealed abstract class Stream[A] { lhs =>
    *
    * Will result in: Stream(4, 5, 6, 7)
    */
-  def dropWhile(f: A => Boolean): Stream[A] =
+  def dropWhile(f: A => Boolean): Streaming[A] =
     this match {
       case Empty() => Empty()
       case Next(lt) => Next(lt.map(_.dropWhile(f)))
@@ -394,12 +399,25 @@ sealed abstract class Stream[A] { lhs =>
     }
 
   /**
+   * Provide a stream of all the tails of a stream (including itself).
+   *
+   * For example, Stream(1, 2).tails is equivalent to:
+   *
+   *   Stream(Stream(1, 2), Stream(1), Stream.empty)
+   */
+  def tails: Streaming[Streaming[A]] =
+    uncons match {
+      case None => This(this, Always(Streaming.empty))
+      case Some((_, tail)) => This(this, tail.map(_.tails))
+    }
+
+  /**
    * Provide an iterator over the elements in the stream.
    */
   def iterator: Iterator[A] =
     new Iterator[A] {
-      var ls: Eval[Stream[A]] = null
-      var s: Stream[A] = lhs
+      var ls: Eval[Streaming[A]] = null
+      var s: Streaming[A] = lhs
       def hasNext: Boolean =
         { if (s == null) { s = ls.value; ls = null }; s.nonEmpty }
       def next: A = {
@@ -420,7 +438,7 @@ sealed abstract class Stream[A] { lhs =>
    * case of infinite streams.
    */
   def toList: List[A] = {
-    @tailrec def unroll(buf: mutable.ListBuffer[A], s: Stream[A]): List[A] =
+    @tailrec def unroll(buf: mutable.ListBuffer[A], s: Streaming[A]): List[A] =
       s match {
         case Empty() => buf.toList
         case Next(lt) => unroll(buf, lt.value)
@@ -449,7 +467,7 @@ sealed abstract class Stream[A] { lhs =>
    * String representation of the first n elements of a stream.
    */
   def toString(limit: Int = 10): String = {
-    @tailrec def unroll(n: Int, sb: StringBuffer, s: Stream[A]): String =
+    @tailrec def unroll(n: Int, sb: StringBuffer, s: Streaming[A]): String =
       if (n <= 0) sb.append(", ...)").toString else s match {
         case Empty() => sb.append(")").toString
         case Next(lt) => unroll(n, sb, lt.value)
@@ -471,7 +489,7 @@ sealed abstract class Stream[A] { lhs =>
    * case of infinite streams.
    */
   def toArray(implicit ct: ClassTag[A]): Array[A] = {
-    @tailrec def unroll(buf: mutable.ArrayBuffer[A], s: Stream[A]): Array[A] =
+    @tailrec def unroll(buf: mutable.ArrayBuffer[A], s: Streaming[A]): Array[A] =
       s match {
         case Empty() => buf.toArray
         case Next(lt) => unroll(buf, lt.value)
@@ -487,7 +505,7 @@ sealed abstract class Stream[A] { lhs =>
    * By default stream does not memoize to avoid memory leaks when the
    * head of the stream is retained.
    */
-  def memoize: Stream[A] =
+  def memoize: Streaming[A] =
     this match {
       case Empty() => Empty()
       case Next(lt) => Next(lt.memoize)
@@ -505,8 +523,8 @@ sealed abstract class Stream[A] { lhs =>
    * In some cases (particularly if the stream is to be memoized) it
    * may be desirable to ensure that these values are not retained.
    */
-  def compact: Stream[A] = {
-    @tailrec def unroll(s: Stream[A]): Stream[A] =
+  def compact: Streaming[A] = {
+    @tailrec def unroll(s: Streaming[A]): Streaming[A] =
       s match {
         case Next(lt) => unroll(lt.value)
         case s => s
@@ -515,10 +533,10 @@ sealed abstract class Stream[A] { lhs =>
   }
 }
 
-object Stream {
+object Streaming extends StreamingInstances {
 
   /**
-   * Concrete Stream[A] types:
+   * Concrete Streaming[A] types:
    *
    *  - Empty(): an empty stream.
    *  - This(a, tail): a non-empty stream containing (at least) `a`.
@@ -529,27 +547,27 @@ object Stream {
    * and Always). The head of `This` is eager -- a lazy head can be
    * represented using `Next(Always(...))` or `Next(Later(...))`.
    */
-  case class Empty[A]() extends Stream[A]
-  case class Next[A](next: Eval[Stream[A]]) extends Stream[A]
-  case class This[A](a: A, tail: Eval[Stream[A]]) extends Stream[A]
+  case class Empty[A]() extends Streaming[A]
+  case class Next[A](next: Eval[Streaming[A]]) extends Streaming[A]
+  case class This[A](a: A, tail: Eval[Streaming[A]]) extends Streaming[A]
 
   /**
    * Create an empty stream of type A.
    */
-  def empty[A]: Stream[A] =
+  def empty[A]: Streaming[A] =
     Empty()
 
   /**
    * Create a stream consisting of a single value.
    */
-  def apply[A](a: A): Stream[A] =
+  def apply[A](a: A): Streaming[A] =
     This(a, Now(Empty()))
 
   /**
    * Create a stream from two or more values.
    */
-  def apply[A](a1: A, a2: A, as: A*): Stream[A] =
-    This(a1, Now(This(a2, Now(Stream.fromVector(as.toVector)))))
+  def apply[A](a1: A, a2: A, as: A*): Streaming[A] =
+    This(a1, Now(This(a2, Now(Streaming.fromVector(as.toVector)))))
 
   /**
    * Defer stream creation.
@@ -557,7 +575,7 @@ object Stream {
    * Given an expression which creates a stream, this method defers
    * that creation, allowing the head (if any) to be lazy.
    */
-  def defer[A](s: => Stream[A]): Stream[A] =
+  def defer[A](s: => Streaming[A]): Streaming[A] =
     Next(Always(s))
 
   /**
@@ -565,8 +583,8 @@ object Stream {
    *
    * The stream will be eagerly evaluated.
    */
-  def fromVector[A](as: Vector[A]): Stream[A] = {
-    def loop(s: Stream[A], i: Int): Stream[A] =
+  def fromVector[A](as: Vector[A]): Streaming[A] = {
+    def loop(s: Streaming[A], i: Int): Streaming[A] =
       if (i < 0) s else loop(This(as(i), Now(s)), i - 1)
     loop(Empty(), as.length - 1)
   }
@@ -576,8 +594,8 @@ object Stream {
    *
    * The stream will be eagerly evaluated.
    */
-  def fromList[A](as: List[A]): Stream[A] = {
-    def loop(s: Stream[A], ras: List[A]): Stream[A] =
+  def fromList[A](as: List[A]): Streaming[A] = {
+    def loop(s: Streaming[A], ras: List[A]): Streaming[A] =
       ras match {
         case Nil => s
         case a :: rt => loop(This(a, Now(s)), rt)
@@ -590,7 +608,7 @@ object Stream {
    *
    * The stream will be eagerly evaluated.
    */
-  def fromIterable[A](as: Iterable[A]): Stream[A] =
+  def fromIterable[A](as: Iterable[A]): Streaming[A] =
     fromIteratorUnsafe(as.iterator)
 
   /**
@@ -604,21 +622,21 @@ object Stream {
    * creates an iterator for the express purpose of calling this
    * method.
    */
-  def fromIteratorUnsafe[A](it: Iterator[A]): Stream[A] =
+  def fromIteratorUnsafe[A](it: Iterator[A]): Streaming[A] =
     if (it.hasNext) This(it.next, Later(fromIteratorUnsafe(it))) else Empty()
 
   /**
    * Create a self-referential stream.
    */
-  def knot[A](f: Eval[Stream[A]] => Stream[A], memo: Boolean = false): Stream[A] = {
-    lazy val s: Eval[Stream[A]] = if (memo) Later(f(s)) else Always(f(s))
+  def knot[A](f: Eval[Streaming[A]] => Streaming[A], memo: Boolean = false): Streaming[A] = {
+    lazy val s: Eval[Streaming[A]] = if (memo) Later(f(s)) else Always(f(s))
     s.value
   }
 
   /**
    * Continually return a constant value.
    */
-  def continually[A](a: A): Stream[A] =
+  def continually[A](a: A): Streaming[A] =
     knot(s => This(a, s))
 
   /**
@@ -629,27 +647,27 @@ object Stream {
    * stream is memoized to ensure that repeated traversals produce the
    * same results.
    */
-  def thunk[A](f: () => A): Stream[A] =
+  def thunk[A](f: () => A): Streaming[A] =
     knot(s => This(f(), s), memo = true)
 
   /**
    * Produce an infinite stream of values given an initial value and a
    * tranformation function.
    */
-  def infinite[A](a: A)(f: A => A): Stream[A] =
+  def infinite[A](a: A)(f: A => A): Streaming[A] =
     This(a, Always(infinite(f(a))(f)))
 
   /**
    * Stream of integers starting at n.
    */
-  def from(n: Int): Stream[Int] =
+  def from(n: Int): Streaming[Int] =
     infinite(n)(_ + 1)
 
   /**
    * Provide a stream of integers starting with `start` and ending
    * with `end` (i.e. inclusive).
    */
-  def interval(start: Int, end: Int): Stream[Int] =
+  def interval(start: Int, end: Int): Streaming[Int] =
     if (start > end) Empty() else This(start, Always(interval(start + 1, end)))
 
   /**
@@ -658,7 +676,7 @@ object Stream {
    * None represents an empty stream. Some(a) reprsents an initial
    * element, and we can compute the tail (if any) via f(a).
    */
-  def unfold[A](o: Option[A])(f: A => Option[A]): Stream[A] =
+  def unfold[A](o: Option[A])(f: A => Option[A]): Streaming[A] =
     o match {
       case None => Empty()
       case Some(a) => This(a, Always(unfold(f(a))(f)))
@@ -667,7 +685,7 @@ object Stream {
   /**
    * An empty loop, will wait forever if evaluated.
    */
-  def godot: Stream[Nothing] =
+  def godot: Streaming[Nothing] =
     knot[Nothing](s => Next[Nothing](s))
 
   /**
@@ -683,31 +701,89 @@ object Stream {
    */
   object syntax {
     object %:: {
-      def unapply[A](s: Stream[A]): Option[(A, Eval[Stream[A]])] = s.uncons
+      def unapply[A](s: Streaming[A]): Option[(A, Eval[Streaming[A]])] = s.uncons
     }
 
-    class StreamOps[A](rhs: Eval[Stream[A]]) {
-      def %::(lhs: A): Stream[A] = This(lhs, rhs)
-      def %:::(lhs: Stream[A]): Stream[A] = lhs concat rhs
+    class StreamOps[A](rhs: Eval[Streaming[A]]) {
+      def %::(lhs: A): Streaming[A] = This(lhs, rhs)
+      def %:::(lhs: Streaming[A]): Streaming[A] = lhs concat rhs
     }
 
-    implicit def streamOps[A](as: => Stream[A]): StreamOps[A] =
+    implicit def streamOps[A](as: => Streaming[A]): StreamOps[A] =
       new StreamOps(Always(as))
   }
 }
 
-trait StreamInstances {
-  implicit val streamMonad: MonadCombine[Stream] =
-    new MonadCombine[Stream] {
-      def pure[A](a: A): Stream[A] =
-        Stream(a)
-      override def map[A, B](as: Stream[A])(f: A => B): Stream[B] =
+trait StreamingInstances {
+
+  implicit val streamInstance: Traverse[Streaming] with MonadCombine[Streaming] with CoflatMap[Streaming] =
+    new Traverse[Streaming] with MonadCombine[Streaming] with CoflatMap[Streaming] {
+      def pure[A](a: A): Streaming[A] =
+        Streaming(a)
+      override def map[A, B](as: Streaming[A])(f: A => B): Streaming[B] =
         as.map(f)
-      def flatMap[A, B](as: Stream[A])(f: A => Stream[B]): Stream[B] =
+      def flatMap[A, B](as: Streaming[A])(f: A => Streaming[B]): Streaming[B] =
         as.flatMap(f)
-      def empty[A]: Stream[A] =
-        Stream.empty
-      def combine[A](xs: Stream[A], ys: Stream[A]): Stream[A] =
+      def empty[A]: Streaming[A] =
+        Streaming.empty
+      def combine[A](xs: Streaming[A], ys: Streaming[A]): Streaming[A] =
         xs concat ys
+
+      override def map2[A, B, Z](fa: Streaming[A], fb: Streaming[B])(f: (A, B) => Z): Streaming[Z] =
+        fa.flatMap(a => fb.map(b => f(a, b)))
+
+      def coflatMap[A, B](fa: Streaming[A])(f: Streaming[A] => B): Streaming[B] =
+        fa.tails.filter(_.nonEmpty).map(f)
+
+      def foldLeft[A, B](fa: Streaming[A], b: B)(f: (B, A) => B): B =
+        fa.foldLeft(b)(f)
+
+      def foldRight[A, B](fa: Streaming[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa.foldRight(lb)(f)
+
+      def traverse[G[_]: Applicative, A, B](fa: Streaming[A])(f: A => G[B]): G[Streaming[B]] = {
+        val G = Applicative[G]
+        def init: G[Streaming[B]] = G.pure(Streaming.empty[B])
+
+        // We use foldRight to avoid possible stack overflows. Since
+        // we don't want to return a Eval[_] instance, we call .value
+        // at the end.
+        //
+        // (We don't worry about internal laziness because traverse
+        // has to evaluate the entire stream anyway.)
+        import Streaming.syntax._
+        foldRight(fa, Later(init)) { (a, lgsb) =>
+          lgsb.map(gsb => G.map2(f(a), gsb)(_ %:: _))
+        }.value
+      }
+
+      override def exists[A](fa: Streaming[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
+
+      override def forall[A](fa: Streaming[A])(p: A => Boolean): Boolean =
+        fa.forall(p)
+
+      override def isEmpty[A](fa: Streaming[A]): Boolean =
+        fa.isEmpty
+    }
+
+  import Streaming.{Empty, Next, This}
+
+  implicit def streamEq[A: Eq]: Eq[Streaming[A]] =
+    new Eq[Streaming[A]] {
+      def eqv(x: Streaming[A], y: Streaming[A]): Boolean = {
+        @tailrec def loop(x: Streaming[A], y: Streaming[A]): Boolean =
+          x match {
+            case Empty() => y.isEmpty
+            case Next(lt1) => loop(lt1.value, y)
+            case This(a1, lt1) =>
+              y match {
+                case Empty() => false
+                case Next(lt2) => loop(x, lt2.value)
+                case This(a2, lt2) => if (a1 =!= a2) false else loop(lt1.value, lt2.value)
+              }
+          }
+        loop(x, y)
+      }
     }
 }
