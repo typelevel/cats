@@ -45,6 +45,13 @@ trait Apply[F[_]] extends Functor[F] with ApplyArityFunctions[F] { self =>
       def F: Apply[F] = self
       def G: Apply[G] = GG
     }
+
+  /** The product of two Applys is an Apply - operations are defined position-wise. */
+  def product[G[_]](implicit GG: Apply[G]): Apply[Lambda[X => (F[X], G[X])]] =
+    new ProductApply[F, G] {
+      def F: Apply[F] = self
+      def G: Apply[G] = GG
+    }
 }
 
 trait CompositeApply[F[_], G[_]]
@@ -54,4 +61,12 @@ trait CompositeApply[F[_], G[_]]
 
   def ap[A, B](fa: F[G[A]])(f: F[G[A => B]]): F[G[B]] =
     F.ap(fa)(F.map(f)(gab => G.ap(_)(gab)))
+}
+
+trait ProductApply[F[_], G[_]] extends Apply[Lambda[X => (F[X], G[X])]] with Functor.Product[F, G] {
+  def F: Apply[F]
+  def G: Apply[G]
+
+  def ap[A, B](fa: (F[A], G[A]))(f: (F[A => B], G[A => B])): (F[B], G[B]) =
+    (F.ap(fa._1)(f._1), G.ap(fa._2)(f._2))
 }

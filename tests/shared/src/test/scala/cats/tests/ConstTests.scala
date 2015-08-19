@@ -4,11 +4,11 @@ package tests
 import algebra.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{Const, NonEmptyList}
-import cats.laws.discipline.{ApplyTests, ApplicativeTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{ApplyTests, ApplicativeTests => ApplicativeLawTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.{constArbitrary, oneAndArbitrary}
 
 class ConstTests extends CatsSuite {
-  checkAll("Const[String, Int]", ApplicativeTests[Const[String, ?]].applicative[Int, Int, Int])
+  checkAll("Const[String, Int]", ApplicativeLawTests[Const[String, ?]].applicative[Int, Int, Int])
   checkAll("Applicative[Const[String, ?]]", SerializableTests.serializable(Applicative[Const[String, ?]]))
 
   checkAll("Const[String, Int] with Option", TraverseTests[Const[String, ?]].traverse[Int, Int, Int, Int, Option, Option])

@@ -8,8 +8,14 @@ import org.scalacheck.Arbitrary
 
 import scala.concurrent.Future
 
-trait ArbitraryK[F[_]] {
+trait ArbitraryK[F[_]] { self =>
   def synthesize[A: Arbitrary]: Arbitrary[F[A]]
+
+  def product[G[_]](implicit G: ArbitraryK[G]): ArbitraryK[Lambda[A => (F[A], G[A])]] =
+    new ArbitraryK[Lambda[A => (F[A], G[A])]] {
+      def synthesize[A: Arbitrary]: Arbitrary[(F[A], G[A])] =
+        Arbitrary.arbTuple2(self.synthesize, G.synthesize)
+    }
 }
 
 object ArbitraryK {
