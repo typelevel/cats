@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import cats.data.{Cokleisli, Kleisli, NonEmptyList, Validated, Xor, XorT, Ior, Const, OptionT}
+import cats.data.{Cokleisli, Kleisli, NonEmptyList, Validated, Xor, XorT, Ior, Const, OptionT, Prod, Func, AppFunc}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 
@@ -89,6 +89,15 @@ object ArbitraryK {
 
   implicit def cokleisliA[F[_], A]: ArbitraryK[Cokleisli[F, A, ?]] =
     new ArbitraryK[Cokleisli[F, A, ?]]{ def synthesize[B: Arbitrary]: Arbitrary[Cokleisli[F, A, B]] = implicitly }
+
+  implicit def prodA[F[_], G[_]](implicit F: ArbitraryK[F], G: ArbitraryK[G]): ArbitraryK[Lambda[X => Prod[F, G, X]]] =
+    new ArbitraryK[Lambda[X => Prod[F, G, X]]]{ def synthesize[A: Arbitrary]: Arbitrary[Prod[F, G, A]] = implicitly }
+
+  implicit def funcA[F[_], A](implicit F: ArbitraryK[F]): ArbitraryK[Func[F, A, ?]] =
+    new ArbitraryK[Func[F, A, ?]]{ def synthesize[B: Arbitrary]: Arbitrary[Func[F, A, B]] = implicitly }
+
+  implicit def appFuncA[F[_], A](implicit F: ArbitraryK[F], FF: Applicative[F]): ArbitraryK[AppFunc[F, A, ?]] =
+    new ArbitraryK[AppFunc[F, A, ?]]{ def synthesize[B: Arbitrary]: Arbitrary[AppFunc[F, A, B]] = implicitly }
 
   implicit def futureArbitraryK: ArbitraryK[Future] =
     new ArbitraryK[Future] {
