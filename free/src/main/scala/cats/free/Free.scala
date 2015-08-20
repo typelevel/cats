@@ -9,13 +9,13 @@ object Free {
   /**
    * Return from the computation with the given value.
    */
-  private[free] final case class Pure[S[_], A](a: A) extends Free[S, A]
+  final case class Pure[S[_], A](a: A) extends Free[S, A]
 
   /** Suspend the computation with the given suspension. */
-  private[free] final case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
+  final case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
 
   /** Call a subroutine and continue with the given function. */
-  private[free] final case class Gosub[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
+  final case class Gosub[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 
   /**
    * Suspend a value within a functor lifting it to a Free.
