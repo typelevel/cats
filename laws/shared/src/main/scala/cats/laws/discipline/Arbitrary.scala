@@ -52,10 +52,4 @@ object arbitrary {
 
   implicit def appFuncArbitrary[F[_], A, B](implicit F: ArbitraryK[F], B: Arbitrary[B], FF: Applicative[F]): Arbitrary[AppFunc[F, A, B]] =
     Arbitrary(F.synthesize[B].arbitrary.map(fb => Func.appFunc[F, A, B](_ => fb)))
-
-  implicit def foldArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Fold[A]] =
-    Arbitrary(Gen.oneOf(getArbitrary[A].map(Fold.Return(_)), getArbitrary[A => A].map(Fold.Continue(_)), Gen.const(Fold.Pass[A])))
-
-  implicit def lazyArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Lazy[A]] =
-    Arbitrary(Gen.oneOf(A.arbitrary.map(Lazy.eager), A.arbitrary.map(a => Lazy.byName(a)), A.arbitrary.map(a => Lazy.byNeed(a))))
 }

@@ -12,8 +12,8 @@ sealed trait Prod[F[_], G[_], A] {
 }
 object Prod extends ProdInstances {
   def apply[F[_], G[_], A](first0: => F[A], second0: => G[A]): Prod[F, G, A] = new Prod[F, G, A] {
-    lazy val firstThunk: Lazy[F[A]] = Lazy(first0)
-    lazy val secondThunk: Lazy[G[A]] = Lazy(second0)
+    val firstThunk: Eval[F[A]] = Later(first0)
+    val secondThunk: Eval[G[A]] = Later(second0)
     def first: F[A] = firstThunk.value
     def second: G[A] = secondThunk.value
   }
