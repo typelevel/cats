@@ -1,9 +1,11 @@
 package cats
 package free
 
+import cats.arrow.NaturalTransformation
+
 /** Applicative Functor for Free */
 sealed abstract class FreeApplicative[F[_], A] { self =>
-  import FreeApplicative.{FA, Pure, Ap, ap => apply}
+  import FreeApplicative.{FA, Pure, Ap, ap => apply, lift}
 
   final def ap[B](b: FA[F, A => B]): FA[F, B] =
     b match {
@@ -33,6 +35,13 @@ sealed abstract class FreeApplicative[F[_], A] { self =>
     this match {
       case Pure(a) => G.pure(a)
       case x: Ap[F, A] => G.ap(f(x.pivot))(x.fn.foldMap(f))
+    }
+
+  final def compile[G[_]](f: F ~> G)(implicit G: Applicative[G]): FA[G, A] =
+    foldMap[FA[G, ?]] {
+      new NaturalTransformation[F, FA[G, ?]] {
+        def apply[B](fa: F[B]): FA[G, B] = lift(f(fa))
+      }
     }
 }
 
