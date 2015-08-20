@@ -340,11 +340,21 @@ val xor: Xor[NumberFormatException, Int] =
   }
 ```
 
-However, this can get tedious quickly. `Xor` provides a `fromTryCatch` method on its companon object
+However, this can get tedious quickly. `Xor` provides a `fromTryCatch` method on its companion object
 that allows you to pass it a function, along with the type of exception you want to catch, and does the
 above for you.
 
 ```tut
 val xor: Xor[NumberFormatException, Int] =
   Xor.fromTryCatch[NumberFormatException]("abc".toInt)
+```
+
+## Additional syntax
+
+```tut
+import cats.data.Xor.syntax._
+
+val xor3: Xor[String, Int] = 7.right[String]
+
+val xor4: Xor[String, Int] = "hello 🐈s".left[Int]
 ```

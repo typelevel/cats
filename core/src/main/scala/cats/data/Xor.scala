@@ -141,6 +141,13 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 object Xor extends XorInstances with XorFunctions {
   final case class Left[+A](a: A) extends (A Xor Nothing)
   final case class Right[+B](b: B) extends (Nothing Xor B)
+
+  object syntax {
+    implicit class XorOps[A](a: A) {
+      def left[B]: A Xor B = Xor.Left(a)
+      def right[B]: B Xor A = Xor.Right(a)
+    }
+  }
 }
 
 sealed abstract class XorInstances extends XorInstances1 {
