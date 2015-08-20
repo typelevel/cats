@@ -48,9 +48,9 @@ sealed abstract class FreeApplicative[F[_], A] { self =>
 object FreeApplicative {
   type FA[F[_], A] = FreeApplicative[F, A]
 
-  private[free] final case class Pure[F[_], A](a: A) extends FA[F, A]
+  final case class Pure[F[_], A](a: A) extends FA[F, A]
 
-  private[free] abstract class Ap[F[_], A] extends FA[F, A] {
+  abstract class Ap[F[_], A] extends FA[F, A] {
     type Pivot
     val pivot: F[Pivot]
     val fn: FA[F, Pivot => A]
