@@ -51,6 +51,6 @@ object arbitrary {
 
   implicit def streamKArbitrary[F[_], A](implicit F: Monad[F], A: Arbitrary[A]): Arbitrary[StreamingT[F, A]] =
     Arbitrary(for {
-      as <- Gen.listOf(A.arbitrary)
+      as <- Gen.listOf(A.arbitrary).map(_.take(8)) // HACK
     } yield as.foldLeft(StreamingT.empty[F, A])((s, a) => StreamingT.This(a, F.pure(s))))
 }
