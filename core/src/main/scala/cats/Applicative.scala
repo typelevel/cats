@@ -36,6 +36,13 @@ import simulacrum.typeclass
 
     }
 
+  /** The product of two Applicatives is an Applicative - operations are defined position-wise. */
+  def product[G[_]](implicit GG: Applicative[G]): Applicative[Lambda[X => (F[X], G[X])]] =
+    new ProductApplicative[F, G] {
+      def F: Applicative[F] = self
+      def G: Applicative[G] = GG
+    }
+
   def traverse[A, G[_], B](value: G[A])(f: A => F[B])(implicit G: Traverse[G]): F[G[B]] =
     G.traverse(value)(f)(this)
 
@@ -47,8 +54,15 @@ import simulacrum.typeclass
 trait CompositeApplicative[F[_],G[_]]
     extends Applicative[λ[α => F[G[α]]]] with CompositeApply[F,G] {
 
-  implicit def F: Applicative[F]
-  implicit def G: Applicative[G]
+  def F: Applicative[F]
+  def G: Applicative[G]
 
   def pure[A](a: A): F[G[A]] = F.pure(G.pure(a))
+}
+
+trait ProductApplicative[F[_], G[_]] extends Applicative[Lambda[X => (F[X], G[X])]] with ProductApply[F, G] {
+  def F: Applicative[F]
+  def G: Applicative[G]
+
+  def pure[A](a: A): (F[A], G[A]) = (F.pure(a), G.pure(a))
 }

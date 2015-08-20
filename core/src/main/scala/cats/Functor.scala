@@ -25,6 +25,12 @@ import functor.Contravariant
     def G: Functor[G] = GG
   }
 
+  /** The product of two Functors is a Functor - operations are defined position-wise. */
+  def product[G[_]](implicit GG: Functor[G]): Functor[Lambda[X => (F[X], G[X])]] = new Functor.Product[F, G] {
+    def F: Functor[F] = self
+    def G: Functor[G] = GG
+  }
+
   /**
    * Compose this functor F with a Contravariant Functor G to produce a new Contravariant Functor
    * on F[G[_]].
@@ -69,6 +75,13 @@ object Functor {
 
     override def map[A, B](fa: F[G[A]])(f: A => B): F[G[B]] =
       F.map(fa)(G.lift(f))
+  }
+
+  trait Product[F[_], G[_]] extends Functor[Lambda[X => (F[X], G[X])]] {
+    def F: Functor[F]
+    def G: Functor[G]
+
+    override def map[A, B](fa: (F[A], G[A]))(f: A => B): (F[B], G[B]) = (F.map(fa._1)(f), G.map(fa._2)(f))
   }
 
   trait ContravariantComposite[F[_], G[_]] extends Contravariant[Lambda[X => F[G[X]]]] {
