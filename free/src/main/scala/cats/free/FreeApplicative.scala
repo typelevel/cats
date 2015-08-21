@@ -30,7 +30,7 @@ sealed abstract class FreeApplicative[F[_], A] { self =>
       case x: Ap[F, A] => apply(f(x.pivot))(x.fn.hoist(f))
   }
 
-  /** Interpretes/Runs the sequence of operations using the semantics of Applicative G
+  /** Interprets/Runs the sequence of operations using the semantics of Applicative G
     * Tail recursive only if G provides tail recursive interpretation (ie G is FreeMonad)
     */
   final def foldMap[G[_]](f: F ~> G)(implicit G: Applicative[G]): G[A] =
@@ -43,6 +43,14 @@ sealed abstract class FreeApplicative[F[_], A] { self =>
     foldMap[FA[G, ?]] {
       new NaturalTransformation[F, FA[G, ?]] {
         def apply[B](fa: F[B]): FA[G, B] = lift(f(fa))
+      }
+    }
+
+  /** Compile this FreeApplicative algebra into a Free algebra. */
+  final def monad: Free[F, A] =
+    foldMap[Free[F, ?]] {
+      new NaturalTransformation[F, Free[F, ?]] {
+        def apply[B](fa: F[B]): Free[F, B] = Free.liftF(fa)
       }
     }
 }
