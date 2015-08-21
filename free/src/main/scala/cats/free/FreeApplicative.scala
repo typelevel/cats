@@ -5,6 +5,8 @@ import cats.arrow.NaturalTransformation
 
 /** Applicative Functor for Free */
 sealed abstract class FreeApplicative[F[_], A] { self =>
+  // ap => apply alias needed so we can refer to both
+  // FreeApplicative.ap and FreeApplicative#ap
   import FreeApplicative.{FA, Pure, Ap, ap => apply, lift}
 
   final def ap[B](b: FA[F, A => B]): FA[F, B] =
