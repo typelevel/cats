@@ -1,9 +1,10 @@
 package cats
 package free
 
+import cats.arrow.NaturalTransformation
+
 /** Applicative Functor for Free */
 sealed abstract class FreeApplicative[F[_], A] { self =>
-
   import FreeApplicative.{FA, Pure, Ap}
 
   final def ap[B](b: FA[F, A => B]): FA[F, B] =
@@ -27,13 +28,21 @@ sealed abstract class FreeApplicative[F[_], A] { self =>
       case x: Ap[F, A] => Ap(f(x.pivot))(x.fn.hoist(f))
   }
 
-  /** Interpretes/Runs the sequence of operations using the semantics of Applicative G
+  /** Interprets/Runs the sequence of operations using the semantics of Applicative G
     * Tail recursive only if G provides tail recursive interpretation (ie G is FreeMonad)
     */
   final def run[G[_]](f: F ~> G)(implicit G: Applicative[G]): G[A] =
     this match {
       case Pure(a) => G.pure(a)
       case x: Ap[F, A] => G.ap(f(x.pivot))(x.fn.run(f))
+    }
+
+  /** Compile this FreeApplicative algebra into a Free algebra. */
+  final def monad: Free[F, A] =
+    run[Free[F, ?]] {
+      new NaturalTransformation[F, Free[F, ?]] {
+        def apply[B](fa: F[B]): Free[F, B] = Free.liftF(fa)
+      }
     }
 }
 

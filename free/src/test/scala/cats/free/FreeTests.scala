@@ -10,8 +10,8 @@ class FreeTests extends CatsSuite {
   implicit def freeArbitrary[F[_], A](implicit F: ArbitraryK[F], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
     Arbitrary(
       Gen.oneOf(
-        A.arbitrary.map(Free.Pure[F, A]),
-        F.synthesize(freeArbitrary[F, A]).arbitrary.map(Free.Suspend[F, A])))
+        A.arbitrary.map(Free.pure[F, A]),
+        F.synthesize[A].arbitrary.map(Free.liftF[F, A])))
 
   implicit def freeArbitraryK[F[_]](implicit F: ArbitraryK[F]): ArbitraryK[Free[F, ?]] =
     new ArbitraryK[Free[F, ?]]{
@@ -27,14 +27,4 @@ class FreeTests extends CatsSuite {
 
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
-
-  // Check that expected implicits resolve.
-  // As long as this code compiles, the "tests" pass.
-  object ImplicitResolution {
-
-    // before the addition of the freeCMonad helper, the monad instances for
-    // FreeC were not found.
-    sealed abstract class Foo[A]
-    Monad[FreeC[Foo, ?]]
-  }
 }
