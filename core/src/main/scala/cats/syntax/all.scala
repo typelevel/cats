@@ -16,6 +16,7 @@ trait AllSyntax
     with InvariantSyntax
     with MonadCombineSyntax
     with MonadFilterSyntax
+    with OptionSyntax
     with OrderSyntax
     with PartialOrderSyntax
     with ProfunctorSyntax
