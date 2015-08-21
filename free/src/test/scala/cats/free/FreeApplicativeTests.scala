@@ -48,7 +48,7 @@ class FreeApplicativeTests extends CatsSuite {
     val y = FreeApplicative.pure[Id, Int](2)
     val f = x.map(i => (j: Int) => i + j)
     val nt = NaturalTransformation.id[Id]
-    val r1 = x.ap(f)
+    val r1 = y.ap(f)
     val r2 = r1.compile(nt)
     assert(r1.foldMap(nt) == r2.foldMap(nt))
   }
