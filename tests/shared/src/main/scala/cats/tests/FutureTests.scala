@@ -5,13 +5,13 @@ import cats.data.Xor
 import cats.laws.discipline._
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 
-class FutureTests extends CatsSuite {
+abstract class FutureTests(implicit ec: ExecutionContext) extends CatsSuite {
   val timeout = 3.seconds
 
   implicit val eqkf: EqK[Future] =
