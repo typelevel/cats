@@ -39,6 +39,12 @@ sealed abstract class FreeApplicative[F[_], A] { self =>
       case x: Ap[F, A] => G.ap(f(x.pivot))(x.fn.foldMap(f))
     }
 
+  /** Interpret/run the operations using the semantics of `Applicative[F]`.
+    * Tail recursive only if `F` provides tail recursive interpretation.
+    */
+  final def fold(implicit F: Applicative[F]): F[A] =
+    foldMap(NaturalTransformation.id[F])
+
   final def compile[G[_]](f: F ~> G)(implicit G: Applicative[G]): FA[G, A] =
     foldMap[FA[G, ?]] {
       new NaturalTransformation[F, FA[G, ?]] {

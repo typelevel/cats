@@ -31,6 +31,18 @@ class FreeApplicativeTests extends CatsSuite {
   checkAll("FreeApplicative[Option, ?]", ApplicativeTests[FreeApplicative[Option, ?]].applicative[Int, Int, Int])
   checkAll("Monad[FreeApplicative[Option, ?]]", SerializableTests.serializable(Applicative[FreeApplicative[Option, ?]]))
 
+  test("FreeApplicative#fold") {
+    val n = 2
+    val o1 = Option(1)
+    val o2 = Applicative[Option].pure(n)
+
+    val x = FreeApplicative.lift[Option, Int](o1)
+    val y = FreeApplicative.pure[Option, Int](n)
+    val f = x.map(i => (j: Int) => i + j)
+    val r = y.ap(f)
+    assert(r.fold == Apply[Option].map2(o1, o2)(_ + _))
+  }
+
   test("FreeApplicative#compile") {
     val x = FreeApplicative.lift[Id, Int](1)
     val y = FreeApplicative.pure[Id, Int](2)
