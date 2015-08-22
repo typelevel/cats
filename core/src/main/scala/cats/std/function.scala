@@ -2,8 +2,7 @@ package cats
 package std
 
 import algebra.Eq
-import cats.arrow.{Arrow, Choice}
-import cats.data.Xor
+import cats.arrow.Arrow
 import cats.functor.Contravariant
 
 trait Function0Instances {
@@ -48,14 +47,8 @@ trait Function1Instances {
         f.compose(fa)
     }
 
-  implicit val function1Instance: Choice[Function1] with Arrow[Function1] =
-    new Choice[Function1] with Arrow[Function1] {
-      def choice[A, B, C](f: A => C, g: B => C): Xor[A, B] => C =
-        _ match {
-          case Xor.Left(a) => f(a)
-          case Xor.Right(b) => g(b)
-        }
-
+  implicit val function1Instance: Arrow[Function1] =
+    new Arrow[Function1] {
       def lift[A, B](f: A => B): A => B = f
 
       def first[A, B, C](fa: A => B): ((A, C)) => (B, C) = {
