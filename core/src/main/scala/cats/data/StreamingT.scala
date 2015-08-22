@@ -20,9 +20,9 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def uncons(implicit ev: Monad[F]): F[Option[(A, StreamingT[F, A])]] =
     this match {
-      case Empty() => ev.pure(None)
-      case Next(ft) => ft.flatMap(_.uncons)
       case This(a, ft) => ft.map(t => Some((a, t)))
+      case Next(ft) => ft.flatMap(_.uncons)
+      case Empty() => ev.pure(None)
     }
 
   /**
@@ -30,29 +30,37 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def map[B](f: A => B)(implicit ev: Functor[F]): StreamingT[F, B] =
     this match {
-      case Empty() => Empty()
-      case Next(ft) => Next(ft.map(_.map(f)))
       case This(a, ft) => This(f(a), ft.map(_.map(f)))
+      case Next(ft) => Next(ft.map(_.map(f)))
+      case Empty() => Empty()
     }
 
   /**
    * Lazily transform the stream given a function `f`.
    */
-  def flatMap[B](f: A => StreamingT[F, B])(implicit ev: Functor[F]): StreamingT[F, B] =
+  def flatMap[B](f: A => StreamingT[F, B])(implicit ev: Monad[F]): StreamingT[F, B] = {
     this match {
-      case Empty() => Empty()
-      case Next(ft) => Next(ft.map(_.flatMap(f)))
-      case This(a, ft) => f(a) concat ft.map(_.flatMap(f))
+      case This(a, ft) =>
+        f(a) match {
+          case This(a0, ft0) => This(a0, ft0.flatMap(_ fconcat ft.map(_.flatMap(f))))
+          case Next(ft0) => Next(ft0.flatMap(_ fconcat ft.map(_.flatMap(f))))
+          case Empty() => Next(ft.map(_.flatMap(f)))
+        }
+      case Next(ft) =>
+        Next(ft.map(_.flatMap(f)))
+      case Empty() =>
+        Empty()
     }
+  }
 
   /**
    * Lazily filter the stream given the predicate `f`.
    */
   def filter(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
-      case Empty() => this
-      case Next(ft) => Next(ft.map(_.filter(f)))
       case This(a, ft) => if (f(a)) this else Next(ft.map(_.filter(f)))
+      case Next(ft) => Next(ft.map(_.filter(f)))
+      case Empty() => this
     }
 
   /**
@@ -60,9 +68,9 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit ev: Monad[F]): F[B] =
     this match {
-      case Empty() => ev.pure(b)
-      case Next(ft) => ft.flatMap(_.foldLeft(b)(f))
       case This(a, ft) => ft.flatMap(_.foldLeft(f(b, a))(f))
+      case Next(ft) => ft.flatMap(_.foldLeft(b)(f))
+      case Empty() => ev.pure(b)
     }
 
   /**
@@ -84,29 +92,49 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
     uncons.map(_.isEmpty)
 
   /**
-   * Lazily concatenate two streams.
+   * Prepend an A value to the current stream.
    */
-  def concat(rhs: StreamingT[F, A])(implicit ev: Functor[F]): StreamingT[F, A] =
-    this match {
-      case Empty() => rhs
-      case Next(ft) => Next(ft.map(_ concat rhs))
-      case This(a, ft) => This(a, ft.map(_ concat rhs))
+  def %::(a: A)(implicit ev: Applicative[F]): StreamingT[F, A] =
+    This(a, ev.pure(this))
+
+  /**
+   * Prepend a StreamingT[F, A] value to the current stream.
+   */
+  def %:::(lhs: StreamingT[F, A])(implicit ev: Functor[F]): StreamingT[F, A] =
+    lhs match {
+      case This(a, ft) => This(a, ft.map(_ %::: this))
+      case Next(ft) => Next(ft.map(_ %::: this))
+      case Empty() => this
     }
 
   /**
-   * Lazily concatenate two streams.
+   * Concatenate streaming values within F[_].
    *
-   * In this case the evaluation of the second stream may be deferred.
+   * This method is useful when calling .flatMap over a
+   * F[StreamingT[F, A]] value.
    */
-  def concat(rhs: F[StreamingT[F, A]])(implicit ev: Functor[F]): StreamingT[F, A] =
+  def concat(rhs: F[StreamingT[F, A]])(implicit ev: Monad[F]): StreamingT[F, A] =
     this match {
+      case This(a, ft) => This(a, ft.flatMap(_ fconcat rhs))
+      case Next(ft) => Next(ft.flatMap(_ fconcat rhs))
       case Empty() => Next(rhs)
-      case Next(ft) => Next(ft.map(_ concat rhs))
-      case This(a, ft) => This(a, ft.map(_ concat rhs))
     }
 
   /**
-   * Lazily zip two streams together.
+   * Concatenate streaming values within F[_].
+   *
+   * This method is useful when calling .flatMap over a
+   * F[StreamingT[F, A]] value.
+   */
+  def fconcat(rhs: F[StreamingT[F, A]])(implicit ev: Monad[F]): F[StreamingT[F, A]] =
+    this match {
+      case This(a, ft) => ev.pure(This(a, ft.flatMap(_ fconcat rhs)))
+      case Next(ft) => ft.flatMap(_ fconcat rhs)
+      case Empty() => rhs
+    }
+
+  /**
+   * Zip two streams together.
    *
    * The lenght of the result will be the shorter of the two
    * arguments.
@@ -147,9 +175,9 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def exists(f: A => Boolean)(implicit ev: Monad[F]): F[Boolean] =
     this match {
-      case Empty() => ev.pure(false)
-      case Next(ft) => ft.flatMap(_.exists(f))
       case This(a, ft) => if (f(a)) ev.pure(true) else ft.flatMap(_.exists(f))
+      case Next(ft) => ft.flatMap(_.exists(f))
+      case Empty() => ev.pure(false)
     }
 
   /**
@@ -158,9 +186,9 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def forall(f: A => Boolean)(implicit ev: Monad[F]): F[Boolean] =
     this match {
-      case Empty() => ev.pure(true)
-      case Next(ft) => ft.flatMap(_.exists(f))
       case This(a, ft) => if (!f(a)) ev.pure(false) else ft.flatMap(_.forall(f))
+      case Next(ft) => ft.flatMap(_.forall(f))
+      case Empty() => ev.pure(true)
     }
 
   /**
@@ -172,9 +200,9 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def take(n: Int)(implicit ev: Functor[F]): StreamingT[F, A] =
     if (n <= 0) Empty() else this match {
-      case Empty() => Empty()
-      case Next(ft) => Next(ft.map(_.take(n)))
       case This(a, ft) => This(a, ft.map(_.take(n - 1)))
+      case Next(ft) => Next(ft.map(_.take(n)))
+      case Empty() => Empty()
     }
 
   /**
@@ -186,9 +214,9 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def drop(n: Int)(implicit ev: Functor[F]): StreamingT[F, A] =
     if (n <= 0) this else this match {
-      case Empty() => Empty()
-      case Next(ft) => Next(ft.map(_.drop(n)))
       case This(a, ft) => Next(ft.map(_.take(n - 1)))
+      case Next(ft) => Next(ft.map(_.drop(n)))
+      case Empty() => Empty()
     }
 
   /**
@@ -208,9 +236,9 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def takeWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
-      case Empty() => Empty()
-      case Next(ft) => Next(ft.map(_.takeWhile(f)))
       case This(a, ft) => if (f(a)) This(a, ft.map(_.takeWhile(f))) else Empty()
+      case Next(ft) => Next(ft.map(_.takeWhile(f)))
+      case Empty() => Empty()
     }
 
   /**
@@ -230,9 +258,9 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def dropWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
-      case Empty() => Empty()
-      case Next(ft) => Next(ft.map(_.dropWhile(f)))
       case This(a, ft) => if (f(a)) Empty() else This(a, ft.map(_.takeWhile(f)))
+      case Next(ft) => Next(ft.map(_.dropWhile(f)))
+      case Empty() => Empty()
     }
 
   /**
@@ -243,9 +271,9 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def toList(implicit ev: Monad[F]): F[List[A]] =
     this match {
-      case Empty() => ev.pure(Nil)
-      case Next(ft) => ft.flatMap(_.toList)
       case This(a, ft) => ft.flatMap(_.toList).map(a :: _)
+      case Next(ft) => ft.flatMap(_.toList)
+      case Empty() => ev.pure(Nil)
     }
 
   /**
@@ -259,13 +287,13 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   override def toString: String =
     this match {
-      case This(a, _) => "Stream(" + a + ", ...)"
-      case Empty() => "Stream()"
-      case Next(_) => "Stream(...)"
+      case This(a, _) => s"StreamingT($a, ...)"
+      case Next(_) => "StreamingT(...)"
+      case Empty() => "StreamingT()"
     }
 }
 
-object StreamingT {
+object StreamingT extends StreamingTInstances {
 
   /**
    * Concrete Stream[A] types:
@@ -279,9 +307,9 @@ object StreamingT {
    * and Always). The head of `This` is eager -- a lazy head can be
    * represented using `Next(Always(...))` or `Next(Later(...))`.
    */
-  case class Empty[F[_], A]() extends StreamingT[F, A]
-  case class Next[F[_], A](next: F[StreamingT[F, A]]) extends StreamingT[F, A]
-  case class This[F[_], A](a: A, tail: F[StreamingT[F, A]]) extends StreamingT[F, A]
+  final case class Empty[F[_], A]() extends StreamingT[F, A]
+  final case class Next[F[_], A](next: F[StreamingT[F, A]]) extends StreamingT[F, A]
+  final case class This[F[_], A](a: A, tail: F[StreamingT[F, A]]) extends StreamingT[F, A]
 
   /**
    * Create an empty stream of type A.
@@ -290,13 +318,85 @@ object StreamingT {
     Empty()
 
   /**
-   * Create a stream consisting of a single value.
+   * Alias for `.empty[F, A]`.
+   */
+  def apply[F[_], A]: StreamingT[F, A] =
+    Empty()
+
+  /**
+   * Create a stream consisting of a single `A` value.
    */
   def apply[F[_], A](a: A)(implicit ev: Applicative[F]): StreamingT[F, A] =
     This(a, ev.pure(Empty()))
 
+  /**
+   * Create a stream from two or more values.
+   */
+  def apply[F[_], A](a1: A, a2: A, as: A*)(implicit ev: Applicative[F]): StreamingT[F, A] =
+    This(a1, ev.pure(This(a2, ev.pure(StreamingT.fromVector[F, A](as.toVector)))))
+
+  /**
+   * Create a stream from a vector.
+   */
+  def fromVector[F[_], A](as: Vector[A])(implicit ev: Applicative[F]): StreamingT[F, A] = {
+    def loop(s: StreamingT[F, A], i: Int): StreamingT[F, A] =
+      if (i < 0) s else loop(This(as(i), ev.pure(s)), i - 1)
+    loop(Empty(), as.length - 1)
+  }
+
+  /**
+   * Create a stream from a list.
+   */
+  def fromList[F[_], A](as: List[A])(implicit ev: Applicative[F]): StreamingT[F, A] = {
+    def loop(s: StreamingT[F, A], ras: List[A]): StreamingT[F, A] =
+      ras match {
+        case Nil => s
+        case a :: rt => loop(This(a, ev.pure(s)), rt)
+      }
+    loop(Empty(), as.reverse)
+  }
+
+  /**
+   * Create a stream consisting of a single `F[A]`.
+   */
+  def single[F[_], A](a: F[A])(implicit ev: Applicative[F]): StreamingT[F, A] =
+    Next(a.map(apply(_)))
+
+  /**
+   * Prepend an `A` to an `F[StreamingT[F, A]]`.
+   */
   def cons[F[_], A](a: A, fs: F[StreamingT[F, A]]): StreamingT[F, A] =
     This(a, fs)
+
+  /**
+   * Prepend an `A` to an `Eval[StreamingT[F, A]]`.
+   */
+  def lcons[F[_], A](a: A, ls: Eval[StreamingT[F, A]])(implicit ev: Applicative[F]): StreamingT[F, A] =
+    This(a, ev.pureEval(ls))
+
+  /**
+   * Prepend an `F[A]` to an `F[StreamingT[F, A]]`.
+   */
+  def fcons[F[_]: Functor, A](fa: F[A], fs: F[StreamingT[F, A]]): StreamingT[F, A] =
+    Next(fa.map(a => This(a, fs)))
+
+  /**
+   * Prepend a `StreamingT[F, A]` to an `F[StreamingT[F, A]]`.
+   */
+  def concat[F[_]: Monad, A](s: StreamingT[F, A], fs: F[StreamingT[F, A]]): StreamingT[F, A] =
+    s concat fs
+
+  /**
+   * Prepend a `StreamingT[F, A]` to an `Eval[StreamingT[F, A]]`.
+   */
+  def lconcat[F[_], A](s: StreamingT[F, A], ls: Eval[StreamingT[F, A]])(implicit ev: Monad[F]): StreamingT[F, A] =
+    s concat ev.pureEval(ls)
+
+  /**
+   * Prepend an `F[StreamingT[F, A]]` to an `F[StreamingT[F, A]]`.
+   */
+  def fconcat[F[_]: Monad, A](fs1: F[StreamingT[F, A]], fs2: F[StreamingT[F, A]]): StreamingT[F, A] =
+    Next(fs1.map(_ concat fs2))
 
   /**
    * Produce a stream given an "unfolding" function.
@@ -306,11 +406,61 @@ object StreamingT {
    */
   def unfold[F[_], A](o: Option[A])(f: A => F[Option[A]])(implicit ev: Functor[F]): StreamingT[F, A] =
     o match {
-      case None => Empty()
       case Some(a) => This(a, f(a).map(o => unfold(o)(f)))
+      case None => Empty()
     }
 
-  implicit def streamTMonad[F[_]: Applicative]: Monad[StreamingT[F, ?]] =
+  /**
+   * Contains syntax for F[Streaming[F, A]].
+   *
+   * To eanble this, say:
+   *
+   *   import cats.data.StreamingT.syntax._
+   *
+   * This provides the %:: and %::: operators for prepending to an
+   * F[Streaming[F, A]] value, as well as a lazy Streaming[F, A]
+   * value. This mirrors the methods of the same name which can be
+   * used to prepend to a Streaming[F, A] value.
+   *
+   * In order to support laziness when using F[Streaming[F, A]]
+   * values, the type constructor F[_] must support laziness, and the
+   * F[Streaming[F, A]] value must be constructed lazily.
+   *
+   * For example, `StreamingT[Option, ?]` cannot support laziness,
+   * because Option[_] is eager.
+   *
+   * Additionally, `x %:: Future.successful(xs)` will not produce a
+   * lazy StreamT[Future, ?], since `xs` will already have been
+   * evaluated.
+   */
+  object syntax {
+    implicit class StreamingTOps[F[_], A](rhs: => StreamingT[F, A]) {
+      def %::(a: A)(implicit ev: Applicative[F]): StreamingT[F, A] =
+        This(a, ev.pureEval(Always(rhs)))
+      def %:::(s: StreamingT[F, A])(implicit ev: Monad[F]): StreamingT[F, A] =
+        s concat ev.pureEval(Always(rhs))
+      def %::(fa: F[A])(implicit ev: Monad[F]): StreamingT[F, A] =
+        Next(fa.map(a => This(a, ev.pureEval(Always(rhs)))))
+      def %:::(fs: F[StreamingT[F, A]])(implicit ev: Monad[F]): StreamingT[F, A] =
+        Next(fs.map(_ concat ev.pureEval(Always(rhs))))
+    }
+
+    implicit class FStreamingTOps[F[_], A](rhs: F[StreamingT[F, A]]) {
+      def %::(a: A): StreamingT[F, A] =
+        This(a, rhs)
+      def %:::(s: StreamingT[F, A])(implicit ev: Monad[F]): StreamingT[F, A] =
+        s concat rhs
+      def %::(fa: F[A])(implicit ev: Functor[F]): StreamingT[F, A] =
+        Next(fa.map(a => This(a, rhs)))
+      def %:::(fs: F[StreamingT[F, A]])(implicit ev: Monad[F]): StreamingT[F, A] =
+        Next(fs.map(_ concat rhs))
+    }
+  }
+}
+
+trait StreamingTInstances {
+
+  implicit def streamTMonad[F[_]: Monad]: Monad[StreamingT[F, ?]] =
     new Monad[StreamingT[F, ?]] {
       def pure[A](a: A): StreamingT[F, A] =
         StreamingT(a)

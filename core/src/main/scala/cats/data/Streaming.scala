@@ -54,7 +54,9 @@ sealed abstract class Streaming[A] { lhs =>
    * Deconstruct a stream into a head and tail (if available).
    *
    * This method will evaluate the stream until it finds a head and
-   * tail, or until the stream is exhausted.
+   * tail, or until the stream is exhausted. The head will be
+   * evaluated, whereas the tail will remain (potentially) lazy within
+   * Eval.
    */
   def uncons: Option[(A, Eval[Streaming[A]])] = {
     @tailrec def unroll(s: Streaming[A]): Option[(A, Eval[Streaming[A]])] =
@@ -192,13 +194,30 @@ sealed abstract class Streaming[A] { lhs =>
    * arguments.
    */
   def zip[B](rhs: Streaming[B]): Streaming[(A, B)] =
-    (lhs.uncons, rhs.uncons) match {
-      case (Some((a, lta)), Some((b, ltb))) =>
-        This((a, b), Always(lta.value zip ltb.value))
-      case _ =>
+    (lhs, rhs) match {
+      case (This(a, lta), This(b, ltb)) =>
+        This((a, b), for { ta <- lta; tb <- ltb } yield ta zip tb)
+      case (Empty(), _) =>
         Empty()
+      case (_, Empty()) =>
+        Empty()
+      case (Next(lta), s) =>
+        Next(lta.map(_ zip s))
+      case (s, Next(ltb)) =>
+        Next(ltb.map(s zip _))
     }
 
+  /**
+   * Zip the items of the stream with their position.
+   *
+   * Indices start at 0, so
+   *
+   *   Streaming(x, y, z).zipWithIndex
+   *
+   * lazily produces:
+   *
+   *   Streaing((x, 0), (y, 1), (z, 2))
+   */
   def zipWithIndex: Streaming[(A, Int)] = {
     def loop(s: Streaming[A], i: Int): Streaming[(A, Int)] =
       s match {
@@ -216,15 +235,19 @@ sealed abstract class Streaming[A] { lhs =>
    * two arguments.
    */
   def izip[B](rhs: Streaming[B]): Streaming[Ior[A, B]] =
-    (lhs.uncons, rhs.uncons) match {
-      case (Some((a, lta)), Some((b, ltb))) =>
-        This(Ior.both(a, b), Always(lta.value izip ltb.value))
-      case (Some(_), None) =>
-        lhs.map(a => Ior.left(a))
-      case (None, Some(_)) =>
-        rhs.map(b => Ior.right(b))
-      case _ =>
+    (lhs, rhs) match {
+      case (This(a, lta), This(b, ltb)) =>
+        This(Ior.both(a, b), for { ta <- lta; tb <- ltb } yield ta izip tb)
+      case (Empty(), Empty()) =>
         Empty()
+      case (s, Empty()) =>
+        s.map(a => Ior.left(a))
+      case (Empty(), s) =>
+        s.map(b => Ior.right(b))
+      case (Next(lta), s) =>
+        Next(lta.map(_ izip s))
+      case (s, Next(ltb)) =>
+        Next(ltb.map(s izip _))
     }
 
   /**
@@ -240,13 +263,17 @@ sealed abstract class Streaming[A] { lhs =>
    * the resulting order is not defined.
    */
   def merge(rhs: Streaming[A])(implicit ev: Order[A]): Streaming[A] =
-    (lhs.uncons, rhs.uncons) match {
-      case (Some((a0, lt0)), Some((a1, lt1))) =>
-        if (a0 < a1) This(a0, Always(lt0.value merge rhs))
-        else This(a1, Always(lhs merge lt1.value))
-      case (None, None) => Empty()
-      case (_, None) => lhs
-      case (None, _) => rhs
+    (lhs, rhs) match {
+      case (This(a0, lt0), This(a1, lt1)) =>
+        if (a0 < a1) This(a0, lt0.map(_ merge rhs)) else This(a1, lt1.map(lhs merge _))
+      case (Next(lta), s) =>
+        Next(lta.map(_ merge s))
+      case (s, Next(ltb)) =>
+        Next(ltb.map(s merge _))
+      case (s, Empty()) =>
+        s
+      case (Empty(), s) =>
+        s
     }
 
   /**
@@ -259,9 +286,10 @@ sealed abstract class Streaming[A] { lhs =>
    * will appear after the other stream is exhausted.
    */
   def interleave(rhs: Streaming[A]): Streaming[A] =
-    lhs.uncons match {
-      case None => rhs
-      case Some((a, lt)) => This(a, Always(rhs interleave lt.value))
+    lhs match {
+      case This(a, lt) => This(a, lt.map(rhs interleave _))
+      case Next(lt) => Next(lt.map(_ interleave rhs))
+      case Empty() => rhs
     }
 
   /**
@@ -278,6 +306,10 @@ sealed abstract class Streaming[A] { lhs =>
    * This is true even for infinite streams, at least in theory --
    * time and space limitations of evaluating an infinite stream may
    * make it impossible to reach very distant elements.
+   *
+   * This method lazily evaluates the input streams, but due to the
+   * diagonalization method may read ahead more than is strictly
+   * necessary.
    */
   def product[B](rhs: Streaming[B]): Streaming[(A, B)] = {
     def loop(i: Int): Streaming[(A, B)] = {
@@ -295,7 +327,7 @@ sealed abstract class Streaming[A] { lhs =>
         build(0) concat Always(loop(i + 1))
       }
     }
-    loop(0)
+    Next(Always(loop(0)))
   }
 
   /**
@@ -351,7 +383,7 @@ sealed abstract class Streaming[A] { lhs =>
     if (n <= 0) this else this match {
       case Empty() => Empty()
       case Next(lt) => Next(lt.map(_.drop(n)))
-      case This(a, lt) => Next(lt.map(_.take(n - 1)))
+      case This(a, lt) => Next(lt.map(_.drop(n - 1)))
     }
 
   /**
@@ -395,7 +427,7 @@ sealed abstract class Streaming[A] { lhs =>
     this match {
       case Empty() => Empty()
       case Next(lt) => Next(lt.map(_.dropWhile(f)))
-      case This(a, lt) => if (f(a)) Empty() else This(a, lt.map(_.takeWhile(f)))
+      case This(a, lt) => if (f(a)) Empty() else This(a, lt.map(_.dropWhile(f)))
     }
 
   /**
@@ -403,12 +435,13 @@ sealed abstract class Streaming[A] { lhs =>
    *
    * For example, Stream(1, 2).tails is equivalent to:
    *
-   *   Stream(Stream(1, 2), Stream(1), Stream.empty)
+   *   Streaming(Streaming(1, 2), Streaming(1), Streaming.empty)
    */
   def tails: Streaming[Streaming[A]] =
-    uncons match {
-      case None => This(this, Always(Streaming.empty))
-      case Some((_, tail)) => This(this, tail.map(_.tails))
+    this match {
+      case This(a, lt) => This(this, lt.map(_.tails))
+      case Next(lt) => Next(lt.map(_.tails))
+      case Empty() => This(this, Always(Streaming.empty))
     }
 
   /**
@@ -547,14 +580,20 @@ object Streaming extends StreamingInstances {
    * and Always). The head of `This` is eager -- a lazy head can be
    * represented using `Next(Always(...))` or `Next(Later(...))`.
    */
-  case class Empty[A]() extends Streaming[A]
-  case class Next[A](next: Eval[Streaming[A]]) extends Streaming[A]
-  case class This[A](a: A, tail: Eval[Streaming[A]]) extends Streaming[A]
+  final case class Empty[A]() extends Streaming[A]
+  final case class Next[A](next: Eval[Streaming[A]]) extends Streaming[A]
+  final case class This[A](a: A, tail: Eval[Streaming[A]]) extends Streaming[A]
 
   /**
    * Create an empty stream of type A.
    */
   def empty[A]: Streaming[A] =
+    Empty()
+
+  /**
+   * Alias for `.empty[A]`.
+   */
+  def apply[A]: Streaming[A] =
     Empty()
 
   /**
@@ -590,7 +629,7 @@ object Streaming extends StreamingInstances {
   }
 
   /**
-   * Create a stream from a vector.
+   * Create a stream from a list.
    *
    * The stream will be eagerly evaluated.
    */
@@ -716,16 +755,18 @@ object Streaming extends StreamingInstances {
 
 trait StreamingInstances {
 
+  import Streaming.{This, Empty}
+
   implicit val streamInstance: Traverse[Streaming] with MonadCombine[Streaming] with CoflatMap[Streaming] =
     new Traverse[Streaming] with MonadCombine[Streaming] with CoflatMap[Streaming] {
       def pure[A](a: A): Streaming[A] =
-        Streaming(a)
+        This(a, Now(Empty()))
       override def map[A, B](as: Streaming[A])(f: A => B): Streaming[B] =
         as.map(f)
       def flatMap[A, B](as: Streaming[A])(f: A => Streaming[B]): Streaming[B] =
         as.flatMap(f)
       def empty[A]: Streaming[A] =
-        Streaming.empty
+        Empty()
       def combine[A](xs: Streaming[A], ys: Streaming[A]): Streaming[A] =
         xs concat ys
 
@@ -751,9 +792,8 @@ trait StreamingInstances {
         //
         // (We don't worry about internal laziness because traverse
         // has to evaluate the entire stream anyway.)
-        import Streaming.syntax._
         foldRight(fa, Later(init)) { (a, lgsb) =>
-          lgsb.map(gsb => G.map2(f(a), gsb)(_ %:: _))
+          lgsb.map(gsb => G.map2(f(a), gsb) { (a, s) => This(a, Now(s)) })
         }.value
       }
 
