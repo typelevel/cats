@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.arrow.{Choice, Arrow, Category, Split}
+import cats.arrow.{Arrow, Choice, Split}
 import cats.data.Kleisli
 import cats.functor.Strong
 import cats.laws.discipline._
