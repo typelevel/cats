@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.arrow.{Arrow, Choice, Split}
+import cats.arrow.{Arrow, Split}
 import cats.functor.Strong
 
 /**
@@ -87,17 +87,6 @@ sealed abstract class KleisliInstances extends KleisliInstances0 {
 
   implicit def kleisliArrow[F[_]](implicit ev: Monad[F]): Arrow[Kleisli[F, ?, ?]] =
     new KleisliArrow[F] { def F: Monad[F] = ev }
-
-  implicit def kleisliChoice[F[_]](implicit ev: Monad[F]): Choice[Kleisli[F, ?, ?]] =
-    new Choice[Kleisli[F, ?, ?]] {
-      def id[A]: Kleisli[F, A, A] = Kleisli(ev.pure(_))
-
-      def choice[A, B, C](f: Kleisli[F, A, C], g: Kleisli[F, B, C]): Kleisli[F, Xor[A, B], C] =
-        Kleisli(_.fold(f.run, g.run))
-
-      def compose[A, B, C](f: Kleisli[F, B, C], g: Kleisli[F, A, B]): Kleisli[F, A, C] =
-        f.compose(g)
-    }
 
   implicit def kleisliMonadReader[F[_]: Monad, A]: MonadReader[Kleisli[F, ?, ?], A] =
     new MonadReader[Kleisli[F, ?, ?], A] {
