@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.arrow.{Arrow, Category, Split}
+import cats.arrow.{Arrow, Choice, Split}
 import cats.data.Kleisli
 import cats.functor.Strong
 import cats.laws.discipline._
@@ -22,9 +22,9 @@ class KleisliTests extends CatsSuite {
   }
 
   {
-    implicit val kleisliCategory = Kleisli.kleisliChoice[Option]
-    checkAll("Kleisli[Option, Int, Int]", CategoryTests[Kleisli[Option, ?, ?]].category[Int, Int, Int, Int])
-    checkAll("Category[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Category[Kleisli[Option, ?, ?]]))
+    implicit val kleisliChoice = Kleisli.kleisliChoice[Option]
+    checkAll("Kleisli[Option, Int, Int]", ChoiceTests[Kleisli[Option, ?, ?]].choice[Int, Int, Int, Int])
+    checkAll("Choice[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Choice[Kleisli[Option, ?, ?]]))
   }
 
   {
