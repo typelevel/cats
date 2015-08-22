@@ -1,9 +1,10 @@
 package cats
 package tests
 
-import cats.arrow.{Arrow, Category}
+import cats.arrow.{Arrow, Choice}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
+import cats.laws.discipline.arbitrary._
 
 class FunctionTests extends CatsSuite {
   checkAll("Function0[Int]", ComonadTests[Function0].comonad[Int, Int, Int])
@@ -18,6 +19,6 @@ class FunctionTests extends CatsSuite {
   checkAll("Function1[Int, Int]", ArrowTests[Function1].arrow[Int, Int, Int, Int, Int, Int])
   checkAll("Arrow[Function1]", SerializableTests.serializable(Arrow[Function1]))
 
-  checkAll("Function1[Int, Int]", CategoryTests[Function1].category[Int, Int, Int, Int])
-  checkAll("Category[Function1]", SerializableTests.serializable(Category[Function1]))
+  checkAll("Function1[Int, Int]", ChoiceTests[Function1].choice[Int, Int, Int, Int])
+  checkAll("Choice[Function1]", SerializableTests.serializable(Choice[Function1]))
 }

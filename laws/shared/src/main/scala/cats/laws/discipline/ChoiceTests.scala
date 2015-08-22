@@ -10,7 +10,7 @@ import org.scalacheck.Prop._
 trait ChoiceTests[F[_, _]] extends CategoryTests[F] {
   def laws: ChoiceLaws[F]
 
-  def split[A, B, C, D](implicit
+  def choice[A, B, C, D](implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFAC: Arbitrary[F[A, C]],
     ArbFBC: Arbitrary[F[B, C]],
