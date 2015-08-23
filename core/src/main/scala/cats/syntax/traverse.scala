@@ -21,6 +21,9 @@ class TraverseOps[F[_], A](fa: F[A])(implicit F: Traverse[F]) {
   def traverseU[GB](f: A => GB)(implicit U: Unapply[Applicative, GB]): U.M[F[U.A]] =
     F.traverseU[A, GB](fa)(f)(U)
 
+  def sequence[G[_], B](implicit G: Applicative[G], ev: A =:= G[B]): G[F[B]] =
+    F.sequence(fa.asInstanceOf[F[G[B]]])
+
   def sequenceU(implicit U: Unapply[Applicative,A]): U.M[F[U.A]] =
     F.sequenceU[A](fa)(U)
 

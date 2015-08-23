@@ -114,6 +114,11 @@ class SyntaxTests extends CatsSuite with PropertyChecks {
     val as2: List[A] = fa.dropWhile_(f5)
   }
 
+  def testTraverse[F[_]: Traverse, G[_]: Applicative, A]: Unit = {
+    val fga = mock[F[G[A]]]
+    val gunit: G[F[A]] = fga.sequence
+  }
+
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
     val fa = mock[F[A]]
     val f1 = mock[(A, A) => A]
