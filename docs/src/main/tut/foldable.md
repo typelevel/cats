@@ -40,3 +40,21 @@ Hence when defining some new data structure, if we can define a `foldLeft` and
 `foldRight` we are able to provide many other useful operations, if not always
  the most efficient implementations, over the structure without further 
  implementation.
+ 
+-------------------------------------------------------------------------------
+ 
+Note that, in order to support laziness, the signature of `Foldable`'s 
+`foldRight` is 
+
+```
+def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B]
+```
+
+as opposed to
+ 
+```
+def foldRight[A, B](fa: F[A], z: B)(f: (A, B) => B): B
+```
+ 
+which someone familiar with the `foldRight` from the collections in Scala's standard
+library might expect. 
