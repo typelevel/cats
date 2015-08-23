@@ -31,7 +31,6 @@ cache:
   directories:
   - $HOME/.sbt/0.13
   - $HOME/.sbt/boot/scala*
-  - $HOME/.sbt/cache
   - $HOME/.sbt/launchers
   - $HOME/.ivy2
 before_cache:
