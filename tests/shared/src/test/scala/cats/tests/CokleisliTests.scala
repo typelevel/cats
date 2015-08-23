@@ -6,32 +6,24 @@ import cats.data.{Cokleisli, NonEmptyList}
 import cats.functor.Profunctor
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.ArbitraryK._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
-import algebra.laws.GroupLaws
+import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
 
 class CokleisliTests extends Platform.UltraSlowCatsSuite {
 
   implicit def cokleisliEq[F[_], A, B](implicit A: Arbitrary[F[A]], FB: Eq[B]): Eq[Cokleisli[F, A, B]] =
     Eq.by[Cokleisli[F, A, B], F[A] => B](_.run)
 
+  def cokleisliEqE[F[_], A](implicit A: Arbitrary[F[A]], FA: Eq[A]): Eq[Cokleisli[F, A, A]] =
+    Eq.by[Cokleisli[F, A, A], F[A] => A](_.run)
+
   checkAll("Cokleisli[Option, Int, Int]", ApplicativeTests[Cokleisli[Option, Int, ?]].applicative[Int, Int, Int])
   checkAll("Applicative[Cokleisli[Option, Int, ?]", SerializableTests.serializable(Applicative[Cokleisli[Option, Int, ?]]))
 
   checkAll("Cokleisli[Option, Int, Int]", ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[Int, Int, Int, Int, Int, Int])
   checkAll("Profunctor[Cokleisli[Option, ?, ?]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
-
-  {
-    implicit val cokleisliMonoid = Monoid[Cokleisli[NonEmptyList, Int, Int]]
-    checkAll("Cokleisli[NonEmptyList, Int, Int]", GroupLaws[Cokleisli[NonEmptyList, Int, Int]].monoid)
-    checkAll("Monoid[Cokleisli[NonEmptyList, Int, Int]", SerializableTests.serializable(cokleisliMonoid))
-  }
-
-  {
-    implicit val cokleisliSemigroup = Semigroup[Cokleisli[NonEmptyList, Int, Int]]
-    checkAll("Cokleisli[NonEmptyList, Int, Int]", GroupLaws[Cokleisli[NonEmptyList, Int, Int]].semigroup)
-    checkAll("Semigroup[Cokleisli[NonEmptyList, Int, Int]]", SerializableTests.serializable(cokleisliSemigroup))
-  }
 
   {
     // Ceremony to help scalac to do the right thing, see also #267.
@@ -46,4 +38,28 @@ class CokleisliTests extends Platform.UltraSlowCatsSuite {
     checkAll("Cokleisli[NonEmptyList, Int, Int]", ArrowTests[CokleisliNEL].arrow[Int, Int, Int, Int, Int, Int])
     checkAll("Arrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(Arrow[CokleisliNEL]))
   }
+
+  {
+    // More ceremony, see above
+    type CokleisliNELE[A] = Cokleisli[NonEmptyList, A, A]
+
+    implicit def ev0: ArbitraryK[CokleisliNELE] = cokleisliE
+
+    implicit def ev1[A: Eq](implicit arb: Arbitrary[A]): Eq[CokleisliNELE[A]] =
+      cokleisliEqE[NonEmptyList, A](oneAndArbitrary, Eq[A])
+
+    {
+      implicit val cokleisliMonoidK = Cokleisli.cokleisliMonoidK[NonEmptyList]
+      checkAll("Cokleisli[NonEmptyList, Int, Int]", MonoidKTests[CokleisliNELE].monoidK[Int])
+      checkAll("MonoidK[Lambda[A => Cokleisli[NonEmptyList, A, A]]]", SerializableTests.serializable(cokleisliMonoidK))
+    }
+
+    {
+      implicit val cokleisliSemigroupK = Cokleisli.cokleisliSemigroupK[NonEmptyList]
+      checkAll("Cokleisli[NonEmptyList, Int, Int]", SemigroupKTests[CokleisliNELE].semigroupK[Int])
+      checkAll("SemigroupK[Lambda[A => Cokleisli[NonEmptyList, A, A]]]", SerializableTests.serializable(cokleisliSemigroupK))
+    }
+
+  }
+
 }
