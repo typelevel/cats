@@ -1,9 +1,9 @@
 package cats
 
 /**
- * A typeclass that is used to help guide scala's type inference to
- * find typeclass instances for types which have shapes which differ
- * from what their typeclasses are looking for.
+ * A type class that is used to help guide Scala's type inference to
+ * find type class instances for types which have shapes which differ
+ * from what their type classes are looking for.
  *
  * For example, [[Functor]] is defined for types in the shape
  * F[_]. Scala has no problem finding instance of Functor which match
@@ -11,15 +11,15 @@ package cats
  * also a functor defined for some types which have the Shape F[_,_]
  * when one of the two 'holes' is fixed. For example. there is a
  * Functor for Map[A,?] for any A, and for Either[A,?] for any A,
- * however the scala compiler will not find them without some coercing.
+ * however the Scala compiler will not find them without some coercing.
  */
 trait Unapply[TC[_[_]], MA] {
-  // a type constructor which is properly kinded for the typeclass
+  // a type constructor which is properly kinded for the type class
   type M[_]
   // the type applied to the type constructor to make an MA
   type A
 
-  // the actual typeclass instance found
+  // the actual type class instance found
   def TC: TC[M]
 
   // a function which will coerce the MA value into one of type M[A]
@@ -32,7 +32,7 @@ object Unapply extends Unapply2Instances {
   // a convenience method for summoning Unapply instances
   def apply[TC[_[_]], MA](implicit ev: Unapply[TC,MA]): Unapply[TC, MA] = implicitly
 
-  // the type we will instantiate when we find a typeclass instance
+  // the type we will instantiate when we find a type class instance
   // which is already the expected shape: F[_]
   type Aux1[TC[_[_]], MA, F[_], AA] = Unapply[TC, MA] {
     type M[X] = F[X]
@@ -51,14 +51,14 @@ object Unapply extends Unapply2Instances {
 
 sealed abstract class Unapply2Instances extends Unapply3Instances {
 
-  // the type we will instantiate when we find a typeclass instance
+  // the type we will instantiate when we find a type class instance
   // for a type in the shape F[_,_] when we fix the left type
   type Aux2Left[TC[_[_]], FA, F[_,_], AA, B] = Unapply[TC, FA] {
     type M[X] = F[X,B]
     type A = AA
   }
 
-  // the type we will instantiate when we find a typeclass instance
+  // the type we will instantiate when we find a type class instance
   // for a type in the shape F[_,_] when we fix the right type
   type Aux2Right[TC[_[_]], MA, F[_,_], AA, B] = Unapply[TC, MA] {
     type M[X] = F[AA,X]
@@ -97,7 +97,7 @@ sealed abstract class Unapply2Instances extends Unapply3Instances {
      def subst: F[Nothing, B] => M[A] = identity
    }
 
-  // the type we will instantiate when we find a typeclass instance
+  // the type we will instantiate when we find a type class instance
   // for a type in the shape of a Monad Transformer with 2 type params
   type Aux2MT[TC[_[_]], MA, F[_[_],_], AA[_], B] = Unapply[TC, MA] {
     type M[X] = F[AA,X]
@@ -107,7 +107,7 @@ sealed abstract class Unapply2Instances extends Unapply3Instances {
 
 sealed abstract class Unapply3Instances {
 
-  // the type we will instantiate when we find a typeclass instance
+  // the type we will instantiate when we find a type class instance
   // for a type in the shape of a Monad Transformer with 3 type params
   // F[_[_],_,_] when we fix the middle type
   type Aux3MTLeft[TC[_[_]], MA, F[_[_],_,_], AA[_], B, C] = Unapply[TC, MA] {
@@ -115,7 +115,7 @@ sealed abstract class Unapply3Instances {
     type A = B
   }
 
-  // the type we will instantiate when we find a typeclass instance
+  // the type we will instantiate when we find a type class instance
   // for a type in the shape of a Monad Transformer with 3 type params
   // F[_[_],_,_] when we fix the right type
   type Aux3MTRight[TC[_[_]], MA, F[_[_],_,_], AA[_], B, C] = Unapply[TC, MA] {

@@ -9,9 +9,9 @@ script:
         "$TRAVIS_BRANCH" == "master" &&
         $(cat version.sbt) =~ "-SNAPSHOT"
   ]]; then
-    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean validateJS && sbt validateJVM publish gitSnapshots publish ;
+    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt ++$TRAVIS_SCALA_VERSION clean macrosJS/compile coreJS/compile lawsJS/compile && sbt ++$TRAVIS_SCALA_VERSION testsJS/test && sbt ++$TRAVIS_SCALA_VERSION freeJS/test && sbt ++$TRAVIS_SCALA_VERSION stateJS/test && sbt ++$TRAVIS_SCALA_VERSION validateJVM publish gitSnapshots publish ;
   else
-    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt clean validateJS && sbt validateJVM publishLocal ;
+    sbt ++$TRAVIS_SCALA_VERSION coverage validateJVM coverageReport && bash <(curl -s https://codecov.io/bash) && sbt ++$TRAVIS_SCALA_VERSION clean macrosJS/compile coreJS/compile lawsJS/compile && sbt ++$TRAVIS_SCALA_VERSION testsJS/test && sbt ++$TRAVIS_SCALA_VERSION freeJS/test && sbt ++$TRAVIS_SCALA_VERSION stateJS/test && sbt ++$TRAVIS_SCALA_VERSION validateJVM publishLocal ;
   fi
 notifications:
   webhooks:
@@ -22,5 +22,5 @@ notifications:
     on_start: false
 env:
   global:
-  - secure: Kf44XQFpq2QGe3rn98Dsf5Uz3WXzPDralS54co7sqT5oQGs1mYLYZRYz+I75ZSo5ffZ86H7M+AI9YFofqGwAjBixBbqf1tGkUh3oZp2fN3QfqzazGV3HzC+o41zALG5FL+UBaURev9ChQ5fYeTtFB7YAzejHz4y5E97awk934Rg=
-  - secure: QbNAu0jCaKrwjJi7KZtYEBA/pYbTJ91Y1x/eLAJpsamswVOvwnThA/TLYuux+oiZQCiDUpBzP3oxksIrEEUAhl0lMtqRFY3MrcUr+si9NIjX8hmoFwkvZ5o1b7pmLF6Vz3rQeP/EWMLcljLzEwsrRXeK0Ei2E4vFpsg8yz1YXJg=
+  - secure: "X3x7EJUTc2E0VzAC1f4lzeJ4kcU8NI1quLFk/uigEx5qqranzipqE4wXLXhRcub4akMnBrDdW3kahFAU28cSgeWxpbYC3f26MNlahSpJIrWpwEMSmfSlwJSZCJYP6cbVY7GCNjk2jl+4BdT8JAdM5j1ozWLFV0QAhfvV5GIj8tg="
+  - secure: "KMngIPhnOE0WEonCi6ar2Qxxc3D0pe+DRalrveF2mWHuz8Xncphz5f5VhkZmxY/v8nM0EjiaN9L2KpAwiPrO7vIt152ZHYH+Ih6ojcBfdxB0N/F5LsRFWseNdJDkGX04teWjDFWWG1a9+rnbkQZ3S2sAT0QmSZT621ByEm3m438="

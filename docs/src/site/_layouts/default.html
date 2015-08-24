@@ -3,6 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <!--mathjax-->
+    <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
     <title>{{ site.name }} - {{ page.title }}</title>
 
     <link rel="stylesheet" href="{{ site.baseurl }}css/styles.css">
@@ -42,7 +47,10 @@
 	      <a href="{{ site.baseurl }}/typeclasses.html">Typeclasses</a>
 	    </li>
 	    <li {%if page.section =="datatypes" %} class="active" {% else %} class="inactive" {% endif %}>
-	      <a  href="{{ site.baseurl }}/datatypes.html">Data Types</a>
+	      <a href="{{ site.baseurl }}/datatypes.html">Data Types</a>
+	    </li>
+	    <li {%if page.section == "resources_for_learners" %} class="active" {% else %} class="inactive" {% endif %}>
+	      <a href="{{ site.baseurl }}/resources_for_learners.html">Resources For Learners</a>
 	    </li>
 	    <li {%if page.section =="colophon" %} class="active" {% else %} class="inactive" {% endif %}>
 	      <a href="{{ site.baseurl }}/colophon.html">Colophon</a>

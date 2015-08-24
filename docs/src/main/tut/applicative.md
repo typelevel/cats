@@ -7,8 +7,8 @@ scaladoc: "#cats.Applicative"
 ---
 # Applicative
 
-Applicative functors are a simple extension of the [Apply
-functor](apply.md) which adds a single method, `pure`:
+`Applicative` extends [`Apply`](apply.html) by adding a single method,
+`pure`:
 
 ```scala
     def pure[A](x: A): F[A]
@@ -28,9 +28,9 @@ Applicative[Option].pure(1)
 Applicative[List].pure(1)
 ```
 
-Like [Functor](functor.md) and [Apply](apply.md), Applicative
-functors also compose naturally with other Applicative functors. When
-you compose one Applicative with another, the resulting `pure`
+Like [`Functor`](functor.html) and [`Apply`](apply.html), `Applicative`
+functors also compose naturally with each other. When
+you compose one `Applicative` with another, the resulting `pure`
 operation will lift the passed value into one context, and the result
 into the other context:
 
@@ -40,9 +40,9 @@ into the other context:
 
 ## Applicative Functors & Monads
 
-Applicative functors are a generalization of monads thus allowing to express 
-effectful computations into a pure functional way.
+`Applicative` is a generalization of [`Monad`](monad.html), allowing expression
+of effectful computations in a pure functional way.
 
-Applicative functors are generally preferred to monads when the structure 
-of a computation is fixed a priori. That makes it possible to perform certain
+`Applicative` is generally preferred to `Monad` when the structure of a
+computation is fixed a priori. That makes it possible to perform certain
 kinds of static analysis on applicative values.
