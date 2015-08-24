@@ -64,8 +64,8 @@ sealed abstract class CokleisliInstances extends CokleisliInstances0 {
       fa.map(f)
   }
 
-  implicit def cokleisliMonoid[F[_], A](implicit ev: Comonad[F]): Monoid[Cokleisli[F, A, A]] =
-    new CokleisliMonoid[F, A] { def F: Comonad[F] = ev }
+  implicit def cokleisliMonoidK[F[_]](implicit ev: Comonad[F]): MonoidK[Lambda[A => Cokleisli[F, A, A]]] =
+    new CokleisliMonoidK[F] { def F: Comonad[F] = ev }
 }
 
 sealed abstract class CokleisliInstances0 {
@@ -75,8 +75,8 @@ sealed abstract class CokleisliInstances0 {
   implicit def cokleisliProfunctor[F[_]](implicit ev: Functor[F]): Profunctor[Cokleisli[F, ?, ?]] =
     new CokleisliProfunctor[F] { def F: Functor[F] = ev }
 
-  implicit def cokleisliSemigroup[F[_], A](implicit ev: CoflatMap[F]): Semigroup[Cokleisli[F, A, A]] =
-    new CokleisliSemigroup[F, A] { def F: CoflatMap[F] = ev }
+  implicit def cokleisliSemigroupK[F[_]](implicit ev: CoflatMap[F]): SemigroupK[Lambda[A => Cokleisli[F, A, A]]] =
+    new CokleisliSemigroupK[F] { def F: CoflatMap[F] = ev }
 }
 
 private trait CokleisliArrow[F[_]] extends Arrow[Cokleisli[F, ?, ?]] with CokleisliSplit[F] with CokleisliProfunctor[F] {
@@ -124,14 +124,14 @@ private trait CokleisliProfunctor[F[_]] extends Profunctor[Cokleisli[F, ?, ?]] {
     fab.map(f)
 }
 
-private trait CokleisliSemigroup[F[_], A] extends Semigroup[Cokleisli[F, A, A]] {
+private trait CokleisliSemigroupK[F[_]] extends SemigroupK[Lambda[A => Cokleisli[F, A, A]]] {
   implicit def F: CoflatMap[F]
 
-  def combine(a: Cokleisli[F, A, A], b: Cokleisli[F, A, A]): Cokleisli[F, A, A] = a compose b
+  def combine[A](a: Cokleisli[F, A, A], b: Cokleisli[F, A, A]): Cokleisli[F, A, A] = a compose b
 }
 
-private trait CokleisliMonoid[F[_], A] extends Monoid[Cokleisli[F, A, A]] with CokleisliSemigroup[F, A] {
+private trait CokleisliMonoidK[F[_]] extends MonoidK[Lambda[A => Cokleisli[F, A, A]]] with CokleisliSemigroupK[F] {
   implicit def F: Comonad[F]
 
-  def empty: Cokleisli[F, A, A] = Cokleisli(F.extract[A])
+  def empty[A]: Cokleisli[F, A, A] = Cokleisli(F.extract[A])
 }

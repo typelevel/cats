@@ -112,7 +112,7 @@ map       | Functor
 traverse  | Applicative
 
 ### Type class instances
-The type class instances for `Kleisli`, like that for functions, fix the input type (and the `F[_]`) and leave
+The type class instances for `Kleisli`, like that for functions, often fix the input type (and the `F[_]`) and leave
 the output type free. What type class instances it has tends to depend on what instances the `F[_]` has. For
 instance, `Kleisli[F, A, B]` has a `Functor` instance so long as the chosen `F[_]` does. It has a `Monad`
 instance so long as the chosen `F[_]` does. The instances in Cats are laid out in a way such that implicit
@@ -140,16 +140,27 @@ implicit def kleisliFlatMap[F[_], Z](implicit F: FlatMap[F]): FlatMap[Kleisli[F,
 
 Below is a table of some of the type class instances `Kleisli` can have depending on what instances `F[_]` has.
 
-Type class    | Constraint on `F[_]`
-------------- | -------------------
-Functor       | Functor
-Apply         | Apply
-Applicative   | Applicative
-FlatMap       | FlatMap
-Monad         | Monad
-Arrow         | Monad
-Split         | FlatMap
-Strong        | Functor
+Type class     | Constraint on `F[_]`
+-------------- | -------------------
+Functor        | Functor
+Apply          | Apply
+Applicative    | Applicative
+FlatMap        | FlatMap
+Monad          | Monad
+Arrow          | Monad
+Split          | FlatMap
+Strong         | Functor
+SemigroupK*    | FlatMap
+MonoidK*       | Monad
+
+*These instances only exist for Kleisli arrows with identical input and output types; that is, 
+`Kleisli[F, A, A]` for some type A. These instances use Kleisli composition as the `combine` operation,
+and `Monad.pure` as the `empty` value.
+
+Also, there is an instance of `Monoid[Kleisli[F, A, B]]` if there is an instance of `Monoid[F[B]]`. 
+`Monoid.combine` here creates a new Kleisli arrow which takes an `A` value and feeds it into each 
+of the combined Kleisli arrows, which together return two `F[B]` values. Then, they are combined into one 
+using the `Monoid[F[B]]` instance.
 
 ## Other uses
 ### Monad Transformers

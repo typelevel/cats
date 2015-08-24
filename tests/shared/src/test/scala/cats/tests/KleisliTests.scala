@@ -10,6 +10,7 @@ import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 import algebra.laws.GroupLaws
+import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
 
 class KleisliTests extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
@@ -70,15 +71,27 @@ class KleisliTests extends CatsSuite {
   }
 
   {
-    implicit val kleisliMonoid = Kleisli.kleisliMonoid[Option, Int]
-    checkAll("Kleisli[Option, Int, Int]", GroupLaws[Kleisli[Option, Int, Int]].monoid)
-    checkAll("Monoid[Kleisli[Option, Int, Int]]", SerializableTests.serializable(kleisliMonoid))
+    implicit val kleisliMonoid = Kleisli.kleisliMonoid[Option, Int, String]
+    checkAll("Kleisli[Option, Int, String]", GroupLaws[Kleisli[Option, Int, String]].monoid)
+    checkAll("Monoid[Kleisli[Option, Int, String]]", SerializableTests.serializable(kleisliMonoid))
   }
 
   {
-    implicit val kleisliSemigroup = Kleisli.kleisliSemigroup[Option, Int]
-    checkAll("Kleisli[Option, Int, Int]", GroupLaws[Kleisli[Option, Int, Int]].semigroup)
-    checkAll("Semigroup[Kleisli[Option, Int, Int]]", SerializableTests.serializable(kleisliSemigroup))
+    implicit val kleisliSemigroup = Kleisli.kleisliSemigroup[Option, Int, String]
+    checkAll("Kleisli[Option, Int, String]", GroupLaws[Kleisli[Option, Int, String]].semigroup)
+    checkAll("Semigroup[Kleisli[Option, Int, String]]", SerializableTests.serializable(kleisliSemigroup))
+  }
+
+  {
+    implicit val kleisliMonoidK = Kleisli.kleisliMonoidK[Option]
+    checkAll("Kleisli[Option, Int, Int]", MonoidKTests[Lambda[A => Kleisli[Option, A, A]]].monoidK[Int])
+    checkAll("MonoidK[Lambda[A => Kleisli[Option, A, A]]]", SerializableTests.serializable(kleisliMonoidK))
+  }
+
+  {
+    implicit val kleisliSemigroupK = Kleisli.kleisliSemigroupK[Option]
+    checkAll("Kleisli[Option, Int, Int]", SemigroupKTests[Lambda[A => Kleisli[Option, A, A]]].semigroupK[Int])
+    checkAll("SemigroupK[Lambda[A => Kleisli[Option, A, A]]]", SerializableTests.serializable(kleisliSemigroupK))
   }
 
   check {
