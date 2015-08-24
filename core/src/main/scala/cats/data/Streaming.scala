@@ -1,13 +1,63 @@
 package cats
 package data
 
-import cats.syntax.eq._
-import cats.syntax.order._
-import scala.reflect.ClassTag
+import cats.syntax.all._
 
+import scala.reflect.ClassTag
 import scala.annotation.tailrec
 import scala.collection.mutable
 
+/**
+ * `Streaming[A]` represents a stream of values. A stream can be
+ * thought of as a collection, with two key differences:
+ *
+ *  1. It may be infinite; it does not necessarily have a finite
+ *     length. For this reason, there is no `.length` method.
+ *
+ *  2. It may be lazy. In other words, the entire stream may not be in
+ *     memory. In this case, each "step" of the stream has
+ *     instructions for producing the next step.
+ *
+ * Streams are not necessarily lazy: they use `Eval[Stream[A]]` to
+ * represent a tail that may (or may not be) lazy. If `Now[A]` is used
+ * for each tail, then `Stream[A]` will behave similarly to
+ * `List[A]`. If `Later[A]` is used for each tail, then `Stream[A]`
+ * will behave similarly to `scala.Stream[A]` (i.e. it will
+ * lazily-compute the tail, and will memoize the result to improve the
+ * performance of repeated traversals). If `Always[A]` is used for
+ * each tail, the result will be a lazy stream which does not memoize
+ * results (saving space at the cost of potentially-repeated
+ * calculations).
+ *
+ * Since `Streaming[A]` has been compared to `scala.Stream[A]` it is
+ * worth noting some key differences between the two types:
+ *
+ *  1. When the entire stream is known ahead of time, `Streaming[A]`
+ *     can represent it more efficiencly, using `Now[A]`, rather than
+ *     allocating a list of closures.
+ *
+ *  2. `Streaming[A]` does not memoize by default. This protects
+ *     against cases where a reference to head will prevent the entire
+ *     stream from being garbage collected, and is a better default.
+ *     A stream can be memoized later using the `.memoize` method.
+ *
+ *  3. `Streaming[A]` does not inherit from the standard collections,
+ *     meaning a wide variety of methods which are dangerous on
+ *     streams (`.length`, `.apply`, etc.) are not present.
+ *
+ *  4. `scala.Stream[A]` requires an immediate value for `.head`. This
+ *     means that operations like `.filter` will block until a
+ *     matching value is found, or the stream is exhausted (which
+ *     could be never in the case of an infinite stream). By contrast,
+ *     `Streaming[A]` values can be totally lazy (and can be
+ *     lazily-constructed using `Streaming.defer()`), so methods like
+ *     `.filter` are completely lazy.
+ *
+ *  5. The use of `Eval[Stream[A]]` to represent the "tail" of the
+ *     stream means that streams can be lazily (and safely)
+ *     constructed with `Foldable#foldRight`, and that `.map` and
+ *     `.flatMap` operations over the tail will be safely trampolined.
+ */
 sealed abstract class Streaming[A] { lhs =>
 
   import Streaming.{Empty, Next, This}
@@ -26,10 +76,10 @@ sealed abstract class Streaming[A] { lhs =>
    * these nodes will be evaluated until an empty or non-empty stream
    * is found (i.e. until Empty() or This() is found).
    */
-  def fold[B](b: => B, f: (A, Eval[Streaming[A]]) => B): B = {
+  def fold[B](b: Eval[B], f: (A, Eval[Streaming[A]]) => B): B = {
     @tailrec def unroll(s: Streaming[A]): B =
       s match {
-        case Empty() => b
+        case Empty() => b.value
         case Next(lt) => unroll(lt.value)
         case This(a, lt) => f(a, lt)
       }
@@ -126,6 +176,21 @@ sealed abstract class Streaming[A] { lhs =>
     }
 
   /**
+   * Eagerly search the stream from the left. The search ends when f
+   * returns true for some a, or the stream is exhausted. Some(a)
+   * signals a match, None means no matching items were found.
+   */
+  def find(f: A => Boolean): Option[A] = {
+    @tailrec def loop(s: Streaming[A]): Option[A] =
+      s match {
+        case This(a, lt) => if (f(a)) Some(a) else loop(lt.value)
+        case Next(lt) => loop(lt.value)
+        case Empty() => None
+      }
+    loop(this)
+  }
+
+  /**
    * Return true if the stream is empty, false otherwise.
    *
    * In this case of deferred streams this will force the first
@@ -190,21 +255,82 @@ sealed abstract class Streaming[A] { lhs =>
   /**
    * Lazily zip two streams together.
    *
-   * The lenght of the result will be the shorter of the two
+   * The length of the result will be the shorter of the two
    * arguments.
    */
   def zip[B](rhs: Streaming[B]): Streaming[(A, B)] =
+    (lhs zipMap rhs)((a, b) => (a, b))
+
+  /**
+   * Lazily zip two streams together, using the given function `f` to
+   * produce output values.
+   *
+   * The length of the result will be the shorter of the two
+   * arguments.
+   *
+   * The expression:
+   *
+   *   (lhs zipMap rhs)(f)
+   *
+   * is equivalent to (but more efficient than):
+   *
+   *   (lhs zip rhs).map { case (a, b) => f(a, b) }
+   */
+  def zipMap[B, C](rhs: Streaming[B])(f: (A, B) => C): Streaming[C] =
     (lhs, rhs) match {
       case (This(a, lta), This(b, ltb)) =>
-        This((a, b), for { ta <- lta; tb <- ltb } yield ta zip tb)
+        This(f(a, b), for { ta <- lta; tb <- ltb } yield (ta zipMap tb)(f))
       case (Empty(), _) =>
         Empty()
       case (_, Empty()) =>
         Empty()
       case (Next(lta), s) =>
-        Next(lta.map(_ zip s))
+        Next(lta.map(_.zipMap(s)(f)))
       case (s, Next(ltb)) =>
-        Next(ltb.map(s zip _))
+        Next(ltb.map(s.zipMap(_)(f)))
+    }
+
+  /**
+   * Lazily zip two streams together using Ior.
+   *
+   * Unlike `zip`, the length of the result will be the longer of the
+   * two arguments.
+   */
+  def izip[B](rhs: Streaming[B]): Streaming[Ior[A, B]] =
+    izipMap(rhs)(Ior.both, Ior.left, Ior.right)
+
+  /**
+   * Zip two streams together, using the given function `f` to produce
+   * the output values.
+   *
+   * Unlike zipMap, the length of the result will be the *longer* of
+   * the two input streams. The functions `g` and `h` will be used in
+   * this case to produce valid `C` values.
+   *
+   * The expression:
+   *
+   *   (lhs izipMap rhs)(f, g, h)
+   *
+   * is equivalent to (but more efficient than):
+   *
+   *   (lhs izip rhs).map {
+   *     case Ior.Both(a, b) => f(a, b)
+   *     case Ior.Left(a) => g(a)
+   *     case Ior.Right(b) => h(b)
+   *   }
+   */
+  def izipMap[B, C](rhs: Streaming[B])(f: (A, B) => C, g: A => C, h: B => C): Streaming[C] =
+    (lhs, rhs) match {
+      case (This(a, lta), This(b, ltb)) =>
+        This(f(a, b), for { ta <- lta; tb <- ltb } yield (ta izipMap tb)(f, g, h))
+      case (Next(lta), tb) =>
+        Next(lta.map(_.izipMap(tb)(f, g, h)))
+      case (ta, Next(ltb)) =>
+        Next(ltb.map(ta.izipMap(_)(f, g, h)))
+      case (Empty(), tb) =>
+        tb.map(h)
+      case (ta, Empty()) =>
+        ta.map(g)
     }
 
   /**
@@ -227,28 +353,6 @@ sealed abstract class Streaming[A] { lhs =>
       }
     loop(this, 0)
   }
-
-  /**
-   * Lazily zip two streams together using Ior.
-   *
-   * Unlike `zip`, the length of the result will be the longer of the
-   * two arguments.
-   */
-  def izip[B](rhs: Streaming[B]): Streaming[Ior[A, B]] =
-    (lhs, rhs) match {
-      case (This(a, lta), This(b, ltb)) =>
-        This(Ior.both(a, b), for { ta <- lta; tb <- ltb } yield ta izip tb)
-      case (Empty(), Empty()) =>
-        Empty()
-      case (s, Empty()) =>
-        s.map(a => Ior.left(a))
-      case (Empty(), s) =>
-        s.map(b => Ior.right(b))
-      case (Next(lta), s) =>
-        Next(lta.map(_ izip s))
-      case (s, Next(ltb)) =>
-        Next(ltb.map(s izip _))
-    }
 
   /**
    * Unzip this stream of tuples into two distinct streams.
@@ -451,16 +555,18 @@ sealed abstract class Streaming[A] { lhs =>
     new Iterator[A] {
       var ls: Eval[Streaming[A]] = null
       var s: Streaming[A] = lhs
+
       def hasNext: Boolean =
         { if (s == null) { s = ls.value; ls = null }; s.nonEmpty }
+
+      val emptyCase: Eval[A] =
+        Always(throw new NoSuchElementException("next on empty iterator"))
+      val consCase: (A, Eval[Streaming[A]]) => A =
+        (a, lt) => { ls = lt; s = null; a }
+
       def next: A = {
         if (s == null) s = ls.value
-        s.uncons match {
-          case None =>
-            throw new NoSuchElementException("next on empty iterator")
-          case Some((a, lt)) =>
-            { ls = lt; s = null; a }
-        }
+        s.fold(emptyCase, consCase)
       }
     }
 
@@ -591,22 +697,28 @@ object Streaming extends StreamingInstances {
     Empty()
 
   /**
-   * Alias for `.empty[A]`.
-   */
-  def apply[A]: Streaming[A] =
-    Empty()
-
-  /**
    * Create a stream consisting of a single value.
    */
   def apply[A](a: A): Streaming[A] =
     This(a, Now(Empty()))
 
   /**
+   * Prepend a value to a stream.
+   */
+  def cons[A](a: A, s: Streaming[A]): Streaming[A] =
+    This(a, Now(s))
+
+  /**
+   * Prepend a value to an Eval[Streaming[A]].
+   */
+  def cons[A](a: A, ls: Eval[Streaming[A]]): Streaming[A] =
+    This(a, ls)
+
+  /**
    * Create a stream from two or more values.
    */
   def apply[A](a1: A, a2: A, as: A*): Streaming[A] =
-    This(a1, Now(This(a2, Now(Streaming.fromVector(as.toVector)))))
+    cons(a1, cons(a2, fromVector(as.toVector)))
 
   /**
    * Defer stream creation.
@@ -615,7 +727,16 @@ object Streaming extends StreamingInstances {
    * that creation, allowing the head (if any) to be lazy.
    */
   def defer[A](s: => Streaming[A]): Streaming[A] =
-    Next(Always(s))
+    eval(Always(s))
+
+  /**
+   * Create a stream from an `Eval[Streaming[A]]` value.
+   *
+   * Given an expression which creates a stream, this method defers
+   * that creation, allowing the head (if any) to be lazy.
+   */
+  def eval[A](ls: Eval[Streaming[A]]): Streaming[A] =
+    Next(ls)
 
   /**
    * Create a stream from a vector.
@@ -676,7 +797,7 @@ object Streaming extends StreamingInstances {
    * Continually return a constant value.
    */
   def continually[A](a: A): Streaming[A] =
-    knot(s => This(a, s))
+    knot(s => This(a, s), memo = true)
 
   /**
    * Continually return the result of a thunk.
@@ -725,7 +846,7 @@ object Streaming extends StreamingInstances {
    * An empty loop, will wait forever if evaluated.
    */
   def godot: Streaming[Nothing] =
-    knot[Nothing](s => Next[Nothing](s))
+    knot[Nothing](s => Next[Nothing](s), memo = true)
 
   /**
    * Contains various Stream-specific syntax.
@@ -743,30 +864,28 @@ object Streaming extends StreamingInstances {
       def unapply[A](s: Streaming[A]): Option[(A, Eval[Streaming[A]])] = s.uncons
     }
 
-    class StreamOps[A](rhs: Eval[Streaming[A]]) {
+    class StreamingOps[A](rhs: Eval[Streaming[A]]) {
       def %::(lhs: A): Streaming[A] = This(lhs, rhs)
       def %:::(lhs: Streaming[A]): Streaming[A] = lhs concat rhs
     }
 
-    implicit def streamOps[A](as: => Streaming[A]): StreamOps[A] =
-      new StreamOps(Always(as))
+    implicit def streamingOps[A](as: => Streaming[A]): StreamingOps[A] =
+      new StreamingOps(Always(as))
   }
 }
 
-trait StreamingInstances {
-
-  import Streaming.{This, Empty}
+trait StreamingInstances extends StreamingInstances1 {
 
   implicit val streamInstance: Traverse[Streaming] with MonadCombine[Streaming] with CoflatMap[Streaming] =
     new Traverse[Streaming] with MonadCombine[Streaming] with CoflatMap[Streaming] {
       def pure[A](a: A): Streaming[A] =
-        This(a, Now(Empty()))
+        Streaming(a)
       override def map[A, B](as: Streaming[A])(f: A => B): Streaming[B] =
         as.map(f)
       def flatMap[A, B](as: Streaming[A])(f: A => Streaming[B]): Streaming[B] =
         as.flatMap(f)
       def empty[A]: Streaming[A] =
-        Empty()
+        Streaming.empty
       def combine[A](xs: Streaming[A], ys: Streaming[A]): Streaming[A] =
         xs concat ys
 
@@ -793,7 +912,7 @@ trait StreamingInstances {
         // (We don't worry about internal laziness because traverse
         // has to evaluate the entire stream anyway.)
         foldRight(fa, Later(init)) { (a, lgsb) =>
-          lgsb.map(gsb => G.map2(f(a), gsb) { (a, s) => This(a, Now(s)) })
+          lgsb.map(gsb => G.map2(f(a), gsb) { (a, s) => Streaming.cons(a, s) })
         }.value
       }
 
@@ -807,23 +926,28 @@ trait StreamingInstances {
         fa.isEmpty
     }
 
-  import Streaming.{Empty, Next, This}
+  implicit def streamOrder[A: Order]: Order[Streaming[A]] =
+    new Order[Streaming[A]] {
+      def compare(x: Streaming[A], y: Streaming[A]): Int =
+        (x izipMap y)(_ compare _, _ => 1, _ => -1)
+          .find(_ != 0).getOrElse(0)
+    }
+}
 
+trait StreamingInstances1 extends StreamingInstances2 {
+  implicit def streamPartialOrder[A: PartialOrder]: PartialOrder[Streaming[A]] =
+    new PartialOrder[Streaming[A]] {
+      def partialCompare(x: Streaming[A], y: Streaming[A]): Double =
+        (x izipMap y)(_ partialCompare _, _ => 1.0, _ => -1.0)
+          .find(_ != 0.0).getOrElse(0.0)
+    }
+}
+
+trait StreamingInstances2 {
   implicit def streamEq[A: Eq]: Eq[Streaming[A]] =
     new Eq[Streaming[A]] {
-      def eqv(x: Streaming[A], y: Streaming[A]): Boolean = {
-        @tailrec def loop(x: Streaming[A], y: Streaming[A]): Boolean =
-          x match {
-            case Empty() => y.isEmpty
-            case Next(lt1) => loop(lt1.value, y)
-            case This(a1, lt1) =>
-              y match {
-                case Empty() => false
-                case Next(lt2) => loop(x, lt2.value)
-                case This(a2, lt2) => if (a1 =!= a2) false else loop(lt1.value, lt2.value)
-              }
-          }
-        loop(x, y)
-      }
+      def eqv(x: Streaming[A], y: Streaming[A]): Boolean =
+        (x izipMap y)(_ === _, _ => false, _ => false)
+          .forall(_ == true)
     }
 }

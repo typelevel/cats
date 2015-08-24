@@ -91,7 +91,9 @@ object EqK {
 
   implicit def streamT[F[_]: EqK: Monad]: EqK[StreamingT[F, ?]] =
     new EqK[StreamingT[F, ?]] {
-      def synthesize[A: Eq]: Eq[StreamingT[F, A]] =
-        cats.laws.discipline.eq.streamTEq[F, A](EqK[F], Monad[F], Eq[A])
+      def synthesize[A: Eq]: Eq[StreamingT[F, A]] = {
+        implicit val eqfb: Eq[F[Boolean]] = EqK[F].synthesize[Boolean]
+        implicitly
+      }
     }
 }
