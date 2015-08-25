@@ -3,6 +3,7 @@ package state
 
 import cats.free.Trampoline
 import cats.data.Kleisli
+import cats.std.function.function0Instance
 
 /**
  * `StateT[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S`
@@ -116,9 +117,7 @@ sealed abstract class StateTInstances extends StateTInstances0 {
 }
 
 sealed abstract class StateTInstances0 {
-  // The Functor[Function0] is currently in std.
-  // Should we move it to core? Issue #258
-  implicit def stateMonadState[S](implicit F: Functor[Function0]): MonadState[State[?, ?], S] =
+  implicit def stateMonadState[S]: MonadState[State[?, ?], S] =
     StateT.stateTMonadState[Trampoline, S]
 }
 
