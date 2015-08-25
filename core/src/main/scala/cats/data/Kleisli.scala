@@ -82,8 +82,12 @@ sealed trait KleisliFunctions {
 }
 
 sealed abstract class KleisliInstances extends KleisliInstances0 {
-  implicit def kleisliMonoid[F[_], A](implicit M: Monad[F]): Monoid[Kleisli[F, A, A]] =
-    new KleisliMonoid[F, A] { def F: Monad[F] = M }
+
+  implicit def kleisliMonoid[F[_], A, B](implicit M: Monoid[F[B]]): Monoid[Kleisli[F, A, B]] =
+    new KleisliMonoid[F, A, B] { def FB: Monoid[F[B]] = M }
+
+  implicit def kleisliMonoidK[F[_]](implicit M: Monad[F]): MonoidK[Lambda[A => Kleisli[F, A, A]]] =
+    new KleisliMonoidK[F] { def F: Monad[F] = M }
 
   implicit def kleisliArrow[F[_]](implicit ev: Monad[F]): Arrow[Kleisli[F, ?, ?]] =
     new KleisliArrow[F] { def F: Monad[F] = ev }
@@ -129,8 +133,11 @@ sealed abstract class KleisliInstances0 extends KleisliInstances1 {
       fa.map(f)
   }
 
-  implicit def kleisliSemigroup[F[_], A](implicit ev: FlatMap[F]): Semigroup[Kleisli[F, A, A]] =
-    new KleisliSemigroup[F, A] { def F: FlatMap[F] = ev }
+  implicit def kleisliSemigroup[F[_], A, B](implicit M: Semigroup[F[B]]): Semigroup[Kleisli[F, A, B]] =
+    new KleisliSemigroup[F, A, B] { def FB: Semigroup[F[B]] = M }
+
+  implicit def kleisliSemigroupK[F[_]](implicit ev: FlatMap[F]): SemigroupK[Lambda[A => Kleisli[F, A, A]]] =
+    new KleisliSemigroupK[F] { def F: FlatMap[F] = ev }
 }
 
 sealed abstract class KleisliInstances1 extends KleisliInstances2 {
@@ -205,14 +212,27 @@ private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] {
     fa.second[C]
 }
 
-private trait KleisliSemigroup[F[_], A] extends Semigroup[Kleisli[F, A, A]] {
-  implicit def F: FlatMap[F]
+private trait KleisliSemigroup[F[_], A, B] extends Semigroup[Kleisli[F, A, B]] {
+  implicit def FB: Semigroup[F[B]]
 
-  override def combine(a: Kleisli[F, A, A], b: Kleisli[F, A, A]): Kleisli[F, A, A] = a compose b
+  override def combine(a: Kleisli[F, A, B], b: Kleisli[F, A, B]): Kleisli[F, A, B] = 
+    Kleisli[F, A, B](x => FB.combine(a.run(x), b.run(x)))
 }
 
-private trait KleisliMonoid[F[_], A] extends Monoid[Kleisli[F, A, A]] with KleisliSemigroup[F, A] {
+private trait KleisliMonoid[F[_], A, B] extends Monoid[Kleisli[F, A, B]] with KleisliSemigroup[F, A, B] {
+  implicit def FB: Monoid[F[B]]
+
+  override def empty = Kleisli[F, A, B](a => FB.empty)
+}
+
+private trait KleisliSemigroupK[F[_]] extends SemigroupK[Lambda[A => Kleisli[F, A, A]]] {
+  implicit def F: FlatMap[F]
+
+  override def combine[A](a: Kleisli[F, A, A], b: Kleisli[F, A, A]): Kleisli[F, A, A] = a compose b
+}
+
+private trait KleisliMonoidK[F[_]] extends MonoidK[Lambda[A => Kleisli[F, A, A]]] with KleisliSemigroupK[F] {
   implicit def F: Monad[F]
 
-  override def empty: Kleisli[F, A, A] = Kleisli(F.pure[A])
+  override def empty[A]: Kleisli[F, A, A] = Kleisli(F.pure[A])
 }
