@@ -109,7 +109,7 @@ sealed abstract class Eval[A] { self =>
  * This type should be used when an A value is already in hand, or
  * when the computation to produce an A value is pure and very fast.
  */
-case class Now[A](value: A) extends Eval[A] {
+final case class Now[A](value: A) extends Eval[A] {
   def memoize: Eval[A] = this
 }
 
@@ -128,7 +128,7 @@ case class Now[A](value: A) extends Eval[A] {
  * by the closure) will not be retained, and will be available for
  * garbage collection.
  */
-class Later[A](f: () => A) extends Eval[A] {
+final class Later[A](f: () => A) extends Eval[A] {
   private[this] var thunk: () => A = f
 
   // The idea here is that `f` may have captured very large
@@ -161,7 +161,7 @@ object Later {
  * required. It should be avoided except when laziness is required and
  * caching must be avoided. Generally, prefer Later.
  */
-class Always[A](f: () => A) extends Eval[A] {
+final class Always[A](f: () => A) extends Eval[A] {
   def value: A = f()
   def memoize: Eval[A] = new Later(f)
 }
