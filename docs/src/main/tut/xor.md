@@ -352,7 +352,7 @@ val xor: Xor[NumberFormatException, Int] =
 ## Additional syntax
 
 ```tut
-import cats.data.Xor.syntax._
+import cats.syntax.xor._
 
 val xor3: Xor[String, Int] = 7.right[String]
 

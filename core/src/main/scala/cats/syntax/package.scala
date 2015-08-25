@@ -24,4 +24,5 @@ package object syntax {
   object split extends SplitSyntax
   object strong extends StrongSyntax
   object traverse extends TraverseSyntax
+  object xor extends XorSyntax
 }

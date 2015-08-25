@@ -26,3 +26,4 @@ trait AllSyntax
     with SplitSyntax
     with StrongSyntax
     with TraverseSyntax
+    with XorSyntax
