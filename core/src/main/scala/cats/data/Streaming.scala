@@ -727,7 +727,7 @@ object Streaming extends StreamingInstances {
    * that creation, allowing the head (if any) to be lazy.
    */
   def defer[A](s: => Streaming[A]): Streaming[A] =
-    eval(Always(s))
+    wait(Always(s))
 
   /**
    * Create a stream from an `Eval[Streaming[A]]` value.
@@ -735,7 +735,7 @@ object Streaming extends StreamingInstances {
    * Given an expression which creates a stream, this method defers
    * that creation, allowing the head (if any) to be lazy.
    */
-  def eval[A](ls: Eval[Streaming[A]]): Streaming[A] =
+  def wait[A](ls: Eval[Streaming[A]]): Streaming[A] =
     Next(ls)
 
   /**
@@ -841,12 +841,6 @@ object Streaming extends StreamingInstances {
       case None => Empty()
       case Some(a) => This(a, Always(unfold(f(a))(f)))
     }
-
-  /**
-   * An empty loop, will wait forever if evaluated.
-   */
-  def godot: Streaming[Nothing] =
-    knot[Nothing](s => Next[Nothing](s), memo = true)
 
   /**
    * Contains various Stream-specific syntax.

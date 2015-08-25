@@ -118,6 +118,7 @@ object ArbitraryK {
     new ArbitraryK[OptionT[F, ?]] { def synthesize[A: Arbitrary]: Arbitrary[OptionT[F, A]] = implicitly }
 
   import cats.data.{Streaming, StreamingT}
+
   implicit val streaming: ArbitraryK[Streaming] =
     new ArbitraryK[Streaming] { def synthesize[A: Arbitrary]: Arbitrary[Streaming[A]] = implicitly }
 

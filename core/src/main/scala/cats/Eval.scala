@@ -265,7 +265,7 @@ trait EvalInstances extends EvalInstances0 {
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
     }
 
-  implicit def evalOrder[A: Order]: Eq[Eval[A]] =
+  implicit def evalOrder[A: Order]: Order[Eval[A]] =
     new Order[Eval[A]] {
       def compare(lx: Eval[A], ly: Eval[A]): Int =
         lx.value compare ly.value
@@ -276,7 +276,7 @@ trait EvalInstances extends EvalInstances0 {
 }
 
 trait EvalInstances0 extends EvalInstances1 {
-  implicit def evalPartialOrder[A: PartialOrder]: Eq[Eval[A]] =
+  implicit def evalPartialOrder[A: PartialOrder]: PartialOrder[Eval[A]] =
     new PartialOrder[Eval[A]] {
       def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
         lx.value partialCompare ly.value

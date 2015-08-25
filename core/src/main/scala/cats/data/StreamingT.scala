@@ -47,11 +47,7 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
   def flatMap[B](f: A => StreamingT[F, B])(implicit ev: Monad[F]): StreamingT[F, B] = {
     this match {
       case This(a, ft) =>
-        f(a) match {
-          case This(a0, ft0) => This(a0, ft0.flatMap(_ fconcat ft.map(_.flatMap(f))))
-          case Next(ft0) => Next(ft0.flatMap(_ fconcat ft.map(_.flatMap(f))))
-          case Empty() => Next(ft.map(_.flatMap(f)))
-        }
+        Next(f(a) fconcat ft.map(_.flatMap(f)))
       case Next(ft) =>
         Next(ft.map(_.flatMap(f)))
       case Empty() =>
@@ -429,6 +425,18 @@ object StreamingT extends StreamingTInstances {
     Next(a.map(apply(_)))
 
   /**
+   * Create a stream from `A` and `F[StreamingT[F, A]]` values.
+   */
+  def cons[F[_], A](a: A, fs: F[StreamingT[F, A]]): StreamingT[F, A] =
+    This(a, fs)
+
+  /**
+   * Create a stream from an `F[StreamingT[F, A]]` value.
+   */
+  def defer[F[_], A](s: => StreamingT[F, A])(implicit ev: Applicative[F]): StreamingT[F, A] =
+    Next(ev.pureEval(Always(s)))
+
+  /**
    * Create a stream from an `F[StreamingT[F, A]]` value.
    */
   def wait[F[_], A](fs: F[StreamingT[F, A]]): StreamingT[F, A] =
@@ -545,7 +553,11 @@ trait StreamingTInstances2 {
   implicit def streamingTEq[F[_], A](implicit ev: Monad[F], eva: Eq[A], evfb: Eq[F[Boolean]]): Eq[StreamingT[F, A]] =
     new Eq[StreamingT[F, A]] {
       def eqv(xs: StreamingT[F, A], ys: StreamingT[F, A]): Boolean =
+        // The double-negative is important here: we don't want to
+        // search for true values, but false ones. If there are no
+        // false values (even if there are also no true values) then
+        // the structures are equal.
         (xs izipMap ys)(_ === _, _ => false, _ => false)
-          .forall(_ == true) === ev.pure(true)
+          .exists(!_) =!= ev.pure(true)
     }
 }

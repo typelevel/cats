@@ -3,7 +3,7 @@ package std
 
 import algebra.Eq
 
-trait OptionInstances {
+trait OptionInstances extends OptionInstances1 {
   implicit val optionInstance: Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] =
     new Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] {
 
@@ -49,16 +49,8 @@ trait OptionInstances {
       override def forall[A](fa: Option[A])(p: A => Boolean): Boolean =
         fa.forall(p)
 
-      override def isEmpty[A](fa: Option[A]): Boolean = fa.isEmpty
-    }
-
-  // TODO: eventually use algebra's instances (which will deal with
-  // implicit priority between Eq/PartialOrder/Order).
-
-  implicit def eqOption[A](implicit ev: Eq[A]): Eq[Option[A]] =
-    new Eq[Option[A]] {
-      def eqv(x: Option[A], y: Option[A]): Boolean =
-        x.fold(y == None)(a => y.fold(false)(ev.eqv(_, a)))
+      override def isEmpty[A](fa: Option[A]): Boolean =
+        fa.isEmpty
     }
 
   implicit def optionMonoid[A](implicit ev: Semigroup[A]): Monoid[Option[A]] =
@@ -72,5 +64,35 @@ trait OptionInstances {
             case Some(yy) => Some(ev.combine(xx,yy))
           }
         }
+    }
+
+  implicit def orderOption[A](implicit ev: Order[A]): Order[Option[A]] =
+    new Order[Option[A]] {
+      def compare(x: Option[A], y: Option[A]): Int =
+        x match {
+          case Some(a) =>
+            y match {
+              case Some(b) => ev.compare(a, b)
+              case None => 1
+            }
+          case None =>
+            if (y.isDefined) -1 else 0
+        }
+    }
+}
+
+trait OptionInstances1 extends OptionInstances2 {
+  implicit def partialOrderOption[A](implicit ev: PartialOrder[A]): PartialOrder[Option[A]] =
+    new PartialOrder[Option[A]] {
+      def partialCompare(x: Option[A], y: Option[A]): Double =
+        x.fold(if (y.isDefined) -1.0 else 0.0)(a => y.fold(1.0)(ev.partialCompare(_, a)))
+    }
+}
+
+trait OptionInstances2 {
+  implicit def eqOption[A](implicit ev: Eq[A]): Eq[Option[A]] =
+    new Eq[Option[A]] {
+      def eqv(x: Option[A], y: Option[A]): Boolean =
+        x.fold(y == None)(a => y.fold(false)(ev.eqv(_, a)))
     }
 }

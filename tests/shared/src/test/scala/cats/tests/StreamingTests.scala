@@ -1,6 +1,8 @@
 package cats
 package tests
 
+import algebra.laws.OrderLaws
+
 import cats.data.Streaming
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests}
@@ -14,6 +16,9 @@ class StreamingTests extends CatsSuite {
 
   checkAll("Streaming[Int] with Option", TraverseTests[Streaming].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Streaming]", SerializableTests.serializable(Traverse[Streaming]))
+
+  checkAll("Streaming[Int]", OrderLaws[Streaming[Int]].order)
+  checkAll("Order[Streaming[Int]]", SerializableTests.serializable(Order[Streaming[Int]]))
 }
 
 class AdHocStreamingTests extends CatsProps {
