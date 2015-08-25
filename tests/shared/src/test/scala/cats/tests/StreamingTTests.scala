@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import algebra.laws.{GroupLaws, OrderLaws}
+import algebra.laws.OrderLaws
 
 import cats.data.StreamingT
 import cats.laws.discipline.{CoflatMapTests, EqK, MonadCombineTests, SerializableTests}
@@ -26,4 +26,30 @@ class StreamingTTests extends CatsSuite {
   checkAll("StreamingT[List, ?]", CoflatMapTests[StreamingT[List, ?]].coflatMap[Int, Int, Int])
   checkAll("StreamingT[List, Int]", OrderLaws[StreamingT[List, Int]].order)
   checkAll("Monad[StreamingT[List, ?]]", SerializableTests.serializable(Monad[StreamingT[List, ?]]))
+}
+
+class SpecificStreamingTTests extends CatsSuite {
+
+  type S[A] = StreamingT[List, A]
+
+  def cons[A](a: A, fs: List[S[A]]): S[A] = StreamingT.cons(a, fs)
+  def wait[A](fs: List[S[A]]): S[A] = StreamingT.wait(fs)
+  def empty[A]: S[A] = StreamingT.empty[List, A]
+
+  test("counter-example #1"){
+    val fa: S[Boolean] =
+      cons(true, List(cons(true, List(empty)), empty))
+
+    def f(b: Boolean): S[Boolean] =
+      if (b) cons(false, List(cons(true, List(empty))))
+      else empty
+
+    def g(b: Boolean): S[Boolean] =
+      if (b) empty
+      else cons(true, List(cons(false, List(empty)), cons(true, List(empty))))
+
+    val x = fa.flatMap(f).flatMap(g)
+    val y = fa.flatMap(a => f(a).flatMap(g))
+    assert(x === y)
+  }
 }

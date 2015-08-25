@@ -92,7 +92,7 @@ object EqK {
   implicit def streamT[F[_]: EqK: Monad]: EqK[StreamingT[F, ?]] =
     new EqK[StreamingT[F, ?]] {
       def synthesize[A: Eq]: Eq[StreamingT[F, A]] = {
-        implicit val eqfb: Eq[F[Boolean]] = EqK[F].synthesize[Boolean]
+        implicit val eqfla: Eq[F[List[A]]] = EqK[F].synthesize[List[A]]
         implicitly
       }
     }

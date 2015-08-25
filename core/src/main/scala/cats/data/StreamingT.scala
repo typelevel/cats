@@ -161,87 +161,6 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
     }
 
   /**
-   * Zip two streams together.
-   *
-   * The length of the result will be the shorter of the two
-   * arguments.
-   */
-  def zip[B](rhs: StreamingT[F, B])(implicit ev: Monad[F]): StreamingT[F, (A, B)] =
-    (lhs zipMap rhs)((a, b) => (a, b))
-
-  /**
-   * Lazily zip two streams together using Ior.
-   *
-   * Unlike `zip`, the length of the result will be the longer of the
-   * two arguments.
-   */
-  def izip[B](rhs: StreamingT[F, B])(implicit ev: Monad[F]): StreamingT[F, Ior[A, B]] =
-    izipMap(rhs)(Ior.both, Ior.left, Ior.right)
-
-  /**
-   * Zip two streams together, using the given function `f` to produce
-   * the output values.
-   *
-   * The length of the result will be the shorter of the two
-   * input streams.
-   *
-   * The expression:
-   *
-   *   (lhs zipMap rhs)(f)
-   *
-   * is equivalent to (but more efficient than):
-   *
-   *   (lhs zip rhs).map { case (a, b) => f(a, b) }
-   */
-  def zipMap[B, C](rhs: StreamingT[F, B])(f: (A, B) => C)(implicit ev: Monad[F]): StreamingT[F, C] =
-    (lhs, rhs) match {
-      case (This(a, fta), This(b, ftb)) =>
-        This(f(a, b), ev.map2(fta, ftb)((ta, tb) => ta.zipMap(tb)(f)))
-      case (Empty(), _) =>
-        Empty()
-      case (_, Empty()) =>
-        Empty()
-      case (Next(fta), tb) =>
-        Next(fta.map(_.zipMap(tb)(f)))
-      case (ta, Next(ftb)) =>
-        Next(ftb.map(ta.zipMap(_)(f)))
-    }
-
-  /**
-   * Zip two streams together, using the given function `f` to produce
-   * the output values.
-   *
-   * Unlike zipMap, the length of the result will be the *longer* of
-   * the two input streams. The functions `g` and `h` will be used in
-   * this case to produce valid `C` values.
-   *
-   * The expression:
-   *
-   *   (lhs izipMap rhs)(f, g, h)
-   *
-   * is equivalent to (but more efficient than):
-   *
-   *   (lhs izip rhs).map {
-   *     case Ior.Both(a, b) => f(a, b)
-   *     case Ior.Left(a) => g(a)
-   *     case Ior.Right(b) => h(b)
-   *   }
-   */
-  def izipMap[B, C](rhs: StreamingT[F, B])(f: (A, B) => C, g: A => C, h: B => C)(implicit ev: Monad[F]): StreamingT[F, C] =
-    (lhs, rhs) match {
-      case (This(a, fta), This(b, ftb)) =>
-        This(f(a, b), ev.map2(fta, ftb)((ta, tb) => ta.izipMap(tb)(f, g, h)))
-      case (Next(fta), tb) =>
-        Next(fta.map(_.izipMap(tb)(f, g, h)))
-      case (ta, Next(ftb)) =>
-        Next(ftb.map(ta.izipMap(_)(f, g, h)))
-      case (Empty(), tb) =>
-        tb.map(h)
-      case (ta, Empty()) =>
-        ta.map(g)
-    }
-
-  /**
    * Return true if some element of the stream satisfies the
    * predicate, false otherwise.
    */
@@ -522,42 +441,25 @@ trait StreamingTInstances extends StreamingTInstances1 {
         fa.coflatMap(f)
     }
 
-  implicit def streamingTOrder[F[_], A](implicit ev: Monad[F], eva: Order[A], evfb: Order[F[Int]]): Order[StreamingT[F, A]] =
+  implicit def streamingTOrder[F[_], A](implicit ev: Monad[F], eva: Order[F[List[A]]]): Order[StreamingT[F, A]] =
     new Order[StreamingT[F, A]] {
-      def compare(xs: StreamingT[F, A], ys: StreamingT[F, A]): Int =
-        (xs izipMap ys)(_ compare _, _ => 1, _ => -1)
-          .find(_ != 0)
-          .map(_.getOrElse(0)) compare ev.pure(0)
-    }
-
-  def streamingTPairwiseMonoid[F[_]: Monad, A: Monoid]: Monoid[StreamingT[F, A]] =
-    new Monoid[StreamingT[F, A]] {
-      def empty: StreamingT[F, A] =
-        StreamingT.empty
-      def combine(xs: StreamingT[F, A], ys: StreamingT[F, A]): StreamingT[F, A] =
-        (xs izipMap ys)(_ |+| _, x => x, y => y)
+      def compare(x: StreamingT[F, A], y: StreamingT[F, A]): Int =
+        x.toList compare y.toList
     }
 }
 
 trait StreamingTInstances1 extends StreamingTInstances2 {
-  implicit def streamingTPartialOrder[F[_], A](implicit ev: Monad[F], eva: PartialOrder[A], evfb: PartialOrder[F[Double]]): PartialOrder[StreamingT[F, A]] =
+  implicit def streamingTPartialOrder[F[_], A](implicit ev: Monad[F], eva: PartialOrder[F[List[A]]]): PartialOrder[StreamingT[F, A]] =
     new PartialOrder[StreamingT[F, A]] {
-      def partialCompare(xs: StreamingT[F, A], ys: StreamingT[F, A]): Double =
-        (xs izipMap ys)(_ partialCompare _, _ => 1.0, _ => -1.0)
-          .find(_ != 0.0)
-          .map(_.getOrElse(0.0)) partialCompare ev.pure(0.0)
+      def partialCompare(x: StreamingT[F, A], y: StreamingT[F, A]): Double =
+        x.toList partialCompare y.toList
     }
 }
 
 trait StreamingTInstances2 {
-  implicit def streamingTEq[F[_], A](implicit ev: Monad[F], eva: Eq[A], evfb: Eq[F[Boolean]]): Eq[StreamingT[F, A]] =
+  implicit def streamingTEq[F[_], A](implicit ev: Monad[F], eva: Eq[F[List[A]]]): Eq[StreamingT[F, A]] =
     new Eq[StreamingT[F, A]] {
-      def eqv(xs: StreamingT[F, A], ys: StreamingT[F, A]): Boolean =
-        // The double-negative is important here: we don't want to
-        // search for true values, but false ones. If there are no
-        // false values (even if there are also no true values) then
-        // the structures are equal.
-        (xs izipMap ys)(_ === _, _ => false, _ => false)
-          .exists(!_) =!= ev.pure(true)
+      def eqv(x: StreamingT[F, A], y: StreamingT[F, A]): Boolean =
+        x.toList === y.toList
     }
 }
