@@ -221,9 +221,9 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    *
    * For example:
    *
-   *   Stream(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
+   *   StreamingT[List, Int](1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
    *
-   * Will result in: Stream(1, 2, 3)
+   * Will result in: StreamingT[List, Int](1, 2, 3)
    */
   def takeWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
@@ -243,9 +243,9 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    *
    * For example:
    *
-   *   Stream(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
+   *   StreamingT[List, Int](1, 2, 3, 4, 5, 6, 7).dropWhile(n => n != 4)
    *
-   * Will result in: Stream(4, 5, 6, 7)
+   * Will result in: StreamingT[List, Int](4, 5, 6, 7)
    */
   def dropWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {

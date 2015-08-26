@@ -338,11 +338,11 @@ sealed abstract class Streaming[A] { lhs =>
    *
    * Indices start at 0, so
    *
-   *   Streaming(x, y, z).zipWithIndex
+   *   Streaming('x, 'y, 'z).zipWithIndex
    *
    * lazily produces:
    *
-   *   Streaming((x, 0), (y, 1), (z, 2))
+   *   Streaming(('x, 0), ('y, 1), ('z, 2))
    */
   def zipWithIndex: Streaming[(A, Int)] = {
     def loop(s: Streaming[A], i: Int): Streaming[(A, Int)] =
@@ -501,9 +501,9 @@ sealed abstract class Streaming[A] { lhs =>
    *
    * For example:
    *
-   *   Stream(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
+   *   Streaming(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
    *
-   * Will result in: Stream(1, 2, 3)
+   * Will result in: Streaming(1, 2, 3)
    */
   def takeWhile(f: A => Boolean): Streaming[A] =
     this match {
@@ -523,9 +523,9 @@ sealed abstract class Streaming[A] { lhs =>
    *
    * For example:
    *
-   *   Stream(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
+   *   Streaming(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
    *
-   * Will result in: Stream(4, 5, 6, 7)
+   * Will result in: Streaming(4, 5, 6, 7)
    */
   def dropWhile(f: A => Boolean): Streaming[A] =
     this match {
@@ -537,7 +537,7 @@ sealed abstract class Streaming[A] { lhs =>
   /**
    * Provide a stream of all the tails of a stream (including itself).
    *
-   * For example, Stream(1, 2).tails is equivalent to:
+   * For example, Streaming(1, 2).tails is equivalent to:
    *
    *   Streaming(Streaming(1, 2), Streaming(1), Streaming.empty)
    */
@@ -597,9 +597,9 @@ sealed abstract class Streaming[A] { lhs =>
    */
   override def toString: String =
     this match {
-      case Cons(a, _) => "Stream(" + a + ", ...)"
-      case Empty() => "Stream()"
-      case Wait(_) => "Stream(...)"
+      case Cons(a, _) => "Streaming(" + a + ", ...)"
+      case Empty() => "Streaming()"
+      case Wait(_) => "Streaming(...)"
     }
 
   /**
@@ -614,9 +614,9 @@ sealed abstract class Streaming[A] { lhs =>
       }
     uncons match {
       case None =>
-        "Stream()"
+        "Streaming()"
       case Some((a, lt)) =>
-        val sb = new StringBuffer().append("Stream(" + a.toString)
+        val sb = new StringBuffer().append("Streaming(" + a.toString)
         unroll(limit - 1, sb, lt.value)
     }
   }
