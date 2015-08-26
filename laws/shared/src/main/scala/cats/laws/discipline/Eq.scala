@@ -41,5 +41,4 @@ object eq {
       eqSA.eqv(f, g) && eqA.eqv(f.empty, g.empty)
     }
   }
-
 }

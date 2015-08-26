@@ -84,4 +84,16 @@ object EqK {
 
   implicit val vector: EqK[Vector] =
     new EqK[Vector] { def synthesize[A: Eq]: Eq[Vector[A]] = implicitly }
+
+  import cats.data.{Streaming, StreamingT}
+  implicit val streaming: EqK[Streaming] =
+    new EqK[Streaming] { def synthesize[A: Eq]: Eq[Streaming[A]] = implicitly }
+
+  implicit def streamT[F[_]: EqK: Monad]: EqK[StreamingT[F, ?]] =
+    new EqK[StreamingT[F, ?]] {
+      def synthesize[A: Eq]: Eq[StreamingT[F, A]] = {
+        implicit val eqfla: Eq[F[List[A]]] = EqK[F].synthesize[List[A]]
+        implicitly
+      }
+    }
 }

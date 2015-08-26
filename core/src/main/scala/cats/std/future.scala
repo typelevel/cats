@@ -10,6 +10,8 @@ trait FutureInstances extends FutureInstances1 {
     new FutureCoflatMap with MonadError[Lambda[(E, A) => Future[A]], Throwable]{
       def pure[A](x: A): Future[A] = Future.successful(x)
 
+      override def pureEval[A](x: Eval[A]): Future[A] = Future(x.value)
+
       def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
 
       def handleError[A](fea: Future[A])(f: Throwable => Future[A]): Future[A] = fea.recoverWith { case t => f(t) }

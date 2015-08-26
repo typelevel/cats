@@ -13,12 +13,20 @@ import simulacrum.typeclass
  * Must obey the laws defined in cats.laws.ApplicativeLaws.
  */
 @typeclass trait Applicative[F[_]] extends Apply[F] { self =>
+
   /**
-   * `pure` lifts any value into the Applicative Functor
+   * `pure` lifts any value into the Applicative Functor.
    *
    * Applicative[Option].pure(10) = Some(10)
    */
   def pure[A](x: A): F[A]
+
+  /**
+   * `pureEval` lifts any value into the Applicative Functor.
+   *
+   * This variant supports optional laziness.
+   */
+  def pureEval[A](x: Eval[A]): F[A] = pure(x.value)
 
   override def map[A, B](fa: F[A])(f: A => B): F[B] = ap(fa)(pure(f))
 

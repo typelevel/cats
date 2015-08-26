@@ -89,6 +89,15 @@ sealed abstract class Eval[A] { self =>
           val run = f
         }
     }
+
+  /**
+   * Ensure that the result of the computation (if any) will be
+   * memoized.
+   *
+   * Practically, this means that when called on an Always[A] a
+   * Later[A] with an equivalent computation will be returned.
+   */
+  def memoize: Eval[A]
 }
 
 
@@ -100,7 +109,9 @@ sealed abstract class Eval[A] { self =>
  * This type should be used when an A value is already in hand, or
  * when the computation to produce an A value is pure and very fast.
  */
-case class Now[A](value: A) extends Eval[A]
+final case class Now[A](value: A) extends Eval[A] {
+  def memoize: Eval[A] = this
+}
 
 
 /**
@@ -117,7 +128,7 @@ case class Now[A](value: A) extends Eval[A]
  * by the closure) will not be retained, and will be available for
  * garbage collection.
  */
-class Later[A](f: () => A) extends Eval[A] {
+final class Later[A](f: () => A) extends Eval[A] {
   private[this] var thunk: () => A = f
 
   // The idea here is that `f` may have captured very large
@@ -132,6 +143,8 @@ class Later[A](f: () => A) extends Eval[A] {
     thunk = null // scalastyle:off
     result
   }
+
+  def memoize: Eval[A] = this
 }
 
 object Later {
@@ -148,8 +161,9 @@ object Later {
  * required. It should be avoided except when laziness is required and
  * caching must be avoided. Generally, prefer Later.
  */
-class Always[A](f: () => A) extends Eval[A] {
+final class Always[A](f: () => A) extends Eval[A] {
   def value: A = f()
+  def memoize: Eval[A] = new Later(f)
 }
 
 object Always {
@@ -212,6 +226,8 @@ object Eval extends EvalInstances {
     val start: () => Eval[Start]
     val run: Start => Eval[A]
 
+    def memoize: Eval[A] = Later(value)
+
     def value: A = {
       type L = Eval[Any]
       type C = Any => Eval[Any]
@@ -243,12 +259,13 @@ trait EvalInstances extends EvalInstances0 {
     new Bimonad[Eval] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
       def pure[A](a: A): Eval[A] = Now(a)
+      override def pureEval[A](la: Eval[A]): Eval[A] = la
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
       def extract[A](la: Eval[A]): A = la.value
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
     }
 
-  implicit def evalOrder[A: Order]: Eq[Eval[A]] =
+  implicit def evalOrder[A: Order]: Order[Eval[A]] =
     new Order[Eval[A]] {
       def compare(lx: Eval[A], ly: Eval[A]): Int =
         lx.value compare ly.value
@@ -259,7 +276,7 @@ trait EvalInstances extends EvalInstances0 {
 }
 
 trait EvalInstances0 extends EvalInstances1 {
-  implicit def evalPartialOrder[A: PartialOrder]: Eq[Eval[A]] =
+  implicit def evalPartialOrder[A: PartialOrder]: PartialOrder[Eval[A]] =
     new PartialOrder[Eval[A]] {
       def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
         lx.value partialCompare ly.value

@@ -3,7 +3,7 @@ package syntax
 
 import cats.macros.Ops
 
-trait GroupSyntax {
+trait GroupSyntax extends SemigroupSyntax {
   // TODO: use simulacrum instances eventually
   implicit def groupSyntax[A: Group](a: A): GroupOps[A] =
     new GroupOps[A](a)
