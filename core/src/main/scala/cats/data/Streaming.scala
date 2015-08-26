@@ -60,7 +60,7 @@ import scala.collection.mutable
  */
 sealed abstract class Streaming[A] { lhs =>
 
-  import Streaming.{Empty, Next, This}
+  import Streaming.{Empty, Wait, Cons}
 
   /**
    * The stream's catamorphism.
@@ -72,16 +72,16 @@ sealed abstract class Streaming[A] { lhs =>
    *  2. non-empty stream: apply the function to the head and tail
    *
    * This method can be more convenient than pattern-matching, since
-   * it includes support for handling deferred streams (i.e. Next(_)),
+   * it includes support for handling deferred streams (i.e. Wait(_)),
    * these nodes will be evaluated until an empty or non-empty stream
-   * is found (i.e. until Empty() or This() is found).
+   * is found (i.e. until Empty() or Cons() is found).
    */
   def fold[B](b: Eval[B], f: (A, Eval[Streaming[A]]) => B): B = {
     @tailrec def unroll(s: Streaming[A]): B =
       s match {
         case Empty() => b.value
-        case Next(lt) => unroll(lt.value)
-        case This(a, lt) => f(a, lt)
+        case Wait(lt) => unroll(lt.value)
+        case Cons(a, lt) => f(a, lt)
       }
     unroll(this)
   }
@@ -96,8 +96,8 @@ sealed abstract class Streaming[A] { lhs =>
   def foldStreaming[B](bs: => Streaming[B], f: (A, Eval[Streaming[A]]) => Streaming[B]): Streaming[B] =
     this match {
       case Empty() => bs
-      case Next(lt) => Next(lt.map(_.foldStreaming(bs, f)))
-      case This(a, lt) => f(a, lt)
+      case Wait(lt) => Wait(lt.map(_.foldStreaming(bs, f)))
+      case Cons(a, lt) => f(a, lt)
     }
 
   /**
@@ -112,8 +112,8 @@ sealed abstract class Streaming[A] { lhs =>
     @tailrec def unroll(s: Streaming[A]): Option[(A, Eval[Streaming[A]])] =
       s match {
         case Empty() => None
-        case Next(lt) => unroll(lt.value)
-        case This(a, lt) => Some((a, lt))
+        case Wait(lt) => unroll(lt.value)
+        case Cons(a, lt) => Some((a, lt))
       }
     unroll(this)
   }
@@ -124,8 +124,8 @@ sealed abstract class Streaming[A] { lhs =>
   def map[B](f: A => B): Streaming[B] =
     this match {
       case Empty() => Empty()
-      case Next(lt) => Next(lt.map(_.map(f)))
-      case This(a, lt) => This(f(a), lt.map(_.map(f)))
+      case Wait(lt) => Wait(lt.map(_.map(f)))
+      case Cons(a, lt) => Cons(f(a), lt.map(_.map(f)))
     }
 
   /**
@@ -134,8 +134,8 @@ sealed abstract class Streaming[A] { lhs =>
   def flatMap[B](f: A => Streaming[B]): Streaming[B] =
     this match {
       case Empty() => Empty()
-      case Next(lt) => Next(lt.map(_.flatMap(f)))
-      case This(a, lt) => f(a) concat lt.map(_.flatMap(f))
+      case Wait(lt) => Wait(lt.map(_.flatMap(f)))
+      case Cons(a, lt) => f(a) concat lt.map(_.flatMap(f))
     }
 
   /**
@@ -145,11 +145,11 @@ sealed abstract class Streaming[A] { lhs =>
     this match {
       case Empty() =>
         this
-      case Next(lt) =>
-        Next(lt.map(_.filter(f)))
-      case This(a, lt) =>
+      case Wait(lt) =>
+        Wait(lt.map(_.filter(f)))
+      case Cons(a, lt) =>
         val ft = lt.map(_.filter(f))
-        if (f(a)) This(a, ft) else Next(ft)
+        if (f(a)) Cons(a, ft) else Wait(ft)
     }
 
   /**
@@ -159,8 +159,8 @@ sealed abstract class Streaming[A] { lhs =>
     @tailrec def unroll(s: Streaming[A], b: B): B =
       s match {
         case Empty() => b
-        case Next(lt) => unroll(lt.value, b)
-        case This(a, lt) => unroll(lt.value, f(b, a))
+        case Wait(lt) => unroll(lt.value, b)
+        case Cons(a, lt) => unroll(lt.value, f(b, a))
       }
     unroll(this, b)
   }
@@ -171,8 +171,8 @@ sealed abstract class Streaming[A] { lhs =>
   def foldRight[B](b: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
     this match {
       case Empty() => b
-      case Next(lt) => lt.flatMap(_.foldRight(b)(f))
-      case This(a, lt) => f(a, lt.flatMap(_.foldRight(b)(f)))
+      case Wait(lt) => lt.flatMap(_.foldRight(b)(f))
+      case Cons(a, lt) => f(a, lt.flatMap(_.foldRight(b)(f)))
     }
 
   /**
@@ -183,8 +183,8 @@ sealed abstract class Streaming[A] { lhs =>
   def find(f: A => Boolean): Option[A] = {
     @tailrec def loop(s: Streaming[A]): Option[A] =
       s match {
-        case This(a, lt) => if (f(a)) Some(a) else loop(lt.value)
-        case Next(lt) => loop(lt.value)
+        case Cons(a, lt) => if (f(a)) Some(a) else loop(lt.value)
+        case Wait(lt) => loop(lt.value)
         case Empty() => None
       }
     loop(this)
@@ -199,9 +199,9 @@ sealed abstract class Streaming[A] { lhs =>
   def isEmpty: Boolean = {
     @tailrec def unroll(s: Streaming[A]): Boolean =
       s match {
-        case This(_, _) => false
+        case Cons(_, _) => false
         case Empty() => true
-        case Next(lt) => unroll(lt.value)
+        case Wait(lt) => unroll(lt.value)
       }
     unroll(this)
   }
@@ -226,8 +226,8 @@ sealed abstract class Streaming[A] { lhs =>
   def peekEmpty: Option[Boolean] =
     this match {
       case Empty() => Some(true)
-      case Next(_) => None
-      case This(a, lt) => Some(false)
+      case Wait(_) => None
+      case Cons(a, lt) => Some(false)
     }
 
   /**
@@ -236,8 +236,8 @@ sealed abstract class Streaming[A] { lhs =>
   def concat(rhs: Streaming[A]): Streaming[A] =
     this match {
       case Empty() => rhs
-      case Next(lt) => Next(lt.map(_ concat rhs))
-      case This(a, lt) => This(a, lt.map(_ concat rhs))
+      case Wait(lt) => Wait(lt.map(_ concat rhs))
+      case Cons(a, lt) => Cons(a, lt.map(_ concat rhs))
     }
 
   /**
@@ -247,9 +247,9 @@ sealed abstract class Streaming[A] { lhs =>
    */
   def concat(rhs: Eval[Streaming[A]]): Streaming[A] =
     this match {
-      case Empty() => Next(rhs)
-      case Next(lt) => Next(lt.map(_ concat rhs))
-      case This(a, lt) => This(a, lt.map(_ concat rhs))
+      case Empty() => Wait(rhs)
+      case Wait(lt) => Wait(lt.map(_ concat rhs))
+      case Cons(a, lt) => Cons(a, lt.map(_ concat rhs))
     }
 
   /**
@@ -278,16 +278,16 @@ sealed abstract class Streaming[A] { lhs =>
    */
   def zipMap[B, C](rhs: Streaming[B])(f: (A, B) => C): Streaming[C] =
     (lhs, rhs) match {
-      case (This(a, lta), This(b, ltb)) =>
-        This(f(a, b), for { ta <- lta; tb <- ltb } yield (ta zipMap tb)(f))
+      case (Cons(a, lta), Cons(b, ltb)) =>
+        Cons(f(a, b), for { ta <- lta; tb <- ltb } yield (ta zipMap tb)(f))
       case (Empty(), _) =>
         Empty()
       case (_, Empty()) =>
         Empty()
-      case (Next(lta), s) =>
-        Next(lta.map(_.zipMap(s)(f)))
-      case (s, Next(ltb)) =>
-        Next(ltb.map(s.zipMap(_)(f)))
+      case (Wait(lta), s) =>
+        Wait(lta.map(_.zipMap(s)(f)))
+      case (s, Wait(ltb)) =>
+        Wait(ltb.map(s.zipMap(_)(f)))
     }
 
   /**
@@ -321,12 +321,12 @@ sealed abstract class Streaming[A] { lhs =>
    */
   def izipMap[B, C](rhs: Streaming[B])(f: (A, B) => C, g: A => C, h: B => C): Streaming[C] =
     (lhs, rhs) match {
-      case (This(a, lta), This(b, ltb)) =>
-        This(f(a, b), for { ta <- lta; tb <- ltb } yield (ta izipMap tb)(f, g, h))
-      case (Next(lta), tb) =>
-        Next(lta.map(_.izipMap(tb)(f, g, h)))
-      case (ta, Next(ltb)) =>
-        Next(ltb.map(ta.izipMap(_)(f, g, h)))
+      case (Cons(a, lta), Cons(b, ltb)) =>
+        Cons(f(a, b), for { ta <- lta; tb <- ltb } yield (ta izipMap tb)(f, g, h))
+      case (Wait(lta), tb) =>
+        Wait(lta.map(_.izipMap(tb)(f, g, h)))
+      case (ta, Wait(ltb)) =>
+        Wait(ltb.map(ta.izipMap(_)(f, g, h)))
       case (Empty(), tb) =>
         tb.map(h)
       case (ta, Empty()) =>
@@ -348,8 +348,8 @@ sealed abstract class Streaming[A] { lhs =>
     def loop(s: Streaming[A], i: Int): Streaming[(A, Int)] =
       s match {
         case Empty() => Empty()
-        case Next(lt) => Next(lt.map(s => loop(s, i)))
-        case This(a, lt) => This((a, i), lt.map(s => loop(s, i + 1)))
+        case Wait(lt) => Wait(lt.map(s => loop(s, i)))
+        case Cons(a, lt) => Cons((a, i), lt.map(s => loop(s, i + 1)))
       }
     loop(this, 0)
   }
@@ -368,12 +368,12 @@ sealed abstract class Streaming[A] { lhs =>
    */
   def merge(rhs: Streaming[A])(implicit ev: Order[A]): Streaming[A] =
     (lhs, rhs) match {
-      case (This(a0, lt0), This(a1, lt1)) =>
-        if (a0 < a1) This(a0, lt0.map(_ merge rhs)) else This(a1, lt1.map(lhs merge _))
-      case (Next(lta), s) =>
-        Next(lta.map(_ merge s))
-      case (s, Next(ltb)) =>
-        Next(ltb.map(s merge _))
+      case (Cons(a0, lt0), Cons(a1, lt1)) =>
+        if (a0 < a1) Cons(a0, lt0.map(_ merge rhs)) else Cons(a1, lt1.map(lhs merge _))
+      case (Wait(lta), s) =>
+        Wait(lta.map(_ merge s))
+      case (s, Wait(ltb)) =>
+        Wait(ltb.map(s merge _))
       case (s, Empty()) =>
         s
       case (Empty(), s) =>
@@ -391,8 +391,8 @@ sealed abstract class Streaming[A] { lhs =>
    */
   def interleave(rhs: Streaming[A]): Streaming[A] =
     lhs match {
-      case This(a, lt) => This(a, lt.map(rhs interleave _))
-      case Next(lt) => Next(lt.map(_ interleave rhs))
+      case Cons(a, lt) => Cons(a, lt.map(rhs interleave _))
+      case Wait(lt) => Wait(lt.map(_ interleave rhs))
       case Empty() => rhs
     }
 
@@ -424,14 +424,14 @@ sealed abstract class Streaming[A] { lhs =>
           val k = i - j
           if (j >= xs.length || k >= ys.length) build(j + 1) else {
             val tpl = (xs(j).asInstanceOf[A], ys(k).asInstanceOf[B])
-            This(tpl, Always(build(j + 1)))
+            Cons(tpl, Always(build(j + 1)))
           }
         }
       if (i > xs.length + ys.length - 2) Empty() else {
         build(0) concat Always(loop(i + 1))
       }
     }
-    Next(Always(loop(0)))
+    Wait(Always(loop(0)))
   }
 
   /**
@@ -442,8 +442,8 @@ sealed abstract class Streaming[A] { lhs =>
     @tailrec def unroll(s: Streaming[A]): Boolean =
       s match {
         case Empty() => false
-        case Next(lt) => unroll(lt.value)
-        case This(a, lt) => if (f(a)) true else unroll(lt.value)
+        case Wait(lt) => unroll(lt.value)
+        case Cons(a, lt) => if (f(a)) true else unroll(lt.value)
       }
     unroll(this)
   }
@@ -456,8 +456,8 @@ sealed abstract class Streaming[A] { lhs =>
     @tailrec def unroll(s: Streaming[A]): Boolean =
       s match {
         case Empty() => true
-        case Next(lt) => unroll(lt.value)
-        case This(a, lt) => if (f(a)) unroll(lt.value) else false
+        case Wait(lt) => unroll(lt.value)
+        case Cons(a, lt) => if (f(a)) unroll(lt.value) else false
       }
     unroll(this)
   }
@@ -472,8 +472,8 @@ sealed abstract class Streaming[A] { lhs =>
   def take(n: Int): Streaming[A] =
     if (n <= 0) Empty() else this match {
       case Empty() => Empty()
-      case Next(lt) => Next(lt.map(_.take(n)))
-      case This(a, lt) => This(a, lt.map(_.take(n - 1)))
+      case Wait(lt) => Wait(lt.map(_.take(n)))
+      case Cons(a, lt) => Cons(a, lt.map(_.take(n - 1)))
     }
 
   /**
@@ -486,8 +486,8 @@ sealed abstract class Streaming[A] { lhs =>
   def drop(n: Int): Streaming[A] =
     if (n <= 0) this else this match {
       case Empty() => Empty()
-      case Next(lt) => Next(lt.map(_.drop(n)))
-      case This(a, lt) => Next(lt.map(_.drop(n - 1)))
+      case Wait(lt) => Wait(lt.map(_.drop(n)))
+      case Cons(a, lt) => Wait(lt.map(_.drop(n - 1)))
     }
 
   /**
@@ -508,8 +508,8 @@ sealed abstract class Streaming[A] { lhs =>
   def takeWhile(f: A => Boolean): Streaming[A] =
     this match {
       case Empty() => Empty()
-      case Next(lt) => Next(lt.map(_.takeWhile(f)))
-      case This(a, lt) => if (f(a)) This(a, lt.map(_.takeWhile(f))) else Empty()
+      case Wait(lt) => Wait(lt.map(_.takeWhile(f)))
+      case Cons(a, lt) => if (f(a)) Cons(a, lt.map(_.takeWhile(f))) else Empty()
     }
 
   /**
@@ -530,8 +530,8 @@ sealed abstract class Streaming[A] { lhs =>
   def dropWhile(f: A => Boolean): Streaming[A] =
     this match {
       case Empty() => Empty()
-      case Next(lt) => Next(lt.map(_.dropWhile(f)))
-      case This(a, lt) => if (f(a)) Empty() else This(a, lt.map(_.dropWhile(f)))
+      case Wait(lt) => Wait(lt.map(_.dropWhile(f)))
+      case Cons(a, lt) => if (f(a)) Empty() else Cons(a, lt.map(_.dropWhile(f)))
     }
 
   /**
@@ -543,9 +543,9 @@ sealed abstract class Streaming[A] { lhs =>
    */
   def tails: Streaming[Streaming[A]] =
     this match {
-      case This(a, lt) => This(this, lt.map(_.tails))
-      case Next(lt) => Next(lt.map(_.tails))
-      case Empty() => This(this, Always(Streaming.empty))
+      case Cons(a, lt) => Cons(this, lt.map(_.tails))
+      case Wait(lt) => Wait(lt.map(_.tails))
+      case Empty() => Cons(this, Always(Streaming.empty))
     }
 
   /**
@@ -580,8 +580,8 @@ sealed abstract class Streaming[A] { lhs =>
     @tailrec def unroll(buf: mutable.ListBuffer[A], s: Streaming[A]): List[A] =
       s match {
         case Empty() => buf.toList
-        case Next(lt) => unroll(buf, lt.value)
-        case This(a, lt) => unroll(buf += a, lt.value)
+        case Wait(lt) => unroll(buf, lt.value)
+        case Cons(a, lt) => unroll(buf += a, lt.value)
       }
     unroll(mutable.ListBuffer.empty[A], this)
   }
@@ -597,9 +597,9 @@ sealed abstract class Streaming[A] { lhs =>
    */
   override def toString: String =
     this match {
-      case This(a, _) => "Stream(" + a + ", ...)"
+      case Cons(a, _) => "Stream(" + a + ", ...)"
       case Empty() => "Stream()"
-      case Next(_) => "Stream(...)"
+      case Wait(_) => "Stream(...)"
     }
 
   /**
@@ -609,8 +609,8 @@ sealed abstract class Streaming[A] { lhs =>
     @tailrec def unroll(n: Int, sb: StringBuffer, s: Streaming[A]): String =
       if (n <= 0) sb.append(", ...)").toString else s match {
         case Empty() => sb.append(")").toString
-        case Next(lt) => unroll(n, sb, lt.value)
-        case This(a, lt) => unroll(n - 1, sb.append(", " + a.toString), lt.value)
+        case Wait(lt) => unroll(n, sb, lt.value)
+        case Cons(a, lt) => unroll(n - 1, sb.append(", " + a.toString), lt.value)
       }
     uncons match {
       case None =>
@@ -631,8 +631,8 @@ sealed abstract class Streaming[A] { lhs =>
     @tailrec def unroll(buf: mutable.ArrayBuffer[A], s: Streaming[A]): Array[A] =
       s match {
         case Empty() => buf.toArray
-        case Next(lt) => unroll(buf, lt.value)
-        case This(a, lt) => unroll(buf += a, lt.value)
+        case Wait(lt) => unroll(buf, lt.value)
+        case Cons(a, lt) => unroll(buf += a, lt.value)
       }
     unroll(mutable.ArrayBuffer.empty[A], this)
   }
@@ -647,15 +647,15 @@ sealed abstract class Streaming[A] { lhs =>
   def memoize: Streaming[A] =
     this match {
       case Empty() => Empty()
-      case Next(lt) => Next(lt.memoize)
-      case This(a, lt) => This(a, lt.memoize)
+      case Wait(lt) => Wait(lt.memoize)
+      case Cons(a, lt) => Cons(a, lt.memoize)
     }
 
   /**
-   * Compact removes "pauses" in the stream (represented as Next(_)
+   * Compact removes "pauses" in the stream (represented as Wait(_)
    * nodes).
    *
-   * Normally, Next(_) values are used to defer tail computation in
+   * Normally, Wait(_) values are used to defer tail computation in
    * cases where it is convenient to return a stream value where
    * neither the head or tail are computed yet.
    *
@@ -665,7 +665,7 @@ sealed abstract class Streaming[A] { lhs =>
   def compact: Streaming[A] = {
     @tailrec def unroll(s: Streaming[A]): Streaming[A] =
       s match {
-        case Next(lt) => unroll(lt.value)
+        case Wait(lt) => unroll(lt.value)
         case s => s
       }
     unroll(this)
@@ -678,17 +678,17 @@ object Streaming extends StreamingInstances {
    * Concrete Streaming[A] types:
    *
    *  - Empty(): an empty stream.
-   *  - This(a, tail): a non-empty stream containing (at least) `a`.
-   *  - Next(tail): a deferred stream.
+   *  - Cons(a, tail): a non-empty stream containing (at least) `a`.
+   *  - Wait(tail): a deferred stream.
    *
-   * This represents a lazy, possibly infinite stream of values.
+   * Cons represents a lazy, possibly infinite stream of values.
    * Eval[_] is used to represent possible laziness (via Now, Later,
-   * and Always). The head of `This` is eager -- a lazy head can be
-   * represented using `Next(Always(...))` or `Next(Later(...))`.
+   * and Always). The head of `Cons` is eager -- a lazy head can be
+   * represented using `Wait(Always(...))` or `Wait(Later(...))`.
    */
   final case class Empty[A]() extends Streaming[A]
-  final case class Next[A](next: Eval[Streaming[A]]) extends Streaming[A]
-  final case class This[A](a: A, tail: Eval[Streaming[A]]) extends Streaming[A]
+  final case class Wait[A](next: Eval[Streaming[A]]) extends Streaming[A]
+  final case class Cons[A](a: A, tail: Eval[Streaming[A]]) extends Streaming[A]
 
   /**
    * Create an empty stream of type A.
@@ -700,19 +700,19 @@ object Streaming extends StreamingInstances {
    * Create a stream consisting of a single value.
    */
   def apply[A](a: A): Streaming[A] =
-    This(a, Now(Empty()))
+    Cons(a, Now(Empty()))
 
   /**
    * Prepend a value to a stream.
    */
   def cons[A](a: A, s: Streaming[A]): Streaming[A] =
-    This(a, Now(s))
+    Cons(a, Now(s))
 
   /**
    * Prepend a value to an Eval[Streaming[A]].
    */
   def cons[A](a: A, ls: Eval[Streaming[A]]): Streaming[A] =
-    This(a, ls)
+    Cons(a, ls)
 
   /**
    * Create a stream from two or more values.
@@ -736,7 +736,7 @@ object Streaming extends StreamingInstances {
    * that creation, allowing the head (if any) to be lazy.
    */
   def wait[A](ls: Eval[Streaming[A]]): Streaming[A] =
-    Next(ls)
+    Wait(ls)
 
   /**
    * Create a stream from a vector.
@@ -745,7 +745,7 @@ object Streaming extends StreamingInstances {
    */
   def fromVector[A](as: Vector[A]): Streaming[A] = {
     def loop(s: Streaming[A], i: Int): Streaming[A] =
-      if (i < 0) s else loop(This(as(i), Now(s)), i - 1)
+      if (i < 0) s else loop(Cons(as(i), Now(s)), i - 1)
     loop(Empty(), as.length - 1)
   }
 
@@ -758,7 +758,7 @@ object Streaming extends StreamingInstances {
     def loop(s: Streaming[A], ras: List[A]): Streaming[A] =
       ras match {
         case Nil => s
-        case a :: rt => loop(This(a, Now(s)), rt)
+        case a :: rt => loop(Cons(a, Now(s)), rt)
       }
     loop(Empty(), as.reverse)
   }
@@ -783,7 +783,7 @@ object Streaming extends StreamingInstances {
    * method.
    */
   def fromIteratorUnsafe[A](it: Iterator[A]): Streaming[A] =
-    if (it.hasNext) This(it.next, Later(fromIteratorUnsafe(it))) else Empty()
+    if (it.hasNext) Cons(it.next, Later(fromIteratorUnsafe(it))) else Empty()
 
   /**
    * Create a self-referential stream.
@@ -797,7 +797,7 @@ object Streaming extends StreamingInstances {
    * Continually return a constant value.
    */
   def continually[A](a: A): Streaming[A] =
-    knot(s => This(a, s), memo = true)
+    knot(s => Cons(a, s), memo = true)
 
   /**
    * Continually return the result of a thunk.
@@ -808,14 +808,14 @@ object Streaming extends StreamingInstances {
    * same results.
    */
   def thunk[A](f: () => A): Streaming[A] =
-    knot(s => This(f(), s), memo = true)
+    knot(s => Cons(f(), s), memo = true)
 
   /**
    * Produce an infinite stream of values given an initial value and a
    * tranformation function.
    */
   def infinite[A](a: A)(f: A => A): Streaming[A] =
-    This(a, Always(infinite(f(a))(f)))
+    Cons(a, Always(infinite(f(a))(f)))
 
   /**
    * Stream of integers starting at n.
@@ -828,7 +828,7 @@ object Streaming extends StreamingInstances {
    * with `end` (i.e. inclusive).
    */
   def interval(start: Int, end: Int): Streaming[Int] =
-    if (start > end) Empty() else This(start, Always(interval(start + 1, end)))
+    if (start > end) Empty() else Cons(start, Always(interval(start + 1, end)))
 
   /**
    * Produce a stream given an "unfolding" function.
@@ -839,7 +839,7 @@ object Streaming extends StreamingInstances {
   def unfold[A](o: Option[A])(f: A => Option[A]): Streaming[A] =
     o match {
       case None => Empty()
-      case Some(a) => This(a, Always(unfold(f(a))(f)))
+      case Some(a) => Cons(a, Always(unfold(f(a))(f)))
     }
 
   /**
@@ -859,7 +859,7 @@ object Streaming extends StreamingInstances {
     }
 
     class StreamingOps[A](rhs: Eval[Streaming[A]]) {
-      def %::(lhs: A): Streaming[A] = This(lhs, rhs)
+      def %::(lhs: A): Streaming[A] = Cons(lhs, rhs)
       def %:::(lhs: Streaming[A]): Streaming[A] = lhs concat rhs
     }
 

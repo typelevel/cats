@@ -178,12 +178,11 @@ class AdHocStreamingTests extends CatsProps {
     }
   }
 
-  import Streaming.Next
   import Streaming.syntax._
   import scala.util.Try
 
   val bomb: Streaming[Int] =
-    Next(Later(sys.error("boom")))
+    Streaming.defer(sys.error("boom"))
 
   val dangerous: Streaming[Int] =
     1 %:: 2 %:: 3 %:: bomb
