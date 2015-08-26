@@ -18,10 +18,10 @@ import scala.collection.mutable
  *     memory. In this case, each "step" of the stream has
  *     instructions for producing the next step.
  *
- * Streams are not necessarily lazy: they use `Eval[Stream[A]]` to
+ * Streams are not necessarily lazy: they use `Eval[Streaming[A]]` to
  * represent a tail that may (or may not be) lazy. If `Now[A]` is used
- * for each tail, then `Stream[A]` will behave similarly to
- * `List[A]`. If `Later[A]` is used for each tail, then `Stream[A]`
+ * for each tail, then `Streaming[A]` will behave similarly to
+ * `List[A]`. If `Later[A]` is used for each tail, then `Streaming[A]`
  * will behave similarly to `scala.Stream[A]` (i.e. it will
  * lazily-compute the tail, and will memoize the result to improve the
  * performance of repeated traversals). If `Always[A]` is used for
@@ -53,7 +53,7 @@ import scala.collection.mutable
  *     lazily-constructed using `Streaming.defer()`), so methods like
  *     `.filter` are completely lazy.
  *
- *  5. The use of `Eval[Stream[A]]` to represent the "tail" of the
+ *  5. The use of `Eval[Streaming[A]]` to represent the "tail" of the
  *     stream means that streams can be lazily (and safely)
  *     constructed with `Foldable#foldRight`, and that `.map` and
  *     `.flatMap` operations over the tail will be safely trampolined.
@@ -342,7 +342,7 @@ sealed abstract class Streaming[A] { lhs =>
    *
    * lazily produces:
    *
-   *   Streaing((x, 0), (y, 1), (z, 2))
+   *   Streaming((x, 0), (y, 1), (z, 2))
    */
   def zipWithIndex: Streaming[(A, Int)] = {
     def loop(s: Streaming[A], i: Int): Streaming[(A, Int)] =

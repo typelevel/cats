@@ -283,7 +283,7 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
 object StreamingT extends StreamingTInstances {
 
   /**
-   * Concrete Stream[A] types:
+   * Concrete StreamingT[A] types:
    *
    *  - Empty(): an empty stream.
    *  - Cons(a, tail): a non-empty stream containing (at least) `a`.
