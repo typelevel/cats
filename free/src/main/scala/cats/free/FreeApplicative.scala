@@ -4,7 +4,7 @@ package free
 import cats.arrow.NaturalTransformation
 
 /** Applicative Functor for Free */
-sealed abstract class FreeApplicative[F[_], A] { self =>
+sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable { self =>
   // ap => apply alias needed so we can refer to both
   // FreeApplicative.ap and FreeApplicative#ap
   import FreeApplicative.{FA, Pure, Ap, ap => apply, lift}
@@ -13,21 +13,21 @@ sealed abstract class FreeApplicative[F[_], A] { self =>
     b match {
       case Pure(f) =>
         this.map(f)
-      case x: Ap[F, A => B] =>
+      case x@Ap() =>
         apply(x.pivot)(self.ap(x.fn.map(fx => a => p => fx(p)(a))))
     }
 
   final def map[B](f: A => B): FA[F, B] =
     this match {
       case Pure(a) => Pure(f(a))
-      case x: Ap[F, A] => apply(x.pivot)(x.fn.map(f compose _))
+      case x@Ap() => apply(x.pivot)(x.fn.map(f compose _))
     }
 
   /** Natural Transformation of FreeApplicative based on given Natural Transformation */
   final def hoist[G[_]](f: F ~> G): FA[G, A] =
     this match {
       case Pure(a) => Pure[G, A](a)
-      case x: Ap[F, A] => apply(f(x.pivot))(x.fn.hoist(f))
+      case x@Ap() => apply(f(x.pivot))(x.fn.hoist(f))
   }
 
   /** Interprets/Runs the sequence of operations using the semantics of Applicative G
@@ -36,7 +36,7 @@ sealed abstract class FreeApplicative[F[_], A] { self =>
   final def foldMap[G[_]](f: F ~> G)(implicit G: Applicative[G]): G[A] =
     this match {
       case Pure(a) => G.pure(a)
-      case x: Ap[F, A] => G.ap(f(x.pivot))(x.fn.foldMap(f))
+      case x@Ap() => G.ap(f(x.pivot))(x.fn.foldMap(f))
     }
 
   /** Interpret/run the operations using the semantics of `Applicative[F]`.
@@ -66,7 +66,7 @@ object FreeApplicative {
 
   final case class Pure[F[_], A](a: A) extends FA[F, A]
 
-  abstract class Ap[F[_], A] extends FA[F, A] {
+  abstract case class Ap[F[_], A]() extends FA[F, A] {
     type Pivot
     val pivot: F[Pivot]
     val fn: FA[F, Pivot => A]
