@@ -65,8 +65,8 @@ sealed abstract class Streaming[A] { lhs =>
   /**
    * The stream's catamorphism.
    *
-   * This method allows the stream to be transformed to an abtirary
-   * by handling two cases:
+   * This method allows the stream to be transformed into an arbitrary
+   * value by handling two cases:
    *
    *  1. empty stream: return b
    *  2. non-empty stream: apply the function to the head and tail

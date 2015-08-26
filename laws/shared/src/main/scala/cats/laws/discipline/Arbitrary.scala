@@ -63,7 +63,7 @@ object arbitrary {
   //   for { s <- arbitrary[F[StreamingT[F, A]]] } yield wait(s),
   //   const(StreamingT.empty[F, A]))
   //
-  // Howver, getting this right with Scalacheck (and avoiding SOEs) is
+  // However, getting this right with Scalacheck (and avoiding SOEs) is
   // somewhat fiddly, so this will have to do for now.
   //
   // The max possible size of a StreamingT instance (n) will result in
