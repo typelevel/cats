@@ -8,6 +8,7 @@ trait AllSyntax
     with ComonadSyntax
     with ComposeSyntax
     with ContravariantSyntax
+    with EitherSyntax
     with EqSyntax
     with FlatMapSyntax
     with FoldableSyntax
