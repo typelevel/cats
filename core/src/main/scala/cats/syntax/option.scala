@@ -5,11 +5,11 @@ import cats.data.Xor
 
 trait OptionSyntax {
   def none[A] = Option.empty[A]
-  implicit def toOptionSyntax[A](a: A): ToOptionOps[A] = new ToOptionOps(a)
+  implicit def optionIdSyntax[A](a: A): OptionIdOps[A] = new OptionIdOps(a)
   implicit def optionSyntax[A](a: Option[A]): OptionOps[A] = new OptionOps(a)
 }
 
-class ToOptionOps[A](val a: A) extends AnyVal {
+class OptionIdOps[A](val a: A) extends AnyVal {
   def some: Option[A] = Option(a)
 }
 
