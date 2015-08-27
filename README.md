@@ -1,5 +1,11 @@
 ## Cats
 
+[![Build Status](https://api.travis-ci.org/non/cats.png)](https://travis-ci.org/non/cats)
+[![Workflow](https://badge.waffle.io/non/cats.png?label=ready&title=Ready)](https://waffle.io/non/cats)
+[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
+[![codecov.io](http://codecov.io/github/non/cats/coverage.svg?branch=master)](http://codecov.io/github/non/cats?branch=master)
+[![Maven Central](https://img.shields.io/maven-central/v/org.spire-math/cats_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/org.spire-math/cats_2.11)
+
 ### Overview
 
 Cats is a proof-of-concept library intended to provide abstractions
@@ -67,11 +73,6 @@ builds:
 
  * May run out of memory: We suggest you use 
    [Paul Philips's sbt script](https://github.com/paulp/sbt-extras) that will use the settings from Cats. 
-
-[![Build Status](https://api.travis-ci.org/non/cats.png)](https://travis-ci.org/non/cats)
-[![Workflow](https://badge.waffle.io/non/cats.png?label=ready&title=Ready)](https://waffle.io/non/cats)
-[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
-[![codecov.io](http://codecov.io/github/non/cats/coverage.svg?branch=master)](http://codecov.io/github/non/cats?branch=master)
 
 ### Design
 
