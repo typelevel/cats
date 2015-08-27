@@ -6,10 +6,11 @@
 export publish_cmd="publishLocal"
 
 if [[ $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_BRANCH == "master" && $(cat version.sbt) =~ "-SNAPSHOT" ]]; then
-  export publish_cmd="publish gitSnapshots publish"   
-  if [[ $TRAVIS_SCALA_VERSION = "2.11.7" ]]; then
-    export publish_cmd="$publish_cmd ghpagesPushSite"
-  fi
+  export publish_cmd="publish gitSnapshots publish"
+  # temporarily disable to stabilize travis
+  #if [[ $TRAVIS_SCALA_VERSION = "2.11.7" ]]; then
+  #  export publish_cmd="$publish_cmd ghpagesPushSite"
+  #fi
 fi
 
 sbt_cmd="sbt ++$TRAVIS_SCALA_VERSION"
