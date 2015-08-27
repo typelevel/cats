@@ -1,0 +1,1 @@
+alias boot = ;reload ;project coreJVM ;iflast shell

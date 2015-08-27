@@ -6,8 +6,6 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
 
-import org.scalajs.sbtplugin.cross.CrossProject
-
 lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageMinimum := 60,
   ScoverageKeys.coverageFailOnMinimum := false,
@@ -34,19 +32,16 @@ lazy val commonSettings = Seq(
     "org.spire-math" %%% "algebra-std" % "0.3.1",
     "org.typelevel" %%% "machinist" % "0.4.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0-M5" cross CrossVersion.full),
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.5.4")
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
-  scmInfo := Some(ScmInfo(url("https://github.com/non/cats"),
-    "scm:git:git@github.com:non/cats.git"))
+  parallelExecution in Test := false
 ) ++ warnUnusedImport
 
 lazy val commonJsSettings = Seq(
-  scalaJSStage in Global := FastOptStage,
-  parallelExecution in Test := false
+  scalaJSStage in Global := FastOptStage
 )
 
 lazy val commonJvmSettings = Seq(
-  parallelExecution in Test := false,
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
 )
 
@@ -95,14 +90,16 @@ lazy val cats = project.in(file("."))
 lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
-  .aggregate(macrosJVM, coreJVM, lawsJVM, testsJVM, docs, freeJVM, bench, stateJVM)
-  .dependsOn(macrosJVM, coreJVM, lawsJVM, testsJVM, docs, freeJVM, bench, stateJVM)
+  .settings(commonJvmSettings)
+  .aggregate(macrosJVM, coreJVM, lawsJVM, freeJVM, stateJVM, testsJVM, docs, bench)
+  .dependsOn(macrosJVM, coreJVM, lawsJVM, freeJVM, stateJVM, testsJVM % "test-internal -> test", bench% "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
-  .aggregate(macrosJS, coreJS, lawsJS, testsJS, freeJS, stateJS)
-  .dependsOn(macrosJS, coreJS, lawsJS, testsJS, freeJS, stateJS)
+  .settings(commonJsSettings)
+  .aggregate(macrosJS, coreJS, lawsJS, freeJS, stateJS, testsJS)
+  .dependsOn(macrosJS, coreJS, lawsJS, freeJS, stateJS, testsJS % "test-internal -> test")
   .enablePlugins(ScalaJSPlugin)
 
 lazy val macros = crossProject.crossType(CrossType.Pure)
@@ -182,20 +179,9 @@ lazy val testsJS = tests.js
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/non/cats")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+  scmInfo := Some(ScmInfo(url("https://github.com/non/cats"), "scm:git:git@github.com:non/cats.git")),
   autoAPIMappings := true,
   apiURL := Some(url("https://non.github.io/cats/api/")),
-  releaseCrossBuild := true,
-  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
-  publishMavenStyle := true,
-  publishArtifact in Test := false,
-  pomIncludeRepository := { _ => false },
-  publishTo <<= version { (v: String) =>
-    val nexus = "https://oss.sonatype.org/"
-    if (v.trim.endsWith("SNAPSHOT"))
-      Some("snapshots" at nexus + "content/repositories/snapshots")
-    else
-      Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-  },
   pomExtra := (
     <developers>
       <developer>
@@ -205,12 +191,12 @@ lazy val publishSettings = Seq(
       </developer>
     </developers>
   )
-)
+) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess 
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;freeJVM/test;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;docs/test;bench/test")
+addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;freeJVM/test;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;bench/test")
 
-addCommandAlias("validateJVM", ";buildJVM;scalastyle;buildJVM;scalastyle;unidoc;tut")
+addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
 addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;freeJS/compile;freeJS/test;stateJS/compile;stateJS/test")
 
@@ -318,8 +304,10 @@ lazy val warnUnusedImport = Seq(
   scalacOptions in (Test, console) <<= (scalacOptions in (Compile, console))
 )
 
-// For Travis CI - see http://www.cakesolutions.net/teamblogs/publishing-artefacts-to-oss-sonatype-nexus-using-sbt-and-travis-ci
-credentials ++= (for {
-  username <- Option(System.getenv().get("SONATYPE_USERNAME"))
-  password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
-} yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
+lazy val credentialSettings = Seq(
+  // For Travis CI - see http://www.cakesolutions.net/teamblogs/publishing-artefacts-to-oss-sonatype-nexus-using-sbt-and-travis-ci
+  credentials ++= (for {
+    username <- Option(System.getenv().get("SONATYPE_USERNAME"))
+    password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
+  } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
+)

@@ -44,8 +44,9 @@ the website).
 
 ### Building Cats
 
-To build Cats you should have [sbt](http://www.scala-sbt.org/0.13/tutorial/Setup.html)
-installed. Run `sbt`, and then use any of the following commands:
+To build Cats you should have
+[sbt](http://www.scala-sbt.org/0.13/tutorial/Setup.html) and [Node.js](https://nodejs.org/)
+ installed. Run `sbt`, and then use any of the following commands:
 
  * `compile`: compile the code
  * `console`: launch a REPL
@@ -53,6 +54,19 @@ installed. Run `sbt`, and then use any of the following commands:
  * `unidoc`: generate the documentation
  * `scalastyle`: run the style-checker on the code
  * `validate`: run tests, style-checker, and doc generation
+
+#### Scala and Scala-js
+
+Cats cross-compiles to both JVM and Javascript(JS). If you are not used to
+working with cross-compiling builds, the first things that you will notice is that
+builds:
+
+ * Will take longer: To build JVM only, just use the `catsJVM`, or `catsJS` for
+   JS only. And if you want the default project to be  `catsJVM`, just copy the
+   file `scripts/sbtrc-JVM` to `.sbtrc` in the root directory.
+
+ * May run out of memory: We suggest you use 
+   [Paul Philips's sbt script](https://github.com/paulp/sbt-extras) that will use the settings from Cats. 
 
 [![Build Status](https://api.travis-ci.org/non/cats.png)](https://travis-ci.org/non/cats)
 [![Workflow](https://badge.waffle.io/non/cats.png?label=ready&title=Ready)](https://waffle.io/non/cats)
