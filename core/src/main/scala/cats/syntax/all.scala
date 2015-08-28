@@ -8,6 +8,7 @@ trait AllSyntax
     with ComonadSyntax
     with ComposeSyntax
     with ContravariantSyntax
+    with EitherSyntax
     with EqSyntax
     with FlatMapSyntax
     with FoldableSyntax
@@ -16,6 +17,7 @@ trait AllSyntax
     with InvariantSyntax
     with MonadCombineSyntax
     with MonadFilterSyntax
+    with OptionSyntax
     with OrderSyntax
     with PartialOrderSyntax
     with ProfunctorSyntax
