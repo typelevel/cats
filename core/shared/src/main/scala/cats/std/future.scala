@@ -1,7 +1,7 @@
 package cats
 package std
 
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.FiniteDuration
 
 trait FutureInstances extends FutureInstances1 {
@@ -27,16 +27,16 @@ trait FutureInstances extends FutureInstances1 {
   def futureEq[A](atMost: FiniteDuration)(implicit A: Eq[A], ec: ExecutionContext): Eq[Future[A]] =
     new Eq[Future[A]] {
 
-      def eqv(x: Future[A], y: Future[A]): Boolean = Await.result((x zip y).map((A.eqv _).tupled), atMost)
+      def eqv(x: Future[A], y: Future[A]): Boolean = await.result((x zip y).map((A.eqv _).tupled), atMost)
     }
 }
 
-trait FutureInstances1 {
+trait FutureInstances1 extends Platform.Instances {
 
   def futureComonad(atMost: FiniteDuration)(implicit ec: ExecutionContext): Comonad[Future] =
     new FutureCoflatMap with Comonad[Future] {
 
-      def extract[A](x: Future[A]): A = Await.result(x, atMost)
+      def extract[A](x: Future[A]): A = await.result(x, atMost)
 
       def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
     }
@@ -46,6 +46,11 @@ trait FutureInstances1 {
 
       def empty: Future[A] = Future.successful(A.empty)
     }
+}
+
+trait AwaitResult {
+
+  def result[A](f: Future[A], atMost: FiniteDuration): A
 }
 
 private[std] abstract class FutureCoflatMap(implicit ec: ExecutionContext) extends CoflatMap[Future] {

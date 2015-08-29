@@ -111,7 +111,7 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
 lazy val macrosJVM = macros.jvm 
 lazy val macrosJS = macros.js
 
-lazy val core = crossProject.crossType(CrossType.Pure)
+lazy val core = crossProject
   .dependsOn(macros)
   .settings(moduleName := "cats-core")
   .settings(catsSettings:_*)
@@ -168,8 +168,7 @@ lazy val tests = crossProject
   .settings(moduleName := "cats-tests")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
-  .settings(noPublishSettings:_*)
-  .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test")
+  .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M7")
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
