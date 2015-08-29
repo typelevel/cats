@@ -26,7 +26,7 @@ You run your program and it says key "url" not found, turns out the key was "end
 and re-run. Now it says the "port" key was not a well-formed integer.
 
 It would be nice to have all of these errors be reported simultaneously. That the username can't have dashes can
-be validated separate from it not having special characters, as well as from the password needing to have certain
+be validated separately from it not having special characters, as well as from the password needing to have certain
 requirements. A misspelled (or missing) field in a config can be validated separately from another field not being
 well-formed.
 
@@ -275,7 +275,7 @@ For very much the same reasons, despite the shape of `Validated` matching exactl
 two separate data types due to their different natures.
 
 ### The nature of `flatMap`
-Another reason we would be hesistant to define a `flatMap` method on `Validated` lies in the nature of `flatMap`.
+Another reason we would be hesitant to define a `flatMap` method on `Validated` lies in the nature of `flatMap`.
 
 ```scala
 def flatMap[F[_], A, B](fa: F[A])(f: A => F[B]): F[B]
