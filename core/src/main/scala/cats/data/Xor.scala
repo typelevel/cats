@@ -3,6 +3,7 @@ package data
 
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
+import scala.util.control.NonFatal
 
 /** Represents a right-biased disjunction that is either an `A` or a `B`.
  *
@@ -191,6 +192,19 @@ trait XorFunctions {
   def left[A, B](a: A): A Xor B = Xor.Left(a)
 
   def right[A, B](b: B): A Xor B = Xor.Right(b)
+
+  /**
+   * Evaluate the given `body` while catching all "non-fatal" errors.
+   *
+   * In this case "non-fatal" means anything matched by
+   * scala.util.control.NonFatal.
+   */
+  def catching[A](body: => A): Xor[Throwable, A] =
+    try {
+      Xor.right(body)
+    } catch {
+      case NonFatal(t) => Xor.left(t)
+    }
 
   /**
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of

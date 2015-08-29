@@ -1,8 +1,10 @@
 package cats
 
 import scala.annotation.tailrec
+import scala.util.control.NonFatal
+
 import cats.syntax.all._
-import data.Xor
+import cats.data.Xor
 
 /**
  * Eval is a monad which controls evaluation.
@@ -99,8 +101,6 @@ sealed abstract class Eval[A] { self =>
    * Later[A] with an equivalent computation will be returned.
    */
   def memoize: Eval[A]
-
-  def attempt: Eval[Throwable Xor A]
 }
 
 
@@ -114,7 +114,6 @@ sealed abstract class Eval[A] { self =>
  */
 final case class Now[A](value: A) extends Eval[A] {
   def memoize: Eval[A] = this
-  def attempt: Eval[Throwable Xor A] = Now(Xor.Right(value))
 }
 
 
@@ -132,8 +131,8 @@ final case class Now[A](value: A) extends Eval[A] {
  * by the closure) will not be retained, and will be available for
  * garbage collection.
  */
-final class Later[A](f: () => A) extends Eval[A] {
-  self =>
+final class Later[A](f: () => A) extends Eval[A] { self =>
+
   private[this] var thunk: () => A = f
 
   // The idea here is that `f` may have captured very large
@@ -150,7 +149,6 @@ final class Later[A](f: () => A) extends Eval[A] {
   }
 
   def memoize: Eval[A] = this
-  def attempt: Eval[Throwable Xor A] = new Later(() => Xor.fromTryCatch[Throwable](self.value))
 }
 
 object Later {
@@ -170,7 +168,6 @@ object Later {
 final class Always[A](f: () => A) extends Eval[A] {
   def value: A = f()
   def memoize: Eval[A] = new Later(f)
-  def attempt: Eval[Throwable Xor A] = new Always(() => Xor.fromTryCatch[Throwable](value))
 }
 
 object Always {
@@ -228,8 +225,7 @@ object Eval extends EvalInstances {
    * trampoline are not exposed. This allows a slightly more efficient
    * implementat of the .value method.
    */
-  sealed abstract class Compute[A] extends Eval[A] {
-    self =>
+  sealed abstract class Compute[A] extends Eval[A] { self =>
     type Start
     val start: () => Eval[Start]
     val run: Start => Eval[A]
@@ -258,18 +254,6 @@ object Eval extends EvalInstances {
         }
       loop(this.asInstanceOf[L], Nil).asInstanceOf[A]
     }
-
-    def attempt: Eval[Throwable Xor A] =
-      new Compute[Throwable Xor A] {
-        type Start = Xor[Throwable,self.Start]
-        override val start: () => Eval[Start] = () => Eval.now(Xor.fromTryCatch[Throwable](self.start().value))
-        override val run: Start => Eval[Throwable Xor A] = {(s: Throwable Xor self.Start) =>
-          (for {
-            ss <- s
-            aa <- Xor.fromTryCatch[Throwable](self.run(ss))
-          } yield aa).sequenceU
-        }
-      }
   }
 }
 
