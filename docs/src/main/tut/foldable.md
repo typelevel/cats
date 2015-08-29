@@ -7,7 +7,7 @@ scaladoc: "#cats.Foldable"
 ---
 # Foldable
 
-Foldable typeclass instances can be defined for data structures that can be 
+Foldable type class instances can be defined for data structures that can be 
 folded to a summary value.
 
 In the case of a collection (such as `List` or `Set`), these methods will fold 
