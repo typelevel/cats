@@ -4,6 +4,9 @@ import data._
 
 import java.util.concurrent.CountDownLatch
 
+/**
+ * A Task is an abstraction of a computation which produces an A.
+ */
 sealed trait Task[A] {
   import Task._
 
@@ -18,9 +21,28 @@ sealed trait Task[A] {
 }
 
 object Task {
+  /**
+   * Construct a Task which represents an already calculated eager value
+   */
   def now[A](a: A): Task[A] = Value(Eval.now(a))
+
+  /**
+   * Construct a Task that when run will produce an A by evaluating the argument
+   */
   def later[A](a: => A): Task[A] = Value(Eval.later(a))
+
+  /** 
+   * Construct a task from a thunk that will be executed each time the Task is run
+   */
   def always[A](a: () => A): Task[A] = Value(new Always(a))
+
+  /**
+   *  Construct a Task which will represent an asynchronous
+   *  computation. The constructor takes a function which will be
+   *  invoked when the Task is run, passing the task a callback (A =>
+   *  Unit) which will be called when the asyncrounous computation is
+   *  complete.
+   */
   def async[A](cb: (A => Unit) => Unit): Task[A] = Async(cb)
 
   private[cats] final case class Value[A](value: Eval[A]) extends Task[A] {
