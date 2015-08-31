@@ -36,7 +36,8 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] {
       def props: Seq[(String, Prop)] = Seq(
         "traverse identity" -> forAll(laws.traverseIdentity[A, C] _),
         "traverse sequential composition" -> forAll(laws.traverseSequentialComposition[A, B, C, X, Y] _),
-        "traverse parallel composition" -> forAll(laws.traverseParallelComposition[A, B, X, Y] _)
+        "traverse parallel composition" -> forAll(laws.traverseParallelComposition[A, B, X, Y] _),
+        "traverse derive foldMap" -> forAll(laws.foldMapDerived[A, M] _)
       )
     }
   }
