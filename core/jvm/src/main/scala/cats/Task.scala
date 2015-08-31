@@ -31,7 +31,7 @@ object Task {
    */
   def later[A](a: => A): Task[A] = Value(Eval.later(a))
 
-  /** 
+  /**
    * Construct a task from a thunk that will be executed each time the Task is run
    */
   def always[A](a: () => A): Task[A] = Value(new Always(a))
