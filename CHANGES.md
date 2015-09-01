@@ -38,7 +38,7 @@ Several new type classes and data types were introduced:
  * `Choice[F[_, _]]`
  * `Group[A]`
  * `MonadReader[F[_, _], R]`
- * `Stream[A]` and `StreamT[F[_], A]`
+ * `Streaming[A]` and `StreamingT[F[_], A]`
  * `Prod[F[_], G[_], A]` and `Func[F[_], A, B]`
 
 Syntax tests were added to ensure that existing syntax worked, and
