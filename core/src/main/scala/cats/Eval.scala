@@ -219,7 +219,7 @@ object Eval extends EvalInstances {
    *
    * Unlike a traditional trampoline, the internal workings of the
    * trampoline are not exposed. This allows a slightly more efficient
-   * implementat of the .value method.
+   * implementation of the .value method.
    */
   sealed abstract class Compute[A] extends Eval[A] {
     type Start
