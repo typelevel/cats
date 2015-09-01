@@ -23,7 +23,7 @@ To get started with SBT, simply add the following to your `build.sbt`
 file:
 
 ```scala
-libraryDependencies += "org.spire-math" %% "cats" % "0.1.2"
+libraryDependencies += "org.spire-math" %% "cats" % "0.2.0"
 ```
 
 This will pull in all of Cats' modules. If you only require some
@@ -38,7 +38,7 @@ functionality, you can pick-and-choose from amongst these modules
 
 Release notes for Cats are available in [CHANGES.md](CHANGES.md).
 
-*Cats 0.1.2 is a pre-release: there are not currently source- or
+*Cats 0.2.0 is a pre-release: there are not currently source- or
 binary-compatibility guarantees.*
 
 ### Documentation
@@ -68,11 +68,11 @@ working with cross-compiling builds, the first things that you will notice is th
 builds:
 
  * Will take longer: To build JVM only, just use the `catsJVM`, or `catsJS` for
-   JS only. And if you want the default project to be  `catsJVM`, just copy the
+   JS only. And if you want the default project to be `catsJVM`, just copy the
    file `scripts/sbtrc-JVM` to `.sbtrc` in the root directory.
 
- * May run out of memory: We suggest you use 
-   [Paul Philips's sbt script](https://github.com/paulp/sbt-extras) that will use the settings from Cats. 
+ * May run out of memory: We suggest you use
+   [Paul Philips's sbt script](https://github.com/paulp/sbt-extras) that will use the settings from Cats.
 
 ### Design
 
@@ -94,7 +94,7 @@ Cats will be designed to use modern *best practices*:
 (We also plan to support [Miniboxing](http://scala-miniboxing.org) in a branch.)
 
 Currently Cats is experimenting with providing laziness via a type
-constructor (`Lazy[_]`), rather than via ad-hoc by-name
+constructor (`Eval[_]`), rather than via ad-hoc by-name
 parameters.This design may change if it ends up being impractical.
 
 The goal is to make Cats as efficient as possible for both strict and
@@ -184,7 +184,8 @@ The current maintainers (people who can merge pull requests) are:
 
 We are currently following a practice of requiring at least two
 sign-offs to merge PRs (and for large or contentious issues we may
-wait for more).
+wait for more). For typos or other small fixes to documentation we
+relax this to a single sign-off.
 
 ### Contributing
 
