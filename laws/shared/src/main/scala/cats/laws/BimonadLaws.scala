@@ -2,7 +2,7 @@ package cats
 package laws
 
 /**
- * Laws that must be obeyed by any [[Bimonad]].
+ * Laws that must be obeyed by any `Bimonad`.
  */
 trait BimonadLaws[F[_]] extends MonadLaws[F] with ComonadLaws[F] {
   implicit override def F: Bimonad[F]
