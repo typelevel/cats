@@ -7,8 +7,11 @@ package laws
 trait BimonadLaws[F[_]] extends MonadLaws[F] with ComonadLaws[F] {
   implicit override def F: Bimonad[F]
 
-  def pureExtractComposition[A](a: A): IsEq[A] =
+  def pureExtractIsId[A](a: A): IsEq[A] =
     F.extract(F.pure(a)) <-> a
+
+  def extractPureIsId[A](fa: F[A]): IsEq[F[A]] =
+    F.pure(F.extract(fa)) <-> fa
 }
 
 object BimonadLaws {

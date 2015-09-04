@@ -36,8 +36,7 @@ class FutureTests extends CatsSuite {
 
   // Need non-fatal Throwables for Future recoverWith/handleError
   implicit val nonFatalArbitrary: Arbitrary[Throwable] =
-    //Arbitrary(arbitrary[Exception].map(_.asInstanceOf[Throwable]))
-    Arbitrary(org.scalacheck.Gen.const(new Exception("hi there").asInstanceOf[Throwable]))
+    Arbitrary(arbitrary[Exception].map(_.asInstanceOf[Throwable]))
 
   checkAll("Future[Int]", MonadErrorTests[Lambda[(E, A) => Future[A]], Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
