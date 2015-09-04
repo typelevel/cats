@@ -109,6 +109,8 @@ lazy val macros = crossProject
   .settings(catsSettings:_*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
+  .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
+
 
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
@@ -267,7 +269,7 @@ lazy val commonScalacOptions = Seq(
   "-language:implicitConversions",
   "-language:experimental.macros",
   "-unchecked",
-  //"-Xfatal-warnings",
+  "-Xfatal-warnings",
   "-Xlint",
   "-Yinline-warnings",
   "-Yno-adapted-args",
