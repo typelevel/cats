@@ -1,8 +1,6 @@
 package cats
 package std
 
-import scala.collection.immutable.VectorBuilder
-
 trait VectorInstances {
   implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] =
     new Traverse[Vector] with MonadCombine[Vector] {
@@ -31,11 +29,10 @@ trait VectorInstances {
         Eval.defer(loop(0))
       }
 
-      def traverse[G[_]: Applicative, A, B](fa: Vector[A])(f: A => G[B]): G[Vector[B]] = {
-        val G = Applicative[G]
-        val gba = G.pure(Vector.empty[B])
-        fa.foldLeft(gba)((buf, a) => G.map2(buf, f(a))(_ :+ _))
-      }
+      def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
+        G.map(
+          fa.foldLeft(G.pure(Vector.empty[B]))((acc, a) => G.map2(f(a), acc)(_ +: _))
+        )(_.reverse)
 
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)
