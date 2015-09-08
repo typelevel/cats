@@ -3,6 +3,7 @@ package free
 
 import scala.annotation.tailrec
 
+import cats.data.Xor, Xor.{Left, Right}
 import cats.arrow.NaturalTransformation
 
 object Free {
@@ -70,7 +71,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Evaluate a single layer of the free monad.
    */
   @tailrec
-  final def resume(implicit S: Functor[S]): Either[S[Free[S, A]], A] = this match {
+  final def resume(implicit S: Functor[S]): S[Free[S, A]] Xor A = this match {
     case Pure(a) => Right(a)
     case Suspend(t) => Left(S.map(t)(Pure(_)))
     case Gosub(c, f) =>
