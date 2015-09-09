@@ -82,6 +82,12 @@ sealed abstract class Eval[A] { self =>
               val run = f
             }
         }
+      case c: Eval.Call[A] =>
+        new Eval.Compute[B] {
+          type Start = A
+          val start = c.thunk
+          val run = f
+        }
       case _ =>
         new Eval.Compute[B] {
           type Start = A
@@ -194,7 +200,7 @@ object Eval extends EvalInstances {
    * which produces an Eval[A] value. Like .flatMap, it is stack-safe.
    */
   def defer[A](a: => Eval[A]): Eval[A] =
-    Eval.Unit.flatMap(_ => a)
+    new Eval.Call[A](a _) {}
 
   /**
    * Static Eval instances for some common values.
@@ -207,6 +213,18 @@ object Eval extends EvalInstances {
   val False: Eval[Boolean] = Now(false)
   val Zero: Eval[Int] = Now(0)
   val One: Eval[Int] = Now(1)
+
+  /**
+   * Call is a type of Eval[A] that is used to defer computations
+   * which produce Eval[A].
+   *
+   * Users should not instantiate Call instances themselves. Instead,
+   * they will be automatically created when needed.
+   */
+  sealed abstract class Call[A](val thunk: () => Eval[A]) extends Eval[A] {
+    def memoize: Eval[A] = new Later(() => thunk().value)
+    def value: A = thunk().value
+  }
 
   /**
    * Compute is a type of Eval[A] that is used to chain computations
