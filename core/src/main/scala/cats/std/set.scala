@@ -24,5 +24,5 @@ trait SetInstances extends algebra.std.SetInstances {
       override def isEmpty[A](fa: Set[A]): Boolean = fa.isEmpty
     }
 
-    implicit def setMonoidInstance[A]: Monoid[Set[A]] = MonoidK[Set].algebra[A]
+    implicit def setMonoid[A]: Monoid[Set[A]] = MonoidK[Set].algebra[A]
 }
