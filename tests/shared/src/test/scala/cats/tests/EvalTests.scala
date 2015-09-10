@@ -37,7 +37,7 @@ class EvalTests extends CatsSuite {
       val (spooky, lz) = init(value)
       (0 until n).foreach { _ =>
         val result = lz.value
-        assert(result === value)
+        result should === (value)
         spin ^= result.##
       }
       assert(spooky.counter == numEvals)

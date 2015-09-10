@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.std.AllInstances
-import cats.syntax.AllSyntax
+import cats.syntax.{AllSyntax, EqOps}
 import org.scalatest.{ FunSuite, PropSpec, Matchers }
 import org.scalatest.prop.PropertyChecks
 import org.typelevel.discipline.scalatest.Discipline
@@ -16,13 +16,15 @@ import scala.util.{Failure, Success, Try}
  * An opinionated stack of traits to improve consistency and reduce
  * boilerplate in Cats tests.
  */
-trait CatsSuite extends FunSuite with Matchers with Discipline with AllInstances with AllSyntax with TestInstances {
+trait CatsSuite extends FunSuite with Matchers with Discipline with AllInstances with AllSyntax with TestInstances with StrictCatsEquality {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(
       minSuccessful = Platform.minSuccessful,
       maxDiscardedFactor = Platform.maxDiscardedFactor)
-  // disable scalatest's ===
-  override def convertToEqualizer[T](left: T): Equalizer[T] = ???
+
+  // disable Eq syntax (by making `eqSyntax` not implicit), since it collides
+  // with scalactic's equality
+  override def eqSyntax[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
 }
 
 trait CatsProps extends PropSpec with Matchers with PropertyChecks with TestInstances {
