@@ -2,12 +2,10 @@ package cats
 package laws
 package discipline
 
-import cats.data.{Cokleisli, Kleisli, NonEmptyList, Validated, Xor, XorT, Ior, Const}
-import org.scalacheck.Arbitrary
-
+import cats.data._
 import cats.implicits._
 
-import scala.concurrent.Future
+import org.scalacheck.Arbitrary
 
 trait EqK[F[_]] {
   def synthesize[A: Eq]: Eq[F[A]]
@@ -85,7 +83,6 @@ object EqK {
   implicit val vector: EqK[Vector] =
     new EqK[Vector] { def synthesize[A: Eq]: Eq[Vector[A]] = implicitly }
 
-  import cats.data.{Streaming, StreamingT}
   implicit val streaming: EqK[Streaming] =
     new EqK[Streaming] { def synthesize[A: Eq]: Eq[Streaming[A]] = implicitly }
 
@@ -93,6 +90,29 @@ object EqK {
     new EqK[StreamingT[F, ?]] {
       def synthesize[A: Eq]: Eq[StreamingT[F, A]] = {
         implicit val eqfla: Eq[F[List[A]]] = EqK[F].synthesize[List[A]]
+        implicitly
+      }
+    }
+
+  implicit def function1L[A: Arbitrary]: EqK[A => ?] =
+    new EqK[A => ?] {
+      def synthesize[B: Eq]: Eq[A => B] =
+        cats.laws.discipline.eq.function1Eq
+    }
+
+  implicit def kleisli[F[_]: EqK, A](implicit evKA: EqK[A => ?]): EqK[Kleisli[F, A, ?]] =
+    new EqK[Kleisli[F, A, ?]] {
+      def synthesize[B: Eq]: Eq[Kleisli[F, A, B]] = {
+        implicit val eqFB: Eq[F[B]] = EqK[F].synthesize[B]
+        implicit val eqAFB: Eq[A => F[B]] = evKA.synthesize[F[B]]
+        eqAFB.on[Kleisli[F, A, B]](_.run)
+      }
+    }
+
+  implicit def optionT[F[_]: EqK]: EqK[OptionT[F, ?]] =
+    new EqK[OptionT[F, ?]] {
+      def synthesize[A: Eq]: Eq[OptionT[F, A]] = {
+        implicit val eqFOA: Eq[F[Option[A]]] = EqK[F].synthesize[Option[A]]
         implicitly
       }
     }

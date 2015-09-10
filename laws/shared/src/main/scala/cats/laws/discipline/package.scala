@@ -2,6 +2,7 @@ package cats
 package laws
 
 import algebra.laws._
+
 import org.scalacheck.Prop
 
 package object discipline {
