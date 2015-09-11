@@ -23,13 +23,6 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
       case x@Ap() => apply(x.pivot)(x.fn.map(f compose _))
     }
 
-  /** Natural Transformation of FreeApplicative based on given Natural Transformation */
-  final def hoist[G[_]](f: F ~> G): FA[G, A] =
-    this match {
-      case Pure(a) => Pure[G, A](a)
-      case x@Ap() => apply(f(x.pivot))(x.fn.hoist(f))
-  }
-
   /** Interprets/Runs the sequence of operations using the semantics of Applicative G
     * Tail recursive only if G provides tail recursive interpretation (ie G is FreeMonad)
     */
@@ -45,6 +38,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   final def fold(implicit F: Applicative[F]): F[A] =
     foldMap(NaturalTransformation.id[F])
 
+  /** Interpreter this FreeApplicative algebra into another using FreeApplicative. */
   final def compile[G[_]](f: F ~> G)(implicit G: Applicative[G]): FA[G, A] =
     foldMap[FA[G, ?]] {
       new NaturalTransformation[F, FA[G, ?]] {
