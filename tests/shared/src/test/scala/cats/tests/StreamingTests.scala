@@ -262,6 +262,10 @@ class AdHocStreamingTests extends CatsProps {
     isok(bomb.take(0))
   }
 
+  property("take up to the last valid element"){
+    isok(dangerous.take(3).toList)
+  }
+
   property("lazy drop") {
     isok(bomb.drop(10))
     isok(bomb.drop(0))
