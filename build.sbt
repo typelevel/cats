@@ -135,7 +135,7 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(disciplineDependencies:_*)
   .settings(libraryDependencies ++= Seq(
     "org.spire-math" %%% "algebra-laws" % "0.3.1",
-    "com.github.inthenow" %%% "bricks-platform" % "v0.0.0-24-g752baf3-SNAPSHOT"))
+    "com.github.inthenow" %%% "bricks-platform" % "0.0.1"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -170,7 +170,7 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .settings(noPublishSettings:_*)
   .settings(libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test",
-    "com.github.inthenow" %%% "bricks-platform" % "v0.0.0-24-g752baf3-SNAPSHOT" % "test"))
+    "com.github.inthenow" %%% "bricks-platform" % "0.0.1" % "test"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
