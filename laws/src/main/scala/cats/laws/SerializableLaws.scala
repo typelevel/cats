@@ -4,12 +4,14 @@ package laws
 import org.scalacheck.Prop
 import org.scalacheck.Prop.{ False, Proof, Result }
 
+import bricks.Platform
+
 /**
  * Check for Java Serializability.
  *
  * This laws is only applicative on the JVM, but is something we want
- * to be sure to enforce. Therefore, we use cats.macros.Platform to do
- * a runtime check rather than create a separate jvm-laws project.
+ * to be sure to enforce. Therefore, we use bricks.Platform to do a
+ * runtime check rather than create a separate jvm-laws project.
  */
 object SerializableLaws {
 
@@ -26,7 +28,7 @@ object SerializableLaws {
   // laws project.
 
   def serializable[A](a: A): Prop =
-    if (cats.macros.Platform.isJs) Prop(_ => Result(status = Proof)) else Prop { _ =>
+    if (Platform.isJs) Prop(_ => Result(status = Proof)) else Prop { _ =>
       import java.io.{ ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream }
 
       val baos = new ByteArrayOutputStream()

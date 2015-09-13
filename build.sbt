@@ -103,17 +103,17 @@ lazy val catsJS = project.in(file(".catsJS"))
   .dependsOn(macrosJS, coreJS, lawsJS, freeJS, stateJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
-// 
-lazy val macros = crossProject
+
+lazy val macros = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-macros")
   .settings(catsSettings:_*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
   .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
 
-
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
+
 
 lazy val core = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros)
@@ -133,7 +133,9 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
-  .settings(libraryDependencies += "org.spire-math" %%% "algebra-laws" % "0.3.1")
+  .settings(libraryDependencies ++= Seq(
+    "org.spire-math" %%% "algebra-laws" % "0.3.1",
+    "com.github.inthenow" %%% "bricks-platform" % "v0.0.0-24-g752baf3-SNAPSHOT"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -166,7 +168,9 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
   .settings(noPublishSettings:_*)
-  .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test")
+  .settings(libraryDependencies ++= Seq(
+    "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test",
+    "com.github.inthenow" %%% "bricks-platform" % "v0.0.0-24-g752baf3-SNAPSHOT" % "test"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 

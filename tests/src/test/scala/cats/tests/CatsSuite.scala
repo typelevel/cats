@@ -1,7 +1,8 @@
 package cats
 package tests
 
-import cats.macros.Platform
+import bricks.Platform
+
 import cats.std.AllInstances
 import cats.syntax.AllSyntax
 
