@@ -2,7 +2,7 @@ package cats
 package laws
 
 import cats.data.Kleisli
-import cats.syntax.flatMap._
+import cats.implicits._
 
 /**
  * Laws that must be obeyed by any `Monad`.
@@ -29,6 +29,12 @@ trait MonadLaws[F[_]] extends ApplicativeLaws[F] with FlatMapLaws[F] {
    */
   def kleisliRightIdentity[A, B](a: A, f: A => F[B]): IsEq[F[B]] =
     (Kleisli(f) andThen Kleisli(F.pure[B])).run(a) <-> f(a)
+
+  /**
+   * Make sure that map and flatMap are consistent.
+   */
+  def mapFlatMapCoherence[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
+    fa.flatMap(a => F.pure(f(a))) <-> fa.map(f)
 }
 
 object MonadLaws {

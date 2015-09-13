@@ -24,12 +24,16 @@ possible:
  * Cody Allen
  * Colt Frederickson
  * Dale Wijnand
+ * Dave Rostron
  * David Allsopp
  * Derek Wickern
+ * Edmund Noble
  * Erik Osheim
  * Eugene Burmako
  * Eugene Yokota
+ * Feynman Liang
  * Frank S. Thomas
+ * Jisoo Park
  * Josh Marcus
  * Julien Truffaut
  * Kenji Yoshida
@@ -40,6 +44,8 @@ possible:
  * Miles Sabin
  * Owen Parry
  * Pascal Voitot
+ * Philip Wills
+ * Rintcius
  * Rob Norris
  * Romain Ruetschi
  * Ross A. Baker

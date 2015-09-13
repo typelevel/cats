@@ -38,7 +38,8 @@ lazy val commonSettings = Seq(
 ) ++ warnUnusedImport
 
 lazy val commonJsSettings = Seq(
-  scalaJSStage in Global := FastOptStage
+  scalaJSStage in Global := FastOptStage,
+  parallelExecution := false
 )
 
 lazy val commonJvmSettings = Seq(
@@ -279,7 +280,7 @@ lazy val sharedReleaseProcess = Seq(
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
-    runClean,
+    //runClean, // disabled to reduce memory usage during release
     runTest,
     setReleaseVersion,
     commitReleaseVersion,

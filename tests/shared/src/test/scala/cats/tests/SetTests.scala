@@ -4,6 +4,8 @@ package tests
 import cats.laws.discipline.{FoldableTests, MonoidKTests, SerializableTests}
 
 class SetTests extends CatsSuite {
+  checkAll("Set[Int]", algebra.laws.GroupLaws[Set[Int]].monoid)
+
   checkAll("Set[Int]", MonoidKTests[Set].monoidK[Int])
   checkAll("MonoidK[Set]", SerializableTests.serializable(MonoidK[Set]))
 

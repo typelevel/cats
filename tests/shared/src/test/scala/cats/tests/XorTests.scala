@@ -3,6 +3,7 @@ package tests
 
 import cats.data.Xor
 import cats.data.Xor._
+import cats.laws.discipline.arbitrary.xorArbitrary
 import cats.laws.discipline.{TraverseTests, MonadErrorTests, SerializableTests}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Prop._
@@ -12,6 +13,8 @@ import org.scalacheck.Arbitrary._
 import scala.util.Try
 
 class XorTests extends CatsSuite {
+  checkAll("Xor[String, Int]", algebra.laws.GroupLaws[Xor[String, Int]].monoid)
+
   checkAll("Xor[String, Int]", MonadErrorTests[Xor, String].monadError[Int, Int, Int])
   checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor, String]))
 

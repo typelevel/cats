@@ -105,6 +105,12 @@ class OptionTTests extends CatsSuite {
     }
   })
 
+  test("fromOption")(check {
+    forAll { (o: Option[Int]) =>
+      List(o) == OptionT.fromOption[List](o).value
+    }
+  })
+
   checkAll("OptionT[List, Int]", MonadTests[OptionT[List, ?]].monad[Int, Int, Int])
   checkAll("MonadOptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
 }
