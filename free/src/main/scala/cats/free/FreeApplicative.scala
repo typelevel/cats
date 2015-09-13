@@ -38,7 +38,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   final def fold(implicit F: Applicative[F]): F[A] =
     foldMap(NaturalTransformation.id[F])
 
-  /** Interpreter this FreeApplicative algebra into another using FreeApplicative. */
+  /** Interpret this algebra into another FreeApplicative */
   final def compile[G[_]](f: F ~> G): FA[G, A] =
     foldMap[FA[G, ?]] {
       new NaturalTransformation[F, FA[G, ?]] {
