@@ -30,9 +30,7 @@ trait VectorInstances {
       }
 
       def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
-        G.map(
-          fa.foldLeft(G.pure(Vector.empty[B]))((acc, a) => G.map2(f(a), acc)(_ +: _))
-        )(_.reverse)
+        fa.foldLeft(G.pure(Vector.empty[B]))((buf, a) => G.map2(buf, f(a))(_ :+ _))
 
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)

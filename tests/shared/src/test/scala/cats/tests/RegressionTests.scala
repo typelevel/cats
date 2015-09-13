@@ -1,6 +1,8 @@
 package cats
 package tests
 
+import cats.data.Const
+
 import scala.collection.mutable
 
 class RegressionTests extends CatsSuite {
@@ -73,5 +75,11 @@ class RegressionTests extends CatsSuite {
       State[String, Unit](s => ((), s + "3"))
     )((_: Unit, _: Unit, _: Unit) => ()).run("")._2
     assert(oneTwoThree == "123")
+  }
+
+  test("#500: foldMap - traverse consistency") {
+    assert(
+      List(1,2,3).traverseU(i => Const(List(i))).getConst == List(1,2,3).foldMap(List(_))
+    )
   }
 }
