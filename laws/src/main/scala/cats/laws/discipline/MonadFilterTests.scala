@@ -9,14 +9,10 @@ import Prop._
 trait MonadFilterTests[F[_]] extends MonadTests[F] {
   def laws: MonadFilterLaws[F]
 
-  def monadFilter[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-    ArbF: ArbitraryK[F],
-    EqFA: Eq[F[A]],
-    EqFB: Eq[F[B]],
-    EqFC: Eq[F[C]]
-  ): RuleSet = {
-    implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
-    implicit def ArbFB: Arbitrary[F[B]] = ArbF.synthesize[B]
+  def monadFilter[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq]: RuleSet = {
+    implicit def ArbFA: Arbitrary[F[A]] = ArbitraryK[F].synthesize
+    implicit def ArbFB: Arbitrary[F[B]] = ArbitraryK[F].synthesize
+    implicit def EqFB: Eq[F[B]] = EqK[F].synthesize
 
     new DefaultRuleSet(
       name = "monadFilter",
@@ -27,6 +23,10 @@ trait MonadFilterTests[F[_]] extends MonadTests[F] {
 }
 
 object MonadFilterTests {
-  def apply[F[_]: MonadFilter]: MonadFilterTests[F] =
-    new MonadFilterTests[F] { def laws: MonadFilterLaws[F] = MonadFilterLaws[F] }
+  def apply[F[_]: MonadFilter: ArbitraryK: EqK]: MonadFilterTests[F] =
+    new MonadFilterTests[F] {
+      def arbitraryK: ArbitraryK[F] = implicitly
+      def eqK: EqK[F] = implicitly
+      def laws: MonadFilterLaws[F] = MonadFilterLaws[F]
+    }
 }

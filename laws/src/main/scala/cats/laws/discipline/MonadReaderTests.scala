@@ -8,7 +8,10 @@ import org.scalacheck.Prop.forAll
 trait MonadReaderTests[F[_, _], R] extends MonadTests[F[R, ?]] {
   def laws: MonadReaderLaws[F, R]
 
-  def monadReader[A : Arbitrary, B : Arbitrary, C : Arbitrary](implicit
+  implicit def arbitraryK: ArbitraryK[F[R, ?]]
+  implicit def eqK: EqK[F[R, ?]]
+
+  def monadReader[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
     ArbF: ArbitraryK[F[R, ?]],
     EqFA: Eq[F[R, A]],
     EqFB: Eq[F[R, B]],
@@ -34,6 +37,10 @@ trait MonadReaderTests[F[_, _], R] extends MonadTests[F[R, ?]] {
 }
 
 object MonadReaderTests {
-  def apply[F[_, _], R](implicit FR: MonadReader[F, R]): MonadReaderTests[F, R] =
-    new MonadReaderTests[F, R] { def laws: MonadReaderLaws[F, R] = MonadReaderLaws[F, R] }
+  def apply[F[_, _], R](implicit FR: MonadReader[F, R], arbKFR: ArbitraryK[F[R, ?]], eqKFR: EqK[F[R, ?]]): MonadReaderTests[F, R] =
+    new MonadReaderTests[F, R] {
+      def arbitraryK: ArbitraryK[F[R, ?]] = arbKFR
+      def eqK: EqK[F[R, ?]] = eqKFR
+      def laws: MonadReaderLaws[F, R] = MonadReaderLaws[F, R]
+    }
 }

@@ -65,6 +65,11 @@ import simulacrum.typeclass
     }
 
   /**
+   * Alias for [[fold]].
+   */
+  def combineAll[A: Monoid](fa: F[A]): A = fold(fa)
+
+  /**
    * Fold implemented by mapping `A` values into `B` and then
    * combining them using the given `Monoid[B]` instance.
    */
@@ -211,7 +216,7 @@ trait CompositeFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] {
   implicit def G: Foldable[G]
 
   /**
-   *  Left assocative fold on F[G[A]] using 'f'
+   *  Left associative fold on F[G[A]] using 'f'
    */
   def foldLeft[A, B](fga: F[G[A]], b: B)(f: (B, A) => B): B =
     F.foldLeft(fga, b)((b, a) => G.foldLeft(a, b)(f))

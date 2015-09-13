@@ -8,15 +8,17 @@ import org.scalacheck.Prop.forAll
 trait MonadErrorTests[F[_, _], E] extends MonadTests[F[E, ?]] {
   def laws: MonadErrorLaws[F, E]
 
-  def monadError[A : Arbitrary, B : Arbitrary, C : Arbitrary](implicit
-    ArbF: ArbitraryK[F[E, ?]],
-    EqFA: Eq[F[E, A]],
-    EqFB: Eq[F[E, B]],
-    EqFC: Eq[F[E, C]],
-    ArbE: Arbitrary[E]
-  ): RuleSet = {
-    implicit def ArbFEA: Arbitrary[F[E, A]] = ArbF.synthesize[A]
-    implicit def ArbFEB: Arbitrary[F[E, B]] = ArbF.synthesize[B]
+  implicit def arbitraryK: ArbitraryK[F[E, ?]]
+  implicit def eqK: EqK[F[E, ?]]
+
+  implicit def arbitraryE: Arbitrary[E]
+  implicit def eqE: Eq[E]
+
+  def monadError[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq]: RuleSet = {
+    implicit def ArbFEA: Arbitrary[F[E, A]] = arbitraryK.synthesize[A]
+    implicit def ArbFEB: Arbitrary[F[E, B]] = arbitraryK.synthesize[B]
+    implicit def EqFEA: Eq[F[E, A]] = eqK.synthesize[A]
+    implicit def EqFEB: Eq[F[E, B]] = eqK.synthesize[B]
 
     new RuleSet {
       def name: String = "monadError"
@@ -32,6 +34,12 @@ trait MonadErrorTests[F[_, _], E] extends MonadTests[F[E, ?]] {
 }
 
 object MonadErrorTests {
-  def apply[F[_, _], E](implicit FE: MonadError[F, E]): MonadErrorTests[F, E] =
-    new MonadErrorTests[F, E] { def laws: MonadErrorLaws[F, E] = MonadErrorLaws[F, E] }
+  def apply[F[_, _], E: Arbitrary: Eq](implicit FE: MonadError[F, E], ArbKFE: ArbitraryK[F[E, ?]], EqKFE: EqK[F[E, ?]]): MonadErrorTests[F, E] =
+    new MonadErrorTests[F, E] {
+      def arbitraryE: Arbitrary[E] = implicitly[Arbitrary[E]]
+      def arbitraryK: ArbitraryK[F[E, ?]] = ArbKFE
+      def eqE: Eq[E] = Eq[E]
+      def eqK: EqK[F[E, ?]] = EqKFE
+      def laws: MonadErrorLaws[F, E] = MonadErrorLaws[F, E]
+    }
 }

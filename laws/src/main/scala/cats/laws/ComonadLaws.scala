@@ -16,15 +16,6 @@ trait ComonadLaws[F[_]] extends CoflatMapLaws[F] {
   def mapCoflattenIdentity[A](fa: F[A]): IsEq[F[A]] =
     fa.coflatten.map(_.extract) <-> fa
 
-  def coflattenThroughMap[A](fa: F[A]): IsEq[F[F[F[A]]]] =
-    fa.coflatten.coflatten <-> fa.coflatten.map(_.coflatten)
-
-  def coflattenCoherence[A, B](fa: F[A], f: F[A] => B): IsEq[F[B]] =
-    fa.coflatMap(f) <-> fa.coflatten.map(f)
-
-  def coflatMapIdentity[A, B](fa: F[A]): IsEq[F[F[A]]] =
-    fa.coflatten <-> fa.coflatMap(identity)
-
   def mapCoflatMapCoherence[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
     fa.map(f) <-> fa.coflatMap(fa0 => f(fa0.extract))
 

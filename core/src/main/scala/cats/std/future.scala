@@ -1,7 +1,7 @@
 package cats
 package std
 
-import cats.syntax.group._
+import cats.syntax.all._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.FiniteDuration

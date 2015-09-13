@@ -2,7 +2,7 @@ package cats
 package state
 
 import cats.tests.CatsSuite
-import cats.laws.discipline.{ArbitraryK, MonadStateTests, MonoidKTests, SerializableTests}
+import cats.laws.discipline.{ArbitraryK, EqK, MonadStateTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen, Prop}, Prop.forAll
 
@@ -61,6 +61,14 @@ object StateTTests {
   implicit def stateEq[F[_], S, A](implicit S: Arbitrary[S], FSA: Eq[F[(S, A)]], F: FlatMap[F]): Eq[StateT[F, S, A]] =
     Eq.by[StateT[F, S, A], S => F[(S, A)]](state =>
       s => state.run(s))
+
+  implicit def stateEqK[F[_]: FlatMap: EqK, S: Arbitrary: Eq]: EqK[StateT[F, S, ?]] =
+    new EqK[StateT[F, S, ?]] {
+      def synthesize[A: Eq]: Eq[StateT[F, S, A]] = {
+        implicit val fsa: Eq[F[(S, A)]] = EqK[F].synthesize[(S, A)]
+        stateEq[F, S, A]
+      }
+    }
 
   val add1: State[Int, Int] = State(n => (n + 1, n))
 }

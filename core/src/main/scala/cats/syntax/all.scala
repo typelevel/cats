@@ -15,6 +15,7 @@ trait AllSyntax
     with FunctorSyntax
     with GroupSyntax
     with InvariantSyntax
+    with ListSyntax
     with MonadCombineSyntax
     with MonadFilterSyntax
     with OptionSyntax

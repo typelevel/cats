@@ -14,13 +14,12 @@ trait ComonadTests[F[_]] extends CoflatMapTests[F] {
   def laws: ComonadLaws[F]
 
   def comonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq]: RuleSet = {
-    implicit def ArbFA: Arbitrary[F[A]] = ArbitraryK[F].synthesize[A]
-
-    implicit val eqfa: Eq[F[A]] = EqK[F].synthesize[A]
-    implicit val eqffa: Eq[F[F[A]]] = EqK[F].synthesize[F[A]]
-    implicit val eqfffa: Eq[F[F[F[A]]]] = EqK[F].synthesize[F[F[A]]]
-    implicit val eqfb: Eq[F[B]] = EqK[F].synthesize[B]
-    implicit val eqfc: Eq[F[C]] = EqK[F].synthesize[C]
+    implicit def ArbFA: Arbitrary[F[A]] = ArbitraryK[F].synthesize
+    implicit val eqfa: Eq[F[A]] = EqK[F].synthesize
+    implicit val eqffa: Eq[F[F[A]]] = EqK[F].synthesize
+    implicit val eqfffa: Eq[F[F[F[A]]]] = EqK[F].synthesize
+    implicit val eqfb: Eq[F[B]] = EqK[F].synthesize
+    implicit val eqfc: Eq[F[C]] = EqK[F].synthesize
 
     new DefaultRuleSet(
       name = "comonad",
