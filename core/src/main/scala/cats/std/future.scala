@@ -1,9 +1,9 @@
 package cats
 package std
 
-import cats.syntax.eq._
+import cats.syntax.all._
 
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.FiniteDuration
 
 trait FutureInstances extends FutureInstances1 {
@@ -23,39 +23,38 @@ trait FutureInstances extends FutureInstances1 {
       override def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
     }
 
-  implicit def futureSemigroup[A](implicit A: Semigroup[A], ec: ExecutionContext): Semigroup[Future[A]] =
-    new FutureSemigroup[A]()
-
-  def futureEq[A](atMost: FiniteDuration)(implicit A: Eq[A], ec: ExecutionContext): Eq[Future[A]] =
-    new Eq[Future[A]] {
-      def eqv(fx: Future[A], fy: Future[A]): Boolean =
-        Await.result((fx zip fy).map { case (x, y) => x === y }, atMost)
-    }
+  implicit def futureGroup[A: Group](implicit ec: ExecutionContext): Group[Future[A]] =
+    new FutureGroup[A]
 }
 
-trait FutureInstances1 {
-
-  def futureComonad(atMost: FiniteDuration)(implicit ec: ExecutionContext): Comonad[Future] =
-    new FutureCoflatMap with Comonad[Future] {
-
-      def extract[A](x: Future[A]): A = Await.result(x, atMost)
-
-      def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
-    }
-
-  implicit def futureMonoid[A](implicit A: Monoid[A], ec: ExecutionContext): Monoid[Future[A]] =
-    new FutureSemigroup[A] with Monoid[Future[A]] {
-
-      def empty: Future[A] = Future.successful(A.empty)
-    }
+trait FutureInstances1 extends FutureInstances2 {
+  implicit def futureMonoid[A: Monoid](implicit ec: ExecutionContext): Monoid[Future[A]] =
+    new FutureMonoid[A]
 }
 
-private[std] abstract class FutureCoflatMap(implicit ec: ExecutionContext) extends CoflatMap[Future] {
+trait FutureInstances2 {
+  implicit def futureSemigroup[A: Semigroup](implicit ec: ExecutionContext): Semigroup[Future[A]] =
+    new FutureSemigroup[A]
+}
 
+private[cats] abstract class FutureCoflatMap(implicit ec: ExecutionContext) extends CoflatMap[Future] {
+  def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
   def coflatMap[A, B](fa: Future[A])(f: Future[A] => B): Future[B] = Future(f(fa))
 }
 
-private[std] class FutureSemigroup[A](implicit A: Semigroup[A], ec: ExecutionContext) extends Semigroup[Future[A]] {
+private[cats] class FutureSemigroup[A: Semigroup](implicit ec: ExecutionContext) extends Semigroup[Future[A]] {
+  def combine(fx: Future[A], fy: Future[A]): Future[A] =
+    (fx zip fy).map { case (x, y) => x |+| y }
+}
 
-  def combine(fx: Future[A], fy: Future[A]): Future[A] = (fx zip fy).map((A.combine _).tupled)
+private[cats] class FutureMonoid[A](implicit A: Monoid[A], ec: ExecutionContext) extends FutureSemigroup[A] with Monoid[Future[A]] {
+  def empty: Future[A] =
+    Future.successful(A.empty)
+}
+
+private[cats] class FutureGroup[A](implicit A: Group[A], ec: ExecutionContext) extends FutureMonoid[A] with Group[Future[A]] {
+  def inverse(fx: Future[A]): Future[A] =
+    fx.map(_.inverse)
+  override def remove(fx: Future[A], fy: Future[A]): Future[A] =
+    (fx zip fy).map { case (x, y) => x |-| y }
 }
