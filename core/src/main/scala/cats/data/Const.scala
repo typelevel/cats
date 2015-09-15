@@ -75,7 +75,7 @@ sealed abstract class ConstInstances0 extends ConstInstances1 {
       Const.empty
 
     def ap[A, B](fa: Const[C, A])(f: Const[C, A => B]): Const[C, B] =
-      fa.retag[B] combine f.retag[B]
+      f.retag[B] combine fa.retag[B]
   }
 }
 

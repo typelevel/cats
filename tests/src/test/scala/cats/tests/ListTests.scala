@@ -13,7 +13,7 @@ class ListTests extends CatsSuite with GeneratorDrivenPropertyChecks {
   checkAll("List[Int]", MonadCombineTests[List].monadCombine[Int, Int, Int])
   checkAll("MonadCombine[List]", SerializableTests.serializable(MonadCombine[List]))
 
-  checkAll("List[Int] with Option", TraverseTests[List].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("List[Int] with Option", TraverseTests[List].traverse[Int, Int, Int, List[Int], Option, Option])
   checkAll("Traverse[List]", SerializableTests.serializable(Traverse[List]))
 
   test("nel => list => nel returns original nel")(
