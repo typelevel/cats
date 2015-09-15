@@ -156,7 +156,13 @@ sealed abstract class XorInstances extends XorInstances1 {
       def show(f: A Xor B): String = f.show
     }
 
-  implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor, A ]=
+  implicit def xorMonoid[A, B](implicit A: Semigroup[A], B: Monoid[B]): Monoid[A Xor B] =
+    new Monoid[A Xor B] {
+      def empty: A Xor B = Xor.Right(B.empty)
+      def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
+    }
+
+  implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor, A ] =
     new Traverse[A Xor ?] with MonadError[Xor, A] {
       def traverse[F[_]: Applicative, B, C](fa: A Xor B)(f: B => F[C]): F[A Xor C] = fa.traverse(f)
       def foldLeft[B, C](fa: A Xor B, c: C)(f: (C, B) => C): C = fa.foldLeft(c)(f)

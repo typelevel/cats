@@ -35,8 +35,7 @@ trait StreamInstances {
           if (s.isEmpty) lb else f(s.head, Eval.defer(foldRight(s.tail, lb)(f)))
         }
 
-      def traverse[G[_]: Applicative, A, B](fa: Stream[A])(f: A => G[B]): G[Stream[B]] = {
-        val G = Applicative[G]
+      def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] = {
         def init: G[Stream[B]] = G.pure(Stream.empty[B])
 
         // We use foldRight to avoid possible stack overflows. Since
