@@ -1,5 +1,7 @@
 package cats
 
+import cats.data.Streaming
+
 import scala.collection.mutable
 import simulacrum.typeclass
 
@@ -206,6 +208,11 @@ import simulacrum.typeclass
       val F = self
       val G = ev
     }
+
+  def toStreaming[A](fa: F[A]): Streaming[A] =
+    foldRight(fa, Now(Streaming.empty[A])){ (a, ls) =>
+      Now(Streaming.cons(a, ls))
+    }.value
 }
 
 /**

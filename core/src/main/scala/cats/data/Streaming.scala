@@ -764,6 +764,9 @@ object Streaming extends StreamingInstances {
     loop(Empty(), as.reverse)
   }
 
+  def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Streaming[A] =
+    F.toStreaming(fa)
+
   /**
    * Create a stream from an iterable.
    *
@@ -919,6 +922,9 @@ trait StreamingInstances extends StreamingInstances1 {
 
       override def isEmpty[A](fa: Streaming[A]): Boolean =
         fa.isEmpty
+
+      override def toStreaming[A](fa: Streaming[A]): Streaming[A] =
+        fa
     }
 
   implicit def streamOrder[A: Order]: Order[Streaming[A]] =

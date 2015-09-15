@@ -4,6 +4,7 @@ package std
 import algebra.Eq
 import algebra.std.{ListMonoid, ListOrder}
 
+import cats.data.Streaming
 import cats.syntax.order._
 
 import scala.annotation.tailrec
@@ -62,6 +63,9 @@ trait ListInstances extends ListInstances1 {
         fa.forall(p)
 
       override def isEmpty[A](fa: List[A]): Boolean = fa.isEmpty
+
+      override def toStreaming[A](fa: List[A]): Streaming[A] =
+        Streaming.fromList(fa)
     }
 
   implicit def listAlgebra[A]: Monoid[List[A]] = new ListMonoid[A]

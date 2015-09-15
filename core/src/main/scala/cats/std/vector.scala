@@ -1,6 +1,8 @@
 package cats
 package std
 
+import cats.data.Streaming
+
 trait VectorInstances {
   implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] =
     new Traverse[Vector] with MonadCombine[Vector] {
@@ -36,6 +38,9 @@ trait VectorInstances {
         fa.exists(p)
 
       override def isEmpty[A](fa: Vector[A]): Boolean = fa.isEmpty
+
+      override def toStreaming[A](fa: Vector[A]): Streaming[A] =
+        Streaming.fromVector(fa)
     }
 
   // TODO: eventually use algebra's instances (which will deal with

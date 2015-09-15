@@ -36,6 +36,7 @@ abstract class FoldableCheck[F[_]: ArbitraryK: Foldable](name: String) extends C
   test("toList/isEmpty/nonEmpty") {
     forAll { (fa: F[Int]) =>
       fa.toList shouldBe iterator(fa).toList
+      fa.toStreaming.toList shouldBe iterator(fa).toList
       fa.isEmpty shouldBe iterator(fa).isEmpty
       fa.nonEmpty shouldBe iterator(fa).nonEmpty
     }
@@ -94,5 +95,8 @@ class FoldableTestsAdditional extends CatsSuite {
       if (n == 2) Now(true) else lb
     }
     assert(result.value)
+
+    // toStreaming should be lazy
+    assert(dangerous.toStreaming.take(3).toList == List(0, 1, 2))
   }
 }
