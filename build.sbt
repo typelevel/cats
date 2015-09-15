@@ -1,7 +1,6 @@
 import com.typesafe.sbt.pgp.PgpKeys.publishSigned
 import com.typesafe.sbt.SbtSite.SiteKeys._
 import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
-import pl.project13.scala.sbt.SbtJmh._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
@@ -189,8 +188,8 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
   .settings(noPublishSettings)
-  .settings(jmhSettings)
   .settings(commonJvmSettings)
+  .enablePlugins(JmhPlugin)
 
 // cats-js is JS-only
 lazy val js = project
