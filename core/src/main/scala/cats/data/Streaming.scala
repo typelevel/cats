@@ -474,7 +474,7 @@ sealed abstract class Streaming[A] { lhs =>
       case Empty() => Empty()
       case Wait(lt) => Wait(lt.map(_.take(n)))
       case Cons(a, lt) =>
-        Cons(a, if (n ==1) Now(Empty()) else lt.map(_.take(n - 1)))
+        Cons(a, if (n == 1) Now(Empty()) else lt.map(_.take(n - 1)))
     }
 
   /**
