@@ -50,22 +50,6 @@ object Coyoneda {
   /** `F[A]` converts to `Coyoneda[F,A]` for any `F` */
   def lift[F[_], A](fa: F[A]): Coyoneda[F, A] = apply(fa)(identity[A])
 
-  /**
-   * Represents a partially-built Coyoneda instance. Used in the `by` method.
-   */
-  final class By[F[_]] {
-    def apply[A, B](k: A => B)(implicit F: F[A]): Aux[F, B, A] = Coyoneda(F)(k)
-  }
-
-  /**
-   * Partial application of type parameters to `apply`.
-   *
-   * It can be nicer to say `Coyoneda.by[F]{ x: X => ... }`
-   *
-   * ...instead of `Coyoneda[...](...){ x => ... }`.
-   */
-  def by[F[_]]: By[F] = new By[F]
-
   /** Like `lift(fa).map(_k)`. */
   def apply[F[_], A, B](fa: F[A])(k0: A => B): Aux[F, B, A] =
     new Coyoneda[F, B] {

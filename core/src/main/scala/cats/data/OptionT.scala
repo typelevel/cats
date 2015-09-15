@@ -93,6 +93,25 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 object OptionT extends OptionTInstances {
   def pure[F[_], A](a: A)(implicit F: Applicative[F]): OptionT[F, A] =
     OptionT(F.pure(Some(a)))
+
+  /**
+   * Transforms an `Option` into an `OptionT`, lifted into the specified `Applicative`.
+   *
+   * Note: The return type is a FromOptionAux[F], which has an apply method on it, allowing
+   * you to call fromOption like this:
+   * {{{
+   * val t: Option[Int] = ...
+   * val x: OptionT[List, Int] = fromOption[List](t)
+   * }}}
+   *
+   * The reason for the indirection is to emulate currying type parameters.
+   */
+  def fromOption[F[_]]: FromOptionAux[F] = new FromOptionAux
+
+  class FromOptionAux[F[_]] private[OptionT] {
+    def apply[A](value: Option[A])(implicit F: Applicative[F]): OptionT[F, A] =
+      OptionT(F.pure(value))
+  }
 }
 
 // TODO create prioritized hierarchy for Functor, Monad, etc

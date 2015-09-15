@@ -92,25 +92,28 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, coreJVM, lawsJVM, freeJVM, stateJVM, testsJVM, docs, bench)
-  .dependsOn(macrosJVM, coreJVM, lawsJVM, freeJVM, stateJVM, testsJVM % "test-internal -> test", bench% "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, coreJVM, lawsJVM, freeJVM, stateJVM, testsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, coreJVM, lawsJVM, freeJVM, stateJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, coreJS, lawsJS, freeJS, stateJS, testsJS)
-  .dependsOn(macrosJS, coreJS, lawsJS, freeJS, stateJS, testsJS % "test-internal -> test")
+  .aggregate(macrosJS, coreJS, lawsJS, freeJS, stateJS, testsJS, js)
+  .dependsOn(macrosJS, coreJS, lawsJS, freeJS, stateJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
+
 
 lazy val macros = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-macros")
   .settings(catsSettings:_*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
+  .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
 
-lazy val macrosJVM = macros.jvm 
+lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
+
 
 lazy val core = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros)
@@ -125,24 +128,19 @@ lazy val core = crossProject.crossType(CrossType.Pure)
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
-lazy val laws = crossProject
+lazy val laws = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
-  .settings(libraryDependencies += "org.spire-math" %%% "algebra-laws" % "0.3.1")
+  .settings(libraryDependencies ++= Seq(
+    "org.spire-math" %%% "algebra-laws" % "0.3.1",
+    "com.github.inthenow" %%% "bricks-platform" % "0.0.1"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
-
-lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
-  .settings(moduleName := "cats-bench")
-  .settings(catsSettings)
-  .settings(noPublishSettings)
-  .settings(jmhSettings)
-  .settings(commonJvmSettings)
 
 lazy val free = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, tests % "test-internal -> test")
@@ -164,18 +162,42 @@ lazy val state = crossProject.crossType(CrossType.Pure)
 lazy val stateJVM = state.jvm
 lazy val stateJS = state.js
 
-lazy val tests = crossProject
+lazy val tests = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, laws)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
   .settings(noPublishSettings:_*)
-  .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test")
+  .settings(libraryDependencies ++= Seq(
+    "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test",
+    "com.github.inthenow" %%% "bricks-platform" % "0.0.1" % "test"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val testsJVM = tests.jvm
 lazy val testsJS = tests.js
+
+// cats-jvm is JVM-only
+lazy val jvm = project
+  .dependsOn(macrosJVM, coreJVM, testsJVM % "test-internal -> test")
+  .settings(moduleName := "cats-jvm")
+  .settings(catsSettings:_*)
+  .settings(commonJvmSettings:_*)
+
+// bench is currently JVM-only
+lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
+  .settings(moduleName := "cats-bench")
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .settings(jmhSettings)
+  .settings(commonJvmSettings)
+
+// cats-js is JS-only
+lazy val js = project
+  .dependsOn(macrosJS, coreJS, testsJS % "test-internal -> test")
+  .settings(moduleName := "cats-js")
+  .settings(catsSettings:_*)
+  .settings(commonJsSettings:_*)
 
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/non/cats")),
