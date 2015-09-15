@@ -9,11 +9,11 @@ class UnapplyTests extends CatsSuite {
 
   test("Unapply works for stuff already the right kind") {
     val x = Traverse[List].traverseU(List(1,2,3))(Option(_))
-    assert(x == Some(List(1,2,3)))
+    x should === (Some(List(1,2,3)))
   }
 
   test("Unapply works for F[_,_] with the left fixed") {
     val x = Traverse[List].traverseU(List(1,2,3))(Xor.right(_))
-    assert(x == Xor.right(List(1,2,3)))
+    (x: String Xor List[Int]) should === (Xor.right(List(1,2,3)))
   }
 }

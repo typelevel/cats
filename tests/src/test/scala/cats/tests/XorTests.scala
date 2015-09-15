@@ -91,17 +91,13 @@ class XorTests extends CatsSuite {
   }
 
   test("recover ignores unhandled values") {
-    assert {
-      val xor = Xor.left[String, Int]("xor")
-      xor.recover { case "notxor" => 5 } === xor
-    }
+    val xor = Xor.left[String, Int]("xor")
+    xor.recover { case "notxor" => 5 } should === (xor)
   }
 
   test("recover ignores the right side") {
-    assert {
-      val xor = Xor.right[String, Int](10)
-      xor.recover { case "xor" => 5 } === xor
-    }
+    val xor = Xor.right[String, Int](10)
+    xor.recover { case "xor" => 5 } should === (xor)
   }
 
   test("recoverWith recovers handled values") {
@@ -112,17 +108,13 @@ class XorTests extends CatsSuite {
   }
 
   test("recoverWith ignores unhandled values") {
-    assert {
-      val xor = Xor.left[String, Int]("xor")
-      xor.recoverWith { case "notxor" => Xor.right[String, Int](5) } === xor
-    }
+    val xor = Xor.left[String, Int]("xor")
+    xor.recoverWith { case "notxor" => Xor.right[String, Int](5) } should === (xor)
   }
 
   test("recoverWith ignores the right side") {
-    assert {
-      val xor = Xor.right[String, Int](10)
-      xor.recoverWith { case "xor" => Xor.right[String, Int](5) } === xor
-    }
+    val xor = Xor.right[String, Int](10)
+    xor.recoverWith { case "xor" => Xor.right[String, Int](5) } should === (xor)
   }
 
   check {

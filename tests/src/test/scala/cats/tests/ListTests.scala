@@ -18,11 +18,11 @@ class ListTests extends CatsSuite with GeneratorDrivenPropertyChecks {
 
   test("nel => list => nel returns original nel")(
     forAll { fa: NonEmptyList[Int] =>
-      assert(fa.unwrap.toNel == Some(fa))
+      fa.unwrap.toNel should === (Some(fa))
     }
   )
 
   test("toNel on empty list returns None"){
-    assert(List.empty[Int].toNel == None)
+    List.empty[Int].toNel should === (None)
   }
 }

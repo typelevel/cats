@@ -40,7 +40,7 @@ class EvalTests extends CatsSuite {
         result should === (value)
         spin ^= result.##
       }
-      assert(spooky.counter == numEvals)
+      spooky.counter should === (numEvals)
     }
     (0 to 2).foreach(n => nTimes(n, numCalls(n)))
   }

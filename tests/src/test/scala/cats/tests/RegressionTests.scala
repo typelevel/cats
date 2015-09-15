@@ -25,6 +25,7 @@ class RegressionTests extends CatsSuite {
   val buf = mutable.ListBuffer.empty[String]
 
   case class Person(id: Int, name: String)
+  implicit val personEq: Eq[Person] = Eq.fromUniversalEquals
 
   def alloc(name: String): State[Int, Person] =
     State { id =>
@@ -36,18 +37,18 @@ class RegressionTests extends CatsSuite {
 
     // test result order
     val ons = List(Option(1), Option(2), Option(3))
-    assert(Traverse[List].sequence(ons) == Some(List(1, 2, 3)))
+    Traverse[List].sequence(ons) should === (Some(List(1, 2, 3)))
 
     // test order of effects using a contrived, unsafe state monad.
     val names = List("Alice", "Bob", "Claire")
     val allocated = names.map(alloc)
     val state = Traverse[List].sequence[State[Int, ?],Person](allocated)
     val (people, counter) = state.run(0)
-    assert(people == List(Person(0, "Alice"), Person(1, "Bob"), Person(2, "Claire")))
-    assert(counter == 3)
+    people should === (List(Person(0, "Alice"), Person(1, "Bob"), Person(2, "Claire")))
+    counter should === (3)
 
     // ensure that side-effects occurred in "correct" order
-    assert(buf.toList == names)
+    buf.toList should === (names)
   }
 
   test("#167: confirm ap2 order") {
@@ -55,7 +56,7 @@ class RegressionTests extends CatsSuite {
       State[String, Unit](s => ((), s + "1")),
       State[String, Unit](s => ((), s + "2"))
     )(State.instance[String].pure((_: Unit, _: Unit) => ())).run("")._2
-    assert(twelve == "12")
+    twelve should === ("12")
   }
 
   test("#167: confirm map2 order") {
@@ -63,7 +64,7 @@ class RegressionTests extends CatsSuite {
       State[String, Unit](s => ((), s + "1")),
       State[String, Unit](s => ((), s + "2"))
     )((_: Unit, _: Unit) => ()).run("")._2
-    assert(twelve == "12")
+    twelve should === ("12")
   }
 
   test("#167: confirm map3 order") {
@@ -72,6 +73,6 @@ class RegressionTests extends CatsSuite {
       State[String, Unit](s => ((), s + "2")),
       State[String, Unit](s => ((), s + "3"))
     )((_: Unit, _: Unit, _: Unit) => ()).run("")._2
-    assert(oneTwoThree == "123")
+    oneTwoThree should === ("123")
   }
 }
