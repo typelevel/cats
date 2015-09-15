@@ -109,7 +109,7 @@ class KleisliTests extends CatsSuite {
   test("lift") {
     val f = Kleisli.function { (x: Int) => (Some(x + 1): Option[Int]) }
     val l = f.lift[List]
-    assert((List(1, 2, 3) >>= l.run) == List(Some(2), Some(3), Some(4)))
+    (List(1, 2, 3) >>= l.run) should === (List(Some(2), Some(3), Some(4)))
   }
 
   test("transform") {
@@ -118,7 +118,7 @@ class KleisliTests extends CatsSuite {
     val list = opt.transform(optToList)
 
     val is = 0.to(10).toList
-    assert(is.map(list.run) == is.map(Kleisli.function { (x: Int) => List(x.toDouble) }.run))
+    is.map(list.run) should === (is.map(Kleisli.function { (x: Int) => List(x.toDouble) }.run))
   }
 
   test("local") {
@@ -129,6 +129,6 @@ class KleisliTests extends CatsSuite {
     val kconfig2 = Kleisli.function { (c: Config) => Option(c.i.toDouble) }
 
     val config = Config(0, "cats")
-    assert(kconfig1.run(config) == kconfig2.run(config))
+    kconfig1.run(config) should === (kconfig2.run(config))
   }
 }

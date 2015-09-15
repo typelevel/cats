@@ -45,8 +45,8 @@ class WordCountTest extends CatsSuite {
     val lineCount = allResults.first.second
     val charCount = allResults.second
     val wordCount = wordCountState.runA(false).run
-    assert(charCount.getConst == 96 &&
-      lineCount.getConst == 2 &&
-      wordCount.getConst == 17)
+    charCount.getConst should === (96)
+    lineCount.getConst should === (2)
+    wordCount.getConst should === (17)
   }
 }

@@ -40,7 +40,7 @@ class FreeApplicativeTests extends CatsSuite {
     val y = FreeApplicative.pure[Option, Int](n)
     val f = x.map(i => (j: Int) => i + j)
     val r = y.ap(f)
-    assert(r.fold == Apply[Option].map2(o1, o2)(_ + _))
+    r.fold should === (Apply[Option].map2(o1, o2)(_ + _))
   }
 
   test("FreeApplicative#compile") {
@@ -50,7 +50,7 @@ class FreeApplicativeTests extends CatsSuite {
     val nt = NaturalTransformation.id[Id]
     val r1 = y.ap(f)
     val r2 = r1.compile(nt)
-    assert(r1.foldMap(nt) == r2.foldMap(nt))
+    r1.foldMap(nt) should === (r2.foldMap(nt))
   }
 
   test("FreeApplicative#monad") {
@@ -63,6 +63,6 @@ class FreeApplicativeTests extends CatsSuite {
       new NaturalTransformation[Id, Id] {
         def apply[A](fa: Id[A]): Id[A] = fa
       }
-    assert(r1.foldMap(nt) == r2.foldMap(nt))
+    r1.foldMap(nt) should === (r2.foldMap(nt))
   }
 }

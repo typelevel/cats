@@ -57,13 +57,13 @@ class FoldableTestsAdditional extends CatsSuite {
     // some basic sanity checks
     val ns = (1 to 10).toList
     val total = ns.sum
-    assert(F.foldLeft(ns, 0)(_ + _) == total)
-    assert(F.foldRight(ns, Now(0))((x, ly) => ly.map(x + _)).value == total)
-    assert(F.fold(ns) == total)
+    F.foldLeft(ns, 0)(_ + _) should === (total)
+    F.foldRight(ns, Now(0))((x, ly) => ly.map(x + _)).value should === (total)
+    F.fold(ns) should === (total)
 
     // more basic checks
     val names = List("Aaron", "Betty", "Calvin", "Deirdra")
-    assert(F.foldMap(names)(_.length) == names.map(_.length).sum)
+    F.foldMap(names)(_.length) should === (names.map(_.length).sum)
 
     // test trampolining
     val large = (1 to 10000).toList
@@ -71,7 +71,7 @@ class FoldableTestsAdditional extends CatsSuite {
 
     // safely build large lists
     val larger = F.foldRight(large, Now(List.empty[Int]))((x, lxs) => lxs.map((x + 1) :: _))
-    assert(larger.value == large.map(_ + 1))
+    larger.value should === (large.map(_ + 1))
   }
 
   test("Foldable[Stream]") {
