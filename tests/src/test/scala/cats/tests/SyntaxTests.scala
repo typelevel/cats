@@ -1,6 +1,8 @@
 package cats
 package tests
 
+import cats.std.AllInstances
+import cats.syntax.AllSyntax
 import algebra.laws.GroupLaws
 import cats.functor.{Invariant, Contravariant}
 import cats.laws.discipline.SerializableTests
@@ -27,7 +29,7 @@ import scala.reflect.runtime.universe.TypeTag
  *
  * None of these tests should ever run, or do any runtime checks.
  */
-class SyntaxTests extends CatsSuite with PropertyChecks {
+class SyntaxTests extends AllInstances with AllSyntax {
 
   // pretend we have a value of type A
   def mock[A]: A = ???

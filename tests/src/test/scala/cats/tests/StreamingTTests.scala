@@ -50,6 +50,6 @@ class SpecificStreamingTTests extends CatsSuite {
 
     val x = fa.flatMap(f).flatMap(g)
     val y = fa.flatMap(a => f(a).flatMap(g))
-    assert(x === y)
+    x should === (y)
   }
 }

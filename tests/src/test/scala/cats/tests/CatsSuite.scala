@@ -4,7 +4,7 @@ package tests
 import bricks.Platform
 
 import cats.std.AllInstances
-import cats.syntax.AllSyntax
+import cats.syntax.{AllSyntax, EqOps}
 
 import org.scalactic.anyvals.{PosZDouble, PosInt}
 import org.scalatest.{FunSuite, PropSpec, Matchers}
@@ -32,12 +32,13 @@ trait TestSettings extends Configuration with Matchers {
  * An opinionated stack of traits to improve consistency and reduce
  * boilerplate in Cats tests.
  */
-trait CatsSuite extends FunSuite with Discipline with TestSettings with AllInstances with AllSyntax with TestInstances {
+trait CatsSuite extends FunSuite with Matchers with Discipline with TestSettings with AllInstances with AllSyntax with TestInstances with StrictCatsEquality {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration
 
-  // disable scalatest's ===
-  override def convertToEqualizer[T](left: T): Equalizer[T] = ???
+  // disable Eq syntax (by making `eqSyntax` not implicit), since it collides
+  // with scalactic's equality
+  override def eqSyntax[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
 }
 
 trait CatsProps extends PropSpec with PropertyChecks with TestSettings with TestInstances {
