@@ -274,7 +274,7 @@ lazy val commonScalacOptions = Seq(
   "-language:experimental.macros",
   "-unchecked",
   "-Xfatal-warnings",
-  "-Xlint:-missing-interpolator,_",
+  "-Xlint",
   "-Yinline-warnings",
   "-Yno-adapted-args",
   "-Ywarn-dead-code",
