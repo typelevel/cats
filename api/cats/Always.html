@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../lib/template.js"></script>
       <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../lib/modernizr.custom.js"></script><script type="text/javascript" src="../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
@@ -43,7 +43,7 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
@@ -365,6 +365,27 @@ function <code>f</code>.</p><p>This call is stack-safe -- many .map calls may be
 consumed additional stack during evaluation.</p><p>Computation performed in f is always lazy, even when called on an
 eager (Now) instance.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Eval.html" class="extype" name="cats.Eval">Eval</a></dd></dl></div>
+    </li><li name="cats.Always#memoize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="memoize:cats.Eval[A]"></a>
+      <a id="memoize:Eval[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">memoize</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Always.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Always@memoize:cats.Eval[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Ensure that the result of the computation (if any) will be
+memoized.</p><div class="fullcomment"><div class="comment cmt"><p>Ensure that the result of the computation (if any) will be
+memoized.</p><p>Practically, this means that when called on an Always[A] a
+Later[A] with an equivalent computation will be returned.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.Always">Always</a> → <a href="Eval.html" class="extype" name="cats.Eval">Eval</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

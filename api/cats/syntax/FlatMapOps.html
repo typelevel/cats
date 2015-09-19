@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -165,12 +165,12 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.syntax.FlatMapOps#&gt;&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.syntax.FlatMapOps#&gt;&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&gt;&gt;[B](fb:F[B]):F[B]"></a>
       <a id="&gt;&gt;[B](F[B]):F[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -181,7 +181,10 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Alias for <a href="#followedBy[B](fb:F[B]):F[B]" class="extmbr" name="cats.syntax.FlatMapOps#followedBy">followedBy</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="#followedBy[B](fb:F[B]):F[B]" class="extmbr" name="cats.syntax.FlatMapOps#followedBy">followedBy</a>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@inline</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="cats.syntax.FlatMapOps#&gt;&gt;=" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="&gt;&gt;=[B](f:A=&gt;F[B]):F[B]"></a>
       <a id="&gt;&gt;=[B]((A)⇒F[B]):F[B]"></a>
@@ -313,6 +316,42 @@
       </a>
     </span>
       
+    </li><li name="cats.syntax.FlatMapOps#followedBy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="followedBy[B](fb:F[B]):F[B]"></a>
+      <a id="followedBy[B](F[B]):F[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">followedBy</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.syntax.FlatMapOps.F">F</span>[<span class="extype" name="cats.syntax.FlatMapOps.followedBy.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.FlatMapOps.F">F</span>[<span class="extype" name="cats.syntax.FlatMapOps.followedBy.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.FlatMapOps@followedBy[B](fb:F[B]):F[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sequentially compose two actions, discarding any value produced by the first.</p>
+    </li><li name="cats.syntax.FlatMapOps#followedByEval" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="followedByEval[B](fb:cats.Eval[F[B]]):F[B]"></a>
+      <a id="followedByEval[B](Eval[F[B]]):F[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">followedByEval</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="fb">fb: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.syntax.FlatMapOps.F">F</span>[<span class="extype" name="cats.syntax.FlatMapOps.followedByEval.B">B</span>]]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.FlatMapOps.F">F</span>[<span class="extype" name="cats.syntax.FlatMapOps.followedByEval.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.FlatMapOps@followedByEval[B](fb:cats.Eval[F[B]]):F[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sequentially compose two actions, discarding any value produced by the first.</p><div class="fullcomment"><div class="comment cmt"><p>Sequentially compose two actions, discarding any value produced by the first. This variant of
+<a href="#followedBy[B](fb:F[B]):F[B]" class="extmbr" name="cats.syntax.FlatMapOps#followedBy">followedBy</a> also lets you define the evaluation strategy of the second action. For instance
+you can evaluate it only <i>after</i> the first action has finished:</p><pre>fa.followedByEval(later(fb))</pre></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>

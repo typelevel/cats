@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -28,10 +28,12 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img alt="Trait" src="../../lib/trait_big.png" />
+        <a href="NaturalTransformation$.html" title="See companion object"><img alt="Trait/Object" src="../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.arrow">arrow</a></p>
-        <h1>NaturalTransformation</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="cats.arrow">package arrow</a>
+        <h1><a href="NaturalTransformation$.html" title="See companion object">NaturalTransformation</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="NaturalTransformation$.html" title="See companion object">object NaturalTransformation</a>
+            | <a href="package.html" class="extype" name="cats.arrow">package arrow</a>
           </div></span></h3><span class="permalink">
       <a href="../../index.html#cats.arrow.NaturalTransformation" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
@@ -49,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/arrow/NaturalTransformation.scala" target="_blank">NaturalTransformation.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.arrow.NaturalTransformation.F">F</span>, <span class="extype" name="cats.arrow.NaturalTransformation.G">G</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/arrow/NaturalTransformation.scala" target="_blank">NaturalTransformation.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -165,6 +167,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.arrow.NaturalTransformation#andThen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="andThen[H[_]](f:cats.arrow.NaturalTransformation[G,H]):cats.arrow.NaturalTransformation[F,H]"></a>
+      <a id="andThen[H[_]](NaturalTransformation[G,H]):NaturalTransformation[F,H]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.arrow.NaturalTransformation.G">G</span>, <span class="extype" name="cats.arrow.NaturalTransformation.andThen.H">H</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.arrow.NaturalTransformation.F">F</span>, <span class="extype" name="cats.arrow.NaturalTransformation.andThen.H">H</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.NaturalTransformation@andThen[H[_]](f:cats.arrow.NaturalTransformation[G,H]):cats.arrow.NaturalTransformation[F,H]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -205,6 +224,23 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.arrow.NaturalTransformation#compose" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="compose[E[_]](f:cats.arrow.NaturalTransformation[E,F]):cats.arrow.NaturalTransformation[E,G]"></a>
+      <a id="compose[E[_]](NaturalTransformation[E,F]):NaturalTransformation[E,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="tparams">[<span name="E">E<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.arrow.NaturalTransformation.compose.E">E</span>, <span class="extype" name="cats.arrow.NaturalTransformation.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.arrow.NaturalTransformation.compose.E">E</span>, <span class="extype" name="cats.arrow.NaturalTransformation.G">G</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.arrow.NaturalTransformation@compose[E[_]](f:cats.arrow.NaturalTransformation[E,F]):cats.arrow.NaturalTransformation[E,G]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>

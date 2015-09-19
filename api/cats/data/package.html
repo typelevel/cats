@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -88,7 +88,58 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.data.Cokleisli" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="cats.data.AppFunc" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AppFunc[F[_],A,B]extendsFunc[F,A,B]"></a>
+      <a id="AppFunc[F[_],A,B]:AppFunc[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AppFunc.html"><span class="name">AppFunc</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <a href="Func.html" class="extype" name="cats.data.Func">Func</a>[<span class="extype" name="cats.data.AppFunc.F">F</span>, <span class="extype" name="cats.data.AppFunc.A">A</span>, <span class="extype" name="cats.data.AppFunc.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@AppFunc[F[_],A,B]extendsFunc[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An implementation of <a href="Func.html" class="extype" name="cats.data.Func">Func</a> that's specialized to <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>.</p>
+    </li><li name="cats.data.AppFuncApplicative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AppFuncApplicative[F[_],C]extendsApplicative[[X]cats.data.AppFunc[F,C,X]]"></a>
+      <a id="AppFuncApplicative[F[_],C]:AppFuncApplicative[F,C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AppFuncApplicative.html"><span class="name">AppFuncApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[X]<a href="AppFunc.html" class="extype" name="cats.data.AppFunc">AppFunc</a>[<span class="extype" name="cats.data.AppFuncApplicative.F">F</span>, <span class="extype" name="cats.data.AppFuncApplicative.C">C</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@AppFuncApplicative[F[_],C]extendsApplicative[[X]cats.data.AppFunc[F,C,X]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.AppFuncInstances" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AppFuncInstancesextendsAnyRef"></a>
+      <a id="AppFuncInstances:AppFuncInstances"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AppFuncInstances.html"><span class="name">AppFuncInstances</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@AppFuncInstancesextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.Cokleisli" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Cokleisli[F[_],A,B]extendsProductwithSerializable"></a>
       <a id="Cokleisli[F[_],A,B]:Cokleisli[F,A,B]"></a>
       <h4 class="signature">
@@ -222,6 +273,126 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.package@ConstInstances1extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.Func" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Func[F[_],A,B]extendsAnyRef"></a>
+      <a id="Func[F[_],A,B]:Func[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Func.html"><span class="name">Func</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@Func[F[_],A,B]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><a href="Func.html" class="extype" name="cats.data.Func">Func</a> is a function <code>A =&gt; F[B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p><a href="Func.html" class="extype" name="cats.data.Func">Func</a> is a function <code>A =&gt; F[B]</code>.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
+</p></div></div>
+    </li><li name="cats.data.FuncApplicative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FuncApplicative[F[_],C]extendsApplicative[[X]cats.data.Func[F,C,X]]withFuncApply[F,C]"></a>
+      <a id="FuncApplicative[F[_],C]:FuncApplicative[F,C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FuncApplicative.html"><span class="name">FuncApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[X]<a href="Func.html" class="extype" name="cats.data.Func">Func</a>[<span class="extype" name="cats.data.FuncApplicative.F">F</span>, <span class="extype" name="cats.data.FuncApplicative.C">C</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="FuncApply.html" class="extype" name="cats.data.FuncApply">FuncApply</a>[<span class="extype" name="cats.data.FuncApplicative.F">F</span>, <span class="extype" name="cats.data.FuncApplicative.C">C</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@FuncApplicative[F[_],C]extendsApplicative[[X]cats.data.Func[F,C,X]]withFuncApply[F,C]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.FuncApply" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FuncApply[F[_],C]extendsApply[[X]cats.data.Func[F,C,X]]withFuncFunctor[F,C]"></a>
+      <a id="FuncApply[F[_],C]:FuncApply[F,C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FuncApply.html"><span class="name">FuncApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[X]<a href="Func.html" class="extype" name="cats.data.Func">Func</a>[<span class="extype" name="cats.data.FuncApply.F">F</span>, <span class="extype" name="cats.data.FuncApply.C">C</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="FuncFunctor.html" class="extype" name="cats.data.FuncFunctor">FuncFunctor</a>[<span class="extype" name="cats.data.FuncApply.F">F</span>, <span class="extype" name="cats.data.FuncApply.C">C</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@FuncApply[F[_],C]extendsApply[[X]cats.data.Func[F,C,X]]withFuncFunctor[F,C]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.FuncFunctor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FuncFunctor[F[_],C]extendsFunctor[[X]cats.data.Func[F,C,X]]"></a>
+      <a id="FuncFunctor[F[_],C]:FuncFunctor[F,C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FuncFunctor.html"><span class="name">FuncFunctor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[X]<a href="Func.html" class="extype" name="cats.data.Func">Func</a>[<span class="extype" name="cats.data.FuncFunctor.F">F</span>, <span class="extype" name="cats.data.FuncFunctor.C">C</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@FuncFunctor[F[_],C]extendsFunctor[[X]cats.data.Func[F,C,X]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.FuncInstances" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FuncInstancesextendsFuncInstances0"></a>
+      <a id="FuncInstances:FuncInstances"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FuncInstances.html"><span class="name">FuncInstances</span></a><span class="result"> extends <a href="FuncInstances0.html" class="extype" name="cats.data.FuncInstances0">FuncInstances0</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@FuncInstancesextendsFuncInstances0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.FuncInstances0" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FuncInstances0extendsFuncInstances1"></a>
+      <a id="FuncInstances0:FuncInstances0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FuncInstances0.html"><span class="name">FuncInstances0</span></a><span class="result"> extends <a href="FuncInstances1.html" class="extype" name="cats.data.FuncInstances1">FuncInstances1</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@FuncInstances0extendsFuncInstances1" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.FuncInstances1" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FuncInstances1extendsAnyRef"></a>
+      <a id="FuncInstances1:FuncInstances1"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FuncInstances1.html"><span class="name">FuncInstances1</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@FuncInstances1extendsAnyRef" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -561,6 +732,228 @@ convenient methods for working with this nested structure.</p><p>It may also be 
       </a>
     </span>
       
+    </li><li name="cats.data.Prod" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Prod[F[_],G[_],A]extendsAnyRef"></a>
+      <a id="Prod[F[_],G[_],A]:Prod[F,G,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Prod.html"><span class="name">Prod</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@Prod[F[_],G[_],A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a> is a product to two independent functor values.</p><div class="fullcomment"><div class="comment cmt"><p><a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a> is a product to two independent functor values.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
+</p></div></div>
+    </li><li name="cats.data.ProdAlternative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdAlternative[F[_],G[_]]extendsAlternative[[X]cats.data.Prod[F,G,X]]withProdApplicative[F,G]withProdMonoidK[F,G]"></a>
+      <a id="ProdAlternative[F[_],G[_]]:ProdAlternative[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdAlternative.html"><span class="name">ProdAlternative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdAlternative.F">F</span>, <span class="extype" name="cats.data.ProdAlternative.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="ProdApplicative.html" class="extype" name="cats.data.ProdApplicative">ProdApplicative</a>[<span class="extype" name="cats.data.ProdAlternative.F">F</span>, <span class="extype" name="cats.data.ProdAlternative.G">G</span>] with <a href="ProdMonoidK.html" class="extype" name="cats.data.ProdMonoidK">ProdMonoidK</a>[<span class="extype" name="cats.data.ProdAlternative.F">F</span>, <span class="extype" name="cats.data.ProdAlternative.G">G</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdAlternative[F[_],G[_]]extendsAlternative[[X]cats.data.Prod[F,G,X]]withProdApplicative[F,G]withProdMonoidK[F,G]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdApplicative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdApplicative[F[_],G[_]]extendsApplicative[[X]cats.data.Prod[F,G,X]]withProdApply[F,G]"></a>
+      <a id="ProdApplicative[F[_],G[_]]:ProdApplicative[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdApplicative.html"><span class="name">ProdApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdApplicative.F">F</span>, <span class="extype" name="cats.data.ProdApplicative.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="ProdApply.html" class="extype" name="cats.data.ProdApply">ProdApply</a>[<span class="extype" name="cats.data.ProdApplicative.F">F</span>, <span class="extype" name="cats.data.ProdApplicative.G">G</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdApplicative[F[_],G[_]]extendsApplicative[[X]cats.data.Prod[F,G,X]]withProdApply[F,G]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdApply" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdApply[F[_],G[_]]extendsApply[[X]cats.data.Prod[F,G,X]]withProdFunctor[F,G]"></a>
+      <a id="ProdApply[F[_],G[_]]:ProdApply[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdApply.html"><span class="name">ProdApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdApply.F">F</span>, <span class="extype" name="cats.data.ProdApply.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="ProdFunctor.html" class="extype" name="cats.data.ProdFunctor">ProdFunctor</a>[<span class="extype" name="cats.data.ProdApply.F">F</span>, <span class="extype" name="cats.data.ProdApply.G">G</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdApply[F[_],G[_]]extendsApply[[X]cats.data.Prod[F,G,X]]withProdFunctor[F,G]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdFunctor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdFunctor[F[_],G[_]]extendsFunctor[[X]cats.data.Prod[F,G,X]]"></a>
+      <a id="ProdFunctor[F[_],G[_]]:ProdFunctor[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdFunctor.html"><span class="name">ProdFunctor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdFunctor.F">F</span>, <span class="extype" name="cats.data.ProdFunctor.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdFunctor[F[_],G[_]]extendsFunctor[[X]cats.data.Prod[F,G,X]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdInstance0" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdInstance0extendsProdInstance1"></a>
+      <a id="ProdInstance0:ProdInstance0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdInstance0.html"><span class="name">ProdInstance0</span></a><span class="result"> extends <a href="ProdInstance1.html" class="extype" name="cats.data.ProdInstance1">ProdInstance1</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdInstance0extendsProdInstance1" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdInstance1" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdInstance1extendsProdInstance2"></a>
+      <a id="ProdInstance1:ProdInstance1"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdInstance1.html"><span class="name">ProdInstance1</span></a><span class="result"> extends <a href="ProdInstance2.html" class="extype" name="cats.data.ProdInstance2">ProdInstance2</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdInstance1extendsProdInstance2" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdInstance2" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdInstance2extendsProdInstance3"></a>
+      <a id="ProdInstance2:ProdInstance2"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdInstance2.html"><span class="name">ProdInstance2</span></a><span class="result"> extends <a href="ProdInstance3.html" class="extype" name="cats.data.ProdInstance3">ProdInstance3</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdInstance2extendsProdInstance3" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdInstance3" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdInstance3extendsProdInstance4"></a>
+      <a id="ProdInstance3:ProdInstance3"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdInstance3.html"><span class="name">ProdInstance3</span></a><span class="result"> extends <a href="ProdInstance4.html" class="extype" name="cats.data.ProdInstance4">ProdInstance4</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdInstance3extendsProdInstance4" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdInstance4" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdInstance4extendsAnyRef"></a>
+      <a id="ProdInstance4:ProdInstance4"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdInstance4.html"><span class="name">ProdInstance4</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdInstance4extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdInstances" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdInstancesextendsProdInstance0"></a>
+      <a id="ProdInstances:ProdInstances"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdInstances.html"><span class="name">ProdInstances</span></a><span class="result"> extends <a href="ProdInstance0.html" class="extype" name="cats.data.ProdInstance0">ProdInstance0</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdInstancesextendsProdInstance0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdMonoidK" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdMonoidK[F[_],G[_]]extendsMonoidK[[X]cats.data.Prod[F,G,X]]withProdSemigroupK[F,G]"></a>
+      <a id="ProdMonoidK[F[_],G[_]]:ProdMonoidK[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdMonoidK.html"><span class="name">ProdMonoidK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="ProdSemigroupK.html" class="extype" name="cats.data.ProdSemigroupK">ProdSemigroupK</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdMonoidK[F[_],G[_]]extendsMonoidK[[X]cats.data.Prod[F,G,X]]withProdSemigroupK[F,G]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdSemigroupK" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdSemigroupK[F[_],G[_]]extendsSemigroupK[[X]cats.data.Prod[F,G,X]]"></a>
+      <a id="ProdSemigroupK[F[_],G[_]]:ProdSemigroupK[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdSemigroupK.html"><span class="name">ProdSemigroupK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdSemigroupK.F">F</span>, <span class="extype" name="cats.data.ProdSemigroupK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdSemigroupK[F[_],G[_]]extendsSemigroupK[[X]cats.data.Prod[F,G,X]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.Reader" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Reader[A,B]=cats.data.package.ReaderT[cats.Id,A,B]"></a>
       <a id="Reader[A,B]:Reader[A,B]"></a>
@@ -591,6 +984,180 @@ convenient methods for working with this nested structure.</p><p>It may also be 
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.package@ReaderT[F[_],A,B]=cats.data.Kleisli[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.Streaming" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Streaming[A]extendsAnyRef"></a>
+      <a id="Streaming[A]:Streaming[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Streaming.html"><span class="name">Streaming</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@Streaming[A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>Streaming[A]</code> represents a stream of values.</p><div class="fullcomment"><div class="comment cmt"><p><code>Streaming[A]</code> represents a stream of values. A stream can be
+thought of as a collection, with two key differences:</p><ol class="decimal"><li>It may be infinite; it does not necessarily have a finite
+    length. For this reason, there is no <code>.length</code> method.</li></ol><p> 2. It may be lazy. In other words, the entire stream may not be in
+    memory. In this case, each &quot;step&quot; of the stream has
+    instructions for producing the next step.</p><p>Streams are not necessarily lazy: they use <code>Eval[Streaming[A]]</code> to
+represent a tail that may (or may not be) lazy. If <code>Now[A]</code> is used
+for each tail, then <code>Streaming[A]</code> will behave similarly to
+<code>List[A]</code>. If <code>Later[A]</code> is used for each tail, then <code>Streaming[A]</code>
+will behave similarly to <code>scala.Stream[A]</code> (i.e. it will
+lazily-compute the tail, and will memoize the result to improve the
+performance of repeated traversals). If <code>Always[A]</code> is used for
+each tail, the result will be a lazy stream which does not memoize
+results (saving space at the cost of potentially-repeated
+calculations).</p><p>Since <code>Streaming[A]</code> has been compared to <code>scala.Stream[A]</code> it is
+worth noting some key differences between the two types:</p><ol class="decimal"><li>When the entire stream is known ahead of time, <code>Streaming[A]</code>
+    can represent it more efficiencly, using <code>Now[A]</code>, rather than
+    allocating a list of closures.</li></ol><p> 2. <code>Streaming[A]</code> does not memoize by default. This protects
+    against cases where a reference to head will prevent the entire
+    stream from being garbage collected, and is a better default.
+    A stream can be memoized later using the <code>.memoize</code> method.</p><p> 3. <code>Streaming[A]</code> does not inherit from the standard collections,
+    meaning a wide variety of methods which are dangerous on
+    streams (<code>.length</code>, <code>.apply</code>, etc.) are not present.</p><p> 4. <code>scala.Stream[A]</code> requires an immediate value for <code>.head</code>. This
+    means that operations like <code>.filter</code> will block until a
+    matching value is found, or the stream is exhausted (which
+    could be never in the case of an infinite stream). By contrast,
+    <code>Streaming[A]</code> values can be totally lazy (and can be
+    lazily-constructed using <code>Streaming.defer()</code>), so methods like
+    <code>.filter</code> are completely lazy.</p><p> 5. The use of <code>Eval[Streaming[A]]</code> to represent the &quot;tail&quot; of the
+    stream means that streams can be lazily (and safely)
+    constructed with <code>Foldable#foldRight</code>, and that <code>.map</code> and
+    <code>.flatMap</code> operations over the tail will be safely trampolined.
+</p></div></div>
+    </li><li name="cats.data.StreamingInstances" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StreamingInstancesextendsStreamingInstances1"></a>
+      <a id="StreamingInstances:StreamingInstances"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StreamingInstances.html"><span class="name">StreamingInstances</span></a><span class="result"> extends <a href="StreamingInstances1.html" class="extype" name="cats.data.StreamingInstances1">StreamingInstances1</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@StreamingInstancesextendsStreamingInstances1" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.StreamingInstances1" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StreamingInstances1extendsStreamingInstances2"></a>
+      <a id="StreamingInstances1:StreamingInstances1"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StreamingInstances1.html"><span class="name">StreamingInstances1</span></a><span class="result"> extends <a href="StreamingInstances2.html" class="extype" name="cats.data.StreamingInstances2">StreamingInstances2</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@StreamingInstances1extendsStreamingInstances2" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.StreamingInstances2" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StreamingInstances2extendsAnyRef"></a>
+      <a id="StreamingInstances2:StreamingInstances2"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StreamingInstances2.html"><span class="name">StreamingInstances2</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@StreamingInstances2extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.StreamingT" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="StreamingT[F[_],A]extendsAnyRef"></a>
+      <a id="StreamingT[F[_],A]:StreamingT[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StreamingT.html"><span class="name">StreamingT</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@StreamingT[F[_],A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">StreamingT[F, A] is a monad transformer which parallels Streaming[A].</p><div class="fullcomment"><div class="comment cmt"><p>StreamingT[F, A] is a monad transformer which parallels Streaming[A].</p><p>However, there are a few key differences. <code>StreamingT[F, A]</code> only
+supports lazy evaluation if <code>F</code> does, and if the <code>F[_]</code> values are
+constructed lazily. Also, monadic recursion on <code>StreamingT[F, A]</code>
+is stack-safe only if monadic recursion on <code>F</code> is stack-safe.
+Finally, since <code>F</code> is not guaranteed to have a <code>Comonad</code>, it does
+not support many methods on <code>Streaming[A]</code> which return immediate
+values.
+</p></div></div>
+    </li><li name="cats.data.StreamingTInstances" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StreamingTInstancesextendsStreamingTInstances1"></a>
+      <a id="StreamingTInstances:StreamingTInstances"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StreamingTInstances.html"><span class="name">StreamingTInstances</span></a><span class="result"> extends <a href="StreamingTInstances1.html" class="extype" name="cats.data.StreamingTInstances1">StreamingTInstances1</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@StreamingTInstancesextendsStreamingTInstances1" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.StreamingTInstances1" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StreamingTInstances1extendsStreamingTInstances2"></a>
+      <a id="StreamingTInstances1:StreamingTInstances1"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StreamingTInstances1.html"><span class="name">StreamingTInstances1</span></a><span class="result"> extends <a href="StreamingTInstances2.html" class="extype" name="cats.data.StreamingTInstances2">StreamingTInstances2</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@StreamingTInstances1extendsStreamingTInstances2" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.StreamingTInstances2" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StreamingTInstances2extendsAnyRef"></a>
+      <a id="StreamingTInstances2:StreamingTInstances2"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StreamingTInstances2.html"><span class="name">StreamingTInstances2</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@StreamingTInstances2extendsAnyRef" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -852,7 +1419,24 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="cats.data.Cokleisli" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="cats.data.AppFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AppFunc"></a>
+      <a id="AppFunc:AppFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AppFunc$.html"><span class="name">AppFunc</span></a><span class="result"> extends <a href="AppFuncInstances.html" class="extype" name="cats.data.AppFuncInstances">AppFuncInstances</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@AppFunc" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.Cokleisli" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Cokleisli"></a>
       <a id="Cokleisli:Cokleisli"></a>
       <h4 class="signature">
@@ -882,6 +1466,23 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.package@Const" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.Func" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Func"></a>
+      <a id="Func:Func"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Func$.html"><span class="name">Func</span></a><span class="result"> extends <a href="FuncInstances.html" class="extype" name="cats.data.FuncInstances">FuncInstances</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@Func" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1073,6 +1674,23 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </a>
     </span>
       
+    </li><li name="cats.data.Prod" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Prod"></a>
+      <a id="Prod:Prod"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Prod$.html"><span class="name">Prod</span></a><span class="result"> extends <a href="ProdInstances.html" class="extype" name="cats.data.ProdInstances">ProdInstances</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@Prod" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.Reader" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Reader"></a>
       <a id="Reader:Reader"></a>
@@ -1103,6 +1721,40 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.package@ReaderT:cats.data.Kleisli.type" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.Streaming" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Streaming"></a>
+      <a id="Streaming:Streaming"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Streaming$.html"><span class="name">Streaming</span></a><span class="result"> extends <a href="StreamingInstances.html" class="extype" name="cats.data.StreamingInstances">StreamingInstances</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@Streaming" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.StreamingT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StreamingT"></a>
+      <a id="StreamingT:StreamingT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StreamingT$.html"><span class="name">StreamingT</span></a><span class="result"> extends <a href="StreamingTInstances.html" class="extype" name="cats.data.StreamingTInstances">StreamingTInstances</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@StreamingT" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

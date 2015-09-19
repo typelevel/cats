@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../lib/template.js"></script>
       <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../lib/modernizr.custom.js"></script><script type="text/javascript" src="../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
@@ -128,7 +128,7 @@
       <a id="Always[A]:Always[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
@@ -258,7 +258,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="CompositeApplicative.html"><span class="name">CompositeApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[α]<span class="extype" name="cats.CompositeApplicative.F">F</span>[<span class="extype" name="cats.CompositeApplicative.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.α">α</span>]]] with <a href="CompositeApply.html" class="extype" name="cats.CompositeApply">CompositeApply</a>[<span class="extype" name="cats.CompositeApplicative.F">F</span>, <span class="extype" name="cats.CompositeApplicative.G">G</span>]</span>
+        <a href="CompositeApplicative.html"><span class="name">CompositeApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[α]<span class="extype" name="cats.CompositeApplicative.F">F</span>[<span class="extype" name="cats.CompositeApplicative.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]] with <a href="CompositeApply.html" class="extype" name="cats.CompositeApply">CompositeApply</a>[<span class="extype" name="cats.CompositeApplicative.F">F</span>, <span class="extype" name="cats.CompositeApplicative.G">G</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@CompositeApplicative[F[_],G[_]]extendsApplicative[[α]F[G[α]]]withCompositeApply[F,G]" title="Permalink" target="_top">
@@ -275,7 +275,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="CompositeApply.html"><span class="name">CompositeApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[[X]<span class="extype" name="cats.CompositeApply.F">F</span>[<span class="extype" name="cats.CompositeApply.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.X">X</span>]]] with <a href="Functor$$Composite.html" class="extype" name="cats.Functor.Composite">Composite</a>[<span class="extype" name="cats.CompositeApply.F">F</span>, <span class="extype" name="cats.CompositeApply.G">G</span>]</span>
+        <a href="CompositeApply.html"><span class="name">CompositeApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[[X]<span class="extype" name="cats.CompositeApply.F">F</span>[<span class="extype" name="cats.CompositeApply.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.X">X</span>]]] with <a href="Functor$$Composite.html" class="extype" name="cats.Functor.Composite">Composite</a>[<span class="extype" name="cats.CompositeApply.F">F</span>, <span class="extype" name="cats.CompositeApply.G">G</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@CompositeApply[F[_],G[_]]extendsApply[[X]F[G[X]]]withFunctor.Composite[F,G]" title="Permalink" target="_top">
@@ -292,7 +292,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="CompositeFoldable.html"><span class="name">CompositeFoldable</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.CompositeFoldable.F">F</span>[<span class="extype" name="cats.CompositeFoldable.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.α">α</span>]]]</span>
+        <a href="CompositeFoldable.html"><span class="name">CompositeFoldable</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.CompositeFoldable.F">F</span>[<span class="extype" name="cats.CompositeFoldable.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@CompositeFoldable[F[_],G[_]]extendsFoldable[[α]F[G[α]]]" title="Permalink" target="_top">
@@ -310,7 +310,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="CompositeReducible.html"><span class="name">CompositeReducible</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.α">α</span>]]] with <a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>[<span class="extype" name="cats.CompositeReducible.F">F</span>, <span class="extype" name="cats.CompositeReducible.G">G</span>]</span>
+        <a href="CompositeReducible.html"><span class="name">CompositeReducible</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]] with <a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>[<span class="extype" name="cats.CompositeReducible.F">F</span>, <span class="extype" name="cats.CompositeReducible.G">G</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@CompositeReducible[F[_],G[_]]extendsReducible[[α]F[G[α]]]withCompositeFoldable[F,G]" title="Permalink" target="_top">
@@ -519,7 +519,7 @@ Must obey the laws defined in cats.laws.FlatMapLaws.</p></span></dd></dl></div>
       <p class="shortcomment cmt">Data structures that can be folded to a summary value.</p><div class="fullcomment"><div class="comment cmt"><p>Data structures that can be folded to a summary value.</p><p>In the case of a collection (such as <code>List</code> or <code>Set</code>), these
 methods will fold together (combine) the values contained in the
 collection to produce a single result. Most collection types have
-<code>foldLeft</code> methods, which will usually be used by the associationed
+<code>foldLeft</code> methods, which will usually be used by the associated
 <code>Foldable[_]</code> instance.</p><p>Foldable[F] is implemented in terms of two basic methods:</p><ul><li><code>foldLeft(fa, b)(f)</code> eagerly folds <code>fa</code> from left-to-right.</li><li><code>foldRight(fa, b)(f)</code> lazily folds <code>fa</code> from right-to-left.</li></ul><p>Beyond these it provides many other useful methods related to
 folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fold.pdf" target="_blank">A tutorial on the universality and expressiveness of fold</a>
 </p></div></div>
@@ -590,7 +590,7 @@ encodes pure unary function application.
       <a id="Later[A]:Later[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
@@ -645,7 +645,7 @@ garbage collection.
       <p class="shortcomment cmt">The combination of a Monad with a MonoidK
 </p>
     </li><li name="cats.MonadError" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="MonadError[F[_,_],E]extendsMonad[[X_kp1]F[E,X_kp1]]"></a>
+      <a id="MonadError[F[_,_],E]extendsMonad[[β]F[E,β]]"></a>
       <a id="MonadError[F[_,_],E]:MonadError[F,E]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -653,10 +653,10 @@ garbage collection.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="MonadError.html"><span class="name">MonadError</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[[X_kp1]<span class="extype" name="cats.MonadError.F">F</span>[<span class="extype" name="cats.MonadError.E">E</span>, <span class="extype" name="cats.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>]]</span>
+        <a href="MonadError.html"><span class="name">MonadError</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[[β]<span class="extype" name="cats.MonadError.F">F</span>[<span class="extype" name="cats.MonadError.E">E</span>, <span class="extype" name="cats.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@MonadError[F[_,_],E]extendsMonad[[X_kp1]F[E,X_kp1]]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@MonadError[F[_,_],E]extendsMonad[[β]F[E,β]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -687,7 +687,7 @@ us since it allows us to add a <code>filter</code> method to a Monad, which is
 used when pattern matching or using guards in for comprehensions.
 </p></div></div>
     </li><li name="cats.MonadReader" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="MonadReader[F[_,_],R]extendsMonad[[X_kp1]F[R,X_kp1]]"></a>
+      <a id="MonadReader[F[_,_],R]extendsMonad[[β]F[R,β]]"></a>
       <a id="MonadReader[F[_,_],R]:MonadReader[F,R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -695,16 +695,16 @@ used when pattern matching or using guards in for comprehensions.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="MonadReader.html"><span class="name">MonadReader</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="R">R</span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[[X_kp1]<span class="extype" name="cats.MonadReader.F">F</span>[<span class="extype" name="cats.MonadReader.R">R</span>, <span class="extype" name="cats.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>]]</span>
+        <a href="MonadReader.html"><span class="name">MonadReader</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="R">R</span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[[β]<span class="extype" name="cats.MonadReader.F">F</span>[<span class="extype" name="cats.MonadReader.R">R</span>, <span class="extype" name="cats.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@MonadReader[F[_,_],R]extendsMonad[[X_kp1]F[R,X_kp1]]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@MonadReader[F[_,_],R]extendsMonad[[β]F[R,β]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">A monad that has the ability to read from an environment.</p>
     </li><li name="cats.MonadState" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="MonadState[F[_,_],S]extendsMonad[[X_kp1]F[S,X_kp1]]"></a>
+      <a id="MonadState[F[_,_],S]extendsMonad[[β]F[S,β]]"></a>
       <a id="MonadState[F[_,_],S]:MonadState[F,S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -712,10 +712,10 @@ used when pattern matching or using guards in for comprehensions.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="MonadState.html"><span class="name">MonadState</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[[X_kp1]<span class="extype" name="cats.MonadState.F">F</span>[<span class="extype" name="cats.MonadState.S">S</span>, <span class="extype" name="cats.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>]]</span>
+        <a href="MonadState.html"><span class="name">MonadState</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[[β]<span class="extype" name="cats.MonadState.F">F</span>[<span class="extype" name="cats.MonadState.S">S</span>, <span class="extype" name="cats.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@MonadState[F[_,_],S]extendsMonad[[X_kp1]F[S,X_kp1]]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@MonadState[F[_,_],S]extendsMonad[[β]F[S,β]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -796,7 +796,7 @@ the &quot;rest&quot; of the values (<code>G[A]</code>) can be easily found.
       <a id="Now[A]:Now[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">

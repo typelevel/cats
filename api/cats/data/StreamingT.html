@@ -1,0 +1,872 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>StreamingT - cats.data.StreamingT</title>
+          <meta name="description" content="StreamingT - cats.data.StreamingT" />
+          <meta name="keywords" content="StreamingT cats.data.StreamingT" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'cats.data.StreamingT';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="StreamingT$.html" title="See companion object"><img alt="Class/Object" src="../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.data">data</a></p>
+        <h1><a href="StreamingT$.html" title="See companion object">StreamingT</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="StreamingT$.html" title="See companion object">object StreamingT</a>
+            | <a href="package.html" class="extype" name="cats.data">package data</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">StreamingT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>StreamingT[F, A] is a monad transformer which parallels Streaming[A].</p><p>However, there are a few key differences. <code>StreamingT[F, A]</code> only
+supports lazy evaluation if <code>F</code> does, and if the <code>F[_]</code> values are
+constructed lazily. Also, monadic recursion on <code>StreamingT[F, A]</code>
+is stack-safe only if monadic recursion on <code>F</code> is stack-safe.
+Finally, since <code>F</code> is not guaranteed to have a <code>Comonad</code>, it does
+not support many methods on <code>Streaming[A]</code> which return immediate
+values.
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/StreamingT.scala" target="_blank">StreamingT.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="cats.data.StreamingT"><span>StreamingT</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.StreamingT#%::" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="%::(a:A)(implicitev:cats.Applicative[F]):cats.data.StreamingT[F,A]"></a>
+      <a id="%::(A)(Applicative[F]):StreamingT[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $percent$colon$colon" class="name">%::</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.StreamingT.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@%::(a:A)(implicitev:cats.Applicative[F]):cats.data.StreamingT[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Prepend an A value to the current stream.</p>
+    </li><li name="cats.data.StreamingT#%:::" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="%:::(lhs:cats.data.StreamingT[F,A])(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]"></a>
+      <a id="%:::(StreamingT[F,A])(Functor[F]):StreamingT[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $percent$colon$colon$colon" class="name">%:::</span><span class="params">(<span name="lhs">lhs: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@%:::(lhs:cats.data.StreamingT[F,A])(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Prepend a StreamingT[F, A] value to the current stream.</p>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.StreamingT#coflatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="coflatMap[B](f:cats.data.StreamingT[F,A]=&gt;B)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,B]"></a>
+      <a id="coflatMap[B]((StreamingT[F,A])⇒B)(Functor[F]):StreamingT[F,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">coflatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]) ⇒ <span class="extype" name="cats.data.StreamingT.coflatMap.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.coflatMap.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@coflatMap[B](f:cats.data.StreamingT[F,A]=&gt;B)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">xyz
+</p>
+    </li><li name="cats.data.StreamingT#concat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="concat(rhs:F[cats.data.StreamingT[F,A]])(implicitev:cats.Monad[F]):cats.data.StreamingT[F,A]"></a>
+      <a id="concat(F[StreamingT[F,A]])(Monad[F]):StreamingT[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">concat</span><span class="params">(<span name="rhs">rhs: <span class="extype" name="cats.data.StreamingT.F">F</span>[<a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@concat(rhs:F[cats.data.StreamingT[F,A]])(implicitev:cats.Monad[F]):cats.data.StreamingT[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Concatenate streaming values within F[_].</p><div class="fullcomment"><div class="comment cmt"><p>Concatenate streaming values within F[_].</p><p>This method is useful when calling .flatMap over a
+F[StreamingT[F, A]] value.
+</p></div></div>
+    </li><li name="cats.data.StreamingT#drop" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="drop(n:Int)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]"></a>
+      <a id="drop(Int)(Functor[F]):StreamingT[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">drop</span><span class="params">(<span name="n">n: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@drop(n:Int)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a stream consisting of all but the first <code>n</code> elements of
+this stream.</p><div class="fullcomment"><div class="comment cmt"><p>Return a stream consisting of all but the first <code>n</code> elements of
+this stream.</p><p>If the current stream has <code>n</code> or fewer elements, an empty stream
+will be returned.
+</p></div></div>
+    </li><li name="cats.data.StreamingT#dropWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dropWhile(f:A=&gt;Boolean)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]"></a>
+      <a id="dropWhile((A)⇒Boolean)(Functor[F]):StreamingT[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dropWhile</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StreamingT.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@dropWhile(f:A=&gt;Boolean)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">From the beginning of this stream, create a new stream which
+removes all elements that fulfill the predicate <code>f</code>.</p><div class="fullcomment"><div class="comment cmt"><p>From the beginning of this stream, create a new stream which
+removes all elements that fulfill the predicate <code>f</code>. Once an
+element is found which does not fulfill the predicate, that
+element and all subsequent elements will be returned.</p><p>If all elements satisfy <code>f</code>, an empty stream will be returned.
+If no elements satisfy <code>f</code>, the current stream will be returned.</p><p>For example:</p><p>  StreamingT[List, Int](1, 2, 3, 4, 5, 6, 7).dropWhile(n =&gt; n != 4)</p><p>Will result in: StreamingT[List, Int](4, 5, 6, 7)
+</p></div></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.StreamingT#exists" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="exists(f:A=&gt;Boolean)(implicitev:cats.Monad[F]):F[Boolean]"></a>
+      <a id="exists((A)⇒Boolean)(Monad[F]):F[Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exists</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StreamingT.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.StreamingT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@exists(f:A=&gt;Boolean)(implicitev:cats.Monad[F]):F[Boolean]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return true if some element of the stream satisfies the
+predicate, false otherwise.</p>
+    </li><li name="cats.data.StreamingT#fconcat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fconcat(rhs:F[cats.data.StreamingT[F,A]])(implicitev:cats.Monad[F]):F[cats.data.StreamingT[F,A]]"></a>
+      <a id="fconcat(F[StreamingT[F,A]])(Monad[F]):F[StreamingT[F,A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fconcat</span><span class="params">(<span name="rhs">rhs: <span class="extype" name="cats.data.StreamingT.F">F</span>[<a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.StreamingT.F">F</span>[<a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@fconcat(rhs:F[cats.data.StreamingT[F,A]])(implicitev:cats.Monad[F]):F[cats.data.StreamingT[F,A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Concatenate streaming values within F[_].</p><div class="fullcomment"><div class="comment cmt"><p>Concatenate streaming values within F[_].</p><p>This method is useful when calling .flatMap over a
+F[StreamingT[F, A]] value.
+</p></div></div>
+    </li><li name="cats.data.StreamingT#filter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="filter(f:A=&gt;Boolean)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]"></a>
+      <a id="filter((A)⇒Boolean)(Functor[F]):StreamingT[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filter</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StreamingT.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@filter(f:A=&gt;Boolean)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lazily filter the stream given the predicate <code>f</code>.</p>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.StreamingT#find" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="find(f:A=&gt;Boolean)(implicitev:cats.Monad[F]):F[Option[A]]"></a>
+      <a id="find((A)⇒Boolean)(Monad[F]):F[Option[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">find</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StreamingT.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.StreamingT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.StreamingT.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@find(f:A=&gt;Boolean)(implicitev:cats.Monad[F]):F[Option[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Eagerly search the stream from the left.</p><div class="fullcomment"><div class="comment cmt"><p>Eagerly search the stream from the left. The search ends when f
+returns true for some a, or the stream is exhausted. Some(a)
+signals a match, None means no matching items were found.
+</p></div></div>
+    </li><li name="cats.data.StreamingT#flatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="flatMap[B](f:A=&gt;cats.data.StreamingT[F,B])(implicitev:cats.Monad[F]):cats.data.StreamingT[F,B]"></a>
+      <a id="flatMap[B]((A)⇒StreamingT[F,B])(Monad[F]):StreamingT[F,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StreamingT.A">A</span>) ⇒ <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.flatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.flatMap.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@flatMap[B](f:A=&gt;cats.data.StreamingT[F,B])(implicitev:cats.Monad[F]):cats.data.StreamingT[F,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lazily transform the stream given a function <code>f</code>.</p>
+    </li><li name="cats.data.StreamingT#foldLeft" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foldLeft[B](b:B)(f:(B,A)=&gt;B)(implicitev:cats.Monad[F]):F[B]"></a>
+      <a id="foldLeft[B](B)((B,A)⇒B)(Monad[F]):F[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.StreamingT.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StreamingT.foldLeft.B">B</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>) ⇒ <span class="extype" name="cats.data.StreamingT.foldLeft.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.StreamingT.F">F</span>[<span class="extype" name="cats.data.StreamingT.foldLeft.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@foldLeft[B](b:B)(f:(B,A)=&gt;B)(implicitev:cats.Monad[F]):F[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Eagerly fold the stream to a single value from the left.</p>
+    </li><li name="cats.data.StreamingT#forall" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="forall(f:A=&gt;Boolean)(implicitev:cats.Monad[F]):F[Boolean]"></a>
+      <a id="forall((A)⇒Boolean)(Monad[F]):F[Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">forall</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StreamingT.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.StreamingT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@forall(f:A=&gt;Boolean)(implicitev:cats.Monad[F]):F[Boolean]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return true if every element of the stream satisfies the
+predicate, false otherwise.</p>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.StreamingT#isEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isEmpty(implicitev:cats.Monad[F]):F[Boolean]"></a>
+      <a id="isEmpty(Monad[F]):F[Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isEmpty</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.StreamingT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@isEmpty(implicitev:cats.Monad[F]):F[Boolean]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return true if the stream is empty, false otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Return true if the stream is empty, false otherwise.</p><p>In this case of deferred streams this will force the first
+element to be calculated.
+</p></div></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.StreamingT#map" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="map[B](f:A=&gt;B)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,B]"></a>
+      <a id="map[B]((A)⇒B)(Functor[F]):StreamingT[F,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StreamingT.A">A</span>) ⇒ <span class="extype" name="cats.data.StreamingT.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.map.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@map[B](f:A=&gt;B)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lazily transform the stream given a function <code>f</code>.</p>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.StreamingT#nonEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nonEmpty(implicitev:cats.Monad[F]):F[Boolean]"></a>
+      <a id="nonEmpty(Monad[F]):F[Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nonEmpty</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.StreamingT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@nonEmpty(implicitev:cats.Monad[F]):F[Boolean]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return true if the stream is non-empty, false otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Return true if the stream is non-empty, false otherwise.</p><p>In this case of deferred streams this will force the first
+element to be calculated.
+</p></div></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.StreamingT#take" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="take(n:Int)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]"></a>
+      <a id="take(Int)(Functor[F]):StreamingT[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">take</span><span class="params">(<span name="n">n: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@take(n:Int)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a stream consisting only of the first <code>n</code> elements of this
+stream.</p><div class="fullcomment"><div class="comment cmt"><p>Return a stream consisting only of the first <code>n</code> elements of this
+stream.</p><p>If the current stream has <code>n</code> or fewer elements, the entire
+stream will be returned.
+</p></div></div>
+    </li><li name="cats.data.StreamingT#takeWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="takeWhile(f:A=&gt;Boolean)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]"></a>
+      <a id="takeWhile((A)⇒Boolean)(Functor[F]):StreamingT[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">takeWhile</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StreamingT.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@takeWhile(f:A=&gt;Boolean)(implicitev:cats.Functor[F]):cats.data.StreamingT[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">From the beginning of this stream, create a new stream which
+takes only those elements that fulfill the predicate <code>f</code>.</p><div class="fullcomment"><div class="comment cmt"><p>From the beginning of this stream, create a new stream which
+takes only those elements that fulfill the predicate <code>f</code>. Once an
+element is found which does not fulfill the predicate, no further
+elements will be returned.</p><p>If all elements satisfy <code>f</code>, the current stream will be returned.
+If no elements satisfy <code>f</code>, an empty stream will be returned.</p><p>For example:</p><p>  StreamingT[List, Int](1, 2, 3, 4, 5, 6, 7).takeWhile(n =&gt; n != 4)</p><p>Will result in: StreamingT[List, Int](1, 2, 3)
+</p></div></div>
+    </li><li name="cats.data.StreamingT#toList" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toList(implicitev:cats.Monad[F]):F[List[A]]"></a>
+      <a id="toList(Monad[F]):F[List[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toList</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.StreamingT.F">F</span>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.data.StreamingT.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@toList(implicitev:cats.Monad[F]):F[List[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provide a list of elements in the stream.</p><div class="fullcomment"><div class="comment cmt"><p>Provide a list of elements in the stream.</p><p>This will evaluate the stream immediately, and will hang in the
+case of infinite streams.
+</p></div></div>
+    </li><li name="cats.data.StreamingT#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Basic string representation of a stream.</p><div class="fullcomment"><div class="comment cmt"><p>Basic string representation of a stream.</p><p>This method will not force evaluation of any lazy part of a
+stream. As a result, you will see at most one element (the first
+one).</p><p>Use .toString(n) to see the first n elements of the stream.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.StreamingT">StreamingT</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.StreamingT#uncons" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="uncons(implicitev:cats.Monad[F]):F[Option[(A,F[cats.data.StreamingT[F,A]])]]"></a>
+      <a id="uncons(Monad[F]):F[Option[(A,F[StreamingT[F,A]])]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">uncons</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.StreamingT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[(<span class="extype" name="cats.data.StreamingT.A">A</span>, <span class="extype" name="cats.data.StreamingT.F">F</span>[<a href="" class="extype" name="cats.data.StreamingT">StreamingT</a>[<span class="extype" name="cats.data.StreamingT.F">F</span>, <span class="extype" name="cats.data.StreamingT.A">A</span>]])]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@uncons(implicitev:cats.Monad[F]):F[Option[(A,F[cats.data.StreamingT[F,A]])]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Deconstruct a stream into a head and tail (if available).</p><div class="fullcomment"><div class="comment cmt"><p>Deconstruct a stream into a head and tail (if available).</p><p>This method will evaluate the stream until it finds a head and
+tail, or until the stream is exhausted.
+</p></div></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StreamingT@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

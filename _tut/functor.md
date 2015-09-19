@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  "Functors"
+title:  "Functor"
 section: "typeclasses"
 source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Functor.scala"
 scaladoc: "#cats.Functor"
@@ -46,12 +46,12 @@ import cats._
 scala> implicit val optionFunctor: Functor[Option] = new Functor[Option] {
      |   def map[A,B](fa: Option[A])(f: A => B) = fa map f
      | }
-optionFunctor: cats.Functor[Option] = $anon$1@25cc51c6
+optionFunctor: cats.Functor[Option] = $anon$1@6c1dc0a
 
 scala> implicit val listFunctor: Functor[List] = new Functor[List] {
      |   def map[A,B](fa: List[A])(f: A => B) = fa map f
      | }
-listFunctor: cats.Functor[List] = $anon$1@431d909a
+listFunctor: cats.Functor[List] = $anon$1@6a443b00
 ```
 
 However, functors can also be created for types which don't have a `map`
@@ -63,7 +63,7 @@ scala> implicit def function1Functor[In]: Functor[Function1[In, ?]] =
      |   new Functor[Function1[In, ?]] {
      |     def map[A,B](fa: In => A)(f: A => B): Function1[In,B] = fa andThen f
      |   }
-function1Functor: [In]=> cats.Functor[[X_kp1]In => X_kp1]
+function1Functor: [In]=> cats.Functor[[β]In => β]
 ```
 
 This example demonstrates the use of the
@@ -136,19 +136,19 @@ create a new functor `F[G[_]]` by composing them:
 
 ```scala
 scala> val listOpt = Functor[List] compose Functor[Option]
-listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@23737936
+listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@1a1f722f
 
 scala> listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
 res10: List[Option[Int]] = List(Some(2), None, Some(4))
 
 scala> val optList = Functor[Option] compose Functor[List]
-optList: cats.Functor[[X]Option[List[X]]] = cats.Functor$$anon$1@5db73f9
+optList: cats.Functor[[X]Option[List[X]]] = cats.Functor$$anon$1@3011f9ae
 
 scala> optList.map(Some(List(1, 2, 3)))(_ + 1)
 res11: Option[List[Int]] = Some(List(2, 3, 4))
 
 scala> val listOptList = listOpt compose Functor[List]
-listOptList: cats.Functor[[X]List[Option[List[X]]]] = cats.Functor$$anon$1@51755c0c
+listOptList: cats.Functor[[X]List[Option[List[X]]]] = cats.Functor$$anon$1@1a810d64
 
 scala> listOptList.map(List(Some(List(1,2)), None, Some(List(3,4))))(_ + 1)
 res12: List[Option[List[Int]]] = List(Some(List(2, 3)), None, Some(List(4, 5)))

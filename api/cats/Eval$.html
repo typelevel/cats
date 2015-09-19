@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../lib/template.js"></script>
       <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../lib/modernizr.custom.js"></script><script type="text/javascript" src="../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
@@ -92,7 +92,28 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.Eval.Compute" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="cats.Eval.Call" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Call[A]extendsEval[A]"></a>
+      <a id="Call[A]:Call[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Eval$$Call.html"><span class="name">Call</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Eval.Call.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Eval$@Call[A]extendsEval[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Call is a type of Eval[A] that is used to defer computations
+which produce Eval[A].</p><div class="fullcomment"><div class="comment cmt"><p>Call is a type of Eval[A] that is used to defer computations
+which produce Eval[A].</p><p>Users should not instantiate Call instances themselves. Instead,
+they will be automatically created when needed.
+</p></div></div>
+    </li><li name="cats.Eval.Compute" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Compute[A]extendsEval[A]"></a>
       <a id="Compute[A]:Compute[A]"></a>
       <h4 class="signature">
@@ -115,7 +136,7 @@ implements the trampoline that guarantees stack-safety.</p><p>Users should not i
 themselves. Instead, they will be automatically created when
 needed.</p><p>Unlike a traditional trampoline, the internal workings of the
 trampoline are not exposed. This allows a slightly more efficient
-implementat of the .value method.
+implementation of the .value method.
 </p></div></div>
     </li></ol>
             </div>
@@ -442,35 +463,35 @@ which produces an Eval[A] value. Like .flatMap, it is stack-safe.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalInstances0.html" class="extype" name="cats.EvalInstances0">EvalInstances0</a></dd></dl></div>
     </li><li name="cats.EvalInstances#evalOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="evalOrder[A](implicitevidence$1:cats.Order[A]):cats.Eq[cats.Eval[A]]"></a>
-      <a id="evalOrder[A](Order[A]):Eq[Eval[A]]"></a>
+      <a id="evalOrder[A](implicitevidence$1:cats.Order[A]):cats.Order[cats.Eval[A]]"></a>
+      <a id="evalOrder[A](Order[A]):Order[Eval[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">evalOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.EvalInstances.evalOrder.A">A</span>]</span>)</span><span class="result">: <a href="package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalInstances.evalOrder.A">A</span>]]</span>
+        <span class="name">evalOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.EvalInstances.evalOrder.A">A</span>]</span>)</span><span class="result">: <a href="package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalInstances.evalOrder.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Eval$@evalOrder[A](implicitevidence$1:cats.Order[A]):cats.Eq[cats.Eval[A]]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Eval$@evalOrder[A](implicitevidence$1:cats.Order[A]):cats.Order[cats.Eval[A]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalInstances.html" class="extype" name="cats.EvalInstances">EvalInstances</a></dd></dl></div>
     </li><li name="cats.EvalInstances0#evalPartialOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="evalPartialOrder[A](implicitevidence$3:cats.PartialOrder[A]):cats.Eq[cats.Eval[A]]"></a>
-      <a id="evalPartialOrder[A](PartialOrder[A]):Eq[Eval[A]]"></a>
+      <a id="evalPartialOrder[A](implicitevidence$3:cats.PartialOrder[A]):cats.PartialOrder[cats.Eval[A]]"></a>
+      <a id="evalPartialOrder[A](PartialOrder[A]):PartialOrder[Eval[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">evalPartialOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="package.html#PartialOrder[A]=algebra.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.EvalInstances0.evalPartialOrder.A">A</span>]</span>)</span><span class="result">: <a href="package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalInstances0.evalPartialOrder.A">A</span>]]</span>
+        <span class="name">evalPartialOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="package.html#PartialOrder[A]=algebra.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.EvalInstances0.evalPartialOrder.A">A</span>]</span>)</span><span class="result">: <a href="package.html#PartialOrder[A]=algebra.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalInstances0.evalPartialOrder.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Eval$@evalPartialOrder[A](implicitevidence$3:cats.PartialOrder[A]):cats.Eq[cats.Eval[A]]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Eval$@evalPartialOrder[A](implicitevidence$3:cats.PartialOrder[A]):cats.PartialOrder[cats.Eval[A]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -93,7 +93,19 @@
       <div class="occurrences"><a href="../cats/Eval$.html" class="extype" name="cats.Eval">Eval</a> </div>
     </div><div class="entry">
       <div class="name">tail</div>
-      <div class="occurrences"><a href="../cats/data/OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a> </div>
+      <div class="occurrences"><a href="../cats/data/OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a> <a href="../cats/data/Streaming$$Cons.html" class="extype" name="cats.data.Streaming.Cons">Cons</a> </div>
+    </div><div class="entry">
+      <div class="name">tails</div>
+      <div class="occurrences"><a href="../cats/data/Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a> </div>
+    </div><div class="entry">
+      <div class="name">take</div>
+      <div class="occurrences"><a href="../cats/data/Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a> <a href="../cats/data/StreamingT.html" class="extype" name="cats.data.StreamingT">StreamingT</a> </div>
+    </div><div class="entry">
+      <div class="name">takeWhile</div>
+      <div class="occurrences"><a href="../cats/data/Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a> <a href="../cats/data/StreamingT.html" class="extype" name="cats.data.StreamingT">StreamingT</a> </div>
+    </div><div class="entry">
+      <div class="name">thunk</div>
+      <div class="occurrences"><a href="../cats/Eval$$Call.html" class="extype" name="cats.Eval.Call">Call</a> <a href="../cats/data/Streaming$.html" class="extype" name="cats.data.Streaming">Streaming</a> </div>
     </div><div class="entry">
       <div class="name">to</div>
       <div class="occurrences"><a href="../cats/data/Ior.html" class="extype" name="cats.data.Ior">Ior</a> <a href="../cats/data/Xor.html" class="extype" name="cats.data.Xor">Xor</a> <a href="../cats/data/XorT.html" class="extype" name="cats.data.XorT">XorT</a> </div>
@@ -164,6 +176,9 @@
       <div class="name">toApplyOps</div>
       <div class="occurrences"><a href="../cats/Apply$$ToApplyOps.html" class="extype" name="cats.Apply.ToApplyOps">ToApplyOps</a> </div>
     </div><div class="entry">
+      <div class="name">toArray</div>
+      <div class="occurrences"><a href="../cats/data/Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a> </div>
+    </div><div class="entry">
       <div class="name">toBimonadOps</div>
       <div class="occurrences"><a href="../cats/Bimonad$$ToBimonadOps.html" class="extype" name="cats.Bimonad.ToBimonadOps">ToBimonadOps</a> </div>
     </div><div class="entry">
@@ -200,8 +215,11 @@
       <div class="name">toLeft</div>
       <div class="occurrences"><a href="../cats/data/OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a> </div>
     </div><div class="entry">
+      <div class="name">toLeftXor</div>
+      <div class="occurrences"><a href="../cats/syntax/OptionOps.html" class="extype" name="cats.syntax.OptionOps">OptionOps</a> </div>
+    </div><div class="entry">
       <div class="name">toList</div>
-      <div class="occurrences"><a href="../cats/Foldable.html" class="extype" name="cats.Foldable">Foldable</a> <a href="../cats/data/Ior.html" class="extype" name="cats.data.Ior">Ior</a> <a href="../cats/data/Validated.html" class="extype" name="cats.data.Validated">Validated</a> <a href="../cats/data/Xor.html" class="extype" name="cats.data.Xor">Xor</a> </div>
+      <div class="occurrences"><a href="../cats/Foldable.html" class="extype" name="cats.Foldable">Foldable</a> <a href="../cats/data/Ior.html" class="extype" name="cats.data.Ior">Ior</a> <a href="../cats/data/Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a> <a href="../cats/data/StreamingT.html" class="extype" name="cats.data.StreamingT">StreamingT</a> <a href="../cats/data/Validated.html" class="extype" name="cats.data.Validated">Validated</a> <a href="../cats/data/Xor.html" class="extype" name="cats.data.Xor">Xor</a> </div>
     </div><div class="entry">
       <div class="name">toMonadCombineOps</div>
       <div class="occurrences"><a href="../cats/MonadCombine$$ToMonadCombineOps.html" class="extype" name="cats.MonadCombine.ToMonadCombineOps">ToMonadCombineOps</a> </div>
@@ -215,6 +233,9 @@
       <div class="name">toMonoidKOps</div>
       <div class="occurrences"><a href="../cats/MonoidK$$ToMonoidKOps.html" class="extype" name="cats.MonoidK.ToMonoidKOps">ToMonoidKOps</a> </div>
     </div><div class="entry">
+      <div class="name">toNel</div>
+      <div class="occurrences"><a href="../cats/syntax/ListOps.html" class="extype" name="cats.syntax.ListOps">ListOps</a> </div>
+    </div><div class="entry">
       <div class="name">toOption</div>
       <div class="occurrences"><a href="../cats/data/Ior.html" class="extype" name="cats.data.Ior">Ior</a> <a href="../cats/data/Validated.html" class="extype" name="cats.data.Validated">Validated</a> <a href="../cats/data/Xor.html" class="extype" name="cats.data.Xor">Xor</a> <a href="../cats/data/XorT.html" class="extype" name="cats.data.XorT">XorT</a> </div>
     </div><div class="entry">
@@ -224,11 +245,20 @@
       <div class="name">toRight</div>
       <div class="occurrences"><a href="../cats/data/OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a> </div>
     </div><div class="entry">
+      <div class="name">toRightXor</div>
+      <div class="occurrences"><a href="../cats/syntax/OptionOps.html" class="extype" name="cats.syntax.OptionOps">OptionOps</a> </div>
+    </div><div class="entry">
       <div class="name">toSemigroupKOps</div>
       <div class="occurrences"><a href="../cats/SemigroupK$$ToSemigroupKOps.html" class="extype" name="cats.SemigroupK.ToSemigroupKOps">ToSemigroupKOps</a> </div>
     </div><div class="entry">
       <div class="name">toShowOps</div>
       <div class="occurrences"><a href="../cats/Show$$ToShowOps.html" class="extype" name="cats.Show.ToShowOps">ToShowOps</a> </div>
+    </div><div class="entry">
+      <div class="name">toStreaming</div>
+      <div class="occurrences"><a href="../cats/Foldable.html" class="extype" name="cats.Foldable">Foldable</a> <a href="../cats/Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a> </div>
+    </div><div class="entry">
+      <div class="name">toString</div>
+      <div class="occurrences"><a href="../cats/data/Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a> <a href="../cats/data/StreamingT.html" class="extype" name="cats.data.StreamingT">StreamingT</a> </div>
     </div><div class="entry">
       <div class="name">toTraverseOps</div>
       <div class="occurrences"><a href="../cats/Traverse$$ToTraverseOps.html" class="extype" name="cats.Traverse.ToTraverseOps">ToTraverseOps</a> </div>
@@ -240,7 +270,7 @@
       <div class="occurrences"><a href="../cats/data/Validated.html" class="extype" name="cats.data.Validated">Validated</a> </div>
     </div><div class="entry">
       <div class="name">toXor</div>
-      <div class="occurrences"><a href="../cats/data/Ior.html" class="extype" name="cats.data.Ior">Ior</a> <a href="../cats/data/Validated.html" class="extype" name="cats.data.Validated">Validated</a> </div>
+      <div class="occurrences"><a href="../cats/data/Ior.html" class="extype" name="cats.data.Ior">Ior</a> <a href="../cats/data/Validated.html" class="extype" name="cats.data.Validated">Validated</a> <a href="../cats/syntax/EitherOps.html" class="extype" name="cats.syntax.EitherOps">EitherOps</a> </div>
     </div><div class="entry">
       <div class="name">toYoneda</div>
       <div class="occurrences"><a href="../cats/free/Coyoneda.html" class="extype" name="cats.free.Coyoneda">Coyoneda</a> </div>
@@ -252,7 +282,7 @@
       <div class="occurrences"><a href="../cats/state/StateT.html" class="extype" name="cats.state.StateT">StateT</a> </div>
     </div><div class="entry">
       <div class="name">traverse</div>
-      <div class="occurrences"><a href="../cats/Applicative.html" class="extype" name="cats.Applicative">Applicative</a> <a href="../cats/Traverse.html" class="extype" name="cats.Traverse">Traverse</a> <a href="../cats/data/Const.html" class="extype" name="cats.data.Const">Const</a> <a href="../cats/data/Ior.html" class="extype" name="cats.data.Ior">Ior</a> <a href="../cats/data/Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a> <a href="../cats/data/Validated.html" class="extype" name="cats.data.Validated">Validated</a> <a href="../cats/data/Xor.html" class="extype" name="cats.data.Xor">Xor</a> <a href="../cats/data/XorT.html" class="extype" name="cats.data.XorT">XorT</a> <a href="../cats/syntax/TraverseOps.html" class="extype" name="cats.syntax.TraverseOps">TraverseOps</a> <a href="../cats/syntax/package.html" class="extype" name="cats.syntax">syntax</a> </div>
+      <div class="occurrences"><a href="../cats/Applicative.html" class="extype" name="cats.Applicative">Applicative</a> <a href="../cats/Traverse.html" class="extype" name="cats.Traverse">Traverse</a> <a href="../cats/data/AppFunc.html" class="extype" name="cats.data.AppFunc">AppFunc</a> <a href="../cats/data/Const.html" class="extype" name="cats.data.Const">Const</a> <a href="../cats/data/Ior.html" class="extype" name="cats.data.Ior">Ior</a> <a href="../cats/data/Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a> <a href="../cats/data/Validated.html" class="extype" name="cats.data.Validated">Validated</a> <a href="../cats/data/Xor.html" class="extype" name="cats.data.Xor">Xor</a> <a href="../cats/data/XorT.html" class="extype" name="cats.data.XorT">XorT</a> <a href="../cats/syntax/TraverseOps.html" class="extype" name="cats.syntax.TraverseOps">TraverseOps</a> <a href="../cats/syntax/package.html" class="extype" name="cats.syntax">syntax</a> </div>
     </div><div class="entry">
       <div class="name">traverse1_</div>
       <div class="occurrences"><a href="../cats/Reducible.html" class="extype" name="cats.Reducible">Reducible</a> </div>

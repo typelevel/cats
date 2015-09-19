@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">FreeApplicative</span>
+        <span class="name">FreeApplicative</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/free/src/main/scala/cats/free/FreeApplicative.scala" target="_blank">FreeApplicative.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.free.FreeApplicative"><span>FreeApplicative</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.free.FreeApplicative"><span>FreeApplicative</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -93,18 +93,18 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="cats.free.FreeApplicative.Ap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Ap[F[_],A]extendsFreeApplicative.FA[F,A]"></a>
+      <a id="Ap[F[_],A]extendsFreeApplicative.FA[F,A]withProductwithSerializable"></a>
       <a id="Ap[F[_],A]:Ap[F,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
-        <span class="kind">class</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="FreeApplicative$$Ap.html"><span class="name">Ap</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="#FA[F[_],A]=cats.free.FreeApplicative[F,A]" class="extmbr" name="cats.free.FreeApplicative.FA">FA</a>[<span class="extype" name="cats.free.FreeApplicative.Ap.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.Ap.A">A</span>]</span>
+        <a href="FreeApplicative$$Ap.html"><span class="name">Ap</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">()</span><span class="result"> extends <a href="#FA[F[_],A]=cats.free.FreeApplicative[F,A]" class="extmbr" name="cats.free.FreeApplicative.FA">FA</a>[<span class="extype" name="cats.free.FreeApplicative.Ap.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.Ap.A">A</span>] with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.FreeApplicative$@Ap[F[_],A]extendsFreeApplicative.FA[F,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.FreeApplicative$@Ap[F[_],A]extendsFreeApplicative.FA[F,A]withProductwithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -201,19 +201,19 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.free.FreeApplicative#Ap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Ap[F[_],P,A](fp:F[P])(f:cats.free.FreeApplicative.FA[F,P=&gt;A]):cats.free.FreeApplicative.FA[F,A]"></a>
-      <a id="Ap[F[_],P,A](F[P])(FA[F,(P)⇒A]):FA[F,A]"></a>
+    </li><li name="cats.free.FreeApplicative#ap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ap[F[_],P,A](fp:F[P])(f:cats.free.FreeApplicative.FA[F,P=&gt;A]):cats.free.FreeApplicative.FA[F,A]"></a>
+      <a id="ap[F[_],P,A](F[P])(FA[F,(P)⇒A]):FA[F,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Ap</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="P">P</span>, <span name="A">A</span>]</span><span class="params">(<span name="fp">fp: <span class="extype" name="cats.free.FreeApplicative.Ap.F">F</span>[<span class="extype" name="cats.free.FreeApplicative.Ap.P">P</span>]</span>)</span><span class="params">(<span name="f">f: <a href="#FA[F[_],A]=cats.free.FreeApplicative[F,A]" class="extmbr" name="cats.free.FreeApplicative.FA">FA</a>[<span class="extype" name="cats.free.FreeApplicative.Ap.F">F</span>, (<span class="extype" name="cats.free.FreeApplicative.Ap.P">P</span>) ⇒ <span class="extype" name="cats.free.FreeApplicative.Ap.A">A</span>]</span>)</span><span class="result">: <a href="#FA[F[_],A]=cats.free.FreeApplicative[F,A]" class="extmbr" name="cats.free.FreeApplicative.FA">FA</a>[<span class="extype" name="cats.free.FreeApplicative.Ap.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.Ap.A">A</span>]</span>
+        <span class="name">ap</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="P">P</span>, <span name="A">A</span>]</span><span class="params">(<span name="fp">fp: <span class="extype" name="cats.free.FreeApplicative.ap.F">F</span>[<span class="extype" name="cats.free.FreeApplicative.ap.P">P</span>]</span>)</span><span class="params">(<span name="f">f: <a href="#FA[F[_],A]=cats.free.FreeApplicative[F,A]" class="extmbr" name="cats.free.FreeApplicative.FA">FA</a>[<span class="extype" name="cats.free.FreeApplicative.ap.F">F</span>, (<span class="extype" name="cats.free.FreeApplicative.ap.P">P</span>) ⇒ <span class="extype" name="cats.free.FreeApplicative.ap.A">A</span>]</span>)</span><span class="result">: <a href="#FA[F[_],A]=cats.free.FreeApplicative[F,A]" class="extmbr" name="cats.free.FreeApplicative.FA">FA</a>[<span class="extype" name="cats.free.FreeApplicative.ap.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.ap.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.FreeApplicative$@Ap[F[_],P,A](fp:F[P])(f:cats.free.FreeApplicative.FA[F,P=&gt;A]):cats.free.FreeApplicative.FA[F,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.FreeApplicative$@ap[F[_],P,A](fp:F[P])(f:cats.free.FreeApplicative.FA[F,P=&gt;A]):cats.free.FreeApplicative.FA[F,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -316,18 +316,18 @@
               
         </dd></dl></div>
     </li><li name="cats.free.FreeApplicative#freeApplicative" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="freeApplicative[S[_]]:cats.Applicative[[X_kp1]cats.free.FreeApplicative[S,X_kp1]]"></a>
-      <a id="freeApplicative[S[_]]:Applicative[[X_kp1]FreeApplicative[S,X_kp1]]"></a>
+      <a id="freeApplicative[S[_]]:cats.Applicative[[β]cats.free.FreeApplicative[S,β]]"></a>
+      <a id="freeApplicative[S[_]]:Applicative[[β]FreeApplicative[S,β]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">freeApplicative</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[X_kp1]<a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a>[<span class="extype" name="cats.free.FreeApplicative.freeApplicative.S">S</span>, <span class="extype" name="cats.free.FreeApplicative.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>]]</span>
+        <span class="name">freeApplicative</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[β]<a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a>[<span class="extype" name="cats.free.FreeApplicative.freeApplicative.S">S</span>, <span class="extype" name="cats.free.FreeApplicative.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.FreeApplicative$@freeApplicative[S[_]]:cats.Applicative[[X_kp1]cats.free.FreeApplicative[S,X_kp1]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.FreeApplicative$@freeApplicative[S[_]]:cats.Applicative[[β]cats.free.FreeApplicative[S,β]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -580,7 +580,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

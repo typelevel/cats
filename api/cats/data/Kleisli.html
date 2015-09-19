@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -444,7 +444,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">lift</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.Kleisli.lift.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Kleisli">Kleisli</a>[[α]<span class="extype" name="cats.data.Kleisli.lift.G">G</span>[<span class="extype" name="cats.data.Kleisli.F">F</span>[<span class="extype" name="cats.data.Kleisli.&lt;refinement&gt;.L_kp.α">α</span>]], <span class="extype" name="cats.data.Kleisli.A">A</span>, <span class="extype" name="cats.data.Kleisli.B">B</span>]</span>
+        <span class="name">lift</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.Kleisli.lift.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Kleisli">Kleisli</a>[[α]<span class="extype" name="cats.data.Kleisli.lift.G">G</span>[<span class="extype" name="cats.data.Kleisli.F">F</span>[<span class="extype" name="cats.data.Kleisli.&lt;refinement&gt;.Λ$.α">α</span>]], <span class="extype" name="cats.data.Kleisli.A">A</span>, <span class="extype" name="cats.data.Kleisli.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Kleisli@lift[G[_]](implicitG:cats.Applicative[G]):cats.data.Kleisli[[α]G[F[α]],A,B]" title="Permalink" target="_top">
@@ -487,18 +487,18 @@
     </span>
       
     </li><li name="cats.data.Kleisli#lower" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="lower(implicitF:cats.Monad[F]):cats.data.Kleisli[F,A,F[B]]"></a>
-      <a id="lower(Monad[F]):Kleisli[F,A,F[B]]"></a>
+      <a id="lower(implicitF:cats.Applicative[F]):cats.data.Kleisli[F,A,F[B]]"></a>
+      <a id="lower(Applicative[F]):Kleisli[F,A,F[B]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">lower</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>, <span class="extype" name="cats.data.Kleisli.A">A</span>, <span class="extype" name="cats.data.Kleisli.F">F</span>[<span class="extype" name="cats.data.Kleisli.B">B</span>]]</span>
+        <span class="name">lower</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>, <span class="extype" name="cats.data.Kleisli.A">A</span>, <span class="extype" name="cats.data.Kleisli.F">F</span>[<span class="extype" name="cats.data.Kleisli.B">B</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Kleisli@lower(implicitF:cats.Monad[F]):cats.data.Kleisli[F,A,F[B]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Kleisli@lower(implicitF:cats.Applicative[F]):cats.data.Kleisli[F,A,F[B]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

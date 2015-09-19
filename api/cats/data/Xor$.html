@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -630,18 +630,35 @@ the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For ex
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorInstances2.html" class="extype" name="cats.data.XorInstances2">XorInstances2</a></dd></dl></div>
     </li><li name="cats.data.XorInstances#xorInstances" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorInstances[A]:cats.Traverse[[X_kp1]cats.data.Xor[A,X_kp1]]withcats.MonadError[cats.data.Xor,A]"></a>
-      <a id="xorInstances[A]:Traverse[[X_kp1]Xor[A,X_kp1]]withMonadError[Xor,A]"></a>
+      <a id="xorInstances[A]:cats.Traverse[[β]cats.data.Xor[A,β]]withcats.MonadError[cats.data.Xor,A]"></a>
+      <a id="xorInstances[A]:Traverse[[β]Xor[A,β]]withMonadError[Xor,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">xorInstances</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[X_kp1]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>]] with <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>, <span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>]</span>
+        <span class="name">xorInstances</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>]] with <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>, <span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@xorInstances[A]:cats.Traverse[[X_kp1]cats.data.Xor[A,X_kp1]]withcats.MonadError[cats.data.Xor,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Xor$@xorInstances[A]:cats.Traverse[[β]cats.data.Xor[A,β]]withcats.MonadError[cats.data.Xor,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorInstances.html" class="extype" name="cats.data.XorInstances">XorInstances</a></dd></dl></div>
+    </li><li name="cats.data.XorInstances#xorMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="xorMonoid[A,B](implicitA:cats.Semigroup[A],implicitB:cats.Monoid[B]):cats.Monoid[cats.data.Xor[A,B]]"></a>
+      <a id="xorMonoid[A,B](Semigroup[A],Monoid[B]):Monoid[Xor[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">xorMonoid</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.XorInstances.xorMonoid.A">A</span>]</span>, <span name="B">B: <a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.XorInstances.xorMonoid.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorMonoid.A">A</span>, <span class="extype" name="cats.data.XorInstances.xorMonoid.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@xorMonoid[A,B](implicitA:cats.Semigroup[A],implicitB:cats.Monoid[B]):cats.Monoid[cats.data.Xor[A,B]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

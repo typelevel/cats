@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/optionT.scala" target="_blank">optionT.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/OptionT.scala" target="_blank">OptionT.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="OptionTInstances.html" class="extype" name="cats.data.OptionTInstances">OptionTInstances</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -90,7 +90,27 @@
         <div id="allMembers">
         
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="cats.data.OptionT.FromOptionAux" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FromOptionAux[F[_]]extendsAnyRef"></a>
+      <a id="FromOptionAux[F[_]]:FromOptionAux[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="OptionT$$FromOptionAux.html"><span class="name">FromOptionAux</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT$@FromOptionAux[F[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
 
         
 
@@ -244,6 +264,26 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.OptionT#fromOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromOption[F[_]]:cats.data.OptionT.FromOptionAux[F]"></a>
+      <a id="fromOption[F[_]]:FromOptionAux[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromOption</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="OptionT$$FromOptionAux.html" class="extype" name="cats.data.OptionT.FromOptionAux">FromOptionAux</a>[<span class="extype" name="cats.data.OptionT.fromOption.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT$@fromOption[F[_]]:cats.data.OptionT.FromOptionAux[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Transforms an <code>Option</code> into an <code>OptionT</code>, lifted into the specified <code>Applicative</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transforms an <code>Option</code> into an <code>OptionT</code>, lifted into the specified <code>Applicative</code>.</p><p>Note: The return type is a FromOptionAux[F], which has an apply method on it, allowing
+you to call fromOption like this:</p><pre><span class="kw">val</span> t: <span class="std">Option</span>[<span class="std">Int</span>] = ...
+<span class="kw">val</span> x: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = fromOption[<span class="std">List</span>](t)</pre><p>The reason for the indirection is to emulate currying type parameters.
+</p></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -364,18 +404,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OptionTInstances.html" class="extype" name="cats.data.OptionTInstances">OptionTInstances</a></dd></dl></div>
     </li><li name="cats.data.OptionTInstances#optionTMonad" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="optionTMonad[F[_]](implicitevidence$1:cats.Monad[F]):cats.Monad[[X_kp1]cats.data.OptionT[F,X_kp1]]"></a>
-      <a id="optionTMonad[F[_]](Monad[F]):Monad[[X_kp1]OptionT[F,X_kp1]]"></a>
+      <a id="optionTMonad[F[_]](implicitevidence$1:cats.Monad[F]):cats.Monad[[β]cats.data.OptionT[F,β]]"></a>
+      <a id="optionTMonad[F[_]](Monad[F]):Monad[[β]OptionT[F,β]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">optionTMonad</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OptionTInstances.optionTMonad.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[X_kp1]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.optionTMonad.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>]]</span>
+        <span class="name">optionTMonad</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OptionTInstances.optionTMonad.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.optionTMonad.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@optionTMonad[F[_]](implicitevidence$1:cats.Monad[F]):cats.Monad[[X_kp1]cats.data.OptionT[F,X_kp1]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OptionT$@optionTMonad[F[_]](implicitevidence$1:cats.Monad[F]):cats.Monad[[β]cats.data.OptionT[F,β]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

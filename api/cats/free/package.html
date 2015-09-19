@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -110,7 +110,7 @@ The homomorphism from <code>F[A]</code> to <code>Coyoneda[F,A]</code> exists eve
 <code>F</code> is not a functor.
 </p></div></div>
     </li><li name="cats.free.Free" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Free[S[_],A]extendsSerializable"></a>
+      <a id="Free[S[_],A]extendsProductwithSerializable"></a>
       <a id="Free[S[_],A]:Free[S,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -118,10 +118,10 @@ The homomorphism from <code>F[A]</code> to <code>Coyoneda[F,A]</code> exists eve
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Free.html"><span class="name">Free</span></a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Free.html"><span class="name">Free</span></a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.package@Free[S[_],A]extendsSerializable" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.package@Free[S[_],A]extendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -130,7 +130,7 @@ using the heap instead of the stack, allowing tail-call
 elimination.
 </p></div></div>
     </li><li name="cats.free.FreeApplicative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="FreeApplicative[F[_],A]extendsAnyRef"></a>
+      <a id="FreeApplicative[F[_],A]extendsProductwithSerializable"></a>
       <a id="FreeApplicative[F[_],A]:FreeApplicative[F,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -138,33 +138,14 @@ elimination.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="FreeApplicative.html"><span class="name">FreeApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="FreeApplicative.html"><span class="name">FreeApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.package@FreeApplicative[F[_],A]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.package@FreeApplicative[F[_],A]extendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Applicative Functor for Free</p>
-    </li><li name="cats.free.FreeC" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="FreeC[S[_],A]=cats.free.Free[[X_kp1]cats.free.Coyoneda[S,X_kp1],A]"></a>
-      <a id="FreeC[S[_],A]:FreeC[S,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name">FreeC</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> = <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[[X_kp1]<a href="Coyoneda.html" class="extype" name="cats.free.Coyoneda">Coyoneda</a>[<span class="extype" name="cats.free.FreeC.S">S</span>, <span class="extype" name="cats.free.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>], <span class="extype" name="cats.free.FreeC.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.free.package@FreeC[S[_],A]=cats.free.Free[[X_kp1]cats.free.Coyoneda[S,X_kp1],A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Free monad of the free functor (Coyoneda) of S.</p><div class="fullcomment"><div class="comment cmt"><p>Free monad of the free functor (Coyoneda) of S.</p><p>This can be useful because the monad for <code>Free</code> requires a functor, and
-Coyoneda provides a free functor.
-</p></div></div>
     </li><li name="cats.free.Trampoline" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Trampoline[A]=cats.free.Free[Function0,A]"></a>
       <a id="Trampoline[A]:Trampoline[A]"></a>
@@ -271,7 +252,7 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="FreeApplicative$.html"><span class="name">FreeApplicative</span></a>
+        <a href="FreeApplicative$.html"><span class="name">FreeApplicative</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.free.package@FreeApplicative" title="Permalink" target="_top">

@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/std/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="FutureInstances.html" class="extype" name="cats.std.FutureInstances">FutureInstances</a>, <a href="FutureInstances1.html" class="extype" name="cats.std.FutureInstances1">FutureInstances1</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="FutureInstances.html" class="extype" name="cats.std.FutureInstances">FutureInstances</a>, <a href="FutureInstances1.html" class="extype" name="cats.std.FutureInstances1">FutureInstances1</a>, <a href="FutureInstances2.html" class="extype" name="cats.std.FutureInstances2">FutureInstances2</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.future"><span>future</span></li><li class="in" name="cats.std.FutureInstances"><span>FutureInstances</span></li><li class="in" name="cats.std.FutureInstances1"><span>FutureInstances1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.future"><span>future</span></li><li class="in" name="cats.std.FutureInstances"><span>FutureInstances</span></li><li class="in" name="cats.std.FutureInstances1"><span>FutureInstances1</span></li><li class="in" name="cats.std.FutureInstances2"><span>FutureInstances2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -242,36 +242,19 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.std.FutureInstances1#futureComonad" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="futureComonad(atMost:scala.concurrent.duration.FiniteDuration)(implicitec:scala.concurrent.ExecutionContext):cats.Comonad[scala.concurrent.Future]"></a>
-      <a id="futureComonad(FiniteDuration)(ExecutionContext):Comonad[Future]"></a>
+    </li><li name="cats.std.FutureInstances#futureGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="futureGroup[A](implicitevidence$1:cats.Group[A],implicitec:scala.concurrent.ExecutionContext):cats.Group[scala.concurrent.Future[A]]"></a>
+      <a id="futureGroup[A](Group[A],ExecutionContext):Group[Future[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">futureComonad</span><span class="params">(<span name="atMost">atMost: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>]</span>
+        <span class="name">futureGroup</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#Group[A]=algebra.Group[A]" class="extmbr" name="cats.Group">Group</a>[<span class="extype" name="cats.std.FutureInstances.futureGroup.A">A</span>]</span>, <span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="../package.html#Group[A]=algebra.Group[A]" class="extmbr" name="cats.Group">Group</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="cats.std.FutureInstances.futureGroup.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$future$@futureComonad(atMost:scala.concurrent.duration.FiniteDuration)(implicitec:scala.concurrent.ExecutionContext):cats.Comonad[scala.concurrent.Future]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FutureInstances1.html" class="extype" name="cats.std.FutureInstances1">FutureInstances1</a></dd></dl></div>
-    </li><li name="cats.std.FutureInstances#futureEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="futureEq[A](atMost:scala.concurrent.duration.FiniteDuration)(implicitA:cats.Eq[A],implicitec:scala.concurrent.ExecutionContext):cats.Eq[scala.concurrent.Future[A]]"></a>
-      <a id="futureEq[A](FiniteDuration)(Eq[A],ExecutionContext):Eq[Future[A]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">futureEq</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="atMost">atMost: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.std.FutureInstances.futureEq.A">A</span>]</span>, <span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="cats.std.FutureInstances.futureEq.A">A</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$future$@futureEq[A](atMost:scala.concurrent.duration.FiniteDuration)(implicitA:cats.Eq[A],implicitec:scala.concurrent.ExecutionContext):cats.Eq[scala.concurrent.Future[A]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$future$@futureGroup[A](implicitevidence$1:cats.Group[A],implicitec:scala.concurrent.ExecutionContext):cats.Group[scala.concurrent.Future[A]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -285,7 +268,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">futureInstance</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[E, A]<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="cats.std.FutureInstances.&lt;refinement&gt;.L_kp.A">A</span>], <span class="extype" name="scala.Throwable">Throwable</span>] with <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>]</span>
+        <span class="name">futureInstance</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[E, A]<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="cats.std.FutureInstances.&lt;refinement&gt;.Λ$.A">A</span>], <span class="extype" name="scala.Throwable">Throwable</span>] with <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.std.package$$future$@futureInstance(implicitec:scala.concurrent.ExecutionContext):cats.MonadError[[E,A]scala.concurrent.Future[A],Throwable]withcats.CoflatMap[scala.concurrent.Future]" title="Permalink" target="_top">
@@ -294,7 +277,7 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FutureInstances.html" class="extype" name="cats.std.FutureInstances">FutureInstances</a></dd></dl></div>
     </li><li name="cats.std.FutureInstances1#futureMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="futureMonoid[A](implicitA:cats.Monoid[A],implicitec:scala.concurrent.ExecutionContext):cats.Monoid[scala.concurrent.Future[A]]"></a>
+      <a id="futureMonoid[A](implicitevidence$2:cats.Monoid[A],implicitec:scala.concurrent.ExecutionContext):cats.Monoid[scala.concurrent.Future[A]]"></a>
       <a id="futureMonoid[A](Monoid[A],ExecutionContext):Monoid[Future[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -302,16 +285,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">futureMonoid</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.std.FutureInstances1.futureMonoid.A">A</span>]</span>, <span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="cats.std.FutureInstances1.futureMonoid.A">A</span>]]</span>
+        <span class="name">futureMonoid</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.std.FutureInstances1.futureMonoid.A">A</span>]</span>, <span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="cats.std.FutureInstances1.futureMonoid.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$future$@futureMonoid[A](implicitA:cats.Monoid[A],implicitec:scala.concurrent.ExecutionContext):cats.Monoid[scala.concurrent.Future[A]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$future$@futureMonoid[A](implicitevidence$2:cats.Monoid[A],implicitec:scala.concurrent.ExecutionContext):cats.Monoid[scala.concurrent.Future[A]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FutureInstances1.html" class="extype" name="cats.std.FutureInstances1">FutureInstances1</a></dd></dl></div>
-    </li><li name="cats.std.FutureInstances#futureSemigroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="futureSemigroup[A](implicitA:cats.Semigroup[A],implicitec:scala.concurrent.ExecutionContext):cats.Semigroup[scala.concurrent.Future[A]]"></a>
+    </li><li name="cats.std.FutureInstances2#futureSemigroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="futureSemigroup[A](implicitevidence$3:cats.Semigroup[A],implicitec:scala.concurrent.ExecutionContext):cats.Semigroup[scala.concurrent.Future[A]]"></a>
       <a id="futureSemigroup[A](Semigroup[A],ExecutionContext):Semigroup[Future[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -319,14 +302,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">futureSemigroup</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.std.FutureInstances.futureSemigroup.A">A</span>]</span>, <span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="cats.std.FutureInstances.futureSemigroup.A">A</span>]]</span>
+        <span class="name">futureSemigroup</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.std.FutureInstances2.futureSemigroup.A">A</span>]</span>, <span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="cats.std.FutureInstances2.futureSemigroup.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$future$@futureSemigroup[A](implicitA:cats.Semigroup[A],implicitec:scala.concurrent.ExecutionContext):cats.Semigroup[scala.concurrent.Future[A]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$future$@futureSemigroup[A](implicitevidence$3:cats.Semigroup[A],implicitec:scala.concurrent.ExecutionContext):cats.Semigroup[scala.concurrent.Future[A]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FutureInstances.html" class="extype" name="cats.std.FutureInstances">FutureInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FutureInstances2.html" class="extype" name="cats.std.FutureInstances2">FutureInstances2</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -545,6 +528,8 @@
               <h3>Inherited from <a href="FutureInstances.html" class="extype" name="cats.std.FutureInstances">FutureInstances</a></h3>
             </div><div class="parent" name="cats.std.FutureInstances1">
               <h3>Inherited from <a href="FutureInstances1.html" class="extype" name="cats.std.FutureInstances1">FutureInstances1</a></h3>
+            </div><div class="parent" name="cats.std.FutureInstances2">
+              <h3>Inherited from <a href="FutureInstances2.html" class="extype" name="cats.std.FutureInstances2">FutureInstances2</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

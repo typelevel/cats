@@ -33,7 +33,7 @@ scala> implicit val optionApply: Apply[Option] = new Apply[Option] {
      | 
      |   def map[A,B](fa: Option[A])(f: A => B): Option[B] = fa map f
      | }
-optionApply: cats.Apply[Option] = $anon$1@28b1f7b1
+optionApply: cats.Apply[Option] = $anon$1@3af4e9a
 
 scala> implicit val listApply: Apply[List] = new Apply[List] {
      |   def ap[A, B](fa: List[A])(f: List[A => B]): List[B] =
@@ -41,7 +41,7 @@ scala> implicit val listApply: Apply[List] = new Apply[List] {
      | 
      |   def map[A,B](fa: List[A])(f: A => B): List[B] = fa map f
      | }
-listApply: cats.Apply[List] = $anon$1@65b18bc7
+listApply: cats.Apply[List] = $anon$1@17d8e85c
 ```
 
 ### map
@@ -65,7 +65,7 @@ And like functors, `Apply` instances also compose:
 
 ```scala
 scala> val listOpt = Apply[List] compose Apply[Option]
-listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@4a691a7e
+listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@d90c6
 
 scala> val plusOne = (x:Int) => x + 1
 plusOne: Int => Int = <function1>
@@ -184,10 +184,10 @@ scala> import cats.syntax.apply._
 import cats.syntax.apply._
 
 scala> val option2 = Option(1) |@| Option(2)
-option2: cats.syntax.ApplyBuilder[Option]#ApplyBuilder2[Int,Int] = cats.syntax.ApplyBuilder$ApplyBuilder2@5bc9fb0
+option2: cats.syntax.ApplyBuilder[Option]#ApplyBuilder2[Int,Int] = cats.syntax.ApplyBuilder$ApplyBuilder2@4745992d
 
 scala> val option3 = option2 |@| Option.empty[Int]
-option3: cats.syntax.ApplyBuilder[Option]#ApplyBuilder3[Int,Int,Int] = cats.syntax.ApplyBuilder$ApplyBuilder3@4d100b40
+option3: cats.syntax.ApplyBuilder[Option]#ApplyBuilder3[Int,Int,Int] = cats.syntax.ApplyBuilder$ApplyBuilder3@38d42469
 
 scala> option2 map addArity2
 res19: Option[Int] = Some(3)

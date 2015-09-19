@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -829,18 +829,18 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
     </span>
       
     </li><li name="cats.data.XorT#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="traverse[G[_],D](f:B=&gt;G[D])(implicittraverseF:cats.Traverse[F],implicittraverseXorA:cats.Traverse[[X_kp1]cats.data.Xor[A,X_kp1]],implicitapplicativeG:cats.Applicative[G]):G[cats.data.XorT[F,A,D]]"></a>
-      <a id="traverse[G[_],D]((B)⇒G[D])(Traverse[F],Traverse[[X_kp1]Xor[A,X_kp1]],Applicative[G]):G[XorT[F,A,D]]"></a>
+      <a id="traverse[G[_],D](f:B=&gt;G[D])(implicittraverseF:cats.Traverse[F],implicittraverseXorA:cats.Traverse[[β]cats.data.Xor[A,β]],implicitapplicativeG:cats.Applicative[G]):G[cats.data.XorT[F,A,D]]"></a>
+      <a id="traverse[G[_],D]((B)⇒G[D])(Traverse[F],Traverse[[β]Xor[A,β]],Applicative[G]):G[XorT[F,A,D]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">traverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.XorT.B">B</span>) ⇒ <span class="extype" name="cats.data.XorT.traverse.G">G</span>[<span class="extype" name="cats.data.XorT.traverse.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="traverseF">traverseF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>, <span name="traverseXorA">traverseXorA: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[X_kp1]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>]]</span>, <span name="applicativeG">applicativeG: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.XorT.traverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.XorT.traverse.G">G</span>[<a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.traverse.D">D</span>]]</span>
+        <span class="name">traverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.XorT.B">B</span>) ⇒ <span class="extype" name="cats.data.XorT.traverse.G">G</span>[<span class="extype" name="cats.data.XorT.traverse.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="traverseF">traverseF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>, <span name="traverseXorA">traverseXorA: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.&lt;refinement&gt;.Λ$.β">β</span>]]</span>, <span name="applicativeG">applicativeG: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.XorT.traverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.XorT.traverse.G">G</span>[<a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.traverse.D">D</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.XorT@traverse[G[_],D](f:B=&gt;G[D])(implicittraverseF:cats.Traverse[F],implicittraverseXorA:cats.Traverse[[X_kp1]cats.data.Xor[A,X_kp1]],implicitapplicativeG:cats.Applicative[G]):G[cats.data.XorT[F,A,D]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.XorT@traverse[G[_],D](f:B=&gt;G[D])(implicittraverseF:cats.Traverse[F],implicittraverseXorA:cats.Traverse[[β]cats.data.Xor[A,β]],implicitapplicativeG:cats.Applicative[G]):G[cats.data.XorT[F,A,D]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

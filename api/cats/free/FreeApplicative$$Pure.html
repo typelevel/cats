@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/free/src/main/scala/cats/free/FreeApplicative.scala" target="_blank">FreeApplicative.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a>[<span class="extype" name="cats.free.FreeApplicative.Pure.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.Pure.A">A</span>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a>[<span class="extype" name="cats.free.FreeApplicative.Pure.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.Pure.A">A</span>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.free.FreeApplicative.Pure"><span>Pure</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="cats.free.FreeApplicative"><span>FreeApplicative</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.free.FreeApplicative.Pure"><span>Pure</span></li><li class="in" name="cats.free.FreeApplicative"><span>FreeApplicative</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -239,6 +239,23 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.free.FreeApplicative#compile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compile[G[_]](f:cats.~&gt;[F,G]):cats.free.FreeApplicative.FA[G,A]"></a>
+      <a id="compile[G[_]](~&gt;[F,G]):FA[G,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compile</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../package.html#~&gt;[F[_],G[_]]=cats.arrow.NaturalTransformation[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.free.FreeApplicative.Pure.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.compile.G">G</span>]</span>)</span><span class="result">: <a href="FreeApplicative$.html#FA[F[_],A]=cats.free.FreeApplicative[F,A]" class="extmbr" name="cats.free.FreeApplicative.FA">FA</a>[<span class="extype" name="cats.free.FreeApplicative.compile.G">G</span>, <span class="extype" name="cats.free.FreeApplicative.Pure.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.FreeApplicative$$Pure@compile[G[_]](f:cats.~&gt;[F,G]):cats.free.FreeApplicative.FA[G,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Interpret this algebra into another FreeApplicative</p><div class="fullcomment"><div class="comment cmt"><p>Interpret this algebra into another FreeApplicative</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -279,6 +296,46 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.free.FreeApplicative#fold" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fold(implicitF:cats.Applicative[F]):F[A]"></a>
+      <a id="fold(Applicative[F]):F[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fold</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeApplicative.Pure.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.FreeApplicative.Pure.F">F</span>[<span class="extype" name="cats.free.FreeApplicative.Pure.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.FreeApplicative$$Pure@fold(implicitF:cats.Applicative[F]):F[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Interpret/run the operations using the semantics of <code>Applicative[F]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Interpret/run the operations using the semantics of <code>Applicative[F]</code>.
+Tail recursive only if <code>F</code> provides tail recursive interpretation.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a></dd></dl></div>
+    </li><li name="cats.free.FreeApplicative#foldMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldMap[G[_]](f:cats.~&gt;[F,G])(implicitG:cats.Applicative[G]):G[A]"></a>
+      <a id="foldMap[G[_]](~&gt;[F,G])(Applicative[G]):G[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldMap</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../package.html#~&gt;[F[_],G[_]]=cats.arrow.NaturalTransformation[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.free.FreeApplicative.Pure.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.foldMap.G">G</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeApplicative.foldMap.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.FreeApplicative.foldMap.G">G</span>[<span class="extype" name="cats.free.FreeApplicative.Pure.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.FreeApplicative$$Pure@foldMap[G[_]](f:cats.~&gt;[F,G])(implicitG:cats.Applicative[G]):G[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Interprets/Runs the sequence of operations using the semantics of Applicative G
+Tail recursive only if G provides tail recursive interpretation (ie G is FreeMonad)
+</p><div class="fullcomment"><div class="comment cmt"><p>Interprets/Runs the sequence of operations using the semantics of Applicative G
+Tail recursive only if G provides tail recursive interpretation (ie G is FreeMonad)
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -296,23 +353,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.free.FreeApplicative#hoist" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hoist[G[_]](f:cats.~&gt;[F,G]):cats.free.FreeApplicative.FA[G,A]"></a>
-      <a id="hoist[G[_]](~&gt;[F,G]):FA[G,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hoist</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../package.html#~&gt;[F[_],G[_]]=cats.arrow.NaturalTransformation[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.free.FreeApplicative.Pure.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.hoist.G">G</span>]</span>)</span><span class="result">: <a href="FreeApplicative$.html#FA[F[_],A]=cats.free.FreeApplicative[F,A]" class="extmbr" name="cats.free.FreeApplicative.FA">FA</a>[<span class="extype" name="cats.free.FreeApplicative.hoist.G">G</span>, <span class="extype" name="cats.free.FreeApplicative.Pure.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.free.FreeApplicative$$Pure@hoist[G[_]](f:cats.~&gt;[F,G]):cats.free.FreeApplicative.FA[G,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Natural Transformation of FreeApplicative based on given Natural Transformation</p><div class="fullcomment"><div class="comment cmt"><p>Natural Transformation of FreeApplicative based on given Natural Transformation</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -347,6 +387,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a></dd></dl></div>
+    </li><li name="cats.free.FreeApplicative#monad" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="monad:cats.free.Free[F,A]"></a>
+      <a id="monad:Free[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">monad</span><span class="result">: <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.FreeApplicative.Pure.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.Pure.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.FreeApplicative$$Pure@monad:cats.free.Free[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Compile this FreeApplicative algebra into a Free algebra.</p><div class="fullcomment"><div class="comment cmt"><p>Compile this FreeApplicative algebra into a Free algebra.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -398,27 +455,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.free.FreeApplicative#run" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="run[G[_]](f:cats.~&gt;[F,G])(implicitG:cats.Applicative[G]):G[A]"></a>
-      <a id="run[G[_]](~&gt;[F,G])(Applicative[G]):G[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">run</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../package.html#~&gt;[F[_],G[_]]=cats.arrow.NaturalTransformation[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.free.FreeApplicative.Pure.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.run.G">G</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeApplicative.run.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.FreeApplicative.run.G">G</span>[<span class="extype" name="cats.free.FreeApplicative.Pure.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.free.FreeApplicative$$Pure@run[G[_]](f:cats.~&gt;[F,G])(implicitG:cats.Applicative[G]):G[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Interpretes/Runs the sequence of operations using the semantics of Applicative G
-Tail recursive only if G provides tail recursive interpretation (ie G is FreeMonad)
-</p><div class="fullcomment"><div class="comment cmt"><p>Interpretes/Runs the sequence of operations using the semantics of Applicative G
-Tail recursive only if G provides tail recursive interpretation (ie G is FreeMonad)
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -514,7 +550,9 @@ Tail recursive only if G provides tail recursive interpretation (ie G is FreeMon
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
+        <div class="parent" name="cats.free.FreeApplicative">
+              <h3>Inherited from <a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a>[<span class="extype" name="cats.free.FreeApplicative.Pure.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.Pure.A">A</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
@@ -522,8 +560,6 @@ Tail recursive only if G provides tail recursive interpretation (ie G is FreeMon
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
-            </div><div class="parent" name="cats.free.FreeApplicative">
-              <h3>Inherited from <a href="FreeApplicative.html" class="extype" name="cats.free.FreeApplicative">FreeApplicative</a>[<span class="extype" name="cats.free.FreeApplicative.Pure.F">F</span>, <span class="extype" name="cats.free.FreeApplicative.Pure.A">A</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

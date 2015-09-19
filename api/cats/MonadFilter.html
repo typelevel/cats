@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../lib/template.js"></script>
       <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../lib/modernizr.custom.js"></script><script type="text/javascript" src="../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
@@ -152,7 +152,7 @@ used when pattern matching or using guards in for comprehensions.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"><code>pure</code> lifts any value into the Applicative Functor</p><div class="fullcomment"><div class="comment cmt"><p><code>pure</code> lifts any value into the Applicative Functor</p><p>Applicative[Option].pure(10) = Some(10)
+      <p class="shortcomment cmt"><code>pure</code> lifts any value into the Applicative Functor.</p><div class="fullcomment"><div class="comment cmt"><p><code>pure</code> lifts any value into the Applicative Functor.</p><p>Applicative[Option].pure(10) = Some(10)
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a></dd></dl></div>
     </li></ol>
             </div>
@@ -655,7 +655,7 @@ function to the value.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Applicative.compose.G">G</span>]</span>)</span><span class="result">: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[α]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.Applicative.compose.G">G</span>[<span class="extype" name="cats.Applicative.&lt;refinement&gt;.L_kp.α">α</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Applicative.compose.G">G</span>]</span>)</span><span class="result">: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[α]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.Applicative.compose.G">G</span>[<span class="extype" name="cats.Applicative.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.MonadFilter@compose[G[_]](implicitGG:cats.Applicative[G]):cats.Applicative[[α]F[G[α]]]" title="Permalink" target="_top">
@@ -673,7 +673,7 @@ function to the value.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Apply.compose.G">G</span>]</span>)</span><span class="result">: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[[X]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.Apply.compose.G">G</span>[<span class="extype" name="cats.Apply.&lt;refinement&gt;.L_kp.X">X</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Apply.compose.G">G</span>]</span>)</span><span class="result">: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[[X]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.Apply.compose.G">G</span>[<span class="extype" name="cats.Apply.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.MonadFilter@compose[G[_]](implicitGG:cats.Apply[G]):cats.Apply[[X]F[G[X]]]" title="Permalink" target="_top">
@@ -694,7 +694,7 @@ ap.map2(x, y)(_ + _) == Some(List(11, 12, 21, 22))
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Functor.compose.G">G</span>]</span>)</span><span class="result">: <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[[X]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.Functor.compose.G">G</span>[<span class="extype" name="cats.Functor.&lt;refinement&gt;.L_kp.X">X</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Functor.compose.G">G</span>]</span>)</span><span class="result">: <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[[X]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.Functor.compose.G">G</span>[<span class="extype" name="cats.Functor.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.MonadFilter@compose[G[_]](implicitGG:cats.Functor[G]):cats.Functor[[X]F[G[X]]]" title="Permalink" target="_top">
@@ -716,7 +716,7 @@ map a G[F[A]] to a G[F[B]].
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.functor.Invariant.compose.G">G</span>]</span>, <span name="GG">GG: <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.functor.Invariant.compose.G">G</span>]</span>)</span><span class="result">: <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[[X]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.functor.Invariant.compose.G">G</span>[<span class="extype" name="cats.functor.Invariant.&lt;refinement&gt;.L_kp.X">X</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.functor.Invariant.compose.G">G</span>]</span>, <span name="GG">GG: <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.functor.Invariant.compose.G">G</span>]</span>)</span><span class="result">: <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[[X]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.functor.Invariant.compose.G">G</span>[<span class="extype" name="cats.functor.Invariant.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.MonadFilter@compose[G[_]](implicitevidence$1:cats.functor.Invariant[G],implicitGG:cats.functor.Invariant[G]):cats.functor.Invariant[[X]F[G[X]]]" title="Permalink" target="_top">
@@ -734,7 +734,7 @@ map a G[F[A]] to a G[F[B]].
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">composeWithContravariant</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.Functor.composeWithContravariant.G">G</span>]</span>)</span><span class="result">: <a href="functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[X]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.Functor.composeWithContravariant.G">G</span>[<span class="extype" name="cats.Functor.&lt;refinement&gt;.L_kp.X">X</span>]]]</span>
+        <span class="name">composeWithContravariant</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.Functor.composeWithContravariant.G">G</span>]</span>)</span><span class="result">: <a href="functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[X]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.Functor.composeWithContravariant.G">G</span>[<span class="extype" name="cats.Functor.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.MonadFilter@composeWithContravariant[G[_]](implicitGG:cats.functor.Contravariant[G]):cats.functor.Contravariant[[X]F[G[X]]]" title="Permalink" target="_top">
@@ -754,7 +754,7 @@ on F[G[_]].
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">composeWithFunctor</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Functor.composeWithFunctor.G">G</span>]</span>)</span><span class="result">: <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[[X]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.Functor.composeWithFunctor.G">G</span>[<span class="extype" name="cats.Functor.&lt;refinement&gt;.L_kp.X">X</span>]]]</span>
+        <span class="name">composeWithFunctor</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Functor.composeWithFunctor.G">G</span>]</span>)</span><span class="result">: <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[[X]<span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.Functor.composeWithFunctor.G">G</span>[<span class="extype" name="cats.Functor.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.MonadFilter@composeWithFunctor[G[_]](implicitevidence$1:cats.Functor[G]):cats.Functor[[X]F[G[X]]]" title="Permalink" target="_top">
@@ -1443,6 +1443,24 @@ with the value
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Applicative#pureEval" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="pureEval[A](x:cats.Eval[A]):F[A]"></a>
+      <a id="pureEval[A](Eval[A]):F[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pureEval</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Applicative.pureEval.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.MonadFilter.F">F</span>[<span class="extype" name="cats.Applicative.pureEval.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.MonadFilter@pureEval[A](x:cats.Eval[A]):F[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>pureEval</code> lifts any value into the Applicative Functor.</p><div class="fullcomment"><div class="comment cmt"><p><code>pureEval</code> lifts any value into the Applicative Functor.</p><p>This variant supports optional laziness.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a></dd></dl></div>
     </li><li name="cats.Applicative#sequence" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sequence[G[_],A](as:G[F[A]])(implicitevidence$1:cats.Traverse[G]):F[G[A]]"></a>
       <a id="sequence[G[_],A](G[F[A]])(Traverse[G]):F[G[A]]"></a>

@@ -153,7 +153,7 @@ scala> implicit def constFunctor[X]: Functor[Const[X, ?]] =
      |     def map[A, B](fa: Const[X, A])(f: A => B): Const[X, B] =
      |       Const(fa.getConst)
      |   }
-constFunctor: [X]=> cats.Functor[[X_kp1]cats.data.Const[X,X_kp1]]
+constFunctor: [X]=> cats.Functor[[β]cats.data.Const[X,β]]
 ```
 
 Now that that's taken care of, let's substitute and see what happens.
@@ -237,7 +237,7 @@ scala> implicit def constApplicative[Z]: Applicative[Const[Z, ?]] =
      | 
      |     def ap[A, B](fa: Const[Z, A])(f: Const[Z, A => B]): Const[Z, B] = ???
      |   }
-constApplicative: [Z]=> cats.Applicative[[X_kp1]cats.data.Const[Z,X_kp1]]
+constApplicative: [Z]=> cats.Applicative[[β]cats.data.Const[Z,β]]
 ```
 
 Recall that `Const[Z, A]` means we have a `Z` value in hand, and don't really care about the `A` type parameter.
@@ -261,7 +261,7 @@ scala> implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, ?]] =
      |     def ap[A, B](fa: Const[Z, A])(f: Const[Z, A => B]): Const[Z, B] =
      |       Const(Monoid[Z].combine(fa.getConst, f.getConst))
      |   }
-constApplicative: [Z](implicit evidence$1: cats.Monoid[Z])cats.Applicative[[X_kp1]cats.data.Const[Z,X_kp1]]
+constApplicative: [Z](implicit evidence$1: cats.Monoid[Z])cats.Applicative[[β]cats.data.Const[Z,β]]
 ```
 
 We have our `Applicative`!

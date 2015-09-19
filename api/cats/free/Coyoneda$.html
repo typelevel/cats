@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -111,24 +111,6 @@
       <p class="shortcomment cmt">Lift the <code>Pivot</code> type member to a parameter.</p><div class="fullcomment"><div class="comment cmt"><p>Lift the <code>Pivot</code> type member to a parameter. It is usually more
 convenient to use <code>Aux</code> than a structural type.
 </p></div></div>
-    </li><li name="cats.free.Coyoneda.By" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="By[F[_]]extendsAnyRef"></a>
-      <a id="By[F[_]]:By[F]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="Coyoneda$$By.html"><span class="name">By</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.free.Coyoneda$@By[F[_]]extendsAnyRef" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Represents a partially-built Coyoneda instance.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a partially-built Coyoneda instance. Used in the <code>by</code> method.
-</p></div></div>
     </li></ol>
             </div>
 
@@ -221,24 +203,6 @@ convenient to use <code>Aux</code> than a structural type.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.free.Coyoneda#by" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="by[F[_]]:cats.free.Coyoneda.By[F]"></a>
-      <a id="by[F[_]]:By[F]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">by</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="Coyoneda$$By.html" class="extype" name="cats.free.Coyoneda.By">By</a>[<span class="extype" name="cats.free.Coyoneda.by.F">F</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.free.Coyoneda$@by[F[_]]:cats.free.Coyoneda.By[F]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Partial application of type parameters to <code>apply</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Partial application of type parameters to <code>apply</code>.</p><p>It can be nicer to say <code>Coyoneda.by[F]{ x: X =&gt; ... }</code></p><p>...instead of <code>Coyoneda[...](...){ x =&gt; ... }</code>.
-</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -263,18 +227,18 @@ convenient to use <code>Aux</code> than a structural type.
               
         </dd></dl></div>
     </li><li name="cats.free.Coyoneda#coyonedaFunctor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="coyonedaFunctor[F[_]]:cats.Functor[[X_kp1]cats.free.Coyoneda[F,X_kp1]]"></a>
-      <a id="coyonedaFunctor[F[_]]:Functor[[X_kp1]Coyoneda[F,X_kp1]]"></a>
+      <a id="coyonedaFunctor[F[_]]:cats.Functor[[β]cats.free.Coyoneda[F,β]]"></a>
+      <a id="coyonedaFunctor[F[_]]:Functor[[β]Coyoneda[F,β]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">coyonedaFunctor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[X_kp1]<a href="Coyoneda.html" class="extype" name="cats.free.Coyoneda">Coyoneda</a>[<span class="extype" name="cats.free.Coyoneda.coyonedaFunctor.F">F</span>, <span class="extype" name="cats.free.Coyoneda.&lt;refinement&gt;.L_kp.X_kp1">X_kp1</span>]]</span>
+        <span class="name">coyonedaFunctor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[β]<a href="Coyoneda.html" class="extype" name="cats.free.Coyoneda">Coyoneda</a>[<span class="extype" name="cats.free.Coyoneda.coyonedaFunctor.F">F</span>, <span class="extype" name="cats.free.Coyoneda.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.Coyoneda$@coyonedaFunctor[F[_]]:cats.Functor[[X_kp1]cats.free.Coyoneda[F,X_kp1]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.Coyoneda$@coyonedaFunctor[F[_]]:cats.Functor[[β]cats.free.Coyoneda[F,β]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

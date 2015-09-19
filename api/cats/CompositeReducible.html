@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../lib/template.js"></script>
       <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../lib/modernizr.custom.js"></script><script type="text/javascript" src="../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
@@ -45,7 +45,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">CompositeReducible</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.α">α</span>]]] with <a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>[<span class="extype" name="cats.CompositeReducible.F">F</span>, <span class="extype" name="cats.CompositeReducible.G">G</span>]</span>
+        <span class="name">CompositeReducible</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]] with <a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>[<span class="extype" name="cats.CompositeReducible.F">F</span>, <span class="extype" name="cats.CompositeReducible.G">G</span>]</span>
       </span>
       </h4>
       
@@ -55,7 +55,7 @@ instance for the nested types.</p><p>In other words, given a <code>Reducible[F]<
 values), this class is able to reduce <code>F[G[A]]</code> values.
 </p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Reducible.scala" target="_blank">Reducible.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>[<span class="extype" name="cats.CompositeReducible.F">F</span>, <span class="extype" name="cats.CompositeReducible.G">G</span>], <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.α">α</span>]]], <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.α">α</span>]]], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>[<span class="extype" name="cats.CompositeReducible.F">F</span>, <span class="extype" name="cats.CompositeReducible.G">G</span>], <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]], <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -226,6 +226,24 @@ values), this class is able to reduce <code>F[G[A]]</code> values.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.Foldable#combineAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="combineAll[A](fa:F[A])(implicitevidence$1:cats.Monoid[A]):A"></a>
+      <a id="combineAll[A](F[G[A]])(Monoid[A]):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">combineAll</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.Foldable.combineAll.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Foldable.combineAll.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.combineAll.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.CompositeReducible@combineAll[A](fa:F[A])(implicitevidence$1:cats.Monoid[A]):A" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Alias for <a href="Foldable.html#fold[A](fa:F[A])(implicitA:cats.Monoid[A]):A" class="extmbr" name="cats.Foldable#fold">fold</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Foldable.html#fold[A](fa:F[A])(implicitA:cats.Monoid[A]):A" class="extmbr" name="cats.Foldable#fold">fold</a>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Reducible#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose[G[_]](implicitGG:cats.Reducible[G]):cats.Reducible[[α]F[G[α]]]"></a>
       <a id="compose[G[_]](Reducible[G]):Reducible[[α]F[G[G[α]]]]"></a>
@@ -235,7 +253,7 @@ values), this class is able to reduce <code>F[G[A]]</code> values.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[<span class="extype" name="cats.Reducible.compose.G">G</span>]</span>)</span><span class="result">: <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.Reducible.compose.G">G</span>[<span class="extype" name="cats.Reducible.&lt;refinement&gt;.L_kp.α">α</span>]]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[<span class="extype" name="cats.Reducible.compose.G">G</span>]</span>)</span><span class="result">: <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.Reducible.compose.G">G</span>[<span class="extype" name="cats.Reducible.&lt;refinement&gt;.Λ$.α">α</span>]]]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.CompositeReducible@compose[G[_]](implicitGG:cats.Reducible[G]):cats.Reducible[[α]F[G[α]]]" title="Permalink" target="_top">
@@ -253,7 +271,7 @@ values), this class is able to reduce <code>F[G[A]]</code> values.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.compose.G">G</span>]</span>)</span><span class="result">: <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.Foldable.compose.G">G</span>[<span class="extype" name="cats.Foldable.&lt;refinement&gt;.L_kp.α">α</span>]]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.compose.G">G</span>]</span>)</span><span class="result">: <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.Foldable.compose.G">G</span>[<span class="extype" name="cats.Foldable.&lt;refinement&gt;.Λ$.α">α</span>]]]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.CompositeReducible@compose[G[_]](implicitev:cats.Foldable[G]):cats.Foldable[[α]F[G[α]]]" title="Permalink" target="_top">
@@ -449,8 +467,8 @@ F.foldK(<span class="std">List</span>(<span class="num">1</span> :: <span class=
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"> Left assocative fold on F[G[A]] using 'f'
-</p><div class="fullcomment"><div class="comment cmt"><p> Left assocative fold on F[G[A]] using 'f'
+      <p class="shortcomment cmt"> Left associative fold on F[G[A]] using 'f'
+</p><div class="fullcomment"><div class="comment cmt"><p> Left associative fold on F[G[A]] using 'f'
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a> → <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#foldMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foldMap[A,B](fa:F[A])(f:A=&gt;B)(implicitB:cats.Monoid[B]):B"></a>
@@ -836,7 +854,7 @@ that we only need <code>Apply[G]</code> here, since we don't need to call
 <code>Applicative#pure</code> for a starting value.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a></dd></dl></div>
     </li><li name="cats.Foldable#sequence_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$1:cats.Applicative[G]):G[Unit]"></a>
+      <a id="sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]"></a>
       <a id="sequence_[G[_],A,B](F[G[G[A]]])(Applicative[G]):G[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -847,7 +865,7 @@ that we only need <code>Apply[G]</code> here, since we don't need to call
         <span class="name">sequence_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>[<span class="extype" name="cats.Foldable.sequence_.A">A</span>]]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.sequence_.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.CompositeReducible@sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$1:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
+      <a href="../index.html#cats.CompositeReducible@sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -890,6 +908,23 @@ F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span 
     </span>
       <p class="shortcomment cmt">Convert F[A] to a List[A].</p><div class="fullcomment"><div class="comment cmt"><p>Convert F[A] to a List[A].
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+    </li><li name="cats.Foldable#toStreaming" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toStreaming[A](fa:F[A]):cats.data.Streaming[A]"></a>
+      <a id="toStreaming[A](F[G[A]]):Streaming[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toStreaming</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.Foldable.toStreaming.A">A</span>]]</span>)</span><span class="result">: <a href="data/Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.Foldable.toStreaming.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.CompositeReducible@toStreaming[A](fa:F[A]):cats.data.Streaming[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -1033,9 +1068,9 @@ needed.
         <div class="parent" name="cats.CompositeFoldable">
               <h3>Inherited from <a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>[<span class="extype" name="cats.CompositeReducible.F">F</span>, <span class="extype" name="cats.CompositeReducible.G">G</span>]</h3>
             </div><div class="parent" name="cats.Reducible">
-              <h3>Inherited from <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.α">α</span>]]]</h3>
+              <h3>Inherited from <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]]</h3>
             </div><div class="parent" name="cats.Foldable">
-              <h3>Inherited from <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.L_kp.α">α</span>]]]</h3>
+              <h3>Inherited from <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">

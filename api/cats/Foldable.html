@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../lib/template.js"></script>
       <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../lib/modernizr.custom.js"></script><script type="text/javascript" src="../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
@@ -54,7 +54,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Data structures that can be folded to a summary value.</p><p>In the case of a collection (such as <code>List</code> or <code>Set</code>), these
 methods will fold together (combine) the values contained in the
 collection to produce a single result. Most collection types have
-<code>foldLeft</code> methods, which will usually be used by the associationed
+<code>foldLeft</code> methods, which will usually be used by the associated
 <code>Foldable[_]</code> instance.</p><p>Foldable[F] is implemented in terms of two basic methods:</p><ul><li><code>foldLeft(fa, b)(f)</code> eagerly folds <code>fa</code> from left-to-right.</li><li><code>foldRight(fa, b)(f)</code> lazily folds <code>fa</code> from right-to-left.</li></ul><p>Beyond these it provides many other useful methods related to
 folding over F[A] values.</p><p>See: <a href="https://www.cs.nott.ac.uk/~gmh/fold.pdf" target="_blank">A tutorial on the universality and expressiveness of fold</a>
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Foldable.scala" target="_blank">Foldable.scala</a></dd></dl><div class="toggleContainer block">
@@ -238,6 +238,23 @@ documentation for <code>Eval[_]</code>.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.Foldable#combineAll" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="combineAll[A](fa:F[A])(implicitevidence$1:cats.Monoid[A]):A"></a>
+      <a id="combineAll[A](F[A])(Monoid[A]):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">combineAll</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.combineAll.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Foldable.combineAll.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.combineAll.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Foldable@combineAll[A](fa:F[A])(implicitevidence$1:cats.Monoid[A]):A" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Alias for <a href="#fold[A](fa:F[A])(implicitA:cats.Monoid[A]):A" class="extmbr" name="cats.Foldable#fold">fold</a>.</p>
     </li><li name="cats.Foldable#compose" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="compose[G[_]](implicitev:cats.Foldable[G]):cats.Foldable[[α]F[G[α]]]"></a>
       <a id="compose[G[_]](Foldable[G]):Foldable[[α]F[G[α]]]"></a>
@@ -247,7 +264,7 @@ documentation for <code>Eval[_]</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.compose.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.compose.G">G</span>[<span class="extype" name="cats.Foldable.&lt;refinement&gt;.L_kp.α">α</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.compose.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.compose.G">G</span>[<span class="extype" name="cats.Foldable.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.Foldable@compose[G[_]](implicitev:cats.Foldable[G]):cats.Foldable[[α]F[G[α]]]" title="Permalink" target="_top">
@@ -628,7 +645,7 @@ combining them using the given <code>Monoid[B]</code> instance.</p>
     </span>
       
     </li><li name="cats.Foldable#sequence_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$1:cats.Applicative[G]):G[Unit]"></a>
+      <a id="sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]"></a>
       <a id="sequence_[G[_],A,B](F[G[A]])(Applicative[G]):G[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -639,7 +656,7 @@ combining them using the given <code>Monoid[B]</code> instance.</p>
         <span class="name">sequence_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>[<span class="extype" name="cats.Foldable.sequence_.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.sequence_.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Foldable@sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$1:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Foldable@sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -681,6 +698,23 @@ F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span 
       </a>
     </span>
       <p class="shortcomment cmt">Convert F[A] to a List[A].</p>
+    </li><li name="cats.Foldable#toStreaming" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toStreaming[A](fa:F[A]):cats.data.Streaming[A]"></a>
+      <a id="toStreaming[A](F[A]):Streaming[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toStreaming</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Foldable.F">F</span>[<span class="extype" name="cats.Foldable.toStreaming.A">A</span>]</span>)</span><span class="result">: <a href="data/Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.Foldable.toStreaming.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Foldable@toStreaming[A](fa:F[A]):cats.data.Streaming[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>

@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../lib/template.js"></script>
       <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
-      
+      <script type="text/javascript" src="../lib/modernizr.custom.js"></script><script type="text/javascript" src="../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
@@ -70,7 +70,7 @@ overflows.
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="Always.html" class="extype" name="cats.Always">Always</a>, <a href="Eval$$Compute.html" class="extype" name="cats.Eval.Compute">Compute</a>, <a href="Later.html" class="extype" name="cats.Later">Later</a>, <a href="Now.html" class="extype" name="cats.Now">Now</a></div>
+            <div class="subClasses hiddenContent"><a href="Always.html" class="extype" name="cats.Always">Always</a>, <a href="Eval$$Call.html" class="extype" name="cats.Eval.Call">Call</a>, <a href="Eval$$Compute.html" class="extype" name="cats.Eval.Compute">Compute</a>, <a href="Later.html" class="extype" name="cats.Later">Later</a>, <a href="Now.html" class="extype" name="cats.Now">Now</a></div>
           </div></div>
         
 
@@ -111,7 +111,28 @@ overflows.
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="cats.Eval#value" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="cats.Eval#memoize" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="memoize:cats.Eval[A]"></a>
+      <a id="memoize:Eval[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">memoize</span><span class="result">: <a href="" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Eval.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Eval@memoize:cats.Eval[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Ensure that the result of the computation (if any) will be
+memoized.</p><div class="fullcomment"><div class="comment cmt"><p>Ensure that the result of the computation (if any) will be
+memoized.</p><p>Practically, this means that when called on an Always[A] a
+Later[A] with an equivalent computation will be returned.
+</p></div></div>
+    </li><li name="cats.Eval#value" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="value:A"></a>
       <a id="value:A"></a>
       <h4 class="signature">
