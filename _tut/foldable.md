@@ -103,7 +103,7 @@ scala> Foldable[List].dropWhile_(List[Int](1,2,4,5,6,7))(_ % 2 == 0)
 res22: List[Int] = List(2, 4, 5, 6, 7)
 
 scala> val FoldableListOption = Foldable[List].compose[Option]
-FoldableListOption: cats.Foldable[[α]List[Option[α]]] = cats.Foldable$$anon$1@1721276b
+FoldableListOption: cats.Foldable[[α]List[Option[α]]] = cats.Foldable$$anon$1@3a0b1aa5
 
 scala> FoldableListOption.fold(List(Option(1), Option(2), Option(3), Option(4)))
 res23: Int = 10

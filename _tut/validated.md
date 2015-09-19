@@ -178,13 +178,13 @@ config: Config = Config(Map(endpoint -> 127.0.0.1, port -> not an int))
 
 scala> implicit val nelSemigroup: Semigroup[NonEmptyList[ConfigError]] =
      |   SemigroupK[NonEmptyList].algebra[ConfigError]
-nelSemigroup: cats.Semigroup[cats.data.NonEmptyList[ConfigError]] = cats.SemigroupK$$anon$2@6465a1ae
+nelSemigroup: cats.Semigroup[cats.data.NonEmptyList[ConfigError]] = cats.SemigroupK$$anon$2@62466fb
 
 scala> implicit val readString: Read[String] = Read.stringRead
-readString: Read[String] = Read$$anon$1@7bd0b493
+readString: Read[String] = Read$$anon$1@4b58bcda
 
 scala> implicit val readInt: Read[Int] = Read.intRead
-readInt: Read[Int] = Read$$anon$2@7e1b1979
+readInt: Read[Int] = Read$$anon$2@360d52d3
 
 scala> val v1 = parallelValidate(config.parse[String]("url").toValidatedNel,
      |                           config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
@@ -248,7 +248,7 @@ import cats.data.ValidatedNel
 
 scala> implicit val nelSemigroup: Semigroup[NonEmptyList[ConfigError]] =
      |   SemigroupK[NonEmptyList].algebra[ConfigError]
-nelSemigroup: cats.Semigroup[cats.data.NonEmptyList[ConfigError]] = cats.SemigroupK$$anon$2@337cd0da
+nelSemigroup: cats.Semigroup[cats.data.NonEmptyList[ConfigError]] = cats.SemigroupK$$anon$2@6f187543
 
 scala> val config = Config(Map(("name", "cat"), ("age", "not a number"), ("houseNumber", "1234"), ("lane", "feline street")))
 config: Config = Config(Map(name -> cat, age -> not a number, houseNumber -> 1234, lane -> feline street))
