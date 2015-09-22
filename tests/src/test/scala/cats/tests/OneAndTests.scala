@@ -33,6 +33,13 @@ class OneAndTests extends CatsSuite {
     checkAll("Foldable[OneAnd[A, ListWrapper]]", SerializableTests.serializable(Foldable[OneAnd[?, ListWrapper]]))
   }
 
+  {
+    // Test functor and subclasses don't have implicit conflicts
+    implicitly[Functor[NonEmptyList]]
+    implicitly[Monad[NonEmptyList]]
+    implicitly[Comonad[NonEmptyList]]
+  }
+
   checkAll("NonEmptyList[Int]", MonadTests[NonEmptyList].monad[Int, Int, Int])
   checkAll("Monad[NonEmptyList[A]]", SerializableTests.serializable(Monad[NonEmptyList]))
 
