@@ -87,7 +87,7 @@ final case class OneAnd[A, F[_]](head: A, tail: F[A]) {
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
-trait OneAndInstances {
+trait OneAndInstances extends OneAndLowPriority1 {
 
   implicit def oneAndEq[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[A, F]] =
     new Eq[OneAnd[A, F]]{
@@ -96,12 +96,6 @@ trait OneAndInstances {
 
   implicit def oneAndShow[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[A, F]] =
     Show.show[OneAnd[A, F]](_.show)
-
-  implicit def oneAndFunctor[F[_]](implicit F: Functor[F]): Functor[OneAnd[?, F]] =
-    new Functor[OneAnd[?, F]] {
-      def map[A, B](fa: OneAnd[A, F])(f: A => B): OneAnd[B, F] =
-        OneAnd(f(fa.head), F.map(fa.tail)(f))
-    }
 
   implicit def oneAndSemigroupK[F[_]: MonadCombine]: SemigroupK[OneAnd[?, F]] =
     new SemigroupK[OneAnd[?, F]] {
@@ -137,7 +131,7 @@ trait OneAndInstances {
     }
 }
 
-trait OneAndLowPriority {
+trait OneAndLowPriority0 {
   implicit val nelComonad: Comonad[OneAnd[?, List]] =
     new Comonad[OneAnd[?, List]] {
 
@@ -158,4 +152,12 @@ trait OneAndLowPriority {
     }
 }
 
-object OneAnd extends OneAndInstances with OneAndLowPriority
+trait OneAndLowPriority1 extends OneAndLowPriority0 {
+  implicit def oneAndFunctor[F[_]](implicit F: Functor[F]): Functor[OneAnd[?, F]] =
+    new Functor[OneAnd[?, F]] {
+      def map[A, B](fa: OneAnd[A, F])(f: A => B): OneAnd[B, F] =
+        OneAnd(f(fa.head), F.map(fa.tail)(f))
+    }
+}
+
+object OneAnd extends OneAndInstances
