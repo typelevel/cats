@@ -41,4 +41,9 @@ package object data {
   object Reader {
     def apply[A, B](f: A => B): Reader[A, B] = ReaderT.function[Id, A, B](f)
   }
+
+  type Writer[L, V] = WriterT[Id, L, V]
+  object Writer {
+    def apply[L, V](l: L, v: V): WriterT[Id, L, V] = WriterT[Id, L, V]((l, v))
+  }
 }
