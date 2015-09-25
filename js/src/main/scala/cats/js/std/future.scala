@@ -25,7 +25,7 @@ trait FutureInstances0 extends FutureInstances1 {
         Await.result(x, atMost)
     }
 
-  def futureOrder[A: Order](atMost: FiniteDuration)(implicit ec: E): Eq[Future[A]] =
+  def futureOrder[A: Order](atMost: FiniteDuration)(implicit ec: E): Order[Future[A]] =
     new Order[Future[A]] {
       def compare(x: Future[A], y: Future[A]): Int =
         Await.result((x zip y).map { case (x, y) => x compare y }, atMost)
