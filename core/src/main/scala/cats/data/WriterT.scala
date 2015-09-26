@@ -38,14 +38,14 @@ object WriterT extends WriterTInstances with WriterTFunctions
 
 sealed abstract class WriterTInstances {
   implicit def writerTMonad[F[_], L](implicit monadF: Monad[F], monoidL: Monoid[L]) = {
-    new Monad[({type WT[$] = WriterT[F, L, $]})#WT] {
-      override def pure[A](a: A):({type WT[$] = WriterT[F, L, $]})#WT[A] =
+    new Monad[WriterT[F, L, ?]] {
+      override def pure[A](a: A): WriterT[F, L, A] =
         WriterT.value[F, L, A](a)
 
-      override def flatMap[A, B](fa:({type WT[$] = WriterT[F, L, $]})#WT[A])(f: A =>({type WT[$] = WriterT[F, L, $]})#WT[B]): WriterT[F, L, B] =
+      override def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
         fa.flatMap(a => f(a))
 
-      override def ap[A, B](fa:({type WT[$] = WriterT[F, L, $]})#WT[A])(ff:({type WT[$] = WriterT[F, L, $]})#WT[A => B]):({type WT[$] = WriterT[F, L, $]})#WT[B] =
+      override def ap[A, B](fa: WriterT[F, L, A])(ff: WriterT[F, L, A => B]): WriterT[F, L, B] =
         fa.flatMap(a => ff.map(f => f(a)))
     }
   }
