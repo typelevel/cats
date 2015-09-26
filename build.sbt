@@ -198,6 +198,7 @@ lazy val js = project
   .settings(moduleName := "cats-js")
   .settings(catsSettings:_*)
   .settings(commonJsSettings:_*)
+  .enablePlugins(ScalaJSPlugin)
 
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/non/cats")),
@@ -217,11 +218,11 @@ lazy val publishSettings = Seq(
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess 
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;freeJVM/test;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;bench/test")
+addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;freeJVM/test;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
-addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;freeJS/compile;freeJS/test;stateJS/compile;stateJS/test")
+addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;js/test;freeJS/compile;freeJS/test;stateJS/compile;stateJS/test")
 
 addCommandAlias("validate", ";validateJS;validateJVM")
 

@@ -1,8 +1,8 @@
 package cats
-package jvm
+package js
 package std
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 import scala.concurrent.{ExecutionContext => E}
 import scala.concurrent.duration.FiniteDuration
 
@@ -10,6 +10,13 @@ import cats.std.FutureCoflatMap
 import cats.syntax.all._
 
 object future extends FutureInstances0
+
+object Await {
+  def result[A](f: Future[A], atMost: FiniteDuration): A = f.value match {
+      case Some(v) => v.get
+      case None => throw new IllegalStateException()
+    }
+}
 
 trait FutureInstances0 extends FutureInstances1 {
   def futureComonad(atMost: FiniteDuration)(implicit ec: E): Comonad[Future] =

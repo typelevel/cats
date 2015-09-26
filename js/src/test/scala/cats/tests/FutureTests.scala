@@ -1,16 +1,18 @@
 package cats
-package jvm
+package js
 package tests
 
 import cats.data.Xor
 import cats.laws.discipline._
-import cats.jvm.std.future.{futureEq, futureComonad}
+import cats.js.std.Await
+import cats.js.std.future.{futureEq, futureComonad}
 import cats.tests.CatsSuite
 
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.control.NonFatal
+
+import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
