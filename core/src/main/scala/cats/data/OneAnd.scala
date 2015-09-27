@@ -103,6 +103,9 @@ trait OneAndInstances extends OneAndLowPriority1 {
         a combine b
     }
 
+  implicit def oneAndSemigroup[F[_]: MonadCombine, A]: Semigroup[OneAnd[A, F]] =
+    oneAndSemigroupK.algebra
+
   implicit def oneAndFoldable[F[_]](implicit foldable: Foldable[F]): Foldable[OneAnd[?,F]] =
     new Foldable[OneAnd[?,F]] {
       override def foldLeft[A, B](fa: OneAnd[A, F], b: B)(f: (B, A) => B): B =
