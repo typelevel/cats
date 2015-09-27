@@ -44,11 +44,11 @@ sealed abstract class WriterTInstances {
 
       override def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
         fa.flatMap(a => f(a))
-
-      override def ap[A, B](fa: WriterT[F, L, A])(ff: WriterT[F, L, A => B]): WriterT[F, L, B] =
-        fa.flatMap(a => ff.map(f => f(a)))
     }
   }
+
+  implicit def writerTEq[F[_], L, V](implicit F: Eq[F[(L, V)]]): Eq[WriterT[F, L, V]] =
+    F.on(_.run)
 }
 
 trait WriterTFunctions {

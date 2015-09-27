@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import cats.data.{Cokleisli, Kleisli, NonEmptyList, Validated, Xor, XorT, Ior, Const, OptionT, Prod, Func, AppFunc}
+import cats.data.{Cokleisli, Kleisli, NonEmptyList, Validated, Xor, XorT, Ior, Const, OptionT, Prod, Func, AppFunc, WriterT}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 
@@ -130,4 +130,10 @@ object ArbitraryK {
 
   implicit def streamT[F[_]: Monad]: ArbitraryK[StreamingT[F, ?]] =
     new ArbitraryK[StreamingT[F, ?]] { def synthesize[A: Arbitrary]: Arbitrary[StreamingT[F, A]] = implicitly }
+
+  implicit def writerT[F[_]: ArbitraryK, L: Arbitrary]: ArbitraryK[WriterT[F, L, ?]] =
+    new ArbitraryK[WriterT[F, L, ?]] {
+      def synthesize[A: Arbitrary]: Arbitrary[WriterT[F, L, A]] = Arbitrary(
+        ArbitraryK[F].synthesize[(L, A)].arbitrary.map(WriterT(_)))
+    }
 }
