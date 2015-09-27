@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import algebra.laws.OrderLaws
+import algebra.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{NonEmptyList, OneAnd}
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests}
@@ -24,7 +24,9 @@ class OneAndTests extends CatsSuite {
   {
     implicit val monadCombine = ListWrapper.monadCombine
     checkAll("OneAnd[Int, ListWrapper]", SemigroupKTests[OneAnd[?, ListWrapper]].semigroupK[Int])
+    checkAll("OneAnd[Int, List]", GroupLaws[OneAnd[Int, List]].semigroup)
     checkAll("SemigroupK[OneAnd[A, ListWrapper]]", SerializableTests.serializable(SemigroupK[OneAnd[?, ListWrapper]]))
+    checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[OneAnd[Int, List]]))
   }
 
   {
