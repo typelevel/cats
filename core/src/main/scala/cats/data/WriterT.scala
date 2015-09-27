@@ -10,26 +10,26 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 
   def map[Z](fn: V => Z)(implicit functorF: Functor[F]): WriterT[F, L, Z] =
     WriterT {
-      functorF.map(run) { z => (z._1, fn(z._2))
-      }
+      functorF.map(run) { z => (z._1, fn(z._2)) }
     }
 
   def flatMap[U](f: V => WriterT[F, L, U])(implicit flatMapF: FlatMap[F], semigroupL: Semigroup[L]): WriterT[F, L, U] =
     WriterT {
       flatMapF.flatMap(run) { lv =>
-        flatMapF.map(f(lv._2).run) { lv2 => (semigroupL.combine(lv._1, lv2._1), lv2._2)
+        flatMapF.map(f(lv._2).run) { lv2 =>
+          (semigroupL.combine(lv._1, lv2._1), lv2._2)
         }
       }
     }
 
-  def mapBoth[M, U](f: ((L, V)) => (M, U))(implicit functorF: Functor[F]): WriterT[F, M, U] =
-    WriterT { functorF.map(run)(f) }
+  def mapBoth[M, U](f: (L, V) => (M, U))(implicit functorF: Functor[F]): WriterT[F, M, U] =
+    WriterT { functorF.map(run)(f.tupled) }
 
   def mapWritten[M](f: L => M)(implicit functorF: Functor[F]): WriterT[F, M, V] =
-    mapBoth(wa =>(f(wa._1), wa._2))
+    mapBoth((l, v) => (f(l), v))
 
   def swap(implicit functorF: Functor[F]): WriterT[F, V, L] =
-    mapBoth(wa =>(wa._2, wa._1))
+    mapBoth((l, v) => (v, l))
 
   def reset(implicit monoidL: Monoid[L], functorF: Functor[F]): WriterT[F, L, V] =
     mapWritten(_ => monoidL.empty)
@@ -38,22 +38,22 @@ object WriterT extends WriterTInstances with WriterTFunctions
 
 sealed abstract class WriterTInstances {
   implicit def writerTMonad[F[_], L](implicit monadF: Monad[F], monoidL: Monoid[L]) = {
-    new Monad[({type WT[$] = WriterT[F, L, $]})#WT] {
-      override def pure[A](a: A):({type WT[$] = WriterT[F, L, $]})#WT[A] =
+    new Monad[WriterT[F, L, ?]] {
+      override def pure[A](a: A): WriterT[F, L, A] =
         WriterT.value[F, L, A](a)
 
-      override def flatMap[A, B](fa:({type WT[$] = WriterT[F, L, $]})#WT[A])(f: A =>({type WT[$] = WriterT[F, L, $]})#WT[B]): WriterT[F, L, B] =
+      override def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
         fa.flatMap(a => f(a))
-
-      override def ap[A, B](fa:({type WT[$] = WriterT[F, L, $]})#WT[A])(ff:({type WT[$] = WriterT[F, L, $]})#WT[A => B]):({type WT[$] = WriterT[F, L, $]})#WT[B] =
-        fa.flatMap(a => ff.map(f => f(a)))
     }
   }
+
+  implicit def writerTEq[F[_], L, V](implicit F: Eq[F[(L, V)]]): Eq[WriterT[F, L, V]] =
+    F.on(_.run)
 }
 
 trait WriterTFunctions {
   def putT[F[_], L, V](vf: F[V])(l: L)(implicit functorF: Functor[F]): WriterT[F, L, V] =
-    WriterT(functorF.map(vf)(v =>(l, v)))
+    WriterT(functorF.map(vf)(v => (l, v)))
 
   def put[F[_], L, V](v: V)(l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, V] =
     WriterT.putT[F, L, V](applicativeF.pure(v))(l)
