@@ -177,6 +177,17 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
 lazy val testsJVM = tests.jvm
 lazy val testsJS = tests.js
 
+lazy val examples = crossProject
+  .crossType(CrossType.Pure)
+  .dependsOn(macros, core, free, laws)
+  .settings(moduleName := "cats-examples")
+  .settings(catsSettings:_*)
+  .settings(noPublishSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val examplesJVM = examples.jvm
+lazy val examplesJS = examples.js
+
 // cats-jvm is JVM-only
 lazy val jvm = project
   .dependsOn(macrosJVM, coreJVM, testsJVM % "test-internal -> test")

@@ -116,6 +116,7 @@ Initially Cats will support the following modules:
  * `free`: "Free" data constructors for various type classes.
  * `state`: Monad and transformer support for state.
  * `tests`: Verifies the laws, and runs any other tests. Not published.
+ * `examples`: Unpublished code which you are free to look at and copy.
 
 As the type class families grow, it's possible that additional modules
 will be added as well. Modules which depend on other libraries

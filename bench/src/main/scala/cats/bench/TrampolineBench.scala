@@ -34,12 +34,12 @@ class TrampolineBench {
 
   // TailRec[A] only has .flatMap in 2.11.
 
-  // @Benchmark
-  // def stdlib(): Int = stdlibFib(N).result
-  //
-  // def stdlibFib(n: Int): TailCalls.TailRec[Int] =
-  //   if (n < 2) TailCalls.done(n) else for {
-  //     x <- TailCalls.tailcall(stdlibFib(n - 1))
-  //     y <- TailCalls.tailcall(stdlibFib(n - 2))
-  //   } yield x + y
+  @Benchmark
+  def stdlib(): Int = stdlibFib(N).result
+
+  def stdlibFib(n: Int): TailCalls.TailRec[Int] =
+    if (n < 2) TailCalls.done(n) else for {
+      x <- TailCalls.tailcall(stdlibFib(n - 1))
+      y <- TailCalls.tailcall(stdlibFib(n - 2))
+    } yield x + y
 }
