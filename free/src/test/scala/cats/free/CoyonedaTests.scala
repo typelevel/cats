@@ -7,9 +7,9 @@ import cats.laws.discipline.{ArbitraryK, FunctorTests, SerializableTests}
 
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Prop.forAll
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
-class CoyonedaTests extends CatsSuite {
+class CoyonedaTests extends CatsSuite with GeneratorDrivenPropertyChecks {
   implicit def coyonedaArbitraryK[F[_] : Functor](implicit F: ArbitraryK[F]): ArbitraryK[Coyoneda[F, ?]] =
     new ArbitraryK[Coyoneda[F, ?]]{
       def synthesize[A: Arbitrary]: Arbitrary[Coyoneda[F, A]] = coyonedaArbitrary[F, A]
@@ -26,10 +26,11 @@ class CoyonedaTests extends CatsSuite {
   checkAll("Coyoneda[Option, ?]", FunctorTests[Coyoneda[Option, ?]].functor[Int, Int, Int])
   checkAll("Functor[Coyoneda[Option, ?]]", SerializableTests.serializable(Functor[Coyoneda[Option, ?]]))
 
-  test("toYoneda and then toCoyoneda is identity")(check {
-    // Issues inferring syntax for Eq, using instance explicitly
-    forAll((y: Coyoneda[Option, Int]) => coyonedaEq[Option, Int].eqv(y.toYoneda.toCoyoneda, y))
-  })
+  test("toYoneda and then toCoyoneda is identity"){
+    forAll{ (y: Coyoneda[Option, Int]) =>
+      y.toYoneda.toCoyoneda should === (y)
+    }
+  }
 
   test("transform and run is same as applying natural trans") {
       val nt =
