@@ -98,7 +98,7 @@ object Sequences {
     // You might worry that if emit fails to produce digits, and keeps
     // calling loop (which will recall emit) there could be a
     // possibility of an infinite loop, or at least a stack
-    // overflow).
+    // overflow.
     //
     // However, the algorithm guarantees that we will get
     // at least one digit each time loop calls emit (i.e. we will be
