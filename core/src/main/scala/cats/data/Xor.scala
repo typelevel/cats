@@ -162,8 +162,8 @@ sealed abstract class XorInstances extends XorInstances1 {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor, A ] =
-    new Traverse[A Xor ?] with MonadError[Xor, A] {
+  implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor[A, ?], A] =
+    new Traverse[A Xor ?] with MonadError[Xor[A, ?], A] {
       def traverse[F[_]: Applicative, B, C](fa: A Xor B)(f: B => F[C]): F[A Xor C] = fa.traverse(f)
       def foldLeft[B, C](fa: A Xor B, c: C)(f: (C, B) => C): C = fa.foldLeft(c)(f)
       def foldRight[B, C](fa: A Xor B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] = fa.foldRight(lc)(f)

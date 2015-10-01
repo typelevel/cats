@@ -15,8 +15,8 @@ import scala.util.Try
 class XorTests extends CatsSuite {
   checkAll("Xor[String, Int]", algebra.laws.GroupLaws[Xor[String, Int]].monoid)
 
-  checkAll("Xor[String, Int]", MonadErrorTests[Xor, String].monadError[Int, Int, Int])
-  checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor, String]))
+  checkAll("Xor[String, Int]", MonadErrorTests[Xor[String, ?], String].monadError[Int, Int, Int])
+  checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor[String, ?], String]))
 
   checkAll("Xor[String, Int] with Option", TraverseTests[Xor[String, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Xor[String,?]]", SerializableTests.serializable(Traverse[Xor[String, ?]]))
