@@ -7,11 +7,10 @@ import cats.data.{NonEmptyList, OneAnd}
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary.{evalArbitrary, oneAndArbitrary}
 
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
 import scala.util.Random
 
-class OneAndTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class OneAndTests extends CatsSuite {
   checkAll("OneAnd[Int, List]", OrderLaws[OneAnd[Int, List]].eqv)
 
   // Test instances that have more general constraints

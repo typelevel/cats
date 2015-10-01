@@ -7,9 +7,8 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary._
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
-class IorTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class IorTests extends CatsSuite {
   checkAll("Ior[String, Int]", MonadTests[String Ior ?].monad[Int, Int, Int])
   checkAll("Monad[String Ior ?]]", SerializableTests.serializable(Monad[String Ior ?]))
 

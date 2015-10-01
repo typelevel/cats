@@ -8,11 +8,10 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import algebra.laws.GroupLaws
 import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
 
-class KleisliTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class KleisliTests extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
     Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 

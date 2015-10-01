@@ -5,9 +5,8 @@ import cats.data.{OptionT, Xor}
 import cats.laws.discipline.{MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
-class OptionTTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class OptionTTests extends CatsSuite {
 
   test("fold and cata consistent") {
     forAll { (o: OptionT[List, Int], s: String, f: Int => String) =>

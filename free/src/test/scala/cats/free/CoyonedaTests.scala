@@ -7,9 +7,8 @@ import cats.laws.discipline.{ArbitraryK, FunctorTests, SerializableTests}
 
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
-class CoyonedaTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class CoyonedaTests extends CatsSuite {
   implicit def coyonedaArbitraryK[F[_] : Functor](implicit F: ArbitraryK[F]): ArbitraryK[Coyoneda[F, ?]] =
     new ArbitraryK[Coyoneda[F, ?]]{
       def synthesize[A: Arbitrary]: Arbitrary[Coyoneda[F, A]] = coyonedaArbitrary[F, A]

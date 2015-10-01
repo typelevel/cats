@@ -6,13 +6,12 @@ import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{TraverseTests, ApplicativeTests, SerializableTests}
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Arbitrary._
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import cats.laws.discipline.arbitrary._
 import algebra.laws.OrderLaws
 
 import scala.util.Try
 
-class ValidatedTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
   checkAll("Applicative[Validated[String,?]]", SerializableTests.serializable(Applicative[Validated[String,?]]))
 

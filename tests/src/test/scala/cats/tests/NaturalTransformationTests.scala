@@ -3,9 +3,8 @@ package tests
 
 import cats.arrow.NaturalTransformation
 
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
-class NaturalTransformationTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class NaturalTransformationTests extends CatsSuite {
   val listToOption =
     new NaturalTransformation[List, Option] {
       def apply[A](fa: List[A]): Option[A] = fa.headOption

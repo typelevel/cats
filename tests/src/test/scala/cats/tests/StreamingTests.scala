@@ -6,7 +6,6 @@ import algebra.laws.OrderLaws
 import cats.data.Streaming
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests}
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
 class StreamingTests extends CatsSuite {
   checkAll("Streaming[Int]", CoflatMapTests[Streaming].coflatMap[Int, Int, Int])
@@ -22,7 +21,7 @@ class StreamingTests extends CatsSuite {
   checkAll("Order[Streaming[Int]]", SerializableTests.serializable(Order[Streaming[Int]]))
 }
 
-class AdHocStreamingTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class AdHocStreamingTests extends CatsSuite {
 
   // convert List[A] to Streaming[A]
   def convert[A](as: List[A]): Streaming[A] =

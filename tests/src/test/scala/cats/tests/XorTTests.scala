@@ -5,9 +5,8 @@ import cats.data.{Xor, XorT}
 import cats.laws.discipline.{MonadErrorTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
-class XorTTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class XorTTests extends CatsSuite {
   checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, ?, ?], String].monadError[Int, Int, Int])
   checkAll("XorT[List, String, Int]", MonoidKTests[XorT[List, String, ?]].monoidK[Int])
   checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, ?, ?], String]))

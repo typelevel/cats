@@ -5,9 +5,8 @@ import cats.tests.CatsSuite
 import cats.laws.discipline.{ArbitraryK, EqK, MonadStateTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
-class StateTTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class StateTTests extends CatsSuite {
   import StateTTests._
 
   test("basic state usage"){

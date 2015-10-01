@@ -4,9 +4,8 @@ package tests
 import cats.data.NonEmptyList
 import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
-class ListTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class ListTests extends CatsSuite {
   checkAll("List[Int]", CoflatMapTests[List].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[List]", SerializableTests.serializable(CoflatMap[List]))
 

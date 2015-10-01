@@ -7,12 +7,11 @@ import cats.laws.discipline.arbitrary.xorArbitrary
 import cats.laws.discipline.{TraverseTests, MonadErrorTests, SerializableTests}
 import algebra.laws.{GroupLaws, OrderLaws}
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalacheck.Arbitrary._
 
 import scala.util.Try
 
-class XorTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class XorTests extends CatsSuite {
   checkAll("Xor[String, Int]", GroupLaws[Xor[String, Int]].monoid)
 
   checkAll("Xor[String, Int]", MonadErrorTests[Xor, String].monadError[Int, Int, Int])

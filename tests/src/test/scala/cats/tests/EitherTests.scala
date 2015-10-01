@@ -3,7 +3,6 @@ package tests
 
 import cats.laws.discipline.{TraverseTests, MonadTests, SerializableTests}
 import algebra.laws.OrderLaws
-import org.scalacheck.Prop._
 
 class EitherTests extends CatsSuite {
   checkAll("Either[Int, Int]", MonadTests[Either[Int, ?]].monad[Int, Int, Int])
@@ -30,9 +29,9 @@ class EitherTests extends CatsSuite {
     assert(!partialOrder.isInstanceOf[Order[_]])
   }
 
-  test("show isn't empty")(check {
+  test("show isn't empty") {
     forAll { (e: Either[Int, String]) =>
-      show.show(e).nonEmpty
+      show.show(e).nonEmpty should === (true)
     }
-  })
+  }
 }
