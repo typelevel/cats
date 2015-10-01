@@ -6,18 +6,20 @@ import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{TraverseTests, ApplicativeTests, SerializableTests}
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Arbitrary._
-import org.scalacheck.Prop._
-import org.scalacheck.Prop.BooleanOperators
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import cats.laws.discipline.arbitrary._
+import algebra.laws.OrderLaws
 
 import scala.util.Try
 
-class ValidatedTests extends CatsSuite {
+class ValidatedTests extends CatsSuite with GeneratorDrivenPropertyChecks {
   checkAll("Validated[String, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
   checkAll("Applicative[Validated[String,?]]", SerializableTests.serializable(Applicative[Validated[String,?]]))
 
   checkAll("Validated[String, Int] with Option", TraverseTests[Validated[String,?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Validated[String,?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
+
+  checkAll("Validated[String, Int]", OrderLaws[Validated[String, Int]].order)
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)
@@ -34,95 +36,68 @@ class ValidatedTests extends CatsSuite {
     }
   }
 
-  check{
+  test("fromTry is invalid for failed try"){
     forAll { t: Try[Int] =>
-      t.isFailure == Validated.fromTry(t).isInvalid
+      t.isFailure should === (Validated.fromTry(t).isInvalid)
     }
   }
 
   test("filter makes non-matching entries invalid") {
-    assert(
-      (for {
-        x <- Valid(1).filter[String](_ % 2 == 0)
-      } yield ()).isInvalid)
+    Valid(1).filter[String](_ % 2 == 0).isInvalid should ===(true)
   }
 
   test("filter leaves matching entries valid") {
-    assert(
-      (for {
-        _ <- Valid(2).filter[String](_ % 2 == 0)
-      } yield ()).isValid)
+    Valid(2).filter[String](_ % 2 == 0).isValid should ===(true)
   }
 
-  test("ValidatedNel")(check {
+  test("ValidatedNel") {
     forAll { (e: String) =>
       val manual = Validated.invalid[NonEmptyList[String], Int](NonEmptyList(e))
-      Validated.invalidNel[String, Int](e) == manual &&
-      Validated.invalid(e).toValidatedNel == manual
-    }
-  })
-
-  check {
-    forAll { (v: Validated[String, Int], p: Int => Boolean) =>
-      v.isInvalid ==> (v.forall(p) && !v.exists(p))
+      Validated.invalidNel[String, Int](e) should === (manual)
+      Validated.invalid[String, Int](e).toValidatedNel should === (manual)
     }
   }
 
-  check {
+  test("isInvalid consistent with forall and exists") {
+    forAll { (v: Validated[String, Int], p: Int => Boolean) =>
+      whenever(v.isInvalid) {
+        v.forall(p) should === (true)
+        v.exists(p) should === (false)
+      }
+    }
+  }
+
+  test("foreach only runs for valid") {
     forAll { (v: Validated[String, Int]) =>
       var count = 0
       v.foreach(_ => count += 1)
-      v.isValid == (count == 1)
+      v.isValid should === (count == 1)
     }
   }
 
-  check {
+  test("getOrElse consistent with orElse") {
     forAll { (v: Validated[String, Int], u: Validated[String, Int], i: Int) =>
-      v.getOrElse(u.getOrElse(i)) == v.orElse(u).getOrElse(i)
+      v.getOrElse(u.getOrElse(i)) should === (v.orElse(u).getOrElse(i))
     }
   }
 
-  check {
+  test("toEither then fromEither is identity") {
     forAll { (v: Validated[String, Int]) =>
-      Validated.fromEither(v.toEither) == v
+      Validated.fromEither(v.toEither) should === (v)
     }
   }
 
-  check {
+  test("toList and toOption are empty for invalid") {
     forAll { (v: Validated[String, Int]) =>
-      v.isInvalid == v.toList.isEmpty &&
-      v.isInvalid == v.toOption.isEmpty
+      v.isInvalid should === (v.toList.isEmpty)
+      v.isInvalid should === (v.toOption.isEmpty)
     }
   }
 
-  check {
-    forAll { (v: Validated[String, Int]) =>
-      val equality = implicitly[Eq[Validated[String, Int]]]
-      equality.eqv(v, v)
-    }
-  }
-
-  check {
-    forAll { (v: Validated[String, Int]) =>
-      val partialOrder = implicitly[PartialOrder[Validated[String, Int]]]
-      partialOrder.partialCompare(v, v) == 0 &&
-          partialOrder.eqv(v, v)
-    }
-  }
-
-  check {
-    forAll { (v: Validated[String, Int]) =>
-      val order = implicitly[Order[Validated[String, Int]]]
-      order.compare(v, v) == 0 &&
-          order.partialCompare(v, v) == 0 &&
-          order.eqv(v, v)
-    }
-  }
-
-  check {
+  test("show isn't empty") {
     forAll { (v: Validated[String, Int]) =>
       val show = implicitly[Show[Validated[String, Int]]]
-      show.show(v).size > 0
+      show.show(v).nonEmpty should === (true)
     }
   }
 }

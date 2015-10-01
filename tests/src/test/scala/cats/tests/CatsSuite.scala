@@ -41,14 +41,6 @@ trait CatsSuite extends FunSuite with Matchers with Discipline with TestSettings
   override def eqSyntax[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
 }
 
-trait CatsProps extends PropSpec with PropertyChecks with TestSettings with TestInstances {
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    checkConfiguration
-
-  // disable scalatest's ===
-  override def convertToEqualizer[T](left: T): Equalizer[T] = ???
-}
-
 trait SlowCatsSuite extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     slowCheckConfiguration

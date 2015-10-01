@@ -8,11 +8,11 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import algebra.laws.GroupLaws
 import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
 
-class KleisliTests extends CatsSuite {
+class KleisliTests extends CatsSuite with GeneratorDrivenPropertyChecks {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
     Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
@@ -94,15 +94,15 @@ class KleisliTests extends CatsSuite {
     checkAll("SemigroupK[Lambda[A => Kleisli[Option, A, A]]]", SerializableTests.serializable(kleisliSemigroupK))
   }
 
-  check {
+  test("local composes functions") {
     forAll { (f: Int => Option[String], g: Int => Int, i: Int) =>
-      f(g(i)) == Kleisli.local[Option, String, Int](g)(Kleisli.function(f)).run(i)
+      f(g(i)) should === (Kleisli.local[Option, String, Int](g)(Kleisli.function(f)).run(i))
     }
   }
 
-  check {
+  test("pure consistent with ask") {
     forAll { (i: Int) =>
-      Kleisli.pure[Option, Int, Int](i).run(i) == Kleisli.ask[Option, Int].run(i)
+      Kleisli.pure[Option, Int, Int](i).run(i) should === (Kleisli.ask[Option, Int].run(i))
     }
   }
 
