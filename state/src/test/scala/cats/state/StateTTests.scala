@@ -27,7 +27,7 @@ class StateTTests extends CatsSuite {
     }
   }
 
-  test("Apply syntax is usable on State") {
+  test("Monoidal syntax is usable on State") {
     val x = add1 *> add1
     x.runS(0).run should === (2)
   }

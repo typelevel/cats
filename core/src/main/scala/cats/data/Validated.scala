@@ -111,7 +111,6 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     b => that.fold(_ => false, AA.eqv(b, _))
   )
 
-
   /**
    * From Apply:
    * if both the function and this value are Valid, apply the function
@@ -119,7 +118,18 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def ap[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE,B] =
     (this, f) match {
       case (Valid(a), Valid(f)) => Valid(f(a))
-      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e2,e1))
+      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e2, e1))
+      case (e@Invalid(_), _) => e
+      case (_, e@Invalid(_)) => e
+    }
+
+  /**
+   * From Product
+   */
+  def product[EE >: E, B](fb: Validated[EE, B])(implicit EE: Semigroup[EE]): Validated[EE, (A, B)] =
+    (this, fb) match {
+      case (Valid(a), Valid(b)) => Valid((a, b))
+      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e1, e2))
       case (e @ Invalid(_), _) => e
       case (_, e @ Invalid(_)) => e
     }
@@ -196,8 +206,11 @@ sealed abstract class ValidatedInstances extends ValidatedInstances1 {
       override def map[A, B](fa: Validated[E,A])(f: A => B): Validated[E, B] =
         fa.map(f)
 
-      override def ap[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]): Validated[E, B] =
+      def ap[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]): Validated[E, B] =
         fa.ap(f)(E)
+
+      def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
+        fa.product(fb)(E)
     }
 }
 
