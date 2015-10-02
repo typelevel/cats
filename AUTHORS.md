@@ -45,7 +45,7 @@ possible:
  * Owen Parry
  * Pascal Voitot
  * Philip Wills
- * Rintcius
+ * Rintcius Blok
  * Rob Norris
  * Romain Ruetschi
  * Ross A. Baker
