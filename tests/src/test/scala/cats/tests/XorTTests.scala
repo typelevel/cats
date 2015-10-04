@@ -2,7 +2,7 @@ package cats.tests
 
 import cats.{Id, MonadError}
 import cats.data.{Xor, XorT}
-import cats.laws.discipline.{MonadErrorTests, MonoidKTests, SerializableTests}
+import cats.laws.discipline.{BifunctorTests, MonadErrorTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
 import org.scalacheck.Prop.forAll
@@ -11,6 +11,7 @@ class XorTTests extends CatsSuite {
   checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, ?, ?], String].monadError[Int, Int, Int])
   checkAll("XorT[List, String, Int]", MonoidKTests[XorT[List, String, ?]].monoidK[Int])
   checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, ?, ?], String]))
+  checkAll("XorT[List, ?, ?]", BifunctorTests[XorT[List, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
 
   test("toValidated")(check {
     forAll { (xort: XorT[List, String, Int]) =>

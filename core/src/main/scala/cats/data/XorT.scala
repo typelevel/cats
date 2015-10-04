@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Bifunctor
+
 /**
  * Transformer for `Xor`, allowing the effect of an arbitrary type constructor `F` to be combined with the
  * fail-fast effect of `Xor`.
@@ -156,6 +158,13 @@ abstract class XorTInstances extends XorTInstances1 {
 
   implicit def xorTShow[F[_], L, R](implicit sh: Show[F[L Xor R]]): Show[XorT[F, L, R]] =
     functor.Contravariant[Show].contramap(sh)(_.value)
+
+  implicit def bifunctor[F[_]](implicit F: Functor[F]): Bifunctor[XorT[F, ?, ?]] = {
+    new Bifunctor[XorT[F, ?, ?]] {
+      override def bimap[A, B, C, D](fab: XorT[F, A, B])(f: (A) => C, g: (B) => D): XorT[F, C, D] = fab.bimap(f, g)
+    }
+  }
+
 }
 
 private[data] abstract class XorTInstances1 extends XorTInstances2 {

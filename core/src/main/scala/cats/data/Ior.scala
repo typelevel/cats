@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Bifunctor
+
 /** Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
  *
  * An instance of `A [[Ior]] B` is one of:
@@ -142,6 +144,11 @@ sealed abstract class IorInstances extends IorInstances0 {
     def pure[B](b: B): A Ior B = Ior.right(b)
     def flatMap[B, C](fa: A Ior B)(f: B => A Ior C): A Ior C = fa.flatMap(f)
   }
+
+  implicit def bifunctor: Bifunctor[Ior] =
+    new Bifunctor[Ior] {
+      override def bimap[A, B, C, D](fab: A Ior B)(f: (A) => C, g: (B) => D): C Ior D = fab.bimap(f, g)
+    }
 }
 
 sealed abstract class IorInstances0 {

@@ -4,7 +4,7 @@ package tests
 import cats.data.Xor
 import cats.data.Xor._
 import cats.laws.discipline.arbitrary.xorArbitrary
-import cats.laws.discipline.{TraverseTests, MonadErrorTests, SerializableTests}
+import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadErrorTests, SerializableTests}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Prop._
 import org.scalacheck.Prop.BooleanOperators
@@ -21,6 +21,7 @@ class XorTests extends CatsSuite {
   checkAll("Xor[String, Int] with Option", TraverseTests[Xor[String, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Xor[String,?]]", SerializableTests.serializable(Traverse[Xor[String, ?]]))
 
+
   implicit val arbitraryXor: Arbitrary[Xor[Int, String]] = Arbitrary {
     for {
       left <- arbitrary[Boolean]
@@ -28,6 +29,8 @@ class XorTests extends CatsSuite {
              else arbitrary[String].map(Xor.right)
     } yield xor
   }
+
+  checkAll("? Xor ?", BifunctorTests[Xor].bifunctor[Int, Int, Int, String, String, String])
 
   test("fromTryCatch catches matching exceptions") {
     assert(Xor.fromTryCatch[NumberFormatException]{ "foo".toInt }.isInstanceOf[Xor.Left[NumberFormatException]])
