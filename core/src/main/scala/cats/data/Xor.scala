@@ -164,9 +164,9 @@ sealed abstract class XorInstances extends XorInstances1 {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def bifunctor: Bifunctor[Xor] =
+  implicit def xorBifunctor: Bifunctor[Xor] =
     new Bifunctor[Xor] {
-      override def bimap[A, B, C, D](fab: A Xor B)(f: (A) => C, g: (B) => D): C Xor D = fab.bimap(f, g)
+      override def bimap[A, B, C, D](fab: A Xor B)(f: A => C, g: B => D): C Xor D = fab.bimap(f, g)
     }
 
 

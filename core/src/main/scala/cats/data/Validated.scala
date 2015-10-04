@@ -174,9 +174,9 @@ sealed abstract class ValidatedInstances extends ValidatedInstances1 {
     def show(f: Validated[A,B]): String = f.show
   }
 
-  implicit def bifunctor: Bifunctor[Validated] =
+  implicit def validatedBifunctor: Bifunctor[Validated] =
     new Bifunctor[Validated] {
-      override def bimap[A, B, C, D](fab: Validated[A, B])(f: (A) => C, g: (B) => D): Validated[C, D] = fab.bimap(f, g)
+      override def bimap[A, B, C, D](fab: Validated[A, B])(f: A => C, g: B => D): Validated[C, D] = fab.bimap(f, g)
     }
 
   implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with Applicative[Validated[E, ?]] =

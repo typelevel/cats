@@ -145,9 +145,9 @@ sealed abstract class IorInstances extends IorInstances0 {
     def flatMap[B, C](fa: A Ior B)(f: B => A Ior C): A Ior C = fa.flatMap(f)
   }
 
-  implicit def bifunctor: Bifunctor[Ior] =
+  implicit def iorBifunctor: Bifunctor[Ior] =
     new Bifunctor[Ior] {
-      override def bimap[A, B, C, D](fab: A Ior B)(f: (A) => C, g: (B) => D): C Ior D = fab.bimap(f, g)
+      override def bimap[A, B, C, D](fab: A Ior B)(f: A => C, g: B => D): C Ior D = fab.bimap(f, g)
     }
 }
 
