@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Bifunctor
+
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
@@ -161,6 +163,12 @@ sealed abstract class XorInstances extends XorInstances1 {
       def empty: A Xor B = Xor.Right(B.empty)
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
+
+  implicit def xorBifunctor: Bifunctor[Xor] =
+    new Bifunctor[Xor] {
+      override def bimap[A, B, C, D](fab: A Xor B)(f: A => C, g: B => D): C Xor D = fab.bimap(f, g)
+    }
+
 
   implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor, A ] =
     new Traverse[A Xor ?] with MonadError[Xor, A] {

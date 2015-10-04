@@ -1,9 +1,11 @@
 package cats
 package data
 
+import cats.data.Validated.{Invalid, Valid}
+import cats.functor.Bifunctor
+
 import scala.reflect.ClassTag
-import cats.data.Validated.{Valid, Invalid}
-import scala.util.{Success, Failure, Try}
+import scala.util.{Failure, Success, Try}
 
 sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
@@ -171,6 +173,11 @@ sealed abstract class ValidatedInstances extends ValidatedInstances1 {
   implicit def validatedShow[A, B](implicit A: Show[A], B: Show[B]): Show[Validated[A,B]] = new Show[Validated[A,B]] {
     def show(f: Validated[A,B]): String = f.show
   }
+
+  implicit def validatedBifunctor: Bifunctor[Validated] =
+    new Bifunctor[Validated] {
+      override def bimap[A, B, C, D](fab: Validated[A, B])(f: A => C, g: B => D): Validated[C, D] = fab.bimap(f, g)
+    }
 
   implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with Applicative[Validated[E, ?]] =
     new Traverse[Validated[E, ?]] with Applicative[Validated[E,?]] {
