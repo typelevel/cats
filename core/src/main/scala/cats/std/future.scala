@@ -8,8 +8,8 @@ import scala.concurrent.duration.FiniteDuration
 
 trait FutureInstances extends FutureInstances1 {
 
-  implicit def futureInstance(implicit ec: ExecutionContext): MonadError[Lambda[(E, A) => Future[A]], Throwable] with CoflatMap[Future] =
-    new FutureCoflatMap with MonadError[Lambda[(E, A) => Future[A]], Throwable]{
+  implicit def futureInstance(implicit ec: ExecutionContext): MonadError[Future, Throwable] with CoflatMap[Future] =
+    new FutureCoflatMap with MonadError[Future, Throwable]{
       def pure[A](x: A): Future[A] = Future.successful(x)
 
       override def pureEval[A](x: Eval[A]): Future[A] = Future(x.value)

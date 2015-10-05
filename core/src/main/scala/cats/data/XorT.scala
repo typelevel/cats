@@ -188,7 +188,7 @@ private[data] abstract class XorTInstances1 extends XorTInstances2 {
 }
 
 private[data] abstract class XorTInstances2 extends XorTInstances3 {
-  implicit def xorTMonadError[F[_], L](implicit F: Monad[F]): MonadError[XorT[F, ?, ?], L] = {
+  implicit def xorTMonadError[F[_], L](implicit F: Monad[F]): MonadError[XorT[F, L, ?], L] = {
     implicit val F0 = F
     new XorTMonadError[F, L] { implicit val F = F0 }
   }
@@ -212,7 +212,7 @@ private[data] trait XorTFunctor[F[_], L] extends Functor[XorT[F, L, ?]] {
   override def map[A, B](fa: XorT[F, L, A])(f: A => B): XorT[F, L, B] = fa map f
 }
 
-private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, ?, ?], L] with XorTFunctor[F, L] {
+private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L] with XorTFunctor[F, L] {
   implicit val F: Monad[F]
   def pure[A](a: A): XorT[F, L, A] = XorT.pure[F, L, A](a)
   def flatMap[A, B](fa: XorT[F, L, A])(f: A => XorT[F, L, B]): XorT[F, L, B] = fa flatMap f

@@ -2,26 +2,27 @@ package cats
 package laws
 package discipline
 
+import eq.unitEq
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll
 
-trait MonadStateTests[F[_, _], S] extends MonadTests[F[S, ?]] {
+trait MonadStateTests[F[_], S] extends MonadTests[F] {
   def laws: MonadStateLaws[F, S]
 
-  implicit def arbitraryK: ArbitraryK[F[S, ?]]
-  implicit def eqK: EqK[F[S, ?]]
+  implicit def arbitraryK: ArbitraryK[F]
+  implicit def eqK: EqK[F]
 
   def monadState[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
-    ArbF: ArbitraryK[F[S, ?]],
-    EqFA: Eq[F[S, A]],
-    EqFB: Eq[F[S, B]],
-    EqFC: Eq[F[S, C]],
-    EqFS: Eq[F[S, S]],
-    EqFU: Eq[F[S, Unit]],
+    EqS: Eq[S],
     ArbS: Arbitrary[S]
   ): RuleSet = {
-    implicit def ArbFEA: Arbitrary[F[S, A]] = ArbF.synthesize[A]
-    implicit def ArbFEB: Arbitrary[F[S, B]] = ArbF.synthesize[B]
+    implicit def ArbFEA: Arbitrary[F[A]] = arbitraryK.synthesize[A]
+    implicit def ArbFEB: Arbitrary[F[B]] = arbitraryK.synthesize[B]
+    implicit def EqFA: Eq[F[A]] = eqK.synthesize[A]
+    implicit def EqFB: Eq[F[B]] = eqK.synthesize[B]
+    implicit def EqFC: Eq[F[C]] = eqK.synthesize[C]
+    implicit def EqFS: Eq[F[S]] = eqK.synthesize[S]
+    implicit def EqFUnit: Eq[F[Unit]] = eqK.synthesize[Unit]
 
     new RuleSet {
       def name: String = "monadState"
@@ -38,10 +39,10 @@ trait MonadStateTests[F[_, _], S] extends MonadTests[F[S, ?]] {
 }
 
 object MonadStateTests {
-  def apply[F[_, _], S](implicit FS: MonadState[F, S], arbKFS: ArbitraryK[F[S, ?]], eqKFS: EqK[F[S, ?]]): MonadStateTests[F, S] =
+  def apply[F[_], S](implicit FS: MonadState[F, S], arbKFS: ArbitraryK[F], eqKFS: EqK[F]): MonadStateTests[F, S] =
     new MonadStateTests[F, S] {
-      def arbitraryK: ArbitraryK[F[S, ?]] = arbKFS
-      def eqK: EqK[F[S, ?]] = eqKFS
+      def arbitraryK: ArbitraryK[F] = arbKFS
+      def eqK: EqK[F] = eqKFS
       def laws: MonadStateLaws[F, S] = MonadStateLaws[F, S]
     }
 }

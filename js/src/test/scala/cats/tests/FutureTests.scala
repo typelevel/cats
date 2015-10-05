@@ -43,6 +43,6 @@ class FutureTests extends CatsSuite {
   implicit val nonFatalArbitrary: Arbitrary[Throwable] =
     Arbitrary(arbitrary[Exception].map(identity))
 
-  checkAll("Future[Int]", MonadErrorTests[Lambda[(E, A) => Future[A]], Throwable].monadError[Int, Int, Int])
+  checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
 }
