@@ -75,4 +75,7 @@ object arbitrary {
     Arbitrary(for {
       as <- Gen.listOf(A.arbitrary).map(_.take(8))
     } yield StreamingT.fromList(as))
+
+  implicit def writerTArbitrary[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
+    Arbitrary(F.arbitrary.map(WriterT(_)))
 }
