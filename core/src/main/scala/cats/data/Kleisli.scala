@@ -103,8 +103,8 @@ sealed abstract class KleisliInstances extends KleisliInstances0 {
         f.compose(g)
     }
 
-  implicit def kleisliMonadReader[F[_]: Monad, A]: MonadReader[Kleisli[F, ?, ?], A] =
-    new MonadReader[Kleisli[F, ?, ?], A] {
+  implicit def kleisliMonadReader[F[_]: Monad, A]: MonadReader[Kleisli[F, A, ?], A] =
+    new MonadReader[Kleisli[F, A, ?], A] {
       def pure[B](x: B): Kleisli[F, A, B] =
         Kleisli.pure[F, A, B](x)
 

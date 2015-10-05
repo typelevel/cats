@@ -30,8 +30,8 @@ class KleisliTests extends CatsSuite {
 
   {
     implicit val kleisliMonadReader = Kleisli.kleisliMonadReader[Option, Int]
-    checkAll("Kleisli[Option, Int, Int]", MonadReaderTests[Kleisli[Option, ?, ?], Int].monadReader[Int, Int, Int])
-    checkAll("MonadReader[Kleisli[Option, ?, ?], Int]", SerializableTests.serializable(MonadReader[Kleisli[Option, ?, ?], Int]))
+    checkAll("Kleisli[Option, Int, Int]", MonadReaderTests[Kleisli[Option, Int, ?], Int].monadReader[Int, Int, Int])
+    checkAll("MonadReader[Kleisli[Option, ?, ?], Int]", SerializableTests.serializable(MonadReader[Kleisli[Option, Int, ?], Int]))
   }
 
   {
