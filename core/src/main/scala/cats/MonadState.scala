@@ -6,7 +6,7 @@ package cats
   * dealing with large monad transformer stacks. For instance:
   *
   * {{{
-  * val M = MonadState[StateT[List, ?, ?], Int]
+  * val M = MonadState[StateT[List, Int, ?], Int]
   * import M._
   *
   * for {
@@ -16,16 +16,16 @@ package cats
   * } yield r
   * }}}
   */
-trait MonadState[F[_, _], S] extends Monad[F[S, ?]] {
-  def get: F[S, S]
+trait MonadState[F[_], S] extends Monad[F] {
+  def get: F[S]
 
-  def set(s: S): F[S, Unit]
+  def set(s: S): F[Unit]
 
-  def modify(f: S => S): F[S, Unit] = flatMap(get)(s => set(f(s)))
+  def modify(f: S => S): F[Unit] = flatMap(get)(s => set(f(s)))
 
-  def inspect[A](f: S => A): F[S, A] = map(get)(f)
+  def inspect[A](f: S => A): F[A] = map(get)(f)
 }
 
 object MonadState {
-  def apply[F[_, _], S](implicit F: MonadState[F, S]): MonadState[F, S] = F
+  def apply[F[_], S](implicit F: MonadState[F, S]): MonadState[F, S] = F
 }

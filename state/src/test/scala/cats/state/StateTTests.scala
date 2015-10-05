@@ -39,8 +39,8 @@ class StateTTests extends CatsSuite {
     }
   })
 
-  checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, ?, ?], Int].monadState[Int, Int, Int])
-  checkAll("MonadState[StateT[Option, ?, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, ?, ?], Int]))
+  checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, Int, ?], Int].monadState[Int, Int, Int])
+  checkAll("MonadState[StateT[Option, ?, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, Int, ?], Int]))
 }
 
 object StateTTests {
