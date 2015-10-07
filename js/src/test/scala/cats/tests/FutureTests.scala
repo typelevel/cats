@@ -10,7 +10,6 @@ import cats.tests.CatsSuite
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
-import scala.util.control.NonFatal
 
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
 

@@ -183,6 +183,11 @@ sealed abstract class XorInstances extends XorInstances1 {
         }
       def raiseError[B](e: A): Xor[A, B] = Xor.left(e)
       override def map[B, C](fa: A Xor B)(f: B => C): A Xor C = fa.map(f)
+      override def attempt[B](fab: A Xor B): A Xor (A Xor B) = Xor.right(fab)
+      override def recover[B](fab: A Xor B)(pf: PartialFunction[A, B]): A Xor B =
+        fab recover pf
+      override def recoverWith[B](fab: A Xor B)(pf: PartialFunction[A, A Xor B]): A Xor B =
+        fab recoverWith pf
     }
 }
 
