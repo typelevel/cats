@@ -17,7 +17,7 @@ trait MonadError[F[_], E] extends Monad[F] {
    * Handle any error, potentially recovering from it, by mapping it to an
    * `F[A]` value.
    *
-   * @see [[handle]] to handle any error by simply mapping it to an `A`
+   * @see [[handleError]] to handle any error by simply mapping it to an `A`
    * value instead of an `F[A]`.
    *
    * @see [[recoverWith]] to recover from only certain errors.
