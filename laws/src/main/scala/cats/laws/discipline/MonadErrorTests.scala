@@ -26,11 +26,14 @@ trait MonadErrorTests[F[_], E] extends MonadTests[F] {
       def parents: Seq[RuleSet] = Seq(monad[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
         "monadError left zero" -> forAll(laws.monadErrorLeftZero[A, B] _),
-        "monadError handle" -> forAll(laws.monadErrorHandle[A] _),
-        "monadError pure" -> forAll(laws.monadErrorPure[A] _),
+        "monadError handleWith" -> forAll(laws.monadErrorHandleWith[A] _),
+        "monadError handle" -> forAll(laws.monadErrorHandleWith[A] _),
+        "monadError handleErrorWith pure" -> forAll(laws.handleErrorWithPure[A] _),
+        "monadError handleError pure" -> forAll(laws.handleErrorPure[A] _),
         "monadError raiseError attempt" -> forAll(laws.raiseErrorAttempt _),
         "monadError pure attempt" -> forAll(laws.pureAttempt[A] _),
-        "monadError handleError consistent with recoverWith" -> forAll(laws.handleErrorConsistentWithRecoverWith[A] _),
+        "monadError handleErrorWith consistent with recoverWith" -> forAll(laws.handleErrorWithConsistentWithRecoverWith[A] _),
+        "monadError handleError consistent with recover" -> forAll(laws.handleErrorConsistentWithRecover[A] _),
         "monadError recover consistent with recoverWith" -> forAll(laws.recoverConsistentWithRecoverWith[A] _),
         "monadError attempt consistent with attemptT" -> forAll(laws.attemptConsistentWithAttemptT[A] _)
       )
