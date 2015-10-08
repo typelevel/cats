@@ -99,8 +99,8 @@ object StateT extends StateTInstances {
 }
 
 sealed abstract class StateTInstances extends StateTInstances0 {
-  implicit def stateTMonadState[F[_], S](implicit F: Monad[F]): MonadState[StateT[F, ?, ?], S] =
-    new MonadState[StateT[F, ?, ?], S] {
+  implicit def stateTMonadState[F[_], S](implicit F: Monad[F]): MonadState[StateT[F, S, ?], S] =
+    new MonadState[StateT[F, S, ?], S] {
       def pure[A](a: A): StateT[F, S, A] =
         StateT.pure(a)
 
@@ -117,7 +117,7 @@ sealed abstract class StateTInstances extends StateTInstances0 {
 }
 
 sealed abstract class StateTInstances0 {
-  implicit def stateMonadState[S]: MonadState[State[?, ?], S] =
+  implicit def stateMonadState[S]: MonadState[State[S, ?], S] =
     StateT.stateTMonadState[Trampoline, S]
 }
 

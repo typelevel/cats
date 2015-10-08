@@ -41,4 +41,8 @@ object eq {
       eqSA.eqv(f, g) && eqA.eqv(f.empty, g.empty)
     }
   }
+
+  implicit val unitEq: Eq[Unit] = new Eq[Unit] {
+    def eqv(a: Unit, b: Unit): Boolean = true
+  }
 }

@@ -5,22 +5,22 @@ package discipline
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll
 
-trait MonadReaderTests[F[_, _], R] extends MonadTests[F[R, ?]] {
+trait MonadReaderTests[F[_], R] extends MonadTests[F] {
   def laws: MonadReaderLaws[F, R]
 
-  implicit def arbitraryK: ArbitraryK[F[R, ?]]
-  implicit def eqK: EqK[F[R, ?]]
+  implicit def arbitraryK: ArbitraryK[F]
+  implicit def eqK: EqK[F]
 
   def monadReader[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
-    ArbF: ArbitraryK[F[R, ?]],
-    EqFA: Eq[F[R, A]],
-    EqFB: Eq[F[R, B]],
-    EqFC: Eq[F[R, C]],
-    EqFR: Eq[F[R, R]],
+    ArbF: ArbitraryK[F],
+    EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]],
+    EqFR: Eq[F[R]],
     ArbE: Arbitrary[R]
   ): RuleSet = {
-    implicit def ArbFRA: Arbitrary[F[R, A]] = ArbF.synthesize[A]
-    implicit def ArbFRB: Arbitrary[F[R, B]] = ArbF.synthesize[B]
+    implicit def ArbFRA: Arbitrary[F[A]] = ArbF.synthesize[A]
+    implicit def ArbFRB: Arbitrary[F[B]] = ArbF.synthesize[B]
 
     new RuleSet {
       def name: String = "monadReader"
@@ -37,10 +37,10 @@ trait MonadReaderTests[F[_, _], R] extends MonadTests[F[R, ?]] {
 }
 
 object MonadReaderTests {
-  def apply[F[_, _], R](implicit FR: MonadReader[F, R], arbKFR: ArbitraryK[F[R, ?]], eqKFR: EqK[F[R, ?]]): MonadReaderTests[F, R] =
+  def apply[F[_], R](implicit FR: MonadReader[F, R], arbKFR: ArbitraryK[F], eqKFR: EqK[F]): MonadReaderTests[F, R] =
     new MonadReaderTests[F, R] {
-      def arbitraryK: ArbitraryK[F[R, ?]] = arbKFR
-      def eqK: EqK[F[R, ?]] = eqKFR
+      def arbitraryK: ArbitraryK[F] = arbKFR
+      def eqK: EqK[F] = eqKFR
       def laws: MonadReaderLaws[F, R] = MonadReaderLaws[F, R]
     }
 }

@@ -3,7 +3,7 @@ package tests
 
 import cats.data.{NonEmptyList, Validated}
 import cats.data.Validated.{Valid, Invalid}
-import cats.laws.discipline.{TraverseTests, ApplicativeTests, SerializableTests}
+import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeTests, SerializableTests}
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.arbitrary._
@@ -13,6 +13,7 @@ import scala.util.Try
 
 class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
+  checkAll("Validated[?, ?]", BifunctorTests[Validated].bifunctor[Int, Int, Int, Int, Int, Int])
   checkAll("Applicative[Validated[String,?]]", SerializableTests.serializable(Applicative[Validated[String,?]]))
 
   checkAll("Validated[String, Int] with Option", TraverseTests[Validated[String,?]].traverse[Int, Int, Int, Int, Option, Option])

@@ -70,7 +70,7 @@ val greeting: Future[String] = customGreetingT.getOrElseF(defaultGreeting)
 
 ## Getting to the underlying instance
 
-If you want to get the `F[Option[A]` value (in this case `Future[Option[String]]` out of an `OptionT` instance, you can simply call  `value`:
+If you want to get the `F[Option[A]` value (in this case `Future[Option[String]]`) out of an `OptionT` instance, you can simply call  `value`:
 
 ```tut:silent
 val customGreeting: Future[Option[String]] = customGreetingT.value

@@ -4,6 +4,7 @@ package discipline
 
 import cats.data._
 import cats.implicits._
+import eq.tuple2Eq
 
 import org.scalacheck.Arbitrary
 
@@ -116,4 +117,8 @@ object EqK {
         implicitly
       }
     }
+
+  implicit def writerTEqK[F[_]: EqK, L: Eq]: EqK[WriterT[F, L, ?]] = new EqK[WriterT[F, L, ?]] {
+    def synthesize[A: Eq]: Eq[WriterT[F, L, A]] = EqK[F].synthesize[(L, A)].on(_.run)
+  }
 }

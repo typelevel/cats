@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Bifunctor
+
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
@@ -162,20 +164,30 @@ sealed abstract class XorInstances extends XorInstances1 {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor, A ] =
-    new Traverse[A Xor ?] with MonadError[Xor, A] {
+  implicit def xorBifunctor: Bifunctor[Xor] =
+    new Bifunctor[Xor] {
+      override def bimap[A, B, C, D](fab: A Xor B)(f: A => C, g: B => D): C Xor D = fab.bimap(f, g)
+    }
+
+  implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor[A, ?], A] =
+    new Traverse[A Xor ?] with MonadError[Xor[A, ?], A] {
       def traverse[F[_]: Applicative, B, C](fa: A Xor B)(f: B => F[C]): F[A Xor C] = fa.traverse(f)
       def foldLeft[B, C](fa: A Xor B, c: C)(f: (C, B) => C): C = fa.foldLeft(c)(f)
       def foldRight[B, C](fa: A Xor B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] = fa.foldRight(lc)(f)
       def flatMap[B, C](fa: A Xor B)(f: B => A Xor C): A Xor C = fa.flatMap(f)
       def pure[B](b: B): A Xor B = Xor.right(b)
-      def handleError[B](fea: Xor[A, B])(f: A => Xor[A, B]): Xor[A, B] =
+      def handleErrorWith[B](fea: Xor[A, B])(f: A => Xor[A, B]): Xor[A, B] =
         fea match {
           case Xor.Left(e) => f(e)
           case r @ Xor.Right(_) => r
         }
       def raiseError[B](e: A): Xor[A, B] = Xor.left(e)
       override def map[B, C](fa: A Xor B)(f: B => C): A Xor C = fa.map(f)
+      override def attempt[B](fab: A Xor B): A Xor (A Xor B) = Xor.right(fab)
+      override def recover[B](fab: A Xor B)(pf: PartialFunction[A, B]): A Xor B =
+        fab recover pf
+      override def recoverWith[B](fab: A Xor B)(pf: PartialFunction[A, A Xor B]): A Xor B =
+        fab recoverWith pf
     }
 }
 

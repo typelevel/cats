@@ -48,7 +48,7 @@ lazy val commonJvmSettings = Seq(
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.12.4",
+  libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.12.5",
   libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
 )
 

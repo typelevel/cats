@@ -10,8 +10,8 @@ class FunctionTests extends CatsSuite {
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
   checkAll("Bimonad[Function0]", SerializableTests.serializable(Comonad[Function0]))
 
-  checkAll("Function1[Int, Int]", MonadReaderTests[Function1, Int].monadReader[Int, Int, Int])
-  checkAll("MonadReader[Function1, Int]", SerializableTests.serializable(MonadReader[Function1, Int]))
+  checkAll("Function1[Int, Int]", MonadReaderTests[Int => ?, Int].monadReader[Int, Int, Int])
+  checkAll("MonadReader[Int => ?, Int]", SerializableTests.serializable(MonadReader[Int => ?, Int]))
 
   checkAll("Function1[Int, Int]", ArrowTests[Function1].arrow[Int, Int, Int, Int, Int, Int])
   checkAll("Arrow[Function1]", SerializableTests.serializable(Arrow[Function1]))

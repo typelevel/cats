@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{Xor, Ior}
-import cats.laws.discipline.{TraverseTests, MonadTests, SerializableTests}
+import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
@@ -14,6 +14,7 @@ class IorTests extends CatsSuite {
 
   checkAll("Ior[String, Int] with Option", TraverseTests[String Ior ?].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[String Ior ?]", SerializableTests.serializable(Traverse[String Ior ?]))
+  checkAll("? Ior ?", BifunctorTests[Ior].bifunctor[Int, Int, Int, String, String, String])
 
   test("left Option is defined left and both") {
     forAll { (i: Int Ior String) =>

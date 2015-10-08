@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Bifunctor
+
 /**
  * Transformer for `Xor`, allowing the effect of an arbitrary type constructor `F` to be combined with the
  * fail-fast effect of `Xor`.
@@ -156,6 +158,13 @@ abstract class XorTInstances extends XorTInstances1 {
 
   implicit def xorTShow[F[_], L, R](implicit sh: Show[F[L Xor R]]): Show[XorT[F, L, R]] =
     functor.Contravariant[Show].contramap(sh)(_.value)
+
+  implicit def xorTBifunctor[F[_]](implicit F: Functor[F]): Bifunctor[XorT[F, ?, ?]] = {
+    new Bifunctor[XorT[F, ?, ?]] {
+      override def bimap[A, B, C, D](fab: XorT[F, A, B])(f: A => C, g: B => D): XorT[F, C, D] = fab.bimap(f, g)
+    }
+  }
+
 }
 
 private[data] abstract class XorTInstances1 extends XorTInstances2 {
@@ -179,7 +188,7 @@ private[data] abstract class XorTInstances1 extends XorTInstances2 {
 }
 
 private[data] abstract class XorTInstances2 extends XorTInstances3 {
-  implicit def xorTMonadError[F[_], L](implicit F: Monad[F]): MonadError[XorT[F, ?, ?], L] = {
+  implicit def xorTMonadError[F[_], L](implicit F: Monad[F]): MonadError[XorT[F, L, ?], L] = {
     implicit val F0 = F
     new XorTMonadError[F, L] { implicit val F = F0 }
   }
@@ -203,18 +212,26 @@ private[data] trait XorTFunctor[F[_], L] extends Functor[XorT[F, L, ?]] {
   override def map[A, B](fa: XorT[F, L, A])(f: A => B): XorT[F, L, B] = fa map f
 }
 
-private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, ?, ?], L] with XorTFunctor[F, L] {
+private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L] with XorTFunctor[F, L] {
   implicit val F: Monad[F]
   def pure[A](a: A): XorT[F, L, A] = XorT.pure[F, L, A](a)
   def flatMap[A, B](fa: XorT[F, L, A])(f: A => XorT[F, L, B]): XorT[F, L, B] = fa flatMap f
-  def handleError[A](fea: XorT[F, L, A])(f: L => XorT[F, L, A]): XorT[F, L, A] =
+  def handleErrorWith[A](fea: XorT[F, L, A])(f: L => XorT[F, L, A]): XorT[F, L, A] =
     XorT(F.flatMap(fea.value) {
-      _ match {
-        case Xor.Left(e) => f(e).value
-        case r @ Xor.Right(_) => F.pure(r)
-      }
+      case Xor.Left(e) => f(e).value
+      case r @ Xor.Right(_) => F.pure(r)
+    })
+  override def handleError[A](fea: XorT[F, L, A])(f: L => A): XorT[F, L, A] =
+    XorT(F.flatMap(fea.value) {
+      case Xor.Left(e) => F.pure(Xor.Right(f(e)))
+      case r @ Xor.Right(_) => F.pure(r)
     })
   def raiseError[A](e: L): XorT[F, L, A] = XorT.left(F.pure(e))
+  override def attempt[A](fla: XorT[F, L, A]): XorT[F, L, L Xor A] = XorT.right(fla.value)
+  override def recover[A](fla: XorT[F, L, A])(pf: PartialFunction[L, A]): XorT[F, L, A] =
+    fla.recover(pf)
+  override def recoverWith[A](fla: XorT[F, L, A])(pf: PartialFunction[L, XorT[F, L, A]]): XorT[F, L, A] =
+    fla.recoverWith(pf)
 }
 
 private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
