@@ -78,4 +78,8 @@ object arbitrary {
 
   implicit def writerTArbitrary[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
     Arbitrary(F.arbitrary.map(WriterT(_)))
+
+  // until this is provided by scalacheck
+  implicit def partialFunctionArbitrary[A, B](implicit F: Arbitrary[A => Option[B]]): Arbitrary[PartialFunction[A, B]] =
+    Arbitrary(F.arbitrary.map(Function.unlift))
 }

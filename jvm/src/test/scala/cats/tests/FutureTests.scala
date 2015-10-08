@@ -10,7 +10,6 @@ import cats.tests.CatsSuite
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.control.NonFatal
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary

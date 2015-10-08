@@ -216,14 +216,22 @@ private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L]
   implicit val F: Monad[F]
   def pure[A](a: A): XorT[F, L, A] = XorT.pure[F, L, A](a)
   def flatMap[A, B](fa: XorT[F, L, A])(f: A => XorT[F, L, B]): XorT[F, L, B] = fa flatMap f
-  def handleError[A](fea: XorT[F, L, A])(f: L => XorT[F, L, A]): XorT[F, L, A] =
+  def handleErrorWith[A](fea: XorT[F, L, A])(f: L => XorT[F, L, A]): XorT[F, L, A] =
     XorT(F.flatMap(fea.value) {
-      _ match {
-        case Xor.Left(e) => f(e).value
-        case r @ Xor.Right(_) => F.pure(r)
-      }
+      case Xor.Left(e) => f(e).value
+      case r @ Xor.Right(_) => F.pure(r)
+    })
+  override def handleError[A](fea: XorT[F, L, A])(f: L => A): XorT[F, L, A] =
+    XorT(F.flatMap(fea.value) {
+      case Xor.Left(e) => F.pure(Xor.Right(f(e)))
+      case r @ Xor.Right(_) => F.pure(r)
     })
   def raiseError[A](e: L): XorT[F, L, A] = XorT.left(F.pure(e))
+  override def attempt[A](fla: XorT[F, L, A]): XorT[F, L, L Xor A] = XorT.right(fla.value)
+  override def recover[A](fla: XorT[F, L, A])(pf: PartialFunction[L, A]): XorT[F, L, A] =
+    fla.recover(pf)
+  override def recoverWith[A](fla: XorT[F, L, A])(pf: PartialFunction[L, XorT[F, L, A]]): XorT[F, L, A] =
+    fla.recoverWith(pf)
 }
 
 private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {

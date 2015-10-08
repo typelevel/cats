@@ -2,7 +2,9 @@ package cats
 package std
 
 import cats.syntax.all._
+import cats.data.Xor
 
+import scala.util.control.NonFatal
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.FiniteDuration
 
@@ -16,9 +18,17 @@ trait FutureInstances extends FutureInstances1 {
 
       def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
 
-      def handleError[A](fea: Future[A])(f: Throwable => Future[A]): Future[A] = fea.recoverWith { case t => f(t) }
+      def handleErrorWith[A](fea: Future[A])(f: Throwable => Future[A]): Future[A] = fea.recoverWith { case t => f(t) }
 
       def raiseError[A](e: Throwable): Future[A] = Future.failed(e)
+      override def handleError[A](fea: Future[A])(f: Throwable => A): Future[A] = fea.recover { case t => f(t) }
+
+      override def attempt[A](fa: Future[A]): Future[Throwable Xor A] =
+        (fa map Xor.right) recover { case NonFatal(t) => Xor.left(t) }
+
+      override def recover[A](fa: Future[A])(pf: PartialFunction[Throwable, A]): Future[A] = fa.recover(pf)
+
+      override def recoverWith[A](fa: Future[A])(pf: PartialFunction[Throwable, Future[A]]): Future[A] = fa.recoverWith(pf)
 
       override def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
     }
