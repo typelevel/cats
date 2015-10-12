@@ -4,7 +4,7 @@ package state
 import cats.tests.CatsSuite
 import cats.laws.discipline.{ArbitraryK, EqK, MonadStateTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.eq._
-import org.scalacheck.{Arbitrary, Gen, Prop}, Prop.forAll
+import org.scalacheck.{Arbitrary, Gen}
 
 class StateTTests extends CatsSuite {
   import StateTTests._
@@ -19,25 +19,25 @@ class StateTTests extends CatsSuite {
     x.runS(0).run should === (100001)
   }
 
-  test("State.pure and StateT.pure are consistent")(check {
+  test("State.pure and StateT.pure are consistent"){
     forAll { (s: String, i: Int) =>
       val state: State[String, Int] = State.pure(i)
       val stateT: State[String, Int] = StateT.pure(i)
-      state.run(s).run === stateT.run(s).run
+      state.run(s).run should === (stateT.run(s).run)
     }
-  })
+  }
 
   test("Apply syntax is usable on State") {
     val x = add1 *> add1
     x.runS(0).run should === (2)
   }
 
-  test("Singleton and instance inspect are consistent")(check {
+  test("Singleton and instance inspect are consistent"){
     forAll { (s: String, i: Int) =>
-      State.inspect[Int, String](_.toString).run(i).run ===
-        State.pure[Int, Unit](()).inspect(_.toString).run(i).run
+      State.inspect[Int, String](_.toString).run(i).run should === (
+        State.pure[Int, Unit](()).inspect(_.toString).run(i).run)
     }
-  })
+  }
 
   checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, Int, ?], Int].monadState[Int, Int, Int])
   checkAll("MonadState[StateT[Option, ?, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, Int, ?], Int]))

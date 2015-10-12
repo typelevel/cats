@@ -5,7 +5,6 @@ import cats.tests.CatsSuite
 import cats.laws.discipline.{ArbitraryK, FunctorTests, SerializableTests}
 
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop.forAll
 
 class YonedaTests extends CatsSuite {
   implicit def yonedaArbitraryK[F[_] : Functor](implicit F: ArbitraryK[F]): ArbitraryK[Yoneda[F, ?]] =
@@ -24,7 +23,9 @@ class YonedaTests extends CatsSuite {
   checkAll("Yoneda[Option, ?]", FunctorTests[Yoneda[Option, ?]].functor[Int, Int, Int])
   checkAll("Functor[Yoneda[Option, ?]]", SerializableTests.serializable(Functor[Yoneda[Option, ?]]))
 
-  test("toCoyoneda and then toYoneda is identity")(check {
-    forAll((y: Yoneda[Option, Int]) => y.toCoyoneda.toYoneda === y)
-  })
+  test("toCoyoneda and then toYoneda is identity"){
+    forAll{ (y: Yoneda[Option, Int]) =>
+      y.toCoyoneda.toYoneda should === (y)
+    }
+  }
 }

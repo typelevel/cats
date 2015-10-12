@@ -11,23 +11,23 @@ import org.scalacheck.Prop.forAll
 class WriterTTests extends CatsSuite {
   checkAll("WriterT[List, String, Int]", MonadTests[WriterT[List, String, ?]].monad[String, Int, Int])
 
-  test("double swap is a noop")(check {
+  test("double swap is a noop"){
     forAll { w: WriterT[List, String, Int] =>
-      w.swap.swap === w
+      w.swap.swap should === (w)
     }
-  })
+  }
 
-  test("reset on pure is a noop")(check {
+  test("reset on pure is a noop"){
     forAll { i: Int =>
       val w = Monad[WriterT[List, String, ?]].pure(i)
-      w === w.reset
+      w should === (w.reset)
     }
-  })
+  }
 
-  test("reset consistencey")(check {
+  test("reset consistencey"){
     forAll { (i: Int, w1: WriterT[Id, String, Int], w2: WriterT[Id, String, Int]) =>
       // if the value is the same, everything should be the same
-      w1.map(_ => i).reset === w2.map(_ => i).reset
+      w1.map(_ => i).reset should === (w2.map(_ => i).reset)
     }
-  })
+  }
 }

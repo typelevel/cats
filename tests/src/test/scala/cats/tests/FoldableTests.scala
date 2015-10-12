@@ -16,29 +16,29 @@ abstract class FoldableCheck[F[_]: ArbitraryK: Foldable](name: String) extends C
   test("summation") {
     forAll { (fa: F[Int]) =>
       val total = iterator(fa).sum
-      fa.foldLeft(0)(_ + _) shouldBe total
-      fa.foldRight(Now(0))((x, ly) => ly.map(x + _)).value shouldBe total
-      fa.fold shouldBe total
-      fa.foldMap(identity) shouldBe total
+      fa.foldLeft(0)(_ + _) should === (total)
+      fa.foldRight(Now(0))((x, ly) => ly.map(x + _)).value should === (total)
+      fa.fold should === (total)
+      fa.foldMap(identity) should === (total)
     }
   }
 
   test("find/exists/forall/filter_/dropWhile_") {
     forAll { (fa: F[Int], n: Int) =>
-      fa.find(_ > n)   shouldBe iterator(fa).find(_ > n)
-      fa.exists(_ > n) shouldBe iterator(fa).exists(_ > n)
-      fa.forall(_ > n) shouldBe iterator(fa).forall(_ > n)
-      fa.filter_(_ > n) shouldBe iterator(fa).filter(_ > n).toList
-      fa.dropWhile_(_ > n) shouldBe iterator(fa).dropWhile(_ > n).toList
+      fa.find(_ > n)   should === (iterator(fa).find(_ > n))
+      fa.exists(_ > n) should === (iterator(fa).exists(_ > n))
+      fa.forall(_ > n) should === (iterator(fa).forall(_ > n))
+      fa.filter_(_ > n) should === (iterator(fa).filter(_ > n).toList)
+      fa.dropWhile_(_ > n) should === (iterator(fa).dropWhile(_ > n).toList)
     }
   }
 
   test("toList/isEmpty/nonEmpty") {
     forAll { (fa: F[Int]) =>
-      fa.toList shouldBe iterator(fa).toList
-      fa.toStreaming.toList shouldBe iterator(fa).toList
-      fa.isEmpty shouldBe iterator(fa).isEmpty
-      fa.nonEmpty shouldBe iterator(fa).nonEmpty
+      fa.toList should === (iterator(fa).toList)
+      fa.toStreaming.toList should === (iterator(fa).toList)
+      fa.isEmpty should === (iterator(fa).isEmpty)
+      fa.nonEmpty should === (iterator(fa).nonEmpty)
     }
   }
 }

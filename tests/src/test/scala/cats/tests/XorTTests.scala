@@ -5,7 +5,6 @@ import cats.data.{Xor, XorT}
 import cats.laws.discipline.{BifunctorTests, MonadErrorTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
-import org.scalacheck.Prop.forAll
 
 class XorTTests extends CatsSuite {
   checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, String, ?], String].monadError[Int, Int, Int])
@@ -13,59 +12,57 @@ class XorTTests extends CatsSuite {
   checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, String, ?], String]))
   checkAll("XorT[List, ?, ?]", BifunctorTests[XorT[List, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
 
-  test("toValidated")(check {
+  test("toValidated") {
     forAll { (xort: XorT[List, String, Int]) =>
-      xort.toValidated.map(_.toXor) == xort.value
+      xort.toValidated.map(_.toXor) should === (xort.value)
     }
-  })
+  }
 
-  test("withValidated")(check {
+  test("withValidated") {
     forAll { (xort: XorT[List, String, Int], f: String => Char, g: Int => Double) =>
-      xort.withValidated(_.bimap(f, g)) == xort.bimap(f, g)
+      xort.withValidated(_.bimap(f, g)) should === (xort.bimap(f, g))
     }
-  })
+  }
 
-  test("fromXor")(check {
+  test("fromXor") {
     forAll { (xor: Xor[String, Int]) =>
-      Some(xor.isLeft) == XorT.fromXor[Option](xor).isLeft
+      Some(xor.isLeft) should === (XorT.fromXor[Option](xor).isLeft)
     }
-  })
+  }
 
-  test("isLeft negation of isRight")(check {
+  test("isLeft negation of isRight") {
     forAll { (xort: XorT[List, String, Int]) =>
-      xort.isLeft == xort.isRight.map(! _)
+      xort.isLeft should === (xort.isRight.map(! _))
     }
-  })
+  }
 
-  test("double swap is noop")(check {
+  test("double swap is noop") {
     forAll { (xort: XorT[List, String, Int]) =>
-      xort.swap.swap === xort
+      xort.swap.swap should === (xort)
     }
-  })
+  }
 
-  test("swap negates isRight")(check {
+  test("swap negates isRight") {
     forAll { (xort: XorT[List, String, Int]) =>
-      xort.swap.isRight == xort.isRight.map(! _)
+      xort.swap.isRight should === (xort.isRight.map(! _))
     }
-  })
+  }
 
-  test("toOption on Right returns Some")(check {
+  test("toOption on Right returns Some") {
     forAll { (xort: XorT[List, String, Int]) =>
-      xort.toOption.map(_.isDefined) == xort.isRight
+      xort.toOption.map(_.isDefined) should === (xort.isRight)
     }
-  })
+  }
 
-  test("toEither preserves isRight")(check {
+  test("toEither preserves isRight") {
     forAll { (xort: XorT[List, String, Int]) =>
-      xort.toEither.map(_.isRight) == xort.isRight
+      xort.toEither.map(_.isRight) should === (xort.isRight)
     }
-  })
+  }
 
   test("recover recovers handled values") {
-    assert {
-      val xort = XorT.left[Id, String, Int]("xort")
-      xort.recover { case "xort" => 5 }.isRight
-    }
+    val xort = XorT.left[Id, String, Int]("xort")
+    xort.recover { case "xort" => 5 }.isRight should === (true)
   }
 
   test("recover ignores unhandled values") {
@@ -79,10 +76,8 @@ class XorTTests extends CatsSuite {
   }
 
   test("recoverWith recovers handled values") {
-    assert {
-      val xort = XorT.left[Id, String, Int]("xort")
-      xort.recoverWith { case "xort" => XorT.right[Id, String, Int](5) }.isRight
-    }
+    val xort = XorT.left[Id, String, Int]("xort")
+    xort.recoverWith { case "xort" => XorT.right[Id, String, Int](5) }.isRight should === (true)
   }
 
   test("recoverWith ignores unhandled values") {

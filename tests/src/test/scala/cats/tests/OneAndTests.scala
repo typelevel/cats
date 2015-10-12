@@ -7,7 +7,6 @@ import cats.data.{NonEmptyList, OneAnd}
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary.{evalArbitrary, oneAndArbitrary}
 
-import org.scalacheck.Prop._
 
 import scala.util.Random
 
@@ -48,38 +47,40 @@ class OneAndTests extends CatsSuite {
   checkAll("NonEmptyList[Int]", ComonadTests[NonEmptyList].comonad[Int, Int, Int])
   checkAll("Comonad[NonEmptyList[A]]", SerializableTests.serializable(Comonad[NonEmptyList]))
 
-  test("Creating OneAnd + unwrap is identity")(check {
-    forAll { (list: List[Int]) => (list.size >= 1) ==> {
-      val oneAnd = NonEmptyList(list.head, list.tail: _*)
-      list == oneAnd.unwrap
-    }}
-  })
+  test("Creating OneAnd + unwrap is identity") {
+    forAll { (list: List[Int]) =>
+      whenever(list.size >= 1) {
+        val oneAnd = NonEmptyList(list.head, list.tail: _*)
+        list should === (oneAnd.unwrap)
+      }
+    }
+  }
 
-  test("NonEmptyList#filter is consistent with List#filter")(check {
+  test("NonEmptyList#filter is consistent with List#filter") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.unwrap
-      nel.filter(p) == list.filter(p)
+      nel.filter(p) should === (list.filter(p))
     }
-  })
+  }
 
-  test("NonEmptyList#find is consistent with List#find")(check {
+  test("NonEmptyList#find is consistent with List#find") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.unwrap
-      nel.find(p) == list.find(p)
+      nel.find(p) should === (list.find(p))
     }
-  })
+  }
 
-  test("NonEmptyList#exists is consistent with List#exists")(check {
+  test("NonEmptyList#exists is consistent with List#exists") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.unwrap
-      nel.exists(p) == list.exists(p)
+      nel.exists(p) should === (list.exists(p))
     }
-  })
+  }
 
-  test("NonEmptyList#forall is consistent with List#forall")(check {
+  test("NonEmptyList#forall is consistent with List#forall") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.unwrap
-      nel.forall(p) == list.forall(p)
+      nel.forall(p) should === (list.forall(p))
     }
-  })
+  }
 }

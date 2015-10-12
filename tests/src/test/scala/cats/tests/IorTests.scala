@@ -4,10 +4,9 @@ package tests
 import cats.data.{Xor, Ior}
 import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary._
-import org.scalacheck.Prop._
-import org.scalacheck.Prop.BooleanOperators
 
 class IorTests extends CatsSuite {
   checkAll("Ior[String, Int]", MonadTests[String Ior ?].monad[Int, Int, Int])
@@ -17,103 +16,104 @@ class IorTests extends CatsSuite {
   checkAll("Traverse[String Ior ?]", SerializableTests.serializable(Traverse[String Ior ?]))
   checkAll("? Ior ?", BifunctorTests[Ior].bifunctor[Int, Int, Int, String, String, String])
 
-  check {
+  test("left Option is defined left and both") {
     forAll { (i: Int Ior String) =>
-      (i.isLeft || i.isBoth) == i.left.isDefined
+      (i.isLeft || i.isBoth) should === (i.left.isDefined)
     }
   }
 
-  check {
+  test("right Option is defined for right and both") {
     forAll { (i: Int Ior String) =>
-      (i.isRight || i.isBoth) == i.right.isDefined
+      (i.isRight || i.isBoth) should === (i.right.isDefined)
     }
   }
 
-  check {
+  test("onlyLeftOrRight") {
     forAll { (i: Int Ior String) =>
-      i.onlyLeft.map(Xor.left).orElse(i.onlyRight.map(Xor.right)) == i.onlyLeftOrRight
+      i.onlyLeft.map(Xor.left).orElse(i.onlyRight.map(Xor.right)) should === (i.onlyLeftOrRight)
     }
   }
 
-  check {
+  test("onlyBoth consistent with left and right") {
     forAll { (i: Int Ior String) =>
-      i.onlyBoth == (for {
+      i.onlyBoth should === (for {
         left <- i.left
         right <- i.right
       } yield (left, right))
     }
   }
 
-  check {
+  test("pad") {
     forAll { (i: Int Ior String) =>
-      i.pad == ((i.left, i.right))
+      i.pad should === ((i.left, i.right))
     }
   }
 
-  check {
+  test("unwrap consistent with isBoth") {
     forAll { (i: Int Ior String) =>
-      i.unwrap.isRight == i.isBoth
+      i.unwrap.isRight should === (i.isBoth)
     }
   }
 
-  check {
+  test("isLeft consistent with toOption") {
     forAll { (i: Int Ior String) =>
-      i.isLeft == i.toOption.isEmpty
+      i.isLeft should === (i.toOption.isEmpty)
     }
   }
 
-  check {
+  test("isLeft consistent with toList") {
     forAll { (i: Int Ior String) =>
-      i.isLeft == i.toList.isEmpty
+      i.isLeft should === (i.toList.isEmpty)
     }
   }
 
-  check {
+  test("isLeft consistent with forall and exists") {
     forAll { (i: Int Ior String, p: String => Boolean) =>
-      i.isLeft ==> (i.forall(p) && !i.exists(p))
-    }
-  }
-
-  check {
-    forAll { (i: Int Ior String, f: Int => Double) =>
-      i.leftMap(f).swap == i.swap.map(f)
-    }
-  }
-
-  check {
-    forAll { (i: Int) =>
-      Ior.left[Int, String](i).foreach { _ => fail("should not be called") }
-      true
-    }
-  }
-
-  check {
-    forAll { (i: Int Ior String) =>
-      (i.isRight || i.isBoth) ==> {
-        var count = 0
-        i.foreach { _ => count += 1 }
-        count == 1
+      whenever(i.isLeft) {
+        (i.forall(p) && !i.exists(p)) should === (true)
       }
     }
   }
 
-  check {
+  test("leftMap then swap equivalent to swap then map") {
+    forAll { (i: Int Ior String, f: Int => Double) =>
+      i.leftMap(f).swap should === (i.swap.map(f))
+    }
+  }
+
+  test("foreach is noop for left") {
+    forAll { (i: Int) =>
+      Ior.left[Int, String](i).foreach { _ => fail("should not be called") }
+    }
+  }
+
+  test("foreach runs for right and both") {
+    forAll { (i: Int Ior String) =>
+      whenever(i.isRight || i.isBoth) {
+        var count = 0
+        i.foreach { _ => count += 1 }
+        count should === (1)
+      }
+    }
+  }
+
+  test("show isn't empty") {
     val iorShow = implicitly[Show[Int Ior String]]
 
     forAll { (i: Int Ior String) =>
-      iorShow.show(i).size > 0
+      iorShow.show(i).nonEmpty should === (true)
     }
   }
 
-  check {
+  test("append left") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
-      i.append(j).left == i.left.map(_ + j.left.getOrElse(0)).orElse(j.left)
+      i.append(j).left should === (i.left.map(_ + j.left.getOrElse(0)).orElse(j.left))
     }
   }
 
-  check {
+  test("append right") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
-      i.append(j).right == i.right.map(_ + j.right.getOrElse("")).orElse(j.right)
+      i.append(j).right should === (i.right.map(_ + j.right.getOrElse("")).orElse(j.right))
     }
   }
 }

@@ -21,15 +21,15 @@ class StreamingTests extends CatsSuite {
   checkAll("Order[Streaming[Int]]", SerializableTests.serializable(Order[Streaming[Int]]))
 }
 
-class AdHocStreamingTests extends CatsProps {
+class AdHocStreamingTests extends CatsSuite {
 
   // convert List[A] to Streaming[A]
   def convert[A](as: List[A]): Streaming[A] =
     Streaming.fromList(as)
 
-  property("fromList/toList") {
+  test("fromList/toList") {
     forAll { (xs: List[Int]) =>
-      convert(xs).toList shouldBe xs
+      convert(xs).toList should === (xs)
     }
   }
 
@@ -37,7 +37,7 @@ class AdHocStreamingTests extends CatsProps {
   def test[A, B](xs: List[A])(f: Streaming[A] => B)(g: List[A] => B): Unit =
     f(convert(xs)) shouldBe g(xs)
 
-  property("map") {
+  test("map") {
     forAll { (xs: List[Int], f: Int => Double) =>
       test(xs)(_.map(f).toList)(_.map(f))
     }
@@ -47,49 +47,49 @@ class AdHocStreamingTests extends CatsProps {
   def convertF[A, B](f: A => List[B]): A => Streaming[B] =
     (a: A) => Streaming.fromList(f(a))
 
-  property("flatMap") {
+  test("flatMap") {
     forAll { (xs: List[Int], f: Int => List[Double]) =>
       test(xs)(_.flatMap(convertF(f)).toList)(_.flatMap(f))
     }
   }
 
-  property("filter") {
+  test("filter") {
     forAll { (xs: List[Int], f: Int => Boolean) =>
       test(xs)(_.filter(f).toList)(_.filter(f))
     }
   }
 
-  property("foldLeft") {
+  test("foldLeft") {
     forAll { (xs: List[String], n: Int, f: (Int, String) => Int) =>
       test(xs)(_.foldLeft(n)(f))(_.foldLeft(n)(f))
     }
   }
 
-  property("isEmpty") {
+  test("isEmpty") {
     forAll { (xs: List[String], n: Int, f: (Int, String) => Int) =>
       test(xs)(_.isEmpty)(_.isEmpty)
     }
   }
 
-  property("concat") {
+  test("concat") {
     forAll { (xs: List[Int], ys: List[Int]) =>
       (convert(xs) concat convert(ys)).toList shouldBe (xs ::: ys)
     }
   }
 
-  property("zip") {
+  test("zip") {
     forAll { (xs: List[Int], ys: List[Int]) =>
       (convert(xs) zip convert(ys)).toList shouldBe (xs zip ys)
     }
   }
 
-  property("zipWithIndex") {
+  test("zipWithIndex") {
     forAll { (xs: List[Int], ys: List[Int]) =>
       test(xs)(_.zipWithIndex.toList)(_.zipWithIndex)
     }
   }
 
-  property("unzip") {
+  test("unzip") {
     forAll { (xys: List[(Int, Int)]) =>
       test(xys) { s =>
         val (xs, ys): (Streaming[Int], Streaming[Int]) = s.unzip
@@ -98,56 +98,55 @@ class AdHocStreamingTests extends CatsProps {
     }
   }
 
-  property("exists") {
+  test("exists") {
     forAll { (xs: List[Int], f: Int => Boolean) =>
       test(xs)(_.exists(f))(_.exists(f))
     }
   }
 
-  property("forall") {
+  test("forall") {
     forAll { (xs: List[Int], f: Int => Boolean) =>
       test(xs)(_.forall(f))(_.forall(f))
     }
   }
 
-  property("take") {
+  test("take") {
     forAll { (xs: List[Int], n: Int) =>
       test(xs)(_.take(n).toList)(_.take(n))
     }
   }
 
-  property("drop") {
+  test("drop") {
     forAll { (xs: List[Int], n: Int) =>
       test(xs)(_.drop(n).toList)(_.drop(n))
     }
   }
 
-  property("takeWhile") {
+  test("takeWhile") {
     forAll { (xs: List[Int], f: Int => Boolean) =>
       test(xs)(_.takeWhile(f).toList)(_.takeWhile(f))
     }
   }
 
-  property("dropWhile") {
+  test("dropWhile") {
     forAll { (xs: List[Int], f: Int => Boolean) =>
       test(xs)(_.dropWhile(f).toList)(_.dropWhile(f))
     }
   }
 
-  property("tails") {
+  test("tails") {
     forAll { (xs: List[Int]) =>
       test(xs)(_.tails.map(_.toList).toList)(_.tails.toList)
     }
   }
 
-  property("merge") {
-    import cats.std.int._
+  test("merge") {
     forAll { (xs: List[Int], ys: List[Int]) =>
       (convert(xs.sorted) merge convert(ys.sorted)).toList shouldBe (xs ::: ys).sorted
     }
   }
 
-  property("product") {
+  test("product") {
     forAll { (xs: List[Int], ys: List[Int]) =>
       val result = (convert(xs) product convert(ys)).iterator.toSet
       val expected = (for { x <- xs; y <- ys } yield (x, y)).toSet
@@ -166,7 +165,7 @@ class AdHocStreamingTests extends CatsProps {
     positiveRationals.take(e.size).iterator.toSet shouldBe e
   }
 
-  property("interleave") {
+  test("interleave") {
     forAll { (xs: Vector[Int]) =>
       // not a complete test but it'll have to do for now
       val s = Streaming.fromVector(xs)
@@ -190,96 +189,95 @@ class AdHocStreamingTests extends CatsProps {
   val veryDangerous: Streaming[Int] =
     1 %:: bomb
 
-  property("lazy uncons") {
+  test("lazy uncons") {
     veryDangerous.uncons.map(_._1) shouldBe Some(1)
   }
 
   def isok[U](body: => U): Unit =
     Try(body).isSuccess shouldBe true
 
-  property("lazy map") {
+  test("lazy map") {
     isok(bomb.map(_ + 1))
   }
 
-  property("lazy flatMap") {
+  test("lazy flatMap") {
     isok(bomb.flatMap(n => Streaming(n, n)))
   }
 
-  property("lazy filter") {
+  test("lazy filter") {
     isok(bomb.filter(_ > 10))
   }
 
-  property("lazy foldRight") {
+  test("lazy foldRight") {
     isok(bomb.foldRight(Now(0))((x, total) => total.map(_ + x)))
   }
 
-  property("lazy peekEmpty") {
+  test("lazy peekEmpty") {
     bomb.peekEmpty shouldBe None
   }
 
-  property("lazy concat") {
+  test("lazy concat") {
     isok(bomb concat bomb)
   }
 
-  property("lazier concat") {
+  test("lazier concat") {
     isok(bomb concat Always(sys.error("ouch"): Streaming[Int]))
   }
 
-  property("lazy zip") {
+  test("lazy zip") {
     isok(bomb zip dangerous)
     isok(dangerous zip bomb)
   }
 
-  property("lazy zipWithIndex") {
+  test("lazy zipWithIndex") {
     isok(bomb.zipWithIndex)
   }
 
-  property("lazy izip") {
+  test("lazy izip") {
     isok(bomb izip dangerous)
     isok(dangerous izip bomb)
   }
 
-  property("lazy unzip") {
+  test("lazy unzip") {
     val bombBomb: Streaming[(Int, Int)] = bomb.map(n => (n, n))
     isok { val t: (Streaming[Int], Streaming[Int]) = bombBomb.unzip }
   }
 
-  property("lazy merge") {
-    import cats.std.int._
+  test("lazy merge") {
     isok(bomb merge bomb)
   }
 
-  property("lazy interleave") {
+  test("lazy interleave") {
     isok(bomb interleave bomb)
   }
 
-  property("lazy product") {
+  test("lazy product") {
     isok(bomb product bomb)
   }
 
-  property("lazy take") {
+  test("lazy take") {
     isok(bomb.take(10))
     isok(bomb.take(0))
   }
 
-  property("take up to the last valid element"){
+  test("take up to the last valid element"){
     isok(dangerous.take(3).toList)
   }
 
-  property("lazy drop") {
+  test("lazy drop") {
     isok(bomb.drop(10))
     isok(bomb.drop(0))
   }
 
-  property("lazy takeWhile") {
+  test("lazy takeWhile") {
     isok(bomb.takeWhile(_ < 10))
   }
 
-  property("lazy dropWhile") {
+  test("lazy dropWhile") {
     isok(bomb.takeWhile(_ < 10))
   }
 
-  property("lazy tails") {
+  test("lazy tails") {
     isok(bomb.tails)
   }
 }
