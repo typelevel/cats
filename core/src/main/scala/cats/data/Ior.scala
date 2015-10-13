@@ -169,4 +169,26 @@ sealed trait IorFunctions {
   def left[A, B](a: A): A Ior B = Ior.Left(a)
   def right[A, B](b: B): A Ior B = Ior.Right(b)
   def both[A, B](a: A, b: B): A Ior B = Ior.Both(a, b)
+
+  /**
+   * Create an `Ior` from two Options if at least one of them is defined.
+   *
+   * @param oa an element (optional) for the left side of the `Ior`
+   * @param ob an element (optional) for the right side of the `Ior`
+   *
+   * @return `None` if both `oa` and `ob` are `None`. Otherwise `Some` wrapping
+   * an [[Ior.Left]], [[Ior.Right]], or [[Ior.Both]] if `oa`, `ob`, or both are
+   * defined (respectively).
+   */
+  def fromOptions[A, B](oa: Option[A], ob: Option[B]): Option[A Ior B] =
+    oa match {
+      case Some(a) => ob match {
+        case Some(b) => Some(Ior.Both(a, b))
+        case None => Some(Ior.Left(a))
+      }
+      case None => ob match {
+        case Some(b) => Some(Ior.Right(b))
+        case None => None
+      }
+    }
 }

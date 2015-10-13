@@ -116,4 +116,19 @@ class IorTests extends CatsSuite {
       i.append(j).right should === (i.right.map(_ + j.right.getOrElse("")).orElse(j.right))
     }
   }
+
+  test("fromOptions left/right consistent with input options"){
+    forAll { (oa: Option[String], ob: Option[Int]) =>
+      val x = Ior.fromOptions(oa, ob)
+      x.flatMap(_.left) should === (oa)
+      x.flatMap(_.right) should === (ob)
+    }
+  }
+
+  test("Option roundtrip"){
+    forAll { ior: String Ior Int =>
+      val iorMaybe = Ior.fromOptions(ior.left, ior.right)
+      iorMaybe should === (Some(ior))
+    }
+  }
 }
