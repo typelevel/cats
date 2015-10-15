@@ -25,11 +25,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.map(f)))
 
-  def ap[B](f: OptionT[F,A => B])(implicit F: Applicative[F]): OptionT[F,B] = 
-    OptionT(F.ap(value)(F.map(f.value)(ff => (aa: Option[A]) => aa match {
-                            case Some(a) => ff.map(_(a))
-                            case None => None
-                          })))
+  def ap[B](f: OptionT[F,A => B])(implicit F: Monad[F]): OptionT[F,B] =
+    flatMap(a => f.map(_(a)))
 
   def flatMap[B](f: A => OptionT[F, B])(implicit F: Monad[F]): OptionT[F, B] =
     OptionT(
@@ -120,24 +117,11 @@ object OptionT extends OptionTInstances {
   }
 }
 
-trait OptionTInstances2 {
+trait OptionTInstances1 {
   implicit def optionTFunctor[F[_]:Functor]: Functor[OptionT[F, ?]] =
     new Functor[OptionT[F, ?]] {
       override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
         fa.map(f)
-    }
-}
-
-trait OptionTInstances1 extends OptionTInstances2 {
-  implicit def optionTApplicative[F[_]:Applicative]: Applicative[OptionT[F, ?]] =
-    new Applicative[OptionT[F, ?]] {
-      def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
-
-      override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
-        fa.map(f)
-
-      override def ap[A,B](fa: OptionT[F, A])(f: OptionT[F, A => B]): OptionT[F, B] =
-        fa.ap(f)
     }
 }
 
