@@ -65,4 +65,14 @@ class FreeApplicativeTests extends CatsSuite {
       }
     r1.foldMap(nt) should === (r2.foldMap(nt))
   }
+
+  // Ensure that syntax and implicit resolution work as expected.
+  // If it compiles, it passes the "test".
+  object SyntaxTests {
+
+    // fixed by #568
+    val fli1 = FreeApplicative.lift[List, Int](List(1, 3, 5, 7))
+    val fli2 = FreeApplicative.lift[List, Int](List(1, 3, 5, 7))
+    (fli1 |@| fli2).map(_ + _)
+  }
 }
