@@ -1,8 +1,8 @@
 package cats.tests
 
-import cats.{Id, Monad}
-import cats.data.{OptionT, Xor}
-import cats.laws.discipline.{MonadTests, SerializableTests}
+import cats.{Applicative, Id, Monad}
+import cats.data.{OptionT, Validated, Xor}
+import cats.laws.discipline.{ApplicativeTests, FunctorTests, MonadCombineTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -111,6 +111,8 @@ class OptionTTests extends CatsSuite {
     }
   }
 
-  checkAll("OptionT[List, Int]", MonadTests[OptionT[List, ?]].monad[Int, Int, Int])
+  checkAll("OptionT[List, Int]", MonadCombineTests[OptionT[List, ?]].monad[Int, Int, Int])
+  checkAll("OptionT[Validated, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
+  checkAll("Functor[Map[String,Int]]", FunctorTests[Map[String,?]].functor[Int, Int, Int])
   checkAll("MonadOptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
 }

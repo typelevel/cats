@@ -25,6 +25,12 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.map(f)))
 
+  def ap[B](f: OptionT[F,A => B])(implicit F: Applicative[F]): OptionT[F,B] = 
+    OptionT(F.ap(value)(F.map(f.value)(ff => (aa: Option[A]) => aa match {
+                            case Some(a) => ff.map(_(a))
+                            case None => None
+                          })))
+
   def flatMap[B](f: A => OptionT[F, B])(implicit F: Monad[F]): OptionT[F, B] =
     OptionT(
       F.flatMap(value){
@@ -114,10 +120,30 @@ object OptionT extends OptionTInstances {
   }
 }
 
-// TODO create prioritized hierarchy for Functor, Monad, etc
-trait OptionTInstances {
-  implicit def optionTMonad[F[_]:Monad]: Monad[OptionT[F, ?]] =
-    new Monad[OptionT[F, ?]] {
+trait OptionTInstances2 {
+  implicit def optionTFunctor[F[_]:Functor]: Functor[OptionT[F, ?]] =
+    new Functor[OptionT[F, ?]] {
+      override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
+        fa.map(f)
+    }
+}
+
+trait OptionTInstances1 extends OptionTInstances2 {
+  implicit def optionTApplicative[F[_]:Applicative]: Applicative[OptionT[F, ?]] =
+    new Applicative[OptionT[F, ?]] {
+      def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
+
+      override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
+        fa.map(f)
+
+      override def ap[A,B](fa: OptionT[F, A])(f: OptionT[F, A => B]): OptionT[F, B] =
+        fa.ap(f)
+    }
+}
+
+trait OptionTInstances extends OptionTInstances1 {
+  implicit def optionTMonadCombine[F[_]](implicit F: Monad[F]): MonadCombine[OptionT[F, ?]] =
+    new MonadCombine[OptionT[F, ?]] {
       def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
 
       def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
@@ -125,8 +151,10 @@ trait OptionTInstances {
 
       override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
         fa.map(f)
-    }
 
+      override def empty[A]: OptionT[F,A] = OptionT(F.pure(None))
+      override def combine[A](x: OptionT[F,A], y: OptionT[F,A]): OptionT[F,A] = x orElse y
+    }
   implicit def optionTEq[F[_], A](implicit FA: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     FA.on(_.value)
 }
