@@ -2,6 +2,7 @@ package cats
 package free
 
 import cats.arrow.NaturalTransformation
+import cats.data.Const
 
 /** Applicative Functor for Free */
 sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable { self =>
@@ -45,6 +46,12 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
         def apply[B](fa: F[B]): FA[G, B] = lift(f(fa))
       }
     }
+
+  /** Interpret this algebra into a Monoid */
+  def analyze[M:Monoid](f: F ~> λ[α => M]): M =
+    foldMap[Const[M, ?]](new (F ~> Const[M, ?]) {
+      def apply[X](x: F[X]): Const[M,X] = Const(f(x))
+    }).getConst
 
   /** Compile this FreeApplicative algebra into a Free algebra. */
   final def monad: Free[F, A] =
