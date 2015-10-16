@@ -38,8 +38,10 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def getOrElse[BB >: B](default: => BB): BB = fold(_ => default, identity)
 
-  def orElse[AA >: A, BB >: B](fallback: => AA Xor BB): AA Xor BB =
-    fold(_ => fallback, _ => this)
+  def orElse[C, BB >: B](fallback: => C Xor BB): C Xor BB = this match {
+    case Xor.Left(_)      => fallback
+    case r @ Xor.Right(_) => r
+  }
 
   def recover[BB >: B](pf: PartialFunction[A, BB]): A Xor BB = this match {
     case Xor.Left(a) if pf.isDefinedAt(a) => Xor.right(pf(a))
