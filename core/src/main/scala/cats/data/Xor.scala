@@ -220,10 +220,10 @@ trait XorFunctions {
    * val result: NumberFormatException Xor Int = fromTryCatch[NumberFormatException] { "foo".toInt }
    * }}}
    */
-  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchAux[T] =
-    new FromTryCatchAux[T]
+  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchCurried[T] =
+    new FromTryCatchCurried[T]
 
-  final class FromTryCatchAux[T] private[XorFunctions] {
+  final class FromTryCatchCurried[T] private[XorFunctions] {
     def apply[A](f: => A)(implicit T: ClassTag[T]): T Xor A =
       try {
         right(f)

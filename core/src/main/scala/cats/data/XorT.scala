@@ -123,7 +123,7 @@ trait XorTFunctions {
 
   /** Transforms an `Xor` into an `XorT`, lifted into the specified `Applicative`.
    *
-   * Note: The return type is a FromXorAux[F], which has an apply method on it, allowing
+   * Note: The return type is a FromXorCurried[F], which has an apply method on it, allowing
    * you to call fromXor like this:
    * {{{
    * val t: Xor[String, Int] = ...
@@ -132,9 +132,9 @@ trait XorTFunctions {
    *
    * The reason for the indirection is to emulate currying type parameters.
    */
-  final def fromXor[F[_]]: FromXorAux[F] = new FromXorAux
+  final def fromXor[F[_]]: FromXorCurried[F] = new FromXorCurried
 
-  final class FromXorAux[F[_]] private[XorTFunctions] {
+  final class FromXorCurried[F[_]] private[XorTFunctions] {
     def apply[E, A](xor: Xor[E, A])(implicit F: Applicative[F]): XorT[F, E, A] =
       XorT(F.pure(xor))
   }

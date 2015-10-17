@@ -97,7 +97,7 @@ object OptionT extends OptionTInstances {
   /**
    * Transforms an `Option` into an `OptionT`, lifted into the specified `Applicative`.
    *
-   * Note: The return type is a FromOptionAux[F], which has an apply method on it, allowing
+   * Note: The return type is a FromOptionCurried[F], which has an apply method on it, allowing
    * you to call fromOption like this:
    * {{{
    * val t: Option[Int] = ...
@@ -106,9 +106,9 @@ object OptionT extends OptionTInstances {
    *
    * The reason for the indirection is to emulate currying type parameters.
    */
-  def fromOption[F[_]]: FromOptionAux[F] = new FromOptionAux
+  def fromOption[F[_]]: FromOptionCurried[F] = new FromOptionCurried
 
-  class FromOptionAux[F[_]] private[OptionT] {
+  class FromOptionCurried[F[_]] private[OptionT] {
     def apply[A](value: Option[A])(implicit F: Applicative[F]): OptionT[F, A] =
       OptionT(F.pure(value))
   }
