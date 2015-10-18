@@ -112,7 +112,5 @@ class OptionTTests extends CatsSuite {
   }
 
   checkAll("OptionT[List, Int]", MonadCombineTests[OptionT[List, ?]].monad[Int, Int, Int])
-  checkAll("OptionT[Validated, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
-  checkAll("Functor[Map[String,Int]]", FunctorTests[Map[String,?]].functor[Int, Int, Int])
   checkAll("MonadOptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
 }
