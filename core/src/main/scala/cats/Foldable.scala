@@ -22,7 +22,7 @@ import simulacrum.typeclass
  * Beyond these it provides many other useful methods related to
  * folding over F[A] values.
  *
- * See: [[https://www.cs.nott.ac.uk/~gmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
+ * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
 @typeclass trait Foldable[F[_]] extends Serializable { self =>
 
