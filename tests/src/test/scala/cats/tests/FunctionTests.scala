@@ -9,7 +9,7 @@ import cats.laws.discipline.arbitrary._
 
 class FunctionTests extends CatsSuite {
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
-  checkAll("Bimonad[Function0]", SerializableTests.serializable(Bimonad[Function0]))
+  checkAll("Bimonad[Function0]", SerializableTests.serializable(Comonad[Function0]))
 
   checkAll("Function1[Int, Int]", MonadReaderTests[Int => ?, Int].monadReader[Int, Int, Int])
   checkAll("MonadReader[Int => ?, Int]", SerializableTests.serializable(MonadReader[Int => ?, Int]))
