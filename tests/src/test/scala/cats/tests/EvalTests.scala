@@ -2,8 +2,7 @@ package cats
 package tests
 
 import scala.math.min
-
-// TODO: monad laws
+import cats.laws.discipline.{BimonadTests, SerializableTests}
 
 class EvalTests extends CatsSuite {
 
@@ -74,4 +73,8 @@ class EvalTests extends CatsSuite {
   test("by-name: Eval.always(_)") {
     runValue(999)(always)(n => n)
   }
+
+  checkAll("Eval[Int]", BimonadTests[Eval].bimonad[Int, Int, Int])
+  checkAll("Bimonad[Eval]", SerializableTests.serializable(Bimonad[Eval]))
+
 }
