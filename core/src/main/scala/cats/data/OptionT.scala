@@ -114,10 +114,17 @@ object OptionT extends OptionTInstances {
   }
 }
 
-// TODO create prioritized hierarchy for Functor, Monad, etc
-trait OptionTInstances {
-  implicit def optionTMonad[F[_]:Monad]: Monad[OptionT[F, ?]] =
-    new Monad[OptionT[F, ?]] {
+trait OptionTInstances1 {
+  implicit def optionTFunctor[F[_]:Functor]: Functor[OptionT[F, ?]] =
+    new Functor[OptionT[F, ?]] {
+      override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
+        fa.map(f)
+    }
+}
+
+trait OptionTInstances extends OptionTInstances1 {
+  implicit def optionTMonadCombine[F[_]](implicit F: Monad[F]): MonadCombine[OptionT[F, ?]] =
+    new MonadCombine[OptionT[F, ?]] {
       def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
 
       def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
@@ -125,8 +132,10 @@ trait OptionTInstances {
 
       override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
         fa.map(f)
-    }
 
+      override def empty[A]: OptionT[F,A] = OptionT(F.pure(None))
+      override def combine[A](x: OptionT[F,A], y: OptionT[F,A]): OptionT[F,A] = x orElse y
+    }
   implicit def optionTEq[F[_], A](implicit FA: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     FA.on(_.value)
 }
