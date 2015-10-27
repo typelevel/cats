@@ -113,4 +113,9 @@ class OptionTTests extends CatsSuite {
 
   checkAll("OptionT[List, Int]", MonadCombineTests[OptionT[List, ?]].monad[Int, Int, Int])
   checkAll("MonadOptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
+
+  {
+    implicit val F = ListWrapper.functor
+    checkAll("Functor[OptionT[ListWrapper, ?]]", FunctorTests[OptionT[ListWrapper, ?]].functor[Int, Int, Int])
+  }
 }
