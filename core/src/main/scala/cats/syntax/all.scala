@@ -30,3 +30,4 @@ trait AllSyntax
     with StrongSyntax
     with TraverseSyntax
     with XorSyntax
+    with ValidatedSyntax

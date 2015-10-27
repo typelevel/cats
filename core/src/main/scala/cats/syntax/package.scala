@@ -28,4 +28,5 @@ package object syntax {
   object strong extends StrongSyntax
   object traverse extends TraverseSyntax
   object xor extends XorSyntax
+  object validated extends ValidatedSyntax
 }
