@@ -2,8 +2,8 @@ package cats
 package tests
 
 import cats.arrow.{Arrow, Choice, Split}
-import cats.data.Kleisli
-import cats.functor.Strong
+import cats.data.{Const, Kleisli}
+import cats.functor.{Contravariant, Strong}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -43,6 +43,12 @@ class KleisliTests extends CatsSuite {
     implicit val kleisliStrong = Kleisli.kleisliStrong[Option]
     checkAll("Kleisli[Option, Int, Int]", StrongTests[Kleisli[Option, ?, ?]].strong[Int, Int, Int, Int, Int, Int])
     checkAll("Strong[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Strong[Kleisli[Option, ?, ?]]))
+  }
+
+  {
+    implicit val kleisliContravariant = Kleisli.kleisliContravariant[Const[Int, ?], Int]
+    // checkAll("Kleisli[Const[Int, ?], Int, ?]", ContravariantTests[Kleisli[Const[Int, ?], Int, ?]].contravariant[Int, Int, Int])
+    checkAll("Contravariant[Kleisli[Const[Int, ?], Int, ?]]", SerializableTests.serializable(Contravariant[Kleisli[Const[Int, ?], Int, ?]]))
   }
 
   {
