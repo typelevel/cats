@@ -1,6 +1,8 @@
 package cats
 package data
 
+import functor.Contravariant
+
 /**
  * `OptionT[F[_], A` is a light wrapper on an `F[Option[A]]` with some
  * convenient methods for working with this nested structure.
@@ -24,6 +26,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.map(f)))
+
+  def contramap[B](f: B => A)(implicit F: Contravariant[F]): OptionT[F, B] =
+    OptionT(F.contramap(value)(_.map(f)))
 
   def flatMap[B](f: A => OptionT[F, B])(implicit F: Monad[F]): OptionT[F, B] =
     OptionT(
@@ -138,4 +143,10 @@ trait OptionTInstances extends OptionTInstances1 {
     }
   implicit def optionTEq[F[_], A](implicit FA: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     FA.on(_.value)
+
+  implicit def optionTContravariant[F[_]: Contravariant]: Contravariant[OptionT[F, ?]] =
+    new Contravariant[OptionT[F, ?]] {
+      def contramap[A, B](fa: OptionT[F, A])(f: B => A): OptionT[F, B] =
+        fa.contramap(f)
+    }
 }
