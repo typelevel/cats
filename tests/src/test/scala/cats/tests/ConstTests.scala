@@ -4,7 +4,8 @@ package tests
 import algebra.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{Const, NonEmptyList}
-import cats.laws.discipline.{ApplyTests, ApplicativeTests, SerializableTests, TraverseTests}
+import cats.functor.Contravariant
+import cats.laws.discipline.{ApplyTests, ApplicativeTests, ContravariantTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.{constArbitrary, oneAndArbitrary}
 
 class ConstTests extends CatsSuite {
@@ -31,4 +32,10 @@ class ConstTests extends CatsSuite {
   checkAll("Const[Map[Int, Int], String]", OrderLaws[Const[Map[Int, Int], String]].eqv)
   checkAll("PartialOrder[Const[Set[Int], String]]", OrderLaws[Const[Set[Int], String]].partialOrder)
   checkAll("Order[Const[Int, String]]", OrderLaws[Const[Int, String]].order)
+
+  {
+    implicit val constContravariant = Const.constContravariant[Int]
+    checkAll("Const[Int, Int]", ContravariantTests[Const[Int, ?]].contravariant[Int, String, Boolean])
+    checkAll("Contravariant[Const[Int, ?]]", SerializableTests.serializable(Contravariant[Const[Int, ?]]))
+  }
 }
