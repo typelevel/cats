@@ -231,9 +231,9 @@ trait ValidatedFunctions {
    * val result: Validated[NumberFormatException, Int] = fromTryCatch[NumberFormatException] { "foo".toInt }
    * }}}
    */
-  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchAux[T] = new FromTryCatchAux[T]
+  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchPartiallyApplied[T] = new FromTryCatchPartiallyApplied[T]
 
-  final class FromTryCatchAux[T] private[ValidatedFunctions] {
+  final class FromTryCatchPartiallyApplied[T] private[ValidatedFunctions] {
     def apply[A](f: => A)(implicit T: ClassTag[T]): Validated[T, A] = {
       try {
         valid(f)
