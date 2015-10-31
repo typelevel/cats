@@ -33,12 +33,12 @@ class XorTests extends CatsSuite {
   checkAll("? Xor ?", BifunctorTests[Xor].bifunctor[Int, Int, Int, String, String, String])
 
   test("fromTryCatch catches matching exceptions") {
-    assert(Xor.fromTryCatch[NumberFormatException]{ "foo".toInt }.isInstanceOf[Xor.Left[NumberFormatException]])
+    assert(Xor.catching[NumberFormatException]{ "foo".toInt }.isInstanceOf[Xor.Left[NumberFormatException]])
   }
 
   test("fromTryCatch lets non-matching exceptions escape") {
     val _ = intercept[NumberFormatException] {
-      Xor.fromTryCatch[IndexOutOfBoundsException]{ "foo".toInt }
+      Xor.catching[IndexOutOfBoundsException]{ "foo".toInt }
     }
   }
 
