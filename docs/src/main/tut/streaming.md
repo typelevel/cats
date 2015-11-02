@@ -428,5 +428,5 @@ str(h) + "." + str(t) + "..."
 Lazy, immutable streams are a powerful way to model an in-progress
 calculation, especially when those sequences are potentially
 unbounded. While these examples were based on mathematical problems,
-streams are a great way to model ny case where waiting to collect all
+streams are a great way to model any case where waiting to collect all
 the elements of a sequence would be inefficient or prohibitive.
