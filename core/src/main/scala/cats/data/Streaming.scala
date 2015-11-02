@@ -135,7 +135,7 @@ sealed abstract class Streaming[A] { lhs =>
     this match {
       case Empty() => Empty()
       case Wait(lt) => Wait(lt.map(_.flatMap(f)))
-      case Cons(a, lt) => f(a) concat lt.map(_.flatMap(f))
+      case Cons(a, lt) => f(a) ++ lt.map(_.flatMap(f))
     }
 
   /**
@@ -233,11 +233,11 @@ sealed abstract class Streaming[A] { lhs =>
   /**
    * Lazily concatenate two streams.
    */
-  def concat(rhs: Streaming[A]): Streaming[A] =
+  def ++(rhs: Streaming[A]): Streaming[A] =
     this match {
       case Empty() => rhs
-      case Wait(lt) => Wait(lt.map(_ concat rhs))
-      case Cons(a, lt) => Cons(a, lt.map(_ concat rhs))
+      case Wait(lt) => Wait(lt.map(_ ++ rhs))
+      case Cons(a, lt) => Cons(a, lt.map(_ ++ rhs))
     }
 
   /**
@@ -245,11 +245,11 @@ sealed abstract class Streaming[A] { lhs =>
    *
    * In this case the evaluation of the second stream may be deferred.
    */
-  def concat(rhs: Eval[Streaming[A]]): Streaming[A] =
+  def ++(rhs: Eval[Streaming[A]]): Streaming[A] =
     this match {
       case Empty() => Wait(rhs)
-      case Wait(lt) => Wait(lt.map(_ concat rhs))
-      case Cons(a, lt) => Cons(a, lt.map(_ concat rhs))
+      case Wait(lt) => Wait(lt.map(_ ++ rhs))
+      case Cons(a, lt) => Cons(a, lt.map(_ ++ rhs))
     }
 
   /**
@@ -428,7 +428,7 @@ sealed abstract class Streaming[A] { lhs =>
           }
         }
       if (i > xs.length + ys.length - 2) Empty() else {
-        build(0) concat Always(loop(i + 1))
+        build(0) ++ Always(loop(i + 1))
       }
     }
     Wait(Always(loop(0)))
@@ -666,8 +666,9 @@ sealed abstract class Streaming[A] { lhs =>
   def compact: Streaming[A] = {
     @tailrec def unroll(s: Streaming[A]): Streaming[A] =
       s match {
+        case Cons(a, lt) => Cons(a, lt.map(_.compact))
         case Wait(lt) => unroll(lt.value)
-        case s => s
+        case Empty() => Empty()
       }
     unroll(this)
   }
@@ -807,9 +808,8 @@ object Streaming extends StreamingInstances {
    * Continually return the result of a thunk.
    *
    * This method only differs from `continually` in that the thunk may
-   * not be pure. For this reason (and unlike continually), this
-   * stream is memoized to ensure that repeated traversals produce the
-   * same results.
+   * not be pure. The stream is memoized to ensure that repeated
+   * traversals produce the same results.
    */
   def thunk[A](f: () => A): Streaming[A] =
     knot(s => Cons(f(), s), memo = true)
@@ -845,31 +845,6 @@ object Streaming extends StreamingInstances {
       case None => Empty()
       case Some(a) => Cons(a, Always(unfold(f(a))(f)))
     }
-
-  /**
-   * Contains various Stream-specific syntax.
-   *
-   * To eanble this, say:
-   *
-   *   import cats.data.Stream.syntax._
-   *
-   * This provides the %:: and %::: operators for constructing Streams
-   * lazily, and the %:: extract to use when pattern matching on
-   * Streams.
-   */
-  object syntax {
-    object %:: {
-      def unapply[A](s: Streaming[A]): Option[(A, Eval[Streaming[A]])] = s.uncons
-    }
-
-    class StreamingOps[A](rhs: Eval[Streaming[A]]) {
-      def %::(lhs: A): Streaming[A] = Cons(lhs, rhs)
-      def %:::(lhs: Streaming[A]): Streaming[A] = lhs concat rhs
-    }
-
-    implicit def streamingOps[A](as: => Streaming[A]): StreamingOps[A] =
-      new StreamingOps(Always(as))
-  }
 }
 
 trait StreamingInstances extends StreamingInstances1 {
@@ -885,7 +860,7 @@ trait StreamingInstances extends StreamingInstances1 {
       def empty[A]: Streaming[A] =
         Streaming.empty
       def combine[A](xs: Streaming[A], ys: Streaming[A]): Streaming[A] =
-        xs concat ys
+        xs ++ ys
 
       override def map2[A, B, Z](fa: Streaming[A], fb: Streaming[B])(f: (A, B) => Z): Streaming[Z] =
         fa.flatMap(a => fb.map(b => f(a, b)))

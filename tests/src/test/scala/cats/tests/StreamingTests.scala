@@ -71,9 +71,9 @@ class AdHocStreamingTests extends CatsSuite {
     }
   }
 
-  test("concat") {
+  test("++") {
     forAll { (xs: List[Int], ys: List[Int]) =>
-      (convert(xs) concat convert(ys)).toList shouldBe (xs ::: ys)
+      (convert(xs) ++ convert(ys)).toList shouldBe (xs ::: ys)
     }
   }
 
@@ -177,7 +177,6 @@ class AdHocStreamingTests extends CatsSuite {
     }
   }
 
-  import Streaming.syntax._
   import scala.util.Try
 
   val bomb: Streaming[Int] =
@@ -216,12 +215,12 @@ class AdHocStreamingTests extends CatsSuite {
     bomb.peekEmpty shouldBe None
   }
 
-  test("lazy concat") {
-    isok(bomb concat bomb)
+  test("lazy ++") {
+    isok(bomb ++ bomb)
   }
 
-  test("lazier concat") {
-    isok(bomb concat Always(sys.error("ouch"): Streaming[Int]))
+  test("lazier ++") {
+    isok(bomb ++ Always(sys.error("ouch"): Streaming[Int]))
   }
 
   test("lazy zip") {
