@@ -25,10 +25,10 @@ library) or `Streaming` (the specific type from Cats).
 ## Introduction
 
 A non-empty `Streaming` instance is structured like a `List`: it has a
-*cons* cell containing a single value, as well as a reference to a tail
-which will the subsequent values (if any). This means that adding
-values to the beginning is very efficient, whereas adding values to the
-end is potentially expensive.
+*cons* cell containing a single value, as well as a reference to a
+tail which will calculate the subsequent values (if any). This means
+that adding values to the beginning is very efficient, whereas adding
+values to the end is potentially expensive.
 
 The major difference between `List` and `Streaming` is evaluation.
 `List` is strict: this means that if you have an instance of `List`
