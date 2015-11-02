@@ -24,7 +24,7 @@ library) or `Streaming` (the specific type from Cats).
 
 ## Introduction
 
-A non-empty `Streaming` instances is structured like a `List`: it has a
+A non-empty `Streaming` instance is structured like a `List`: it has a
 *cons* cell containing a single value, as well as a reference to a tail
 which will the subsequent values (if any). This means that adding
 values to the beginning is very efficient, whereas adding values to the
@@ -44,8 +44,8 @@ easily computed.
 This laziness might remind you of another familiar type: `Iterator`.
 Like `Streaming`, `Iterator` also computes values on-demand using a
 `.next` method (along with `.hasNext`). However, the resemblance is
-only skin deep, since `Iterable` is a mutable data type. This means
-that `Iterable` can only be traversed once, it cannot be safely shared,
+only skin deep, since `Iterator` is a mutable data type. This means
+that `Iterator` can only be traversed once, it cannot be safely shared,
 and is often more difficult to reason about.
 
 By contrast, `Streaming` can be safely shared (and safely accessed from
@@ -117,7 +117,7 @@ fives.take(5).toList
 The Fibonacci sequence starts with `0, 1, 1, 2, 3, 5, 8, 13, ...` and
 continues on forever: it is an infinite sequence. Each term is
 calculated by adding the two previous terms (the starting values `0`
-and `1` and fixed).
+and `1` are fixed).
 
 Since the sequence grows forever, lets set up an unbounded integer type
 (`Z`) as well as some useful values:
@@ -127,10 +127,6 @@ type Z = BigInt
 
 val Z0 = BigInt(0)
 val Z1 = BigInt(1)
-//val Z2 = BigInt(2)
-//val Z4 = BigInt(4)
-//val Z10 = BigInt(10)
-//val Z12 = BigInt(12)
 ```
 
 Our first implementation will be a simple recursive method. While this
@@ -360,7 +356,6 @@ element in the stream. Since Pi has an infinite decimal expansion, the
 stream of digits is also infinite.
 
 The algorithm used is ported from this [python code](http://www.cs.utsa.edu/~wagner/pi/pi_cont.html).
-
 It uses a [continued fraction](https://en.wikipedia.org/wiki/Continued_fraction)
 to get ever-closer approximations of Pi, which it uses to produce decimal digits.
 
@@ -385,8 +380,8 @@ overflows (if the call chain becomes too "deep"). However, the details
 of this algorithms ensure that there won't be very many `narrow` and
 `emit` calls before a term of the stream is output.
 
-Also, since are outputting decimal digits (0-9) you might wonder why
-our calculations are done using `Z`, rather than the much less
+Also, since we are outputting decimal digits (0-9) you might wonder
+why our calculations are done using `Z`, rather than the much less
 expensive `Int` which we return. The reason we do this is that
 internally our calculation needs to use very large numbers to
 represent increasingly precise fractional approximations of Pi.

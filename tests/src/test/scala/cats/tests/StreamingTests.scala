@@ -6,7 +6,6 @@ import algebra.laws.OrderLaws
 import cats.data.Streaming
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests}
-import cats.syntax.all._
 
 class StreamingTests extends CatsSuite {
   checkAll("Streaming[Int]", CoflatMapTests[Streaming].coflatMap[Int, Int, Int])
@@ -72,7 +71,7 @@ class AdHocStreamingTests extends CatsSuite {
     }
   }
 
-  property("++") {
+  test("++") {
     forAll { (xs: List[Int], ys: List[Int]) =>
       (convert(xs) ++ convert(ys)).toList shouldBe (xs ::: ys)
     }
@@ -216,11 +215,11 @@ class AdHocStreamingTests extends CatsSuite {
     bomb.peekEmpty shouldBe None
   }
 
-  property("lazy ++") {
+  test("lazy ++") {
     isok(bomb ++ bomb)
   }
 
-  property("lazier ++") {
+  test("lazier ++") {
     isok(bomb ++ Always(sys.error("ouch"): Streaming[Int]))
   }
 
