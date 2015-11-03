@@ -12,6 +12,7 @@ trait BimonadTests[F[_]] extends MonadTests[F] with ComonadTests[F] {
   def bimonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq]: RuleSet = {
     implicit val arbfa: Arbitrary[F[A]] = ArbitraryK[F].synthesize[A]
     implicit val arbffa: Arbitrary[F[F[A]]] = ArbitraryK[F].synthesize[F[A]]
+    implicit val eqfa: Eq[F[A]] = EqK[F].synthesize[A]
     implicit val eqffa: Eq[F[F[A]]] = EqK[F].synthesize[F[A]]
     new RuleSet {
       def name: String = "bimonad"
