@@ -16,9 +16,11 @@ object NotNull {
    */
   private[this] val singleton: NotNull[Any] = new NotNull[Any] {}
 
-  implicit def ambiguousNull1: NotNull[Null] = throw new Exception("An instance of NotNull[Null] was used. This should never happen. Both ambiguousNull1 and ambiguousNull2 should always be in scope if one of them is.")
+  private[this] def ambiguousException: Exception = new Exception("An instance of NotNull[Null] was used. This should never happen. Both ambiguous NotNull[Null] instances should always be in scope if one of them is.")
 
-  implicit def ambiguousNull2: NotNull[Null] = ambiguousNull1
+  implicit def `If you are seeing this, you probably need to add an explicit type parameter somewhere, beause Null is being inferred.`: NotNull[Null] = throw ambiguousException
+
+  implicit def ambiguousNull2: NotNull[Null] = throw ambiguousException
 
   implicit def notNull[A]: NotNull[A] = singleton.asInstanceOf[NotNull[A]]
 }

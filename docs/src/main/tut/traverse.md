@@ -93,7 +93,7 @@ import cats.std.list._
 import cats.syntax.traverse._
 
 def parseIntXor(s: String): Xor[NumberFormatException, Int] =
-  Xor.fromTryCatch[NumberFormatException](s.toInt)
+  Xor.catchOnly[NumberFormatException](s.toInt)
 
 def parseIntValidated(s: String): ValidatedNel[NumberFormatException, Int] =
   Validated.fromTryCatch[NumberFormatException](s.toInt).toValidatedNel
