@@ -27,6 +27,7 @@ trait AllSyntax
     with SemigroupKSyntax
     with Show.ToShowOps
     with SplitSyntax
+    with StreamingSyntax
     with StrongSyntax
     with TraverseSyntax
     with XorSyntax

@@ -220,10 +220,10 @@ trait XorFunctions {
    * val result: NumberFormatException Xor Int = catching[NumberFormatException] { "foo".toInt }
    * }}}
    */
-  def catchOnly[T >: Null <: Throwable]: CatchingAux[T] =
-    new CatchingAux[T]
+  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] =
+    new CatchOnlyPartiallyApplied[T]
 
-  final class CatchingAux[T] private[XorFunctions] {
+  final class CatchOnlyPartiallyApplied[T] private[XorFunctions] {
     def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): T Xor A =
       try {
         right(f)
