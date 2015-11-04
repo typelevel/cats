@@ -96,7 +96,7 @@ def parseIntXor(s: String): Xor[NumberFormatException, Int] =
   Xor.catchOnly[NumberFormatException](s.toInt)
 
 def parseIntValidated(s: String): ValidatedNel[NumberFormatException, Int] =
-  Validated.fromTryCatch[NumberFormatException](s.toInt).toValidatedNel
+  Validated.catchOnly[NumberFormatException](s.toInt).toValidatedNel
 
 val x1 = List("1", "2", "3").traverseU(parseIntXor)
 val x2 = List("1", "abc", "3").traverseU(parseIntXor)

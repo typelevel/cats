@@ -44,13 +44,7 @@ class XorTests extends CatsSuite {
 
   test("catchNonFatal catches non-fatal exceptions") {
     assert(Xor.catchNonFatal{ "foo".toInt }.isLeft)
-    assert(Xor.catchNonFatal{ new Throwable("blargh") }.isLeft)
-  }
-
-  test("catchOnly lets non-matching exceptions escape") {
-    val _ = intercept[NumberFormatException] {
-      Xor.catchOnly[IndexOutOfBoundsException]{ "foo".toInt }
-    }
+    assert(Xor.catchNonFatal{ throw new Throwable("blargh") }.isLeft)
   }
 
   test("fromTry is left for failed Try") {

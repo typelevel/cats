@@ -228,21 +228,27 @@ trait ValidatedFunctions {
    * the resulting `Validated`. Uncaught exceptions are propagated.
    *
    * For example: {{{
-   * val result: Validated[NumberFormatException, Int] = fromTryCatch[NumberFormatException] { "foo".toInt }
+   * val result: Validated[NumberFormatException, Int] = catchOnly[NumberFormatException] { "foo".toInt }
    * }}}
    */
-  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchPartiallyApplied[T] = new FromTryCatchPartiallyApplied[T]
+  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
 
-  final class FromTryCatchPartiallyApplied[T] private[ValidatedFunctions] {
-    def apply[A](f: => A)(implicit T: ClassTag[T]): Validated[T, A] = {
+  final class CatchOnlyPartiallyApplied[T] private[ValidatedFunctions] {
+    def apply[A](f: => A)(implicit T: ClassTag[T], NT: NotNull[T]): Validated[T, A] =
       try {
         valid(f)
       } catch {
         case t if T.runtimeClass.isInstance(t) =>
           invalid(t.asInstanceOf[T])
       }
-    }
   }
+
+  def catchNonFatal[A](f: => A): Validated[Throwable, A] =
+    try {
+      valid(f)
+    } catch {
+      case scala.util.control.NonFatal(t) => invalid(t)
+    }
 
   /**
    * Converts a `Try[A]` to a `Validated[Throwable, A]`.
