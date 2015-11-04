@@ -91,9 +91,9 @@ object ListWrapper {
       def synthesize[A: Arbitrary]: Arbitrary[ListWrapper[A]] = implicitly
     }
 
-  implicit val listWrapperOneAndArbitraryK: ArbitraryK[OneAnd[?, ListWrapper]] =
-    new ArbitraryK[OneAnd[?, ListWrapper]] {
-      def synthesize[A: Arbitrary]: Arbitrary[OneAnd[A, ListWrapper]] = implicitly
+  implicit val listWrapperOneAndArbitraryK: ArbitraryK[OneAnd[ListWrapper, ?]] =
+    new ArbitraryK[OneAnd[ListWrapper, ?]] {
+      def synthesize[A: Arbitrary]: Arbitrary[OneAnd[ListWrapper, A]] = implicitly
     }
 
   implicit def listWrapperEq[A: Eq]: Eq[ListWrapper[A]] = Eq.by(_.list)

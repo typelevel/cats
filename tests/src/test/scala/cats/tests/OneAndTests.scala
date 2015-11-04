@@ -11,27 +11,27 @@ import cats.laws.discipline.arbitrary.{evalArbitrary, oneAndArbitrary}
 import scala.util.Random
 
 class OneAndTests extends CatsSuite {
-  checkAll("OneAnd[Int, List]", OrderLaws[OneAnd[Int, List]].eqv)
+  checkAll("OneAnd[List, Int]", OrderLaws[OneAnd[List, Int]].eqv)
 
   // Test instances that have more general constraints
   {
     implicit val functor = ListWrapper.functor
-    checkAll("OneAnd[Int, ListWrapper]", FunctorTests[OneAnd[?, ListWrapper]].functor[Int, Int, Int])
-    checkAll("Functor[OneAnd[A, ListWrapper]]", SerializableTests.serializable(Functor[OneAnd[?, ListWrapper]]))
+    checkAll("OneAnd[ListWrapper, Int]", FunctorTests[OneAnd[ListWrapper, ?]].functor[Int, Int, Int])
+    checkAll("Functor[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Functor[OneAnd[ListWrapper, ?]]))
   }
 
   {
     implicit val monadCombine = ListWrapper.monadCombine
-    checkAll("OneAnd[Int, ListWrapper]", SemigroupKTests[OneAnd[?, ListWrapper]].semigroupK[Int])
-    checkAll("OneAnd[Int, List]", GroupLaws[OneAnd[Int, List]].semigroup)
-    checkAll("SemigroupK[OneAnd[A, ListWrapper]]", SerializableTests.serializable(SemigroupK[OneAnd[?, ListWrapper]]))
-    checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[OneAnd[Int, List]]))
+    checkAll("OneAnd[ListWrapper, Int]", SemigroupKTests[OneAnd[ListWrapper, ?]].semigroupK[Int])
+    checkAll("OneAnd[List, Int]", GroupLaws[OneAnd[List, Int]].semigroup)
+    checkAll("SemigroupK[OneAnd[ListWrapper, A]]", SerializableTests.serializable(SemigroupK[OneAnd[ListWrapper, ?]]))
+    checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[OneAnd[List, Int]]))
   }
 
   {
     implicit val foldable = ListWrapper.foldable
-    checkAll("OneAnd[Int, ListWrapper]", FoldableTests[OneAnd[?, ListWrapper]].foldable[Int, Int])
-    checkAll("Foldable[OneAnd[A, ListWrapper]]", SerializableTests.serializable(Foldable[OneAnd[?, ListWrapper]]))
+    checkAll("OneAnd[ListWrapper, Int]", FoldableTests[OneAnd[ListWrapper, ?]].foldable[Int, Int])
+    checkAll("Foldable[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Foldable[OneAnd[ListWrapper, ?]]))
   }
 
   {
