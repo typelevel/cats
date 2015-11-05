@@ -13,9 +13,6 @@ trait BimonadLaws[F[_]] extends MonadLaws[F] with ComonadLaws[F] {
   def pureExtractIsId[A](a: A): IsEq[A] =
     F.extract(F.pure(a)) <-> a
 
-  def extractPureIsId[A](fa: F[A]): IsEq[F[A]] =
-    F.pure(F.extract(fa)) <-> fa
-
   def extractFlatMapEntwining[A](ffa: F[F[A]]): IsEq[A] =
     F.extract(F.flatten(ffa)) <-> F.extract(F.map(ffa)(F.extract))
 

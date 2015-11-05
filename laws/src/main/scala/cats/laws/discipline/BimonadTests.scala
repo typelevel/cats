@@ -20,7 +20,6 @@ trait BimonadTests[F[_]] extends MonadTests[F] with ComonadTests[F] {
       def parents: Seq[RuleSet] = Seq(monad[A, B, C], comonad[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
         "pure andThen extract = id" -> forAll(laws.pureExtractIsId[A] _),
-        "extract andThen pure = id" -> forAll(laws.extractPureIsId[A] _),
         "extract/flatMap entwining" -> forAll(laws.extractFlatMapEntwining[A] _),
         "pure/coflatMap entwining" -> forAll(laws.pureCoflatMapEntwining[A] _)
       )
