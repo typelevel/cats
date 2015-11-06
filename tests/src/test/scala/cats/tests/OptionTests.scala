@@ -12,4 +12,13 @@ class OptionTests extends CatsSuite {
 
   checkAll("Option[Int] with Option", TraverseTests[Option].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Option]", SerializableTests.serializable(Traverse[Option]))
+
+  test("show") {
+    none[Int].show should === ("None")
+    1.some.show should === ("Some(1)")
+
+    forAll { fs: Option[String] =>
+      fs.show should === (fs.toString)
+    }
+  }
 }
