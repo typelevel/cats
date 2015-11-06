@@ -74,7 +74,7 @@ trait ListInstances extends ListInstances1 {
 
   implicit def listShow[A:Show]: Show[List[A]] =
     new Show[List[A]] {
-      def show(fa: List[A]): String = s"List(${fa.map(_.show).mkString(", ")})"
+      def show(fa: List[A]): String = fa.map(_.show).mkString("List(", ", ", ")")
     }
 }
 
