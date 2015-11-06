@@ -6,6 +6,7 @@ import algebra.std.{ListMonoid, ListOrder}
 
 import cats.data.Streaming
 import cats.syntax.order._
+import cats.syntax.show._
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
@@ -70,6 +71,11 @@ trait ListInstances extends ListInstances1 {
 
   implicit def listAlgebra[A]: Monoid[List[A]] = new ListMonoid[A]
   implicit def listOrder[A: Order]: Order[List[A]] = new ListOrder[A]
+
+  implicit def listShow[A:Show]: Show[List[A]] =
+    new Show[List[A]] {
+      def show(fa: List[A]): String = s"List(${fa.map(_.show).mkString(", ")})"
+    }
 }
 
 trait ListInstances1 extends ListInstances2 {
