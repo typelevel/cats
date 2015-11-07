@@ -50,7 +50,7 @@ class XorTTests extends CatsSuite {
 
   test("toOption on Right returns Some") {
     forAll { (xort: XorT[List, String, Int]) =>
-      xort.toOption.map(_.isDefined) should === (xort.isRight)
+      xort.toOption.isDefined should === (xort.isRight)
     }
   }
 

@@ -39,7 +39,7 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def toEither(implicit F: Functor[F]): F[Either[A, B]] = F.map(value)(_.toEither)
 
-  def toOption(implicit F: Functor[F]): F[Option[B]] = F.map(value)(_.toOption)
+  def toOption(implicit F: Functor[F]): OptionT[F, B] = OptionT(F.map(value)(_.toOption))
 
   def to[G[_]](implicit functorF: Functor[F], monoidKG: MonoidK[G], applicativeG: Applicative[G]): F[G[B]] =
     functorF.map(value)(_.to[G, B])
