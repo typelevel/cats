@@ -50,8 +50,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Return this if it is Valid, or else fall back to the given default.
    */
-  def orElse[EE >: E, AA >: A](default: => Validated[EE,AA]): Validated[EE,AA] =
-    fold(_ => default, _ => this)
+  def orElse[EE, AA >: A](default: => Validated[EE,AA]): Validated[EE,AA] =
+    this match {
+      case v @ Valid(_) => v
+      case Invalid(_) => default
+    }
 
   /**
    * Converts the value to an Either[E,A]
