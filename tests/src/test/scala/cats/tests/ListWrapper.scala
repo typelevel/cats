@@ -3,7 +3,6 @@ package tests
 
 import cats.data.OneAnd
 import cats.std.list._
-import cats.laws.discipline.ArbitraryK
 import cats.laws.discipline.arbitrary.oneAndArbitrary
 
 import org.scalacheck.Arbitrary
@@ -85,16 +84,6 @@ object ListWrapper {
 
   implicit def listWrapperArbitrary[A: Arbitrary]: Arbitrary[ListWrapper[A]] =
     Arbitrary(arbitrary[List[A]].map(ListWrapper.apply))
-
-  implicit val listWrapperArbitraryK: ArbitraryK[ListWrapper] =
-    new ArbitraryK[ListWrapper] {
-      def synthesize[A: Arbitrary]: Arbitrary[ListWrapper[A]] = implicitly
-    }
-
-  implicit val listWrapperOneAndArbitraryK: ArbitraryK[OneAnd[ListWrapper, ?]] =
-    new ArbitraryK[OneAnd[ListWrapper, ?]] {
-      def synthesize[A: Arbitrary]: Arbitrary[OneAnd[ListWrapper, A]] = implicitly
-    }
 
   implicit def listWrapperEq[A: Eq]: Eq[ListWrapper[A]] = Eq.by(_.list)
 }

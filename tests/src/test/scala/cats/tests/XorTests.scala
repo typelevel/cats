@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.Xor
+import cats.data.{Xor, XorT}
 import cats.data.Xor._
 import cats.laws.discipline.arbitrary.xorArbitrary
 import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadErrorTests, SerializableTests}
@@ -13,6 +13,8 @@ import scala.util.Try
 
 class XorTests extends CatsSuite {
   checkAll("Xor[String, Int]", GroupLaws[Xor[String, Int]].monoid)
+
+  implicit val eq0 = XorT.xorTEq[Xor[String, ?], String, Int]
 
   checkAll("Xor[String, Int]", MonadErrorTests[Xor[String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor[String, ?], String]))

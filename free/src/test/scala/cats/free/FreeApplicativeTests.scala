@@ -2,24 +2,18 @@ package cats
 package free
 
 import cats.arrow.NaturalTransformation
-import cats.laws.discipline.{ArbitraryK, ApplicativeTests, SerializableTests}
+import cats.laws.discipline.{ApplicativeTests, SerializableTests}
 import cats.tests.CatsSuite
 import cats.data.Const
 
 import org.scalacheck.{Arbitrary, Gen}
 
 class FreeApplicativeTests extends CatsSuite {
-  implicit def freeApplicativeArbitrary[F[_], A](implicit F: ArbitraryK[F], A: Arbitrary[A]): Arbitrary[FreeApplicative[F, A]] =
+  implicit def freeApplicativeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[FreeApplicative[F, A]] =
     Arbitrary(
       Gen.oneOf(
         A.arbitrary.map(FreeApplicative.pure[F, A]),
-        F.synthesize[A].arbitrary.map(FreeApplicative.lift[F, A])))
-
-  implicit def freeApplicativeArbitraryK[F[_]](implicit F: ArbitraryK[F]): ArbitraryK[FreeApplicative[F, ?]] =
-    new ArbitraryK[FreeApplicative[F, ?]]{
-      def synthesize[A: Arbitrary]: Arbitrary[FreeApplicative[F, A]] =
-        freeApplicativeArbitrary[F, A]
-    }
+        F.arbitrary.map(FreeApplicative.lift[F, A])))
 
   implicit def freeApplicativeEq[S[_]: Applicative, A](implicit SA: Eq[S[A]]): Eq[FreeApplicative[S, A]] =
     new Eq[FreeApplicative[S, A]] {

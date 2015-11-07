@@ -20,8 +20,8 @@ object arbitrary {
   implicit def xorArbitrary[A, B](implicit A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[A Xor B] =
     Arbitrary(Gen.oneOf(A.arbitrary.map(Xor.left), B.arbitrary.map(Xor.right)))
 
-  implicit def xorTArbitrary[F[_], A, B](implicit F: ArbitraryK[F], A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[XorT[F, A, B]] =
-    Arbitrary(F.synthesize[A Xor B].arbitrary.map(XorT(_)))
+  implicit def xorTArbitrary[F[_], A, B](implicit F: Arbitrary[F[A Xor B]]): Arbitrary[XorT[F, A, B]] =
+    Arbitrary(F.arbitrary.map(XorT(_)))
 
   implicit def validatedArbitrary[A, B](implicit A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[Validated[A, B]] =
     Arbitrary(Gen.oneOf(A.arbitrary.map(Validated.invalid), B.arbitrary.map(Validated.valid)))
@@ -29,14 +29,14 @@ object arbitrary {
   implicit def iorArbitrary[A, B](implicit A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[A Ior B] =
     Arbitrary(Gen.oneOf(A.arbitrary.map(Ior.left), B.arbitrary.map(Ior.right), for { a <- A.arbitrary; b <- B.arbitrary } yield Ior.both(a, b)))
 
-  implicit def kleisliArbitrary[F[_], A, B](implicit F: ArbitraryK[F], B: Arbitrary[B]): Arbitrary[Kleisli[F, A, B]] =
-    Arbitrary(F.synthesize[B].arbitrary.map(fb => Kleisli[F, A, B](_ => fb)))
+  implicit def kleisliArbitrary[F[_], A, B](implicit F: Arbitrary[F[B]]): Arbitrary[Kleisli[F, A, B]] =
+    Arbitrary(F.arbitrary.map(fb => Kleisli[F, A, B](_ => fb)))
 
   implicit def cokleisliArbitrary[F[_], A, B](implicit B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
     Arbitrary(B.arbitrary.map(b => Cokleisli[F, A, B](_ => b)))
 
-  implicit def optionTArbitrary[F[_], A](implicit F: ArbitraryK[F], A: Arbitrary[A]): Arbitrary[OptionT[F, A]] =
-    Arbitrary(F.synthesize[Option[A]].arbitrary.map(OptionT.apply))
+  implicit def optionTArbitrary[F[_], A](implicit F: Arbitrary[F[Option[A]]]): Arbitrary[OptionT[F, A]] =
+    Arbitrary(F.arbitrary.map(OptionT.apply))
 
   implicit def evalArbitrary[A: Arbitrary]: Arbitrary[Eval[A]] =
     Arbitrary(Gen.oneOf(
@@ -44,14 +44,14 @@ object arbitrary {
       getArbitrary[A].map(Eval.later(_)),
       getArbitrary[A].map(Eval.always(_))))
 
-  implicit def prodArbitrary[F[_], G[_], A](implicit F: ArbitraryK[F], G: ArbitraryK[G], A: Arbitrary[A]): Arbitrary[Prod[F, G, A]] =
-    Arbitrary(F.synthesize[A].arbitrary.flatMap(fa => G.synthesize[A].arbitrary.map(ga =>  Prod[F, G, A](fa, ga))))
+  implicit def prodArbitrary[F[_], G[_], A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]]): Arbitrary[Prod[F, G, A]] =
+    Arbitrary(F.arbitrary.flatMap(fa => G.arbitrary.map(ga => Prod[F, G, A](fa, ga))))
 
-  implicit def funcArbitrary[F[_], A, B](implicit F: ArbitraryK[F], B: Arbitrary[B]): Arbitrary[Func[F, A, B]] =
-    Arbitrary(F.synthesize[B].arbitrary.map(fb => Func.func[F, A, B](_ => fb)))
+  implicit def funcArbitrary[F[_], A, B](implicit F: Arbitrary[F[B]]): Arbitrary[Func[F, A, B]] =
+    Arbitrary(F.arbitrary.map(fb => Func.func[F, A, B](_ => fb)))
 
-  implicit def appFuncArbitrary[F[_], A, B](implicit F: ArbitraryK[F], B: Arbitrary[B], FF: Applicative[F]): Arbitrary[AppFunc[F, A, B]] =
-    Arbitrary(F.synthesize[B].arbitrary.map(fb => Func.appFunc[F, A, B](_ => fb)))
+  implicit def appFuncArbitrary[F[_], A, B](implicit F: Arbitrary[F[B]], FF: Applicative[F]): Arbitrary[AppFunc[F, A, B]] =
+    Arbitrary(F.arbitrary.map(fb => Func.appFunc[F, A, B](_ => fb)))
 
   implicit def streamingArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Streaming[A]] =
     Arbitrary(Gen.listOf(A.arbitrary).map(Streaming.fromList(_)))
