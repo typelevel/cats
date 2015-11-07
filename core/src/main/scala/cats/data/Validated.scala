@@ -155,6 +155,12 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def show[EE >: E, AA >: A](implicit EE: Show[EE], AA: Show[AA]): String =
     fold(e => s"Invalid(${EE.show(e)})",
          a => s"Valid(${AA.show(a)})")
+
+  def andThen[EE >: E, B](f: A => Validated[EE, B]): Validated[EE, B] =
+    this match {
+      case Valid(a) => f(a)
+      case i @ Invalid(_) => i
+    }
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions{
