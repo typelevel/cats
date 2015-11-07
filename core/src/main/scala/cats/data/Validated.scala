@@ -163,7 +163,7 @@ object Validated extends ValidatedInstances with ValidatedFunctions{
 }
 
 
-sealed abstract class ValidatedInstances extends ValidatedInstances1 {
+private[data] sealed abstract class ValidatedInstances extends ValidatedInstances1 {
   implicit def validatedOrder[A: Order, B: Order]: Order[Validated[A,B]] = new Order[Validated[A,B]] {
     def compare(x: Validated[A,B], y: Validated[A,B]): Int = x compare y
     override def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
@@ -201,7 +201,7 @@ sealed abstract class ValidatedInstances extends ValidatedInstances1 {
     }
 }
 
-sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
+private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
   implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A,B]] =
     new PartialOrder[Validated[A,B]] {
       def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
@@ -209,7 +209,7 @@ sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
     }
 }
 
-sealed abstract class ValidatedInstances2 {
+private[data] sealed abstract class ValidatedInstances2 {
   implicit def xorEq[A: Eq, B: Eq]: Eq[Validated[A,B]] =
     new Eq[Validated[A,B]] {
       def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y

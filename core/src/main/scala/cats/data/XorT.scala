@@ -140,7 +140,7 @@ trait XorTFunctions {
   }
 }
 
-abstract class XorTInstances extends XorTInstances1 {
+private[data] abstract class XorTInstances extends XorTInstances1 {
 
   /* TODO violates right absorbtion, right distributivity, and left distributivity -- re-enable when MonadCombine laws are split in to weak/strong
   implicit def xorTMonadCombine[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadCombine[XorT[F, L, ?]] = {

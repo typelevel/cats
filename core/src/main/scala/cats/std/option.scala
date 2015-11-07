@@ -81,7 +81,7 @@ trait OptionInstances extends OptionInstances1 {
     }
 }
 
-trait OptionInstances1 extends OptionInstances2 {
+private[std] sealed trait OptionInstances1 extends OptionInstances2 {
   implicit def partialOrderOption[A](implicit ev: PartialOrder[A]): PartialOrder[Option[A]] =
     new PartialOrder[Option[A]] {
       def partialCompare(x: Option[A], y: Option[A]): Double =
@@ -89,7 +89,7 @@ trait OptionInstances1 extends OptionInstances2 {
     }
 }
 
-trait OptionInstances2 {
+private[std] sealed trait OptionInstances2 {
   implicit def eqOption[A](implicit ev: Eq[A]): Eq[Option[A]] =
     new Eq[Option[A]] {
       def eqv(x: Option[A], y: Option[A]): Boolean =

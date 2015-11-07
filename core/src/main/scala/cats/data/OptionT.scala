@@ -114,7 +114,7 @@ object OptionT extends OptionTInstances {
   }
 }
 
-trait OptionTInstances1 {
+private[data] sealed trait OptionTInstances1 {
   implicit def optionTFunctor[F[_]:Functor]: Functor[OptionT[F, ?]] =
     new Functor[OptionT[F, ?]] {
       override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
@@ -122,7 +122,7 @@ trait OptionTInstances1 {
     }
 }
 
-trait OptionTInstances extends OptionTInstances1 {
+private[data] sealed trait OptionTInstances extends OptionTInstances1 {
   implicit def optionTMonadCombine[F[_]](implicit F: Monad[F]): MonadCombine[OptionT[F, ?]] =
     new MonadCombine[OptionT[F, ?]] {
       def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
