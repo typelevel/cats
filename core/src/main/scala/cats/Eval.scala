@@ -271,7 +271,7 @@ object Eval extends EvalInstances {
   }
 }
 
-trait EvalInstances extends EvalInstances0 {
+private[cats] trait EvalInstances extends EvalInstances0 {
 
   implicit val evalBimonad: Bimonad[Eval] =
     new Bimonad[Eval] {
@@ -293,7 +293,7 @@ trait EvalInstances extends EvalInstances0 {
     new EvalGroup[A] { val algebra = Group[A] }
 }
 
-trait EvalInstances0 extends EvalInstances1 {
+private[cats] trait EvalInstances0 extends EvalInstances1 {
   implicit def evalPartialOrder[A: PartialOrder]: PartialOrder[Eval[A]] =
     new PartialOrder[Eval[A]] {
       def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
@@ -304,7 +304,7 @@ trait EvalInstances0 extends EvalInstances1 {
     new EvalMonoid[A] { val algebra = Monoid[A] }
 }
 
-trait EvalInstances1 {
+private[cats] trait EvalInstances1 {
   implicit def evalEq[A: Eq]: Eq[Eval[A]] =
     new Eq[Eval[A]] {
       def eqv(lx: Eval[A], ly: Eval[A]): Boolean =

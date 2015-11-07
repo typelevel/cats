@@ -21,7 +21,7 @@ object Prod extends ProdInstances {
     Some((x.first, x.second))
 }
 
-sealed abstract class ProdInstances extends ProdInstance0 {
+private[data] sealed abstract class ProdInstances extends ProdInstance0 {
   implicit def prodAlternative[F[_], G[_]](implicit FF: Alternative[F], GG: Alternative[G]): Alternative[Lambda[X => Prod[F, G, X]]] = new ProdAlternative[F, G] {
     def F: Alternative[F] = FF
     def G: Alternative[G] = GG

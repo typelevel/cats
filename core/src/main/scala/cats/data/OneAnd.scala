@@ -87,7 +87,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
-trait OneAndInstances extends OneAndLowPriority1 {
+private[data] sealed trait OneAndInstances extends OneAndLowPriority1 {
 
   implicit def oneAndEq[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
     new Eq[OneAnd[F, A]]{

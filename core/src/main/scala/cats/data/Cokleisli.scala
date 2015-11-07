@@ -49,7 +49,7 @@ sealed trait CokleisliFunctions {
     Cokleisli(f)
 }
 
-sealed abstract class CokleisliInstances extends CokleisliInstances0 {
+private[data] sealed abstract class CokleisliInstances extends CokleisliInstances0 {
   implicit def cokleisliArrow[F[_]](implicit ev: Comonad[F]): Arrow[Cokleisli[F, ?, ?]] =
     new CokleisliArrow[F] { def F: Comonad[F] = ev }
 
@@ -68,7 +68,7 @@ sealed abstract class CokleisliInstances extends CokleisliInstances0 {
     new CokleisliMonoidK[F] { def F: Comonad[F] = ev }
 }
 
-sealed abstract class CokleisliInstances0 {
+private[data] sealed abstract class CokleisliInstances0 {
   implicit def cokleisliSplit[F[_]](implicit ev: CoflatMap[F]): Split[Cokleisli[F, ?, ?]] =
     new CokleisliSplit[F] { def F: CoflatMap[F] = ev }
 

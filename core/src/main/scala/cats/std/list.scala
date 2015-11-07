@@ -72,7 +72,7 @@ trait ListInstances extends ListInstances1 {
   implicit def listOrder[A: Order]: Order[List[A]] = new ListOrder[A]
 }
 
-trait ListInstances1 extends ListInstances2 {
+private[std] sealed trait ListInstances1 extends ListInstances2 {
   implicit def partialOrderList[A: PartialOrder]: PartialOrder[List[A]] =
     new PartialOrder[List[A]] {
       def partialCompare(x: List[A], y: List[A]): Double = {
@@ -94,7 +94,7 @@ trait ListInstances1 extends ListInstances2 {
     }
 }
 
-trait ListInstances2 {
+private[std] sealed trait ListInstances2 {
   implicit def eqList[A: Eq]: Eq[List[A]] =
     new Eq[List[A]] {
       def eqv(x: List[A], y: List[A]): Boolean = {

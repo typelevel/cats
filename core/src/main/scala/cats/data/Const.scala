@@ -36,7 +36,7 @@ object Const extends ConstInstances {
     Const(A.empty)
 }
 
-sealed abstract class ConstInstances extends ConstInstances0 {
+private[data] sealed abstract class ConstInstances extends ConstInstances0 {
   implicit def constOrder[A: Order, B]: Order[Const[A, B]] = new Order[Const[A, B]] {
     def compare(x: Const[A, B], y: Const[A, B]): Int =
       x compare y
@@ -64,7 +64,7 @@ sealed abstract class ConstInstances extends ConstInstances0 {
   }
 }
 
-sealed abstract class ConstInstances0 extends ConstInstances1 {
+private[data] sealed abstract class ConstInstances0 extends ConstInstances1 {
   implicit def constPartialOrder[A: PartialOrder, B]: PartialOrder[Const[A, B]] = new PartialOrder[Const[A, B]]{
     def partialCompare(x: Const[A, B], y: Const[A, B]): Double =
       x partialCompare y
@@ -79,7 +79,7 @@ sealed abstract class ConstInstances0 extends ConstInstances1 {
   }
 }
 
-sealed abstract class ConstInstances1 {
+private[data] sealed abstract class ConstInstances1 {
   implicit def constEq[A: Eq, B]: Eq[Const[A, B]] = new Eq[Const[A, B]] {
     def eqv(x: Const[A, B], y: Const[A, B]): Boolean =
       x === y
