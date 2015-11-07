@@ -217,20 +217,27 @@ trait XorFunctions {
    * the resulting `Xor`. Uncaught exceptions are propagated.
    *
    * For example: {{{
-   * val result: NumberFormatException Xor Int = fromTryCatch[NumberFormatException] { "foo".toInt }
+   * val result: NumberFormatException Xor Int = catching[NumberFormatException] { "foo".toInt }
    * }}}
    */
-  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchPartiallyApplied[T] =
-    new FromTryCatchPartiallyApplied[T]
+  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] =
+    new CatchOnlyPartiallyApplied[T]
 
-  final class FromTryCatchPartiallyApplied[T] private[XorFunctions] {
-    def apply[A](f: => A)(implicit T: ClassTag[T]): T Xor A =
+  final class CatchOnlyPartiallyApplied[T] private[XorFunctions] {
+    def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): T Xor A =
       try {
         right(f)
       } catch {
-        case t if T.runtimeClass.isInstance(t) =>
+        case t if CT.runtimeClass.isInstance(t) =>
           left(t.asInstanceOf[T])
       }
+  }
+
+  def catchNonFatal[A](f: => A): Throwable Xor A =
+    try {
+      right(f)
+    } catch {
+      case scala.util.control.NonFatal(t) => left(t)
     }
 
   /**
