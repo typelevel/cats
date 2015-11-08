@@ -111,6 +111,11 @@ class OptionTTests extends CatsSuite {
     }
   }
 
+  test("show"){
+    val xor: String Xor Option[Int] = Xor.right(Some(1))
+    OptionT[Xor[String, ?], Int](xor).show should === ("Xor.Right(Some(1))")
+  }
+
   checkAll("OptionT[List, Int]", MonadCombineTests[OptionT[List, ?]].monad[Int, Int, Int])
   checkAll("MonadOptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
 

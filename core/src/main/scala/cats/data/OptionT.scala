@@ -88,6 +88,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def toLeft[R](right: => R)(implicit F: Functor[F]): XorT[F, A, R] =
     XorT(cata(Xor.Right(right), Xor.Left.apply))
+
+  def show(implicit F: Show[F[Option[A]]]): String = F.show(value)
 }
 
 object OptionT extends OptionTInstances {
@@ -138,4 +140,7 @@ private[data] sealed trait OptionTInstances extends OptionTInstances1 {
     }
   implicit def optionTEq[F[_], A](implicit FA: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     FA.on(_.value)
+
+  implicit def optionTShow[F[_], A](implicit F: Show[F[Option[A]]]): Show[OptionT[F, A]] =
+    functor.Contravariant[Show].contramap(F)(_.value)
 }

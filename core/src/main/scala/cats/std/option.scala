@@ -79,6 +79,14 @@ trait OptionInstances extends OptionInstances1 {
             if (y.isDefined) -1 else 0
         }
     }
+
+  implicit def showOption[A](implicit A: Show[A]): Show[Option[A]] =
+    new Show[Option[A]] {
+      def show(fa: Option[A]): String = fa match {
+        case Some(a) => s"Some(${A.show(a)})"
+        case None => "None"
+      }
+    }
 }
 
 private[std] sealed trait OptionInstances1 extends OptionInstances2 {
