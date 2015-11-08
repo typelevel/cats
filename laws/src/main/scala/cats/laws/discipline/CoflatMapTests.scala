@@ -11,12 +11,10 @@ trait CoflatMapTests[F[_]] extends Laws {
   def laws: CoflatMapLaws[F]
 
   def coflatMap[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-    ArbF: ArbitraryK[F],
+    ArbFA: Arbitrary[F[A]],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]]
   ): RuleSet = {
-    implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
-
     new DefaultRuleSet(
       name = "coflatMap",
       parent = None,

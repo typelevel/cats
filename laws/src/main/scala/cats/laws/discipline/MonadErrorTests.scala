@@ -2,7 +2,8 @@ package cats
 package laws
 package discipline
 
-import cats.laws.discipline.arbitrary.partialFunctionArbitrary
+import cats.data.{ Xor, XorT }
+import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq.unitEq
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll
@@ -10,16 +11,21 @@ import org.scalacheck.Prop.forAll
 trait MonadErrorTests[F[_], E] extends MonadTests[F] {
   def laws: MonadErrorLaws[F, E]
 
-  implicit def arbitraryK: ArbitraryK[F]
-  implicit def eqK: EqK[F]
-
-  implicit def arbitraryE: Arbitrary[E]
-  implicit def eqE: Eq[E]
-
-  def monadError[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq]: RuleSet = {
-    implicit def arbFT[T:Arbitrary]: Arbitrary[F[T]] = arbitraryK.synthesize
-    implicit def eqFT[T:Eq]: Eq[F[T]] = eqK.synthesize
-
+  def monadError[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
+    ArbFA: Arbitrary[F[A]],
+    ArbFB: Arbitrary[F[B]],
+    ArbFC: Arbitrary[F[C]],
+    ArbFAtoB: Arbitrary[F[A => B]],
+    ArbFBtoC: Arbitrary[F[B => C]],
+    ArbE: Arbitrary[E],
+    EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]],
+    EqE: Eq[E],
+    EqFXorEU: Eq[F[E Xor Unit]],
+    EqFXorEA: Eq[F[E Xor A]],
+    EqXorTFEA: Eq[XorT[F, E, A]]
+  ): RuleSet = {
     new RuleSet {
       def name: String = "monadError"
       def bases: Seq[(String, RuleSet)] = Nil
@@ -42,12 +48,8 @@ trait MonadErrorTests[F[_], E] extends MonadTests[F] {
 }
 
 object MonadErrorTests {
-  def apply[F[_], E: Arbitrary: Eq](implicit FE: MonadError[F, E], ArbKF: ArbitraryK[F], EqKF: EqK[F]): MonadErrorTests[F, E] =
+  def apply[F[_], E](implicit FE: MonadError[F, E]): MonadErrorTests[F, E] =
     new MonadErrorTests[F, E] {
-      def arbitraryE: Arbitrary[E] = implicitly[Arbitrary[E]]
-      def arbitraryK: ArbitraryK[F] = ArbKF
-      def eqE: Eq[E] = Eq[E]
-      def eqK: EqK[F] = EqKF
       def laws: MonadErrorLaws[F, E] = MonadErrorLaws[F, E]
     }
 }

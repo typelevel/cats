@@ -1,6 +1,8 @@
 package cats
 package tests
 
+import org.scalacheck.Arbitrary
+
 import cats.arrow.{Arrow, Choice}
 import cats.functor.Contravariant
 import cats.laws.discipline._
@@ -8,6 +10,7 @@ import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 
 class FunctionTests extends CatsSuite {
+  implicit def ev0[A: Arbitrary]: Arbitrary[() => A] = Arbitrary(Arbitrary.arbitrary[A].map { a => () => a })
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
   checkAll("Bimonad[Function0]", SerializableTests.serializable(Bimonad[Function0]))
 

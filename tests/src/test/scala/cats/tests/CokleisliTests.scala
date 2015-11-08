@@ -6,7 +6,6 @@ import cats.data.{Cokleisli, NonEmptyList}
 import cats.functor.Profunctor
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.ArbitraryK._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
@@ -43,7 +42,8 @@ class CokleisliTests extends SlowCatsSuite {
     // More ceremony, see above
     type CokleisliNELE[A] = Cokleisli[NonEmptyList, A, A]
 
-    implicit def ev0: ArbitraryK[CokleisliNELE] = cokleisliE
+    implicit def ev0[A: Arbitrary]: Arbitrary[CokleisliNELE[A]] =
+      cokleisliArbitrary[NonEmptyList, A, A]
 
     implicit def ev1[A: Eq](implicit arb: Arbitrary[A]): Eq[CokleisliNELE[A]] =
       cokleisliEqE[NonEmptyList, A](oneAndArbitrary, Eq[A])

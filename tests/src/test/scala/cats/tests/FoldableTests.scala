@@ -1,17 +1,13 @@
 package cats
 package tests
 
-import cats.laws.discipline.ArbitraryK
-
 import org.scalatest.prop.PropertyChecks
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
-abstract class FoldableCheck[F[_]: ArbitraryK: Foldable](name: String) extends CatsSuite with PropertyChecks {
+abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite with PropertyChecks {
 
   def iterator[T](fa: F[T]): Iterator[T]
-
-  implicit val arbfn: Arbitrary[F[Int]] = ArbitraryK[F].synthesize[Int]
 
   test("summation") {
     forAll { (fa: F[Int]) =>
