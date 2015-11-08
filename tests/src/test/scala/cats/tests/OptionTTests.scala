@@ -1,8 +1,9 @@
 package cats.tests
 
 import cats.{Applicative, Id, Monad}
-import cats.data.{OptionT, Validated, Xor}
-import cats.laws.discipline.{ApplicativeTests, FunctorTests, MonadCombineTests, SerializableTests}
+import cats.data.{Const, OptionT, Validated, Xor}
+import cats.functor.Contravariant
+import cats.laws.discipline.{ApplicativeTests, ContravariantTests, FunctorTests, MonadCombineTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -117,5 +118,11 @@ class OptionTTests extends CatsSuite {
   {
     implicit val F = ListWrapper.functor
     checkAll("Functor[OptionT[ListWrapper, ?]]", FunctorTests[OptionT[ListWrapper, ?]].functor[Int, Int, Int])
+  }
+
+  {
+    implicit val optionTContravariant = OptionT.optionTContravariant[Const[Int, ?]]
+    // checkAll("OptionT[Const[Int, ?], Int]", ContravariantTests[OptionT[Const[Int, ?], ?]].contravariant[Int, Int, Int])
+    checkAll("ContravariantOptionT[Const[Int, ?], ?]]", SerializableTests.serializable(Contravariant[OptionT[Const[Int, ?], ?]]))
   }
 }

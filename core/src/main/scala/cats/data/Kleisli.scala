@@ -2,7 +2,7 @@ package cats
 package data
 
 import cats.arrow.{Arrow, Choice, Split}
-import cats.functor.Strong
+import cats.functor.{Contravariant, Strong}
 
 /**
  * Represents a function `A => F[B]`.
@@ -20,6 +20,9 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
 
   def map[C](f: B => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
     Kleisli(a => F.map(run(a))(f))
+
+  def contramap[C](f: C => B)(implicit F: Contravariant[F]): Kleisli[F, A, C] =
+    Kleisli(a => F.contramap(run(a))(f))
 
   def mapF[N[_], C](f: F[B] => N[C]): Kleisli[N, A, C] =
     Kleisli(run andThen f)
@@ -125,6 +128,9 @@ private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 
   implicit def kleisliStrong[F[_]](implicit ev: Functor[F]): Strong[Kleisli[F, ?, ?]] =
     new KleisliStrong[F] { def F: Functor[F] = ev }
 
+  implicit def kleisliContravariant[F[_], A](implicit ev: Contravariant[F]): Contravariant[Kleisli[F, A, ?]] =
+    new KleisliContravariant[F, A] { def F: Contravariant[F] = ev }
+
   implicit def kleisliFlatMap[F[_]: FlatMap, A]: FlatMap[Kleisli[F, A, ?]] = new FlatMap[Kleisli[F, A, ?]] {
     def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
       fa.flatMap(f)
@@ -212,10 +218,17 @@ private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] {
     fa.second[C]
 }
 
+private trait KleisliContravariant[F[_], A] extends Contravariant[Kleisli[F, A, ?]] {
+  implicit def F: Contravariant[F]
+
+  override def contramap[B, C](fa: Kleisli[F, A, B])(f: C => B): Kleisli[F, A, C] =
+    fa.contramap(f)
+}
+
 private trait KleisliSemigroup[F[_], A, B] extends Semigroup[Kleisli[F, A, B]] {
   implicit def FB: Semigroup[F[B]]
 
-  override def combine(a: Kleisli[F, A, B], b: Kleisli[F, A, B]): Kleisli[F, A, B] = 
+  override def combine(a: Kleisli[F, A, B], b: Kleisli[F, A, B]): Kleisli[F, A, B] =
     Kleisli[F, A, B](x => FB.combine(a.run(x), b.run(x)))
 }
 
