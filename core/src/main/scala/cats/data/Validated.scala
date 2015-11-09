@@ -126,7 +126,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * When Valid, apply the function, marking the result as valid
    * inside the Applicative's context,
-   * when Invalid, lift the Error into the Applicative's contexst
+   * when Invalid, lift the Error into the Applicative's context
    */
   def traverse[F[_], EE >: E, B](f: A => F[B])(implicit F: Applicative[F]): F[Validated[EE,B]] =
     fold(e => F.pure(Invalid(e)),
