@@ -47,14 +47,6 @@ class ValidatedTests extends CatsSuite {
     }
   }
 
-  test("filter makes non-matching entries invalid") {
-    Valid(1).filter[String](_ % 2 == 0).isInvalid should ===(true)
-  }
-
-  test("filter leaves matching entries valid") {
-    Valid(2).filter[String](_ % 2 == 0).isValid should ===(true)
-  }
-
   test("ValidatedNel") {
     forAll { (e: String) =>
       val manual = Validated.invalid[NonEmptyList[String], Int](NonEmptyList(e))
