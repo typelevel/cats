@@ -16,6 +16,10 @@ This version includes new type class instances:
   `Validated`, `Ior`, `Xor`, and `XorT`
 * [#569](https://github.com/non/cats/pull/569): `Functor` instances for
   `OptionT` when `F` has a `Functor` instance but not a `Monad`
+* [#600](https://github.com/non/cats/pull/600): `Show` instances for `Option`
+  and `OptionT`
+* [#601](https://github.com/non/cats/pull/601): `Show` instances for `List`
+* [#602](https://github.com/non/cats/pull/602): `Show` instances for `Set`
 * [#568](https://github.com/non/cats/pull/568): Several new `Unapply` shapes
 
 And API changes:
@@ -30,8 +34,10 @@ And API changes:
   `OptionT[F, B]` instead of an `F[Option[B]]`
 * [#518](https://github.com/non/cats/pull/518): `Free`'s `resume` method now
   returns an `Xor` instead of an `Either`
-* [#575](https://github.com/non/cats/pull/575): `orElse` on `Xor` does not
-  unnecessarily constrain the type of the left side of the result
+* [#575](https://github.com/non/cats/pull/575) and
+  [#606](https://github.com/non/cats/pull/606): `orElse` on `Xor` and
+  `Validated` does not unnecessarily constrain the type of the left side of the
+  result
 * [#577](https://github.com/non/cats/pull/577): `*Aux` helper classes have been
   renamed `*PartiallyApplied`
 
