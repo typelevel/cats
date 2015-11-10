@@ -39,15 +39,6 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def forall(f: A => Boolean): Boolean = fold(_ => true, f)
 
   /**
-   * If the value is Valid but the predicate fails, return an empty
-   * Invalid value, otherwise leaves the value unchanged.  This method
-   * is mostly useful for allowing validated values to be used in a
-   * for comprehension with pattern matching.
-   */
-  def filter[EE >: E](pred: A => Boolean)(implicit M: Monoid[EE]): Validated[EE,A] =
-    fold(Invalid.apply, a => if(pred(a)) this else Invalid(M.empty))
-
-  /**
    * Return this if it is Valid, or else fall back to the given default.
    */
   def orElse[EE, AA >: A](default: => Validated[EE,AA]): Validated[EE,AA] =
@@ -135,7 +126,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * When Valid, apply the function, marking the result as valid
    * inside the Applicative's context,
-   * when Invalid, lift the Error into the Applicative's contexst
+   * when Invalid, lift the Error into the Applicative's context
    */
   def traverse[F[_], EE >: E, B](f: A => F[B])(implicit F: Applicative[F]): F[Validated[EE,B]] =
     fold(e => F.pure(Invalid(e)),
