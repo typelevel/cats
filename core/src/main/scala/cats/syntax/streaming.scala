@@ -25,7 +25,7 @@ trait StreamingSyntax {
   implicit def streamingOps[A](as: => Streaming[A]): StreamingOps[A] =
     new StreamingOps(Always(as))
 
-  class StreamingOps[A](rhs: Eval[Streaming[A]]) {
+  final class StreamingOps[A](rhs: Eval[Streaming[A]]) {
     def %::(lhs: A): Streaming[A] = Cons(lhs, rhs)
     def %:::(lhs: Streaming[A]): Streaming[A] = lhs ++ rhs
   }

@@ -10,7 +10,7 @@ import cats.functor.Bifunctor
  * `XorT[F, A, B]` wraps a value of type `F[A Xor B]`. An `F[C]` can be lifted in to `XorT[F, A, C]` via `XorT.right`,
  * and lifted in to a `XorT[F, C, B]` via `XorT.left`.
  */
-case class XorT[F[_], A, B](value: F[A Xor B]) {
+final case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def fold[C](fa: A => C, fb: B => C)(implicit F: Functor[F]): F[C] = F.map(value)(_.fold(fa, fb))
 

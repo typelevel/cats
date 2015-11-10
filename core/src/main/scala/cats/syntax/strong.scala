@@ -9,7 +9,7 @@ trait StrongSyntax {
     new StrongOps[F, A, B](fab)
 }
 
-class StrongOps[F[_, _], A, B](fab: F[A, B])(implicit F: Strong[F]) {
+final class StrongOps[F[_, _], A, B](fab: F[A, B])(implicit F: Strong[F]) {
   def first[C]: F[(A, C), (B, C)] = F.first(fab)
   def second[C]: F[(C, A), (C, B)] = F.second(fab)
 }

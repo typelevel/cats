@@ -7,6 +7,6 @@ trait MonadCombineSyntax {
     new NestedMonadCombineOps[F, G, A](fga)
 }
 
-class NestedMonadCombineOps[F[_], G[_], A](fga: F[G[A]])(implicit F: MonadCombine[F]) {
+final class NestedMonadCombineOps[F[_], G[_], A](fga: F[G[A]])(implicit F: MonadCombine[F]) {
   def unite(implicit G: Foldable[G]): F[A] = F.unite(fga)
 }

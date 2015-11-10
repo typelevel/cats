@@ -17,7 +17,7 @@ trait FlatMapSyntax extends FlatMapSyntax1 {
     new IfMOps[F](fa)
 }
 
-class FlatMapOps[F[_], A](fa: F[A])(implicit F: FlatMap[F]) {
+final class FlatMapOps[F[_], A](fa: F[A])(implicit F: FlatMap[F]) {
   def flatMap[B](f: A => F[B]): F[B] = F.flatMap(fa)(f)
   def mproduct[B](f: A => F[B]): F[(A, B)] = F.mproduct(fa)(f)
   def >>=[B](f: A => F[B]): F[B] = F.flatMap(fa)(f)
@@ -41,10 +41,10 @@ class FlatMapOps[F[_], A](fa: F[A])(implicit F: FlatMap[F]) {
 
 }
 
-class FlattenOps[F[_], A](ffa: F[F[A]])(implicit F: FlatMap[F]) {
+final class FlattenOps[F[_], A](ffa: F[F[A]])(implicit F: FlatMap[F]) {
   def flatten: F[A] = F.flatten(ffa)
 }
 
-class IfMOps[F[_]](fa: F[Boolean])(implicit F: FlatMap[F]) {
+final class IfMOps[F[_]](fa: F[Boolean])(implicit F: FlatMap[F]) {
   def ifM[B](ifTrue: => F[B], ifFalse: => F[B]): F[B] = F.ifM(fa)(ifTrue, ifFalse)
 }

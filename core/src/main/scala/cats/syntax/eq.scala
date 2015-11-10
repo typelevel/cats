@@ -8,7 +8,7 @@ trait EqSyntax {
     new EqOps[A](a)
 }
 
-class EqOps[A: Eq](lhs: A) {
+final class EqOps[A: Eq](lhs: A) {
   def ===(rhs: A): Boolean = macro Ops.binop[A, Boolean]
   def =!=(rhs: A): Boolean = macro Ops.binop[A, Boolean]
 }

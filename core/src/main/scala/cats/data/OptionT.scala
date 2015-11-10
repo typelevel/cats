@@ -116,7 +116,7 @@ object OptionT extends OptionTInstances {
    */
   def fromOption[F[_]]: FromOptionPartiallyApplied[F] = new FromOptionPartiallyApplied
 
-  class FromOptionPartiallyApplied[F[_]] private[OptionT] {
+  final class FromOptionPartiallyApplied[F[_]] private[OptionT] {
     def apply[A](value: Option[A])(implicit F: Applicative[F]): OptionT[F, A] =
       OptionT(F.pure(value))
   }

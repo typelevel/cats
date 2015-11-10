@@ -33,35 +33,34 @@ private[data] sealed abstract class ProdInstances extends ProdInstance0 {
   }
 }
 
-sealed abstract class ProdInstance0 extends ProdInstance1 {
+private[data] sealed abstract class ProdInstance0 extends ProdInstance1 {
   implicit def prodMonoidK[F[_], G[_]](implicit FF: MonoidK[F], GG: MonoidK[G]): MonoidK[Lambda[X => Prod[F, G, X]]] = new ProdMonoidK[F, G] {
     def F: MonoidK[F] = FF
     def G: MonoidK[G] = GG
   }
 }
 
-sealed abstract class ProdInstance1 extends ProdInstance2 {
+private[data] sealed abstract class ProdInstance1 extends ProdInstance2 {
   implicit def prodSemigroupK[F[_], G[_]](implicit FF: SemigroupK[F], GG: SemigroupK[G]): SemigroupK[Lambda[X => Prod[F, G, X]]] = new ProdSemigroupK[F, G] {
     def F: SemigroupK[F] = FF
     def G: SemigroupK[G] = GG
   }
 }
 
-sealed abstract class ProdInstance2 extends ProdInstance3 {
+private[data] sealed abstract class ProdInstance2 extends ProdInstance3 {
   implicit def prodApplicative[F[_], G[_]](implicit FF: Applicative[F], GG: Applicative[G]): Applicative[Lambda[X => Prod[F, G, X]]] = new ProdApplicative[F, G] {
     def F: Applicative[F] = FF
     def G: Applicative[G] = GG
   }
 }
 
-sealed abstract class ProdInstance3 extends ProdInstance4 {
-  implicit def prodApply[F[_], G[_]](implicit FF: Apply[F], GG: Apply[G]): Apply[Lambda[X => Prod[F, G, X]]] = new ProdApply[F, G] {
+private[data] sealed abstract class ProdInstance3 extends ProdInstance4 { implicit def prodApply[F[_], G[_]](implicit FF: Apply[F], GG: Apply[G]): Apply[Lambda[X => Prod[F, G, X]]] = new ProdApply[F, G] {
     def F: Apply[F] = FF
     def G: Apply[G] = GG
   }
 }
 
-sealed abstract class ProdInstance4 {
+private[data] sealed abstract class ProdInstance4 {
   implicit def prodFunctor[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[Lambda[X => Prod[F, G, X]]] = new ProdFunctor[F, G] {
     def F: Functor[F] = FF
     def G: Functor[G] = GG
