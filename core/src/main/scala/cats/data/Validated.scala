@@ -149,6 +149,25 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def show[EE >: E, AA >: A](implicit EE: Show[EE], AA: Show[AA]): String =
     fold(e => s"Invalid(${EE.show(e)})",
          a => s"Valid(${AA.show(a)})")
+
+  /**
+   * Apply a function (that returns a `Validated`) in the valid case.
+   * Otherwise return the original `Validated`.
+   *
+   * This allows "chained" validation: the output of one validation can be fed
+   * into another validation function.
+   *
+   * This function is similar to `Xor.flatMap`. It's not called `flatMap`,
+   * because by Cats convention, `flatMap` is a monadic bind that is consistent
+   * with `ap`. This method is not consistent with [[ap]] (or other
+   * `Apply`-based methods), because it has "fail-fast" behavior as opposed to
+   * accumulating validation failures.
+   */
+  def andThen[EE >: E, B](f: A => Validated[EE, B]): Validated[EE, B] =
+    this match {
+      case Valid(a) => f(a)
+      case i @ Invalid(_) => i
+    }
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions{

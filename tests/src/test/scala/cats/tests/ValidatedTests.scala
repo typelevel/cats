@@ -97,4 +97,20 @@ class ValidatedTests extends CatsSuite {
       show.show(v).nonEmpty should === (true)
     }
   }
+
+  test("andThen consistent with Xor's flatMap"){
+    forAll { (v: Validated[String, Int], f: Int => Validated[String, Int]) =>
+      v.andThen(f) should === (v.withXor(_.flatMap(f(_).toXor)))
+    }
+  }
+
+  test("ad-hoc andThen tests"){
+    def even(i: Int): Validated[String, Int] =
+      if (i % 2 == 0) Validated.valid(i)
+      else Validated.invalid(s"$i is not even")
+
+    (Validated.valid(3) andThen even) should === (Validated.invalid("3 is not even"))
+    (Validated.valid(4) andThen even) should === (Validated.valid(4))
+    (Validated.invalid("foo") andThen even) should === (Validated.invalid("foo"))
+  }
 }

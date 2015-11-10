@@ -37,6 +37,10 @@ How then do we communicate an error? By making it explicit in the data type we r
 
 ## Xor
 
+### `Xor` vs `Validated`
+
+In general, `Validated` is used to accumulate errors, while `Xor` is used to short-circuit a computation upon the first error. For more information, see the `Validated` vs `Xor` section of the [`Validated` documentation]({{ baseurl }}/tut/validated.html).
+
 ### Why not `Either`
 `Xor` is very similar to `scala.util.Either` - in fact, they are *isomorphic* (that is,
 any `Either` value can be rewritten as an `Xor` value, and vice versa).

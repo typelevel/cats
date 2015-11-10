@@ -271,15 +271,41 @@ This one short circuits! Therefore, if we were to define a `Monad` (or `FlatMap`
 have to override `ap` to get the behavior we want. But then the behavior of `flatMap` would be inconsistent with
 that of `ap`, not good. Therefore, `Validated` has only an `Applicative` instance.
 
-For very much the same reasons, despite the shape of `Validated` matching exactly that of `Xor`, we have
-two separate data types due to their different natures.
+## `Validated` vs `Xor`
 
-### The nature of `flatMap`
-Another reason we would be hesitant to define a `flatMap` method on `Validated` lies in the nature of `flatMap`.
+We've established that an error-accumulating data type such as `Validated` can't have a valid `Monad` instance. Sometimes the task at hand requires error-accumulation. However, sometimes we want a monadic structure that we can use for sequential validation (such as in a for-comprehension). This leaves us in a bit of a conundrum.
 
-```scala
-def flatMap[F[_], A, B](fa: F[A])(f: A => F[B]): F[B]
+Cats has decided to solve this problem by using separate data structures for error-accumulation (`Validated`) and short-circuiting monadic behavior (`Xor`).
+
+If you are trying to decide whether you want to use `Validated` or `Xor`, a simple heuristic is to use `Validated` if you want error-accumulation and to otherwise use `Xor`.
+
+## Sequential Validation
+
+If you do want error accumulation but occasionally run into places where you sequential validation is needed, then `Validated` provides a couple methods that may be helpful.
+
+### `andThen`
+The `andThen` method is similar to `flatMap` (such as `Xor.flatMap`). In the cause of success, it passes the valid value into a function that returns a new `Validated` instance.
+
+```tut
+val houseNumber = config.parse[Int]("house_number").andThen{ n =>
+   if (n >= 0) Validated.valid(n)
+   else Validated.invalid(ParseError("house_number"))
+}
 ```
 
-Note we have an `F[A]`, but we can only ever get an `F[B]` upon successful inspection of the `A`. This implies a
-dependency that `F[B]` has on `F[A]`, which is in conflict with the nature of `Validated`.
+### `withXor`
+The `withXor` method allows you to temporarily turn a `Validated` instance into an `Xor` instance and apply it to a function.
+
+```tut
+import cats.data.Xor
+
+def positive(field: String, i: Int): ConfigError Xor Int = {
+  if (i >= 0) Xor.right(i)
+  else Xor.left(ParseError(field))
+}
+
+val houseNumber = config.parse[Int]("house_number").withXor{ xor: ConfigError Xor Int =>
+  xor.flatMap{ i =>
+    positive(i)
+  }
+```
