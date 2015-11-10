@@ -10,6 +10,7 @@ trait AllInstances
   with    SetInstances
   with    StreamInstances
   with    VectorInstances
+  with    IterableInstances
   with    AnyValInstances
   with    MapInstances
   with    BigIntInstances

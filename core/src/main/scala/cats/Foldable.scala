@@ -185,9 +185,18 @@ import simulacrum.typeclass
    * Convert F[A] to a List[A], dropping all initial elements which
    * match `p`.
    */
+  def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
+    foldRight(fa, Now(List.empty[A])) { (a, llst) =>
+      if (p(a)) llst.map(a :: _) else Now(Nil)
+    }.value
+
+  /**
+   * Convert F[A] to a List[A], dropping all initial elements which
+   * match `p`.
+   */
   def dropWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
     foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
-      if (buf.nonEmpty || p(a)) buf += a else buf
+      if (buf.nonEmpty || !p(a)) buf += a else buf
     }.toList
 
   /**

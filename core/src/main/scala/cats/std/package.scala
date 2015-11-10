@@ -13,6 +13,7 @@ package object std {
   object vector     extends VectorInstances
   object map        extends MapInstances
   object future     extends FutureInstances
+  object iterable   extends IterableInstances
 
   object string     extends StringInstances
   object int        extends IntInstances
