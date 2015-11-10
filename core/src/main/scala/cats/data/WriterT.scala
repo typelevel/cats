@@ -37,7 +37,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 object WriterT extends WriterTInstances with WriterTFunctions
 
 private[data] sealed abstract class WriterTInstances {
-  implicit def writerTMonad[F[_], L](implicit monadF: Monad[F], monoidL: Monoid[L]) = {
+  implicit def writerTMonad[F[_], L](implicit monadF: Monad[F], monoidL: Monoid[L]): Monad[WriterT[F, L, ?]] = {
     new Monad[WriterT[F, L, ?]] {
       override def pure[A](a: A): WriterT[F, L, A] =
         WriterT.value[F, L, A](a)
