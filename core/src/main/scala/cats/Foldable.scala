@@ -182,7 +182,7 @@ import simulacrum.typeclass
     }.toList
 
   /**
-   * Convert F[A] to a List[A], dropping all initial elements which
+   * Convert F[A] to a List[A], retaining only initial elements which
    * match `p`.
    */
   def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
