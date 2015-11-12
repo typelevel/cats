@@ -39,6 +39,12 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
         case None => F.pure(None)
       })
 
+  def transform[B](f: Option[A] => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
+    OptionT(F.map(value)(f))
+
+  def subflatMap[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
+    transform(_.flatMap(f))
+
   def getOrElse(default: => A)(implicit F: Functor[F]): F[A] =
     F.map(value)(_.getOrElse(default))
 

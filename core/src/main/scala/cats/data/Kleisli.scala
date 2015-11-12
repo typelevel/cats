@@ -2,7 +2,7 @@ package cats
 package data
 
 import cats.arrow.{Arrow, Choice, Split}
-import cats.functor.Strong
+import cats.functor.{Contravariant, Strong}
 
 /**
  * Represents a function `A => F[B]`.
@@ -114,6 +114,12 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
 
   implicit def kleisliIdMonadReader[A]: MonadReader[Kleisli[Id, A, ?], A] =
     kleisliMonadReader[Id, A]
+
+  implicit def kleisliContravariant[F[_], C]: Contravariant[Kleisli[F, ?, C]] =
+    new Contravariant[Kleisli[F, ?, C]] {
+      override def contramap[A, B](fa: Kleisli[F, A, C])(f: (B) => A): Kleisli[F, B, C] =
+        fa.lmap(f)
+    }
 }
 
 private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 {

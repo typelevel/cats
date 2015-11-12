@@ -91,4 +91,16 @@ class XorTTests extends CatsSuite {
     val xort = XorT.right[Id, String, Int](10)
     xort.recoverWith { case "xort" => XorT.right[Id, String, Int](5) } should === (xort)
   }
+
+  test("transform consistent with value.map") {
+    forAll { (xort: XorT[List, String, Int], f: String Xor Int => Long Xor Double) =>
+      xort.transform(f) should === (XorT(xort.value.map(f)))
+    }
+  }
+
+  test("subflatMap consistent with value.map+flatMap") {
+    forAll { (xort: XorT[List, String, Int], f: Int => String Xor Double) =>
+      xort.subflatMap(f) should === (XorT(xort.value.map(_.flatMap(f))))
+    }
+  }
 }

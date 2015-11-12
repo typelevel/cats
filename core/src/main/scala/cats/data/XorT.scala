@@ -61,6 +61,12 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
   def flatMapF[AA >: A, D](f: B => F[AA Xor D])(implicit F: Monad[F]): XorT[F, AA, D] =
     flatMap(f andThen XorT.apply)
 
+  def transform[C, D](f: Xor[A, B] => Xor[C, D])(implicit F: Functor[F]): XorT[F, C, D] =
+    XorT(F.map(value)(f))
+
+  def subflatMap[AA >: A, D](f: B => AA Xor D)(implicit F: Functor[F]): XorT[F, AA, D] =
+    transform(_.flatMap(f))
+
   def map[D](f: B => D)(implicit F: Functor[F]): XorT[F, A, D] = bimap(identity, f)
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): XorT[F, C, B] = bimap(f, identity)
