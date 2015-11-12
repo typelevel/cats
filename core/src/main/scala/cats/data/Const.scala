@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Contravariant
+
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
  * [[Const]] can be seen as a type level version of `Function.const[A, B]: A => B => A`
@@ -44,6 +46,11 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
 
   implicit def constShow[A: Show, B]: Show[Const[A, B]] = new Show[Const[A, B]] {
     def show(f: Const[A, B]): String = f.show
+  }
+
+  implicit def constContravariant[C]: Contravariant[Const[C, ?]] = new Contravariant[Const[C, ?]] {
+    override def contramap[A, B](fa: Const[C, A])(f: (B) => A): Const[C, B] =
+      fa.retag[B]
   }
 
   implicit def constTraverse[C]: Traverse[Const[C, ?]] = new Traverse[Const[C, ?]] {

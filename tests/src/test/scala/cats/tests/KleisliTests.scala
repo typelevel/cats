@@ -3,7 +3,7 @@ package tests
 
 import cats.arrow.{Arrow, Choice, Split}
 import cats.data.Kleisli
-import cats.functor.Strong
+import cats.functor.{Contravariant, Strong}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -92,6 +92,9 @@ class KleisliTests extends CatsSuite {
     checkAll("Kleisli[Option, Int, Int]", SemigroupKTests[Lambda[A => Kleisli[Option, A, A]]].semigroupK[Int])
     checkAll("SemigroupK[Lambda[A => Kleisli[Option, A, A]]]", SerializableTests.serializable(kleisliSemigroupK))
   }
+
+  checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[Int, Int, Int])
+  checkAll("Contravariant[Kleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Kleisli[Option, ?, Int]]))
 
   test("local composes functions") {
     forAll { (f: Int => Option[String], g: Int => Int, i: Int) =>
