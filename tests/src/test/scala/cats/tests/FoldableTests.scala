@@ -118,10 +118,6 @@ class FoldableStreamingCheck extends FoldableCheck[Streaming]("streaming") {
   def iterator[T](streaming: Streaming[T]): Iterator[T] = streaming.iterator
 }
 
-class FoldableIterableCheck extends FoldableCheck[Iterable]("iterable") {
-  def iterator[T](iterable: Iterable[T]): Iterator[T] = iterable.iterator
-}
-
 class FoldableMapCheck extends FoldableCheck[Map[Int, ?]]("map") {
   def iterator[T](map: Map[Int, T]): Iterator[T] = map.iterator.map(_._2)
 }
