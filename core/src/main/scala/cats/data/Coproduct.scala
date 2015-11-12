@@ -75,15 +75,10 @@ object Coproduct extends CoproductInstances {
     def apply[G[_], A](ga: G[A]): Coproduct[F, G, A] = Coproduct(Xor.right(ga))
   }
 
-  /** Like `Coproduct.leftc`, but specify only the `G`
-    * @example {{{
-    *                               Coproduct.left[Option](List(1)) // Coproduct[List, Option, Int](Xor.Left(List(1)))
-    *          }}}
-    */
   def left[G[_]]: CoproductLeft[G] = new CoproductLeft[G]
 
-  /** Like `Coproduct.rightc`, but specify only the `F` */
   def right[F[_]]: CoproductRight[F] = new CoproductRight[F]
+
 }
 
 sealed abstract class CoproductInstances3 {
@@ -107,6 +102,7 @@ sealed abstract class CoproductInstances3 {
 }
 
 sealed abstract class CoproductInstances2 extends CoproductInstances3 {
+
   implicit def coproductContravariant[F[_], G[_]](implicit F0: Contravariant[F], G0: Contravariant[G]): Contravariant[Coproduct[F, G, ?]] =
     new CoproductContravariant[F, G] {
       implicit def F: Contravariant[F] = F0
@@ -134,6 +130,7 @@ sealed abstract class CoproductInstances0 extends CoproductInstances1 {
 }
 
 sealed abstract class CoproductInstances extends CoproductInstances0 {
+
   implicit def coproductComonad[F[_], G[_]](implicit F0: Comonad[F], G0: Comonad[G]): Comonad[Coproduct[F, G, ?]] =
     new CoproductComonad[F, G] {
       implicit def F: Comonad[F] = F0
@@ -142,7 +139,7 @@ sealed abstract class CoproductInstances extends CoproductInstances0 {
     }
 }
 
-private trait CoproductFunctor[F[_], G[_]] extends Functor[Coproduct[F, G, ?]] {
+private[data] trait CoproductFunctor[F[_], G[_]] extends Functor[Coproduct[F, G, ?]] {
   implicit def F: Functor[F]
 
   implicit def G: Functor[G]
