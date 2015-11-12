@@ -9,7 +9,7 @@ import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
 /**
  * Arbitrary instances for cats.data
  */
-object arbitrary {
+object arbitrary extends ArbitraryInstances0 {
 
   implicit def constArbitrary[A, B](implicit A: Arbitrary[A]): Arbitrary[Const[A, B]] =
     Arbitrary(A.arbitrary.map(Const[A, B]))
@@ -76,10 +76,15 @@ object arbitrary {
       as <- Gen.listOf(A.arbitrary).map(_.take(8))
     } yield StreamingT.fromList(as))
 
-  implicit def writerTArbitrary[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
-    Arbitrary(F.arbitrary.map(WriterT(_)))
+  implicit def writerArbitrary[L:Arbitrary, V:Arbitrary]: Arbitrary[Writer[L, V]] =
+    writerTArbitrary[Id, L, V]
 
   // until this is provided by scalacheck
   implicit def partialFunctionArbitrary[A, B](implicit F: Arbitrary[A => Option[B]]): Arbitrary[PartialFunction[A, B]] =
     Arbitrary(F.arbitrary.map(Function.unlift))
+}
+
+private[discipline] sealed trait ArbitraryInstances0 {
+  implicit def writerTArbitrary[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
+    Arbitrary(F.arbitrary.map(WriterT(_)))
 }
