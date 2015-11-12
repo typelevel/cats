@@ -89,8 +89,14 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
   implicit def kleisliMonoidK[F[_]](implicit M: Monad[F]): MonoidK[Lambda[A => Kleisli[F, A, A]]] =
     new KleisliMonoidK[F] { def F: Monad[F] = M }
 
+  implicit val kleisliIdMonoidK: MonoidK[Lambda[A => Kleisli[Id, A, A]]] =
+    kleisliMonoidK[Id]
+
   implicit def kleisliArrow[F[_]](implicit ev: Monad[F]): Arrow[Kleisli[F, ?, ?]] =
     new KleisliArrow[F] { def F: Monad[F] = ev }
+
+  implicit val kleisliIdArrow: Arrow[Kleisli[Id, ?, ?]] =
+    kleisliArrow[Id]
 
   implicit def kleisliChoice[F[_]](implicit ev: Monad[F]): Choice[Kleisli[F, ?, ?]] =
     new Choice[Kleisli[F, ?, ?]] {
@@ -103,19 +109,11 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
         f.compose(g)
     }
 
-  implicit def kleisliMonadReader[F[_]: Monad, A]: MonadReader[Kleisli[F, A, ?], A] =
-    new MonadReader[Kleisli[F, A, ?], A] {
-      def pure[B](x: B): Kleisli[F, A, B] =
-        Kleisli.pure[F, A, B](x)
+  implicit val kleisliIdChoice: Choice[Kleisli[Id, ?, ?]] =
+    kleisliChoice[Id]
 
-      def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
-        fa.flatMap(f)
-
-      val ask: Kleisli[F, A, A] = Kleisli(Monad[F].pure)
-
-      def local[B](f: A => A)(fa: Kleisli[F, A, B]): Kleisli[F, A, B] =
-        Kleisli(f.andThen(fa.run))
-    }
+  implicit def kleisliIdMonadReader[A]: MonadReader[Kleisli[Id, A, ?], A] =
+    kleisliMonadReader[Id, A]
 
   implicit def kleisliContravariant[F[_], C]: Contravariant[Kleisli[F, ?, C]] =
     new Contravariant[Kleisli[F, ?, C]] {
@@ -166,11 +164,28 @@ private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 
   }
 }
 
-private[data] sealed abstract class KleisliInstances3 {
+private[data] sealed abstract class KleisliInstances3 extends KleisliInstances4 {
   implicit def kleisliFunctor[F[_]: Functor, A]: Functor[Kleisli[F, A, ?]] = new Functor[Kleisli[F, A, ?]] {
     def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
       fa.map(f)
   }
+}
+
+private[data] sealed abstract class KleisliInstances4 {
+
+  implicit def kleisliMonadReader[F[_]: Monad, A]: MonadReader[Kleisli[F, A, ?], A] =
+    new MonadReader[Kleisli[F, A, ?], A] {
+      def pure[B](x: B): Kleisli[F, A, B] =
+        Kleisli.pure[F, A, B](x)
+
+      def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
+        fa.flatMap(f)
+
+      val ask: Kleisli[F, A, A] = Kleisli(Monad[F].pure)
+
+      def local[B](f: A => A)(fa: Kleisli[F, A, B]): Kleisli[F, A, B] =
+        Kleisli(f.andThen(fa.run))
+    }
 }
 
 private trait KleisliArrow[F[_]] extends Arrow[Kleisli[F, ?, ?]] with KleisliSplit[F] with KleisliStrong[F] {
