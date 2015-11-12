@@ -2,18 +2,13 @@ package cats
 package free
 
 import cats.tests.CatsSuite
-import cats.laws.discipline.{ArbitraryK, FunctorTests, SerializableTests}
+import cats.laws.discipline.{FunctorTests, SerializableTests}
 
 import org.scalacheck.Arbitrary
 
 class YonedaTests extends CatsSuite {
-  implicit def yonedaArbitraryK[F[_] : Functor](implicit F: ArbitraryK[F]): ArbitraryK[Yoneda[F, ?]] =
-    new ArbitraryK[Yoneda[F, ?]]{
-      def synthesize[A: Arbitrary]: Arbitrary[Yoneda[F, A]] =
-        Arbitrary(F.synthesize[A].arbitrary.map(Yoneda(_)))
-    }
-
-  implicit def yonedaArbitrary[F[_] : Functor : ArbitraryK, A : Arbitrary]: Arbitrary[Yoneda[F, A]] = yonedaArbitraryK[F].synthesize[A]
+  implicit def yonedaArbitrary[F[_] : Functor, A](implicit F: Arbitrary[F[A]]): Arbitrary[Yoneda[F, A]] =
+    Arbitrary(F.arbitrary.map(Yoneda(_)))
 
   implicit def yonedaEq[F[_]: Functor, A](implicit FA: Eq[F[A]]): Eq[Yoneda[F, A]] =
     new Eq[Yoneda[F, A]] {

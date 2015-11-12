@@ -10,13 +10,13 @@ object Free {
   /**
    * Return from the computation with the given value.
    */
-  final case class Pure[S[_], A](a: A) extends Free[S, A]
+  private final case class Pure[S[_], A](a: A) extends Free[S, A]
 
   /** Suspend the computation with the given suspension. */
-  final case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
+  private final case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
 
   /** Call a subroutine and continue with the given function. */
-  final case class Gosub[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
+  private final case class Gosub[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 
   /**
    * Suspend a value within a functor lifting it to a Free.
@@ -95,7 +95,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     loop(this)
   }
 
-  def run(implicit S: Comonad[S]): A = go(S.extract)
+  final def run(implicit S: Comonad[S]): A = go(S.extract)
 
   /**
    * Run to completion, using a function that maps the resumption

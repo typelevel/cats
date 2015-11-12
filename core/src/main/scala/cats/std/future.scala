@@ -37,12 +37,12 @@ trait FutureInstances extends FutureInstances1 {
     new FutureGroup[A]
 }
 
-trait FutureInstances1 extends FutureInstances2 {
+private[std] sealed trait FutureInstances1 extends FutureInstances2 {
   implicit def futureMonoid[A: Monoid](implicit ec: ExecutionContext): Monoid[Future[A]] =
     new FutureMonoid[A]
 }
 
-trait FutureInstances2 {
+private[std] sealed trait FutureInstances2 {
   implicit def futureSemigroup[A: Semigroup](implicit ec: ExecutionContext): Semigroup[Future[A]] =
     new FutureSemigroup[A]
 }

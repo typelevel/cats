@@ -423,7 +423,7 @@ object StreamingT extends StreamingTInstances {
   }
 }
 
-trait StreamingTInstances extends StreamingTInstances1 {
+private[data] sealed trait StreamingTInstances extends StreamingTInstances1 {
 
   implicit def streamingTInstance[F[_]: Monad]: MonadCombine[StreamingT[F, ?]] with CoflatMap[StreamingT[F, ?]] =
     new MonadCombine[StreamingT[F, ?]] with CoflatMap[StreamingT[F, ?]] {
@@ -448,7 +448,7 @@ trait StreamingTInstances extends StreamingTInstances1 {
     }
 }
 
-trait StreamingTInstances1 extends StreamingTInstances2 {
+private[data] sealed trait StreamingTInstances1 extends StreamingTInstances2 {
   implicit def streamingTPartialOrder[F[_], A](implicit ev: Monad[F], eva: PartialOrder[F[List[A]]]): PartialOrder[StreamingT[F, A]] =
     new PartialOrder[StreamingT[F, A]] {
       def partialCompare(x: StreamingT[F, A], y: StreamingT[F, A]): Double =
@@ -456,7 +456,7 @@ trait StreamingTInstances1 extends StreamingTInstances2 {
     }
 }
 
-trait StreamingTInstances2 {
+private[data] sealed trait StreamingTInstances2 {
   implicit def streamingTEq[F[_], A](implicit ev: Monad[F], eva: Eq[F[List[A]]]): Eq[StreamingT[F, A]] =
     new Eq[StreamingT[F, A]] {
       def eqv(x: StreamingT[F, A], y: StreamingT[F, A]): Boolean =

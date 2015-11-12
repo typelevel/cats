@@ -39,6 +39,12 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
         case None => F.pure(None)
       })
 
+  def transform[B](f: Option[A] => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
+    OptionT(F.map(value)(f))
+
+  def subflatMap[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
+    transform(_.flatMap(f))
+
   def getOrElse(default: => A)(implicit F: Functor[F]): F[A] =
     F.map(value)(_.getOrElse(default))
 
@@ -88,6 +94,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def toLeft[R](right: => R)(implicit F: Functor[F]): XorT[F, A, R] =
     XorT(cata(Xor.Right(right), Xor.Left.apply))
+
+  def show(implicit F: Show[F[Option[A]]]): String = F.show(value)
 }
 
 object OptionT extends OptionTInstances {
@@ -114,7 +122,7 @@ object OptionT extends OptionTInstances {
   }
 }
 
-trait OptionTInstances1 {
+private[data] sealed trait OptionTInstances1 {
   implicit def optionTFunctor[F[_]:Functor]: Functor[OptionT[F, ?]] =
     new Functor[OptionT[F, ?]] {
       override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
@@ -122,7 +130,7 @@ trait OptionTInstances1 {
     }
 }
 
-trait OptionTInstances extends OptionTInstances1 {
+private[data] sealed trait OptionTInstances extends OptionTInstances1 {
   implicit def optionTMonadCombine[F[_]](implicit F: Monad[F]): MonadCombine[OptionT[F, ?]] =
     new MonadCombine[OptionT[F, ?]] {
       def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
@@ -138,4 +146,7 @@ trait OptionTInstances extends OptionTInstances1 {
     }
   implicit def optionTEq[F[_], A](implicit FA: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     FA.on(_.value)
+
+  implicit def optionTShow[F[_], A](implicit F: Show[F[Option[A]]]): Show[OptionT[F, A]] =
+    functor.Contravariant[Show].contramap(F)(_.value)
 }

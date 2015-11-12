@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.Xor
+import cats.data.{Xor, XorT}
 import cats.data.Xor._
 import cats.laws.discipline.arbitrary.xorArbitrary
 import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadErrorTests, SerializableTests}
@@ -13,6 +13,8 @@ import scala.util.Try
 
 class XorTests extends CatsSuite {
   checkAll("Xor[String, Int]", GroupLaws[Xor[String, Int]].monoid)
+
+  implicit val eq0 = XorT.xorTEq[Xor[String, ?], String, Int]
 
   checkAll("Xor[String, Int]", MonadErrorTests[Xor[String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor[String, ?], String]))
@@ -32,14 +34,19 @@ class XorTests extends CatsSuite {
 
   checkAll("? Xor ?", BifunctorTests[Xor].bifunctor[Int, Int, Int, String, String, String])
 
-  test("fromTryCatch catches matching exceptions") {
-    assert(Xor.fromTryCatch[NumberFormatException]{ "foo".toInt }.isInstanceOf[Xor.Left[NumberFormatException]])
+  test("catchOnly catches matching exceptions") {
+    assert(Xor.catchOnly[NumberFormatException]{ "foo".toInt }.isInstanceOf[Xor.Left[NumberFormatException]])
   }
 
-  test("fromTryCatch lets non-matching exceptions escape") {
+  test("catchOnly lets non-matching exceptions escape") {
     val _ = intercept[NumberFormatException] {
-      Xor.fromTryCatch[IndexOutOfBoundsException]{ "foo".toInt }
+      Xor.catchOnly[IndexOutOfBoundsException]{ "foo".toInt }
     }
+  }
+
+  test("catchNonFatal catches non-fatal exceptions") {
+    assert(Xor.catchNonFatal{ "foo".toInt }.isLeft)
+    assert(Xor.catchNonFatal{ throw new Throwable("blargh") }.isLeft)
   }
 
   test("fromTry is left for failed Try") {

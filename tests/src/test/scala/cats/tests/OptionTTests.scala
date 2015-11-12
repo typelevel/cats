@@ -111,6 +111,23 @@ class OptionTTests extends CatsSuite {
     }
   }
 
+  test("show"){
+    val xor: String Xor Option[Int] = Xor.right(Some(1))
+    OptionT[Xor[String, ?], Int](xor).show should === ("Xor.Right(Some(1))")
+  }
+
+  test("transform consistent with value.map") {
+    forAll { (o: OptionT[List, Int], f: Option[Int] => Option[String]) =>
+      o.transform(f) should === (OptionT(o.value.map(f)))
+    }
+  }
+
+  test("subflatMap consistent with value.map+flatMap") {
+    forAll { (o: OptionT[List, Int], f: Int => Option[String]) =>
+      o.subflatMap(f) should === (OptionT(o.value.map(_.flatMap(f))))
+    }
+  }
+
   checkAll("OptionT[List, Int]", MonadCombineTests[OptionT[List, ?]].monad[Int, Int, Int])
   checkAll("MonadOptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
 

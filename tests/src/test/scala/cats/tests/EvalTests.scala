@@ -3,6 +3,7 @@ package tests
 
 import scala.math.min
 import cats.laws.discipline.{BimonadTests, SerializableTests}
+import cats.laws.discipline.arbitrary._
 
 class EvalTests extends CatsSuite {
 

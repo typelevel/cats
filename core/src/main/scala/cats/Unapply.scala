@@ -49,7 +49,7 @@ object Unapply extends Unapply2Instances {
   }
 }
 
-sealed abstract class Unapply2Instances extends Unapply3Instances {
+private[cats] sealed abstract class Unapply2Instances extends Unapply3Instances {
 
   // the type we will instantiate when we find a type class instance
   // for a type in the shape F[_,_] when we fix the left type
@@ -136,7 +136,7 @@ sealed abstract class Unapply2Instances extends Unapply3Instances {
   }
 }
 
-sealed abstract class Unapply3Instances {
+private[cats] sealed abstract class Unapply3Instances {
 
   // the type we will instantiate when we find a type class instance
   // for a type in the shape of a Monad Transformer with 3 type params

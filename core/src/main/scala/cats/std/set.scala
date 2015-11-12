@@ -1,6 +1,8 @@
 package cats
 package std
 
+import cats.syntax.show._
+
 trait SetInstances extends algebra.std.SetInstances {
   implicit val setInstance: Foldable[Set] with MonoidK[Set] =
     new Foldable[Set] with MonoidK[Set] {
@@ -25,4 +27,9 @@ trait SetInstances extends algebra.std.SetInstances {
     }
 
     implicit def setMonoid[A]: Monoid[Set[A]] = MonoidK[Set].algebra[A]
+
+  implicit def setShow[A:Show]: Show[Set[A]] = new Show[Set[A]] {
+    def show(fa: Set[A]): String =
+      fa.toIterator.map(_.show).mkString("Set(", ", ", ")")
+  }
 }

@@ -10,12 +10,10 @@ trait FunctorTests[F[_]] extends InvariantTests[F] {
   def laws: FunctorLaws[F]
 
   def functor[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-    ArbF: ArbitraryK[F],
+    ArbFA: Arbitrary[F[A]],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]]
   ): RuleSet = {
-    implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
-
     new DefaultRuleSet(
       name = "functor",
       parent = Some(invariant[A, B, C]),

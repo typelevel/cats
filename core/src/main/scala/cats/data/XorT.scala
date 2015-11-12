@@ -39,7 +39,7 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def toEither(implicit F: Functor[F]): F[Either[A, B]] = F.map(value)(_.toEither)
 
-  def toOption(implicit F: Functor[F]): F[Option[B]] = F.map(value)(_.toOption)
+  def toOption(implicit F: Functor[F]): OptionT[F, B] = OptionT(F.map(value)(_.toOption))
 
   def to[G[_]](implicit functorF: Functor[F], monoidKG: MonoidK[G], applicativeG: Applicative[G]): F[G[B]] =
     functorF.map(value)(_.to[G, B])
@@ -60,6 +60,12 @@ case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def flatMapF[AA >: A, D](f: B => F[AA Xor D])(implicit F: Monad[F]): XorT[F, AA, D] =
     flatMap(f andThen XorT.apply)
+
+  def transform[C, D](f: Xor[A, B] => Xor[C, D])(implicit F: Functor[F]): XorT[F, C, D] =
+    XorT(F.map(value)(f))
+
+  def subflatMap[AA >: A, D](f: B => AA Xor D)(implicit F: Functor[F]): XorT[F, AA, D] =
+    transform(_.flatMap(f))
 
   def map[D](f: B => D)(implicit F: Functor[F]): XorT[F, A, D] = bimap(identity, f)
 
@@ -140,7 +146,7 @@ trait XorTFunctions {
   }
 }
 
-abstract class XorTInstances extends XorTInstances1 {
+private[data] abstract class XorTInstances extends XorTInstances1 {
 
   /* TODO violates right absorbtion, right distributivity, and left distributivity -- re-enable when MonadCombine laws are split in to weak/strong
   implicit def xorTMonadCombine[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadCombine[XorT[F, L, ?]] = {

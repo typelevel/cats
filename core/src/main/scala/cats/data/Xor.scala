@@ -147,7 +147,7 @@ object Xor extends XorInstances with XorFunctions {
   final case class Right[+B](b: B) extends (Nothing Xor B)
 }
 
-sealed abstract class XorInstances extends XorInstances1 {
+private[data] sealed abstract class XorInstances extends XorInstances1 {
   implicit def xorOrder[A: Order, B: Order]: Order[A Xor B] =
     new Order[A Xor B] {
       def compare(x: A Xor B, y: A Xor B): Int = x compare y
@@ -193,14 +193,14 @@ sealed abstract class XorInstances extends XorInstances1 {
     }
 }
 
-sealed abstract class XorInstances1 extends XorInstances2 {
+private[data] sealed abstract class XorInstances1 extends XorInstances2 {
   implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[A Xor B] = new PartialOrder[A Xor B] {
     def partialCompare(x: A Xor B, y: A Xor B): Double = x partialCompare y
     override def eqv(x: A Xor B, y: A Xor B): Boolean = x === y
   }
 }
 
-sealed abstract class XorInstances2 {
+private[data] sealed abstract class XorInstances2 {
   implicit def xorEq[A: Eq, B: Eq]: Eq[A Xor B] =
     new Eq[A Xor B] {
       def eqv(x: A Xor B, y: A Xor B): Boolean = x === y
@@ -217,20 +217,27 @@ trait XorFunctions {
    * the resulting `Xor`. Uncaught exceptions are propagated.
    *
    * For example: {{{
-   * val result: NumberFormatException Xor Int = fromTryCatch[NumberFormatException] { "foo".toInt }
+   * val result: NumberFormatException Xor Int = catching[NumberFormatException] { "foo".toInt }
    * }}}
    */
-  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchPartiallyApplied[T] =
-    new FromTryCatchPartiallyApplied[T]
+  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] =
+    new CatchOnlyPartiallyApplied[T]
 
-  final class FromTryCatchPartiallyApplied[T] private[XorFunctions] {
-    def apply[A](f: => A)(implicit T: ClassTag[T]): T Xor A =
+  final class CatchOnlyPartiallyApplied[T] private[XorFunctions] {
+    def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): T Xor A =
       try {
         right(f)
       } catch {
-        case t if T.runtimeClass.isInstance(t) =>
+        case t if CT.runtimeClass.isInstance(t) =>
           left(t.asInstanceOf[T])
       }
+  }
+
+  def catchNonFatal[A](f: => A): Throwable Xor A =
+    try {
+      right(f)
+    } catch {
+      case scala.util.control.NonFatal(t) => left(t)
     }
 
   /**

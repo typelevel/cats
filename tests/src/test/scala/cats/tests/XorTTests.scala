@@ -7,6 +7,8 @@ import cats.laws.discipline.arbitrary._
 
 
 class XorTTests extends CatsSuite {
+  implicit val eq0 = XorT.xorTEq[List, String, String Xor Int]
+  implicit val eq1 = XorT.xorTEq[XorT[List, String, ?], String, Int](eq0)
   checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, String, ?], String].monadError[Int, Int, Int])
   checkAll("XorT[List, String, Int]", MonoidKTests[XorT[List, String, ?]].monoidK[Int])
   checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, String, ?], String]))
@@ -50,7 +52,7 @@ class XorTTests extends CatsSuite {
 
   test("toOption on Right returns Some") {
     forAll { (xort: XorT[List, String, Int]) =>
-      xort.toOption.map(_.isDefined) should === (xort.isRight)
+      xort.toOption.isDefined should === (xort.isRight)
     }
   }
 
@@ -88,5 +90,17 @@ class XorTTests extends CatsSuite {
   test("recoverWith ignores the right side") {
     val xort = XorT.right[Id, String, Int](10)
     xort.recoverWith { case "xort" => XorT.right[Id, String, Int](5) } should === (xort)
+  }
+
+  test("transform consistent with value.map") {
+    forAll { (xort: XorT[List, String, Int], f: String Xor Int => Long Xor Double) =>
+      xort.transform(f) should === (XorT(xort.value.map(f)))
+    }
+  }
+
+  test("subflatMap consistent with value.map+flatMap") {
+    forAll { (xort: XorT[List, String, Int], f: Int => String Xor Double) =>
+      xort.subflatMap(f) should === (XorT(xort.value.map(_.flatMap(f))))
+    }
   }
 }

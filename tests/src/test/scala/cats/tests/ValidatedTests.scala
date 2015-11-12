@@ -26,28 +26,25 @@ class ValidatedTests extends CatsSuite {
     Applicative[Validated[String, ?]].ap2(Invalid("1"), Invalid("2"))(Valid(plus)) should === (Invalid("12"))
   }
 
-  test("fromTryCatch catches matching exceptions") {
-    assert(Validated.fromTryCatch[NumberFormatException]{ "foo".toInt }.isInstanceOf[Invalid[NumberFormatException]])
+  test("catchOnly catches matching exceptions") {
+    assert(Validated.catchOnly[NumberFormatException]{ "foo".toInt }.isInstanceOf[Invalid[NumberFormatException]])
   }
 
-  test("fromTryCatch lets non-matching exceptions escape") {
+  test("catchOnly lets non-matching exceptions escape") {
     val _ = intercept[NumberFormatException] {
-      Validated.fromTryCatch[IndexOutOfBoundsException]{ "foo".toInt }
+      Validated.catchOnly[IndexOutOfBoundsException]{ "foo".toInt }
     }
+  }
+
+  test("catchNonFatal catches non-fatal exceptions") {
+    assert(Validated.catchNonFatal{ "foo".toInt }.isInvalid)
+    assert(Validated.catchNonFatal{ throw new Throwable("blargh") }.isInvalid)
   }
 
   test("fromTry is invalid for failed try"){
     forAll { t: Try[Int] =>
       t.isFailure should === (Validated.fromTry(t).isInvalid)
     }
-  }
-
-  test("filter makes non-matching entries invalid") {
-    Valid(1).filter[String](_ % 2 == 0).isInvalid should ===(true)
-  }
-
-  test("filter leaves matching entries valid") {
-    Valid(2).filter[String](_ % 2 == 0).isValid should ===(true)
   }
 
   test("ValidatedNel") {
@@ -99,5 +96,21 @@ class ValidatedTests extends CatsSuite {
       val show = implicitly[Show[Validated[String, Int]]]
       show.show(v).nonEmpty should === (true)
     }
+  }
+
+  test("andThen consistent with Xor's flatMap"){
+    forAll { (v: Validated[String, Int], f: Int => Validated[String, Int]) =>
+      v.andThen(f) should === (v.withXor(_.flatMap(f(_).toXor)))
+    }
+  }
+
+  test("ad-hoc andThen tests"){
+    def even(i: Int): Validated[String, Int] =
+      if (i % 2 == 0) Validated.valid(i)
+      else Validated.invalid(s"$i is not even")
+
+    (Validated.valid(3) andThen even) should === (Validated.invalid("3 is not even"))
+    (Validated.valid(4) andThen even) should === (Validated.valid(4))
+    (Validated.invalid("foo") andThen even) should === (Validated.invalid("foo"))
   }
 }

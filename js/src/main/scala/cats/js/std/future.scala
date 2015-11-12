@@ -18,7 +18,7 @@ object Await {
     }
 }
 
-trait FutureInstances0 extends FutureInstances1 {
+private[std] sealed trait FutureInstances0 extends FutureInstances1 {
   def futureComonad(atMost: FiniteDuration)(implicit ec: E): Comonad[Future] =
     new FutureCoflatMap with Comonad[Future] {
       def extract[A](x: Future[A]): A =
@@ -32,7 +32,7 @@ trait FutureInstances0 extends FutureInstances1 {
     }
 }
 
-trait FutureInstances1 extends FutureInstances2 {
+private[std] sealed trait FutureInstances1 extends FutureInstances2 {
   def futurePartialOrder[A: PartialOrder](atMost: FiniteDuration)(implicit ec: E): PartialOrder[Future[A]] =
     new PartialOrder[Future[A]] {
       def partialCompare(x: Future[A], y: Future[A]): Double =
@@ -41,7 +41,7 @@ trait FutureInstances1 extends FutureInstances2 {
 
 }
 
-trait FutureInstances2 {
+private[std] sealed trait FutureInstances2 {
   def futureEq[A: Eq](atMost: FiniteDuration)(implicit ec: E): Eq[Future[A]] =
     new Eq[Future[A]] {
       def eqv(x: Future[A], y: Future[A]): Boolean =

@@ -24,4 +24,12 @@ class ListTests extends CatsSuite {
   test("toNel on empty list returns None"){
     List.empty[Int].toNel should === (None)
   }
+
+  test("show"){
+    List(1, 2, 3).show should === ("List(1, 2, 3)")
+    (Nil: List[Int]).show should === ("List()")
+    forAll { l: List[String] =>
+      l.show should === (l.toString)
+    }
+  }
 }

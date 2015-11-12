@@ -847,7 +847,7 @@ object Streaming extends StreamingInstances {
     }
 }
 
-trait StreamingInstances extends StreamingInstances1 {
+private[data] sealed trait StreamingInstances extends StreamingInstances1 {
 
   implicit val streamInstance: Traverse[Streaming] with MonadCombine[Streaming] with CoflatMap[Streaming] =
     new Traverse[Streaming] with MonadCombine[Streaming] with CoflatMap[Streaming] {
@@ -910,7 +910,7 @@ trait StreamingInstances extends StreamingInstances1 {
     }
 }
 
-trait StreamingInstances1 extends StreamingInstances2 {
+private[data] sealed trait StreamingInstances1 extends StreamingInstances2 {
   implicit def streamPartialOrder[A: PartialOrder]: PartialOrder[Streaming[A]] =
     new PartialOrder[Streaming[A]] {
       def partialCompare(x: Streaming[A], y: Streaming[A]): Double =
@@ -919,7 +919,7 @@ trait StreamingInstances1 extends StreamingInstances2 {
     }
 }
 
-trait StreamingInstances2 {
+private[data] sealed trait StreamingInstances2 {
   implicit def streamEq[A: Eq]: Eq[Streaming[A]] =
     new Eq[Streaming[A]] {
       def eqv(x: Streaming[A], y: Streaming[A]): Boolean =
