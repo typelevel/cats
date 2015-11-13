@@ -148,7 +148,7 @@ private[data] trait CoproductFunctor[F[_], G[_]] extends Functor[Coproduct[F, G,
     a map f
 }
 
-private trait CoproductContravariant[F[_], G[_]] extends Contravariant[Coproduct[F, G, ?]] {
+private[data] trait CoproductContravariant[F[_], G[_]] extends Contravariant[Coproduct[F, G, ?]] {
   implicit def F: Contravariant[F]
 
   implicit def G: Contravariant[G]
@@ -157,7 +157,7 @@ private trait CoproductContravariant[F[_], G[_]] extends Contravariant[Coproduct
     a contramap f
 }
 
-private trait CoproductFoldable[F[_], G[_]] extends Foldable[Coproduct[F, G, ?]] {
+private[data] trait CoproductFoldable[F[_], G[_]] extends Foldable[Coproduct[F, G, ?]] {
   implicit def F: Foldable[F]
 
   implicit def G: Foldable[G]
@@ -172,7 +172,7 @@ private trait CoproductFoldable[F[_], G[_]] extends Foldable[Coproduct[F, G, ?]]
     fa foldMap f
 }
 
-private trait CoproductTraverse[F[_], G[_]] extends CoproductFoldable[F, G] with Traverse[Coproduct[F, G, ?]] {
+private[data] trait CoproductTraverse[F[_], G[_]] extends CoproductFoldable[F, G] with Traverse[Coproduct[F, G, ?]] {
   implicit def F: Traverse[F]
 
   implicit def G: Traverse[G]
@@ -184,7 +184,7 @@ private trait CoproductTraverse[F[_], G[_]] extends CoproductFoldable[F, G] with
     fa traverse f
 }
 
-private trait CoproductCoflatMap[F[_], G[_]] extends CoflatMap[Coproduct[F, G, ?]] {
+private[data] trait CoproductCoflatMap[F[_], G[_]] extends CoflatMap[Coproduct[F, G, ?]] {
   implicit def F: CoflatMap[F]
 
   implicit def G: CoflatMap[G]
@@ -197,7 +197,7 @@ private trait CoproductCoflatMap[F[_], G[_]] extends CoflatMap[Coproduct[F, G, ?
 
 }
 
-private trait CoproductComonad[F[_], G[_]] extends Comonad[Coproduct[F, G, ?]] {
+private[data] trait CoproductComonad[F[_], G[_]] extends Comonad[Coproduct[F, G, ?]] {
   implicit def F: Comonad[F]
 
   implicit def G: Comonad[G]
