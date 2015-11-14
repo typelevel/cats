@@ -33,7 +33,7 @@ import cats.syntax.all._
  * Eval instance -- this can defeat the trampolining and lead to stack
  * overflows.
  */
-sealed abstract class Eval[A] { self =>
+sealed abstract class Eval[A] extends Serializable { self =>
 
   /**
    * Evaluate the computation and return an A value.
@@ -290,7 +290,7 @@ private[cats] trait EvalInstances extends EvalInstances0 {
     }
 
   implicit def evalGroup[A: Group]: Group[Eval[A]] =
-    new EvalGroup[A] { val algebra = Group[A] }
+    new EvalGroup[A] { val algebra: Group[A] = Group[A] }
 }
 
 private[cats] trait EvalInstances0 extends EvalInstances1 {

@@ -39,11 +39,11 @@ import org.scalacheck.Arbitrary.arbitrary
 final case class ListWrapper[A](list: List[A]) extends AnyVal
 
 object ListWrapper {
-  def eqv[A : Eq]: Eq[ListWrapper[A]] =
-    new Eq[ListWrapper[A]] {
-      def eqv(x: ListWrapper[A], y: ListWrapper[A]): Boolean =
-        Eq[List[A]].eqv(x.list, y.list)
-    }
+  def order[A:Order]: Order[ListWrapper[A]] = Order[List[A]].on[ListWrapper[A]](_.list)
+
+  def partialOrder[A:PartialOrder]: PartialOrder[ListWrapper[A]] = PartialOrder[List[A]].on[ListWrapper[A]](_.list)
+
+  def eqv[A : Eq]: Eq[ListWrapper[A]] = Eq[List[A]].on[ListWrapper[A]](_.list)
 
   def foldable: Foldable[ListWrapper] =
     new Foldable[ListWrapper] {
@@ -66,6 +66,8 @@ object ListWrapper {
         ListWrapper(SemigroupK[List].combine(x.list, y.list))
     }
 
+  def semigroup[A]: Semigroup[ListWrapper[A]] = semigroupK.algebra[A]
+
   def monadCombine: MonadCombine[ListWrapper] = {
     val M = MonadCombine[List]
 
@@ -81,6 +83,8 @@ object ListWrapper {
         ListWrapper(M.combine(x.list, y.list))
     }
   }
+
+  def monoid[A]: Monoid[ListWrapper[A]] = monadCombine.algebra[A]
 
   implicit def listWrapperArbitrary[A: Arbitrary]: Arbitrary[ListWrapper[A]] =
     Arbitrary(arbitrary[List[A]].map(ListWrapper.apply))
