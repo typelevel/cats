@@ -9,6 +9,6 @@ trait SplitSyntax {
     new SplitOps[F, A, B](fab)
 }
 
-class SplitOps[F[_, _], A, B](fab: F[A, B])(implicit F: Split[F]) {
+final class SplitOps[F[_, _], A, B](fab: F[A, B])(implicit F: Split[F]) {
   def split[C, D](fcd: F[C, D]): F[(A, C), (B, D)] = F.split(fab, fcd)
 }

@@ -294,9 +294,9 @@ object StreamingT extends StreamingTInstances {
    * and Always). The head of `Cons` is eager -- a lazy head can be
    * represented using `Wait(Always(...))` or `Wait(Later(...))`.
    */
-  private[cats] case class Empty[F[_], A]() extends StreamingT[F, A]
-  private[cats] case class Wait[F[_], A](next: F[StreamingT[F, A]]) extends StreamingT[F, A]
-  private[cats] case class Cons[F[_], A](a: A, tail: F[StreamingT[F, A]]) extends StreamingT[F, A]
+  private[cats] final case class Empty[F[_], A]() extends StreamingT[F, A]
+  private[cats] final case class Wait[F[_], A](next: F[StreamingT[F, A]]) extends StreamingT[F, A]
+  private[cats] final case class Cons[F[_], A](a: A, tail: F[StreamingT[F, A]]) extends StreamingT[F, A]
 
   /**
    * Create an empty stream of type A.
@@ -399,7 +399,7 @@ object StreamingT extends StreamingTInstances {
    * evaluated.
    */
   object syntax {
-    implicit class StreamingTOps[F[_], A](rhs: => StreamingT[F, A]) {
+    implicit final class StreamingTOps[F[_], A](rhs: => StreamingT[F, A]) {
       def %::(a: A)(implicit ev: Applicative[F]): StreamingT[F, A] =
         Cons(a, ev.pureEval(Always(rhs)))
       def %:::(s: StreamingT[F, A])(implicit ev: Monad[F]): StreamingT[F, A] =
@@ -410,7 +410,7 @@ object StreamingT extends StreamingTInstances {
         Wait(fs.map(_ concat ev.pureEval(Always(rhs))))
     }
 
-    implicit class FStreamingTOps[F[_], A](rhs: F[StreamingT[F, A]]) {
+    implicit final class FStreamingTOps[F[_], A](rhs: F[StreamingT[F, A]]) {
       def %::(a: A): StreamingT[F, A] =
         Cons(a, rhs)
       def %:::(s: StreamingT[F, A])(implicit ev: Monad[F]): StreamingT[F, A] =

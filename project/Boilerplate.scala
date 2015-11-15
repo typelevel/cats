@@ -14,7 +14,7 @@ import sbt._
 object Boilerplate {
   import scala.StringContext._
 
-  implicit class BlockHelper(val sc: StringContext) extends AnyVal {
+  implicit final class BlockHelper(val sc: StringContext) extends AnyVal {
     def block(args: Any*): String = {
       val interpolated = sc.standardInterpolator(treatEscapes, args)
       val rawLines = interpolated split '\n'
@@ -41,7 +41,7 @@ object Boilerplate {
 
   val maxArity = 22
 
-  class TemplateVals(val arity: Int) {
+  final class TemplateVals(val arity: Int) {
     val synTypes     = (0 until arity) map (n => s"A$n")
     val synVals      = (0 until arity) map (n => s"a$n")
     val synTypedVals = (synVals zip synTypes) map { case (v,t) => v + ":" + t}
@@ -111,10 +111,10 @@ object Boilerplate {
         |package cats
         |package syntax
         |
-        |private[syntax] class ApplyBuilder[F[_]] {
+        |private[syntax] final class ApplyBuilder[F[_]] {
         |  def |@|[A](a: F[A]) = new ApplyBuilder1(a)
         |
-        -  private[syntax] class ApplyBuilder$arity[${`A..N`}](${params}) {
+        -  private[syntax] final class ApplyBuilder$arity[${`A..N`}](${params}) {
         -    $next
         -    def ap[Z](f: F[(${`A..N`}) => Z])(implicit F: Apply[F]): F[Z] = F.ap$n(${`a..n`})(f)
         -    def map[Z](f: (${`A..N`}) => Z)(implicit F: Apply[F]): F[Z] = F.map$n(${`a..n`})(f)
