@@ -15,9 +15,6 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def dimap[C, D](f: C => A)(g: B => D)(implicit F: Functor[F]): Kleisli[F, C, D] =
     Kleisli(c => F.map(run(f(c)))(g))
 
-  def lmap[C](f: C => A): Kleisli[F, C, B] =
-    Kleisli(run compose f)
-
   def map[C](f: B => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
     Kleisli(a => F.map(run(a))(f))
 
@@ -118,7 +115,7 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
   implicit def kleisliContravariant[F[_], C]: Contravariant[Kleisli[F, ?, C]] =
     new Contravariant[Kleisli[F, ?, C]] {
       override def contramap[A, B](fa: Kleisli[F, A, C])(f: (B) => A): Kleisli[F, B, C] =
-        fa.lmap(f)
+        fa.local(f)
     }
 }
 
@@ -218,7 +215,7 @@ private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] {
   implicit def F: Functor[F]
 
   override def lmap[A, B, C](fab: Kleisli[F, A, B])(f: C => A): Kleisli[F, C, B] =
-    fab.lmap(f)
+    fab.local(f)
 
   override def rmap[A, B, C](fab: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
     fab.map(f)
