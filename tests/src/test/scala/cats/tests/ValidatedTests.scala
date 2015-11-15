@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{NonEmptyList, Validated}
+import cats.data.{NonEmptyList, Validated, Xor}
 import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeTests, SerializableTests}
 import org.scalacheck.{Gen, Arbitrary}
@@ -115,5 +115,17 @@ class ValidatedTests extends CatsSuite {
     (Validated.valid(3) andThen even) should === (Validated.invalid("3 is not even"))
     (Validated.valid(4) andThen even) should === (Validated.valid(4))
     (Validated.invalid("foo") andThen even) should === (Validated.invalid("foo"))
+  }
+
+  test("fromOption consistent with Xor.fromOption"){
+    forAll { (o: Option[Int], s: String) =>
+      Validated.fromOption(o, s) should === (Xor.fromOption(o, s).toValidated)
+    }
+  }
+
+  test("fromOption consistent with toOption"){
+    forAll { (o: Option[Int], s: String) =>
+      Validated.fromOption(o, s).toOption should === (o)
+    }
   }
 }
