@@ -183,4 +183,16 @@ class XorTests extends CatsSuite {
     }
   }
 
+  test("to consistent with toList") {
+    forAll { (x: Int Xor String) =>
+      x.to[List, String] should === (x.toList)
+    }
+  }
+
+  test("to consistent with toOption") {
+    forAll { (x: Int Xor String) =>
+      x.to[Option, String] should === (x.toOption)
+    }
+  }
+
 }

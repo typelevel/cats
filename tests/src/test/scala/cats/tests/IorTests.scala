@@ -130,4 +130,16 @@ class IorTests extends CatsSuite {
       iorMaybe should === (Some(ior))
     }
   }
+
+  test("to consistent with toList") {
+    forAll { (x: Int Ior String) =>
+      x.to[List, String] should === (x.toList)
+    }
+  }
+
+  test("to consistent with toOption") {
+    forAll { (x: Int Ior String) =>
+      x.to[Option, String] should === (x.toOption)
+    }
+  }
 }
