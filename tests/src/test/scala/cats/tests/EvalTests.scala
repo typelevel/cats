@@ -4,6 +4,7 @@ package tests
 import scala.math.min
 import cats.laws.discipline.{BimonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
+import algebra.laws.{GroupLaws, OrderLaws}
 
 class EvalTests extends CatsSuite {
 
@@ -90,5 +91,32 @@ class EvalTests extends CatsSuite {
 
   checkAll("Eval[Int]", BimonadTests[Eval].bimonad[Int, Int, Int])
   checkAll("Bimonad[Eval]", SerializableTests.serializable(Bimonad[Eval]))
+
+  checkAll("Eval[Int]", GroupLaws[Eval[Int]].group)
+
+  {
+    implicit val A = ListWrapper.monoid[Int]
+    checkAll("Eval[ListWrapper[Int]]", GroupLaws[Eval[ListWrapper[Int]]].monoid)
+  }
+
+  {
+    implicit val A = ListWrapper.semigroup[Int]
+    checkAll("Eval[ListWrapper[Int]]", GroupLaws[Eval[ListWrapper[Int]]].semigroup)
+  }
+
+  {
+    implicit val A = ListWrapper.order[Int]
+    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].order)
+  }
+
+  {
+    implicit val A = ListWrapper.partialOrder[Int]
+    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].partialOrder)
+  }
+
+  {
+    implicit val A = ListWrapper.eqv[Int]
+    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].eqv)
+  }
 
 }
