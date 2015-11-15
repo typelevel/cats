@@ -1,33 +1,160 @@
 package cats
 package tests
 
-import cats.data.WriterT
+import cats.data.{Writer, WriterT}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 
+import algebra.laws.OrderLaws
 import org.scalacheck.Prop.forAll
 
 class WriterTTests extends CatsSuite {
-  checkAll("WriterT[List, String, Int]", MonadTests[WriterT[List, String, ?]].monad[String, Int, Int])
+  type Logged[A] = Writer[ListWrapper[Int], A]
+
+  // we have a lot of generated lists of lists in these tests. We have to tell
+  // Scalacheck to calm down a bit so we don't hit memory and test duration
+  // issues.
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfig(maxSize = 5, minSuccessful = 20)
+
+  checkAll("WriterT[List, Int, Int]", OrderLaws[WriterT[List, Int, Int]].eqv)
+  checkAll("Eq[WriterT[List, Int, Int]]", SerializableTests.serializable(Eq[WriterT[List, Int, Int]]))
+  // check that this resolves
+  Eq[Writer[Int, Int]]
 
   test("double swap is a noop"){
-    forAll { w: WriterT[List, String, Int] =>
+    forAll { w: WriterT[List, Int, Int] =>
       w.swap.swap should === (w)
     }
   }
 
   test("reset on pure is a noop"){
     forAll { i: Int =>
-      val w = Monad[WriterT[List, String, ?]].pure(i)
+      val w = Monad[WriterT[List, Int, ?]].pure(i)
       w should === (w.reset)
     }
   }
 
   test("reset consistencey"){
-    forAll { (i: Int, w1: WriterT[Id, String, Int], w2: WriterT[Id, String, Int]) =>
+    forAll { (i: Int, w1: WriterT[Id, Int, Int], w2: WriterT[Id, Int, Int]) =>
       // if the value is the same, everything should be the same
       w1.map(_ => i).reset should === (w2.map(_ => i).reset)
     }
+  }
+
+  {
+    // F has a Functor and L has no Semigroup
+    implicit val F: Functor[ListWrapper] = ListWrapper.functor
+
+    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", FunctorTests[WriterT[ListWrapper, ListWrapper[Int], ?]].functor[Int, Int, Int])
+    checkAll("Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]", SerializableTests.serializable(Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]))
+
+    // just making sure this resolves; it's tested above
+    Functor[WriterT[Id, ListWrapper[Int], ?]]
+
+    Functor[Writer[ListWrapper[Int], ?]]
+
+    Functor[Logged]
+  }
+
+  // We have varying instances available depending on `F` and `L`.
+  // We also battle some inference issues with `Id`.
+  // Below we go through some gymnastics in order to test both the implicit
+  // resolution and the laws of these various instances.
+  {
+    // F has an Apply and L has a Semigroup
+    implicit val F: Apply[ListWrapper] = ListWrapper.monadCombine
+    implicit val L: Semigroup[ListWrapper[Int]] = ListWrapper.semigroupK.algebra[Int]
+
+    Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", ApplyTests[WriterT[ListWrapper, ListWrapper[Int], ?]].apply[Int, Int, Int])
+    checkAll("Apply[WriterT[ListWrapper, ListWrapper[Int], ?]]", SerializableTests.serializable(Apply[WriterT[ListWrapper, ListWrapper[Int], ?]]))
+
+    Functor[WriterT[Id, ListWrapper[Int], ?]]
+    Apply[WriterT[Id, ListWrapper[Int], ?]]
+
+    Functor[Writer[ListWrapper[Int], ?]]
+    Apply[Writer[ListWrapper[Int], ?]]
+
+    Functor[Logged]
+    Apply[Logged]
+  }
+
+  {
+    // F has a FlatMap and L has a Semigroup
+    implicit val F: FlatMap[ListWrapper] = ListWrapper.monadCombine
+    implicit val L: Semigroup[ListWrapper[Int]] = ListWrapper.semigroupK.algebra[Int]
+
+    Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    Apply[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", FlatMapTests[WriterT[ListWrapper, ListWrapper[Int], ?]].flatMap[Int, Int, Int])
+    checkAll("FlatMap[WriterT[ListWrapper, ListWrapper[Int], ?]]", SerializableTests.serializable(FlatMap[WriterT[ListWrapper, ListWrapper[Int], ?]]))
+
+    Functor[WriterT[Id, ListWrapper[Int], ?]]
+    Apply[WriterT[Id, ListWrapper[Int], ?]]
+    FlatMap[WriterT[Id, ListWrapper[Int], ?]]
+
+    Functor[Writer[ListWrapper[Int], ?]]
+    Apply[Writer[ListWrapper[Int], ?]]
+    FlatMap[Writer[ListWrapper[Int], ?]]
+
+    Functor[Logged]
+    Apply[Logged]
+    FlatMap[Logged]
+  }
+
+  {
+    // F has an Applicative and L has a Monoid
+    implicit val F: Applicative[ListWrapper] = ListWrapper.monadCombine
+    implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monadCombine.algebra[Int]
+
+    Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    Apply[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", ApplicativeTests[WriterT[ListWrapper, ListWrapper[Int], ?]].applicative[Int, Int, Int])
+    checkAll("Applicative[WriterT[ListWrapper, ListWrapper[Int], ?]]", SerializableTests.serializable(Applicative[WriterT[ListWrapper, ListWrapper[Int], ?]]))
+
+    Functor[WriterT[Id, ListWrapper[Int], ?]]
+    Apply[WriterT[Id, ListWrapper[Int], ?]]
+    Applicative[WriterT[Id, ListWrapper[Int], ?]]
+
+    Functor[Writer[ListWrapper[Int], ?]]
+    Apply[Writer[ListWrapper[Int], ?]]
+    Applicative[Writer[ListWrapper[Int], ?]]
+
+    Functor[Logged]
+    Apply[Logged]
+    Applicative[Logged]
+  }
+
+  {
+    // F has a Monad and L has a Monoid
+    implicit val F: Monad[ListWrapper] = ListWrapper.monadCombine
+    implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monadCombine.algebra[Int]
+
+    Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    Apply[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    Applicative[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    FlatMap[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", MonadTests[WriterT[ListWrapper, ListWrapper[Int], ?]].monad[Int, Int, Int])
+    checkAll("Monad[WriterT[ListWrapper, ListWrapper[Int], ?]]", SerializableTests.serializable(Monad[WriterT[ListWrapper, ListWrapper[Int], ?]]))
+
+    Functor[WriterT[Id, ListWrapper[Int], ?]]
+    Apply[WriterT[Id, ListWrapper[Int], ?]]
+    Applicative[WriterT[Id, ListWrapper[Int], ?]]
+    FlatMap[WriterT[Id, ListWrapper[Int], ?]]
+    Monad[WriterT[Id, ListWrapper[Int], ?]]
+
+    Functor[Writer[ListWrapper[Int], ?]]
+    Apply[Writer[ListWrapper[Int], ?]]
+    Applicative[Writer[ListWrapper[Int], ?]]
+    FlatMap[Writer[ListWrapper[Int], ?]]
+    Monad[Writer[ListWrapper[Int], ?]]
+
+    Functor[Logged]
+    Apply[Logged]
+    Applicative[Logged]
+    FlatMap[Logged]
+    Monad[Logged]
   }
 }

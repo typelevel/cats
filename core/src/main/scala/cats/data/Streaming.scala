@@ -58,7 +58,7 @@ import scala.collection.mutable
  *     constructed with `Foldable#foldRight`, and that `.map` and
  *     `.flatMap` operations over the tail will be safely trampolined.
  */
-sealed abstract class Streaming[A] { lhs =>
+sealed abstract class Streaming[A] extends Product with Serializable { lhs =>
 
   import Streaming.{Empty, Wait, Cons}
 
@@ -89,7 +89,7 @@ sealed abstract class Streaming[A] { lhs =>
   /**
    * A variant of fold, used for constructing streams.
    *
-   * The only difference is that foldStream will preserve deferred
+   * The only difference is that foldStreaming will preserve deferred
    * streams. This makes it more appropriate to use in situations
    * where the stream's laziness must be preserved.
    */

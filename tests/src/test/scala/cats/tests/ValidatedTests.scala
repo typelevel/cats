@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{NonEmptyList, Validated}
+import cats.data.{NonEmptyList, Validated, Xor}
 import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeTests, SerializableTests}
 import org.scalacheck.{Gen, Arbitrary}
@@ -20,6 +20,21 @@ class ValidatedTests extends CatsSuite {
   checkAll("Traverse[Validated[String,?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
 
   checkAll("Validated[String, Int]", OrderLaws[Validated[String, Int]].order)
+  checkAll("Order[Validated[String, Int]]", SerializableTests.serializable(Order[Validated[String, Int]]))
+
+  {
+    implicit val S = ListWrapper.partialOrder[String]
+    implicit val I = ListWrapper.partialOrder[Int]
+    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", OrderLaws[Validated[ListWrapper[String], ListWrapper[Int]]].partialOrder)
+    checkAll("PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]]))
+  }
+
+  {
+    implicit val S = ListWrapper.eqv[String]
+    implicit val I = ListWrapper.eqv[Int]
+    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", OrderLaws[Validated[ListWrapper[String], ListWrapper[Int]]].eqv)
+    checkAll("Eq[Validated[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(Eq[Validated[ListWrapper[String], ListWrapper[Int]]]))
+  }
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)
@@ -57,9 +72,11 @@ class ValidatedTests extends CatsSuite {
 
   test("isInvalid consistent with forall and exists") {
     forAll { (v: Validated[String, Int], p: Int => Boolean) =>
-      whenever(v.isInvalid) {
+      if (v.isInvalid) {
         v.forall(p) should === (true)
         v.exists(p) should === (false)
+      } else {
+        v.forall(p) should === (v.exists(p))
       }
     }
   }
@@ -69,6 +86,7 @@ class ValidatedTests extends CatsSuite {
       var count = 0
       v.foreach(_ => count += 1)
       v.isValid should === (count == 1)
+      v.isInvalid should === (count == 0)
     }
   }
 
@@ -112,5 +130,17 @@ class ValidatedTests extends CatsSuite {
     (Validated.valid(3) andThen even) should === (Validated.invalid("3 is not even"))
     (Validated.valid(4) andThen even) should === (Validated.valid(4))
     (Validated.invalid("foo") andThen even) should === (Validated.invalid("foo"))
+  }
+
+  test("fromOption consistent with Xor.fromOption"){
+    forAll { (o: Option[Int], s: String) =>
+      Validated.fromOption(o, s) should === (Xor.fromOption(o, s).toValidated)
+    }
+  }
+
+  test("fromOption consistent with toOption"){
+    forAll { (o: Option[Int], s: String) =>
+      Validated.fromOption(o, s).toOption should === (o)
+    }
   }
 }
