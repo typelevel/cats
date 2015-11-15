@@ -171,6 +171,10 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
     }
   }
 
+  implicit def xorTTraverse[F[_], L](implicit F: Traverse[F]): Traverse[XorT[F, L, ?]] =
+    new XorTTraverse[F, L] {
+      val F0: Traverse[F] = F
+    }
 }
 
 private[data] abstract class XorTInstances1 extends XorTInstances2 {
@@ -191,6 +195,11 @@ private[data] abstract class XorTInstances1 extends XorTInstances2 {
       def empty[A]: XorT[F, L, A] = XorT.left(F.pure(L.empty))(F)
     }
   }
+
+  implicit def xorTFoldable[F[_], L](implicit F: Foldable[F]): Foldable[XorT[F, L, ?]] =
+    new XorTFoldable[F, L] {
+      val F0: Foldable[F] = F
+    }
 }
 
 private[data] abstract class XorTInstances2 extends XorTInstances3 {
@@ -264,4 +273,19 @@ private[data] trait XorTMonadCombine[F[_], L] extends MonadCombine[XorT[F, L, ?]
   implicit val L: Monoid[L]
 }
 
+private[data] sealed trait XorTFoldable[F[_], L] extends Foldable[XorT[F, L, ?]] {
+  implicit def F0: Foldable[F]
 
+  def foldLeft[A, B](fa: XorT[F, L, A], b: B)(f: (B, A) => B): B =
+    fa.foldLeft(b)(f)
+
+  def foldRight[A, B](fa: XorT[F, L, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    fa.foldRight(lb)(f)
+}
+
+private[data] sealed trait XorTTraverse[F[_], L] extends Traverse[XorT[F, L, ?]] with XorTFoldable[F, L] {
+  override implicit def F0: Traverse[F]
+
+  override def traverse[G[_]: Applicative, A, B](fa: XorT[F, L, A])(f: A => G[B]): G[XorT[F, L, B]] =
+    fa traverse f
+}
