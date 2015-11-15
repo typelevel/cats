@@ -17,10 +17,18 @@ trait BifunctorLaws[F[_, _]] {
   }
 
   def bifunctorLeftMapIdentity[A, B](fa: F[A, B]): IsEq[F[A, B]] =
-    F.leftMap(fa)(identity) <-> fa
+    fa.leftMap(identity) <-> fa
 
   def bifunctorRightMapIdentity[A, B](fa: F[A, B]): IsEq[F[A, B]] =
-    F.rightMap(fa)(identity) <-> fa
+    fa.rightMap(identity) <-> fa
+
+  def bifunctorLeftMapComposition[A, B, C, D](fa: F[A, B], f: A => C, g: C => D): IsEq[F[D, B]] = {
+    fa.leftMap(f).leftMap(g) <-> fa.leftMap(f andThen g)
+  }
+
+  def bifunctorRightMapComposition[A, B, C, D](fa: F[A, B], f: B => C, g: C => D): IsEq[F[A, D]] = {
+    fa.rightMap(f).rightMap(g) <-> fa.rightMap(f andThen g)
+  }
 
 }
 
