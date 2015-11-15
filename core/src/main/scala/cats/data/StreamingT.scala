@@ -205,7 +205,7 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    */
   def drop(n: Int)(implicit ev: Functor[F]): StreamingT[F, A] =
     if (n <= 0) this else this match {
-      case Cons(a, ft) => Wait(ft.map(_.take(n - 1)))
+      case Cons(a, ft) => Wait(ft.map(_.drop(n - 1)))
       case Wait(ft) => Wait(ft.map(_.drop(n)))
       case Empty() => Empty()
     }

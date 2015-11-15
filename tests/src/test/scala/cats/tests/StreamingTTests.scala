@@ -49,4 +49,16 @@ class SpecificStreamingTTests extends CatsSuite {
     val y = fa.flatMap(a => f(a).flatMap(g))
     x should === (y)
   }
+
+  test("take with Id consistent with List.take") {
+    forAll { (s: StreamingT[Id, Int], i: Int) =>
+      s.take(i).toList should === (s.toList.take(i))
+    }
+  }
+
+  test("drop with Id consistent with List.drop") {
+    forAll { (s: StreamingT[Id, Int], i: Int) =>
+      s.drop(i).toList should === (s.toList.drop(i))
+    }
+  }
 }
