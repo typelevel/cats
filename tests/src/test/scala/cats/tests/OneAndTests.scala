@@ -48,11 +48,10 @@ class OneAndTests extends CatsSuite {
   checkAll("Comonad[NonEmptyList[A]]", SerializableTests.serializable(Comonad[NonEmptyList]))
 
   test("Creating OneAnd + unwrap is identity") {
-    forAll { (list: List[Int]) =>
-      whenever(list.size >= 1) {
-        val oneAnd = NonEmptyList(list.head, list.tail: _*)
-        list should === (oneAnd.unwrap)
-      }
+    forAll { (i: Int, tail: List[Int]) =>
+      val list = i :: tail
+      val oneAnd = NonEmptyList(i, tail: _*)
+      list should === (oneAnd.unwrap)
     }
   }
 

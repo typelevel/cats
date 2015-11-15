@@ -57,7 +57,7 @@ class ValidatedTests extends CatsSuite {
 
   test("isInvalid consistent with forall and exists") {
     forAll { (v: Validated[String, Int], p: Int => Boolean) =>
-      whenever(v.isInvalid) {
+      if (v.isInvalid) {
         v.forall(p) should === (true)
         v.exists(p) should === (false)
       }

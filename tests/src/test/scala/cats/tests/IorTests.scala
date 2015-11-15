@@ -69,7 +69,7 @@ class IorTests extends CatsSuite {
 
   test("isLeft consistent with forall and exists") {
     forAll { (i: Int Ior String, p: String => Boolean) =>
-      whenever(i.isLeft) {
+      if (i.isLeft) {
         (i.forall(p) && !i.exists(p)) should === (true)
       }
     }
@@ -89,11 +89,10 @@ class IorTests extends CatsSuite {
 
   test("foreach runs for right and both") {
     forAll { (i: Int Ior String) =>
-      whenever(i.isRight || i.isBoth) {
-        var count = 0
-        i.foreach { _ => count += 1 }
-        count should === (1)
-      }
+      var count = 0
+      i.foreach { _ => count += 1 }
+      if (i.isRight || i.isBoth) count should === (1)
+      else count should === (0)
     }
   }
 

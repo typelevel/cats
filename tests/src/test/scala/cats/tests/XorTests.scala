@@ -83,7 +83,7 @@ class XorTests extends CatsSuite {
 
   test("getOrElse ignores default for right") {
     forAll { (x: Int Xor String, s: String, t: String) =>
-      whenever(x.isRight) {
+      if (x.isRight) {
         x.getOrElse(s) should === (x.getOrElse(t))
       }
     }
@@ -134,7 +134,7 @@ class XorTests extends CatsSuite {
 
   test("isLeft implies forall") {
     forAll { (x: Int Xor String, p: String => Boolean) =>
-      whenever(x.isLeft) {
+      if (x.isLeft) {
         x.forall(p) should === (true)
       }
     }
@@ -142,7 +142,7 @@ class XorTests extends CatsSuite {
 
   test("isLeft implies exists is false") {
     forAll { (x: Int Xor String, p: String => Boolean) =>
-      whenever(x.isLeft) {
+      if (x.isLeft) {
         x.exists(p) should === (false)
       }
     }
@@ -150,7 +150,7 @@ class XorTests extends CatsSuite {
 
   test("ensure on left is identity") {
     forAll { (x: Int Xor String, i: Int, p: String => Boolean) =>
-      whenever(x.isLeft) {
+      if (x.isLeft) {
         x.ensure(i)(p) should === (x)
       }
     }
