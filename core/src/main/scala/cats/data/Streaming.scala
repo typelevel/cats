@@ -89,7 +89,7 @@ sealed abstract class Streaming[A] extends Product with Serializable { lhs =>
   /**
    * A variant of fold, used for constructing streams.
    *
-   * The only difference is that foldStream will preserve deferred
+   * The only difference is that foldStreaming will preserve deferred
    * streams. This makes it more appropriate to use in situations
    * where the stream's laziness must be preserved.
    */
