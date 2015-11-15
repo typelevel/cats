@@ -1,18 +1,38 @@
 package cats
 package tests
 
+import cats.functor.Bifunctor
 import cats.data.{Xor, XorT}
-import cats.laws.discipline.{BifunctorTests, MonadErrorTests, MonoidKTests, SerializableTests}
+import cats.laws.discipline.{BifunctorTests, FoldableTests, FunctorTests, MonadErrorTests, MonoidKTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
-
 
 class XorTTests extends CatsSuite {
   implicit val eq0 = XorT.xorTEq[List, String, String Xor Int]
   implicit val eq1 = XorT.xorTEq[XorT[List, String, ?], String, Int](eq0)
   checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, String, ?], String].monadError[Int, Int, Int])
-  checkAll("XorT[List, String, Int]", MonoidKTests[XorT[List, String, ?]].monoidK[Int])
   checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, String, ?], String]))
+  checkAll("XorT[List, String, Int]", MonoidKTests[XorT[List, String, ?]].monoidK[Int])
+  checkAll("MonoidK[XorT[List, String, ?]]", SerializableTests.serializable(MonoidK[XorT[List, String, ?]]))
   checkAll("XorT[List, ?, ?]", BifunctorTests[XorT[List, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
+  checkAll("Bifunctor[XorT[List, ?, ?]]", SerializableTests.serializable(Bifunctor[XorT[List, ?, ?]]))
+  checkAll("XorT[List, Int, ?]", TraverseTests[XorT[List, Int, ?]].foldable[Int, Int])
+  checkAll("Traverse[XorT[List, Int, ?]]", SerializableTests.serializable(Traverse[XorT[List, Int, ?]]))
+
+  {
+    implicit val F = ListWrapper.foldable
+    checkAll("XorT[ListWrapper, Int, ?]", FoldableTests[XorT[ListWrapper, Int, ?]].foldable[Int, Int])
+    checkAll("Foldable[XorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Foldable[XorT[ListWrapper, Int, ?]]))
+  }
+
+  {
+    implicit val F = ListWrapper.functor
+    checkAll("XorT[ListWrapper, Int, ?]", FunctorTests[XorT[ListWrapper, Int, ?]].functor[Int, Int, Int])
+    checkAll("Functor[XorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Functor[XorT[ListWrapper, Int, ?]]))
+  }
+
+  // make sure that the Monad and Traverse instances don't result in ambiguous
+  // Functor instances
+  Functor[XorT[List, Int, ?]]
 
   test("toValidated") {
     forAll { (xort: XorT[List, String, Int]) =>
