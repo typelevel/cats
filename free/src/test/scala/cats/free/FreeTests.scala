@@ -1,6 +1,7 @@
 package cats
 package free
 
+import cats.arrow.NaturalTransformation
 import cats.tests.CatsSuite
 import cats.laws.discipline.{MonadTests, SerializableTests}
 import org.scalacheck.{Arbitrary, Gen}
@@ -21,4 +22,10 @@ class FreeTests extends CatsSuite {
 
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
+
+  test("mapSuspension id"){
+    forAll { x: Free[List, Int] =>
+      x.mapSuspension(NaturalTransformation.id[List]) should === (x)
+    }
+  }
 }
