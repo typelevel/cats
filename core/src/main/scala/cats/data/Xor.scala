@@ -217,7 +217,7 @@ trait XorFunctions {
    * the resulting `Xor`. Uncaught exceptions are propagated.
    *
    * For example: {{{
-   * val result: NumberFormatException Xor Int = catching[NumberFormatException] { "foo".toInt }
+   * val result: NumberFormatException Xor Int = catchOnly[NumberFormatException] { "foo".toInt }
    * }}}
    */
   def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] =
