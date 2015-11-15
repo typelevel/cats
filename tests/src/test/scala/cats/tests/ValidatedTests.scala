@@ -60,6 +60,8 @@ class ValidatedTests extends CatsSuite {
       if (v.isInvalid) {
         v.forall(p) should === (true)
         v.exists(p) should === (false)
+      } else {
+        v.forall(p) should === (v.exists(p))
       }
     }
   }
@@ -69,6 +71,7 @@ class ValidatedTests extends CatsSuite {
       var count = 0
       v.foreach(_ => count += 1)
       v.isValid should === (count == 1)
+      v.isInvalid should === (count == 0)
     }
   }
 
