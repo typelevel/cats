@@ -3,7 +3,7 @@ package tests
 
 import cats.functor.Bifunctor
 import cats.data.{Xor, XorT}
-import cats.laws.discipline.{BifunctorTests, FoldableTests, MonadErrorTests, MonoidKTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{BifunctorTests, FoldableTests, FunctorTests, MonadErrorTests, MonoidKTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 
 
@@ -24,6 +24,16 @@ class XorTTests extends CatsSuite {
     checkAll("XorT[ListWrapper, Int, ?]", FoldableTests[XorT[ListWrapper, Int, ?]].foldable[Int, Int])
     checkAll("Foldable[XorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Foldable[XorT[ListWrapper, Int, ?]]))
   }
+
+  {
+    implicit val F = ListWrapper.functor
+    checkAll("XorT[ListWrapper, Int, ?]", FunctorTests[XorT[ListWrapper, Int, ?]].functor[Int, Int, Int])
+    checkAll("Functor[XorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Functor[XorT[ListWrapper, Int, ?]]))
+  }
+
+  // make sure that the Monad and Traverse instances don't result in ambiguous
+  // Functor instances
+  Functor[XorT[List, Int, ?]]
 
   test("toValidated") {
     forAll { (xort: XorT[List, String, Int]) =>
