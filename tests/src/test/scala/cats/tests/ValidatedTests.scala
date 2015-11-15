@@ -20,6 +20,21 @@ class ValidatedTests extends CatsSuite {
   checkAll("Traverse[Validated[String,?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
 
   checkAll("Validated[String, Int]", OrderLaws[Validated[String, Int]].order)
+  checkAll("Order[Validated[String, Int]]", SerializableTests.serializable(Order[Validated[String, Int]]))
+
+  {
+    implicit val S = ListWrapper.partialOrder[String]
+    implicit val I = ListWrapper.partialOrder[Int]
+    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", OrderLaws[Validated[ListWrapper[String], ListWrapper[Int]]].partialOrder)
+    checkAll("PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]]))
+  }
+
+  {
+    implicit val S = ListWrapper.eqv[String]
+    implicit val I = ListWrapper.eqv[Int]
+    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", OrderLaws[Validated[ListWrapper[String], ListWrapper[Int]]].eqv)
+    checkAll("Eq[Validated[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(Eq[Validated[ListWrapper[String], ListWrapper[Int]]]))
+  }
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)
