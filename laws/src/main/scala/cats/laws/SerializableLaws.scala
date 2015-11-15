@@ -4,7 +4,7 @@ package laws
 import org.scalacheck.Prop
 import org.scalacheck.Prop.{ False, Proof, Result }
 
-import bricks.Platform
+import catalysts.Platform
 
 /**
  * Check for Java Serializability.

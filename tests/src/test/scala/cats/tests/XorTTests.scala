@@ -6,7 +6,6 @@ import cats.data.{Xor, XorT}
 import cats.laws.discipline.{BifunctorTests, FoldableTests, FunctorTests, MonadErrorTests, MonoidKTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 
-
 class XorTTests extends CatsSuite {
   implicit val eq0 = XorT.xorTEq[List, String, String Xor Int]
   implicit val eq1 = XorT.xorTEq[XorT[List, String, ?], String, Int](eq0)
@@ -122,6 +121,72 @@ class XorTTests extends CatsSuite {
   test("subflatMap consistent with value.map+flatMap") {
     forAll { (xort: XorT[List, String, Int], f: Int => String Xor Double) =>
       xort.subflatMap(f) should === (XorT(xort.value.map(_.flatMap(f))))
+    }
+  }
+
+  test("fold with Id consistent with Xor fold") {
+    forAll { (xort: XorT[Id, String, Int], f: String => Long, g: Int => Long) =>
+      xort.fold(f, g) should === (xort.value.fold(f, g))
+    }
+  }
+
+  test("getOrElse with Id consistent with Xor getOrElse") {
+    forAll { (xort: XorT[Id, String, Int], i: Int) =>
+      xort.getOrElse(i) should === (xort.value.getOrElse(i))
+    }
+  }
+
+  test("forall with Id consistent with Xor forall") {
+    forAll { (xort: XorT[Id, String, Int], f: Int => Boolean) =>
+      xort.forall(f) should === (xort.value.forall(f))
+    }
+  }
+
+  test("exists with Id consistent with Xor exists") {
+    forAll { (xort: XorT[Id, String, Int], f: Int => Boolean) =>
+      xort.exists(f) should === (xort.value.exists(f))
+    }
+  }
+
+  test("leftMap with Id consistent with Xor leftMap") {
+    forAll { (xort: XorT[Id, String, Int], f: String => Long) =>
+      xort.leftMap(f).value should === (xort.value.leftMap(f))
+    }
+  }
+
+  test("compare with Id consistent with Xor compare") {
+    forAll { (x: XorT[Id, String, Int], y: XorT[Id, String, Int]) =>
+      x.compare(y) should === (x.value.compare(y.value))
+    }
+  }
+
+  test("=== with Id consistent with Xor ===") {
+    forAll { (x: XorT[Id, String, Int], y: XorT[Id, String, Int]) =>
+      x === y should === (x.value === y.value)
+    }
+  }
+
+  test("traverse with Id consistent with Xor traverse") {
+    forAll { (x: XorT[Id, String, Int], f: Int => Option[Long]) =>
+      x.traverse(f).map(_.value) should === (x.value.traverse(f))
+    }
+  }
+
+  test("foldLeft with Id consistent with Xor foldLeft") {
+    forAll { (x: XorT[Id, String, Int], l: Long, f: (Long, Int) => Long) =>
+      x.foldLeft(l)(f) should === (x.value.foldLeft(l)(f))
+    }
+  }
+
+  test("foldRight with Id consistent with Xor foldRight") {
+    forAll { (x: XorT[Id, String, Int], l: Eval[Long], f: (Int, Eval[Long]) => Eval[Long]) =>
+      x.foldRight(l)(f) should === (x.value.foldRight(l)(f))
+    }
+  }
+
+  test("merge with Id consistent with Xor merge") {
+    forAll { (x: XorT[Id, Int, Int]) =>
+      x.merge should === (x.value.merge)
     }
   }
 }
