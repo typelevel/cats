@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import bricks.Platform
+import catalysts.Platform
 
 import cats.std.AllInstances
 import cats.syntax.{AllSyntax, EqOps}

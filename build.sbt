@@ -26,7 +26,7 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.4.0",
+    "com.github.mpilquist" %%% "simulacrum" % "0.5.0",
     "org.spire-math" %%% "algebra" % "0.3.1",
     "org.spire-math" %%% "algebra-std" % "0.3.1",
     "org.typelevel" %%% "machinist" % "0.4.1",
@@ -135,7 +135,7 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(disciplineDependencies:_*)
   .settings(libraryDependencies ++= Seq(
     "org.spire-math" %%% "algebra-laws" % "0.3.1",
-    "com.github.inthenow" %%% "bricks-platform" % "0.0.1"))
+    "org.typelevel" %%% "catalysts-platform" % "0.0.2"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -170,7 +170,7 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .settings(noPublishSettings:_*)
   .settings(libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test",
-    "com.github.inthenow" %%% "bricks-platform" % "0.0.1" % "test"))
+    "org.typelevel" %%% "catalysts-platform" % "0.0.2" % "test"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
