@@ -14,7 +14,7 @@ import cats.syntax.all._
  * not support many methods on `Streaming[A]` which return immediate
  * values.
  */
-sealed abstract class StreamingT[F[_], A] { lhs =>
+sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lhs =>
 
   import StreamingT.{Empty, Wait, Cons}
 
