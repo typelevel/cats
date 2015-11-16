@@ -43,6 +43,18 @@ class AdHocStreamingTests extends CatsSuite {
     }
   }
 
+  test("results aren't reevaluated after memoize") {
+    forAll { (orig: Streaming[Int]) =>
+      val size = orig.toList.size
+      var i = 0
+      val memoized = orig.map(_ => i += 1).memoize
+      memoized.toList
+      i should === (size)
+      memoized.toList
+      i should === (size)
+    }
+  }
+
   // convert (A => List[B]) to (A => Streaming[B])
   def convertF[A, B](f: A => List[B]): A => Streaming[B] =
     (a: A) => Streaming.fromList(f(a))
