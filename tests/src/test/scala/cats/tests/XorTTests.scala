@@ -189,4 +189,16 @@ class XorTTests extends CatsSuite {
       x.merge should === (x.value.merge)
     }
   }
+
+  test("to consistent with toOption") {
+    forAll { (x: XorT[List, String, Int]) =>
+      x.to[Option] should === (x.toOption.value)
+    }
+  }
+
+  test("toEither consistent with toOption") {
+    forAll { (x: XorT[List, String, Int]) =>
+      x.toEither.map(_.right.toOption) should === (x.toOption.value)
+    }
+  }
 }
