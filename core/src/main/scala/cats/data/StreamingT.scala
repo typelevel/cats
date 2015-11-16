@@ -107,7 +107,7 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    * element to be calculated.
    */
   def isEmpty(implicit ev: Monad[F]): F[Boolean] =
-    uncons.map(_.isDefined)
+    uncons.map(_.isEmpty)
 
   /**
    * Return true if the stream is non-empty, false otherwise.
@@ -116,7 +116,7 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    * element to be calculated.
    */
   def nonEmpty(implicit ev: Monad[F]): F[Boolean] =
-    uncons.map(_.isEmpty)
+    uncons.map(_.isDefined)
 
   /**
    * Prepend an A value to the current stream.
@@ -205,7 +205,7 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    */
   def drop(n: Int)(implicit ev: Functor[F]): StreamingT[F, A] =
     if (n <= 0) this else this match {
-      case Cons(a, ft) => Wait(ft.map(_.take(n - 1)))
+      case Cons(a, ft) => Wait(ft.map(_.drop(n - 1)))
       case Wait(ft) => Wait(ft.map(_.drop(n)))
       case Empty() => Empty()
     }
@@ -249,7 +249,7 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    */
   def dropWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
-      case Cons(a, ft) => if (f(a)) Empty() else Cons(a, ft.map(_.takeWhile(f)))
+      case Cons(a, ft) => if (f(a)) Empty() else Cons(a, ft.map(_.dropWhile(f)))
       case Wait(ft) => Wait(ft.map(_.dropWhile(f)))
       case Empty() => Empty()
     }
@@ -439,6 +439,9 @@ private[data] sealed trait StreamingTInstances extends StreamingTInstances1 {
         fa.filter(f)
       def coflatMap[A, B](fa: StreamingT[F, A])(f: StreamingT[F, A] => B): StreamingT[F, B] =
         fa.coflatMap(f)
+
+      override def map[A, B](fa: StreamingT[F, A])(f: A => B): StreamingT[F, B] =
+        fa.map(f)
     }
 
   implicit def streamingTOrder[F[_], A](implicit ev: Monad[F], eva: Order[F[List[A]]]): Order[StreamingT[F, A]] =
