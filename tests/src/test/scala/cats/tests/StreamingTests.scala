@@ -6,6 +6,7 @@ import algebra.laws.OrderLaws
 import cats.data.Streaming
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests}
+import org.scalacheck.{Arbitrary, Gen}
 
 class StreamingTests extends CatsSuite {
   checkAll("Streaming[Int]", CoflatMapTests[Streaming].coflatMap[Int, Int, Int])
@@ -19,6 +20,18 @@ class StreamingTests extends CatsSuite {
 
   checkAll("Streaming[Int]", OrderLaws[Streaming[Int]].order)
   checkAll("Order[Streaming[Int]]", SerializableTests.serializable(Order[Streaming[Int]]))
+
+  {
+    implicit val I = ListWrapper.partialOrder[Int]
+    checkAll("Streaming[ListWrapper[Int]]", OrderLaws[Streaming[ListWrapper[Int]]].partialOrder)
+    checkAll("PartialOrder[Streaming[ListWrapper[Int]]]", SerializableTests.serializable(PartialOrder[Streaming[ListWrapper[Int]]]))
+  }
+
+  {
+    implicit val I = ListWrapper.eqv[Int]
+    checkAll("Streaming[ListWrapper[Int]]", OrderLaws[Streaming[ListWrapper[Int]]].eqv)
+    checkAll("Eq[Streaming[ListWrapper[Int]]]", SerializableTests.serializable(Eq[Streaming[ListWrapper[Int]]]))
+  }
 }
 
 class AdHocStreamingTests extends CatsSuite {
@@ -137,6 +150,26 @@ class AdHocStreamingTests extends CatsSuite {
   test("tails") {
     forAll { (xs: List[Int]) =>
       test(xs)(_.tails.map(_.toList).toList)(_.tails.toList)
+    }
+  }
+
+  test("peekEmpty consistent with isEmpty") {
+    forAll { (s: Streaming[Int]) =>
+      s.peekEmpty.foreach(_ should === (s.isEmpty))
+    }
+  }
+
+  test("memoize doesn't change values") {
+    forAll { (s: Streaming[Int]) =>
+      s.memoize should === (s)
+    }
+  }
+
+  test("interval") {
+    // we don't want this test to take a really long time
+    implicit val arbInt: Arbitrary[Int] = Arbitrary(Gen.choose(-10, 20))
+    forAll { (start: Int, end: Int) =>
+      Streaming.interval(start, end).toList should === ((start to end).toList)
     }
   }
 
