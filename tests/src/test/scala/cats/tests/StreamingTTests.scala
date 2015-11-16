@@ -23,6 +23,18 @@ class StreamingTTests extends CatsSuite {
   checkAll("StreamingT[List, ?]", CoflatMapTests[StreamingT[List, ?]].coflatMap[Int, Int, Int])
   checkAll("StreamingT[List, Int]", OrderLaws[StreamingT[List, Int]].order)
   checkAll("Monad[StreamingT[List, ?]]", SerializableTests.serializable(Monad[StreamingT[List, ?]]))
+
+  test("take with Id consistent with List.take") {
+    forAll { (s: StreamingT[Id, Int], i: Int) =>
+      s.take(i).toList should === (s.toList.take(i))
+    }
+  }
+
+  test("drop with Id consistent with List.drop") {
+    forAll { (s: StreamingT[Id, Int], i: Int) =>
+      s.drop(i).toList should === (s.toList.drop(i))
+    }
+  }
 }
 
 class SpecificStreamingTTests extends CatsSuite {
@@ -48,17 +60,5 @@ class SpecificStreamingTTests extends CatsSuite {
     val x = fa.flatMap(f).flatMap(g)
     val y = fa.flatMap(a => f(a).flatMap(g))
     x should === (y)
-  }
-
-  test("take with Id consistent with List.take") {
-    forAll { (s: StreamingT[Id, Int], i: Int) =>
-      s.take(i).toList should === (s.toList.take(i))
-    }
-  }
-
-  test("drop with Id consistent with List.drop") {
-    forAll { (s: StreamingT[Id, Int], i: Int) =>
-      s.drop(i).toList should === (s.toList.drop(i))
-    }
   }
 }
