@@ -9,7 +9,7 @@ import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
 /**
  * Arbitrary instances for cats.data
  */
-object arbitrary {
+object arbitrary extends ArbitraryInstances0 {
 
   implicit def constArbitrary[A, B](implicit A: Arbitrary[A]): Arbitrary[Const[A, B]] =
     Arbitrary(A.arbitrary.map(Const[A, B]))
@@ -56,28 +56,38 @@ object arbitrary {
   implicit def streamingArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Streaming[A]] =
     Arbitrary(Gen.listOf(A.arbitrary).map(Streaming.fromList(_)))
 
-  // TODO: it would be better to do this recursively, i.e. more like:
-  //
-  // Gen.oneOf(
-  //   for { a <- arbitrary[A]; s <- arbitrary[F[StreamingT[F, A]]] } yield cons(a, s),
-  //   for { s <- arbitrary[F[StreamingT[F, A]]] } yield wait(s),
-  //   const(StreamingT.empty[F, A]))
-  //
-  // However, getting this right with Scalacheck (and avoiding SOEs) is
-  // somewhat fiddly, so this will have to do for now.
-  //
+  def emptyStreamingTGen[F[_], A]: Gen[StreamingT[F, A]] =
+    Gen.const(StreamingT.empty[F, A])
+
+  def streamingTGen[F[_], A](maxDepth: Int)(implicit F: Monad[F], A: Arbitrary[A]): Gen[StreamingT[F, A]] = {
+    if (maxDepth <= 1)
+      emptyStreamingTGen[F, A]
+    else {
+      Gen.oneOf(
+        // Empty
+        emptyStreamingTGen[F, A],
+        // Wait
+        streamingTGen[F, A](maxDepth - 1).map(s =>
+          StreamingT.wait(F.pure(s))),
+        // Cons
+        for {
+          a <- A.arbitrary
+          s <- streamingTGen[F, A](maxDepth - 1)
+        } yield StreamingT.cons(a, F.pure(s))
+      )
+    }
+  }
+
   // The max possible size of a StreamingT instance (n) will result in
   // instances of up to n^3 in length when testing flatMap
   // composition. The current value (8) could result in streams of up
   // to 512 elements in length. Thus, since F may not be stack-safe,
   // we want to keep n relatively small.
   implicit def streamingTArbitrary[F[_], A](implicit F: Monad[F], A: Arbitrary[A]): Arbitrary[StreamingT[F, A]] =
-    Arbitrary(for {
-      as <- Gen.listOf(A.arbitrary).map(_.take(8))
-    } yield StreamingT.fromList(as))
+    Arbitrary(streamingTGen[F, A](8))
 
-  implicit def writerTArbitrary[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
-    Arbitrary(F.arbitrary.map(WriterT(_)))
+  implicit def writerArbitrary[L:Arbitrary, V:Arbitrary]: Arbitrary[Writer[L, V]] =
+    writerTArbitrary[Id, L, V]
 
   // until this is provided by scalacheck
   implicit def partialFunctionArbitrary[A, B](implicit F: Arbitrary[A => Option[B]]): Arbitrary[PartialFunction[A, B]] =
@@ -91,4 +101,9 @@ object arbitrary {
   implicit def showArbitrary[A: Arbitrary]: Arbitrary[Show[A]] =
     Arbitrary(Show.fromToString[A])
 
+}
+
+private[discipline] sealed trait ArbitraryInstances0 {
+  implicit def writerTArbitrary[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
+    Arbitrary(F.arbitrary.map(WriterT(_)))
 }

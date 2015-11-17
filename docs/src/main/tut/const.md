@@ -23,7 +23,7 @@ The `const` function takes two arguments and simply returns the first argument, 
 final case class Const[A, B](getConst: A)
 ```
 
-The `Const` data type takes two type parameters, but only ever stores a value of the first type paramter.
+The `Const` data type takes two type parameters, but only ever stores a value of the first type parameter.
 Because the second type parameter is not used in the data type, the type parameter is referred to as a
 "phantom type".
 
@@ -247,7 +247,7 @@ implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, ?]] =
 
 We have our `Applicative`!
 
-Going back to `Traverse`, we fill in the first paramter of `traverse` with `fa` since that's
+Going back to `Traverse`, we fill in the first parameter of `traverse` with `fa` since that's
 the only value that fits.
 
 Now we need a `A => G[B]`. We have an `A => B`, and we've decided to use `Const` for our `G[_]`. We need to

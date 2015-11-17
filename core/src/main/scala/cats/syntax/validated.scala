@@ -7,7 +7,7 @@ trait ValidatedSyntax {
   implicit def validatedIdSyntax[A](a: A): ValidatedIdSyntax[A] = new ValidatedIdSyntax(a)
 }
 
-class ValidatedIdSyntax[A](val a: A) extends AnyVal {
+final class ValidatedIdSyntax[A](val a: A) extends AnyVal {
   def valid[B]: Validated[B, A] = Validated.Valid(a)
   def validNel[B]: ValidatedNel[B, A] = Validated.Valid(a)
   def invalid[B]: Validated[A, B] = Validated.Invalid(a)
