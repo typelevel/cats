@@ -87,7 +87,7 @@ class InjectTests extends CatsSuite {
       val expr1: Free[T, Int] = Inject.inject[T, Test1Algebra, Int](Test1(x, Free.pure))
       val expr2: Free[T, Int] = Inject.inject[T, Test2Algebra, Int](Test2(y, Free.pure))
       val res = distr[T, Int](expr1 >> expr2)
-      res.contains(Free.pure(x + y)) should ===(true)
+      res == Some(Free.pure(x + y)) should ===(true)
     }
   }
 
