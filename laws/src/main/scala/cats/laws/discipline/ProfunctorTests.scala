@@ -15,13 +15,18 @@ trait ProfunctorTests[F[_, _]] extends Laws {
     ArbFAB: Arbitrary[F[A, B]],
     ArbFCD: Arbitrary[F[C, D]],
     EqFAB: Eq[F[A, B]],
+    EqFAD: Eq[F[A, D]],
     EqFAG: Eq[F[A, G]]
   ): RuleSet =
     new DefaultRuleSet(
       name = "profunctor",
       parent = None,
       "profunctor identity" -> forAll(laws.profunctorIdentity[A, B] _),
-      "profunctor composition" -> forAll(laws.profunctorComposition[A, B, C, D, E, G] _))
+      "profunctor composition" -> forAll(laws.profunctorComposition[A, B, C, D, E, G] _),
+      "profunctor lmap identity" -> forAll(laws.profunctorLmapIdentity[A, B] _),
+      "profunctor rmap identity" -> forAll(laws.profunctorRmapIdentity[A, B] _),
+      "profunctor lmap composition" -> forAll(laws.profunctorLmapComposition[A, B, C, D] _),
+      "profunctor rmap composition" -> forAll(laws.profunctorRmapComposition[A, D, C, B] _))
 }
 
 object ProfunctorTests {
