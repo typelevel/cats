@@ -13,6 +13,7 @@ This file lists the people whose contributions have made Cats
 possible:
 
  * Adelbert Chang
+ * Alessandro Lacava
  * Alissa Pajer
  * Alistair Johnson
  * Amir Mohammad Saied
