@@ -56,12 +56,6 @@ val withFallback: Future[String] = customGreetingT.getOrElse("hello, there!")
 Sometimes you may have an `Option[A]` and/or `F[A]` and want to *lift* them into an `OptionT[F, A]`. For this purpose `OptionT` exposes two useful methods, namely `fromOption` and `liftF`, respectively. E.g.:
 
 ```tut:silent
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
-
-import cats.data.OptionT
-import cats.std.future._
-
 val greetingFO: Future[Option[String]] = Future.successful(Some("Hello"))
 
 val firstnameF: Future[String] = Future.successful("Jane")

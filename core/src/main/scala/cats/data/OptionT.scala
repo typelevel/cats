@@ -125,7 +125,7 @@ object OptionT extends OptionTInstances {
     * Lifts the `F[A]` Functor into an `OptionT[F, A]`.
     *
     */
-  def liftF[F[_], A](fa: F[A])(implicit F: Functor[F]): OptionT[F, A] = OptionT(F.map(fa)(Option(_)))
+  def liftF[F[_], A](fa: F[A])(implicit F: Functor[F]): OptionT[F, A] = OptionT(F.map(fa)(Some(_)))
 }
 
 private[data] sealed trait OptionTInstances1 {
