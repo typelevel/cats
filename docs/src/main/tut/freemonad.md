@@ -352,7 +352,7 @@ val result: Map[String, Int] = compilePure(program, Map.empty)
 
 Real world applications often time combine different algebras. 
 The `Inject` typeclass described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
-let us compose different algebras in the context of `Free`
+let us compose different algebras in the context of `Free`.
 
 Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that conform a more complex program.
 
@@ -376,13 +376,13 @@ case class AddCat(a: String) extends DataOp[Unit]
 case class GetAllCats() extends DataOp[List[String]]
 ```
 
-Once the ADTs are defined we can formally state that a `Free` program is the Coproduct of it's Algebras
+Once the ADTs are defined we can formally state that a `Free` program is the Coproduct of it's Algebras.
 
 ```tut
 type CatsApp[A] = Coproduct[DataOp, Interact, A]
 ```
 
-In order to take advantage of monadic composition ee use smart constructors to lift our Algebra to the `Free` context
+In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the `Free` context.
 
 ```tut
 def lift[F[_], G[_], A](fa: F[A])(implicit I: Inject[F, G]): Free[G, A] =
@@ -407,7 +407,7 @@ object DataSource {
 }
 ```
 
-ADTs are now easily composed and trivially intertwined inside monadic contexts
+ADTs are now easily composed and trivially intertwined inside monadic contexts.
 
 ```tut 
 def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]) = {
@@ -461,8 +461,6 @@ import DataSource._, Interacts._
 
 val evaled = program.foldMap(interpreter)
 ```
-
-The pattern presented above allows us to compose Monads that result into Coproducts thanks to the Inject typeclass.
 
 ## <a name="what-is-free-in-theory"></a>For the curious ones: what is Free in theory?
 
