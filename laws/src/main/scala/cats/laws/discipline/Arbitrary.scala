@@ -91,7 +91,4 @@ object arbitrary {
   implicit def showArbitrary[A: Arbitrary]: Arbitrary[Show[A]] =
     Arbitrary(Show.fromToString[A])
 
-
-
-
 }
