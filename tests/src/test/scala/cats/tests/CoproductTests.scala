@@ -1,6 +1,7 @@
 package cats.tests
 
 import algebra.Eq
+import algebra.laws.OrderLaws
 import cats._
 import cats.data.Coproduct
 import cats.functor.Contravariant
@@ -15,6 +16,9 @@ class CoproductTests extends CatsSuite {
 
   checkAll("Coproduct[Eval, Eval, ?]", ComonadTests[Coproduct[Eval, Eval, ?]].comonad[Int, Int, Int])
   checkAll("Comonad[Coproduct[Eval, Eval, ?]]", SerializableTests.serializable(Comonad[Coproduct[Eval, Eval, ?]]))
+
+  checkAll("Coproduct[Option, Option, Int]", OrderLaws[Coproduct[Option, Option, Int]].eqv)
+  checkAll("Eq[Coproduct[Option, Option, Int]]", SerializableTests.serializable(Eq[Coproduct[Option, Option, Int]]))
 
   implicit def showEq[A](implicit arbA: Arbitrary[A], stringEq: Eq[String]): Eq[Show[A]] = new Eq[Show[A]] {
     def eqv(f: Show[A], g: Show[A]): Boolean = {
