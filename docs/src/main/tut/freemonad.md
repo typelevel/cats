@@ -348,6 +348,124 @@ it's not too hard to get around.)
 val result: Map[String, Int] = compilePure(program, Map.empty)
 ```
 
+## Composing Free monads ADTs.
+
+Real world applications often time combine different algebras. 
+You may have heard that monads do not compose. 
+That is not entirely true if you think of an Application as the `Coproduct` of it's algebras.
+The `Inject` typeclass described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
+let us compose different algebras in the context of `Free`
+
+Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that conform a more complex program.
+
+```tut
+import cats.arrow.NaturalTransformation
+import cats.data.{Xor, Coproduct}
+import cats.free.{Inject, Free}
+import cats.{Id, ~>}
+import scala.collection.mutable.ListBuffer
+```
+
+```tut
+/* Handles user interaction */
+sealed trait Interact[A]
+case class Ask(prompt: String) extends Interact[String]
+case class Tell(msg: String) extends Interact[Unit]
+
+/* Represents persistence operations */
+sealed trait DataOp[A]
+case class AddCat(a: String) extends DataOp[Unit]
+case class GetAllCats() extends DataOp[List[String]]
+```
+
+Once we define our ADTs we can state that an Application is the Coproduct of it's Algebras
+
+```tut
+type CatsApp[A] = Coproduct[DataOp, Interact, A]
+```
+
+We use smart constructors to lift our Algebra to the `Free` context
+
+```tut
+def lift[F[_], G[_], A](fa: F[A])(implicit I: Inject[F, G]): Free[G, A] =
+  Free.liftF(I.inj(fa))
+
+class Interacts[F[_]](implicit I: Inject[Interact, F]) {
+  def tell(msg: String): Free[F, Unit] = lift(Tell(msg))
+  def ask(prompt: String): Free[F, String] = lift(Ask(prompt))
+}
+
+object Interacts {
+  implicit def interacts[F[_]](implicit I: Inject[Interact, F]): Interacts[F] = new Interacts[F]
+}
+
+class DataSource[F[_]](implicit I: Inject[DataOp, F]) {
+  def addCat(a: String): Free[F, Unit] = lift[DataOp, F, Unit](AddCat(a))
+  def getAllCats: Free[F, List[String]] = lift[DataOp, F, List[String]](GetAllCats())
+}
+
+object DataSource {
+  implicit def dataSource[F[_]](implicit I: Inject[DataOp, F]): DataSource[F] = new DataSource[F]
+}
+```
+
+We may now easily compose the ADTs into our program
+
+```tut 
+def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]) = {
+
+  import I._, D._
+
+  for {
+    cat <- ask("What's the kitty's name")
+    _ <- addCat(cat)
+    cats <- getAllCats
+    _ <- tell(cats.toString)
+  } yield ()
+}
+```
+
+Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so when they are compiled and 
+applied to our `Free` program.
+
+```scala
+object ConsoleCatsInterpreter extends (Interact ~> Id) {
+  def apply[A](i: Interact[A]) = i match {
+    case Ask(prompt) =>
+      println(prompt)
+      scala.io.StdIn.readLine()
+    case Tell(msg) =>
+      println(msg)
+  }
+}
+
+object InMemoryDatasourceInterpreter extends (DataOp ~> Id) {
+
+  private[this] val memDataSet = new ListBuffer[String]
+
+  def apply[A](fa: DataOp[A]) = fa match {
+    case AddCat(a) => memDataSet.append(a); ()
+    case GetAllCats() => memDataSet.toList
+  }
+}
+
+def or[F[_], G[_], H[_]](f: F ~> H, g: G ~> H): Coproduct[F, G, ?] ~> H =
+  new NaturalTransformation[Coproduct[F, G, ?], H] {
+    def apply[A](fa: Coproduct[F, G, A]): H[A] = fa.run match {
+      case Xor.Left(ff) => f(ff)
+      case Xor.Right(gg) => g(gg)
+    }
+  }
+
+val interpreter: CatsApp ~> Id = or(InMemoryDatasourceInterpreter, ConsoleCatsInterpreter)
+
+import DataSource._, Interacts._
+
+val evaled = program.foldMap(interpreter)
+```
+
+The pattern presented above allows us to compose Monads that result into Coproducts thanks to the Inject typeclass.
+
 ## <a name="what-is-free-in-theory"></a>For the curious ones: what is Free in theory?
 
 Mathematically-speaking, a *free monad* (at least in the programming
