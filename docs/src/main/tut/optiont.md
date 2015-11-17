@@ -51,6 +51,33 @@ val noWelcome: OptionT[Future, String] = customGreetingT.filterNot(_.contains("w
 val withFallback: Future[String] = customGreetingT.getOrElse("hello, there!")
 ```
 
+## From `Option[A]` and/or `F[A]` to `OptionT[F, A]`
+
+Sometimes you may have an `Option[A]` and/or `F[A]` and want to *lift* them into an `OptionT[F, A]`. For this purpose `OptionT` exposes two useful methods, namely `fromOption` and `liftF`, respectively. E.g.:
+
+```tut:silent
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import cats.data.OptionT
+import cats.std.future._
+
+val greetingFO: Future[Option[String]] = Future.successful(Some("Hello"))
+
+val firstnameF: Future[String] = Future.successful("Jane")
+
+val lastnameO: Option[String] = Some("Doe")
+
+val ot: OptionT[Future, String] = for {
+  g <- OptionT(greetingFO)
+  f <- OptionT.liftF(firstnameF)
+  l <- OptionT.fromOption(lastnameO)
+} yield s"$g $f $l"
+
+val result: Future[Option[String]] = ot.value // Future(Some("Hello Jane Doe"))
+
+```
+
 ## Beyond map
 
 Sometimes the operation you want to perform on an `Option[Future[String]]` might not be as simple as just wrapping the `Option` method in a `Future.map` call. For example, what if we want to greet the customer with their custom greeting if it exists but otherwise fall back to a default `Future[String]` greeting? Without `OptionT`, this implementation might look like:

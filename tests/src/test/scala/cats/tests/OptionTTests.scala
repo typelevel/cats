@@ -111,6 +111,12 @@ class OptionTTests extends CatsSuite {
     }
   }
 
+  test("liftF") {
+    forAll { (xs: List[Int]) =>
+      xs.map(Option(_)) should ===(OptionT.liftF(xs).value)
+    }
+  }
+
   test("show"){
     val xor: String Xor Option[Int] = Xor.right(Some(1))
     OptionT[Xor[String, ?], Int](xor).show should === ("Xor.Right(Some(1))")
