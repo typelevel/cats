@@ -24,6 +24,20 @@ class XorTests extends CatsSuite {
 
   checkAll("Xor[Int, String]", OrderLaws[String Xor Int].order)
 
+  {
+    implicit val S = ListWrapper.partialOrder[String]
+    implicit val I = ListWrapper.partialOrder[Int]
+    checkAll("ListWrapper[String] Xor ListWrapper[Int]", OrderLaws[ListWrapper[String] Xor ListWrapper[Int]].partialOrder)
+    checkAll("PartialOrder[ListWrapper[String] Xor ListWrapper[Int]]", SerializableTests.serializable(PartialOrder[ListWrapper[String] Xor ListWrapper[Int]]))
+  }
+
+  {
+    implicit val S = ListWrapper.eqv[String]
+    implicit val I = ListWrapper.eqv[Int]
+    checkAll("ListWrapper[String] Xor ListWrapper[Int]", OrderLaws[ListWrapper[String] Xor ListWrapper[Int]].eqv)
+    checkAll("Eq[ListWrapper[String] Xor ListWrapper[Int]]", SerializableTests.serializable(Eq[ListWrapper[String] Xor ListWrapper[Int]]))
+  }
+
   implicit val arbitraryXor: Arbitrary[Xor[Int, String]] = Arbitrary {
     for {
       left <- arbitrary[Boolean]
