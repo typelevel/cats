@@ -352,9 +352,9 @@ val result: Map[String, Int] = compilePure(program, Map.empty)
 
 Real world applications often time combine different algebras. 
 The `Inject` typeclass described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
-let us compose different algebras in the context of `Free`.
+lets us compose different algebras in the context of `Free`.
 
-Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that conform a more complex program.
+Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.
 
 ```tut
 import cats.arrow.NaturalTransformation
@@ -423,7 +423,7 @@ def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]) = {
 }
 ```
 
-Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so when they can be
+Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so they can be
 compiled and applied to our `Free` program.
 
 ```scala

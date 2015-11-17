@@ -9,5 +9,5 @@ trait CoproductSyntax {
 
 final class CoproductOps[F[_], A](val a: F[A]) extends AnyVal {
   def leftc[G[_]]: Coproduct[F, G, A] = Coproduct.leftc(a)
-  def rightc[G[_]]: Coproduct[G, F, Made A] = Coproduct.rightc(a)
+  def rightc[G[_]]: Coproduct[G, F, A] = Coproduct.rightc(a)
 }
