@@ -351,8 +351,6 @@ val result: Map[String, Int] = compilePure(program, Map.empty)
 ## Composing Free monads ADTs.
 
 Real world applications often time combine different algebras. 
-You may have heard that monads do not compose. 
-That is not entirely true if you think of an Application as the `Coproduct` of it's algebras.
 The `Inject` typeclass described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
 let us compose different algebras in the context of `Free`
 
@@ -378,13 +376,13 @@ case class AddCat(a: String) extends DataOp[Unit]
 case class GetAllCats() extends DataOp[List[String]]
 ```
 
-Once we define our ADTs we can state that an Application is the Coproduct of it's Algebras
+Once the ADTs are defined we can formally state that a `Free` program is the Coproduct of it's Algebras
 
 ```tut
 type CatsApp[A] = Coproduct[DataOp, Interact, A]
 ```
 
-We use smart constructors to lift our Algebra to the `Free` context
+In order to take advantage of monadic composition ee use smart constructors to lift our Algebra to the `Free` context
 
 ```tut
 def lift[F[_], G[_], A](fa: F[A])(implicit I: Inject[F, G]): Free[G, A] =
@@ -409,7 +407,7 @@ object DataSource {
 }
 ```
 
-We may now easily compose the ADTs into our program
+ADTs are now easily composed and trivially intertwined inside monadic contexts
 
 ```tut 
 def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]) = {
@@ -425,8 +423,8 @@ def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]) = {
 }
 ```
 
-Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so when they are compiled and 
-applied to our `Free` program.
+Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so when they can be
+compiled and applied to our `Free` program.
 
 ```scala
 object ConsoleCatsInterpreter extends (Interact ~> Id) {
