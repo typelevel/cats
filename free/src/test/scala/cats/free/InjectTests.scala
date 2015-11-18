@@ -1,6 +1,7 @@
 package cats
 package free
 
+import cats.arrow.NaturalTransformation
 import cats.data.{Xor, Coproduct}
 import cats.laws.discipline.arbitrary
 import cats.tests.CatsSuite
@@ -40,14 +41,6 @@ class InjectTests extends CatsSuite {
   implicit def test2Arbitrary[A](implicit seqArb: Arbitrary[Int], intAArb : Arbitrary[Int => A]): Arbitrary[Test2[A]] =
     Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test2(s, f))
 
-  def or[F[_], G[_], H[_]](f: F ~> H, g: G ~> H): Coproduct[F, G, ?] ~> H =
-    new (Coproduct[F, G, ?] ~> H) {
-      def apply[A](fa: Coproduct[F, G, A]): H[A] = fa.run match {
-        case Xor.Left(ff) => f(ff)
-        case Xor.Right(gg) => g(gg)
-      }
-    }
-
   object Test1Interpreter extends (Test1Algebra ~> Id) {
     override def apply[A](fa: Test1Algebra[A]): Id[A] = fa match {
       case Test1(k, h) => Id.pure[A](h(k))
@@ -60,7 +53,7 @@ class InjectTests extends CatsSuite {
     }
   }
 
-  val coProductInterpreter: T ~> Id = or(Test1Interpreter, Test2Interpreter)
+  val coProductInterpreter: T ~> Id = NaturalTransformation.or(Test1Interpreter, Test2Interpreter)
 
   test("inj") {
     forAll { (x: Int, y: Int) =>

@@ -447,15 +447,7 @@ object InMemoryDatasourceInterpreter extends (DataOp ~> Id) {
   }
 }
 
-def or[F[_], G[_], H[_]](f: F ~> H, g: G ~> H): Coproduct[F, G, ?] ~> H =
-  new NaturalTransformation[Coproduct[F, G, ?], H] {
-    def apply[A](fa: Coproduct[F, G, A]): H[A] = fa.run match {
-      case Xor.Left(ff) => f(ff)
-      case Xor.Right(gg) => g(gg)
-    }
-  }
-
-val interpreter: CatsApp ~> Id = or(InMemoryDatasourceInterpreter, ConsoleCatsInterpreter)
+val interpreter: CatsApp ~> Id = NaturalTransformation.or(InMemoryDatasourceInterpreter, ConsoleCatsInterpreter)
 
 import DataSource._, Interacts._
 
