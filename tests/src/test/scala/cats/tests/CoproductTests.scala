@@ -14,8 +14,14 @@ class CoproductTests extends CatsSuite {
   checkAll("Coproduct[Option, Option, ?]", TraverseTests[Coproduct[Option, Option, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Coproduct[Option, Option, ?]]", SerializableTests.serializable(Traverse[Coproduct[Option, Option, ?]]))
 
+  checkAll("Coproduct[Option, Option, ?]", FoldableTests[Coproduct[Option, Option, ?]].foldable[Int, Int])
+  checkAll("Foldable[Coproduct[Option, Option, ?]]", SerializableTests.serializable(Foldable[Coproduct[Option, Option, ?]]))
+
   checkAll("Coproduct[Eval, Eval, ?]", ComonadTests[Coproduct[Eval, Eval, ?]].comonad[Int, Int, Int])
   checkAll("Comonad[Coproduct[Eval, Eval, ?]]", SerializableTests.serializable(Comonad[Coproduct[Eval, Eval, ?]]))
+
+  checkAll("Coproduct[Eval, Eval, ?]", CoflatMapTests[Coproduct[Eval, Eval, ?]].coflatMap[Int, Int, Int])
+  checkAll("CoflatMap[Coproduct[Eval, Eval, ?]]", SerializableTests.serializable(CoflatMap[Coproduct[Eval, Eval, ?]]))
 
   checkAll("Coproduct[Option, Option, Int]", OrderLaws[Coproduct[Option, Option, Int]].eqv)
   checkAll("Eq[Coproduct[Option, Option, Int]]", SerializableTests.serializable(Eq[Coproduct[Option, Option, Int]]))
