@@ -30,6 +30,13 @@ object Free {
   /** Lift a pure value into Free */
   def pure[S[_], A](a: A): Free[S, A] = Pure(a)
 
+  final class FreeInjectPartiallyApplied[F[_], G[_]] private[free] {
+    def apply[A](fa: F[A])(implicit I : Inject[F, G]): Free[G, A] =
+      Free.liftF(I.inj(fa))
+  }
+
+  def inject[F[_], G[_]]: FreeInjectPartiallyApplied[F, G] = new FreeInjectPartiallyApplied
+
   /**
    * `Free[S, ?]` has a monad for any type constructor `S[_]`.
    */

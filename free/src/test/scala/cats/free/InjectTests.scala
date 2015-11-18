@@ -55,13 +55,19 @@ class InjectTests extends CatsSuite {
 
   val coProductInterpreter: T ~> Id = NaturalTransformation.or(Test1Interpreter, Test2Interpreter)
 
+  val x: Free[T, Int] = Free.inject[Test1Algebra, T](Test1(1, identity))
+
   test("inj") {
     forAll { (x: Int, y: Int) =>
-      val res = for {
-        a <- Inject.inject[T, Test1Algebra, Int](Test1(x, Free.pure))
-        b <- Inject.inject[T, Test2Algebra, Int](Test2(y, Free.pure))
-      } yield a + b
-      (res foldMap coProductInterpreter) == Id.pure(x + y) should ===(true)
+        def res[F[_]]
+            (implicit I0: Test1Algebra :<: F,
+            I1: Test2Algebra :<: F): Free[F, Int] = {
+          for {
+            a <- Free.inject[Test1Algebra, F](Test1(x, identity))
+            b <- Free.inject[Test2Algebra, F](Test2(y, identity))
+          } yield a + b
+        }
+      (res[T] foldMap coProductInterpreter) == Id.pure(x + y) should ===(true)
     }
   }
 
