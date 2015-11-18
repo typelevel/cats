@@ -82,4 +82,7 @@ object arbitrary {
   // until this is provided by scalacheck
   implicit def partialFunctionArbitrary[A, B](implicit F: Arbitrary[A => Option[B]]): Arbitrary[PartialFunction[A, B]] =
     Arbitrary(F.arbitrary.map(Function.unlift))
+
+  implicit def thunkArbitrary[A](implicit F: Arbitrary[A]): Arbitrary[() => A] =
+    Arbitrary(F.arbitrary.map(a => () => a))
 }

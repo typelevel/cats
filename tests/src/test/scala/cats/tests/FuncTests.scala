@@ -4,6 +4,7 @@ package tests
 import cats.data.{ Func, AppFunc, Const }
 import Func.{ appFunc, appFuncU }
 import cats.laws.discipline._
+import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 
 class FuncTests extends CatsSuite {
@@ -12,6 +13,10 @@ class FuncTests extends CatsSuite {
     Eq.by[Func[F, A, B], A => F[B]](_.run)
   implicit def appFuncEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[AppFunc[F, A, B]] =
     Eq.by[AppFunc[F, A, B], A => F[B]](_.run)
+
+  implicit val iso = MonoidalTests.Isomorphisms.covariant[Func[Option, Int, ?]]
+  checkAll("Func[Option, Int, Int]", MonoidalTests[Func[Option, Int, ?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[Func[Option, Int, ?]]", SerializableTests.serializable(Monoidal[Func[Option, Int, ?]]))
 
   {
     implicit val funcApp = Func.funcApplicative[Option, Int]

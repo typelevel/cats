@@ -4,9 +4,9 @@ package tests
 import algebra.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{NonEmptyList, OneAnd}
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests}
+import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, MonoidalTests}
 import cats.laws.discipline.arbitrary.{evalArbitrary, oneAndArbitrary}
-
+import cats.laws.discipline.eq._
 
 import scala.util.Random
 
@@ -14,6 +14,13 @@ class OneAndTests extends CatsSuite {
   checkAll("OneAnd[Int, List]", OrderLaws[OneAnd[Int, List]].eqv)
 
   // Test instances that have more general constraints
+  {
+    implicit val monadCombine = ListWrapper.monadCombine
+    implicit val iso = MonoidalTests.Isomorphisms.covariant[OneAnd[?, ListWrapper]]
+    checkAll("OneAnd[Int, ListWrapper]", MonoidalTests[OneAnd[?, ListWrapper]].monoidal[Int, Int, Int])
+    checkAll("Monoidal[OneAnd[A, ListWrapper]]", SerializableTests.serializable(Monoidal[OneAnd[?, ListWrapper]]))
+  }
+
   {
     implicit val functor = ListWrapper.functor
     checkAll("OneAnd[Int, ListWrapper]", FunctorTests[OneAnd[?, ListWrapper]].functor[Int, Int, Int])

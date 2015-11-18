@@ -5,9 +5,13 @@ import algebra.laws.OrderLaws
 
 import cats.data.Streaming
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests}
+import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests, MonoidalTests}
+import cats.laws.discipline.eq.tuple3Eq
 
 class StreamingTests extends CatsSuite {
+  checkAll("Streaming[Int]", MonoidalTests[Streaming].monoidal[Int, Int, Int])
+  checkAll("Monoidal[Streaming]", SerializableTests.serializable(Monoidal[Streaming]))
+
   checkAll("Streaming[Int]", CoflatMapTests[Streaming].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[Streaming]", SerializableTests.serializable(CoflatMap[Streaming]))
 

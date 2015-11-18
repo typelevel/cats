@@ -4,10 +4,15 @@ package tests
 import algebra.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{Const, NonEmptyList}
-import cats.laws.discipline.{ApplyTests, ApplicativeTests, SerializableTests, TraverseTests}
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary.{constArbitrary, oneAndArbitrary}
 
 class ConstTests extends CatsSuite {
+
+  implicit val iso = MonoidalTests.Isomorphisms.covariant[Const[String, ?]]
+  checkAll("Const[String, Int]", MonoidalTests[Const[String, ?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[Const[String, ?]]", SerializableTests.serializable(Monoidal[Const[String, ?]]))
+
   checkAll("Const[String, Int]", ApplicativeTests[Const[String, ?]].applicative[Int, Int, Int])
   checkAll("Applicative[Const[String, ?]]", SerializableTests.serializable(Applicative[Const[String, ?]]))
 

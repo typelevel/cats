@@ -1,9 +1,13 @@
 package cats
 package tests
 
-import cats.laws.discipline.{CoflatMapTests, MonadCombineTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{CoflatMapTests, MonadCombineTests, SerializableTests, TraverseTests, MonoidalTests}
+import cats.laws.discipline.eq.tuple3Eq
 
 class StreamTests extends CatsSuite {
+  checkAll("Stream[Int]", MonoidalTests[Stream].monoidal[Int, Int, Int])
+  checkAll("Monoidal[Stream]", SerializableTests.serializable(Monoidal[Stream]))
+
   checkAll("Stream[Int]", CoflatMapTests[Stream].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[Stream]", SerializableTests.serializable(CoflatMap[Stream]))
 

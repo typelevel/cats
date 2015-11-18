@@ -1,9 +1,10 @@
 package cats.tests
 
-import cats.{Id, Monad}
+import cats.{Id, Monad, Monoidal}
 import cats.data.{OptionT, Xor}
-import cats.laws.discipline.{MonadTests, SerializableTests}
+import cats.laws.discipline.{MonadTests, SerializableTests, MonoidalTests}
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
 
 class OptionTTests extends CatsSuite {
@@ -111,6 +112,10 @@ class OptionTTests extends CatsSuite {
     }
   }
 
+  implicit val iso = MonoidalTests.Isomorphisms.covariant[OptionT[List, ?]]
+  checkAll("OptionT[List, Int]", MonoidalTests[OptionT[List, ?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[OptionT[List, ?]]", SerializableTests.serializable(Monoidal[OptionT[List, ?]]))
+
   checkAll("OptionT[List, Int]", MonadTests[OptionT[List, ?]].monad[Int, Int, Int])
-  checkAll("MonadOptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
+  checkAll("Monad[OptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
 }

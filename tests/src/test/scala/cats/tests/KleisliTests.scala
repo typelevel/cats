@@ -15,6 +15,10 @@ class KleisliTests extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
     Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
+  implicit val iso = MonoidalTests.Isomorphisms.covariant[Kleisli[Option, Int, ?]]
+  checkAll("Kleisli[Option, Int, Int]", MonoidalTests[Kleisli[Option, Int, ?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Monoidal[Kleisli[Option, Int, ?]]))
+
   {
     implicit val kleisliArrow = Kleisli.kleisliArrow[Option]
     checkAll("Kleisli[Option, Int, Int]", ArrowTests[Kleisli[Option, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])

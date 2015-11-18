@@ -3,15 +3,20 @@ package tests
 
 import cats.data.{NonEmptyList, Validated}
 import cats.data.Validated.{Valid, Invalid}
-import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeTests, SerializableTests}
+import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeTests, SerializableTests, MonoidalTests}
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq.tuple3Eq
 import algebra.laws.OrderLaws
 
 import scala.util.Try
 
 class ValidatedTests extends CatsSuite {
+  implicit val iso = MonoidalTests.Isomorphisms.covariant[Validated[String, ?]]
+  checkAll("Validated[String, Int]", MonoidalTests[Validated[String,?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[Validated[String,?]]", SerializableTests.serializable(Monoidal[Validated[String,?]]))
+
   checkAll("Validated[String, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
   checkAll("Validated[?, ?]", BifunctorTests[Validated].bifunctor[Int, Int, Int, Int, Int, Int])
   checkAll("Applicative[Validated[String,?]]", SerializableTests.serializable(Applicative[Validated[String,?]]))

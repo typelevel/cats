@@ -2,13 +2,18 @@ package cats
 package tests
 
 import cats.data.{Xor, Ior}
-import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadTests, SerializableTests}
+import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadTests, SerializableTests, MonoidalTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary._
 
 class IorTests extends CatsSuite {
+
+  implicit val iso = MonoidalTests.Isomorphisms.covariant[Ior[String, ?]]
+  checkAll("Ior[String, Int]", MonoidalTests[Ior[String, ?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[String Ior ?]]", SerializableTests.serializable(Monoidal[String Ior ?]))
+
   checkAll("Ior[String, Int]", MonadTests[String Ior ?].monad[Int, Int, Int])
   checkAll("Monad[String Ior ?]]", SerializableTests.serializable(Monad[String Ior ?]))
 
