@@ -81,7 +81,7 @@ object Coproduct extends CoproductInstances {
 
 }
 
-sealed abstract class CoproductInstances3 {
+private[data] sealed abstract class CoproductInstances3 {
 
   implicit def coproductEq[F[_], G[_], A](implicit E: Eq[F[A] Xor G[A]]): Eq[Coproduct[F, G, A]] =
     Eq.by(_.run)
@@ -101,7 +101,7 @@ sealed abstract class CoproductInstances3 {
     }
 }
 
-sealed abstract class CoproductInstances2 extends CoproductInstances3 {
+private[data] sealed abstract class CoproductInstances2 extends CoproductInstances3 {
 
   implicit def coproductContravariant[F[_], G[_]](implicit F0: Contravariant[F], G0: Contravariant[G]): Contravariant[Coproduct[F, G, ?]] =
     new CoproductContravariant[F, G] {
@@ -111,7 +111,7 @@ sealed abstract class CoproductInstances2 extends CoproductInstances3 {
     }
 }
 
-sealed abstract class CoproductInstances1 extends CoproductInstances2 {
+private[data] sealed abstract class CoproductInstances1 extends CoproductInstances2 {
   implicit def coproductCoflatMap[F[_], G[_]](implicit F0: CoflatMap[F], G0: CoflatMap[G]): CoflatMap[Coproduct[F, G, ?]] =
     new CoproductCoflatMap[F, G] {
       implicit def F: CoflatMap[F] = F0
@@ -120,7 +120,7 @@ sealed abstract class CoproductInstances1 extends CoproductInstances2 {
     }
 }
 
-sealed abstract class CoproductInstances0 extends CoproductInstances1 {
+private[data] sealed abstract class CoproductInstances0 extends CoproductInstances1 {
   implicit def coproductTraverse[F[_], G[_]](implicit F0: Traverse[F], G0: Traverse[G]): Traverse[Coproduct[F, G, ?]] =
     new CoproductTraverse[F, G] {
       implicit def F: Traverse[F] = F0
