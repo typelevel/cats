@@ -385,12 +385,9 @@ type CatsApp[A] = Coproduct[DataOp, Interact, A]
 In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the `Free` context.
 
 ```tut
-def lift[F[_], G[_], A](fa: F[A])(implicit I: Inject[F, G]): Free[G, A] =
-  Free.liftF(I.inj(fa))
-
 class Interacts[F[_]](implicit I: Inject[Interact, F]) {
-  def tell(msg: String): Free[F, Unit] = lift(Tell(msg))
-  def ask(prompt: String): Free[F, String] = lift(Ask(prompt))
+  def tell(msg: String): Free[F, Unit] = Free.inject[Interact, F](Tell(msg))
+  def ask(prompt: String): Free[F, String] = Free.inject[Interact, F](Ask(prompt))
 }
 
 object Interacts {
@@ -398,8 +395,8 @@ object Interacts {
 }
 
 class DataSource[F[_]](implicit I: Inject[DataOp, F]) {
-  def addCat(a: String): Free[F, Unit] = lift[DataOp, F, Unit](AddCat(a))
-  def getAllCats: Free[F, List[String]] = lift[DataOp, F, List[String]](GetAllCats())
+  def addCat(a: String): Free[F, Unit] = Free.inject[DataOp, F](AddCat(a))
+  def getAllCats: Free[F, List[String]] = Free.inject[DataOp, F](GetAllCats())
 }
 
 object DataSource {
