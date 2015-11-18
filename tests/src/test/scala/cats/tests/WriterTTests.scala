@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.data.{Writer, WriterT}
+import cats.functor.Bifunctor
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
@@ -56,6 +57,9 @@ class WriterTTests extends CatsSuite {
     Functor[Writer[ListWrapper[Int], ?]]
 
     Functor[Logged]
+
+    checkAll("WriterT[ListWrapper, ?, ?]", BifunctorTests[WriterT[ListWrapper, ?, ?]].bifunctor[Int, Int, Int, Int, Int, Int])
+    checkAll("Bifunctor[WriterT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bifunctor[WriterT[ListWrapper, ?, ?]]))
   }
 
   // We have varying instances available depending on `F` and `L`.
