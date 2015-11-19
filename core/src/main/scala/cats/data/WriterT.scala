@@ -1,7 +1,7 @@
 package cats
 package data
 
-import functor.Bifunctor
+import cats.functor.Bifunctor
 
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {
   def written(implicit functorF: Functor[F]): F[L] =
