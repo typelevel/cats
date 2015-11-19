@@ -808,8 +808,8 @@ object Streaming extends StreamingInstances {
    * Continually return the result of a thunk.
    *
    * This method only differs from `continually` in that the thunk may
-   * not be pure. The stream is memoized to ensure that repeated
-   * traversals produce the same results.
+   * not be pure. Thus, repeated traversals may produce different
+   * results.
    */
   def thunk[A](f: () => A): Streaming[A] =
     knot(s => Cons(f(), s), memo = false)
