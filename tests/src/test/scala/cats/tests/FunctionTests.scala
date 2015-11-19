@@ -8,6 +8,7 @@ import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import algebra.laws.GroupLaws
 
 class FunctionTests extends CatsSuite {
   implicit def ev0[A: Arbitrary]: Arbitrary[() => A] = Arbitrary(Arbitrary.arbitrary[A].map { a => () => a })
@@ -25,4 +26,6 @@ class FunctionTests extends CatsSuite {
 
   checkAll("Function1[Int, Int]", ContravariantTests[? => Int].contravariant[Int, Int, Int])
   checkAll("Contravariant[? => Int]", SerializableTests.serializable(Contravariant[? => Int]))
+
+  checkAll("Function1[String, Int]", GroupLaws[Function1[String, Int]].monoid)
 }
