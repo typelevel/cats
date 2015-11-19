@@ -47,6 +47,14 @@ class OneAndTests extends CatsSuite {
   checkAll("NonEmptyList[Int]", ComonadTests[NonEmptyList].comonad[Int, Int, Int])
   checkAll("Comonad[NonEmptyList[A]]", SerializableTests.serializable(Comonad[NonEmptyList]))
 
+  test("Show is not empty and is formatted as expected") {
+    forAll { (nel: NonEmptyList[Int]) =>
+      nel.show.nonEmpty should === (true)
+      nel.show.startsWith("OneAnd") should === (true)
+      nel.show should === (implicitly[Show[NonEmptyList[Int]]].show(nel))
+    }
+  }
+
   test("Creating OneAnd + unwrap is identity") {
     forAll { (i: Int, tail: List[Int]) =>
       val list = i :: tail
