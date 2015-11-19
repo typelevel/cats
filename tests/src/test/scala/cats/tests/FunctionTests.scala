@@ -17,8 +17,10 @@ class FunctionTests extends CatsSuite {
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
   checkAll("Bimonad[Function0]", SerializableTests.serializable(Bimonad[Function0]))
 
-  implicit val iso = MonoidalTests.Isomorphisms.covariant[Function1[Int, ?]]
-  checkAll("Function1[Int, Int]", MonoidalTests[Function1[Int, ?]].monoidal[Int, Int, Int])
+  {
+    implicit val iso = MonoidalTests.Isomorphisms.covariant[Function1[Int, ?]]
+    checkAll("Function1[Int, Int]", MonoidalTests[Function1[Int, ?]].monoidal[Int, Int, Int])
+  }
   checkAll("Monoidal[Function1[Int, ?]]", SerializableTests.serializable(Monoidal[Function1[Int, ?]]))
 
   checkAll("Function1[Int, Int]", MonadReaderTests[Int => ?, Int].monadReader[Int, Int, Int])

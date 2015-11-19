@@ -13,8 +13,8 @@ class ConstTests extends CatsSuite {
   {
     implicit val iso = MonoidalTests.Isomorphisms.covariant[Const[String, ?]]
     checkAll("Const[String, Int]", MonoidalTests[Const[String, ?]].monoidal[Int, Int, Int])
-    checkAll("Monoidal[Const[String, ?]]", SerializableTests.serializable(Monoidal[Const[String, ?]]))
   }
+  checkAll("Monoidal[Const[String, ?]]", SerializableTests.serializable(Monoidal[Const[String, ?]]))
 
   checkAll("Const[String, Int]", ApplicativeTests[Const[String, ?]].applicative[Int, Int, Int])
   checkAll("Applicative[Const[String, ?]]", SerializableTests.serializable(Applicative[Const[String, ?]]))
@@ -42,4 +42,9 @@ class ConstTests extends CatsSuite {
 
   checkAll("Const[String, Int]", ContravariantTests[Const[String, ?]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Const[String, ?]]", SerializableTests.serializable(Contravariant[Const[String, ?]]))
+
+  {
+    implicit val iso = MonoidalTests.Isomorphisms.contravariant[Const[String, ?]]
+    checkAll("Const[String, Int]", MonoidalTests[Const[String, ?]].monoidal[Int, Int, Int])
+  }
 }

@@ -50,6 +50,15 @@ object MonoidalTests {
         def `(a, unit) ≅ a`[A](fs: (F[(A, Unit)], F[A]))(implicit EqFA: Eq[F[A]]) =
           F.map(fs._1)(_._1) ?== fs._2
       }
+    implicit def contravariant[F[_]](implicit F: functor.Contravariant[F]): Isomorphisms[F] =
+      new Isomorphisms[F] {
+        def `((a, b), c) ≅ (a, (b, c))`[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)]))(implicit EqFABC: Eq[F[(A, B, C)]]) =
+          F.contramap[(A, (B, C)), (A, B, C)](fs._1) { case (a, b, c) => (a, (b, c)) } ?== F.contramap[((A, B), C), (A, B, C)](fs._2) { case (a, b, c) => ((a, b), c) }
+        def `(unit, a) ≅ a`[A](fs: (F[(Unit, A)], F[A]))(implicit EqFA: Eq[F[A]]) =
+          F.contramap(fs._1)((a: A) => ((), a)) ?== fs._2
+        def `(a, unit) ≅ a`[A](fs: (F[(A, Unit)], F[A]))(implicit EqFA: Eq[F[A]]) =
+          F.contramap(fs._1)((a: A) => (a, ())) ?== fs._2
+      }
   }
 
 }
