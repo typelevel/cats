@@ -16,7 +16,7 @@ class XorTTests extends CatsSuite {
   checkAll("MonoidK[XorT[List, String, ?]]", SerializableTests.serializable(MonoidK[XorT[List, String, ?]]))
   checkAll("XorT[List, ?, ?]", BifunctorTests[XorT[List, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
   checkAll("Bifunctor[XorT[List, ?, ?]]", SerializableTests.serializable(Bifunctor[XorT[List, ?, ?]]))
-  checkAll("XorT[List, Int, ?]", TraverseTests[XorT[List, Int, ?]].foldable[Int, Int])
+  checkAll("XorT[List, Int, ?]", TraverseTests[XorT[List, Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[XorT[List, Int, ?]]", SerializableTests.serializable(Traverse[XorT[List, Int, ?]]))
   checkAll("XorT[List, String, Int]", OrderLaws[XorT[List, String, Int]].order)
   checkAll("Order[XorT[List, String, Int]]", SerializableTests.serializable(Order[XorT[List, String, Int]]))
