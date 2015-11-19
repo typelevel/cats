@@ -157,6 +157,16 @@ class AdHocStreamingTests extends CatsSuite {
     }
   }
 
+  test("thunk is evaluated for each item") {
+    // don't want the stream to be too big
+    implicit val arbInt = Arbitrary(Gen.choose(-10, 20))
+    forAll { (start: Int, end: Int) =>
+      var i = start - 1
+      val stream = Streaming.thunk{ () => i += 1; i}.takeWhile(_ <= end)
+      stream.toList should === ((start to end).toList)
+    }
+  }
+
   test("interval") {
     // we don't want this test to take a really long time
     implicit val arbInt: Arbitrary[Int] = Arbitrary(Gen.choose(-10, 20))
