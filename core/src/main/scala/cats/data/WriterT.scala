@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Bifunctor
+
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {
   def written(implicit functorF: Functor[F]): F[L] =
     functorF.map(run)(_._1)
@@ -31,6 +33,9 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
   def mapBoth[M, U](f: (L, V) => (M, U))(implicit functorF: Functor[F]): WriterT[F, M, U] =
     WriterT { functorF.map(run)(f.tupled) }
 
+  def bimap[M, U](f: L => M, g: V => U)(implicit functorF: Functor[F]): WriterT[F, M, U] =
+    mapBoth((l, v) => (f(l), g(v)))
+
   def mapWritten[M](f: L => M)(implicit functorF: Functor[F]): WriterT[F, M, V] =
     mapBoth((l, v) => (f(l), v))
 
@@ -51,6 +56,12 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
   // on an algebra release that includes https://github.com/non/algebra/pull/82
   implicit def writerTIdEq[L, V](implicit E: Eq[(L, V)]): Eq[WriterT[Id, L, V]] =
     writerTEq[Id, L, V]
+
+  implicit def writerTBifunctor[F[_]:Functor]: Bifunctor[WriterT[F, ?, ?]] =
+    new Bifunctor[WriterT[F, ?, ?]] {
+      def bimap[A, B, C, D](fab: WriterT[F, A, B])(f: A => C, g: B => D): WriterT[F, C, D] =
+        fab.bimap(f, g)
+    }
 }
 
 private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 {
