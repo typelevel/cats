@@ -156,10 +156,9 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
   }
   */
 
-  implicit def xorTEq[F[_], L, R](implicit e: Eq[F[L Xor R]]): Eq[XorT[F, L, R]] =
-    // TODO Use Eq.instance on next algebra upgrade
-    new Eq[XorT[F, L, R]] {
-      def eqv(x: XorT[F, L, R], y: XorT[F, L, R]): Boolean = e.eqv(x.value, y.value)
+  implicit def xorTOrder[F[_], L, R](implicit F: Order[F[L Xor R]]): Order[XorT[F, L, R]] =
+    new XorTOrder[F, L, R] {
+      val F0: Order[F[L Xor R]] = F
     }
 
   implicit def xorTShow[F[_], L, R](implicit sh: Show[F[L Xor R]]): Show[XorT[F, L, R]] =
@@ -200,6 +199,11 @@ private[data] abstract class XorTInstances1 extends XorTInstances2 {
     new XorTFoldable[F, L] {
       val F0: Foldable[F] = F
     }
+
+  implicit def xorTPartialOrder[F[_], L, R](implicit F: PartialOrder[F[L Xor R]]): PartialOrder[XorT[F, L, R]] =
+    new XorTPartialOrder[F, L, R] {
+      val F0: PartialOrder[F[L Xor R]] = F
+    }
 }
 
 private[data] abstract class XorTInstances2 extends XorTInstances3 {
@@ -213,6 +217,11 @@ private[data] abstract class XorTInstances2 extends XorTInstances3 {
     implicit val L0 = L
     new XorTSemigroupK[F, L] { implicit val F = F0; implicit val L = L0 }
   }
+
+  implicit def xorTEq[F[_], L, R](implicit F: Eq[F[L Xor R]]): Eq[XorT[F, L, R]] =
+    new XorTEq[F, L, R] {
+      val F0: Eq[F[L Xor R]] = F
+    }
 }
 
 private[data] abstract class XorTInstances3 {
@@ -288,4 +297,23 @@ private[data] sealed trait XorTTraverse[F[_], L] extends Traverse[XorT[F, L, ?]]
 
   override def traverse[G[_]: Applicative, A, B](fa: XorT[F, L, A])(f: A => G[B]): G[XorT[F, L, B]] =
     fa traverse f
+}
+
+private[data] sealed trait XorTEq[F[_], L, A] extends Eq[XorT[F, L, A]] {
+  implicit def F0: Eq[F[L Xor A]]
+
+  override def eqv(x: XorT[F, L, A], y: XorT[F, L, A]): Boolean = x === y
+}
+
+private[data] sealed trait XorTPartialOrder[F[_], L, A] extends PartialOrder[XorT[F, L, A]] with XorTEq[F, L, A]{
+  override implicit def F0: PartialOrder[F[L Xor A]]
+
+  override def partialCompare(x: XorT[F, L, A], y: XorT[F, L, A]): Double =
+    x partialCompare y
+}
+
+private[data] sealed trait XorTOrder[F[_], L, A] extends Order[XorT[F, L, A]] with XorTPartialOrder[F, L, A]{
+  override implicit def F0: Order[F[L Xor A]]
+
+  override def compare(x: XorT[F, L, A], y: XorT[F, L, A]): Int = x compare y
 }

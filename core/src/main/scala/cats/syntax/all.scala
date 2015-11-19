@@ -32,3 +32,4 @@ trait AllSyntax
     with TraverseSyntax
     with XorSyntax
     with ValidatedSyntax
+    with CoproductSyntax
