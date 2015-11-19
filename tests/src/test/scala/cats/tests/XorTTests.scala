@@ -3,7 +3,7 @@ package tests
 
 import cats.functor.Bifunctor
 import cats.data.{Xor, XorT}
-import cats.laws.discipline.{BifunctorTests, FoldableTests, FunctorTests, MonadErrorTests, MonoidKTests, SerializableTests, TraverseTests}
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import algebra.laws.OrderLaws
 
@@ -43,6 +43,12 @@ class XorTTests extends CatsSuite {
     implicit val F = ListWrapper.eqv[String Xor Int]
     checkAll("XorT[ListWrapper, String, Int]", OrderLaws[XorT[ListWrapper, String, Int]].eqv)
     checkAll("Eq[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(Eq[XorT[ListWrapper, String, Int]]))
+  }
+
+  {
+    implicit val L = ListWrapper.semigroup[String]
+    checkAll("XorT[Option, ListWrapper[String], ?]", SemigroupKTests[XorT[Option, ListWrapper[String], ?]].semigroupK[Int])
+    checkAll("SemigroupK[XorT[Option, ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[XorT[Option, ListWrapper[String], ?]]))
   }
 
   // make sure that the Monad and Traverse instances don't result in ambiguous
