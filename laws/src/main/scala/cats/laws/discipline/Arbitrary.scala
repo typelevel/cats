@@ -59,16 +59,16 @@ object arbitrary extends ArbitraryInstances0 {
     else {
       // the arbitrary instance for the next layer of the stream
       implicit val A = Arbitrary(streamingGen[A](maxDepth - 1))
-    Gen.frequency(
-      // Empty
-      1 -> Gen.const(Streaming.empty[A]),
-      // Wait
-      2 -> getArbitrary[Eval[Streaming[A]]].map(Streaming.wait(_)),
-      // Cons
-      6 -> (for {
-        a <- getArbitrary[A]
-        tail <- getArbitrary[Eval[Streaming[A]]]
-      } yield Streaming.cons(a, tail)))
+      Gen.frequency(
+        // Empty
+        1 -> Gen.const(Streaming.empty[A]),
+        // Wait
+        2 -> getArbitrary[Eval[Streaming[A]]].map(Streaming.wait(_)),
+        // Cons
+        6 -> (for {
+          a <- getArbitrary[A]
+          tail <- getArbitrary[Eval[Streaming[A]]]
+        } yield Streaming.cons(a, tail)))
     }
 
   implicit def streamingArbitrary[A:Arbitrary]: Arbitrary[Streaming[A]] =
