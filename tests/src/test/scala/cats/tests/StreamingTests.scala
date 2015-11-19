@@ -55,10 +55,6 @@ class AdHocStreamingTests extends CatsSuite {
     }
   }
 
-  // convert List[A] to Streaming[A]
-  def convert[A](as: List[A]): Streaming[A] =
-    Streaming.fromList(as)
-
   test("fromList/toList") {
     forAll { (xs: List[Int]) =>
       Streaming.fromList(xs).toList should === (xs)
