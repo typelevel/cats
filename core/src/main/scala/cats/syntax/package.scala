@@ -26,7 +26,9 @@ package object syntax {
   object semigroupk extends SemigroupKSyntax
   object show extends Show.ToShowOps
   object split extends SplitSyntax
+  object streaming extends StreamingSyntax
   object strong extends StrongSyntax
   object traverse extends TraverseSyntax
   object xor extends XorSyntax
+  object validated extends ValidatedSyntax
 }

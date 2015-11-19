@@ -2,6 +2,7 @@ package cats
 package free
 
 import cats.arrow.NaturalTransformation
+import cats.data.Const
 
 /** Applicative Functor for Free */
 sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable { self =>
@@ -13,14 +14,14 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
     b match {
       case Pure(f) =>
         this.map(f)
-      case x@Ap() =>
-        apply(x.pivot)(self.ap(x.fn.map(fx => a => p => fx(p)(a))))
+      case Ap(pivot, fn) =>
+        apply(pivot)(self.ap(fn.map(fx => a => p => fx(p)(a))))
     }
 
   final def map[B](f: A => B): FA[F, B] =
     this match {
       case Pure(a) => Pure(f(a))
-      case x@Ap() => apply(x.pivot)(x.fn.map(f compose _))
+      case Ap(pivot, fn) => apply(pivot)(fn.map(f compose _))
     }
 
   /** Interprets/Runs the sequence of operations using the semantics of Applicative G
@@ -29,7 +30,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   final def foldMap[G[_]](f: F ~> G)(implicit G: Applicative[G]): G[A] =
     this match {
       case Pure(a) => G.pure(a)
-      case x@Ap() => G.ap(f(x.pivot))(x.fn.foldMap(f))
+      case Ap(pivot, fn) => G.ap(f(pivot))(fn.foldMap(f))
     }
 
   /** Interpret/run the operations using the semantics of `Applicative[F]`.
@@ -46,6 +47,12 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
       }
     }
 
+  /** Interpret this algebra into a Monoid */
+  final def analyze[M:Monoid](f: F ~> λ[α => M]): M =
+    foldMap[Const[M, ?]](new (F ~> Const[M, ?]) {
+      def apply[X](x: F[X]): Const[M,X] = Const(f(x))
+    }).getConst
+
   /** Compile this FreeApplicative algebra into a Free algebra. */
   final def monad: Free[F, A] =
     foldMap[Free[F, ?]] {
@@ -58,23 +65,14 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
 object FreeApplicative {
   type FA[F[_], A] = FreeApplicative[F, A]
 
-  final case class Pure[F[_], A](a: A) extends FA[F, A]
+  private final case class Pure[F[_], A](a: A) extends FA[F, A]
 
-  abstract case class Ap[F[_], A]() extends FA[F, A] {
-    type Pivot
-    val pivot: F[Pivot]
-    val fn: FA[F, Pivot => A]
-  }
+  private final case class Ap[F[_], P, A](pivot: F[P], fn: FA[F, P => A]) extends FA[F, A]
 
   final def pure[F[_], A](a: A): FA[F, A] =
     Pure(a)
 
-  final def ap[F[_], P, A](fp: F[P])(f: FA[F, P => A]): FA[F, A] =
-    new Ap[F, A] {
-      type Pivot = P
-      val pivot: F[Pivot] = fp
-      val fn: FA[F, Pivot => A] = f
-    }
+  final def ap[F[_], P, A](fp: F[P])(f: FA[F, P => A]): FA[F, A] = Ap(fp, f)
 
   final def lift[F[_], A](fa: F[A]): FA[F, A] =
     ap(fa)(Pure(a => a))

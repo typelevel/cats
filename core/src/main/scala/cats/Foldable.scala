@@ -22,7 +22,7 @@ import simulacrum.typeclass
  * Beyond these it provides many other useful methods related to
  * folding over F[A] values.
  *
- * See: [[https://www.cs.nott.ac.uk/~gmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
+ * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
 @typeclass trait Foldable[F[_]] extends Serializable { self =>
 
@@ -182,12 +182,21 @@ import simulacrum.typeclass
     }.toList
 
   /**
+   * Convert F[A] to a List[A], retaining only initial elements which
+   * match `p`.
+   */
+  def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
+    foldRight(fa, Now(List.empty[A])) { (a, llst) =>
+      if (p(a)) llst.map(a :: _) else Now(Nil)
+    }.value
+
+  /**
    * Convert F[A] to a List[A], dropping all initial elements which
    * match `p`.
    */
   def dropWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
     foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
-      if (buf.nonEmpty || p(a)) buf += a else buf
+      if (buf.nonEmpty || !p(a)) buf += a else buf
     }.toList
 
   /**

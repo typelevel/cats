@@ -2,8 +2,8 @@ package cats
 package tests
 
 import cats.arrow.{Arrow, Choice, Split}
-import cats.data.Kleisli
-import cats.functor.Strong
+import cats.data.{Kleisli, Reader}
+import cats.functor.{Contravariant, Strong}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -97,6 +97,9 @@ class KleisliTests extends CatsSuite {
     checkAll("SemigroupK[Lambda[A => Kleisli[Option, A, A]]]", SerializableTests.serializable(kleisliSemigroupK))
   }
 
+  checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[Int, Int, Int])
+  checkAll("Contravariant[Kleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Kleisli[Option, ?, Int]]))
+
   test("local composes functions") {
     forAll { (f: Int => Option[String], g: Int => Int, i: Int) =>
       f(g(i)) should === (Kleisli.local[Option, String, Int](g)(Kleisli.function(f)).run(i))
@@ -133,5 +136,69 @@ class KleisliTests extends CatsSuite {
 
     val config = Config(0, "cats")
     kconfig1.run(config) should === (kconfig2.run(config))
+  }
+
+  /**
+   * Testing that implicit resolution works. If it compiles, the "test" passes.
+   */
+  object ImplicitResolution {
+    // F is List
+    Functor[Kleisli[List, Int, ?]]
+    Apply[Kleisli[List, Int, ?]]
+    Applicative[Kleisli[List, Int, ?]]
+    Monad[Kleisli[List, Int, ?]]
+    MonadReader[Kleisli[List, Int, ?], Int]
+    Monoid[Kleisli[List, Int, String]]
+    MonoidK[Lambda[A => Kleisli[List, A, A]]]
+    Arrow[Kleisli[List, ?, ?]]
+    Choice[Kleisli[List, ?, ?]]
+    Split[Kleisli[List, ?, ?]]
+    Strong[Kleisli[List, ?, ?]]
+    FlatMap[Kleisli[List, Int, ?]]
+    Semigroup[Kleisli[List, Int, String]]
+    SemigroupK[Lambda[A => Kleisli[List, A, A]]]
+
+    // F is Id
+    Functor[Kleisli[Id, Int, ?]]
+    Apply[Kleisli[Id, Int, ?]]
+    Applicative[Kleisli[Id, Int, ?]]
+    Monad[Kleisli[Id, Int, ?]]
+    MonadReader[Kleisli[Id, Int, ?], Int]
+    Monoid[Kleisli[Id, Int, String]]
+    MonoidK[Lambda[A => Kleisli[Id, A, A]]]
+    Arrow[Kleisli[Id, ?, ?]]
+    Choice[Kleisli[Id, ?, ?]]
+    Split[Kleisli[Id, ?, ?]]
+    Strong[Kleisli[Id, ?, ?]]
+    FlatMap[Kleisli[Id, Int, ?]]
+    Semigroup[Kleisli[Id, Int, String]]
+    SemigroupK[Lambda[A => Kleisli[Id, A, A]]]
+
+    // using Reader alias instead of Kleisli with Id as F
+    Functor[Reader[Int, ?]]
+    Apply[Reader[Int, ?]]
+    Applicative[Reader[Int, ?]]
+    Monad[Reader[Int, ?]]
+    MonadReader[Reader[Int, ?], Int]
+    Monoid[Reader[Int, String]]
+    MonoidK[Lambda[A => Reader[A, A]]]
+    Arrow[Reader[?, ?]]
+    Choice[Reader[?, ?]]
+    Split[Reader[?, ?]]
+    Strong[Reader[?, ?]]
+    FlatMap[Reader[Int, ?]]
+    Semigroup[Reader[Int, String]]
+    SemigroupK[Lambda[A => Reader[A, A]]]
+
+    // using IntReader alias instead of Kleisli with Id as F and A as Int
+    type IntReader[A] = Reader[Int, A]
+    Functor[IntReader]
+    Apply[IntReader]
+    Applicative[IntReader]
+    Monad[IntReader]
+    MonadReader[IntReader, Int]
+    Monoid[IntReader[String]]
+    FlatMap[IntReader]
+    Semigroup[IntReader[String]]
   }
 }

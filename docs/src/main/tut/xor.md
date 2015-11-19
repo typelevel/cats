@@ -37,6 +37,10 @@ How then do we communicate an error? By making it explicit in the data type we r
 
 ## Xor
 
+### `Xor` vs `Validated`
+
+In general, `Validated` is used to accumulate errors, while `Xor` is used to short-circuit a computation upon the first error. For more information, see the `Validated` vs `Xor` section of the [`Validated` documentation]({{ baseurl }}/tut/validated.html).
+
 ### Why not `Either`
 `Xor` is very similar to `scala.util.Either` - in fact, they are *isomorphic* (that is,
 any `Either` value can be rewritten as an `Xor` value, and vice versa).
@@ -340,13 +344,20 @@ val xor: Xor[NumberFormatException, Int] =
   }
 ```
 
-However, this can get tedious quickly. `Xor` provides a `fromTryCatch` method on its companion object
+However, this can get tedious quickly. `Xor` provides a `catchOnly` method on its companion object
 that allows you to pass it a function, along with the type of exception you want to catch, and does the
 above for you.
 
 ```tut
 val xor: Xor[NumberFormatException, Int] =
-  Xor.fromTryCatch[NumberFormatException]("abc".toInt)
+  Xor.catchOnly[NumberFormatException]("abc".toInt)
+```
+
+If you want to catch all (non-fatal) throwables, you can use `catchNonFatal`.
+
+```tut
+val xor: Xor[Throwable, Int] =
+  Xor.catchNonFatal("abc".toInt)
 ```
 
 ## Additional syntax

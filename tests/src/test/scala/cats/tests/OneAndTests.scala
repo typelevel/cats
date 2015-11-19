@@ -11,34 +11,34 @@ import cats.laws.discipline.eq._
 import scala.util.Random
 
 class OneAndTests extends CatsSuite {
-  checkAll("OneAnd[Int, List]", OrderLaws[OneAnd[Int, List]].eqv)
+  checkAll("OneAnd[List, Int]", OrderLaws[OneAnd[List, Int]].eqv)
 
   // Test instances that have more general constraints
   {
     implicit val monadCombine = ListWrapper.monadCombine
-    implicit val iso = MonoidalTests.Isomorphisms.covariant[OneAnd[?, ListWrapper]]
-    checkAll("OneAnd[Int, ListWrapper]", MonoidalTests[OneAnd[?, ListWrapper]].monoidal[Int, Int, Int])
-    checkAll("Monoidal[OneAnd[A, ListWrapper]]", SerializableTests.serializable(Monoidal[OneAnd[?, ListWrapper]]))
+    implicit val iso = MonoidalTests.Isomorphisms.covariant[OneAnd[ListWrapper, ?]]
+    checkAll("OneAnd[ListWrapper, Int]", MonoidalTests[OneAnd[ListWrapper, ?]].monoidal[Int, Int, Int])
+    checkAll("Monoidal[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Monoidal[OneAnd[ListWrapper, ?]]))
   }
 
   {
     implicit val functor = ListWrapper.functor
-    checkAll("OneAnd[Int, ListWrapper]", FunctorTests[OneAnd[?, ListWrapper]].functor[Int, Int, Int])
-    checkAll("Functor[OneAnd[A, ListWrapper]]", SerializableTests.serializable(Functor[OneAnd[?, ListWrapper]]))
+    checkAll("OneAnd[ListWrapper, Int]", FunctorTests[OneAnd[ListWrapper, ?]].functor[Int, Int, Int])
+    checkAll("Functor[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Functor[OneAnd[ListWrapper, ?]]))
   }
 
   {
     implicit val monadCombine = ListWrapper.monadCombine
-    checkAll("OneAnd[Int, ListWrapper]", SemigroupKTests[OneAnd[?, ListWrapper]].semigroupK[Int])
-    checkAll("OneAnd[Int, List]", GroupLaws[OneAnd[Int, List]].semigroup)
-    checkAll("SemigroupK[OneAnd[A, ListWrapper]]", SerializableTests.serializable(SemigroupK[OneAnd[?, ListWrapper]]))
-    checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[OneAnd[Int, List]]))
+    checkAll("OneAnd[ListWrapper, Int]", SemigroupKTests[OneAnd[ListWrapper, ?]].semigroupK[Int])
+    checkAll("OneAnd[List, Int]", GroupLaws[OneAnd[List, Int]].semigroup)
+    checkAll("SemigroupK[OneAnd[ListWrapper, A]]", SerializableTests.serializable(SemigroupK[OneAnd[ListWrapper, ?]]))
+    checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[OneAnd[List, Int]]))
   }
 
   {
     implicit val foldable = ListWrapper.foldable
-    checkAll("OneAnd[Int, ListWrapper]", FoldableTests[OneAnd[?, ListWrapper]].foldable[Int, Int])
-    checkAll("Foldable[OneAnd[A, ListWrapper]]", SerializableTests.serializable(Foldable[OneAnd[?, ListWrapper]]))
+    checkAll("OneAnd[ListWrapper, Int]", FoldableTests[OneAnd[ListWrapper, ?]].foldable[Int, Int])
+    checkAll("Foldable[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Foldable[OneAnd[ListWrapper, ?]]))
   }
 
   {
@@ -55,11 +55,10 @@ class OneAndTests extends CatsSuite {
   checkAll("Comonad[NonEmptyList[A]]", SerializableTests.serializable(Comonad[NonEmptyList]))
 
   test("Creating OneAnd + unwrap is identity") {
-    forAll { (list: List[Int]) =>
-      whenever(list.size >= 1) {
-        val oneAnd = NonEmptyList(list.head, list.tail: _*)
-        list should === (oneAnd.unwrap)
-      }
+    forAll { (i: Int, tail: List[Int]) =>
+      val list = i :: tail
+      val oneAnd = NonEmptyList(i, tail: _*)
+      list should === (oneAnd.unwrap)
     }
   }
 

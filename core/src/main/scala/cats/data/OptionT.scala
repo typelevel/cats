@@ -39,6 +39,12 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
         case None => F.pure(None)
       })
 
+  def transform[B](f: Option[A] => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
+    OptionT(F.map(value)(f))
+
+  def subflatMap[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
+    transform(_.flatMap(f))
+
   def getOrElse(default: => A)(implicit F: Functor[F]): F[A] =
     F.map(value)(_.getOrElse(default))
 
@@ -88,6 +94,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def toLeft[R](right: => R)(implicit F: Functor[F]): XorT[F, A, R] =
     XorT(cata(Xor.Right(right), Xor.Left.apply))
+
+  def show(implicit F: Show[F[Option[A]]]): String = F.show(value)
 }
 
 object OptionT extends OptionTInstances {
@@ -97,8 +105,8 @@ object OptionT extends OptionTInstances {
   /**
    * Transforms an `Option` into an `OptionT`, lifted into the specified `Applicative`.
    *
-   * Note: The return type is a FromOptionAux[F], which has an apply method on it, allowing
-   * you to call fromOption like this:
+   * Note: The return type is a FromOptionPartiallyApplied[F], which has an apply method
+   * on it, allowing you to call fromOption like this:
    * {{{
    * val t: Option[Int] = ...
    * val x: OptionT[List, Int] = fromOption[List](t)
@@ -106,18 +114,31 @@ object OptionT extends OptionTInstances {
    *
    * The reason for the indirection is to emulate currying type parameters.
    */
-  def fromOption[F[_]]: FromOptionAux[F] = new FromOptionAux
+  def fromOption[F[_]]: FromOptionPartiallyApplied[F] = new FromOptionPartiallyApplied
 
-  class FromOptionAux[F[_]] private[OptionT] {
+  final class FromOptionPartiallyApplied[F[_]] private[OptionT] {
     def apply[A](value: Option[A])(implicit F: Applicative[F]): OptionT[F, A] =
       OptionT(F.pure(value))
   }
+
+  /**
+    * Lifts the `F[A]` Functor into an `OptionT[F, A]`.
+    *
+    */
+  def liftF[F[_], A](fa: F[A])(implicit F: Functor[F]): OptionT[F, A] = OptionT(F.map(fa)(Some(_)))
 }
 
-// TODO create prioritized hierarchy for Functor, Monad, etc
-trait OptionTInstances {
-  implicit def optionTMonad[F[_]:Monad]: Monad[OptionT[F, ?]] =
-    new Monad[OptionT[F, ?]] {
+private[data] sealed trait OptionTInstances1 {
+  implicit def optionTFunctor[F[_]:Functor]: Functor[OptionT[F, ?]] =
+    new Functor[OptionT[F, ?]] {
+      override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
+        fa.map(f)
+    }
+}
+
+private[data] sealed trait OptionTInstances extends OptionTInstances1 {
+  implicit def optionTMonadCombine[F[_]](implicit F: Monad[F]): MonadCombine[OptionT[F, ?]] =
+    new MonadCombine[OptionT[F, ?]] {
       def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
 
       def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
@@ -125,8 +146,13 @@ trait OptionTInstances {
 
       override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
         fa.map(f)
-    }
 
+      override def empty[A]: OptionT[F,A] = OptionT(F.pure(None))
+      override def combine[A](x: OptionT[F,A], y: OptionT[F,A]): OptionT[F,A] = x orElse y
+    }
   implicit def optionTEq[F[_], A](implicit FA: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     FA.on(_.value)
+
+  implicit def optionTShow[F[_], A](implicit F: Show[F[Option[A]]]): Show[OptionT[F, A]] =
+    functor.Contravariant[Show].contramap(F)(_.value)
 }

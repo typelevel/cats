@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.Xor
+import cats.data.{Xor, XorT}
 import cats.data.Xor._
 import cats.laws.discipline.arbitrary.xorArbitrary
 import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadErrorTests, SerializableTests, MonoidalTests}
@@ -15,9 +15,13 @@ import scala.util.Try
 class XorTests extends CatsSuite {
   checkAll("Xor[String, Int]", GroupLaws[Xor[String, Int]].monoid)
 
-  implicit val iso = MonoidalTests.Isomorphisms.covariant[Xor[String, ?]]
-  checkAll("Xor[String, Int]", MonoidalTests[Xor[String, ?]].monoidal[Int, Int, Int])
+  {
+    implicit val iso = MonoidalTests.Isomorphisms.covariant[Xor[String, ?]]
+    checkAll("Xor[String, Int]", MonoidalTests[Xor[String, ?]].monoidal[Int, Int, Int])
+  }
   checkAll("Monoidal[Xor, ?]", SerializableTests.serializable(Monoidal[Xor[String, ?]]))
+
+  implicit val eq0 = XorT.xorTEq[Xor[String, ?], String, Int]
 
   checkAll("Xor[String, Int]", MonadErrorTests[Xor[String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor[String, ?], String]))
@@ -26,6 +30,20 @@ class XorTests extends CatsSuite {
   checkAll("Traverse[Xor[String,?]]", SerializableTests.serializable(Traverse[Xor[String, ?]]))
 
   checkAll("Xor[Int, String]", OrderLaws[String Xor Int].order)
+
+  {
+    implicit val S = ListWrapper.partialOrder[String]
+    implicit val I = ListWrapper.partialOrder[Int]
+    checkAll("ListWrapper[String] Xor ListWrapper[Int]", OrderLaws[ListWrapper[String] Xor ListWrapper[Int]].partialOrder)
+    checkAll("PartialOrder[ListWrapper[String] Xor ListWrapper[Int]]", SerializableTests.serializable(PartialOrder[ListWrapper[String] Xor ListWrapper[Int]]))
+  }
+
+  {
+    implicit val S = ListWrapper.eqv[String]
+    implicit val I = ListWrapper.eqv[Int]
+    checkAll("ListWrapper[String] Xor ListWrapper[Int]", OrderLaws[ListWrapper[String] Xor ListWrapper[Int]].eqv)
+    checkAll("Eq[ListWrapper[String] Xor ListWrapper[Int]]", SerializableTests.serializable(Eq[ListWrapper[String] Xor ListWrapper[Int]]))
+  }
 
   implicit val arbitraryXor: Arbitrary[Xor[Int, String]] = Arbitrary {
     for {
@@ -37,14 +55,19 @@ class XorTests extends CatsSuite {
 
   checkAll("? Xor ?", BifunctorTests[Xor].bifunctor[Int, Int, Int, String, String, String])
 
-  test("fromTryCatch catches matching exceptions") {
-    assert(Xor.fromTryCatch[NumberFormatException]{ "foo".toInt }.isInstanceOf[Xor.Left[NumberFormatException]])
+  test("catchOnly catches matching exceptions") {
+    assert(Xor.catchOnly[NumberFormatException]{ "foo".toInt }.isInstanceOf[Xor.Left[NumberFormatException]])
   }
 
-  test("fromTryCatch lets non-matching exceptions escape") {
+  test("catchOnly lets non-matching exceptions escape") {
     val _ = intercept[NumberFormatException] {
-      Xor.fromTryCatch[IndexOutOfBoundsException]{ "foo".toInt }
+      Xor.catchOnly[IndexOutOfBoundsException]{ "foo".toInt }
     }
+  }
+
+  test("catchNonFatal catches non-fatal exceptions") {
+    assert(Xor.catchNonFatal{ "foo".toInt }.isLeft)
+    assert(Xor.catchNonFatal{ throw new Throwable("blargh") }.isLeft)
   }
 
   test("fromTry is left for failed Try") {
@@ -81,7 +104,7 @@ class XorTests extends CatsSuite {
 
   test("getOrElse ignores default for right") {
     forAll { (x: Int Xor String, s: String, t: String) =>
-      whenever(x.isRight) {
+      if (x.isRight) {
         x.getOrElse(s) should === (x.getOrElse(t))
       }
     }
@@ -132,7 +155,7 @@ class XorTests extends CatsSuite {
 
   test("isLeft implies forall") {
     forAll { (x: Int Xor String, p: String => Boolean) =>
-      whenever(x.isLeft) {
+      if (x.isLeft) {
         x.forall(p) should === (true)
       }
     }
@@ -140,7 +163,7 @@ class XorTests extends CatsSuite {
 
   test("isLeft implies exists is false") {
     forAll { (x: Int Xor String, p: String => Boolean) =>
-      whenever(x.isLeft) {
+      if (x.isLeft) {
         x.exists(p) should === (false)
       }
     }
@@ -148,7 +171,7 @@ class XorTests extends CatsSuite {
 
   test("ensure on left is identity") {
     forAll { (x: Int Xor String, i: Int, p: String => Boolean) =>
-      whenever(x.isLeft) {
+      if (x.isLeft) {
         x.ensure(i)(p) should === (x)
       }
     }
@@ -178,6 +201,18 @@ class XorTests extends CatsSuite {
   test("combine is right iff both operands are right") {
     forAll { (x: Int Xor String, y: Int Xor String) =>
       x.combine(y).isRight should === (x.isRight && y.isRight)
+    }
+  }
+
+  test("to consistent with toList") {
+    forAll { (x: Int Xor String) =>
+      x.to[List, String] should === (x.toList)
+    }
+  }
+
+  test("to consistent with toOption") {
+    forAll { (x: Int Xor String) =>
+      x.to[Option, String] should === (x.toOption)
     }
   }
 

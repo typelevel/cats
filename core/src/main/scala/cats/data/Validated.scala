@@ -39,19 +39,13 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def forall(f: A => Boolean): Boolean = fold(_ => true, f)
 
   /**
-   * If the value is Valid but the predicate fails, return an empty
-   * Invalid value, otherwise leaves the value unchanged.  This method
-   * is mostly useful for allowing validated values to be used in a
-   * for comprehension with pattern matching.
-   */
-  def filter[EE >: E](pred: A => Boolean)(implicit M: Monoid[EE]): Validated[EE,A] =
-    fold(Invalid.apply, a => if(pred(a)) this else Invalid(M.empty))
-
-  /**
    * Return this if it is Valid, or else fall back to the given default.
    */
-  def orElse[EE >: E, AA >: A](default: => Validated[EE,AA]): Validated[EE,AA] =
-    fold(_ => default, _ => this)
+  def orElse[EE, AA >: A](default: => Validated[EE,AA]): Validated[EE,AA] =
+    this match {
+      case v @ Valid(_) => v
+      case Invalid(_) => default
+    }
 
   /**
    * Converts the value to an Either[E,A]
@@ -142,7 +136,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * When Valid, apply the function, marking the result as valid
    * inside the Applicative's context,
-   * when Invalid, lift the Error into the Applicative's contexst
+   * when Invalid, lift the Error into the Applicative's context
    */
   def traverse[F[_], EE >: E, B](f: A => F[B])(implicit F: Applicative[F]): F[Validated[EE,B]] =
     fold(e => F.pure(Invalid(e)),
@@ -165,6 +159,25 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def show[EE >: E, AA >: A](implicit EE: Show[EE], AA: Show[AA]): String =
     fold(e => s"Invalid(${EE.show(e)})",
          a => s"Valid(${AA.show(a)})")
+
+  /**
+   * Apply a function (that returns a `Validated`) in the valid case.
+   * Otherwise return the original `Validated`.
+   *
+   * This allows "chained" validation: the output of one validation can be fed
+   * into another validation function.
+   *
+   * This function is similar to `Xor.flatMap`. It's not called `flatMap`,
+   * because by Cats convention, `flatMap` is a monadic bind that is consistent
+   * with `ap`. This method is not consistent with [[ap]] (or other
+   * `Apply`-based methods), because it has "fail-fast" behavior as opposed to
+   * accumulating validation failures.
+   */
+  def andThen[EE >: E, B](f: A => Validated[EE, B]): Validated[EE, B] =
+    this match {
+      case Valid(a) => f(a)
+      case i @ Invalid(_) => i
+    }
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions{
@@ -173,7 +186,7 @@ object Validated extends ValidatedInstances with ValidatedFunctions{
 }
 
 
-sealed abstract class ValidatedInstances extends ValidatedInstances1 {
+private[data] sealed abstract class ValidatedInstances extends ValidatedInstances1 {
   implicit def validatedOrder[A: Order, B: Order]: Order[Validated[A,B]] = new Order[Validated[A,B]] {
     def compare(x: Validated[A,B], y: Validated[A,B]): Int = x compare y
     override def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
@@ -214,7 +227,7 @@ sealed abstract class ValidatedInstances extends ValidatedInstances1 {
     }
 }
 
-sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
+private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
   implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A,B]] =
     new PartialOrder[Validated[A,B]] {
       def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
@@ -222,7 +235,7 @@ sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
     }
 }
 
-sealed abstract class ValidatedInstances2 {
+private[data] sealed abstract class ValidatedInstances2 {
   implicit def xorEq[A: Eq, B: Eq]: Eq[Validated[A,B]] =
     new Eq[Validated[A,B]] {
       def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
@@ -241,21 +254,27 @@ trait ValidatedFunctions {
    * the resulting `Validated`. Uncaught exceptions are propagated.
    *
    * For example: {{{
-   * val result: Validated[NumberFormatException, Int] = fromTryCatch[NumberFormatException] { "foo".toInt }
+   * val result: Validated[NumberFormatException, Int] = catchOnly[NumberFormatException] { "foo".toInt }
    * }}}
    */
-  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchAux[T] = new FromTryCatchAux[T]
+  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
 
-  final class FromTryCatchAux[T] private[ValidatedFunctions] {
-    def apply[A](f: => A)(implicit T: ClassTag[T]): Validated[T, A] = {
+  final class CatchOnlyPartiallyApplied[T] private[ValidatedFunctions] {
+    def apply[A](f: => A)(implicit T: ClassTag[T], NT: NotNull[T]): Validated[T, A] =
       try {
         valid(f)
       } catch {
         case t if T.runtimeClass.isInstance(t) =>
           invalid(t.asInstanceOf[T])
       }
-    }
   }
+
+  def catchNonFatal[A](f: => A): Validated[Throwable, A] =
+    try {
+      valid(f)
+    } catch {
+      case scala.util.control.NonFatal(t) => invalid(t)
+    }
 
   /**
    * Converts a `Try[A]` to a `Validated[Throwable, A]`.

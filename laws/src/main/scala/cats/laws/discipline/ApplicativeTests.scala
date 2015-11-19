@@ -10,14 +10,13 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
   def laws: ApplicativeLaws[F]
 
   def applicative[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-    ArbF: ArbitraryK[F],
+    ArbFA: Arbitrary[F[A]],
+    ArbFAtoB: Arbitrary[F[A => B]],
+    ArbFBtoC: Arbitrary[F[B => C]],
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]]
   ): RuleSet = {
-    implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
-    implicit def ArbFAB: Arbitrary[F[A => B]] = ArbF.synthesize[A => B]
-
     new DefaultRuleSet(
       name = "applicative",
       parent = Some(apply[A, B, C]),

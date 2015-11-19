@@ -98,7 +98,7 @@ object StateT extends StateTInstances {
     StateT(s => F.pure((s, a)))
 }
 
-sealed abstract class StateTInstances extends StateTInstances0 {
+private[state] sealed abstract class StateTInstances extends StateTInstances0 {
   implicit def stateTMonadState[F[_], S](implicit F: Monad[F]): MonadState[StateT[F, S, ?], S] =
     new MonadState[StateT[F, S, ?], S] {
       def pure[A](a: A): StateT[F, S, A] =
@@ -116,14 +116,14 @@ sealed abstract class StateTInstances extends StateTInstances0 {
     }
 }
 
-sealed abstract class StateTInstances0 {
+private[state] sealed abstract class StateTInstances0 {
   implicit def stateMonadState[S]: MonadState[State[S, ?], S] =
     StateT.stateTMonadState[Trampoline, S]
 }
 
 // To workaround SI-7139 `object State` needs to be defined inside the package object
 // together with the type alias.
-abstract class StateFunctions {
+private[state] abstract class StateFunctions {
 
   def apply[S, A](f: S => (S, A)): State[S, A] =
     StateT.applyF(Trampoline.done((s: S) => Trampoline.done(f(s))))

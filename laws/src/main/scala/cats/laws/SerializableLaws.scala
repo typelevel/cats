@@ -4,12 +4,12 @@ package laws
 import org.scalacheck.Prop
 import org.scalacheck.Prop.{ False, Proof, Result }
 
-import bricks.Platform
+import catalysts.Platform
 
 /**
  * Check for Java Serializability.
  *
- * This laws is only applicative on the JVM, but is something we want
+ * This law is only applicable on the JVM, but is something we want
  * to be sure to enforce. Therefore, we use bricks.Platform to do a
  * runtime check rather than create a separate jvm-laws project.
  */

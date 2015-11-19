@@ -14,4 +14,12 @@ class MapTests extends CatsSuite {
 
   checkAll("Map[Int, Int] with Option", TraverseTests[Map[Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Map[Int, ?]]", SerializableTests.serializable(Traverse[Map[Int, ?]]))
+
+  test("show isn't empty and is formatted as expected") {
+    forAll { (map: Map[Int, String]) =>
+      map.show.nonEmpty should === (true)
+      map.show.startsWith("Map(") should === (true)
+      map.show should === (implicitly[Show[Map[Int, String]]].show(map))
+    }
+  }
 }

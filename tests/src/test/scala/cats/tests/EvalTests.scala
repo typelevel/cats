@@ -2,8 +2,9 @@ package cats
 package tests
 
 import scala.math.min
-
-// TODO: monad laws
+import cats.laws.discipline.{BimonadTests, SerializableTests}
+import cats.laws.discipline.arbitrary._
+import algebra.laws.{GroupLaws, OrderLaws}
 
 class EvalTests extends CatsSuite {
 
@@ -13,7 +14,9 @@ class EvalTests extends CatsSuite {
    * It is basically a mutable counter that can be used to measure how
    * many times an otherwise pure function is being evaluted.
    */
-  class Spooky(var counter: Int = 0)
+  class Spooky(var counter: Int = 0) {
+    def increment(): Unit = counter += 1
+  }
 
   /**
    * This method creates a Eval[A] instance (along with a
@@ -48,7 +51,7 @@ class EvalTests extends CatsSuite {
   // has the semantics of lazy val: 0 or 1 evaluations
   def memoized[A](value: A): (Spooky, Eval[A]) = {
     val spooky = new Spooky
-    (spooky, Eval.later { spooky.counter += 1; value })
+    (spooky, Eval.later { spooky.increment(); value })
   }
 
   test("memoized: Eval.later(_)") {
@@ -58,7 +61,7 @@ class EvalTests extends CatsSuite {
   // has the semantics of val: 1 evaluation
   def eager[A](value: A): (Spooky, Eval[A]) = {
     val spooky = new Spooky
-    (spooky, Eval.now { spooky.counter += 1; value })
+    (spooky, Eval.now { spooky.increment(); value })
   }
 
   test("eager: Eval.now(_)") {
@@ -68,10 +71,52 @@ class EvalTests extends CatsSuite {
   // has the semantics of def: N evaluations
   def always[A](value: A): (Spooky, Eval[A]) = {
     val spooky = new Spooky
-    (spooky, Eval.always { spooky.counter += 1; value })
+    (spooky, Eval.always { spooky.increment(); value })
   }
 
   test("by-name: Eval.always(_)") {
     runValue(999)(always)(n => n)
   }
+
+  test(".value should evaluate only once on the result of .memoize"){
+    forAll { i: Eval[Int] =>
+      val spooky = new Spooky
+      val i2 = i.map(_ => spooky.increment).memoize
+      i2.value
+      spooky.counter should === (1)
+      i2.value
+      spooky.counter should === (1)
+    }
+  }
+
+  checkAll("Eval[Int]", BimonadTests[Eval].bimonad[Int, Int, Int])
+  checkAll("Bimonad[Eval]", SerializableTests.serializable(Bimonad[Eval]))
+
+  checkAll("Eval[Int]", GroupLaws[Eval[Int]].group)
+
+  {
+    implicit val A = ListWrapper.monoid[Int]
+    checkAll("Eval[ListWrapper[Int]]", GroupLaws[Eval[ListWrapper[Int]]].monoid)
+  }
+
+  {
+    implicit val A = ListWrapper.semigroup[Int]
+    checkAll("Eval[ListWrapper[Int]]", GroupLaws[Eval[ListWrapper[Int]]].semigroup)
+  }
+
+  {
+    implicit val A = ListWrapper.order[Int]
+    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].order)
+  }
+
+  {
+    implicit val A = ListWrapper.partialOrder[Int]
+    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].partialOrder)
+  }
+
+  {
+    implicit val A = ListWrapper.eqv[Int]
+    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].eqv)
+  }
+
 }

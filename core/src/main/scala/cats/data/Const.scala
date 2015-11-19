@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Contravariant
+
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
  * [[Const]] can be seen as a type level version of `Function.const[A, B]: A => B => A`
@@ -36,7 +38,7 @@ object Const extends ConstInstances {
     Const(A.empty)
 }
 
-sealed abstract class ConstInstances extends ConstInstances0 {
+private[data] sealed abstract class ConstInstances extends ConstInstances0 {
   implicit def constOrder[A: Order, B]: Order[Const[A, B]] = new Order[Const[A, B]] {
     def compare(x: Const[A, B], y: Const[A, B]): Int =
       x compare y
@@ -44,6 +46,11 @@ sealed abstract class ConstInstances extends ConstInstances0 {
 
   implicit def constShow[A: Show, B]: Show[Const[A, B]] = new Show[Const[A, B]] {
     def show(f: Const[A, B]): String = f.show
+  }
+
+  implicit def constContravariant[C]: Contravariant[Const[C, ?]] = new Contravariant[Const[C, ?]] {
+    override def contramap[A, B](fa: Const[C, A])(f: (B) => A): Const[C, B] =
+      fa.retag[B]
   }
 
   implicit def constTraverse[C]: Traverse[Const[C, ?]] = new Traverse[Const[C, ?]] {
@@ -64,7 +71,7 @@ sealed abstract class ConstInstances extends ConstInstances0 {
   }
 }
 
-sealed abstract class ConstInstances0 extends ConstInstances1 {
+private[data] sealed abstract class ConstInstances0 extends ConstInstances1 {
   implicit def constPartialOrder[A: PartialOrder, B]: PartialOrder[Const[A, B]] = new PartialOrder[Const[A, B]]{
     def partialCompare(x: Const[A, B], y: Const[A, B]): Double =
       x partialCompare y
@@ -85,7 +92,7 @@ sealed abstract class ConstInstances0 extends ConstInstances1 {
   }
 }
 
-sealed abstract class ConstInstances1 {
+private[data] sealed abstract class ConstInstances1 {
   implicit def constEq[A: Eq, B]: Eq[Const[A, B]] = new Eq[Const[A, B]] {
     def eqv(x: Const[A, B], y: Const[A, B]): Boolean =
       x === y

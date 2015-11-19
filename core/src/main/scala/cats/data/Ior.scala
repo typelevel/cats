@@ -131,7 +131,7 @@ object Ior extends IorInstances with IorFunctions {
   final case class Both[+A, +B](a: A, b: B) extends (A Ior B)
 }
 
-sealed abstract class IorInstances extends IorInstances0 {
+private[data] sealed abstract class IorInstances extends IorInstances0 {
   implicit def iorEq[A: Eq, B: Eq]: Eq[A Ior B] = new Eq[A Ior B] {
     def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
   }
@@ -151,7 +151,7 @@ sealed abstract class IorInstances extends IorInstances0 {
     }
 }
 
-sealed abstract class IorInstances0 {
+private[data] sealed abstract class IorInstances0 {
 
   implicit def iorInstances[A]: Traverse[A Ior ?] with Functor[A Ior ?] = new Traverse[A Ior ?] with Functor[A Ior ?] {
     def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =

@@ -9,26 +9,35 @@ import Prop._
 trait BimonadTests[F[_]] extends MonadTests[F] with ComonadTests[F] {
   def laws: BimonadLaws[F]
 
-  def bimonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq]: RuleSet = {
-    implicit val arbfa: Arbitrary[F[A]] = ArbitraryK[F].synthesize[A]
-    implicit val eqfa: Eq[F[A]] = EqK[F].synthesize[A]
+  def bimonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
+    ArbFA: Arbitrary[F[A]],
+    ArbFFA: Arbitrary[F[F[A]]],
+    ArbFB: Arbitrary[F[B]],
+    ArbFC: Arbitrary[F[C]],
+    ArbFAtoB: Arbitrary[F[A => B]],
+    ArbFBtoC: Arbitrary[F[B => C]],
+    EqFFFA: Eq[F[F[A]]],
+    EqFFA: Eq[F[F[F[A]]]],
+    EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]]
+  ): RuleSet = {
     new RuleSet {
       def name: String = "bimonad"
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(monad[A, B, C], comonad[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
         "pure andThen extract = id" -> forAll(laws.pureExtractIsId[A] _),
-        "extract andThen pure = id" -> forAll(laws.extractPureIsId[A] _)
+        "extract/flatMap entwining" -> forAll(laws.extractFlatMapEntwining[A] _),
+        "pure/coflatMap entwining" -> forAll(laws.pureCoflatMapEntwining[A] _)
       )
     }
   }
 }
 
 object BimonadTests {
-  def apply[F[_]: Bimonad: ArbitraryK: EqK]: BimonadTests[F] =
+  def apply[F[_]: Bimonad]: BimonadTests[F] =
     new BimonadTests[F] {
-      def arbitraryK: ArbitraryK[F] = implicitly
-      def eqK: EqK[F] = implicitly
       def laws: BimonadLaws[F] = BimonadLaws[F]
     }
 }

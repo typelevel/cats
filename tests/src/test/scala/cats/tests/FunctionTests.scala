@@ -1,7 +1,10 @@
 package cats
 package tests
 
+import org.scalacheck.Arbitrary
+
 import cats.arrow.{Arrow, Choice}
+import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
@@ -12,7 +15,7 @@ class FunctionTests extends CatsSuite {
   checkAll("Monoidal[Function0]", SerializableTests.serializable(Monoidal[Function0]))
 
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
-  checkAll("Bimonad[Function0]", SerializableTests.serializable(Comonad[Function0]))
+  checkAll("Bimonad[Function0]", SerializableTests.serializable(Bimonad[Function0]))
 
   implicit val iso = MonoidalTests.Isomorphisms.covariant[Function1[Int, ?]]
   checkAll("Function1[Int, Int]", MonoidalTests[Function1[Int, ?]].monoidal[Int, Int, Int])
@@ -26,4 +29,7 @@ class FunctionTests extends CatsSuite {
 
   checkAll("Function1[Int, Int]", ChoiceTests[Function1].choice[Int, Int, Int, Int])
   checkAll("Choice[Function1]", SerializableTests.serializable(Choice[Function1]))
+
+  checkAll("Function1[Int, Int]", ContravariantTests[? => Int].contravariant[Int, Int, Int])
+  checkAll("Contravariant[? => Int]", SerializableTests.serializable(Contravariant[? => Int]))
 }

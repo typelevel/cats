@@ -6,6 +6,7 @@ import algebra.std.{ListMonoid, ListOrder}
 
 import cats.data.Streaming
 import cats.syntax.order._
+import cats.syntax.show._
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
@@ -70,9 +71,14 @@ trait ListInstances extends ListInstances1 {
 
   implicit def listAlgebra[A]: Monoid[List[A]] = new ListMonoid[A]
   implicit def listOrder[A: Order]: Order[List[A]] = new ListOrder[A]
+
+  implicit def listShow[A:Show]: Show[List[A]] =
+    new Show[List[A]] {
+      def show(fa: List[A]): String = fa.map(_.show).mkString("List(", ", ", ")")
+    }
 }
 
-trait ListInstances1 extends ListInstances2 {
+private[std] sealed trait ListInstances1 extends ListInstances2 {
   implicit def partialOrderList[A: PartialOrder]: PartialOrder[List[A]] =
     new PartialOrder[List[A]] {
       def partialCompare(x: List[A], y: List[A]): Double = {
@@ -94,7 +100,7 @@ trait ListInstances1 extends ListInstances2 {
     }
 }
 
-trait ListInstances2 {
+private[std] sealed trait ListInstances2 {
   implicit def eqList[A: Eq]: Eq[List[A]] =
     new Eq[List[A]] {
       def eqv(x: List[A], y: List[A]): Boolean = {
