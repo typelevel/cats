@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.arrow.NaturalTransformation
+import cats.data.Coproduct
 
 
 class NaturalTransformationTests extends CatsSuite {
@@ -14,6 +15,28 @@ class NaturalTransformationTests extends CatsSuite {
     new NaturalTransformation[Option, List] {
       def apply[A](fa: Option[A]): List[A] = fa.toList
     }
+
+  sealed trait Test1Algebra[A] {
+    def v : A
+  }
+
+  case class Test1[A](v : A) extends Test1Algebra[A]
+
+  sealed trait Test2Algebra[A] {
+    def v : A
+  }
+
+  case class Test2[A](v : A) extends Test2Algebra[A]
+
+  object Test1NT extends (Test1Algebra ~> Id) {
+    override def apply[A](fa: Test1Algebra[A]): Id[A] = Id.pure(fa.v)
+  }
+
+  object Test2NT extends (Test2Algebra ~> Id) {
+    override def apply[A](fa: Test2Algebra[A]): Id[A] = Id.pure(fa.v)
+  }
+
+  type T[A] = Coproduct[Test1Algebra, Test2Algebra, A]
 
   test("compose") {
     forAll { (list: List[Int]) =>
@@ -32,6 +55,14 @@ class NaturalTransformationTests extends CatsSuite {
   test("id is identity") {
     forAll { (list: List[Int]) =>
       NaturalTransformation.id[List].apply(list) should === (list)
+    }
+  }
+
+  test("or") {
+    val combinedInterpreter = NaturalTransformation.or(Test1NT, Test2NT)
+    forAll { (a : Int, b : Int) =>
+      (combinedInterpreter(Coproduct.left(Test1(a))) == Id.pure(a)) should ===(true)
+      (combinedInterpreter(Coproduct.right(Test2(b))) == Id.pure(b)) should ===(true)
     }
   }
 }

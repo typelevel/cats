@@ -348,6 +348,109 @@ it's not too hard to get around.)
 val result: Map[String, Int] = compilePure(program, Map.empty)
 ```
 
+## Composing Free monads ADTs.
+
+Real world applications often time combine different algebras. 
+The `Inject` typeclass described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
+lets us compose different algebras in the context of `Free`.
+
+Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.
+
+```tut
+import cats.arrow.NaturalTransformation
+import cats.data.{Xor, Coproduct}
+import cats.free.{Inject, Free}
+import cats.{Id, ~>}
+import scala.collection.mutable.ListBuffer
+```
+
+```tut
+/* Handles user interaction */
+sealed trait Interact[A]
+case class Ask(prompt: String) extends Interact[String]
+case class Tell(msg: String) extends Interact[Unit]
+
+/* Represents persistence operations */
+sealed trait DataOp[A]
+case class AddCat(a: String) extends DataOp[Unit]
+case class GetAllCats() extends DataOp[List[String]]
+```
+
+Once the ADTs are defined we can formally state that a `Free` program is the Coproduct of it's Algebras.
+
+```tut
+type CatsApp[A] = Coproduct[DataOp, Interact, A]
+```
+
+In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the `Free` context.
+
+```tut
+class Interacts[F[_]](implicit I: Inject[Interact, F]) {
+  def tell(msg: String): Free[F, Unit] = Free.inject[Interact, F](Tell(msg))
+  def ask(prompt: String): Free[F, String] = Free.inject[Interact, F](Ask(prompt))
+}
+
+object Interacts {
+  implicit def interacts[F[_]](implicit I: Inject[Interact, F]): Interacts[F] = new Interacts[F]
+}
+
+class DataSource[F[_]](implicit I: Inject[DataOp, F]) {
+  def addCat(a: String): Free[F, Unit] = Free.inject[DataOp, F](AddCat(a))
+  def getAllCats: Free[F, List[String]] = Free.inject[DataOp, F](GetAllCats())
+}
+
+object DataSource {
+  implicit def dataSource[F[_]](implicit I: Inject[DataOp, F]): DataSource[F] = new DataSource[F]
+}
+```
+
+ADTs are now easily composed and trivially intertwined inside monadic contexts.
+
+```tut 
+def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]) = {
+
+  import I._, D._
+
+  for {
+    cat <- ask("What's the kitty's name")
+    _ <- addCat(cat)
+    cats <- getAllCats
+    _ <- tell(cats.toString)
+  } yield ()
+}
+```
+
+Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so they can be
+compiled and applied to our `Free` program.
+
+```scala
+object ConsoleCatsInterpreter extends (Interact ~> Id) {
+  def apply[A](i: Interact[A]) = i match {
+    case Ask(prompt) =>
+      println(prompt)
+      scala.io.StdIn.readLine()
+    case Tell(msg) =>
+      println(msg)
+  }
+}
+
+object InMemoryDatasourceInterpreter extends (DataOp ~> Id) {
+
+  private[this] val memDataSet = new ListBuffer[String]
+
+  def apply[A](fa: DataOp[A]) = fa match {
+    case AddCat(a) => memDataSet.append(a); ()
+    case GetAllCats() => memDataSet.toList
+  }
+}
+
+val interpreter: CatsApp ~> Id = NaturalTransformation.or(InMemoryDatasourceInterpreter, ConsoleCatsInterpreter)
+
+import DataSource._, Interacts._
+
+val evaled = program.foldMap(interpreter)
+```
+
 ## <a name="what-is-free-in-theory"></a>For the curious ones: what is Free in theory?
 
 Mathematically-speaking, a *free monad* (at least in the programming
