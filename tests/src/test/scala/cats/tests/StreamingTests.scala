@@ -163,6 +163,81 @@ class AdHocStreamingTests extends CatsSuite {
     }
   }
 
+  test("toArray") {
+    forAll { (xs: Streaming[Int]) =>
+      xs.toArray should be (xs.toList.toArray)
+    }
+  }
+
+  test("compact should result in same values") {
+    forAll { (xs: Streaming[Int]) =>
+      xs.compact should === (xs)
+    }
+  }
+
+  test("fromFoldable consistent with fromList") {
+    forAll { (xs: List[Int]) =>
+      Streaming.fromFoldable(xs) should === (Streaming.fromList(xs))
+    }
+  }
+
+  test("fromIterable consistent with fromList") {
+    forAll { (xs: List[Int]) =>
+      Streaming.fromIterable(xs) should === (Streaming.fromList(xs))
+    }
+  }
+
+  test("fromIteratorUnsafe consistent with fromList") {
+    forAll { (xs: List[Int]) =>
+      Streaming.fromIteratorUnsafe(xs.iterator) should === (Streaming.fromList(xs))
+    }
+  }
+
+  test("continually consistent with List.fill") {
+    forAll { (l: Long, b: Byte) =>
+      val n = b.toInt
+      Streaming.continually(l).take(n).toList should === (List.fill(n)(l))
+    }
+  }
+
+  test("continually consistent with thunk") {
+    forAll { (l: Long, b: Byte) =>
+      val n = b.toInt
+      Streaming.continually(l).take(n) should === (Streaming.thunk(() => l).take(n))
+    }
+  }
+
+  test("equality consistent with list equality") {
+    forAll { (xs: Streaming[Int], ys: Streaming[Int]) =>
+      Eq[Streaming[Int]].eqv(xs, ys) should === (xs.toList == ys.toList)
+    }
+  }
+
+  test("unfold with Some consistent with infinite") {
+    forAll { (start: Int, b: Byte) =>
+      val n = b.toInt
+      val unfolded = Streaming.unfold(Some(start))(n => Some(n + 1)).take(n)
+      unfolded should === (Streaming.infinite(start)(_ + 1).take(n))
+    }
+  }
+
+  test("unfold consistent with infinite then takeWhile") {
+    implicit val arbInt: Arbitrary[Int] = Arbitrary(Gen.choose(-10, 20))
+    forAll { (start: Int, n: Int) =>
+      val end = start + n
+      def check(i: Int): Option[Int] = if (i <= end) Some(i) else None
+      val unfolded = Streaming.unfold(check(start))(i => check(i + 1))
+      val fromInfinite = Streaming.infinite(start)(_ + 1).takeWhile(_ <= end)
+      unfolded.toList should === (fromInfinite.toList)
+    }
+  }
+
+  test("unfold on None returns empty stream") {
+    forAll { (f: Int => Option[Int]) =>
+      Streaming.unfold(none[Int])(f) should === (Streaming.empty[Int])
+    }
+  }
+
   test("peekEmpty consistent with isEmpty") {
     forAll { (s: Streaming[Int]) =>
       s.peekEmpty.foreach(_ should === (s.isEmpty))
