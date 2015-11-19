@@ -812,7 +812,7 @@ object Streaming extends StreamingInstances {
    * traversals produce the same results.
    */
   def thunk[A](f: () => A): Streaming[A] =
-    knot(s => Cons(f(), s), memo = true)
+    knot(s => Cons(f(), s), memo = false)
 
   /**
    * Produce an infinite stream of values given an initial value and a
