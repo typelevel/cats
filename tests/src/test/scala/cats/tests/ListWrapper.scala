@@ -45,7 +45,7 @@ object ListWrapper {
 
   def eqv[A : Eq]: Eq[ListWrapper[A]] = Eq[List[A]].on[ListWrapper[A]](_.list)
 
-  def foldable: Foldable[ListWrapper] =
+  val foldable: Foldable[ListWrapper] =
     new Foldable[ListWrapper] {
       def foldLeft[A, B](fa: ListWrapper[A], b: B)(f: (B, A) => B): B =
         Foldable[List].foldLeft(fa.list, b)(f)
@@ -54,13 +54,13 @@ object ListWrapper {
         Foldable[List].foldRight(fa.list, lb)(f)
     }
 
-  def functor: Functor[ListWrapper] =
+  val functor: Functor[ListWrapper] =
     new Functor[ListWrapper] {
       def map[A, B](fa: ListWrapper[A])(f: A => B): ListWrapper[B] =
         ListWrapper(Functor[List].map(fa.list)(f))
     }
 
-  def semigroupK: SemigroupK[ListWrapper] =
+  val semigroupK: SemigroupK[ListWrapper] =
     new SemigroupK[ListWrapper] {
       def combine[A](x: ListWrapper[A], y: ListWrapper[A]): ListWrapper[A] =
         ListWrapper(SemigroupK[List].combine(x.list, y.list))
@@ -68,7 +68,7 @@ object ListWrapper {
 
   def semigroup[A]: Semigroup[ListWrapper[A]] = semigroupK.algebra[A]
 
-  def monadCombine: MonadCombine[ListWrapper] = {
+  val monadCombine: MonadCombine[ListWrapper] = {
     val M = MonadCombine[List]
 
     new MonadCombine[ListWrapper] {
@@ -83,6 +83,8 @@ object ListWrapper {
         ListWrapper(M.combine(x.list, y.list))
     }
   }
+
+  val monad: Monad[ListWrapper] = monadCombine
 
   def monoid[A]: Monoid[ListWrapper[A]] = monadCombine.algebra[A]
 

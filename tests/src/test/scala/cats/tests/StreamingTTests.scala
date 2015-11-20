@@ -25,6 +25,21 @@ class StreamingTTests extends CatsSuite {
   checkAll("StreamingT[List, Int]", OrderLaws[StreamingT[List, Int]].order)
   checkAll("Monad[StreamingT[List, ?]]", SerializableTests.serializable(Monad[StreamingT[List, ?]]))
 
+  {
+    implicit val F = ListWrapper.monad
+    implicit val O = ListWrapper.partialOrder[List[Int]]
+    checkAll("StreamingT[ListWrapper, Int]", OrderLaws[StreamingT[ListWrapper, Int]].partialOrder)
+    checkAll("PartialOrder[StreamingT[ListWrapper, Int]]", SerializableTests.serializable(PartialOrder[StreamingT[ListWrapper, Int]]))
+  }
+
+  {
+    implicit val F = ListWrapper.monad
+    implicit val E = ListWrapper.eqv[List[Int]]
+    checkAll("StreamingT[ListWrapper, Int]", OrderLaws[StreamingT[ListWrapper, Int]].eqv)
+    checkAll("Eq[StreamingT[ListWrapper, Int]]", SerializableTests.serializable(Eq[StreamingT[ListWrapper, Int]]))
+  }
+
+
   test("uncons with Id consistent with List headOption/tail") {
     forAll { (s: StreamingT[Id, Int]) =>
       val sList = s.toList
@@ -129,6 +144,36 @@ class StreamingTTests extends CatsSuite {
   test("drop with Id consistent with List.drop") {
     forAll { (s: StreamingT[Id, Int], i: Int) =>
       s.drop(i).toList should === (s.toList.drop(i))
+    }
+  }
+
+  test("fromVector") {
+    forAll { (xs: Vector[Int]) =>
+      StreamingT.fromVector[Id, Int](xs).toList.toVector should === (xs)
+    }
+  }
+
+  test("fromList") {
+    forAll { (xs: List[Int]) =>
+      StreamingT.fromList[Id, Int](xs).toList should === (xs)
+    }
+  }
+
+  test("single consistent with apply") {
+    forAll { (i: Int) =>
+      StreamingT[Id, Int](i) should === (StreamingT.single[Id, Int](i))
+    }
+  }
+
+  test("var-arg apply") {
+    forAll { (x1: Int, x2: Int, x3: Int, x4: Int) =>
+      val fromList = StreamingT.fromList[Id, Int](x1 :: x2 :: x3 :: x4 :: Nil)
+      StreamingT[Id, Int](x1, x2, x3, x4) should === (fromList)
+    }
+
+    forAll { (x1: Int, x2: Int, tail: List[Int]) =>
+      val fromList = StreamingT.fromList[Id, Int](x1 :: x2 :: tail)
+      StreamingT[Id, Int](x1, x2, tail: _*) should === (fromList)
     }
   }
 }
