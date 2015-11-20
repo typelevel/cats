@@ -277,10 +277,12 @@ private[data] trait XorTMonadFilter[F[_], L] extends MonadFilter[XorT[F, L, ?]] 
   def empty[A]: XorT[F, L, A] = XorT(F.pure(Xor.left(L.empty)))
 }
 
+/* TODO violates right absorbtion, right distributivity, and left distributivity -- re-enable when MonadCombine laws are split in to weak/strong
 private[data] trait XorTMonadCombine[F[_], L] extends MonadCombine[XorT[F, L, ?]] with XorTMonadFilter[F, L] with XorTSemigroupK[F, L] {
   implicit val F: Monad[F]
   implicit val L: Monoid[L]
 }
+*/
 
 private[data] sealed trait XorTFoldable[F[_], L] extends Foldable[XorT[F, L, ?]] {
   implicit def F0: Foldable[F]
