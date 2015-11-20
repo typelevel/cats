@@ -50,9 +50,15 @@ class OneAndTests extends CatsSuite {
   test("Show is not empty and is formatted as expected") {
     forAll { (nel: NonEmptyList[Int]) =>
       nel.show.nonEmpty should === (true)
-      nel.show.startsWith("OneAnd") should === (true)
+      nel.show.startsWith("OneAnd(") should === (true)
       nel.show should === (implicitly[Show[NonEmptyList[Int]]].show(nel))
+      nel.show.contains(nel.head.show) should === (true)
     }
+  }
+
+  test("Show is formatted correctly") {
+    val oneAnd = NonEmptyList("Test", Nil)
+    oneAnd.show should === ("OneAnd(Test, List())")
   }
 
   test("Creating OneAnd + unwrap is identity") {
