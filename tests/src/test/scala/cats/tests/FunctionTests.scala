@@ -8,7 +8,6 @@ import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import cats.std.function.{ function1MonoidK, function1SemigroupK }
 import algebra.laws.GroupLaws
 
 class FunctionTests extends CatsSuite {
@@ -28,7 +27,7 @@ class FunctionTests extends CatsSuite {
   checkAll("Function1[Int, Int]", ContravariantTests[? => Int].contravariant[Int, Int, Int])
   checkAll("Contravariant[? => Int]", SerializableTests.serializable(Contravariant[? => Int]))
 
-  checkAll("Function1[String, Int]", GroupLaws[Function1[String, Int]].semigroup)
+  checkAll("Function1[String, Int]", GroupLaws[Function1[String, Int]].semigroup(function1Semigroup[String, Int]))
 
   checkAll("Function1[String, Int]", GroupLaws[Function1[String, Int]].monoid)
 
