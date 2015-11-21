@@ -28,6 +28,8 @@ class FunctionTests extends CatsSuite {
   checkAll("Function1[Int, Int]", ContravariantTests[? => Int].contravariant[Int, Int, Int])
   checkAll("Contravariant[? => Int]", SerializableTests.serializable(Contravariant[? => Int]))
 
+  checkAll("Function1[String, Int]", GroupLaws[Function1[String, Int]].semigroup)
+
   checkAll("Function1[String, Int]", GroupLaws[Function1[String, Int]].monoid)
 
   checkAll("Function1[Int, Int]", MonoidKTests[Lambda[A => A => A]].semigroupK[Int])
