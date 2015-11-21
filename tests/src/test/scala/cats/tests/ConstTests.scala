@@ -45,6 +45,6 @@ class ConstTests extends CatsSuite {
 
   {
     implicit val iso = MonoidalTests.Isomorphisms.contravariant[Const[String, ?]]
-    checkAll("Const[String, Int]", MonoidalTests[Const[String, ?]].monoidal[Int, Int, Int])
+    checkAll("contravariant Const[String, Int]", MonoidalTests[Const[String, ?]].monoidal[Int, Int, Int])
   }
 }
