@@ -73,17 +73,17 @@ trait Function1Instances extends Function1Instances0 {
 
   implicit def function1Monoid[A,B](implicit M: Monoid[B]): Monoid[A => B] =
     new Function1Monoid[A, B] { def B: Monoid[B] = M }
+
+  implicit val function1MonoidK: MonoidK[Lambda[A => A => A]] =
+    new Function1MonoidK {}
 }
 
 trait Function1Instances0 {
   implicit def function1Semigroup[A,B](implicit S: Semigroup[B]): Semigroup[A => B] =
     new Function1Semigroup[A, B] { def B: Semigroup[B] = S }
-}
 
-private[std] trait Function1Monoid[A, B] extends Monoid[A => B] with Function1Semigroup[A, B] {
-  implicit def B: Monoid[B]
-
-  override def empty: A => B = _ => B.empty
+  implicit val function1SemigroupK: SemigroupK[Lambda[A => A => A]] =
+    new Function1SemigroupK {}
 }
 
 private[std] trait Function1Semigroup[A, B] extends Semigroup[A => B] {
@@ -92,6 +92,20 @@ private[std] trait Function1Semigroup[A, B] extends Semigroup[A => B] {
   override def combine(x: A => B, y: A => B): A => B = { a =>
     B.combine(x(a), y(a))
   }
+}
+
+private[std] trait Function1Monoid[A, B] extends Monoid[A => B] with Function1Semigroup[A, B] {
+  implicit def B: Monoid[B]
+
+  override def empty: A => B = _ => B.empty
+}
+
+private[std] trait Function1SemigroupK extends SemigroupK[Lambda[A => A => A]] {
+  override def combine[A](x: A => A, y: A => A): A => A = x compose y
+}
+
+private[std] trait Function1MonoidK extends MonoidK[Lambda[A => A => A]] with Function1SemigroupK {
+  override def empty[A]: A => A = identity[A]
 }
 
 trait FunctionInstances
