@@ -26,7 +26,7 @@ trait Function0Instances {
     }
 }
 
-trait Function1Instances {
+trait Function1Instances extends Function1Instances0 {
   implicit def function1Contravariant[R]: Contravariant[? => R] =
     new Contravariant[? => R] {
       def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
@@ -71,13 +71,27 @@ trait Function1Instances {
       def compose[A, B, C](f: B => C, g: A => B): A => C = f.compose(g)
     }
 
-  implicit def function1Monoid[A,B](implicit B: Monoid[B]): Monoid[A => B] =
-    new Monoid[A => B] {
-      def empty: A => B = _ => B.empty
-      def combine(x: A => B, y: A => B): A => B = { a =>
-        B.combine(x(a), y(a))
-      }
-    }
+  implicit def function1Monoid[A,B](implicit M: Monoid[B]): Monoid[A => B] =
+    new Function1Monoid[A, B] { def B: Monoid[B] = M }
+}
+
+trait Function1Instances0 {
+  implicit def function1Semigroup[A,B](implicit S: Semigroup[B]): Semigroup[A => B] =
+    new Function1Semigroup[A, B] { def B: Semigroup[B] = S }
+}
+
+private[std] trait Function1Monoid[A, B] extends Monoid[A => B] with Function1Semigroup[A, B] {
+  implicit def B: Monoid[B]
+
+  override def empty: A => B = _ => B.empty
+}
+
+private[std] trait Function1Semigroup[A, B] extends Semigroup[A => B] {
+  implicit def B: Semigroup[B]
+
+  override def combine(x: A => B, y: A => B): A => B = { a =>
+    B.combine(x(a), y(a))
+  }
 }
 
 trait FunctionInstances
