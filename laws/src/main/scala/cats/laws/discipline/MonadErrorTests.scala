@@ -3,6 +3,7 @@ package laws
 package discipline
 
 import cats.data.{ Xor, XorT }
+import cats.laws.discipline.MonoidalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq.unitEq
 import org.scalacheck.{Arbitrary, Prop}
@@ -24,7 +25,9 @@ trait MonadErrorTests[F[_], E] extends MonadTests[F] {
     EqE: Eq[E],
     EqFXorEU: Eq[F[E Xor Unit]],
     EqFXorEA: Eq[F[E Xor A]],
-    EqXorTFEA: Eq[XorT[F, E, A]]
+    EqXorTFEA: Eq[XorT[F, E, A]],
+    EqFABC: Eq[F[(A, B, C)]],
+    iso: Isomorphisms[F]
   ): RuleSet = {
     new RuleSet {
       def name: String = "monadError"

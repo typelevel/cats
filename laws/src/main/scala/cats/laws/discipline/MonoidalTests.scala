@@ -20,7 +20,7 @@ trait MonoidalTests[F[_]] extends Laws {
     new DefaultRuleSet(
       name = "monoidal",
       parent = None,
-      "monoidal associativity" -> forAll((fa: F[A], fb: F[B], fc: F[C]) => iso.associativity(laws.associativity(fa, fb, fc)))
+      "monoidal associativity" -> forAll((fa: F[A], fb: F[B], fc: F[C]) => iso.associativity(laws.monoidalAssociativity(fa, fb, fc)))
     )
   }
 }
@@ -35,15 +35,11 @@ object MonoidalTests {
 
   object Isomorphisms {
     import algebra.laws._
-    implicit def covariant[F[_]](implicit F: Functor[F]): Isomorphisms[F] =
+    implicit def invariant[F[_]](implicit F: functor.Invariant[F]): Isomorphisms[F] =
       new Isomorphisms[F] {
         def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)]))(implicit EqFABC: Eq[F[(A, B, C)]]) =
-          F.map(fs._1) { case (a, (b, c)) => (a, b, c) } ?== F.map(fs._2) { case ((a, b), c) => (a, b, c) }
-      }
-    implicit def contravariant[F[_]](implicit F: functor.Contravariant[F]): Isomorphisms[F] =
-      new Isomorphisms[F] {
-        def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)]))(implicit EqFABC: Eq[F[(A, B, C)]]) =
-          F.contramap[(A, (B, C)), (A, B, C)](fs._1) { case (a, b, c) => (a, (b, c)) } ?== F.contramap[((A, B), C), (A, B, C)](fs._2) { case (a, b, c) => ((a, b), c) }
+          F.imap(fs._1) { case (a, (b, c)) => (a, b, c) } { case (a, b, c) => (a, (b, c)) } ?==
+          F.imap(fs._2) { case ((a, b), c) => (a, b, c) } { case (a, b, c) => ((a, b), c) }
       }
   }
 

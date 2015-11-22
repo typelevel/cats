@@ -8,7 +8,7 @@ import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 
 class ProdTests extends CatsSuite {
-  implicit val iso = MonoidalTests.Isomorphisms.covariant[Prod[Option, List, ?]]
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Prod[Option, List, ?]]
   checkAll("Prod[Option, List, Int]", MonoidalTests[Lambda[X => Prod[Option, List, X]]].monoidal[Int, Int, Int])
   checkAll("Monoidal[Prod[Option, List, Int]]", SerializableTests.serializable(Monoidal[Lambda[X => Prod[Option, List, X]]]))
 

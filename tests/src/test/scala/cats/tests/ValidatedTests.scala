@@ -13,7 +13,7 @@ import algebra.laws.OrderLaws
 import scala.util.Try
 
 class ValidatedTests extends CatsSuite {
-  implicit val iso = MonoidalTests.Isomorphisms.covariant[Validated[String, ?]]
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Validated[String, ?]]
   checkAll("Validated[String, Int]", MonoidalTests[Validated[String,?]].monoidal[Int, Int, Int])
   checkAll("Monoidal[Validated[String,?]]", SerializableTests.serializable(Monoidal[Validated[String,?]]))
 

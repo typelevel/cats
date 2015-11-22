@@ -2,7 +2,7 @@ package cats
 package state
 
 import cats.tests.CatsSuite
-import cats.laws.discipline.{MonadStateTests, MonoidKTests, SerializableTests}
+import cats.laws.discipline.{MonoidalTests, MonadStateTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -39,6 +39,7 @@ class StateTTests extends CatsSuite {
     }
   }
 
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
   checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, Int, ?], Int].monadState[Int, Int, Int])
   checkAll("MonadState[StateT[Option, ?, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, Int, ?], Int]))
 }

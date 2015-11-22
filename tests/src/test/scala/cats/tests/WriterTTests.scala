@@ -62,6 +62,8 @@ class WriterTTests extends CatsSuite {
     checkAll("Bifunctor[WriterT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bifunctor[WriterT[ListWrapper, ?, ?]]))
   }
 
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[WriterT[ListWrapper, ListWrapper[Int], ?]](WriterT.writerTFunctor(ListWrapper.functor))
+
   // We have varying instances available depending on `F` and `L`.
   // We also battle some inference issues with `Id`.
   // Below we go through some gymnastics in order to test both the implicit

@@ -112,14 +112,10 @@ class OptionTTests extends CatsSuite {
     }
   }
 
-  {
-    implicit val iso = MonoidalTests.Isomorphisms.covariant[OptionT[List, ?]]
-    checkAll("OptionT[List, Int]", MonoidalTests[OptionT[List, ?]].monoidal[Int, Int, Int])
-  }
-  checkAll("Monoidal[OptionT[List, ?]]", SerializableTests.serializable(Monoidal[OptionT[List, ?]]))
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[OptionT[List, ?]]
 
-  checkAll("OptionT[List, Int]", MonadTests[OptionT[List, ?]].monad[Int, Int, Int])
-  checkAll("Monad[OptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
+  checkAll("OptionT[List, Int]", MonoidalTests[OptionT[List, ?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[OptionT[List, ?]]", SerializableTests.serializable(Monoidal[OptionT[List, ?]]))
 
   test("liftF") {
     forAll { (xs: List[Int]) =>
@@ -145,7 +141,7 @@ class OptionTTests extends CatsSuite {
   }
 
   checkAll("OptionT[List, Int]", MonadCombineTests[OptionT[List, ?]].monad[Int, Int, Int])
-  checkAll("MonadOptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
+  checkAll("Monad[OptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
 
   {
     implicit val F = ListWrapper.functor

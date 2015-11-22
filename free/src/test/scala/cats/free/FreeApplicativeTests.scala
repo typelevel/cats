@@ -2,7 +2,8 @@ package cats
 package free
 
 import cats.arrow.NaturalTransformation
-import cats.laws.discipline.{ApplicativeTests, SerializableTests}
+import cats.laws.discipline.{MonoidalTests, ApplicativeTests, SerializableTests}
+import cats.laws.discipline.eq.tuple3Eq
 import cats.tests.CatsSuite
 import cats.data.Const
 
@@ -22,6 +23,8 @@ class FreeApplicativeTests extends CatsSuite {
         SA.eqv(a.foldMap(nt), b.foldMap(nt))
       }
     }
+
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[FreeApplicative[Option, ?]]
 
   checkAll("FreeApplicative[Option, ?]", ApplicativeTests[FreeApplicative[Option, ?]].applicative[Int, Int, Int])
   checkAll("Monad[FreeApplicative[Option, ?]]", SerializableTests.serializable(Applicative[FreeApplicative[Option, ?]]))

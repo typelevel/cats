@@ -7,7 +7,8 @@ import algebra.laws.OrderLaws
 
 class EitherTests extends CatsSuite {
 
-  implicit val iso = MonoidalTests.Isomorphisms.covariant[Either[Int, ?]]
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Either[Int, ?]]
+
   checkAll("Either[Int, Int]", MonoidalTests[Either[Int, ?]].monoidal[Int, Int, Int])
   checkAll("Monoidal[Either[Int, ?]]", SerializableTests.serializable(Monoidal[Either[Int, ?]]))
 

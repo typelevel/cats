@@ -5,7 +5,7 @@ trait MonoidalLaws[F[_]] {
 
   implicit def F: Monoidal[F]
 
-  def associativity[A, B, C](fa: F[A], fb: F[B], fc: F[C]): (F[(A, (B, C))], F[((A, B), C)]) =
+  def monoidalAssociativity[A, B, C](fa: F[A], fb: F[B], fc: F[C]): (F[(A, (B, C))], F[((A, B), C)]) =
     (F.product(fa, F.product(fb, fc)), F.product(F.product(fa, fb), fc))
 
 }

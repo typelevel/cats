@@ -13,10 +13,11 @@ import scala.util.Random
 class OneAndTests extends CatsSuite {
   checkAll("OneAnd[List, Int]", OrderLaws[OneAnd[List, Int]].eqv)
 
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.oneAndFunctor(ListWrapper.functor))
+
   // Test instances that have more general constraints
   {
     implicit val monadCombine = ListWrapper.monadCombine
-    implicit val iso = MonoidalTests.Isomorphisms.covariant[OneAnd[ListWrapper, ?]]
     checkAll("OneAnd[ListWrapper, Int]", MonoidalTests[OneAnd[ListWrapper, ?]].monoidal[Int, Int, Int])
     checkAll("Monoidal[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Monoidal[OneAnd[ListWrapper, ?]]))
   }
@@ -47,6 +48,8 @@ class OneAndTests extends CatsSuite {
     implicitly[Monad[NonEmptyList]]
     implicitly[Comonad[NonEmptyList]]
   }
+
+  implicit val iso2 = MonoidalTests.Isomorphisms.invariant[OneAnd[List, ?]]
 
   checkAll("NonEmptyList[Int]", MonadTests[NonEmptyList].monad[Int, Int, Int])
   checkAll("Monad[NonEmptyList[A]]", SerializableTests.serializable(Monad[NonEmptyList]))

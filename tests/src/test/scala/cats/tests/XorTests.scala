@@ -15,10 +15,9 @@ import scala.util.Try
 class XorTests extends CatsSuite {
   checkAll("Xor[String, Int]", GroupLaws[Xor[String, Int]].monoid)
 
-  {
-    implicit val iso = MonoidalTests.Isomorphisms.covariant[Xor[String, ?]]
-    checkAll("Xor[String, Int]", MonoidalTests[Xor[String, ?]].monoidal[Int, Int, Int])
-  }
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Xor[String, ?]]
+
+  checkAll("Xor[String, Int]", MonoidalTests[Xor[String, ?]].monoidal[Int, Int, Int])
   checkAll("Monoidal[Xor, ?]", SerializableTests.serializable(Monoidal[Xor[String, ?]]))
 
   implicit val eq0 = XorT.xorTEq[Xor[String, ?], String, Int]

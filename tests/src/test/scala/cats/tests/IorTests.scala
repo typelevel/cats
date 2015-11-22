@@ -10,7 +10,8 @@ import org.scalacheck.Arbitrary._
 
 class IorTests extends CatsSuite {
 
-  implicit val iso = MonoidalTests.Isomorphisms.covariant[Ior[String, ?]]
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Ior[String, ?]]
+
   checkAll("Ior[String, Int]", MonoidalTests[Ior[String, ?]].monoidal[Int, Int, Int])
   checkAll("Monoidal[String Ior ?]]", SerializableTests.serializable(Monoidal[String Ior ?]))
 

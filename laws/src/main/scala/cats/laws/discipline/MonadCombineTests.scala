@@ -2,6 +2,7 @@ package cats
 package laws
 package discipline
 
+import cats.laws.discipline.MonoidalTests.Isomorphisms
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import Prop._
@@ -17,7 +18,9 @@ trait MonadCombineTests[F[_]] extends MonadFilterTests[F] with AlternativeTests[
     ArbFBtoC: Arbitrary[F[B => C]],
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
-    EqFC: Eq[F[C]]
+    EqFC: Eq[F[C]],
+    EqFABC: Eq[F[(A, B, C)]],
+    iso: Isomorphisms[F]
   ): RuleSet = {
     new RuleSet {
       def name: String = "monadCombine"

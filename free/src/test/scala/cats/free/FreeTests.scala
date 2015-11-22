@@ -3,7 +3,8 @@ package free
 
 import cats.arrow.NaturalTransformation
 import cats.tests.CatsSuite
-import cats.laws.discipline.{MonadTests, SerializableTests}
+import cats.laws.discipline.{MonoidalTests, MonadTests, SerializableTests}
+import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
 
 class FreeTests extends CatsSuite {
@@ -19,6 +20,8 @@ class FreeTests extends CatsSuite {
       def eqv(a: Free[S, A], b: Free[S, A]): Boolean =
         SA.eqv(a.runM(identity),  b.runM(identity))
     }
+
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Free[Option, ?]]
 
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))

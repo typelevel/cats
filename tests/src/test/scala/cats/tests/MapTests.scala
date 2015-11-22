@@ -5,7 +5,8 @@ import cats.laws.discipline.{TraverseTests, FlatMapTests, SerializableTests, Mon
 import cats.laws.discipline.eq._
 
 class MapTests extends CatsSuite {
-  implicit val iso = MonoidalTests.Isomorphisms.covariant[Map[Int, ?]]
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Map[Int, ?]]
+
   checkAll("Map[Int, Int]", MonoidalTests[Map[Int, ?]].monoidal[Int, Int, Int])
   checkAll("Monoidal[Map[Int, ?]]", SerializableTests.serializable(Monoidal[Map[Int, ?]]))
 
