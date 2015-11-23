@@ -357,7 +357,6 @@ lets us compose different algebras in the context of `Free`.
 Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.
 
 ```tut:silent
-import cats.arrow.NaturalTransformation
 import cats.data.{Xor, Coproduct}
 import cats.free.{Inject, Free}
 import cats.{Id, ~>}
