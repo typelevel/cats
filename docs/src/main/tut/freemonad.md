@@ -448,7 +448,7 @@ object InMemoryDatasourceInterpreter extends (DataOp ~> Id) {
   }
 }
 
-val interpreter: CatsApp ~> Id = NaturalTransformation.or(InMemoryDatasourceInterpreter, ConsoleCatsInterpreter)
+val interpreter: CatsApp ~> Id = InMemoryDatasourceInterpreter or ConsoleCatsInterpreter
 ```
 
 Now if we run our program and type in "snuggles" when prompted, we see something like this:
