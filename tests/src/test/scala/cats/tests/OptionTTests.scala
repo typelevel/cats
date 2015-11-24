@@ -2,7 +2,7 @@ package cats.tests
 
 import cats.{Applicative, Id, Monad, Show}
 import cats.data.{OptionT, Validated, Xor}
-import cats.laws.discipline.{ApplicativeTests, FunctorTests, MonadCombineTests, SerializableTests}
+import cats.laws.discipline.{ApplicativeTests, FunctorTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -146,8 +146,8 @@ class OptionTTests extends CatsSuite {
     }
   }
 
-  checkAll("OptionT[List, Int]", MonadCombineTests[OptionT[List, ?]].monad[Int, Int, Int])
-  checkAll("MonadOptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
+  checkAll("Monad[OptionT[List, Int]]", MonadTests[OptionT[List, ?]].monad[Int, Int, Int])
+  checkAll("Monad[OptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
 
   {
     implicit val F = ListWrapper.functor
