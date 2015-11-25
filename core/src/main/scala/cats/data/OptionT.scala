@@ -137,8 +137,9 @@ private[data] sealed trait OptionTInstances1 {
 }
 
 private[data] sealed trait OptionTInstances extends OptionTInstances1 {
-  implicit def optionTMonadCombine[F[_]](implicit F: Monad[F]): MonadCombine[OptionT[F, ?]] =
-    new MonadCombine[OptionT[F, ?]] {
+
+  implicit def optionTMonad[F[_]](implicit F: Monad[F]): Monad[OptionT[F, ?]] =
+    new Monad[OptionT[F, ?]] {
       def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
 
       def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
@@ -146,10 +147,8 @@ private[data] sealed trait OptionTInstances extends OptionTInstances1 {
 
       override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
         fa.map(f)
-
-      override def empty[A]: OptionT[F,A] = OptionT(F.pure(None))
-      override def combine[A](x: OptionT[F,A], y: OptionT[F,A]): OptionT[F,A] = x orElse y
     }
+
   implicit def optionTEq[F[_], A](implicit FA: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     FA.on(_.value)
 
