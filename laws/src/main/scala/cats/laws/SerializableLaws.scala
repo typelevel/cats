@@ -2,9 +2,11 @@ package cats
 package laws
 
 import org.scalacheck.Prop
-import org.scalacheck.Prop.{ False, Proof, Result }
+import org.scalacheck.Prop.{ Exception, False, Proof, Result }
 
 import catalysts.Platform
+
+import scala.util.control.NonFatal
 
 /**
  * Check for Java Serializability.
@@ -42,8 +44,8 @@ object SerializableLaws {
         val a2 = ois.readObject()
         ois.close()
         Result(status = Proof)
-      } catch { case _: Throwable =>
-          Result(status = False)
+      } catch { case NonFatal(t) =>
+        Result(status = Exception(t))
       } finally {
         oos.close()
         if (ois != null) ois.close()

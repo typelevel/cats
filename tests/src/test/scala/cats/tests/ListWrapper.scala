@@ -86,6 +86,12 @@ object ListWrapper {
 
   val monad: Monad[ListWrapper] = monadCombine
 
+  def monoidK: MonoidK[ListWrapper] = monadCombine
+
+  def monadFilter: MonadFilter[ListWrapper] = monadCombine
+
+  def alternative: Alternative[ListWrapper] = monadCombine
+
   def monoid[A]: Monoid[ListWrapper[A]] = monadCombine.algebra[A]
 
   implicit def listWrapperArbitrary[A: Arbitrary]: Arbitrary[ListWrapper[A]] =
