@@ -133,22 +133,14 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   @tailrec
   final def foldMap[M[_]](f: S ~> M)(implicit M: Monad[M]): M[A] = {
     step match {
-      case Free.Pure(a) => M.pure(a)
-      case Free.Suspend(s) => f(s)
-      case Free.Gosub(c, g) => c match {
-        case Free.Pure(a) => g(M.pure(a)).foldMap(f)
-        case Free.Suspend(s) => g(f(s)).foldMap(f)
-        case Free.Gosub(c1, g1) =>  g(M.flatMap(c1.foldMapRecursiveStep(f))(cc => g1(cc).foldMapRecursiveStep(f))).foldMap(f)
+      case Pure(a) => M.pure(a)
+      case Suspend(s) => f(s)
+      case Gosub(c, g) => c match {
+        case Suspend(s) => g(f(s)).foldMap(f)
+        case _ => throw new Error("Unexpected operation. The case should have been eliminated by `step`.")
       }
     }
   }
-
-  private def foldMapRecursiveStep[M[_]](f: S ~> M)(implicit M: Monad[M]): M[A] =
-    step match {
-      case Pure(a) => M.pure(a)
-      case Suspend(s) => f(s)
-      case Gosub(c, g) => M.flatMap(c.foldMap(f))(cc => g(cc).foldMap(f))
-    }
 
   /**
    * Compile your Free into another language by changing the suspension functor
