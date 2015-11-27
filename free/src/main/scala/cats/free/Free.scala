@@ -130,7 +130,20 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Run to completion, mapping the suspension with the given transformation at each step and
    * accumulating into the monad `M`.
    */
-  final def foldMap[M[_]](f: S ~> M)(implicit M: Monad[M]): M[A] =
+  @tailrec
+  final def foldMap[M[_]](f: S ~> M)(implicit M: Monad[M]): M[A] = {
+    step match {
+      case Free.Pure(a) => M.pure(a)
+      case Free.Suspend(s) => f(s)
+      case Free.Gosub(c, g) => c match {
+        case Free.Pure(a) => g(M.pure(a)).foldMap(f)
+        case Free.Suspend(s) => g(f(s)).foldMap(f)
+        case Free.Gosub(c1, g1) =>  g(M.flatMap(c1.foldMapRecursiveStep(f))(cc => g1(cc).foldMapRecursiveStep(f))).foldMap(f)
+      }
+    }
+  }
+
+  private def foldMapRecursiveStep[M[_]](f: S ~> M)(implicit M: Monad[M]): M[A] =
     step match {
       case Pure(a) => M.pure(a)
       case Suspend(s) => f(s)
