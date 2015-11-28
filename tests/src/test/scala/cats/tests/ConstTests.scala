@@ -35,4 +35,19 @@ class ConstTests extends CatsSuite {
 
   checkAll("Const[String, Int]", ContravariantTests[Const[String, ?]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Const[String, ?]]", SerializableTests.serializable(Contravariant[Const[String, ?]]))
+
+  test("show") {
+
+    Const(1).show should === ("Const(1)")
+
+    forAll { const: Const[Int, String] =>
+      const.show.startsWith("Const(") should === (true)
+      const.show.contains(const.getConst.show)
+      const.show should === (implicitly[Show[Const[Int, String]]].show(const))
+      const.show should === (const.retag[Boolean].show)
+    }
+  }
+
+
+
 }
