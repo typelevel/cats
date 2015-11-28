@@ -10,17 +10,17 @@ import cats.laws.discipline.eq._
 
 class StreamingTTests extends CatsSuite {
 
-  checkAll("StreamingT[Eval, ?]", MonadCombineTests[StreamingT[Eval, ?]].monad[Int, Int, Int])
+  checkAll("StreamingT[Eval, ?]", MonadCombineTests[StreamingT[Eval, ?]].monadCombine[Int, Int, Int])
   checkAll("StreamingT[Eval, ?]", CoflatMapTests[StreamingT[Eval, ?]].coflatMap[Int, Int, Int])
   checkAll("StreamingT[Eval, Int]", OrderLaws[StreamingT[Eval, Int]].order)
   checkAll("Monad[StreamingT[Eval, ?]]", SerializableTests.serializable(Monad[StreamingT[Eval, ?]]))
 
-  checkAll("StreamingT[Option, ?]", MonadCombineTests[StreamingT[Option, ?]].monad[Int, Int, Int])
+  checkAll("StreamingT[Option, ?]", MonadCombineTests[StreamingT[Option, ?]].monadCombine[Int, Int, Int])
   checkAll("StreamingT[Option, ?]", CoflatMapTests[StreamingT[Option, ?]].coflatMap[Int, Int, Int])
   checkAll("StreamingT[Option, Int]", OrderLaws[StreamingT[Option, Int]].order)
   checkAll("Monad[StreamingT[Option, ?]]", SerializableTests.serializable(Monad[StreamingT[Option, ?]]))
 
-  checkAll("StreamingT[List, ?]", MonadCombineTests[StreamingT[List, ?]].monad[Int, Int, Int])
+  checkAll("StreamingT[List, ?]", MonadCombineTests[StreamingT[List, ?]].monadCombine[Int, Int, Int])
   checkAll("StreamingT[List, ?]", CoflatMapTests[StreamingT[List, ?]].coflatMap[Int, Int, Int])
   checkAll("StreamingT[List, Int]", OrderLaws[StreamingT[List, Int]].order)
   checkAll("Monad[StreamingT[List, ?]]", SerializableTests.serializable(Monad[StreamingT[List, ?]]))
