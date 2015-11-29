@@ -116,14 +116,6 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     runM2(this)
   }
 
-  /** Takes one evaluation step in the Free monad, re-associating left-nested binds in the process. */
-  @tailrec
-  final def step: Free[S, A] = this match {
-    case Gosub(Gosub(c, f), g) => c.flatMap(cc => f(cc).flatMap(g)).step
-    case Gosub(Pure(a), f) => f(a).step
-    case x => x
-  }
-
   /**
    * Catamorphism for `Free`.
    *
@@ -131,16 +123,16 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * accumulating into the monad `M`.
    */
   @tailrec
-  final def foldMap[M[_]](f: S ~> M)(implicit M: Monad[M]): M[A] = {
-    step match {
+  final def foldMap[M[_]](f: S ~> M)(implicit M: Monad[M]): M[A] =
+    this match {
       case Pure(a) => M.pure(a)
       case Suspend(s) => f(s)
       case Gosub(c, g) => c match {
         case Suspend(s) => g(f(s)).foldMap(f)
-        case _ => throw new Error("Unexpected operation. The case should have been eliminated by `step`.")
+        case Gosub(cSub, h) => cSub.flatMap(cc => h(cc).flatMap(g)).foldMap(f)
+        case Pure(a) => g(a).foldMap(f)
       }
     }
-  }
 
   /**
    * Compile your Free into another language by changing the suspension functor
