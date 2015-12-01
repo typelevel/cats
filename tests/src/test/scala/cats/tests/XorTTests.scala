@@ -157,6 +157,12 @@ class XorTTests extends CatsSuite {
     }
   }
 
+  test("getOrElseF with Id consistent with Xor getOrElse") {
+    forAll { (xort: XorT[Id, String, Int], i: Int) =>
+      xort.getOrElseF(i) should === (xort.value.getOrElse(i))
+    }
+  }
+
   test("forall with Id consistent with Xor forall") {
     forAll { (xort: XorT[Id, String, Int], f: Int => Boolean) =>
       xort.forall(f) should === (xort.value.forall(f))
