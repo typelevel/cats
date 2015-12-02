@@ -13,11 +13,15 @@ Before introducing a `SemigroupK`, it makes sense to talk about what a
 returns a value of type `A`. This operation must be guaranteed to be
 associative. That is to say that:
 
-    ((a combine b) combine c)
+```scala
+((a combine b) combine c)
+```
 
 must be the same as
 
-    (a combine (b combine c))
+```scala
+(a combine (b combine c))
+```
 
 for all possible values of `a`, `b`, `c`.
 
@@ -33,10 +37,14 @@ defines type aliases to the `Semigroup` from algebra, so that you can
 There are instances of `Semigroup` defined for many types found in the
 scala common library:
 
-```tut
+```tut:silent
 import cats._
 import cats.std.all._
+```
 
+Examples.
+
+```tut
 Semigroup[Int].combine(1, 2)
 Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
 Semigroup[Option[Int]].combine(Option(1), Option(2))
@@ -89,7 +97,7 @@ There is inline syntax available for both `Semigroup` and
 `|+|` is the operator from semigroup and that `<+>` is the operator
 from `SemigroupK` (called `Plus` in scalaz).
 
-```tut
+```tut:silent
 import cats.syntax.all._
 import cats.implicits._
 import cats.std._
@@ -97,7 +105,11 @@ import cats.std._
 val one = Option(1)
 val two = Option(2)
 val n: Option[Int] = None
+```
 
+Thus.
+
+```tut
 one |+| two
 one <+> two
 n |+| two

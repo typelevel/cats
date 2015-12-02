@@ -33,7 +33,7 @@ We can use `flatten` to define `flatMap`: `flatMap` is just `map`
 followed by `flatten`. Conversely, `flatten` is just `flatMap` using
 the identity function `x => x` (i.e. `flatMap(_)(x => x)`).
 
-```tut
+```tut:silent
 import cats._
 
 implicit def optionMonad(implicit app: Applicative[Option]) =
@@ -52,7 +52,7 @@ implicit def optionMonad(implicit app: Applicative[Option]) =
 follows this tradition by providing implementations of `flatten` and `map`
 derived from `flatMap` and `pure`.
 
-```tut
+```tut:silent
 implicit val listMonad = new Monad[List] {
   def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] = fa.flatMap(f)
   def pure[A](a: A): List[A] = List(a)
@@ -94,7 +94,7 @@ instructions on how to compose any outer monad (`F` in the following
 example) with a specific inner monad (`Option` in the following
 example).
 
-```tut
+```tut:silent
 case class OptionT[F[_], A](value: F[Option[A]])
 
 implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
