@@ -4,21 +4,11 @@ package free
 import cats.arrow.NaturalTransformation
 import cats.tests.CatsSuite
 import cats.laws.discipline.{MonadTests, SerializableTests}
+import cats.laws.discipline.arbitrary.function0Arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
 class FreeTests extends CatsSuite {
-
-  implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
-    Arbitrary(
-      Gen.oneOf(
-        A.arbitrary.map(Free.pure[F, A]),
-        F.arbitrary.map(Free.liftF[F, A])))
-
-  implicit def freeEq[S[_]: Monad, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
-    new Eq[Free[S, A]] {
-      def eqv(a: Free[S, A], b: Free[S, A]): Boolean =
-        SA.eqv(a.runM(identity),  b.runM(identity))
-    }
+  import FreeTests._
 
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
@@ -50,4 +40,28 @@ class FreeTests extends CatsSuite {
 
     assert(10000 == a(0).foldMap(runner))
   }
+}
+
+object FreeTests extends FreeTestsInstances {
+  import cats.std.function._
+
+  implicit def trampolineArbitrary[A:Arbitrary]: Arbitrary[Trampoline[A]] =
+    freeArbitrary[Function0, A]
+
+  implicit def trampolineEq[A:Eq]: Eq[Trampoline[A]] =
+    freeEq[Function0, A]
+}
+
+sealed trait FreeTestsInstances {
+  implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
+    Arbitrary(
+      Gen.oneOf(
+        A.arbitrary.map(Free.pure[F, A]),
+        F.arbitrary.map(Free.liftF[F, A])))
+
+  implicit def freeEq[S[_]: Monad, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
+    new Eq[Free[S, A]] {
+      def eqv(a: Free[S, A], b: Free[S, A]): Boolean =
+        SA.eqv(a.runM(identity),  b.runM(identity))
+    }
 }

@@ -11,7 +11,6 @@ import cats.laws.discipline.arbitrary._
 import algebra.laws.GroupLaws
 
 class FunctionTests extends CatsSuite {
-  implicit def ev0[A: Arbitrary]: Arbitrary[() => A] = Arbitrary(Arbitrary.arbitrary[A].map { a => () => a })
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
   checkAll("Bimonad[Function0]", SerializableTests.serializable(Bimonad[Function0]))
 

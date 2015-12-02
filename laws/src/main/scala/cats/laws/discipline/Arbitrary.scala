@@ -116,6 +116,8 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def showArbitrary[A: Arbitrary]: Arbitrary[Show[A]] =
     Arbitrary(Show.fromToString[A])
 
+  implicit def function0Arbitrary[A: Arbitrary]: Arbitrary[() => A] =
+    Arbitrary(getArbitrary[A].map(() => _))
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {
