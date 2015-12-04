@@ -20,7 +20,7 @@ class FreeTests extends CatsSuite {
     }
   }
 
-  test("foldMap is stack safe") {
+  ignore("foldMap is stack safe") {
     trait FTestApi[A]
     case class TB(i: Int) extends FTestApi[Int]
 
@@ -73,7 +73,7 @@ sealed trait FreeTestsInstances {
   }
 
   implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
-    Arbitrary(freeGen[F, A](16))
+    Arbitrary(freeGen[F, A](8))
 
   implicit def freeEq[S[_]: Monad, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
     new Eq[Free[S, A]] {
