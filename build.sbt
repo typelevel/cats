@@ -153,7 +153,7 @@ lazy val freeJVM = free.jvm
 lazy val freeJS = free.js
 
 lazy val state = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core, free, tests % "test-internal -> test")
+  .dependsOn(macros, core, free % "compile-internal;test-internal -> test", tests % "test-internal -> test")
   .settings(moduleName := "cats-state")
   .settings(catsSettings:_*)
   .jsSettings(commonJsSettings:_*)
