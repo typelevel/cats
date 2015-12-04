@@ -73,7 +73,7 @@ sealed trait FreeTestsInstances {
   }
 
   implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
-    Arbitrary(freeGen[F, A](8))
+    Arbitrary(freeGen[F, A](6))
 
   implicit def freeEq[S[_]: Monad, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
     new Eq[Free[S, A]] {
