@@ -163,6 +163,21 @@ class XorTTests extends CatsSuite {
     }
   }
 
+  test("orElse with Id consistent with Xor orElse") {
+    forAll { (xort: XorT[Id, String, Int], fallback: XorT[Id, String, Int]) =>
+      xort.orElse(fallback).value should === (xort.value.orElse(fallback.value))
+    }
+  }
+
+  test("orElse evaluates effect only once") {
+    forAll { (xor: String Xor Int, fallback: XorT[Eval, String, Int]) =>
+      var evals = 0
+      val xort = (XorT(Eval.always { evals += 1; xor }) orElse fallback)
+      xort.value.value
+      evals should === (1)
+    }
+  }
+
   test("forall with Id consistent with Xor forall") {
     forAll { (xort: XorT[Id, String, Int], f: Int => Boolean) =>
       xort.forall(f) should === (xort.value.forall(f))

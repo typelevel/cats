@@ -29,6 +29,15 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
     }
   }
 
+  def orElse[AA >: A, BB >: B](default: => XorT[F, AA, BB])(implicit F: Monad[F]): XorT[F, AA, BB] = {
+    XorT(F.flatMap(value) { xor =>
+      xor match {
+        case Xor.Left(_) => default.value
+        case _ => F.pure(xor)
+      }
+    })
+  }
+
   def recover(pf: PartialFunction[A, B])(implicit F: Functor[F]): XorT[F, A, B] =
     XorT(F.map(value)(_.recover(pf)))
 
