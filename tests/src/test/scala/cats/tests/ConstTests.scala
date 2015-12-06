@@ -25,6 +25,8 @@ class ConstTests extends CatsSuite {
   // Algebra checks for Serializability of instances as part of the laws
   checkAll("Monoid[Const[Int, String]]", GroupLaws[Const[Int, String]].monoid)
 
+  checkAll("Const[NonEmptyList[Int], String]", GroupLaws[Const[NonEmptyList[Int], String]].semigroup)
+
   // Note while Eq is a superclass of PartialOrder and PartialOrder a superclass
   // of Order, you can get different instances with different (more general) constraints.
   // For instance, you can get an Order for Const if the first type parameter has an Order,
