@@ -194,6 +194,12 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
 }
 
 private[data] sealed abstract class XorInstances1 extends XorInstances2 {
+
+  implicit def xorSemigroup[A, B](implicit A: Semigroup[A], B: Semigroup[B]): Semigroup[A Xor B] =
+    new Semigroup[A Xor B] {
+      def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
+    }
+
   implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[A Xor B] = new PartialOrder[A Xor B] {
     def partialCompare(x: A Xor B, y: A Xor B): Double = x partialCompare y
     override def eqv(x: A Xor B, y: A Xor B): Boolean = x === y
