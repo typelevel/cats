@@ -12,8 +12,9 @@ import org.scalacheck.Arbitrary._
 import scala.util.Try
 
 class XorTests extends CatsSuite {
-  checkAll("Monoid[Xor[String, Int]]", GroupLaws[Xor[String, Int]].monoid)
-  checkAll("Semigroup[Xor[String, NonEmptyList[Int]]]", GroupLaws[Xor[String, NonEmptyList[Int]]].semigroup)
+  checkAll("Xor[String, Int]", GroupLaws[Xor[String, Int]].monoid)
+
+  checkAll("Xor[String, NonEmptyList[Int]]", GroupLaws[Xor[String, NonEmptyList[Int]]].semigroup)
 
   implicit val eq0 = XorT.xorTEq[Xor[String, ?], String, Int]
 
