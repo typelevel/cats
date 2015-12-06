@@ -24,6 +24,8 @@ class ValidatedTests extends CatsSuite {
 
   checkAll("Monoid[Validated[String, Int]]", GroupLaws[Validated[String, Int]].monoid)
 
+  checkAll("Semigroup[Validated[String, NonEmptyList[Int]]]", GroupLaws[Validated[String, NonEmptyList[Int]]].semigroup)
+
   {
     implicit val S = ListWrapper.partialOrder[String]
     implicit val I = ListWrapper.partialOrder[Int]
