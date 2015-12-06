@@ -236,6 +236,12 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
 }
 
 private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
+
+  implicit def validatedSemigroup[A, B](implicit A: Semigroup[A], B: Semigroup[B]): Semigroup[Validated[A, B]] =
+    new Semigroup[Validated[A, B]] {
+      def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x combine y
+    }
+
   implicit def validatedPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A,B]] =
     new PartialOrder[Validated[A,B]] {
       def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y

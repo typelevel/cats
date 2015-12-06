@@ -22,7 +22,9 @@ class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int]", OrderLaws[Validated[String, Int]].order)
   checkAll("Order[Validated[String, Int]]", SerializableTests.serializable(Order[Validated[String, Int]]))
 
-  checkAll("Monoid[Validated[String, Int]]", GroupLaws[Validated[String, Int]].monoid)
+  checkAll("Validated[String, Int]", GroupLaws[Validated[String, Int]].monoid)
+
+  checkAll("Validated[String, NonEmptyList[Int]]", GroupLaws[Validated[String, NonEmptyList[Int]]].semigroup)
 
   {
     implicit val S = ListWrapper.partialOrder[String]
