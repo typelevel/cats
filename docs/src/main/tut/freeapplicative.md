@@ -8,7 +8,7 @@ scaladoc: "#cats.free.FreeApplicative"
 # Free Applicative
 
 `FreeApplicative`s are similar to `Free` (monads) in that they provide a nice way to represent
-computations as data and are useful for building embedded DSLs (EDSLs). However, they differ in
+computations as data and are useful for building embedded DSLs (EDSLs). However, they differ
 from `Free` in that the kinds of operations they support are limited, much like the distinction
 between `Applicative` and `Monad`.
 
@@ -143,7 +143,7 @@ logValidation((hasNumber |@| size(3)).map(_ || _))
 ### Why not both?
 It is perhaps more plausible and useful to have both the actual validation function and the logging
 strings. While we could easily compile our program twice, once for each interpreter as we have above,
-we could also do it in one go - this would avoid multiple traversals or the same structure.
+we could also do it in one go - this would avoid multiple traversals of the same structure.
 
 Another useful property `Applicative`s have over `Monad`s is that given two `Applicative`s `F[_]` and
 `G[_]`, their product `type FG[A] = (F[A], G[A])` is also an `Applicative`. This is not true in the general
