@@ -273,11 +273,12 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    * This method will not force evaluation of any lazy part of a
    * stream. As a result, you will see at most one element (the first
    * one).
-   *
-   * Use .toString(n) to see the first n elements of the stream.
    */
-  override def toString: String =
-    "StreamingT(...)"
+  override def toString: String = this match {
+    case Cons(a, _) => s"StreamingT($a, ...)"
+    case Wait(_) => "StreamingT(...)"
+    case Empty() => "StreamingT()"
+  }
 }
 
 object StreamingT extends StreamingTInstances {
