@@ -47,7 +47,7 @@ val prog: Validation[Boolean] = (size(5) |@| hasNumber).map { case (l, r) => l &
 As it stands, our program is just an instance of a data structure - nothing has happened
 at this point. To make our program useful we need to interpret it.
 
-```tut
+```tut:silent
 import cats.Id
 import cats.arrow.NaturalTransformation
 import cats.std.function._
@@ -61,7 +61,9 @@ val compiler =
           case HasNumber  => str.exists(c => "0123456789".contains(c))
         }
   }
+```
 
+```tut
 val validator = prog.foldMap[String => ?](compiler)
 validator("1234")
 validator("12345")
@@ -128,7 +130,14 @@ val logCompiler =
       }
   }
 
-val logValidation = prog.foldMap[Log](logCompiler)
+def logValidation[A](validation: Validation[A]): List[String] =
+  validation.foldMap[Log](logCompiler).getConst
+```
+
+```tut
+logValidation(prog)
+logValidation(size(5) *> hasNumber *> size(10))
+logValidation((hasNumber |@| size(3)).map(_ || _))
 ```
 
 ### Why not both?
