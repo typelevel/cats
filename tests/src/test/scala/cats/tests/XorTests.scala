@@ -1,9 +1,9 @@
 package cats
 package tests
 
-import cats.data.{Xor, XorT}
+import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
-import cats.laws.discipline.arbitrary.xorArbitrary
+import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadErrorTests, SerializableTests}
 import algebra.laws.{GroupLaws, OrderLaws}
 import org.scalacheck.{Arbitrary, Gen}
@@ -13,6 +13,8 @@ import scala.util.Try
 
 class XorTests extends CatsSuite {
   checkAll("Xor[String, Int]", GroupLaws[Xor[String, Int]].monoid)
+
+  checkAll("Xor[String, NonEmptyList[Int]]", GroupLaws[Xor[String, NonEmptyList[Int]]].semigroup)
 
   implicit val eq0 = XorT.xorTEq[Xor[String, ?], String, Int]
 
