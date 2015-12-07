@@ -176,6 +176,14 @@ class StreamingTTests extends CatsSuite {
       StreamingT[Id, Int](x1, x2, tail: _*) should === (fromList)
     }
   }
+
+  test("toString is wrapped in StreamingT()"){
+    forAll { (xs: StreamingT[Option, Int]) =>
+      val s = xs.toString
+      s.take(11) should === ("StreamingT(")
+      s.last should === (')')
+    }
+  }
 }
 
 class SpecificStreamingTTests extends CatsSuite {
