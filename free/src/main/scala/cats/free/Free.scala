@@ -74,6 +74,14 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def fold[B](r: A => B, s: S[Free[S, A]] => B)(implicit S: Functor[S]): B =
     resume.fold(s, r)
 
+  /** Takes one evaluation step in the Free monad, re-associating left-nested binds in the process. */
+  @tailrec
+  final def step: Free[S, A] = this match {
+    case Gosub(Gosub(c, f), g) => c.flatMap(cc => f(cc).flatMap(g)).step
+    case Gosub(Pure(a), f) => f(a).step
+    case x => x
+  }
+
   /**
    * Evaluate a single layer of the free monad.
    */
@@ -122,16 +130,11 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Run to completion, mapping the suspension with the given transformation at each step and
    * accumulating into the monad `M`.
    */
-  @tailrec
   final def foldMap[M[_]](f: S ~> M)(implicit M: Monad[M]): M[A] =
-    this match {
+    step match {
       case Pure(a) => M.pure(a)
       case Suspend(s) => f(s)
-      case Gosub(c, g) => c match {
-        case Suspend(s) => g(f(s)).foldMap(f)
-        case Gosub(cSub, h) => cSub.flatMap(cc => h(cc).flatMap(g)).foldMap(f)
-        case Pure(a) => g(a).foldMap(f)
-      }
+      case Gosub(c, g) => M.flatMap(c.foldMap(f))(cc => g(cc).foldMap(f))
     }
 
   /**

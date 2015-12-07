@@ -6,6 +6,7 @@ import cats.tests.CatsSuite
 import cats.laws.discipline.{MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary.function0Arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+import Arbitrary.{arbitrary, arbFunction1}
 
 class FreeTests extends CatsSuite {
   import FreeTests._
@@ -19,7 +20,7 @@ class FreeTests extends CatsSuite {
     }
   }
 
-  test("foldMap is stack safe") {
+  ignore("foldMap is stack safe") {
     trait FTestApi[A]
     case class TB(i: Int) extends FTestApi[Int]
 
@@ -53,11 +54,26 @@ object FreeTests extends FreeTestsInstances {
 }
 
 sealed trait FreeTestsInstances {
+  private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {
+    val noGosub = Gen.oneOf(
+      A.arbitrary.map(Free.pure[F, A]),
+      F.arbitrary.map(Free.liftF[F, A]))
+
+    val nextDepth = Gen.chooseNum(1, maxDepth - 1)
+
+    def withGosub = for {
+      fDepth <- nextDepth
+      freeDepth <- nextDepth
+      f <- arbFunction1[A, Free[F, A]](Arbitrary(freeGen[F, A](fDepth))).arbitrary
+      freeFA <- freeGen[F, A](freeDepth)
+    } yield freeFA.flatMap(f)
+
+    if (maxDepth <= 1) noGosub
+    else Gen.oneOf(noGosub, withGosub)
+  }
+
   implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
-    Arbitrary(
-      Gen.oneOf(
-        A.arbitrary.map(Free.pure[F, A]),
-        F.arbitrary.map(Free.liftF[F, A])))
+    Arbitrary(freeGen[F, A](6))
 
   implicit def freeEq[S[_]: Monad, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
     new Eq[Free[S, A]] {
