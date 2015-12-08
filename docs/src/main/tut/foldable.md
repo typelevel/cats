@@ -23,10 +23,16 @@ used by the associated `Foldable[_]` instance.
 These form the basis for many other operations, see also: 
 [A tutorial on the universality and expressiveness of fold](https://www.cs.nott.ac.uk/~gmh/fold.pdf) 
 
-```tut
+First some standard imports.
+
+```tut:silent
 import cats._
 import cats.std.all._
+```
 
+And examples.
+
+```tut
 Foldable[List].fold(List("a", "b", "c"))
 Foldable[List].foldMap(List(1, 2, 4))(_.toString)
 Foldable[List].foldK(List(List(1,2,3), List(2,3,4)))
@@ -70,13 +76,13 @@ Hence when defining some new data structure, if we can define a `foldLeft` and
 Note that, in order to support laziness, the signature of `Foldable`'s 
 `foldRight` is 
 
-```
+```scala
 def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B]
 ```
 
 as opposed to
  
-```
+```scala
 def foldRight[A, B](fa: F[A], z: B)(f: (A, B) => B): B
 ```
  

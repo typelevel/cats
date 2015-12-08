@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.{Applicative, Id, Monad, Monoidal}
+import cats.{Applicative, Id, Monad, Monoidal, Show}
 import cats.data.{OptionT, Validated, Xor}
 import cats.laws.discipline.{ApplicativeTests, FunctorTests, MonadCombineTests, SerializableTests, MonoidalTests, MonadTests}
 import cats.laws.discipline.arbitrary._
@@ -82,6 +82,12 @@ class OptionTTests extends CatsSuite {
     }
   }
 
+  test("flatMap and flatMapF consistent") {
+    forAll { (optionT: OptionT[List, Int], f: Int => OptionT[List, Int])  =>
+      optionT.flatMap(f) should === (optionT.flatMapF(f(_).value))
+    }
+  }
+
   test("OptionT[Id, A].toRight consistent with Xor.fromOption") {
     forAll { (o: OptionT[Id, Int], s: String) =>
       o.toRight(s).value should === (Xor.fromOption(o.value, s))
@@ -123,9 +129,15 @@ class OptionTTests extends CatsSuite {
     }
   }
 
-  test("show"){
+  test("show") {
     val xor: String Xor Option[Int] = Xor.right(Some(1))
     OptionT[Xor[String, ?], Int](xor).show should === ("Xor.Right(Some(1))")
+  }
+
+  test("implicit Show[OptionT] instance and explicit show method are consistent") {
+    forAll { optionT: OptionT[List, Int] =>
+      optionT.show should === (implicitly[Show[OptionT[List, Int]]].show(optionT))
+    }
   }
 
   test("transform consistent with value.map") {
@@ -140,7 +152,7 @@ class OptionTTests extends CatsSuite {
     }
   }
 
-  checkAll("OptionT[List, Int]", MonadCombineTests[OptionT[List, ?]].monad[Int, Int, Int])
+  checkAll("Monad[OptionT[List, Int]]", MonadTests[OptionT[List, ?]].monad[Int, Int, Int])
   checkAll("Monad[OptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
 
   {

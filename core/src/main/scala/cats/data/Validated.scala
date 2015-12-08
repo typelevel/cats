@@ -178,6 +178,21 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case Valid(a) => f(a)
       case i @ Invalid(_) => i
     }
+
+  /**
+   * Combine this `Validated` with another `Validated`, using the `Semigroup`
+   * instances of the underlying `E` and `A` instances. The resultant `Validated`
+   * will be `Valid`, if, and only if, both this `Validated` instance and the
+   * supplied `Validated` instance are also `Valid`.
+   */
+  def combine[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Semigroup[EE], AA: Semigroup[AA]): Validated[EE, AA] =
+    (this, that) match {
+      case (Valid(a), Valid(b)) => Valid(AA.combine(a, b))
+      case (Invalid(a), Invalid(b)) => Invalid(EE.combine(a, b))
+      case (Invalid(_), _) => this
+      case _ => that
+    }
+
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions{
@@ -187,6 +202,12 @@ object Validated extends ValidatedInstances with ValidatedFunctions{
 
 
 private[data] sealed abstract class ValidatedInstances extends ValidatedInstances1 {
+
+  implicit def validatedMonoid[A, B](implicit A: Semigroup[A], B: Monoid[B]): Monoid[Validated[A, B]] = new Monoid[Validated[A, B]] {
+    def empty: Validated[A, B] = Valid(B.empty)
+    def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x combine y
+  }
+
   implicit def validatedOrder[A: Order, B: Order]: Order[Validated[A,B]] = new Order[Validated[A,B]] {
     def compare(x: Validated[A,B], y: Validated[A,B]): Int = x compare y
     override def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
@@ -228,6 +249,12 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
 }
 
 private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
+
+  implicit def validatedSemigroup[A, B](implicit A: Semigroup[A], B: Semigroup[B]): Semigroup[Validated[A, B]] =
+    new Semigroup[Validated[A, B]] {
+      def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x combine y
+    }
+
   implicit def validatedPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A,B]] =
     new PartialOrder[Validated[A,B]] {
       def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
@@ -295,4 +322,3 @@ trait ValidatedFunctions {
    */
   def fromOption[A, B](o: Option[B], ifNone: => A): Validated[A,B] = o.fold(invalid[A, B](ifNone))(valid)
 }
-

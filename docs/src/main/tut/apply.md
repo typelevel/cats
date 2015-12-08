@@ -14,8 +14,9 @@ a context can be `Option`, `List` or `Future` for example).
 However, the difference between `ap` and `map` is that for `ap` the function that 
 takes care of the transformation is of type `F[A => B]`, whereas for `map` it is `A => B`:
 
-```tut
+```tut:silent
 import cats._
+
 val intToString: Int => String = _.toString
 val double: Int => Int = _ * 2
 val addTwo: Int => Int = _ + 2
@@ -139,8 +140,6 @@ f2(Some(1), Some(2), Some(3))
 All instances created by `|@|` have `map`, `ap`, and `tupled` methods of the appropriate arity:
 
 ```tut
-import cats.syntax.monoidal._
-
 val option2 = Option(1) |@| Option(2)
 val option3 = option2 |@| Option.empty[Int]
 

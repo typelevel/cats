@@ -12,21 +12,32 @@ A semigroup for some given type A has a single operation
 returns a value of type A. This operation must be guaranteed to be
 associative. That is to say that:
 
-    ((a combine b) combine c)
+```scala
+((a combine b) combine c)
+```
 
 must be the same as
-     
-    (a combine (b combine c))
+
+```scala
+(a combine (b combine c))
+```
 
 for all possible values of a,b,c. 
 
 There are instances of `Semigroup` defined for many types found in the
 scala common library:
 
-```tut
+First some imports.
+
+```tut:silent
 import cats._
 import cats.std.all._
+import cats.implicits._
+```
 
+Examples.
+
+```tut
 Semigroup[Int].combine(1, 2)
 Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
 Semigroup[Option[Int]].combine(Option(1), Option(2))
@@ -40,10 +51,7 @@ value of having a `Semigroup` typeclass available is that these
 compose, so for instance, we can say 
  
 ```tut
-import cats.implicits._
-
 Map("foo" -> Map("bar" -> 5)).combine(Map("foo" -> Map("bar" -> 6), "baz" -> Map()))
-
 Map("foo" -> List(1, 2)).combine(Map("foo" -> List(3,4), "bar" -> List(42)))
 ```
 
@@ -54,12 +62,11 @@ Map("foo" -> Map("bar" -> 5)) ++  Map("foo" -> Map("bar" -> 6), "baz" -> Map())
 Map("foo" -> List(1, 2)) ++ Map("foo" -> List(3,4), "bar" -> List(42))
 ```
 
-
 There is inline syntax available for `Semigroup`. Here we are 
-following the convention from scalaz, that`|+|` is the 
+following the convention from scalaz, that `|+|` is the 
 operator from `Semigroup`.
 
-```tut
+```tut:silent
 import cats.syntax.all._
 import cats.implicits._
 import cats.std._
@@ -67,7 +74,11 @@ import cats.std._
 val one = Option(1)
 val two = Option(2)
 val n: Option[Int] = None
+```
 
+Thus.
+
+```tut
 one |+| two
 n |+| two
 n |+| n

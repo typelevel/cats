@@ -108,9 +108,6 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def partialFunctionArbitrary[A, B](implicit F: Arbitrary[A => Option[B]]): Arbitrary[PartialFunction[A, B]] =
     Arbitrary(F.arbitrary.map(Function.unlift))
 
-  implicit def thunkArbitrary[A](implicit F: Arbitrary[A]): Arbitrary[() => A] =
-    Arbitrary(F.arbitrary.map(a => () => a))
-
   implicit def coproductArbitrary[F[_], G[_], A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]]): Arbitrary[Coproduct[F, G, A]] =
     Arbitrary(Gen.oneOf(
       F.arbitrary.map(Coproduct.leftc[F, G, A]),
@@ -119,6 +116,8 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def showArbitrary[A: Arbitrary]: Arbitrary[Show[A]] =
     Arbitrary(Show.fromToString[A])
 
+  implicit def function0Arbitrary[A: Arbitrary]: Arbitrary[() => A] =
+    Arbitrary(getArbitrary[A].map(() => _))
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {

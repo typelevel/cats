@@ -12,7 +12,7 @@ class StreamingTTests extends CatsSuite {
 
   {
     implicit val iso = MonoidalTests.Isomorphisms.invariant[StreamingT[Eval, ?]]
-    checkAll("StreamingT[Eval, ?]", MonadCombineTests[StreamingT[Eval, ?]].monad[Int, Int, Int])
+    checkAll("StreamingT[Eval, ?]", MonadCombineTests[StreamingT[Eval, ?]].monadCombine[Int, Int, Int])
     checkAll("StreamingT[Eval, ?]", CoflatMapTests[StreamingT[Eval, ?]].coflatMap[Int, Int, Int])
     checkAll("StreamingT[Eval, Int]", OrderLaws[StreamingT[Eval, Int]].order)
     checkAll("Monad[StreamingT[Eval, ?]]", SerializableTests.serializable(Monad[StreamingT[Eval, ?]]))
@@ -20,7 +20,7 @@ class StreamingTTests extends CatsSuite {
 
   {
     implicit val iso = MonoidalTests.Isomorphisms.invariant[StreamingT[Option, ?]]
-    checkAll("StreamingT[Option, ?]", MonadCombineTests[StreamingT[Option, ?]].monad[Int, Int, Int])
+    checkAll("StreamingT[Option, ?]", MonadCombineTests[StreamingT[Option, ?]].monadCombine[Int, Int, Int])
     checkAll("StreamingT[Option, ?]", CoflatMapTests[StreamingT[Option, ?]].coflatMap[Int, Int, Int])
     checkAll("StreamingT[Option, Int]", OrderLaws[StreamingT[Option, Int]].order)
     checkAll("Monad[StreamingT[Option, ?]]", SerializableTests.serializable(Monad[StreamingT[Option, ?]]))
@@ -28,11 +28,26 @@ class StreamingTTests extends CatsSuite {
 
   {
     implicit val iso = MonoidalTests.Isomorphisms.invariant[StreamingT[List, ?]]
-    checkAll("StreamingT[List, ?]", MonadCombineTests[StreamingT[List, ?]].monad[Int, Int, Int])
+    checkAll("StreamingT[List, ?]", MonadCombineTests[StreamingT[List, ?]].monadCombine[Int, Int, Int])
     checkAll("StreamingT[List, ?]", CoflatMapTests[StreamingT[List, ?]].coflatMap[Int, Int, Int])
     checkAll("StreamingT[List, Int]", OrderLaws[StreamingT[List, Int]].order)
     checkAll("Monad[StreamingT[List, ?]]", SerializableTests.serializable(Monad[StreamingT[List, ?]]))
   }
+
+  {
+    implicit val F = ListWrapper.monad
+    implicit val O = ListWrapper.partialOrder[List[Int]]
+    checkAll("StreamingT[ListWrapper, Int]", OrderLaws[StreamingT[ListWrapper, Int]].partialOrder)
+    checkAll("PartialOrder[StreamingT[ListWrapper, Int]]", SerializableTests.serializable(PartialOrder[StreamingT[ListWrapper, Int]]))
+  }
+
+  {
+    implicit val F = ListWrapper.monad
+    implicit val E = ListWrapper.eqv[List[Int]]
+    checkAll("StreamingT[ListWrapper, Int]", OrderLaws[StreamingT[ListWrapper, Int]].eqv)
+    checkAll("Eq[StreamingT[ListWrapper, Int]]", SerializableTests.serializable(Eq[StreamingT[ListWrapper, Int]]))
+  }
+
 
   test("uncons with Id consistent with List headOption/tail") {
     forAll { (s: StreamingT[Id, Int]) =>
@@ -138,6 +153,44 @@ class StreamingTTests extends CatsSuite {
   test("drop with Id consistent with List.drop") {
     forAll { (s: StreamingT[Id, Int], i: Int) =>
       s.drop(i).toList should === (s.toList.drop(i))
+    }
+  }
+
+  test("fromVector") {
+    forAll { (xs: Vector[Int]) =>
+      StreamingT.fromVector[Id, Int](xs).toList.toVector should === (xs)
+    }
+  }
+
+  test("fromList") {
+    forAll { (xs: List[Int]) =>
+      StreamingT.fromList[Id, Int](xs).toList should === (xs)
+    }
+  }
+
+  test("single consistent with apply") {
+    forAll { (i: Int) =>
+      StreamingT[Id, Int](i) should === (StreamingT.single[Id, Int](i))
+    }
+  }
+
+  test("var-arg apply") {
+    forAll { (x1: Int, x2: Int, x3: Int, x4: Int) =>
+      val fromList = StreamingT.fromList[Id, Int](x1 :: x2 :: x3 :: x4 :: Nil)
+      StreamingT[Id, Int](x1, x2, x3, x4) should === (fromList)
+    }
+
+    forAll { (x1: Int, x2: Int, tail: List[Int]) =>
+      val fromList = StreamingT.fromList[Id, Int](x1 :: x2 :: tail)
+      StreamingT[Id, Int](x1, x2, tail: _*) should === (fromList)
+    }
+  }
+
+  test("toString is wrapped in StreamingT()"){
+    forAll { (xs: StreamingT[Option, Int]) =>
+      val s = xs.toString
+      s.take(11) should === ("StreamingT(")
+      s.last should === (')')
     }
   }
 }

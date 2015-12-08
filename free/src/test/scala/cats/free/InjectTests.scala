@@ -1,7 +1,6 @@
 package cats
 package free
 
-import cats.arrow.NaturalTransformation
 import cats.data.{Xor, Coproduct}
 import cats.laws.discipline.arbitrary
 import cats.tests.CatsSuite
@@ -53,7 +52,7 @@ class InjectTests extends CatsSuite {
     }
   }
 
-  val coProductInterpreter: T ~> Id = NaturalTransformation.or(Test1Interpreter, Test2Interpreter)
+  val coProductInterpreter: T ~> Id = Test1Interpreter or Test2Interpreter
 
   val x: Free[T, Int] = Free.inject[Test1Algebra, T](Test1(1, identity))
 

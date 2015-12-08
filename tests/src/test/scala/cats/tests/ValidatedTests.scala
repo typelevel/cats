@@ -8,7 +8,7 @@ import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq.tuple3Eq
-import algebra.laws.OrderLaws
+import algebra.laws.{OrderLaws, GroupLaws}
 
 import scala.util.Try
 
@@ -26,6 +26,10 @@ class ValidatedTests extends CatsSuite {
 
   checkAll("Validated[String, Int]", OrderLaws[Validated[String, Int]].order)
   checkAll("Order[Validated[String, Int]]", SerializableTests.serializable(Order[Validated[String, Int]]))
+
+  checkAll("Validated[String, Int]", GroupLaws[Validated[String, Int]].monoid)
+
+  checkAll("Validated[String, NonEmptyList[Int]]", GroupLaws[Validated[String, NonEmptyList[Int]]].semigroup)
 
   {
     implicit val S = ListWrapper.partialOrder[String]
@@ -148,4 +152,11 @@ class ValidatedTests extends CatsSuite {
       Validated.fromOption(o, s).toOption should === (o)
     }
   }
+
+  test("isValid after combine, iff both are valid") {
+    forAll { (lhs: Validated[Int, String], rhs: Validated[Int, String]) =>
+      lhs.combine(rhs).isValid should === (lhs.isValid && rhs.isValid)
+    }
+  }
+
 }

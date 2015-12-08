@@ -4,7 +4,7 @@ The type class pattern is a ubiquitous pattern in Scala, its function
 is to provide a behavior for some type. You think of it as an
 "interface" in the Java sense. Here's an example.
 
-```tut
+```tut:silent
 /**
  * A type class to provide textual representation
  */
@@ -17,7 +17,7 @@ into `String`s. Now we can write a function which is polymorphic on
 some `A`, as long as we have some value of `Show[A]`, so that our function
 can have a way of producing a `String`:
 
-```tut
+```tut:silent
 def log[A](a: A)(implicit s: Show[A]) = println(s.show(a))
 ```
 
@@ -30,11 +30,15 @@ log("a string")
 
 It is trivial to supply a `Show` instance for `String`:
 
-```tut
+```tut:silent
 implicit val stringShow = new Show[String] {
   def show(s: String) = s
 }
-// and now our call to Log succeeds
+```
+
+and now our call to Log succeeds
+
+```tut
 log("a string")
 ```
 
@@ -51,7 +55,7 @@ For some types, providing a `Show` instance might depend on having some
 implicit `Show` instance of some other type, for instance, we could
 implement `Show` for `Option`:
 
-```tut
+```tut:silent
 implicit def optionShow[A](implicit sa: Show[A]) = new Show[Option[A]] {
   def show(oa: Option[A]): String = oa match {
     case None => "None"
@@ -69,13 +73,13 @@ log(Option(Option("hello")))
 
 Scala has syntax just for this pattern that we use frequently:
 
-```scala
-def log[A : Show](a: A) = println(implicitly[Show[A]].show(a))
+```tut:silent
+def log[A: Show](a: A) = println(implicitly[Show[A]].show(a))
 ```
 
 is the same as
 
-```scala
+```tut:silent
 def log[A](a: A)(implicit s: Show[A]) = println(s.show(a))
 ```
 
