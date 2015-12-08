@@ -108,8 +108,10 @@ object OptionT extends OptionTInstances {
    * Note: The return type is a FromOptionPartiallyApplied[F], which has an apply method
    * on it, allowing you to call fromOption like this:
    * {{{
-   * val t: Option[Int] = ...
-   * val x: OptionT[List, Int] = fromOption[List](t)
+   * scala> import cats.std.list._
+   * scala> val o: Option[Int] = Some(2)
+   * scala> OptionT.fromOption[List](o)
+   * res0: OptionT[List, Int] = OptionT(List(Some(2)))
    * }}}
    *
    * The reason for the indirection is to emulate currying type parameters.

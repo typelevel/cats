@@ -34,7 +34,13 @@ final class FlatMapOps[F[_], A](fa: F[A])(implicit F: FlatMap[F]) {
    * you can evaluate it only ''after'' the first action has finished:
    *
    * {{{
-   *   fa.followedByEval(later(fb))
+   * scala> import cats.Eval
+   * scala> import cats.std.option._
+   * scala> import cats.syntax.flatMap._
+   * scala> val fa: Option[Int] = Some(3)
+   * scala> def fb: Option[String] = Some("foo")
+   * scala> fa.followedByEval(Eval.later(fb))
+   * res0: Option[String] = Some(foo)
    * }}}
    */
   def followedByEval[B](fb: Eval[F[B]]): F[B] = F.flatMap(fa)(_ => fb.value)

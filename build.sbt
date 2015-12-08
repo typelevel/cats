@@ -34,7 +34,7 @@ lazy val commonSettings = Seq(
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
   parallelExecution in Test := false
-) ++ warnUnusedImport
+) ++ warnUnusedImport ++ doctestSettings
 
 lazy val commonJsSettings = Seq(
   scalaJSStage in Global := FastOptStage,
