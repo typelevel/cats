@@ -18,6 +18,10 @@ lazy val buildSettings = Seq(
   crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
 
+lazy val catsDoctestSettings = Seq(
+  doctestWithDependencies := false
+) ++ doctestSettings
+
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions,
   resolvers ++= Seq(
@@ -34,7 +38,7 @@ lazy val commonSettings = Seq(
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
   parallelExecution in Test := false
-) ++ warnUnusedImport ++ doctestSettings
+) ++ warnUnusedImport
 
 lazy val commonJsSettings = Seq(
   scalaJSStage in Global := FastOptStage,
@@ -43,12 +47,16 @@ lazy val commonJsSettings = Seq(
 
 lazy val commonJvmSettings = Seq(
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
-)
+// currently sbt-doctest is only running on the JVM, because I was running into
+// some issues in the generated JS tests.
+) ++ catsDoctestSettings
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
+lazy val scalacheckVersion = "1.12.5"
+
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.12.5",
+  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion,
   libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
 )
 
@@ -122,6 +130,7 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(
     sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
   )
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion % "test")
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
