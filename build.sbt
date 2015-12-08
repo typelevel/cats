@@ -47,8 +47,8 @@ lazy val commonJsSettings = Seq(
 
 lazy val commonJvmSettings = Seq(
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
-// currently sbt-doctest is only running on the JVM, because I was running into
-// some issues in the generated JS tests.
+// currently sbt-doctest doesn't work in JS builds, so this has to go in the
+// JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
 ) ++ catsDoctestSettings
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
