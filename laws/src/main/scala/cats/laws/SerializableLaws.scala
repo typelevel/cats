@@ -2,14 +2,16 @@ package cats
 package laws
 
 import org.scalacheck.Prop
-import org.scalacheck.Prop.{ False, Proof, Result }
+import org.scalacheck.Prop.{ Exception, False, Proof, Result }
 
-import bricks.Platform
+import catalysts.Platform
+
+import scala.util.control.NonFatal
 
 /**
  * Check for Java Serializability.
  *
- * This laws is only applicative on the JVM, but is something we want
+ * This law is only applicable on the JVM, but is something we want
  * to be sure to enforce. Therefore, we use bricks.Platform to do a
  * runtime check rather than create a separate jvm-laws project.
  */
@@ -42,8 +44,8 @@ object SerializableLaws {
         val a2 = ois.readObject()
         ois.close()
         Result(status = Proof)
-      } catch { case _: Throwable =>
-          Result(status = False)
+      } catch { case NonFatal(t) =>
+        Result(status = Exception(t))
       } finally {
         oos.close()
         if (ois != null) ois.close()

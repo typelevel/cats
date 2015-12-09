@@ -87,10 +87,15 @@ import simulacrum.typeclass
    * For example:
    *
    * {{{
-   *     def parseInt(s: String): Option[Int] = ...
-   *     val F = Foldable[List]
-   *     F.traverse_(List("333", "444"))(parseInt) // Some(())
-   *     F.traverse_(List("333", "zzz"))(parseInt) // None
+   * scala> import cats.data.Xor
+   * scala> import cats.std.list._
+   * scala> import cats.std.option._
+   * scala> def parseInt(s: String): Option[Int] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
+   * scala> val F = Foldable[List]
+   * scala> F.traverse_(List("333", "444"))(parseInt)
+   * res0: Option[Unit] = Some(())
+   * scala> F.traverse_(List("333", "zzz"))(parseInt)
+   * res1: Option[Unit] = None
    * }}}
    *
    * This method is primarily useful when `G[_]` represents an action
@@ -111,9 +116,13 @@ import simulacrum.typeclass
    * For example:
    *
    * {{{
-   *     val F = Foldable[List]
-   *     F.sequence_(List(Option(1), Option(2), Option(3))) // Some(())
-   *     F.sequence_(List(Option(1), None, Option(3)))      // None
+   * scala> import cats.std.list._
+   * scala> import cats.std.option._
+   * scala> val F = Foldable[List]
+   * scala> F.sequence_(List(Option(1), Option(2), Option(3)))
+   * res0: Option[Unit] = Some(())
+   * scala> F.sequence_(List(Option(1), None, Option(3)))
+   * res1: Option[Unit] = None
    * }}}
    */
   def sequence_[G[_]: Applicative, A, B](fga: F[G[A]]): G[Unit] =
@@ -128,9 +137,10 @@ import simulacrum.typeclass
    * For example:
    *
    * {{{
-   *     val F = Foldable[List]
-   *     F.foldK(List(1 :: 2 :: Nil, 3 :: 4 :: 5 :: Nil))
-   *     // List(1, 2, 3, 4, 5)
+   * scala> import cats.std.list._
+   * scala> val F = Foldable[List]
+   * scala> F.foldK(List(1 :: 2 :: Nil, 3 :: 4 :: 5 :: Nil))
+   * res0: List[Int] = List(1, 2, 3, 4, 5)
    * }}}
    */
   def foldK[G[_], A](fga: F[G[A]])(implicit G: MonoidK[G]): G[A] =
@@ -182,12 +192,21 @@ import simulacrum.typeclass
     }.toList
 
   /**
+   * Convert F[A] to a List[A], retaining only initial elements which
+   * match `p`.
+   */
+  def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
+    foldRight(fa, Now(List.empty[A])) { (a, llst) =>
+      if (p(a)) llst.map(a :: _) else Now(Nil)
+    }.value
+
+  /**
    * Convert F[A] to a List[A], dropping all initial elements which
    * match `p`.
    */
   def dropWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
     foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
-      if (buf.nonEmpty || p(a)) buf += a else buf
+      if (buf.nonEmpty || !p(a)) buf += a else buf
     }.toList
 
   /**

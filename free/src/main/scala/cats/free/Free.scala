@@ -10,13 +10,13 @@ object Free {
   /**
    * Return from the computation with the given value.
    */
-  final case class Pure[S[_], A](a: A) extends Free[S, A]
+  private final case class Pure[S[_], A](a: A) extends Free[S, A]
 
   /** Suspend the computation with the given suspension. */
-  final case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
+  private final case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
 
   /** Call a subroutine and continue with the given function. */
-  final case class Gosub[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
+  private final case class Gosub[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 
   /**
    * Suspend a value within a functor lifting it to a Free.
@@ -29,6 +29,13 @@ object Free {
 
   /** Lift a pure value into Free */
   def pure[S[_], A](a: A): Free[S, A] = Pure(a)
+
+  final class FreeInjectPartiallyApplied[F[_], G[_]] private[free] {
+    def apply[A](fa: F[A])(implicit I : Inject[F, G]): Free[G, A] =
+      Free.liftF(I.inj(fa))
+  }
+
+  def inject[F[_], G[_]]: FreeInjectPartiallyApplied[F, G] = new FreeInjectPartiallyApplied
 
   /**
    * `Free[S, ?]` has a monad for any type constructor `S[_]`.
@@ -67,6 +74,14 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def fold[B](r: A => B, s: S[Free[S, A]] => B)(implicit S: Functor[S]): B =
     resume.fold(s, r)
 
+  /** Takes one evaluation step in the Free monad, re-associating left-nested binds in the process. */
+  @tailrec
+  final def step: Free[S, A] = this match {
+    case Gosub(Gosub(c, f), g) => c.flatMap(cc => f(cc).flatMap(g)).step
+    case Gosub(Pure(a), f) => f(a).step
+    case x => x
+  }
+
   /**
    * Evaluate a single layer of the free monad.
    */
@@ -95,7 +110,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     loop(this)
   }
 
-  def run(implicit S: Comonad[S]): A = go(S.extract)
+  final def run(implicit S: Comonad[S]): A = go(S.extract)
 
   /**
    * Run to completion, using a function that maps the resumption
@@ -107,14 +122,6 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
       case Right(r) => Monad[M].pure(r)
     }
     runM2(this)
-  }
-
-  /** Takes one evaluation step in the Free monad, re-associating left-nested binds in the process. */
-  @tailrec
-  final def step: Free[S, A] = this match {
-    case Gosub(Gosub(c, f), g) => c.flatMap(cc => f(cc).flatMap(g)).step
-    case Gosub(Pure(a), f) => f(a).step
-    case x => x
   }
 
   /**

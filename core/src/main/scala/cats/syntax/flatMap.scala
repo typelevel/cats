@@ -17,7 +17,7 @@ trait FlatMapSyntax extends FlatMapSyntax1 {
     new IfMOps[F](fa)
 }
 
-class FlatMapOps[F[_], A](fa: F[A])(implicit F: FlatMap[F]) {
+final class FlatMapOps[F[_], A](fa: F[A])(implicit F: FlatMap[F]) {
   def flatMap[B](f: A => F[B]): F[B] = F.flatMap(fa)(f)
   def mproduct[B](f: A => F[B]): F[(A, B)] = F.mproduct(fa)(f)
   def >>=[B](f: A => F[B]): F[B] = F.flatMap(fa)(f)
@@ -34,17 +34,23 @@ class FlatMapOps[F[_], A](fa: F[A])(implicit F: FlatMap[F]) {
    * you can evaluate it only ''after'' the first action has finished:
    *
    * {{{
-   *   fa.followedByEval(later(fb))
+   * scala> import cats.Eval
+   * scala> import cats.std.option._
+   * scala> import cats.syntax.flatMap._
+   * scala> val fa: Option[Int] = Some(3)
+   * scala> def fb: Option[String] = Some("foo")
+   * scala> fa.followedByEval(Eval.later(fb))
+   * res0: Option[String] = Some(foo)
    * }}}
    */
   def followedByEval[B](fb: Eval[F[B]]): F[B] = F.flatMap(fa)(_ => fb.value)
 
 }
 
-class FlattenOps[F[_], A](ffa: F[F[A]])(implicit F: FlatMap[F]) {
+final class FlattenOps[F[_], A](ffa: F[F[A]])(implicit F: FlatMap[F]) {
   def flatten: F[A] = F.flatten(ffa)
 }
 
-class IfMOps[F[_]](fa: F[Boolean])(implicit F: FlatMap[F]) {
+final class IfMOps[F[_]](fa: F[Boolean])(implicit F: FlatMap[F]) {
   def ifM[B](ifTrue: => F[B], ifFalse: => F[B]): F[B] = F.ifM(fa)(ifTrue, ifFalse)
 }

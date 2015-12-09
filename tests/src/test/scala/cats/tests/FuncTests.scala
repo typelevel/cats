@@ -4,6 +4,7 @@ package tests
 import cats.data.{ Func, AppFunc, Const }
 import Func.{ appFunc, appFuncU }
 import cats.laws.discipline._
+import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 
 class FuncTests extends CatsSuite {

@@ -5,7 +5,9 @@ import algebra.laws.OrderLaws
 
 import cats.data.Streaming
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests}
+import org.scalacheck.{Arbitrary, Gen}
 
 class StreamingTests extends CatsSuite {
   checkAll("Streaming[Int]", CoflatMapTests[Streaming].coflatMap[Int, Int, Int])
@@ -19,138 +21,264 @@ class StreamingTests extends CatsSuite {
 
   checkAll("Streaming[Int]", OrderLaws[Streaming[Int]].order)
   checkAll("Order[Streaming[Int]]", SerializableTests.serializable(Order[Streaming[Int]]))
+
+  {
+    implicit val I = ListWrapper.partialOrder[Int]
+    checkAll("Streaming[ListWrapper[Int]]", OrderLaws[Streaming[ListWrapper[Int]]].partialOrder)
+    checkAll("PartialOrder[Streaming[ListWrapper[Int]]]", SerializableTests.serializable(PartialOrder[Streaming[ListWrapper[Int]]]))
+  }
+
+  {
+    implicit val I = ListWrapper.eqv[Int]
+    checkAll("Streaming[ListWrapper[Int]]", OrderLaws[Streaming[ListWrapper[Int]]].eqv)
+    checkAll("Eq[Streaming[ListWrapper[Int]]]", SerializableTests.serializable(Eq[Streaming[ListWrapper[Int]]]))
+  }
 }
 
 class AdHocStreamingTests extends CatsSuite {
 
-  // convert List[A] to Streaming[A]
-  def convert[A](as: List[A]): Streaming[A] =
-    Streaming.fromList(as)
+  test("results aren't reevaluated after memoize") {
+    forAll { (orig: Streaming[Int]) =>
+      val ns = orig.toList
+      val size = ns.size
+
+      var i = 0
+      val memoized = orig.map { n => i += 1; n }.memoize
+
+      val xs = memoized.toList
+      i should === (size)
+      xs should === (ns)
+
+      val ys = memoized.toList
+      i should === (size)
+      ys should === (ns)
+    }
+  }
 
   test("fromList/toList") {
     forAll { (xs: List[Int]) =>
-      convert(xs).toList should === (xs)
+      Streaming.fromList(xs).toList should === (xs)
+    }
+
+    forAll { (xs: Streaming[Int]) =>
+      val list = xs.toList
+      Streaming.fromList(list).toList should === (list)
     }
   }
-
-  // test that functions over Streaming[A] vs List[A] produce the same B.
-  def test[A, B](xs: List[A])(f: Streaming[A] => B)(g: List[A] => B): Unit =
-    f(convert(xs)) shouldBe g(xs)
 
   test("map") {
-    forAll { (xs: List[Int], f: Int => Double) =>
-      test(xs)(_.map(f).toList)(_.map(f))
+    forAll { (xs: Streaming[Int], f: Int => Double) =>
+      xs.map(f).toList should === (xs.toList.map(f))
     }
   }
 
-  // convert (A => List[B]) to (A => Streaming[B])
-  def convertF[A, B](f: A => List[B]): A => Streaming[B] =
-    (a: A) => Streaming.fromList(f(a))
-
   test("flatMap") {
-    forAll { (xs: List[Int], f: Int => List[Double]) =>
-      test(xs)(_.flatMap(convertF(f)).toList)(_.flatMap(f))
+    forAll { (xs: Streaming[Int], f: Int => Streaming[Double]) =>
+      xs.flatMap(f).toList should === (xs.toList.flatMap(f(_).toList))
     }
   }
 
   test("filter") {
-    forAll { (xs: List[Int], f: Int => Boolean) =>
-      test(xs)(_.filter(f).toList)(_.filter(f))
+    forAll { (xs: Streaming[Int], f: Int => Boolean) =>
+      xs.filter(f).toList should === (xs.toList.filter(f))
     }
   }
 
   test("foldLeft") {
-    forAll { (xs: List[String], n: Int, f: (Int, String) => Int) =>
-      test(xs)(_.foldLeft(n)(f))(_.foldLeft(n)(f))
+    forAll { (xs: Streaming[String], n: Int, f: (Int, String) => Int) =>
+      xs.foldLeft(n)(f) should === (xs.toList.foldLeft(n)(f))
     }
   }
 
   test("isEmpty") {
-    forAll { (xs: List[String], n: Int, f: (Int, String) => Int) =>
-      test(xs)(_.isEmpty)(_.isEmpty)
+    forAll { (xs: Streaming[String], n: Int, f: (Int, String) => Int) =>
+      xs.isEmpty should === (xs.toList.isEmpty)
     }
   }
 
   test("++") {
-    forAll { (xs: List[Int], ys: List[Int]) =>
-      (convert(xs) ++ convert(ys)).toList shouldBe (xs ::: ys)
+    forAll { (xs: Streaming[Int], ys: Streaming[Int]) =>
+      (xs ++ ys).toList should === (xs.toList ::: ys.toList)
     }
   }
 
   test("zip") {
-    forAll { (xs: List[Int], ys: List[Int]) =>
-      (convert(xs) zip convert(ys)).toList shouldBe (xs zip ys)
+    forAll { (xs: Streaming[Int], ys: Streaming[Int]) =>
+      (xs zip ys).toList should === (xs.toList zip ys.toList)
     }
   }
 
   test("zipWithIndex") {
-    forAll { (xs: List[Int], ys: List[Int]) =>
-      test(xs)(_.zipWithIndex.toList)(_.zipWithIndex)
+    forAll { (xs: Streaming[Int]) =>
+      xs.zipWithIndex.toList should === (xs.toList.zipWithIndex)
     }
   }
 
   test("unzip") {
-    forAll { (xys: List[(Int, Int)]) =>
-      test(xys) { s =>
-        val (xs, ys): (Streaming[Int], Streaming[Int]) = s.unzip
-        (xs.toList, ys.toList)
-      }(_.unzip)
+    forAll { (xys: Streaming[(Int, Int)]) =>
+      val (xs, ys): (Streaming[Int], Streaming[Int]) = xys.unzip
+      (xs.toList, ys.toList) should === (xys.toList.unzip)
     }
   }
 
   test("exists") {
-    forAll { (xs: List[Int], f: Int => Boolean) =>
-      test(xs)(_.exists(f))(_.exists(f))
+    forAll { (xs: Streaming[Int], f: Int => Boolean) =>
+      xs.exists(f) should === (xs.toList.exists(f))
     }
   }
 
   test("forall") {
-    forAll { (xs: List[Int], f: Int => Boolean) =>
-      test(xs)(_.forall(f))(_.forall(f))
+    forAll { (xs: Streaming[Int], f: Int => Boolean) =>
+      xs.forall(f) should === (xs.toList.forall(f))
     }
   }
 
   test("take") {
-    forAll { (xs: List[Int], n: Int) =>
-      test(xs)(_.take(n).toList)(_.take(n))
+    forAll { (xs: Streaming[Int], n: Int) =>
+      xs.take(n).toList should === (xs.toList.take(n))
     }
   }
 
   test("drop") {
-    forAll { (xs: List[Int], n: Int) =>
-      test(xs)(_.drop(n).toList)(_.drop(n))
+    forAll { (xs: Streaming[Int], n: Int) =>
+      xs.drop(n).toList should === (xs.toList.drop(n))
     }
   }
 
   test("takeWhile") {
-    forAll { (xs: List[Int], f: Int => Boolean) =>
-      test(xs)(_.takeWhile(f).toList)(_.takeWhile(f))
+    forAll { (xs: Streaming[Int], f: Int => Boolean) =>
+      xs.takeWhile(f).toList should === (xs.toList.takeWhile(f))
     }
   }
 
   test("dropWhile") {
-    forAll { (xs: List[Int], f: Int => Boolean) =>
-      test(xs)(_.dropWhile(f).toList)(_.dropWhile(f))
+    forAll { (xs: Streaming[Int], f: Int => Boolean) =>
+      xs.dropWhile(f).toList should === (xs.toList.dropWhile(f))
     }
   }
 
   test("tails") {
+    forAll { (xs: Streaming[Int]) =>
+      xs.tails.map(_.toList).toList should === (xs.toList.tails.toList)
+    }
+  }
+
+  test("toArray") {
+    forAll { (xs: Streaming[Int]) =>
+      xs.toArray should be (xs.toList.toArray)
+    }
+  }
+
+  test("compact should result in same values") {
+    forAll { (xs: Streaming[Int]) =>
+      xs.compact should === (xs)
+    }
+  }
+
+  test("fromFoldable consistent with fromList") {
     forAll { (xs: List[Int]) =>
-      test(xs)(_.tails.map(_.toList).toList)(_.tails.toList)
+      Streaming.fromFoldable(xs) should === (Streaming.fromList(xs))
+    }
+  }
+
+  test("fromIterable consistent with fromList") {
+    forAll { (xs: List[Int]) =>
+      Streaming.fromIterable(xs) should === (Streaming.fromList(xs))
+    }
+  }
+
+  test("fromIteratorUnsafe consistent with fromList") {
+    forAll { (xs: List[Int]) =>
+      Streaming.fromIteratorUnsafe(xs.iterator) should === (Streaming.fromList(xs))
+    }
+  }
+
+  test("continually consistent with List.fill") {
+    forAll { (l: Long, b: Byte) =>
+      val n = b.toInt
+      Streaming.continually(l).take(n).toList should === (List.fill(n)(l))
+    }
+  }
+
+  test("continually consistent with thunk") {
+    forAll { (l: Long, b: Byte) =>
+      val n = b.toInt
+      Streaming.continually(l).take(n) should === (Streaming.thunk(() => l).take(n))
+    }
+  }
+
+  test("equality consistent with list equality") {
+    forAll { (xs: Streaming[Int], ys: Streaming[Int]) =>
+      Eq[Streaming[Int]].eqv(xs, ys) should === (xs.toList == ys.toList)
+    }
+  }
+
+  test("unfold with Some consistent with infinite") {
+    forAll { (start: Int, b: Byte) =>
+      val n = b.toInt
+      val unfolded = Streaming.unfold(Some(start))(n => Some(n + 1)).take(n)
+      unfolded should === (Streaming.infinite(start)(_ + 1).take(n))
+    }
+  }
+
+  test("unfold consistent with infinite then takeWhile") {
+    implicit val arbInt: Arbitrary[Int] = Arbitrary(Gen.choose(-10, 20))
+    forAll { (start: Int, n: Int) =>
+      val end = start + n
+      def check(i: Int): Option[Int] = if (i <= end) Some(i) else None
+      val unfolded = Streaming.unfold(check(start))(i => check(i + 1))
+      val fromInfinite = Streaming.infinite(start)(_ + 1).takeWhile(_ <= end)
+      unfolded.toList should === (fromInfinite.toList)
+    }
+  }
+
+  test("unfold on None returns empty stream") {
+    forAll { (f: Int => Option[Int]) =>
+      Streaming.unfold(none[Int])(f) should === (Streaming.empty[Int])
+    }
+  }
+
+  test("peekEmpty consistent with isEmpty") {
+    forAll { (s: Streaming[Int]) =>
+      s.peekEmpty.foreach(_ should === (s.isEmpty))
+    }
+  }
+
+  test("memoize doesn't change values") {
+    forAll { (s: Streaming[Int]) =>
+      s.memoize should === (s)
+    }
+  }
+
+  test("thunk is evaluated for each item") {
+    // don't want the stream to be too big
+    implicit val arbInt = Arbitrary(Gen.choose(-10, 20))
+    forAll { (start: Int, end: Int) =>
+      var i = start - 1
+      val stream = Streaming.thunk{ () => i += 1; i}.takeWhile(_ <= end)
+      stream.toList should === ((start to end).toList)
+    }
+  }
+
+  test("interval") {
+    // we don't want this test to take a really long time
+    implicit val arbInt: Arbitrary[Int] = Arbitrary(Gen.choose(-10, 20))
+    forAll { (start: Int, end: Int) =>
+      Streaming.interval(start, end).toList should === ((start to end).toList)
     }
   }
 
   test("merge") {
     forAll { (xs: List[Int], ys: List[Int]) =>
-      (convert(xs.sorted) merge convert(ys.sorted)).toList shouldBe (xs ::: ys).sorted
+      (Streaming.fromList(xs.sorted) merge Streaming.fromList(ys.sorted)).toList should === ((xs ::: ys).sorted)
     }
   }
 
   test("product") {
-    forAll { (xs: List[Int], ys: List[Int]) =>
-      val result = (convert(xs) product convert(ys)).iterator.toSet
-      val expected = (for { x <- xs; y <- ys } yield (x, y)).toSet
-      result shouldBe expected
+    forAll { (xs: Streaming[Int], ys: Streaming[Int]) =>
+      val result = (xs product ys).iterator.toSet
+      val expected = (for { x <- xs.toList; y <- ys.toList } yield (x, y)).toSet
+      result should === (expected)
     }
 
     val nats = Streaming.from(1) // 1, 2, 3, ...
@@ -162,7 +290,7 @@ class AdHocStreamingTests extends CatsSuite {
 
     val positiveRationals = (nats product nats).filter(isRelativelyPrime)
     val e = Set((1,1), (2,1), (1,2), (3,1), (1,3), (4,1), (3,2), (2,3), (1,4))
-    positiveRationals.take(e.size).iterator.toSet shouldBe e
+    positiveRationals.take(e.size).iterator.toSet should === (e)
   }
 
   test("interleave") {

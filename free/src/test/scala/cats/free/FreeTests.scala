@@ -1,38 +1,83 @@
 package cats
 package free
 
+import cats.arrow.NaturalTransformation
 import cats.tests.CatsSuite
-import cats.laws.discipline.{ArbitraryK, EqK, MonadTests, SerializableTests}
+import cats.laws.discipline.{MonadTests, SerializableTests}
+import cats.laws.discipline.arbitrary.function0Arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+import Arbitrary.{arbitrary, arbFunction1}
 
 class FreeTests extends CatsSuite {
+  import FreeTests._
 
-  implicit def freeArbitrary[F[_], A](implicit F: ArbitraryK[F], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
-    Arbitrary(
-      Gen.oneOf(
-        A.arbitrary.map(Free.pure[F, A]),
-        F.synthesize[A].arbitrary.map(Free.liftF[F, A])))
+  checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
+  checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
 
-  implicit def freeArbitraryK[F[_]](implicit F: ArbitraryK[F]): ArbitraryK[Free[F, ?]] =
-    new ArbitraryK[Free[F, ?]]{
-      def synthesize[A: Arbitrary]: Arbitrary[Free[F, A]] =
-        freeArbitrary[F, A]
+  test("mapSuspension id"){
+    forAll { x: Free[List, Int] =>
+      x.mapSuspension(NaturalTransformation.id[List]) should === (x)
     }
+  }
+
+  ignore("foldMap is stack safe") {
+    trait FTestApi[A]
+    case class TB(i: Int) extends FTestApi[Int]
+
+    type FTest[A] = Free[FTestApi, A]
+
+    def tb(i: Int): FTest[Int] = Free.liftF(TB(i))
+
+    def a(i: Int): FTest[Int] = for {
+      j <- tb(i)
+      z <- if (j<10000) a(j) else Free.pure[FTestApi, Int](j)
+    } yield z
+
+    def runner: FTestApi ~> Id = new (FTestApi ~> Id) {
+      def apply[A](fa: FTestApi[A]): Id[A] = fa match {
+        case TB(i) => i+1
+      }
+    }
+
+    assert(10000 == a(0).foldMap(runner))
+  }
+}
+
+object FreeTests extends FreeTestsInstances {
+  import cats.std.function._
+
+  implicit def trampolineArbitrary[A:Arbitrary]: Arbitrary[Trampoline[A]] =
+    freeArbitrary[Function0, A]
+
+  implicit def trampolineEq[A:Eq]: Eq[Trampoline[A]] =
+    freeEq[Function0, A]
+}
+
+sealed trait FreeTestsInstances {
+  private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {
+    val noGosub = Gen.oneOf(
+      A.arbitrary.map(Free.pure[F, A]),
+      F.arbitrary.map(Free.liftF[F, A]))
+
+    val nextDepth = Gen.chooseNum(1, maxDepth - 1)
+
+    def withGosub = for {
+      fDepth <- nextDepth
+      freeDepth <- nextDepth
+      f <- arbFunction1[A, Free[F, A]](Arbitrary(freeGen[F, A](fDepth))).arbitrary
+      freeFA <- freeGen[F, A](freeDepth)
+    } yield freeFA.flatMap(f)
+
+    if (maxDepth <= 1) noGosub
+    else Gen.oneOf(noGosub, withGosub)
+  }
+
+  implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
+    Arbitrary(freeGen[F, A](4))
 
   implicit def freeEq[S[_]: Monad, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
     new Eq[Free[S, A]] {
       def eqv(a: Free[S, A], b: Free[S, A]): Boolean =
         SA.eqv(a.runM(identity),  b.runM(identity))
     }
-
-  implicit def freeEqK[S[_]: EqK: Monad]: EqK[Free[S, ?]] =
-    new EqK[Free[S, ?]] {
-      def synthesize[A: Eq]: Eq[Free[S, A]] = {
-        implicit val sa: Eq[S[A]] = EqK[S].synthesize[A]
-        freeEq[S, A]
-      }
-    }
-
-  checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
-  checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
 }

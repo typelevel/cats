@@ -1,13 +1,13 @@
 package cats
 package tests
 
-import cats.data.{NonEmptyList, Validated}
+import cats.data.{NonEmptyList, Validated, Xor}
 import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeTests, SerializableTests}
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.arbitrary._
-import algebra.laws.OrderLaws
+import algebra.laws.{OrderLaws, GroupLaws}
 
 import scala.util.Try
 
@@ -20,6 +20,25 @@ class ValidatedTests extends CatsSuite {
   checkAll("Traverse[Validated[String,?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
 
   checkAll("Validated[String, Int]", OrderLaws[Validated[String, Int]].order)
+  checkAll("Order[Validated[String, Int]]", SerializableTests.serializable(Order[Validated[String, Int]]))
+
+  checkAll("Validated[String, Int]", GroupLaws[Validated[String, Int]].monoid)
+
+  checkAll("Validated[String, NonEmptyList[Int]]", GroupLaws[Validated[String, NonEmptyList[Int]]].semigroup)
+
+  {
+    implicit val S = ListWrapper.partialOrder[String]
+    implicit val I = ListWrapper.partialOrder[Int]
+    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", OrderLaws[Validated[ListWrapper[String], ListWrapper[Int]]].partialOrder)
+    checkAll("PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]]))
+  }
+
+  {
+    implicit val S = ListWrapper.eqv[String]
+    implicit val I = ListWrapper.eqv[Int]
+    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", OrderLaws[Validated[ListWrapper[String], ListWrapper[Int]]].eqv)
+    checkAll("Eq[Validated[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(Eq[Validated[ListWrapper[String], ListWrapper[Int]]]))
+  }
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)
@@ -47,14 +66,6 @@ class ValidatedTests extends CatsSuite {
     }
   }
 
-  test("filter makes non-matching entries invalid") {
-    Valid(1).filter[String](_ % 2 == 0).isInvalid should ===(true)
-  }
-
-  test("filter leaves matching entries valid") {
-    Valid(2).filter[String](_ % 2 == 0).isValid should ===(true)
-  }
-
   test("ValidatedNel") {
     forAll { (e: String) =>
       val manual = Validated.invalid[NonEmptyList[String], Int](NonEmptyList(e))
@@ -65,9 +76,11 @@ class ValidatedTests extends CatsSuite {
 
   test("isInvalid consistent with forall and exists") {
     forAll { (v: Validated[String, Int], p: Int => Boolean) =>
-      whenever(v.isInvalid) {
+      if (v.isInvalid) {
         v.forall(p) should === (true)
         v.exists(p) should === (false)
+      } else {
+        v.forall(p) should === (v.exists(p))
       }
     }
   }
@@ -77,6 +90,7 @@ class ValidatedTests extends CatsSuite {
       var count = 0
       v.foreach(_ => count += 1)
       v.isValid should === (count == 1)
+      v.isInvalid should === (count == 0)
     }
   }
 
@@ -105,4 +119,39 @@ class ValidatedTests extends CatsSuite {
       show.show(v).nonEmpty should === (true)
     }
   }
+
+  test("andThen consistent with Xor's flatMap"){
+    forAll { (v: Validated[String, Int], f: Int => Validated[String, Int]) =>
+      v.andThen(f) should === (v.withXor(_.flatMap(f(_).toXor)))
+    }
+  }
+
+  test("ad-hoc andThen tests"){
+    def even(i: Int): Validated[String, Int] =
+      if (i % 2 == 0) Validated.valid(i)
+      else Validated.invalid(s"$i is not even")
+
+    (Validated.valid(3) andThen even) should === (Validated.invalid("3 is not even"))
+    (Validated.valid(4) andThen even) should === (Validated.valid(4))
+    (Validated.invalid("foo") andThen even) should === (Validated.invalid("foo"))
+  }
+
+  test("fromOption consistent with Xor.fromOption"){
+    forAll { (o: Option[Int], s: String) =>
+      Validated.fromOption(o, s) should === (Xor.fromOption(o, s).toValidated)
+    }
+  }
+
+  test("fromOption consistent with toOption"){
+    forAll { (o: Option[Int], s: String) =>
+      Validated.fromOption(o, s).toOption should === (o)
+    }
+  }
+
+  test("isValid after combine, iff both are valid") {
+    forAll { (lhs: Validated[Int, String], rhs: Validated[Int, String]) =>
+      lhs.combine(rhs).isValid should === (lhs.isValid && rhs.isValid)
+    }
+  }
+
 }

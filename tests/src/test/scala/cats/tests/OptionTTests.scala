@@ -1,8 +1,8 @@
 package cats.tests
 
-import cats.{Applicative, Id, Monad}
+import cats.{Applicative, Id, Monad, Show}
 import cats.data.{OptionT, Validated, Xor}
-import cats.laws.discipline.{ApplicativeTests, FunctorTests, MonadCombineTests, SerializableTests}
+import cats.laws.discipline.{ApplicativeTests, FunctorTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -81,6 +81,12 @@ class OptionTTests extends CatsSuite {
     }
   }
 
+  test("flatMap and flatMapF consistent") {
+    forAll { (optionT: OptionT[List, Int], f: Int => OptionT[List, Int])  =>
+      optionT.flatMap(f) should === (optionT.flatMapF(f(_).value))
+    }
+  }
+
   test("OptionT[Id, A].toRight consistent with Xor.fromOption") {
     forAll { (o: OptionT[Id, Int], s: String) =>
       o.toRight(s).value should === (Xor.fromOption(o.value, s))
@@ -111,8 +117,37 @@ class OptionTTests extends CatsSuite {
     }
   }
 
-  checkAll("OptionT[List, Int]", MonadCombineTests[OptionT[List, ?]].monad[Int, Int, Int])
-  checkAll("MonadOptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
+  test("liftF") {
+    forAll { (xs: List[Int]) =>
+      xs.map(Option(_)) should ===(OptionT.liftF(xs).value)
+    }
+  }
+
+  test("show") {
+    val xor: String Xor Option[Int] = Xor.right(Some(1))
+    OptionT[Xor[String, ?], Int](xor).show should === ("Xor.Right(Some(1))")
+  }
+
+  test("implicit Show[OptionT] instance and explicit show method are consistent") {
+    forAll { optionT: OptionT[List, Int] =>
+      optionT.show should === (implicitly[Show[OptionT[List, Int]]].show(optionT))
+    }
+  }
+
+  test("transform consistent with value.map") {
+    forAll { (o: OptionT[List, Int], f: Option[Int] => Option[String]) =>
+      o.transform(f) should === (OptionT(o.value.map(f)))
+    }
+  }
+
+  test("subflatMap consistent with value.map+flatMap") {
+    forAll { (o: OptionT[List, Int], f: Int => Option[String]) =>
+      o.subflatMap(f) should === (OptionT(o.value.map(_.flatMap(f))))
+    }
+  }
+
+  checkAll("Monad[OptionT[List, Int]]", MonadTests[OptionT[List, ?]].monad[Int, Int, Int])
+  checkAll("Monad[OptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
 
   {
     implicit val F = ListWrapper.functor

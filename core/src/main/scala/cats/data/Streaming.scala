@@ -58,7 +58,7 @@ import scala.collection.mutable
  *     constructed with `Foldable#foldRight`, and that `.map` and
  *     `.flatMap` operations over the tail will be safely trampolined.
  */
-sealed abstract class Streaming[A] { lhs =>
+sealed abstract class Streaming[A] extends Product with Serializable { lhs =>
 
   import Streaming.{Empty, Wait, Cons}
 
@@ -89,7 +89,7 @@ sealed abstract class Streaming[A] { lhs =>
   /**
    * A variant of fold, used for constructing streams.
    *
-   * The only difference is that foldStream will preserve deferred
+   * The only difference is that foldStreaming will preserve deferred
    * streams. This makes it more appropriate to use in situations
    * where the stream's laziness must be preserved.
    */
@@ -642,14 +642,21 @@ sealed abstract class Streaming[A] { lhs =>
    * Ensure that repeated traversals of the stream will not cause
    * repeated tail computations.
    *
-   * By default stream does not memoize to avoid memory leaks when the
-   * head of the stream is retained.
+   * By default this structure does not memoize to avoid memory leaks
+   * when the head of the stream is retained. However, the user
+   * ultimately has control of the memoization approach based on what
+   * kinds of Eval instances they use.
+   *
+   * There are two calls to .memoize here -- one is a recursive call
+   * to this method (on the tail) and the other is a call to memoize
+   * the Eval instance holding the tail. For more information on how
+   * this works see [[cats.Eval.memoize]].
    */
   def memoize: Streaming[A] =
     this match {
       case Empty() => Empty()
-      case Wait(lt) => Wait(lt.memoize)
-      case Cons(a, lt) => Cons(a, lt.memoize)
+      case Wait(lt) => Wait(lt.map(_.memoize).memoize)
+      case Cons(a, lt) => Cons(a, lt.map(_.memoize).memoize)
     }
 
   /**
@@ -808,11 +815,11 @@ object Streaming extends StreamingInstances {
    * Continually return the result of a thunk.
    *
    * This method only differs from `continually` in that the thunk may
-   * not be pure. The stream is memoized to ensure that repeated
-   * traversals produce the same results.
+   * not be pure. Thus, repeated traversals may produce different
+   * results.
    */
   def thunk[A](f: () => A): Streaming[A] =
-    knot(s => Cons(f(), s), memo = true)
+    knot(s => Cons(f(), s), memo = false)
 
   /**
    * Produce an infinite stream of values given an initial value and a

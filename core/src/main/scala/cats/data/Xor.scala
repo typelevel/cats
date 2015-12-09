@@ -194,6 +194,12 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
 }
 
 private[data] sealed abstract class XorInstances1 extends XorInstances2 {
+
+  implicit def xorSemigroup[A, B](implicit A: Semigroup[A], B: Semigroup[B]): Semigroup[A Xor B] =
+    new Semigroup[A Xor B] {
+      def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
+    }
+
   implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[A Xor B] = new PartialOrder[A Xor B] {
     def partialCompare(x: A Xor B, y: A Xor B): Double = x partialCompare y
     override def eqv(x: A Xor B, y: A Xor B): Boolean = x === y
@@ -216,8 +222,10 @@ trait XorFunctions {
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
    * the resulting `Xor`. Uncaught exceptions are propagated.
    *
-   * For example: {{{
-   * val result: NumberFormatException Xor Int = catching[NumberFormatException] { "foo".toInt }
+   * For example:
+   * {{{
+   * scala> Xor.catchOnly[NumberFormatException] { "foo".toInt }
+   * res0: Xor[NumberFormatException, Int] = Left(java.lang.NumberFormatException: For input string: "foo")
    * }}}
    */
   def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] =

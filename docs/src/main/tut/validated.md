@@ -41,7 +41,7 @@ As our running example, we will look at config parsing. Our config will be repre
 `Map[String, String]`. Parsing will be handled by a `Read` type class - we provide instances
 just for `String` and `Int` for brevity.
 
-```tut
+```tut:silent
 trait Read[A] {
   def read(s: String): Option[A]
 }
@@ -65,7 +65,7 @@ Then we enumerate our errors - when asking for a config value, one of two things
 go wrong: the field is missing, or it is not well-formed with regards to the expected
 type.
 
-```tut
+```tut:silent
 sealed abstract class ConfigError
 final case class MissingConfig(field: String) extends ConfigError
 final case class ParseError(field: String) extends ConfigError
@@ -85,7 +85,7 @@ object Validated {
 
 Now we are ready to write our parser.
 
-```tut
+```tut:silent
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 
@@ -106,7 +106,7 @@ Everything is in place to write the parallel validator. Recall that we can only 
 validation if each piece is independent. How do we enforce the data is independent? By asking
 for all of it up front. Let's start with two pieces of data.
 
-```tut
+```tut:silent
 def parallelValidate[E, A, B, C](v1: Validated[E, A], v2: Validated[E, B])(f: (A, B) => C): Validated[E, C] =
   (v1, v2) match {
     case (Valid(a), Valid(b))       => Valid(f(a, b))
@@ -122,7 +122,7 @@ but that seems needlessly specific - clients may want to define their own way of
 
 How then do we abstract over a binary operation? The `Semigroup` type class captures this idea.
 
-```tut
+```tut:silent
 import cats.Semigroup
 
 def parallelValidate[E : Semigroup, A, B, C](v1: Validated[E, A], v2: Validated[E, B])(f: (A, B) => C): Validated[E, C] =
@@ -144,7 +144,7 @@ Additionally, the type alias `ValidatedNel[E, A]` is provided.
 
 Time to parse.
 
-```tut
+```tut:silent
 import cats.SemigroupK
 import cats.data.NonEmptyList
 import cats.std.list._
@@ -158,7 +158,11 @@ implicit val nelSemigroup: Semigroup[NonEmptyList[ConfigError]] =
 
 implicit val readString: Read[String] = Read.stringRead
 implicit val readInt: Read[Int] = Read.intRead
+```
 
+Any and all errors are reported!
+
+```tut
 val v1 = parallelValidate(config.parse[String]("url").toValidatedNel,
                           config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
 
@@ -169,8 +173,6 @@ val config = Config(Map(("endpoint", "127.0.0.1"), ("port", "1234")))
 val v3 = parallelValidate(config.parse[String]("endpoint").toValidatedNel,
                           config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
 ```
-
-Any and all errors are reported!
 
 ## Apply
 Our `parallelValidate` function looks awfully like the `Apply#map2` function.
@@ -183,7 +185,7 @@ Which can be defined in terms of `Apply#ap` and `Apply#map`, the very functions 
 
 Can we perhaps define an `Apply` instance for `Validated`? Better yet, can we define an `Applicative` instance?
 
-```tut
+```tut:silent
 import cats.Applicative
 
 implicit def validatedApplicative[E : Semigroup]: Applicative[Validated[E, ?]] =
@@ -205,7 +207,7 @@ Awesome! And now we also get access to all the goodness of `Applicative`, among 
 
 We can now easily ask for several bits of configuration and get any and all errors returned back.
 
-```tut
+```tut:silent
 import cats.Apply
 import cats.data.ValidatedNel
 
@@ -216,7 +218,11 @@ val config = Config(Map(("name", "cat"), ("age", "not a number"), ("houseNumber"
 
 case class Address(houseNumber: Int, street: String)
 case class Person(name: String, age: Int, address: Address)
+```
 
+Thus.
+
+```tut
 val personFromConfig: ValidatedNel[ConfigError, Person] =
   Apply[ValidatedNel[ConfigError, ?]].map4(config.parse[String]("name").toValidatedNel,
                                            config.parse[Int]("age").toValidatedNel,
@@ -230,7 +236,7 @@ val personFromConfig: ValidatedNel[ConfigError, Person] =
 `Option` has `flatMap`, `Xor` has `flatMap`, where's `Validated`'s? Let's try to implement it - better yet,
 let's implement the `Monad` type class.
 
-```tut
+```tut:silent
 import cats.Monad
 
 implicit def validatedMonad[E]: Monad[Validated[E, ?]] =
@@ -247,7 +253,7 @@ implicit def validatedMonad[E]: Monad[Validated[E, ?]] =
 
 Note that all `Monad` instances are also `Applicative` instances, where `ap` is defined as
 
-```tut
+```tut:silent
 trait Monad[F[_]] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
   def pure[A](x: A): F[A]
@@ -271,15 +277,46 @@ This one short circuits! Therefore, if we were to define a `Monad` (or `FlatMap`
 have to override `ap` to get the behavior we want. But then the behavior of `flatMap` would be inconsistent with
 that of `ap`, not good. Therefore, `Validated` has only an `Applicative` instance.
 
-For very much the same reasons, despite the shape of `Validated` matching exactly that of `Xor`, we have
-two separate data types due to their different natures.
+## `Validated` vs `Xor`
 
-### The nature of `flatMap`
-Another reason we would be hesitant to define a `flatMap` method on `Validated` lies in the nature of `flatMap`.
+We've established that an error-accumulating data type such as `Validated` can't have a valid `Monad` instance. Sometimes the task at hand requires error-accumulation. However, sometimes we want a monadic structure that we can use for sequential validation (such as in a for-comprehension). This leaves us in a bit of a conundrum.
 
-```scala
-def flatMap[F[_], A, B](fa: F[A])(f: A => F[B]): F[B]
+Cats has decided to solve this problem by using separate data structures for error-accumulation (`Validated`) and short-circuiting monadic behavior (`Xor`).
+
+If you are trying to decide whether you want to use `Validated` or `Xor`, a simple heuristic is to use `Validated` if you want error-accumulation and to otherwise use `Xor`.
+
+## Sequential Validation
+
+If you do want error accumulation but occasionally run into places where you sequential validation is needed, then `Validated` provides a couple methods that may be helpful.
+
+### `andThen`
+The `andThen` method is similar to `flatMap` (such as `Xor.flatMap`). In the cause of success, it passes the valid value into a function that returns a new `Validated` instance.
+
+```tut
+val houseNumber = config.parse[Int]("house_number").andThen{ n =>
+   if (n >= 0) Validated.valid(n)
+   else Validated.invalid(ParseError("house_number"))
+}
 ```
 
-Note we have an `F[A]`, but we can only ever get an `F[B]` upon successful inspection of the `A`. This implies a
-dependency that `F[B]` has on `F[A]`, which is in conflict with the nature of `Validated`.
+### `withXor`
+The `withXor` method allows you to temporarily turn a `Validated` instance into an `Xor` instance and apply it to a function.
+
+```tut:silent
+import cats.data.Xor
+
+def positive(field: String, i: Int): ConfigError Xor Int = {
+  if (i >= 0) Xor.right(i)
+  else Xor.left(ParseError(field))
+}
+```
+
+Thus.
+
+```tut
+val houseNumber = config.parse[Int]("house_number").withXor{ xor: ConfigError Xor Int =>
+  xor.flatMap{ i =>
+    positive("house_number", i)
+  }
+}
+```

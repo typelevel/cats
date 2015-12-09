@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Contravariant
+
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
  * [[Const]] can be seen as a type level version of `Function.const[A, B]: A => B => A`
@@ -46,6 +48,11 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
     def show(f: Const[A, B]): String = f.show
   }
 
+  implicit def constContravariant[C]: Contravariant[Const[C, ?]] = new Contravariant[Const[C, ?]] {
+    override def contramap[A, B](fa: Const[C, A])(f: (B) => A): Const[C, B] =
+      fa.retag[B]
+  }
+
   implicit def constTraverse[C]: Traverse[Const[C, ?]] = new Traverse[Const[C, ?]] {
     def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
       fa.traverse(f)
@@ -65,6 +72,11 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
 }
 
 private[data] sealed abstract class ConstInstances0 extends ConstInstances1 {
+
+  implicit def constSemigroup[A: Semigroup, B]: Semigroup[Const[A, B]] = new Semigroup[Const[A, B]] {
+    def combine(x: Const[A, B], y: Const[A, B]): Const[A, B] = x combine y
+  }
+
   implicit def constPartialOrder[A: PartialOrder, B]: PartialOrder[Const[A, B]] = new PartialOrder[Const[A, B]]{
     def partialCompare(x: Const[A, B], y: Const[A, B]): Double =
       x partialCompare y

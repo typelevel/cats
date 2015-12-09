@@ -1,11 +1,14 @@
 package cats
 package tests
 
+import org.scalacheck.Arbitrary
+
 import cats.arrow.{Arrow, Choice}
 import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import algebra.laws.GroupLaws
 
 class FunctionTests extends CatsSuite {
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
@@ -22,4 +25,14 @@ class FunctionTests extends CatsSuite {
 
   checkAll("Function1[Int, Int]", ContravariantTests[? => Int].contravariant[Int, Int, Int])
   checkAll("Contravariant[? => Int]", SerializableTests.serializable(Contravariant[? => Int]))
+
+  checkAll("Function1[String, Int]", GroupLaws[Function1[String, Int]].semigroup(function1Semigroup[String, Int]))
+
+  checkAll("Function1[String, Int]", GroupLaws[Function1[String, Int]].monoid)
+
+  checkAll("Function1[Int, Int]", MonoidKTests[Lambda[A => A => A]].semigroupK[Int])
+  checkAll("SemigroupK[Lambda[A => A => A]", SerializableTests.serializable(function1SemigroupK))
+
+  checkAll("Function1[Int, Int]", MonoidKTests[Lambda[A => A => A]].monoidK[Int])
+  checkAll("MonoidK[Lambda[A => A => A]", SerializableTests.serializable(function1MonoidK))
 }

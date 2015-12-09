@@ -18,6 +18,10 @@ lazy val buildSettings = Seq(
   crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
 
+lazy val catsDoctestSettings = Seq(
+  doctestWithDependencies := false
+) ++ doctestSettings
+
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions,
   resolvers ++= Seq(
@@ -26,7 +30,7 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.4.0",
+    "com.github.mpilquist" %%% "simulacrum" % "0.5.0",
     "org.spire-math" %%% "algebra" % "0.3.1",
     "org.spire-math" %%% "algebra-std" % "0.3.1",
     "org.typelevel" %%% "machinist" % "0.4.1",
@@ -43,12 +47,16 @@ lazy val commonJsSettings = Seq(
 
 lazy val commonJvmSettings = Seq(
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
-)
+// currently sbt-doctest doesn't work in JS builds, so this has to go in the
+// JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
+) ++ catsDoctestSettings
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
+lazy val scalacheckVersion = "1.12.5"
+
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.12.5",
+  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion,
   libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
 )
 
@@ -122,6 +130,7 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(
     sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
   )
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion % "test")
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -135,7 +144,7 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(disciplineDependencies:_*)
   .settings(libraryDependencies ++= Seq(
     "org.spire-math" %%% "algebra-laws" % "0.3.1",
-    "com.github.inthenow" %%% "bricks-platform" % "0.0.1"))
+    "org.typelevel" %%% "catalysts-platform" % "0.0.2"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -153,7 +162,7 @@ lazy val freeJVM = free.jvm
 lazy val freeJS = free.js
 
 lazy val state = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core, free, tests % "test-internal -> test")
+  .dependsOn(macros, core, free % "compile-internal;test-internal -> test", tests % "test-internal -> test")
   .settings(moduleName := "cats-state")
   .settings(catsSettings:_*)
   .jsSettings(commonJsSettings:_*)
@@ -170,7 +179,7 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .settings(noPublishSettings:_*)
   .settings(libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test",
-    "com.github.inthenow" %%% "bricks-platform" % "0.0.1" % "test"))
+    "org.typelevel" %%% "catalysts-platform" % "0.0.2" % "test"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -218,7 +227,7 @@ lazy val publishSettings = Seq(
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess 
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;freeJVM/test;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
+addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;coreJVM/test;freeJVM/compile;freeJVM/test;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 

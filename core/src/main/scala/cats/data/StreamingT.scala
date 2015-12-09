@@ -14,7 +14,7 @@ import cats.syntax.all._
  * not support many methods on `Streaming[A]` which return immediate
  * values.
  */
-sealed abstract class StreamingT[F[_], A] { lhs =>
+sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lhs =>
 
   import StreamingT.{Empty, Wait, Cons}
 
@@ -107,7 +107,7 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    * element to be calculated.
    */
   def isEmpty(implicit ev: Monad[F]): F[Boolean] =
-    uncons.map(_.isDefined)
+    uncons.map(_.isEmpty)
 
   /**
    * Return true if the stream is non-empty, false otherwise.
@@ -116,7 +116,7 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    * element to be calculated.
    */
   def nonEmpty(implicit ev: Monad[F]): F[Boolean] =
-    uncons.map(_.isEmpty)
+    uncons.map(_.isDefined)
 
   /**
    * Prepend an A value to the current stream.
@@ -205,7 +205,7 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def drop(n: Int)(implicit ev: Functor[F]): StreamingT[F, A] =
     if (n <= 0) this else this match {
-      case Cons(a, ft) => Wait(ft.map(_.take(n - 1)))
+      case Cons(a, ft) => Wait(ft.map(_.drop(n - 1)))
       case Wait(ft) => Wait(ft.map(_.drop(n)))
       case Empty() => Empty()
     }
@@ -249,7 +249,7 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    */
   def dropWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
-      case Cons(a, ft) => if (f(a)) Empty() else Cons(a, ft.map(_.takeWhile(f)))
+      case Cons(a, ft) => if (f(a)) Empty() else Cons(a, ft.map(_.dropWhile(f)))
       case Wait(ft) => Wait(ft.map(_.dropWhile(f)))
       case Empty() => Empty()
     }
@@ -273,11 +273,12 @@ sealed abstract class StreamingT[F[_], A] { lhs =>
    * This method will not force evaluation of any lazy part of a
    * stream. As a result, you will see at most one element (the first
    * one).
-   *
-   * Use .toString(n) to see the first n elements of the stream.
    */
-  override def toString: String =
-    "StreamingT(...)"
+  override def toString: String = this match {
+    case Cons(a, _) => s"StreamingT($a, ...)"
+    case Wait(_) => "StreamingT(...)"
+    case Empty() => "StreamingT()"
+  }
 }
 
 object StreamingT extends StreamingTInstances {
@@ -294,9 +295,9 @@ object StreamingT extends StreamingTInstances {
    * and Always). The head of `Cons` is eager -- a lazy head can be
    * represented using `Wait(Always(...))` or `Wait(Later(...))`.
    */
-  private[cats] case class Empty[F[_], A]() extends StreamingT[F, A]
-  private[cats] case class Wait[F[_], A](next: F[StreamingT[F, A]]) extends StreamingT[F, A]
-  private[cats] case class Cons[F[_], A](a: A, tail: F[StreamingT[F, A]]) extends StreamingT[F, A]
+  private[cats] final case class Empty[F[_], A]() extends StreamingT[F, A]
+  private[cats] final case class Wait[F[_], A](next: F[StreamingT[F, A]]) extends StreamingT[F, A]
+  private[cats] final case class Cons[F[_], A](a: A, tail: F[StreamingT[F, A]]) extends StreamingT[F, A]
 
   /**
    * Create an empty stream of type A.
@@ -350,7 +351,9 @@ object StreamingT extends StreamingTInstances {
     Cons(a, fs)
 
   /**
-   * Create a stream from an `F[StreamingT[F, A]]` value.
+   * Create a stream from a deferred `StreamingT[F, A]` value.
+   * Note: the extent to which this defers the value depends on the `pureEval`
+   * implementation of the `Applicative[F]` instance.
    */
   def defer[F[_], A](s: => StreamingT[F, A])(implicit ev: Applicative[F]): StreamingT[F, A] =
     Wait(ev.pureEval(Always(s)))
@@ -399,7 +402,7 @@ object StreamingT extends StreamingTInstances {
    * evaluated.
    */
   object syntax {
-    implicit class StreamingTOps[F[_], A](rhs: => StreamingT[F, A]) {
+    implicit final class StreamingTOps[F[_], A](rhs: => StreamingT[F, A]) {
       def %::(a: A)(implicit ev: Applicative[F]): StreamingT[F, A] =
         Cons(a, ev.pureEval(Always(rhs)))
       def %:::(s: StreamingT[F, A])(implicit ev: Monad[F]): StreamingT[F, A] =
@@ -410,7 +413,7 @@ object StreamingT extends StreamingTInstances {
         Wait(fs.map(_ concat ev.pureEval(Always(rhs))))
     }
 
-    implicit class FStreamingTOps[F[_], A](rhs: F[StreamingT[F, A]]) {
+    implicit final class FStreamingTOps[F[_], A](rhs: F[StreamingT[F, A]]) {
       def %::(a: A): StreamingT[F, A] =
         Cons(a, rhs)
       def %:::(s: StreamingT[F, A])(implicit ev: Monad[F]): StreamingT[F, A] =
@@ -439,6 +442,9 @@ private[data] sealed trait StreamingTInstances extends StreamingTInstances1 {
         fa.filter(f)
       def coflatMap[A, B](fa: StreamingT[F, A])(f: StreamingT[F, A] => B): StreamingT[F, B] =
         fa.coflatMap(f)
+
+      override def map[A, B](fa: StreamingT[F, A])(f: A => B): StreamingT[F, B] =
+        fa.map(f)
     }
 
   implicit def streamingTOrder[F[_], A](implicit ev: Monad[F], eva: Order[F[List[A]]]): Order[StreamingT[F, A]] =

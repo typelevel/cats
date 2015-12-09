@@ -1,12 +1,11 @@
 package cats
 package tests
 
-import cats.arrow.Arrow
+import cats.arrow.{Arrow, Split}
 import cats.data.{Cokleisli, NonEmptyList}
 import cats.functor.Profunctor
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.ArbitraryK._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
@@ -24,6 +23,9 @@ class CokleisliTests extends SlowCatsSuite {
 
   checkAll("Cokleisli[Option, Int, Int]", ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[Int, Int, Int, Int, Int, Int])
   checkAll("Profunctor[Cokleisli[Option, ?, ?]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
+
+  checkAll("Cokleisli[Option, Int, Int]", SplitTests[Cokleisli[Option, ?, ?]].split[Int, Int, Int, Int, Int, Int])
+  checkAll("Split[Cokleisli[Option, ?, ?]", SerializableTests.serializable(Split[Cokleisli[Option, ?, ?]]))
 
   {
     // Ceremony to help scalac to do the right thing, see also #267.
@@ -43,7 +45,8 @@ class CokleisliTests extends SlowCatsSuite {
     // More ceremony, see above
     type CokleisliNELE[A] = Cokleisli[NonEmptyList, A, A]
 
-    implicit def ev0: ArbitraryK[CokleisliNELE] = cokleisliE
+    implicit def ev0[A: Arbitrary]: Arbitrary[CokleisliNELE[A]] =
+      cokleisliArbitrary[NonEmptyList, A, A]
 
     implicit def ev1[A: Eq](implicit arb: Arbitrary[A]): Eq[CokleisliNELE[A]] =
       cokleisliEqE[NonEmptyList, A](oneAndArbitrary, Eq[A])

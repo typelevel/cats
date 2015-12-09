@@ -76,7 +76,7 @@ recursive values.
 
 We need to create an ADT to represent our key-value operations:
 
-```tut
+```tut:silent
 sealed trait KVStoreA[+Next]
 case class Put[T, Next](key: String, value: T, next: Next) extends KVStoreA[Next]
 case class Get[T, Next](key: String, onResult: T => Next) extends KVStoreA[Next]
@@ -104,7 +104,7 @@ There are six basic steps to "freeing" the ADT:
 
 #### 1. Create a `Free` type based on your ADT
 
-```tut
+```tut:silent
 import cats.free.Free
 
 type KVStore[A] = Free[KVStoreA, A]
@@ -119,7 +119,7 @@ since we get this monad "for free."
 
 Therefore, we need to prove `KVStoreA[_]` has a functor.
 
-```tut
+```tut:silent
 import cats.Functor
 
 implicit val functor: Functor[KVStoreA] =
@@ -142,7 +142,7 @@ These methods will make working with our DSL a lot nicer, and will
 lift `KVStoreA[_]` values into our `KVStore[_]` monad (note the
 missing "A" in the second type).
 
-```tut
+```tut:silent
 import cats.free.Free.liftF
 
 // Put returns nothing (i.e. Unit).
@@ -170,7 +170,7 @@ def update[T](key: String, f: T => T): KVStore[Unit] =
 Now that we can construct `KVStore[_]` values we can use our DSL to
 write "programs" using a *for-comprehension*:
 
-```tut
+```tut:silent
 def program: KVStore[Int] =
   for {
     _ <- put("wild-cats", 2)
@@ -185,7 +185,7 @@ This looks like a monadic flow. However, it just builds a recursive
 data structure representing the sequence of operations. Here is a
 similar program represented explicitly:
 
-```tut
+```tut:silent
 val programA =
   Put("wild-cats", 2,
     Get("wild-cats", { (n0: Int) =>
@@ -223,7 +223,7 @@ containers.  Natural transformations go between types like `F[_]` and
 In our case, we will use a simple mutable map to represent our key
 value store:
 
-```tut
+```tut:silent
 import cats.{Id, ~>}
 import scala.collection.mutable
 
@@ -302,7 +302,7 @@ under `Monad`). As `Id` is a `Monad`, we can use `foldMap`.
 To run your `Free` with previous `impureCompiler`:
 
 ```tut
-val result: Id[Int] = program.foldMap(impureCompiler)
+val result: Int = program.foldMap(impureCompiler)
 ```
 
 An important aspect of `foldMap` is its **stack-safety**. It evaluates
@@ -325,7 +325,7 @@ previous state of the `Map` and you don't have it. For this, you need
 to use the lower level `fold` function and fold the `Free[_]` by
 yourself:
 
-```tut
+```tut:silent
 // Pure computation
 def compilePure[A](program: KVStore[A], kvs: Map[String, A]): Map[String, A] =
   program.fold(
@@ -346,6 +346,118 @@ it's not too hard to get around.)
 
 ```tut
 val result: Map[String, Int] = compilePure(program, Map.empty)
+```
+
+## Composing Free monads ADTs.
+
+Real world applications often time combine different algebras. 
+The `Inject` typeclass described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
+lets us compose different algebras in the context of `Free`.
+
+Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.
+
+```tut:silent
+import cats.data.{Xor, Coproduct}
+import cats.free.{Inject, Free}
+import cats.{Id, ~>}
+import scala.collection.mutable.ListBuffer
+```
+
+```tut:silent
+/* Handles user interaction */
+sealed trait Interact[A]
+case class Ask(prompt: String) extends Interact[String]
+case class Tell(msg: String) extends Interact[Unit]
+
+/* Represents persistence operations */
+sealed trait DataOp[A]
+case class AddCat(a: String) extends DataOp[Unit]
+case class GetAllCats() extends DataOp[List[String]]
+```
+
+Once the ADTs are defined we can formally state that a `Free` program is the Coproduct of it's Algebras.
+
+```tut:silent
+type CatsApp[A] = Coproduct[DataOp, Interact, A]
+```
+
+In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the `Free` context.
+
+```tut:silent
+class Interacts[F[_]](implicit I: Inject[Interact, F]) {
+  def tell(msg: String): Free[F, Unit] = Free.inject[Interact, F](Tell(msg))
+  def ask(prompt: String): Free[F, String] = Free.inject[Interact, F](Ask(prompt))
+}
+
+object Interacts {
+  implicit def interacts[F[_]](implicit I: Inject[Interact, F]): Interacts[F] = new Interacts[F]
+}
+
+class DataSource[F[_]](implicit I: Inject[DataOp, F]) {
+  def addCat(a: String): Free[F, Unit] = Free.inject[DataOp, F](AddCat(a))
+  def getAllCats: Free[F, List[String]] = Free.inject[DataOp, F](GetAllCats())
+}
+
+object DataSource {
+  implicit def dataSource[F[_]](implicit I: Inject[DataOp, F]): DataSource[F] = new DataSource[F]
+}
+```
+
+ADTs are now easily composed and trivially intertwined inside monadic contexts.
+
+```tut:silent
+def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]): Free[CatsApp, Unit] = {
+
+  import I._, D._
+
+  for {
+    cat <- ask("What's the kitty's name?")
+    _ <- addCat(cat)
+    cats <- getAllCats
+    _ <- tell(cats.toString)
+  } yield ()
+}
+```
+
+Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so they can be
+compiled and applied to our `Free` program.
+
+```tut:invisible
+def readLine(): String = "snuggles"
+```
+
+```tut:silent
+object ConsoleCatsInterpreter extends (Interact ~> Id) {
+  def apply[A](i: Interact[A]) = i match {
+    case Ask(prompt) =>
+      println(prompt)
+      readLine()
+    case Tell(msg) =>
+      println(msg)
+  }
+}
+
+object InMemoryDatasourceInterpreter extends (DataOp ~> Id) {
+
+  private[this] val memDataSet = new ListBuffer[String]
+
+  def apply[A](fa: DataOp[A]) = fa match {
+    case AddCat(a) => memDataSet.append(a); ()
+    case GetAllCats() => memDataSet.toList
+  }
+}
+
+val interpreter: CatsApp ~> Id = InMemoryDatasourceInterpreter or ConsoleCatsInterpreter
+```
+
+Now if we run our program and type in "snuggles" when prompted, we see something like this:
+
+```tut:silent
+import DataSource._, Interacts._
+```
+
+```tut
+val evaled: Unit = program.foldMap(interpreter)
 ```
 
 ## <a name="what-is-free-in-theory"></a>For the curious ones: what is Free in theory?

@@ -8,19 +8,16 @@ import Prop._
 
 trait ComonadTests[F[_]] extends CoflatMapTests[F] {
 
-  implicit def arbitraryK: ArbitraryK[F]
-  implicit def eqK: EqK[F]
-
   def laws: ComonadLaws[F]
 
-  def comonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq]: RuleSet = {
-    implicit def ArbFA: Arbitrary[F[A]] = ArbitraryK[F].synthesize
-    implicit val eqfa: Eq[F[A]] = EqK[F].synthesize
-    implicit val eqffa: Eq[F[F[A]]] = EqK[F].synthesize
-    implicit val eqfffa: Eq[F[F[F[A]]]] = EqK[F].synthesize
-    implicit val eqfb: Eq[F[B]] = EqK[F].synthesize
-    implicit val eqfc: Eq[F[C]] = EqK[F].synthesize
-
+  def comonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
+    ArbFA: Arbitrary[F[A]],
+    EqFA: Eq[F[A]],
+    EqFFA: Eq[F[F[A]]],
+    EqFFFA: Eq[F[F[F[A]]]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]]
+  ): RuleSet = {
     new DefaultRuleSet(
       name = "comonad",
       parent = Some(coflatMap[A, B, C]),
@@ -39,10 +36,8 @@ trait ComonadTests[F[_]] extends CoflatMapTests[F] {
 }
 
 object ComonadTests {
-  def apply[F[_]: ArbitraryK: Comonad: EqK]: ComonadTests[F] =
+  def apply[F[_]: Comonad]: ComonadTests[F] =
     new ComonadTests[F] {
-      def arbitraryK: ArbitraryK[F] = ArbitraryK[F]
-      def eqK: EqK[F] = EqK[F]
       def laws: ComonadLaws[F] = ComonadLaws[F]
     }
 }

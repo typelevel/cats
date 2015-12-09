@@ -3,19 +3,14 @@ package free
 
 import cats.arrow.NaturalTransformation
 import cats.tests.CatsSuite
-import cats.laws.discipline.{ArbitraryK, FunctorTests, SerializableTests}
+import cats.laws.discipline.{FunctorTests, SerializableTests}
 
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
 class CoyonedaTests extends CatsSuite {
-  implicit def coyonedaArbitraryK[F[_] : Functor](implicit F: ArbitraryK[F]): ArbitraryK[Coyoneda[F, ?]] =
-    new ArbitraryK[Coyoneda[F, ?]]{
-      def synthesize[A: Arbitrary]: Arbitrary[Coyoneda[F, A]] = coyonedaArbitrary[F, A]
-    }
-
-  implicit def coyonedaArbitrary[F[_] : Functor, A : Arbitrary](implicit F: ArbitraryK[F]): Arbitrary[Coyoneda[F, A]] =
-    Arbitrary(F.synthesize[A].arbitrary.map(Coyoneda.lift))
+  implicit def coyonedaArbitrary[F[_] : Functor, A : Arbitrary](implicit F: Arbitrary[F[A]]): Arbitrary[Coyoneda[F, A]] =
+    Arbitrary(F.arbitrary.map(Coyoneda.lift))
 
   implicit def coyonedaEq[F[_]: Functor, A](implicit FA: Eq[F[A]]): Eq[Coyoneda[F, A]] =
     new Eq[Coyoneda[F, A]] {
