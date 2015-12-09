@@ -30,11 +30,9 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
   }
 
   def orElse[AA, BB >: B](default: => XorT[F, AA, BB])(implicit F: Monad[F]): XorT[F, AA, BB] = {
-    XorT(F.flatMap(value) { xor =>
-      xor match {
-        case Xor.Left(_) => default.value
-        case r @ Xor.Right(_) => F.pure(r)
-      }
+    XorT(F.flatMap(value) {
+      case Xor.Left(_) => default.value
+      case r @ Xor.Right(_) => F.pure(r)
     })
   }
 
