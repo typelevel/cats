@@ -89,6 +89,19 @@ class XorTests extends CatsSuite {
     }
   }
 
+  test("swap negates isLeft/isRight") {
+    forAll { (x: Int Xor String) =>
+      x.isLeft should !== (x.swap.isLeft)
+      x.isRight should !== (x.swap.isRight)
+    }
+  }
+
+  test("isLeft consistent with isRight") {
+    forAll { (x: Int Xor String) =>
+      x.isLeft should !== (x.isRight)
+    }
+  }
+
   test("foreach is noop for left") {
     forAll { (x: Int Xor String) =>
       var count = 0

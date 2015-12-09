@@ -154,4 +154,23 @@ class ValidatedTests extends CatsSuite {
     }
   }
 
+  test("isInvalid consistent with isValid") {
+    forAll { (x: Validated[String, Int]) =>
+      x.isInvalid should !== (x.isValid)
+    }
+  }
+
+  test("double swap is identity") {
+    forAll { (x: Validated[String, Int]) =>
+      x.swap.swap should ===(x)
+    }
+  }
+
+  test("swap negates isInvalid/isValid") {
+    forAll { (x: Validated[String, Int]) =>
+      x.isInvalid should !== (x.swap.isInvalid)
+      x.isValid should !== (x.swap.isValid)
+    }
+  }
+
 }

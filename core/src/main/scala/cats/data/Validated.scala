@@ -189,6 +189,10 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case _ => that
     }
 
+  def swap: Validated[A, E] = this match {
+    case Valid(a) => Invalid(a)
+    case Invalid(e) => Valid(e)
+  }
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions{
