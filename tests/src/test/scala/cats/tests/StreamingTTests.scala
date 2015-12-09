@@ -3,7 +3,7 @@ package tests
 
 import algebra.laws.OrderLaws
 
-import cats.data.StreamingT
+import cats.data.{Streaming, StreamingT}
 import cats.laws.discipline.{MonoidalTests, CoflatMapTests, MonadCombineTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -154,6 +154,29 @@ class StreamingTTests extends CatsSuite {
     forAll { (s: StreamingT[Id, Int], i: Int) =>
       s.drop(i).toList should === (s.toList.drop(i))
     }
+  }
+
+  test("unfold with Id consistent with Streaming.unfold") {
+    forAll { (o: Option[Long]) =>
+      val f: Long => Option[Long] = { x  =>
+        val rng = new scala.util.Random(x)
+        if (rng.nextBoolean) Some(rng.nextLong)
+        else None
+      }
+
+      StreamingT.unfold[Id, Long](o)(f).toList should === (Streaming.unfold(o)(f).toList)
+    }
+  }
+
+  test("defer produces the same values") {
+    forAll { (xs: StreamingT[Option, Int]) =>
+      StreamingT.defer(xs) should === (xs)
+    }
+  }
+
+  test("defer isn't eager if the pureEval impl isn't") {
+    def s: StreamingT[Eval, Int] = throw new RuntimeException("blargh")
+    val x = StreamingT.defer[Eval, Int](s)
   }
 
   test("fromVector") {

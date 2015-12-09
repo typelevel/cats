@@ -351,7 +351,9 @@ object StreamingT extends StreamingTInstances {
     Cons(a, fs)
 
   /**
-   * Create a stream from an `F[StreamingT[F, A]]` value.
+   * Create a stream from a deferred `StreamingT[F, A]` value.
+   * Note: the extent to which this defers the value depends on the `pureEval`
+   * implementation of the `Applicative[F]` instance.
    */
   def defer[F[_], A](s: => StreamingT[F, A])(implicit ev: Applicative[F]): StreamingT[F, A] =
     Wait(ev.pureEval(Always(s)))
