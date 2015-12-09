@@ -18,6 +18,10 @@ lazy val buildSettings = Seq(
   crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
 
+lazy val catsDoctestSettings = Seq(
+  doctestWithDependencies := false
+) ++ doctestSettings
+
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions,
   resolvers ++= Seq(
@@ -43,12 +47,16 @@ lazy val commonJsSettings = Seq(
 
 lazy val commonJvmSettings = Seq(
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
-)
+// currently sbt-doctest doesn't work in JS builds, so this has to go in the
+// JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
+) ++ catsDoctestSettings
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
+lazy val scalacheckVersion = "1.12.5"
+
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.12.5",
+  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion,
   libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
 )
 
@@ -122,6 +130,7 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(
     sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
   )
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion % "test")
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -218,7 +227,7 @@ lazy val publishSettings = Seq(
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess 
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;freeJVM/test;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
+addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;coreJVM/test;freeJVM/compile;freeJVM/test;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
