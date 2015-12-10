@@ -23,7 +23,8 @@ trait MonadFilterTests[F[_]] extends MonadTests[F] {
       name = "monadFilter",
       parent = Some(monad[A, B, C]),
       "monadFilter left empty" -> forAll(laws.monadFilterLeftEmpty[A, B] _),
-      "monadFilter right empty" -> forAll(laws.monadFilterRightEmpty[A, B] _))
+      "monadFilter right empty" -> forAll(laws.monadFilterRightEmpty[A, B] _),
+      "monadFilter consistency" -> forAll(laws.monadFilterConsistency[A, B] _))
   }
 }
 
