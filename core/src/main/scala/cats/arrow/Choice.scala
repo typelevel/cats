@@ -14,8 +14,8 @@ trait Choice[F[_, _]] extends Category[F] {
    * {{{
    * scala> import cats.data.Xor
    * scala> import cats.std.function._
-   * scala> val b: Boolean => String = x => s"$x is a boolean"
-   * scala> val i: Int => String = x => s"$x is an integer"
+   * scala> val b: Boolean => String = _ + " is a boolean"
+   * scala> val i: Int => String =  _ + " is an integer"
    * scala> val f: (Boolean Xor Int) => String = Choice[Function1].choice(b, i)
    *
    * scala> f(Xor.right(3))
