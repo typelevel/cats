@@ -222,8 +222,10 @@ trait XorFunctions {
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
    * the resulting `Xor`. Uncaught exceptions are propagated.
    *
-   * For example: {{{
-   * val result: NumberFormatException Xor Int = catchOnly[NumberFormatException] { "foo".toInt }
+   * For example:
+   * {{{
+   * scala> Xor.catchOnly[NumberFormatException] { "foo".toInt }
+   * res0: Xor[NumberFormatException, Int] = Left(java.lang.NumberFormatException: For input string: "foo")
    * }}}
    */
   def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] =

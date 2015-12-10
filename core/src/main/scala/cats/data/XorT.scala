@@ -118,12 +118,15 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
    *
    * Example:
    * {{{
-   * val v1: Validated[NonEmptyList[Error], Int] = ...
-   * val v2: Validated[NonEmptyList[Error], Int] = ...
-   * val xort: XorT[Error, Int] = ...
-   *
-   * val result: XorT[NonEmptyList[Error], Int] =
-   *   xort.withValidated { v3 => (v1 |@| v2 |@| v3.leftMap(NonEmptyList(_))) { case (i, j, k) => i + j + k } }
+   * scala> import cats.std.option._
+   * scala> import cats.std.list._
+   * scala> import cats.syntax.monoidal._
+   * scala> type Error = String
+   * scala> val v1: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList("error 1"))
+   * scala> val v2: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList("error 2"))
+   * scala> val xort: XorT[Option, Error, Int] = XorT(Some(Xor.left("error 3")))
+   * scala> xort.withValidated { v3 => (v1 |@| v2 |@| v3.leftMap(NonEmptyList(_))).map{ case (i, j, k) => i + j + k } }
+   * res0: XorT[Option, NonEmptyList[Error], Int] = XorT(Some(Left(OneAnd(error 1,List(error 2, error 3)))))
    * }}}
    */
   def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB])(implicit F: Functor[F]): XorT[F, AA, BB] =
@@ -146,8 +149,10 @@ trait XorTFunctions {
    * Note: The return type is a FromXorPartiallyApplied[F], which has an apply method
    * on it, allowing you to call fromXor like this:
    * {{{
-   * val t: Xor[String, Int] = ...
-   * val x: XorT[Option, String, Int] = fromXor[Option](t)
+   * scala> import cats.std.option._
+   * scala> val t: Xor[String, Int] = Xor.right(3)
+   * scala> XorT.fromXor[Option](t)
+   * res0: XorT[Option, String, Int] = XorT(Some(Right(3)))
    * }}}
    *
    * The reason for the indirection is to emulate currying type parameters.

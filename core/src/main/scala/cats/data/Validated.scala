@@ -134,6 +134,12 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def map[B](f: A => B): Validated[E,B] = bimap(identity, f)
 
   /**
+   * Apply a function to an Invalid value, returning a new Invalid value.
+   * Or, if the original valid was Valid, return it.
+   */
+  def leftMap[EE](f: E => EE): Validated[EE,A] = bimap(f, identity)
+
+  /**
    * When Valid, apply the function, marking the result as valid
    * inside the Applicative's context,
    * when Invalid, lift the Error into the Applicative's context
@@ -221,6 +227,7 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
   implicit def validatedBifunctor: Bifunctor[Validated] =
     new Bifunctor[Validated] {
       override def bimap[A, B, C, D](fab: Validated[A, B])(f: A => C, g: B => D): Validated[C, D] = fab.bimap(f, g)
+      override def leftMap[A, B, C](fab: Validated[A, B])(f: A => C): Validated[C, B] = fab.leftMap(f)
     }
 
   implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with Applicative[Validated[E, ?]] =
@@ -280,8 +287,10 @@ trait ValidatedFunctions {
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
    * the resulting `Validated`. Uncaught exceptions are propagated.
    *
-   * For example: {{{
-   * val result: Validated[NumberFormatException, Int] = catchOnly[NumberFormatException] { "foo".toInt }
+   * For example:
+   * {{{
+   * scala> Validated.catchOnly[NumberFormatException] { "foo".toInt }
+   * res0: Validated[NumberFormatException, Int] = Invalid(java.lang.NumberFormatException: For input string: "foo")
    * }}}
    */
   def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
