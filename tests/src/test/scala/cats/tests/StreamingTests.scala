@@ -263,6 +263,31 @@ class AdHocStreamingTests extends CatsSuite {
     }
   }
 
+  test("uncons consistent with headOption"){
+    forAll { (s: Streaming[Int]) =>
+      s.uncons.map(_._1) should === (s.toList.headOption)
+    }
+  }
+
+  test("uncons tail consistent with drop(1)"){
+    forAll { (s: Streaming[Int]) =>
+      val tail: Option[Streaming[Int]] = s.uncons.map(_._2.value)
+      tail.foreach(_.toList should === (s.toList.drop(1)))
+    }
+  }
+
+  test("isEmpty consistent with fold"){
+    forAll { (s: Streaming[Int]) =>
+      s.isEmpty should === (s.fold(Now(true), (_, _) => false))
+    }
+  }
+
+  test("foldStreaming consistent with fold"){
+    forAll { (ints: Streaming[Int], longs: Streaming[Long], f: (Int, Eval[Streaming[Int]]) => Streaming[Long]) =>
+      ints.foldStreaming(longs, f) should === (ints.fold(Now(longs), f))
+    }
+  }
+
   test("interval") {
     // we don't want this test to take a really long time
     implicit val arbInt: Arbitrary[Int] = Arbitrary(Gen.choose(-10, 20))
