@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{NonEmptyList, Validated, Xor}
+import cats.data.{NonEmptyList, Validated, ValidatedNel, Xor}
 import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeTests, SerializableTests, MonoidalTests}
 import org.scalacheck.{Gen, Arbitrary}
@@ -178,4 +178,12 @@ class ValidatedTests extends CatsSuite {
     }
   }
 
+  test("Unapply-based apply syntax"){
+    // this type has kind F[_, _], which requires `Unapply`-based syntax
+    val x: ValidatedNel[String, Int] = Validated.invalidNel("error 1")
+    val y: ValidatedNel[String, Boolean] = Validated.invalidNel("error 2")
+
+    val z = x.map2(y)((i, b) => if (b) i + 1 else i)
+    z should === (NonEmptyList("error 1", "error 2").invalid[Int])
+  }
 }
