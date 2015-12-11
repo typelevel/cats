@@ -3,13 +3,16 @@ package free
 
 import cats.arrow.NaturalTransformation
 import cats.tests.CatsSuite
-import cats.laws.discipline.{MonadTests, SerializableTests}
+import cats.laws.discipline.{MonoidalTests, MonadTests, SerializableTests}
+import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary.function0Arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import Arbitrary.{arbitrary, arbFunction1}
 
 class FreeTests extends CatsSuite {
   import FreeTests._
+
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Free[Option, ?]]
 
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))

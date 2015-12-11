@@ -2,6 +2,7 @@ package cats
 package laws
 package discipline
 
+import cats.laws.discipline.MonoidalTests.Isomorphisms
 import eq.unitEq
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll
@@ -22,7 +23,9 @@ trait MonadStateTests[F[_], S] extends MonadTests[F] {
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
     EqFUnit: Eq[F[Unit]],
-    EqFS: Eq[F[S]]
+    EqFS: Eq[F[S]],
+    EqFABC: Eq[F[(A, B, C)]],
+    iso: Isomorphisms[F]
   ): RuleSet = {
     new RuleSet {
       def name: String = "monadState"

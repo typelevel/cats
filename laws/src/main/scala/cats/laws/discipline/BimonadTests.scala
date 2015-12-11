@@ -2,6 +2,7 @@ package cats
 package laws
 package discipline
 
+import cats.laws.discipline.MonoidalTests.Isomorphisms
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import Prop._
@@ -20,7 +21,9 @@ trait BimonadTests[F[_]] extends MonadTests[F] with ComonadTests[F] {
     EqFFA: Eq[F[F[F[A]]]],
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
-    EqFC: Eq[F[C]]
+    EqFC: Eq[F[C]],
+    EqFABC: Eq[F[(A, B, C)]],
+    iso: Isomorphisms[F]
   ): RuleSet = {
     new RuleSet {
       def name: String = "bimonad"

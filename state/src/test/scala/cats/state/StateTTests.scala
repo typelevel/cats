@@ -2,8 +2,8 @@ package cats
 package state
 
 import cats.tests.CatsSuite
+import cats.laws.discipline.{MonoidalTests, MonadStateTests, MonoidKTests, SerializableTests}
 import cats.free.FreeTests._
-import cats.laws.discipline.{MonadStateTests, MonoidKTests, SerializableTests}
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -28,7 +28,7 @@ class StateTTests extends CatsSuite {
     }
   }
 
-  test("Apply syntax is usable on State") {
+  test("Monoidal syntax is usable on State") {
     val x = add1 *> add1
     x.runS(0).run should === (2)
   }
@@ -77,11 +77,17 @@ class StateTTests extends CatsSuite {
     }
   }
 
-  checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, Int, ?], Int].monadState[Int, Int, Int])
-  checkAll("MonadState[StateT[Option, ?, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, Int, ?], Int]))
+  {
+    implicit val iso = MonoidalTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
+    checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, Int, ?], Int].monadState[Int, Int, Int])
+    checkAll("MonadState[StateT[Option, ?, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, Int, ?], Int]))
+  }
 
-  checkAll("State[Long, ?]", MonadStateTests[State[Long, ?], Long].monadState[Int, Int, Int])
-  checkAll("MonadState[State[Long, ?], Long]", SerializableTests.serializable(MonadState[State[Long, ?], Long]))
+  {
+    implicit val iso = MonoidalTests.Isomorphisms.invariant[State[Long, ?]]
+    checkAll("State[Long, ?]", MonadStateTests[State[Long, ?], Long].monadState[Int, Int, Int])
+    checkAll("MonadState[State[Long, ?], Long]", SerializableTests.serializable(MonadState[State[Long, ?], Long]))
+  }
 }
 
 object StateTTests extends StateTTestsInstances {

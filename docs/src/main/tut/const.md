@@ -219,13 +219,17 @@ implicit def constApplicative[Z]: Applicative[Const[Z, ?]] =
     def pure[A](a: A): Const[Z, A] = ???
 
     def ap[A, B](fa: Const[Z, A])(f: Const[Z, A => B]): Const[Z, B] = ???
+
+    def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] = ???
+
+    def product[A, B](fa: Const[Z, A],fb: Const[Z, B]): Const[Z, (A, B)] = ???
   }
 ```
 
 Recall that `Const[Z, A]` means we have a `Z` value in hand, and don't really care about the `A` type parameter.
 Therefore we can more or less treat the type `Const[Z, A]` as just `Z`.
 
-In both functions we have a problem. In `pure`, we have an `A` value, but want to return a `Z` value. We have
+In functions `pure` and `ap` we have a problem. In `pure`, we have an `A` value, but want to return a `Z` value. We have
 no function `A => Z`, so our only option is to completely ignore the `A` value. But we still don't have a `Z`! Let's
 put that aside for now, but still keep it in the back of our minds.
 
@@ -242,6 +246,12 @@ implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, ?]] =
 
     def ap[A, B](fa: Const[Z, A])(f: Const[Z, A => B]): Const[Z, B] =
       Const(Monoid[Z].combine(fa.getConst, f.getConst))
+      
+    def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] =
+      Const(fa.getConst)
+
+    def product[A, B](fa: Const[Z, A],fb: Const[Z, B]): Const[Z, (A, B)] =
+      Const(Monoid[Z].combine(fa.getConst, fb.getConst))
   }
 ```
 

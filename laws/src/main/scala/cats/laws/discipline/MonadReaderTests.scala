@@ -2,6 +2,7 @@ package cats
 package laws
 package discipline
 
+import cats.laws.discipline.MonoidalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll
 
@@ -18,7 +19,9 @@ trait MonadReaderTests[F[_], R] extends MonadTests[F] {
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
-    EqFR: Eq[F[R]]
+    EqFR: Eq[F[R]],
+    EqFABC: Eq[F[(A, B, C)]],
+    iso: Isomorphisms[F]
   ): RuleSet = {
     new RuleSet {
       def name: String = "monadReader"

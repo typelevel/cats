@@ -28,8 +28,6 @@ import simulacrum.typeclass
    */
   def pureEval[A](x: Eval[A]): F[A] = pure(x.value)
 
-  override def map[A, B](fa: F[A])(f: A => B): F[B] = ap(fa)(pure(f))
-
   /**
    * Two sequentially dependent Applicatives can be composed.
    *

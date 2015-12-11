@@ -1,9 +1,10 @@
 package cats.tests
 
-import cats.{Applicative, Id, Monad, Show}
+import cats.{Applicative, Id, Monad, Monoidal, Show}
 import cats.data.{OptionT, Validated, Xor}
-import cats.laws.discipline.{ApplicativeTests, FunctorTests, MonadTests, SerializableTests}
+import cats.laws.discipline.{ApplicativeTests, FunctorTests, MonadCombineTests, SerializableTests, MonoidalTests, MonadTests}
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
 
 class OptionTTests extends CatsSuite {
@@ -116,6 +117,11 @@ class OptionTTests extends CatsSuite {
       List(o) should === (OptionT.fromOption[List](o).value)
     }
   }
+
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[OptionT[List, ?]]
+
+  checkAll("OptionT[List, Int]", MonoidalTests[OptionT[List, ?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[OptionT[List, ?]]", SerializableTests.serializable(Monoidal[OptionT[List, ?]]))
 
   test("liftF") {
     forAll { (xs: List[Int]) =>
