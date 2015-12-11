@@ -15,6 +15,20 @@ trait Arrow[F[_, _]] extends Split[F] with Strong[F] with Category[F] { self =>
     compose(swap, compose(first[A, B, C](fa), swap))
   }
 
+  /**
+   * Create a new arrow that splits its input between the `f` and `g` arrows
+   * and combines the output of each.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.std.function._
+   * scala> val toLong: Int => Long = _.toLong
+   * scala> val toDouble: Float => Double = _.toDouble
+   * scala> val f: ((Int, Float)) => (Long, Double) = Arrow[Function1].split(toLong, toDouble)
+   * scala> f((3, 4.0f))
+   * res0: (Long, Double) = (3,4.0)
+   * }}}
+   */
   def split[A, B, C, D](f: F[A, B], g: F[C, D]): F[(A, C), (B, D)] =
     andThen(first(f), second(g))
 }
