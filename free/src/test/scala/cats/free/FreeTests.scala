@@ -23,6 +23,26 @@ class FreeTests extends CatsSuite {
     }
   }
 
+  test("suspend doesn't change value"){
+    forAll { x: Free[List, Int] =>
+      Free.suspend(x) should === (x)
+    }
+  }
+
+  test("suspend is lazy"){
+    def yikes[F[_], A]: Free[F, A] = throw new RuntimeException("blargh")
+    // this shouldn't throw an exception unless we try to run it
+    val _ = Free.suspend(yikes[Option, Int])
+  }
+
+  test("mapSuspension consistent with foldMap"){
+    forAll { x: Free[List, Int] =>
+      val mapped = x.mapSuspension(headOptionU)
+      val folded = mapped.foldMap(NaturalTransformation.id[Option])
+      folded should === (x.foldMap(headOptionU))
+    }
+  }
+
   ignore("foldMap is stack safe") {
     trait FTestApi[A]
     case class TB(i: Int) extends FTestApi[Int]
@@ -57,6 +77,10 @@ object FreeTests extends FreeTestsInstances {
 }
 
 sealed trait FreeTestsInstances {
+  val headOptionU: List ~> Option = new (List ~> Option) {
+    def apply[A](fa: List[A]): Option[A] = fa.headOption
+  }
+
   private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {
     val noGosub = Gen.oneOf(
       A.arbitrary.map(Free.pure[F, A]),
