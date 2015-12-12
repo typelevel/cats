@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.{CoflatMapLaws, FlatMapLaws}
+import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws}
 import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests, MonoidalTests}
 import cats.laws.discipline.eq._
 
@@ -27,11 +27,10 @@ class OptionTests extends CatsSuite {
     }
   }
 
-  // The following two tests check the kleisliAssociativity and
-  // cokleisliAssociativity laws which are a different formulation of
-  // the flatMapAssociativity and coflatMapAssociativity laws. Since
-  // these laws are more or less duplicates of existing laws, we don't
-  // check them for all types that have FlatMap or CoflatMap instances.
+  // The following tests check laws which are a different formulation of
+  // laws that are checked. Since these laws are more or less duplicates of
+  // existing laws, we don't check them for all types that have the relevant
+  // instances.
 
   test("Kleisli associativity") {
     forAll { (l: Long,
@@ -49,6 +48,15 @@ class OptionTests extends CatsSuite {
               g: Option[Int]  => Char,
               h: Option[Char] => String) =>
       val isEq = CoflatMapLaws[Option].cokleisliAssociativity(f, g, h, l)
+      isEq.lhs should === (isEq.rhs)
+    }
+  }
+
+  test("applicative composition") {
+    forAll { (fa: Option[Int],
+              fab: Option[Int => Long],
+              fbc: Option[Long => Char]) =>
+      val isEq = ApplicativeLaws[Option].applicativeComposition(fa, fab, fbc)
       isEq.lhs should === (isEq.rhs)
     }
   }
