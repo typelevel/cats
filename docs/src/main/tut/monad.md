@@ -25,7 +25,7 @@ List(List(1),List(2,3)).flatten
 
 If `Applicative` is already present and `flatten` is well-behaved,
 extending the `Applicative` to a `Monad` is trivial. To provide evidence
-that a type belongs in the `Monad` typeclass, cats' implementation
+that a type belongs in the `Monad` type class, cats' implementation
 requires us to provide an implementation of `pure` (which can be reused
 from `Applicative`) and `flatMap`.
 
