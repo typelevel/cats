@@ -102,6 +102,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) {
 Below are some more methods on `Kleisli` that can be used so long as the constraint on `F[_]`
 is satisfied.
 
+```
 Method    | Constraint on `F[_]`
 --------- | -------------------
 andThen   | FlatMap
@@ -110,6 +111,7 @@ flatMap   | FlatMap
 lower     | Monad
 map       | Functor
 traverse  | Applicative
+```
 
 ### Type class instances
 The type class instances for `Kleisli`, like that for functions, often fix the input type (and the `F[_]`) and leave
