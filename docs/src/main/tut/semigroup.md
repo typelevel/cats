@@ -47,9 +47,9 @@ Semigroup[Int => Int].combine({(x: Int) => x + 1},{(x: Int) => x * 10}).apply(6)
 
 Many of these types have methods defined directly on them,
 which allow for such combining, e.g. `++` on List, but the
-value of having a `Semigroup` typeclass available is that these
-compose, so for instance, we can say 
- 
+value of having a `Semigroup` type class available is that these
+compose, so for instance, we can say
+
 ```tut
 Map("foo" -> Map("bar" -> 5)).combine(Map("foo" -> Map("bar" -> 6), "baz" -> Map()))
 Map("foo" -> List(1, 2)).combine(Map("foo" -> List(3,4), "bar" -> List(42)))
@@ -87,7 +87,7 @@ two |+| n
 
 You'll notice that instead of declaring `one` as `Some(1)`, I chose
 `Option(1)`, and I added an explicit type declaration for `n`. This is
-because there aren't typeclass instances for Some or None, but for
+because there aren't type class instances for Some or None, but for
 Option. If we try to use Some and None, we'll get errors:
 
 ```tut:nofail
@@ -96,7 +96,7 @@ None |+| Some(1)
 ```
 
 N.B.
-Cats does not define a `Semigroup` typeclass itself, it uses the [`Semigroup`
+Cats does not define a `Semigroup` type class itself, it uses the [`Semigroup`
 trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala)
 which is defined in the [algebra project](https://github.com/non/algebra) on 
 which it depends. The [`cats` package object](https://github.com/non/cats/blob/master/core/src/main/scala/cats/package.scala)

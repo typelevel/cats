@@ -350,8 +350,8 @@ val result: Map[String, Int] = compilePure(program, Map.empty)
 
 ## Composing Free monads ADTs.
 
-Real world applications often time combine different algebras. 
-The `Inject` typeclass described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
+Real world applications often time combine different algebras.
+The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
 lets us compose different algebras in the context of `Free`.
 
 Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.

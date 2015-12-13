@@ -7,7 +7,7 @@ scaladoc: "#cats.functor.Invariant"
 ---
 # Invariant
 
-The `Invariant` typeclass is for functors that define an `imap`
+The `Invariant` type class is for functors that define an `imap`
 function with the following type:
 
 ```scala
@@ -66,8 +66,8 @@ but we can't turn it back into a `Date` using only `contramap`!
 
 From the previous discussion we conclude that we need both the `map`
 from (covariant) `Functor` and `contramap` from `Contravariant`.
-There already is a typeclass for this and it is called `Invariant`.
-Instances of the `Invariant` typeclass provide the `imap` function:
+There already is a type class for this and it is called `Invariant`.
+Instances of the `Invariant` type class provide the `imap` function:
 
 ```scala
 def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
