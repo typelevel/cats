@@ -2,6 +2,7 @@ package cats
 package tests
 
 import scala.math.min
+import cats.laws.ComonadLaws
 import cats.laws.discipline.{MonoidalTests, BimonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -123,4 +124,22 @@ class EvalTests extends CatsSuite {
     checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].eqv)
   }
 
+  // The following tests check laws which are a different formulation of
+  // laws that are checked. Since these laws are more or less duplicates of
+  // existing laws, we don't check them for all types that have the relevant
+  // instances.
+
+  test("cokleisli left identity") {
+    forAll { (fa: Eval[Int], f: Eval[Int] => Long) =>
+      val isEq = ComonadLaws[Eval].cokleisliLeftIdentity(fa, f)
+      isEq.lhs should === (isEq.rhs)
+    }
+  }
+
+  test("cokleisli right identity") {
+    forAll { (fa: Eval[Int], f: Eval[Int] => Long) =>
+      val isEq = ComonadLaws[Eval].cokleisliRightIdentity(fa, f)
+      isEq.lhs should === (isEq.rhs)
+    }
+  }
 }
