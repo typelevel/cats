@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws}
+import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests, MonoidalTests}
 import cats.laws.discipline.eq._
 
@@ -57,6 +57,22 @@ class OptionTests extends CatsSuite {
               fab: Option[Int => Long],
               fbc: Option[Long => Char]) =>
       val isEq = ApplicativeLaws[Option].applicativeComposition(fa, fab, fbc)
+      isEq.lhs should === (isEq.rhs)
+    }
+  }
+
+  val monadLaws = MonadLaws[Option]
+
+  test("Kleisli left identity") {
+    forAll { (a: Int, f: Int => Option[Long]) =>
+      val isEq = monadLaws.kleisliLeftIdentity(a, f)
+      isEq.lhs should === (isEq.rhs)
+    }
+  }
+
+  test("Kleisli right identity") {
+    forAll { (a: Int, f: Int => Option[Long]) =>
+      val isEq = monadLaws.kleisliRightIdentity(a, f)
       isEq.lhs should === (isEq.rhs)
     }
   }
