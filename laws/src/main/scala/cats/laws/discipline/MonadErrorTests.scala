@@ -36,7 +36,7 @@ trait MonadErrorTests[F[_], E] extends MonadTests[F] {
       def props: Seq[(String, Prop)] = Seq(
         "monadError left zero" -> forAll(laws.monadErrorLeftZero[A, B] _),
         "monadError handleWith" -> forAll(laws.monadErrorHandleWith[A] _),
-        "monadError handle" -> forAll(laws.monadErrorHandleWith[A] _),
+        "monadError handle" -> forAll(laws.monadErrorHandle[A] _),
         "monadError handleErrorWith pure" -> forAll(laws.handleErrorWithPure[A] _),
         "monadError handleError pure" -> forAll(laws.handleErrorPure[A] _),
         "monadError raiseError attempt" -> forAll(laws.raiseErrorAttempt _),
