@@ -31,9 +31,9 @@ import simulacrum.{op, typeclass}
   /**
    * Compose two SemigroupK intsances.
    */
-  def composedWith[G[_]: SemigroupK]: SemigroupK[λ[α => F[G[α]]]] =
+  def compose[G[_]: SemigroupK]: SemigroupK[λ[α => F[G[α]]]] =
     new SemigroupK[λ[α => F[G[α]]]] {
-      def combine[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = combine(x, y)
+      def combine[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = self.combine(x, y)
     }
 
   /**
