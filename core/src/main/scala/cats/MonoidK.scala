@@ -30,13 +30,17 @@ import simulacrum.typeclass
   def empty[A]: F[A]
 
   /**
-   * Compose two MonoidK intsances.
+   * Compose two MonoidK instances.
    */
-  def compose[G[_]](implicit GG: MonoidK[G]): MonoidK[λ[α => F[G[α]]]] =
+  override def composedWith[G[_]]: MonoidK[λ[α => F[G[α]]]] =
     new CompositeMonoidK[F, G] {
       implicit def F: MonoidK[F] = self
-      implicit def G: MonoidK[G] = GG
     }
+
+  /**
+   * Compose two MonoidK instances.
+   */
+  def compose[G[_]](implicit GG: MonoidK[G]): MonoidK[λ[α => F[G[α]]]] = composedWith[G]
 
   /**
    * Given a type A, create a concrete Monoid[F[A]].
@@ -49,11 +53,9 @@ import simulacrum.typeclass
 }
 
 trait CompositeMonoidK[F[_],G[_]]
-  extends MonoidK[λ[α => F[G[α]]]] {
+  extends MonoidK[λ[α => F[G[α]]]] with CompositeSemigroupK[F, G] {
 
   implicit def F: MonoidK[F]
-  implicit def G: MonoidK[G]
 
   def empty[A]: F[G[A]] = F.empty
-  def combine[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = F.combine(x, y)
 }
