@@ -32,17 +32,8 @@ class ComposeTests extends CatsSuite {
   {
     // Reducible composition
 
-    val nelReducible =
-      new NonEmptyReducible[NonEmptyList, List] {
-        def split[A](fa: NonEmptyList[A]): (A, List[A]) = (fa.head, fa.tail)
-      }
-
-    val nevReducible =
-      new NonEmptyReducible[NonEmptyVector, Vector] {
-        def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
-      }
-
-    implicit val reducibleListVector: Reducible[Lambda[A => NonEmptyList[NonEmptyVector[A]]]] = nelReducible compose nevReducible
+    implicit val reducibleListVector: Reducible[Lambda[A => NonEmptyList[NonEmptyVector[A]]]] =
+      Reducible[NonEmptyList] compose Reducible[NonEmptyVector]
 
     // No Reducible-specific laws, so check the Foldable laws are satisfied
     checkAll("Reducible[Lambda[A => List[Vector[A]]]]", FoldableTests[Lambda[A => NonEmptyList[NonEmptyVector[A]]]].foldable[Int, Int])
