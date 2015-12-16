@@ -18,7 +18,7 @@ final case class Coproduct[F[_], G[_], A](run: F[A] Xor G[A]) {
       run.bimap(a => F.coflatMap(a)(x => f(leftc(x))), a => G.coflatMap(a)(x => f(rightc(x))))
     )
 
-  def duplicate(implicit F: CoflatMap[F], G: CoflatMap[G]): Coproduct[F, G, Coproduct[F, G, A]] =
+  def coflatten(implicit F: CoflatMap[F], G: CoflatMap[G]): Coproduct[F, G, Coproduct[F, G, A]] =
     Coproduct(run.bimap(
       x => F.coflatMap(x)(a => leftc(a))
       , x => G.coflatMap(x)(a => rightc(a)))
@@ -195,23 +195,16 @@ private[data] trait CoproductCoflatMap[F[_], G[_]] extends CoflatMap[Coproduct[F
   def coflatMap[A, B](a: Coproduct[F, G, A])(f: Coproduct[F, G, A] => B): Coproduct[F, G, B] =
     a coflatMap f
 
+  override def coflatten[A](fa: Coproduct[F, G, A]): Coproduct[F, G, Coproduct[F, G, A]] =
+    fa.coflatten
 }
 
-private[data] trait CoproductComonad[F[_], G[_]] extends Comonad[Coproduct[F, G, ?]] {
+private[data] trait CoproductComonad[F[_], G[_]] extends Comonad[Coproduct[F, G, ?]] with CoproductCoflatMap[F, G] {
   implicit def F: Comonad[F]
 
   implicit def G: Comonad[G]
 
-  def map[A, B](a: Coproduct[F, G, A])(f: A => B): Coproduct[F, G, B] =
-    a map f
-
   def extract[A](p: Coproduct[F, G, A]): A =
     p.extract
-
-  def coflatMap[A, B](a: Coproduct[F, G, A])(f: Coproduct[F, G, A] => B): Coproduct[F, G, B] =
-    a coflatMap f
-
-  def duplicate[A](a: Coproduct[F, G, A]): Coproduct[F, G, Coproduct[F, G, A]] =
-    a.duplicate
 }
 
