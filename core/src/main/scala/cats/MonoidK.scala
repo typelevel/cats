@@ -30,7 +30,7 @@ import simulacrum.typeclass
   def empty[A]: F[A]
 
   /**
-   * Compose two MonoidK instances.
+   * Compose this MonoidK with an arbitrary type constructor
    */
   override def composedWith[G[_]]: MonoidK[λ[α => F[G[α]]]] =
     new CompositeMonoidK[F, G] {
