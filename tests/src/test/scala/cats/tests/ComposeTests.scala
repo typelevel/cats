@@ -2,7 +2,8 @@ package cats
 package tests
 
 import cats.data.{ NonEmptyList, NonEmptyVector, OneAnd }
-import cats.laws.discipline.{ ApplicativeTests, FoldableTests, MonoidalTests, SemigroupKTests, arbitrary, eq }, arbitrary._, eq._
+import cats.laws.discipline.{ AlternativeTests, ApplicativeTests, FoldableTests, MonoidKTests, MonoidalTests, SemigroupKTests }
+import cats.laws.discipline.{ arbitrary, eq }, arbitrary._, eq._
 import org.scalacheck.Arbitrary
 
 class ComposeTests extends CatsSuite {
@@ -11,6 +12,15 @@ class ComposeTests extends CatsSuite {
   // issues.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfig(maxSize = 5, minSuccessful = 20)
+
+  {
+    // Alternative composition
+
+    implicit val alternativeListVector: Alternative[Lambda[A => List[Vector[A]]]] = Alternative[List] compose Alternative[Vector]
+    implicit val iso = MonoidalTests.Isomorphisms.invariant[Lambda[A => List[Vector[A]]]]
+
+    checkAll("Alternative[Lambda[A => List[Vector[A]]]]", AlternativeTests[Lambda[A => List[Vector[A]]]].alternative[Int, Int, Int])
+  }
 
   {
     // Applicative composition
@@ -27,6 +37,14 @@ class ComposeTests extends CatsSuite {
     implicit val foldableListVector: Foldable[Lambda[A => List[Vector[A]]]] = Foldable[List] compose Foldable[Vector]
 
     checkAll("Foldable[Lambda[A => List[Vector[A]]]]", FoldableTests[Lambda[A => List[Vector[A]]]].foldable[Int, Int])
+  }
+
+  {
+    // MonoidK composition
+
+    implicit val monoidKListVector: MonoidK[Lambda[A => List[Vector[A]]]] = MonoidK[List] compose MonoidK[Vector]
+
+    checkAll("MonoidK[Lambda[A => List[Vector[A]]]]", MonoidKTests[Lambda[A => List[Vector[A]]]].monoidK[Int])
   }
 
   {
