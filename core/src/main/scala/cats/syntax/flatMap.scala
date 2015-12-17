@@ -19,7 +19,20 @@ trait FlatMapSyntax extends FlatMapSyntax1 {
 
 final class FlatMapOps[F[_], A](fa: F[A])(implicit F: FlatMap[F]) {
   def flatMap[B](f: A => F[B]): F[B] = F.flatMap(fa)(f)
+
+  /**
+   * Pair `A` with the result of function application.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.std.list._
+   * scala> import cats.syntax.flatMap._
+   * scala> List("12", "34", "56").mproduct(_.toList)
+   * res0: List[(String, Char)] = List((12,1), (12,2), (34,3), (34,4), (56,5), (56,6))
+   * }}}
+   */
   def mproduct[B](f: A => F[B]): F[(A, B)] = F.mproduct(fa)(f)
+
   def >>=[B](f: A => F[B]): F[B] = F.flatMap(fa)(f)
 
   /** Alias for [[followedBy]]. */
@@ -48,9 +61,43 @@ final class FlatMapOps[F[_], A](fa: F[A])(implicit F: FlatMap[F]) {
 }
 
 final class FlattenOps[F[_], A](ffa: F[F[A]])(implicit F: FlatMap[F]) {
+
+  /**
+   * Flatten nested `F` values.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.Xor
+   * scala> import cats.syntax.flatMap._
+   * scala> type ErrorOr[A] = String Xor A
+   * scala> val x: ErrorOr[ErrorOr[Int]] = Xor.right(Xor.right(3))
+   * scala> x.flatten
+   * res0: ErrorOr[Int] = Right(3)
+   * }}}
+   */
   def flatten: F[A] = F.flatten(ffa)
 }
 
 final class IfMOps[F[_]](fa: F[Boolean])(implicit F: FlatMap[F]) {
+
+  /**
+   * A conditional lifted into the `F` context.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.{Eval, Now}
+   * scala> import cats.syntax.flatMap._
+   *
+   * scala> val b1: Eval[Boolean] = Now(true)
+   * scala> val asInt1: Eval[Int] = b1.ifM(Now(1), Now(0))
+   * scala> asInt1.value
+   * res0: Int = 1
+   *
+   * scala> val b2: Eval[Boolean] = Now(false)
+   * scala> val asInt2: Eval[Int] = b2.ifM(Now(1), Now(0))
+   * scala> asInt2.value
+   * res1: Int = 0
+   * }}}
+   */
   def ifM[B](ifTrue: => F[B], ifFalse: => F[B]): F[B] = F.ifM(fa)(ifTrue, ifFalse)
 }
