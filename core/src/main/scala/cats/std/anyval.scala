@@ -70,8 +70,11 @@ trait LongInstances {
   implicit val longShow: Show[Long] =
     Show.fromToString[Long]
 
-  implicit val longOrder: Order[Long] =
-    new Order[Long] {
+  implicit val longAlgebra: Group[Long] with Order[Long] =
+    new Group[Long] with Order[Long] {
+      def empty: Long = 0L
+      def inverse(a: Long): Long = -a
+      def combine(x: Long, y: Long): Long = x+y
       def compare(x: Long, y: Long): Int =
         if (x < y) -1 else if (y < x) 1 else 0
     }
