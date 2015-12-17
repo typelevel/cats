@@ -1,9 +1,9 @@
 package cats
 package tests
 
+import cats.laws.OrderLaws
 import cats.laws.discipline.{TraverseTests, MonadTests, SerializableTests, MonoidalTests}
 import cats.laws.discipline.eq._
-import algebra.laws.OrderLaws
 
 class EitherTests extends CatsSuite {
 

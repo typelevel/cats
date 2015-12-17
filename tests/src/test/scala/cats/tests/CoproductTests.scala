@@ -1,10 +1,9 @@
 package cats.tests
 
-import algebra.Eq
-import algebra.laws.OrderLaws
 import cats._
 import cats.data.Coproduct
 import cats.functor.Contravariant
+import cats.laws.OrderLaws
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary

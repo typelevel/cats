@@ -3,7 +3,7 @@ package std
 
 import cats.syntax.eq._
 
-trait MapInstances extends algebra.std.MapInstances {
+trait MapInstances {
 
   implicit def MapEq[A, B: Eq]: Eq[Map[A, B]] =
     new Eq[Map[A, B]] {
