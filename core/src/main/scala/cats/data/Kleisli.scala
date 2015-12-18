@@ -64,9 +64,6 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
 object Kleisli extends KleisliInstances with KleisliFunctions
 
 private[data] sealed trait KleisliFunctions {
-  /** creates a [[Kleisli]] from a function */
-  def function[F[_], A, B](f: A => F[B]): Kleisli[F, A, B] =
-    Kleisli(f)
 
   def pure[F[_], A, B](x: B)(implicit F: Applicative[F]): Kleisli[F, A, B] =
     Kleisli(_ => F.pure(x))
@@ -153,7 +150,7 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
       fb.map(f)
 
     def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
-      Kleisli.function(a => Applicative[F].product(fb.run(a), fc.run(a)))
+      Kleisli(a => Applicative[F].product(fb.run(a), fc.run(a)))
   }
 }
 
@@ -163,7 +160,7 @@ private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 
       fa(f)
 
     def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
-      Kleisli.function(a => Apply[F].product(fb.run(a), fc.run(a)))
+      Kleisli(a => Apply[F].product(fb.run(a), fc.run(a)))
 
     def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
       fa.map(f)
