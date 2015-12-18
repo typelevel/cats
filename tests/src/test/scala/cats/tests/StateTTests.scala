@@ -1,9 +1,9 @@
 package cats
-package state
+package tests
 
-import cats.tests.CatsSuite
 import cats.laws.discipline.{MonoidalTests, MonadStateTests, MonoidKTests, SerializableTests}
-import cats.free.FreeTests._
+import cats.state.{State, StateT}
+import cats.tests.FreeTests._
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
 

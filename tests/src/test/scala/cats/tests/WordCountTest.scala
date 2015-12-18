@@ -1,7 +1,6 @@
 package cats
-package state
+package tests
 
-import cats.tests.CatsSuite
 import cats.data.{ Func, AppFunc, Const }
 import Func.{ appFunc, appFuncU }
 

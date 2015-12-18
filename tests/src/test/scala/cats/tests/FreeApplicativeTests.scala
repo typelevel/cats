@@ -1,10 +1,10 @@
 package cats
-package free
+package tests
 
 import cats.arrow.NaturalTransformation
+import cats.free.FreeApplicative
 import cats.laws.discipline.{MonoidalTests, ApplicativeTests, SerializableTests}
 import cats.laws.discipline.eq.tuple3Eq
-import cats.tests.CatsSuite
 import cats.data.Const
 
 import org.scalacheck.{Arbitrary, Gen}
