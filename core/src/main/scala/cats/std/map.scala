@@ -1,6 +1,8 @@
 package cats
 package std
 
+import scala.collection.mutable
+
 import cats.syntax.eq._
 
 trait MapInstances {
@@ -64,4 +66,72 @@ trait MapInstances {
 
       override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
     }
+
+  implicit def mapMonoid[K, V: Semigroup]: MapMonoid[K, V] =
+    new MapMonoid[K, V]
+
+  implicit def mapGroup[K, V: Group]: MapGroup[K, V] =
+    new MapGroup[K, V]
+}
+
+class MapMonoid[K, V](implicit V: Semigroup[V]) extends Monoid[Map[K, V]]  {
+  def empty: Map[K, V] = Map.empty
+
+  def combine(x: Map[K, V], y: Map[K, V]): Map[K, V] =
+    MapMethods.addMap(x, y)(V.combine)
+}
+
+class MapGroup[K, V](implicit V: Group[V]) extends MapMonoid[K, V] with Group[Map[K, V]] {
+  def inverse(x: Map[K, V]): Map[K, V] =
+    x.map { case (k, v) => (k, V.inverse(v)) }
+
+  override def remove(x: Map[K, V], y: Map[K, V]): Map[K, V] =
+    MapMethods.subtractMap(x, y)(V.remove)(V.inverse)
+}
+
+object MapMethods {
+  def initMutableMap[K, V](m: Map[K, V]): mutable.Map[K, V] = {
+    val result = mutable.Map.empty[K, V]
+    m.foreach { case (k, v) => result(k) = v }
+    result
+  }
+
+  def wrapMutableMap[K, V](m: mutable.Map[K, V]): Map[K, V] =
+    new WrappedMutableMap(m)
+
+  private[cats] class WrappedMutableMap[K, V](m: mutable.Map[K, V]) extends Map[K, V] {
+    override def size: Int = m.size
+    def get(k: K): Option[V] = m.get(k)
+    def iterator: Iterator[(K, V)] = m.iterator
+    def +[V2 >: V](kv: (K, V2)): Map[K, V2] = m.toMap + kv
+    def -(key: K): Map[K, V] = m.toMap - key
+  }
+
+  def addMap[K, V](x: Map[K, V], y: Map[K, V])(f: (V, V) => V): Map[K, V] = {
+    val (small, big, g) =
+      if (x.size <= y.size) (x, y, f)
+      else (y, x, (v1: V, v2: V) => f(v2, v1))
+
+    val m = initMutableMap(big)
+    small.foreach { case (k, v1) =>
+      m(k) = m.get(k) match {
+        case Some(v2) => g(v1, v2)
+        case None => v1
+      }
+    }
+    wrapMutableMap(m)
+  }
+
+  def subtractMap[K, V](x: Map[K, V], y: Map[K, V])(subtract: (V, V) => V)(negate: V => V): Map[K, V] = {
+    // even if x is smaller, we'd need to call map/foreach on y to
+    // negate all its values, so this is just as fast or faster.
+    val m = initMutableMap(x)
+    y.foreach { case (k, v2) =>
+      m(k) = m.get(k) match {
+        case Some(v1) => subtract(v1, v2)
+        case None => negate(v2)
+      }
+    }
+    wrapMutableMap(m)
+  }
 }
