@@ -38,15 +38,9 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
     Cokleisli(fca => F.extract(F.map(fca)(_._1)) -> run(F.map(fca)(_._2)))
 }
 
-object Cokleisli extends CokleisliInstances with CokleisliFunctions {
+object Cokleisli extends CokleisliInstances {
   def pure[F[_], A, B](x: B): Cokleisli[F, A, B] =
     Cokleisli(_ => x)
-}
-
-sealed trait CokleisliFunctions {
-  /** creates a [[Cokleisli]] from a function */
-  def cokleisli[F[_], A, B](f: F[A] => B): Cokleisli[F, A, B] =
-    Cokleisli(f)
 }
 
 private[data] sealed abstract class CokleisliInstances extends CokleisliInstances0 {
