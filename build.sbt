@@ -23,7 +23,11 @@ lazy val catsDoctestSettings = Seq(
 ) ++ doctestSettings
 
 lazy val commonSettings = Seq(
-  scalacOptions ++= commonScalacOptions,
+  scalacOptions ++= commonScalacOptions ++
+    (CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 10)) => Seq.empty
+    case _             => Seq("-Ywarn-value-discard")
+  }),
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
@@ -286,7 +290,6 @@ lazy val commonScalacOptions = Seq(
   "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
-  "-Ywarn-value-discard",
   "-Xfuture"
 )
 
