@@ -115,7 +115,7 @@ Write about https://github.com/non/cats/pull/36#issuecomment-72892359
 ### Write tests
 
 - Tests for cats-core go into the tests module, under the `cats.tests` package.
-- Tests for additional modules, such as `free`, go into the tests directory within that module.  
+- Tests for additional modules, such as 'jvm', go into the tests directory within that module.
 - Cats tests should extend `CatsSuite`.  `CatsSuite` integrates [ScalaTest](http://www.scalatest.org/)
 with [Discipline](https://github.com/typelevel/discipline) for law checking, and imports all syntax and standard instances for convenience.
 - The first parameter to the `checkAll` method provided by
