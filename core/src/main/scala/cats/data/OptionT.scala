@@ -72,11 +72,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     F.map(value)(_.isEmpty)
 
   def orElse(default: => OptionT[F, A])(implicit F: Monad[F]): OptionT[F, A] =
-    OptionT(
-      F.flatMap(value) {
-        case s @ Some(_) => F.pure(s)
-        case None => default.value
-      })
+    orElseF(default.value)
 
   def orElseF(default: => F[Option[A]])(implicit F: Monad[F]): OptionT[F, A] =
     OptionT(
