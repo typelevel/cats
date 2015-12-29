@@ -106,8 +106,20 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority1 {
   implicit def oneAndSemigroup[F[_]: MonadCombine, A]: Semigroup[OneAnd[F, A]] =
     oneAndSemigroupK.algebra
 
-  implicit def oneAndFoldable[F[_]](implicit foldable: Foldable[F]): Foldable[OneAnd[F, ?]] =
-    new Foldable[OneAnd[F, ?]] {
+  @deprecated("use oneAndReducible", "0.4.0")
+  def oneAndFoldable[F[_]: Foldable]: Foldable[OneAnd[F, ?]] = oneAndReducible[F]
+
+  implicit def oneAndReducible[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
+    new Reducible[OneAnd[F, ?]] {
+      override def reduceLeftTo[A, B](fa: OneAnd[F, A])(f: (A) => B)(g: (B, A) => B): B =
+        F.foldLeft[A, B](fa.tail, f(fa.head))(g)
+
+      override def reduceRightTo[A, B](fa: OneAnd[F, A])(f: (A) => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        F.reduceRightToOption(fa.tail)(f)(g).flatMap {
+          case None => Eval.later(f(fa.head))
+          case Some(b) => g(fa.head, Eval.now(b))
+        }
+
       override def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
       override def foldRight[A, B](fa: OneAnd[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
