@@ -79,13 +79,15 @@ import simulacrum.typeclass
   /**
    * Left associative monadic folding on `F`.
    */
-  def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])
-    (implicit G: Monad[G]): G[B] =
-    partialFold[A, B => G[B]](fa)({a: A =>
-      Fold.Continue({ b =>
-        (w: B) => G.flatMap(f(w, a))(b)
-      })
-    }).complete(Lazy { b: B => G.pure(b) })(z)
+  def foldM[G[_], A, B](fa: F[A], z: Eval[B])(f: (B, A) => G[B])
+    (implicit G: Monad[G]): Eval[G[B]] =
+    foldRight[A, B => G[B]](fa, Eval.later { G.pure _ }) { (a: A, acc: Eval[B => G[B]]) =>
+      acc map { (k: B => G[B]) =>
+        w: B => G.flatMap(f(w, a))(k)
+      }
+    } flatMap { acc =>
+      z map { b: B => acc(b) }
+    }
 
   /**
    * Traverse `F[A]` using `Applicative[G]`.
