@@ -106,9 +106,6 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority1 {
   implicit def oneAndSemigroup[F[_]: MonadCombine, A]: Semigroup[OneAnd[F, A]] =
     oneAndSemigroupK.algebra
 
-  @deprecated("use oneAndReducible", "0.4.0")
-  def oneAndFoldable[F[_]: Foldable]: Foldable[OneAnd[F, ?]] = oneAndReducible[F]
-
   implicit def oneAndReducible[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
     new NonEmptyReducible[OneAnd[F,?], F] {
       override def split[A](fa: OneAnd[F,A]): (A, F[A]) = (fa.head, fa.tail)
