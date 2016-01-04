@@ -1,8 +1,8 @@
 package cats
-package free
+package tests
 
 import cats.arrow.NaturalTransformation
-import cats.tests.CatsSuite
+import cats.free.Coyoneda
 import cats.laws.discipline.{FunctorTests, SerializableTests}
 
 import org.scalacheck.{Arbitrary, Gen}

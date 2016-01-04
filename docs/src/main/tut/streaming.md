@@ -2,7 +2,7 @@
 layout: default
 title:  "Streaming"
 section: "data"
-source: "https://github.com/non/cats/blob/master/data/src/main/scala/cats/data/Streaming.scala"
+source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/Streaming.scala"
 scaladoc: "#cats.data.Streaming"
 ---
 

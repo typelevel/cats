@@ -1,7 +1,7 @@
 package cats
-package free
+package tests
 
-import cats.tests.CatsSuite
+import cats.free.Yoneda
 import cats.laws.discipline.{FunctorTests, SerializableTests}
 
 import org.scalacheck.Arbitrary

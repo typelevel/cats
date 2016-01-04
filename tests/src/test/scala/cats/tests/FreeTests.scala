@@ -1,8 +1,8 @@
 package cats
-package free
+package tests
 
 import cats.arrow.NaturalTransformation
-import cats.tests.CatsSuite
+import cats.free.{Free, Trampoline}
 import cats.laws.discipline.{MonoidalTests, MonadTests, SerializableTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary.function0Arbitrary
