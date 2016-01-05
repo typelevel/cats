@@ -1,7 +1,7 @@
 name: Cats Documentation
 markdown: redcarpet
 highlighter: pygments
-baseurl: /cats/
+baseurl: /cats
 apidocs: /cats/api/
 
 collections:
