@@ -13,4 +13,15 @@ class VectorTests extends CatsSuite {
 
   checkAll("Vector[Int] with Option", TraverseTests[Vector].traverse[Int, Int, Int, List[Int], Option, Option])
   checkAll("Traverse[Vector]", SerializableTests.serializable(Traverse[Vector]))
+
+  test("show") {
+    Vector(1, 2, 3).show should === ("Vector(1, 2, 3)")
+
+    Vector.empty[Int].show should === ("Vector()")
+
+    forAll { vec: Vector[String] =>
+      vec.show should === (vec.toString)
+    }
+  }
+
 }
