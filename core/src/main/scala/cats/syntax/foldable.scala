@@ -15,6 +15,6 @@ trait FoldableSyntax extends Foldable.ToFoldableOps with FoldableSyntax1 {
 }
 
 final class NestedFoldableOps[F[_], G[_], A](fga: F[G[A]])(implicit F: Foldable[F]) {
-  def sequence_[B](implicit G: Applicative[G]): G[Unit] = F.sequence_(fga)
+  def sequence_(implicit G: Applicative[G]): G[Unit] = F.sequence_(fga)
   def foldK(implicit G: MonoidK[G]): G[A] = F.foldK(fga)
 }
