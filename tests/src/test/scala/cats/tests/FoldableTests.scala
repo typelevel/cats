@@ -97,6 +97,10 @@ class FoldableTestsAdditional extends CatsSuite {
     }
     assert(result.value)
 
+    // test trampolining
+    val large = Stream((1 to 10000): _*)
+    assert(contains(large, 10000).value)
+
     // toStreaming should be lazy
     assert(dangerous.toStreaming.take(3).toList == List(0, 1, 2))
   }
