@@ -73,6 +73,20 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
   def transformF[G[_], B](f: F[(S, A)] => G[(S, B)])(implicit F: FlatMap[F], G: Applicative[G]): StateT[G, S, B] =
     StateT(s => f(run(s)))
 
+  /** Transform the state used
+   *
+   * This is useful when you are working with many focused `StateT`s and want to pass in a
+   * global state containing the various states needed for each individual `StateT`.
+   */
+  def transformS[R](f: R => S, g: (R, S) => R)(implicit F: Monad[F]): StateT[F, R, A] =
+    StateT { r =>
+      F.flatMap(runF) { ff =>
+        val s = f(r)
+        val nextState = ff(s)
+        F.map(nextState) { case (s, a) => (g(r, s), a) }
+      }
+    }
+
   /**
    * Modify the state (`S`) component.
    */
