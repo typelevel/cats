@@ -3,10 +3,10 @@ package tests
 
 import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
+import cats.laws.{GroupLaws, OrderLaws}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadErrorTests, SerializableTests, MonoidalTests}
 import cats.laws.discipline.eq.tuple3Eq
-import algebra.laws.{GroupLaws, OrderLaws}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary._
 

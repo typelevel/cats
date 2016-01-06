@@ -5,10 +5,10 @@ import org.scalacheck.Arbitrary
 
 import cats.arrow.{Arrow, Choice}
 import cats.functor.Contravariant
+import cats.laws.GroupLaws
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import algebra.laws.GroupLaws
 
 class FunctionTests extends CatsSuite {
 

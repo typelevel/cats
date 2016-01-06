@@ -1,8 +1,6 @@
 package cats
 package std
 
-import algebra.Eq
-
 trait OptionInstances extends OptionInstances1 {
   implicit val optionInstance: Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] =
     new Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] {

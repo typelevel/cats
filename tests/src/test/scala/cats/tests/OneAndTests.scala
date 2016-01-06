@@ -1,9 +1,8 @@
 package cats
 package tests
 
-import algebra.laws.{GroupLaws, OrderLaws}
-
 import cats.data.{NonEmptyList, OneAnd}
+import cats.laws.{GroupLaws, OrderLaws}
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, MonoidalTests}
 import cats.laws.discipline.arbitrary.{evalArbitrary, oneAndArbitrary}
 import cats.laws.discipline.eq._

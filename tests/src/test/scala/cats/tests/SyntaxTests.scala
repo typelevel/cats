@@ -3,8 +3,8 @@ package tests
 
 import cats.std.AllInstances
 import cats.syntax.AllSyntax
-import algebra.laws.GroupLaws
 import cats.functor.{Invariant, Contravariant}
+import cats.laws.GroupLaws
 import cats.laws.discipline.SerializableTests
 
 import org.scalacheck.{Arbitrary}

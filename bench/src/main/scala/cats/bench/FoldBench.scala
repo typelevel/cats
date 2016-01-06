@@ -1,6 +1,6 @@
 package cats.bench
 
-import algebra.std.string._
+import cats.std.string._
 import cats.data.Const
 import cats.std.list._
 import cats.{Foldable, Traverse}

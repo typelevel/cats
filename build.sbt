@@ -23,7 +23,11 @@ lazy val catsDoctestSettings = Seq(
 ) ++ doctestSettings
 
 lazy val commonSettings = Seq(
-  scalacOptions ++= commonScalacOptions,
+  scalacOptions ++= commonScalacOptions ++
+    (CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 10)) => Seq.empty
+    case _             => Seq("-Ywarn-value-discard")
+  }),
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
@@ -31,8 +35,6 @@ lazy val commonSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.5.0",
-    "org.spire-math" %%% "algebra" % "0.3.1",
-    "org.spire-math" %%% "algebra-std" % "0.3.1",
     "org.typelevel" %%% "machinist" % "0.4.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
@@ -143,7 +145,6 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
   .settings(libraryDependencies ++= Seq(
-    "org.spire-math" %%% "algebra-laws" % "0.3.1",
     "org.typelevel" %%% "catalysts-platform" % "0.0.2"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
@@ -269,7 +270,6 @@ lazy val commonScalacOptions = Seq(
   "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
-  "-Ywarn-value-discard",
   "-Xfuture"
 )
 
