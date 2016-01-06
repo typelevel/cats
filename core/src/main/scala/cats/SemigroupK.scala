@@ -26,14 +26,14 @@ import simulacrum.{op, typeclass}
    * Combine two F[A] values.
    */
   @op("<+>", alias=true)
-  def combine[A](x: F[A], y: F[A]): F[A]
+  def combineK[A](x: F[A], y: F[A]): F[A]
 
   /**
    * Compose two SemigroupK intsances.
    */
   def compose[G[_]: SemigroupK]: SemigroupK[λ[α => F[G[α]]]] =
     new SemigroupK[λ[α => F[G[α]]]] {
-      def combine[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = self.combine(x, y)
+      def combineK[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = self.combineK(x, y)
     }
 
   /**
@@ -41,6 +41,6 @@ import simulacrum.{op, typeclass}
    */
   def algebra[A]: Semigroup[F[A]] =
     new Semigroup[F[A]] {
-      def combine(x: F[A], y: F[A]): F[A] = self.combine(x, y)
+      def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
     }
 }

@@ -188,8 +188,8 @@ private[data] sealed trait WriterTMonad[F[_], L] extends WriterTApplicative[F, L
 private[data] sealed trait WriterTSemigroupK[F[_], L] extends SemigroupK[WriterT[F, L, ?]] {
   implicit def F0: SemigroupK[F]
 
-  def combine[A](x: WriterT[F, L, A], y: WriterT[F, L, A]): WriterT[F, L, A] =
-    WriterT(F0.combine(x.run, y.run))
+  def combineK[A](x: WriterT[F, L, A], y: WriterT[F, L, A]): WriterT[F, L, A] =
+    WriterT(F0.combineK(x.run, y.run))
 }
 
 private[data] sealed trait WriterTMonoidK[F[_], L] extends MonoidK[WriterT[F, L, ?]] with WriterTSemigroupK[F, L] {

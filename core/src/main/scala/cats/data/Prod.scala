@@ -92,8 +92,8 @@ sealed trait ProdApplicative[F[_], G[_]] extends Applicative[Lambda[X => Prod[F,
 sealed trait ProdSemigroupK[F[_], G[_]] extends SemigroupK[Lambda[X => Prod[F, G, X]]] {
   def F: SemigroupK[F]
   def G: SemigroupK[G]
-  override def combine[A](x: Prod[F, G, A], y: Prod[F, G, A]): Prod[F, G, A] =
-    Prod(F.combine(x.first, y.first), G.combine(x.second, y.second))
+  override def combineK[A](x: Prod[F, G, A], y: Prod[F, G, A]): Prod[F, G, A] =
+    Prod(F.combineK(x.first, y.first), G.combineK(x.second, y.second))
 }
 
 sealed trait ProdMonoidK[F[_], G[_]] extends MonoidK[Lambda[X => Prod[F, G, X]]] with ProdSemigroupK[F, G] {

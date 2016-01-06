@@ -10,7 +10,7 @@ trait VectorInstances {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 
-      def combine[A](x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
+      def combineK[A](x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
 
       def pure[A](x: A): Vector[A] = Vector(x)
 

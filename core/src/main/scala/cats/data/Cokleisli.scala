@@ -121,7 +121,7 @@ private trait CokleisliProfunctor[F[_]] extends Profunctor[Cokleisli[F, ?, ?]] {
 private trait CokleisliSemigroupK[F[_]] extends SemigroupK[Lambda[A => Cokleisli[F, A, A]]] {
   implicit def F: CoflatMap[F]
 
-  def combine[A](a: Cokleisli[F, A, A], b: Cokleisli[F, A, A]): Cokleisli[F, A, A] = a compose b
+  def combineK[A](a: Cokleisli[F, A, A], b: Cokleisli[F, A, A]): Cokleisli[F, A, A] = a compose b
 }
 
 private trait CokleisliMonoidK[F[_]] extends MonoidK[Lambda[A => Cokleisli[F, A, A]]] with CokleisliSemigroupK[F] {
