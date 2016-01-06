@@ -77,6 +77,23 @@ class StateTTests extends CatsSuite {
     }
   }
 
+  test("StateT#transformS with identity is identity") {
+    forAll { (s: StateT[List, Long, Int]) =>
+      s.transformS[Long](identity, (s, i) => i) should === (s)
+    }
+  }
+
+  test("StateT#transformS modifies state") {
+    final case class Env(int: Int, str: String)
+    val x = StateT((x: Int) => Option((x + 1, x)))
+    val xx = x.transformS[Env](_.int, (e, i) => e.copy(int = i))
+    val input = 5
+
+    val got = x.run(input)
+    val expected = xx.run(Env(input, "hello")).map { case (e, i) => (e.int, i) }
+    got should === (expected)
+  }
+
   {
     implicit val iso = MonoidalTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
     checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, Int, ?], Int].monadState[Int, Int, Int])
