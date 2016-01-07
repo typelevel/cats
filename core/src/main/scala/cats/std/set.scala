@@ -3,7 +3,7 @@ package std
 
 import cats.syntax.show._
 
-trait SetInstances extends algebra.std.SetInstances {
+trait SetInstances {
   implicit val setInstance: Foldable[Set] with MonoidK[Set] =
     new Foldable[Set] with MonoidK[Set] {
 
@@ -28,8 +28,20 @@ trait SetInstances extends algebra.std.SetInstances {
 
     implicit def setMonoid[A]: Monoid[Set[A]] = MonoidK[Set].algebra[A]
 
+  implicit def setPartialOrder[A]: PartialOrder[Set[A]] = new SetPartialOrder[A]
+
   implicit def setShow[A:Show]: Show[Set[A]] = new Show[Set[A]] {
     def show(fa: Set[A]): String =
       fa.toIterator.map(_.show).mkString("Set(", ", ", ")")
   }
+}
+
+class SetPartialOrder[A] extends PartialOrder[Set[A]] {
+  def partialCompare(x: Set[A], y: Set[A]): Double =
+    if (x.size < y.size) if (x.subsetOf(y)) -1.0 else Double.NaN
+    else if (y.size < x.size) -partialCompare(y, x)
+    else if (x == y) 0.0
+    else Double.NaN
+
+  override def eqv(x: Set[A], y: Set[A]): Boolean = x == y
 }

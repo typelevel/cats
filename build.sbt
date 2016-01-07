@@ -23,7 +23,11 @@ lazy val catsDoctestSettings = Seq(
 ) ++ doctestSettings
 
 lazy val commonSettings = Seq(
-  scalacOptions ++= commonScalacOptions,
+  scalacOptions ++= commonScalacOptions ++
+    (CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 10)) => Seq.empty
+    case _             => Seq("-Ywarn-value-discard")
+  }),
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
@@ -31,8 +35,6 @@ lazy val commonSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.5.0",
-    "org.spire-math" %%% "algebra" % "0.3.1",
-    "org.spire-math" %%% "algebra-std" % "0.3.1",
     "org.typelevel" %%% "machinist" % "0.4.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
@@ -102,15 +104,15 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, coreJVM, lawsJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, coreJVM, lawsJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, coreJVM, lawsJVM, testsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, kernelJVM, coreJVM, lawsJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, coreJS, lawsJS, testsJS, js)
-  .dependsOn(macrosJS, coreJS, lawsJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, kernelJS, coreJS, lawsJS, testsJS, js)
+  .dependsOn(macrosJS, kernelJS, coreJS, lawsJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -125,8 +127,17 @@ lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
 
+lazy val kernel = crossProject.crossType(CrossType.Pure)
+  .settings(moduleName := "cats-kernel")
+  .settings(catsSettings:_*)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val kernelJVM = kernel.jvm
+lazy val kernelJS = kernel.js
+
 lazy val core = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros)
+  .dependsOn(macros, kernel)
   .settings(moduleName := "cats-core")
   .settings(catsSettings:_*)
   .settings(
@@ -140,12 +151,11 @@ lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
 lazy val laws = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core)
+  .dependsOn(macros, kernel, core)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
   .settings(libraryDependencies ++= Seq(
-    "org.spire-math" %%% "algebra-laws" % "0.3.1",
     "org.typelevel" %%% "catalysts-platform" % "0.0.2"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
@@ -154,7 +164,7 @@ lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
 
 lazy val tests = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core, laws)
+  .dependsOn(macros, kernel, core, laws)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
@@ -170,13 +180,13 @@ lazy val testsJS = tests.js
 
 // cats-jvm is JVM-only
 lazy val jvm = project
-  .dependsOn(macrosJVM, coreJVM, testsJVM % "test-internal -> test")
+  .dependsOn(macrosJVM, kernelJVM, coreJVM, testsJVM % "test-internal -> test")
   .settings(moduleName := "cats-jvm")
   .settings(catsSettings:_*)
   .settings(commonJvmSettings:_*)
 
 // bench is currently JVM-only
-lazy val bench = project.dependsOn(macrosJVM, coreJVM, lawsJVM)
+lazy val bench = project.dependsOn(macrosJVM, kernelJVM, coreJVM, lawsJVM)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
   .settings(noPublishSettings)
@@ -185,7 +195,7 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, lawsJVM)
 
 // cats-js is JS-only
 lazy val js = project
-  .dependsOn(macrosJS, coreJS, testsJS % "test-internal -> test")
+  .dependsOn(macrosJS, kernelJS, coreJS, testsJS % "test-internal -> test")
   .settings(moduleName := "cats-js")
   .settings(catsSettings:_*)
   .settings(commonJsSettings:_*)
@@ -271,7 +281,6 @@ lazy val commonScalacOptions = Seq(
   "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
-  "-Ywarn-value-discard",
   "-Xfuture"
 )
 

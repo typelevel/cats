@@ -3,11 +3,11 @@ package tests
 
 import cats.data.{Writer, WriterT}
 import cats.functor.Bifunctor
+import cats.laws.OrderLaws
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 
-import algebra.laws.OrderLaws
 import org.scalacheck.Prop.forAll
 
 class WriterTTests extends CatsSuite {

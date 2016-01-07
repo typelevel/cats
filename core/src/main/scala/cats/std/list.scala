@@ -1,9 +1,6 @@
 package cats
 package std
 
-import algebra.Eq
-import algebra.std.{ListMonoid, ListOrder}
-
 import cats.data.Streaming
 import cats.syntax.order._
 import cats.syntax.show._
@@ -119,4 +116,43 @@ private[std] sealed trait ListInstances2 {
         loop(x, y)
       }
     }
+}
+
+class ListOrder[A](implicit ev: Order[A]) extends Order[List[A]] {
+  def compare(xs: List[A], ys: List[A]): Int = {
+    @tailrec def loop(xs: List[A], ys: List[A]): Int =
+      xs match {
+        case Nil =>
+          if (ys.isEmpty) 0 else -1
+        case x :: xs =>
+          ys match {
+            case Nil => 1
+            case y :: ys =>
+              val n = ev.compare(x, y)
+              if (n != 0) n else loop(xs, ys)
+          }
+      }
+    loop(xs, ys)
+  }
+}
+
+class ListMonoid[A] extends Monoid[List[A]] {
+  def empty: List[A] = Nil
+  def combine(x: List[A], y: List[A]): List[A] = x ::: y
+
+  override def combineN(x: List[A], n: Int): List[A] = {
+    val buf = ListBuffer.empty[A]
+    @tailrec def loop(i: Int): List[A] =
+      if (i <= 0) buf.toList else {
+        buf ++= x
+        loop(i - 1)
+      }
+    loop(n)
+  }
+
+  override def combineAll(xs: TraversableOnce[List[A]]): List[A] = {
+    val buf = ListBuffer.empty[A]
+    xs.foreach(buf ++= _)
+    buf.toList
+  }
 }

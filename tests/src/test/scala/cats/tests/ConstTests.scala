@@ -1,10 +1,10 @@
 package cats
 package tests
 
-import algebra.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{Const, NonEmptyList}
 import cats.functor.Contravariant
+import cats.laws.{GroupLaws, OrderLaws}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary.{constArbitrary, oneAndArbitrary}
 

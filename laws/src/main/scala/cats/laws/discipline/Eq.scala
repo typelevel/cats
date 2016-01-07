@@ -2,7 +2,6 @@ package cats
 package laws
 package discipline
 
-import algebra.Eq
 import org.scalacheck.Arbitrary
 
 object eq {
