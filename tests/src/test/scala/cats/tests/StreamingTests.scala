@@ -1,9 +1,8 @@
 package cats
 package tests
 
-import algebra.laws.OrderLaws
-
 import cats.data.Streaming
+import cats.laws.OrderLaws
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests, MonoidalTests}

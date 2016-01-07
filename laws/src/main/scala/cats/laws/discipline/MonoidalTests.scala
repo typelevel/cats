@@ -34,11 +34,10 @@ object MonoidalTests {
   }
 
   object Isomorphisms {
-    import algebra.laws._
     implicit def invariant[F[_]](implicit F: functor.Invariant[F]): Isomorphisms[F] =
       new Isomorphisms[F] {
         def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)]))(implicit EqFABC: Eq[F[(A, B, C)]]) =
-          F.imap(fs._1) { case (a, (b, c)) => (a, b, c) } { case (a, b, c) => (a, (b, c)) } ?==
+          F.imap(fs._1) { case (a, (b, c)) => (a, b, c) } { case (a, b, c) => (a, (b, c)) } <->
           F.imap(fs._2) { case ((a, b), c) => (a, b, c) } { case (a, b, c) => ((a, b), c) }
       }
   }

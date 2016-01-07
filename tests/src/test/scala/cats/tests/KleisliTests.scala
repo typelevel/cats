@@ -4,11 +4,11 @@ package tests
 import cats.arrow.{Arrow, Choice, Split}
 import cats.data.{Kleisli, Reader}
 import cats.functor.{Contravariant, Strong}
+import cats.laws.GroupLaws
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
-import algebra.laws.GroupLaws
 import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
 
 class KleisliTests extends CatsSuite {

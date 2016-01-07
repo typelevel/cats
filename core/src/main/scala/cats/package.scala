@@ -44,18 +44,4 @@ package object cats {
       def traverse[G[_], A, B](a: A)(f: A => G[B])(implicit G: Applicative[G]): G[B] =
         f(a)
   }
-
-  type Eq[A] = algebra.Eq[A]
-  type PartialOrder[A] = algebra.PartialOrder[A]
-  type Order[A] = algebra.Order[A]
-  type Semigroup[A] = algebra.Semigroup[A]
-  type Monoid[A] = algebra.Monoid[A]
-  type Group[A] = algebra.Group[A]
-
-  val Eq = algebra.Eq
-  val PartialOrder = algebra.PartialOrder
-  val Order = algebra.Order
-  val Semigroup = algebra.Semigroup
-  val Monoid = algebra.Monoid
-  val Group = algebra.Group
 }
