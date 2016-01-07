@@ -64,7 +64,7 @@ lazy val disciplineDependencies = Seq(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(kernelJVM, coreJVM),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -89,7 +89,7 @@ lazy val docs = project
   .settings(tutSettings)
   .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
-  .dependsOn(coreJVM)
+  .dependsOn(kernelJVM, coreJVM)
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "root")
@@ -217,11 +217,11 @@ lazy val publishSettings = Seq(
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess 
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;coreJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
+addCommandAlias("buildJVM", ";macrosJVM/compile;kernelJVM/compile;coreJVM/compile;kernelJVM/test;coreJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
-addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;js/test")
+addCommandAlias("validateJS", ";macrosJS/compile;kernelJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;js/test")
 
 addCommandAlias("validate", ";validateJS;validateJVM")
 
