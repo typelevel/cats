@@ -3,40 +3,40 @@ package tests
 
 import cats.laws.discipline.{MonoidalTests, MonadStateTests, MonoidKTests, SerializableTests}
 import cats.state.{State, StateT}
-import cats.tests.FreeTests._
 import cats.laws.discipline.eq._
+import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
 
 class StateTTests extends CatsSuite {
   import StateTTests._
 
   test("basic state usage"){
-    add1.run(1).run should === (2 -> 1)
+    add1.run(1).value should === (2 -> 1)
   }
 
   test("traversing state is stack-safe"){
     val ns = (0 to 100000).toList
     val x = ns.traverseU(_ => add1)
-    x.runS(0).run should === (100001)
+    x.runS(0).value should === (100001)
   }
 
   test("State.pure and StateT.pure are consistent"){
     forAll { (s: String, i: Int) =>
       val state: State[String, Int] = State.pure(i)
       val stateT: State[String, Int] = StateT.pure(i)
-      state.run(s).run should === (stateT.run(s).run)
+      state.run(s) should === (stateT.run(s))
     }
   }
 
   test("Monoidal syntax is usable on State") {
     val x = add1 *> add1
-    x.runS(0).run should === (2)
+    x.runS(0).value should === (2)
   }
 
   test("Singleton and instance inspect are consistent"){
     forAll { (s: String, i: Int) =>
-      State.inspect[Int, String](_.toString).run(i).run should === (
-        State.pure[Int, Unit](()).inspect(_.toString).run(i).run)
+      State.inspect[Int, String](_.toString).run(i) should === (
+        State.pure[Int, Unit](()).inspect(_.toString).run(i))
     }
   }
 
@@ -109,10 +109,10 @@ class StateTTests extends CatsSuite {
 
 object StateTTests extends StateTTestsInstances {
   implicit def stateEq[S:Eq:Arbitrary, A:Eq]: Eq[State[S, A]] =
-    stateTEq[free.Trampoline, S, A]
+    stateTEq[Eval, S, A]
 
   implicit def stateArbitrary[S: Arbitrary, A: Arbitrary]: Arbitrary[State[S, A]] =
-    stateTArbitrary[free.Trampoline, S, A]
+    stateTArbitrary[Eval, S, A]
 
   val add1: State[Int, Int] = State(n => (n + 1, n))
 }

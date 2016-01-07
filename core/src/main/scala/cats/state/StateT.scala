@@ -1,9 +1,7 @@
 package cats
 package state
 
-import cats.free.Trampoline
 import cats.data.Kleisli
-import cats.std.function.function0Instance
 
 /**
  * `StateT[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S`
@@ -145,7 +143,7 @@ private[state] sealed abstract class StateTInstances extends StateTInstances0 {
 
 private[state] sealed abstract class StateTInstances0 {
   implicit def stateMonadState[S]: MonadState[State[S, ?], S] =
-    StateT.stateTMonadState[Trampoline, S]
+    StateT.stateTMonadState[Eval, S]
 }
 
 // To workaround SI-7139 `object State` needs to be defined inside the package object
@@ -153,7 +151,7 @@ private[state] sealed abstract class StateTInstances0 {
 private[state] abstract class StateFunctions {
 
   def apply[S, A](f: S => (S, A)): State[S, A] =
-    StateT.applyF(Trampoline.done((s: S) => Trampoline.done(f(s))))
+    StateT.applyF(Now((s: S) => Now(f(s))))
 
   /**
    * Return `a` and maintain the input state.
