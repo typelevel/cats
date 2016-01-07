@@ -123,7 +123,7 @@ object StateT extends StateTInstances {
     StateT(s => F.pure((s, a)))
 }
 
-private[state] sealed abstract class StateTInstances extends StateTInstances0 {
+private[state] sealed abstract class StateTInstances {
   implicit def stateTMonadState[F[_], S](implicit F: Monad[F]): MonadState[StateT[F, S, ?], S] =
     new MonadState[StateT[F, S, ?], S] {
       def pure[A](a: A): StateT[F, S, A] =
@@ -139,11 +139,6 @@ private[state] sealed abstract class StateTInstances extends StateTInstances0 {
       override def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] =
         fa.map(f)
     }
-}
-
-private[state] sealed abstract class StateTInstances0 {
-  implicit def stateMonadState[S]: MonadState[State[S, ?], S] =
-    StateT.stateTMonadState[Eval, S]
 }
 
 // To workaround SI-7139 `object State` needs to be defined inside the package object
