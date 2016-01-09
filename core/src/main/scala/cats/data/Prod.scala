@@ -79,8 +79,6 @@ sealed trait ProdApply[F[_], G[_]] extends Apply[Lambda[X => Prod[F, G, X]]] wit
   def G: Apply[G]
   def ap[A, B](fa: Prod[F, G, A])(f: Prod[F, G, A => B]): Prod[F, G, B] =
     Prod(F.ap(fa.first)(f.first), G.ap(fa.second)(f.second))
-  def product[A, B](fa: Prod[F, G, A], fb: Prod[F, G, B]): Prod[F, G, (A, B)] =
-    Prod(F.product(fa.first, fb.first), G.product(fa.second, fb.second))
 }
 
 sealed trait ProdApplicative[F[_], G[_]] extends Applicative[Lambda[X => Prod[F, G, X]]] with ProdApply[F, G] {

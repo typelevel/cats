@@ -157,8 +157,6 @@ private[data] sealed trait WriterTApply[F[_], L] extends WriterTFunctor[F, L] wi
 
   def ap[A, B](fa: WriterT[F, L, A])(f: WriterT[F, L, A => B]): WriterT[F, L, B] =
     fa ap f
-  def product[A, B](fa: WriterT[F, L, A], fb: WriterT[F, L, B]): WriterT[F, L, (A, B)] =
-    WriterT(F0.map(F0.product(fa.run, fb.run)) { case ((l1, a), (l2, b)) => (L0.combine(l1, l2), (a, b)) })
 }
 
 private[data] sealed trait WriterTFlatMap[F[_], L] extends WriterTApply[F, L] with FlatMap[WriterT[F, L, ?]] {
