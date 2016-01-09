@@ -49,11 +49,6 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
         val (mx, nx) = fx
         (M.map(mx)(f), N.map(nx)(f))
       }
-      def product[X, Y](fx: MN[X], fy: MN[Y]): MN[(X, Y)] = {
-        val (mx, nx) = fx
-        val (my, ny) = fy
-        (M.product(mx, my), N.product(nx, ny))
-      }
     }
     val lhs: MN[F[B]] = fa.traverse[MN, B](a => (f(a), g(a)))
     val rhs: MN[F[B]] = (fa.traverse(f), fa.traverse(g))

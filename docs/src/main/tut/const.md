@@ -221,8 +221,6 @@ implicit def constApplicative[Z]: Applicative[Const[Z, ?]] =
     def ap[A, B](fa: Const[Z, A])(f: Const[Z, A => B]): Const[Z, B] = ???
 
     def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] = ???
-
-    def product[A, B](fa: Const[Z, A],fb: Const[Z, B]): Const[Z, (A, B)] = ???
   }
 ```
 
@@ -249,9 +247,6 @@ implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, ?]] =
       
     def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] =
       Const(fa.getConst)
-
-    def product[A, B](fa: Const[Z, A],fb: Const[Z, B]): Const[Z, (A, B)] =
-      Const(Monoid[Z].combine(fa.getConst, fb.getConst))
   }
 ```
 
