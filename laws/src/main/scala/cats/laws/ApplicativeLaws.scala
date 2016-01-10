@@ -31,6 +31,18 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
     val compose: (B => C) => (A => B) => (A => C) = _.compose
     fa.ap(fab.ap(fbc.ap(F.pure(compose)))) <-> fa.ap(fab).ap(fbc)
   }
+
+  def apProductConsistent[A, B](fa: F[A], f: F[A => B]): IsEq[F[B]] =
+    F.ap(fa)(f) <-> F.map(F.product(f, fa)) { case (f, a) => f(a) }
+
+  // The following are the lax monoidal functor identity laws - the associativity law is covered by
+  // Cartesian's associativity law.
+
+  def monoidalLeftIdentity[A](fa: F[A]): IsEq[F[A]] =
+    F.map(F.product(F.pure(()), fa))(_._2) <-> fa
+
+  def monoidalRightIdentity[A](fa: F[A]): IsEq[F[A]] =
+    F.map(F.product(fa, F.pure(())))(_._1) <-> fa
 }
 
 object ApplicativeLaws {

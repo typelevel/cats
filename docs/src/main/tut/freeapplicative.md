@@ -39,7 +39,7 @@ Because a `FreeApplicative` only supports the operations of `Applicative`, we do
 of a for-comprehension. We can however still use `Applicative` syntax provided by Cats.
 
 ```tut:silent
-import cats.syntax.monoidal._
+import cats.syntax.cartesian._
 
 val prog: Validation[Boolean] = (size(5) |@| hasNumber).map { case (l, r) => l && r}
 ```

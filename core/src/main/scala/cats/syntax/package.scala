@@ -3,8 +3,8 @@ package cats
 package object syntax {
   object all extends AllSyntax
   object apply extends ApplySyntax
-  object monoidal extends MonoidalSyntax
   object bifunctor extends BifunctorSyntax
+  object cartesian extends CartesianSyntax
   object coflatMap extends CoflatMapSyntax
   object comonad extends ComonadSyntax
   object compose extends ComposeSyntax

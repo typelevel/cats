@@ -3,7 +3,7 @@ package tests
 
 import cats.data.{NonEmptyList, Validated, ValidatedNel, Xor}
 import cats.data.Validated.{Valid, Invalid}
-import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeTests, SerializableTests, MonoidalTests}
+import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeTests, SerializableTests, CartesianTests}
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.arbitrary._
@@ -13,9 +13,9 @@ import algebra.laws.{OrderLaws, GroupLaws}
 import scala.util.Try
 
 class ValidatedTests extends CatsSuite {
-  implicit val iso = MonoidalTests.Isomorphisms.invariant[Validated[String, ?]]
-  checkAll("Validated[String, Int]", MonoidalTests[Validated[String,?]].monoidal[Int, Int, Int])
-  checkAll("Monoidal[Validated[String,?]]", SerializableTests.serializable(Monoidal[Validated[String,?]]))
+  implicit val iso = CartesianTests.Isomorphisms.invariant[Validated[String, ?]]
+  checkAll("Validated[String, Int]", CartesianTests[Validated[String,?]].cartesian[Int, Int, Int])
+  checkAll("Cartesian[Validated[String,?]]", SerializableTests.serializable(Cartesian[Validated[String,?]]))
 
   checkAll("Validated[String, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
   checkAll("Validated[?, ?]", BifunctorTests[Validated].bifunctor[Int, Int, Int, Int, Int, Int])

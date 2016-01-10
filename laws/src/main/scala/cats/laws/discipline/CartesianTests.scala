@@ -7,27 +7,27 @@ import org.scalacheck.Prop
 import Prop._
 import org.typelevel.discipline.Laws
 
-trait MonoidalTests[F[_]] extends Laws {
-  def laws: MonoidalLaws[F]
+trait CartesianTests[F[_]] extends Laws {
+  def laws: CartesianLaws[F]
 
-  def monoidal[A : Arbitrary, B : Arbitrary, C : Arbitrary](implicit
-    iso: MonoidalTests.Isomorphisms[F],
+  def cartesian[A : Arbitrary, B : Arbitrary, C : Arbitrary](implicit
+    iso: CartesianTests.Isomorphisms[F],
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],
     EqFABC: Eq[F[(A, B, C)]]
   ): RuleSet = {
     new DefaultRuleSet(
-      name = "monoidal",
+      name = "cartesian",
       parent = None,
-      "monoidal associativity" -> forAll((fa: F[A], fb: F[B], fc: F[C]) => iso.associativity(laws.monoidalAssociativity(fa, fb, fc)))
+      "cartesian associativity" -> forAll((fa: F[A], fb: F[B], fc: F[C]) => iso.associativity(laws.cartesianAssociativity(fa, fb, fc)))
     )
   }
 }
 
-object MonoidalTests {
-  def apply[F[_] : Monoidal](implicit ev: Isomorphisms[F]): MonoidalTests[F] =
-    new MonoidalTests[F] { val laws: MonoidalLaws[F] = MonoidalLaws[F] }
+object CartesianTests {
+  def apply[F[_] : Cartesian](implicit ev: Isomorphisms[F]): CartesianTests[F] =
+    new CartesianTests[F] { val laws: CartesianLaws[F] = CartesianLaws[F] }
 
   trait Isomorphisms[F[_]] {
     def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)]))(implicit EqFABC: Eq[F[(A, B, C)]]): Prop

@@ -8,7 +8,7 @@ import simulacrum.typeclass
  * Must obey the laws defined in cats.laws.ApplyLaws.
  */
 @typeclass(excludeParents=List("ApplyArityFunctions"))
-trait Apply[F[_]] extends Functor[F] with Monoidal[F] with ApplyArityFunctions[F] { self =>
+trait Apply[F[_]] extends Functor[F] with Cartesian[F] with ApplyArityFunctions[F] { self =>
 
   /**
    * Given a value and a function in the Apply context, applies the

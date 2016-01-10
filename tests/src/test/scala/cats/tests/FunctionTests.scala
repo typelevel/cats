@@ -12,15 +12,15 @@ import algebra.laws.GroupLaws
 
 class FunctionTests extends CatsSuite {
 
-  checkAll("Function0[Int]", MonoidalTests[Function0].monoidal[Int, Int, Int])
-  checkAll("Monoidal[Function0]", SerializableTests.serializable(Monoidal[Function0]))
+  checkAll("Function0[Int]", CartesianTests[Function0].cartesian[Int, Int, Int])
+  checkAll("Cartesian[Function0]", SerializableTests.serializable(Cartesian[Function0]))
 
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
   checkAll("Bimonad[Function0]", SerializableTests.serializable(Bimonad[Function0]))
 
-  implicit val iso = MonoidalTests.Isomorphisms.invariant[Function1[Int, ?]]
-  checkAll("Function1[Int, Int]", MonoidalTests[Function1[Int, ?]].monoidal[Int, Int, Int])
-  checkAll("Monoidal[Function1[Int, ?]]", SerializableTests.serializable(Monoidal[Function1[Int, ?]]))
+  implicit val iso = CartesianTests.Isomorphisms.invariant[Function1[Int, ?]]
+  checkAll("Function1[Int, Int]", CartesianTests[Function1[Int, ?]].cartesian[Int, Int, Int])
+  checkAll("Cartesian[Function1[Int, ?]]", SerializableTests.serializable(Cartesian[Function1[Int, ?]]))
 
   checkAll("Function1[Int, Int]", MonadReaderTests[Int => ?, Int].monadReader[Int, Int, Int])
   checkAll("MonadReader[Int => ?, Int]", SerializableTests.serializable(MonadReader[Int => ?, Int]))

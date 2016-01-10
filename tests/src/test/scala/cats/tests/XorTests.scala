@@ -4,7 +4,7 @@ package tests
 import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadErrorTests, SerializableTests, MonoidalTests}
+import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadErrorTests, SerializableTests, CartesianTests}
 import cats.laws.discipline.eq.tuple3Eq
 import algebra.laws.{GroupLaws, OrderLaws}
 import org.scalacheck.{Arbitrary, Gen}
@@ -15,10 +15,10 @@ import scala.util.Try
 class XorTests extends CatsSuite {
   checkAll("Xor[String, Int]", GroupLaws[Xor[String, Int]].monoid)
 
-  implicit val iso = MonoidalTests.Isomorphisms.invariant[Xor[String, ?]]
+  implicit val iso = CartesianTests.Isomorphisms.invariant[Xor[String, ?]]
 
-  checkAll("Xor[String, Int]", MonoidalTests[Xor[String, ?]].monoidal[Int, Int, Int])
-  checkAll("Monoidal[Xor, ?]", SerializableTests.serializable(Monoidal[Xor[String, ?]]))
+  checkAll("Xor[String, Int]", CartesianTests[Xor[String, ?]].cartesian[Int, Int, Int])
+  checkAll("Cartesian[Xor, ?]", SerializableTests.serializable(Cartesian[Xor[String, ?]]))
 
   checkAll("Xor[String, NonEmptyList[Int]]", GroupLaws[Xor[String, NonEmptyList[Int]]].semigroup)
 
