@@ -223,20 +223,21 @@ object Eval extends EvalInstances {
    */
   sealed abstract class Call[A](val thunk: () => Eval[A]) extends Eval[A] {
     def memoize: Eval[A] = new Later(() => value)
-    def value: A = {
-      def loop(fa: Eval[A]): Eval[A] = fa match {
-        case call: Eval.Call[A] =>
-          loop(call.thunk())
-        case compute: Eval.Compute[A] =>
-          new Eval.Compute[A] {
-            type Start = compute.Start
-            val start: () => Eval[Start] = () => compute.start()
-            val run: Start => Eval[A] = s => loop(compute.run(s))
-          }
-        case other => other
-      }
+    def value: A = Call.loop(this).value
+  }
 
-      loop(this).value
+  object Call {
+    /** Collapse the call stack for eager evaluations */
+    private def loop[A](fa: Eval[A]): Eval[A] = fa match {
+      case call: Eval.Call[A] =>
+        loop(call.thunk())
+      case compute: Eval.Compute[A] =>
+        new Eval.Compute[A] {
+          type Start = compute.Start
+          val start: () => Eval[Start] = () => compute.start()
+          val run: Start => Eval[A] = s => loop(compute.run(s))
+        }
+      case other => other
     }
   }
 
