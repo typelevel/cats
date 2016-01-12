@@ -30,7 +30,7 @@ trait Arrow[F[_, _]] extends Split[F] with Strong[F] with Category[F] { self =>
     compose(lift(g), andThen(lift(f), fab))
 
   /**
-    * Create a new arrow that takes two inputs, but only modifies the second input
+    * Create a new arrow that takes two inputs, but only modifies the first input
     *
     * Example:
     * {{{
