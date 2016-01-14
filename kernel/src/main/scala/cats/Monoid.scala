@@ -1,5 +1,6 @@
 package cats
 
+import simulacrum.typeclass
 import scala.{ specialized => sp }
 
 /**
@@ -8,7 +9,7 @@ import scala.{ specialized => sp }
  * `combine(x, empty) == combine(empty, x) == x`. For example, if we have `Monoid[String]`,
  * with `combine` as string concatenation, then `empty = ""`.
  */
-trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
+@typeclass trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
 
   /**
    * Return the identity element for this monoid.
@@ -43,10 +44,4 @@ trait MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] {
     ev.combineAll(as)
 }
 
-object Monoid extends MonoidFunctions[Monoid] {
-
-  /**
-   * Access an implicit `Monoid[A]`.
-   */
-  @inline final def apply[A](implicit ev: Monoid[A]): Monoid[A] = ev
-}
+object Monoid extends MonoidFunctions[Monoid]
