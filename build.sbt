@@ -37,13 +37,16 @@ lazy val commonSettings = Seq(
   unmanagedClasspath in Compile ++= update.value.select(configurationFilter("compileonly")),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.5.0" % "compileonly",
-    "org.typelevel" %%% "machinist" % "0.4.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport
+
+lazy val machinistDependencies = Seq(
+  libraryDependencies += "org.typelevel" %%% "machinist" % "0.4.1"
+)
 
 lazy val commonJsSettings = Seq(
   scalaJSStage in Global := FastOptStage,
@@ -56,7 +59,9 @@ lazy val commonJvmSettings = Seq(
 // JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
 ) ++ catsDoctestSettings
 
-lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
+lazy val kernelSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
+
+lazy val catsSettings = kernelSettings ++ machinistDependencies
 
 lazy val scalacheckVersion = "1.12.5"
 
@@ -131,7 +136,7 @@ lazy val macrosJS = macros.js
 
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-kernel")
-  .settings(catsSettings:_*)
+  .settings(kernelSettings:_*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
