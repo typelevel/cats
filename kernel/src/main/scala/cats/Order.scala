@@ -30,7 +30,7 @@ import scala.{specialized => sp}
    */
   def compare(x: A, y: A): Int
 
-  def partialCompare(x: A, y: A): Double = compare(x, y).toDouble
+  override def partialCompare(x: A, y: A): Double = compare(x, y).toDouble
 
   /**
    * If x <= y, return x, else return y.
