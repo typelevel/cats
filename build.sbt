@@ -1,6 +1,8 @@
 import com.typesafe.sbt.pgp.PgpKeys.publishSigned
 import com.typesafe.sbt.SbtSite.SiteKeys._
 import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
+import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
+import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifacts
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
@@ -130,6 +132,8 @@ lazy val macrosJS = macros.js
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-kernel")
   .settings(catsSettings:_*)
+  .settings(mimaDefaultSettings:_*)
+  .settings(previousArtifacts := Set("org.spire-math" %% "cats-kernel" % "0.4.0"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -221,7 +225,7 @@ lazy val publishSettings = Seq(
 // These aliases serialise the build for the benefit of Travis-CI.
 addCommandAlias("buildJVM", ";macrosJVM/compile;kernelJVM/compile;coreJVM/compile;kernelJVM/test;coreJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
 
-addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
+addCommandAlias("validateJVM", ";scalastyle;buildJVM;mima-report-binary-issues;makeSite")
 
 addCommandAlias("validateJS", ";macrosJS/compile;kernelJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;js/test")
 
