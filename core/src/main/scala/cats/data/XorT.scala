@@ -40,11 +40,9 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
     XorT(F.map(value)(_.recover(pf)))
 
   def recoverWith(pf: PartialFunction[A, XorT[F, A, B]])(implicit F: Monad[F]): XorT[F, A, B] =
-    XorT(F.flatMap(value) { xor =>
-      xor match {
-        case Xor.Left(a) if pf.isDefinedAt(a) => pf(a).value
-        case _                                => F.pure(xor)
-      }
+    XorT(F.flatMap(value) {
+      case Xor.Left(a) if pf.isDefinedAt(a) => pf(a).value
+      case other => F.pure(other)
     })
 
   def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F]): F[BB] = fold(f, identity)
