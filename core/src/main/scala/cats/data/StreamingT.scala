@@ -70,7 +70,9 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    */
   def filter(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
-      case Cons(a, ft) => if (f(a)) this else Wait(ft.map(_.filter(f)))
+      case Cons(a, ft) =>
+        val tail = ft.map(_.filter(f))
+        if (f(a)) Cons(a, tail) else Wait(tail)
       case Wait(ft) => Wait(ft.map(_.filter(f)))
       case Empty() => this
     }

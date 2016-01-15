@@ -6,6 +6,7 @@ package object syntax {
   object bifunctor extends BifunctorSyntax
   object cartesian extends CartesianSyntax
   object coflatMap extends CoflatMapSyntax
+  object coproduct extends CoproductSyntax
   object comonad extends ComonadSyntax
   object compose extends ComposeSyntax
   object contravariant extends ContravariantSyntax

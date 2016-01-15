@@ -78,6 +78,11 @@ class StreamingTTests extends CatsSuite {
     }
   }
 
+  test("filter - check regression") {
+    val s = StreamingT[Option, Int](1, 2, 1)
+    s.filter(_ > 1).toList should === (Some(List(2)))
+  }
+
   test("foldLeft with Id consistent with List.foldLeft") {
     forAll { (s: StreamingT[Id, Int], l: Long, f: (Long, Int) => Long) =>
       s.foldLeft(l)(f) should === (s.toList.foldLeft(l)(f))
