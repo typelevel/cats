@@ -133,7 +133,10 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-kernel")
   .settings(catsSettings:_*)
   .settings(mimaDefaultSettings:_*)
-  .settings(previousArtifacts := Set("org.spire-math" %% "cats-kernel" % "0.4.0"))
+  .settings(previousArtifacts := Set(
+    // TODO: Add cats-kernel artifacts as they are released, e.g.
+    //   "org.spire-math" %% "cats-kernel" % "0.4.0"
+  ))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
