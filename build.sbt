@@ -131,10 +131,19 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
-
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-kernel")
   .settings(kernelSettings:_*)
+  .settings(pomPostProcess := { (node) =>
+    import scala.xml._
+    import scala.xml.transform._
+    def stripIf(f: Node => Boolean) = new RewriteRule {
+      override def transform(n: Node) =
+        if (f(n)) NodeSeq.Empty else n
+    }
+    val stripProvidedScope = stripIf { n => n.label == "dependency" && (n \ "scope").text == "provided" }
+    new RuleTransformer(stripProvidedScope).transform(node)(0)
+  })
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
