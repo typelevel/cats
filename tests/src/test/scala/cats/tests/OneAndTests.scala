@@ -4,7 +4,7 @@ package tests
 import algebra.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{NonEmptyList, OneAnd}
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, MonoidalTests}
+import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, MonoidalTests, TraverseTests}
 import cats.laws.discipline.arbitrary.{evalArbitrary, oneAndArbitrary}
 import cats.laws.discipline.eq._
 
@@ -12,6 +12,8 @@ import scala.util.Random
 
 class OneAndTests extends CatsSuite {
   checkAll("OneAnd[List, Int]", OrderLaws[OneAnd[List, Int]].eqv)
+
+  checkAll("OneAnd[List, Int] with Option", TraverseTests[OneAnd[List, ?]].traverse[Int, Int, Int, Int, Option, Option])
 
   implicit val iso = MonoidalTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.oneAndFunctor(ListWrapper.functor))
 
