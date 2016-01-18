@@ -234,8 +234,8 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
       override def leftMap[A, B, C](fab: Validated[A, B])(f: A => C): Validated[C, B] = fab.leftMap(f)
     }
 
-  implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with Applicative[Validated[E, ?]] =
-    new Traverse[Validated[E, ?]] with Applicative[Validated[E,?]] {
+  implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =
+    new Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] {
       def traverse[F[_]: Applicative, A, B](fa: Validated[E,A])(f: A => F[B]): F[Validated[E,B]] =
         fa.traverse(f)
 
@@ -256,6 +256,13 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
 
       def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
         fa.product(fb)(E)
+
+      def handleErrorWith[A](fa: Validated[E, A])(f: E => Validated[E, A]): Validated[E, A] =
+        fa match {
+          case Validated.Invalid(e) => f(e)
+          case v @ Validated.Valid(_) => v
+        }
+      def raiseError[A](e: E): Validated[E, A] = Validated.Invalid(e)
     }
 }
 
