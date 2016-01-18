@@ -4,9 +4,13 @@ package std
 import cats.data.Streaming
 import cats.syntax.show._
 
+import scala.annotation.tailrec
+import scala.collection.+:
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+
 trait VectorInstances {
-  implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] =
-    new Traverse[Vector] with MonadCombine[Vector] {
+  implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
+    new Traverse[Vector] with MonadCombine[Vector] with CoflatMap[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 
@@ -22,6 +26,15 @@ trait VectorInstances {
 
       override def map2[A, B, Z](fa: Vector[A], fb: Vector[B])(f: (A, B) => Z): Vector[Z] =
         fa.flatMap(a => fb.map(b => f(a, b)))
+
+      def coflatMap[A, B](fa: Vector[A])(f: Vector[A] => B): Vector[B] = {
+        @tailrec def loop(buf: ArrayBuffer[B], as: Vector[A]): Vector[B] =
+          as match {
+            case _ +: rest => loop(buf += f(as), rest)
+            case _ => buf.to[Vector]
+          }
+        loop(ArrayBuffer.empty[B], fa)
+      }
 
       def foldLeft[A, B](fa: Vector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
