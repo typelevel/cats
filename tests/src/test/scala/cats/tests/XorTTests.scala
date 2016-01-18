@@ -3,20 +3,25 @@ package tests
 
 import cats.functor.Bifunctor
 import cats.data.{Xor, XorT}
-import cats.laws.discipline.{BifunctorTests, FoldableTests, FunctorTests, MonadErrorTests, MonoidKTests, SerializableTests, TraverseTests}
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq.tuple3Eq
+import algebra.laws.OrderLaws
 
 class XorTTests extends CatsSuite {
   implicit val eq0 = XorT.xorTEq[List, String, String Xor Int]
   implicit val eq1 = XorT.xorTEq[XorT[List, String, ?], String, Int](eq0)
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[XorT[List, String, ?]]
   checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, String, ?], String]))
   checkAll("XorT[List, String, Int]", MonoidKTests[XorT[List, String, ?]].monoidK[Int])
   checkAll("MonoidK[XorT[List, String, ?]]", SerializableTests.serializable(MonoidK[XorT[List, String, ?]]))
   checkAll("XorT[List, ?, ?]", BifunctorTests[XorT[List, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
   checkAll("Bifunctor[XorT[List, ?, ?]]", SerializableTests.serializable(Bifunctor[XorT[List, ?, ?]]))
-  checkAll("XorT[List, Int, ?]", TraverseTests[XorT[List, Int, ?]].foldable[Int, Int])
+  checkAll("XorT[List, Int, ?]", TraverseTests[XorT[List, Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[XorT[List, Int, ?]]", SerializableTests.serializable(Traverse[XorT[List, Int, ?]]))
+  checkAll("XorT[List, String, Int]", OrderLaws[XorT[List, String, Int]].order)
+  checkAll("Order[XorT[List, String, Int]]", SerializableTests.serializable(Order[XorT[List, String, Int]]))
 
   {
     implicit val F = ListWrapper.foldable
@@ -28,6 +33,24 @@ class XorTTests extends CatsSuite {
     implicit val F = ListWrapper.functor
     checkAll("XorT[ListWrapper, Int, ?]", FunctorTests[XorT[ListWrapper, Int, ?]].functor[Int, Int, Int])
     checkAll("Functor[XorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Functor[XorT[ListWrapper, Int, ?]]))
+  }
+
+  {
+    implicit val F = ListWrapper.partialOrder[String Xor Int]
+    checkAll("XorT[ListWrapper, String, Int]", OrderLaws[XorT[ListWrapper, String, Int]].partialOrder)
+    checkAll("PartialOrder[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(PartialOrder[XorT[ListWrapper, String, Int]]))
+  }
+
+  {
+    implicit val F = ListWrapper.eqv[String Xor Int]
+    checkAll("XorT[ListWrapper, String, Int]", OrderLaws[XorT[ListWrapper, String, Int]].eqv)
+    checkAll("Eq[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(Eq[XorT[ListWrapper, String, Int]]))
+  }
+
+  {
+    implicit val L = ListWrapper.semigroup[String]
+    checkAll("XorT[Option, ListWrapper[String], ?]", SemigroupKTests[XorT[Option, ListWrapper[String], ?]].semigroupK[Int])
+    checkAll("SemigroupK[XorT[Option, ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[XorT[Option, ListWrapper[String], ?]]))
   }
 
   // make sure that the Monad and Traverse instances don't result in ambiguous
@@ -130,9 +153,36 @@ class XorTTests extends CatsSuite {
     }
   }
 
+  test("valueOr with Id consistent with Xor valueOr") {
+    forAll { (xort: XorT[Id, String, Int], f: String => Int) =>
+      xort.valueOr(f) should === (xort.value.valueOr(f))
+    }
+  }
+
   test("getOrElse with Id consistent with Xor getOrElse") {
     forAll { (xort: XorT[Id, String, Int], i: Int) =>
       xort.getOrElse(i) should === (xort.value.getOrElse(i))
+    }
+  }
+
+  test("getOrElseF with Id consistent with Xor getOrElse") {
+    forAll { (xort: XorT[Id, String, Int], i: Int) =>
+      xort.getOrElseF(i) should === (xort.value.getOrElse(i))
+    }
+  }
+
+  test("orElse with Id consistent with Xor orElse") {
+    forAll { (xort: XorT[Id, String, Int], fallback: XorT[Id, String, Int]) =>
+      xort.orElse(fallback).value should === (xort.value.orElse(fallback.value))
+    }
+  }
+
+  test("orElse evaluates effect only once") {
+    forAll { (xor: String Xor Int, fallback: XorT[Eval, String, Int]) =>
+      var evals = 0
+      val xort = (XorT(Eval.always { evals += 1; xor }) orElse fallback)
+      xort.value.value
+      evals should === (1)
     }
   }
 

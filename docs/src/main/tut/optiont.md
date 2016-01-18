@@ -2,12 +2,12 @@
 layout: default
 title:  "OptionT"
 section: "data"
-source: "https://github.com/non/cats/blob/master/data/src/main/scala/cats/data/optionT.scala"
+source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/OptionT.scala"
 scaladoc: "#cats.data.OptionT"
 ---
 # OptionT
 
-`OptionT[F[_], A` is a light wrapper on an `F[Option[A]]`. Speaking technically, it is a monad transformer for `Option`, but you don't need to know what that means for it to be useful. `OptionT` can be more convenient to work with than using `F[Option[A]]` directly.
+`OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]`. Speaking technically, it is a monad transformer for `Option`, but you don't need to know what that means for it to be useful. `OptionT` can be more convenient to work with than using `F[Option[A]]` directly.
 
 ## Reduce map boilerplate
 
@@ -49,6 +49,27 @@ val withWelcome: OptionT[Future, String] = customGreetingT.filter(_.contains("we
 val noWelcome: OptionT[Future, String] = customGreetingT.filterNot(_.contains("welcome"))
 
 val withFallback: Future[String] = customGreetingT.getOrElse("hello, there!")
+```
+
+## From `Option[A]` and/or `F[A]` to `OptionT[F, A]`
+
+Sometimes you may have an `Option[A]` and/or `F[A]` and want to *lift* them into an `OptionT[F, A]`. For this purpose `OptionT` exposes two useful methods, namely `fromOption` and `liftF`, respectively. E.g.:
+
+```tut:silent
+val greetingFO: Future[Option[String]] = Future.successful(Some("Hello"))
+
+val firstnameF: Future[String] = Future.successful("Jane")
+
+val lastnameO: Option[String] = Some("Doe")
+
+val ot: OptionT[Future, String] = for {
+  g <- OptionT(greetingFO)
+  f <- OptionT.liftF(firstnameF)
+  l <- OptionT.fromOption(lastnameO)
+} yield s"$g $f $l"
+
+val result: Future[Option[String]] = ot.value // Future(Some("Hello Jane Doe"))
+
 ```
 
 ## Beyond map

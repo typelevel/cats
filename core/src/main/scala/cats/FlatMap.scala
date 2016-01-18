@@ -29,6 +29,9 @@ import simulacrum.typeclass
   override def ap[A, B](fa: F[A])(ff: F[A => B]): F[B] =
     flatMap(ff)(f => map(fa)(f))
 
+  override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
+    flatMap(fa)(a => map(fb)(b => (a, b)))
+
   /**
    *  Pair `A` with the result of function application.
    */

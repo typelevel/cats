@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.arrow.Arrow
+import cats.arrow.{Arrow, Split}
 import cats.data.{Cokleisli, NonEmptyList}
 import cats.functor.Profunctor
 import cats.laws.discipline._
@@ -18,11 +18,19 @@ class CokleisliTests extends SlowCatsSuite {
   def cokleisliEqE[F[_], A](implicit A: Arbitrary[F[A]], FA: Eq[A]): Eq[Cokleisli[F, A, A]] =
     Eq.by[Cokleisli[F, A, A], F[A] => A](_.run)
 
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Cokleisli[Option, Int, ?]]
+
+  checkAll("Cokleisli[Option, Int, Int]", MonoidalTests[Cokleisli[Option, Int, ?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[Cokleisli[Option, Int, ?]", SerializableTests.serializable(Monoidal[Cokleisli[Option, Int, ?]]))
+
   checkAll("Cokleisli[Option, Int, Int]", ApplicativeTests[Cokleisli[Option, Int, ?]].applicative[Int, Int, Int])
   checkAll("Applicative[Cokleisli[Option, Int, ?]", SerializableTests.serializable(Applicative[Cokleisli[Option, Int, ?]]))
 
   checkAll("Cokleisli[Option, Int, Int]", ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[Int, Int, Int, Int, Int, Int])
   checkAll("Profunctor[Cokleisli[Option, ?, ?]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
+
+  checkAll("Cokleisli[Option, Int, Int]", SplitTests[Cokleisli[Option, ?, ?]].split[Int, Int, Int, Int, Int, Int])
+  checkAll("Split[Cokleisli[Option, ?, ?]", SerializableTests.serializable(Split[Cokleisli[Option, ?, ?]]))
 
   {
     // Ceremony to help scalac to do the right thing, see also #267.
@@ -62,4 +70,9 @@ class CokleisliTests extends SlowCatsSuite {
 
   }
 
+  test("contramapValue with Id consistent with lmap"){
+    forAll { (c: Cokleisli[Id, Int, Long], f: Char => Int) =>
+      c.contramapValue[Char](f) should === (c.lmap(f))
+    }
+  }
 }

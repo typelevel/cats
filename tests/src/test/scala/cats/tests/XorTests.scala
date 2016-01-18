@@ -1,10 +1,11 @@
 package cats
 package tests
 
-import cats.data.{Xor, XorT}
+import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
-import cats.laws.discipline.arbitrary.xorArbitrary
-import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadErrorTests, SerializableTests}
+import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadErrorTests, SerializableTests, MonoidalTests}
+import cats.laws.discipline.eq.tuple3Eq
 import algebra.laws.{GroupLaws, OrderLaws}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary._
@@ -13,6 +14,13 @@ import scala.util.Try
 
 class XorTests extends CatsSuite {
   checkAll("Xor[String, Int]", GroupLaws[Xor[String, Int]].monoid)
+
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Xor[String, ?]]
+
+  checkAll("Xor[String, Int]", MonoidalTests[Xor[String, ?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[Xor, ?]", SerializableTests.serializable(Monoidal[Xor[String, ?]]))
+
+  checkAll("Xor[String, NonEmptyList[Int]]", GroupLaws[Xor[String, NonEmptyList[Int]]].semigroup)
 
   implicit val eq0 = XorT.xorTEq[Xor[String, ?], String, Int]
 
@@ -23,6 +31,20 @@ class XorTests extends CatsSuite {
   checkAll("Traverse[Xor[String,?]]", SerializableTests.serializable(Traverse[Xor[String, ?]]))
 
   checkAll("Xor[Int, String]", OrderLaws[String Xor Int].order)
+
+  {
+    implicit val S = ListWrapper.partialOrder[String]
+    implicit val I = ListWrapper.partialOrder[Int]
+    checkAll("ListWrapper[String] Xor ListWrapper[Int]", OrderLaws[ListWrapper[String] Xor ListWrapper[Int]].partialOrder)
+    checkAll("PartialOrder[ListWrapper[String] Xor ListWrapper[Int]]", SerializableTests.serializable(PartialOrder[ListWrapper[String] Xor ListWrapper[Int]]))
+  }
+
+  {
+    implicit val S = ListWrapper.eqv[String]
+    implicit val I = ListWrapper.eqv[Int]
+    checkAll("ListWrapper[String] Xor ListWrapper[Int]", OrderLaws[ListWrapper[String] Xor ListWrapper[Int]].eqv)
+    checkAll("Eq[ListWrapper[String] Xor ListWrapper[Int]]", SerializableTests.serializable(Eq[ListWrapper[String] Xor ListWrapper[Int]]))
+  }
 
   implicit val arbitraryXor: Arbitrary[Xor[Int, String]] = Arbitrary {
     for {
@@ -70,6 +92,19 @@ class XorTests extends CatsSuite {
   test("double swap is identity") {
     forAll { (x: Int Xor String) =>
       x.swap.swap should === (x)
+    }
+  }
+
+  test("swap negates isLeft/isRight") {
+    forAll { (x: Int Xor String) =>
+      x.isLeft should !== (x.swap.isLeft)
+      x.isRight should !== (x.swap.isRight)
+    }
+  }
+
+  test("isLeft consistent with isRight") {
+    forAll { (x: Int Xor String) =>
+      x.isLeft should !== (x.isRight)
     }
   }
 

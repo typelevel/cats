@@ -114,10 +114,27 @@ Write about https://github.com/non/cats/pull/36#issuecomment-72892359
 
 ### Write tests
 
-Tests go into the tests module, under the `cats.tests` package.  Cats tests
-should extend `CatsSuite`.  `CatsSuite` integrates ScalaTest with Discipline
-for law checking, and imports all syntax and standard instances for
-convenience.
+- Tests for cats-core go into the tests module, under the `cats.tests` package.
+- Tests for additional modules, such as 'jvm', go into the tests directory within that module.
+- Cats tests should extend `CatsSuite`.  `CatsSuite` integrates [ScalaTest](http://www.scalatest.org/)
+with [Discipline](https://github.com/typelevel/discipline) for law checking, and imports all syntax and standard instances for convenience.
+- The first parameter to the `checkAll` method provided by
+ [Discipline](https://github.com/typelevel/discipline), is the name of the test and will be output to the
+ console as part of the test execution. By convention:
+ - When checking laws, this parameter generally takes a form that describes the data type being tested.
+ For example the name *"Validated[String, Int]"* might be used when testing a type class instance
+ that the `Validated` data type supports.
+ - An exception to this is serializability tests, where the type class name is also included in the name.
+ For example, in the case of `Validated`, the serializability test would take the form,
+ *"Applicative[Validated[String, Int]"*, to indicate that this test is verifying that the `Applicative` 
+ type class instance for the `Validated` data type is serializable.
+ - This convention helps to ensure clear and easy to understand output, with minimal duplication in the output.
+- It is also a goal that, for every combination of data type and supported type class instance:
+ - Appropriate law checks for that combination are included to ensure that the instance meets the laws for that type class.
+ - A serializability test for that combination is also included, such that we know that frameworks which
+ rely heavily on serialization, such as `Spark`, will have strong compatibility with `cats`.
+ - Note that custom serialization tests are not required for instances of type classes which come from
+ `algebra`, such as `Monoid`, because the `algebra` laws include a test for serialization.
 
 TODO
 

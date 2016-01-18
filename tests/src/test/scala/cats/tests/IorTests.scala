@@ -2,13 +2,19 @@ package cats
 package tests
 
 import cats.data.{Xor, Ior}
-import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadTests, SerializableTests}
+import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadTests, SerializableTests, MonoidalTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary._
 
 class IorTests extends CatsSuite {
+
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Ior[String, ?]]
+
+  checkAll("Ior[String, Int]", MonoidalTests[Ior[String, ?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[String Ior ?]]", SerializableTests.serializable(Monoidal[String Ior ?]))
+
   checkAll("Ior[String, Int]", MonadTests[String Ior ?].monad[Int, Int, Int])
   checkAll("Monad[String Ior ?]]", SerializableTests.serializable(Monad[String Ior ?]))
 
@@ -140,6 +146,24 @@ class IorTests extends CatsSuite {
   test("to consistent with toOption") {
     forAll { (x: Int Ior String) =>
       x.to[Option, String] should === (x.toOption)
+    }
+  }
+
+  test("toXor consistent with right") {
+    forAll { (x: Int Ior String) =>
+      x.toXor.toOption should === (x.right)
+    }
+  }
+
+  test("toXor consistent with toEither") {
+    forAll { (x: Int Ior String) =>
+      x.toEither should === (x.toXor.toEither)
+    }
+  }
+
+  test("getOrElse consistent with Option getOrElse") {
+    forAll { (x: Int Ior String, default: String) =>
+      x.getOrElse(default) should === (x.toOption.getOrElse(default))
     }
   }
 }

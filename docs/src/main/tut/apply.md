@@ -14,8 +14,9 @@ a context can be `Option`, `List` or `Future` for example).
 However, the difference between `ap` and `map` is that for `ap` the function that 
 takes care of the transformation is of type `F[A => B]`, whereas for `map` it is `A => B`:
 
-```tut
+```tut:silent
 import cats._
+
 val intToString: Int => String = _.toString
 val double: Int => Int = _ * 2
 val addTwo: Int => Int = _ + 2
@@ -25,6 +26,9 @@ implicit val optionApply: Apply[Option] = new Apply[Option] {
     fa.flatMap (a => f.map (ff => ff(a)))
 
   def map[A,B](fa: Option[A])(f: A => B): Option[B] = fa map f
+  
+  def product[A, B](fa: Option[A], fb: Option[B]): Option[(A, B)] =
+    fa.flatMap(a => fb.map(b => (a, b)))
 }
 
 implicit val listApply: Apply[List] = new Apply[List] {
@@ -32,6 +36,9 @@ implicit val listApply: Apply[List] = new Apply[List] {
     fa.flatMap (a => f.map (ff => ff(a)))
 
   def map[A,B](fa: List[A])(f: A => B): List[B] = fa map f
+  
+  def product[A, B](fa: List[A], fb: List[B]): List[(A, B)] =
+    fa.zip(fb)
 }
 ```
 
@@ -118,7 +125,7 @@ In order to use it, first import `cats.syntax.all._` or `cats.syntax.apply._`.
 Here we see that the following two functions, `f1` and `f2`, are equivalent:
 
 ```tut
-import cats.syntax.apply._
+import cats.syntax.monoidal._
 
 def f1(a: Option[Int], b: Option[Int], c: Option[Int]) =
   (a |@| b |@| c) map { _ * _ * _ }
@@ -133,8 +140,6 @@ f2(Some(1), Some(2), Some(3))
 All instances created by `|@|` have `map`, `ap`, and `tupled` methods of the appropriate arity:
 
 ```tut
-import cats.syntax.apply._
-
 val option2 = Option(1) |@| Option(2)
 val option3 = option2 |@| Option.empty[Int]
 

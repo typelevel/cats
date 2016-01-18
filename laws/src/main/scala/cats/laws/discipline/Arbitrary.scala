@@ -53,8 +53,26 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def appFuncArbitrary[F[_], A, B](implicit F: Arbitrary[F[B]], FF: Applicative[F]): Arbitrary[AppFunc[F, A, B]] =
     Arbitrary(F.arbitrary.map(fb => Func.appFunc[F, A, B](_ => fb)))
 
-  implicit def streamingArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Streaming[A]] =
-    Arbitrary(Gen.listOf(A.arbitrary).map(Streaming.fromList(_)))
+  def streamingGen[A:Arbitrary](maxDepth: Int): Gen[Streaming[A]] =
+    if (maxDepth <= 1)
+      Gen.const(Streaming.empty[A])
+    else {
+      // the arbitrary instance for the next layer of the stream
+      implicit val A = Arbitrary(streamingGen[A](maxDepth - 1))
+      Gen.frequency(
+        // Empty
+        1 -> Gen.const(Streaming.empty[A]),
+        // Wait
+        2 -> getArbitrary[Eval[Streaming[A]]].map(Streaming.wait(_)),
+        // Cons
+        6 -> (for {
+          a <- getArbitrary[A]
+          tail <- getArbitrary[Eval[Streaming[A]]]
+        } yield Streaming.cons(a, tail)))
+    }
+
+  implicit def streamingArbitrary[A:Arbitrary]: Arbitrary[Streaming[A]] =
+    Arbitrary(streamingGen[A](8))
 
   def emptyStreamingTGen[F[_], A]: Gen[StreamingT[F, A]] =
     Gen.const(StreamingT.empty[F, A])
@@ -62,20 +80,17 @@ object arbitrary extends ArbitraryInstances0 {
   def streamingTGen[F[_], A](maxDepth: Int)(implicit F: Monad[F], A: Arbitrary[A]): Gen[StreamingT[F, A]] = {
     if (maxDepth <= 1)
       emptyStreamingTGen[F, A]
-    else {
-      Gen.oneOf(
-        // Empty
-        emptyStreamingTGen[F, A],
-        // Wait
-        streamingTGen[F, A](maxDepth - 1).map(s =>
-          StreamingT.wait(F.pure(s))),
-        // Cons
-        for {
-          a <- A.arbitrary
-          s <- streamingTGen[F, A](maxDepth - 1)
-        } yield StreamingT.cons(a, F.pure(s))
-      )
-    }
+    else Gen.frequency(
+      // Empty
+      1 -> emptyStreamingTGen[F, A],
+      // Wait
+      2 -> streamingTGen[F, A](maxDepth - 1).map(s =>
+        StreamingT.wait(F.pure(s))),
+      // Cons
+      6 -> (for {
+        a <- A.arbitrary
+        s <- streamingTGen[F, A](maxDepth - 1)
+      } yield StreamingT.cons(a, F.pure(s))))
   }
 
   // The max possible size of a StreamingT instance (n) will result in
@@ -101,6 +116,8 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def showArbitrary[A: Arbitrary]: Arbitrary[Show[A]] =
     Arbitrary(Show.fromToString[A])
 
+  implicit def function0Arbitrary[A: Arbitrary]: Arbitrary[() => A] =
+    Arbitrary(getArbitrary[A].map(() => _))
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {

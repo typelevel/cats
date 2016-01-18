@@ -71,20 +71,22 @@ private[data] sealed abstract class ProdInstances4 {
 sealed trait ProdFunctor[F[_], G[_]] extends Functor[Lambda[X => Prod[F, G, X]]] {
   def F: Functor[F]
   def G: Functor[G]
-  override def map[A, B](fa: Prod[F, G, A])(f: A => B): Prod[F, G, B] = Prod(F.map(fa.first)(f), G.map(fa.second)(f))
+  def map[A, B](fa: Prod[F, G, A])(f: A => B): Prod[F, G, B] = Prod(F.map(fa.first)(f), G.map(fa.second)(f))
 }
 
 sealed trait ProdApply[F[_], G[_]] extends Apply[Lambda[X => Prod[F, G, X]]] with ProdFunctor[F, G] {
   def F: Apply[F]
   def G: Apply[G]
-  override def ap[A, B](fa: Prod[F, G, A])(f: Prod[F, G, A => B]): Prod[F, G, B] =
+  def ap[A, B](fa: Prod[F, G, A])(f: Prod[F, G, A => B]): Prod[F, G, B] =
     Prod(F.ap(fa.first)(f.first), G.ap(fa.second)(f.second))
+  def product[A, B](fa: Prod[F, G, A], fb: Prod[F, G, B]): Prod[F, G, (A, B)] =
+    Prod(F.product(fa.first, fb.first), G.product(fa.second, fb.second))
 }
 
 sealed trait ProdApplicative[F[_], G[_]] extends Applicative[Lambda[X => Prod[F, G, X]]] with ProdApply[F, G] {
   def F: Applicative[F]
   def G: Applicative[G]
-  override def pure[A](a: A): Prod[F, G, A] = Prod(F.pure(a), G.pure(a))
+  def pure[A](a: A): Prod[F, G, A] = Prod(F.pure(a), G.pure(a))
 }
 
 sealed trait ProdSemigroupK[F[_], G[_]] extends SemigroupK[Lambda[X => Prod[F, G, X]]] {

@@ -2,6 +2,7 @@ package cats
 package std
 
 import cats.data.Streaming
+import cats.syntax.show._
 
 trait VectorInstances {
   implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] =
@@ -41,6 +42,11 @@ trait VectorInstances {
 
       override def toStreaming[A](fa: Vector[A]): Streaming[A] =
         Streaming.fromVector(fa)
+    }
+
+  implicit def vectorShow[A:Show]: Show[Vector[A]] =
+    new Show[Vector[A]] {
+      def show(fa: Vector[A]): String = fa.map(_.show).mkString("Vector(", ", ", ")")
     }
 
   // TODO: eventually use algebra's instances (which will deal with

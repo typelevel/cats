@@ -51,4 +51,17 @@ class CoproductTests extends CatsSuite {
     }
   }
 
+  test("swap negates isLeft/isRight") {
+    forAll { (x: Coproduct[Option, Option, Int]) =>
+      x.isLeft should !== (x.swap.isLeft)
+      x.isRight should !== (x.swap.isRight)
+    }
+  }
+
+  test("isLeft consistent with isRight") {
+    forAll { (x: Coproduct[Option, Option, Int]) =>
+      x.isLeft should !== (x.isRight)
+    }
+  }
+
 }

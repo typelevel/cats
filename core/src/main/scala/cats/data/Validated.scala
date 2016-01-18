@@ -105,7 +105,6 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     b => that.fold(_ => false, AA.eqv(b, _))
   )
 
-
   /**
    * From Apply:
    * if both the function and this value are Valid, apply the function
@@ -113,7 +112,18 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def ap[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE,B] =
     (this, f) match {
       case (Valid(a), Valid(f)) => Valid(f(a))
-      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e2,e1))
+      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e2, e1))
+      case (e@Invalid(_), _) => e
+      case (_, e@Invalid(_)) => e
+    }
+
+  /**
+   * From Product
+   */
+  def product[EE >: E, B](fb: Validated[EE, B])(implicit EE: Semigroup[EE]): Validated[EE, (A, B)] =
+    (this, fb) match {
+      case (Valid(a), Valid(b)) => Valid((a, b))
+      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e1, e2))
       case (e @ Invalid(_), _) => e
       case (_, e @ Invalid(_)) => e
     }
@@ -122,6 +132,12 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * Apply a function to a Valid value, returning a new Valid value
    */
   def map[B](f: A => B): Validated[E,B] = bimap(identity, f)
+
+  /**
+   * Apply a function to an Invalid value, returning a new Invalid value.
+   * Or, if the original valid was Valid, return it.
+   */
+  def leftMap[EE](f: E => EE): Validated[EE,A] = bimap(f, identity)
 
   /**
    * When Valid, apply the function, marking the result as valid
@@ -168,6 +184,25 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case Valid(a) => f(a)
       case i @ Invalid(_) => i
     }
+
+  /**
+   * Combine this `Validated` with another `Validated`, using the `Semigroup`
+   * instances of the underlying `E` and `A` instances. The resultant `Validated`
+   * will be `Valid`, if, and only if, both this `Validated` instance and the
+   * supplied `Validated` instance are also `Valid`.
+   */
+  def combine[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Semigroup[EE], AA: Semigroup[AA]): Validated[EE, AA] =
+    (this, that) match {
+      case (Valid(a), Valid(b)) => Valid(AA.combine(a, b))
+      case (Invalid(a), Invalid(b)) => Invalid(EE.combine(a, b))
+      case (Invalid(_), _) => this
+      case _ => that
+    }
+
+  def swap: Validated[A, E] = this match {
+    case Valid(a) => Invalid(a)
+    case Invalid(e) => Valid(e)
+  }
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions{
@@ -177,6 +212,12 @@ object Validated extends ValidatedInstances with ValidatedFunctions{
 
 
 private[data] sealed abstract class ValidatedInstances extends ValidatedInstances1 {
+
+  implicit def validatedMonoid[A, B](implicit A: Semigroup[A], B: Monoid[B]): Monoid[Validated[A, B]] = new Monoid[Validated[A, B]] {
+    def empty: Validated[A, B] = Valid(B.empty)
+    def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x combine y
+  }
+
   implicit def validatedOrder[A: Order, B: Order]: Order[Validated[A,B]] = new Order[Validated[A,B]] {
     def compare(x: Validated[A,B], y: Validated[A,B]): Int = x compare y
     override def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
@@ -190,10 +231,11 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
   implicit def validatedBifunctor: Bifunctor[Validated] =
     new Bifunctor[Validated] {
       override def bimap[A, B, C, D](fab: Validated[A, B])(f: A => C, g: B => D): Validated[C, D] = fab.bimap(f, g)
+      override def leftMap[A, B, C](fab: Validated[A, B])(f: A => C): Validated[C, B] = fab.leftMap(f)
     }
 
-  implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with Applicative[Validated[E, ?]] =
-    new Traverse[Validated[E, ?]] with Applicative[Validated[E,?]] {
+  implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =
+    new Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] {
       def traverse[F[_]: Applicative, A, B](fa: Validated[E,A])(f: A => F[B]): F[Validated[E,B]] =
         fa.traverse(f)
 
@@ -209,13 +251,29 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
       override def map[A, B](fa: Validated[E,A])(f: A => B): Validated[E, B] =
         fa.map(f)
 
-      override def ap[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]): Validated[E, B] =
+      def ap[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]): Validated[E, B] =
         fa.ap(f)(E)
+
+      def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
+        fa.product(fb)(E)
+
+      def handleErrorWith[A](fa: Validated[E, A])(f: E => Validated[E, A]): Validated[E, A] =
+        fa match {
+          case Validated.Invalid(e) => f(e)
+          case v @ Validated.Valid(_) => v
+        }
+      def raiseError[A](e: E): Validated[E, A] = Validated.Invalid(e)
     }
 }
 
 private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
-  implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A,B]] =
+
+  implicit def validatedSemigroup[A, B](implicit A: Semigroup[A], B: Semigroup[B]): Semigroup[Validated[A, B]] =
+    new Semigroup[Validated[A, B]] {
+      def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x combine y
+    }
+
+  implicit def validatedPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A,B]] =
     new PartialOrder[Validated[A,B]] {
       def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
       override def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
@@ -223,7 +281,7 @@ private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstanc
 }
 
 private[data] sealed abstract class ValidatedInstances2 {
-  implicit def xorEq[A: Eq, B: Eq]: Eq[Validated[A,B]] =
+  implicit def validatedEq[A: Eq, B: Eq]: Eq[Validated[A,B]] =
     new Eq[Validated[A,B]] {
       def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
     }
@@ -240,8 +298,10 @@ trait ValidatedFunctions {
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
    * the resulting `Validated`. Uncaught exceptions are propagated.
    *
-   * For example: {{{
-   * val result: Validated[NumberFormatException, Int] = catchOnly[NumberFormatException] { "foo".toInt }
+   * For example:
+   * {{{
+   * scala> Validated.catchOnly[NumberFormatException] { "foo".toInt }
+   * res0: Validated[NumberFormatException, Int] = Invalid(java.lang.NumberFormatException: For input string: "foo")
    * }}}
    */
   def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
@@ -282,4 +342,3 @@ trait ValidatedFunctions {
    */
   def fromOption[A, B](o: Option[B], ifNone: => A): Validated[A,B] = o.fold(invalid[A, B](ifNone))(valid)
 }
-

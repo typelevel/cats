@@ -14,6 +14,11 @@ class FuncTests extends CatsSuite {
   implicit def appFuncEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[AppFunc[F, A, B]] =
     Eq.by[AppFunc[F, A, B], A => F[B]](_.run)
 
+  implicit val iso = MonoidalTests.Isomorphisms.invariant[Func[Option, Int, ?]]
+
+  checkAll("Func[Option, Int, Int]", MonoidalTests[Func[Option, Int, ?]].monoidal[Int, Int, Int])
+  checkAll("Monoidal[Func[Option, Int, ?]]", SerializableTests.serializable(Monoidal[Func[Option, Int, ?]]))
+
   {
     implicit val funcApp = Func.funcApplicative[Option, Int]
     checkAll("Func[Option, Int, Int]", ApplicativeTests[Func[Option, Int, ?]].applicative[Int, Int, Int])
@@ -34,6 +39,7 @@ class FuncTests extends CatsSuite {
 
   {
     implicit val appFuncApp = AppFunc.appFuncApplicative[Option, Int]
+    implicit val iso = MonoidalTests.Isomorphisms.invariant[AppFunc[Option, Int, ?]]
     checkAll("AppFunc[Option, Int, Int]", ApplicativeTests[AppFunc[Option, Int, ?]].applicative[Int, Int, Int])
     checkAll("Applicative[AppFunc[Option, Int, ?]]", SerializableTests.serializable(Applicative[AppFunc[Option, Int, ?]]))
   }

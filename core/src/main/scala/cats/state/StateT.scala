@@ -1,9 +1,7 @@
 package cats
 package state
 
-import cats.free.Trampoline
 import cats.data.Kleisli
-import cats.std.function.function0Instance
 
 /**
  * `StateT[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S`
@@ -74,6 +72,33 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
     StateT(s => f(run(s)))
 
   /**
+   * Transform the state used.
+   *
+   * This is useful when you are working with many focused `StateT`s and want to pass in a
+   * global state containing the various states needed for each individual `StateT`.
+   *
+   * {{{
+   * scala> import cats.std.option._ // needed for StateT.apply
+   * scala> type GlobalEnv = (Int, String)
+   * scala> val x: StateT[Option, Int, Double] = StateT((x: Int) => Option((x + 1, x.toDouble)))
+   * scala> val xt: StateT[Option, GlobalEnv, Double] = x.transformS[GlobalEnv](_._1, (t, i) => (i, t._2))
+   * scala> val input = 5
+   * scala> x.run(input)
+   * res0: Option[(Int, Double)] = Some((6,5.0))
+   * scala> xt.run((input, "hello"))
+   * res1: Option[(GlobalEnv, Double)] = Some(((6,hello),5.0))
+   * }}}
+   */
+  def transformS[R](f: R => S, g: (R, S) => R)(implicit F: Monad[F]): StateT[F, R, A] =
+    StateT { r =>
+      F.flatMap(runF) { ff =>
+        val s = f(r)
+        val nextState = ff(s)
+        F.map(nextState) { case (s, a) => (g(r, s), a) }
+      }
+    }
+
+  /**
    * Modify the state (`S`) component.
    */
   def modify(f: S => S)(implicit F: Monad[F]): StateT[F, S, A] =
@@ -98,7 +123,7 @@ object StateT extends StateTInstances {
     StateT(s => F.pure((s, a)))
 }
 
-private[state] sealed abstract class StateTInstances extends StateTInstances0 {
+private[state] sealed abstract class StateTInstances {
   implicit def stateTMonadState[F[_], S](implicit F: Monad[F]): MonadState[StateT[F, S, ?], S] =
     new MonadState[StateT[F, S, ?], S] {
       def pure[A](a: A): StateT[F, S, A] =
@@ -116,17 +141,12 @@ private[state] sealed abstract class StateTInstances extends StateTInstances0 {
     }
 }
 
-private[state] sealed abstract class StateTInstances0 {
-  implicit def stateMonadState[S]: MonadState[State[S, ?], S] =
-    StateT.stateTMonadState[Trampoline, S]
-}
-
 // To workaround SI-7139 `object State` needs to be defined inside the package object
 // together with the type alias.
 private[state] abstract class StateFunctions {
 
   def apply[S, A](f: S => (S, A)): State[S, A] =
-    StateT.applyF(Trampoline.done((s: S) => Trampoline.done(f(s))))
+    StateT.applyF(Now((s: S) => Now(f(s))))
 
   /**
    * Return `a` and maintain the input state.

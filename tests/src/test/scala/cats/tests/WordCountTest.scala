@@ -1,7 +1,6 @@
 package cats
-package state
+package tests
 
-import cats.tests.CatsSuite
 import cats.data.{ Func, AppFunc, Const }
 import Func.{ appFunc, appFuncU }
 
@@ -44,7 +43,7 @@ class WordCountTest extends CatsSuite {
     val wordCountState = allResults.first.first
     val lineCount = allResults.first.second
     val charCount = allResults.second
-    val wordCount = wordCountState.runA(false).run
+    val wordCount = wordCountState.runA(false).value
     charCount.getConst should === (96)
     lineCount.getConst should === (2)
     wordCount.getConst should === (17)

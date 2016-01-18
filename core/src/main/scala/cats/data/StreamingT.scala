@@ -70,7 +70,9 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    */
   def filter(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
-      case Cons(a, ft) => if (f(a)) this else Wait(ft.map(_.filter(f)))
+      case Cons(a, ft) =>
+        val tail = ft.map(_.filter(f))
+        if (f(a)) Cons(a, tail) else Wait(tail)
       case Wait(ft) => Wait(ft.map(_.filter(f)))
       case Empty() => this
     }
@@ -273,11 +275,12 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    * This method will not force evaluation of any lazy part of a
    * stream. As a result, you will see at most one element (the first
    * one).
-   *
-   * Use .toString(n) to see the first n elements of the stream.
    */
-  override def toString: String =
-    "StreamingT(...)"
+  override def toString: String = this match {
+    case Cons(a, _) => s"StreamingT($a, ...)"
+    case Wait(_) => "StreamingT(...)"
+    case Empty() => "StreamingT()"
+  }
 }
 
 object StreamingT extends StreamingTInstances {
@@ -350,7 +353,9 @@ object StreamingT extends StreamingTInstances {
     Cons(a, fs)
 
   /**
-   * Create a stream from an `F[StreamingT[F, A]]` value.
+   * Create a stream from a deferred `StreamingT[F, A]` value.
+   * Note: the extent to which this defers the value depends on the `pureEval`
+   * implementation of the `Applicative[F]` instance.
    */
   def defer[F[_], A](s: => StreamingT[F, A])(implicit ev: Applicative[F]): StreamingT[F, A] =
     Wait(ev.pureEval(Always(s)))

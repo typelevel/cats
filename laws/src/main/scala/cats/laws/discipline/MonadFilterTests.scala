@@ -2,6 +2,7 @@ package cats
 package laws
 package discipline
 
+import cats.laws.discipline.MonoidalTests.Isomorphisms
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import Prop._
@@ -17,13 +18,16 @@ trait MonadFilterTests[F[_]] extends MonadTests[F] {
     ArbFBtoC: Arbitrary[F[B => C]],
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
-    EqFC: Eq[F[C]]
+    EqFC: Eq[F[C]],
+    EqFABC: Eq[F[(A, B, C)]],
+    iso: Isomorphisms[F]
   ): RuleSet = {
     new DefaultRuleSet(
       name = "monadFilter",
       parent = Some(monad[A, B, C]),
       "monadFilter left empty" -> forAll(laws.monadFilterLeftEmpty[A, B] _),
-      "monadFilter right empty" -> forAll(laws.monadFilterRightEmpty[A, B] _))
+      "monadFilter right empty" -> forAll(laws.monadFilterRightEmpty[A, B] _),
+      "monadFilter consistency" -> forAll(laws.monadFilterConsistency[A, B] _))
   }
 }
 
