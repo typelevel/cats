@@ -87,7 +87,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
-private[data] sealed trait OneAndInstances extends OneAndLowPriority1 {
+private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
 
   implicit def oneAndEq[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
     new Eq[OneAnd[F, A]]{
@@ -160,6 +160,25 @@ trait OneAndLowPriority1 extends OneAndLowPriority0 {
     new Functor[OneAnd[F, ?]] {
       def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
         OneAnd(f(fa.head), F.map(fa.tail)(f))
+    }
+}
+
+trait OneAndLowPriority2 extends OneAndLowPriority1 {
+  implicit def oneAndTraverse[F[_]](implicit F: Traverse[F]): Traverse[OneAnd[F, ?]] =
+    new Traverse[OneAnd[F, ?]] {
+      def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {
+        val tail = F.traverse(fa.tail)(f)
+        val head = f(fa.head)
+        G.ap2(head, tail)(G.pure(OneAnd(_, _)))
+      }
+
+      def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B = {
+        fa.foldLeft(b)(f)
+      }
+
+      def foldRight[A, B](fa: OneAnd[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+        fa.foldRight(lb)(f)
+      }
     }
 }
 
