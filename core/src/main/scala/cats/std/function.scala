@@ -1,7 +1,6 @@
 package cats
 package std
 
-import algebra.Eq
 import cats.arrow.{Arrow, Choice}
 import cats.data.Xor
 import cats.functor.Contravariant
