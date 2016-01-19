@@ -6,7 +6,7 @@ import cats.syntax.show._
 
 import scala.annotation.tailrec
 import scala.collection.+:
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import scala.collection.mutable.ArrayBuffer
 
 trait VectorInstances {
   implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
