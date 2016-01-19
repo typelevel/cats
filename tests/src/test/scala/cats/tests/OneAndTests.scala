@@ -14,7 +14,7 @@ class OneAndTests extends CatsSuite {
   checkAll("OneAnd[List, Int]", OrderLaws[OneAnd[List, Int]].eqv)
 
   checkAll("OneAnd[List, Int] with Option", TraverseTests[OneAnd[List, ?]].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Functor[OneAnd[List, A]]", SerializableTests.serializable(Traverse[OneAnd[List, ?]]))
+  checkAll("Traverse[OneAnd[List, A]]", SerializableTests.serializable(Traverse[OneAnd[List, ?]]))
 
   implicit val iso = MonoidalTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.oneAndFunctor(ListWrapper.functor))
 
