@@ -6,7 +6,7 @@ import cats.syntax.show._
 
 import scala.annotation.tailrec
 import scala.collection.+:
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.ListBuffer
 
 trait VectorInstances {
   implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
@@ -28,12 +28,12 @@ trait VectorInstances {
         fa.flatMap(a => fb.map(b => f(a, b)))
 
       def coflatMap[A, B](fa: Vector[A])(f: Vector[A] => B): Vector[B] = {
-        @tailrec def loop(buf: ArrayBuffer[B], as: Vector[A]): Vector[B] =
+        @tailrec def loop(buf: ListBuffer[B], as: Vector[A]): Vector[B] =
           as match {
             case _ +: rest => loop(buf += f(as), rest)
             case _ => buf.to[Vector]
           }
-        loop(ArrayBuffer.empty[B], fa)
+        loop(ListBuffer.empty[B], fa)
       }
 
       def foldLeft[A, B](fa: Vector[A], b: B)(f: (B, A) => B): B =
