@@ -44,10 +44,10 @@ object CartesianTests {
           F.imap(fs._2) { case ((a, b), c) => (a, b, c) } { case (a, b, c) => ((a, b), c) }
 
         def leftIdentity[A](fs: (F[(Unit, A)], F[A]))(implicit EqFA: Eq[F[A]]): Prop =
-          F.imap(fs._1) { case (_, a) => a } { a => ((), a) } ?== F.imap(fs._2)(identity)(identity)
+          F.imap(fs._1) { case (_, a) => a } { a => ((), a) } ?== fs._2
 
         def rightIdentity[A](fs: (F[(A, Unit)], F[A]))(implicit EqFA: Eq[F[A]]): Prop =
-          F.imap(fs._1) { case (a, _) => a } { a => (a, ()) } ?== F.imap(fs._2)(identity)(identity)
+          F.imap(fs._1) { case (a, _) => a } { a => (a, ()) } ?== fs._2
       }
   }
 
