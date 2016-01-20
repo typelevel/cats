@@ -14,12 +14,12 @@ trait Apply[F[_]] extends Functor[F] with Cartesian[F] with ApplyArityFunctions[
    * Given a value and a function in the Apply context, applies the
    * function to the value.
    */
-  def ap[A, B](fa: F[A])(ff: F[A => B]): F[B]
+  def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
 
   /**
    * ap2 is a binary version of ap, defined in terms of ap.
    */
-  def ap2[A, B, Z](fa: F[A], fb: F[B])(ff: F[(A, B) => Z]): F[Z] =
+  def ap2[A, B, Z](ff: F[(A, B) => Z])(fa: F[A], fb: F[B]): F[Z] =
     map(product(fa, product(fb, ff))) { case (a, (b, f)) => f(a, b) }
 
   /**
@@ -53,8 +53,8 @@ trait CompositeApply[F[_], G[_]]
   def F: Apply[F]
   def G: Apply[G]
 
-  def ap[A, B](fa: F[G[A]])(f: F[G[A => B]]): F[G[B]] =
-    F.ap(fa)(F.map(f)(gab => G.ap(_)(gab)))
+  def ap[A, B](f: F[G[A => B]])(fa: F[G[A]]): F[G[B]] =
+    F.ap(F.map(f)(gab => G.ap(gab)(_)))(fa)
 
   def product[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[(A, B)]] =
     F.map2(fa, fb)(G.product)
