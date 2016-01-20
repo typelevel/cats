@@ -33,7 +33,7 @@ package object cats {
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
       def coflatMap[A, B](a: A)(f: A => B): B = f(a)
       override def map[A, B](fa: A)(f: A => B): B = f(fa)
-      override def ap[A, B](fa: A)(ff: A => B): B = ff(fa)
+      override def ap[A, B](ff: A => B)(fa: A): B = ff(fa)
       override def flatten[A](ffa: A): A = ffa
       override def map2[A, B, Z](fa: A, fb: B)(f: (A, B) => Z): Z = f(fa, fb)
       override def lift[A, B](f: A => B): A => B = f

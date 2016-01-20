@@ -43,7 +43,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
       def ap[X, Y](fa: MN[X])(f: MN[X => Y]): MN[Y] = {
         val (fam, fan) = fa
         val (fm, fn) = f
-        (M.ap(fam)(fm), N.ap(fan)(fn))
+        (M.ap(fm)(fam), N.ap(fn)(fan))
       }
       def map[X, Y](fx: MN[X])(f: X => Y): MN[Y] = {
         val (mx, nx) = fx
