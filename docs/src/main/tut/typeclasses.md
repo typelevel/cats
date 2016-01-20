@@ -90,7 +90,7 @@ an implicit parameter to the method signature (with a name we do not know).
   digraph G {
     aize ="4,4";
     edge [dir=back]
-    node [shape=box]
+    node [shape=box,style="rounded"]
     Functor [group=g2]
     Apply [group=g2]
     Applicative [group=g2]
@@ -124,5 +124,8 @@ an implicit parameter to the method signature (with a name we do not know).
     }
     Monad -> Bimonad
     Apply -> FlatMap -> Monad
+    Foldable -> Traverse
+    Functor -> Traverse
+    Foldable -> Reducible
   }
 )
