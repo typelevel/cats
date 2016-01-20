@@ -22,7 +22,7 @@ import scala.{specialized => sp}
  * true      false       = -1.0    (corresponds to x < y)
  * false     true        = 1.0     (corresponds to x > y)
  */
-@typeclass trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
+@typeclass trait PartialOrder[@sp A] extends Eq[A] { self =>
 
   /**
    * Result of comparing `x` with `y`. Returns NaN if operands are not

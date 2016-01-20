@@ -7,7 +7,7 @@ import scala.annotation.{ switch, tailrec }
 /**
  * A semigroup is any set `A` with an associative operation (`combine`).
  */
-@typeclass trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
+@typeclass trait Semigroup[@sp(Int, Long, Float, Double) A] {
 
   /**
    * Associative operation taking which combines two values.

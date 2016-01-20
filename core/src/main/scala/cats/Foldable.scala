@@ -24,7 +24,7 @@ import simulacrum.typeclass
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@typeclass trait Foldable[F[_]] extends Serializable { self =>
+@typeclass trait Foldable[F[_]] { self =>
 
   /**
    * Left associative fold on 'F' using the function 'f'.
@@ -108,6 +108,31 @@ import simulacrum.typeclass
     }
 
   /**
+   * Behaves like traverse_, but uses [[Unapply]] to find the
+   * [[Applicative]] instance for `G` - used when `G` is a
+   * type constructor with two or more parameters such as [[cats.data.Xor]]
+   *
+   * {{{
+   * scala> import cats.data.Xor
+   * scala> import cats.std.list._
+   * scala> def parseInt(s: String): Xor[String, Int] =
+   *      |   try { Xor.Right(s.toInt) }
+   *      |   catch { case _: NumberFormatException => Xor.Left("boo") }
+   * scala> val F = Foldable[List]
+   * scala> F.traverseU_(List("333", "444"))(parseInt)
+   * res0: Xor[String, Unit] = Right(())
+   * scala> F.traverseU_(List("333", "zzz"))(parseInt)
+   * res1: Xor[String, Unit] = Left(boo)
+   * }}}
+   *
+   * Note that using `traverse_` instead of `traverseU_` would not compile without
+   * explicitly passing in the type parameters - the type checker has trouble
+   * inferring the appropriate instance.
+   */
+  def traverseU_[A, GB](fa: F[A])(f: A => GB)(implicit U: Unapply[Applicative, GB]): U.M[Unit] =
+    traverse_(fa)(f.andThen(U.subst))(U.TC)
+
+  /**
    * Sequence `F[G[A]]` using `Applicative[G]`.
    *
    * This is similar to `traverse_` except it operates on `F[G[A]]`
@@ -125,8 +150,30 @@ import simulacrum.typeclass
    * res1: Option[Unit] = None
    * }}}
    */
-  def sequence_[G[_]: Applicative, A, B](fga: F[G[A]]): G[Unit] =
+  def sequence_[G[_]: Applicative, A](fga: F[G[A]]): G[Unit] =
     traverse_(fga)(identity)
+
+  /**
+   * Behaves like sequence_, but uses [[Unapply]] to find the
+   * [[Applicative]] instance for `G` - used when `G` is a
+   * type constructor with two or more parameters such as [[cats.data.Xor]]
+   *
+   * {{{
+   * scala> import cats.data.Xor
+   * scala> import cats.std.list._
+   * scala> val F = Foldable[List]
+   * scala> F.sequenceU_(List(Xor.right[String, Int](333), Xor.Right(444)))
+   * res0: Xor[String, Unit] = Right(())
+   * scala> F.sequenceU_(List(Xor.right[String, Int](333), Xor.Left("boo")))
+   * res1: Xor[String, Unit] = Left(boo)
+   * }}}
+   *
+   * Note that using `sequence_` instead of `sequenceU_` would not compile without
+   * explicitly passing in the type parameters - the type checker has trouble
+   * inferring the appropriate instance.
+   */
+  def sequenceU_[GA](fa: F[GA])(implicit U: Unapply[Applicative, GA]): U.M[Unit] =
+    traverseU_(fa)(identity)
 
   /**
    * Fold implemented using the given `MonoidK[G]` instance.

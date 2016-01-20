@@ -6,7 +6,7 @@ import scala.{ specialized => sp }
 /**
  * A group is a monoid where each element has an inverse.
  */
-@typeclass trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
+@typeclass trait Group[@sp(Int, Long, Float, Double) A] extends Monoid[A] {
 
   /**
    * Find the inverse of `a`.

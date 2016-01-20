@@ -30,7 +30,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   final def foldMap[G[_]](f: F ~> G)(implicit G: Applicative[G]): G[A] =
     this match {
       case Pure(a) => G.pure(a)
-      case Ap(pivot, fn) => G.ap(f(pivot))(fn.foldMap(f))
+      case Ap(pivot, fn) => G.map2(f(pivot), fn.foldMap(f))((a, g) => g(a))
     }
 
   /** Interpret/run the operations using the semantics of `Applicative[F]`.

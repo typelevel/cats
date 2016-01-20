@@ -9,7 +9,7 @@ import scala.{ specialized => sp }
  * `combine(x, empty) == combine(empty, x) == x`. For example, if we have `Monoid[String]`,
  * with `combine` as string concatenation, then `empty = ""`.
  */
-@typeclass trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
+@typeclass trait Monoid[@sp(Int, Long, Float, Double) A] extends Semigroup[A] {
 
   /**
    * Return the identity element for this monoid.

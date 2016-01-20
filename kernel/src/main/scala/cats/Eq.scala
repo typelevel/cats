@@ -11,7 +11,7 @@ import scala.math.Equiv
  * type. Any 2 instances `x` and `y` are equal if `eqv(x, y)` is `true`.
  * Moreover, `eqv` should form an equivalence relation.
  */
-@typeclass trait Eq[@sp A] extends Any with Serializable { self =>
+@typeclass trait Eq[@sp A] { self =>
 
   /**
    * Returns `true` if `x` and `y` are equivalent, `false` otherwise.
