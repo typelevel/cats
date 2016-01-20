@@ -85,3 +85,16 @@ def log[A](a: A)(implicit s: Show[A]) = println(s.show(a))
 
 That is that declaring the type parameter as `A : Show`, it will add
 an implicit parameter to the method signature (with a name we do not know).
+
+![Typeclass hierarchy](http://g.gravizo.com/g?
+  digraph G {
+    aize ="4,4";
+    node [shape=box]
+    Functor -> Apply -> Applicative -> Monad -> MonadFilter -> MonadCombine
+    Applicative -> Alternative -> MonadCombine
+    SemigroupK -> MonoidK -> Alternative
+    Functor -> CoflatMap -> Comonad -> Bimonad
+    Monad -> Bimonad
+    Apply -> FlatMap -> Monad
+  }
+)
