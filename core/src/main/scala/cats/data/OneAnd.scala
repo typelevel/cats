@@ -161,6 +161,12 @@ trait OneAndLowPriority1 extends OneAndLowPriority0 {
       def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
         OneAnd(f(fa.head), F.map(fa.tail)(f))
     }
+
+  implicit def oneAndReducible[F[_]](implicit foldable: Foldable[F]): Reducible[OneAnd[F, ?]] =
+    new NonEmptyReducible[OneAnd[F, ?], F] {
+      def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
+    }
+
 }
 
 object OneAnd extends OneAndInstances
