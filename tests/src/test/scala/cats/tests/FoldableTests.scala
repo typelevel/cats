@@ -34,6 +34,16 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test("findMap") {
+    forAll { (fa: F[Int], n: Int) =>
+      val f: Int => Option[Double] = a => {
+        val b = a.toDouble
+        if (b > n) Some(b) else None
+      }
+      fa.findMap(f) should === (iterator(fa).collectFirst(Function.unlift(f)))
+    }
+  }
+
   test("toList/isEmpty/nonEmpty") {
     forAll { (fa: F[Int]) =>
       fa.toList should === (iterator(fa).toList)
