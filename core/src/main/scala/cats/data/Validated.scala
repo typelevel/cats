@@ -251,7 +251,7 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
       override def map[A, B](fa: Validated[E,A])(f: A => B): Validated[E, B] =
         fa.map(f)
 
-      def ap[A,B](fa: Validated[E,A])(f: Validated[E,A=>B]): Validated[E, B] =
+      def ap[A,B](f: Validated[E,A=>B])(fa: Validated[E,A]): Validated[E, B] =
         fa.ap(f)(E)
 
       def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
