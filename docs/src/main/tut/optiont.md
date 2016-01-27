@@ -74,7 +74,7 @@ val result: Future[Option[String]] = ot.value // Future(Some("Hello Jane Doe"))
 
 ## Beyond map
 
-Sometimes the operation you want to perform on an `Option[Future[String]]` might not be as simple as just wrapping the `Option` method in a `Future.map` call. For example, what if we want to greet the customer with their custom greeting if it exists but otherwise fall back to a default `Future[String]` greeting? Without `OptionT`, this implementation might look like:
+Sometimes the operation you want to perform on an `Future[Option[String]]` might not be as simple as just wrapping the `Option` method in a `Future.map` call. For example, what if we want to greet the customer with their custom greeting if it exists but otherwise fall back to a default `Future[String]` greeting? Without `OptionT`, this implementation might look like:
 
 ```tut:silent
 val defaultGreeting: Future[String] = Future.successful("hello, there")
@@ -91,7 +91,7 @@ val greeting: Future[String] = customGreetingT.getOrElseF(defaultGreeting)
 
 ## Getting to the underlying instance
 
-If you want to get the `F[Option[A]` value (in this case `Future[Option[String]]`) out of an `OptionT` instance, you can simply call  `value`:
+If you want to get the `F[Option[A]]` value (in this case `Future[Option[String]]`) out of an `OptionT` instance, you can simply call  `value`:
 
 ```tut:silent
 val customGreeting: Future[Option[String]] = customGreetingT.value
