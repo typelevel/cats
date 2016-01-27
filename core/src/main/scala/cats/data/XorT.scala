@@ -120,7 +120,7 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
    * {{{
    * scala> import cats.std.option._
    * scala> import cats.std.list._
-   * scala> import cats.syntax.monoidal._
+   * scala> import cats.syntax.cartesian._
    * scala> type Error = String
    * scala> val v1: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList("error 1"))
    * scala> val v2: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList("error 2"))

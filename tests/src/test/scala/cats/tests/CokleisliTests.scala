@@ -18,10 +18,10 @@ class CokleisliTests extends SlowCatsSuite {
   def cokleisliEqE[F[_], A](implicit A: Arbitrary[F[A]], FA: Eq[A]): Eq[Cokleisli[F, A, A]] =
     Eq.by[Cokleisli[F, A, A], F[A] => A](_.run)
 
-  implicit val iso = MonoidalTests.Isomorphisms.invariant[Cokleisli[Option, Int, ?]]
+  implicit val iso = CartesianTests.Isomorphisms.invariant[Cokleisli[Option, Int, ?]]
 
-  checkAll("Cokleisli[Option, Int, Int]", MonoidalTests[Cokleisli[Option, Int, ?]].monoidal[Int, Int, Int])
-  checkAll("Monoidal[Cokleisli[Option, Int, ?]", SerializableTests.serializable(Monoidal[Cokleisli[Option, Int, ?]]))
+  checkAll("Cokleisli[Option, Int, Int]", CartesianTests[Cokleisli[Option, Int, ?]].cartesian[Int, Int, Int])
+  checkAll("Cartesian[Cokleisli[Option, Int, ?]", SerializableTests.serializable(Cartesian[Cokleisli[Option, Int, ?]]))
 
   checkAll("Cokleisli[Option, Int, Int]", ApplicativeTests[Cokleisli[Option, Int, ?]].applicative[Int, Int, Int])
   checkAll("Applicative[Cokleisli[Option, Int, ?]", SerializableTests.serializable(Applicative[Cokleisli[Option, Int, ?]]))

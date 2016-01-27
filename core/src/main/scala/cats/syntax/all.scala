@@ -3,8 +3,8 @@ package syntax
 
 trait AllSyntax
     extends ApplySyntax
-    with MonoidalSyntax
     with BifunctorSyntax
+    with CartesianSyntax
     with CoflatMapSyntax
     with ComonadSyntax
     with ComposeSyntax

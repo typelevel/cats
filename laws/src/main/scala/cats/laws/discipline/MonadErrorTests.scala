@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import cats.data.{ Xor, XorT }
-import cats.laws.discipline.MonoidalTests.Isomorphisms
+import cats.laws.discipline.CartesianTests.Isomorphisms
 import cats.laws.discipline.eq.unitEq
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll

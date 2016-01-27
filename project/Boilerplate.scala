@@ -25,8 +25,8 @@ object Boilerplate {
 
 
   val templates: Seq[Template] = Seq(
-    GenMonoidalBuilders,
-    GenMonoidalArityFunctions,
+    GenCartesianBuilders,
+    GenCartesianArityFunctions,
     GenApplyArityFunctions
   )
 
@@ -85,8 +85,8 @@ object Boilerplate {
     The block otherwise behaves as a standard interpolated string with regards to variable substitution.
   */
 
-  object GenMonoidalBuilders extends Template {
-    def filename(root: File) = root /  "cats" / "syntax" / "MonoidalBuilder.scala"
+  object GenCartesianBuilders extends Template {
+    def filename(root: File) = root /  "cats" / "syntax" / "CartesianBuilder.scala"
 
     def content(tv: TemplateVals) = {
       import tv._
@@ -95,7 +95,7 @@ object Boilerplate {
       val tpesString = synTypes mkString ", "
       val params = (synVals zip tpes) map { case (v,t) => s"$v:$t"} mkString ", "
       val next = if (arity + 1 <= maxArity) {
-        s"def |@|[Z](z: F[Z]) = new MonoidalBuilder${arity + 1}(${`a..n`}, z)"
+        s"def |@|[Z](z: F[Z]) = new CartesianBuilder${arity + 1}(${`a..n`}, z)"
       } else {
         ""
       }
@@ -104,18 +104,18 @@ object Boilerplate {
 
       val map =
         if (arity == 1) s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F]): F[Z] = functor.map(${`a..n`})(f)"
-        else s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], monoidal: Monoidal[F]): F[Z] = Monoidal.map$n(${`a..n`})(f)"
+        else s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], cartesian: Cartesian[F]): F[Z] = Cartesian.map$n(${`a..n`})(f)"
 
       val contramap =
         if (arity == 1) s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F]): F[Z] = contravariant.contramap(${`a..n`})(f)"
-        else s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], monoidal: Monoidal[F]): F[Z] = Monoidal.contramap$n(${`a..n`})(f)"
+        else s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.contramap$n(${`a..n`})(f)"
 
       val imap =
         if (arity == 1) s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F]): F[Z] = invariant.imap(${`a..n`})(f)(g)"
-        else s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], monoidal: Monoidal[F]): F[Z] = Monoidal.imap$n(${`a..n`})(f)(g)"
+        else s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.imap$n(${`a..n`})(f)(g)"
 
       val tupled = if (arity != 1) {
-        s"def tupled(implicit invariant: Invariant[F], monoidal: Monoidal[F]): F[(${`A..N`})] = Monoidal.tuple$n(${`a..n`})"
+        s"def tupled(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[(${`A..N`})] = Cartesian.tuple$n(${`a..n`})"
       } else {
         ""
       }
@@ -126,10 +126,10 @@ object Boilerplate {
         |
         |import cats.functor.{Contravariant, Invariant}
         |
-        |private[syntax] final class MonoidalBuilder[F[_]] {
-        |  def |@|[A](a: F[A]) = new MonoidalBuilder1(a)
+        |private[syntax] final class CartesianBuilder[F[_]] {
+        |  def |@|[A](a: F[A]) = new CartesianBuilder1(a)
         |
-        -  private[syntax] final class MonoidalBuilder$arity[${`A..N`}]($params) {
+        -  private[syntax] final class CartesianBuilder$arity[${`A..N`}]($params) {
         -    $next
         -    def ap[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(${`a..n`})(f)
         -    $map
@@ -172,17 +172,17 @@ object Boilerplate {
       block"""
         |package cats
         |trait ApplyArityFunctions[F[_]] { self: Apply[F] =>
-        |  def tuple2[A, B](f1: F[A], f2: F[B]): F[(A, B)] = Monoidal.tuple2(f1, f2)(self, self)
+        |  def tuple2[A, B](f1: F[A], f2: F[B]): F[(A, B)] = Cartesian.tuple2(f1, f2)(self, self)
         -  def ap$arity[${`A..N`}, Z]($fparams)(f: F[(${`A..N`}) => Z]):F[Z] = $apply
-        -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Monoidal.map$arity($fparams)(f)(self, self)
-        -  def tuple$arity[${`A..N`}, Z]($fparams): F[(${`A..N`})] = Monoidal.tuple$arity($fparams)(self, self)
+        -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Cartesian.map$arity($fparams)(f)(self, self)
+        -  def tuple$arity[${`A..N`}, Z]($fparams): F[(${`A..N`})] = Cartesian.tuple$arity($fparams)(self, self)
         |}
       """
     }
   }
 
-  object GenMonoidalArityFunctions extends Template {
-    def filename(root: File) = root / "cats" / "MonoidalArityFunctions.scala"
+  object GenCartesianArityFunctions extends Template {
+    def filename(root: File) = root / "cats" / "CartesianArityFunctions.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
       import tv._
@@ -192,19 +192,19 @@ object Boilerplate {
       val fparams = (fargs zip tpes) map { case (v,t) => s"$v:$t"} mkString ", "
       val fargsS = fargs mkString ", "
 
-      val nestedProducts = (0 until (arity - 2)).foldRight(s"monoidal.product(f${arity - 2}, f${arity - 1})")((i, acc) => s"monoidal.product(f$i, $acc)")
+      val nestedProducts = (0 until (arity - 2)).foldRight(s"cartesian.product(f${arity - 2}, f${arity - 1})")((i, acc) => s"cartesian.product(f$i, $acc)")
       val `nested (a..n)` = (0 until (arity - 2)).foldRight(s"(a${arity - 2}, a${arity - 1})")((i, acc) => s"(a$i, $acc)")
 
       block"""
          |package cats
-         |trait MonoidalArityFunctions {
-        -  def map$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit monoidal: Monoidal[F], functor: Functor[F]): F[Z] =
+         |trait CartesianArityFunctions {
+        -  def map$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit cartesian: Cartesian[F], functor: Functor[F]): F[Z] =
         -    functor.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
-        -  def contramap$arity[F[_], ${`A..N`}, Z]($fparams)(f: Z => (${`A..N`}))(implicit monoidal: Monoidal[F], contravariant: functor.Contravariant[F]):F[Z] =
+        -  def contramap$arity[F[_], ${`A..N`}, Z]($fparams)(f: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], contravariant: functor.Contravariant[F]):F[Z] =
         -    contravariant.contramap($nestedProducts) { z => val ${`(a..n)`} = f(z); ${`nested (a..n)`} }
-        -  def imap$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit monoidal: Monoidal[F], invariant: functor.Invariant[F]):F[Z] =
+        -  def imap$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[Z] =
         -    invariant.imap($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) } { z => val ${`(a..n)`} = g(z); ${`nested (a..n)`} }
-        -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit monoidal: Monoidal[F], invariant: functor.Invariant[F]):F[(${`A..N`})] =
+        -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[(${`A..N`})] =
         -    imap$arity($fargsS)((${`_.._`}))(identity)
          |}
       """

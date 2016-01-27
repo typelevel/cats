@@ -1,16 +1,16 @@
 package cats
 package tests
 
-import cats.laws.discipline.{TraverseTests, MonadTests, SerializableTests, MonoidalTests}
+import cats.laws.discipline.{TraverseTests, MonadTests, SerializableTests, CartesianTests}
 import cats.laws.discipline.eq._
 import algebra.laws.OrderLaws
 
 class EitherTests extends CatsSuite {
 
-  implicit val iso = MonoidalTests.Isomorphisms.invariant[Either[Int, ?]]
+  implicit val iso = CartesianTests.Isomorphisms.invariant[Either[Int, ?]]
 
-  checkAll("Either[Int, Int]", MonoidalTests[Either[Int, ?]].monoidal[Int, Int, Int])
-  checkAll("Monoidal[Either[Int, ?]]", SerializableTests.serializable(Monoidal[Either[Int, ?]]))
+  checkAll("Either[Int, Int]", CartesianTests[Either[Int, ?]].cartesian[Int, Int, Int])
+  checkAll("Cartesian[Either[Int, ?]]", SerializableTests.serializable(Cartesian[Either[Int, ?]]))
 
   checkAll("Either[Int, Int]", MonadTests[Either[Int, ?]].monad[Int, Int, Int])
   checkAll("Monad[Either[Int, ?]]", SerializableTests.serializable(Monad[Either[Int, ?]]))

@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import cats.laws.discipline.MonoidalTests.Isomorphisms
+import cats.laws.discipline.CartesianTests.Isomorphisms
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import Prop._
@@ -28,7 +28,10 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
       "applicative identity" -> forAll(laws.applicativeIdentity[A] _),
       "applicative homomorphism" -> forAll(laws.applicativeHomomorphism[A, B] _),
       "applicative interchange" -> forAll(laws.applicativeInterchange[A, B] _),
-      "applicative map" -> forAll(laws.applicativeMap[A, B] _))
+      "applicative map" -> forAll(laws.applicativeMap[A, B] _),
+      "ap consistent with product + map" -> forAll(laws.apProductConsistent[A, B] _),
+      "monoidal left identity" -> forAll((fa: F[A]) => iso.leftIdentity(laws.monoidalLeftIdentity(fa))),
+      "monoidal right identity" -> forAll((fa: F[A]) => iso.rightIdentity(laws.monoidalRightIdentity(fa))))
   }
 }
 

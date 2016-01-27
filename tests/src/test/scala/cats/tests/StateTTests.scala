@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.discipline.{MonoidalTests, MonadStateTests, MonoidKTests, SerializableTests}
+import cats.laws.discipline.{CartesianTests, MonadStateTests, MonoidKTests, SerializableTests}
 import cats.state.{State, StateT}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
@@ -28,7 +28,7 @@ class StateTTests extends CatsSuite {
     }
   }
 
-  test("Monoidal syntax is usable on State") {
+  test("Cartesian syntax is usable on State") {
     val x = add1 *> add1
     x.runS(0).value should === (2)
   }
@@ -95,13 +95,13 @@ class StateTTests extends CatsSuite {
   }
 
   {
-    implicit val iso = MonoidalTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
+    implicit val iso = CartesianTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
     checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, Int, ?], Int].monadState[Int, Int, Int])
     checkAll("MonadState[StateT[Option, ?, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, Int, ?], Int]))
   }
 
   {
-    implicit val iso = MonoidalTests.Isomorphisms.invariant[State[Long, ?]]
+    implicit val iso = CartesianTests.Isomorphisms.invariant[State[Long, ?]]
     checkAll("State[Long, ?]", MonadStateTests[State[Long, ?], Long].monadState[Int, Int, Int])
     checkAll("MonadState[State[Long, ?], Long]", SerializableTests.serializable(MonadState[State[Long, ?], Long]))
   }
