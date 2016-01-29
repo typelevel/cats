@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.typeclass
+import cats.std.list._
 
 /**
  * Applicative functor.
@@ -29,6 +30,12 @@ import simulacrum.typeclass
   def pureEval[A](x: Eval[A]): F[A] = pure(x.value)
 
   /**
+    * `replicateA` creates a list of the provided Applicative Functor `fa` repeated `n` times
+    */
+  def replicateA[A](n: Int, fa: F[A]): F[List[A]] =
+    sequence(List.fill(n)(fa))
+
+  /**
    * Two sequentially dependent Applicatives can be composed.
    *
    * The composition of Applicatives `F` and `G`, `F[G[x]]`, is also an Applicative
@@ -47,7 +54,6 @@ import simulacrum.typeclass
 
   def sequence[G[_]: Traverse, A](as: G[F[A]]): F[G[A]] =
     traverse(as)(a => a)
-
 }
 
 trait CompositeApplicative[F[_],G[_]]
