@@ -36,14 +36,17 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.5.0",
-    "org.typelevel" %%% "machinist" % "0.4.1",
+    "com.github.mpilquist" %%% "simulacrum" % "0.6.1" % "provided",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport
+
+lazy val machinistDependencies = Seq(
+  libraryDependencies += "org.typelevel" %%% "machinist" % "0.4.1"
+)
 
 lazy val commonJsSettings = Seq(
   scalaJSStage in Global := FastOptStage,
@@ -56,7 +59,9 @@ lazy val commonJvmSettings = Seq(
 // JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
 ) ++ catsDoctestSettings
 
-lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
+lazy val kernelSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
+
+lazy val catsSettings = kernelSettings ++ machinistDependencies
 
 lazy val scalacheckVersion = "1.12.5"
 
@@ -128,15 +133,24 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
-
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-kernel")
-  .settings(catsSettings:_*)
+  .settings(kernelSettings:_*)
   .settings(mimaDefaultSettings:_*)
   .settings(previousArtifacts := Set(
     // TODO: Add cats-kernel artifacts as they are released, e.g.
     //   "org.spire-math" %% "cats-kernel" % "0.4.0"
   ))
+  .settings(pomPostProcess := { (node) =>
+    import scala.xml._
+    import scala.xml.transform._
+    def stripIf(f: Node => Boolean) = new RewriteRule {
+      override def transform(n: Node) =
+        if (f(n)) NodeSeq.Empty else n
+    }
+    val stripProvidedScope = stripIf { n => n.label == "dependency" && (n \ "scope").text == "provided" }
+    new RuleTransformer(stripProvidedScope).transform(node)(0)
+  })
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 

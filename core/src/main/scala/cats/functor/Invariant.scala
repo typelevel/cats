@@ -6,7 +6,7 @@ import simulacrum.typeclass
 /**
  * Must obey the laws defined in cats.laws.InvariantLaws.
  */
-@typeclass trait Invariant[F[_]] extends Any with Serializable { self =>
+@typeclass trait Invariant[F[_]] { self =>
   def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
 
   /**

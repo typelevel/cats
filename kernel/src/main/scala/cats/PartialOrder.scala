@@ -1,5 +1,6 @@
 package cats
 
+import simulacrum.typeclass
 import scala.{specialized => sp}
 
 /**
@@ -21,7 +22,7 @@ import scala.{specialized => sp}
  * true      false       = -1.0    (corresponds to x < y)
  * false     true        = 1.0     (corresponds to x > y)
  */
-trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
+@typeclass trait PartialOrder[@sp A] extends Eq[A] { self =>
 
   /**
    * Result of comparing `x` with `y`. Returns NaN if operands are not
@@ -88,7 +89,7 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
   /**
    * Returns true if `x` = `y`, false otherwise.
    */
-  def eqv(x: A, y: A): Boolean = partialCompare(x, y) == 0
+  override def eqv(x: A, y: A): Boolean = partialCompare(x, y) == 0
 
   /**
    * Returns true if `x` <= `y`, false otherwise.
@@ -136,11 +137,6 @@ trait PartialOrderFunctions {
 }
 
 object PartialOrder extends PartialOrderFunctions {
-
-  /**
-   * Access an implicit `Eq[A]`.
-   */
-  @inline final def apply[A](implicit ev: PartialOrder[A]) = ev
 
   /**
    * Convert an implicit `PartialOrder[A]` to an `PartialOrder[B]`

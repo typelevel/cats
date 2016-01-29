@@ -1,5 +1,6 @@
 package cats
 
+import simulacrum.typeclass
 import scala.{specialized => sp}
 
 /**
@@ -19,7 +20,7 @@ import scala.{specialized => sp}
  *
  * By the totality law, x <= y and y <= x cannot be both false.
  */
-trait Order[@sp A] extends Any with PartialOrder[A] { self =>
+@typeclass trait Order[@sp A] extends PartialOrder[A] { self =>
 
   /**
    * Result of comparing `x` with `y`. Returns an Int whose sign is:
@@ -29,7 +30,7 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    */
   def compare(x: A, y: A): Int
 
-  def partialCompare(x: A, y: A): Double = compare(x, y).toDouble
+  override def partialCompare(x: A, y: A): Double = compare(x, y).toDouble
 
   /**
    * If x <= y, return x, else return y.
@@ -146,11 +147,6 @@ trait OrderFunctions {
 }
 
 object Order extends OrderFunctions {
-
-  /**
-   * Access an implicit `Eq[A]`.
-   */
-  @inline final def apply[A](implicit ev: Order[A]) = ev
 
   /**
    * Convert an implicit `Order[A]` to an `Order[B]` using the given

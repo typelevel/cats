@@ -1,12 +1,13 @@
 package cats
 
+import simulacrum.typeclass
 import scala.{ specialized => sp }
 import scala.annotation.{ switch, tailrec }
 
 /**
  * A semigroup is any set `A` with an associative operation (`combine`).
  */
-trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
+@typeclass trait Semigroup[@sp(Int, Long, Float, Double) A] {
 
   /**
    * Associative operation taking which combines two values.
@@ -64,10 +65,4 @@ trait SemigroupFunctions[S[T] <: Semigroup[T]] {
     ev.combineAllOption(as)
 }
 
-object Semigroup extends SemigroupFunctions[Semigroup] {
-
-  /**
-   * Access an implicit `Semigroup[A]`.
-   */
-  @inline final def apply[A](implicit ev: Semigroup[A]) = ev
-}
+object Semigroup extends SemigroupFunctions[Semigroup]

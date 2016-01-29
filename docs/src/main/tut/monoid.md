@@ -2,7 +2,7 @@
 layout: default
 title:  "Monoid"
 section: "typeclasses"
-source: "https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Monoid.scala"
+source: "https://github.com/non/cats/blob/master/kernel/src/main/scala/cats/Monoid.scala"
 
 ---
 # Monoid
@@ -81,13 +81,3 @@ Thus.
 ```tut
 l.foldMap(i => (i, i.toString)) // do both of the above in one pass, hurrah!
 ```
-
--------------------------------------------------------------------------------
- 
-N.B.
-Cats does not define a `Monoid` type class itself, it uses the [`Monoid`
-trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Monoid.scala)
-which is defined in the [algebra project](https://github.com/non/algebra) on 
-which it depends. The [`cats` package object](https://github.com/non/cats/blob/master/core/src/main/scala/cats/package.scala)
-defines type aliases to the `Monoid` from algebra, so that you can
-`import cats.Monoid`.

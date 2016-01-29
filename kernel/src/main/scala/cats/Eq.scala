@@ -1,5 +1,7 @@
 package cats
 
+import simulacrum.typeclass
+
 import scala.{specialized => sp}
 
 import scala.math.Equiv
@@ -9,7 +11,7 @@ import scala.math.Equiv
  * type. Any 2 instances `x` and `y` are equal if `eqv(x, y)` is `true`.
  * Moreover, `eqv` should form an equivalence relation.
  */
-trait Eq[@sp A] extends Any with Serializable { self =>
+@typeclass trait Eq[@sp A] { self =>
 
   /**
    * Returns `true` if `x` and `y` are equivalent, `false` otherwise.
@@ -57,11 +59,6 @@ trait EqFunctions {
 }
 
 object Eq extends EqFunctions {
-
-  /**
-   * Access an implicit `Eq[A]`.
-   */
-  @inline final def apply[A](implicit ev: Eq[A]): Eq[A] = ev
 
   /**
    * Convert an implicit `Eq[B]` to an `Eq[A]` using the given

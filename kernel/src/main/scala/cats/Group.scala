@@ -1,11 +1,12 @@
 package cats
 
+import simulacrum.typeclass
 import scala.{ specialized => sp }
 
 /**
  * A group is a monoid where each element has an inverse.
  */
-trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
+@typeclass trait Group[@sp(Int, Long, Float, Double) A] extends Monoid[A] {
 
   /**
    * Find the inverse of `a`.
@@ -39,10 +40,4 @@ trait GroupFunctions[G[T] <: Group[T]] extends MonoidFunctions[Group] {
     ev.remove(x, y)
 }
 
-object Group extends GroupFunctions[Group] {
-
-  /**
-   * Access an implicit `Group[A]`.
-   */
-  @inline final def apply[A](implicit ev: Group[A]): Group[A] = ev
-}
+object Group extends GroupFunctions[Group]

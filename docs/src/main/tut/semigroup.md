@@ -2,7 +2,7 @@
 layout: default
 title:  "Semigroup"
 section: "typeclasses"
-source: "https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala"
+source: "https://github.com/non/cats/blob/master/kernel/src/main/scala/cats/Semigroup.scala"
 
 ---
 # Semigroup
@@ -94,11 +94,3 @@ Option. If we try to use Some and None, we'll get errors:
 Some(1) |+| None
 None |+| Some(1)
 ```
-
-N.B.
-Cats does not define a `Semigroup` type class itself, it uses the [`Semigroup`
-trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala)
-which is defined in the [algebra project](https://github.com/non/algebra) on 
-which it depends. The [`cats` package object](https://github.com/non/cats/blob/master/core/src/main/scala/cats/package.scala)
-defines type aliases to the `Semigroup` from algebra, so that you can
-`import cats.Semigroup`.
