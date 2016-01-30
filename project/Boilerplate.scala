@@ -131,7 +131,7 @@ object Boilerplate {
         |
         -  private[syntax] final class CartesianBuilder$arity[${`A..N`}]($params) {
         -    $next
-        -    def ap[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)(${`a..n`})
+        -    def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)(${`a..n`})
         -    $map
         -    $contramap
         -    $imap
