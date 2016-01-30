@@ -42,8 +42,8 @@ binary-compatibility guarantees.*
 ### Documentation
 Among the goals of Cats is to provide approachable and useful documentation.
 Documentation is available in the form of tutorials on the Cats
-[website](http://non.github.io/cats/), as well as through
-[Scaladoc](http://non.github.io/cats/api/#package) (also reachable through
+[website](http://typelevel.github.io/cats/), as well as through
+[Scaladoc](http://typelevel.github.io/cats/api/#package) (also reachable through
 the website).
 
 ### Building Cats
