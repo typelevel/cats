@@ -165,11 +165,11 @@ class SyntaxTests extends AllInstances with AllSyntax {
   def testApply[F[_]: Apply, A, B, C, D, Z]: Unit = {
     val fa = mock[F[A]]
     val fab = mock[F[A => B]]
-    val fb0: F[B] = fa.ap(fab)
+    val fb0: F[B] = fab.ap(fa)
 
     val fb = mock[F[B]]
     val fabz = mock[F[(A, B) => Z]]
-    val fz0: F[Z] = fa.ap2(fb)(fabz)
+    val fz0: F[Z] = fabz.ap2(fa, fb)
 
     val f = mock[(A, B) => Z]
     val fz1: F[Z] = fa.map2(fb)(f)

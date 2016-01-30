@@ -165,7 +165,7 @@ trait OneAndLowPriority2 extends OneAndLowPriority1 {
       def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {
         val tail = F.traverse(fa.tail)(f)
         val head = f(fa.head)
-        G.ap2(head, tail)(G.pure(OneAnd(_, _)))
+        G.ap2[B, F[B], OneAnd[F, B]](G.pure(OneAnd(_, _)))(head, tail)
       }
 
       def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B = {
