@@ -14,4 +14,9 @@ import simulacrum.typeclass
 @typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
+
+  /**
+   * Lift a value of type M[A] into a monad transformer MT[M, A]
+   */
+  def liftM[MT[_[_], _]](ma: M[A])(implicit MT: MonadTrans[MT]): MT[F, A] = MT.liftM(ma)
 }
