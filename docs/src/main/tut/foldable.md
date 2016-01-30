@@ -120,5 +120,5 @@ With the lazy `foldRight` on `Foldable`, the calculation terminates
 after looking at only one value:
 
 ```tut
-Foldable[Stream].foldRight(allFalse, Eval.now(true))((a,b) => Eval.now(a && b.value)).value
+Foldable[Stream].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.now(false)).value
 ```
