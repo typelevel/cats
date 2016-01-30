@@ -46,4 +46,7 @@ package object data {
   object Writer {
     def apply[L, V](l: L, v: V): WriterT[Id, L, V] = WriterT[Id, L, V]((l, v))
   }
+
+  type State[S, A] = StateT[Eval, S, A]
+  object State extends StateFunctions
 }
