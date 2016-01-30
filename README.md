@@ -1,9 +1,9 @@
 ## Cats
 
-[![Build Status](https://api.travis-ci.org/non/cats.svg)](https://travis-ci.org/non/cats)
-[![Workflow](https://badge.waffle.io/non/cats.svg?label=ready&title=Ready)](https://waffle.io/non/cats)
-[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
-[![codecov.io](http://codecov.io/github/non/cats/coverage.svg?branch=master)](http://codecov.io/github/non/cats?branch=master)
+[![Build Status](https://api.travis-ci.org/typelevel/cats.svg)](https://travis-ci.org/typelevel/cats)
+[![Workflow](https://badge.waffle.io/typelevel/cats.svg?label=ready&title=Ready)](https://waffle.io/typelevel/cats)
+[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
+[![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/org.spire-math/cats_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/org.spire-math/cats_2.11)
 
 ### Overview
