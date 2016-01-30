@@ -30,7 +30,7 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.6.2-SNAPSHOT",
+    "com.github.mpilquist" %%% "simulacrum" % "0.7.0",
     "org.spire-math" %%% "algebra" % "0.3.1",
     "org.spire-math" %%% "algebra-std" % "0.3.1",
     "org.typelevel" %%% "machinist" % "0.4.1",
