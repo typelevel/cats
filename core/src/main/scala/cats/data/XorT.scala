@@ -280,7 +280,7 @@ private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L]
 private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
   implicit val F: Monad[F]
   implicit val L: Semigroup[L]
-  def combine[A](x: XorT[F, L, A], y: XorT[F, L, A]): XorT[F, L, A] =
+  def combineK[A](x: XorT[F, L, A], y: XorT[F, L, A]): XorT[F, L, A] =
     XorT(F.flatMap(x.value) {
       case Xor.Left(l1) => F.map(y.value) {
         case Xor.Left(l2) => Xor.Left(L.combine(l1, l2))

@@ -64,32 +64,31 @@ takes a concrete type, like `Int`, and returns a concrete type:
 *`, whereas `Int` would have kind `*` and `Map` would have kind `*,* -> *`,
 and, in fact, the `K` in `SemigroupK` stands for `Kind`.
 
-For `List`, the `Semigroup` and `SemigroupK` instance's `combine`
-operation are both list concatenation:
+For `List`, the `Semigroup` instance's `combine` operation and the `SemigroupK`
+instance's `combineK` operation are both list concatenation:
 
 ```tut
-SemigroupK[List].combine(List(1,2,3), List(4,5,6)) == Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
+SemigroupK[List].combineK(List(1,2,3), List(4,5,6)) == Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
 ```
 
-However for `Option`, `Semigroup` and `SemigroupK`'s `combine` operation
-differs. Since `Semigroup` operates on fully specified types, a
-`Semigroup[Option[A]]` knows the concrete type of `A` and will
-use `Semigroup[A].combine` to combine the inner `A`s. Consequently,
-`Semigroup[Option[A]].combine` requires an implicit
-`Semigroup[A]`.
+However for `Option`, the `Semigroup`'s `combine` and the `SemigroupK`'s
+`combineK` operation differ. Since `Semigroup` operates on fully specified
+types, a `Semigroup[Option[A]]` knows the concrete type of `A` and will use
+`Semigroup[A].combine` to combine the inner `A`s. Consequently,
+`Semigroup[Option[A]].combine` requires an implicit `Semigroup[A]`.
 
 In contrast, since `SemigroupK[Option]` operates on `Option` where
 the inner type is not fully specified and can be anything (i.e. is
 "universally quantified"). Thus, we cannot know how to `combine`
 two of them. Therefore, in the case of `Option` the
-`SemigroupK[Option].combine` method has no choice but to use the
+`SemigroupK[Option].combineK` method has no choice but to use the
 `orElse` method of Option:
 
 ```tut
 Semigroup[Option[Int]].combine(Some(1), Some(2))
-SemigroupK[Option].combine(Some(1), Some(2))
-SemigroupK[Option].combine(Some(1), None)
-SemigroupK[Option].combine(None, Some(2))
+SemigroupK[Option].combineK(Some(1), Some(2))
+SemigroupK[Option].combineK(Some(1), None)
+SemigroupK[Option].combineK(None, Some(2))
 ```
 
 There is inline syntax available for both `Semigroup` and

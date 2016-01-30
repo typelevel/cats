@@ -62,8 +62,8 @@ object ListWrapper {
 
   val semigroupK: SemigroupK[ListWrapper] =
     new SemigroupK[ListWrapper] {
-      def combine[A](x: ListWrapper[A], y: ListWrapper[A]): ListWrapper[A] =
-        ListWrapper(SemigroupK[List].combine(x.list, y.list))
+      def combineK[A](x: ListWrapper[A], y: ListWrapper[A]): ListWrapper[A] =
+        ListWrapper(SemigroupK[List].combineK(x.list, y.list))
     }
 
   def semigroup[A]: Semigroup[ListWrapper[A]] = semigroupK.algebra[A]
@@ -79,8 +79,8 @@ object ListWrapper {
 
       def empty[A]: ListWrapper[A] = ListWrapper(M.empty[A])
 
-      def combine[A](x: ListWrapper[A], y: ListWrapper[A]): ListWrapper[A] =
-        ListWrapper(M.combine(x.list, y.list))
+      def combineK[A](x: ListWrapper[A], y: ListWrapper[A]): ListWrapper[A] =
+        ListWrapper(M.combineK(x.list, y.list))
     }
   }
 

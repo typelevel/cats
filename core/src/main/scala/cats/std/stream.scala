@@ -10,7 +10,7 @@ trait StreamInstances {
 
       def empty[A]: Stream[A] = Stream.Empty
 
-      def combine[A](x: Stream[A], y: Stream[A]): Stream[A] = x #::: y
+      def combineK[A](x: Stream[A], y: Stream[A]): Stream[A] = x #::: y
 
       def pure[A](x: A): Stream[A] = Stream(x)
 

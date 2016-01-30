@@ -438,7 +438,7 @@ private[data] sealed trait StreamingTInstances extends StreamingTInstances1 {
         fa.flatMap(f)
       def empty[A]: StreamingT[F, A] =
         StreamingT.empty
-      def combine[A](xs: StreamingT[F, A], ys: StreamingT[F, A]): StreamingT[F, A] =
+      def combineK[A](xs: StreamingT[F, A], ys: StreamingT[F, A]): StreamingT[F, A] =
         xs %::: ys
       override def filter[A](fa: StreamingT[F, A])(f: A => Boolean): StreamingT[F, A] =
         fa.filter(f)

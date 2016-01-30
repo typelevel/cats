@@ -9,7 +9,7 @@ trait OptionInstances extends OptionInstances1 {
 
       def empty[A]: Option[A] = None
 
-      def combine[A](x: Option[A], y: Option[A]): Option[A] = x orElse y
+      def combineK[A](x: Option[A], y: Option[A]): Option[A] = x orElse y
 
       def pure[A](x: A): Option[A] = Some(x)
 

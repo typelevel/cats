@@ -19,21 +19,21 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
    * Combine the head and tail into a single `F[A]` value.
    */
   def unwrap(implicit F: MonadCombine[F]): F[A] =
-    F.combine(F.pure(head), tail)
+    F.combineK(F.pure(head), tail)
 
   /**
    * remove elements not matching the predicate
    */
   def filter(f: A => Boolean)(implicit F: MonadCombine[F]): F[A] = {
     val rest = F.filter(tail)(f)
-    if (f(head)) F.combine(F.pure(head), rest) else rest
+    if (f(head)) F.combineK(F.pure(head), rest) else rest
   }
 
   /**
    * Append another OneAnd to this
    */
   def combine(other: OneAnd[F, A])(implicit F: MonadCombine[F]): OneAnd[F, A] =
-    OneAnd(head, F.combine(tail, F.combine(F.pure(other.head), other.tail)))
+    OneAnd(head, F.combineK(tail, F.combineK(F.pure(other.head), other.tail)))
 
   /**
    * find the first element matching the predicate, if one exists
@@ -99,7 +99,7 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
 
   implicit def oneAndSemigroupK[F[_]: MonadCombine]: SemigroupK[OneAnd[F, ?]] =
     new SemigroupK[OneAnd[F, ?]] {
-      def combine[A](a: OneAnd[F, A], b: OneAnd[F, A]): OneAnd[F, A] =
+      def combineK[A](a: OneAnd[F, A], b: OneAnd[F, A]): OneAnd[F, A] =
         a combine b
     }
 
@@ -122,10 +122,10 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
       def flatMap[A, B](fa: OneAnd[F, A])(f: A => OneAnd[F, B]): OneAnd[F, B] = {
         val end = monad.flatMap(fa.tail) { a =>
           val fa = f(a)
-          monad.combine(monad.pure(fa.head), fa.tail)
+          monad.combineK(monad.pure(fa.head), fa.tail)
         }
         val fst = f(fa.head)
-        OneAnd(fst.head, monad.combine(fst.tail, end))
+        OneAnd(fst.head, monad.combineK(fst.tail, end))
       }
     }
 }
