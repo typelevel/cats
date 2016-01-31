@@ -19,6 +19,7 @@ trait AllSyntax
     with ListSyntax
     with MonadCombineSyntax
     with MonadFilterSyntax
+    with MonadSyntax
     with OptionSyntax
     with OrderSyntax
     with PartialOrderSyntax

@@ -3,7 +3,6 @@ package cats
 package object syntax {
   object all extends AllSyntax
   object apply extends ApplySyntax
-  object monoidal extends MonoidalSyntax
   object bifunctor extends BifunctorSyntax
   object coflatMap extends CoflatMapSyntax
   object comonad extends ComonadSyntax
@@ -18,6 +17,8 @@ package object syntax {
   object invariant extends InvariantSyntax
   object monadCombine extends MonadCombineSyntax
   object monadFilter extends MonadFilterSyntax
+  object monoidal extends MonoidalSyntax
+  object monad extends MonadSyntax
   object option extends OptionSyntax
   object order extends OrderSyntax
   object partialOrder extends PartialOrderSyntax
@@ -29,6 +30,6 @@ package object syntax {
   object streaming extends StreamingSyntax
   object strong extends StrongSyntax
   object traverse extends TraverseSyntax
-  object xor extends XorSyntax
   object validated extends ValidatedSyntax
+  object xor extends XorSyntax
 }

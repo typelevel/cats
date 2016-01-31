@@ -18,5 +18,5 @@ import simulacrum.typeclass
   /**
    * Lift a value of type M[A] into a monad transformer MT[M, A]
    */
-  def liftM[MT[_[_], _]](ma: M[A])(implicit MT: MonadTrans[MT]): MT[F, A] = MT.liftM(ma)
+  def liftM[MT[_[_], _], A](ma: F[A])(implicit MT: MonadTrans[MT]): MT[F, A] = MT.liftM(ma)(this)
 }
