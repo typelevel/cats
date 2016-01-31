@@ -4,7 +4,9 @@ package object syntax {
   object all extends AllSyntax
   object apply extends ApplySyntax
   object bifunctor extends BifunctorSyntax
+  object cartesian extends CartesianSyntax
   object coflatMap extends CoflatMapSyntax
+  object coproduct extends CoproductSyntax
   object comonad extends ComonadSyntax
   object compose extends ComposeSyntax
   object contravariant extends ContravariantSyntax
@@ -15,10 +17,9 @@ package object syntax {
   object functor extends FunctorSyntax
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
+  object monad extends MonadSyntax
   object monadCombine extends MonadCombineSyntax
   object monadFilter extends MonadFilterSyntax
-  object monoidal extends MonoidalSyntax
-  object monad extends MonadSyntax
   object option extends OptionSyntax
   object order extends OrderSyntax
   object partialOrder extends PartialOrderSyntax
@@ -30,6 +31,6 @@ package object syntax {
   object streaming extends StreamingSyntax
   object strong extends StrongSyntax
   object traverse extends TraverseSyntax
-  object validated extends ValidatedSyntax
   object xor extends XorSyntax
+  object validated extends ValidatedSyntax
 }
