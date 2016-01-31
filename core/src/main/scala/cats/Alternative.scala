@@ -3,8 +3,9 @@ package cats
 import simulacrum.typeclass
 
 @typeclass trait Alternative[F[_]] extends Applicative[F] with MonoidK[F] { self =>
+
   /**
-   * Compose two Alternative intsances.
+   * Compose this `Alternative` instance with an [[Applicative]] instance.
    */
   override def compose[G[_]](implicit GG: Applicative[G]): Alternative[λ[α => F[G[α]]]] =
     new CompositeAlternative[F, G] {

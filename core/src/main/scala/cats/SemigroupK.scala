@@ -31,15 +31,10 @@ import simulacrum.{op, typeclass}
   /**
    * Compose this SemigroupK with an arbitrary type constructor
    */
-  def composedWith[G[_]]: SemigroupK[λ[α => F[G[α]]]] =
+  def composeK[G[_]]: SemigroupK[λ[α => F[G[α]]]] =
     new CompositeSemigroupK[F, G] {
       implicit def F: SemigroupK[F] = self
     }
-
-  /**
-   * Compose two SemigroupK instances.
-   */
-  def compose[G[_]](implicit GG: SemigroupK[G]): SemigroupK[λ[α => F[G[α]]]] = composedWith[G]
 
   /**
    * Given a type A, create a concrete Semigroup[F[A]].

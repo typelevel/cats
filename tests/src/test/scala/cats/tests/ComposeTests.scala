@@ -41,7 +41,7 @@ class ComposeTests extends CatsSuite {
   {
     // MonoidK composition
 
-    implicit val monoidKListVector: MonoidK[Lambda[A => List[Vector[A]]]] = MonoidK[List] compose MonoidK[Vector]
+    implicit val monoidKListVector: MonoidK[Lambda[A => List[Vector[A]]]] = MonoidK[List].composeK[Vector]
 
     checkAll("MonoidK[Lambda[A => List[Vector[A]]]]", MonoidKTests[Lambda[A => List[Vector[A]]]].monoidK[Int])
   }
@@ -59,7 +59,7 @@ class ComposeTests extends CatsSuite {
   {
     // SemigroupK composition
 
-    implicit val semigroupKListVector: SemigroupK[Lambda[A => List[Vector[A]]]] = SemigroupK[List] compose SemigroupK[Vector]
+    implicit val semigroupKListVector: SemigroupK[Lambda[A => List[Vector[A]]]] = SemigroupK[List].composeK[Vector]
 
     checkAll("SemigroupK[Lambda[A => List[Vector[A]]]]", SemigroupKTests[Lambda[A => List[Vector[A]]]].semigroupK[Int])
   }
