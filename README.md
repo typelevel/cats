@@ -42,8 +42,8 @@ binary-compatibility guarantees.*
 ### Documentation
 Among the goals of Cats is to provide approachable and useful documentation.
 Documentation is available in the form of tutorials on the Cats
-[website](http://non.github.io/cats/), as well as through
-[Scaladoc](http://non.github.io/cats/api/#package) (also reachable through
+[website](http://typelevel.org/cats), as well as through
+[Scaladoc](http://typelevel.org/cats/api/#package) (also reachable through
 the website).
 
 ### Building Cats
@@ -186,9 +186,9 @@ relax this to a single sign-off.
 ### Contributing
 
 Discussion around Cats is currently happening in the
-[Gitter channel](https://gitter.im/non/cats) as well as on Github
+[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
 issue and PR pages. You can get an overview of who is working on what
-via [Waffle.io](https://waffle.io/non/cats).
+via [Waffle.io](https://waffle.io/typelevel/cats).
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also
