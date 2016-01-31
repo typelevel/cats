@@ -1,9 +1,9 @@
 package cats
 package tests
 
-import cats.data.{NonEmptyList, Validated, ValidatedNel, Xor}
+import cats.data.{NonEmptyList, Validated, ValidatedNel, Xor, XorT}
 import cats.data.Validated.{Valid, Invalid}
-import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeTests, SerializableTests, MonoidalTests}
+import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeErrorTests, SerializableTests, CartesianTests}
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.arbitrary._
@@ -13,16 +13,19 @@ import algebra.laws.{OrderLaws, GroupLaws}
 import scala.util.Try
 
 class ValidatedTests extends CatsSuite {
-  implicit val iso = MonoidalTests.Isomorphisms.invariant[Validated[String, ?]]
-  checkAll("Validated[String, Int]", MonoidalTests[Validated[String,?]].monoidal[Int, Int, Int])
-  checkAll("Monoidal[Validated[String,?]]", SerializableTests.serializable(Monoidal[Validated[String,?]]))
+  implicit val iso = CartesianTests.Isomorphisms.invariant[Validated[String, ?]]
+  checkAll("Validated[String, Int]", CartesianTests[Validated[String,?]].cartesian[Int, Int, Int])
+  checkAll("Cartesian[Validated[String,?]]", SerializableTests.serializable(Cartesian[Validated[String,?]]))
 
-  checkAll("Validated[String, Int]", ApplicativeTests[Validated[String,?]].applicative[Int, Int, Int])
   checkAll("Validated[?, ?]", BifunctorTests[Validated].bifunctor[Int, Int, Int, Int, Int, Int])
-  checkAll("Applicative[Validated[String,?]]", SerializableTests.serializable(Applicative[Validated[String,?]]))
+
+  implicit val eq0 = XorT.xorTEq[Validated[String, ?], String, Int]
+
+  checkAll("Validated[String, Int]", ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
+  checkAll("ApplicativeError[Xor, String]", SerializableTests.serializable(ApplicativeError[Validated[String, ?], String]))
 
   checkAll("Validated[String, Int] with Option", TraverseTests[Validated[String,?]].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[Validated[String,?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
+  checkAll("Traverse[Validated[String, ?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
 
   checkAll("Validated[String, Int]", OrderLaws[Validated[String, Int]].order)
   checkAll("Order[Validated[String, Int]]", SerializableTests.serializable(Order[Validated[String, Int]]))
@@ -47,7 +50,7 @@ class ValidatedTests extends CatsSuite {
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)
-    Applicative[Validated[String, ?]].ap2(Invalid("1"), Invalid("2"))(Valid(plus)) should === (Invalid("12"))
+    Applicative[Validated[String, ?]].ap2(Valid(plus))(Invalid("1"), Invalid("2")) should === (Invalid("12"))
   }
 
   test("catchOnly catches matching exceptions") {

@@ -40,12 +40,12 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
     XorT(F.map(value)(_.recover(pf)))
 
   def recoverWith(pf: PartialFunction[A, XorT[F, A, B]])(implicit F: Monad[F]): XorT[F, A, B] =
-    XorT(F.flatMap(value) { xor =>
-      xor match {
-        case Xor.Left(a) if pf.isDefinedAt(a) => pf(a).value
-        case _                                => F.pure(xor)
-      }
+    XorT(F.flatMap(value) {
+      case Xor.Left(a) if pf.isDefinedAt(a) => pf(a).value
+      case other => F.pure(other)
     })
+
+  def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F]): F[BB] = fold(f, identity)
 
   def forall(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.forall(f))
 
@@ -64,7 +64,7 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): XorT[F, C, D] = XorT(F.map(value)(_.bimap(fa, fb)))
 
   def applyAlt[D](ff: XorT[F, A, B => D])(implicit F: Apply[F]): XorT[F, A, D] =
-    XorT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[A Xor ?].ap(xb)(xbd)))
+    XorT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[A Xor ?].ap(xbd)(xb)))
 
   def flatMap[AA >: A, D](f: B => XorT[F, AA, D])(implicit F: Monad[F]): XorT[F, AA, D] =
     XorT(F.flatMap(value) {
@@ -120,7 +120,7 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
    * {{{
    * scala> import cats.std.option._
    * scala> import cats.std.list._
-   * scala> import cats.syntax.monoidal._
+   * scala> import cats.syntax.cartesian._
    * scala> type Error = String
    * scala> val v1: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList("error 1"))
    * scala> val v2: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList("error 2"))
@@ -280,7 +280,7 @@ private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L]
 private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
   implicit val F: Monad[F]
   implicit val L: Semigroup[L]
-  def combine[A](x: XorT[F, L, A], y: XorT[F, L, A]): XorT[F, L, A] =
+  def combineK[A](x: XorT[F, L, A], y: XorT[F, L, A]): XorT[F, L, A] =
     XorT(F.flatMap(x.value) {
       case Xor.Left(l1) => F.map(y.value) {
         case Xor.Left(l2) => Xor.Left(L.combine(l1, l2))

@@ -2,14 +2,19 @@ package cats
 package std
 
 import cats.data.Streaming
+import cats.syntax.show._
+
+import scala.annotation.tailrec
+import scala.collection.+:
+import scala.collection.immutable.VectorBuilder
 
 trait VectorInstances {
-  implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] =
-    new Traverse[Vector] with MonadCombine[Vector] {
+  implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
+    new Traverse[Vector] with MonadCombine[Vector] with CoflatMap[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 
-      def combine[A](x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
+      def combineK[A](x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
 
       def pure[A](x: A): Vector[A] = Vector(x)
 
@@ -21,6 +26,15 @@ trait VectorInstances {
 
       override def map2[A, B, Z](fa: Vector[A], fb: Vector[B])(f: (A, B) => Z): Vector[Z] =
         fa.flatMap(a => fb.map(b => f(a, b)))
+
+      def coflatMap[A, B](fa: Vector[A])(f: Vector[A] => B): Vector[B] = {
+        @tailrec def loop(builder: VectorBuilder[B], as: Vector[A]): Vector[B] =
+          as match {
+            case _ +: rest => loop(builder += f(as), rest)
+            case _ => builder.result()
+          }
+        loop(new VectorBuilder[B], fa)
+      }
 
       def foldLeft[A, B](fa: Vector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
@@ -41,6 +55,11 @@ trait VectorInstances {
 
       override def toStreaming[A](fa: Vector[A]): Streaming[A] =
         Streaming.fromVector(fa)
+    }
+
+  implicit def vectorShow[A:Show]: Show[Vector[A]] =
+    new Show[Vector[A]] {
+      def show(fa: Vector[A]): String = fa.map(_.show).mkString("Vector(", ", ", ")")
     }
 
   // TODO: eventually use algebra's instances (which will deal with

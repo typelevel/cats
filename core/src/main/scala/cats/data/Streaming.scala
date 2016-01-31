@@ -866,7 +866,7 @@ private[data] sealed trait StreamingInstances extends StreamingInstances1 {
         as.flatMap(f)
       def empty[A]: Streaming[A] =
         Streaming.empty
-      def combine[A](xs: Streaming[A], ys: Streaming[A]): Streaming[A] =
+      def combineK[A](xs: Streaming[A], ys: Streaming[A]): Streaming[A] =
         xs ++ ys
 
       override def map2[A, B, Z](fa: Streaming[A], fb: Streaming[B])(f: (A, B) => Z): Streaming[Z] =

@@ -48,7 +48,7 @@ import simulacrum.typeclass
   override def algebra[A]: Monoid[F[A]] =
     new Monoid[F[A]] {
       def empty: F[A] = self.empty
-      def combine(x: F[A], y: F[A]): F[A] = self.combine(x, y)
+      def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
     }
 }
 

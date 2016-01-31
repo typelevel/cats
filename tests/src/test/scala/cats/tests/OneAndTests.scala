@@ -4,7 +4,7 @@ package tests
 import algebra.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{NonEmptyList, OneAnd}
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, MonoidalTests}
+import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests}
 import cats.laws.discipline.arbitrary.{evalArbitrary, oneAndArbitrary}
 import cats.laws.discipline.eq._
 
@@ -13,13 +13,16 @@ import scala.util.Random
 class OneAndTests extends CatsSuite {
   checkAll("OneAnd[List, Int]", OrderLaws[OneAnd[List, Int]].eqv)
 
-  implicit val iso = MonoidalTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.oneAndFunctor(ListWrapper.functor))
+  checkAll("OneAnd[List, Int] with Option", TraverseTests[OneAnd[List, ?]].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[OneAnd[List, A]]", SerializableTests.serializable(Traverse[OneAnd[List, ?]]))
+
+  implicit val iso = CartesianTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.oneAndFunctor(ListWrapper.functor))
 
   // Test instances that have more general constraints
   {
     implicit val monadCombine = ListWrapper.monadCombine
-    checkAll("OneAnd[ListWrapper, Int]", MonoidalTests[OneAnd[ListWrapper, ?]].monoidal[Int, Int, Int])
-    checkAll("Monoidal[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Monoidal[OneAnd[ListWrapper, ?]]))
+    checkAll("OneAnd[ListWrapper, Int]", CartesianTests[OneAnd[ListWrapper, ?]].cartesian[Int, Int, Int])
+    checkAll("Cartesian[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Cartesian[OneAnd[ListWrapper, ?]]))
   }
 
   {
@@ -49,7 +52,7 @@ class OneAndTests extends CatsSuite {
     implicitly[Comonad[NonEmptyList]]
   }
 
-  implicit val iso2 = MonoidalTests.Isomorphisms.invariant[OneAnd[List, ?]]
+  implicit val iso2 = CartesianTests.Isomorphisms.invariant[OneAnd[List, ?]]
 
   checkAll("NonEmptyList[Int]", MonadTests[NonEmptyList].monad[Int, Int, Int])
   checkAll("Monad[NonEmptyList[A]]", SerializableTests.serializable(Monad[NonEmptyList]))

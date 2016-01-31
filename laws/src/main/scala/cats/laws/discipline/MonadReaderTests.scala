@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import cats.laws.discipline.MonoidalTests.Isomorphisms
+import cats.laws.discipline.CartesianTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll
 

@@ -19,21 +19,21 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
    * Combine the head and tail into a single `F[A]` value.
    */
   def unwrap(implicit F: MonadCombine[F]): F[A] =
-    F.combine(F.pure(head), tail)
+    F.combineK(F.pure(head), tail)
 
   /**
    * remove elements not matching the predicate
    */
   def filter(f: A => Boolean)(implicit F: MonadCombine[F]): F[A] = {
     val rest = F.filter(tail)(f)
-    if (f(head)) F.combine(F.pure(head), rest) else rest
+    if (f(head)) F.combineK(F.pure(head), rest) else rest
   }
 
   /**
    * Append another OneAnd to this
    */
   def combine(other: OneAnd[F, A])(implicit F: MonadCombine[F]): OneAnd[F, A] =
-    OneAnd(head, F.combine(tail, F.combine(F.pure(other.head), other.tail)))
+    OneAnd(head, F.combineK(tail, F.combineK(F.pure(other.head), other.tail)))
 
   /**
    * find the first element matching the predicate, if one exists
@@ -87,7 +87,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
-private[data] sealed trait OneAndInstances extends OneAndLowPriority1 {
+private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
 
   implicit def oneAndEq[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
     new Eq[OneAnd[F, A]]{
@@ -99,20 +99,16 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority1 {
 
   implicit def oneAndSemigroupK[F[_]: MonadCombine]: SemigroupK[OneAnd[F, ?]] =
     new SemigroupK[OneAnd[F, ?]] {
-      def combine[A](a: OneAnd[F, A], b: OneAnd[F, A]): OneAnd[F, A] =
+      def combineK[A](a: OneAnd[F, A], b: OneAnd[F, A]): OneAnd[F, A] =
         a combine b
     }
 
   implicit def oneAndSemigroup[F[_]: MonadCombine, A]: Semigroup[OneAnd[F, A]] =
     oneAndSemigroupK.algebra
 
-  implicit def oneAndFoldable[F[_]](implicit foldable: Foldable[F]): Foldable[OneAnd[F, ?]] =
-    new Foldable[OneAnd[F, ?]] {
-      override def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B =
-        fa.foldLeft(b)(f)
-      override def foldRight[A, B](fa: OneAnd[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        fa.foldRight(lb)(f)
-      override def isEmpty[A](fa: OneAnd[F, A]): Boolean = false
+  implicit def oneAndReducible[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
+    new NonEmptyReducible[OneAnd[F,?], F] {
+      override def split[A](fa: OneAnd[F,A]): (A, F[A]) = (fa.head, fa.tail)
     }
 
   implicit def oneAndMonad[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[F, ?]] =
@@ -126,10 +122,10 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority1 {
       def flatMap[A, B](fa: OneAnd[F, A])(f: A => OneAnd[F, B]): OneAnd[F, B] = {
         val end = monad.flatMap(fa.tail) { a =>
           val fa = f(a)
-          monad.combine(monad.pure(fa.head), fa.tail)
+          monad.combineK(monad.pure(fa.head), fa.tail)
         }
         val fst = f(fa.head)
-        OneAnd(fst.head, monad.combine(fst.tail, end))
+        OneAnd(fst.head, monad.combineK(fst.tail, end))
       }
     }
 }
@@ -162,11 +158,25 @@ trait OneAndLowPriority1 extends OneAndLowPriority0 {
         OneAnd(f(fa.head), F.map(fa.tail)(f))
     }
 
-  implicit def oneAndReducible[F[_]](implicit foldable: Foldable[F]): Reducible[OneAnd[F, ?]] =
-    new NonEmptyReducible[OneAnd[F, ?], F] {
-      def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
-    }
+}
 
+trait OneAndLowPriority2 extends OneAndLowPriority1 {
+  implicit def oneAndTraverse[F[_]](implicit F: Traverse[F]): Traverse[OneAnd[F, ?]] =
+    new Traverse[OneAnd[F, ?]] {
+      def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {
+        val tail = F.traverse(fa.tail)(f)
+        val head = f(fa.head)
+        G.ap2[B, F[B], OneAnd[F, B]](G.pure(OneAnd(_, _)))(head, tail)
+      }
+
+      def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B = {
+        fa.foldLeft(b)(f)
+      }
+
+      def foldRight[A, B](fa: OneAnd[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+        fa.foldRight(lb)(f)
+      }
+    }
 }
 
 object OneAnd extends OneAndInstances

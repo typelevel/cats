@@ -12,12 +12,12 @@ abstract class Yoneda[F[_], A] extends Serializable { self =>
   def apply[B](f: A => B): F[B]
 
   /**
-   * Converts to `F[A]` even without a `Functor` instance for `F`
+   * Converts to `F[A]` even without a `Functor` instance for `F`.
    */
   def run: F[A] = apply(a => a)
 
   /**
-   * Converts to `Coyoneda[F,A]` even without a `Functor` instance for `F`
+   * Converts to `Coyoneda[F,A]` even without a `Functor` instance for `F`.
    */
   def toCoyoneda: Coyoneda.Aux[F, A, A] = Coyoneda(run)(identity[A])
 
@@ -28,23 +28,16 @@ abstract class Yoneda[F[_], A] extends Serializable { self =>
     new Yoneda[F, B] {
       def apply[C](g: B => C): F[C] = self(f andThen g)
     }
-
-  // import Id._
-  // /** `Yoneda[F, _]` is the right Kan extension of `F` along `Id` */
-  // def toRan: Ran[Id, F, A] =
-  //   new Ran[Id, F, A] {
-  //     def apply[B](f: A => B) = self(f)
-  //   }
 }
 
 object Yoneda {
 
   /**
-   * `Yoneda[F, _]` is a functor for any `F`
+   * `Yoneda[F, _]` is a functor for any `F`.
    */
   implicit def yonedaFunctor[F[_]]: Functor[Yoneda[F, ?]] =
     new Functor[Yoneda[F, ?]] {
-      def map[A, B](ya: Yoneda[F,A])(f: A => B): Yoneda[F, B] = ya map f
+      def map[A, B](ya: Yoneda[F, A])(f: A => B): Yoneda[F, B] = ya map f
     }
 
   /**

@@ -1,11 +1,11 @@
 package cats
-package free
+package tests
 
 import cats.arrow.NaturalTransformation
-import cats.laws.discipline.{MonoidalTests, ApplicativeTests, SerializableTests}
-import cats.laws.discipline.eq.tuple3Eq
-import cats.tests.CatsSuite
-import cats.data.Const
+import cats.free.FreeApplicative
+import cats.laws.discipline.{CartesianTests, ApplicativeTests, SerializableTests}
+import cats.laws.discipline.eq.{tuple3Eq, tuple2Eq}
+import cats.data.{Const, State}
 
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -24,7 +24,7 @@ class FreeApplicativeTests extends CatsSuite {
       }
     }
 
-  implicit val iso = MonoidalTests.Isomorphisms.invariant[FreeApplicative[Option, ?]]
+  implicit val iso = CartesianTests.Isomorphisms.invariant[FreeApplicative[Option, ?]]
 
   checkAll("FreeApplicative[Option, ?]", ApplicativeTests[FreeApplicative[Option, ?]].applicative[Int, Int, Int])
   checkAll("Monad[FreeApplicative[Option, ?]]", SerializableTests.serializable(Applicative[FreeApplicative[Option, ?]]))
@@ -85,5 +85,46 @@ class FreeApplicativeTests extends CatsSuite {
 
     val fli2 = FreeApplicative.lift[List, Int](List.empty)
     fli2.analyze[G[Int]](countingNT) should ===(List(0))
+  }
+
+  test("foldMap order of effects - regression check for #799") {
+    trait Foo[A] {
+      def getA: A
+    }
+    final case class Bar(getA: Int) extends Foo[Int]
+    final case class Baz(getA: Long) extends Foo[Long]
+
+    type Dsl[A] = FreeApplicative[Foo, A]
+
+    type Tracked[A] = State[String, A]
+
+    val f: Foo ~> Tracked = new (Foo ~> Tracked) {
+      def apply[A](fa: Foo[A]): Tracked[A] = State[String, A]{ s0 =>
+        (s0 + fa.toString + ";", fa.getA)
+      }
+    }
+
+    val x: Dsl[Int] = FreeApplicative.lift(Bar(3))
+    val y: Dsl[Long] = FreeApplicative.lift(Baz(5L))
+
+    val z1: Dsl[Long] = Apply[Dsl].map2(x, y)((x, y) => x.toLong + y)
+    val z2: Dsl[Long] = Apply[Dsl].map2(y, x)((y, x) => x.toLong + y)
+
+    z1.foldMap(f).run("").value should === (("Bar(3);Baz(5);", 8L))
+    z2.foldMap(f).run("").value should === (("Baz(5);Bar(3);", 8L))
+  }
+
+  test("analyze order of effects - regression check for #799") {
+    type Dsl[A] = FreeApplicative[Id, A]
+    val x: Dsl[String] = FreeApplicative.lift[Id, String]("x")
+    val y: Dsl[String] = FreeApplicative.lift[Id, String]("y")
+
+    val z = Apply[Dsl].map2(x, y)((_, _) => ())
+
+    val asString: Id ~> λ[α => String] = new (Id ~> λ[α => String]) {
+      def apply[A](a: A): String = a.toString
+    }
+
+    z.analyze(asString) should === ("xy")
   }
 }

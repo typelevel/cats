@@ -39,11 +39,14 @@ package object data {
 
   type Reader[A, B] = ReaderT[Id, A, B]
   object Reader {
-    def apply[A, B](f: A => B): Reader[A, B] = ReaderT.function[Id, A, B](f)
+    def apply[A, B](f: A => B): Reader[A, B] = ReaderT[Id, A, B](f)
   }
 
   type Writer[L, V] = WriterT[Id, L, V]
   object Writer {
     def apply[L, V](l: L, v: V): WriterT[Id, L, V] = WriterT[Id, L, V]((l, v))
   }
+
+  type State[S, A] = StateT[Eval, S, A]
+  object State extends StateFunctions
 }

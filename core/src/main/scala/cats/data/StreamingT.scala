@@ -70,7 +70,9 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    */
   def filter(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
-      case Cons(a, ft) => if (f(a)) this else Wait(ft.map(_.filter(f)))
+      case Cons(a, ft) =>
+        val tail = ft.map(_.filter(f))
+        if (f(a)) Cons(a, tail) else Wait(tail)
       case Wait(ft) => Wait(ft.map(_.filter(f)))
       case Empty() => this
     }
@@ -436,7 +438,7 @@ private[data] sealed trait StreamingTInstances extends StreamingTInstances1 {
         fa.flatMap(f)
       def empty[A]: StreamingT[F, A] =
         StreamingT.empty
-      def combine[A](xs: StreamingT[F, A], ys: StreamingT[F, A]): StreamingT[F, A] =
+      def combineK[A](xs: StreamingT[F, A], ys: StreamingT[F, A]): StreamingT[F, A] =
         xs %::: ys
       override def filter[A](fa: StreamingT[F, A])(f: A => Boolean): StreamingT[F, A] =
         fa.filter(f)

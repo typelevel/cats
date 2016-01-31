@@ -1,7 +1,6 @@
 package cats
-package state
+package tests
 
-import cats.tests.CatsSuite
 import cats.data.{ Func, AppFunc, Const }
 import Func.{ appFunc, appFuncU }
 
@@ -11,9 +10,9 @@ import Func.{ appFunc, appFuncU }
  */
 class WordCountTest extends CatsSuite {
   test("wordcount") {
-    import cats.state.State.{ get, set }
+    import cats.data.State.{ get, set }
     val text = "Faith, I must leave thee, love, and shortly too.\nMy operant powers their functions leave to do.\n".toList
-    // A type alias to treat Int as monoidal applicative
+    // A type alias to treat Int as cartesian applicative
     type Count[A] = Const[Int, A]
     // Tye type parameter to Count is ceremonial, so hardcode it to Unit
     def liftInt(i: Int): Count[Unit] = Const(i)
@@ -44,7 +43,7 @@ class WordCountTest extends CatsSuite {
     val wordCountState = allResults.first.first
     val lineCount = allResults.first.second
     val charCount = allResults.second
-    val wordCount = wordCountState.runA(false).run
+    val wordCount = wordCountState.runA(false).value
     charCount.getConst should === (96)
     lineCount.getConst should === (2)
     wordCount.getConst should === (17)

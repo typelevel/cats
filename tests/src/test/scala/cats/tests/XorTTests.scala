@@ -11,7 +11,7 @@ import algebra.laws.OrderLaws
 class XorTTests extends CatsSuite {
   implicit val eq0 = XorT.xorTEq[List, String, String Xor Int]
   implicit val eq1 = XorT.xorTEq[XorT[List, String, ?], String, Int](eq0)
-  implicit val iso = MonoidalTests.Isomorphisms.invariant[XorT[List, String, ?]]
+  implicit val iso = CartesianTests.Isomorphisms.invariant[XorT[List, String, ?]]
   checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, String, ?], String]))
   checkAll("XorT[List, String, Int]", MonoidKTests[XorT[List, String, ?]].monoidK[Int])
@@ -150,6 +150,12 @@ class XorTTests extends CatsSuite {
   test("fold with Id consistent with Xor fold") {
     forAll { (xort: XorT[Id, String, Int], f: String => Long, g: Int => Long) =>
       xort.fold(f, g) should === (xort.value.fold(f, g))
+    }
+  }
+
+  test("valueOr with Id consistent with Xor valueOr") {
+    forAll { (xort: XorT[Id, String, Int], f: String => Int) =>
+      xort.valueOr(f) should === (xort.value.valueOr(f))
     }
   }
 

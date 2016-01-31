@@ -2,8 +2,8 @@
 layout: default
 title:  "FreeMonads"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/free/FreeMonad.scala"
-scaladoc: "#cats.free.FreeMonad"
+source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/free/Free.scala"
+scaladoc: "#cats.free.Free"
 ---
 
 # Free Monad

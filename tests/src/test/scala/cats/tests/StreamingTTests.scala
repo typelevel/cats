@@ -4,14 +4,14 @@ package tests
 import algebra.laws.OrderLaws
 
 import cats.data.{Streaming, StreamingT}
-import cats.laws.discipline.{MonoidalTests, CoflatMapTests, MonadCombineTests, SerializableTests}
+import cats.laws.discipline.{CartesianTests, CoflatMapTests, MonadCombineTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 
 class StreamingTTests extends CatsSuite {
 
   {
-    implicit val iso = MonoidalTests.Isomorphisms.invariant[StreamingT[Eval, ?]]
+    implicit val iso = CartesianTests.Isomorphisms.invariant[StreamingT[Eval, ?]]
     checkAll("StreamingT[Eval, ?]", MonadCombineTests[StreamingT[Eval, ?]].monadCombine[Int, Int, Int])
     checkAll("StreamingT[Eval, ?]", CoflatMapTests[StreamingT[Eval, ?]].coflatMap[Int, Int, Int])
     checkAll("StreamingT[Eval, Int]", OrderLaws[StreamingT[Eval, Int]].order)
@@ -19,7 +19,7 @@ class StreamingTTests extends CatsSuite {
   }
 
   {
-    implicit val iso = MonoidalTests.Isomorphisms.invariant[StreamingT[Option, ?]]
+    implicit val iso = CartesianTests.Isomorphisms.invariant[StreamingT[Option, ?]]
     checkAll("StreamingT[Option, ?]", MonadCombineTests[StreamingT[Option, ?]].monadCombine[Int, Int, Int])
     checkAll("StreamingT[Option, ?]", CoflatMapTests[StreamingT[Option, ?]].coflatMap[Int, Int, Int])
     checkAll("StreamingT[Option, Int]", OrderLaws[StreamingT[Option, Int]].order)
@@ -27,7 +27,7 @@ class StreamingTTests extends CatsSuite {
   }
 
   {
-    implicit val iso = MonoidalTests.Isomorphisms.invariant[StreamingT[List, ?]]
+    implicit val iso = CartesianTests.Isomorphisms.invariant[StreamingT[List, ?]]
     checkAll("StreamingT[List, ?]", MonadCombineTests[StreamingT[List, ?]].monadCombine[Int, Int, Int])
     checkAll("StreamingT[List, ?]", CoflatMapTests[StreamingT[List, ?]].coflatMap[Int, Int, Int])
     checkAll("StreamingT[List, Int]", OrderLaws[StreamingT[List, Int]].order)
@@ -76,6 +76,11 @@ class StreamingTTests extends CatsSuite {
     forAll { (s: StreamingT[Id, Int], f: Int => Boolean) =>
       s.filter(f).toList should === (s.toList.filter(f))
     }
+  }
+
+  test("filter - check regression") {
+    val s = StreamingT[Option, Int](1, 2, 1)
+    s.filter(_ > 1).toList should === (Some(List(2)))
   }
 
   test("foldLeft with Id consistent with List.foldLeft") {

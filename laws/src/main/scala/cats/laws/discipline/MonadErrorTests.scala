@@ -3,13 +3,12 @@ package laws
 package discipline
 
 import cats.data.{ Xor, XorT }
-import cats.laws.discipline.MonoidalTests.Isomorphisms
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.CartesianTests.Isomorphisms
 import cats.laws.discipline.eq.unitEq
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll
 
-trait MonadErrorTests[F[_], E] extends MonadTests[F] {
+trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTests[F] {
   def laws: MonadErrorLaws[F, E]
 
   def monadError[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
@@ -32,19 +31,9 @@ trait MonadErrorTests[F[_], E] extends MonadTests[F] {
     new RuleSet {
       def name: String = "monadError"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(monad[A, B, C])
+      def parents: Seq[RuleSet] = Seq(applicativeError[A, B, C], monad[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
-        "monadError left zero" -> forAll(laws.monadErrorLeftZero[A, B] _),
-        "monadError handleWith" -> forAll(laws.monadErrorHandleWith[A] _),
-        "monadError handle" -> forAll(laws.monadErrorHandle[A] _),
-        "monadError handleErrorWith pure" -> forAll(laws.handleErrorWithPure[A] _),
-        "monadError handleError pure" -> forAll(laws.handleErrorPure[A] _),
-        "monadError raiseError attempt" -> forAll(laws.raiseErrorAttempt _),
-        "monadError pure attempt" -> forAll(laws.pureAttempt[A] _),
-        "monadError handleErrorWith consistent with recoverWith" -> forAll(laws.handleErrorWithConsistentWithRecoverWith[A] _),
-        "monadError handleError consistent with recover" -> forAll(laws.handleErrorConsistentWithRecover[A] _),
-        "monadError recover consistent with recoverWith" -> forAll(laws.recoverConsistentWithRecoverWith[A] _),
-        "monadError attempt consistent with attemptT" -> forAll(laws.attemptConsistentWithAttemptT[A] _)
+        "monadError left zero" -> forAll(laws.monadErrorLeftZero[A, B] _)
       )
     }
   }

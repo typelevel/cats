@@ -15,10 +15,10 @@ class KleisliTests extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
     Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
-  implicit val iso = MonoidalTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
+  implicit val iso = CartesianTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
 
-  checkAll("Kleisli[Option, Int, Int]", MonoidalTests[Kleisli[Option, Int, ?]].monoidal[Int, Int, Int])
-  checkAll("Monoidal[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Monoidal[Kleisli[Option, Int, ?]]))
+  checkAll("Kleisli[Option, Int, Int]", CartesianTests[Kleisli[Option, Int, ?]].cartesian[Int, Int, Int])
+  checkAll("Cartesian[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Cartesian[Kleisli[Option, Int, ?]]))
 
   {
     implicit val kleisliArrow = Kleisli.kleisliArrow[Option]
@@ -103,7 +103,7 @@ class KleisliTests extends CatsSuite {
 
   test("local composes functions") {
     forAll { (f: Int => Option[String], g: Int => Int, i: Int) =>
-      f(g(i)) should === (Kleisli.local[Option, String, Int](g)(Kleisli.function(f)).run(i))
+      f(g(i)) should === (Kleisli.local[Option, String, Int](g)(Kleisli(f)).run(i))
     }
   }
 
@@ -114,26 +114,26 @@ class KleisliTests extends CatsSuite {
   }
 
   test("lift") {
-    val f = Kleisli.function { (x: Int) => (Some(x + 1): Option[Int]) }
+    val f = Kleisli { (x: Int) => (Some(x + 1): Option[Int]) }
     val l = f.lift[List]
     (List(1, 2, 3) >>= l.run) should === (List(Some(2), Some(3), Some(4)))
   }
 
   test("transform") {
-    val opt = Kleisli.function { (x: Int) => Option(x.toDouble) }
+    val opt = Kleisli { (x: Int) => Option(x.toDouble) }
     val optToList = new (Option ~> List) { def apply[A](fa: Option[A]): List[A] = fa.toList }
     val list = opt.transform(optToList)
 
     val is = 0.to(10).toList
-    is.map(list.run) should === (is.map(Kleisli.function { (x: Int) => List(x.toDouble) }.run))
+    is.map(list.run) should === (is.map(Kleisli { (x: Int) => List(x.toDouble) }.run))
   }
 
   test("local") {
     case class Config(i: Int, s: String)
 
-    val kint = Kleisli.function { (x: Int) => Option(x.toDouble) }
+    val kint = Kleisli { (x: Int) => Option(x.toDouble) }
     val kconfig1 = kint.local[Config](_.i)
-    val kconfig2 = Kleisli.function { (c: Config) => Option(c.i.toDouble) }
+    val kconfig2 = Kleisli { (c: Config) => Option(c.i.toDouble) }
 
     val config = Config(0, "cats")
     kconfig1.run(config) should === (kconfig2.run(config))

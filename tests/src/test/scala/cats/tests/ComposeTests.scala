@@ -2,8 +2,7 @@ package cats
 package tests
 
 import cats.data.{ NonEmptyList, NonEmptyVector, OneAnd }
-import cats.laws.discipline.{ AlternativeTests, ApplicativeTests, FoldableTests, MonoidKTests, MonoidalTests, SemigroupKTests }
-import cats.laws.discipline.{ arbitrary, eq }, arbitrary._, eq._
+import cats.laws.discipline.{ AlternativeTests, ApplicativeTests, FoldableTests, CartesianTests, MonoidKTests, SemigroupKTests, arbitrary, eq }, arbitrary._, eq._
 import org.scalacheck.Arbitrary
 
 class ComposeTests extends CatsSuite {
@@ -17,7 +16,7 @@ class ComposeTests extends CatsSuite {
     // Alternative composition
 
     implicit val alternativeListVector: Alternative[Lambda[A => List[Vector[A]]]] = Alternative[List] compose Alternative[Vector]
-    implicit val iso = MonoidalTests.Isomorphisms.invariant[Lambda[A => List[Vector[A]]]]
+    implicit val iso = CartesianTests.Isomorphisms.invariant[Lambda[A => List[Vector[A]]]]
 
     checkAll("Alternative[Lambda[A => List[Vector[A]]]]", AlternativeTests[Lambda[A => List[Vector[A]]]].alternative[Int, Int, Int])
   }
@@ -26,7 +25,7 @@ class ComposeTests extends CatsSuite {
     // Applicative composition
 
     implicit val applicativeListVector: Applicative[Lambda[A => List[Vector[A]]]] = Applicative[List] compose Applicative[Vector]
-    implicit val iso = MonoidalTests.Isomorphisms.invariant[Lambda[A => List[Vector[A]]]]
+    implicit val iso = CartesianTests.Isomorphisms.invariant[Lambda[A => List[Vector[A]]]]
 
     checkAll("Applicative[Lambda[A => List[Vector[A]]]]", ApplicativeTests[Lambda[A => List[Vector[A]]]].applicative[Int, Int, Int])
   }

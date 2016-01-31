@@ -1,9 +1,9 @@
 ## Cats
 
-[![Build Status](https://api.travis-ci.org/non/cats.png)](https://travis-ci.org/non/cats)
-[![Workflow](https://badge.waffle.io/non/cats.png?label=ready&title=Ready)](https://waffle.io/non/cats)
-[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
-[![codecov.io](http://codecov.io/github/non/cats/coverage.svg?branch=master)](http://codecov.io/github/non/cats?branch=master)
+[![Build Status](https://api.travis-ci.org/typelevel/cats.svg)](https://travis-ci.org/typelevel/cats)
+[![Workflow](https://badge.waffle.io/typelevel/cats.svg?label=ready&title=Ready)](https://waffle.io/typelevel/cats)
+[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
+[![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/org.spire-math/cats_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/org.spire-math/cats_2.11)
 
 ### Overview
@@ -33,8 +33,6 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-macros`: Macros used by Cats syntax (*required*).
  * `cats-core`: Core type classes and functionality (*required*).
  * `cats-laws`: Laws for testing type class instances.
- * `cats-free`: "Free" data constructors for various type classes.
- * `cats-state`: Monad and transformer support for state.
 
 Release notes for Cats are available in [CHANGES.md](CHANGES.md).
 
@@ -44,8 +42,8 @@ binary-compatibility guarantees.*
 ### Documentation
 Among the goals of Cats is to provide approachable and useful documentation.
 Documentation is available in the form of tutorials on the Cats
-[website](http://non.github.io/cats/), as well as through
-[Scaladoc](http://non.github.io/cats/api/#package) (also reachable through
+[website](http://typelevel.org/cats), as well as through
+[Scaladoc](http://typelevel.org/cats/api/#package) (also reachable through
 the website).
 
 ### Building Cats
@@ -113,8 +111,6 @@ Initially Cats will support the following modules:
  * `macros`: Macro definitions needed for `core` and other projects.
  * `core`: Definitions for widely-used type classes and data types.
  * `laws`: The encoded laws for type classes, exported to assist third-party testing.
- * `free`: "Free" data constructors for various type classes.
- * `state`: Monad and transformer support for state.
  * `tests`: Verifies the laws, and runs any other tests. Not published.
 
 As the type class families grow, it's possible that additional modules
@@ -190,9 +186,9 @@ relax this to a single sign-off.
 ### Contributing
 
 Discussion around Cats is currently happening in the
-[Gitter channel](https://gitter.im/non/cats) as well as on Github
+[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
 issue and PR pages. You can get an overview of who is working on what
-via [Waffle.io](https://waffle.io/non/cats).
+via [Waffle.io](https://waffle.io/typelevel/cats).
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also

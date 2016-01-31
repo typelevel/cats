@@ -31,8 +31,6 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-macros`: Macros used by Cats syntax (*required*).
  * `cats-core`: Core type classes and functionality (*required*).
  * `cats-laws`: Laws for testing type class instances.
- * `cats-free`: "Free" data constructors for various type classes.
- * `cats-state`: Monad and transformer support for state.
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/non/cats/blob/master/CHANGES.md).
 
