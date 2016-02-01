@@ -1,3 +1,254 @@
+## Version 0.4.0
+
+> 2016 February 1
+
+Version 0.4.0 is the fourth release of the Cats library, and the first release
+published under the `org.typelevel` group from the
+[Typelevel](https://github.com/typelevel) organization on GitHub (previous
+releases had been published to `org.spire-math` from `non/cats`). This means
+that users will need to change the `groupId` for their Cats dependencies when
+updating. If you have a line like this in your SBT build configuration, for
+example:
+
+```scala
+libraryDependencies += "org.spire-math" %% "cats" % "0.3.0"
+```
+
+You will need to change it to the following:
+
+```scala
+libraryDependencies += "org.typelevel" %% "cats" % "0.4.0"
+```
+
+This release no longer includes `cats-state` or `cats-free` artifacts, since
+the `cats.state` and `cats.free` packages have been moved into `cats-core`.
+
+If you've checked out the GitHub repository locally, it would be a good idea to
+update your remote to point to the new organization, which will typically look
+like this (note that you should confirm that `origin` is the appropriate
+remote name):
+
+```bash
+git remote set-url origin git@github.com:typelevel/cats.git
+```
+
+This release includes a large number of breaking changes, including most
+prominently the introduction of a new `Cartesian` type class that is a supertype
+of `Monad` (and many other types). If you use the `|@|` syntax that had
+previously been provided by `Apply`, you'll need to change your imports from
+`cats.syntax.apply._` to `cats.syntax.cartesian._`. For example:
+
+```scala
+scala> import cats.Eval, cats.syntax.cartesian._
+import cats.Eval
+import cats.syntax.cartesian._
+
+scala> (Eval.now("v") |@| Eval.now(0.4)).tupled
+res0: cats.Eval[(String, Double)] = cats.Eval$$anon$5@104f8bbd
+```
+
+Other changes in this release are described below.
+
+This version includes API changes:
+
+* [#555](https://github.com/typelevel/cats/pull/555): `|@|` syntax is now
+  provided by `cats.syntax.cartesian`
+* [#835](https://github.com/typelevel/cats/pull/835): `State` and `StateT` are
+  now in the `cats.data` package
+* [#781](https://github.com/typelevel/cats/pull/781): `combine` on `SemigroupK`
+  is now `combineK`
+* [#821](https://github.com/typelevel/cats/pull/821) and
+  [#833](https://github.com/typelevel/cats/pull/833): The order of arguments for
+  `ap` has been reversed (now function first)
+* [#833](https://github.com/typelevel/cats/pull/833): `ap` on
+  `CartesianBuilderN` is now `apWith`
+* [#782](https://github.com/typelevel/cats/pull/782): `State` now uses `Eval`
+  instead of `Trampoline` for stack safety
+* [#697](https://github.com/typelevel/cats/pull/697): `or` for natural
+  transformations is now an instance method
+* [#725](https://github.com/typelevel/cats/pull/725): `orElse` on `XorT` and
+  does not unnecessarily constrain the type of the left side of the result
+* [#648](https://github.com/typelevel/cats/pull/648): Some types now extend
+  `Product` and `Serializable` to improve type inference
+* [#647](https://github.com/typelevel/cats/pull/647): `ProdInstancesN` names
+  changed for consistency
+* [#636](https://github.com/typelevel/cats/pull/636): `Eval` is now
+  `Serializable`
+* [#685](https://github.com/typelevel/cats/pull/685): Fixes for copy-paste
+  errors in method names for instances for `Validated`
+* [#778](https://github.com/typelevel/cats/pull/778): Unnecessary type parameter
+  on `Foldable`'s `sequence_` has been removed
+
+And additions:
+
+* [#555](https://github.com/typelevel/cats/pull/555) and
+  [#795](https://github.com/typelevel/cats/pull/795): `Cartesian`
+* [#671](https://github.com/typelevel/cats/pull/671): `Coproduct` and `Inject`
+* [#812](https://github.com/typelevel/cats/pull/812): `ApplicativeError`
+* [#765](https://github.com/typelevel/cats/pull/765): `State` and `Free` (and
+  related types) are now in the core module
+* [#611](https://github.com/typelevel/cats/pull/611): `Validated` now has an
+  `andThen` method that provides binding (but without the `for`-comprehension
+  syntactic sugar that the name `flatMap` would bring)
+* [#796](https://github.com/typelevel/cats/pull/796): `sequenceU_` and
+  `traverseU_` on `Foldable`
+* [#780](https://github.com/typelevel/cats/pull/780): `transformS` for `StateT`
+* [#807](https://github.com/typelevel/cats/pull/807): `valueOr` for `XorT`
+* [#714](https://github.com/typelevel/cats/pull/714): `orElse` for `XorT`
+* [#705](https://github.com/typelevel/cats/pull/705): `getOrElseF` for `XorT`
+* [#731](https://github.com/typelevel/cats/pull/731): `swap` for `Validated`
+* [#571](https://github.com/typelevel/cats/pull/571): `transform` and
+  `subflatMap` on `OptionT` and `XorT`
+* [#757](https://github.com/typelevel/cats/pull/757) and
+  [#843](https://github.com/typelevel/cats/pull/843): `compose` for
+  `Alternative` and `composeK` for `MonoidK`
+* [#667](https://github.com/typelevel/cats/pull/667): `OptionT.liftF`
+
+And removals:
+
+* [#613](https://github.com/typelevel/cats/pull/613): `Free` and
+  `FreeApplicative` constructors are now private
+* [#605](https://github.com/typelevel/cats/pull/605): `filter` on `Validated`
+* [#698](https://github.com/typelevel/cats/pull/698): `MonadCombine` instances
+  for `OptionT`
+* [#635](https://github.com/typelevel/cats/pull/635): `Kleisli`'s redundant
+  `lmap`, which was equivalent to `local`
+* [#752](https://github.com/typelevel/cats/pull/752): `Cokleisli.cokleisli`,
+  which was equivalent to `Cokleisli.apply`
+* [#687](https://github.com/typelevel/cats/pull/687): Unused `XorTMonadCombine`
+* [#622](https://github.com/typelevel/cats/pull/622): Many prioritization types
+  are now private
+
+And new type class instances:
+
+* [#644](https://github.com/typelevel/cats/pull/644): `Traverse` and `Foldable`
+  instances for `XorT`
+* [#691](https://github.com/typelevel/cats/pull/691): Various instances for
+  `Function1`
+* [#628](https://github.com/typelevel/cats/pull/628) and
+  [#696](https://github.com/typelevel/cats/pull/696): Various instances for
+  `WriterT`
+* [#673](https://github.com/typelevel/cats/pull/673): `Bifunctor` instances for
+  `WriterT`
+* [#715](https://github.com/typelevel/cats/pull/715) and
+  [#716](https://github.com/typelevel/cats/pull/716): `Semigroup` and `Monoid`
+  instances for `Validated`
+* [#717](https://github.com/typelevel/cats/pull/717) and
+  [#718](https://github.com/typelevel/cats/pull/718): `Semigroup` instances for
+  `Xor` and `Const`
+* [#818](https://github.com/typelevel/cats/pull/818): `CoflatMap` instance for
+  `Vector`
+* [#626](https://github.com/typelevel/cats/pull/626): `Contravariant` instances
+  for `Const` and `Kleisli`
+* [#621](https://github.com/typelevel/cats/pull/621): `Id` instances for
+  `Kleisli`
+* [#772](https://github.com/typelevel/cats/pull/772): `Reducible` instances for
+  `OneAnd`
+* [#816](https://github.com/typelevel/cats/pull/816): `Traverse` instances for
+  `OneAnd`
+* [#639](https://github.com/typelevel/cats/issues/639): `Traverse` instance
+  for `Id`
+* [#774](https://github.com/typelevel/cats/pull/774) and
+  [#775](https://github.com/typelevel/cats/pull/775): `Show` instances for
+  `Vector` and `Stream`
+
+And bug fixes:
+
+* [#623](https://github.com/typelevel/cats/pull/623) fixes
+  [#563](https://github.com/typelevel/cats/issues/563), a bug in the behavior of
+  `dropWhile_` on `Foldable`
+* [#665](https://github.com/typelevel/cats/pull/665) fixes
+  [#662](https://github.com/typelevel/cats/pull/662), a bug that resulted in
+  re-evaluation after memoization in `Streaming`
+* [#683](https://github.com/typelevel/cats/pull/683) fixes
+  [#677](https://github.com/typelevel/cats/issues/677), a bug in
+  `Streaming.thunk`
+* [#801](https://github.com/typelevel/cats/pull/801): Fixes order effect bug in
+  `foldMap` on `FreeApplicative`
+* [#798](https://github.com/typelevel/cats/pull/798): Fixes bug in `filter` on
+  `StreamingT`
+* [#656](https://github.com/typelevel/cats/pull/656): Fixes bug in `drop` on
+  `StreamingT`
+* [#769](https://github.com/typelevel/cats/pull/769): Improved stack consumption
+  for `Eval.Call`
+
+And some dependency updates:
+
+* [#833](https://github.com/typelevel/cats/pull/833): Update to Simulacrum
+  0.7.0
+* [#764](https://github.com/typelevel/cats/pull/764): 2.10 version is now
+  2.10.6
+* [#643](https://github.com/typelevel/cats/pull/643): Update to Catalysts 0.2.0
+* [#727](https://github.com/typelevel/cats/pull/727): Update to Scalastyle 0.8.0
+
+There are also many improvements to the documentation, tutorials, laws, tests,
+and benchmarks, including the following:
+
+* [#724](https://github.com/typelevel/cats/pull/724): sbt-doctest is now used to
+  validate Scaladoc examples
+* [#809](https://github.com/typelevel/cats/pull/809): MiMa now enforces binary
+  compatibilty
+* [#806](https://github.com/typelevel/cats/pull/806): Various improvements to
+  use of Simulacrum, which is now a compile-time-only dependency
+* [#734](https://github.com/typelevel/cats/pull/734): Documentation on testing
+  conventions
+* [#710](https://github.com/typelevel/cats/pull/710): Documentation for
+  `Invariant`
+* [#832](https://github.com/typelevel/cats/pull/832): Updated `Free`
+  documentation
+* [#824](https://github.com/typelevel/cats/pull/824): New examples for
+  `Foldable`
+* [#797](https://github.com/typelevel/cats/pull/797): Scaladoc examples for
+  methods on `Arrow`
+* [#783](https://github.com/typelevel/cats/pull/783) and others: Scaladoc
+  examples for syntax methods
+* [#720](https://github.com/typelevel/cats/pull/720): Expanded documentation for
+  `FreeApplicative`
+* [#636](https://github.com/typelevel/cats/pull/636): Law checking for `Eval`
+* [#649](https://github.com/typelevel/cats/pull/649) and
+  [#660](https://github.com/typelevel/cats/pull/660): Better `Arbitrary`
+  instances for `Streaming` and `StreamingT`
+* [#722](https://github.com/typelevel/cats/pull/722): More consistent `toString`
+  for `StreamingT`
+* [#672](https://github.com/typelevel/cats/pull/672): Additional laws for
+  `Profunctor`
+* [#668](https://github.com/typelevel/cats/pull/668),
+  [#669](https://github.com/typelevel/cats/pull/669),
+  [#679](https://github.com/typelevel/cats/pull/679),
+  [#680](https://github.com/typelevel/cats/pull/680), and
+  [#681](https://github.com/typelevel/cats/pull/681): Additional law checking
+  for `Xor`, `XorT`, and `Either`
+* [#707](https://github.com/typelevel/cats/pull/707): Additional testing for
+  `State` and `StateT`
+* [#736](https://github.com/typelevel/cats/pull/736): `map` / `flatMap`
+  coherence
+* [#748](https://github.com/typelevel/cats/pull/748): Left and right identity
+  laws for `Kleisli`
+* [#753](https://github.com/typelevel/cats/pull/753): Consistency tests for
+  `Cokleisli`
+* [#733](https://github.com/typelevel/cats/pull/733): Associativity laws for
+  `Kleisli` and `Cokleisli` composition
+* [#741](https://github.com/typelevel/cats/pull/741): Tests for
+  `Unapply`-supported syntax
+* [#690](https://github.com/typelevel/cats/pull/690): Error reporting
+  improvements for serializability tests
+* [#701](https://github.com/typelevel/cats/pull/701): Better documentation for
+  the Travis CI script
+* [#787](https://github.com/typelevel/cats/pull/787): Support for cross-module
+  Scaladoc links
+
+Known issues:
+
+* [#702](https://github.com/typelevel/cats/pull/702): This change identified and
+  fixed a stack safety bug in `foldMap` on `Free`, but raised other issues (see
+  [#712](https://github.com/typelevel/cats/issues/712)) and was reverted in
+  [#713](https://github.com/typelevel/cats/pull/713);
+  [#721](https://github.com/typelevel/cats/issues/721) now tracks the non-stack
+  safety of `Free`'s `foldMap`
+
+As always thanks to everyone who filed issues, participated in the Cats Gitter
+channel, submitted code, or helped review pull requests.
+
 ## Version 0.3.0
 
 > 2015 November 8
