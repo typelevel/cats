@@ -255,94 +255,94 @@ Version 0.3.0 is the third release of the Cats library.
 
 This version includes new type class instances:
 
-* [#545](https://github.com/non/cats/pull/545): `Semigroup` instances for
+* [#545](https://github.com/typelevel/cats/pull/545): `Semigroup` instances for
   `OneAnd`
-* [#521](https://github.com/non/cats/pull/521): `Monoid` instances for `Xor`
+* [#521](https://github.com/typelevel/cats/pull/521): `Monoid` instances for `Xor`
   when the left side has a `Semigroup` instance and the right side has a
   `Monoid`
-* [#497](https://github.com/non/cats/pull/497): `Monoid` instances for `Set`
-* [#559](https://github.com/non/cats/pull/559): `Bifunctor` instances for
+* [#497](https://github.com/typelevel/cats/pull/497): `Monoid` instances for `Set`
+* [#559](https://github.com/typelevel/cats/pull/559): `Bifunctor` instances for
   `Validated`, `Ior`, `Xor`, and `XorT`
-* [#569](https://github.com/non/cats/pull/569): `Functor` instances for
+* [#569](https://github.com/typelevel/cats/pull/569): `Functor` instances for
   `OptionT` when `F` has a `Functor` instance but not a `Monad`
-* [#600](https://github.com/non/cats/pull/600): `Show` instances for `Option`
+* [#600](https://github.com/typelevel/cats/pull/600): `Show` instances for `Option`
   and `OptionT`
-* [#601](https://github.com/non/cats/pull/601): `Show` instances for `List`
-* [#602](https://github.com/non/cats/pull/602): `Show` instances for `Set`
-* [#568](https://github.com/non/cats/pull/568): Several new `Unapply` shapes
+* [#601](https://github.com/typelevel/cats/pull/601): `Show` instances for `List`
+* [#602](https://github.com/typelevel/cats/pull/602): `Show` instances for `Set`
+* [#568](https://github.com/typelevel/cats/pull/568): Several new `Unapply` shapes
 
 And API changes:
 
-* [#592](https://github.com/non/cats/pull/592): `fromTryCatch` on `Xor` and
+* [#592](https://github.com/typelevel/cats/pull/592): `fromTryCatch` on `Xor` and
   `Validated` is now `catchOnly`
-* [#553](https://github.com/non/cats/pull/553): `MonadError` now characterizes
+* [#553](https://github.com/typelevel/cats/pull/553): `MonadError` now characterizes
   type constructors of kind `* -> *` instead of `(*, *) -> *`
-* [#598](https://github.com/non/cats/pull/598): `OneAnd`'s type constructor type
+* [#598](https://github.com/typelevel/cats/pull/598): `OneAnd`'s type constructor type
   parameter is now before the element type
-* [#610](https://github.com/non/cats/pull/610): `XorT`'s `toOption` returns an
+* [#610](https://github.com/typelevel/cats/pull/610): `XorT`'s `toOption` returns an
   `OptionT[F, B]` instead of an `F[Option[B]]`
-* [#518](https://github.com/non/cats/pull/518): `Free`'s `resume` method now
+* [#518](https://github.com/typelevel/cats/pull/518): `Free`'s `resume` method now
   returns an `Xor` instead of an `Either`
-* [#575](https://github.com/non/cats/pull/575) and
-  [#606](https://github.com/non/cats/pull/606): `orElse` on `Xor` and
+* [#575](https://github.com/typelevel/cats/pull/575) and
+  [#606](https://github.com/typelevel/cats/pull/606): `orElse` on `Xor` and
   `Validated` does not unnecessarily constrain the type of the left side of the
   result
-* [#577](https://github.com/non/cats/pull/577): `*Aux` helper classes have been
+* [#577](https://github.com/typelevel/cats/pull/577): `*Aux` helper classes have been
   renamed `*PartiallyApplied`
 
 And additions:
 
-* [#542](https://github.com/non/cats/pull/542): `WriterT`
-* [#567](https://github.com/non/cats/pull/567): `Ior.fromOptions`
-* [#528](https://github.com/non/cats/pull/528): `OptionT.fromOption`
-* [#562](https://github.com/non/cats/pull/562): `handleErrorWith` and related
+* [#542](https://github.com/typelevel/cats/pull/542): `WriterT`
+* [#567](https://github.com/typelevel/cats/pull/567): `Ior.fromOptions`
+* [#528](https://github.com/typelevel/cats/pull/528): `OptionT.fromOption`
+* [#562](https://github.com/typelevel/cats/pull/562): `handleErrorWith` and related
   helper methods on `MonadError`
-* [#520](https://github.com/non/cats/pull/520): `toNel` and `fromList`
+* [#520](https://github.com/typelevel/cats/pull/520): `toNel` and `fromList`
   conversions from `List` to `NonEmptyList`
-* [#533](https://github.com/non/cats/pull/533): Conversions between types with
+* [#533](https://github.com/typelevel/cats/pull/533): Conversions between types with
   `Foldable` instances and `Streaming`
-* [#507](https://github.com/non/cats/pull/507): `isJvm` and `isJs` macros in the
+* [#507](https://github.com/typelevel/cats/pull/507): `isJvm` and `isJs` macros in the
   new `cats.macros.Platform`
-* [#572](https://github.com/non/cats/pull/572): `analyze` on `FreeApplicative`
+* [#572](https://github.com/typelevel/cats/pull/572): `analyze` on `FreeApplicative`
   for compilation into a `Monoid`
-* [#587](https://github.com/non/cats/pull/587): Syntax for lifting values (and
+* [#587](https://github.com/typelevel/cats/pull/587): Syntax for lifting values (and
   optional values) into `Validated`
 
 And several aliases:
 
-* [#492](https://github.com/non/cats/pull/492): `FlatMapSyntax` now includes
+* [#492](https://github.com/typelevel/cats/pull/492): `FlatMapSyntax` now includes
   `followedBy`, which is an alias for `>>`, together with a new
   `followedByEval`, which allows the caller to choose the evaluation strategy of
   the second action
-* [#523](https://github.com/non/cats/pull/523): `Foldable` now has a
+* [#523](https://github.com/typelevel/cats/pull/523): `Foldable` now has a
   `combineAll` method that aliases `fold` and allows postfix usage via
   `FoldableSyntax`
 
 And a few removals:
 
-* [#524](https://github.com/non/cats/pull/524): `FreeApplicative`'s redundant
+* [#524](https://github.com/typelevel/cats/pull/524): `FreeApplicative`'s redundant
   `hoist`, which was equivalent to `compile`
-* [#531](https://github.com/non/cats/pull/531): `Coyoneda`'s `by`
-* [#612](https://github.com/non/cats/pull/612): Many prioritization and instance
+* [#531](https://github.com/typelevel/cats/pull/531): `Coyoneda`'s `by`
+* [#612](https://github.com/typelevel/cats/pull/612): Many prioritization and instance
   traits are now private
 
 And bug fixes:
 
-* [#547](https://github.com/non/cats/pull/547): The `empty` values for
+* [#547](https://github.com/typelevel/cats/pull/547): The `empty` values for
   `Monoid[Double]` and `Monoid[Float]` are now `0` instead of `1`
-* [#530](https://github.com/non/cats/pull/530): `Streaming.take(n).toList` no
+* [#530](https://github.com/typelevel/cats/pull/530): `Streaming.take(n).toList` no
   longer evaluates the `n + 1`-st element
-* [#538](https://github.com/non/cats/pull/538): `OneAnd`'s instances are
+* [#538](https://github.com/typelevel/cats/pull/538): `OneAnd`'s instances are
   properly prioritized
 
 There are also many improvements to the documentation, tutorials, laws, tests,
 and benchmarks:
 
-* [#522](https://github.com/non/cats/pull/522): ScalaTest's `===` now uses `Eq`
+* [#522](https://github.com/typelevel/cats/pull/522): ScalaTest's `===` now uses `Eq`
   instances
-* [#502](https://github.com/non/cats/pull/502): `Traverse`'s laws verify the
+* [#502](https://github.com/typelevel/cats/pull/502): `Traverse`'s laws verify the
   consistency of `foldMap` and `traverse`
-* [#519](https://github.com/non/cats/pull/519): Benchmarks (and performance
+* [#519](https://github.com/typelevel/cats/pull/519): Benchmarks (and performance
   improvements) for `Eval`
 * …and many others
 
