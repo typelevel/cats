@@ -128,6 +128,11 @@ private[data] sealed trait OptionTInstances1 {
       override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
         fa.map(f)
     }
+
+  implicit val optionTMonadTrans: MonadTrans[OptionT] = new MonadTrans[OptionT] {
+    def liftM[M[_], A](ma: M[A])(implicit M: Monad[M]): OptionT[M, A] =
+      OptionT(M.map(ma)(Some.apply))
+  }
 }
 
 private[data] sealed trait OptionTInstances extends OptionTInstances1 {

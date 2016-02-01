@@ -193,6 +193,12 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
     new XorTTraverse[F, L] {
       val F0: Traverse[F] = F
     }
+
+  implicit def xortTMonadTrans[A]: MonadTrans[({type λ[α[_], β] = XorT[α, A, β]})#λ] =
+    new MonadTrans[({type λ[α[_], β] = XorT[α, A, β]})#λ] {
+    def liftM[M[_], B](ma: M[B])(implicit M: Monad[M]): XorT[M, A, B] =
+      XorT(M.map(ma)(Xor.right))
+  }
 }
 
 private[data] abstract class XorTInstances1 extends XorTInstances2 {

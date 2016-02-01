@@ -62,6 +62,12 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
       def bimap[A, B, C, D](fab: WriterT[F, A, B])(f: A => C, g: B => D): WriterT[F, C, D] =
         fab.bimap(f, g)
     }
+
+  implicit def writerTMonadTrans[W](implicit W: Monoid[W]): MonadTrans[({type λ[α[_], β]=WriterT[α,W,β]})#λ] =
+    new MonadTrans[({type λ[α[_], β]=WriterT[α,W,β]})#λ] {
+      def liftM[M[_], A](ma: M[A])(implicit M: Monad[M]): WriterT[M,W,A] =
+        WriterT(M.map(ma)((W.empty, _)))
+  }
 }
 
 private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 {

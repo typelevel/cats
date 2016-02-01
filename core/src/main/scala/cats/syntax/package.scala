@@ -17,6 +17,7 @@ package object syntax {
   object functor extends FunctorSyntax
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
+  object monad extends MonadSyntax
   object monadCombine extends MonadCombineSyntax
   object monadFilter extends MonadFilterSyntax
   object option extends OptionSyntax
