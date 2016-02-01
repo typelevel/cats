@@ -43,6 +43,7 @@ possible:
  * Jean-Rémi Desjardins
  * Jisoo Park
  * Josh Marcus
+ * Juan Pedro Moreno
  * Julien Richard-Foy
  * Julien Truffaut
  * Kenji Yoshida
