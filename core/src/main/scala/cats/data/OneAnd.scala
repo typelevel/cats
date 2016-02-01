@@ -157,6 +157,7 @@ trait OneAndLowPriority1 extends OneAndLowPriority0 {
       def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
         OneAnd(f(fa.head), F.map(fa.tail)(f))
     }
+
 }
 
 trait OneAndLowPriority2 extends OneAndLowPriority1 {

@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{ NonEmptyList, NonEmptyVector, OneAnd }
-import cats.laws.discipline.{ ApplicativeTests, FoldableTests, CartesianTests, SemigroupKTests, arbitrary, eq }, arbitrary._, eq._
+import cats.laws.discipline.{ AlternativeTests, ApplicativeTests, FoldableTests, CartesianTests, MonoidKTests, SemigroupKTests, arbitrary, eq }, arbitrary._, eq._
 import org.scalacheck.Arbitrary
 
 class ComposeTests extends CatsSuite {
@@ -11,6 +11,15 @@ class ComposeTests extends CatsSuite {
   // issues.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfig(maxSize = 5, minSuccessful = 20)
+
+  {
+    // Alternative composition
+
+    implicit val alternativeListVector: Alternative[Lambda[A => List[Vector[A]]]] = Alternative[List] compose Alternative[Vector]
+    implicit val iso = CartesianTests.Isomorphisms.invariant[Lambda[A => List[Vector[A]]]]
+
+    checkAll("Alternative[Lambda[A => List[Vector[A]]]]", AlternativeTests[Lambda[A => List[Vector[A]]]].alternative[Int, Int, Int])
+  }
 
   {
     // Applicative composition
@@ -30,19 +39,18 @@ class ComposeTests extends CatsSuite {
   }
 
   {
+    // MonoidK composition
+
+    implicit val monoidKListVector: MonoidK[Lambda[A => List[Vector[A]]]] = MonoidK[List].composeK[Vector]
+
+    checkAll("MonoidK[Lambda[A => List[Vector[A]]]]", MonoidKTests[Lambda[A => List[Vector[A]]]].monoidK[Int])
+  }
+
+  {
     // Reducible composition
 
-    val nelReducible =
-      new NonEmptyReducible[NonEmptyList, List] {
-        def split[A](fa: NonEmptyList[A]): (A, List[A]) = (fa.head, fa.tail)
-      }
-
-    val nevReducible =
-      new NonEmptyReducible[NonEmptyVector, Vector] {
-        def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
-      }
-
-    implicit val reducibleListVector: Reducible[Lambda[A => NonEmptyList[NonEmptyVector[A]]]] = nelReducible compose nevReducible
+    implicit val reducibleListVector: Reducible[Lambda[A => NonEmptyList[NonEmptyVector[A]]]] =
+      Reducible[NonEmptyList] compose Reducible[NonEmptyVector]
 
     // No Reducible-specific laws, so check the Foldable laws are satisfied
     checkAll("Reducible[Lambda[A => List[Vector[A]]]]", FoldableTests[Lambda[A => NonEmptyList[NonEmptyVector[A]]]].foldable[Int, Int])
@@ -51,7 +59,7 @@ class ComposeTests extends CatsSuite {
   {
     // SemigroupK composition
 
-    implicit val semigroupKListVector: SemigroupK[Lambda[A => List[Vector[A]]]] = SemigroupK[List] compose SemigroupK[Vector]
+    implicit val semigroupKListVector: SemigroupK[Lambda[A => List[Vector[A]]]] = SemigroupK[List].composeK[Vector]
 
     checkAll("SemigroupK[Lambda[A => List[Vector[A]]]]", SemigroupKTests[Lambda[A => List[Vector[A]]]].semigroupK[Int])
   }

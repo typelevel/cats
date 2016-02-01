@@ -29,11 +29,11 @@ import simulacrum.{op, typeclass}
   def combineK[A](x: F[A], y: F[A]): F[A]
 
   /**
-   * Compose two SemigroupK intsances.
+   * Compose this SemigroupK with an arbitrary type constructor
    */
-  def compose[G[_]: SemigroupK]: SemigroupK[λ[α => F[G[α]]]] =
-    new SemigroupK[λ[α => F[G[α]]]] {
-      def combineK[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = self.combineK(x, y)
+  def composeK[G[_]]: SemigroupK[λ[α => F[G[α]]]] =
+    new CompositeSemigroupK[F, G] {
+      implicit def F: SemigroupK[F] = self
     }
 
   /**
@@ -43,4 +43,12 @@ import simulacrum.{op, typeclass}
     new Semigroup[F[A]] {
       def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
     }
+}
+
+trait CompositeSemigroupK[F[_],G[_]]
+  extends SemigroupK[λ[α => F[G[α]]]] {
+
+  implicit def F: SemigroupK[F]
+
+  def combineK[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = F.combineK(x, y)
 }
