@@ -202,57 +202,57 @@ lazy val publishSettings = Seq(
       <developer>
         <id>ceedubs</id>
         <name>Cody Allen</name>
-        <url>http://github.com/ceedubs/</url>
+        <url>https://github.com/ceedubs/</url>
       </developer>
       <developer>
         <id>rossabaker</id>
         <name>Ross Baker</name>
-        <url>http://github.com/rossabaker/</url>
+        <url>https://github.com/rossabaker/</url>
       </developer>
       <developer>
         <id>travisbrown</id>
         <name>Travis Brown</name>
-        <url>http://github.com/travisbrown/</url>
+        <url>https://github.com/travisbrown/</url>
       </developer>
       <developer>
         <id>adelbertc</id>
         <name>Adelbert Chang</name>
-        <url>http://github.com/adelbertc/</url>
+        <url>https://github.com/adelbertc/</url>
       </developer>
       <developer>
         <id>tpolecat</id>
         <name>Rob Norris</name>
-        <url>http://github.com/tpolecat/</url>
+        <url>https://github.com/tpolecat/</url>
       </developer>
       <developer>
         <id>stew</id>
         <name>Mike O'Connor</name>
-        <url>http://github.com/stew/</url>
+        <url>https://github.com/stew/</url>
       </developer>
       <developer>
         <id>non</id>
         <name>Erik Osheim</name>
-        <url>http://github.com/non/</url>
+        <url>https://github.com/non/</url>
       </developer>
       <developer>
         <id>mpilquist</id>
         <name>Michael Pilquist</name>
-        <url>http://github.com/mpilquist/</url>
+        <url>https://github.com/mpilquist/</url>
       </developer>
       <developer>
         <id>milessabin</id>
         <name>Miles Sabin</name>
-        <url>http://github.com/milessabin/</url>
+        <url>https://github.com/milessabin/</url>
       </developer>
       <developer>
         <id>fthomas</id>
         <name>Frank Thomas</name>
-        <url>http://github.com/fthomas/</url>
+        <url>https://github.com/fthomas/</url>
       </developer>
       <developer>
         <id>julien-truffaut</id>
         <name>Julien Truffaut</name>
-        <url>http://github.com/julien-truffaut/</url>
+        <url>https://github.com/julien-truffaut/</url>
       </developer>
     </developers>
   )
