@@ -186,8 +186,6 @@ and benchmarks, including the following:
 
 * [#724](https://github.com/typelevel/cats/pull/724): sbt-doctest is now used to
   validate Scaladoc examples
-* [#809](https://github.com/typelevel/cats/pull/809): MiMa now enforces binary
-  compatibilty
 * [#806](https://github.com/typelevel/cats/pull/806): Various improvements to
   use of Simulacrum, which is now a compile-time-only dependency
 * [#734](https://github.com/typelevel/cats/pull/734): Documentation on testing
