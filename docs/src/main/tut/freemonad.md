@@ -266,7 +266,7 @@ works, but you might prefer folding your `Free` in a "purer" way. The
 state in an immutable map, avoiding mutation altogether.
 
 ```tut:silent
-import cats.state.State
+import cats.data.State
 
 type KVStoreState[A] = State[Map[String, Any], A]
 val pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
