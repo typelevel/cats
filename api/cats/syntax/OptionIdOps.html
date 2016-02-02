@@ -49,14 +49,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/syntax/option.scala" target="_blank">option.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/syntax/option.scala" target="_blank">option.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
-                <span class="toggle diagram-link">Type Hierarchy</span>
-                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 168.00 118.00" height="118pt" width="168pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="graph0"><polygon points="-4,4 -4,-114 164,-114 164,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.syntax.OptionIdOps (this class)" xlink:href="#inheritance-diagram"><polygon points="136,-49 24,-49 24,-24 136,-24 136,-49" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="34" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33.7495" x="54.9263" text-anchor="start">OptionIdOps[A]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="scala.AnyVal"><polygon points="117,-110 43,-110 43,-85 117,-85 117,-110" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-104.5" x="53" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="73.6396" text-anchor="start">AnyVal</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="OptionIdOps[A] is a subtype of AnyVal"><path d="M80,-79.6874C80,-69.9173 80,-57.8534 80,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="78.2501,-79.8435 80,-84.8435 81.7501,-79.8435 78.2501,-79.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
-              </div></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -237,7 +233,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.syntax.OptionIdOps#some" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.syntax.OptionIdOps#some" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="some:Option[A]"></a>
       <a id="some:Option[A]"></a>
       <h4 class="signature">
@@ -253,7 +249,10 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Wrap a value in <code>Some</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Wrap a value in <code>Some</code>.</p><p><code>3.some</code> is equivalent to <code>Some(3)</code>, but the former will have an inferred
+return type of <code>Option[Int]</code> while the latter will have <code>Some[Int]</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.syntax.option._
+scala&gt; <span class="num">3.</span>some
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)</pre></div></div>
     </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>

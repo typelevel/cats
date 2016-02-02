@@ -49,9 +49,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/std/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="FunctionInstances.html" class="extype" name="cats.std.FunctionInstances">FunctionInstances</a>, <a href="Function1Instances.html" class="extype" name="cats.std.Function1Instances">Function1Instances</a>, <a href="Function0Instances.html" class="extype" name="cats.std.Function0Instances">Function0Instances</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="FunctionInstances.html" class="extype" name="cats.std.FunctionInstances">FunctionInstances</a>, <span class="extype" name="cats.std.Function1Instances">Function1Instances</span>, <span class="extype" name="cats.std.Function1Instances0">Function1Instances0</span>, <span class="extype" name="cats.std.Function0Instances">Function0Instances</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.function"><span>function</span></li><li class="in" name="cats.std.FunctionInstances"><span>FunctionInstances</span></li><li class="in" name="cats.std.Function1Instances"><span>Function1Instances</span></li><li class="in" name="cats.std.Function0Instances"><span>Function0Instances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.function"><span>function</span></li><li class="in" name="cats.std.FunctionInstances"><span>FunctionInstances</span></li><li class="in" name="cats.std.Function1Instances"><span>Function1Instances</span></li><li class="in" name="cats.std.Function1Instances0"><span>Function1Instances0</span></li><li class="in" name="cats.std.Function0Instances"><span>Function0Instances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -218,7 +218,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Function0Instances.html" class="extype" name="cats.std.Function0Instances">Function0Instances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function0Instances</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
       <a id="equals(Any):Boolean"></a>
@@ -275,7 +275,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Function0Instances.html" class="extype" name="cats.std.Function0Instances">Function0Instances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function0Instances</dd></dl></div>
     </li><li name="cats.std.Function1Instances#function1Contravariant" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="function1Contravariant[R]:cats.functor.Contravariant[[α]α=&gt;R]"></a>
       <a id="function1Contravariant[R]:Contravariant[[α](α)⇒R]"></a>
@@ -292,24 +292,24 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Function1Instances.html" class="extype" name="cats.std.Function1Instances">Function1Instances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances</dd></dl></div>
     </li><li name="cats.std.Function1Instances#function1Covariant" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="function1Covariant[T1]:cats.MonadReader[[α,β]α=&gt;β,T1]"></a>
-      <a id="function1Covariant[T1]:MonadReader[[α,β](α)⇒β,T1]"></a>
+      <a id="function1Covariant[T1]:cats.MonadReader[[β]T1=&gt;β,T1]"></a>
+      <a id="function1Covariant[T1]:MonadReader[[β](T1)⇒β,T1]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">function1Covariant</span><span class="tparams">[<span name="T1">T1</span>]</span><span class="result">: <a href="../MonadReader.html" class="extype" name="cats.MonadReader">MonadReader</a>[[α, β](<span class="extype" name="cats.std.Function1Instances.&lt;refinement&gt;.Λ$.α">α</span>) ⇒ <span class="extype" name="cats.std.Function1Instances.&lt;refinement&gt;.Λ$.β">β</span>, <span class="extype" name="cats.std.Function1Instances.function1Covariant.T1">T1</span>]</span>
+        <span class="name">function1Covariant</span><span class="tparams">[<span name="T1">T1</span>]</span><span class="result">: <a href="../MonadReader.html" class="extype" name="cats.MonadReader">MonadReader</a>[[β](<span class="extype" name="cats.std.Function1Instances.function1Covariant.T1">T1</span>) ⇒ <span class="extype" name="cats.std.Function1Instances.&lt;refinement&gt;.Λ$.β">β</span>, <span class="extype" name="cats.std.Function1Instances.function1Covariant.T1">T1</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$function$@function1Covariant[T1]:cats.MonadReader[[α,β]α=&gt;β,T1]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$function$@function1Covariant[T1]:cats.MonadReader[[β]T1=&gt;β,T1]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Function1Instances.html" class="extype" name="cats.std.Function1Instances">Function1Instances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances</dd></dl></div>
     </li><li name="cats.std.Function1Instances#function1Instance" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="function1Instance:cats.arrow.Choice[Function1]withcats.arrow.Arrow[Function1]"></a>
       <a id="function1Instance:Choice[Function1]withArrow[Function1]"></a>
@@ -326,9 +326,9 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Function1Instances.html" class="extype" name="cats.std.Function1Instances">Function1Instances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances</dd></dl></div>
     </li><li name="cats.std.Function1Instances#function1Monoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="function1Monoid[A,B](implicitB:cats.Monoid[B]):cats.Monoid[A=&gt;B]"></a>
+      <a id="function1Monoid[A,B](implicitM:cats.Monoid[B]):cats.Monoid[A=&gt;B]"></a>
       <a id="function1Monoid[A,B](Monoid[B]):Monoid[(A)⇒B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -336,14 +336,65 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">function1Monoid</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.std.Function1Instances.function1Monoid.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[(<span class="extype" name="cats.std.Function1Instances.function1Monoid.A">A</span>) ⇒ <span class="extype" name="cats.std.Function1Instances.function1Monoid.B">B</span>]</span>
+        <span class="name">function1Monoid</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.std.Function1Instances.function1Monoid.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[(<span class="extype" name="cats.std.Function1Instances.function1Monoid.A">A</span>) ⇒ <span class="extype" name="cats.std.Function1Instances.function1Monoid.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$function$@function1Monoid[A,B](implicitB:cats.Monoid[B]):cats.Monoid[A=&gt;B]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$function$@function1Monoid[A,B](implicitM:cats.Monoid[B]):cats.Monoid[A=&gt;B]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Function1Instances.html" class="extype" name="cats.std.Function1Instances">Function1Instances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances</dd></dl></div>
+    </li><li name="cats.std.Function1Instances#function1MonoidK" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="function1MonoidK:cats.MonoidK[[A]A=&gt;A]"></a>
+      <a id="function1MonoidK:MonoidK[[A](A)⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function1MonoidK</span><span class="result">: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[A](<span class="extype" name="cats.std.Function1Instances.&lt;refinement&gt;.Λ$.A">A</span>) ⇒ <span class="extype" name="cats.std.Function1Instances.&lt;refinement&gt;.Λ$.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.package$$function$@function1MonoidK:cats.MonoidK[[A]A=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances</dd></dl></div>
+    </li><li name="cats.std.Function1Instances0#function1Semigroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="function1Semigroup[A,B](implicitS:cats.Semigroup[B]):cats.Semigroup[A=&gt;B]"></a>
+      <a id="function1Semigroup[A,B](Semigroup[B]):Semigroup[(A)⇒B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function1Semigroup</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="S">S: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.std.Function1Instances0.function1Semigroup.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[(<span class="extype" name="cats.std.Function1Instances0.function1Semigroup.A">A</span>) ⇒ <span class="extype" name="cats.std.Function1Instances0.function1Semigroup.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.package$$function$@function1Semigroup[A,B](implicitS:cats.Semigroup[B]):cats.Semigroup[A=&gt;B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances0</dd></dl></div>
+    </li><li name="cats.std.Function1Instances0#function1SemigroupK" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="function1SemigroupK:cats.SemigroupK[[A]A=&gt;A]"></a>
+      <a id="function1SemigroupK:SemigroupK[[A](A)⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function1SemigroupK</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[A](<span class="extype" name="cats.std.Function1Instances0.&lt;refinement&gt;.Λ$.A">A</span>) ⇒ <span class="extype" name="cats.std.Function1Instances0.&lt;refinement&gt;.Λ$.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.package$$function$@function1SemigroupK:cats.SemigroupK[[A]A=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances0</dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -561,9 +612,11 @@
         <div class="parent" name="cats.std.FunctionInstances">
               <h3>Inherited from <a href="FunctionInstances.html" class="extype" name="cats.std.FunctionInstances">FunctionInstances</a></h3>
             </div><div class="parent" name="cats.std.Function1Instances">
-              <h3>Inherited from <a href="Function1Instances.html" class="extype" name="cats.std.Function1Instances">Function1Instances</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.std.Function1Instances">Function1Instances</span></h3>
+            </div><div class="parent" name="cats.std.Function1Instances0">
+              <h3>Inherited from <span class="extype" name="cats.std.Function1Instances0">Function1Instances0</span></h3>
             </div><div class="parent" name="cats.std.Function0Instances">
-              <h3>Inherited from <a href="Function0Instances.html" class="extype" name="cats.std.Function0Instances">Function0Instances</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.std.Function0Instances">Function0Instances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

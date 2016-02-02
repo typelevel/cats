@@ -13,11 +13,15 @@ Before introducing a `SemigroupK`, it makes sense to talk about what a
 returns a value of type `A`. This operation must be guaranteed to be
 associative. That is to say that:
 
-    ((a combine b) combine c)
+```scala
+((a combine b) combine c)
+```
 
 must be the same as
 
-    (a combine (b combine c))
+```scala
+(a combine (b combine c))
+```
 
 for all possible values of `a`, `b`, `c`.
 
@@ -34,12 +38,13 @@ There are instances of `Semigroup` defined for many types found in the
 scala common library:
 
 ```scala
-scala> import cats._
 import cats._
-
-scala> import cats.std.all._
 import cats.std.all._
+```
 
+Examples.
+
+```scala
 scala> Semigroup[Int].combine(1, 2)
 res0: Int = 3
 
@@ -68,39 +73,38 @@ takes a concrete type, like `Int`, and returns a concrete type:
 *`, whereas `Int` would have kind `*` and `Map` would have kind `*,* -> *`,
 and, in fact, the `K` in `SemigroupK` stands for `Kind`.
 
-For `List`, the `Semigroup` and `SemigroupK` instance's `combine`
-operation are both list concatenation:
+For `List`, the `Semigroup` instance's `combine` operation and the `SemigroupK`
+instance's `combineK` operation are both list concatenation:
 
 ```scala
-scala> SemigroupK[List].combine(List(1,2,3), List(4,5,6)) == Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
+scala> SemigroupK[List].combineK(List(1,2,3), List(4,5,6)) == Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
 res5: Boolean = true
 ```
 
-However for `Option`, `Semigroup` and `SemigroupK`'s `combine` operation
-differs. Since `Semigroup` operates on fully specified types, a
-`Semigroup[Option[A]]` knows the concrete type of `A` and will
-use `Semigroup[A].combine` to combine the inner `A`s. Consequently,
-`Semigroup[Option[A]].combine` requires an implicit
-`Semigroup[A]`.
+However for `Option`, the `Semigroup`'s `combine` and the `SemigroupK`'s
+`combineK` operation differ. Since `Semigroup` operates on fully specified
+types, a `Semigroup[Option[A]]` knows the concrete type of `A` and will use
+`Semigroup[A].combine` to combine the inner `A`s. Consequently,
+`Semigroup[Option[A]].combine` requires an implicit `Semigroup[A]`.
 
 In contrast, since `SemigroupK[Option]` operates on `Option` where
 the inner type is not fully specified and can be anything (i.e. is
 "universally quantified"). Thus, we cannot know how to `combine`
 two of them. Therefore, in the case of `Option` the
-`SemigroupK[Option].combine` method has no choice but to use the
+`SemigroupK[Option].combineK` method has no choice but to use the
 `orElse` method of Option:
 
 ```scala
 scala> Semigroup[Option[Int]].combine(Some(1), Some(2))
 res6: Option[Int] = Some(3)
 
-scala> SemigroupK[Option].combine(Some(1), Some(2))
+scala> SemigroupK[Option].combineK(Some(1), Some(2))
 res7: Option[Int] = Some(1)
 
-scala> SemigroupK[Option].combine(Some(1), None)
+scala> SemigroupK[Option].combineK(Some(1), None)
 res8: Option[Int] = Some(1)
 
-scala> SemigroupK[Option].combine(None, Some(2))
+scala> SemigroupK[Option].combineK(None, Some(2))
 res9: Option[Int] = Some(2)
 ```
 
@@ -110,47 +114,41 @@ There is inline syntax available for both `Semigroup` and
 from `SemigroupK` (called `Plus` in scalaz).
 
 ```scala
-scala> import cats.syntax.all._
 import cats.syntax.all._
-
-scala> import cats.implicits._
 import cats.implicits._
-
-scala> import cats.std._
 import cats.std._
 
-scala> val one = Option(1)
-one: Option[Int] = Some(1)
+val one = Option(1)
+val two = Option(2)
+val n: Option[Int] = None
+```
 
-scala> val two = Option(2)
-two: Option[Int] = Some(2)
+Thus.
 
-scala> val n: Option[Int] = None
-n: Option[Int] = None
-
+```scala
 scala> one |+| two
-res10: Option[Int] = Some(3)
+res11: Option[Int] = Some(3)
 
 scala> one <+> two
-res11: Option[Int] = Some(1)
+res12: Option[Int] = Some(1)
 
 scala> n |+| two
-res12: Option[Int] = Some(2)
-
-scala> n <+> two
 res13: Option[Int] = Some(2)
 
-scala> n |+| n
-res14: Option[Int] = None
+scala> n <+> two
+res14: Option[Int] = Some(2)
 
-scala> n <+> n
+scala> n |+| n
 res15: Option[Int] = None
 
+scala> n <+> n
+res16: Option[Int] = None
+
 scala> two |+| n
-res16: Option[Int] = Some(2)
+res17: Option[Int] = Some(2)
 
 scala> two <+> n
-res17: Option[Int] = Some(2)
+res18: Option[Int] = Some(2)
 ```
 
 You'll notice that instead of declaring `one` as `Some(1)`, we chose
@@ -165,5 +163,5 @@ scala> Some(1) <+> None
                ^
 
 scala> None <+> Some(1)
-res19: Option[Int] = Some(1)
+res20: Option[Int] = Some(1)
 ```

@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/free/src/main/scala/cats/free/Free.scala" target="_blank">Free.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/free/Free.scala" target="_blank">Free.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -92,57 +92,23 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.free.Free.Gosub" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Gosub[S[_],B,C]extendsFree[S,B]withProductwithSerializable"></a>
-      <a id="Gosub[S[_],B,C]:Gosub[S,B,C]"></a>
+              <ol><li name="cats.free.Free.FreeInjectPartiallyApplied" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FreeInjectPartiallyApplied[F[_],G[_]]extendsAnyRef"></a>
+      <a id="FreeInjectPartiallyApplied[F[_],G[_]]:FreeInjectPartiallyApplied[F,G]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
-        <span class="kind">case class</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Free$$Gosub.html"><span class="name">Gosub</span></a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="c">c: <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.Gosub.S">S</span>, <span class="extype" name="cats.free.Free.Gosub.C">C</span>]</span>, <span name="f">f: (<span class="extype" name="cats.free.Free.Gosub.C">C</span>) ⇒ <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.Gosub.S">S</span>, <span class="extype" name="cats.free.Free.Gosub.B">B</span>]</span>)</span><span class="result"> extends <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.Gosub.S">S</span>, <span class="extype" name="cats.free.Free.Gosub.B">B</span>] with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Free$$FreeInjectPartiallyApplied.html"><span class="name">FreeInjectPartiallyApplied</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.Free$@Gosub[S[_],B,C]extendsFree[S,B]withProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.Free$@FreeInjectPartiallyApplied[F[_],G[_]]extendsAnyRef" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Call a subroutine and continue with the given function.</p>
-    </li><li name="cats.free.Free.Pure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Pure[S[_],A]extendsFree[S,A]withProductwithSerializable"></a>
-      <a id="Pure[S[_],A]:Pure[S,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Free$$Pure.html"><span class="name">Pure</span></a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.free.Free.Pure.A">A</span></span>)</span><span class="result"> extends <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.Pure.S">S</span>, <span class="extype" name="cats.free.Free.Pure.A">A</span>] with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.free.Free$@Pure[S[_],A]extendsFree[S,A]withProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Return from the computation with the given value.</p>
-    </li><li name="cats.free.Free.Suspend" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Suspend[S[_],A]extendsFree[S,A]withProductwithSerializable"></a>
-      <a id="Suspend[S[_],A]:Suspend[S,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Free$$Suspend.html"><span class="name">Suspend</span></a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.free.Free.Suspend.S">S</span>[<span class="extype" name="cats.free.Free.Suspend.A">A</span>]</span>)</span><span class="result"> extends <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.Suspend.S">S</span>, <span class="extype" name="cats.free.Free.Suspend.A">A</span>] with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.free.Free$@Suspend[S[_],A]extendsFree[S,A]withProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Suspend the computation with the given suspension.</p>
+      
     </li></ol>
             </div>
 
@@ -349,6 +315,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.free.Free#inject" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="inject[F[_],G[_]]:cats.free.Free.FreeInjectPartiallyApplied[F,G]"></a>
+      <a id="inject[F[_],G[_]]:FreeInjectPartiallyApplied[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inject</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="Free$$FreeInjectPartiallyApplied.html" class="extype" name="cats.free.Free.FreeInjectPartiallyApplied">FreeInjectPartiallyApplied</a>[<span class="extype" name="cats.free.Free.inject.F">F</span>, <span class="extype" name="cats.free.Free.inject.G">G</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.Free$@inject[F[_],G[_]]:cats.free.Free.FreeInjectPartiallyApplied[F,G]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

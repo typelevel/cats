@@ -57,17 +57,13 @@ SemigroupK is like a Semigroup for kinds (i.e. parameterized
 types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><p>Here's how to distinguish Semigroup and SemigroupK:</p><ul><li>Semigroup[A] allows two A values to be combined.</li><li>SemigroupK[F] allows two F[A] values to be combined, for any A.
    The combination operation just depends on the structure of F,
    but not the structure of A.
-</li></ul></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.SemigroupK.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/SemigroupK.scala" target="_blank">SemigroupK.scala</a></dd></dl><div class="toggleContainer block">
+</li></ul></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.SemigroupK.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/SemigroupK.scala" target="_blank">SemigroupK.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="Alternative.html" class="extype" name="cats.Alternative">Alternative</a>, <a href="MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>, <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>, <a href="data/ProdAlternative.html" class="extype" name="cats.data.ProdAlternative">ProdAlternative</a>, <a href="data/ProdMonoidK.html" class="extype" name="cats.data.ProdMonoidK">ProdMonoidK</a>, <a href="data/ProdSemigroupK.html" class="extype" name="cats.data.ProdSemigroupK">ProdSemigroupK</a></div>
-          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
-                <span class="toggle diagram-link">Type Hierarchy</span>
-                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 263.50 155.00" height="155pt" width="264pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="graph0"><polygon points="-4,4 -4,-151 259.5,-151 259.5,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.SemigroupK (this trait)" xlink:href="#inheritance-diagram"><polygon points="170,-86 60,-86 60,-61 170,-61 170,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="70" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="90.7637" text-anchor="start">SemigroupK[F]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.MonoidK" xlink:href="MonoidK.html#inheritance-diagram"><polygon points="94,-25 -7.10543e-15,-25 -7.10543e-15,-0 94,-0 94,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="30.5444" text-anchor="start">MonoidK[F]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="MonoidK[F] is a subtype of SemigroupK[F]"><path d="M97.7772,-57.5567C86.1808,-47.4951 71.1097,-34.4187 60.4067,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="96.6419,-58.8885 101.565,-60.8435 98.9356,-56.2449 96.6419,-58.8885" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.data.ProdSemigroupK" xlink:href="data/ProdSemigroupK.html#inheritance-diagram"><polygon points="255.5,-25 112.5,-25 112.5,-0 255.5,-0 255.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="123" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="143.589" text-anchor="start">ProdSemigroupK[F, G]</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="ProdSemigroupK[F, G] is a subtype of SemigroupK[F]"><path d="M132.476,-57.5567C144.243,-47.4951 159.536,-34.4187 170.396,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="131.295,-56.264 128.632,-60.8435 133.57,-58.9241 131.295,-56.264" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="scala.Serializable"><polygon points="162.5,-147 67.5,-147 67.5,-122 162.5,-122 162.5,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="78" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="98.7637" text-anchor="start">Serializable</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="SemigroupK[F] is a subtype of Serializable"><path d="M115,-116.687C115,-106.917 115,-94.8534 115,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="113.25,-116.843 115,-121.843 116.75,-116.844 113.25,-116.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
-              </div></div>
+            <div class="subClasses hiddenContent"><a href="Alternative.html" class="extype" name="cats.Alternative">Alternative</a>, <a href="CompositeAlternative.html" class="extype" name="cats.CompositeAlternative">CompositeAlternative</a>, <a href="CompositeMonoidK.html" class="extype" name="cats.CompositeMonoidK">CompositeMonoidK</a>, <a href="CompositeSemigroupK.html" class="extype" name="cats.CompositeSemigroupK">CompositeSemigroupK</a>, <a href="MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>, <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>, <a href="data/ProdAlternative.html" class="extype" name="cats.data.ProdAlternative">ProdAlternative</a>, <a href="data/ProdMonoidK.html" class="extype" name="cats.data.ProdMonoidK">ProdMonoidK</a>, <a href="data/ProdSemigroupK.html" class="extype" name="cats.data.ProdSemigroupK">ProdSemigroupK</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -84,7 +80,7 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.SemigroupK"><span>SemigroupK</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.SemigroupK"><span>SemigroupK</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -107,19 +103,19 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="cats.SemigroupK#combine" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="combine[A](x:F[A],y:F[A]):F[A]"></a>
-      <a id="combine[A](F[A],F[A]):F[A]"></a>
+              <ol><li name="cats.SemigroupK#combineK" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="combineK[A](x:F[A],y:F[A]):F[A]"></a>
+      <a id="combineK[A](F[A],F[A]):F[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">combine</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.SemigroupK.F">F</span>[<span class="extype" name="cats.SemigroupK.combine.A">A</span>]</span>, <span name="y">y: <span class="extype" name="cats.SemigroupK.F">F</span>[<span class="extype" name="cats.SemigroupK.combine.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.SemigroupK.F">F</span>[<span class="extype" name="cats.SemigroupK.combine.A">A</span>]</span>
+        <span class="name">combineK</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.SemigroupK.F">F</span>[<span class="extype" name="cats.SemigroupK.combineK.A">A</span>]</span>, <span name="y">y: <span class="extype" name="cats.SemigroupK.F">F</span>[<span class="extype" name="cats.SemigroupK.combineK.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.SemigroupK.F">F</span>[<span class="extype" name="cats.SemigroupK.combineK.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@combine[A](x:F[A],y:F[A]):F[A]" title="Permalink" target="_top">
+      <a href="../index.html#cats.SemigroupK@combineK[A](x:F[A],y:F[A]):F[A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -134,12 +130,29 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.SemigroupK@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li></ol>
             </div>
 
         <div id="values" class="values members">
               <h3>Concrete Value Members</h3>
-              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
@@ -155,8 +168,8 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <a id="##():Int"></a>
       <h4 class="signature">
@@ -172,8 +185,8 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
@@ -189,7 +202,7 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="cats.SemigroupK#algebra" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="algebra[A]:cats.Semigroup[F[A]]"></a>
       <a id="algebra[A]:Semigroup[F[A]]"></a>
@@ -224,64 +237,25 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="clone():Object"></a>
-      <a id="clone():AnyRef"></a>
+    </li><li name="cats.SemigroupK#composeK" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="composeK[G[_]]:cats.SemigroupK[[α]F[G[α]]]"></a>
+      <a id="composeK[G[_]]:SemigroupK[[α]F[G[α]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">composeK</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="" class="extype" name="cats.SemigroupK">SemigroupK</a>[[α]<span class="extype" name="cats.SemigroupK.F">F</span>[<span class="extype" name="cats.SemigroupK.composeK.G">G</span>[<span class="extype" name="cats.SemigroupK.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@clone():Object" title="Permalink" target="_top">
+      <a href="../index.html#cats.SemigroupK@composeK[G[_]]:cats.SemigroupK[[α]F[G[α]]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="cats.SemigroupK#composedWith" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="composedWith[G[_]](implicitevidence$1:cats.SemigroupK[G]):cats.SemigroupK[[α]F[G[α]]]"></a>
-      <a id="composedWith[G[_]](SemigroupK[G]):SemigroupK[[α]F[G[α]]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">composedWith</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.SemigroupK.composedWith.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.SemigroupK">SemigroupK</a>[[α]<span class="extype" name="cats.SemigroupK.F">F</span>[<span class="extype" name="cats.SemigroupK.composedWith.G">G</span>[<span class="extype" name="cats.SemigroupK.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@composedWith[G[_]](implicitevidence$1:cats.SemigroupK[G]):cats.SemigroupK[[α]F[G[α]]]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Compose two SemigroupK intsances.</p>
-    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="eq(x$1:AnyRef):Boolean"></a>
-      <a id="eq(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Compose this SemigroupK with an arbitrary type constructor
+</p>
+    </li><li name="scala.Any#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
@@ -297,48 +271,8 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <a id="finalize():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@finalize():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getClass():Class[_]"></a>
-      <a id="getClass():Class[_]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -354,7 +288,7 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -372,75 +306,7 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ne(x$1:AnyRef):Boolean"></a>
-      <a id="ne(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notify():Unit"></a>
-      <a id="notify():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@notify():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notifyAll():Unit"></a>
-      <a id="notifyAll():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
-      <a id="synchronized[T0](⇒T0):T0"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -456,76 +322,7 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <a id="wait():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@wait():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
-      <a id="wait(Long,Int):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long):Unit"></a>
-      <a id="wait(Long):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.SemigroupK@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li></ol>
             </div>
 
@@ -539,8 +336,6 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>

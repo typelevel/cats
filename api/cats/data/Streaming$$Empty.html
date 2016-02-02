@@ -53,14 +53,10 @@
 Eval[_] is used to represent possible laziness (via Now, Later,
 and Always). The head of <code>Cons</code> is eager -- a lazy head can be
 represented using <code>Wait(Always(...))</code> or <code>Wait(Later(...))</code>.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/Streaming.scala" target="_blank">Streaming.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Streaming.scala" target="_blank">Streaming.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
-                <span class="toggle diagram-link">Type Hierarchy</span>
-                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 319.00 118.00" height="118pt" width="319pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="graph0"><polygon points="-4,4 -4,-114 315,-114 315,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.data.Streaming.Empty (this class)" xlink:href="#inheritance-diagram"><polygon points="200.5,-49 116.5,-49 116.5,-24 200.5,-24 200.5,-49" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="126.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33.7495" x="147.328" text-anchor="start">Empty[A]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="cats.data.Streaming" xlink:href="Streaming.html#inheritance-diagram"><polygon points="101,-110 0,-110 0,-85 101,-85 101,-110" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-104.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="31.2095" text-anchor="start">Streaming[A]</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="Empty[A] is a subtype of Streaming[A]"><path d="M76.1624,-82.4807C94.7491,-72.3269 119.586,-58.7588 137.104,-49.1884" stroke="#d4d4d4" fill="none"></path><polygon points="75.1288,-81.0512 71.5799,-84.9841 76.8068,-84.1228 75.1288,-81.0512" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="scala.Product"><polygon points="197.5,-110 119.5,-110 119.5,-85 197.5,-85 197.5,-110" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="129.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="150.379" text-anchor="start">Product</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="Empty[A] is a subtype of Product"><path d="M158.5,-79.6874C158.5,-69.9173 158.5,-57.8534 158.5,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="156.75,-79.8435 158.5,-84.8435 160.25,-79.8435 156.75,-79.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="scala.Serializable"><polygon points="311,-110 216,-110 216,-85 311,-85 311,-110" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="226.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="247.264" text-anchor="start">Serializable</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="Empty[A] is a subtype of Serializable"><path d="M238.55,-82.4807C220.48,-72.3269 196.334,-58.7588 179.301,-49.1884" stroke="#d4d4d4" fill="none"></path><polygon points="237.789,-84.0604 243.006,-84.9841 239.504,-81.0091 237.789,-84.0604" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
-              </div></div>
+          <div class="superTypes hiddenContent"><a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -77,7 +73,7 @@ represented using <code>Wait(Always(...))</code> or <code>Wait(Later(...))</code
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.data.Streaming.Empty"><span>Empty</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="cats.data.Streaming"><span>Streaming</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.data.Streaming.Empty"><span>Empty</span></li><li class="in" name="cats.data.Streaming"><span>Streaming</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -156,6 +152,42 @@ represented using <code>Wait(Always(...))</code> or <code>Wait(Later(...))</code
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.Streaming#++" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="++(rhs:cats.Eval[cats.data.Streaming[A]]):cats.data.Streaming[A]"></a>
+      <a id="++(Eval[Streaming[A]]):Streaming[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus$plus" class="name">++</span><span class="params">(<span name="rhs">rhs: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>]]</span>)</span><span class="result">: <a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Streaming$$Empty@++(rhs:cats.Eval[cats.data.Streaming[A]]):cats.data.Streaming[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lazily concatenate two streams.</p><div class="fullcomment"><div class="comment cmt"><p>Lazily concatenate two streams.</p><p>In this case the evaluation of the second stream may be deferred.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a></dd></dl></div>
+    </li><li name="cats.data.Streaming#++" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="++(rhs:cats.data.Streaming[A]):cats.data.Streaming[A]"></a>
+      <a id="++(Streaming[A]):Streaming[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus$plus" class="name">++</span><span class="params">(<span name="rhs">rhs: <a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>]</span>)</span><span class="result">: <a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Streaming$$Empty@++(rhs:cats.data.Streaming[A]):cats.data.Streaming[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lazily concatenate two streams.</p><div class="fullcomment"><div class="comment cmt"><p>Lazily concatenate two streams.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a></dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
@@ -235,42 +267,6 @@ nodes).</p><p>Normally, Wait(_) values are used to defer tail computation in
 cases where it is convenient to return a stream value where
 neither the head or tail are computed yet.</p><p>In some cases (particularly if the stream is to be memoized) it
 may be desirable to ensure that these values are not retained.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a></dd></dl></div>
-    </li><li name="cats.data.Streaming#concat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="concat(rhs:cats.Eval[cats.data.Streaming[A]]):cats.data.Streaming[A]"></a>
-      <a id="concat(Eval[Streaming[A]]):Streaming[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">concat</span><span class="params">(<span name="rhs">rhs: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>]]</span>)</span><span class="result">: <a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Streaming$$Empty@concat(rhs:cats.Eval[cats.data.Streaming[A]]):cats.data.Streaming[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Lazily concatenate two streams.</p><div class="fullcomment"><div class="comment cmt"><p>Lazily concatenate two streams.</p><p>In this case the evaluation of the second stream may be deferred.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a></dd></dl></div>
-    </li><li name="cats.data.Streaming#concat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="concat(rhs:cats.data.Streaming[A]):cats.data.Streaming[A]"></a>
-      <a id="concat(Streaming[A]):Streaming[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">concat</span><span class="params">(<span name="rhs">rhs: <a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>]</span>)</span><span class="result">: <a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Streaming$$Empty@concat(rhs:cats.data.Streaming[A]):cats.data.Streaming[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Lazily concatenate two streams.</p><div class="fullcomment"><div class="comment cmt"><p>Lazily concatenate two streams.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a></dd></dl></div>
     </li><li name="cats.data.Streaming#drop" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="drop(n:Int):cats.data.Streaming[A]"></a>
@@ -507,7 +503,7 @@ is found (i.e. until Empty() or Cons() is found).
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A variant of fold, used for constructing streams.</p><div class="fullcomment"><div class="comment cmt"><p>A variant of fold, used for constructing streams.</p><p>The only difference is that foldStream will preserve deferred
+      <p class="shortcomment cmt">A variant of fold, used for constructing streams.</p><div class="fullcomment"><div class="comment cmt"><p>A variant of fold, used for constructing streams.</p><p>The only difference is that foldStreaming will preserve deferred
 streams. This makes it more appropriate to use in situations
 where the stream's laziness must be preserved.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a></dd></dl></div>
@@ -703,8 +699,13 @@ this case to produce valid <code>C</code> values.</p><p>The expression:</p><p>  
     </span>
       <p class="shortcomment cmt">Ensure that repeated traversals of the stream will not cause
 repeated tail computations.</p><div class="fullcomment"><div class="comment cmt"><p>Ensure that repeated traversals of the stream will not cause
-repeated tail computations.</p><p>By default stream does not memoize to avoid memory leaks when the
-head of the stream is retained.
+repeated tail computations.</p><p>By default this structure does not memoize to avoid memory leaks
+when the head of the stream is retained. However, the user
+ultimately has control of the memoization approach based on what
+kinds of Eval instances they use.</p><p>There are two calls to .memoize here -- one is a recursive call
+to this method (on the tail) and the other is a call to memoize
+the Eval instance holding the tail. For more information on how
+this works see <a href="../Eval.html#memoize:cats.Eval[A]" class="extmbr" name="cats.Eval#memoize">cats.Eval.memoize</a>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a></dd></dl></div>
     </li><li name="cats.data.Streaming#merge" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="merge(rhs:cats.data.Streaming[A])(implicitev:cats.Order[A]):cats.data.Streaming[A]"></a>
@@ -1171,7 +1172,9 @@ arguments.</p><p>The expression:</p><p>  (lhs zipMap rhs)(f)</p><p>is equivalent
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
+        <div class="parent" name="cats.data.Streaming">
+              <h3>Inherited from <a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
@@ -1179,8 +1182,6 @@ arguments.</p><p>The expression:</p><p>  (lhs zipMap rhs)(f)</p><p>is equivalent
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
-            </div><div class="parent" name="cats.data.Streaming">
-              <h3>Inherited from <a href="Streaming.html" class="extype" name="cats.data.Streaming">Streaming</a>[<span class="extype" name="cats.data.Streaming.Empty.A">A</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

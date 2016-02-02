@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Ior</span><span class="result"> extends <a href="IorInstances.html" class="extype" name="cats.data.IorInstances">IorInstances</a> with <a href="IorFunctions.html" class="extype" name="cats.data.IorFunctions">IorFunctions</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Ior</span><span class="result"> extends <span class="extype" name="cats.data.IorInstances">IorInstances</span> with <a href="IorFunctions.html" class="extype" name="cats.data.IorFunctions">IorFunctions</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/Ior.scala" target="_blank">Ior.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Ior.scala" target="_blank">Ior.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="IorFunctions.html" class="extype" name="cats.data.IorFunctions">IorFunctions</a>, <a href="IorInstances.html" class="extype" name="cats.data.IorInstances">IorInstances</a>, <a href="IorInstances0.html" class="extype" name="cats.data.IorInstances0">IorInstances0</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="IorFunctions.html" class="extype" name="cats.data.IorFunctions">IorFunctions</a>, <span class="extype" name="cats.data.IorInstances">IorInstances</span>, <span class="extype" name="cats.data.IorInstances0">IorInstances0</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -315,6 +315,26 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.IorFunctions#fromOptions" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromOptions[A,B](oa:Option[A],ob:Option[B]):Option[cats.data.Ior[A,B]]"></a>
+      <a id="fromOptions[A,B](Option[A],Option[B]):Option[Ior[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromOptions</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="oa">oa: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.IorFunctions.fromOptions.A">A</span>]</span>, <span name="ob">ob: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.IorFunctions.fromOptions.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.IorFunctions.fromOptions.A">A</span>, <span class="extype" name="cats.data.IorFunctions.fromOptions.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Ior$@fromOptions[A,B](oa:Option[A],ob:Option[B]):Option[cats.data.Ior[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create an <code>Ior</code> from two Options if at least one of them is defined.</p><div class="fullcomment"><div class="comment cmt"><p>Create an <code>Ior</code> from two Options if at least one of them is defined.
+</p></div><dl class="paramcmts block"><dt class="param">oa</dt><dd class="cmt"><p>an element (optional) for the left side of the <code>Ior</code></p></dd><dt class="param">ob</dt><dd class="cmt"><p>an element (optional) for the right side of the <code>Ior</code></p></dd><dt>returns</dt><dd class="cmt"><p><code>None</code> if both <code>oa</code> and <code>ob</code> are <code>None</code>. Otherwise <code>Some</code> wrapping
+an <a href="Ior$$Left.html" class="extype" name="cats.data.Ior.Left">Ior.Left</a>, <a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Ior.Right</a>, or <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Ior.Both</a> if <code>oa</code>, <code>ob</code>, or both are
+defined (respectively).</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="IorFunctions.html" class="extype" name="cats.data.IorFunctions">IorFunctions</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -349,6 +369,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.IorInstances#iorBifunctor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iorBifunctor:cats.functor.Bifunctor[cats.data.Ior]"></a>
+      <a id="iorBifunctor:Bifunctor[Ior]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iorBifunctor</span><span class="result">: <a href="../functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Ior$@iorBifunctor:cats.functor.Bifunctor[cats.data.Ior]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorInstances</dd></dl></div>
     </li><li name="cats.data.IorInstances#iorEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="iorEq[A,B](implicitevidence$1:cats.Eq[A],implicitevidence$2:cats.Eq[B]):cats.Eq[cats.data.Ior[A,B]]"></a>
       <a id="iorEq[A,B](Eq[A],Eq[B]):Eq[Ior[A,B]]"></a>
@@ -365,7 +402,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="IorInstances.html" class="extype" name="cats.data.IorInstances">IorInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorInstances</dd></dl></div>
     </li><li name="cats.data.IorInstances0#iorInstances" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="iorInstances[A]:cats.Traverse[[β]cats.data.Ior[A,β]]withcats.Functor[[β]cats.data.Ior[A,β]]"></a>
       <a id="iorInstances[A]:Traverse[[β]Ior[A,β]]withFunctor[[β]Ior[A,β]]"></a>
@@ -382,7 +419,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="IorInstances0.html" class="extype" name="cats.data.IorInstances0">IorInstances0</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorInstances0</dd></dl></div>
     </li><li name="cats.data.IorInstances#iorMonad" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="iorMonad[A](implicitevidence$5:cats.Semigroup[A]):cats.Monad[[β]cats.data.Ior[A,β]]"></a>
       <a id="iorMonad[A](Semigroup[A]):Monad[[β]Ior[A,β]]"></a>
@@ -399,7 +436,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="IorInstances.html" class="extype" name="cats.data.IorInstances">IorInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorInstances</dd></dl></div>
     </li><li name="cats.data.IorInstances#iorShow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="iorShow[A,B](implicitevidence$3:cats.Show[A],implicitevidence$4:cats.Show[B]):cats.Show[cats.data.Ior[A,B]]"></a>
       <a id="iorShow[A,B](Show[A],Show[B]):Show[Ior[A,B]]"></a>
@@ -416,7 +453,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="IorInstances.html" class="extype" name="cats.data.IorInstances">IorInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorInstances</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -638,9 +675,9 @@
             </div><div class="parent" name="cats.data.IorFunctions">
               <h3>Inherited from <a href="IorFunctions.html" class="extype" name="cats.data.IorFunctions">IorFunctions</a></h3>
             </div><div class="parent" name="cats.data.IorInstances">
-              <h3>Inherited from <a href="IorInstances.html" class="extype" name="cats.data.IorInstances">IorInstances</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.data.IorInstances">IorInstances</span></h3>
             </div><div class="parent" name="cats.data.IorInstances0">
-              <h3>Inherited from <a href="IorInstances0.html" class="extype" name="cats.data.IorInstances0">IorInstances0</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.data.IorInstances0">IorInstances0</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

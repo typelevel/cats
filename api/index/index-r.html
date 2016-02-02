@@ -30,13 +30,13 @@
       <div class="occurrences"><a href="../cats/data/Ior$.html" class="extype" name="cats.data.Ior">Ior</a> <a href="../cats/data/Xor$.html" class="extype" name="cats.data.Xor">Xor</a> </div>
     </div><div class="entry">
       <div class="name">raiseError</div>
-      <div class="occurrences"><a href="../cats/MonadError.html" class="extype" name="cats.MonadError">MonadError</a> </div>
+      <div class="occurrences"><a href="../cats/ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a> </div>
     </div><div class="entry">
       <div class="name">recover</div>
-      <div class="occurrences"><a href="../cats/data/Xor.html" class="extype" name="cats.data.Xor">Xor</a> <a href="../cats/data/XorT.html" class="extype" name="cats.data.XorT">XorT</a> </div>
+      <div class="occurrences"><a href="../cats/ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a> <a href="../cats/data/Xor.html" class="extype" name="cats.data.Xor">Xor</a> <a href="../cats/data/XorT.html" class="extype" name="cats.data.XorT">XorT</a> </div>
     </div><div class="entry">
       <div class="name">recoverWith</div>
-      <div class="occurrences"><a href="../cats/data/Xor.html" class="extype" name="cats.data.Xor">Xor</a> <a href="../cats/data/XorT.html" class="extype" name="cats.data.XorT">XorT</a> </div>
+      <div class="occurrences"><a href="../cats/ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a> <a href="../cats/data/Xor.html" class="extype" name="cats.data.Xor">Xor</a> <a href="../cats/data/XorT.html" class="extype" name="cats.data.XorT">XorT</a> </div>
     </div><div class="entry">
       <div class="name">reduce</div>
       <div class="occurrences"><a href="../cats/Reducible.html" class="extype" name="cats.Reducible">Reducible</a> </div>
@@ -68,6 +68,9 @@
       <div class="name">remove</div>
       <div class="occurrences"><a href="../cats/EvalGroup.html" class="extype" name="cats.EvalGroup">EvalGroup</a> <a href="../cats/syntax/GroupOps.html" class="extype" name="cats.syntax.GroupOps">GroupOps</a> </div>
     </div><div class="entry">
+      <div class="name">reset</div>
+      <div class="occurrences"><a href="../cats/data/WriterT.html" class="extype" name="cats.data.WriterT">WriterT</a> </div>
+    </div><div class="entry">
       <div class="name">resume</div>
       <div class="occurrences"><a href="../cats/free/Free.html" class="extype" name="cats.free.Free">Free</a> </div>
     </div><div class="entry">
@@ -75,36 +78,39 @@
       <div class="occurrences"><a href="../cats/data/Const.html" class="extype" name="cats.data.Const">Const</a> </div>
     </div><div class="entry">
       <div class="name">right</div>
-      <div class="occurrences"><a href="../cats/data/Ior.html" class="extype" name="cats.data.Ior">Ior</a> <a href="../cats/data/IorFunctions.html" class="extype" name="cats.data.IorFunctions">IorFunctions</a> <a href="../cats/data/XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a> <a href="../cats/data/XorTFunctions.html" class="extype" name="cats.data.XorTFunctions">XorTFunctions</a> <a href="../cats/syntax/XorIdOps.html" class="extype" name="cats.syntax.XorIdOps">XorIdOps</a> </div>
+      <div class="occurrences"><a href="../cats/data/Coproduct$.html" class="extype" name="cats.data.Coproduct">Coproduct</a> <a href="../cats/data/Ior.html" class="extype" name="cats.data.Ior">Ior</a> <a href="../cats/data/IorFunctions.html" class="extype" name="cats.data.IorFunctions">IorFunctions</a> <a href="../cats/data/XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a> <a href="../cats/data/XorTFunctions.html" class="extype" name="cats.data.XorTFunctions">XorTFunctions</a> <a href="../cats/syntax/XorIdOps.html" class="extype" name="cats.syntax.XorIdOps">XorIdOps</a> </div>
     </div><div class="entry">
       <div class="name">rightMap</div>
-      <div class="occurrences"><a href="../cats/functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a> </div>
+      <div class="occurrences"><a href="../cats/functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a> <a href="../cats/syntax/BifunctorOps.html" class="extype" name="cats.syntax.BifunctorOps">BifunctorOps</a> </div>
+    </div><div class="entry">
+      <div class="name">rightc</div>
+      <div class="occurrences"><a href="../cats/data/Coproduct$.html" class="extype" name="cats.data.Coproduct">Coproduct</a> <a href="../cats/syntax/CoproductOps.html" class="extype" name="cats.syntax.CoproductOps">CoproductOps</a> </div>
     </div><div class="entry">
       <div class="name">rmap</div>
       <div class="occurrences"><a href="../cats/functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a> <a href="../cats/syntax/ProfunctorOps.html" class="extype" name="cats.syntax.ProfunctorOps">ProfunctorOps</a> </div>
     </div><div class="entry">
       <div class="name">run</div>
-      <div class="occurrences"><a href="../cats/Eval$$Compute.html" class="extype" name="cats.Eval.Compute">Compute</a> <a href="../cats/data/Cokleisli.html" class="extype" name="cats.data.Cokleisli">Cokleisli</a> <a href="../cats/data/Func.html" class="extype" name="cats.data.Func">Func</a> <a href="../cats/data/Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a> <a href="../cats/free/Coyoneda.html" class="extype" name="cats.free.Coyoneda">Coyoneda</a> <a href="../cats/free/Free.html" class="extype" name="cats.free.Free">Free</a> <a href="../cats/free/Yoneda.html" class="extype" name="cats.free.Yoneda">Yoneda</a> <a href="../cats/state/StateT.html" class="extype" name="cats.state.StateT">StateT</a> </div>
+      <div class="occurrences"><a href="../cats/Eval$$Compute.html" class="extype" name="cats.Eval.Compute">Compute</a> <a href="../cats/data/Cokleisli.html" class="extype" name="cats.data.Cokleisli">Cokleisli</a> <a href="../cats/data/Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a> <a href="../cats/data/Func.html" class="extype" name="cats.data.Func">Func</a> <a href="../cats/data/Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a> <a href="../cats/data/StateT.html" class="extype" name="cats.data.StateT">StateT</a> <a href="../cats/data/WriterT.html" class="extype" name="cats.data.WriterT">WriterT</a> <a href="../cats/free/Coyoneda.html" class="extype" name="cats.free.Coyoneda">Coyoneda</a> <a href="../cats/free/Free.html" class="extype" name="cats.free.Free">Free</a> <a href="../cats/free/Yoneda.html" class="extype" name="cats.free.Yoneda">Yoneda</a> </div>
     </div><div class="entry">
       <div class="name">runA</div>
-      <div class="occurrences"><a href="../cats/state/StateT.html" class="extype" name="cats.state.StateT">StateT</a> </div>
+      <div class="occurrences"><a href="../cats/data/StateT.html" class="extype" name="cats.data.StateT">StateT</a> </div>
     </div><div class="entry">
       <div class="name">runEmpty</div>
-      <div class="occurrences"><a href="../cats/state/StateT.html" class="extype" name="cats.state.StateT">StateT</a> </div>
+      <div class="occurrences"><a href="../cats/data/StateT.html" class="extype" name="cats.data.StateT">StateT</a> </div>
     </div><div class="entry">
       <div class="name">runEmptyA</div>
-      <div class="occurrences"><a href="../cats/state/StateT.html" class="extype" name="cats.state.StateT">StateT</a> </div>
+      <div class="occurrences"><a href="../cats/data/StateT.html" class="extype" name="cats.data.StateT">StateT</a> </div>
     </div><div class="entry">
       <div class="name">runEmptyS</div>
-      <div class="occurrences"><a href="../cats/state/StateT.html" class="extype" name="cats.state.StateT">StateT</a> </div>
+      <div class="occurrences"><a href="../cats/data/StateT.html" class="extype" name="cats.data.StateT">StateT</a> </div>
     </div><div class="entry">
       <div class="name">runF</div>
-      <div class="occurrences"><a href="../cats/state/StateT.html" class="extype" name="cats.state.StateT">StateT</a> </div>
+      <div class="occurrences"><a href="../cats/data/StateT.html" class="extype" name="cats.data.StateT">StateT</a> </div>
     </div><div class="entry">
       <div class="name">runM</div>
       <div class="occurrences"><a href="../cats/free/Free.html" class="extype" name="cats.free.Free">Free</a> </div>
     </div><div class="entry">
       <div class="name">runS</div>
-      <div class="occurrences"><a href="../cats/state/StateT.html" class="extype" name="cats.state.StateT">StateT</a> </div>
+      <div class="occurrences"><a href="../cats/data/StateT.html" class="extype" name="cats.data.StateT">StateT</a> </div>
     </div></body>
       </html>

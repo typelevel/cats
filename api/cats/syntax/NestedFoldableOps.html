@@ -41,7 +41,7 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
@@ -49,14 +49,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/syntax/foldable.scala" target="_blank">foldable.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/syntax/foldable.scala" target="_blank">foldable.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
-                <span class="toggle diagram-link">Type Hierarchy</span>
-                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 224.00 118.00" height="118pt" width="224pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="graph0"><polygon points="-4,4 -4,-114 220,-114 220,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.syntax.NestedFoldableOps (this class)" xlink:href="#inheritance-diagram"><polygon points="191.5,-49 24.5,-49 24.5,-24 191.5,-24 191.5,-49" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="35" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33.7495" x="55.6357" text-anchor="start">NestedFoldableOps[F, G, A]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="scala.AnyRef"><polygon points="146,-110 70,-110 70,-85 146,-85 146,-110" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-104.5" x="80" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="100.714" text-anchor="start">AnyRef</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="NestedFoldableOps[F, G, A] is a subtype of AnyRef"><path d="M108,-79.6874C108,-69.9173 108,-57.8534 108,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="106.25,-79.8435 108,-84.8435 109.75,-79.8435 106.25,-79.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
-              </div></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -266,7 +262,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.syntax.NestedFoldableOps#foldK" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.syntax.NestedFoldableOps#foldK" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foldK(implicitG:cats.MonoidK[G]):G[A]"></a>
       <a id="foldK(MonoidK[G]):G[A]"></a>
       <h4 class="signature">
@@ -282,7 +278,13 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Foldable.html#foldK[G[_],A](fga:F[G[A]])(implicitG:cats.MonoidK[G]):G[A]" class="extmbr" name="cats.Foldable#foldK">Foldable.foldK</a>.
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">import</span> cats.std.set._
+scala&gt; <span class="kw">import</span> cats.syntax.foldable._
+scala&gt; <span class="kw">val</span> l: <span class="std">List</span>[<span class="std">Set</span>[<span class="std">Int</span>]] = <span class="std">List</span>(<span class="std">Set</span>(<span class="num">1</span>, <span class="num">2</span>), <span class="std">Set</span>(<span class="num">2</span>, <span class="num">3</span>), <span class="std">Set</span>(<span class="num">3</span>, <span class="num">4</span>))
+scala&gt; l.foldK
+res0: <span class="std">Set</span>[<span class="std">Int</span>] = <span class="std">Set</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)</pre></span></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -386,18 +388,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.syntax.NestedFoldableOps#sequence_" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="sequence_[B](implicitG:cats.Applicative[G]):G[Unit]"></a>
-      <a id="sequence_[B](Applicative[G]):G[Unit]"></a>
+      <a id="sequence_(implicitG:cats.Applicative[G]):G[Unit]"></a>
+      <a id="sequence_(Applicative[G]):G[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">sequence_</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.syntax.NestedFoldableOps.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.NestedFoldableOps.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">sequence_</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.syntax.NestedFoldableOps.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.NestedFoldableOps.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.NestedFoldableOps@sequence_[B](implicitG:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.NestedFoldableOps@sequence_(implicitG:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

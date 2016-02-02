@@ -47,21 +47,17 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Traverse</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Traverse.F">F</span>]</span>
+        <span class="name">Traverse</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Traverse, also known as Traversable.</p><p>Traversal over a structure with an effect.</p><p>Traversing with the <a href="package.html#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a> effect is equivalent to <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
 Traversing with the <a href="data/Const.html" class="extype" name="cats.data.Const">cats.data.Const</a> effect where the first type parameter has
 a <a href="package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a> instance is equivalent to <a href="Foldable.html" class="extype" name="cats.Foldable">cats.Foldable</a>#fold.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
-</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.Traverse.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Traverse.scala" target="_blank">Traverse.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.Traverse.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Traverse.scala" target="_blank">Traverse.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Traverse.F">F</span>], <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Traverse.F">F</span>], <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Traverse.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
-                <span class="toggle diagram-link">Type Hierarchy</span>
-                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 208.00 118.00" height="118pt" width="208pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="graph0"><polygon points="-4,4 -4,-114 204,-114 204,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.Traverse (this trait)" xlink:href="#inheritance-diagram"><polygon points="145.5,-49 51.5,-49 51.5,-24 145.5,-24 145.5,-49" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../lib/trait_diagram.png" y="-43.5" x="61.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33.7495" x="82.2373" text-anchor="start">Traverse[F]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.Functor" xlink:href="Functor.html#inheritance-diagram"><polygon points="89,-110 0,-110 0,-85 89,-85 89,-110" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../lib/trait_diagram.png" y="-104.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="31.3276" text-anchor="start">Functor[F]</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="Traverse[F] is a subtype of Functor[F]"><path d="M58.6598,-81.0291C67.801,-71.0415 79.5019,-58.2572 87.8535,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="57.2535,-79.9736 55.1687,-84.8435 59.8354,-82.3366 57.2535,-79.9736" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.Foldable" xlink:href="Foldable.html#inheritance-diagram"><polygon points="200,-110 107,-110 107,-85 200,-85 200,-110" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../lib/trait_diagram.png" y="-104.5" x="117.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="138.099" text-anchor="start">Foldable[F]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="Traverse[F] is a subtype of Foldable[F]"><path d="M139.078,-81.0291C129.767,-71.0415 117.85,-58.2572 109.344,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="137.944,-82.3794 142.634,-84.8435 140.504,-79.9928 137.944,-82.3794" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
-              </div></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -556,9 +552,10 @@ match <code>p</code>.
       </a>
     </span>
       <p class="shortcomment cmt">Fold implemented using the given <code>MonoidK[G]</code> instance.</p><div class="fullcomment"><div class="comment cmt"><p>Fold implemented using the given <code>MonoidK[G]</code> instance.</p><p>This method is identical to fold, except that we use the universal monoid (<code>MonoidK[G]</code>)
-to get a <code>Monoid[G[A]]</code> instance.</p><p>For example:</p><pre><span class="kw">val</span> F = Foldable[<span class="std">List</span>]
-F.foldK(<span class="std">List</span>(<span class="num">1</span> :: <span class="num">2</span> :: Nil, <span class="num">3</span> :: <span class="num">4</span> :: <span class="num">5</span> :: Nil))
-<span class="cmt">// List(1, 2, 3, 4, 5)</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+to get a <code>Monoid[G[A]]</code> instance.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.foldK(<span class="std">List</span>(<span class="num">1</span> :: <span class="num">2</span> :: Nil, <span class="num">3</span> :: <span class="num">4</span> :: <span class="num">5</span> :: Nil))
+res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#foldMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foldMap[A,B](fa:F[A])(f:A=&gt;B)(implicitB:cats.Monoid[B]):B"></a>
       <a id="foldMap[A,B](F[A])((A)⇒B)(Monoid[B]):B"></a>
@@ -878,26 +875,60 @@ structure from F[G[A]] to G[F[A]].</p>
     </span>
       <p class="shortcomment cmt">Behaves just like sequence, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
 Applicative instance for G.</p>
-    </li><li name="cats.Foldable#sequence_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]"></a>
-      <a id="sequence_[G[_],A,B](F[G[A]])(Applicative[G]):G[Unit]"></a>
+    </li><li name="cats.Foldable#sequenceU_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sequenceU_[GA](fa:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[Unit]"></a>
+      <a id="sequenceU_[GA](F[GA])(Unapply[Applicative,GA]):M[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">sequence_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>[<span class="extype" name="cats.Foldable.sequence_.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.sequence_.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">sequenceU_</span><span class="tparams">[<span name="GA">GA</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Foldable.sequenceU_.GA">GA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.Foldable.sequenceU_.GA">GA</span>]</span>)</span><span class="result">: <a href="Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Traverse@sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Traverse@sequenceU_[GA](fa:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
+type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
+type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
+scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.sequenceU_(<span class="std">List</span>(Xor.right[<span class="std">String</span>, <span class="std">Int</span>](<span class="num">333</span>), Xor.Right(<span class="num">444</span>)))
+res0: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Right(())
+scala&gt; F.sequenceU_(<span class="std">List</span>(Xor.right[<span class="std">String</span>, <span class="std">Int</span>](<span class="num">333</span>), Xor.Left(<span class="lit">"boo"</span>)))
+res1: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Left(boo)</pre><p>Note that using <code>sequence_</code> instead of <code>sequenceU_</code> would not compile without
+explicitly passing in the type parameters - the type checker has trouble
+inferring the appropriate instance.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+    </li><li name="cats.Foldable#sequence_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sequence_[G[_],A](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]"></a>
+      <a id="sequence_[G[_],A](F[G[A]])(Applicative[G]):G[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sequence_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>[<span class="extype" name="cats.Foldable.sequence_.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.sequence_.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Traverse@sequence_[G[_],A](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Sequence <code>F[G[A]]</code> using <code>Applicative[G]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Sequence <code>F[G[A]]</code> using <code>Applicative[G]</code>.</p><p>This is similar to <code>traverse_</code> except it operates on <code>F[G[A]]</code>
-values, so no additional functions are needed.</p><p>For example:</p><pre><span class="kw">val</span> F = Foldable[<span class="std">List</span>]
-F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">1</span>), <span class="std">Option</span>(<span class="num">2</span>), <span class="std">Option</span>(<span class="num">3</span>))) <span class="cmt">// Some(())</span>
-F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">1</span>), <span class="std">None</span>, <span class="std">Option</span>(<span class="num">3</span>)))      <span class="cmt">// None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+values, so no additional functions are needed.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">import</span> cats.std.option._
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">1</span>), <span class="std">Option</span>(<span class="num">2</span>), <span class="std">Option</span>(<span class="num">3</span>)))
+res0: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">Some</span>(())
+scala&gt; F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">1</span>), <span class="std">None</span>, <span class="std">Option</span>(<span class="num">3</span>)))
+res1: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -915,6 +946,26 @@ F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Foldable#takeWhile_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="takeWhile_[A](fa:F[A])(p:A=&gt;Boolean):List[A]"></a>
+      <a id="takeWhile_[A](F[A])((A)⇒Boolean):List[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">takeWhile_</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Foldable.takeWhile_.A">A</span>]</span>)</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Foldable.takeWhile_.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.Foldable.takeWhile_.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Traverse@takeWhile_[A](fa:F[A])(p:A=&gt;Boolean):List[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Convert F[A] to a List[A], retaining only initial elements which
+match <code>p</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Convert F[A] to a List[A], retaining only initial elements which
+match <code>p</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#toList" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toList[A](fa:F[A]):List[A]"></a>
       <a id="toList[A](F[A]):List[A]"></a>
@@ -985,6 +1036,39 @@ F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span 
     </span>
       <p class="shortcomment cmt">Behaves just like traverse, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
 Applicative instance for G.</p>
+    </li><li name="cats.Foldable#traverseU_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="traverseU_[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[Unit]"></a>
+      <a id="traverseU_[A,GB](F[A])((A)⇒GB)(Unapply[Applicative,GB]):M[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverseU_</span><span class="tparams">[<span name="A">A</span>, <span name="GB">GB</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Foldable.traverseU_.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.traverseU_.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.traverseU_.GB">GB</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.Foldable.traverseU_.GB">GB</span>]</span>)</span><span class="result">: <a href="Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Traverse@traverseU_[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
+type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
+type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
+scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): Xor[<span class="std">String</span>, <span class="std">Int</span>] =
+     |   <span class="kw">try</span> { Xor.Right(s.toInt) }
+     |   <span class="kw">catch</span> { <span class="kw">case</span> _: NumberFormatException <span class="kw">=&gt;</span> Xor.Left(<span class="lit">"boo"</span>) }
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.traverseU_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"444"</span>))(parseInt)
+res0: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Right(())
+scala&gt; F.traverseU_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"zzz"</span>))(parseInt)
+res1: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Left(boo)</pre><p>Note that using <code>traverse_</code> instead of <code>traverseU_</code> would not compile without
+explicitly passing in the type parameters - the type checker has trouble
+inferring the appropriate instance.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#traverse_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverse_[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitG:cats.Applicative[G]):G[Unit]"></a>
       <a id="traverse_[G[_],A,B](F[A])((A)⇒G[B])(Applicative[G]):G[Unit]"></a>
@@ -1002,10 +1086,15 @@ Applicative instance for G.</p>
       </a>
     </span>
       <p class="shortcomment cmt">Traverse <code>F[A]</code> using <code>Applicative[G]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse <code>F[A]</code> using <code>Applicative[G]</code>.</p><p><code>A</code> values will be mapped into <code>G[B]</code> and combined using
-<code>Applicative#map2</code>.</p><p>For example:</p><pre><span class="kw">def</span> parseInt(s: <span class="std">String</span>): <span class="std">Option</span>[<span class="std">Int</span>] = ...
-<span class="kw">val</span> F = Foldable[<span class="std">List</span>]
-F.traverse_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"444"</span>))(parseInt) <span class="cmt">// Some(())</span>
-F.traverse_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"zzz"</span>))(parseInt) <span class="cmt">// None</span></pre><p>This method is primarily useful when <code>G[_]</code> represents an action
+<code>Applicative#map2</code>.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
+scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">import</span> cats.std.option._
+scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): <span class="std">Option</span>[<span class="std">Int</span>] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.traverse_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"444"</span>))(parseInt)
+res0: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">Some</span>(())
+scala&gt; F.traverse_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"zzz"</span>))(parseInt)
+res1: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">None</span></pre><p>This method is primarily useful when <code>G[_]</code> represents an action
 or effect, and the specific <code>A</code> aspect of <code>G[A]</code> is not otherwise
 needed.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>

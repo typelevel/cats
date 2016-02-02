@@ -22,7 +22,7 @@ Cats is currently available for Scala 2.10 and 2.11.
 
 To get started with SBT, simply add the following to your build.sbt file:
 
-    libraryDependencies += "org.spire-math" %% "cats" % "0.2.0"
+    libraryDependencies += "org.typelevel" %% "cats" % "0.4.0"
 
 This will pull in all of Cats' modules. If you only require some
 functionality, you can pick-and-choose from amongst these modules
@@ -31,8 +31,6 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-macros`: Macros used by Cats syntax (*required*).
  * `cats-core`: Core type classes and functionality (*required*).
  * `cats-laws`: Laws for testing type class instances.
- * `cats-free`: "Free" data constructors for various type classes.
- * `cats-state`: Monad and transformer support for state.
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/non/cats/blob/master/CHANGES.md).
 

@@ -15,32 +15,20 @@ parsing a single `String` into an `Int`, validating a login, or asynchronously f
 information for a user.
 
 ```scala
-scala> def parseInt(s: String): Option[Int] = ???
-parseInt: (s: String)Option[Int]
-
-scala> import cats.data.Xor
 import cats.data.Xor
-
-scala> trait SecurityError
-defined trait SecurityError
-
-scala> trait Credentials
-defined trait Credentials
-
-scala> def validateLogin(cred: Credentials): Xor[SecurityError, Unit] = ???
-validateLogin: (cred: Credentials)cats.data.Xor[SecurityError,Unit]
-
-scala> import scala.concurrent.Future
 import scala.concurrent.Future
 
-scala> trait Profile
-defined trait Profile
+def parseInt(s: String): Option[Int] = ???
 
-scala> trait User
-defined trait User
+trait SecurityError
+trait Credentials
 
-scala> def userInfo(user: User): Future[Profile] = ???
-userInfo: (user: User)scala.concurrent.Future[Profile]
+def validateLogin(cred: Credentials): Xor[SecurityError, Unit] = ???
+
+trait Profile
+trait User
+
+def userInfo(user: User): Future[Profile] = ???
 ```
 
 Each function asks only for the data it actually needs; in the case of `userInfo`, a single `User`. We
@@ -103,26 +91,21 @@ instances - `scalac` has issues inferring the instances for data types that do n
 trivially satisfy the `F[_]` shape required by `Applicative`.
 
 ```scala
-scala> import cats.Semigroup
 import cats.Semigroup
-
-scala> import cats.data.{NonEmptyList, OneAnd, Validated, ValidatedNel, Xor}
 import cats.data.{NonEmptyList, OneAnd, Validated, ValidatedNel, Xor}
-
-scala> import cats.std.list._
 import cats.std.list._
-
-scala> import cats.syntax.traverse._
 import cats.syntax.traverse._
 
-scala> def parseIntXor(s: String): Xor[NumberFormatException, Int] =
-     |   Xor.fromTryCatch[NumberFormatException](s.toInt)
-parseIntXor: (s: String)cats.data.Xor[NumberFormatException,Int]
+def parseIntXor(s: String): Xor[NumberFormatException, Int] =
+  Xor.catchOnly[NumberFormatException](s.toInt)
 
-scala> def parseIntValidated(s: String): ValidatedNel[NumberFormatException, Int] =
-     |   Validated.fromTryCatch[NumberFormatException](s.toInt).toValidatedNel
-parseIntValidated: (s: String)cats.data.ValidatedNel[NumberFormatException,Int]
+def parseIntValidated(s: String): ValidatedNel[NumberFormatException, Int] =
+  Validated.catchOnly[NumberFormatException](s.toInt).toValidatedNel
+```
 
+Examples.
+
+```scala
 scala> val x1 = List("1", "2", "3").traverseU(parseIntXor)
 x1: cats.data.Xor[NumberFormatException,List[Int]] = Right(List(1, 2, 3))
 
@@ -131,21 +114,27 @@ x2: cats.data.Xor[NumberFormatException,List[Int]] = Left(java.lang.NumberFormat
 
 scala> val x3 = List("1", "abc", "def").traverseU(parseIntXor)
 x3: cats.data.Xor[NumberFormatException,List[Int]] = Left(java.lang.NumberFormatException: For input string: "abc")
+```
 
-scala> // Need proof that NonEmptyList[A] is a Semigroup for there to be an
-     | // Applicative instance for ValidatedNel
-     | implicit def nelSemigroup[A]: Semigroup[NonEmptyList[A]] =
-     |   OneAnd.oneAndSemigroupK[List].algebra[A]
-nelSemigroup: [A]=> cats.Semigroup[cats.data.NonEmptyList[A]]
+We need proof that `NonEmptyList[A]` is a `Semigroup `for there to be an `Applicative` instance for 
+`ValidatedNel`.
 
+```scala
+implicit def nelSemigroup[A]: Semigroup[NonEmptyList[A]] =
+  OneAnd.oneAndSemigroupK[List].algebra[A]
+```
+
+Thus.
+
+```scala
 scala> val v1 = List("1", "2", "3").traverseU(parseIntValidated)
-v1: cats.data.Validated[cats.data.OneAnd[NumberFormatException,[+A]List[A]],List[Int]] = Valid(List(1, 2, 3))
+v1: cats.data.Validated[cats.data.OneAnd[[+A]List[A],NumberFormatException],List[Int]] = Valid(List(1, 2, 3))
 
 scala> val v2 = List("1", "abc", "3").traverseU(parseIntValidated)
-v2: cats.data.Validated[cats.data.OneAnd[NumberFormatException,[+A]List[A]],List[Int]] = Invalid(OneAnd(java.lang.NumberFormatException: For input string: "abc",List()))
+v2: cats.data.Validated[cats.data.OneAnd[[+A]List[A],NumberFormatException],List[Int]] = Invalid(OneAnd(java.lang.NumberFormatException: For input string: "abc",List()))
 
 scala> val v3 = List("1", "abc", "def").traverseU(parseIntValidated)
-v3: cats.data.Validated[cats.data.OneAnd[NumberFormatException,[+A]List[A]],List[Int]] = Invalid(OneAnd(java.lang.NumberFormatException: For input string: "abc",List(java.lang.NumberFormatException: For input string: "def")))
+v3: cats.data.Validated[cats.data.OneAnd[[+A]List[A],NumberFormatException],List[Int]] = Invalid(OneAnd(java.lang.NumberFormatException: For input string: "abc",List(java.lang.NumberFormatException: For input string: "def")))
 ```
 
 Notice that in the `Xor` case, should any string fail to parse the entire traversal
@@ -170,23 +159,15 @@ If we fix `E` to be some sort of environment or configuration, we can use the
 `Reader` applicative in our traverse.
 
 ```scala
-scala> import cats.data.Reader
 import cats.data.Reader
 
-scala> trait Context
-defined trait Context
+trait Context
+trait Topic
+trait Result
 
-scala> trait Topic
-defined trait Topic
+type Job[A] = Reader[Context, A]
 
-scala> trait Result
-defined trait Result
-
-scala> type Job[A] = Reader[Context, A]
-defined type alias Job
-
-scala> def processTopic(topic: Topic): Job[Result] = ???
-processTopic: (topic: Topic)Job[Result]
+def processTopic(topic: Topic): Job[Result] = ???
 ```
 
 We can imagine we have a data pipeline that processes a bunch of data, each piece of data
@@ -198,8 +179,8 @@ Corresponding to our bunches of data are bunches of topics, a `List[Topic]` if y
 Since `Reader` has an `Applicative` instance, we can `traverse` over this list with `processTopic`.
 
 ```scala
-scala> def processTopics(topics: List[Topic]) = topics.traverse(processTopic)
-processTopics: (topics: List[Topic])Job[List[Result]]
+def processTopics(topics: List[Topic]) = 
+  topics.traverse(processTopic)
 ```
 
 Note the nice return type - `Job[List[Result]]`. We now have one aggregate `Job` that when run,
@@ -255,24 +236,18 @@ Sometimes our effectful functions return a `Unit` value in cases where there is 
 to return (e.g. writing to some sort of store).
 
 ```scala
-scala> trait Data
-defined trait Data
-
-scala> def writeToStore(data: Data): Future[Unit] = ???
-writeToStore: (data: Data)scala.concurrent.Future[Unit]
+trait Data
+def writeToStore(data: Data): Future[Unit] = ???
 ```
 
 If we traverse using this, we end up with a funny type.
 
 ```scala
-scala> import cats.std.future._
 import cats.std.future._
-
-scala> import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.ExecutionContext.Implicits.global
 
-scala> def writeManyToStore(data: List[Data]) = data.traverse(writeToStore)
-writeManyToStore: (data: List[Data])scala.concurrent.Future[List[Unit]]
+def writeManyToStore(data: List[Data]) =
+  data.traverse(writeToStore)
 ```
 
 We end up with a `Future[List[Unit]]`! A `List[Unit]` is not of any use to us, and communicates the
@@ -283,16 +258,15 @@ is common, so `Foldable` (superclass of `Traverse`) provides `traverse_` and `se
 same thing as `traverse` and `sequence` but ignores any value produced along the way, returning `Unit` at the end.
 
 ```scala
-scala> import cats.syntax.foldable._
 import cats.syntax.foldable._
 
-scala> def writeManyToStore(data: List[Data]) = data.traverse_(writeToStore)
-writeManyToStore: (data: List[Data])scala.concurrent.Future[Unit]
+def writeManyToStore(data: List[Data]) = 
+  data.traverse_(writeToStore)
 
-scala> // Int values are ignored with traverse_
-     | def writeToStoreV2(data: Data): Future[Int] = ???
-writeToStoreV2: (data: Data)scala.concurrent.Future[Int]
+// Int values are ignored with traverse_
+def writeToStoreV2(data: Data): Future[Int] = 
+  ???
 
-scala> def writeManyToStoreV2(data: List[Data]) = data.traverse_(writeToStoreV2)
-writeManyToStoreV2: (data: List[Data])scala.concurrent.Future[Unit]
+def writeManyToStoreV2(data: List[Data]) = 
+  data.traverse_(writeToStoreV2)
 ```

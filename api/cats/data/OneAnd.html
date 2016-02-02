@@ -47,20 +47,16 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">OneAnd</span><span class="tparams">[<span name="A">A</span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="head">head: <span class="extype" name="cats.data.OneAnd.A">A</span></span>, <span name="tail">tail: <span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">OneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="head">head: <span class="extype" name="cats.data.OneAnd.A">A</span></span>, <span name="tail">tail: <span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A data type which represents a single element (head) and some other
 structure (tail). As we have done in package.scala, this can be
-used to represent a List which is guaranteed to not be empty:</p><pre><span class="kw">type</span> NonEmptyList[A] = OneAnd[A, <span class="std">List</span>]</pre></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/OneAnd.scala" target="_blank">OneAnd.scala</a></dd></dl><div class="toggleContainer block">
+used to represent a List which is guaranteed to not be empty:</p><pre><span class="kw">type</span> NonEmptyList[A] = OneAnd[<span class="std">List</span>, A]</pre></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/OneAnd.scala" target="_blank">OneAnd.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
-                <span class="toggle diagram-link">Type Hierarchy</span>
-                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 199.50 118.00" height="118pt" width="200pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="graph0"><polygon points="-4,4 -4,-114 195.5,-114 195.5,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.data.OneAnd (this class)" xlink:href="#inheritance-diagram"><polygon points="143,-49 39,-49 39,-24 143,-24 143,-49" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="49" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33.7495" x="69.8179" text-anchor="start">OneAnd[A, F]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="scala.Product"><polygon points="78,-110 0,-110 0,-85 78,-85 78,-110" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="30.8794" text-anchor="start">Product</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="OneAnd[A, F] is a subtype of Product"><path d="M52.6354,-81.0291C61.438,-71.0415 72.7055,-58.2572 80.7478,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="51.2667,-79.9353 49.2735,-84.8435 53.8924,-82.2495 51.2667,-79.9353" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="scala.Serializable"><polygon points="191.5,-110 96.5,-110 96.5,-85 191.5,-85 191.5,-110" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="107" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="127.764" text-anchor="start">Serializable</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="OneAnd[A, F] is a subtype of Serializable"><path d="M130.102,-81.0291C121.13,-71.0415 109.646,-58.2572 101.449,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="128.886,-82.2933 133.529,-84.8435 131.489,-79.9544 128.886,-82.2933" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
-              </div></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -97,8 +93,8 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="cats.data.OneAnd#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(head:A,tail:F[A]):cats.data.OneAnd[A,F]"></a>
-      <a id="&lt;init&gt;:OneAnd[A,F]"></a>
+      <a id="&lt;init&gt;(head:A,tail:F[A]):cats.data.OneAnd[F,A]"></a>
+      <a id="&lt;init&gt;:OneAnd[F,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -108,7 +104,7 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
         <span class="name">OneAnd</span><span class="params">(<span name="head">head: <span class="extype" name="cats.data.OneAnd.A">A</span></span>, <span name="tail">tail: <span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd@&lt;init&gt;(head:A,tail:F[A]):cats.data.OneAnd[A,F]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OneAnd@&lt;init&gt;(head:A,tail:F[A]):cats.data.OneAnd[F,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -174,23 +170,23 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.data.OneAnd#===" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="===(that:cats.data.OneAnd[A,F])(implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):Boolean"></a>
-      <a id="===(OneAnd[A,F])(Eq[A],Eq[F[A]]):Boolean"></a>
+      <a id="===(that:cats.data.OneAnd[F,A])(implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):Boolean"></a>
+      <a id="===(OneAnd[F,A])(Eq[A],Eq[F[A]]):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>, <span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>, <span name="FA">FA: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>, <span class="extype" name="cats.data.OneAnd.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>, <span name="FA">FA: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd@===(that:cats.data.OneAnd[A,F])(implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OneAnd@===(that:cats.data.OneAnd[F,A])(implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Typesafe equality operator.</p><div class="fullcomment"><div class="comment cmt"><p>Typesafe equality operator.</p><p>This method is similar to == except that it only allows two
-OneAnd[A, F] values to be compared to each other, and uses
+OneAnd[F, A] values to be compared to each other, and uses
 equality provided by Eq[_] instances, rather than using the
 universal equality provided by .equals.
 </p></div></div>
@@ -235,18 +231,18 @@ universal equality provided by .equals.
               
         </dd></dl></div>
     </li><li name="cats.data.OneAnd#combine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="combine(other:cats.data.OneAnd[A,F])(implicitF:cats.MonadCombine[F]):cats.data.OneAnd[A,F]"></a>
-      <a id="combine(OneAnd[A,F])(MonadCombine[F]):OneAnd[A,F]"></a>
+      <a id="combine(other:cats.data.OneAnd[F,A])(implicitF:cats.MonadCombine[F]):cats.data.OneAnd[F,A]"></a>
+      <a id="combine(OneAnd[F,A])(MonadCombine[F]):OneAnd[F,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">combine</span><span class="params">(<span name="other">other: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>, <span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.A">A</span>, <span class="extype" name="cats.data.OneAnd.F">F</span>]</span>
+        <span class="name">combine</span><span class="params">(<span name="other">other: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>, <span class="extype" name="cats.data.OneAnd.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>, <span class="extype" name="cats.data.OneAnd.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd@combine(other:cats.data.OneAnd[A,F])(implicitF:cats.MonadCombine[F]):cats.data.OneAnd[A,F]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OneAnd@combine(other:cats.data.OneAnd[F,A])(implicitF:cats.MonadCombine[F]):cats.data.OneAnd[F,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

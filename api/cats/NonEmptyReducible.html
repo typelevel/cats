@@ -52,14 +52,10 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This class defines a <code>Reducible[F]</code> in terms of a <code>Foldable[G]</code>
 together with a <code>split method, </code>F[A]<code> =&gt; </code>(A, G[A])<code>.</code></p><p>This class can be used on any type where the first value (<code>A</code>) and
 the &quot;rest&quot; of the values (<code>G[A]</code>) can be easily found.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Reducible.scala" target="_blank">Reducible.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Reducible.scala" target="_blank">Reducible.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[<span class="extype" name="cats.NonEmptyReducible.F">F</span>], <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.NonEmptyReducible.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
-                <span class="toggle diagram-link">Type Hierarchy</span>
-                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 214.00 118.00" height="118pt" width="214pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="graph0"><polygon points="-4,4 -4,-114 210,-114 210,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.NonEmptyReducible (this class)" xlink:href="#inheritance-diagram"><polygon points="182,-49 24,-49 24,-24 182,-24 182,-49" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../lib/class_diagram.png" y="-43.5" x="34" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33.7495" x="54.5864" text-anchor="start">NonEmptyReducible[F, G]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.Reducible" xlink:href="Reducible.html#inheritance-diagram"><polygon points="152.5,-110 53.5,-110 53.5,-85 152.5,-85 152.5,-110" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../lib/trait_diagram.png" y="-104.5" x="64" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="84.542" text-anchor="start">Reducible[F]</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="NonEmptyReducible[F, G] is a subtype of Reducible[F]"><path d="M103,-79.6874C103,-69.9173 103,-57.8534 103,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="101.25,-79.8435 103,-84.8435 104.75,-79.8435 101.25,-79.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
-              </div></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -454,9 +450,10 @@ match <code>p</code>.
       </a>
     </span>
       <p class="shortcomment cmt">Fold implemented using the given <code>MonoidK[G]</code> instance.</p><div class="fullcomment"><div class="comment cmt"><p>Fold implemented using the given <code>MonoidK[G]</code> instance.</p><p>This method is identical to fold, except that we use the universal monoid (<code>MonoidK[G]</code>)
-to get a <code>Monoid[G[A]]</code> instance.</p><p>For example:</p><pre><span class="kw">val</span> F = Foldable[<span class="std">List</span>]
-F.foldK(<span class="std">List</span>(<span class="num">1</span> :: <span class="num">2</span> :: Nil, <span class="num">3</span> :: <span class="num">4</span> :: <span class="num">5</span> :: Nil))
-<span class="cmt">// List(1, 2, 3, 4, 5)</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+to get a <code>Monoid[G[A]]</code> instance.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.foldK(<span class="std">List</span>(<span class="num">1</span> :: <span class="num">2</span> :: Nil, <span class="num">3</span> :: <span class="num">4</span> :: <span class="num">5</span> :: Nil))
+res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.NonEmptyReducible#foldLeft" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foldLeft[A,B](fa:F[A],b:B)(f:(B,A)=&gt;B):B"></a>
       <a id="foldLeft[A,B](F[A],B)((B,A)⇒B):B"></a>
@@ -862,26 +859,60 @@ with every other value using the given function <code>g</code>.
 that we only need <code>Apply[G]</code> here, since we don't need to call
 <code>Applicative#pure</code> for a starting value.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a></dd></dl></div>
-    </li><li name="cats.Foldable#sequence_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]"></a>
-      <a id="sequence_[G[_],A,B](F[G[A]])(Applicative[G]):G[Unit]"></a>
+    </li><li name="cats.Foldable#sequenceU_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sequenceU_[GA](fa:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[Unit]"></a>
+      <a id="sequenceU_[GA](F[GA])(Unapply[Applicative,GA]):M[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">sequence_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.NonEmptyReducible.F">F</span>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>[<span class="extype" name="cats.Foldable.sequence_.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.sequence_.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">sequenceU_</span><span class="tparams">[<span name="GA">GA</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.NonEmptyReducible.F">F</span>[<span class="extype" name="cats.Foldable.sequenceU_.GA">GA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.Foldable.sequenceU_.GA">GA</span>]</span>)</span><span class="result">: <a href="Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.NonEmptyReducible@sequence_[G[_],A,B](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
+      <a href="../index.html#cats.NonEmptyReducible@sequenceU_[GA](fa:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
+type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
+type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
+scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.sequenceU_(<span class="std">List</span>(Xor.right[<span class="std">String</span>, <span class="std">Int</span>](<span class="num">333</span>), Xor.Right(<span class="num">444</span>)))
+res0: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Right(())
+scala&gt; F.sequenceU_(<span class="std">List</span>(Xor.right[<span class="std">String</span>, <span class="std">Int</span>](<span class="num">333</span>), Xor.Left(<span class="lit">"boo"</span>)))
+res1: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Left(boo)</pre><p>Note that using <code>sequence_</code> instead of <code>sequenceU_</code> would not compile without
+explicitly passing in the type parameters - the type checker has trouble
+inferring the appropriate instance.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+    </li><li name="cats.Foldable#sequence_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sequence_[G[_],A](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]"></a>
+      <a id="sequence_[G[_],A](F[G[A]])(Applicative[G]):G[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sequence_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.NonEmptyReducible.F">F</span>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>[<span class="extype" name="cats.Foldable.sequence_.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.sequence_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.sequence_.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.NonEmptyReducible@sequence_[G[_],A](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Sequence <code>F[G[A]]</code> using <code>Applicative[G]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Sequence <code>F[G[A]]</code> using <code>Applicative[G]</code>.</p><p>This is similar to <code>traverse_</code> except it operates on <code>F[G[A]]</code>
-values, so no additional functions are needed.</p><p>For example:</p><pre><span class="kw">val</span> F = Foldable[<span class="std">List</span>]
-F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">1</span>), <span class="std">Option</span>(<span class="num">2</span>), <span class="std">Option</span>(<span class="num">3</span>))) <span class="cmt">// Some(())</span>
-F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">1</span>), <span class="std">None</span>, <span class="std">Option</span>(<span class="num">3</span>)))      <span class="cmt">// None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+values, so no additional functions are needed.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">import</span> cats.std.option._
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">1</span>), <span class="std">Option</span>(<span class="num">2</span>), <span class="std">Option</span>(<span class="num">3</span>)))
+res0: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">Some</span>(())
+scala&gt; F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">1</span>), <span class="std">None</span>, <span class="std">Option</span>(<span class="num">3</span>)))
+res1: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -899,6 +930,26 @@ F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Foldable#takeWhile_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="takeWhile_[A](fa:F[A])(p:A=&gt;Boolean):List[A]"></a>
+      <a id="takeWhile_[A](F[A])((A)⇒Boolean):List[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">takeWhile_</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.NonEmptyReducible.F">F</span>[<span class="extype" name="cats.Foldable.takeWhile_.A">A</span>]</span>)</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Foldable.takeWhile_.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.Foldable.takeWhile_.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.NonEmptyReducible@takeWhile_[A](fa:F[A])(p:A=&gt;Boolean):List[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Convert F[A] to a List[A], retaining only initial elements which
+match <code>p</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Convert F[A] to a List[A], retaining only initial elements which
+match <code>p</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#toList" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toList[A](fa:F[A]):List[A]"></a>
       <a id="toList[A](F[A]):List[A]"></a>
@@ -972,6 +1023,39 @@ F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span 
 difference is that we only need <code>Apply[G]</code> here, since we don't
 need to call <code>Applicative#pure</code> for a starting value.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a></dd></dl></div>
+    </li><li name="cats.Foldable#traverseU_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="traverseU_[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[Unit]"></a>
+      <a id="traverseU_[A,GB](F[A])((A)⇒GB)(Unapply[Applicative,GB]):M[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverseU_</span><span class="tparams">[<span name="A">A</span>, <span name="GB">GB</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.NonEmptyReducible.F">F</span>[<span class="extype" name="cats.Foldable.traverseU_.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.traverseU_.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.traverseU_.GB">GB</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.Foldable.traverseU_.GB">GB</span>]</span>)</span><span class="result">: <a href="Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.NonEmptyReducible@traverseU_[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
+type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
+type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
+scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): Xor[<span class="std">String</span>, <span class="std">Int</span>] =
+     |   <span class="kw">try</span> { Xor.Right(s.toInt) }
+     |   <span class="kw">catch</span> { <span class="kw">case</span> _: NumberFormatException <span class="kw">=&gt;</span> Xor.Left(<span class="lit">"boo"</span>) }
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.traverseU_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"444"</span>))(parseInt)
+res0: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Right(())
+scala&gt; F.traverseU_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"zzz"</span>))(parseInt)
+res1: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Left(boo)</pre><p>Note that using <code>traverse_</code> instead of <code>traverseU_</code> would not compile without
+explicitly passing in the type parameters - the type checker has trouble
+inferring the appropriate instance.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#traverse_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverse_[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitG:cats.Applicative[G]):G[Unit]"></a>
       <a id="traverse_[G[_],A,B](F[A])((A)⇒G[B])(Applicative[G]):G[Unit]"></a>
@@ -989,10 +1073,15 @@ need to call <code>Applicative#pure</code> for a starting value.
       </a>
     </span>
       <p class="shortcomment cmt">Traverse <code>F[A]</code> using <code>Applicative[G]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse <code>F[A]</code> using <code>Applicative[G]</code>.</p><p><code>A</code> values will be mapped into <code>G[B]</code> and combined using
-<code>Applicative#map2</code>.</p><p>For example:</p><pre><span class="kw">def</span> parseInt(s: <span class="std">String</span>): <span class="std">Option</span>[<span class="std">Int</span>] = ...
-<span class="kw">val</span> F = Foldable[<span class="std">List</span>]
-F.traverse_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"444"</span>))(parseInt) <span class="cmt">// Some(())</span>
-F.traverse_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"zzz"</span>))(parseInt) <span class="cmt">// None</span></pre><p>This method is primarily useful when <code>G[_]</code> represents an action
+<code>Applicative#map2</code>.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
+scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">import</span> cats.std.option._
+scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): <span class="std">Option</span>[<span class="std">Int</span>] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.traverse_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"444"</span>))(parseInt)
+res0: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">Some</span>(())
+scala&gt; F.traverse_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"zzz"</span>))(parseInt)
+res1: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">None</span></pre><p>This method is primarily useful when <code>G[_]</code> represents an action
 or effect, and the specific <code>A</code> aspect of <code>G[A]</code> is not otherwise
 needed.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>

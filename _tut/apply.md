@@ -15,33 +15,31 @@ However, the difference between `ap` and `map` is that for `ap` the function tha
 takes care of the transformation is of type `F[A => B]`, whereas for `map` it is `A => B`:
 
 ```scala
-scala> import cats._
 import cats._
 
-scala> val intToString: Int => String = _.toString
-intToString: Int => String = <function1>
+val intToString: Int => String = _.toString
+val double: Int => Int = _ * 2
+val addTwo: Int => Int = _ + 2
 
-scala> val double: Int => Int = _ * 2
-double: Int => Int = <function1>
+implicit val optionApply: Apply[Option] = new Apply[Option] {
+  def ap[A, B](f: Option[A => B])(fa: Option[A]): Option[B] =
+    fa.flatMap (a => f.map (ff => ff(a)))
 
-scala> val addTwo: Int => Int = _ + 2
-addTwo: Int => Int = <function1>
+  def map[A,B](fa: Option[A])(f: A => B): Option[B] = fa map f
+  
+  def product[A, B](fa: Option[A], fb: Option[B]): Option[(A, B)] =
+    fa.flatMap(a => fb.map(b => (a, b)))
+}
 
-scala> implicit val optionApply: Apply[Option] = new Apply[Option] {
-     |   def ap[A, B](fa: Option[A])(f: Option[A => B]): Option[B] =
-     |     fa.flatMap (a => f.map (ff => ff(a)))
-     | 
-     |   def map[A,B](fa: Option[A])(f: A => B): Option[B] = fa map f
-     | }
-optionApply: cats.Apply[Option] = $anon$1@290cf639
+implicit val listApply: Apply[List] = new Apply[List] {
+  def ap[A, B](f: List[A => B])(fa: List[A]): List[B] =
+    fa.flatMap (a => f.map (ff => ff(a)))
 
-scala> implicit val listApply: Apply[List] = new Apply[List] {
-     |   def ap[A, B](fa: List[A])(f: List[A => B]): List[B] =
-     |     fa.flatMap (a => f.map (ff => ff(a)))
-     | 
-     |   def map[A,B](fa: List[A])(f: A => B): List[B] = fa map f
-     | }
-listApply: cats.Apply[List] = $anon$1@2a1dcbd0
+  def map[A,B](fa: List[A])(f: A => B): List[B] = fa map f
+  
+  def product[A, B](fa: List[A], fb: List[B]): List[(A, B)] =
+    fa.zip(fb)
+}
 ```
 
 ### map
@@ -50,13 +48,13 @@ Since `Apply` extends `Functor`, we can use the `map` method from `Functor`:
 
 ```scala
 scala> Apply[Option].map(Some(1))(intToString)
-res0: Option[String] = Some(1)
+res3: Option[String] = Some(1)
 
 scala> Apply[Option].map(Some(1))(double)
-res1: Option[Int] = Some(2)
+res4: Option[Int] = Some(2)
 
 scala> Apply[Option].map(None)(double)
-res2: Option[Int] = None
+res5: Option[Int] = None
 ```
 
 ### compose
@@ -65,33 +63,33 @@ And like functors, `Apply` instances also compose:
 
 ```scala
 scala> val listOpt = Apply[List] compose Apply[Option]
-listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@1fbd3054
+listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@4213211d
 
 scala> val plusOne = (x:Int) => x + 1
 plusOne: Int => Int = <function1>
 
-scala> listOpt.ap(List(Some(1), None, Some(3)))(List(Some(plusOne)))
-res3: List[Option[Int]] = List(Some(2), None, Some(4))
+scala> listOpt.ap(List(Some(plusOne)))(List(Some(1), None, Some(3)))
+res6: List[Option[Int]] = List(Some(2), None, Some(4))
 ```
 
 ### ap
 The `ap` method is a method that `Functor` does not have:
 
 ```scala
-scala> Apply[Option].ap(Some(1))(Some(intToString))
-res4: Option[String] = Some(1)
+scala> Apply[Option].ap(Some(intToString))(Some(1))
+res7: Option[String] = Some(1)
 
-scala> Apply[Option].ap(Some(1))(Some(double))
-res5: Option[Int] = Some(2)
+scala> Apply[Option].ap(Some(double))(Some(1))
+res8: Option[Int] = Some(2)
 
-scala> Apply[Option].ap(None)(Some(double))
-res6: Option[Int] = None
+scala> Apply[Option].ap(Some(double))(None)
+res9: Option[Int] = None
 
-scala> Apply[Option].ap(Some(1))(None)
-res7: Option[Nothing] = None
+scala> Apply[Option].ap(None)(Some(1))
+res10: Option[Nothing] = None
 
 scala> Apply[Option].ap(None)(None)
-res8: Option[Nothing] = None
+res11: Option[Nothing] = None
 ```
 
 ### ap2, ap3, etc
@@ -105,14 +103,14 @@ For example:
 scala> val addArity2 = (a: Int, b: Int) => a + b
 addArity2: (Int, Int) => Int = <function2>
 
-scala> Apply[Option].ap2(Some(1), Some(2))(Some(addArity2))
-res9: Option[Int] = Some(3)
+scala> Apply[Option].ap2(Some(addArity2))(Some(1), Some(2))
+res12: Option[Int] = Some(3)
 
 scala> val addArity3 = (a: Int, b: Int, c: Int) => a + b + c
 addArity3: (Int, Int, Int) => Int = <function3>
 
-scala> Apply[Option].ap3(Some(1), Some(2), Some(3))(Some(addArity3))
-res10: Option[Int] = Some(6)
+scala> Apply[Option].ap3(Some(addArity3))(Some(1), Some(2), Some(3))
+res13: Option[Int] = Some(6)
 ```
 
 Note that if any of the arguments of this example is `None`, the
@@ -120,11 +118,11 @@ final result is `None` as well.  The effects of the context we are operating on
 are carried through the entire computation:
 
 ```scala
-scala> Apply[Option].ap2(Some(1), None)(Some(addArity2))
-res11: Option[Int] = None
+scala> Apply[Option].ap2(Some(addArity2))(Some(1), None)
+res14: Option[Int] = None
 
-scala> Apply[Option].ap4(Some(1), Some(2), Some(3), Some(4))(None)
-res12: Option[Nothing] = None
+scala> Apply[Option].ap4(None)(Some(1), Some(2), Some(3), Some(4))
+res15: Option[Nothing] = None
 ```
 
 ### map2, map3, etc
@@ -133,10 +131,10 @@ Similarly, `mapN` functions are available:
 
 ```scala
 scala> Apply[Option].map2(Some(1), Some(2))(addArity2)
-res13: Option[Int] = Some(3)
+res16: Option[Int] = Some(3)
 
 scala> Apply[Option].map3(Some(1), Some(2), Some(3))(addArity3)
-res14: Option[Int] = Some(6)
+res17: Option[Int] = Some(6)
 ```
 
 ### tuple2, tuple3, etc
@@ -145,10 +143,10 @@ And `tupleN`:
 
 ```scala
 scala> Apply[Option].tuple2(Some(1), Some(2))
-res15: Option[(Int, Int)] = Some((1,2))
+res18: Option[(Int, Int)] = Some((1,2))
 
 scala> Apply[Option].tuple3(Some(1), Some(2), Some(3))
-res16: Option[(Int, Int, Int)] = Some((1,2,3))
+res19: Option[(Int, Int, Int)] = Some((1,2,3))
 ```
 
 ## apply builder syntax
@@ -159,8 +157,8 @@ In order to use it, first import `cats.syntax.all._` or `cats.syntax.apply._`.
 Here we see that the following two functions, `f1` and `f2`, are equivalent:
 
 ```scala
-scala> import cats.syntax.apply._
-import cats.syntax.apply._
+scala> import cats.syntax.cartesian._
+import cats.syntax.cartesian._
 
 scala> def f1(a: Option[Int], b: Option[Int], c: Option[Int]) =
      |   (a |@| b |@| c) map { _ * _ * _ }
@@ -171,39 +169,36 @@ scala> def f2(a: Option[Int], b: Option[Int], c: Option[Int]) =
 f2: (a: Option[Int], b: Option[Int], c: Option[Int])Option[Int]
 
 scala> f1(Some(1), Some(2), Some(3))
-res17: Option[Int] = Some(6)
+res20: Option[Int] = Some(6)
 
 scala> f2(Some(1), Some(2), Some(3))
-res18: Option[Int] = Some(6)
+res21: Option[Int] = Some(6)
 ```
 
 All instances created by `|@|` have `map`, `ap`, and `tupled` methods of the appropriate arity:
 
 ```scala
-scala> import cats.syntax.apply._
-import cats.syntax.apply._
-
 scala> val option2 = Option(1) |@| Option(2)
-option2: cats.syntax.ApplyBuilder[Option]#ApplyBuilder2[Int,Int] = cats.syntax.ApplyBuilder$ApplyBuilder2@280020a2
+option2: cats.syntax.CartesianBuilder[Option]#CartesianBuilder2[Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder2@19caf263
 
 scala> val option3 = option2 |@| Option.empty[Int]
-option3: cats.syntax.ApplyBuilder[Option]#ApplyBuilder3[Int,Int,Int] = cats.syntax.ApplyBuilder$ApplyBuilder3@bdf8d4c
+option3: cats.syntax.CartesianBuilder[Option]#CartesianBuilder3[Int,Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder3@44b3ace5
 
 scala> option2 map addArity2
-res19: Option[Int] = Some(3)
+res22: Option[Int] = Some(3)
 
 scala> option3 map addArity3
-res20: Option[Int] = None
+res23: Option[Int] = None
 
-scala> option2 ap Some(addArity2)
-res21: Option[Int] = Some(3)
+scala> option2 apWith Some(addArity2)
+res24: Option[Int] = Some(3)
 
-scala> option3 ap Some(addArity3)
-res22: Option[Int] = None
+scala> option3 apWith Some(addArity3)
+res25: Option[Int] = None
 
 scala> option2.tupled
-res23: Option[(Int, Int)] = Some((1,2))
+res26: Option[(Int, Int)] = Some((1,2))
 
 scala> option3.tupled
-res24: Option[(Int, Int, Int)] = None
+res27: Option[(Int, Int, Int)] = None
 ```

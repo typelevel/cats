@@ -40,18 +40,15 @@ We can trivially create a `Functor` instance for a type which has a well
 behaved `map` method:
 
 ```scala
-scala> import cats._
 import cats._
 
-scala> implicit val optionFunctor: Functor[Option] = new Functor[Option] {
-     |   def map[A,B](fa: Option[A])(f: A => B) = fa map f
-     | }
-optionFunctor: cats.Functor[Option] = $anon$1@57248dcd
+implicit val optionFunctor: Functor[Option] = new Functor[Option] {
+  def map[A,B](fa: Option[A])(f: A => B) = fa map f
+}
 
-scala> implicit val listFunctor: Functor[List] = new Functor[List] {
-     |   def map[A,B](fa: List[A])(f: A => B) = fa map f
-     | }
-listFunctor: cats.Functor[List] = $anon$1@2c56ab57
+implicit val listFunctor: Functor[List] = new Functor[List] {
+  def map[A,B](fa: List[A])(f: A => B) = fa map f
+}
 ```
 
 However, functors can also be created for types which don't have a `map`
@@ -59,11 +56,10 @@ method. For example, if we create a `Functor` for `Function1[In, ?]`
 we can use `andThen` to implement `map`:
 
 ```scala
-scala> implicit def function1Functor[In]: Functor[Function1[In, ?]] =
-     |   new Functor[Function1[In, ?]] {
-     |     def map[A,B](fa: In => A)(f: A => B): Function1[In,B] = fa andThen f
-     |   }
-function1Functor: [In]=> cats.Functor[[β]In => β]
+implicit def function1Functor[In]: Functor[Function1[In, ?]] =
+  new Functor[Function1[In, ?]] {
+    def map[A,B](fa: In => A)(f: A => B): Function1[In,B] = fa andThen f
+  }
 ```
 
 This example demonstrates the use of the
@@ -86,19 +82,17 @@ scala> val len: String => Int = _.length
 len: String => Int = <function1>
 
 scala> Functor[List].map(List("qwer", "adsfg"))(len)
-res3: List[Int] = List(4, 5)
+res5: List[Int] = List(4, 5)
 ```
 
 `Option` is a functor which only applies the function when the `Option` value 
 is a `Some`:
 
 ```scala
-scala> // Some(x) case: function is applied to x; result is wrapped in Some
-     | Functor[Option].map(Some("adsf"))(len)
-res5: Option[Int] = Some(4)
+scala> Functor[Option].map(Some("adsf"))(len) // Some(x) case: function is applied to x; result is wrapped in Some
+res6: Option[Int] = Some(4)
 
-scala> // None case: simply returns None (function is not applied)
-     | Functor[Option].map(None)(len)
+scala> Functor[Option].map(None)(len) // None case: simply returns None (function is not applied)
 res7: Option[Int] = None
 ```
 
@@ -136,19 +130,19 @@ create a new functor `F[G[_]]` by composing them:
 
 ```scala
 scala> val listOpt = Functor[List] compose Functor[Option]
-listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@48716959
+listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@73069aee
 
 scala> listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
 res10: List[Option[Int]] = List(Some(2), None, Some(4))
 
 scala> val optList = Functor[Option] compose Functor[List]
-optList: cats.Functor[[X]Option[List[X]]] = cats.Functor$$anon$1@6ba3b150
+optList: cats.Functor[[X]Option[List[X]]] = cats.Functor$$anon$1@41053dee
 
 scala> optList.map(Some(List(1, 2, 3)))(_ + 1)
 res11: Option[List[Int]] = Some(List(2, 3, 4))
 
 scala> val listOptList = listOpt compose Functor[List]
-listOptList: cats.Functor[[X]List[Option[List[X]]]] = cats.Functor$$anon$1@2d6f6e73
+listOptList: cats.Functor[[X]List[Option[List[X]]]] = cats.Functor$$anon$1@6de8a9cf
 
 scala> listOptList.map(List(Some(List(1,2)), None, Some(List(3,4))))(_ + 1)
 res12: List[Option[List[Int]]] = List(Some(List(2, 3)), None, Some(List(4, 5)))

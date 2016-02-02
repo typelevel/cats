@@ -30,7 +30,7 @@ res2: List[Int] = List(1, 2, 3)
 
 If `Applicative` is already present and `flatten` is well-behaved,
 extending the `Applicative` to a `Monad` is trivial. To provide evidence
-that a type belongs in the `Monad` typeclass, cats' implementation
+that a type belongs in the `Monad` type class, cats' implementation
 requires us to provide an implementation of `pure` (which can be reused
 from `Applicative`) and `flatMap`.
 
@@ -39,18 +39,16 @@ followed by `flatten`. Conversely, `flatten` is just `flatMap` using
 the identity function `x => x` (i.e. `flatMap(_)(x => x)`).
 
 ```scala
-scala> import cats._
 import cats._
 
-scala> implicit def optionMonad(implicit app: Applicative[Option]) =
-     |   new Monad[Option] {
-     |     // Define flatMap using Option's flatten method
-     |     override def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =
-     |       app.map(fa)(f).flatten
-     |     // Reuse this definition from Applicative.
-     |     override def pure[A](a: A): Option[A] = app.pure(a)
-     |   }
-optionMonad: (implicit app: cats.Applicative[Option])cats.Monad[Option]
+implicit def optionMonad(implicit app: Applicative[Option]) =
+  new Monad[Option] {
+    // Define flatMap using Option's flatten method
+    override def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =
+      app.map(fa)(f).flatten
+    // Reuse this definition from Applicative.
+    override def pure[A](a: A): Option[A] = app.pure(a)
+  }
 ```
 
 ### flatMap
@@ -60,11 +58,10 @@ follows this tradition by providing implementations of `flatten` and `map`
 derived from `flatMap` and `pure`.
 
 ```scala
-scala> implicit val listMonad = new Monad[List] {
-     |   def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] = fa.flatMap(f)
-     |   def pure[A](a: A): List[A] = List(a)
-     | }
-listMonad: cats.Monad[List] = $anon$1@58491bc5
+implicit val listMonad = new Monad[List] {
+  def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] = fa.flatMap(f)
+  def pure[A](a: A): List[A] = List(a)
+}
 ```
 
 Part of the reason for this is that name `flatMap` has special significance in
@@ -81,7 +78,7 @@ scala> universe.reify(
      |     y <- Some(2)
      |   } yield x + y
      | ).tree
-res3: reflect.runtime.universe.Tree = Some.apply(1).flatMap(((x) => Some.apply(2).map(((y) => x.$plus(y)))))
+res4: reflect.runtime.universe.Tree = Some.apply(1).flatMap(((x) => Some.apply(2).map(((y) => x.$plus(y)))))
 ```
 
 ### ifM
@@ -92,7 +89,7 @@ statement into the monadic context.
 
 ```scala
 scala> Monad[List].ifM(List(true, false, true))(List(1, 2), List(3, 4))
-res4: List[Int] = List(1, 2, 3, 4, 1, 2)
+res5: List[Int] = List(1, 2, 3, 4, 1, 2)
 ```
 
 ### Composition
@@ -106,22 +103,20 @@ example) with a specific inner monad (`Option` in the following
 example).
 
 ```scala
-scala> case class OptionT[F[_], A](value: F[Option[A]])
-defined class OptionT
+case class OptionT[F[_], A](value: F[Option[A]])
 
-scala> implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
-     |   new Monad[OptionT[F, ?]] {
-     |     def pure[A](a: A): OptionT[F, A] = OptionT(F.pure(Some(a)))
-     |     def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
-     |       OptionT {
-     |         F.flatMap(fa.value) {
-     |           case None => F.pure(None)
-     |           case Some(a) => f(a).value
-     |         }
-     |       }
-     |   }
-     | }
-optionTMonad: [F[_]](implicit F: cats.Monad[F])cats.Monad[[β]OptionT[F,β]]
+implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
+  new Monad[OptionT[F, ?]] {
+    def pure[A](a: A): OptionT[F, A] = OptionT(F.pure(Some(a)))
+    def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
+      OptionT {
+        F.flatMap(fa.value) {
+          case None => F.pure(None)
+          case Some(a) => f(a).value
+        }
+      }
+  }
+}
 ```
 
 This sort of construction is called a monad transformer.

@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Xor</span><span class="result"> extends <a href="XorInstances.html" class="extype" name="cats.data.XorInstances">XorInstances</a> with <a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Xor</span><span class="result"> extends <span class="extype" name="cats.data.XorInstances">XorInstances</span> with <a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/Xor.scala" target="_blank">Xor.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Xor.scala" target="_blank">Xor.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a>, <a href="XorInstances.html" class="extype" name="cats.data.XorInstances">XorInstances</a>, <a href="XorInstances1.html" class="extype" name="cats.data.XorInstances1">XorInstances1</a>, <a href="XorInstances2.html" class="extype" name="cats.data.XorInstances2">XorInstances2</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a>, <span class="extype" name="cats.data.XorInstances">XorInstances</span>, <span class="extype" name="cats.data.XorInstances1">XorInstances1</span>, <span class="extype" name="cats.data.XorInstances2">XorInstances2</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -92,19 +92,19 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.data.XorFunctions.FromTryCatchAux" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="FromTryCatchAux[T]extendsAnyRef"></a>
-      <a id="FromTryCatchAux[T]:FromTryCatchAux[T]"></a>
+              <ol><li name="cats.data.XorFunctions.CatchOnlyPartiallyApplied" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CatchOnlyPartiallyApplied[T]extendsAnyRef"></a>
+      <a id="CatchOnlyPartiallyApplied[T]:CatchOnlyPartiallyApplied[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="XorFunctions$FromTryCatchAux.html"><span class="name">FromTryCatchAux</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="XorFunctions$CatchOnlyPartiallyApplied.html"><span class="name">CatchOnlyPartiallyApplied</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.XorFunctions@FromTryCatchAux[T]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.XorFunctions@CatchOnlyPartiallyApplied[T]extendsAnyRef" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -218,6 +218,43 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.XorFunctions#catchNonFatal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catchNonFatal[A](f:=&gt;A):cats.data.Xor[Throwable,A]"></a>
+      <a id="catchNonFatal[A](⇒A):Xor[Throwable,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catchNonFatal</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="f">f: ⇒ <span class="extype" name="cats.data.XorFunctions.catchNonFatal.A">A</span></span>)</span><span class="result">: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="scala.Throwable">Throwable</span>, <span class="extype" name="cats.data.XorFunctions.catchNonFatal.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@catchNonFatal[A](f:=&gt;A):cats.data.Xor[Throwable,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a></dd></dl></div>
+    </li><li name="cats.data.XorFunctions#catchOnly" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catchOnly[T&gt;:Null&lt;:Throwable]:XorFunctions.this.CatchOnlyPartiallyApplied[T]"></a>
+      <a id="catchOnly[T&lt;:Throwable&gt;:Null]:CatchOnlyPartiallyApplied[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catchOnly</span><span class="tparams">[<span name="T">T &gt;: <span class="extype" name="scala.Null">Null</span> &lt;: <span class="extype" name="scala.Throwable">Throwable</span></span>]</span><span class="result">: <a href="#CatchOnlyPartiallyApplied[T]extendsAnyRef" class="extmbr" name="cats.data.XorFunctions.CatchOnlyPartiallyApplied">CatchOnlyPartiallyApplied</a>[<span class="extype" name="cats.data.XorFunctions.catchOnly.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@catchOnly[T&gt;:Null&lt;:Throwable]:XorFunctions.this.CatchOnlyPartiallyApplied[T]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
+the resulting <code>Xor</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
+the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For example:</p><pre>scala&gt; Xor.catchOnly[NumberFormatException] { <span class="lit">"foo"</span>.toInt }
+res0: Xor[NumberFormatException, <span class="std">Int</span>] = Left(java.lang.NumberFormatException: For input string: <span class="lit">"foo"</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -354,25 +391,6 @@ the left of the <code>Xor</code> when the specified <code>Option</code> is <code
     </span>
       <p class="shortcomment cmt">Converts a <code>Try[A]</code> to a <code>Throwable Xor A</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts a <code>Try[A]</code> to a <code>Throwable Xor A</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a></dd></dl></div>
-    </li><li name="cats.data.XorFunctions#fromTryCatch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fromTryCatch[T&gt;:Null&lt;:Throwable]:XorFunctions.this.FromTryCatchAux[T]"></a>
-      <a id="fromTryCatch[T&lt;:Throwable&gt;:Null]:FromTryCatchAux[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fromTryCatch</span><span class="tparams">[<span name="T">T &gt;: <span class="extype" name="scala.Null">Null</span> &lt;: <span class="extype" name="scala.Throwable">Throwable</span></span>]</span><span class="result">: <a href="#FromTryCatchAux[T]extendsAnyRef" class="extmbr" name="cats.data.XorFunctions.FromTryCatchAux">FromTryCatchAux</a>[<span class="extype" name="cats.data.XorFunctions.fromTryCatch.T">T</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@fromTryCatch[T&gt;:Null&lt;:Throwable]:XorFunctions.this.FromTryCatchAux[T]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
-the resulting <code>Xor</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
-the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For example: </p><pre><span class="kw">val</span> result: NumberFormatException Xor <span class="std">Int</span> = fromTryCatch[NumberFormatException] { <span class="lit">"foo"</span>.toInt }</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -612,6 +630,23 @@ the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For ex
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.XorInstances#xorBifunctor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="xorBifunctor:cats.functor.Bifunctor[cats.data.Xor]"></a>
+      <a id="xorBifunctor:Bifunctor[Xor]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">xorBifunctor</span><span class="result">: <a href="../functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@xorBifunctor:cats.functor.Bifunctor[cats.data.Xor]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
     </li><li name="cats.data.XorInstances2#xorEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="xorEq[A,B](implicitevidence$6:cats.Eq[A],implicitevidence$7:cats.Eq[B]):cats.Eq[cats.data.Xor[A,B]]"></a>
       <a id="xorEq[A,B](Eq[A],Eq[B]):Eq[Xor[A,B]]"></a>
@@ -628,24 +663,24 @@ the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For ex
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorInstances2.html" class="extype" name="cats.data.XorInstances2">XorInstances2</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances2</dd></dl></div>
     </li><li name="cats.data.XorInstances#xorInstances" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorInstances[A]:cats.Traverse[[β]cats.data.Xor[A,β]]withcats.MonadError[cats.data.Xor,A]"></a>
-      <a id="xorInstances[A]:Traverse[[β]Xor[A,β]]withMonadError[Xor,A]"></a>
+      <a id="xorInstances[A]:cats.Traverse[[β]cats.data.Xor[A,β]]withcats.MonadError[[β]cats.data.Xor[A,β],A]"></a>
+      <a id="xorInstances[A]:Traverse[[β]Xor[A,β]]withMonadError[[β]Xor[A,β],A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">xorInstances</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>]] with <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>, <span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>]</span>
+        <span class="name">xorInstances</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>]] with <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>], <span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@xorInstances[A]:cats.Traverse[[β]cats.data.Xor[A,β]]withcats.MonadError[cats.data.Xor,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Xor$@xorInstances[A]:cats.Traverse[[β]cats.data.Xor[A,β]]withcats.MonadError[[β]cats.data.Xor[A,β],A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorInstances.html" class="extype" name="cats.data.XorInstances">XorInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
     </li><li name="cats.data.XorInstances#xorMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="xorMonoid[A,B](implicitA:cats.Semigroup[A],implicitB:cats.Monoid[B]):cats.Monoid[cats.data.Xor[A,B]]"></a>
       <a id="xorMonoid[A,B](Semigroup[A],Monoid[B]):Monoid[Xor[A,B]]"></a>
@@ -662,7 +697,7 @@ the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For ex
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorInstances.html" class="extype" name="cats.data.XorInstances">XorInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
     </li><li name="cats.data.XorInstances#xorOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="xorOrder[A,B](implicitevidence$1:cats.Order[A],implicitevidence$2:cats.Order[B]):cats.Order[cats.data.Xor[A,B]]"></a>
       <a id="xorOrder[A,B](Order[A],Order[B]):Order[Xor[A,B]]"></a>
@@ -679,7 +714,7 @@ the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For ex
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorInstances.html" class="extype" name="cats.data.XorInstances">XorInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
     </li><li name="cats.data.XorInstances1#xorPartialOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="xorPartialOrder[A,B](implicitevidence$4:cats.PartialOrder[A],implicitevidence$5:cats.PartialOrder[B]):cats.PartialOrder[cats.data.Xor[A,B]]"></a>
       <a id="xorPartialOrder[A,B](PartialOrder[A],PartialOrder[B]):PartialOrder[Xor[A,B]]"></a>
@@ -696,7 +731,24 @@ the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For ex
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorInstances1.html" class="extype" name="cats.data.XorInstances1">XorInstances1</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances1</dd></dl></div>
+    </li><li name="cats.data.XorInstances1#xorSemigroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="xorSemigroup[A,B](implicitA:cats.Semigroup[A],implicitB:cats.Semigroup[B]):cats.Semigroup[cats.data.Xor[A,B]]"></a>
+      <a id="xorSemigroup[A,B](Semigroup[A],Semigroup[B]):Semigroup[Xor[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">xorSemigroup</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.XorInstances1.xorSemigroup.A">A</span>]</span>, <span name="B">B: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.XorInstances1.xorSemigroup.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances1.xorSemigroup.A">A</span>, <span class="extype" name="cats.data.XorInstances1.xorSemigroup.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@xorSemigroup[A,B](implicitA:cats.Semigroup[A],implicitB:cats.Semigroup[B]):cats.Semigroup[cats.data.Xor[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances1</dd></dl></div>
     </li><li name="cats.data.XorInstances#xorShow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="xorShow[A,B](implicitA:cats.Show[A],implicitB:cats.Show[B]):cats.Show[cats.data.Xor[A,B]]"></a>
       <a id="xorShow[A,B](Show[A],Show[B]):Show[Xor[A,B]]"></a>
@@ -713,7 +765,7 @@ the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For ex
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorInstances.html" class="extype" name="cats.data.XorInstances">XorInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
     </li></ol>
             </div>
 
@@ -730,11 +782,11 @@ the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For ex
             </div><div class="parent" name="cats.data.XorFunctions">
               <h3>Inherited from <a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a></h3>
             </div><div class="parent" name="cats.data.XorInstances">
-              <h3>Inherited from <a href="XorInstances.html" class="extype" name="cats.data.XorInstances">XorInstances</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.data.XorInstances">XorInstances</span></h3>
             </div><div class="parent" name="cats.data.XorInstances1">
-              <h3>Inherited from <a href="XorInstances1.html" class="extype" name="cats.data.XorInstances1">XorInstances1</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.data.XorInstances1">XorInstances1</span></h3>
             </div><div class="parent" name="cats.data.XorInstances2">
-              <h3>Inherited from <a href="XorInstances2.html" class="extype" name="cats.data.XorInstances2">XorInstances2</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.data.XorInstances2">XorInstances2</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

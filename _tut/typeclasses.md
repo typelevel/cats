@@ -5,13 +5,12 @@ is to provide a behavior for some type. You think of it as an
 "interface" in the Java sense. Here's an example.
 
 ```scala
-scala> /**
-     |  * A type class to provide textual representation
-     |  */
-     | trait Show[A] {
-     |   def show(f: A): String
-     | }
-defined trait Show
+/**
+ * A type class to provide textual representation
+ */
+trait Show[A] {
+  def show(f: A): String
+}
 ```
 This class says that a value of type `Show[A]` has a way to turn `A`s
 into `String`s. Now we can write a function which is polymorphic on
@@ -19,8 +18,7 @@ some `A`, as long as we have some value of `Show[A]`, so that our function
 can have a way of producing a `String`:
 
 ```scala
-scala> def log[A](a: A)(implicit s: Show[A]) = println(s.show(a))
-log: [A](a: A)(implicit s: Show[A])Unit
+def log[A](a: A)(implicit s: Show[A]) = println(s.show(a))
 ```
 
 If we now try to call log, without supplying a `Show` instance, we will
@@ -36,13 +34,15 @@ scala> log("a string")
 It is trivial to supply a `Show` instance for `String`:
 
 ```scala
-scala> implicit val stringShow = new Show[String] {
-     |   def show(s: String) = s
-     | }
-stringShow: Show[String] = $anon$1@c0b694a
+implicit val stringShow = new Show[String] {
+  def show(s: String) = s
+}
+```
 
-scala> // and now our call to Log succeeds
-     | log("a string")
+and now our call to Log succeeds
+
+```scala
+scala> log("a string")
 a string
 ```
 
@@ -60,13 +60,12 @@ implicit `Show` instance of some other type, for instance, we could
 implement `Show` for `Option`:
 
 ```scala
-scala> implicit def optionShow[A](implicit sa: Show[A]) = new Show[Option[A]] {
-     |   def show(oa: Option[A]): String = oa match {
-     |     case None => "None"
-     |     case Some(a) => "Some("+ sa.show(a) + ")"
-     |   }
-     | }
-optionShow: [A](implicit sa: Show[A])Show[Option[A]]
+implicit def optionShow[A](implicit sa: Show[A]) = new Show[Option[A]] {
+  def show(oa: Option[A]): String = oa match {
+    case None => "None"
+    case Some(a) => "Some("+ sa.show(a) + ")"
+  }
+}
 ```
 
 Now we can call our log function with a `Option[String]` or a
@@ -80,7 +79,7 @@ Some(Some(hello))
 Scala has syntax just for this pattern that we use frequently:
 
 ```scala
-def log[A : Show](a: A) = println(implicitly[Show[A]].show(a))
+def log[A: Show](a: A) = println(implicitly[Show[A]].show(a))
 ```
 
 is the same as

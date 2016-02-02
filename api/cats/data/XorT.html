@@ -43,7 +43,7 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
@@ -54,14 +54,10 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Transformer for <code>Xor</code>, allowing the effect of an arbitrary type constructor <code>F</code> to be combined with the
 fail-fast effect of <code>Xor</code>.</p><p><code>XorT[F, A, B]</code> wraps a value of type <code>F[A Xor B]</code>. An <code>F[C]</code> can be lifted in to <code>XorT[F, A, C]</code> via <code>XorT.right</code>,
 and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/XorT.scala" target="_blank">XorT.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/XorT.scala" target="_blank">XorT.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
-                <span class="toggle diagram-link">Type Hierarchy</span>
-                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 199.50 118.00" height="118pt" width="200pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="graph0"><polygon points="-4,4 -4,-114 195.5,-114 195.5,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.data.XorT (this class)" xlink:href="#inheritance-diagram"><polygon points="140.5,-49 41.5,-49 41.5,-24 140.5,-24 140.5,-49" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="52" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33.7495" x="72.5469" text-anchor="start">XorT[F, A, B]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="scala.Product"><polygon points="78,-110 0,-110 0,-85 78,-85 78,-110" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="30.8794" text-anchor="start">Product</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="XorT[F, A, B] is a subtype of Product"><path d="M52.6354,-81.0291C61.438,-71.0415 72.7055,-58.2572 80.7478,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="51.2667,-79.9353 49.2735,-84.8435 53.8924,-82.2495 51.2667,-79.9353" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="scala.Serializable"><polygon points="191.5,-110 96.5,-110 96.5,-85 191.5,-85 191.5,-110" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="107" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="127.764" text-anchor="start">Serializable</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="XorT[F, A, B] is a subtype of Serializable"><path d="M130.102,-81.0291C121.13,-71.0415 109.646,-58.2572 101.449,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="128.886,-82.2933 133.529,-84.8435 131.489,-79.9544 128.886,-82.2933" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
-              </div></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -509,6 +505,23 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </a>
     </span>
       
+    </li><li name="cats.data.XorT#getOrElseF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getOrElseF[BB&gt;:B](default:=&gt;F[BB])(implicitF:cats.Monad[F]):F[BB]"></a>
+      <a id="getOrElseF[BB&gt;:B](⇒F[BB])(Monad[F]):F[BB]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOrElseF</span><span class="tparams">[<span name="BB">BB &gt;: <span class="extype" name="cats.data.XorT.B">B</span></span>]</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="cats.data.XorT.F">F</span>[<span class="extype" name="cats.data.XorT.getOrElseF.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.XorT.F">F</span>[<span class="extype" name="cats.data.XorT.getOrElseF.BB">BB</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT@getOrElseF[BB&gt;:B](default:=&gt;F[BB])(implicitF:cats.Monad[F]):F[BB]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -662,6 +675,23 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.XorT#orElse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="orElse[AA,BB&gt;:B](default:=&gt;cats.data.XorT[F,AA,BB])(implicitF:cats.Monad[F]):cats.data.XorT[F,AA,BB]"></a>
+      <a id="orElse[AA,BB&gt;:B](⇒XorT[F,AA,BB])(Monad[F]):XorT[F,AA,BB]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orElse</span><span class="tparams">[<span name="AA">AA</span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.XorT.B">B</span></span>]</span><span class="params">(<span name="default">default: ⇒ <a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.orElse.AA">AA</span>, <span class="extype" name="cats.data.XorT.orElse.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.orElse.AA">AA</span>, <span class="extype" name="cats.data.XorT.orElse.BB">BB</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT@orElse[AA,BB&gt;:B](default:=&gt;cats.data.XorT[F,AA,BB])(implicitF:cats.Monad[F]):cats.data.XorT[F,AA,BB]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.XorT#partialCompare" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="partialCompare(that:cats.data.XorT[F,A,B])(implicitp:cats.PartialOrder[F[cats.data.Xor[A,B]]]):Double"></a>
       <a id="partialCompare(XorT[F,A,B])(PartialOrder[F[Xor[A,B]]]):Double"></a>
@@ -726,6 +756,23 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.XorT@show(implicitshow:cats.Show[F[cats.data.Xor[A,B]]]):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.XorT#subflatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="subflatMap[AA&gt;:A,D](f:B=&gt;cats.data.Xor[AA,D])(implicitF:cats.Functor[F]):cats.data.XorT[F,AA,D]"></a>
+      <a id="subflatMap[AA&gt;:A,D]((B)⇒Xor[AA,D])(Functor[F]):XorT[F,AA,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">subflatMap</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.XorT.A">A</span></span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.XorT.B">B</span>) ⇒ <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorT.subflatMap.AA">AA</span>, <span class="extype" name="cats.data.XorT.subflatMap.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.subflatMap.AA">AA</span>, <span class="extype" name="cats.data.XorT.subflatMap.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT@subflatMap[AA&gt;:A,D](f:B=&gt;cats.data.Xor[AA,D])(implicitF:cats.Functor[F]):cats.data.XorT[F,AA,D]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -799,18 +846,18 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
     </span>
       
     </li><li name="cats.data.XorT#toOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toOption(implicitF:cats.Functor[F]):F[Option[B]]"></a>
-      <a id="toOption(Functor[F]):F[Option[B]]"></a>
+      <a id="toOption(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]"></a>
+      <a id="toOption(Functor[F]):OptionT[F,B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toOption</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.XorT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.XorT.B">B</span>]]</span>
+        <span class="name">toOption</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.XorT@toOption(implicitF:cats.Functor[F]):F[Option[B]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.XorT@toOption(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -828,6 +875,23 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.XorT@toValidated(implicitF:cats.Functor[F]):F[cats.data.Validated[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.XorT#transform" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="transform[C,D](f:cats.data.Xor[A,B]=&gt;cats.data.Xor[C,D])(implicitF:cats.Functor[F]):cats.data.XorT[F,C,D]"></a>
+      <a id="transform[C,D]((Xor[A,B])⇒Xor[C,D])(Functor[F]):XorT[F,C,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">transform</span><span class="tparams">[<span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.B">B</span>]) ⇒ <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorT.transform.C">C</span>, <span class="extype" name="cats.data.XorT.transform.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.transform.C">C</span>, <span class="extype" name="cats.data.XorT.transform.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT@transform[C,D](f:cats.data.Xor[A,B]=&gt;cats.data.Xor[C,D])(implicitF:cats.Functor[F]):cats.data.XorT[F,C,D]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -862,6 +926,23 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.XorT@value:F[cats.data.Xor[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.XorT#valueOr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="valueOr[BB&gt;:B](f:A=&gt;BB)(implicitF:cats.Functor[F]):F[BB]"></a>
+      <a id="valueOr[BB&gt;:B]((A)⇒BB)(Functor[F]):F[BB]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">valueOr</span><span class="tparams">[<span name="BB">BB &gt;: <span class="extype" name="cats.data.XorT.B">B</span></span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.XorT.A">A</span>) ⇒ <span class="extype" name="cats.data.XorT.valueOr.BB">BB</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.XorT.F">F</span>[<span class="extype" name="cats.data.XorT.valueOr.BB">BB</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT@valueOr[BB&gt;:B](f:A=&gt;BB)(implicitF:cats.Functor[F]):F[BB]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -952,12 +1033,15 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </a>
     </span>
       <p class="shortcomment cmt">Run this value as a <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> against the function and convert it back to an <code><a href="" class="extype" name="cats.data.XorT">XorT</a></code>.</p><div class="fullcomment"><div class="comment cmt"><p>Run this value as a <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> against the function and convert it back to an <code><a href="" class="extype" name="cats.data.XorT">XorT</a></code>.</p><p>The <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>XorT</code> &quot;fails fast&quot; - it is often useful to &quot;momentarily&quot; have
-it accumulate errors instead, which is what the <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> data type gives us.</p><p>Example:</p><pre><span class="kw">val</span> v1: Validated[NonEmptyList[Error], <span class="std">Int</span>] = ...
-<span class="kw">val</span> v2: Validated[NonEmptyList[Error], <span class="std">Int</span>] = ...
-<span class="kw">val</span> xort: XorT[Error, <span class="std">Int</span>] = ...
-
-<span class="kw">val</span> result: XorT[NonEmptyList[Error], <span class="std">Int</span>] =
-  xort.withValidated { v3 <span class="kw">=&gt;</span> (v1 |@| v2 |@| v3.leftMap(NonEmptyList(_))) { <span class="kw">case</span> (i, j, k) <span class="kw">=&gt;</span> i + j + k } }</pre></div></div>
+it accumulate errors instead, which is what the <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> data type gives us.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.option._
+scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">import</span> cats.syntax.cartesian._
+scala&gt; <span class="kw">type</span> Error = <span class="std">String</span>
+scala&gt; <span class="kw">val</span> v1: Validated[NonEmptyList[Error], <span class="std">Int</span>] = Validated.Invalid(NonEmptyList(<span class="lit">"error 1"</span>))
+scala&gt; <span class="kw">val</span> v2: Validated[NonEmptyList[Error], <span class="std">Int</span>] = Validated.Invalid(NonEmptyList(<span class="lit">"error 2"</span>))
+scala&gt; <span class="kw">val</span> xort: XorT[<span class="std">Option</span>, Error, <span class="std">Int</span>] = XorT(<span class="std">Some</span>(Xor.left(<span class="lit">"error 3"</span>)))
+scala&gt; xort.withValidated { v3 <span class="kw">=&gt;</span> (v1 |@| v2 |@| v3.leftMap(NonEmptyList(_))).map{ <span class="kw">case</span> (i, j, k) <span class="kw">=&gt;</span> i + j + k } }
+res0: XorT[<span class="std">Option</span>, NonEmptyList[Error], <span class="std">Int</span>] = XorT(<span class="std">Some</span>(Left(OneAnd(error <span class="num">1</span>,<span class="std">List</span>(error <span class="num">2</span>, error <span class="num">3</span>)))))</pre></div></div>
     </li></ol>
             </div>
 

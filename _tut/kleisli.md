@@ -6,12 +6,9 @@ source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/K
 scaladoc: "#cats.data.Kleisli"
 ---
 # Kleisli
-Kleisli is a data type that will come in handy often, especially if you are working with monadic functions.
-Monadic functions are functions that return a monadic value - for instance, a function may return an
-`Option[Int]` or an `Xor[String, List[Double]]`.
-
-How then do we compose these functions together nicely? We cannot use the usual `compose` or `andThen` methods
-without having functions take an `Option` or `Xor` as a parameter, which can be strange and unwieldy.
+Kleisli enables composition of functions that return a monadic value, for instance an `Option[Int]` 
+or a `Xor[String, List[Double]]`, without having functions take an `Option` or `Xor` as a parameter, 
+which can be strange and unwieldy.
 
 We may also have several functions which depend on some environment and want a nice way to compose these functions
 to ensure they all receive the same environment. Or perhaps we have functions which depend on their own "local"
@@ -27,34 +24,31 @@ this compositional property that we are able to write many small functions and c
 to create a larger one that suits our needs.
 
 ```scala
-scala> val twice: Int => Int =
-     |   x => x * 2
-twice: Int => Int = <function1>
+val twice: Int => Int =
+  x => x * 2
 
-scala> val countCats: Int => String =
-     |   x => if (x == 1) "1 cat" else s"$x cats"
-countCats: Int => String = <function1>
+val countCats: Int => String =
+  x => if (x == 1) "1 cat" else s"$x cats"
 
-scala> val twiceAsManyCats: Int => String =
-     |   twice andThen countCats
-twiceAsManyCats: Int => String = <function1>
+val twiceAsManyCats: Int => String =
+  twice andThen countCats // equivalent to: countCats compose twice  
+```
 
-scala>   // equivalent to: countCats compose twice
-     | 
-     | twiceAsManyCats(1) // "2 cats"
+Thus.
+
+```scala
+scala> twiceAsManyCats(1) // "2 cats"
 res2: String = 2 cats
 ```
 
 Sometimes, our functions will need to return monadic values. For instance, consider the following set of functions.
 
 ```scala
-scala> val parse: String => Option[Int] =
-     |   s => if (s.matches("-?[0-9]+")) Some(s.toInt) else None
-parse: String => Option[Int] = <function1>
+val parse: String => Option[Int] =
+  s => if (s.matches("-?[0-9]+")) Some(s.toInt) else None
 
-scala> val reciprocal: Int => Option[Double] =
-     |   i => if (i != 0) Some(1.0 / i) else None
-reciprocal: Int => Option[Double] = <function1>
+val reciprocal: Int => Option[Double] =
+  i => if (i != 0) Some(1.0 / i) else None
 ```
 
 As it stands we cannot use `Function1.compose` (or `Function1.andThen`) to compose these two functions.
@@ -69,34 +63,26 @@ properties of the `F[_]`, we can do different things with `Kleisli`s. For instan
 compose two `Kleisli`s much like we can two functions.
 
 ```scala
-scala> import cats.FlatMap
 import cats.FlatMap
-
-scala> import cats.syntax.flatMap._
 import cats.syntax.flatMap._
 
-scala> final case class Kleisli[F[_], A, B](run: A => F[B]) {
-     |   def compose[Z](k: Kleisli[F, Z, A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
-     |     Kleisli[F, Z, B](z => k.run(z).flatMap(run))
-     | }
-defined class Kleisli
+final case class Kleisli[F[_], A, B](run: A => F[B]) {
+  def compose[Z](k: Kleisli[F, Z, A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
+    Kleisli[F, Z, B](z => k.run(z).flatMap(run))
+}
 ```
 
 Returning to our earlier example:
 
 ```scala
-scala> // Bring in cats.FlatMap[Option] instance
-     | import cats.std.option._
+// Bring in cats.FlatMap[Option] instance
 import cats.std.option._
 
-scala> val parse = Kleisli((s: String) => try { Some(s.toInt) } catch { case _: NumberFormatException => None })
-parse: Kleisli[Option,String,Int] = Kleisli(<function1>)
+val parse = Kleisli((s: String) => try { Some(s.toInt) } catch { case _: NumberFormatException => None })
 
-scala> val reciprocal = Kleisli((i: Int) => if (i == 0) None else Some(1.0 / i))
-reciprocal: Kleisli[Option,Int,Double] = Kleisli(<function1>)
+val reciprocal = Kleisli((i: Int) => if (i == 0) None else Some(1.0 / i))
 
-scala> val parseAndReciprocal = reciprocal.compose(parse)
-parseAndReciprocal: Kleisli[Option,String,Double] = Kleisli(<function1>)
+val parseAndReciprocal = reciprocal.compose(parse)
 ```
 
 `Kleisli#andThen` can be defined similarly.
@@ -106,19 +92,18 @@ we can do useful things with weaker requirements. Such an example would be `Klei
 that `F[_]` have a `Functor` instance (e.g. is equipped with `map: F[A] => (A => B) => F[B]`).
 
 ```scala
-scala> import cats.Functor
 import cats.Functor
 
-scala> final case class Kleisli[F[_], A, B](run: A => F[B]) {
-     |   def map[C](f: B => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
-     |     Kleisli[F, A, C](a => F.map(run(a))(f))
-     | }
-defined class Kleisli
+final case class Kleisli[F[_], A, B](run: A => F[B]) {
+  def map[C](f: B => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
+    Kleisli[F, A, C](a => F.map(run(a))(f))
+}
 ```
 
 Below are some more methods on `Kleisli` that can be used so long as the constraint on `F[_]`
 is satisfied.
 
+```
 Method    | Constraint on `F[_]`
 --------- | -------------------
 andThen   | FlatMap
@@ -127,6 +112,7 @@ flatMap   | FlatMap
 lower     | Monad
 map       | Functor
 traverse  | Applicative
+```
 
 ### Type class instances
 The type class instances for `Kleisli`, like that for functions, often fix the input type (and the `F[_]`) and leave
@@ -138,26 +124,21 @@ resolution will pick up the most specific instance it can (depending on the `F[_
 An example of a `Monad` instance for `Kleisli` would be:
 
 ```scala
-scala> import cats.syntax.flatMap._
 import cats.syntax.flatMap._
-
-scala> import cats.syntax.functor._
 import cats.syntax.functor._
+// Alternatively we can import cats.implicits._ to bring in all the
+// syntax at once (as well as all type class instances)
 
-scala> // Alternatively we can import cats.implicits._ to bring in all the
-     | // syntax at once (as well as all type class instances)
-     | 
-     | // We can define a FlatMap instance for Kleisli if the F[_] we chose has a FlatMap instance
-     | // Note the input type and F are fixed, with the output type left free
-     | implicit def kleisliFlatMap[F[_], Z](implicit F: FlatMap[F]): FlatMap[Kleisli[F, Z, ?]] =
-     |   new FlatMap[Kleisli[F, Z, ?]] {
-     |     def flatMap[A, B](fa: Kleisli[F, Z, A])(f: A => Kleisli[F, Z, B]): Kleisli[F, Z, B] =
-     |       Kleisli(z => fa.run(z).flatMap(a => f(a).run(z)))
-     | 
-     |     def map[A, B](fa: Kleisli[F, Z, A])(f: A => B): Kleisli[F, Z, B] =
-     |       Kleisli(z => fa.run(z).map(f))
-     |   }
-kleisliFlatMap: [F[_], Z](implicit F: cats.FlatMap[F])cats.FlatMap[[γ]Kleisli[F,Z,γ]]
+// We can define a FlatMap instance for Kleisli if the F[_] we chose has a FlatMap instance
+// Note the input type and F are fixed, with the output type left free
+implicit def kleisliFlatMap[F[_], Z](implicit F: FlatMap[F]): FlatMap[Kleisli[F, Z, ?]] =
+  new FlatMap[Kleisli[F, Z, ?]] {
+    def flatMap[A, B](fa: Kleisli[F, Z, A])(f: A => Kleisli[F, Z, B]): Kleisli[F, Z, B] =
+      Kleisli(z => fa.run(z).flatMap(a => f(a).run(z)))
+
+    def map[A, B](fa: Kleisli[F, Z, A])(f: A => B): Kleisli[F, Z, B] =
+      Kleisli(z => fa.run(z).map(f))
+  }
 ```
 
 Below is a table of some of the type class instances `Kleisli` can have depending on what instances `F[_]` has.
@@ -205,27 +186,20 @@ functions often refer to the function as a `Reader`. For instance, it is common 
 In the same spirit, Cats defines a `Reader` type alias along the lines of:
 
 ```scala
-scala> // We want A => B, but Kleisli provides A => F[B]. To make the types/shapes match,
-     | // we need an F[_] such that providing it a type A is equivalent to A
-     | // This can be thought of as the type-level equivalent of the identity function
-     | type Id[A] = A
-defined type alias Id
+// We want A => B, but Kleisli provides A => F[B]. To make the types/shapes match,
+// we need an F[_] such that providing it a type A is equivalent to A
+// This can be thought of as the type-level equivalent of the identity function
+type Id[A] = A
 
-scala> type Reader[A, B] = Kleisli[Id, A, B]
-defined type alias Reader
+type Reader[A, B] = Kleisli[Id, A, B]
+object Reader {
+  // Lifts a plain function A => B into a Kleisli, giving us access
+  // to all the useful methods and type class instances
+  def apply[A, B](f: A => B): Reader[A, B] = Kleisli[Id, A, B](f)
+}
 
-scala> object Reader {
-     |   // Lifts a plain function A => B into a Kleisli, giving us access
-     |   // to all the useful methods and type class instances
-     |   def apply[A, B](f: A => B): Reader[A, B] = Kleisli[Id, A, B](f)
-     | }
-defined object Reader
-
-scala> type ReaderT[F[_], A, B] = Kleisli[F, A, B]
-defined type alias ReaderT
-
-scala> val ReaderT = Kleisli
-ReaderT: Kleisli.type = Kleisli
+type ReaderT[F[_], A, B] = Kleisli[F, A, B]
+val ReaderT = Kleisli
 ```
 
 The `ReaderT` value alias exists to allow users to use the `Kleisli` companion object as if it were `ReaderT`, if
@@ -243,31 +217,17 @@ If the configuration is good, we return a `Some` of the module, otherwise a `Non
 simplicity - if you want to provide error messages or other failure context, consider using `Xor` instead.
 
 ```scala
-scala> case class DbConfig(url: String, user: String, pass: String)
-defined class DbConfig
+case class DbConfig(url: String, user: String, pass: String)
+trait Db
+object Db {
+  val fromDbConfig: Kleisli[Option, DbConfig, Db] = ???
+}
 
-scala> trait Db
-defined trait Db
-
-scala> object Db {
-     |   val fromDbConfig: Kleisli[Option, DbConfig, Db] = ???
-     | }
-defined object Db
-warning: previously defined trait Db is not a companion to object Db.
-Companions must be defined together; you may wish to use :paste mode for this.
-
-scala> case class ServiceConfig(addr: String, port: Int)
-defined class ServiceConfig
-
-scala> trait Service
-defined trait Service
-
-scala> object Service {
-     |   val fromServiceConfig: Kleisli[Option, ServiceConfig, Service] = ???
-     | }
-defined object Service
-warning: previously defined trait Service is not a companion to object Service.
-Companions must be defined together; you may wish to use :paste mode for this.
+case class ServiceConfig(addr: String, port: Int)
+trait Service
+object Service {
+  val fromServiceConfig: Kleisli[Option, ServiceConfig, Service] = ???
+}
 ```
 
 We have two independent modules, a `Db` (allowing access to a database) and a `Service` (supporting an API to provide
@@ -276,11 +236,9 @@ should be. However our application needs both of these modules to work. It is pl
 application configuration.
 
 ```scala
-scala> case class AppConfig(dbConfig: DbConfig, serviceConfig: ServiceConfig)
-defined class AppConfig
+case class AppConfig(dbConfig: DbConfig, serviceConfig: ServiceConfig)
 
-scala> class App(db: Db, service: Service)
-defined class App
+class App(db: Db, service: Service)
 ```
 
 As it stands, we cannot use both `Kleisli` validation functions together nicely - one takes a `DbConfig`, the
@@ -288,10 +246,9 @@ other a `ServiceConfig`. That means the `FlatMap` (and by extension, the `Monad`
 input type is fixed in the type class instances). However, there is a nice function on `Kleisli` called `local`.
 
 ```scala
-scala> final case class Kleisli[F[_], A, B](run: A => F[B]) {
-     |   def local[AA](f: AA => A): Kleisli[F, AA, B] = Kleisli(f.andThen(run))
-     | }
-defined class Kleisli
+final case class Kleisli[F[_], A, B](run: A => F[B]) {
+  def local[AA](f: AA => A): Kleisli[F, AA, B] = Kleisli(f.andThen(run))
+}
 ```
 
 What `local` allows us to do is essentially "expand" our input type to a more "general" one. In our case, we
@@ -301,59 +258,37 @@ so long as we tell it how to go from an `AppConfig` to the other configs.
 Now we can create our application config validator!
 
 ```scala
-scala> final case class Kleisli[F[_], Z, A](run: Z => F[A]) {
-     |   def flatMap[B](f: A => Kleisli[F, Z, B])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
-     |     Kleisli(z => F.flatMap(run(z))(a => f(a).run(z)))
-     | 
-     |   def map[B](f: A => B)(implicit F: Functor[F]): Kleisli[F, Z, B] =
-     |     Kleisli(z => F.map(run(z))(f))
-     | 
-     |   def local[ZZ](f: ZZ => Z): Kleisli[F, ZZ, A] = Kleisli(f.andThen(run))
-     | }
-defined class Kleisli
+final case class Kleisli[F[_], Z, A](run: Z => F[A]) {
+  def flatMap[B](f: A => Kleisli[F, Z, B])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
+    Kleisli(z => F.flatMap(run(z))(a => f(a).run(z)))
 
-scala> case class DbConfig(url: String, user: String, pass: String)
-defined class DbConfig
+  def map[B](f: A => B)(implicit F: Functor[F]): Kleisli[F, Z, B] =
+    Kleisli(z => F.map(run(z))(f))
 
-scala> trait Db
-defined trait Db
-warning: previously defined object Db is not a companion to trait Db.
-Companions must be defined together; you may wish to use :paste mode for this.
+  def local[ZZ](f: ZZ => Z): Kleisli[F, ZZ, A] = Kleisli(f.andThen(run))
+}
 
-scala> object Db {
-     |   val fromDbConfig: Kleisli[Option, DbConfig, Db] = ???
-     | }
-defined object Db
-warning: previously defined trait Db is not a companion to object Db.
-Companions must be defined together; you may wish to use :paste mode for this.
+case class DbConfig(url: String, user: String, pass: String)
+trait Db
+object Db {
+  val fromDbConfig: Kleisli[Option, DbConfig, Db] = ???
+}
 
-scala> case class ServiceConfig(addr: String, port: Int)
-defined class ServiceConfig
+case class ServiceConfig(addr: String, port: Int)
+trait Service
+object Service {
+  val fromServiceConfig: Kleisli[Option, ServiceConfig, Service] = ???
+}
 
-scala> trait Service
-defined trait Service
-warning: previously defined object Service is not a companion to trait Service.
-Companions must be defined together; you may wish to use :paste mode for this.
+case class AppConfig(dbConfig: DbConfig, serviceConfig: ServiceConfig)
 
-scala> object Service {
-     |   val fromServiceConfig: Kleisli[Option, ServiceConfig, Service] = ???
-     | }
-defined object Service
-warning: previously defined trait Service is not a companion to object Service.
-Companions must be defined together; you may wish to use :paste mode for this.
+class App(db: Db, service: Service)
 
-scala> case class AppConfig(dbConfig: DbConfig, serviceConfig: ServiceConfig)
-defined class AppConfig
-
-scala> class App(db: Db, service: Service)
-defined class App
-
-scala> def appFromAppConfig: Kleisli[Option, AppConfig, App] =
-     |   for {
-     |     db <- Db.fromDbConfig.local[AppConfig](_.dbConfig)
-     |     sv <- Service.fromServiceConfig.local[AppConfig](_.serviceConfig)
-     |   } yield new App(db, sv)
-appFromAppConfig: Kleisli[Option,AppConfig,App]
+def appFromAppConfig: Kleisli[Option, AppConfig, App] =
+  for {
+    db <- Db.fromDbConfig.local[AppConfig](_.dbConfig)
+    sv <- Service.fromServiceConfig.local[AppConfig](_.serviceConfig)
+  } yield new App(db, sv)
 ```
 
 What if we need a module that doesn't need any config validation, say a strategy to log events? We would have such a

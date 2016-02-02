@@ -23,13 +23,16 @@ used by the associated `Foldable[_]` instance.
 These form the basis for many other operations, see also: 
 [A tutorial on the universality and expressiveness of fold](https://www.cs.nott.ac.uk/~gmh/fold.pdf) 
 
+First some standard imports.
+
 ```scala
-scala> import cats._
 import cats._
+import cats.implicits._
+```
 
-scala> import cats.std.all._
-import cats.std.all._
+And examples.
 
+```scala
 scala> Foldable[List].fold(List("a", "b", "c"))
 res0: String = abc
 
@@ -96,23 +99,30 @@ res19: Option[Unit] = Some(())
 scala> Foldable[List].sequence_(List(Option(1), None))
 res20: Option[Unit] = None
 
+scala> val prints: Eval[Unit] = List(Eval.always(println(1)), Eval.always(println(2))).sequence_
+prints: cats.Eval[Unit] = cats.Eval$$anon$5@558c22d3
+
+scala> prints.value
+1
+2
+
 scala> Foldable[List].dropWhile_(List[Int](2,4,5,6,7))(_ % 2 == 0)
-res21: List[Int] = List(2, 4, 5, 6, 7)
+res22: List[Int] = List(5, 6, 7)
 
 scala> Foldable[List].dropWhile_(List[Int](1,2,4,5,6,7))(_ % 2 == 0)
-res22: List[Int] = List(2, 4, 5, 6, 7)
+res23: List[Int] = List(1, 2, 4, 5, 6, 7)
 
 scala> val FoldableListOption = Foldable[List].compose[Option]
-FoldableListOption: cats.Foldable[[α]List[Option[α]]] = cats.Foldable$$anon$1@3a0b1aa5
+FoldableListOption: cats.Foldable[[α]List[Option[α]]] = cats.Foldable$$anon$1@15745ded
 
 scala> FoldableListOption.fold(List(Option(1), Option(2), Option(3), Option(4)))
-res23: Int = 10
+res24: Int = 10
 
 scala> FoldableListOption.fold(List(Option(1), Option(2), Option(3), None))
-res24: Int = 6
+res25: Int = 6
 
 scala> FoldableListOption.fold(List(Option("1"), Option("2"), Option("3"), None))
-res25: String = 123
+res26: String = 123
 ```
 
 Hence when defining some new data structure, if we can define a `foldLeft` and
@@ -125,15 +135,49 @@ Hence when defining some new data structure, if we can define a `foldLeft` and
 Note that, in order to support laziness, the signature of `Foldable`'s 
 `foldRight` is 
 
-```
+```scala
 def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B]
 ```
 
 as opposed to
  
-```
+```scala
 def foldRight[A, B](fa: F[A], z: B)(f: (A, B) => B): B
 ```
  
-which someone familiar with the `foldRight` from the collections in Scala's standard
-library might expect. 
+which someone familiar with the `foldRight` from the collections in
+Scala's standard library might expect. This will prevent operations
+which are lazy in their right hand argument to traverse the entire
+structure unnecessarily. For example, if you have:
+
+```scala
+scala> val allFalse = Stream.continually(false)
+allFalse: scala.collection.immutable.Stream[Boolean] = Stream(false, ?)
+```
+
+which is an infinite stream of `false` values, and if you wanted to
+reduce this to a single false value using the logical and (`&&`). You
+intuitively know that the result of this operation should be
+`false`. It is not necessary to consider the entire stream in order to
+determine this result, you only need to consider the first
+value. Using `foldRight` from the standard library *will* try to
+consider the entire stream, and thus will eventually cause a stack
+overflow:
+
+```scala
+scala> try {
+     |   allFalse.foldRight(true)(_ && _)
+     | } catch {
+     |   case e:StackOverflowError => println(e)
+     | }
+java.lang.StackOverflowError
+res27: AnyVal = ()
+```
+
+With the lazy `foldRight` on `Foldable`, the calculation terminates
+after looking at only one value:
+
+```scala
+scala> Foldable[Stream].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.now(false)).value
+res28: Boolean = false
+```

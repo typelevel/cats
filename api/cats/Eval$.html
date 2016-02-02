@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Eval</span><span class="result"> extends <a href="EvalInstances.html" class="extype" name="cats.EvalInstances">EvalInstances</a></span>
+        <span class="name">Eval</span><span class="result"> extends <span class="extype" name="cats.EvalInstances">EvalInstances</span> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/Eval.scala" target="_blank">Eval.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Eval.scala" target="_blank">Eval.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="EvalInstances.html" class="extype" name="cats.EvalInstances">EvalInstances</a>, <a href="EvalInstances0.html" class="extype" name="cats.EvalInstances0">EvalInstances0</a>, <a href="EvalInstances1.html" class="extype" name="cats.EvalInstances1">EvalInstances1</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.EvalInstances">EvalInstances</span>, <span class="extype" name="cats.EvalInstances0">EvalInstances0</span>, <span class="extype" name="cats.EvalInstances1">EvalInstances1</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.Eval"><span>Eval</span></li><li class="in" name="cats.EvalInstances"><span>EvalInstances</span></li><li class="in" name="cats.EvalInstances0"><span>EvalInstances0</span></li><li class="in" name="cats.EvalInstances1"><span>EvalInstances1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.Eval"><span>Eval</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.EvalInstances"><span>EvalInstances</span></li><li class="in" name="cats.EvalInstances0"><span>EvalInstances0</span></li><li class="in" name="cats.EvalInstances1"><span>EvalInstances1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -196,6 +196,23 @@ implementation of the .value method.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.Eval.Call" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Call"></a>
+      <a id="Call:Call"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Eval$$Call$.html"><span class="name">Call</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Eval$@Call" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.Eval#False" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="False:cats.Eval[Boolean]"></a>
       <a id="False:Eval[Boolean]"></a>
@@ -410,7 +427,7 @@ which produces an Eval[A] value. Like .flatMap, it is stack-safe.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalInstances.html" class="extype" name="cats.EvalInstances">EvalInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EvalInstances</dd></dl></div>
     </li><li name="cats.EvalInstances1#evalEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="evalEq[A](implicitevidence$5:cats.Eq[A]):cats.Eq[cats.Eval[A]]"></a>
       <a id="evalEq[A](Eq[A]):Eq[Eval[A]]"></a>
@@ -427,7 +444,7 @@ which produces an Eval[A] value. Like .flatMap, it is stack-safe.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalInstances1.html" class="extype" name="cats.EvalInstances1">EvalInstances1</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EvalInstances1</dd></dl></div>
     </li><li name="cats.EvalInstances#evalGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="evalGroup[A](implicitevidence$2:cats.Group[A]):cats.Group[cats.Eval[A]]"></a>
       <a id="evalGroup[A](Group[A]):Group[Eval[A]]"></a>
@@ -444,7 +461,7 @@ which produces an Eval[A] value. Like .flatMap, it is stack-safe.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalInstances.html" class="extype" name="cats.EvalInstances">EvalInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EvalInstances</dd></dl></div>
     </li><li name="cats.EvalInstances0#evalMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="evalMonoid[A](implicitevidence$4:cats.Monoid[A]):cats.Monoid[cats.Eval[A]]"></a>
       <a id="evalMonoid[A](Monoid[A]):Monoid[Eval[A]]"></a>
@@ -461,7 +478,7 @@ which produces an Eval[A] value. Like .flatMap, it is stack-safe.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalInstances0.html" class="extype" name="cats.EvalInstances0">EvalInstances0</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EvalInstances0</dd></dl></div>
     </li><li name="cats.EvalInstances#evalOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="evalOrder[A](implicitevidence$1:cats.Order[A]):cats.Order[cats.Eval[A]]"></a>
       <a id="evalOrder[A](Order[A]):Order[Eval[A]]"></a>
@@ -478,7 +495,7 @@ which produces an Eval[A] value. Like .flatMap, it is stack-safe.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalInstances.html" class="extype" name="cats.EvalInstances">EvalInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EvalInstances</dd></dl></div>
     </li><li name="cats.EvalInstances0#evalPartialOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="evalPartialOrder[A](implicitevidence$3:cats.PartialOrder[A]):cats.PartialOrder[cats.Eval[A]]"></a>
       <a id="evalPartialOrder[A](PartialOrder[A]):PartialOrder[Eval[A]]"></a>
@@ -495,7 +512,7 @@ which produces an Eval[A] value. Like .flatMap, it is stack-safe.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalInstances0.html" class="extype" name="cats.EvalInstances0">EvalInstances0</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EvalInstances0</dd></dl></div>
     </li><li name="cats.EvalInstances1#evalSemigroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="evalSemigroup[A](implicitevidence$6:cats.Semigroup[A]):cats.Semigroup[cats.Eval[A]]"></a>
       <a id="evalSemigroup[A](Semigroup[A]):Semigroup[Eval[A]]"></a>
@@ -512,7 +529,7 @@ which produces an Eval[A] value. Like .flatMap, it is stack-safe.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalInstances1.html" class="extype" name="cats.EvalInstances1">EvalInstances1</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EvalInstances1</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -786,12 +803,16 @@ which produces an Eval[A] value. Like .flatMap, it is stack-safe.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="cats.EvalInstances">
-              <h3>Inherited from <a href="EvalInstances.html" class="extype" name="cats.EvalInstances">EvalInstances</a></h3>
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="cats.EvalInstances">
+              <h3>Inherited from <span class="extype" name="cats.EvalInstances">EvalInstances</span></h3>
             </div><div class="parent" name="cats.EvalInstances0">
-              <h3>Inherited from <a href="EvalInstances0.html" class="extype" name="cats.EvalInstances0">EvalInstances0</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.EvalInstances0">EvalInstances0</span></h3>
             </div><div class="parent" name="cats.EvalInstances1">
-              <h3>Inherited from <a href="EvalInstances1.html" class="extype" name="cats.EvalInstances1">EvalInstances1</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.EvalInstances1">EvalInstances1</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

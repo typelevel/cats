@@ -53,14 +53,10 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><code>OptionT[F[_], A</code> is a light wrapper on an <code>F[Option[A]]</code> with some
 convenient methods for working with this nested structure.</p><p>It may also be said that <code>OptionT</code> is a monad transformer for <code>Option</code>.</p><p>For more information, see the <a href="http://non.github.io/cats/tut/optiont.html" target="_blank">documentation</a>.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/OptionT.scala" target="_blank">OptionT.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/OptionT.scala" target="_blank">OptionT.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
-                <span class="toggle diagram-link">Type Hierarchy</span>
-                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 199.50 118.00" height="118pt" width="200pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="graph0"><polygon points="-4,4 -4,-114 195.5,-114 195.5,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.data.OptionT (this class)" xlink:href="#inheritance-diagram"><polygon points="141.5,-49 40.5,-49 40.5,-24 141.5,-24 141.5,-49" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="51" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33.7495" x="71.7095" text-anchor="start">OptionT[F, A]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="scala.Product"><polygon points="78,-110 0,-110 0,-85 78,-85 78,-110" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="30.8794" text-anchor="start">Product</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="OptionT[F, A] is a subtype of Product"><path d="M52.6354,-81.0291C61.438,-71.0415 72.7055,-58.2572 80.7478,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="51.2667,-79.9353 49.2735,-84.8435 53.8924,-82.2495 51.2667,-79.9353" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="scala.Serializable"><polygon points="191.5,-110 96.5,-110 96.5,-85 191.5,-85 191.5,-110" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="107" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-94.7495" x="127.764" text-anchor="start">Serializable</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="OptionT[F, A] is a subtype of Serializable"><path d="M130.102,-81.0291C121.13,-71.0415 109.646,-58.2572 101.449,-49.1323" stroke="#d4d4d4" fill="none"></path><polygon points="128.886,-82.2933 133.529,-84.8435 131.489,-79.9544 128.886,-82.2933" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
-              </div></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -613,6 +609,40 @@ contexts.
       </a>
     </span>
       
+    </li><li name="cats.data.OptionT#show" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="show(implicitF:cats.Show[F[Option[A]]]):String"></a>
+      <a id="show(Show[F[Option[A]]]):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">show</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionT.A">A</span>]]]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@show(implicitF:cats.Show[F[Option[A]]]):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.OptionT#subflatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="subflatMap[B](f:A=&gt;Option[B])(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]"></a>
+      <a id="subflatMap[B]((A)⇒Option[B])(Functor[F]):OptionT[F,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">subflatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OptionT.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionT.subflatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.subflatMap.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@subflatMap[B](f:A=&gt;Option[B])(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -660,6 +690,23 @@ contexts.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.OptionT@toRight[L](left:=&gt;L)(implicitF:cats.Functor[F]):cats.data.XorT[F,L,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.OptionT#transform" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="transform[B](f:Option[A]=&gt;Option[B])(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]"></a>
+      <a id="transform[B]((Option[A])⇒Option[B])(Functor[F]):OptionT[F,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">transform</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionT.A">A</span>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionT.transform.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.transform.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@transform[B](f:Option[A]=&gt;Option[B])(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

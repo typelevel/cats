@@ -2,7 +2,7 @@
 layout: default
 title:  "Xor"
 section: "data"
-source: "https://github.com/non/cats/blob/master/data/src/main/scala/cats/data/Xor.scala"
+source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/Xor.scala"
 scaladoc: "#cats.data.Xor"
 ---
 # Xor
@@ -36,6 +36,10 @@ exception came from.
 How then do we communicate an error? By making it explicit in the data type we return.
 
 ## Xor
+
+### `Xor` vs `Validated`
+
+In general, `Validated` is used to accumulate errors, while `Xor` is used to short-circuit a computation upon the first error. For more information, see the `Validated` vs `Xor` section of the [`Validated` documentation]({{ site.baseurl }}/tut/validated.html).
 
 ### Why not `Either`
 `Xor` is very similar to `scala.util.Either` - in fact, they are *isomorphic* (that is,
@@ -110,17 +114,15 @@ Since we only ever want the computation to continue in the case of `Xor.Right` (
 by the right-bias nature), we fix the left type parameter and leave the right one free.
 
 ```scala
-scala> import cats.Monad
 import cats.Monad
 
-scala> implicit def xorMonad[Err]: Monad[Xor[Err, ?]] =
-     |   new Monad[Xor[Err, ?]] {
-     |     def flatMap[A, B](fa: Xor[Err, A])(f: A => Xor[Err, B]): Xor[Err, B] =
-     |       fa.flatMap(f)
-     | 
-     |     def pure[A](x: A): Xor[Err, A] = Xor.right(x)
-     |   }
-xorMonad: [Err]=> cats.Monad[[β]cats.data.Xor[Err,β]]
+implicit def xorMonad[Err]: Monad[Xor[Err, ?]] =
+  new Monad[Xor[Err, ?]] {
+    def flatMap[A, B](fa: Xor[Err, A])(f: A => Xor[Err, B]): Xor[Err, B] =
+      fa.flatMap(f)
+
+    def pure[A](x: A): Xor[Err, A] = Xor.right(x)
+  }
 ```
 
 ### Example usage: Round 1
@@ -130,46 +132,42 @@ take the reciprocal, and then turn the reciprocal into a string.
 In exception-throwing code, we would have something like this:
 
 ```scala
-scala> object ExceptionStyle {
-     |   def parse(s: String): Int =
-     |     if (s.matches("-?[0-9]+")) s.toInt
-     |     else throw new NumberFormatException(s"${s} is not a valid integer.")
-     | 
-     |   def reciprocal(i: Int): Double =
-     |     if (i == 0) throw new IllegalArgumentException("Cannot take reciprocal of 0.")
-     |     else 1.0 / i
-     | 
-     |   def stringify(d: Double): String = d.toString
-     | }
-defined object ExceptionStyle
+object ExceptionStyle {
+  def parse(s: String): Int =
+    if (s.matches("-?[0-9]+")) s.toInt
+    else throw new NumberFormatException(s"${s} is not a valid integer.")
+
+  def reciprocal(i: Int): Double =
+    if (i == 0) throw new IllegalArgumentException("Cannot take reciprocal of 0.")
+    else 1.0 / i
+
+  def stringify(d: Double): String = d.toString
+}
 ```
 
 Instead, let's make the fact that some of our functions can fail explicit in the return type.
 
 ```scala
-scala> object XorStyle {
-     |   def parse(s: String): Xor[NumberFormatException, Int] =
-     |     if (s.matches("-?[0-9]+")) Xor.right(s.toInt)
-     |     else Xor.left(new NumberFormatException(s"${s} is not a valid integer."))
-     | 
-     |   def reciprocal(i: Int): Xor[IllegalArgumentException, Double] =
-     |     if (i == 0) Xor.left(new IllegalArgumentException("Cannot take reciprocal of 0."))
-     |     else Xor.right(1.0 / i)
-     | 
-     |   def stringify(d: Double): String = d.toString
-     | }
-defined object XorStyle
+object XorStyle {
+  def parse(s: String): Xor[NumberFormatException, Int] =
+    if (s.matches("-?[0-9]+")) Xor.right(s.toInt)
+    else Xor.left(new NumberFormatException(s"${s} is not a valid integer."))
+
+  def reciprocal(i: Int): Xor[IllegalArgumentException, Double] =
+    if (i == 0) Xor.left(new IllegalArgumentException("Cannot take reciprocal of 0."))
+    else Xor.right(1.0 / i)
+
+  def stringify(d: Double): String = d.toString
+}
 ```
 
 Now, using combinators like `flatMap` and `map`, we can compose our functions together.
 
 ```scala
-scala> import XorStyle._
 import XorStyle._
 
-scala> def magic(s: String): Xor[Exception, String] =
-     |   parse(s).flatMap(reciprocal).map(stringify)
-magic: (s: String)cats.data.Xor[Exception,String]
+def magic(s: String): Xor[Exception, String] =
+  parse(s).flatMap(reciprocal).map(stringify)
 ```
 
 With the composite function that we actually care about, we can pass in strings and then pattern
@@ -198,25 +196,24 @@ Instead of using exceptions as our error value, let's instead enumerate explicit
 can go wrong in our program.
 
 ```scala
-scala> object XorStyle {
-     |   sealed abstract class Error
-     |   final case class NotANumber(string: String) extends Error
-     |   final case object NoZeroReciprocal extends Error
-     | 
-     |   def parse(s: String): Xor[Error, Int] =
-     |     if (s.matches("-?[0-9]+")) Xor.right(s.toInt)
-     |     else Xor.left(NotANumber(s))
-     | 
-     |   def reciprocal(i: Int): Xor[Error, Double] =
-     |     if (i == 0) Xor.left(NoZeroReciprocal)
-     |     else Xor.right(1.0 / i)
-     | 
-     |   def stringify(d: Double): String = d.toString
-     | 
-     |   def magic(s: String): Xor[Error, String] =
-     |     parse(s).flatMap(reciprocal).map(stringify)
-     | }
-defined object XorStyle
+object XorStyle {
+  sealed abstract class Error
+  final case class NotANumber(string: String) extends Error
+  final case object NoZeroReciprocal extends Error
+
+  def parse(s: String): Xor[Error, Int] =
+    if (s.matches("-?[0-9]+")) Xor.right(s.toInt)
+    else Xor.left(NotANumber(s))
+
+  def reciprocal(i: Int): Xor[Error, Double] =
+    if (i == 0) Xor.left(NoZeroReciprocal)
+    else Xor.right(1.0 / i)
+
+  def stringify(d: Double): String = d.toString
+
+  def magic(s: String): Xor[Error, String] =
+    parse(s).flatMap(reciprocal).map(stringify)
+}
 ```
 
 For our little module, we enumerate any and all errors that can occur. Then, instead of using
@@ -241,35 +238,26 @@ Once you start using `Xor` for all your error-handling, you may quickly run into
 you need to call into two separate modules which give back separate kinds of errors.
 
 ```scala
-scala> sealed abstract class DatabaseError
-defined class DatabaseError
+sealed abstract class DatabaseError
+trait DatabaseValue
 
-scala> trait DatabaseValue
-defined trait DatabaseValue
+object Database {
+  def databaseThings(): Xor[DatabaseError, DatabaseValue] = ???
+}
 
-scala> object Database {
-     |   def databaseThings(): Xor[DatabaseError, DatabaseValue] = ???
-     | }
-defined object Database
+sealed abstract class ServiceError
+trait ServiceValue
 
-scala> sealed abstract class ServiceError
-defined class ServiceError
-
-scala> trait ServiceValue
-defined trait ServiceValue
-
-scala> object Service {
-     |   def serviceThings(v: DatabaseValue): Xor[ServiceError, ServiceValue] = ???
-     | }
-defined object Service
+object Service {
+  def serviceThings(v: DatabaseValue): Xor[ServiceError, ServiceValue] = ???
+}
 ```
 
 Let's say we have an application that wants to do database things, and then take database
 values and do service things. Glancing at the types, it looks like `flatMap` will do it.
 
 ```scala
-scala> def doApp = Database.databaseThings().flatMap(Service.serviceThings)
-doApp: cats.data.Xor[Object,ServiceValue]
+def doApp = Database.databaseThings().flatMap(Service.serviceThings)
 ```
 
 This doesn't work! Well, it does, but it gives us `Xor[Object, ServiceValue]` which isn't
@@ -286,36 +274,23 @@ So clearly in order for us to easily compose `Xor` values, the left type paramet
 We may then be tempted to make our entire application share an error data type.
 
 ```scala
-scala> sealed abstract class AppError
-defined class AppError
+sealed abstract class AppError
+final case object DatabaseError1 extends AppError
+final case object DatabaseError2 extends AppError
+final case object ServiceError1 extends AppError
+final case object ServiceError2 extends AppError
 
-scala> final case object DatabaseError1 extends AppError
-defined object DatabaseError1
+trait DatabaseValue
 
-scala> final case object DatabaseError2 extends AppError
-defined object DatabaseError2
+object Database {
+  def databaseThings(): Xor[AppError, DatabaseValue] = ???
+}
 
-scala> final case object ServiceError1 extends AppError
-defined object ServiceError1
+object Service {
+  def serviceThings(v: DatabaseValue): Xor[AppError, ServiceValue] = ???
+}
 
-scala> final case object ServiceError2 extends AppError
-defined object ServiceError2
-
-scala> trait DatabaseValue
-defined trait DatabaseValue
-
-scala> object Database {
-     |   def databaseThings(): Xor[AppError, DatabaseValue] = ???
-     | }
-defined object Database
-
-scala> object Service {
-     |   def serviceThings(v: DatabaseValue): Xor[AppError, ServiceValue] = ???
-     | }
-defined object Service
-
-scala> def doApp = Database.databaseThings().flatMap(Service.serviceThings)
-doApp: cats.data.Xor[AppError,ServiceValue]
+def doApp = Database.databaseThings().flatMap(Service.serviceThings)
 ```
 
 This certainly works, or at least it compiles. But consider the case where another module wants to just use
@@ -328,38 +303,25 @@ Instead of lumping all our errors into one big ADT, we can instead keep them loc
 an application-wide error ADT that wraps each error ADT we need.
 
 ```scala
-scala> sealed abstract class DatabaseError
-defined class DatabaseError
+sealed abstract class DatabaseError
+trait DatabaseValue
 
-scala> trait DatabaseValue
-defined trait DatabaseValue
+object Database {
+  def databaseThings(): Xor[DatabaseError, DatabaseValue] = ???
+}
 
-scala> object Database {
-     |   def databaseThings(): Xor[DatabaseError, DatabaseValue] = ???
-     | }
-defined object Database
+sealed abstract class ServiceError
+trait ServiceValue
 
-scala> sealed abstract class ServiceError
-defined class ServiceError
+object Service {
+  def serviceThings(v: DatabaseValue): Xor[ServiceError, ServiceValue] = ???
+}
 
-scala> trait ServiceValue
-defined trait ServiceValue
-
-scala> object Service {
-     |   def serviceThings(v: DatabaseValue): Xor[ServiceError, ServiceValue] = ???
-     | }
-defined object Service
-
-scala> sealed abstract class AppError
-defined class AppError
-
-scala> object AppError {
-     |   final case class Database(error: DatabaseError) extends AppError
-     |   final case class Service(error: ServiceError) extends AppError
-     | }
-defined object AppError
-warning: previously defined class AppError is not a companion to object AppError.
-Companions must be defined together; you may wish to use :paste mode for this.
+sealed abstract class AppError
+object AppError {
+  final case class Database(error: DatabaseError) extends AppError
+  final case class Service(error: ServiceError) extends AppError
+}
 ```
 
 Now in our outer application, we can wrap/lift each module-specific error into `AppError` and then
@@ -367,10 +329,9 @@ call our combinators as usual. `Xor` provides a convenient method to assist with
 it can be thought of as the same as `map`, but for the `Left` side.
 
 ```scala
-scala> def doApp: Xor[AppError, ServiceValue] =
-     |   Database.databaseThings().leftMap(AppError.Database).
-     |   flatMap(dv => Service.serviceThings(dv).leftMap(AppError.Service))
-doApp: cats.data.Xor[AppError,ServiceValue]
+def doApp: Xor[AppError, ServiceValue] =
+  Database.databaseThings().leftMap(AppError.Database).
+  flatMap(dv => Service.serviceThings(dv).leftMap(AppError.Service))
 ```
 
 Hurrah! Each module only cares about its own errors as it should be, and more composite modules have their
@@ -378,13 +339,12 @@ own error ADT that encapsulates each constituent module's error ADT. Doing this 
 on entire classes of errors instead of having to pattern match on each individual one.
 
 ```scala
-scala> def awesome =
-     |   doApp match {
-     |     case Xor.Left(AppError.Database(_)) => "something in the database went wrong"
-     |     case Xor.Left(AppError.Service(_))  => "something in the service went wrong"
-     |     case Xor.Right(_)                   => "everything is alright!"
-     |   }
-awesome: String
+def awesome =
+  doApp match {
+    case Xor.Left(AppError.Database(_)) => "something in the database went wrong"
+    case Xor.Left(AppError.Service(_))  => "something in the service went wrong"
+    case Xor.Right(_)                   => "everything is alright!"
+  }
 ```
 
 ## Working with exception-y code
@@ -401,14 +361,22 @@ scala> val xor: Xor[NumberFormatException, Int] =
 xor: cats.data.Xor[NumberFormatException,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
 ```
 
-However, this can get tedious quickly. `Xor` provides a `fromTryCatch` method on its companion object
+However, this can get tedious quickly. `Xor` provides a `catchOnly` method on its companion object
 that allows you to pass it a function, along with the type of exception you want to catch, and does the
 above for you.
 
 ```scala
 scala> val xor: Xor[NumberFormatException, Int] =
-     |   Xor.fromTryCatch[NumberFormatException]("abc".toInt)
+     |   Xor.catchOnly[NumberFormatException]("abc".toInt)
 xor: cats.data.Xor[NumberFormatException,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
+```
+
+If you want to catch all (non-fatal) throwables, you can use `catchNonFatal`.
+
+```scala
+scala> val xor: Xor[Throwable, Int] =
+     |   Xor.catchNonFatal("abc".toInt)
+xor: cats.data.Xor[Throwable,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
 ```
 
 ## Additional syntax

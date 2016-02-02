@@ -2,7 +2,7 @@
 layout: default
 title:  "Const"
 section: "data"
-source: "https://github.com/non/cats/blob/master/data/src/main/scala/cats/data/Const.scala"
+source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/Const.scala"
 scaladoc: "#cats.data.Const"
 ---
 # Const
@@ -14,8 +14,7 @@ have its uses, which serve as a nice example of the consistency and elegance of 
 The `Const` data type can be thought of similarly to the `const` function, but as a data type.
 
 ```scala
-scala> def const[A, B](a: A)(b: => B): A = a
-const: [A, B](a: A)(b: => B)A
+def const[A, B](a: A)(b: => B): A = a
 ```
 
 The `const` function takes two arguments and simply returns the first argument, ignoring the second.
@@ -24,7 +23,7 @@ The `const` function takes two arguments and simply returns the first argument, 
 final case class Const[A, B](getConst: A)
 ```
 
-The `Const` data type takes two type parameters, but only ever stores a value of the first type paramter.
+The `Const` data type takes two type parameters, but only ever stores a value of the first type parameter.
 Because the second type parameter is not used in the data type, the type parameter is referred to as a
 "phantom type".
 
@@ -46,60 +45,54 @@ A lens can be thought of as a first class getter/setter. A `Lens[S, A]` is a dat
 an `A` out of an `S`, or set an `A` in an `S`.
 
 ```scala
-scala> trait Lens[S, A] {
-     |   def get(s: S): A
-     | 
-     |   def set(s: S, a: A): S
-     | 
-     |   def modify(s: S)(f: A => A): S =
-     |     set(s, f(get(s)))
-     | }
-defined trait Lens
+trait Lens[S, A] {
+  def get(s: S): A
+
+  def set(s: S, a: A): S
+
+  def modify(s: S)(f: A => A): S =
+    set(s, f(get(s)))
+}
 ```
 
 It can be useful to have effectful modifications as well - perhaps our modification can fail (`Option`) or
 can return several values (`List`).
 
 ```scala
-scala> trait Lens[S, A] {
-     |   def get(s: S): A
-     | 
-     |   def set(s: S, a: A): S
-     | 
-     |   def modify(s: S)(f: A => A): S =
-     |     set(s, f(get(s)))
-     | 
-     |   def modifyOption(s: S)(f: A => Option[A]): Option[S] =
-     |     f(get(s)).map(a => set(s, a))
-     | 
-     |   def modifyList(s: S)(f: A => List[A]): List[S] =
-     |     f(get(s)).map(a => set(s, a))
-     | }
-defined trait Lens
+trait Lens[S, A] {
+  def get(s: S): A
+
+  def set(s: S, a: A): S
+
+  def modify(s: S)(f: A => A): S =
+    set(s, f(get(s)))
+
+  def modifyOption(s: S)(f: A => Option[A]): Option[S] =
+    f(get(s)).map(a => set(s, a))
+
+  def modifyList(s: S)(f: A => List[A]): List[S] =
+    f(get(s)).map(a => set(s, a))
+}
 ```
 
 Note that both `modifyOption` and `modifyList` share the *exact* same implementation. If we look closely, the
 only thing we need is a `map` operation on the data type. Being good functional programmers, we abstract.
 
 ```scala
-scala> import cats.Functor
 import cats.Functor
-
-scala> import cats.syntax.functor._
 import cats.syntax.functor._
 
-scala> trait Lens[S, A] {
-     |   def get(s: S): A
-     | 
-     |   def set(s: S, a: A): S
-     | 
-     |   def modify(s: S)(f: A => A): S =
-     |     set(s, f(get(s)))
-     | 
-     |   def modifyF[F[_] : Functor](s: S)(f: A => F[A]): F[S] =
-     |     f(get(s)).map(a => set(s, a))
-     | }
-defined trait Lens
+trait Lens[S, A] {
+  def get(s: S): A
+
+  def set(s: S, a: A): S
+
+  def modify(s: S)(f: A => A): S =
+    set(s, f(get(s)))
+
+  def modifyF[F[_] : Functor](s: S)(f: A => F[A]): F[S] =
+    f(get(s)).map(a => set(s, a))
+}
 ```
 
 We can redefine `modify` in terms of `modifyF` by using `cats.Id`. We can also treat `set` as a modification
@@ -107,19 +100,17 @@ that simply ignores the current value. Due to these modifications however, we mu
 since having it defined in terms of `set` would lead to infinite circular calls.
 
 ```scala
-scala> import cats.Id
 import cats.Id
 
-scala> trait Lens[S, A] {
-     |   def modifyF[F[_] : Functor](s: S)(f: A => F[A]): F[S]
-     | 
-     |   def set(s: S, a: A): S = modify(s)(_ => a)
-     | 
-     |   def modify(s: S)(f: A => A): S = modifyF[Id](s)(f)
-     | 
-     |   def get(s: S): A
-     | }
-defined trait Lens
+trait Lens[S, A] {
+  def modifyF[F[_] : Functor](s: S)(f: A => F[A]): F[S]
+
+  def set(s: S, a: A): S = modify(s)(_ => a)
+
+  def modify(s: S)(f: A => A): S = modifyF[Id](s)(f)
+
+  def get(s: S): A
+}
 ```
 
 What about `get`? Certainly we can't define `get` in terms of the others.. the others are to modify an existing
@@ -144,34 +135,31 @@ Before we plug and play however, note that `modifyF` has a `Functor` constraint 
 define a `Functor` instance for `Const`, where the first type parameter is fixed.
 
 ```scala
-scala> import cats.data.Const
 import cats.data.Const
 
-scala> implicit def constFunctor[X]: Functor[Const[X, ?]] =
-     |   new Functor[Const[X, ?]] {
-     |     // Recall Const[X, A] ~= X, so the function is not of any use to us
-     |     def map[A, B](fa: Const[X, A])(f: A => B): Const[X, B] =
-     |       Const(fa.getConst)
-     |   }
-constFunctor: [X]=> cats.Functor[[β]cats.data.Const[X,β]]
+implicit def constFunctor[X]: Functor[Const[X, ?]] =
+  new Functor[Const[X, ?]] {
+    // Recall Const[X, A] ~= X, so the function is not of any use to us
+    def map[A, B](fa: Const[X, A])(f: A => B): Const[X, B] =
+      Const(fa.getConst)
+  }
 ```
 
 Now that that's taken care of, let's substitute and see what happens.
 
 ```scala
-scala> trait Lens[S, A] {
-     |   def modifyF[F[_] : Functor](s: S)(f: A => F[A]): F[S]
-     | 
-     |   def set(s: S, a: A): S = modify(s)(_ => a)
-     | 
-     |   def modify(s: S)(f: A => A): S = modifyF[Id](s)(f)
-     | 
-     |   def get(s: S): A = {
-     |     val storedValue = modifyF[Const[A, ?]](s)(a => Const(a))
-     |     storedValue.getConst
-     |   }
-     | }
-defined trait Lens
+trait Lens[S, A] {
+  def modifyF[F[_] : Functor](s: S)(f: A => F[A]): F[S]
+
+  def set(s: S, a: A): S = modify(s)(_ => a)
+
+  def modify(s: S)(f: A => A): S = modifyF[Id](s)(f)
+
+  def get(s: S): A = {
+    val storedValue = modifyF[Const[A, ?]](s)(a => Const(a))
+    storedValue.getConst
+  }
+}
 ```
 
 It works! We get a `Const[A, S]` out on the other side, and we simply just retrieve the `A` value stored inside.
@@ -187,22 +175,19 @@ paper, Jeremy Gibbons and Bruno C. d. S. Oliveria describe a functional approach
 data. Among the abstractions presented are `Foldable` and `Traverse`, replicated below (also available in Cats).
 
 ```scala
-scala> import cats.{Applicative, Monoid}
 import cats.{Applicative, Monoid}
 
-scala> trait Foldable[F[_]] {
-     |   // Given a collection of data F[A], and a function mapping each A to a B where B has a Monoid instance,
-     |   // reduce the collection down to a single B value using the monoidal behavior of B
-     |   def foldMap[A, B : Monoid](fa: F[A])(f: A => B): B
-     | }
-defined trait Foldable
+trait Foldable[F[_]] {
+  // Given a collection of data F[A], and a function mapping each A to a B where B has a Monoid instance,
+  // reduce the collection down to a single B value using the monoidal behavior of B
+  def foldMap[A, B : Monoid](fa: F[A])(f: A => B): B
+}
 
-scala> trait Traverse[F[_]] {
-     |   // Given a collection of data F[A], for each value apply the function f which returns an effectful
-     |   // value. The result of traverse is the composition of all these effectful values.
-     |   def traverse[G[_] : Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
-     | }
-defined trait Traverse
+trait Traverse[F[_]] {
+  // Given a collection of data F[A], for each value apply the function f which returns an effectful
+  // value. The result of traverse is the composition of all these effectful values.
+  def traverse[G[_] : Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
+}
 ```
 
 These two type classes seem unrelated - one reduces a collection down to a single value, the other traverses
@@ -210,12 +195,11 @@ a collection with an effectful function, collecting results. It may be surprisin
 subsumes `Foldable`.
 
 ```scala
-scala> trait Traverse[F[_]] extends Foldable[F] {
-     |   def traverse[G[_] : Applicative, A, X](fa: F[A])(f: A => G[X]): G[F[X]]
-     | 
-     |   def foldMap[A, B : Monoid](fa: F[A])(f: A => B): B
-     | }
-defined trait Traverse
+trait Traverse[F[_]] extends Foldable[F] {
+  def traverse[G[_] : Applicative, A, X](fa: F[A])(f: A => G[X]): G[F[X]]
+
+  def foldMap[A, B : Monoid](fa: F[A])(f: A => B): B
+}
 ```
 
 To start, we observe that if we are to implement `foldMap` in terms of `traverse`, we will want a `B` out
@@ -228,22 +212,24 @@ However, if we imagine `G[_]` to be a sort of type-level constant function, wher
 one.
 
 ```scala
-scala> import cats.data.Const
 import cats.data.Const
 
-scala> implicit def constApplicative[Z]: Applicative[Const[Z, ?]] =
-     |   new Applicative[Const[Z, ?]] {
-     |     def pure[A](a: A): Const[Z, A] = ???
-     | 
-     |     def ap[A, B](fa: Const[Z, A])(f: Const[Z, A => B]): Const[Z, B] = ???
-     |   }
-constApplicative: [Z]=> cats.Applicative[[β]cats.data.Const[Z,β]]
+implicit def constApplicative[Z]: Applicative[Const[Z, ?]] =
+  new Applicative[Const[Z, ?]] {
+    def pure[A](a: A): Const[Z, A] = ???
+
+    def ap[A, B](f: Const[Z, A => B])(fa: Const[Z, A]): Const[Z, B] = ???
+
+    def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] = ???
+
+    def product[A, B](fa: Const[Z, A],fb: Const[Z, B]): Const[Z, (A, B)] = ???
+  }
 ```
 
 Recall that `Const[Z, A]` means we have a `Z` value in hand, and don't really care about the `A` type parameter.
 Therefore we can more or less treat the type `Const[Z, A]` as just `Z`.
 
-In both functions we have a problem. In `pure`, we have an `A` value, but want to return a `Z` value. We have
+In functions `pure` and `ap` we have a problem. In `pure`, we have an `A` value, but want to return a `Z` value. We have
 no function `A => Z`, so our only option is to completely ignore the `A` value. But we still don't have a `Z`! Let's
 put that aside for now, but still keep it in the back of our minds.
 
@@ -254,19 +240,24 @@ So now we need a constant `Z` value, and a binary function that takes two `Z`s a
 We want `Z` to have a `Monoid` instance!
 
 ```scala
-scala> implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, ?]] =
-     |   new Applicative[Const[Z, ?]] {
-     |     def pure[A](a: A): Const[Z, A] = Const(Monoid[Z].empty)
-     | 
-     |     def ap[A, B](fa: Const[Z, A])(f: Const[Z, A => B]): Const[Z, B] =
-     |       Const(Monoid[Z].combine(fa.getConst, f.getConst))
-     |   }
-constApplicative: [Z](implicit evidence$1: cats.Monoid[Z])cats.Applicative[[β]cats.data.Const[Z,β]]
+implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, ?]] =
+  new Applicative[Const[Z, ?]] {
+    def pure[A](a: A): Const[Z, A] = Const(Monoid[Z].empty)
+
+    def ap[A, B](f: Const[Z, A => B])(fa: Const[Z, A]): Const[Z, B] =
+      Const(Monoid[Z].combine(fa.getConst, f.getConst))
+      
+    def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] =
+      Const(fa.getConst)
+
+    def product[A, B](fa: Const[Z, A],fb: Const[Z, B]): Const[Z, (A, B)] =
+      Const(Monoid[Z].combine(fa.getConst, fb.getConst))
+  }
 ```
 
 We have our `Applicative`!
 
-Going back to `Traverse`, we fill in the first paramter of `traverse` with `fa` since that's
+Going back to `Traverse`, we fill in the first parameter of `traverse` with `fa` since that's
 the only value that fits.
 
 Now we need a `A => G[B]`. We have an `A => B`, and we've decided to use `Const` for our `G[_]`. We need to
@@ -281,15 +272,14 @@ that `Const[B, Z]` (for any `Z`) is the moral equivalent of just `B`, so `A => C
 to `A => B`, which is exactly what we have, we just need to wrap it.
 
 ```scala
-scala> trait Traverse[F[_]] extends Foldable[F] {
-     |   def traverse[G[_] : Applicative, A, X](fa: F[A])(f: A => G[X]): G[F[X]]
-     | 
-     |   def foldMap[A, B : Monoid](fa: F[A])(f: A => B): B = {
-     |     val const: Const[B, F[Nothing]] = traverse[Const[B, ?], A, Nothing](fa)(a => Const(f(a)))
-     |     const.getConst
-     |   }
-     | }
-defined trait Traverse
+trait Traverse[F[_]] extends Foldable[F] {
+  def traverse[G[_] : Applicative, A, X](fa: F[A])(f: A => G[X]): G[F[X]]
+
+  def foldMap[A, B : Monoid](fa: F[A])(f: A => B): B = {
+    val const: Const[B, F[Nothing]] = traverse[Const[B, ?], A, Nothing](fa)(a => Const(f(a)))
+    const.getConst
+  }
+}
 ```
 
 Hurrah!

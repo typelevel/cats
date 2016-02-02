@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">StreamingT</span><span class="result"> extends <a href="StreamingTInstances.html" class="extype" name="cats.data.StreamingTInstances">StreamingTInstances</a></span>
+        <span class="name">StreamingT</span><span class="result"> extends <span class="extype" name="cats.data.StreamingTInstances">StreamingTInstances</span> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/non/cats/tree/master/core/src/main/scala/cats/data/StreamingT.scala" target="_blank">StreamingT.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/StreamingT.scala" target="_blank">StreamingT.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="StreamingTInstances.html" class="extype" name="cats.data.StreamingTInstances">StreamingTInstances</a>, <a href="StreamingTInstances1.html" class="extype" name="cats.data.StreamingTInstances1">StreamingTInstances1</a>, <a href="StreamingTInstances2.html" class="extype" name="cats.data.StreamingTInstances2">StreamingTInstances2</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.StreamingTInstances">StreamingTInstances</span>, <span class="extype" name="cats.data.StreamingTInstances1">StreamingTInstances1</span>, <span class="extype" name="cats.data.StreamingTInstances2">StreamingTInstances2</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.data.StreamingT"><span>StreamingT</span></li><li class="in" name="cats.data.StreamingTInstances"><span>StreamingTInstances</span></li><li class="in" name="cats.data.StreamingTInstances1"><span>StreamingTInstances1</span></li><li class="in" name="cats.data.StreamingTInstances2"><span>StreamingTInstances2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.data.StreamingT"><span>StreamingT</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.StreamingTInstances"><span>StreamingTInstances</span></li><li class="in" name="cats.data.StreamingTInstances1"><span>StreamingTInstances1</span></li><li class="in" name="cats.data.StreamingTInstances2"><span>StreamingTInstances2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -238,7 +238,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">Create a stream from <code>A</code> and <code>F[StreamingT[F, A]]</code> values.</p>
-    </li><li name="cats.data.StreamingT#defer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.StreamingT#defer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defer[F[_],A](s:=&gt;cats.data.StreamingT[F,A])(implicitev:cats.Applicative[F]):cats.data.StreamingT[F,A]"></a>
       <a id="defer[F[_],A](⇒StreamingT[F,A])(Applicative[F]):StreamingT[F,A]"></a>
       <h4 class="signature">
@@ -254,7 +254,10 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Create a stream from an <code>F[StreamingT[F, A]]</code> value.</p>
+      <p class="shortcomment cmt">Create a stream from a deferred <code>StreamingT[F, A]</code> value.</p><div class="fullcomment"><div class="comment cmt"><p>Create a stream from a deferred <code>StreamingT[F, A]</code> value.
+Note: the extent to which this defers the value depends on the <code>pureEval</code>
+implementation of the <code>Applicative[F]</code> instance.
+</p></div></div>
     </li><li name="cats.data.StreamingT#empty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="empty[F[_],A]:cats.data.StreamingT[F,A]"></a>
       <a id="empty[F[_],A]:StreamingT[F,A]"></a>
@@ -498,7 +501,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StreamingTInstances2.html" class="extype" name="cats.data.StreamingTInstances2">StreamingTInstances2</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StreamingTInstances2</dd></dl></div>
     </li><li name="cats.data.StreamingTInstances#streamingTInstance" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="streamingTInstance[F[_]](implicitevidence$3:cats.Monad[F]):cats.MonadCombine[[β]cats.data.StreamingT[F,β]]withcats.CoflatMap[[β]cats.data.StreamingT[F,β]]"></a>
       <a id="streamingTInstance[F[_]](Monad[F]):MonadCombine[[β]StreamingT[F,β]]withCoflatMap[[β]StreamingT[F,β]]"></a>
@@ -515,7 +518,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StreamingTInstances.html" class="extype" name="cats.data.StreamingTInstances">StreamingTInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StreamingTInstances</dd></dl></div>
     </li><li name="cats.data.StreamingTInstances#streamingTOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="streamingTOrder[F[_],A](implicitev:cats.Monad[F],impliciteva:cats.Order[F[List[A]]]):cats.Order[cats.data.StreamingT[F,A]]"></a>
       <a id="streamingTOrder[F[_],A](Monad[F],Order[F[List[A]]]):Order[StreamingT[F,A]]"></a>
@@ -532,7 +535,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StreamingTInstances.html" class="extype" name="cats.data.StreamingTInstances">StreamingTInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StreamingTInstances</dd></dl></div>
     </li><li name="cats.data.StreamingTInstances1#streamingTPartialOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="streamingTPartialOrder[F[_],A](implicitev:cats.Monad[F],impliciteva:cats.PartialOrder[F[List[A]]]):cats.PartialOrder[cats.data.StreamingT[F,A]]"></a>
       <a id="streamingTPartialOrder[F[_],A](Monad[F],PartialOrder[F[List[A]]]):PartialOrder[StreamingT[F,A]]"></a>
@@ -549,7 +552,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StreamingTInstances1.html" class="extype" name="cats.data.StreamingTInstances1">StreamingTInstances1</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StreamingTInstances1</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -724,12 +727,16 @@ element, and we can compute the tail (if any) via f(a).
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="cats.data.StreamingTInstances">
-              <h3>Inherited from <a href="StreamingTInstances.html" class="extype" name="cats.data.StreamingTInstances">StreamingTInstances</a></h3>
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="cats.data.StreamingTInstances">
+              <h3>Inherited from <span class="extype" name="cats.data.StreamingTInstances">StreamingTInstances</span></h3>
             </div><div class="parent" name="cats.data.StreamingTInstances1">
-              <h3>Inherited from <a href="StreamingTInstances1.html" class="extype" name="cats.data.StreamingTInstances1">StreamingTInstances1</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.data.StreamingTInstances1">StreamingTInstances1</span></h3>
             </div><div class="parent" name="cats.data.StreamingTInstances2">
-              <h3>Inherited from <a href="StreamingTInstances2.html" class="extype" name="cats.data.StreamingTInstances2">StreamingTInstances2</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.data.StreamingTInstances2">StreamingTInstances2</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
