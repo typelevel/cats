@@ -524,7 +524,7 @@ sealed abstract class Streaming[A] extends Product with Serializable { lhs =>
    *
    * For example:
    *
-   *   Streaming(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
+   *   Streaming(1, 2, 3, 4, 5, 6, 7).dropWhile(n => n != 4)
    *
    * Will result in: Streaming(4, 5, 6, 7)
    */
@@ -532,7 +532,7 @@ sealed abstract class Streaming[A] extends Product with Serializable { lhs =>
     this match {
       case Empty() => Empty()
       case Wait(lt) => Wait(lt.map(_.dropWhile(f)))
-      case Cons(a, lt) => if (f(a)) Empty() else Cons(a, lt.map(_.dropWhile(f)))
+      case Cons(a, lt) => if (f(a)) Wait(lt.map(_.dropWhile(f))) else Cons(a, lt)
     }
 
   /**
