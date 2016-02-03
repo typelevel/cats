@@ -15,10 +15,10 @@ def contramap[A, B](f: B => A): F[A] => F[B]
 ```
 
 It looks like regular (also called `Covariant`) [`Functor`](functor.html)'s `map`,
-but with `f` transformation reversed.
+but with the `f` transformation reversed.
 
 Generally speaking, if you have some context `F[A]` for type `A`,
-and you can get `A` value out of `B` value — `Contravariant` allows you to get the `F[B]` context for `B`.
+and you can get an `A` value out of a `B` value — `Contravariant` allows you to get the `F[B]` context for `B`.
 
 Examples of `Contravariant` instances are [`Show`](show.html) and `scala.math.Ordering` (along with `algebra.Order`).
 
@@ -33,7 +33,7 @@ import cats.implicits._
 case class Money(amount: Int)
 case class Salary(size: Money)
 
-implicit val showMoney: Show[Money] = Show.show(m => s"${m.amount}$$")
+implicit val showMoney: Show[Money] = Show.show(m => s"$$${m.amount}")
 ```
 
 If we want to show a `Salary` instance, we can just convert it to a `Money` instance and show it instead.
