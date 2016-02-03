@@ -501,10 +501,11 @@ sealed abstract class Streaming[A] extends Product with Serializable { lhs =>
    * If no elements satisfy `f`, an empty stream will be returned.
    *
    * For example:
-   *
-   *   Streaming(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
-   *
-   * Will result in: Streaming(1, 2, 3)
+   * {{{
+   * scala> val s = Streaming(1, 2, 3, 4, 5, 6, 7)
+   * scala> s.takeWhile(n => n != 4).toList
+   * res0: List[Int] = List(1, 2, 3)
+   * }}}
    */
   def takeWhile(f: A => Boolean): Streaming[A] =
     this match {
@@ -523,10 +524,11 @@ sealed abstract class Streaming[A] extends Product with Serializable { lhs =>
    * If no elements satisfy `f`, the current stream will be returned.
    *
    * For example:
-   *
-   *   Streaming(1, 2, 3, 4, 5, 6, 7).dropWhile(n => n != 4)
-   *
-   * Will result in: Streaming(4, 5, 6, 7)
+   * {{{
+   * scala> val s = Streaming(1, 2, 3, 4, 5, 6, 7)
+   * scala> s.dropWhile(n => n != 4).toList
+   * res0: List[Int] = List(4, 5, 6, 7)
+   * }}}
    */
   def dropWhile(f: A => Boolean): Streaming[A] =
     this match {
