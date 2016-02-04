@@ -65,7 +65,9 @@
       <div id="extra">
 	<h5>Useful links:</h5>
 	<ul>
-	{% if page.source != null %}
+	{% if (page.source != null) and (page.source contains 'https:') %}
+	<li><a href="{{page.source}}">Source</a></li>
+	{% elsif page.source != null %}
 	<li><a href="{{site.sources}}{{page.source}}">Source</a></li>
 	{% endif %}
 	{% if page.scaladoc != null %}
