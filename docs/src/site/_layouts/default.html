@@ -61,8 +61,15 @@
           {{ content }}
 	</div>
       </div>
-      {% if (page.section == 'data') or (page.section == 'typeclasses') and ((page.source != null) or (page.scaladoc != null))%}
-      <div id="extra">
+	<!--workaround of poor boolean algebra implementation (see: http://stackoverflow.com/questions/23054564/how-to-use-multiple-arguments-in-an-if-statement-with-liquid?answertab=oldest#tab-top) -->
+	{% if (page.section == 'data') or (page.section == 'typeclasses') %}
+		{% assign linksSection = true %}
+	{% endif %}
+	{% if (page.source != null) or (page.scaladoc != null) %}
+		{% assign linksContent = true %}
+	{% endif %}
+	{% if linksSection and linksContent %}
+	<div id="extra">
 	<h5>Useful links:</h5>
 	<ul>
 	{% if (page.source != null) and (page.source contains 'https:') %}
