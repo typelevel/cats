@@ -2,7 +2,7 @@
 layout: default
 title:  "Kleisli"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/Kleisli.scala"
+source: "core/src/main/scala/cats/data/Kleisli.scala"
 scaladoc: "#cats.data.Kleisli"
 ---
 # Kleisli

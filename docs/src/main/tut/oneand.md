@@ -2,7 +2,7 @@
 layout: default
 title:  "OneAnd"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/OneAnd.scala"
+source: "core/src/main/scala/cats/data/OneAnd.scala"
 scaladoc: "#cats.data.OneAnd"
 ---
 # OneAnd

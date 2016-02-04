@@ -2,7 +2,7 @@
 layout: default
 title:  "OptionT"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/OptionT.scala"
+source: "core/src/main/scala/cats/data/OptionT.scala"
 scaladoc: "#cats.data.OptionT"
 ---
 # OptionT

@@ -2,7 +2,7 @@
 layout: default
 title:  "SemigroupK"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/SemigroupK.scala"
+source: "core/src/main/scala/cats/SemigroupK.scala"
 scaladoc: "#cats.SemigroupK"
 ---
 # SemigroupK
@@ -30,7 +30,7 @@ Cats does not define a `Semigroup` type class itself. Instead, we use the
 trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala)
 which is defined in the [algebra
 project](https://github.com/non/algebra). The [`cats` package
-object](https://github.com/non/cats/blob/master/core/src/main/scala/cats/package.scala)
+object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
 defines type aliases to the `Semigroup` from algebra, so that you can
 `import cats.semigroup`.
 

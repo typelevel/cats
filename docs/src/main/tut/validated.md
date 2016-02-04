@@ -2,7 +2,7 @@
 layout: default
 title:  "Validated"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/Validated.scala"
+source: "core/src/main/scala/cats/data/Validated.scala"
 scaladoc: "#cats.data.Validated"
 ---
 # Validated

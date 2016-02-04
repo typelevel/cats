@@ -13,7 +13,7 @@ import simulacrum.typeclass
  *  but we can't implement pure (because we wouldn't know what key to use
  *  when instantiating the new Map).
  *
- *  @see See [[https://github.com/non/cats/issues/3]] for some discussion.
+ *  @see See [[https://github.com/typelevel/cats/issues/3]] for some discussion.
  *
  * Must obey the laws defined in cats.laws.FlatMapLaws.
  */

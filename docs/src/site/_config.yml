@@ -3,6 +3,7 @@ markdown: redcarpet
 highlighter: pygments
 baseurl: /cats
 apidocs: /cats/api/
+sources: https://github.com/typelevel/cats/blob/master/
 
 collections:
   tut:
