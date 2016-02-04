@@ -88,6 +88,6 @@ N.B.
 Cats does not define a `Monoid` type class itself, it uses the [`Monoid`
 trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Monoid.scala)
 which is defined in the [algebra project](https://github.com/non/algebra) on 
-which it depends. The [`cats` package object](https://github.com/non/cats/blob/master/core/src/main/scala/cats/package.scala)
+which it depends. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
 defines type aliases to the `Monoid` from algebra, so that you can
 `import cats.Monoid`.

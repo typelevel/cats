@@ -2,7 +2,7 @@
 layout: default
 title:  "FreeApplicatives"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/free/FreeApplicative.scala"
+source: "core/src/main/scala/cats/free/FreeApplicative.scala"
 scaladoc: "#cats.free.FreeApplicative"
 ---
 # Free Applicative

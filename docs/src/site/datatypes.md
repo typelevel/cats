@@ -3,13 +3,10 @@ layout: default
 title:  "Data Types"
 section: "data"
 ---
+# Data Types
 
-<h1>Data Types</h1>
-
-<ul>
 {% for x in site.tut %}
   {% if x.section == 'data' %}
-    <li><a href="{{ site.baseurl }}{{ x.url }}">{{ x.title }}</a></li>
+- [{{x.title}}]({{site.baseurl}}{{x.url}})
   {% endif %}
 {% endfor %}
-</ul>

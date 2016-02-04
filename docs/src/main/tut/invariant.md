@@ -2,7 +2,7 @@
 layout: default
 title:  "Invariant"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/functor/Invariant.scala"
+source: "core/src/main/scala/cats/functor/Invariant.scala"
 scaladoc: "#cats.functor.Invariant"
 ---
 # Invariant

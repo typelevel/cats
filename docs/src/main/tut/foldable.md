@@ -2,7 +2,7 @@
 layout: default
 title:  "Foldable"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Foldable.scala"
+source: "core/src/main/scala/cats/Foldable.scala"
 scaladoc: "#cats.Foldable"
 ---
 # Foldable

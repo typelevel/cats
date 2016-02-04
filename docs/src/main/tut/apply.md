@@ -2,7 +2,7 @@
 layout: default
 title:  "Apply"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Apply.scala"
+source: "core/src/main/scala/cats/Apply.scala"
 scaladoc: "#cats.Apply"
 ---
 # Apply
