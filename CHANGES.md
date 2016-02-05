@@ -1,3 +1,28 @@
+## Version 0.4.1
+
+> 2016 February 4
+
+Version 0.4.1 is a patch release in the 0.4 series and is binary compatible with
+version 0.4.0.
+
+This patch fixes bugs with the `dropWhile` methods on `Streaming` and
+`StreamingT`.
+
+This release corrects outdated build/POM metadata, which should fix API doc URLS.
+
+Bug fixes:
+
+[#856](https://github.com/typelevel/cats/pull/856): Fix `Streaming` and `StreamingT` `dropWhile` functions
+
+Build/publishing changes:
+
+[#852](https://github.com/typelevel/cats/pull/852) Update build with org change
+
+Documentation and site improvements:
+
+[#859](https://github.com/typelevel/cats/pull/859) Add Contravariant documentation page
+[#861](https://github.com/typelevel/cats/pull/861) Docs: Revive useful links section. Update URLs
+
 ## Version 0.4.0
 
 > 2016 February 1
