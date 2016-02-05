@@ -166,9 +166,19 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def xorBifunctor: Bifunctor[Xor] =
-    new Bifunctor[Xor] {
+  implicit def xorBifunctor: Bifunctor[Xor] with Bifoldable[Xor] =
+    new Bifunctor[Xor] with Bifoldable[Xor]{
       override def bimap[A, B, C, D](fab: A Xor B)(f: A => C, g: B => D): C Xor D = fab.bimap(f, g)
+      def bifoldLeft[A, B, C](fab: Xor[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
+        fab match {
+          case Xor.Left(a) => f(c, a)
+          case Xor.Right(b) => g(c, b)
+        }
+      def bifoldRight[A, B, C](fab: Xor[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+        fab match {
+          case Xor.Left(a) => f(a, c)
+          case Xor.Right(b) => g(b, c)
+        }
     }
 
   implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor[A, ?], A] =

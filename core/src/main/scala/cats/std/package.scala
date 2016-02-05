@@ -27,4 +27,6 @@ package object std {
 
   object bigInt     extends BigIntInstances
   object bigDecimal extends BigDecimalInstances
+
+  object tuple      extends TupleInstances
 }
