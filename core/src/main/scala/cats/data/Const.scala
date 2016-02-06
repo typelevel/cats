@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Contravariant
+import cats.functor.{Bifunctor, Contravariant}
 
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
@@ -69,6 +69,12 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
     def combine(x: Const[A, B], y: Const[A, B]): Const[A, B] =
       x combine y
   }
+
+  implicit val constBifunctor: Bifunctor[Const] =
+    new Bifunctor[Const] {
+      def bimap[A, B, C, D](fab: Const[A, B])(f: A => C, g: B => D): Const[C, D] =
+        Const(f(fab.getConst))
+    }
 }
 
 private[data] sealed abstract class ConstInstances0 extends ConstInstances1 {
