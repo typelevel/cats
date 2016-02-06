@@ -74,6 +74,16 @@ trait FoldableLaws[F[_]] {
   ): Boolean = {
     !F.isEmpty(fa) || F.forall(fa)(p)
   }
+
+
+  def findMapLazy[A](fa: F[A]): Boolean = {
+    var i = 0
+    F.findMap(fa){ a =>
+      i = i + 1
+      Some(a)
+    }
+    i == (if (F.isEmpty(fa)) 0 else 1)
+  }
 }
 
 object FoldableLaws {

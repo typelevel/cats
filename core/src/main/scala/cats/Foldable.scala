@@ -266,6 +266,12 @@ import simulacrum.typeclass
     !isEmpty(fa)
 
   /**
+    * Find the first element that when mapped by `f` yields a non-empty Option, returning the mapped value. Otherwise return `None`.
+    */
+  def findMap[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
+    foldRight(fa, Eval.now(Option.empty[B]))((x, ly) => Eval.now(f(x).orElse(ly.value))).value
+
+  /**
    * Compose this `Foldable[F]` with a `Foldable[G]` to create
    * a `Foldable[F[G]]` instance.
    */
