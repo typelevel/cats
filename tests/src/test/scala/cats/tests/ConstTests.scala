@@ -4,7 +4,7 @@ package tests
 import algebra.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{Const, NonEmptyList}
-import cats.functor.Contravariant
+import cats.functor.{Bifunctor, Contravariant}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary.{constArbitrary, oneAndArbitrary}
 
@@ -44,6 +44,9 @@ class ConstTests extends CatsSuite {
 
   checkAll("Const[String, Int]", ContravariantTests[Const[String, ?]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Const[String, ?]]", SerializableTests.serializable(Contravariant[Const[String, ?]]))
+
+  checkAll("Const[?, ?]", BifunctorTests[Const].bifunctor[Int, Int, Int, String, String, String])
+  checkAll("Bifunctor[Const]", SerializableTests.serializable(Bifunctor[Const]))
 
   test("show") {
 

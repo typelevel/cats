@@ -1,7 +1,15 @@
 package cats
 package std
 
+import cats.functor.Bifunctor
+
 trait EitherInstances extends EitherInstances1 {
+  implicit val eitherBifunctor: Bifunctor[Either] =
+    new Bifunctor[Either] {
+      def bimap[A, B, C, D](fab: Either[A, B])(f: A => C, g: B => D): Either[C, D] =
+        fab.fold(a => Left(f(a)), b => Right(g(b)))
+    }
+
   implicit def eitherInstances[A]: Monad[Either[A, ?]] with Traverse[Either[A, ?]] =
     new Monad[Either[A, ?]] with Traverse[Either[A, ?]] {
       def pure[B](b: B): Either[A, B] = Right(b)
