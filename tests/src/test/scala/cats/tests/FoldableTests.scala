@@ -23,14 +23,18 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test("find/exists/forall/filter_/dropWhile_") {
+  test("find/exists/forall/filter_/dropWhile_/collectNonEmpty") {
     forAll { (fa: F[Int], n: Int) =>
       fa.find(_ > n)   should === (iterator(fa).find(_ > n))
       fa.exists(_ > n) should === (iterator(fa).exists(_ > n))
       fa.forall(_ > n) should === (iterator(fa).forall(_ > n))
       fa.filter_(_ > n) should === (iterator(fa).filter(_ > n).toList)
       fa.dropWhile_(_ > n) should === (iterator(fa).dropWhile(_ > n).toList)
-      fa.takeWhile_(_ > n) should === (iterator(fa).takeWhile(_ > n).toList)
+      fa.takeWhile_(_ > n) should === (iterator(fa).takeWhile(_ > n).toList);
+      {
+        val f = (x: Int) => if (x > n) Option(x) else Option.empty
+        fa.collectNonEmpty(f).toList should === (iterator(fa).map(f).flatten.toList)
+      }
     }
   }
 

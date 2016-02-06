@@ -23,7 +23,8 @@ trait FoldableTests[F[_]] extends Laws {
       "forall consistent with exists" -> forAll(laws.forallConsistentWithExists[A] _),
       "forall true if empty" -> forAll(laws.forallEmpty[A] _),
       "exists is lazy" -> forAll(laws.existsLazy[A] _),
-      "forall is lazy" -> forAll(laws.forallLazy[A] _)
+      "forall is lazy" -> forAll(laws.forallLazy[A] _),
+      "collectNonEmpty is lazy" -> forAll(laws.collectNonEmptyLazy[A] _)
     )
   }
 }
