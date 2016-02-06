@@ -266,6 +266,15 @@ import simulacrum.typeclass
     !isEmpty(fa)
 
   /**
+    * Lazily converts F[A] to a Streaming[B] containing only elements mapped to non-empty Options by f.
+    */
+  def collectNonEmpty[A, B](fa: F[A])(f: A => Option[B]): Streaming[B] =
+    Streaming.wait(foldRight(fa, Now(Streaming.empty[B])) { (a, lbs) =>
+      f(a).fold(lbs)(a => Now(Streaming.cons(a, lbs)))
+    })
+
+
+  /**
    * Compose this `Foldable[F]` with a `Foldable[G]` to create
    * a `Foldable[F[G]]` instance.
    */

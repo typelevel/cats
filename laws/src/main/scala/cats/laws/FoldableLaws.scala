@@ -49,6 +49,15 @@ trait FoldableLaws[F[_]] {
     i == (if (F.isEmpty(fa)) 0 else 1)
   }
 
+  def collectNonEmptyLazy[A](fa: F[A]): Boolean = {
+        var i = 0
+        F.collectNonEmpty(fa){ a =>
+            i = i + 1
+            Some(a)
+          }.take(1).toList
+        i == (if (F.isEmpty(fa)) 0 else 1)
+      }
+
   def forallConsistentWithExists[A](
     fa: F[A],
     p: A => Boolean
