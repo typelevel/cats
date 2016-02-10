@@ -137,6 +137,12 @@ private[data] sealed abstract class StateTInstances {
       override def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] =
         fa.map(f)
     }
+
+  implicit def stateTLift[M[_], S](implicit M: Applicative[M]): TransLift[({type λ[α[_], β] = StateT[α, S, β]})#λ, M] =
+    new TransLift[({type λ[α[_], β] = StateT[α, S, β]})#λ, M] {
+      def liftT[A](ma: M[A]): StateT[M, S, A] = StateT(s => M.map(ma)(s -> _))
+    }
+
 }
 
 // To workaround SI-7139 `object State` needs to be defined inside the package object

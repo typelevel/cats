@@ -458,6 +458,11 @@ private[data] sealed trait StreamingTInstances extends StreamingTInstances1 {
       def compare(x: StreamingT[F, A], y: StreamingT[F, A]): Int =
         x.toList compare y.toList
     }
+
+  implicit def streamingTTransLift[M[_]: Applicative]: TransLift[StreamingT, M] =
+    new TransLift[StreamingT, M] {
+      def liftT[A](ma: M[A]): StreamingT[M, A] = StreamingT.single(ma)
+    }
 }
 
 private[data] sealed trait StreamingTInstances1 extends StreamingTInstances2 {

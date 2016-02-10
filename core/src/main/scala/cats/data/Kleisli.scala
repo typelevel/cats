@@ -114,6 +114,11 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
       override def contramap[A, B](fa: Kleisli[F, A, C])(f: (B) => A): Kleisli[F, B, C] =
         fa.local(f)
     }
+
+  implicit def kleisliTransLift[M[_], A]: TransLift[({type λ[α[_], β] = Kleisli[α, A, β]})#λ, M] =
+    new TransLift[({type λ[α[_], β] = Kleisli[α, A, β]})#λ, M] {
+      def liftT[B](ma: M[B]): Kleisli[M, A, B] = Kleisli[M, A, B](a => ma)
+    }
 }
 
 private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 {
