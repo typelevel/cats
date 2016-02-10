@@ -23,7 +23,7 @@ final class OptionIdOps[A](val a: A) extends AnyVal {
    * res0: Option[Int] = Some(3)
    * }}}
    */
-  def some: Option[A] = Option(a)
+  def some: Option[A] = Some(a)
 }
 
 final class OptionOps[A](val oa: Option[A]) extends AnyVal {

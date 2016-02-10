@@ -76,4 +76,11 @@ class OptionTests extends CatsSuite {
       isEq.lhs should === (isEq.rhs)
     }
   }
+
+  // a test for OptionIdOps.some to always return Some
+
+  test("OptionIdOps.some"){
+    val s: String = null
+    s.some.contains(s) should === (true)
+  }
 }
