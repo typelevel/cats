@@ -51,7 +51,7 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
 
   /**
    * Run with `S`'s empty monoid value as the initial state and return the final
-   * state (discarding the final value).
+   * value (discarding the final state).
    */
   def runEmptyA(implicit S: Monoid[S], F: FlatMap[F]): F[A] = runA(S.empty)
 
