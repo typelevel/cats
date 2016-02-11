@@ -81,6 +81,6 @@ class OptionTests extends CatsSuite {
 
   test("OptionIdOps.some"){
     val s: String = null
-    s.some.contains(s) should === (true)
+    s.some.exists(_ == null) should === (true)
   }
 }
