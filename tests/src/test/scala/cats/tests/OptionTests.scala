@@ -77,10 +77,11 @@ class OptionTests extends CatsSuite {
     }
   }
 
-  // a test for OptionIdOps.some to always return Some
+  // a test for OptionIdOps.some to return Some even if the argument is null
 
-  test("OptionIdOps.some"){
+  test(".some with null argument still results in Some #871") {
     val s: String = null
-    s.some.exists(_ == null) should === (true)
+    // can't use `s.some should === (Some(null))` here, because it leads to NullPointerException
+    s.some.exists(_ == null) should ===(true)
   }
 }
