@@ -77,7 +77,7 @@ class OptionTests extends CatsSuite {
     }
   }
 
-  // a test for OptionIdOps.some to return Some even if the argument is null
+  // OptionIdOps tests
 
   test(".some with null argument still results in Some #871") {
     val s: String = null
