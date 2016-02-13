@@ -173,7 +173,7 @@ import scala.collection.mutable
 
 // the program will crash if a key is not found,
 // or if a type is incorrectly specified.
-def impureCompiler =
+def impureCompiler: KVStoreA ~> Id  =
   new (KVStoreA ~> Id) {
 
     // a very simple (and imprecise) key-value store
