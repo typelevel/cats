@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.functor.Invariant
-import cats.laws.discipline.{InvariantTests, SerializableTests}
+import cats.laws.discipline.{InvariantTests, InvariantMonoidalTests, SerializableTests}
 import cats.laws.discipline.eq._
 
 import org.scalacheck.{Arbitrary, Gen}
@@ -33,4 +33,10 @@ class AlgebraInvariantTests extends CatsSuite {
 
   checkAll("Invariant[Monoid]", InvariantTests[Monoid].invariant[Int, Int, Int])
   checkAll("Invariant[Monoid]", SerializableTests.serializable(Invariant[Monoid]))
+
+  checkAll("InvariantMonoidal[Semigroup]", InvariantMonoidalTests[Semigroup].invariantMonoidal[Int, Int, Int])
+  checkAll("InvariantMonoidal[Semigroup]", SerializableTests.serializable(InvariantMonoidal[Semigroup]))
+
+  checkAll("InvariantMonoidal[Monoid]", InvariantMonoidalTests[Monoid].invariantMonoidal[Int, Int, Int])
+  checkAll("InvariantMonoidal[Monoid]", SerializableTests.serializable(InvariantMonoidal[Monoid]))
 }

@@ -35,19 +35,6 @@ object Invariant extends AlgebraInvariantInstances
  * can't have instances for Cats type classes in their companion objects.
  */
 private[functor] sealed trait AlgebraInvariantInstances {
-
-  implicit val catsFunctorInvariantForSemigroup: Invariant[Semigroup] = new Invariant[Semigroup] {
-    def imap[A, B](fa: Semigroup[A])(f: A => B)(g: B => A): Semigroup[B] = new Semigroup[B] {
-
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-    }
-  }
-
-  implicit val catsFunctorInvariantForMonoid: Invariant[Monoid] = new Invariant[Monoid] {
-    def imap[A, B](fa: Monoid[A])(f: A => B)(g: B => A): Monoid[B] = new Monoid[B] {
-      val empty = f(fa.empty)
-
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-    }
-  }
+  implicit val catsFunctorInvariantForSemigroup: Invariant[Semigroup] = InvariantMonoidal.invariantMonoidalSemigroup
+  implicit val catsFunctorInvariantForMonoid: Invariant[Monoid] = InvariantMonoidal.invariantMonoidalMonoid
 }
