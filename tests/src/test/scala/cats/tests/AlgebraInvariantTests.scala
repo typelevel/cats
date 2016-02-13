@@ -11,13 +11,11 @@ class AlgebraInvariantTests extends CatsSuite {
 
   val intMultiplication: Monoid[Int] = new Monoid[Int] {
     val empty = 1
-
     def combine(x: Int, y: Int): Int = x * y
   }
 
   val maxInt: Monoid[Int] = new Monoid[Int] {
     val empty = Int.MinValue
-
     def combine(x: Int, y: Int): Int = if (x > y) x else y
   }
 
