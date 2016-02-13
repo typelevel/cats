@@ -171,13 +171,14 @@ value store:
 import cats.{Id, ~>}
 import scala.collection.mutable
 
-// a very simple (and imprecise) key-value store
-val kvs = mutable.Map.empty[String, Any]
-
 // the program will crash if a key is not found,
 // or if a type is incorrectly specified.
 def impureCompiler =
   new (KVStoreA ~> Id) {
+
+    // a very simple (and imprecise) key-value store
+    val kvs = mutable.Map.empty[String, Any]
+
     def apply[A](fa: KVStoreA[A]): Id[A] =
       fa match {
         case Put(key, value) =>
@@ -274,7 +275,7 @@ val pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
     fa match {
       case Put(key, value) => State.modify(_.updated(key, value))
       case Get(key) =>
-        State.pure(kvs.get(key).map(_.asInstanceOf[A]))
+        State.inspect(_.get(key).map(_.asInstanceOf[A]))
       case Delete(key) => State.modify(_ - key)
     }
 }
