@@ -5,20 +5,23 @@ package data
  * [[Prod]] is a product to two independent functor values.
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
- */
-sealed trait Prod[F[_], G[_], A] {
-  def first: F[A]
-  def second: G[A]
-}
+  */
+final case class Prod[F[_], G[_], A](first: F[A], second: G[A])
+
 object Prod extends ProdInstances {
-  def apply[F[_], G[_], A](first0: => F[A], second0: => G[A]): Prod[F, G, A] = new Prod[F, G, A] {
-    val firstThunk: Eval[F[A]] = Later(first0)
-    val secondThunk: Eval[G[A]] = Later(second0)
-    def first: F[A] = firstThunk.value
-    def second: G[A] = secondThunk.value
+  type EvalLifted[F[_], A] = Eval[F[A]]
+
+  def always[F[_], G[_], A](first: => F[A], second: => G[A]): Prod[EvalLifted[F, ?], EvalLifted[G, ?], A] = {
+    val firstThunk: Eval[F[A]] = Always(first)
+    val secondThunk: Eval[G[A]] = Always(second)
+    Prod[EvalLifted[F, ?], EvalLifted[G, ?], A](firstThunk, secondThunk)
   }
-  def unapply[F[_], G[_], A](x: Prod[F, G, A]): Option[(F[A], G[A])] =
-    Some((x.first, x.second))
+
+  def later[F[_], G[_], A](first: => F[A], second: => G[A]): Prod[EvalLifted[F, ?], EvalLifted[G, ?], A] = {
+    val firstThunk: Eval[F[A]] = Later(first)
+    val secondThunk: Eval[G[A]] = Later(second)
+    Prod[EvalLifted[F, ?], EvalLifted[G, ?], A](firstThunk, secondThunk)
+  }
 }
 
 private[data] sealed abstract class ProdInstances extends ProdInstances0 {
