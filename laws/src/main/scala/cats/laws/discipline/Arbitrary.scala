@@ -11,6 +11,12 @@ import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
  */
 object arbitrary extends ArbitraryInstances0 {
 
+  // A special function1Arbitrary for testing operations like dropWhile specifically
+  // in the context of Int => Boolean. Once scalacheck supports better Function1 arbitrary
+  // instances this can be removed.
+  implicit def function1Arbitrary: Arbitrary[(Int) => Boolean] =
+    Arbitrary(getArbitrary[Int].map(x => (input) => input < x))
+
   implicit def constArbitrary[A, B](implicit A: Arbitrary[A]): Arbitrary[Const[A, B]] =
     Arbitrary(A.arbitrary.map(Const[A, B]))
 

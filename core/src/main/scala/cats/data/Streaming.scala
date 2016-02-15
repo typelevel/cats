@@ -501,10 +501,11 @@ sealed abstract class Streaming[A] extends Product with Serializable { lhs =>
    * If no elements satisfy `f`, an empty stream will be returned.
    *
    * For example:
-   *
-   *   Streaming(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
-   *
-   * Will result in: Streaming(1, 2, 3)
+   * {{{
+   * scala> val s = Streaming(1, 2, 3, 4, 5, 6, 7)
+   * scala> s.takeWhile(n => n != 4).toList
+   * res0: List[Int] = List(1, 2, 3)
+   * }}}
    */
   def takeWhile(f: A => Boolean): Streaming[A] =
     this match {
@@ -523,16 +524,17 @@ sealed abstract class Streaming[A] extends Product with Serializable { lhs =>
    * If no elements satisfy `f`, the current stream will be returned.
    *
    * For example:
-   *
-   *   Streaming(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
-   *
-   * Will result in: Streaming(4, 5, 6, 7)
+   * {{{
+   * scala> val s = Streaming(1, 2, 3, 4, 5, 6, 7)
+   * scala> s.dropWhile(n => n != 4).toList
+   * res0: List[Int] = List(4, 5, 6, 7)
+   * }}}
    */
   def dropWhile(f: A => Boolean): Streaming[A] =
     this match {
       case Empty() => Empty()
       case Wait(lt) => Wait(lt.map(_.dropWhile(f)))
-      case Cons(a, lt) => if (f(a)) Empty() else Cons(a, lt.map(_.dropWhile(f)))
+      case s @ Cons(a, lt) => if (f(a)) Wait(lt.map(_.dropWhile(f))) else s
     }
 
   /**
@@ -866,7 +868,7 @@ private[data] sealed trait StreamingInstances extends StreamingInstances1 {
         as.flatMap(f)
       def empty[A]: Streaming[A] =
         Streaming.empty
-      def combine[A](xs: Streaming[A], ys: Streaming[A]): Streaming[A] =
+      def combineK[A](xs: Streaming[A], ys: Streaming[A]): Streaming[A] =
         xs ++ ys
 
       override def map2[A, B, Z](fa: Streaming[A], fb: Streaming[B])(f: (A, B) => Z): Streaming[Z] =

@@ -50,7 +50,7 @@ class ValidatedTests extends CatsSuite {
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)
-    Applicative[Validated[String, ?]].ap2(Invalid("1"), Invalid("2"))(Valid(plus)) should === (Invalid("12"))
+    Applicative[Validated[String, ?]].ap2(Valid(plus))(Invalid("1"), Invalid("2")) should === (Invalid("12"))
   }
 
   test("catchOnly catches matching exceptions") {

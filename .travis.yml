@@ -7,11 +7,6 @@ scala:
 - 2.10.6
 - 2.11.7
 
-cache:
-  directories:
-    - $HOME/.ivy2/cache
-    - $HOME/.sbt
-
 script:
   - scripts/travis-publish.sh
 

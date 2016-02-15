@@ -30,6 +30,7 @@ trait AllSyntax
     with SplitSyntax
     with StreamingSyntax
     with StrongSyntax
+    with TransLiftSyntax
     with TraverseSyntax
     with XorSyntax
     with ValidatedSyntax

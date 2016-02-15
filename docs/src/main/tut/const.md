@@ -2,7 +2,7 @@
 layout: default
 title:  "Const"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/Const.scala"
+source: "core/src/main/scala/cats/data/Const.scala"
 scaladoc: "#cats.data.Const"
 ---
 # Const
@@ -218,7 +218,7 @@ implicit def constApplicative[Z]: Applicative[Const[Z, ?]] =
   new Applicative[Const[Z, ?]] {
     def pure[A](a: A): Const[Z, A] = ???
 
-    def ap[A, B](fa: Const[Z, A])(f: Const[Z, A => B]): Const[Z, B] = ???
+    def ap[A, B](f: Const[Z, A => B])(fa: Const[Z, A]): Const[Z, B] = ???
 
     def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] = ???
 
@@ -244,7 +244,7 @@ implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, ?]] =
   new Applicative[Const[Z, ?]] {
     def pure[A](a: A): Const[Z, A] = Const(Monoid[Z].empty)
 
-    def ap[A, B](fa: Const[Z, A])(f: Const[Z, A => B]): Const[Z, B] =
+    def ap[A, B](f: Const[Z, A => B])(fa: Const[Z, A]): Const[Z, B] =
       Const(Monoid[Z].combine(fa.getConst, f.getConst))
       
     def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] =

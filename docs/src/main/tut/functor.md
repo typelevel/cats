@@ -2,7 +2,7 @@
 layout: default
 title:  "Functor"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Functor.scala"
+source: "core/src/main/scala/cats/Functor.scala"
 scaladoc: "#cats.Functor"
 ---
 # Functor

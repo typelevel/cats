@@ -16,6 +16,6 @@ import simulacrum.typeclass
    */
   def unite[G[_], A](fga: F[G[A]])(implicit G: Foldable[G]): F[A] =
     flatMap(fga) { ga =>
-      G.foldLeft(ga, empty[A])((acc, a) => combine(acc, pure(a)))
+      G.foldLeft(ga, empty[A])((acc, a) => combineK(acc, pure(a)))
     }
 }

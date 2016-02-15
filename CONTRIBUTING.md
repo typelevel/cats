@@ -6,9 +6,9 @@ section: "contributing"
 # Contributor guide
 
 Discussion around Cats is currently happening in the
-[Gitter channel](https://gitter.im/non/cats) as well as on Github
+[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
 issue and PR pages. You can get an overview of who is working on what
-via [Waffle.io](https://waffle.io/non/cats).
+via [Waffle.io](https://waffle.io/typelevel/cats).
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also
@@ -54,7 +54,7 @@ skip these steps and jump straight to submitting a pull request.
 ### Find something that belongs in cats
 
 Looking for a way that you can help out? Check out our
-[Waffle.io page](https://waffle.io/non/cats). Choose a card from the
+[Waffle.io page](https://waffle.io/typelevel/cats). Choose a card from the
 "Ready" column. Before you start working on it, make sure that it's
 not already assigned to someone and that nobody has left a comment
 saying that they are working on it!
@@ -66,9 +66,9 @@ Have an idea for something new? That's great! We recommend that you
 make sure it belongs in cats before you put effort into creating a
 pull request. The preferred ways to do that are to either:
 
- * [create a GitHub issue](https://github.com/non/cats/issues/new)
+ * [create a GitHub issue](https://github.com/typelevel/cats/issues/new)
    describing your idea.
- * get feedback in the [cats Gitter room](https://gitter.im/non/cats).
+ * get feedback in the [cats Gitter room](https://gitter.im/typelevel/cats).
 
 Things that belong in cats generally have the following characteristics:
 
@@ -106,11 +106,11 @@ TODO
 
 *Should this just link to a separate doc? This might get large.*
 
-Write about implicit params as discussed in https://github.com/non/cats/issues/27
+Write about implicit params as discussed in https://github.com/typelevel/cats/issues/27
 
-Write about type class methods on data structures as described in https://github.com/non/cats/issues/25
+Write about type class methods on data structures as described in https://github.com/typelevel/cats/issues/25
 
-Write about https://github.com/non/cats/pull/36#issuecomment-72892359
+Write about https://github.com/typelevel/cats/pull/36#issuecomment-72892359
 
 ### Write tests
 
@@ -143,7 +143,7 @@ Write about checking laws
 ## Contributing documentation
 
 ### source for the documentation
-The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/non/cats/tree/master/docs).
+The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/typelevel/cats/tree/master/docs).
 
 * The source for the static pages is in `docs/src/site`
 * The source for the tut compiled pages is in `docs/src/main/tut`
@@ -211,7 +211,7 @@ the contribution process for the cats project.
 It may take a while to familiarize yourself with this document, but if
 we are doing our job right, you shouldn't have to spend months poring
 over the project source code or lurking the
-[Gitter room](https://gitter.im/non/cats) before you feel comfortable
+[Gitter room](https://gitter.im/typelevel/cats) before you feel comfortable
 contributing. In fact, if you encounter any confusion or frustration
 during the contribution process, please create a GitHub issue and
 we'll do our best to improve the process.

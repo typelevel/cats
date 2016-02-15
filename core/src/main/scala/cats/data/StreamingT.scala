@@ -222,10 +222,12 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    * If no elements satisfy `f`, an empty stream will be returned.
    *
    * For example:
-   *
-   *   StreamingT[List, Int](1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
-   *
-   * Will result in: StreamingT[List, Int](1, 2, 3)
+   * {{{
+   * scala> import cats.std.list._
+   * scala> val s = StreamingT[List, Int](1, 2, 3, 4, 5, 6, 7)
+   * scala> s.takeWhile(n => n != 4).toList.flatten
+   * res0: List[Int] = List(1, 2, 3)
+   * }}}
    */
   def takeWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
@@ -244,14 +246,16 @@ sealed abstract class StreamingT[F[_], A] extends Product with Serializable { lh
    * If no elements satisfy `f`, the current stream will be returned.
    *
    * For example:
-   *
-   *   StreamingT[List, Int](1, 2, 3, 4, 5, 6, 7).dropWhile(n => n != 4)
-   *
-   * Will result in: StreamingT[List, Int](4, 5, 6, 7)
+   * {{{
+   * scala> import cats.std.list._
+   * scala> val s = StreamingT[List, Int](1, 2, 3, 4, 5, 6, 7)
+   * scala> s.dropWhile(n => n != 4).toList.flatten
+   * res0: List[Int] = List(4, 5, 6, 7)
+   * }}}
    */
   def dropWhile(f: A => Boolean)(implicit ev: Functor[F]): StreamingT[F, A] =
     this match {
-      case Cons(a, ft) => if (f(a)) Empty() else Cons(a, ft.map(_.dropWhile(f)))
+      case s @ Cons(a, ft) => if (f(a)) Wait(ft.map(_.dropWhile(f))) else s
       case Wait(ft) => Wait(ft.map(_.dropWhile(f)))
       case Empty() => Empty()
     }
@@ -438,7 +442,7 @@ private[data] sealed trait StreamingTInstances extends StreamingTInstances1 {
         fa.flatMap(f)
       def empty[A]: StreamingT[F, A] =
         StreamingT.empty
-      def combine[A](xs: StreamingT[F, A], ys: StreamingT[F, A]): StreamingT[F, A] =
+      def combineK[A](xs: StreamingT[F, A], ys: StreamingT[F, A]): StreamingT[F, A] =
         xs %::: ys
       override def filter[A](fa: StreamingT[F, A])(f: A => Boolean): StreamingT[F, A] =
         fa.filter(f)
@@ -453,6 +457,11 @@ private[data] sealed trait StreamingTInstances extends StreamingTInstances1 {
     new Order[StreamingT[F, A]] {
       def compare(x: StreamingT[F, A], y: StreamingT[F, A]): Int =
         x.toList compare y.toList
+    }
+
+  implicit def streamingTTransLift[M[_]: Applicative]: TransLift[StreamingT, M] =
+    new TransLift[StreamingT, M] {
+      def liftT[A](ma: M[A]): StreamingT[M, A] = StreamingT.single(ma)
     }
 }
 

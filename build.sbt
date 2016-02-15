@@ -13,7 +13,7 @@ lazy val scoverageSettings = Seq(
 )
 
 lazy val buildSettings = Seq(
-  organization := "org.spire-math",
+  organization := "org.typelevel",
   scalaVersion := "2.11.7",
   crossScalaVersions := Seq("2.10.6", "2.11.7")
 )
@@ -30,7 +30,7 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.6.1",
+    "com.github.mpilquist" %%% "simulacrum" % "0.7.0",
     "org.spire-math" %%% "algebra" % "0.3.1",
     "org.spire-math" %%% "algebra-std" % "0.3.1",
     "org.typelevel" %%% "machinist" % "0.4.1",
@@ -74,7 +74,7 @@ lazy val docSettings = Seq(
     "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
     "-diagrams"
   ),
-  git.remoteRepo := "git@github.com:non/cats.git",
+  git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
 
@@ -192,21 +192,71 @@ lazy val js = project
   .enablePlugins(ScalaJSPlugin)
 
 lazy val publishSettings = Seq(
-  homepage := Some(url("https://github.com/non/cats")),
+  homepage := Some(url("https://github.com/typelevel/cats")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
-  scmInfo := Some(ScmInfo(url("https://github.com/non/cats"), "scm:git:git@github.com:non/cats.git")),
+  scmInfo := Some(ScmInfo(url("https://github.com/typelevel/cats"), "scm:git:git@github.com:typelevel/cats.git")),
   autoAPIMappings := true,
-  apiURL := Some(url("https://non.github.io/cats/api/")),
+  apiURL := Some(url("http://typelevel.org/cats/api/")),
   pomExtra := (
     <developers>
       <developer>
+        <id>ceedubs</id>
+        <name>Cody Allen</name>
+        <url>https://github.com/ceedubs/</url>
+      </developer>
+      <developer>
+        <id>rossabaker</id>
+        <name>Ross Baker</name>
+        <url>https://github.com/rossabaker/</url>
+      </developer>
+      <developer>
+        <id>travisbrown</id>
+        <name>Travis Brown</name>
+        <url>https://github.com/travisbrown/</url>
+      </developer>
+      <developer>
+        <id>adelbertc</id>
+        <name>Adelbert Chang</name>
+        <url>https://github.com/adelbertc/</url>
+      </developer>
+      <developer>
+        <id>tpolecat</id>
+        <name>Rob Norris</name>
+        <url>https://github.com/tpolecat/</url>
+      </developer>
+      <developer>
+        <id>stew</id>
+        <name>Mike O'Connor</name>
+        <url>https://github.com/stew/</url>
+      </developer>
+      <developer>
         <id>non</id>
         <name>Erik Osheim</name>
-        <url>http://github.com/non/</url>
+        <url>https://github.com/non/</url>
+      </developer>
+      <developer>
+        <id>mpilquist</id>
+        <name>Michael Pilquist</name>
+        <url>https://github.com/mpilquist/</url>
+      </developer>
+      <developer>
+        <id>milessabin</id>
+        <name>Miles Sabin</name>
+        <url>https://github.com/milessabin/</url>
+      </developer>
+      <developer>
+        <id>fthomas</id>
+        <name>Frank Thomas</name>
+        <url>https://github.com/fthomas/</url>
+      </developer>
+      <developer>
+        <id>julien-truffaut</id>
+        <name>Julien Truffaut</name>
+        <url>https://github.com/julien-truffaut/</url>
       </developer>
     </developers>
   )
-) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess 
+) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // These aliases serialise the build for the benefit of Travis-CI.
 addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;coreJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
@@ -302,7 +352,7 @@ lazy val sharedReleaseProcess = Seq(
     publishArtifacts,
     setNextVersion,
     commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
+    ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
     pushChanges)
 )
 
