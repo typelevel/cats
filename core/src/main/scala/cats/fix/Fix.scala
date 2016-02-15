@@ -42,7 +42,7 @@ import cats.syntax.functor._
   *    |                              |
   *    | _.map(_.fold(algebra)        | _.fold(algebra)
   *    |                              |
-  *    |              unFix           |
+  *    |              _.unFix         |
   *    F[Fix[F]] <------------------- Fix[F]
   *
   *
