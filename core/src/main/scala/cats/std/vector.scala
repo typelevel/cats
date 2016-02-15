@@ -68,16 +68,11 @@ trait VectorInstances {
   implicit def eqVector[A](implicit ev: Eq[A]): Eq[Vector[A]] =
     new Eq[Vector[A]] {
       def eqv(x: Vector[A], y: Vector[A]): Boolean = {
-        def loop(xs: Vector[A], ys: Vector[A]): Boolean =
-          xs match {
-            case Seq() => ys.isEmpty
-            case a +: xs =>
-              ys match {
-                case Seq() => false
-                case b +: ys => if (ev.neqv(a, b)) false else loop(xs, ys)
-              }
-          }
-        loop(x, y)
+        @tailrec def loop(from: Int): Boolean =
+          if(from == x.size) true
+          else ev.eqv(x(from), y(from)) && loop(from + 1)
+
+        (x.size == y.size) && loop(0)
       }
     }
 }
