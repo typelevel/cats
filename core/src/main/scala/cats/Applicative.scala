@@ -30,7 +30,7 @@ import cats.std.list._
   def pureEval[A](x: Eval[A]): F[A] = pure(x.value)
 
   /**
-    * `replicateA` creates a list of the provided Applicative Functor `fa` repeated `n` times
+    * Given fa and n, apply fa n times to construct an F[List[A]] value.
     */
   def replicateA[A](n: Int, fa: F[A]): F[List[A]] =
     sequence(List.fill(n)(fa))
