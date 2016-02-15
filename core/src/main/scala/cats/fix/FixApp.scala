@@ -71,8 +71,10 @@ object FixApp {
       }
     }
 
+
     import ListTraversableFunctor.traverse
 
+    
     /**
       * Traversing lists of strings
       * while trying to parse their elements as integers
