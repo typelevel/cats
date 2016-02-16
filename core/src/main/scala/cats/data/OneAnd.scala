@@ -66,6 +66,12 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     Eval.defer(f(head, F.foldRight(tail, lb)(f)))
 
   /**
+    * Applies f to all the elements of the structure
+    */
+  def map[B](f: A => B)(implicit F: Functor[F]): OneAnd[F, B] =
+    OneAnd(f(head), F.map(tail)(f))
+
+  /**
    * Typesafe equality operator.
    *
    * This method is similar to == except that it only allows two
