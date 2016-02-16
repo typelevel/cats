@@ -120,7 +120,7 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
   implicit def oneAndMonad[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[F, ?]] =
     new Monad[OneAnd[F, ?]] {
       override def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
-        OneAnd(f(fa.head), monad.map(fa.tail)(f))
+        fa map f
 
       def pure[A](x: A): OneAnd[F, A] =
         OneAnd(x, monad.empty)
@@ -139,6 +139,11 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
 trait OneAndLowPriority0 {
   implicit val nelComonad: Comonad[OneAnd[List, ?]] =
     new Comonad[OneAnd[List, ?]] {
+      val functorList: Functor[List] =
+        new Functor[List] {
+          def map[A, B](fa: List[A])(f: A => B): List[B] =
+            fa map f
+        }
 
       def coflatMap[A, B](fa: OneAnd[List, A])(f: OneAnd[List, A] => B): OneAnd[List, B] = {
         @tailrec def consume(as: List[A], buf: ListBuffer[B]): List[B] =
@@ -153,7 +158,7 @@ trait OneAndLowPriority0 {
         fa.head
 
       def map[A, B](fa: OneAnd[List, A])(f: A => B): OneAnd[List, B] =
-        OneAnd(f(fa.head), fa.tail.map(f))
+        fa.map(f)(functorList)
     }
 }
 
@@ -161,7 +166,7 @@ trait OneAndLowPriority1 extends OneAndLowPriority0 {
   implicit def oneAndFunctor[F[_]](implicit F: Functor[F]): Functor[OneAnd[F, ?]] =
     new Functor[OneAnd[F, ?]] {
       def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
-        OneAnd(f(fa.head), F.map(fa.tail)(f))
+        fa map f
     }
 
 }
