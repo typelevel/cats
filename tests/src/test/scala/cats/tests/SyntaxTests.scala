@@ -201,4 +201,12 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val g2 = mock[B => D]
     val d0 = fab.bifoldMap(f2, g2)
   }
+
+  def testApplicative[F[_]: Applicative, A]: Unit = {
+    val a = mock[A]
+    val fa = a.pure[F]
+
+    val la = mock[Eval[A]]
+    val lfa = la.pureEval[F]
+  }
 }
