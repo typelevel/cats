@@ -137,14 +137,10 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
 }
 
 trait OneAndLowPriority0 {
+  import cats.std.list._
+
   implicit val nelComonad: Comonad[OneAnd[List, ?]] =
     new Comonad[OneAnd[List, ?]] {
-      val functorList: Functor[List] =
-        new Functor[List] {
-          def map[A, B](fa: List[A])(f: A => B): List[B] =
-            fa map f
-        }
-
       def coflatMap[A, B](fa: OneAnd[List, A])(f: OneAnd[List, A] => B): OneAnd[List, B] = {
         @tailrec def consume(as: List[A], buf: ListBuffer[B]): List[B] =
           as match {
@@ -158,7 +154,7 @@ trait OneAndLowPriority0 {
         fa.head
 
       def map[A, B](fa: OneAnd[List, A])(f: A => B): OneAnd[List, B] =
-        fa.map(f)(functorList)
+        fa map f
     }
 }
 
