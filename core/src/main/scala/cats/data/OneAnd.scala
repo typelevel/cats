@@ -3,6 +3,7 @@ package data
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
+import cats.std.list._
 
 /**
  * A data type which represents a single element (head) and some other
@@ -110,7 +111,7 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
     }
 
   implicit def oneAndSemigroup[F[_]: MonadCombine, A]: Semigroup[OneAnd[F, A]] =
-    oneAndSemigroupK.algebra
+    oneAndSemigroupK(MonadCombine[F]).algebra
 
   implicit def oneAndReducible[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
     new NonEmptyReducible[OneAnd[F,?], F] {
@@ -137,8 +138,6 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
 }
 
 trait OneAndLowPriority0 {
-  import cats.std.list._
-
   implicit val nelComonad: Comonad[OneAnd[List, ?]] =
     new Comonad[OneAnd[List, ?]] {
       def coflatMap[A, B](fa: OneAnd[List, A])(f: OneAnd[List, A] => B): OneAnd[List, B] = {
