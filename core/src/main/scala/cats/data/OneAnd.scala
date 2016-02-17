@@ -111,7 +111,7 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
     }
 
   implicit def oneAndSemigroup[F[_]: MonadCombine, A]: Semigroup[OneAnd[F, A]] =
-    oneAndSemigroupK(MonadCombine[F]).algebra
+    oneAndSemigroupK[F].algebra
 
   implicit def oneAndReducible[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
     new NonEmptyReducible[OneAnd[F,?], F] {
