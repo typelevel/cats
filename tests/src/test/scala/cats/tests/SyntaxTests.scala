@@ -185,4 +185,20 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val fz4: F[Z] = (fa |@| fb |@| fc).map(f2)
     val fz5: F[Z] = (fa |@| fb |@| fc).apWith(ff2)
   }
+
+  def testBifoldable[F[_, _]: Bifoldable, A, B, C, D: Monoid]: Unit = {
+    val fab = mock[F[A, B]]
+
+    val f0 = mock[(C, A) => C]
+    val g0 = mock[(C, B) => C]
+    val c0 = fab.bifoldLeft(mock[C])(f0, g0)
+
+    val f1 = mock[(A, Eval[C]) => Eval[C]]
+    val g1 = mock[(B, Eval[C]) => Eval[C]]
+    val c1 = fab.bifoldRight(mock[Eval[C]])(f1, g1)
+
+    val f2 = mock[A => D]
+    val g2 = mock[B => D]
+    val d0 = fab.bifoldMap(f2, g2)
+  }
 }
