@@ -4,6 +4,7 @@ package object syntax {
   object all extends AllSyntax
   object apply extends ApplySyntax
   object bifunctor extends BifunctorSyntax
+  object bifoldable extends BifoldableSyntax
   object cartesian extends CartesianSyntax
   object coflatMap extends CoflatMapSyntax
   object coproduct extends CoproductSyntax
