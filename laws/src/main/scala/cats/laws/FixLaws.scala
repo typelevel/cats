@@ -12,13 +12,15 @@ trait FixLaws[F[_]] {
   def foldReflectionLaw(fix: Fix[F]): IsEq[Fix[F]] =
     fix.fold[Fix[F]](Fix(_)) <-> fix
 
-  def foldCancellationLaw[A](unFix: F[Fix[F]], algebra: F[A] => A) =
+  def foldCancellationLaw[A](unFix: F[Fix[F]], algebra: F[A] => A): IsEq[A] =
     Fix(unFix).fold[A](algebra) <-> algebra(unFix.map(_.fold[A](algebra)))
 
 }
 
 object FixLaws {
   def apply[F[_]](implicit ev: Functor[F]): FixLaws[F] =
-    new FixLaws[F] { def F: Functor[F] = ev }
+    new FixLaws[F] {
+      def F: Functor[F] = ev
+    }
 }
 

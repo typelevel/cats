@@ -3,7 +3,7 @@ package cats.fix
 import cats.{Applicative, Functor}
 import cats.syntax.functor._
 
-/**
+ /**
   *
   * Note: this is NOT library code
   *
@@ -49,22 +49,16 @@ object FixApp {
     object ListTraversableFunctor extends FixTraverse[ListFunctor] {
       implicit def implicitFunctor[Z] = listFunctor[Z]
 
-      /**
-        *
-        * for `Nil` (having 0 parameters) we use `map0` (agreed, actually `pure`)
-        * for `Cons` (having 2 parameters) we use `map2`
-        *
-        * there should be a way to generalize this to *all polynomial functors*
-        *
-        */
       def traverseAlgebra[A[_] : Applicative, Z, Y](z2ay: Z => A[Y]): ListFunctor[Z, A[Fix[ListFunctor[Y, ?]]]] => A[Fix[ListFunctor[Y, ?]]] = {
         case Nil() => Applicative[A].pure(nil[Y])
         case Cons(z, a_ys) => Applicative[A].map2(z2ay(z), a_ys)(cons[Y])
       }
+
       def foldLeft[Z, Y](fix: Fix[ListFunctor[Z, ?]], y: Y)(yz2y: (Y, Z) => Y): Y = fix.fold[Y] {
         case Nil() => y
         case Cons(z, y) => yz2y(y, z)
       }
+
       def foldRight[Z, Y](fix: Fix[ListFunctor[Z, ?]], ly: cats.Eval[Y])(zly2ly: (Z, cats.Eval[Y]) => cats.Eval[Y]): cats.Eval[Y] = fix.fold[cats.Eval[Y]] {
         case Nil() => ly
         case Cons(z, ly) => zly2ly(z, ly)
@@ -73,15 +67,6 @@ object FixApp {
 
 
     import ListTraversableFunctor.traverse
-
-
-    /**
-      * Traversing lists of strings
-      * while trying to parse their elements as integers
-      *
-      * lists
-      *
-      */
 
     type Try[A] = Either[Throwable, A]
 
