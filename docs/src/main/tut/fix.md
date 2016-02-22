@@ -20,7 +20,7 @@ See [Using Catamorphisms Subtypes and Monad Transformers for Writing Modular Fun
 ## Fixed Point example: imports
 
 ```tut
-import cats.{Applicative, Functor}
+import cats.{Applicative, Functor, Show}
 import cats.syntax.functor._
 import cats.fix._
 import cats.std.either.eitherInstances
