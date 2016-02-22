@@ -49,10 +49,10 @@ import cats.syntax.functor._
   * Why is all this useful?
   *
   * `fold` generalizes structural recursion over recursive lists (using `foldRight`)
-  * to a whole range of recursive data structures f type `Fix[F]`
+  * to a whole range of recursive data structures of type `Fix[F]`
   *
   * in order to define a structural recursive function of type `Fix[F] => A`
-  * it suffices to define a function of type `F[A] => A`
+  * it suffices to define a function (referred to as algebra) of type `F[A] => A`
   *
   * the nice thing about functions of type `F[A] => A` is that they can be defined in a *modular* way
   * because recursion and algebraic operations (sum and product) are strictly separated
