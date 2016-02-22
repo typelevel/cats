@@ -20,7 +20,7 @@ See [Using Catamorphisms Subtypes and Monad Transformers for Writing Modular Fun
 ## Fixed Point example: imports
 
 ```tut
-import cats.{Applicative, Functor, Show}
+import cats.{Applicative, Functor, Show, Eval, Now, Later, Always}
 import cats.syntax.functor._
 import cats.fix._
 import cats.std.either.eitherInstances
@@ -36,7 +36,7 @@ Let's look at an example: *lists* as least fixed points of a functor:
     case class Nil[Z, A]() extends ListFunctor[Z, A]
     case class Cons[Z, A](z: Z, a: A) extends ListFunctor[Z, A]
     
-     def listFunctor[Z] = new Functor[ListFunctor[Z, ?]] {
+    def listFunctor[Z] = new Functor[ListFunctor[Z, ?]] {
       def map[A, B](lfa: ListFunctor[Z, A])(a2b: A => B): ListFunctor[Z, B] = lfa match {
         case Nil() => Nil()
         case Cons(z, a) => Cons(z, a2b(a))
@@ -147,16 +147,6 @@ Here is a typical example: *traversing a list of strings, trying to parse them a
     val badTryingOneTwoThreeInts: Try[List[Int]] =
       traverse[Try, String, Int](badOneTwoThreeStrings) { s => `try`(Integer.parseInt(s)) }
 
-```
-
-And here is how we can run our example
-
-```tut
-scala> goodTryingOneTwoThreeInts.map(_.show)
-res0: Try[String] = Right(cons(1, cons(2, cons(3, nil))))
-
-scala> badTryingOneTwoThreeInts.map(_.show)
-res1: Try[String] = Left(java.lang.NumberFormatException: For input string: "two")
 ```
 
 ## What about evaluation?
