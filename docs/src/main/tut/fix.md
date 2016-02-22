@@ -17,6 +17,16 @@ The nice thing about algebras of type `F[A] => A` as opposed to the structural r
 is that they can be defined in a *modular* way because *recursion* and *algebraic functor operations* (*sum* and *product*) are strictly separated.
 See [Using Catamorphisms Subtypes and Monad Transformers for Writing Modular Functional Interpreters](https://www.researchgate.net/publication/2550340_Using_Catamorphisms_Subtypes_and_Monad_Transformers_for_Writing_Modular_Functional_Interpreters) for more information.
 
+## Fixed Point example: imports
+
+```tut
+import cats.{Applicative, Functor}
+import cats.syntax.functor._
+import cats.fix._
+import cats.std.either.eitherInstances
+```
+
+
 ## Fixed Point example: List
 
 Let's look at an example: *lists* as least fixed points of a functor:
@@ -115,8 +125,6 @@ Here is a typical example: *traversing a list of strings, trying to parse them a
       `try` {
         Integer.parseInt(string)
       }
-
-    import cats.std.either.eitherInstances
 
     implicit val implicitStringListFunctor = listFunctor[String]
 
