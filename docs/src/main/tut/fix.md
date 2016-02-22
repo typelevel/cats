@@ -35,6 +35,13 @@ Let's look at an example: *lists* as least fixed points of a functor:
     trait ListFunctor[Z, A]
     case class Nil[Z, A]() extends ListFunctor[Z, A]
     case class Cons[Z, A](z: Z, a: A) extends ListFunctor[Z, A]
+    
+     def listFunctor[Z] = new Functor[ListFunctor[Z, ?]] {
+      def map[A, B](lfa: ListFunctor[Z, A])(a2b: A => B): ListFunctor[Z, B] = lfa match {
+        case Nil() => Nil()
+        case Cons(z, a) => Cons(z, a2b(a))
+      }
+    }   
 ```
 
 ```tut
