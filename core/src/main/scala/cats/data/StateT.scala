@@ -1,7 +1,5 @@
 package cats
-package state
-
-import cats.data.Kleisli
+package data
 
 /**
  * `StateT[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S`
@@ -53,7 +51,7 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
 
   /**
    * Run with `S`'s empty monoid value as the initial state and return the final
-   * state (discarding the final value).
+   * value (discarding the final state).
    */
   def runEmptyA(implicit S: Monoid[S], F: FlatMap[F]): F[A] = runA(S.empty)
 
@@ -110,6 +108,11 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
   def inspect[B](f: S => B)(implicit F: Monad[F]): StateT[F, S, B] =
     transform((s, _) => (s, f(s)))
 
+  /**
+    * Get the input state, without modifying the state.
+    */
+  def get(implicit F: Monad[F]): StateT[F, S, S] =
+    inspect(identity)
 }
 
 object StateT extends StateTInstances {
@@ -123,7 +126,7 @@ object StateT extends StateTInstances {
     StateT(s => F.pure((s, a)))
 }
 
-private[state] sealed abstract class StateTInstances {
+private[data] sealed abstract class StateTInstances {
   implicit def stateTMonadState[F[_], S](implicit F: Monad[F]): MonadState[StateT[F, S, ?], S] =
     new MonadState[StateT[F, S, ?], S] {
       def pure[A](a: A): StateT[F, S, A] =
@@ -139,11 +142,17 @@ private[state] sealed abstract class StateTInstances {
       override def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] =
         fa.map(f)
     }
+
+  implicit def stateTLift[M[_], S](implicit M: Applicative[M]): TransLift[({type λ[α[_], β] = StateT[α, S, β]})#λ, M] =
+    new TransLift[({type λ[α[_], β] = StateT[α, S, β]})#λ, M] {
+      def liftT[A](ma: M[A]): StateT[M, S, A] = StateT(s => M.map(ma)(s -> _))
+    }
+
 }
 
 // To workaround SI-7139 `object State` needs to be defined inside the package object
 // together with the type alias.
-private[state] abstract class StateFunctions {
+private[data] abstract class StateFunctions {
 
   def apply[S, A](f: S => (S, A)): State[S, A] =
     StateT.applyF(Now((s: S) => Now(f(s))))

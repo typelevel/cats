@@ -10,7 +10,7 @@ import Func.{ appFunc, appFuncU }
  */
 class WordCountTest extends CatsSuite {
   test("wordcount") {
-    import cats.state.State.{ get, set }
+    import cats.data.State.{ get, set }
     val text = "Faith, I must leave thee, love, and shortly too.\nMy operant powers their functions leave to do.\n".toList
     // A type alias to treat Int as cartesian applicative
     type Count[A] = Const[Int, A]

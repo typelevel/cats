@@ -43,6 +43,7 @@ possible:
  * Jean-Rémi Desjardins
  * Jisoo Park
  * Josh Marcus
+ * Juan Pedro Moreno
  * Julien Richard-Foy
  * Julien Truffaut
  * Kenji Yoshida
@@ -59,6 +60,7 @@ possible:
  * Owen Parry
  * Pascal Voitot
  * Paul Phillips
+ * Pavkin Vladimir
  * Philip Wills
  * Raúl Raja Martínez
  * Rintcius Blok

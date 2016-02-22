@@ -4,6 +4,7 @@ package syntax
 trait AllSyntax
     extends ApplySyntax
     with BifunctorSyntax
+    with BifoldableSyntax
     with CartesianSyntax
     with CoflatMapSyntax
     with ComonadSyntax
@@ -30,6 +31,7 @@ trait AllSyntax
     with SplitSyntax
     with StreamingSyntax
     with StrongSyntax
+    with TransLiftSyntax
     with TraverseSyntax
     with XorSyntax
     with ValidatedSyntax

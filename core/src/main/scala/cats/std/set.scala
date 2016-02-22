@@ -9,7 +9,7 @@ trait SetInstances extends algebra.std.SetInstances {
 
       def empty[A]: Set[A] = Set.empty[A]
 
-      def combine[A](x: Set[A], y: Set[A]): Set[A] = x | y
+      def combineK[A](x: Set[A], y: Set[A]): Set[A] = x | y
 
       def foldLeft[A, B](fa: Set[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)

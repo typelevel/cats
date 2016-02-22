@@ -131,7 +131,7 @@ object Boilerplate {
         |
         -  private[syntax] final class CartesianBuilder$arity[${`A..N`}]($params) {
         -    $next
-        -    def ap[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(${`a..n`})(f)
+        -    def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)(${`a..n`})
         -    $map
         -    $contramap
         -    $imap
@@ -157,23 +157,23 @@ object Boilerplate {
 
       val fArgsA = (0 until a) map { "f" + _ } mkString ","
       val fArgsB = (a until arity) map { "f" + _ } mkString ","
-      val argsA = (0 until a) map { "a" + _ } mkString ","
-      val argsB = (a until arity) map { "a" + _ } mkString ","
+      val argsA = (0 until a) map { n => "a" + n + ":A" + n } mkString ","
+      val argsB = (a until arity) map { n => "a" + n + ":A" + n } mkString ","
       def apN(n: Int) = if (n == 1) { "ap" } else { s"ap$n" }
       def allArgs = (0 until arity) map { "a" + _ } mkString ","
 
       val apply =
         block"""
-          -    ${apN(b)}($fArgsB)(${apN(a)}($fArgsA)(map(f)(f =>
+          -    ${apN(b)}(${apN(a)}(map(f)(f =>
           -      ($argsA) => ($argsB) => f($allArgs)
-          -    )))
+          -    ))($fArgsA))($fArgsB)
           """
 
       block"""
         |package cats
         |trait ApplyArityFunctions[F[_]] { self: Apply[F] =>
         |  def tuple2[A, B](f1: F[A], f2: F[B]): F[(A, B)] = Cartesian.tuple2(f1, f2)(self, self)
-        -  def ap$arity[${`A..N`}, Z]($fparams)(f: F[(${`A..N`}) => Z]):F[Z] = $apply
+        -  def ap$arity[${`A..N`}, Z](f: F[(${`A..N`}) => Z])($fparams):F[Z] = $apply
         -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Cartesian.map$arity($fparams)(f)(self, self)
         -  def tuple$arity[${`A..N`}, Z]($fparams): F[(${`A..N`})] = Cartesian.tuple$arity($fparams)(self, self)
         |}

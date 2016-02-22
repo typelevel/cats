@@ -40,10 +40,10 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
     type MN[Z] = (M[Z], N[Z])
     implicit val MN = new Applicative[MN] {
       def pure[X](x: X): MN[X] = (M.pure(x), N.pure(x))
-      def ap[X, Y](fa: MN[X])(f: MN[X => Y]): MN[Y] = {
+      def ap[X, Y](f: MN[X => Y])(fa: MN[X]): MN[Y] = {
         val (fam, fan) = fa
         val (fm, fn) = f
-        (M.ap(fam)(fm), N.ap(fan)(fn))
+        (M.ap(fm)(fam), N.ap(fn)(fan))
       }
       def map[X, Y](fx: MN[X])(f: X => Y): MN[Y] = {
         val (mx, nx) = fx

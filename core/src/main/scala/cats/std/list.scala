@@ -17,7 +17,7 @@ trait ListInstances extends ListInstances1 {
 
       def empty[A]: List[A] = Nil
 
-      def combine[A](x: List[A], y: List[A]): List[A] = x ++ y
+      def combineK[A](x: List[A], y: List[A]): List[A] = x ++ y
 
       def pure[A](x: A): List[A] = x :: Nil
 

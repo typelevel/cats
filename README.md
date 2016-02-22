@@ -1,10 +1,10 @@
 ## Cats
 
-[![Build Status](https://api.travis-ci.org/non/cats.svg)](https://travis-ci.org/non/cats)
-[![Workflow](https://badge.waffle.io/non/cats.svg?label=ready&title=Ready)](https://waffle.io/non/cats)
-[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
-[![codecov.io](http://codecov.io/github/non/cats/coverage.svg?branch=master)](http://codecov.io/github/non/cats?branch=master)
-[![Maven Central](https://img.shields.io/maven-central/v/org.spire-math/cats_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/org.spire-math/cats_2.11)
+[![Build Status](https://api.travis-ci.org/typelevel/cats.svg)](https://travis-ci.org/typelevel/cats)
+[![Workflow](https://badge.waffle.io/typelevel/cats.svg?label=ready&title=Ready)](https://waffle.io/typelevel/cats)
+[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
+[![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
+[![Maven Central](https://img.shields.io/maven-central/v/org.typelevel/cats_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/org.typelevel/cats_2.11)
 
 ### Overview
 
@@ -23,7 +23,7 @@ To get started with SBT, simply add the following to your `build.sbt`
 file:
 
 ```scala
-libraryDependencies += "org.spire-math" %% "cats" % "0.3.0"
+libraryDependencies += "org.typelevel" %% "cats" % "0.4.1"
 ```
 
 This will pull in all of Cats' modules. If you only require some
@@ -36,14 +36,14 @@ functionality, you can pick-and-choose from amongst these modules
 
 Release notes for Cats are available in [CHANGES.md](CHANGES.md).
 
-*Cats 0.3.0 is a pre-release: there are not currently source- or
+*Cats 0.4.1 is a pre-release: there are not currently source- or
 binary-compatibility guarantees.*
 
 ### Documentation
 Among the goals of Cats is to provide approachable and useful documentation.
 Documentation is available in the form of tutorials on the Cats
-[website](http://non.github.io/cats/), as well as through
-[Scaladoc](http://non.github.io/cats/api/#package) (also reachable through
+[website](http://typelevel.org/cats), as well as through
+[Scaladoc](http://typelevel.org/cats/api/#package) (also reachable through
 the website).
 
 ### Building Cats
@@ -186,9 +186,9 @@ relax this to a single sign-off.
 ### Contributing
 
 Discussion around Cats is currently happening in the
-[Gitter channel](https://gitter.im/non/cats) as well as on Github
+[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
 issue and PR pages. You can get an overview of who is working on what
-via [Waffle.io](https://waffle.io/non/cats).
+via [Waffle.io](https://waffle.io/typelevel/cats).
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also

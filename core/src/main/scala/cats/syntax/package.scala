@@ -4,6 +4,7 @@ package object syntax {
   object all extends AllSyntax
   object apply extends ApplySyntax
   object bifunctor extends BifunctorSyntax
+  object bifoldable extends BifoldableSyntax
   object cartesian extends CartesianSyntax
   object coflatMap extends CoflatMapSyntax
   object coproduct extends CoproductSyntax
@@ -29,6 +30,7 @@ package object syntax {
   object split extends SplitSyntax
   object streaming extends StreamingSyntax
   object strong extends StrongSyntax
+  object transLift extends TransLiftSyntax
   object traverse extends TraverseSyntax
   object xor extends XorSyntax
   object validated extends ValidatedSyntax

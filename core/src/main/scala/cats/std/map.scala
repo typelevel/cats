@@ -45,10 +45,10 @@ trait MapInstances extends algebra.std.MapInstances {
       override def map2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: (A, B) => Z): Map[K, Z] =
         fa.flatMap { case (k, a) => fb.get(k).map(b => (k, f(a, b))) }
 
-      override def ap[A, B](fa: Map[K, A])(ff: Map[K, A => B]): Map[K, B] =
+      override def ap[A, B](ff: Map[K, A => B])(fa: Map[K, A]): Map[K, B] =
         fa.flatMap { case (k, a) => ff.get(k).map(f => (k, f(a))) }
 
-      override def ap2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: Map[K, (A, B) => Z]): Map[K, Z] =
+      override def ap2[A, B, Z](f: Map[K, (A, B) => Z])(fa: Map[K, A], fb: Map[K, B]): Map[K, Z] =
         f.flatMap { case (k, f) =>
           for { a <- fa.get(k); b <- fb.get(k) } yield (k, f(a, b))
         }

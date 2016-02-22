@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.laws.discipline.{CartesianTests, MonadStateTests, MonoidKTests, SerializableTests}
-import cats.state.{State, StateT}
+import cats.data.{State, StateT}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
@@ -74,6 +74,19 @@ class StateTTests extends CatsSuite {
       val s2 = State.modify(f)
 
       s1 should === (s2)
+    }
+  }
+
+  test(".get and then .run produces same state as value"){
+    forAll { (s: State[Long, Int], initial: Long) =>
+      val (finalS, finalA) = s.get.run(initial).value
+      finalS should === (finalA)
+    }
+  }
+
+  test(".get equivalent to flatMap with State.get"){
+    forAll { (s: State[Long, Int]) =>
+      s.get should === (s.flatMap(_ => State.get))
     }
   }
 

@@ -22,7 +22,7 @@ Cats is currently available for Scala 2.10 and 2.11.
 
 To get started with SBT, simply add the following to your build.sbt file:
 
-    libraryDependencies += "org.spire-math" %% "cats" % "0.3.0"
+    libraryDependencies += "org.typelevel" %% "cats" % "0.4.1"
 
 This will pull in all of Cats' modules. If you only require some
 functionality, you can pick-and-choose from amongst these modules
@@ -32,7 +32,7 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-core`: Core type classes and functionality (*required*).
  * `cats-laws`: Laws for testing type class instances.
 
-Release notes for Cats are available in [CHANGES.md](https://github.com/non/cats/blob/master/CHANGES.md).
+Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
 <a name "motivations"></a>
 # Motivations
@@ -95,7 +95,7 @@ In an attempt to be more modular, Cats is broken up into a number of sub-project
 
 All code is available to you under the MIT license, available at
 http://opensource.org/licenses/mit-license.php and also in the
-[COPYING](https://raw.githubusercontent.com/non/cats/master/COPYING) file. The design is informed by many other
+[COPYING](https://raw.githubusercontent.com/typelevel/cats/master/COPYING) file. The design is informed by many other
 projects, in particular Scalaz.
 
-Copyright the maintainers, 2015.
+Copyright the maintainers, 2016.

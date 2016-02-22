@@ -101,7 +101,7 @@ private[std] sealed trait Function1Monoid[A, B] extends Monoid[A => B] with Func
 }
 
 private[std] sealed trait Function1SemigroupK extends SemigroupK[Lambda[A => A => A]] {
-  override def combine[A](x: A => A, y: A => A): A => A = x compose y
+  override def combineK[A](x: A => A, y: A => A): A => A = x compose y
 }
 
 private[std] sealed trait Function1MonoidK extends MonoidK[Lambda[A => A => A]] with Function1SemigroupK {

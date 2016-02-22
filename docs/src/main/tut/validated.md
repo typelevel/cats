@@ -2,7 +2,7 @@
 layout: default
 title:  "Validated"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/Validated.scala"
+source: "core/src/main/scala/cats/data/Validated.scala"
 scaladoc: "#cats.data.Validated"
 ---
 # Validated
@@ -190,7 +190,7 @@ import cats.Applicative
 
 implicit def validatedApplicative[E : Semigroup]: Applicative[Validated[E, ?]] =
   new Applicative[Validated[E, ?]] {
-    def ap[A, B](fa: Validated[E, A])(f: Validated[E, A => B]): Validated[E, B] =
+    def ap[A, B](f: Validated[E, A => B])(fa: Validated[E, A]): Validated[E, B] =
       (fa, f) match {
         case (Valid(a), Valid(fab)) => Valid(fab(a))
         case (i@Invalid(_), Valid(_)) => i
@@ -200,12 +200,13 @@ implicit def validatedApplicative[E : Semigroup]: Applicative[Validated[E, ?]] =
 
     def pure[A](x: A): Validated[E, A] = Validated.valid(x)
     def map[A, B](fa: Validated[E, A])(f: A => B): Validated[E, B] = fa.map(f)
-    def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] = ap(fb)(fa.map(a => b => (a, b)))
+    def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
+      ap(fa.map(a => (b: B) => (a, b)))(fb)
   }
 ```
 
-Awesome! And now we also get access to all the goodness of `Applicative`, among which include
-`map{2-22}`, as well as the `Apply` syntax `|@|`.
+Awesome! And now we also get access to all the goodness of `Applicative`, which includes `map{2-22}`, as well as the
+`Cartesian` syntax `|@|`.
 
 We can now easily ask for several bits of configuration and get any and all errors returned back.
 

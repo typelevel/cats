@@ -2,7 +2,7 @@
 layout: default
 title:  "Invariant"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/functor/Invariant.scala"
+source: "core/src/main/scala/cats/functor/Invariant.scala"
 scaladoc: "#cats.functor.Invariant"
 ---
 # Invariant
@@ -14,7 +14,7 @@ function with the following type:
 def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
 ```
 
-Every covariant (as well as contravariant) functor gives rise to an invariant
+Every covariant (as well as [contravariant](contravariant.html)) functor gives rise to an invariant
 functor, by ignoring the `f` (or in case of contravariance, `g`) function.
 
 Examples for instances of `Invariant` are `Semigroup` and `Monoid`, in
@@ -29,7 +29,7 @@ timestamp.  Let's say that we want to create a `Semigroup[Date]`, by
 
 ### Semigroup does not form a covariant functor
 
-If `Semigroup` had an instance for the standard covariant `Functor`
+If `Semigroup` had an instance for the standard covariant [`Functor`](functor.html)
 typeclass, we could use `map` to apply a function `longToDate`:
 
 ```tut:silent
@@ -47,7 +47,7 @@ like we can't have an `Functor` instance for `Semigroup`.
 ### Semigroup does not form a contravariant functor
 
 On the other side, if `Semigroup` would form a *contravariant* functor
-by having an instance for `Contravariant`, we could make use of
+by having an instance for [`Contravariant`](contravariant.html), we could make use of
 `contramap` to apply a function `dateToLong`:
 
 ```tut:silent

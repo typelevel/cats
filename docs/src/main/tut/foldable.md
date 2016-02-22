@@ -2,7 +2,7 @@
 layout: default
 title:  "Foldable"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Foldable.scala"
+source: "core/src/main/scala/cats/Foldable.scala"
 scaladoc: "#cats.Foldable"
 ---
 # Foldable
@@ -27,7 +27,7 @@ First some standard imports.
 
 ```tut:silent
 import cats._
-import cats.std.all._
+import cats.implicits._
 ```
 
 And examples.
@@ -57,6 +57,10 @@ Foldable[List].traverse_(List("1", "2"))(parseInt)
 Foldable[List].traverse_(List("1", "A"))(parseInt)
 Foldable[List].sequence_(List(Option(1), Option(2)))
 Foldable[List].sequence_(List(Option(1), None))
+
+val prints: Eval[Unit] = List(Eval.always(println(1)), Eval.always(println(2))).sequence_
+prints.value
+
 Foldable[List].dropWhile_(List[Int](2,4,5,6,7))(_ % 2 == 0)
 Foldable[List].dropWhile_(List[Int](1,2,4,5,6,7))(_ % 2 == 0)
 
@@ -86,5 +90,35 @@ as opposed to
 def foldRight[A, B](fa: F[A], z: B)(f: (A, B) => B): B
 ```
  
-which someone familiar with the `foldRight` from the collections in Scala's standard
-library might expect. 
+which someone familiar with the `foldRight` from the collections in
+Scala's standard library might expect. This will prevent operations
+which are lazy in their right hand argument to traverse the entire
+structure unnecessarily. For example, if you have:
+
+```tut
+val allFalse = Stream.continually(false)
+```
+
+which is an infinite stream of `false` values, and if you wanted to
+reduce this to a single false value using the logical and (`&&`). You
+intuitively know that the result of this operation should be
+`false`. It is not necessary to consider the entire stream in order to
+determine this result, you only need to consider the first
+value. Using `foldRight` from the standard library *will* try to
+consider the entire stream, and thus will eventually cause a stack
+overflow:
+
+```tut
+try {
+  allFalse.foldRight(true)(_ && _)
+} catch {
+  case e:StackOverflowError => println(e)
+}
+```
+
+With the lazy `foldRight` on `Foldable`, the calculation terminates
+after looking at only one value:
+
+```tut
+Foldable[Stream].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.now(false)).value
+```

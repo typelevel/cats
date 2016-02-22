@@ -109,4 +109,11 @@ class OneAndTests extends CatsSuite {
       nel.forall(p) should === (list.forall(p))
     }
   }
+
+  test("NonEmptyList#map is consistent with List#map") {
+    forAll { (nel: NonEmptyList[Int], p: Int => String) =>
+      val list = nel.unwrap
+      nel.map(p).unwrap should === (list.map(p))
+    }
+  }
 }

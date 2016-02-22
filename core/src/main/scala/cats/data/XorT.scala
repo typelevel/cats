@@ -64,7 +64,7 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): XorT[F, C, D] = XorT(F.map(value)(_.bimap(fa, fb)))
 
   def applyAlt[D](ff: XorT[F, A, B => D])(implicit F: Apply[F]): XorT[F, A, D] =
-    XorT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[A Xor ?].ap(xb)(xbd)))
+    XorT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[A Xor ?].ap(xbd)(xb)))
 
   def flatMap[AA >: A, D](f: B => XorT[F, AA, D])(implicit F: Monad[F]): XorT[F, AA, D] =
     XorT(F.flatMap(value) {
@@ -193,6 +193,13 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
     new XorTTraverse[F, L] {
       val F0: Traverse[F] = F
     }
+
+  implicit def xortTransLift[M[_],E](implicit M: Functor[M]): TransLift[({type λ[α[_], β] = XorT[α,E,β]})#λ, M] =
+    new TransLift[({type λ[α[_], β] = XorT[α,E,β]})#λ, M] {
+      def liftT[A](ma: M[A]): XorT[M,E,A] =
+        XorT(M.map(ma)(Xor.right))
+    }
+
 }
 
 private[data] abstract class XorTInstances1 extends XorTInstances2 {
@@ -280,7 +287,7 @@ private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L]
 private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
   implicit val F: Monad[F]
   implicit val L: Semigroup[L]
-  def combine[A](x: XorT[F, L, A], y: XorT[F, L, A]): XorT[F, L, A] =
+  def combineK[A](x: XorT[F, L, A], y: XorT[F, L, A]): XorT[F, L, A] =
     XorT(F.flatMap(x.value) {
       case Xor.Left(l1) => F.map(y.value) {
         case Xor.Left(l2) => Xor.Left(L.combine(l1, l2))

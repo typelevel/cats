@@ -2,8 +2,8 @@
 layout: default
 title:  "State"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/state/StateT.scala"
-scaladoc: "#cats.state.StateT"
+source: "core/src/main/scala/cats/data/StateT.scala"
+scaladoc: "#cats.data.StateT"
 ---
 # State
 
@@ -131,7 +131,7 @@ Our `nextLong` function takes a `Seed` and returns an updated `Seed` and a `Long
 Let's write a new version of `nextLong` using `State`:
 
 ```tut:silent
-import cats.state.State
+import cats.data.State
 
 val nextLong: State[Seed, Long] = State(seed =>
   (seed.next, seed.long))

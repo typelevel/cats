@@ -10,7 +10,7 @@ import cats.functor.{Contravariant, Strong}
 final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
 
   def apply[C](f: Kleisli[F, A, B => C])(implicit F: Apply[F]): Kleisli[F, A, C] =
-    Kleisli(a => F.ap(run(a))(f.run(a)))
+    Kleisli(a => F.ap(f.run(a))(run(a)))
 
   def dimap[C, D](f: C => A)(g: B => D)(implicit F: Functor[F]): Kleisli[F, C, D] =
     Kleisli(c => F.map(run(f(c)))(g))
@@ -114,6 +114,11 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
       override def contramap[A, B](fa: Kleisli[F, A, C])(f: (B) => A): Kleisli[F, B, C] =
         fa.local(f)
     }
+
+  implicit def kleisliTransLift[M[_], A]: TransLift[({type λ[α[_], β] = Kleisli[α, A, β]})#λ, M] =
+    new TransLift[({type λ[α[_], β] = Kleisli[α, A, β]})#λ, M] {
+      def liftT[B](ma: M[B]): Kleisli[M, A, B] = Kleisli[M, A, B](a => ma)
+    }
 }
 
 private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 {
@@ -143,7 +148,7 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
     def pure[B](x: B): Kleisli[F, A, B] =
       Kleisli.pure[F, A, B](x)
 
-    def ap[B, C](fa: Kleisli[F, A, B])(f: Kleisli[F, A, B => C]): Kleisli[F, A, C] =
+    def ap[B, C](f: Kleisli[F, A, B => C])(fa: Kleisli[F, A, B]): Kleisli[F, A, C] =
       fa(f)
 
     def map[B, C](fb: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
@@ -156,7 +161,7 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
 
 private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 {
   implicit def kleisliApply[F[_]: Apply, A]: Apply[Kleisli[F, A, ?]] = new Apply[Kleisli[F, A, ?]] {
-    def ap[B, C](fa: Kleisli[F, A, B])(f: Kleisli[F, A, B => C]): Kleisli[F, A, C] =
+    def ap[B, C](f: Kleisli[F, A, B => C])(fa: Kleisli[F, A, B]): Kleisli[F, A, C] =
       fa(f)
 
     def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
@@ -252,7 +257,7 @@ private trait KleisliMonoid[F[_], A, B] extends Monoid[Kleisli[F, A, B]] with Kl
 private trait KleisliSemigroupK[F[_]] extends SemigroupK[Lambda[A => Kleisli[F, A, A]]] {
   implicit def F: FlatMap[F]
 
-  override def combine[A](a: Kleisli[F, A, A], b: Kleisli[F, A, A]): Kleisli[F, A, A] = a compose b
+  override def combineK[A](a: Kleisli[F, A, A], b: Kleisli[F, A, A]): Kleisli[F, A, A] = a compose b
 }
 
 private trait KleisliMonoidK[F[_]] extends MonoidK[Lambda[A => Kleisli[F, A, A]]] with KleisliSemigroupK[F] {
