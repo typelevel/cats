@@ -86,6 +86,9 @@ object ListWrapper {
 
   val monad: Monad[ListWrapper] = monadCombine
 
+  /** apply is taken due to ListWrapper being a case class */
+  val applyInstance: Apply[ListWrapper] = monadCombine
+
   def monoidK: MonoidK[ListWrapper] = monadCombine
 
   def monadFilter: MonadFilter[ListWrapper] = monadCombine
