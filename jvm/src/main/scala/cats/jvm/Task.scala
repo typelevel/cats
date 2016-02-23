@@ -3,7 +3,7 @@ package jvm
 
 import cats.data.Xor
 import scala.reflect.ClassTag
-import java.util.concurrent.{Callable, CountDownLatch, ExecutorService, Executors, ThreadFactory}
+import java.util.concurrent.{Callable, CountDownLatch, ExecutorService, Executors}
 
 /**
  * A Task is an abstraction of a computation which produces an A
@@ -65,28 +65,6 @@ sealed trait Task[A] { self =>
 }
 
 object Task extends TaskInstances{
-
-  /**
-   * Thread factory to mark all threads as daemon
-   */
-  lazy val DaemonThreadFactory = new ThreadFactory {
-    val defaultThreadFactory = Executors.defaultThreadFactory()
-    def newThread(r: Runnable) = {
-      val t = defaultThreadFactory.newThread(r)
-      t.setDaemon(true)
-      t
-    }
-  }
-
-  /**
-   * The default executor service is a fixed thread pool with N daemon threads,
-   * where N is equal to the twice number of available processors.
-   */
-  def createFixedExecutor(numThreads: Int): ExecutorService = {
-    Executors.newFixedThreadPool(numThreads, DaemonThreadFactory)
-  }
-
-
   /**
    * Construct a Task which represents an already calculated eager
    * value

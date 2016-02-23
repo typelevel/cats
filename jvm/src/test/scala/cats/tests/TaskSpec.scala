@@ -2,7 +2,6 @@ package cats
 package jvm
 package tests
 
-import cats.implicits._
 import cats.data.{Streaming,Xor}
 import cats.tests.CatsSuite
 import cats.laws.discipline._
@@ -128,10 +127,8 @@ class TaskTests extends CatsSuite {
   }
 
   test("Task should run forked tasks on another thread") {
-    import java.lang.{Runtime,System,Thread}
 
-    val numThreads = Runtime.getRuntime.availableProcessors * 2
-    implicit val pool = Task.createFixedExecutor(numThreads)
+    implicit val pool = new java.util.concurrent.ForkJoinPool
 
     var time1: Long = 0
     var time2: Long = 0
