@@ -90,19 +90,29 @@ div#content {
 
 div#extra {
     background: #EEEEFF;
-    width: 150px;
     margin-right: 50px;
-    margin-left: -100%;
     margin-top: 50px;
-#    float: right;
     padding: 10px;
 }
 
+div#extra h5 {
+    display: inline;
+    margin-bottom: 0;
+}
+
 div#extra ul {
+	display:inline;
     list-style-type: none;
     text-align: center;
     margin: 0;
     padding: 0;
+}
+
+div#extra ul li {
+    display: inline;
+    font-weight: bold;
+    font-size: 0.83em;
+    margin-left: 3px;
 }
 
 div#footer {
@@ -203,14 +213,14 @@ div#navbar li a {
 
 li#active {
     float: left;
-    diplay: inline-block;
+    display: inline-block;
     color: black
     color: white
     
 }
 li#active a {
     float: left;
-    diplay: inline-block;
+    display: inline-block;
     color: black;
     background: white;
     

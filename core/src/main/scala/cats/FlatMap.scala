@@ -13,7 +13,7 @@ import simulacrum.typeclass
  *  but we can't implement pure (because we wouldn't know what key to use
  *  when instantiating the new Map).
  *
- *  @see See [[https://github.com/non/cats/issues/3]] for some discussion.
+ *  @see See [[https://github.com/typelevel/cats/issues/3]] for some discussion.
  *
  * Must obey the laws defined in cats.laws.FlatMapLaws.
  */
@@ -26,8 +26,11 @@ import simulacrum.typeclass
   def flatten[A](ffa: F[F[A]]): F[A] =
     flatMap(ffa)(fa => fa)
 
-  override def ap[A, B](fa: F[A])(ff: F[A => B]): F[B] =
+  override def ap[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     flatMap(ff)(f => map(fa)(f))
+
+  override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
+    flatMap(fa)(a => map(fb)(b => (a, b)))
 
   /**
    *  Pair `A` with the result of function application.

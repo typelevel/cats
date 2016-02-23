@@ -2,7 +2,7 @@
 layout: default
 title:  "Xor"
 section: "data"
-source: "https://github.com/non/cats/blob/master/data/src/main/scala/cats/data/Xor.scala"
+source: "core/src/main/scala/cats/data/Xor.scala"
 scaladoc: "#cats.data.Xor"
 ---
 # Xor
@@ -36,6 +36,10 @@ exception came from.
 How then do we communicate an error? By making it explicit in the data type we return.
 
 ## Xor
+
+### `Xor` vs `Validated`
+
+In general, `Validated` is used to accumulate errors, while `Xor` is used to short-circuit a computation upon the first error. For more information, see the `Validated` vs `Xor` section of the [`Validated` documentation]({{ site.baseurl }}/tut/validated.html).
 
 ### Why not `Either`
 `Xor` is very similar to `scala.util.Either` - in fact, they are *isomorphic* (that is,
@@ -96,7 +100,7 @@ over `M[_] : Monad`).
 Since we only ever want the computation to continue in the case of `Xor.Right` (as captured
 by the right-bias nature), we fix the left type parameter and leave the right one free.
 
-```tut
+```tut:silent
 import cats.Monad
 
 implicit def xorMonad[Err]: Monad[Xor[Err, ?]] =
@@ -114,7 +118,7 @@ take the reciprocal, and then turn the reciprocal into a string.
 
 In exception-throwing code, we would have something like this:
 
-```tut
+```tut:silent
 object ExceptionStyle {
   def parse(s: String): Int =
     if (s.matches("-?[0-9]+")) s.toInt
@@ -130,7 +134,7 @@ object ExceptionStyle {
 
 Instead, let's make the fact that some of our functions can fail explicit in the return type.
 
-```tut
+```tut:silent
 object XorStyle {
   def parse(s: String): Xor[NumberFormatException, Int] =
     if (s.matches("-?[0-9]+")) Xor.right(s.toInt)
@@ -146,7 +150,7 @@ object XorStyle {
 
 Now, using combinators like `flatMap` and `map`, we can compose our functions together.
 
-```tut
+```tut:silent
 import XorStyle._
 
 def magic(s: String): Xor[Exception, String] =
@@ -177,7 +181,7 @@ This implies that there is still room to improve.
 Instead of using exceptions as our error value, let's instead enumerate explicitly the things that
 can go wrong in our program.
 
-```tut
+```tut:silent
 object XorStyle {
   sealed abstract class Error
   final case class NotANumber(string: String) extends Error
@@ -217,7 +221,7 @@ magic("123") match {
 Once you start using `Xor` for all your error-handling, you may quickly run into an issue where
 you need to call into two separate modules which give back separate kinds of errors.
 
-```tut
+```tut:silent
 sealed abstract class DatabaseError
 trait DatabaseValue
 
@@ -236,7 +240,7 @@ object Service {
 Let's say we have an application that wants to do database things, and then take database
 values and do service things. Glancing at the types, it looks like `flatMap` will do it.
 
-```tut
+```tut:silent
 def doApp = Database.databaseThings().flatMap(Service.serviceThings)
 ```
 
@@ -253,7 +257,7 @@ to unify the `E1` and `E2` in a `flatMap` call - in our case, the closest common
 So clearly in order for us to easily compose `Xor` values, the left type parameter must be the same.
 We may then be tempted to make our entire application share an error data type.
 
-```tut
+```tut:silent
 sealed abstract class AppError
 final case object DatabaseError1 extends AppError
 final case object DatabaseError2 extends AppError
@@ -282,7 +286,7 @@ must inspect **all** the `AppError` cases, even though it was only intended for 
 Instead of lumping all our errors into one big ADT, we can instead keep them local to each module, and have
 an application-wide error ADT that wraps each error ADT we need.
 
-```tut
+```tut:silent
 sealed abstract class DatabaseError
 trait DatabaseValue
 
@@ -308,7 +312,7 @@ Now in our outer application, we can wrap/lift each module-specific error into `
 call our combinators as usual. `Xor` provides a convenient method to assist with this, called `Xor.leftMap` -
 it can be thought of as the same as `map`, but for the `Left` side.
 
-```tut
+```tut:silent
 def doApp: Xor[AppError, ServiceValue] =
   Database.databaseThings().leftMap(AppError.Database).
   flatMap(dv => Service.serviceThings(dv).leftMap(AppError.Service))
@@ -318,7 +322,7 @@ Hurrah! Each module only cares about its own errors as it should be, and more co
 own error ADT that encapsulates each constituent module's error ADT. Doing this also allows us to take action
 on entire classes of errors instead of having to pattern match on each individual one.
 
-```tut
+```tut:silent
 def awesome =
   doApp match {
     case Xor.Left(AppError.Database(_)) => "something in the database went wrong"
@@ -340,13 +344,20 @@ val xor: Xor[NumberFormatException, Int] =
   }
 ```
 
-However, this can get tedious quickly. `Xor` provides a `fromTryCatch` method on its companion object
+However, this can get tedious quickly. `Xor` provides a `catchOnly` method on its companion object
 that allows you to pass it a function, along with the type of exception you want to catch, and does the
 above for you.
 
 ```tut
 val xor: Xor[NumberFormatException, Int] =
-  Xor.fromTryCatch[NumberFormatException]("abc".toInt)
+  Xor.catchOnly[NumberFormatException]("abc".toInt)
+```
+
+If you want to catch all (non-fatal) throwables, you can use `catchNonFatal`.
+
+```tut
+val xor: Xor[Throwable, Int] =
+  Xor.catchNonFatal("abc".toInt)
 ```
 
 ## Additional syntax

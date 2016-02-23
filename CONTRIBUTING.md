@@ -6,13 +6,13 @@ section: "contributing"
 # Contributor guide
 
 Discussion around Cats is currently happening in the
-[Gitter channel](https://gitter.im/non/cats) as well as on Github
+[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
 issue and PR pages. You can get an overview of who is working on what
-via [Waffle.io](https://waffle.io/non/cats).
+via [Waffle.io](https://waffle.io/typelevel/cats).
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also
-gladly accepted. For more information, check out the [contributor guide](CONTRIBUTING.md).
+gladly accepted.
 
 People are expected to follow the
 [Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
@@ -22,11 +22,11 @@ venues.
 We hope that our community will be respectful, helpful, and kind. If
 you find yourself embroiled in a situation that becomes heated, or
 that fails to live up to our expectations, you should disengage and
-contact one of the [project maintainers](#maintainers) in private. We
+contact one of the [project maintainers](README.md#maintainers) in private. We
 hope to avoid letting minor aggressions and misunderstandings escalate
 into larger problems.
 
-If you are being harassed, please contact one of [us](#maintainers)
+If you are being harassed, please contact one of [us](README.md#maintainers)
 immediately so that we can support you.
 
 ## How can I help?
@@ -54,7 +54,7 @@ skip these steps and jump straight to submitting a pull request.
 ### Find something that belongs in cats
 
 Looking for a way that you can help out? Check out our
-[Waffle.io page](https://waffle.io/non/cats). Choose a card from the
+[Waffle.io page](https://waffle.io/typelevel/cats). Choose a card from the
 "Ready" column. Before you start working on it, make sure that it's
 not already assigned to someone and that nobody has left a comment
 saying that they are working on it!
@@ -66,9 +66,9 @@ Have an idea for something new? That's great! We recommend that you
 make sure it belongs in cats before you put effort into creating a
 pull request. The preferred ways to do that are to either:
 
- * [create a GitHub issue](https://github.com/non/cats/issues/new)
+ * [create a GitHub issue](https://github.com/typelevel/cats/issues/new)
    describing your idea.
- * get feedback in the [cats Gitter room](https://gitter.im/non/cats).
+ * get feedback in the [cats Gitter room](https://gitter.im/typelevel/cats).
 
 Things that belong in cats generally have the following characteristics:
 
@@ -106,18 +106,35 @@ TODO
 
 *Should this just link to a separate doc? This might get large.*
 
-Write about implicit params as discussed in https://github.com/non/cats/issues/27
+Write about implicit params as discussed in https://github.com/typelevel/cats/issues/27
 
-Write about type class methods on data structures as described in https://github.com/non/cats/issues/25
+Write about type class methods on data structures as described in https://github.com/typelevel/cats/issues/25
 
-Write about https://github.com/non/cats/pull/36#issuecomment-72892359
+Write about https://github.com/typelevel/cats/pull/36#issuecomment-72892359
 
 ### Write tests
 
-Tests go into the tests module, under the `cats.tests` package.  Cats tests
-should extend `CatsSuite`.  `CatsSuite` integrates ScalaTest with Discipline
-for law checking, and imports all syntax and standard instances for
-convenience.
+- Tests for cats-core go into the tests module, under the `cats.tests` package.
+- Tests for additional modules, such as 'jvm', go into the tests directory within that module.
+- Cats tests should extend `CatsSuite`.  `CatsSuite` integrates [ScalaTest](http://www.scalatest.org/)
+with [Discipline](https://github.com/typelevel/discipline) for law checking, and imports all syntax and standard instances for convenience.
+- The first parameter to the `checkAll` method provided by
+ [Discipline](https://github.com/typelevel/discipline), is the name of the test and will be output to the
+ console as part of the test execution. By convention:
+ - When checking laws, this parameter generally takes a form that describes the data type being tested.
+ For example the name *"Validated[String, Int]"* might be used when testing a type class instance
+ that the `Validated` data type supports.
+ - An exception to this is serializability tests, where the type class name is also included in the name.
+ For example, in the case of `Validated`, the serializability test would take the form,
+ *"Applicative[Validated[String, Int]"*, to indicate that this test is verifying that the `Applicative` 
+ type class instance for the `Validated` data type is serializable.
+ - This convention helps to ensure clear and easy to understand output, with minimal duplication in the output.
+- It is also a goal that, for every combination of data type and supported type class instance:
+ - Appropriate law checks for that combination are included to ensure that the instance meets the laws for that type class.
+ - A serializability test for that combination is also included, such that we know that frameworks which
+ rely heavily on serialization, such as `Spark`, will have strong compatibility with `cats`.
+ - Note that custom serialization tests are not required for instances of type classes which come from
+ `algebra`, such as `Monoid`, because the `algebra` laws include a test for serialization.
 
 TODO
 
@@ -126,7 +143,7 @@ Write about checking laws
 ## Contributing documentation
 
 ### source for the documentation
-The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/non/cats/tree/master/docs).
+The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/typelevel/cats/tree/master/docs).
 
 * The source for the static pages is in `docs/src/site`
 * The source for the tut compiled pages is in `docs/src/main/tut`
@@ -194,7 +211,7 @@ the contribution process for the cats project.
 It may take a while to familiarize yourself with this document, but if
 we are doing our job right, you shouldn't have to spend months poring
 over the project source code or lurking the
-[Gitter room](https://gitter.im/non/cats) before you feel comfortable
+[Gitter room](https://gitter.im/typelevel/cats) before you feel comfortable
 contributing. In fact, if you encounter any confusion or frustration
 during the contribution process, please create a GitHub issue and
 we'll do our best to improve the process.

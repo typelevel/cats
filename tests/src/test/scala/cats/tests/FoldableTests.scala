@@ -1,44 +1,45 @@
 package cats
 package tests
 
-import cats.laws.discipline.ArbitraryK
-
 import org.scalatest.prop.PropertyChecks
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
-abstract class FoldableCheck[F[_]: ArbitraryK: Foldable](name: String) extends CatsSuite with PropertyChecks {
+import cats.data.Streaming
+import cats.std.all._
+import cats.laws.discipline.arbitrary._
+
+abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite with PropertyChecks {
 
   def iterator[T](fa: F[T]): Iterator[T]
-
-  implicit val arbfn: Arbitrary[F[Int]] = ArbitraryK[F].synthesize[Int]
 
   test("summation") {
     forAll { (fa: F[Int]) =>
       val total = iterator(fa).sum
-      fa.foldLeft(0)(_ + _) shouldBe total
-      fa.foldRight(Now(0))((x, ly) => ly.map(x + _)).value shouldBe total
-      fa.fold shouldBe total
-      fa.foldMap(identity) shouldBe total
+      fa.foldLeft(0)(_ + _) should === (total)
+      fa.foldRight(Now(0))((x, ly) => ly.map(x + _)).value should === (total)
+      fa.fold should === (total)
+      fa.foldMap(identity) should === (total)
     }
   }
 
   test("find/exists/forall/filter_/dropWhile_") {
     forAll { (fa: F[Int], n: Int) =>
-      fa.find(_ > n)   shouldBe iterator(fa).find(_ > n)
-      fa.exists(_ > n) shouldBe iterator(fa).exists(_ > n)
-      fa.forall(_ > n) shouldBe iterator(fa).forall(_ > n)
-      fa.filter_(_ > n) shouldBe iterator(fa).filter(_ > n).toList
-      fa.dropWhile_(_ > n) shouldBe iterator(fa).dropWhile(_ > n).toList
+      fa.find(_ > n)   should === (iterator(fa).find(_ > n))
+      fa.exists(_ > n) should === (iterator(fa).exists(_ > n))
+      fa.forall(_ > n) should === (iterator(fa).forall(_ > n))
+      fa.filter_(_ > n) should === (iterator(fa).filter(_ > n).toList)
+      fa.dropWhile_(_ > n) should === (iterator(fa).dropWhile(_ > n).toList)
+      fa.takeWhile_(_ > n) should === (iterator(fa).takeWhile(_ > n).toList)
     }
   }
 
   test("toList/isEmpty/nonEmpty") {
     forAll { (fa: F[Int]) =>
-      fa.toList shouldBe iterator(fa).toList
-      fa.toStreaming.toList shouldBe iterator(fa).toList
-      fa.isEmpty shouldBe iterator(fa).isEmpty
-      fa.nonEmpty shouldBe iterator(fa).nonEmpty
+      fa.toList should === (iterator(fa).toList)
+      fa.toStreaming.toList should === (iterator(fa).toList)
+      fa.isEmpty should === (iterator(fa).isEmpty)
+      fa.nonEmpty should === (iterator(fa).nonEmpty)
     }
   }
 }
@@ -96,7 +97,31 @@ class FoldableTestsAdditional extends CatsSuite {
     }
     assert(result.value)
 
+    // test trampolining
+    val large = Stream((1 to 10000): _*)
+    assert(contains(large, 10000).value)
+
     // toStreaming should be lazy
     assert(dangerous.toStreaming.take(3).toList == List(0, 1, 2))
   }
+}
+
+class FoldableListCheck extends FoldableCheck[List]("list") {
+  def iterator[T](list: List[T]): Iterator[T] = list.iterator
+}
+
+class FoldableVectorCheck extends FoldableCheck[Vector]("vector") {
+  def iterator[T](vector: Vector[T]): Iterator[T] = vector.iterator
+}
+
+class FoldableStreamCheck extends FoldableCheck[Stream]("stream") {
+  def iterator[T](stream: Stream[T]): Iterator[T] = stream.iterator
+}
+
+class FoldableStreamingCheck extends FoldableCheck[Streaming]("streaming") {
+  def iterator[T](streaming: Streaming[T]): Iterator[T] = streaming.iterator
+}
+
+class FoldableMapCheck extends FoldableCheck[Map[Int, ?]]("map") {
+  def iterator[T](map: Map[Int, T]): Iterator[T] = map.iterator.map(_._2)
 }

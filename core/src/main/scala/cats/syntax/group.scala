@@ -9,7 +9,7 @@ trait GroupSyntax extends SemigroupSyntax {
     new GroupOps[A](a)
 }
 
-class GroupOps[A: Group](lhs: A) {
+final class GroupOps[A: Group](lhs: A) {
   def |-|(rhs: A): A = macro Ops.binop[A, A]
   def remove(rhs: A): A = macro Ops.binop[A, A]
   def inverse(): A = macro Ops.unop[A]

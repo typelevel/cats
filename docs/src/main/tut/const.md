@@ -2,7 +2,7 @@
 layout: default
 title:  "Const"
 section: "data"
-source: "https://github.com/non/cats/blob/master/data/src/main/scala/cats/data/Const.scala"
+source: "core/src/main/scala/cats/data/Const.scala"
 scaladoc: "#cats.data.Const"
 ---
 # Const
@@ -13,17 +13,17 @@ have its uses, which serve as a nice example of the consistency and elegance of 
 ## Thinking about `Const`
 The `Const` data type can be thought of similarly to the `const` function, but as a data type.
 
-```tut
+```tut:silent
 def const[A, B](a: A)(b: => B): A = a
 ```
 
 The `const` function takes two arguments and simply returns the first argument, ignoring the second.
 
-```scala
+```tut:silent
 final case class Const[A, B](getConst: A)
 ```
 
-The `Const` data type takes two type parameters, but only ever stores a value of the first type paramter.
+The `Const` data type takes two type parameters, but only ever stores a value of the first type parameter.
 Because the second type parameter is not used in the data type, the type parameter is referred to as a
 "phantom type".
 
@@ -44,7 +44,7 @@ to use a lens.
 A lens can be thought of as a first class getter/setter. A `Lens[S, A]` is a data type that knows how to get
 an `A` out of an `S`, or set an `A` in an `S`.
 
-```tut
+```tut:silent
 trait Lens[S, A] {
   def get(s: S): A
 
@@ -58,7 +58,7 @@ trait Lens[S, A] {
 It can be useful to have effectful modifications as well - perhaps our modification can fail (`Option`) or
 can return several values (`List`).
 
-```tut
+```tut:silent
 trait Lens[S, A] {
   def get(s: S): A
 
@@ -78,7 +78,7 @@ trait Lens[S, A] {
 Note that both `modifyOption` and `modifyList` share the *exact* same implementation. If we look closely, the
 only thing we need is a `map` operation on the data type. Being good functional programmers, we abstract.
 
-```tut
+```tut:silent
 import cats.Functor
 import cats.syntax.functor._
 
@@ -99,7 +99,7 @@ We can redefine `modify` in terms of `modifyF` by using `cats.Id`. We can also t
 that simply ignores the current value. Due to these modifications however, we must leave `modifyF` abstract
 since having it defined in terms of `set` would lead to infinite circular calls.
 
-```tut
+```tut:silent
 import cats.Id
 
 trait Lens[S, A] {
@@ -134,7 +134,7 @@ is to take an `A` and return it right back (lifted into `Const`).
 Before we plug and play however, note that `modifyF` has a `Functor` constraint on `F[_]`. This means we need to
 define a `Functor` instance for `Const`, where the first type parameter is fixed.
 
-```tut
+```tut:silent
 import cats.data.Const
 
 implicit def constFunctor[X]: Functor[Const[X, ?]] =
@@ -147,7 +147,7 @@ implicit def constFunctor[X]: Functor[Const[X, ?]] =
 
 Now that that's taken care of, let's substitute and see what happens.
 
-```tut
+```tut:silent
 trait Lens[S, A] {
   def modifyF[F[_] : Functor](s: S)(f: A => F[A]): F[S]
 
@@ -174,7 +174,7 @@ In the popular [The Essence of the Iterator Pattern](https://www.cs.ox.ac.uk/jer
 paper, Jeremy Gibbons and Bruno C. d. S. Oliveria describe a functional approach to iterating over a collection of
 data. Among the abstractions presented are `Foldable` and `Traverse`, replicated below (also available in Cats).
 
-```tut
+```tut:silent
 import cats.{Applicative, Monoid}
 
 trait Foldable[F[_]] {
@@ -194,7 +194,7 @@ These two type classes seem unrelated - one reduces a collection down to a singl
 a collection with an effectful function, collecting results. It may be surprising to see that in fact `Traverse`
 subsumes `Foldable`.
 
-```tut
+```tut:silent
 trait Traverse[F[_]] extends Foldable[F] {
   def traverse[G[_] : Applicative, A, X](fa: F[A])(f: A => G[X]): G[F[X]]
 
@@ -211,21 +211,25 @@ However, if we imagine `G[_]` to be a sort of type-level constant function, wher
 `F[X]` is the value we want to ignore, we treat it as the second type parameter and hence, leave it as the free
 one.
 
-```tut
+```tut:silent
 import cats.data.Const
 
 implicit def constApplicative[Z]: Applicative[Const[Z, ?]] =
   new Applicative[Const[Z, ?]] {
     def pure[A](a: A): Const[Z, A] = ???
 
-    def ap[A, B](fa: Const[Z, A])(f: Const[Z, A => B]): Const[Z, B] = ???
+    def ap[A, B](f: Const[Z, A => B])(fa: Const[Z, A]): Const[Z, B] = ???
+
+    def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] = ???
+
+    def product[A, B](fa: Const[Z, A],fb: Const[Z, B]): Const[Z, (A, B)] = ???
   }
 ```
 
 Recall that `Const[Z, A]` means we have a `Z` value in hand, and don't really care about the `A` type parameter.
 Therefore we can more or less treat the type `Const[Z, A]` as just `Z`.
 
-In both functions we have a problem. In `pure`, we have an `A` value, but want to return a `Z` value. We have
+In functions `pure` and `ap` we have a problem. In `pure`, we have an `A` value, but want to return a `Z` value. We have
 no function `A => Z`, so our only option is to completely ignore the `A` value. But we still don't have a `Z`! Let's
 put that aside for now, but still keep it in the back of our minds.
 
@@ -235,19 +239,25 @@ should try to do something more useful. This suggests composition of `Z`s, which
 So now we need a constant `Z` value, and a binary function that takes two `Z`s and produces a `Z`. Sound familiar?
 We want `Z` to have a `Monoid` instance!
 
-```tut
+```tut:silent
 implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, ?]] =
   new Applicative[Const[Z, ?]] {
     def pure[A](a: A): Const[Z, A] = Const(Monoid[Z].empty)
 
-    def ap[A, B](fa: Const[Z, A])(f: Const[Z, A => B]): Const[Z, B] =
+    def ap[A, B](f: Const[Z, A => B])(fa: Const[Z, A]): Const[Z, B] =
       Const(Monoid[Z].combine(fa.getConst, f.getConst))
+      
+    def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] =
+      Const(fa.getConst)
+
+    def product[A, B](fa: Const[Z, A],fb: Const[Z, B]): Const[Z, (A, B)] =
+      Const(Monoid[Z].combine(fa.getConst, fb.getConst))
   }
 ```
 
 We have our `Applicative`!
 
-Going back to `Traverse`, we fill in the first paramter of `traverse` with `fa` since that's
+Going back to `Traverse`, we fill in the first parameter of `traverse` with `fa` since that's
 the only value that fits.
 
 Now we need a `A => G[B]`. We have an `A => B`, and we've decided to use `Const` for our `G[_]`. We need to
@@ -261,7 +271,7 @@ So to summarize, what we want is a function `A => Const[B, Nothing]`, and we hav
 that `Const[B, Z]` (for any `Z`) is the moral equivalent of just `B`, so `A => Const[B, Nothing]` is equivalent
 to `A => B`, which is exactly what we have, we just need to wrap it.
 
-```tut
+```tut:silent
 trait Traverse[F[_]] extends Foldable[F] {
   def traverse[G[_] : Applicative, A, X](fa: F[A])(f: A => G[X]): G[F[X]]
 

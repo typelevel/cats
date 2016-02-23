@@ -9,7 +9,7 @@ trait SemigroupSyntax {
     new SemigroupOps[A](a)
 }
 
-class SemigroupOps[A: Semigroup](lhs: A) {
+final class SemigroupOps[A: Semigroup](lhs: A) {
   def |+|(rhs: A): A = macro Ops.binop[A, A]
   def combine(rhs: A): A = macro Ops.binop[A, A]
   def combineN(rhs: Int): A = macro Ops.binop[A, A]

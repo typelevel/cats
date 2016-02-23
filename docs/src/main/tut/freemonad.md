@@ -2,8 +2,8 @@
 layout: default
 title:  "FreeMonads"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/free/FreeMonad.scala"
-scaladoc: "#cats.free.FreeMonad"
+source: "core/src/main/scala/cats/free/Free.scala"
+scaladoc: "#cats.free.Free"
 ---
 
 # Free Monad
@@ -76,102 +76,67 @@ recursive values.
 
 We need to create an ADT to represent our key-value operations:
 
-```tut
-sealed trait KVStoreA[+Next]
-case class Put[T, Next](key: String, value: T, next: Next) extends KVStoreA[Next]
-case class Get[T, Next](key: String, onResult: T => Next) extends KVStoreA[Next]
-case class Delete[Next](key: String, next: Next) extends KVStoreA[Next]
+```tut:silent
+sealed trait KVStoreA[A]
+case class Put[T](key: String, value: T) extends KVStoreA[Unit]
+case class Get[T](key: String) extends KVStoreA[Option[T]]
+case class Delete(key: String) extends KVStoreA[Unit]
 ```
-
-The `next` field in each of the types provides a way to link an
-operation with successive values. The `Next` type parameter can be
-anything at all, including `Unit`. It can be thought of as a carrier,
-a way to link a single operation with successive operations.
-
-As we will see, the `next` field is also necessary to allow us to
-provide a `Functor` instance for `KVStoreA[_]`.
 
 ### Free your ADT
 
 There are six basic steps to "freeing" the ADT:
 
 1. Create a type based on `Free[_]` and `KVStoreA[_]`.
-2. Prove `KVStoreA[_]` has a functor.
-3. Create smart constructors for `KVStore[_]` using `liftF`.
-4. Build a program out of key-value DSL operations.
-5. Build a compiler for programs of DSL operations.
-6. Execute our compiled program.
+2. Create smart constructors for `KVStore[_]` using `liftF`.
+3. Build a program out of key-value DSL operations.
+4. Build a compiler for programs of DSL operations.
+5. Execute our compiled program.
 
 #### 1. Create a `Free` type based on your ADT
 
-```tut
+```tut:silent
 import cats.free.Free
 
 type KVStore[A] = Free[KVStoreA, A]
 ```
 
-#### 2. Prove `KVStoreA[_]` has a `Functor`.
-
-One important thing to remark is that `Free[F[_], A]` automatically
-gives us a monad for `F`, if `F` has a functor (i.e. if we can find or
-construct a `Functor[F]` instance). It is described as a *free monad*
-since we get this monad "for free."
-
-Therefore, we need to prove `KVStoreA[_]` has a functor.
-
-```tut
-import cats.Functor
-
-implicit val functor: Functor[KVStoreA] =
-  new Functor[KVStoreA] {
-    def map[A, B](kvs: KVStoreA[A])(f: A => B): KVStoreA[B] =
-      kvs match {
-        case Put(key, value, next) =>
-          Put(key, value, f(next))
-        case g: Get[t, A] => // help scalac with parametric type
-          Get[t, B](g.key, g.onResult andThen f)
-        case Delete(key, next) =>
-          Delete(key, f(next))
-      }
-  }
-```
-
-#### 3. Create smart constructors using `liftF`
+#### 2. Create smart constructors using `liftF`
 
 These methods will make working with our DSL a lot nicer, and will
 lift `KVStoreA[_]` values into our `KVStore[_]` monad (note the
 missing "A" in the second type).
 
-```tut
+```tut:silent
 import cats.free.Free.liftF
 
 // Put returns nothing (i.e. Unit).
 def put[T](key: String, value: T): KVStore[Unit] =
-  liftF(Put(key, value, ()))
+  liftF[KVStoreA, Unit](Put[T](key, value))
 
 // Get returns a T value.
-def get[T](key: String): KVStore[T] =
-  liftF(Get[T, T](key, identity))
+def get[T](key: String): KVStore[Option[T]] =
+  liftF[KVStoreA, Option[T]](Get[T](key))
 
 // Delete returns nothing (i.e. Unit).
 def delete(key: String): KVStore[Unit] =
-  liftF(Delete(key, ()))
+  liftF(Delete(key))
 
 // Update composes get and set, and returns nothing.
 def update[T](key: String, f: T => T): KVStore[Unit] =
   for {
-    v <- get[T](key)
-    _ <- put[T](key, f(v))
+    vMaybe <- get[T](key)
+    _ <- vMaybe.map(v => put[T](key, f(v))).getOrElse(Free.pure(()))
   } yield ()
 ```
 
-#### 4. Build a program
+#### 3. Build a program
 
 Now that we can construct `KVStore[_]` values we can use our DSL to
 write "programs" using a *for-comprehension*:
 
-```tut
-def program: KVStore[Int] =
+```tut:silent
+def program: KVStore[Option[Int]] =
   for {
     _ <- put("wild-cats", 2)
     _ <- update[Int]("wild-cats", (_ + 12))
@@ -182,30 +147,9 @@ def program: KVStore[Int] =
 ```
 
 This looks like a monadic flow. However, it just builds a recursive
-data structure representing the sequence of operations. Here is a
-similar program represented explicitly:
+data structure representing the sequence of operations.
 
-```tut
-val programA =
-  Put("wild-cats", 2,
-    Get("wild-cats", { (n0: Int) =>
-      Put("wild-cats", n0 + 12,
-        Put("tame-cats", 5,
-          Get("wild-cats", { (n1: Int) =>
-            Delete("tame-cats", n1)
-          })
-        )
-      )
-    })
-  )
-```
-
-One problem with `programA` you may have noticed is that the
-constructor and function calls are all nested. If we had to sequence
-ten thousand operations, we might run out of stack space and trigger a
-`StackOverflowException`.
-
-#### 5. Write a compiler for your program
+#### 4. Write a compiler for your program
 
 As you may have understood now, `Free[_]` is used to create an embedded
 DSL. By itself, this DSL only represents a sequence of operations
@@ -223,30 +167,31 @@ containers.  Natural transformations go between types like `F[_]` and
 In our case, we will use a simple mutable map to represent our key
 value store:
 
-```tut
+```tut:silent
 import cats.{Id, ~>}
 import scala.collection.mutable
 
-// a very simple (and imprecise) key-value store
-val kvs = mutable.Map.empty[String, Any]
-
 // the program will crash if a key is not found,
 // or if a type is incorrectly specified.
-def impureCompiler =
+def impureCompiler: KVStoreA ~> Id  =
   new (KVStoreA ~> Id) {
+
+    // a very simple (and imprecise) key-value store
+    val kvs = mutable.Map.empty[String, Any]
+
     def apply[A](fa: KVStoreA[A]): Id[A] =
       fa match {
-        case Put(key, value, next) =>
+        case Put(key, value) =>
           println(s"put($key, $value)")
           kvs(key) = value
-          next
-        case g: Get[t, A] =>
-          println(s"get(${g.key})")
-          g.onResult(kvs(g.key).asInstanceOf[t])
-        case Delete(key, next) =>
+          ()
+        case Get(key) =>
+          println(s"get($key)")
+          kvs.get(key).map(_.asInstanceOf[A])
+        case Delete(key) =>
           println(s"delete($key)")
           kvs.remove(key)
-          next
+          ()
       }
   }
 ```
@@ -271,7 +216,7 @@ behavior, such as:
  - a pseudo-random monad to support non-determinism
  - and so on...
 
-#### 6. Run your program
+#### 5. Run your program
 
 The final step is naturally running your program after compiling it.
 
@@ -293,7 +238,7 @@ recursive structure by:
 This operation is called `Free.foldMap`:
 
 ```scala
-final def foldMap[M[_]](f: S ~> M)(implicit S: Functor[S], M: Monad[M]): M[A] = ...
+final def foldMap[M[_]](f: S ~> M)(M: Monad[M]): M[A] = ...
 ```
 
 `M` must be a `Monad` to be flattenable (the famous monoid aspect
@@ -302,7 +247,7 @@ under `Monad`). As `Id` is a `Monad`, we can use `foldMap`.
 To run your `Free` with previous `impureCompiler`:
 
 ```tut
-val result: Id[Int] = program.foldMap(impureCompiler)
+val result: Option[Int] = program.foldMap(impureCompiler)
 ```
 
 An important aspect of `foldMap` is its **stack-safety**. It evaluates
@@ -317,27 +262,23 @@ data-intensive tasks, as well as infinite processes such as streams.
 #### 7. Use a pure compiler (optional)
 
 The previous examples used a effectful natural transformation. This
-works, but you might prefer folding your `Free` in a "purer" way.
+works, but you might prefer folding your `Free` in a "purer" way. The
+[State](state.html) data structure can be used to keep track of the program
+state in an immutable map, avoiding mutation altogether.
 
-Using an immutable `Map`, it's impossible to write a natural
-transformation using `foldMap` because you would need to know the
-previous state of the `Map` and you don't have it. For this, you need
-to use the lower level `fold` function and fold the `Free[_]` by
-yourself:
+```tut:silent
+import cats.data.State
 
-```tut
-// Pure computation
-def compilePure[A](program: KVStore[A], kvs: Map[String, A]): Map[String, A] =
-  program.fold(
-    _ => kvs,
-    {
-      case Put(key, value, next) => // help scalac past type erasure
-        compilePure[A](next, kvs + (key -> value.asInstanceOf[A]))
-      case g: Get[a, f] => // a bit more help for scalac
-        compilePure(g.onResult(kvs(g.key).asInstanceOf[a]), kvs)
-      case Delete(key, next) =>
-        compilePure(next, kvs - key)
-    })
+type KVStoreState[A] = State[Map[String, Any], A]
+val pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
+  def apply[A](fa: KVStoreA[A]): KVStoreState[A] =
+    fa match {
+      case Put(key, value) => State.modify(_.updated(key, value))
+      case Get(key) =>
+        State.inspect(_.get(key).map(_.asInstanceOf[A]))
+      case Delete(key) => State.modify(_ - key)
+    }
+}
 ```
 
 (You can see that we are again running into some places where Scala's
@@ -345,7 +286,119 @@ support for pattern matching is limited by the JVM's type erasure, but
 it's not too hard to get around.)
 
 ```tut
-val result: Map[String, Int] = compilePure(program, Map.empty)
+val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(Map.empty).value
+```
+
+## Composing Free monads ADTs.
+
+Real world applications often time combine different algebras.
+The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
+lets us compose different algebras in the context of `Free`.
+
+Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.
+
+```tut:silent
+import cats.data.{Xor, Coproduct}
+import cats.free.{Inject, Free}
+import cats.{Id, ~>}
+import scala.collection.mutable.ListBuffer
+```
+
+```tut:silent
+/* Handles user interaction */
+sealed trait Interact[A]
+case class Ask(prompt: String) extends Interact[String]
+case class Tell(msg: String) extends Interact[Unit]
+
+/* Represents persistence operations */
+sealed trait DataOp[A]
+case class AddCat(a: String) extends DataOp[Unit]
+case class GetAllCats() extends DataOp[List[String]]
+```
+
+Once the ADTs are defined we can formally state that a `Free` program is the Coproduct of it's Algebras.
+
+```tut:silent
+type CatsApp[A] = Coproduct[DataOp, Interact, A]
+```
+
+In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the `Free` context.
+
+```tut:silent
+class Interacts[F[_]](implicit I: Inject[Interact, F]) {
+  def tell(msg: String): Free[F, Unit] = Free.inject[Interact, F](Tell(msg))
+  def ask(prompt: String): Free[F, String] = Free.inject[Interact, F](Ask(prompt))
+}
+
+object Interacts {
+  implicit def interacts[F[_]](implicit I: Inject[Interact, F]): Interacts[F] = new Interacts[F]
+}
+
+class DataSource[F[_]](implicit I: Inject[DataOp, F]) {
+  def addCat(a: String): Free[F, Unit] = Free.inject[DataOp, F](AddCat(a))
+  def getAllCats: Free[F, List[String]] = Free.inject[DataOp, F](GetAllCats())
+}
+
+object DataSource {
+  implicit def dataSource[F[_]](implicit I: Inject[DataOp, F]): DataSource[F] = new DataSource[F]
+}
+```
+
+ADTs are now easily composed and trivially intertwined inside monadic contexts.
+
+```tut:silent
+def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]): Free[CatsApp, Unit] = {
+
+  import I._, D._
+
+  for {
+    cat <- ask("What's the kitty's name?")
+    _ <- addCat(cat)
+    cats <- getAllCats
+    _ <- tell(cats.toString)
+  } yield ()
+}
+```
+
+Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so they can be
+compiled and applied to our `Free` program.
+
+```tut:invisible
+def readLine(): String = "snuggles"
+```
+
+```tut:silent
+object ConsoleCatsInterpreter extends (Interact ~> Id) {
+  def apply[A](i: Interact[A]) = i match {
+    case Ask(prompt) =>
+      println(prompt)
+      readLine()
+    case Tell(msg) =>
+      println(msg)
+  }
+}
+
+object InMemoryDatasourceInterpreter extends (DataOp ~> Id) {
+
+  private[this] val memDataSet = new ListBuffer[String]
+
+  def apply[A](fa: DataOp[A]) = fa match {
+    case AddCat(a) => memDataSet.append(a); ()
+    case GetAllCats() => memDataSet.toList
+  }
+}
+
+val interpreter: CatsApp ~> Id = InMemoryDatasourceInterpreter or ConsoleCatsInterpreter
+```
+
+Now if we run our program and type in "snuggles" when prompted, we see something like this:
+
+```tut:silent
+import DataSource._, Interacts._
+```
+
+```tut
+val evaled: Unit = program.foldMap(interpreter)
 ```
 
 ## <a name="what-is-free-in-theory"></a>For the curious ones: what is Free in theory?

@@ -95,7 +95,7 @@ trait FloatInstances /* missing algebra type classes */ {
   implicit val floatAlgebra: CommutativeGroup[Float] with Order[Float] =
     new CommutativeGroup[Float] with Order[Float] {
       def combine(x: Float, y: Float): Float = x + y
-      def empty: Float = 1F
+      def empty: Float = 0F
       def inverse(x: Float): Float = -x
       def compare(x: Float, y: Float): Int =
         java.lang.Float.compare(x, y)
@@ -112,7 +112,7 @@ trait DoubleInstances /* missing algebra type classes */ {
   implicit val doubleAlgebra: CommutativeGroup[Double] with Order[Double] =
     new CommutativeGroup[Double] with Order[Double] {
       def combine(x: Double, y: Double): Double = x + y
-      def empty: Double = 1D
+      def empty: Double = 0D
       def inverse(x: Double): Double = -x
       def compare(x: Double, y: Double): Int =
         java.lang.Double.compare(x, y)

@@ -2,7 +2,7 @@
 layout: default
 title:  "Traverse"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Traverse.scala"
+source: "core/src/main/scala/cats/Traverse.scala"
 scaladoc: "#cats.Traverse"
 ---
 # Traverse
@@ -14,17 +14,20 @@ These effects tend to show up in functions working on a single piece of data - f
 parsing a single `String` into an `Int`, validating a login, or asynchronously fetching website
 information for a user.
 
-```tut
+```tut:silent
+import cats.data.Xor
+import scala.concurrent.Future
+
 def parseInt(s: String): Option[Int] = ???
 
-import cats.data.Xor
 trait SecurityError
 trait Credentials
+
 def validateLogin(cred: Credentials): Xor[SecurityError, Unit] = ???
 
-import scala.concurrent.Future
 trait Profile
 trait User
+
 def userInfo(user: User): Future[Profile] = ???
 ```
 
@@ -86,27 +89,38 @@ to allow it to infer the `Applicative[Xor[A, ?]]` and `Applicative[Validated[A, 
 instances - `scalac` has issues inferring the instances for data types that do not
 trivially satisfy the `F[_]` shape required by `Applicative`.
 
-```tut
+```tut:silent
 import cats.Semigroup
 import cats.data.{NonEmptyList, OneAnd, Validated, ValidatedNel, Xor}
 import cats.std.list._
 import cats.syntax.traverse._
 
 def parseIntXor(s: String): Xor[NumberFormatException, Int] =
-  Xor.fromTryCatch[NumberFormatException](s.toInt)
+  Xor.catchOnly[NumberFormatException](s.toInt)
 
 def parseIntValidated(s: String): ValidatedNel[NumberFormatException, Int] =
-  Validated.fromTryCatch[NumberFormatException](s.toInt).toValidatedNel
+  Validated.catchOnly[NumberFormatException](s.toInt).toValidatedNel
+```
 
+Examples.
+
+```tut
 val x1 = List("1", "2", "3").traverseU(parseIntXor)
 val x2 = List("1", "abc", "3").traverseU(parseIntXor)
 val x3 = List("1", "abc", "def").traverseU(parseIntXor)
+```
 
-// Need proof that NonEmptyList[A] is a Semigroup for there to be an
-// Applicative instance for ValidatedNel
+We need proof that `NonEmptyList[A]` is a `Semigroup `for there to be an `Applicative` instance for 
+`ValidatedNel`.
+
+```tut:silent
 implicit def nelSemigroup[A]: Semigroup[NonEmptyList[A]] =
   OneAnd.oneAndSemigroupK[List].algebra[A]
+```
 
+Thus.
+
+```tut
 val v1 = List("1", "2", "3").traverseU(parseIntValidated)
 val v2 = List("1", "abc", "3").traverseU(parseIntValidated)
 val v3 = List("1", "abc", "def").traverseU(parseIntValidated)
@@ -133,7 +147,7 @@ a type alias for `Kleisli[Id, E, A]` which is a wrapper around `E => A`.
 If we fix `E` to be some sort of environment or configuration, we can use the
 `Reader` applicative in our traverse.
 
-```tut
+```tut:silent
 import cats.data.Reader
 
 trait Context
@@ -153,8 +167,9 @@ that topic. (Note that since a `Job` is just a `Reader`/`Kleisli`, one could wri
 Corresponding to our bunches of data are bunches of topics, a `List[Topic]` if you will.
 Since `Reader` has an `Applicative` instance, we can `traverse` over this list with `processTopic`.
 
-```tut
-def processTopics(topics: List[Topic]) = topics.traverse(processTopic)
+```tut:silent
+def processTopics(topics: List[Topic]) = 
+  topics.traverse(processTopic)
 ```
 
 Note the nice return type - `Job[List[Result]]`. We now have one aggregate `Job` that when run,
@@ -186,9 +201,7 @@ Given `Option` has an `Applicative` instance, we can traverse over the list with
 
 ```tut
 import cats.std.option._
-
 val l1 = List(Option(1), Option(2), Option(3)).traverse(identity)
-
 val l2 = List(Option(1), None, Option(3)).traverse(identity)
 ```
 
@@ -196,7 +209,6 @@ val l2 = List(Option(1), None, Option(3)).traverse(identity)
 
 ```tut
 val l1 = List(Option(1), Option(2), Option(3)).sequence
-
 val l2 = List(Option(1), None, Option(3)).sequence
 ```
 
@@ -204,19 +216,19 @@ val l2 = List(Option(1), None, Option(3)).sequence
 Sometimes our effectful functions return a `Unit` value in cases where there is no interesting value
 to return (e.g. writing to some sort of store).
 
-```tut
+```tut:silent
 trait Data
-
 def writeToStore(data: Data): Future[Unit] = ???
 ```
 
 If we traverse using this, we end up with a funny type.
 
-```tut
+```tut:silent
 import cats.std.future._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-def writeManyToStore(data: List[Data]) = data.traverse(writeToStore)
+def writeManyToStore(data: List[Data]) =
+  data.traverse(writeToStore)
 ```
 
 We end up with a `Future[List[Unit]]`! A `List[Unit]` is not of any use to us, and communicates the
@@ -226,13 +238,16 @@ Traversing solely for the sake of the effect (ignoring any values that may be pr
 is common, so `Foldable` (superclass of `Traverse`) provides `traverse_` and `sequence_` methods that do the
 same thing as `traverse` and `sequence` but ignores any value produced along the way, returning `Unit` at the end.
 
-```tut
+```tut:silent
 import cats.syntax.foldable._
 
-def writeManyToStore(data: List[Data]) = data.traverse_(writeToStore)
+def writeManyToStore(data: List[Data]) = 
+  data.traverse_(writeToStore)
 
 // Int values are ignored with traverse_
-def writeToStoreV2(data: Data): Future[Int] = ???
+def writeToStoreV2(data: Data): Future[Int] = 
+  ???
 
-def writeManyToStoreV2(data: List[Data]) = data.traverse_(writeToStoreV2)
+def writeManyToStoreV2(data: List[Data]) = 
+  data.traverse_(writeToStoreV2)
 ```

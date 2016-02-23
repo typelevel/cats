@@ -10,9 +10,9 @@
     </script>
     <title>{{ site.name }} - {{ page.title }}</title>
 
-    <link rel="stylesheet" href="{{ site.baseurl }}css/styles.css">
-    <link rel="stylesheet" href="{{ site.baseurl }}css/custom.css">
-    <link rel="stylesheet" href="{{ site.baseurl }}css/syntax.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/styles.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/custom.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/syntax.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -24,9 +24,9 @@
 	<div id="commute"><img src="http://plastic-idolatry.com/erik/cats2.png"/></div>
 	<div id="toolbox">
 	  <table id="tooltable">
-	    <tr><td class="label">Source:</td><td class="link"><a href="https://github.com/non/cats">Github</a></td></tr>
-	    <tr><td class="label">Chat:</td><td class="link"><a href="https://gitter.im/non/cats">Gitter</a></td></tr>
-	    <tr><td class="label">Build:</td><td class="link"><a href="https://travis-ci.org/non/cats">Travis</a></td></tr>
+	    <tr><td class="label">Source:</td><td class="link"><a href="https://github.com/typelevel/cats">Github</a></td></tr>
+	    <tr><td class="label">Chat:</td><td class="link"><a href="https://gitter.im/typelevel/cats">Gitter</a></td></tr>
+	    <tr><td class="label">Build:</td><td class="link"><a href="https://travis-ci.org/typelevel/cats">Travis</a></td></tr>
 	    <tr><td class="label">Api:</td><td class="link"><a href="{{site.apidocs}}">Scaladoc</a></td></tr>
 	  </table>
 	</div>
@@ -46,7 +46,7 @@
 	    <li {%if page.section =="typeclasses" %} class="active" {% else %} class="inactive" {% endif%}>
 	      <a href="{{ site.baseurl }}/typeclasses.html">Typeclasses</a>
 	    </li>
-	    <li {%if page.section =="datatypes" %} class="active" {% else %} class="inactive" {% endif %}>
+	    <li {%if page.section =="data" %} class="active" {% else %} class="inactive" {% endif %}>
 	      <a href="{{ site.baseurl }}/datatypes.html">Data Types</a>
 	    </li>
 	    <li {%if page.section == "resources_for_learners" %} class="active" {% else %} class="inactive" {% endif %}>
@@ -61,12 +61,21 @@
           {{ content }}
 	</div>
       </div>
-      {% if (page.section == 'data') or (page.section == 'typeclasses') and ((page.source != null) or (page.scaladoc != null))%}
-      <div id="extra">
-	<h5>useful links</h5>
+	<!--workaround of poor boolean algebra implementation (see: http://stackoverflow.com/questions/23054564/how-to-use-multiple-arguments-in-an-if-statement-with-liquid?answertab=oldest#tab-top) -->
+	{% if (page.section == 'data') or (page.section == 'typeclasses') %}
+		{% assign linksSection = true %}
+	{% endif %}
+	{% if (page.source != null) or (page.scaladoc != null) %}
+		{% assign linksContent = true %}
+	{% endif %}
+	{% if linksSection and linksContent %}
+	<div id="extra">
+	<h5>Useful links:</h5>
 	<ul>
-	{% if page.source != null %}
+	{% if (page.source != null) and (page.source contains 'https:') %}
 	<li><a href="{{page.source}}">Source</a></li>
+	{% elsif page.source != null %}
+	<li><a href="{{site.sources}}{{page.source}}">Source</a></li>
 	{% endif %}
 	{% if page.scaladoc != null %}
 	<li><a href="{{site.apidocs}}{{ page.scaladoc }}">Scaladoc</a></li>
@@ -79,6 +88,6 @@
       </div>
     </div>
 
-    <script src="{{ site.baseurl }}js/scale.fix.js" type="text/javascript"></script>
+    <script src="{{ site.baseurl }}/js/scale.fix.js" type="text/javascript"></script>
   </body>
 </html>

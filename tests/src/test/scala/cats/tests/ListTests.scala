@@ -2,11 +2,15 @@ package cats
 package tests
 
 import cats.data.NonEmptyList
-import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests}
+import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests, CartesianTests}
 import cats.laws.discipline.arbitrary._
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import cats.laws.discipline.eq._
 
-class ListTests extends CatsSuite with GeneratorDrivenPropertyChecks {
+class ListTests extends CatsSuite {
+
+  checkAll("List[Int]", CartesianTests[List].cartesian[Int, Int, Int])
+  checkAll("Cartesian[List]", SerializableTests.serializable(Cartesian[List]))
+
   checkAll("List[Int]", CoflatMapTests[List].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[List]", SerializableTests.serializable(CoflatMap[List]))
 
@@ -24,5 +28,13 @@ class ListTests extends CatsSuite with GeneratorDrivenPropertyChecks {
 
   test("toNel on empty list returns None"){
     List.empty[Int].toNel should === (None)
+  }
+
+  test("show"){
+    List(1, 2, 3).show should === ("List(1, 2, 3)")
+    (Nil: List[Int]).show should === ("List()")
+    forAll { l: List[String] =>
+      l.show should === (l.toString)
+    }
   }
 }

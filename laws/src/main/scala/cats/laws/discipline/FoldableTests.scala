@@ -10,12 +10,10 @@ trait FoldableTests[F[_]] extends Laws {
   def laws: FoldableLaws[F]
 
   def foldable[A: Arbitrary, B: Arbitrary](implicit
-    ArbF: ArbitraryK[F],
+    ArbFA: Arbitrary[F[A]],
     B: Monoid[B],
     EqB: Eq[B]
   ): RuleSet = {
-    implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
-
     new DefaultRuleSet(
       name = "foldable",
       parent = None,

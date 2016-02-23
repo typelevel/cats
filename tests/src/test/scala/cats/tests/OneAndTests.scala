@@ -1,36 +1,48 @@
 package cats
 package tests
 
-import algebra.laws.OrderLaws
+import algebra.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{NonEmptyList, OneAnd}
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests}
+import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests}
 import cats.laws.discipline.arbitrary.{evalArbitrary, oneAndArbitrary}
-
-import org.scalacheck.Prop._
+import cats.laws.discipline.eq._
 
 import scala.util.Random
 
 class OneAndTests extends CatsSuite {
-  checkAll("OneAnd[Int, List]", OrderLaws[OneAnd[Int, List]].eqv)
+  checkAll("OneAnd[List, Int]", OrderLaws[OneAnd[List, Int]].eqv)
+
+  checkAll("OneAnd[List, Int] with Option", TraverseTests[OneAnd[List, ?]].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[OneAnd[List, A]]", SerializableTests.serializable(Traverse[OneAnd[List, ?]]))
+
+  implicit val iso = CartesianTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.oneAndFunctor(ListWrapper.functor))
 
   // Test instances that have more general constraints
   {
+    implicit val monadCombine = ListWrapper.monadCombine
+    checkAll("OneAnd[ListWrapper, Int]", CartesianTests[OneAnd[ListWrapper, ?]].cartesian[Int, Int, Int])
+    checkAll("Cartesian[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Cartesian[OneAnd[ListWrapper, ?]]))
+  }
+
+  {
     implicit val functor = ListWrapper.functor
-    checkAll("OneAnd[Int, ListWrapper]", FunctorTests[OneAnd[?, ListWrapper]].functor[Int, Int, Int])
-    checkAll("Functor[OneAnd[A, ListWrapper]]", SerializableTests.serializable(Functor[OneAnd[?, ListWrapper]]))
+    checkAll("OneAnd[ListWrapper, Int]", FunctorTests[OneAnd[ListWrapper, ?]].functor[Int, Int, Int])
+    checkAll("Functor[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Functor[OneAnd[ListWrapper, ?]]))
   }
 
   {
     implicit val monadCombine = ListWrapper.monadCombine
-    checkAll("OneAnd[Int, ListWrapper]", SemigroupKTests[OneAnd[?, ListWrapper]].semigroupK[Int])
-    checkAll("SemigroupK[OneAnd[A, ListWrapper]]", SerializableTests.serializable(SemigroupK[OneAnd[?, ListWrapper]]))
+    checkAll("OneAnd[ListWrapper, Int]", SemigroupKTests[OneAnd[ListWrapper, ?]].semigroupK[Int])
+    checkAll("OneAnd[List, Int]", GroupLaws[OneAnd[List, Int]].semigroup)
+    checkAll("SemigroupK[OneAnd[ListWrapper, A]]", SerializableTests.serializable(SemigroupK[OneAnd[ListWrapper, ?]]))
+    checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[OneAnd[List, Int]]))
   }
 
   {
     implicit val foldable = ListWrapper.foldable
-    checkAll("OneAnd[Int, ListWrapper]", FoldableTests[OneAnd[?, ListWrapper]].foldable[Int, Int])
-    checkAll("Foldable[OneAnd[A, ListWrapper]]", SerializableTests.serializable(Foldable[OneAnd[?, ListWrapper]]))
+    checkAll("OneAnd[ListWrapper, Int]", FoldableTests[OneAnd[ListWrapper, ?]].foldable[Int, Int])
+    checkAll("Foldable[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Foldable[OneAnd[ListWrapper, ?]]))
   }
 
   {
@@ -40,44 +52,68 @@ class OneAndTests extends CatsSuite {
     implicitly[Comonad[NonEmptyList]]
   }
 
+  implicit val iso2 = CartesianTests.Isomorphisms.invariant[OneAnd[List, ?]]
+
   checkAll("NonEmptyList[Int]", MonadTests[NonEmptyList].monad[Int, Int, Int])
   checkAll("Monad[NonEmptyList[A]]", SerializableTests.serializable(Monad[NonEmptyList]))
 
   checkAll("NonEmptyList[Int]", ComonadTests[NonEmptyList].comonad[Int, Int, Int])
   checkAll("Comonad[NonEmptyList[A]]", SerializableTests.serializable(Comonad[NonEmptyList]))
 
-  test("Creating OneAnd + unwrap is identity")(check {
-    forAll { (list: List[Int]) => (list.size >= 1) ==> {
-      val oneAnd = NonEmptyList(list.head, list.tail: _*)
-      list == oneAnd.unwrap
-    }}
-  })
+  test("Show is not empty and is formatted as expected") {
+    forAll { (nel: NonEmptyList[Int]) =>
+      nel.show.nonEmpty should === (true)
+      nel.show.startsWith("OneAnd(") should === (true)
+      nel.show should === (implicitly[Show[NonEmptyList[Int]]].show(nel))
+      nel.show.contains(nel.head.show) should === (true)
+    }
+  }
 
-  test("NonEmptyList#filter is consistent with List#filter")(check {
+  test("Show is formatted correctly") {
+    val oneAnd = NonEmptyList("Test", Nil)
+    oneAnd.show should === ("OneAnd(Test, List())")
+  }
+
+  test("Creating OneAnd + unwrap is identity") {
+    forAll { (i: Int, tail: List[Int]) =>
+      val list = i :: tail
+      val oneAnd = NonEmptyList(i, tail: _*)
+      list should === (oneAnd.unwrap)
+    }
+  }
+
+  test("NonEmptyList#filter is consistent with List#filter") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.unwrap
-      nel.filter(p) == list.filter(p)
+      nel.filter(p) should === (list.filter(p))
     }
-  })
+  }
 
-  test("NonEmptyList#find is consistent with List#find")(check {
+  test("NonEmptyList#find is consistent with List#find") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.unwrap
-      nel.find(p) == list.find(p)
+      nel.find(p) should === (list.find(p))
     }
-  })
+  }
 
-  test("NonEmptyList#exists is consistent with List#exists")(check {
+  test("NonEmptyList#exists is consistent with List#exists") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.unwrap
-      nel.exists(p) == list.exists(p)
+      nel.exists(p) should === (list.exists(p))
     }
-  })
+  }
 
-  test("NonEmptyList#forall is consistent with List#forall")(check {
+  test("NonEmptyList#forall is consistent with List#forall") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.unwrap
-      nel.forall(p) == list.forall(p)
+      nel.forall(p) should === (list.forall(p))
     }
-  })
+  }
+
+  test("NonEmptyList#map is consistent with List#map") {
+    forAll { (nel: NonEmptyList[Int], p: Int => String) =>
+      val list = nel.unwrap
+      nel.map(p).unwrap should === (list.map(p))
+    }
+  }
 }

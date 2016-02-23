@@ -6,7 +6,7 @@ import simulacrum.typeclass
 /**
  * Must obey the laws defined in cats.laws.InvariantLaws.
  */
-@typeclass trait Invariant[F[_]] extends Any with Serializable { self =>
+@typeclass trait Invariant[F[_]] { self =>
   def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
 
   /**
@@ -64,7 +64,7 @@ object Invariant extends AlgebraInvariantInstances {
  * Invariant instances for types that are housed in Algebra and therefore
  * can't have instances for Cats type classes in their companion objects.
  */
-trait AlgebraInvariantInstances {
+private[functor] sealed trait AlgebraInvariantInstances {
 
   implicit val invariantSemigroup: Invariant[Semigroup] = new Invariant[Semigroup] {
     def imap[A, B](fa: Semigroup[A])(f: A => B)(g: B => A): Semigroup[B] = new Semigroup[B] {

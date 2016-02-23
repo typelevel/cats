@@ -20,20 +20,20 @@ import simulacrum.{op, typeclass}
  *    The combination operation just depends on the structure of F,
  *    but not the structure of A.
  */
-@typeclass trait SemigroupK[F[_]] extends Serializable { self =>
+@typeclass trait SemigroupK[F[_]] { self =>
 
   /**
    * Combine two F[A] values.
    */
   @op("<+>", alias=true)
-  def combine[A](x: F[A], y: F[A]): F[A]
+  def combineK[A](x: F[A], y: F[A]): F[A]
 
   /**
-   * Compose two SemigroupK intsances.
+   * Compose this SemigroupK with an arbitrary type constructor
    */
-  def composedWith[G[_]: SemigroupK]: SemigroupK[λ[α => F[G[α]]]] =
-    new SemigroupK[λ[α => F[G[α]]]] {
-      def combine[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = combine(x, y)
+  def composeK[G[_]]: SemigroupK[λ[α => F[G[α]]]] =
+    new CompositeSemigroupK[F, G] {
+      implicit def F: SemigroupK[F] = self
     }
 
   /**
@@ -41,6 +41,14 @@ import simulacrum.{op, typeclass}
    */
   def algebra[A]: Semigroup[F[A]] =
     new Semigroup[F[A]] {
-      def combine(x: F[A], y: F[A]): F[A] = self.combine(x, y)
+      def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
     }
+}
+
+trait CompositeSemigroupK[F[_],G[_]]
+  extends SemigroupK[λ[α => F[G[α]]]] {
+
+  implicit def F: SemigroupK[F]
+
+  def combineK[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = F.combineK(x, y)
 }
