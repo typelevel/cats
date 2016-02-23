@@ -64,4 +64,10 @@ class CoproductTests extends CatsSuite {
     }
   }
 
+  test("toValidated consistent with is{Left, Right}") {
+    forAll { (x: Coproduct[Option, Option, Int]) =>
+      x.isLeft should === (x.toValidated.isInvalid)
+      x.isRight should === (x.toValidated.isValid)
+    }
+  }
 }
