@@ -51,6 +51,16 @@ class TaskTests extends CatsSuite {
     run should be (1)
   }
 
+  test("Task should not run async until run is called even if you map/flatMap it") {
+    var run: Int = 0
+    val t: Task[Int] = Task.async { cb => run += 1; cb(1) }
+    val t2 = t.map(_ + 1)
+    val t3 = t.flatMap(i => Task.now(i+ 1))
+    run should be (0)
+    t2.unsafePerformIO()
+    run should be (1)
+  }
+
   test("Task should run async run multiple times if the task is rum multiple times") {
     var run: Int = 0
     val t: Task[Int] = Task.async { cb => run += 1; cb(1) }

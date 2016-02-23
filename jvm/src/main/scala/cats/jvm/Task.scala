@@ -12,12 +12,11 @@ import java.util.concurrent.{Callable, CountDownLatch, ExecutorService, Executor
 sealed trait Task[A] { self =>
   import Task._
 
-  def map[B](f: A => B): Task[B] = new Task[B] {
-    def eval = self.eval.map(f)
-  }
+  def map[B](f: A => B): Task[B] =
+    new Value(eval map f)
 
   def flatMap[B](f: A => Task[B]): Task[B] =
-    new Bind(this, f)
+    new Value(Eval.defer(eval.flatMap(f andThen (_.eval))))
 
   /**
    * Returns a new Task which will evaluate the computation in this
@@ -25,7 +24,7 @@ sealed trait Task[A] { self =>
    * the computation.
    */
   def catchNonFatal: Task[Throwable Xor A] =
-    new AttemptNonFatal(this)
+    new Value(Eval.always(Xor.catchNonFatal(eval.value)))
 
   /**
    * Returns a new Task which will evaluate the computation in this
@@ -33,8 +32,7 @@ sealed trait Task[A] { self =>
    * thrown by the running of the computation.
    */
   def catchOnly[T >: Null <: Throwable: ClassTag]: Task[T Xor A] =
-    new AttemptOnly[T, A](this)
-
+    new Value(Eval.always(Xor.catchOnly[T](eval.value)))
 
   /**
    * Run the computation to produce an A
@@ -46,8 +44,8 @@ sealed trait Task[A] { self =>
    */
   final def unsafeAsyncIO(cb: A => Unit)(implicit pool: ExecutorService): Unit = {
     val _ = pool.submit(new Callable[Unit] {
-                          def call = cb(Task.this.unsafePerformIO)
-                        })
+      def call = cb(Task.this.unsafePerformIO)
+    })
   }
 
   /**
@@ -57,8 +55,8 @@ sealed trait Task[A] { self =>
    */
   def fork(implicit pool: ExecutorService): Task[A] = async { cb =>
     val _ = pool.submit(new Callable[Unit] {
-                                   def call = cb(Task.this.unsafePerformIO)
-                                 })
+      def call = cb(Task.this.unsafePerformIO)
+    })
   }
 
   protected def eval: Eval[A]
@@ -94,42 +92,17 @@ object Task extends TaskInstances{
    */
   def async[A](cb: (A => Unit) => Unit): Task[A] = Async(cb)
 
-  // Here we already have an eval, so we just have to return it
   private[cats] final case class Value[A](eval: Eval[A]) extends Task[A] {
     override def map[B](f: A => B): Task[B] = Value(eval.map(f))
   }
 
-  // Store a flatMap operation on the Heap. when asked to eval, we
-  // flatMap against the given task, using Eval.defer to ensure that
-  // the computation is stack-safe
-  private[cats] final class Bind[Z, A](t: Task[Z], f: Z => Task[A]) extends Task[A] {
-    override def eval: Eval[A] = Eval.defer(t.eval.flatMap(f andThen (_.eval)))
-  }
-
-  /**
-   * Store the intent to catch non-fatal exceptions when running a Task.
-   */
-  private[cats] final case class AttemptNonFatal[A](task: Task[A]) extends Task[Xor[Throwable, A]] {
-    override def eval: Eval[Xor[Throwable, A]] =
-      Eval.always(Xor.catchNonFatal(task.eval.value))
-  }
-
-  /**
-   * Store the intent to catching some subset of the possible
-   * excpetions when running a Task.
-   */
-  private[cats] final case class AttemptOnly[T >: Null <: Throwable : ClassTag, A](task: Task[A]) extends Task[T Xor A] {
-    override def eval: Eval[Xor[T, A]] =
-      Eval.always(Xor.catchOnly[T](task.eval.value))
-  }
-
   private[cats] final case class Async[A](complete: (A => Unit) => Unit) extends Task[A] {
-    override def eval: Eval[A] = {
+    override def eval: Eval[A] = Eval.always {
       val cdl = new CountDownLatch(1)
       var result: Option[A] = None
       complete((a: A) => {result = Some(a); cdl.countDown})
       cdl.await
-      Eval.now(result.get) // YOLO
+      result.get // YOLO
     }
   }
 }
