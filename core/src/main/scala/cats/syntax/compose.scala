@@ -9,7 +9,7 @@ trait ComposeSyntax {
     new ComposeOps[F, A, B](fab)
 }
 
-class ComposeOps[F[_, _], A, B](fab: F[A, B])(implicit F: Compose[F]) {
+final class ComposeOps[F[_, _], A, B](fab: F[A, B])(implicit F: Compose[F]) {
   def compose[Z](fza: F[Z, A]): F[Z, B] = F.compose(fab, fza)
   def andThen[C](fbc: F[B, C]): F[A, C] = F.andThen(fab, fbc)
 }

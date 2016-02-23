@@ -1,0 +1,27 @@
+<classpath>
+  <classpathentry kind="src" path="src/main/scala"/>
+  <classpathentry kind="src" path="src/test/scala"/>
+  <classpathentry kind="src" path="/macros" exported="true" combineaccessrules="false"/>
+  <classpathentry kind="src" path="/core" exported="true" combineaccessrules="false"/>
+  <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/com.github.mpilquist/simulacrum_2.11/jars/simulacrum_2.11-0.4.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra_2.11/jars/algebra_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra-std_2.11/jars/algebra-std_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.typelevel/machinist_2.11/jars/machinist_2.11-0.4.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scoverage/scalac-scoverage-runtime_2.11/jars/scalac-scoverage-runtime_2.11-1.1.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scoverage/scalac-scoverage-plugin_2.11/jars/scalac-scoverage-plugin_2.11-1.1.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scalacheck/scalacheck_2.11/jars/scalacheck_2.11-1.12.4.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scala-sbt/test-interface/jars/test-interface-1.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.typelevel/discipline_2.11/jars/discipline_2.11-0.4.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra-laws_2.11/jars/algebra-laws_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra-macros_2.11/jars/algebra-macros_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/com.github.inthenow/bricks-platform_2.11/jars/bricks-platform_2.11-0.0.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/com.github.inthenow/bricks-macros_2.11/jars/bricks-macros_2.11-0.0.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.typelevel/macro-compat_2.11/jars/macro-compat_2.11-1.0.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scalatest/scalatest_2.11/bundles/scalatest_2.11-3.0.0-M7.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scalactic/scalactic_2.11/bundles/scalactic_2.11-3.0.0-M7.jar"/>
+  <classpathentry kind="lib" path="/opt/software/activator-dist-1.3.6/repository/org.scala-lang.modules/scala-xml_2.11/1.0.2/bundles/scala-xml_2.11.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.11/bundles/scala-parser-combinators_2.11-1.0.4.jar"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="output" path="bin"/>
+</classpath>

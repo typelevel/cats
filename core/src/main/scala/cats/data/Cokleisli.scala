@@ -38,18 +38,12 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
     Cokleisli(fca => F.extract(F.map(fca)(_._1)) -> run(F.map(fca)(_._2)))
 }
 
-object Cokleisli extends CokleisliInstances with CokleisliFunctions {
+object Cokleisli extends CokleisliInstances {
   def pure[F[_], A, B](x: B): Cokleisli[F, A, B] =
     Cokleisli(_ => x)
 }
 
-sealed trait CokleisliFunctions {
-  /** creates a [[Cokleisli]] from a function */
-  def cokleisli[F[_], A, B](f: F[A] => B): Cokleisli[F, A, B] =
-    Cokleisli(f)
-}
-
-sealed abstract class CokleisliInstances extends CokleisliInstances0 {
+private[data] sealed abstract class CokleisliInstances extends CokleisliInstances0 {
   implicit def cokleisliArrow[F[_]](implicit ev: Comonad[F]): Arrow[Cokleisli[F, ?, ?]] =
     new CokleisliArrow[F] { def F: Comonad[F] = ev }
 
@@ -68,7 +62,7 @@ sealed abstract class CokleisliInstances extends CokleisliInstances0 {
     new CokleisliMonoidK[F] { def F: Comonad[F] = ev }
 }
 
-sealed abstract class CokleisliInstances0 {
+private[data] sealed abstract class CokleisliInstances0 {
   implicit def cokleisliSplit[F[_]](implicit ev: CoflatMap[F]): Split[Cokleisli[F, ?, ?]] =
     new CokleisliSplit[F] { def F: CoflatMap[F] = ev }
 
@@ -127,7 +121,7 @@ private trait CokleisliProfunctor[F[_]] extends Profunctor[Cokleisli[F, ?, ?]] {
 private trait CokleisliSemigroupK[F[_]] extends SemigroupK[Lambda[A => Cokleisli[F, A, A]]] {
   implicit def F: CoflatMap[F]
 
-  def combine[A](a: Cokleisli[F, A, A], b: Cokleisli[F, A, A]): Cokleisli[F, A, A] = a compose b
+  def combineK[A](a: Cokleisli[F, A, A], b: Cokleisli[F, A, A]): Cokleisli[F, A, A] = a compose b
 }
 
 private trait CokleisliMonoidK[F[_]] extends MonoidK[Lambda[A => Cokleisli[F, A, A]]] with CokleisliSemigroupK[F] {

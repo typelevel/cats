@@ -9,7 +9,7 @@ trait OptionInstances extends OptionInstances1 {
 
       def empty[A]: Option[A] = None
 
-      def combine[A](x: Option[A], y: Option[A]): Option[A] = x orElse y
+      def combineK[A](x: Option[A], y: Option[A]): Option[A] = x orElse y
 
       def pure[A](x: A): Option[A] = Some(x)
 
@@ -79,9 +79,17 @@ trait OptionInstances extends OptionInstances1 {
             if (y.isDefined) -1 else 0
         }
     }
+
+  implicit def showOption[A](implicit A: Show[A]): Show[Option[A]] =
+    new Show[Option[A]] {
+      def show(fa: Option[A]): String = fa match {
+        case Some(a) => s"Some(${A.show(a)})"
+        case None => "None"
+      }
+    }
 }
 
-trait OptionInstances1 extends OptionInstances2 {
+private[std] sealed trait OptionInstances1 extends OptionInstances2 {
   implicit def partialOrderOption[A](implicit ev: PartialOrder[A]): PartialOrder[Option[A]] =
     new PartialOrder[Option[A]] {
       def partialCompare(x: Option[A], y: Option[A]): Double =
@@ -89,7 +97,7 @@ trait OptionInstances1 extends OptionInstances2 {
     }
 }
 
-trait OptionInstances2 {
+private[std] sealed trait OptionInstances2 {
   implicit def eqOption[A](implicit ev: Eq[A]): Eq[Option[A]] =
     new Eq[Option[A]] {
       def eqv(x: Option[A], y: Option[A]): Boolean =

@@ -9,7 +9,7 @@ trait ProfunctorSyntax {
     new ProfunctorOps[F, A, B](fab)
 }
 
-class ProfunctorOps[F[_, _], A, B](fab: F[A, B])(implicit F: Profunctor[F]) {
+final class ProfunctorOps[F[_, _], A, B](fab: F[A, B])(implicit F: Profunctor[F]) {
   def lmap[C](f: C => A): F[C, B] = F.lmap(fab)(f)
   def rmap[C](f: B => C): F[A, C] = F.rmap(fab)(f)
   def dimap[C, D](f: C => A)(g: B => D): F[C, D] = F.dimap(fab)(f)(g)

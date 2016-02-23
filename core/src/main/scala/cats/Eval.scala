@@ -33,7 +33,7 @@ import cats.syntax.all._
  * Eval instance -- this can defeat the trampolining and lead to stack
  * overflows.
  */
-sealed abstract class Eval[A] { self =>
+sealed abstract class Eval[A] extends Serializable { self =>
 
   /**
    * Evaluate the computation and return an A value.
@@ -222,8 +222,23 @@ object Eval extends EvalInstances {
    * they will be automatically created when needed.
    */
   sealed abstract class Call[A](val thunk: () => Eval[A]) extends Eval[A] {
-    def memoize: Eval[A] = new Later(() => thunk().value)
-    def value: A = thunk().value
+    def memoize: Eval[A] = new Later(() => value)
+    def value: A = Call.loop(this).value
+  }
+
+  object Call {
+    /** Collapse the call stack for eager evaluations */
+    private def loop[A](fa: Eval[A]): Eval[A] = fa match {
+      case call: Eval.Call[A] =>
+        loop(call.thunk())
+      case compute: Eval.Compute[A] =>
+        new Eval.Compute[A] {
+          type Start = compute.Start
+          val start: () => Eval[Start] = () => compute.start()
+          val run: Start => Eval[A] = s => loop(compute.run(s))
+        }
+      case other => other
+    }
   }
 
   /**
@@ -271,7 +286,7 @@ object Eval extends EvalInstances {
   }
 }
 
-trait EvalInstances extends EvalInstances0 {
+private[cats] trait EvalInstances extends EvalInstances0 {
 
   implicit val evalBimonad: Bimonad[Eval] =
     new Bimonad[Eval] {
@@ -290,10 +305,10 @@ trait EvalInstances extends EvalInstances0 {
     }
 
   implicit def evalGroup[A: Group]: Group[Eval[A]] =
-    new EvalGroup[A] { val algebra = Group[A] }
+    new EvalGroup[A] { val algebra: Group[A] = Group[A] }
 }
 
-trait EvalInstances0 extends EvalInstances1 {
+private[cats] trait EvalInstances0 extends EvalInstances1 {
   implicit def evalPartialOrder[A: PartialOrder]: PartialOrder[Eval[A]] =
     new PartialOrder[Eval[A]] {
       def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
@@ -304,7 +319,7 @@ trait EvalInstances0 extends EvalInstances1 {
     new EvalMonoid[A] { val algebra = Monoid[A] }
 }
 
-trait EvalInstances1 {
+private[cats] trait EvalInstances1 {
   implicit def evalEq[A: Eq]: Eq[Eval[A]] =
     new Eq[Eval[A]] {
       def eqv(lx: Eval[A], ly: Eval[A]): Boolean =

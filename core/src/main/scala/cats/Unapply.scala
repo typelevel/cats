@@ -49,7 +49,7 @@ object Unapply extends Unapply2Instances {
   }
 }
 
-sealed abstract class Unapply2Instances extends Unapply3Instances {
+private[cats] sealed abstract class Unapply2Instances extends Unapply3Instances {
 
   // the type we will instantiate when we find a type class instance
   // for a type in the shape F[_,_] when we fix the left type
@@ -62,6 +62,20 @@ sealed abstract class Unapply2Instances extends Unapply3Instances {
   // for a type in the shape F[_,_] when we fix the right type
   type Aux2Right[TC[_[_]], MA, F[_,_], AA, B] = Unapply[TC, MA] {
     type M[X] = F[AA,X]
+    type A = B
+  }
+
+  // the type we will instantiate when we find a type class instance
+  // for a type in the shape F[_,_[_]] when we fix the left type
+  type Aux2LeftK[TC[_[_]], FA, F[_,_[_]], AA, BX[_]] = Unapply[TC, FA] {
+    type M[X] = F[X,BX]
+    type A = AA
+  }
+
+  // the type we will instantiate when we find a type class instance
+  // for a type in the shape F[_[_],_] when we fix the right type, 
+  type Aux2RightK[TC[_[_]], MA, F[_[_],_], AX[_], B] = Unapply[TC, MA] {
+    type M[X] = F[AX,X]
     type A = B
   }
 
@@ -79,6 +93,23 @@ sealed abstract class Unapply2Instances extends Unapply3Instances {
      def TC: TC[F[AA, ?]] = tc
      def subst: F[AA, B] => M[A] = identity
    }
+
+
+  implicit def unapply2leftK[TC[_[_]], F[_,_[_]], AA, B[_]](implicit tc: TC[F[?,B]]): Aux2LeftK[TC,F[AA,B], F, AA, B] = new Unapply[TC, F[AA,B]] {
+     type M[X] = F[X, B]
+     type A = AA
+     def TC: TC[F[?, B]] = tc
+     def subst: F[AA, B] => M[A] = identity
+   }
+
+   implicit def unapply2rightK[TC[_[_]], F[_[_],_], AA[_], B](implicit tc: TC[F[AA,?]]): Aux2RightK[TC,F[AA,B], F, AA, B] = new Unapply[TC, F[AA,B]] {
+     type M[X] = F[AA, X]
+     type A = B
+     def TC: TC[F[AA, ?]] = tc
+     def subst: F[AA, B] => M[A] = identity
+   }
+
+
 
   // STEW: I'm not sure why these Nothing cases are needed and aren't
   // just caught by the generic cases, I'd love for someone to figure
@@ -105,7 +136,7 @@ sealed abstract class Unapply2Instances extends Unapply3Instances {
   }
 }
 
-sealed abstract class Unapply3Instances {
+private[cats] sealed abstract class Unapply3Instances {
 
   // the type we will instantiate when we find a type class instance
   // for a type in the shape of a Monad Transformer with 3 type params

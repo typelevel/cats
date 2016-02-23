@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Bifunctor
+
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
@@ -36,8 +38,10 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def getOrElse[BB >: B](default: => BB): BB = fold(_ => default, identity)
 
-  def orElse[AA >: A, BB >: B](fallback: => AA Xor BB): AA Xor BB =
-    fold(_ => fallback, _ => this)
+  def orElse[C, BB >: B](fallback: => C Xor BB): C Xor BB = this match {
+    case Xor.Left(_)      => fallback
+    case r @ Xor.Right(_) => r
+  }
 
   def recover[BB >: B](pf: PartialFunction[A, BB]): A Xor BB = this match {
     case Xor.Left(a) if pf.isDefinedAt(a) => Xor.right(pf(a))
@@ -143,7 +147,7 @@ object Xor extends XorInstances with XorFunctions {
   final case class Right[+B](b: B) extends (Nothing Xor B)
 }
 
-sealed abstract class XorInstances extends XorInstances1 {
+private[data] sealed abstract class XorInstances extends XorInstances1 {
   implicit def xorOrder[A: Order, B: Order]: Order[A Xor B] =
     new Order[A Xor B] {
       def compare(x: A Xor B, y: A Xor B): Int = x compare y
@@ -162,31 +166,57 @@ sealed abstract class XorInstances extends XorInstances1 {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor, A ] =
-    new Traverse[A Xor ?] with MonadError[Xor, A] {
+  implicit def xorBifunctor: Bifunctor[Xor] with Bifoldable[Xor] =
+    new Bifunctor[Xor] with Bifoldable[Xor]{
+      override def bimap[A, B, C, D](fab: A Xor B)(f: A => C, g: B => D): C Xor D = fab.bimap(f, g)
+      def bifoldLeft[A, B, C](fab: Xor[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
+        fab match {
+          case Xor.Left(a) => f(c, a)
+          case Xor.Right(b) => g(c, b)
+        }
+      def bifoldRight[A, B, C](fab: Xor[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+        fab match {
+          case Xor.Left(a) => f(a, c)
+          case Xor.Right(b) => g(b, c)
+        }
+    }
+
+  implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor[A, ?], A] =
+    new Traverse[A Xor ?] with MonadError[Xor[A, ?], A] {
       def traverse[F[_]: Applicative, B, C](fa: A Xor B)(f: B => F[C]): F[A Xor C] = fa.traverse(f)
       def foldLeft[B, C](fa: A Xor B, c: C)(f: (C, B) => C): C = fa.foldLeft(c)(f)
       def foldRight[B, C](fa: A Xor B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] = fa.foldRight(lc)(f)
       def flatMap[B, C](fa: A Xor B)(f: B => A Xor C): A Xor C = fa.flatMap(f)
       def pure[B](b: B): A Xor B = Xor.right(b)
-      def handleError[B](fea: Xor[A, B])(f: A => Xor[A, B]): Xor[A, B] =
+      def handleErrorWith[B](fea: Xor[A, B])(f: A => Xor[A, B]): Xor[A, B] =
         fea match {
           case Xor.Left(e) => f(e)
           case r @ Xor.Right(_) => r
         }
       def raiseError[B](e: A): Xor[A, B] = Xor.left(e)
       override def map[B, C](fa: A Xor B)(f: B => C): A Xor C = fa.map(f)
+      override def attempt[B](fab: A Xor B): A Xor (A Xor B) = Xor.right(fab)
+      override def recover[B](fab: A Xor B)(pf: PartialFunction[A, B]): A Xor B =
+        fab recover pf
+      override def recoverWith[B](fab: A Xor B)(pf: PartialFunction[A, A Xor B]): A Xor B =
+        fab recoverWith pf
     }
 }
 
-sealed abstract class XorInstances1 extends XorInstances2 {
+private[data] sealed abstract class XorInstances1 extends XorInstances2 {
+
+  implicit def xorSemigroup[A, B](implicit A: Semigroup[A], B: Semigroup[B]): Semigroup[A Xor B] =
+    new Semigroup[A Xor B] {
+      def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
+    }
+
   implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[A Xor B] = new PartialOrder[A Xor B] {
     def partialCompare(x: A Xor B, y: A Xor B): Double = x partialCompare y
     override def eqv(x: A Xor B, y: A Xor B): Boolean = x === y
   }
 }
 
-sealed abstract class XorInstances2 {
+private[data] sealed abstract class XorInstances2 {
   implicit def xorEq[A: Eq, B: Eq]: Eq[A Xor B] =
     new Eq[A Xor B] {
       def eqv(x: A Xor B, y: A Xor B): Boolean = x === y
@@ -202,21 +232,30 @@ trait XorFunctions {
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
    * the resulting `Xor`. Uncaught exceptions are propagated.
    *
-   * For example: {{{
-   * val result: NumberFormatException Xor Int = fromTryCatch[NumberFormatException] { "foo".toInt }
+   * For example:
+   * {{{
+   * scala> Xor.catchOnly[NumberFormatException] { "foo".toInt }
+   * res0: Xor[NumberFormatException, Int] = Left(java.lang.NumberFormatException: For input string: "foo")
    * }}}
    */
-  def fromTryCatch[T >: Null <: Throwable]: FromTryCatchAux[T] =
-    new FromTryCatchAux[T]
+  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] =
+    new CatchOnlyPartiallyApplied[T]
 
-  final class FromTryCatchAux[T] private[XorFunctions] {
-    def apply[A](f: => A)(implicit T: ClassTag[T]): T Xor A =
+  final class CatchOnlyPartiallyApplied[T] private[XorFunctions] {
+    def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): T Xor A =
       try {
         right(f)
       } catch {
-        case t if T.runtimeClass.isInstance(t) =>
+        case t if CT.runtimeClass.isInstance(t) =>
           left(t.asInstanceOf[T])
       }
+  }
+
+  def catchNonFatal[A](f: => A): Throwable Xor A =
+    try {
+      right(f)
+    } catch {
+      case scala.util.control.NonFatal(t) => left(t)
     }
 
   /**

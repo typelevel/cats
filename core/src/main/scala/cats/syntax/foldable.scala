@@ -14,7 +14,22 @@ trait FoldableSyntax extends Foldable.ToFoldableOps with FoldableSyntax1 {
     new NestedFoldableOps[F, G, A](fga)
 }
 
-class NestedFoldableOps[F[_], G[_], A](fga: F[G[A]])(implicit F: Foldable[F]) {
-  def sequence_[B](implicit G: Applicative[G]): G[Unit] = F.sequence_(fga)
+final class NestedFoldableOps[F[_], G[_], A](fga: F[G[A]])(implicit F: Foldable[F]) {
+  def sequence_(implicit G: Applicative[G]): G[Unit] = F.sequence_(fga)
+
+  /**
+   * @see [[Foldable.foldK]].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.std.list._
+   * scala> import cats.std.set._
+   * scala> import cats.syntax.foldable._
+   *
+   * scala> val l: List[Set[Int]] = List(Set(1, 2), Set(2, 3), Set(3, 4))
+   * scala> l.foldK
+   * res0: Set[Int] = Set(1, 2, 3, 4)
+   * }}}
+   */
   def foldK(implicit G: MonoidK[G]): G[A] = F.foldK(fga)
 }

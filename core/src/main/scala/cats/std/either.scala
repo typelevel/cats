@@ -2,6 +2,20 @@ package cats
 package std
 
 trait EitherInstances extends EitherInstances1 {
+  implicit val eitherBifoldable: Bifoldable[Either] =
+    new Bifoldable[Either] {
+      def bifoldLeft[A, B, C](fab: Either[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
+        fab match {
+          case Left(a) => f(c, a)
+          case Right(b) => g(c, b)
+        }
+      def bifoldRight[A, B, C](fab: Either[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+        fab match {
+          case Left(a) => f(a, c)
+          case Right(b) => g(b, c)
+        }
+    }
+
   implicit def eitherInstances[A]: Monad[Either[A, ?]] with Traverse[Either[A, ?]] =
     new Monad[Either[A, ?]] with Traverse[Either[A, ?]] {
       def pure[B](b: B): Either[A, B] = Right(b)
@@ -41,7 +55,7 @@ trait EitherInstances extends EitherInstances1 {
     }
 }
 
-sealed trait EitherInstances1 extends EitherInstances2 {
+private[std] sealed trait EitherInstances1 extends EitherInstances2 {
   implicit def eitherPartialOrder[A, B](implicit A: PartialOrder[A], B: PartialOrder[B]): PartialOrder[Either[A, B]] =
     new PartialOrder[Either[A, B]] {
       def partialCompare(x: Either[A, B], y: Either[A, B]): Double = x.fold(
@@ -51,7 +65,7 @@ sealed trait EitherInstances1 extends EitherInstances2 {
     }
 }
 
-sealed trait EitherInstances2 {
+private[std] sealed trait EitherInstances2 {
   implicit def eitherEq[A, B](implicit A: Eq[A], B: Eq[B]): Eq[Either[A, B]] = new Eq[Either[A, B]] {
     def eqv(x: Either[A, B], y: Either[A, B]): Boolean = x.fold(
       a => y.fold(A.eqv(a, _), _ => false),

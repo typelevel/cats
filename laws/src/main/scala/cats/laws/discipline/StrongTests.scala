@@ -15,6 +15,7 @@ trait StrongTests[F[_, _]] extends ProfunctorTests[F] {
     ArbFBC: Arbitrary[F[B, C]],
     ArbFCD: Arbitrary[F[C, D]],
     EqFAB: Eq[F[A, B]],
+    EqFAD: Eq[F[A, D]],
     EqFAG: Eq[F[A, G]],
     EqFAEDE: Eq[F[(A, E), (D, E)]],
     EqFEAED: Eq[F[(E, A), (E, D)]]

@@ -58,7 +58,7 @@ import scala.collection.mutable
  *     constructed with `Foldable#foldRight`, and that `.map` and
  *     `.flatMap` operations over the tail will be safely trampolined.
  */
-sealed abstract class Streaming[A] { lhs =>
+sealed abstract class Streaming[A] extends Product with Serializable { lhs =>
 
   import Streaming.{Empty, Wait, Cons}
 
@@ -89,7 +89,7 @@ sealed abstract class Streaming[A] { lhs =>
   /**
    * A variant of fold, used for constructing streams.
    *
-   * The only difference is that foldStream will preserve deferred
+   * The only difference is that foldStreaming will preserve deferred
    * streams. This makes it more appropriate to use in situations
    * where the stream's laziness must be preserved.
    */
@@ -135,7 +135,7 @@ sealed abstract class Streaming[A] { lhs =>
     this match {
       case Empty() => Empty()
       case Wait(lt) => Wait(lt.map(_.flatMap(f)))
-      case Cons(a, lt) => f(a) concat lt.map(_.flatMap(f))
+      case Cons(a, lt) => f(a) ++ lt.map(_.flatMap(f))
     }
 
   /**
@@ -233,11 +233,11 @@ sealed abstract class Streaming[A] { lhs =>
   /**
    * Lazily concatenate two streams.
    */
-  def concat(rhs: Streaming[A]): Streaming[A] =
+  def ++(rhs: Streaming[A]): Streaming[A] =
     this match {
       case Empty() => rhs
-      case Wait(lt) => Wait(lt.map(_ concat rhs))
-      case Cons(a, lt) => Cons(a, lt.map(_ concat rhs))
+      case Wait(lt) => Wait(lt.map(_ ++ rhs))
+      case Cons(a, lt) => Cons(a, lt.map(_ ++ rhs))
     }
 
   /**
@@ -245,11 +245,11 @@ sealed abstract class Streaming[A] { lhs =>
    *
    * In this case the evaluation of the second stream may be deferred.
    */
-  def concat(rhs: Eval[Streaming[A]]): Streaming[A] =
+  def ++(rhs: Eval[Streaming[A]]): Streaming[A] =
     this match {
       case Empty() => Wait(rhs)
-      case Wait(lt) => Wait(lt.map(_ concat rhs))
-      case Cons(a, lt) => Cons(a, lt.map(_ concat rhs))
+      case Wait(lt) => Wait(lt.map(_ ++ rhs))
+      case Cons(a, lt) => Cons(a, lt.map(_ ++ rhs))
     }
 
   /**
@@ -428,7 +428,7 @@ sealed abstract class Streaming[A] { lhs =>
           }
         }
       if (i > xs.length + ys.length - 2) Empty() else {
-        build(0) concat Always(loop(i + 1))
+        build(0) ++ Always(loop(i + 1))
       }
     }
     Wait(Always(loop(0)))
@@ -501,10 +501,11 @@ sealed abstract class Streaming[A] { lhs =>
    * If no elements satisfy `f`, an empty stream will be returned.
    *
    * For example:
-   *
-   *   Streaming(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
-   *
-   * Will result in: Streaming(1, 2, 3)
+   * {{{
+   * scala> val s = Streaming(1, 2, 3, 4, 5, 6, 7)
+   * scala> s.takeWhile(n => n != 4).toList
+   * res0: List[Int] = List(1, 2, 3)
+   * }}}
    */
   def takeWhile(f: A => Boolean): Streaming[A] =
     this match {
@@ -523,16 +524,17 @@ sealed abstract class Streaming[A] { lhs =>
    * If no elements satisfy `f`, the current stream will be returned.
    *
    * For example:
-   *
-   *   Streaming(1, 2, 3, 4, 5, 6, 7).takeWhile(n => n != 4)
-   *
-   * Will result in: Streaming(4, 5, 6, 7)
+   * {{{
+   * scala> val s = Streaming(1, 2, 3, 4, 5, 6, 7)
+   * scala> s.dropWhile(n => n != 4).toList
+   * res0: List[Int] = List(4, 5, 6, 7)
+   * }}}
    */
   def dropWhile(f: A => Boolean): Streaming[A] =
     this match {
       case Empty() => Empty()
       case Wait(lt) => Wait(lt.map(_.dropWhile(f)))
-      case Cons(a, lt) => if (f(a)) Empty() else Cons(a, lt.map(_.dropWhile(f)))
+      case s @ Cons(a, lt) => if (f(a)) Wait(lt.map(_.dropWhile(f))) else s
     }
 
   /**
@@ -642,14 +644,21 @@ sealed abstract class Streaming[A] { lhs =>
    * Ensure that repeated traversals of the stream will not cause
    * repeated tail computations.
    *
-   * By default stream does not memoize to avoid memory leaks when the
-   * head of the stream is retained.
+   * By default this structure does not memoize to avoid memory leaks
+   * when the head of the stream is retained. However, the user
+   * ultimately has control of the memoization approach based on what
+   * kinds of Eval instances they use.
+   *
+   * There are two calls to .memoize here -- one is a recursive call
+   * to this method (on the tail) and the other is a call to memoize
+   * the Eval instance holding the tail. For more information on how
+   * this works see [[cats.Eval.memoize]].
    */
   def memoize: Streaming[A] =
     this match {
       case Empty() => Empty()
-      case Wait(lt) => Wait(lt.memoize)
-      case Cons(a, lt) => Cons(a, lt.memoize)
+      case Wait(lt) => Wait(lt.map(_.memoize).memoize)
+      case Cons(a, lt) => Cons(a, lt.map(_.memoize).memoize)
     }
 
   /**
@@ -666,8 +675,9 @@ sealed abstract class Streaming[A] { lhs =>
   def compact: Streaming[A] = {
     @tailrec def unroll(s: Streaming[A]): Streaming[A] =
       s match {
+        case Cons(a, lt) => Cons(a, lt.map(_.compact))
         case Wait(lt) => unroll(lt.value)
-        case s => s
+        case Empty() => Empty()
       }
     unroll(this)
   }
@@ -807,12 +817,11 @@ object Streaming extends StreamingInstances {
    * Continually return the result of a thunk.
    *
    * This method only differs from `continually` in that the thunk may
-   * not be pure. For this reason (and unlike continually), this
-   * stream is memoized to ensure that repeated traversals produce the
-   * same results.
+   * not be pure. Thus, repeated traversals may produce different
+   * results.
    */
   def thunk[A](f: () => A): Streaming[A] =
-    knot(s => Cons(f(), s), memo = true)
+    knot(s => Cons(f(), s), memo = false)
 
   /**
    * Produce an infinite stream of values given an initial value and a
@@ -845,34 +854,9 @@ object Streaming extends StreamingInstances {
       case None => Empty()
       case Some(a) => Cons(a, Always(unfold(f(a))(f)))
     }
-
-  /**
-   * Contains various Stream-specific syntax.
-   *
-   * To eanble this, say:
-   *
-   *   import cats.data.Stream.syntax._
-   *
-   * This provides the %:: and %::: operators for constructing Streams
-   * lazily, and the %:: extract to use when pattern matching on
-   * Streams.
-   */
-  object syntax {
-    object %:: {
-      def unapply[A](s: Streaming[A]): Option[(A, Eval[Streaming[A]])] = s.uncons
-    }
-
-    class StreamingOps[A](rhs: Eval[Streaming[A]]) {
-      def %::(lhs: A): Streaming[A] = Cons(lhs, rhs)
-      def %:::(lhs: Streaming[A]): Streaming[A] = lhs concat rhs
-    }
-
-    implicit def streamingOps[A](as: => Streaming[A]): StreamingOps[A] =
-      new StreamingOps(Always(as))
-  }
 }
 
-trait StreamingInstances extends StreamingInstances1 {
+private[data] sealed trait StreamingInstances extends StreamingInstances1 {
 
   implicit val streamInstance: Traverse[Streaming] with MonadCombine[Streaming] with CoflatMap[Streaming] =
     new Traverse[Streaming] with MonadCombine[Streaming] with CoflatMap[Streaming] {
@@ -884,8 +868,8 @@ trait StreamingInstances extends StreamingInstances1 {
         as.flatMap(f)
       def empty[A]: Streaming[A] =
         Streaming.empty
-      def combine[A](xs: Streaming[A], ys: Streaming[A]): Streaming[A] =
-        xs concat ys
+      def combineK[A](xs: Streaming[A], ys: Streaming[A]): Streaming[A] =
+        xs ++ ys
 
       override def map2[A, B, Z](fa: Streaming[A], fb: Streaming[B])(f: (A, B) => Z): Streaming[Z] =
         fa.flatMap(a => fb.map(b => f(a, b)))
@@ -935,7 +919,7 @@ trait StreamingInstances extends StreamingInstances1 {
     }
 }
 
-trait StreamingInstances1 extends StreamingInstances2 {
+private[data] sealed trait StreamingInstances1 extends StreamingInstances2 {
   implicit def streamPartialOrder[A: PartialOrder]: PartialOrder[Streaming[A]] =
     new PartialOrder[Streaming[A]] {
       def partialCompare(x: Streaming[A], y: Streaming[A]): Double =
@@ -944,7 +928,7 @@ trait StreamingInstances1 extends StreamingInstances2 {
     }
 }
 
-trait StreamingInstances2 {
+private[data] sealed trait StreamingInstances2 {
   implicit def streamEq[A: Eq]: Eq[Streaming[A]] =
     new Eq[Streaming[A]] {
       def eqv(x: Streaming[A], y: Streaming[A]): Boolean =

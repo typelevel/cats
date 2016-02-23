@@ -165,11 +165,11 @@ class SyntaxTests extends AllInstances with AllSyntax {
   def testApply[F[_]: Apply, A, B, C, D, Z]: Unit = {
     val fa = mock[F[A]]
     val fab = mock[F[A => B]]
-    val fb0: F[B] = fa.ap(fab)
+    val fb0: F[B] = fab.ap(fa)
 
     val fb = mock[F[B]]
     val fabz = mock[F[(A, B) => Z]]
-    val fz0: F[Z] = fa.ap2(fb)(fabz)
+    val fz0: F[Z] = fabz.ap2(fa, fb)
 
     val f = mock[(A, B) => Z]
     val fz1: F[Z] = fa.map2(fb)(f)
@@ -177,12 +177,28 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val f1 = mock[(A, B) => Z]
     val ff1 = mock[F[(A, B) => Z]]
     val fz2: F[Z] = (fa |@| fb).map(f1)
-    val fz3: F[Z] = (fa |@| fb).ap(ff1)
+    val fz3: F[Z] = (fa |@| fb).apWith(ff1)
 
     val fc = mock[F[C]]
     val f2 = mock[(A, B, C) => Z]
     val ff2 = mock[F[(A, B, C) => Z]]
     val fz4: F[Z] = (fa |@| fb |@| fc).map(f2)
-    val fz5: F[Z] = (fa |@| fb |@| fc).ap(ff2)
+    val fz5: F[Z] = (fa |@| fb |@| fc).apWith(ff2)
+  }
+
+  def testBifoldable[F[_, _]: Bifoldable, A, B, C, D: Monoid]: Unit = {
+    val fab = mock[F[A, B]]
+
+    val f0 = mock[(C, A) => C]
+    val g0 = mock[(C, B) => C]
+    val c0 = fab.bifoldLeft(mock[C])(f0, g0)
+
+    val f1 = mock[(A, Eval[C]) => Eval[C]]
+    val g1 = mock[(B, Eval[C]) => Eval[C]]
+    val c1 = fab.bifoldRight(mock[Eval[C]])(f1, g1)
+
+    val f2 = mock[A => D]
+    val g2 = mock[B => D]
+    val d0 = fab.bifoldMap(f2, g2)
   }
 }

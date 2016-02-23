@@ -2,26 +2,27 @@ package cats
 package laws
 package discipline
 
+import cats.laws.discipline.CartesianTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll
 
-trait MonadReaderTests[F[_, _], R] extends MonadTests[F[R, ?]] {
+trait MonadReaderTests[F[_], R] extends MonadTests[F] {
   def laws: MonadReaderLaws[F, R]
 
-  implicit def arbitraryK: ArbitraryK[F[R, ?]]
-  implicit def eqK: EqK[F[R, ?]]
-
   def monadReader[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
-    ArbF: ArbitraryK[F[R, ?]],
-    EqFA: Eq[F[R, A]],
-    EqFB: Eq[F[R, B]],
-    EqFC: Eq[F[R, C]],
-    EqFR: Eq[F[R, R]],
-    ArbE: Arbitrary[R]
+    ArbFA: Arbitrary[F[A]],
+    ArbFB: Arbitrary[F[B]],
+    ArbFC: Arbitrary[F[C]],
+    ArbFAtoB: Arbitrary[F[A => B]],
+    ArbFBtoC: Arbitrary[F[B => C]],
+    ArbR: Arbitrary[R],
+    EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]],
+    EqFR: Eq[F[R]],
+    EqFABC: Eq[F[(A, B, C)]],
+    iso: Isomorphisms[F]
   ): RuleSet = {
-    implicit def ArbFRA: Arbitrary[F[R, A]] = ArbF.synthesize[A]
-    implicit def ArbFRB: Arbitrary[F[R, B]] = ArbF.synthesize[B]
-
     new RuleSet {
       def name: String = "monadReader"
       def bases: Seq[(String, RuleSet)] = Nil
@@ -37,10 +38,8 @@ trait MonadReaderTests[F[_, _], R] extends MonadTests[F[R, ?]] {
 }
 
 object MonadReaderTests {
-  def apply[F[_, _], R](implicit FR: MonadReader[F, R], arbKFR: ArbitraryK[F[R, ?]], eqKFR: EqK[F[R, ?]]): MonadReaderTests[F, R] =
+  def apply[F[_], R](implicit FR: MonadReader[F, R]): MonadReaderTests[F, R] =
     new MonadReaderTests[F, R] {
-      def arbitraryK: ArbitraryK[F[R, ?]] = arbKFR
-      def eqK: EqK[F[R, ?]] = eqKFR
       def laws: MonadReaderLaws[F, R] = MonadReaderLaws[F, R]
     }
 }

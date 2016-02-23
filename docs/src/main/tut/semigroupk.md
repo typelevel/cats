@@ -2,7 +2,7 @@
 layout: default
 title:  "SemigroupK"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/SemigroupK.scala"
+source: "core/src/main/scala/cats/SemigroupK.scala"
 scaladoc: "#cats.SemigroupK"
 ---
 # SemigroupK
@@ -13,11 +13,15 @@ Before introducing a `SemigroupK`, it makes sense to talk about what a
 returns a value of type `A`. This operation must be guaranteed to be
 associative. That is to say that:
 
-    ((a combine b) combine c)
+```scala
+((a combine b) combine c)
+```
 
 must be the same as
 
-    (a combine (b combine c))
+```scala
+(a combine (b combine c))
+```
 
 for all possible values of `a`, `b`, `c`.
 
@@ -26,17 +30,21 @@ Cats does not define a `Semigroup` type class itself. Instead, we use the
 trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala)
 which is defined in the [algebra
 project](https://github.com/non/algebra). The [`cats` package
-object](https://github.com/non/cats/blob/master/core/src/main/scala/cats/package.scala)
+object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
 defines type aliases to the `Semigroup` from algebra, so that you can
 `import cats.semigroup`.
 
 There are instances of `Semigroup` defined for many types found in the
 scala common library:
 
-```tut
+```tut:silent
 import cats._
 import cats.std.all._
+```
 
+Examples.
+
+```tut
 Semigroup[Int].combine(1, 2)
 Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
 Semigroup[Option[Int]].combine(Option(1), Option(2))
@@ -56,32 +64,31 @@ takes a concrete type, like `Int`, and returns a concrete type:
 *`, whereas `Int` would have kind `*` and `Map` would have kind `*,* -> *`,
 and, in fact, the `K` in `SemigroupK` stands for `Kind`.
 
-For `List`, the `Semigroup` and `SemigroupK` instance's `combine`
-operation are both list concatenation:
+For `List`, the `Semigroup` instance's `combine` operation and the `SemigroupK`
+instance's `combineK` operation are both list concatenation:
 
 ```tut
-SemigroupK[List].combine(List(1,2,3), List(4,5,6)) == Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
+SemigroupK[List].combineK(List(1,2,3), List(4,5,6)) == Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
 ```
 
-However for `Option`, `Semigroup` and `SemigroupK`'s `combine` operation
-differs. Since `Semigroup` operates on fully specified types, a
-`Semigroup[Option[A]]` knows the concrete type of `A` and will
-use `Semigroup[A].combine` to combine the inner `A`s. Consequently,
-`Semigroup[Option[A]].combine` requires an implicit
-`Semigroup[A]`.
+However for `Option`, the `Semigroup`'s `combine` and the `SemigroupK`'s
+`combineK` operation differ. Since `Semigroup` operates on fully specified
+types, a `Semigroup[Option[A]]` knows the concrete type of `A` and will use
+`Semigroup[A].combine` to combine the inner `A`s. Consequently,
+`Semigroup[Option[A]].combine` requires an implicit `Semigroup[A]`.
 
 In contrast, since `SemigroupK[Option]` operates on `Option` where
 the inner type is not fully specified and can be anything (i.e. is
 "universally quantified"). Thus, we cannot know how to `combine`
 two of them. Therefore, in the case of `Option` the
-`SemigroupK[Option].combine` method has no choice but to use the
+`SemigroupK[Option].combineK` method has no choice but to use the
 `orElse` method of Option:
 
 ```tut
 Semigroup[Option[Int]].combine(Some(1), Some(2))
-SemigroupK[Option].combine(Some(1), Some(2))
-SemigroupK[Option].combine(Some(1), None)
-SemigroupK[Option].combine(None, Some(2))
+SemigroupK[Option].combineK(Some(1), Some(2))
+SemigroupK[Option].combineK(Some(1), None)
+SemigroupK[Option].combineK(None, Some(2))
 ```
 
 There is inline syntax available for both `Semigroup` and
@@ -89,7 +96,7 @@ There is inline syntax available for both `Semigroup` and
 `|+|` is the operator from semigroup and that `<+>` is the operator
 from `SemigroupK` (called `Plus` in scalaz).
 
-```tut
+```tut:silent
 import cats.syntax.all._
 import cats.implicits._
 import cats.std._
@@ -97,7 +104,11 @@ import cats.std._
 val one = Option(1)
 val two = Option(2)
 val n: Option[Int] = None
+```
 
+Thus.
+
+```tut
 one |+| two
 one <+> two
 n |+| two

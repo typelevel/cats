@@ -8,7 +8,7 @@ trait PartialOrderSyntax extends EqSyntax {
     new PartialOrderOps[A](a)
 }
 
-class PartialOrderOps[A](lhs: A)(implicit A: PartialOrder[A]) {
+final class PartialOrderOps[A](lhs: A)(implicit A: PartialOrder[A]) {
   def >(rhs: A): Boolean = macro Ops.binop[A, Boolean]
   def >=(rhs: A): Boolean = macro Ops.binop[A, Boolean]
   def <(rhs: A): Boolean = macro Ops.binop[A, Boolean]

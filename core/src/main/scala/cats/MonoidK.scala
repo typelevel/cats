@@ -30,11 +30,27 @@ import simulacrum.typeclass
   def empty[A]: F[A]
 
   /**
+   * Compose this MonoidK with an arbitrary type constructor
+   */
+  override def composeK[G[_]]: MonoidK[λ[α => F[G[α]]]] =
+    new CompositeMonoidK[F, G] {
+      implicit def F: MonoidK[F] = self
+    }
+
+  /**
    * Given a type A, create a concrete Monoid[F[A]].
    */
   override def algebra[A]: Monoid[F[A]] =
     new Monoid[F[A]] {
       def empty: F[A] = self.empty
-      def combine(x: F[A], y: F[A]): F[A] = self.combine(x, y)
+      def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
     }
+}
+
+trait CompositeMonoidK[F[_],G[_]]
+  extends MonoidK[λ[α => F[G[α]]]] with CompositeSemigroupK[F, G] {
+
+  implicit def F: MonoidK[F]
+
+  def empty[A]: F[G[A]] = F.empty
 }

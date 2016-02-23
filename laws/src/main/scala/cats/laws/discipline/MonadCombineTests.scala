@@ -2,6 +2,7 @@ package cats
 package laws
 package discipline
 
+import cats.laws.discipline.CartesianTests.Isomorphisms
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import Prop._
@@ -9,14 +10,18 @@ import Prop._
 trait MonadCombineTests[F[_]] extends MonadFilterTests[F] with AlternativeTests[F] {
   def laws: MonadCombineLaws[F]
 
-  def monadCombine[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq]: RuleSet = {
-    implicit def ArbFA: Arbitrary[F[A]] = ArbitraryK[F].synthesize
-    implicit def ArbFB: Arbitrary[F[B]] = ArbitraryK[F].synthesize
-    implicit def ArbFAB: Arbitrary[F[A => B]] = ArbitraryK[F].synthesize
-    implicit def EqFA: Eq[F[A]] = EqK[F].synthesize
-    implicit def EqFB: Eq[F[B]] = EqK[F].synthesize
-    implicit def EqFC: Eq[F[C]] = EqK[F].synthesize
-
+  def monadCombine[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
+    ArbFA: Arbitrary[F[A]],
+    ArbFB: Arbitrary[F[B]],
+    ArbFC: Arbitrary[F[C]],
+    ArbFAtoB: Arbitrary[F[A => B]],
+    ArbFBtoC: Arbitrary[F[B => C]],
+    EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]],
+    EqFABC: Eq[F[(A, B, C)]],
+    iso: Isomorphisms[F]
+  ): RuleSet = {
     new RuleSet {
       def name: String = "monadCombine"
       def bases: Seq[(String, RuleSet)] = Nil
@@ -29,10 +34,8 @@ trait MonadCombineTests[F[_]] extends MonadFilterTests[F] with AlternativeTests[
 }
 
 object MonadCombineTests {
-  def apply[F[_]: MonadCombine: ArbitraryK: EqK]: MonadCombineTests[F] =
+  def apply[F[_]: MonadCombine]: MonadCombineTests[F] =
     new MonadCombineTests[F] {
-      def arbitraryK: ArbitraryK[F] = implicitly
-      def eqK: EqK[F] = implicitly
       def laws: MonadCombineLaws[F] = MonadCombineLaws[F]
     }
 }

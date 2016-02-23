@@ -2,27 +2,31 @@ package cats
 package laws
 package discipline
 
+import cats.laws.discipline.CartesianTests.Isomorphisms
+import eq.unitEq
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll
 
-trait MonadStateTests[F[_, _], S] extends MonadTests[F[S, ?]] {
+trait MonadStateTests[F[_], S] extends MonadTests[F] {
   def laws: MonadStateLaws[F, S]
 
-  implicit def arbitraryK: ArbitraryK[F[S, ?]]
-  implicit def eqK: EqK[F[S, ?]]
-
   def monadState[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
-    ArbF: ArbitraryK[F[S, ?]],
-    EqFA: Eq[F[S, A]],
-    EqFB: Eq[F[S, B]],
-    EqFC: Eq[F[S, C]],
-    EqFS: Eq[F[S, S]],
-    EqFU: Eq[F[S, Unit]],
-    ArbS: Arbitrary[S]
+    ArbFA: Arbitrary[F[A]],
+    ArbFB: Arbitrary[F[B]],
+    ArbFC: Arbitrary[F[C]],
+    ArbFAtoB: Arbitrary[F[A => B]],
+    ArbFBtoC: Arbitrary[F[B => C]],
+    ArbS: Arbitrary[S],
+    ArbFS: Arbitrary[F[S]],
+    ArbFUnit: Arbitrary[F[Unit]],
+    EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]],
+    EqFUnit: Eq[F[Unit]],
+    EqFS: Eq[F[S]],
+    EqFABC: Eq[F[(A, B, C)]],
+    iso: Isomorphisms[F]
   ): RuleSet = {
-    implicit def ArbFEA: Arbitrary[F[S, A]] = ArbF.synthesize[A]
-    implicit def ArbFEB: Arbitrary[F[S, B]] = ArbF.synthesize[B]
-
     new RuleSet {
       def name: String = "monadState"
       def bases: Seq[(String, RuleSet)] = Nil
@@ -38,10 +42,8 @@ trait MonadStateTests[F[_, _], S] extends MonadTests[F[S, ?]] {
 }
 
 object MonadStateTests {
-  def apply[F[_, _], S](implicit FS: MonadState[F, S], arbKFS: ArbitraryK[F[S, ?]], eqKFS: EqK[F[S, ?]]): MonadStateTests[F, S] =
+  def apply[F[_], S](implicit FS: MonadState[F, S]): MonadStateTests[F, S] =
     new MonadStateTests[F, S] {
-      def arbitraryK: ArbitraryK[F[S, ?]] = arbKFS
-      def eqK: EqK[F[S, ?]] = eqKFS
       def laws: MonadStateLaws[F, S] = MonadStateLaws[F, S]
     }
 }

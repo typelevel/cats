@@ -1,15 +1,15 @@
 package cats
 
 package object data {
-  type NonEmptyList[A] = OneAnd[A, List]
-  type NonEmptyVector[A] = OneAnd[A, Vector]
-  type NonEmptyStream[A] = OneAnd[A, Stream]
+  type NonEmptyList[A] = OneAnd[List, A]
+  type NonEmptyVector[A] = OneAnd[Vector, A]
+  type NonEmptyStream[A] = OneAnd[Stream, A]
   type ValidatedNel[E, A] = Validated[NonEmptyList[E], A]
 
   def NonEmptyList[A](head: A, tail: List[A] = Nil): NonEmptyList[A] =
     OneAnd(head, tail)
   def NonEmptyList[A](head: A, tail: A*): NonEmptyList[A] =
-    OneAnd[A, List](head, tail.toList)
+    OneAnd[List, A](head, tail.toList)
 
   def NonEmptyVector[A](head: A, tail: Vector[A] = Vector.empty): NonEmptyVector[A] =
     OneAnd(head, tail)
@@ -39,6 +39,14 @@ package object data {
 
   type Reader[A, B] = ReaderT[Id, A, B]
   object Reader {
-    def apply[A, B](f: A => B): Reader[A, B] = ReaderT.function[Id, A, B](f)
+    def apply[A, B](f: A => B): Reader[A, B] = ReaderT[Id, A, B](f)
   }
+
+  type Writer[L, V] = WriterT[Id, L, V]
+  object Writer {
+    def apply[L, V](l: L, v: V): WriterT[Id, L, V] = WriterT[Id, L, V]((l, v))
+  }
+
+  type State[S, A] = StateT[Eval, S, A]
+  object State extends StateFunctions
 }

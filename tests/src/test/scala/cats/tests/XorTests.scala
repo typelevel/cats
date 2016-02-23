@@ -1,25 +1,51 @@
 package cats
 package tests
 
-import cats.data.Xor
+import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
-import cats.laws.discipline.arbitrary.xorArbitrary
-import cats.laws.discipline.{TraverseTests, MonadErrorTests, SerializableTests}
+import cats.functor.Bifunctor
+import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.{BifunctorTests, BifoldableTests, TraverseTests, MonadErrorTests, SerializableTests, CartesianTests}
+import cats.laws.discipline.eq.tuple3Eq
+import algebra.laws.{GroupLaws, OrderLaws}
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Prop._
-import org.scalacheck.Prop.BooleanOperators
 import org.scalacheck.Arbitrary._
 
 import scala.util.Try
 
 class XorTests extends CatsSuite {
-  checkAll("Xor[String, Int]", algebra.laws.GroupLaws[Xor[String, Int]].monoid)
+  checkAll("Xor[String, Int]", GroupLaws[Xor[String, Int]].monoid)
 
-  checkAll("Xor[String, Int]", MonadErrorTests[Xor, String].monadError[Int, Int, Int])
-  checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor, String]))
+  implicit val iso = CartesianTests.Isomorphisms.invariant[Xor[String, ?]]
+
+  checkAll("Xor[String, Int]", CartesianTests[Xor[String, ?]].cartesian[Int, Int, Int])
+  checkAll("Cartesian[Xor, ?]", SerializableTests.serializable(Cartesian[Xor[String, ?]]))
+
+  checkAll("Xor[String, NonEmptyList[Int]]", GroupLaws[Xor[String, NonEmptyList[Int]]].semigroup)
+
+  implicit val eq0 = XorT.xorTEq[Xor[String, ?], String, Int]
+
+  checkAll("Xor[String, Int]", MonadErrorTests[Xor[String, ?], String].monadError[Int, Int, Int])
+  checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor[String, ?], String]))
 
   checkAll("Xor[String, Int] with Option", TraverseTests[Xor[String, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Xor[String,?]]", SerializableTests.serializable(Traverse[Xor[String, ?]]))
+
+  checkAll("Xor[Int, String]", OrderLaws[String Xor Int].order)
+
+  {
+    implicit val S = ListWrapper.partialOrder[String]
+    implicit val I = ListWrapper.partialOrder[Int]
+    checkAll("ListWrapper[String] Xor ListWrapper[Int]", OrderLaws[ListWrapper[String] Xor ListWrapper[Int]].partialOrder)
+    checkAll("PartialOrder[ListWrapper[String] Xor ListWrapper[Int]]", SerializableTests.serializable(PartialOrder[ListWrapper[String] Xor ListWrapper[Int]]))
+  }
+
+  {
+    implicit val S = ListWrapper.eqv[String]
+    implicit val I = ListWrapper.eqv[Int]
+    checkAll("ListWrapper[String] Xor ListWrapper[Int]", OrderLaws[ListWrapper[String] Xor ListWrapper[Int]].eqv)
+    checkAll("Eq[ListWrapper[String] Xor ListWrapper[Int]]", SerializableTests.serializable(Eq[ListWrapper[String] Xor ListWrapper[Int]]))
+  }
 
   implicit val arbitraryXor: Arbitrary[Xor[Int, String]] = Arbitrary {
     for {
@@ -29,65 +55,90 @@ class XorTests extends CatsSuite {
     } yield xor
   }
 
-  test("fromTryCatch catches matching exceptions") {
-    assert(Xor.fromTryCatch[NumberFormatException]{ "foo".toInt }.isInstanceOf[Xor.Left[NumberFormatException]])
+  checkAll("? Xor ?", BifunctorTests[Xor].bifunctor[Int, Int, Int, String, String, String])
+  checkAll("Bifunctor[Xor]", SerializableTests.serializable(Bifunctor[Xor]))
+
+  checkAll("? Xor ?", BifoldableTests[Xor].bifoldable[Int, Int, Int])
+  checkAll("Bifoldable[Xor]", SerializableTests.serializable(Bifoldable[Xor]))
+
+  test("catchOnly catches matching exceptions") {
+    assert(Xor.catchOnly[NumberFormatException]{ "foo".toInt }.isInstanceOf[Xor.Left[NumberFormatException]])
   }
 
-  test("fromTryCatch lets non-matching exceptions escape") {
+  test("catchOnly lets non-matching exceptions escape") {
     val _ = intercept[NumberFormatException] {
-      Xor.fromTryCatch[IndexOutOfBoundsException]{ "foo".toInt }
+      Xor.catchOnly[IndexOutOfBoundsException]{ "foo".toInt }
     }
   }
 
-  check{
+  test("catchNonFatal catches non-fatal exceptions") {
+    assert(Xor.catchNonFatal{ "foo".toInt }.isLeft)
+    assert(Xor.catchNonFatal{ throw new Throwable("blargh") }.isLeft)
+  }
+
+  test("fromTry is left for failed Try") {
     forAll { t: Try[Int] =>
-      t.isFailure == Xor.fromTry(t).isLeft
+      t.isFailure should === (Xor.fromTry(t).isLeft)
     }
   }
 
-  check{
+  test("fromEither isRight consistent with Either.isRight"){
     forAll { e: Either[Int, String] =>
-      Xor.fromEither(e).isRight == e.isRight
+      Xor.fromEither(e).isRight should === (e.isRight)
     }
   }
 
-  check{
+  test("fromOption isLeft consistent with Option.isEmpty") {
     forAll { (o: Option[Int], s: String) =>
-      Xor.fromOption(o, s).isLeft == o.isEmpty
+      Xor.fromOption(o, s).isLeft should === (o.isEmpty)
     }
   }
 
-  check {
+  test("double swap is identity") {
     forAll { (x: Int Xor String) =>
-      x.swap.swap == x
+      x.swap.swap should === (x)
     }
   }
 
-  check {
+  test("swap negates isLeft/isRight") {
+    forAll { (x: Int Xor String) =>
+      x.isLeft should !== (x.swap.isLeft)
+      x.isRight should !== (x.swap.isRight)
+    }
+  }
+
+  test("isLeft consistent with isRight") {
+    forAll { (x: Int Xor String) =>
+      x.isLeft should !== (x.isRight)
+    }
+  }
+
+  test("foreach is noop for left") {
     forAll { (x: Int Xor String) =>
       var count = 0
       x.foreach{ _ => count += 1}
-      (count == 0) == x.isLeft
+      (count == 0) should === (x.isLeft)
     }
   }
 
-  check {
+  test("getOrElse ignores default for right") {
     forAll { (x: Int Xor String, s: String, t: String) =>
-      x.isRight ==> (x.getOrElse(s) == x.getOrElse(t))
+      if (x.isRight) {
+        x.getOrElse(s) should === (x.getOrElse(t))
+      }
     }
   }
 
-  check {
+  test("orElse") {
     forAll { (x: Int Xor String, y: Int Xor String) =>
-      (x.orElse(y) == x) || (x.orElse(y) == y)
+      val z = x.orElse(y)
+      (z === (x)) || (z === (y)) should === (true)
     }
   }
 
   test("recover recovers handled values") {
-    assert {
-      val xor = Xor.left[String, Int]("xor")
-      xor.recover { case "xor" => 5 }.isRight
-    }
+    val xor = Xor.left[String, Int]("xor")
+    xor.recover { case "xor" => 5 }.isRight should === (true)
   }
 
   test("recover ignores unhandled values") {
@@ -101,10 +152,8 @@ class XorTests extends CatsSuite {
   }
 
   test("recoverWith recovers handled values") {
-    assert {
-      val xor = Xor.left[String, Int]("xor")
-      xor.recoverWith { case "xor" => Xor.right[String, Int](5) }.isRight
-    }
+    val xor = Xor.left[String, Int]("xor")
+    xor.recoverWith { case "xor" => Xor.right[String, Int](5) }.isRight should === (true)
   }
 
   test("recoverWith ignores unhandled values") {
@@ -117,78 +166,73 @@ class XorTests extends CatsSuite {
     xor.recoverWith { case "xor" => Xor.right[String, Int](5) } should === (xor)
   }
 
-  check {
+  test("valueOr consistent with swap then map then merge") {
     forAll { (x: Int Xor String, f: Int => String) =>
-      x.valueOr(f) == x.swap.map(f).merge
+      x.valueOr(f) should === (x.swap.map(f).merge)
     }
   }
 
-  check {
+  test("isLeft implies forall") {
     forAll { (x: Int Xor String, p: String => Boolean) =>
-      x.isLeft ==> x.forall(p)
+      if (x.isLeft) {
+        x.forall(p) should === (true)
+      }
     }
   }
 
-  check {
+  test("isLeft implies exists is false") {
     forAll { (x: Int Xor String, p: String => Boolean) =>
-      x.isLeft ==> !x.exists(p)
+      if (x.isLeft) {
+        x.exists(p) should === (false)
+      }
     }
   }
 
-  check {
+  test("ensure on left is identity") {
     forAll { (x: Int Xor String, i: Int, p: String => Boolean) =>
-      x.isLeft ==> (x.ensure(i)(p) == x)
+      if (x.isLeft) {
+        x.ensure(i)(p) should === (x)
+      }
     }
   }
 
-  check {
+  test("toIor then toXor is identity") {
     forAll { (x: Int Xor String) =>
-      x.toIor.toXor == x
+      x.toIor.toXor should === (x)
     }
   }
 
-  check {
+  test("isLeft consistency") {
     forAll { (x: Int Xor String) =>
-      x.toEither.isLeft == x.isLeft &&
-      x.toOption.isEmpty == x.isLeft &&
-      x.toList.isEmpty == x.isLeft &&
-      x.toValidated.isInvalid == x.isLeft
+      x.isLeft should === (x.toEither.isLeft)
+      x.isLeft should === (x.toOption.isEmpty)
+      x.isLeft should === (x.toList.isEmpty)
+      x.isLeft should === (x.toValidated.isInvalid)
     }
   }
 
-  check {
+  test("withValidated") {
     forAll { (x: Int Xor String, f: Int => Double) =>
-      x.withValidated(_.bimap(f, identity)) == x.leftMap(f)
+      x.withValidated(_.bimap(f, identity)) should === (x.leftMap(f))
     }
   }
 
-  check {
+  test("combine is right iff both operands are right") {
     forAll { (x: Int Xor String, y: Int Xor String) =>
-      x.combine(y).isRight == (x.isRight && y.isRight)
+      x.combine(y).isRight should === (x.isRight && y.isRight)
     }
   }
 
-  check {
+  test("to consistent with toList") {
     forAll { (x: Int Xor String) =>
-      val equality = implicitly[Eq[Int Xor String]]
-      equality.eqv(x, x)
+      x.to[List, String] should === (x.toList)
     }
   }
 
-  check {
+  test("to consistent with toOption") {
     forAll { (x: Int Xor String) =>
-      val partialOrder = implicitly[PartialOrder[Int Xor String]]
-      partialOrder.partialCompare(x, x) == 0 &&
-      partialOrder.eqv(x, x)
+      x.to[Option, String] should === (x.toOption)
     }
   }
 
-  check {
-    forAll { (x: Int Xor String) =>
-      val order = implicitly[Order[Int Xor String]]
-      order.compare(x, x) == 0 &&
-      order.partialCompare(x, x) == 0 &&
-      order.eqv(x, x)
-    }
-  }
 }

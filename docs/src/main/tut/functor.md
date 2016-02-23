@@ -2,7 +2,7 @@
 layout: default
 title:  "Functor"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Functor.scala"
+source: "core/src/main/scala/cats/Functor.scala"
 scaladoc: "#cats.Functor"
 ---
 # Functor
@@ -34,11 +34,13 @@ Vector(1,2,3).map(_.toString)
 We can trivially create a `Functor` instance for a type which has a well
 behaved `map` method:
 
-```tut
+```tut:silent
 import cats._
+
 implicit val optionFunctor: Functor[Option] = new Functor[Option] {
   def map[A,B](fa: Option[A])(f: A => B) = fa map f
 }
+
 implicit val listFunctor: Functor[List] = new Functor[List] {
   def map[A,B](fa: List[A])(f: A => B) = fa map f
 }
@@ -48,7 +50,7 @@ However, functors can also be created for types which don't have a `map`
 method. For example, if we create a `Functor` for `Function1[In, ?]`
 we can use `andThen` to implement `map`:
 
-```tut
+```tut:silent
 implicit def function1Functor[In]: Functor[Function1[In, ?]] =
   new Functor[Function1[In, ?]] {
     def map[A,B](fa: In => A)(f: A => B): Function1[In,B] = fa andThen f
@@ -79,10 +81,8 @@ Functor[List].map(List("qwer", "adsfg"))(len)
 is a `Some`:
 
 ```tut
-// Some(x) case: function is applied to x; result is wrapped in Some
-Functor[Option].map(Some("adsf"))(len)
-// None case: simply returns None (function is not applied)
-Functor[Option].map(None)(len)
+Functor[Option].map(Some("adsf"))(len) // Some(x) case: function is applied to x; result is wrapped in Some
+Functor[Option].map(None)(len) // None case: simply returns None (function is not applied)
 ```
 
 ## Derived methods

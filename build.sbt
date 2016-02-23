@@ -13,10 +13,14 @@ lazy val scoverageSettings = Seq(
 )
 
 lazy val buildSettings = Seq(
-  organization := "org.spire-math",
+  organization := "org.typelevel",
   scalaVersion := "2.11.7",
-  crossScalaVersions := Seq("2.10.5", "2.11.7")
+  crossScalaVersions := Seq("2.10.6", "2.11.7")
 )
+
+lazy val catsDoctestSettings = Seq(
+  doctestWithDependencies := false
+) ++ doctestSettings
 
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions,
@@ -26,14 +30,15 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.4.0",
+    "com.github.mpilquist" %%% "simulacrum" % "0.7.0",
     "org.spire-math" %%% "algebra" % "0.3.1",
     "org.spire-math" %%% "algebra-std" % "0.3.1",
     "org.typelevel" %%% "machinist" % "0.4.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0-M5" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
-  parallelExecution in Test := false
+  parallelExecution in Test := false,
+  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport
 
 lazy val commonJsSettings = Seq(
@@ -43,28 +48,33 @@ lazy val commonJsSettings = Seq(
 
 lazy val commonJvmSettings = Seq(
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
-)
+// currently sbt-doctest doesn't work in JS builds, so this has to go in the
+// JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
+) ++ catsDoctestSettings
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
+lazy val scalacheckVersion = "1.12.5"
+
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.12.4",
+  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion,
   libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
 )
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM, freeJVM, stateJVM),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
   siteMappings += file("CONTRIBUTING.md") -> "contributing.md",
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
+    "-Xfatal-warnings",
     "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
     "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
     "-diagrams"
   ),
-  git.remoteRepo := "git@github.com:non/cats.git",
+  git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
 
@@ -79,7 +89,7 @@ lazy val docs = project
   .settings(tutSettings)
   .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
-  .dependsOn(coreJVM, freeJVM, stateJVM)
+  .dependsOn(coreJVM)
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "root")
@@ -92,15 +102,15 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, coreJVM, lawsJVM, freeJVM, stateJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, coreJVM, lawsJVM, freeJVM, stateJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, coreJVM, lawsJVM, testsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, coreJVM, lawsJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, coreJS, lawsJS, freeJS, stateJS, testsJS, js)
-  .dependsOn(macrosJS, coreJS, lawsJS, freeJS, stateJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, coreJS, lawsJS, testsJS, js)
+  .dependsOn(macrosJS, coreJS, lawsJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -122,6 +132,7 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(
     sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
   )
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion % "test")
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -135,32 +146,12 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(disciplineDependencies:_*)
   .settings(libraryDependencies ++= Seq(
     "org.spire-math" %%% "algebra-laws" % "0.3.1",
-    "com.github.inthenow" %%% "bricks-platform" % "0.0.1"))
+    "org.typelevel" %%% "catalysts-platform" % "0.0.2"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
-
-lazy val free = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core, tests % "test-internal -> test")
-  .settings(moduleName := "cats-free")
-  .settings(catsSettings:_*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
-
-lazy val freeJVM = free.jvm
-lazy val freeJS = free.js
-
-lazy val state = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core, free, tests % "test-internal -> test")
-  .settings(moduleName := "cats-state")
-  .settings(catsSettings:_*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
-
-lazy val stateJVM = state.jvm
-lazy val stateJS = state.js
 
 lazy val tests = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, laws)
@@ -170,7 +161,7 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .settings(noPublishSettings:_*)
   .settings(libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test",
-    "com.github.inthenow" %%% "bricks-platform" % "0.0.1" % "test"))
+    "org.typelevel" %%% "catalysts-platform" % "0.0.2" % "test"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -185,7 +176,7 @@ lazy val jvm = project
   .settings(commonJvmSettings:_*)
 
 // bench is currently JVM-only
-lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
+lazy val bench = project.dependsOn(macrosJVM, coreJVM, lawsJVM)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
   .settings(noPublishSettings)
@@ -198,30 +189,81 @@ lazy val js = project
   .settings(moduleName := "cats-js")
   .settings(catsSettings:_*)
   .settings(commonJsSettings:_*)
+  .enablePlugins(ScalaJSPlugin)
 
 lazy val publishSettings = Seq(
-  homepage := Some(url("https://github.com/non/cats")),
+  homepage := Some(url("https://github.com/typelevel/cats")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
-  scmInfo := Some(ScmInfo(url("https://github.com/non/cats"), "scm:git:git@github.com:non/cats.git")),
+  scmInfo := Some(ScmInfo(url("https://github.com/typelevel/cats"), "scm:git:git@github.com:typelevel/cats.git")),
   autoAPIMappings := true,
-  apiURL := Some(url("https://non.github.io/cats/api/")),
+  apiURL := Some(url("http://typelevel.org/cats/api/")),
   pomExtra := (
     <developers>
       <developer>
+        <id>ceedubs</id>
+        <name>Cody Allen</name>
+        <url>https://github.com/ceedubs/</url>
+      </developer>
+      <developer>
+        <id>rossabaker</id>
+        <name>Ross Baker</name>
+        <url>https://github.com/rossabaker/</url>
+      </developer>
+      <developer>
+        <id>travisbrown</id>
+        <name>Travis Brown</name>
+        <url>https://github.com/travisbrown/</url>
+      </developer>
+      <developer>
+        <id>adelbertc</id>
+        <name>Adelbert Chang</name>
+        <url>https://github.com/adelbertc/</url>
+      </developer>
+      <developer>
+        <id>tpolecat</id>
+        <name>Rob Norris</name>
+        <url>https://github.com/tpolecat/</url>
+      </developer>
+      <developer>
+        <id>stew</id>
+        <name>Mike O'Connor</name>
+        <url>https://github.com/stew/</url>
+      </developer>
+      <developer>
         <id>non</id>
         <name>Erik Osheim</name>
-        <url>http://github.com/non/</url>
+        <url>https://github.com/non/</url>
+      </developer>
+      <developer>
+        <id>mpilquist</id>
+        <name>Michael Pilquist</name>
+        <url>https://github.com/mpilquist/</url>
+      </developer>
+      <developer>
+        <id>milessabin</id>
+        <name>Miles Sabin</name>
+        <url>https://github.com/milessabin/</url>
+      </developer>
+      <developer>
+        <id>fthomas</id>
+        <name>Frank Thomas</name>
+        <url>https://github.com/fthomas/</url>
+      </developer>
+      <developer>
+        <id>julien-truffaut</id>
+        <name>Julien Truffaut</name>
+        <url>https://github.com/julien-truffaut/</url>
       </developer>
     </developers>
   )
-) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess 
+) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;freeJVM/compile;freeJVM/test;stateJVM/compile;stateJVM/test;lawsJVM/compile;testsJVM/test;bench/test")
+addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;coreJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
-addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;freeJS/compile;freeJS/test;stateJS/compile;stateJS/test")
+addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;js/test")
 
 addCommandAlias("validate", ";validateJS;validateJVM")
 
@@ -310,7 +352,7 @@ lazy val sharedReleaseProcess = Seq(
     publishArtifacts,
     setNextVersion,
     commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
+    ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
     pushChanges)
 )
 

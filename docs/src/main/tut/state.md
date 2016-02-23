@@ -2,8 +2,8 @@
 layout: default
 title:  "State"
 section: "data"
-source: "https://github.com/non/cats/blob/master/state/src/main/scala/cats/state/State.scala"
-scaladoc: "#cats.state.StateT"
+source: "core/src/main/scala/cats/data/StateT.scala"
+scaladoc: "#cats.data.StateT"
 ---
 # State
 
@@ -131,8 +131,7 @@ Our `nextLong` function takes a `Seed` and returns an updated `Seed` and a `Long
 Let's write a new version of `nextLong` using `State`:
 
 ```tut:silent
-import cats.state.State
-import cats.std.function._
+import cats.data.State
 
 val nextLong: State[Seed, Long] = State(seed =>
   (seed.next, seed.long))
@@ -159,16 +158,16 @@ val createRobot: State[Seed, Robot] =
   } yield Robot(id, sentient, name, model)
 ```
 
-At this point, we have not yet created a robot; we have written instructions for creating a robot. We need to pass in an initial seed value, and then we can call `run` to actually create the robot:
+At this point, we have not yet created a robot; we have written instructions for creating a robot. We need to pass in an initial seed value, and then we can call `value` to actually create the robot:
 
 ```tut
-val (finalState, robot) = createRobot.run(initialSeed).run
+val (finalState, robot) = createRobot.run(initialSeed).value
 ```
 
 If we only care about the robot and not the final state, then we can use `runA`:
 
 ```tut
-val robot = createRobot.runA(initialSeed).run
+val robot = createRobot.runA(initialSeed).value
 ```
 
 The `createRobot` implementation reads much like the imperative code we initially wrote for the mutable RNG. However, this implementation is free of mutation and side-effects. Since this code is referentially transparent, we can perform the refactoring that we tried earlier without affecting the result:
@@ -189,11 +188,11 @@ val createRobot: State[Seed, Robot] = {
 ```
 
 ```tut
-val robot = createRobot.runA(initialSeed).run
+val robot = createRobot.runA(initialSeed).value
 ```
 
 This may seem surprising, but keep in mind that `b` isn't simply a `Boolean`. It is a function that takes a seed and _returns_ a `Boolean`, threading state along the way. Since the seed that is being passed into `b` changes from line to line, so do the returned `Boolean` values.
 
 ## Fine print
 
-TODO explain StateT and the fact that State is an alias for StateT with trampolining.
+TODO explain StateT and the fact that State is an alias for StateT with Eval.

@@ -2,23 +2,33 @@ package cats
 package std
 
 import cats.syntax.all._
+import cats.data.Xor
 
+import scala.util.control.NonFatal
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.FiniteDuration
 
 trait FutureInstances extends FutureInstances1 {
 
-  implicit def futureInstance(implicit ec: ExecutionContext): MonadError[Lambda[(E, A) => Future[A]], Throwable] with CoflatMap[Future] =
-    new FutureCoflatMap with MonadError[Lambda[(E, A) => Future[A]], Throwable]{
+  implicit def futureInstance(implicit ec: ExecutionContext): MonadError[Future, Throwable] with CoflatMap[Future] =
+    new FutureCoflatMap with MonadError[Future, Throwable]{
       def pure[A](x: A): Future[A] = Future.successful(x)
 
       override def pureEval[A](x: Eval[A]): Future[A] = Future(x.value)
 
       def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
 
-      def handleError[A](fea: Future[A])(f: Throwable => Future[A]): Future[A] = fea.recoverWith { case t => f(t) }
+      def handleErrorWith[A](fea: Future[A])(f: Throwable => Future[A]): Future[A] = fea.recoverWith { case t => f(t) }
 
       def raiseError[A](e: Throwable): Future[A] = Future.failed(e)
+      override def handleError[A](fea: Future[A])(f: Throwable => A): Future[A] = fea.recover { case t => f(t) }
+
+      override def attempt[A](fa: Future[A]): Future[Throwable Xor A] =
+        (fa map Xor.right) recover { case NonFatal(t) => Xor.left(t) }
+
+      override def recover[A](fa: Future[A])(pf: PartialFunction[Throwable, A]): Future[A] = fa.recover(pf)
+
+      override def recoverWith[A](fa: Future[A])(pf: PartialFunction[Throwable, Future[A]]): Future[A] = fa.recoverWith(pf)
 
       override def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
     }
@@ -27,12 +37,12 @@ trait FutureInstances extends FutureInstances1 {
     new FutureGroup[A]
 }
 
-trait FutureInstances1 extends FutureInstances2 {
+private[std] sealed trait FutureInstances1 extends FutureInstances2 {
   implicit def futureMonoid[A: Monoid](implicit ec: ExecutionContext): Monoid[Future[A]] =
     new FutureMonoid[A]
 }
 
-trait FutureInstances2 {
+private[std] sealed trait FutureInstances2 {
   implicit def futureSemigroup[A: Semigroup](implicit ec: ExecutionContext): Semigroup[Future[A]] =
     new FutureSemigroup[A]
 }
