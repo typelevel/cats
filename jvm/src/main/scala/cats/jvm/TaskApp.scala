@@ -1,4 +1,5 @@
 package cats
+package jvm
 
 abstract class TaskApp {
   def run(args: Vector[String]): Task[Unit]

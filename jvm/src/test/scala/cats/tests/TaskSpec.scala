@@ -1,7 +1,9 @@
 package cats
+package jvm
 package tests
 
-import data.{Streaming,Xor}
+import cats.tests.CatsSuite
+import cats.data.{Streaming,Xor}
 
 class TaskTests extends CatsSuite {
 
@@ -102,12 +104,10 @@ class TaskTests extends CatsSuite {
   val onesStream: Streaming[Task[Int]] = Streaming.continually(Streaming.fromList(ones)).flatMap(x => x)
 
 
-  // grr
   def taskMap2[A,B,C](t1: Task[A], t2: Task[B])(f: (A,B) => C): Task[C] = {
     t1.flatMap(a => t2.map(b => f(a,b)))
   }
 
-  // grr
   def sequenceStreaming[A](fa: Streaming[Task[A]]): Task[Streaming[A]] = {
     fa.foldRight(Eval.later(Task.now(Streaming.empty[A])))((a, st) =>
       st.map(b => taskMap2(b,a)((x,y) => Streaming.cons(y,x)))).value
@@ -117,6 +117,8 @@ class TaskTests extends CatsSuite {
     val howmany = 1000000
 
     sequenceStreaming(onesStream.take(howmany)).unsafePerformIO().foldLeft(0)((x, _) => x + 1) should be (howmany)
+
+    onesStream.take(howmany).sequence.unsafePerformIO().foldLeft(0)((x, _) => x + 1) should be (howmany)
   }
 
   test("Task should run forked tasks on another thread") {

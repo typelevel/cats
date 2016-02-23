@@ -1,4 +1,5 @@
 package cats
+package jvm
 
 import data.Xor
 import scala.reflect.ClassTag
@@ -8,11 +9,12 @@ import java.util.concurrent.{Callable, CountDownLatch, ExecutorService, Executor
  * A Task is an abstraction of a computation which produces an A
  * possibly asynchronously
  */
-sealed trait Task[A] {
+sealed trait Task[A] { self =>
   import Task._
 
-  def map[B](f: A => B): Task[B] =
-    flatMap(a => Task.now(f(a)))
+  def map[B](f: A => B): Task[B] = new Task[B] {
+    def eval = self.eval.map(f)
+  }
 
   def flatMap[B](f: A => Task[B]): Task[B] =
     new Bind(this, f)
@@ -62,7 +64,7 @@ sealed trait Task[A] {
   protected def eval: Eval[A]
 }
 
-object Task {
+object Task extends TaskInstances{
 
   /**
    * Thread factory to mark all threads as daemon
@@ -83,7 +85,7 @@ object Task {
   def createFixedExecutor(numThreads: Int): ExecutorService = {
     Executors.newFixedThreadPool(numThreads, DaemonThreadFactory)
   }
-  
+
 
   /**
    * Construct a Task which represents an already calculated eager
@@ -114,7 +116,7 @@ object Task {
    */
   def async[A](cb: (A => Unit) => Unit): Task[A] = Async(cb)
 
-  // Here we already have an eval, so we just have to return it 
+  // Here we already have an eval, so we just have to return it
   private[cats] final case class Value[A](eval: Eval[A]) extends Task[A] {
     override def map[B](f: A => B): Task[B] = Value(eval.map(f))
   }
@@ -151,5 +153,14 @@ object Task {
       cdl.await
       Eval.now(result.get) // YOLO
     }
+  }
+}
+
+trait TaskInstances {
+  implicit val taskInstances: Monad[Task] = new Monad[Task] {
+    override def pure[A](a: A): Task[A] = Task.now(a)
+    override def map[A,B](fa: Task[A])(f: A => B): Task[B] = fa map f
+    override def flatMap[A,B](fa: Task[A])(f: A => Task[B]): Task[B] = fa flatMap f
+    override def pureEval[A](x: Eval[A]): Task[A] = Task.Value(x)
   }
 }
