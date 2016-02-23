@@ -2,8 +2,14 @@ package cats
 package jvm
 package tests
 
-import cats.tests.CatsSuite
+import cats.implicits._
 import cats.data.{Streaming,Xor}
+import cats.tests.CatsSuite
+import cats.laws.discipline._
+import cats.laws.discipline.eq.tuple3Eq
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
+import org.scalacheck.Arbitrary.arbitrary
 
 class TaskTests extends CatsSuite {
 
@@ -154,6 +160,22 @@ class TaskTests extends CatsSuite {
     time2 should be > 0L
     time1 should be > time2
   }
+
+  implicit def taskEq[A](implicit A: Eq[A]): Eq[Task[A]] =
+    new Eq[Task[A]] {
+      def eqv(x: Task[A], y: Task[A]): Boolean =
+        A.eqv(x.unsafePerformIO(), y.unsafePerformIO())
+    }
+
+  implicit val arbitraryTask: Arbitrary[Task[Int]] = Arbitrary {
+    arbitrary[Int].flatMap(i => Gen.oneOf(Task.now(i), Task.later(i), Task.always(() => i), Task.async[Int](cb => cb(i))))
+  }
+
+  implicit val arbitraryTaskF: Arbitrary[Task[Int => Int]] = Arbitrary {
+    arbitrary[Int].flatMap(i => Gen.oneOf(Task.now((_:Int) => i), Task.later((_:Int) => i), Task.always(() => (_:Int) => i), Task.async[Int => Int](cb => cb(Function.const(i)))))
+  }
+
+  checkAll("Task[Int]", MonadTests[Task].monad[Int, Int, Int])
 }
 
 

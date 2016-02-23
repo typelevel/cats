@@ -1,7 +1,7 @@
 package cats
 package jvm
 
-import data.Xor
+import cats.data.Xor
 import scala.reflect.ClassTag
 import java.util.concurrent.{Callable, CountDownLatch, ExecutorService, Executors, ThreadFactory}
 
@@ -157,10 +157,18 @@ object Task extends TaskInstances{
 }
 
 trait TaskInstances {
-  implicit val taskInstances: Monad[Task] = new Monad[Task] {
+  implicit val taskMonad: Monad[Task] = new Monad[Task] {
     override def pure[A](a: A): Task[A] = Task.now(a)
     override def map[A,B](fa: Task[A])(f: A => B): Task[B] = fa map f
     override def flatMap[A,B](fa: Task[A])(f: A => Task[B]): Task[B] = fa flatMap f
     override def pureEval[A](x: Eval[A]): Task[A] = Task.Value(x)
+  }
+
+  implicit def taskSemigroup[A](implicit A: Semigroup[A]): Semigroup[Task[A]] = new Semigroup[Task[A]] {
+    def combine(x: Task[A], y: Task[A]): Task[A] =
+      for {
+        xx <- x
+        yy <- y
+      } yield A.combine(xx,yy)
   }
 }
