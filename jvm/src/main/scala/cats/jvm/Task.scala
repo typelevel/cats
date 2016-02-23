@@ -9,14 +9,14 @@ import java.util.concurrent.{Callable, CountDownLatch, ExecutorService, Executor
  * A Task is an abstraction of a computation which produces an A
  * possibly asynchronously
  */
-sealed trait Task[A] { self =>
+final class Task[A](private val eval: Eval[A]) { self =>
   import Task._
 
   def map[B](f: A => B): Task[B] =
-    new Value(eval map f)
+    new Task(eval map f)
 
   def flatMap[B](f: A => Task[B]): Task[B] =
-    new Value(Eval.defer(eval.flatMap(f andThen (_.eval))))
+    new Task(Eval.defer(eval.flatMap(f andThen (_.eval))))
 
   /**
    * Returns a new Task which will evaluate the computation in this
@@ -24,7 +24,7 @@ sealed trait Task[A] { self =>
    * the computation.
    */
   def catchNonFatal: Task[Throwable Xor A] =
-    new Value(Eval.always(Xor.catchNonFatal(eval.value)))
+    new Task(Eval.always(Xor.catchNonFatal(eval.value)))
 
   /**
    * Returns a new Task which will evaluate the computation in this
@@ -32,7 +32,7 @@ sealed trait Task[A] { self =>
    * thrown by the running of the computation.
    */
   def catchOnly[T >: Null <: Throwable: ClassTag]: Task[T Xor A] =
-    new Value(Eval.always(Xor.catchOnly[T](eval.value)))
+    new Task(Eval.always(Xor.catchOnly[T](eval.value)))
 
   /**
    * Run the computation to produce an A
@@ -58,8 +58,6 @@ sealed trait Task[A] { self =>
       def call = cb(Task.this.unsafePerformIO)
     })
   }
-
-  protected def eval: Eval[A]
 }
 
 object Task extends TaskInstances{
@@ -67,21 +65,21 @@ object Task extends TaskInstances{
    * Construct a Task which represents an already calculated eager
    * value
    */
-  def now[A](a: A): Task[A] = Value(Eval.now(a))
+  def now[A](a: A): Task[A] = new Task(Eval.now(a))
 
   /**
    * Construct a Task that when run will produce an A by evaluating
    * the argument. This is an effect capturing constructor which is
    * suitable for wrapping code which is side-effecting
    */
-  def later[A](a: => A): Task[A] = Value(Eval.later(a))
+  def later[A](a: => A): Task[A] = new Task(Eval.later(a))
 
   /**
    * Construct a task from a thunk that will be executed each time the
    * Task is run. This is an effect capturing constructor which is
    * suitable for wrapping code which is side-effecting.
    */
-  def always[A](a: () => A): Task[A] = Value(new Always(a))
+  def always[A](a: () => A): Task[A] = new Task(new Always(a))
 
   /**
    *  Construct a Task which will represent an asynchronous
@@ -90,21 +88,13 @@ object Task extends TaskInstances{
    *  Unit) which will be called when the asyncrounous computation is
    *  complete.
    */
-  def async[A](cb: (A => Unit) => Unit): Task[A] = Async(cb)
-
-  private[cats] final case class Value[A](eval: Eval[A]) extends Task[A] {
-    override def map[B](f: A => B): Task[B] = Value(eval.map(f))
-  }
-
-  private[cats] final case class Async[A](complete: (A => Unit) => Unit) extends Task[A] {
-    override def eval: Eval[A] = Eval.always {
-      val cdl = new CountDownLatch(1)
-      var result: Option[A] = None
-      complete((a: A) => {result = Some(a); cdl.countDown})
-      cdl.await
-      result.get // YOLO
-    }
-  }
+  def async[A](cb: (A => Unit) => Unit): Task[A] = new Task(Eval.always {
+    val cdl = new CountDownLatch(1)
+    var result: Option[A] = None
+    cb((a: A) => {result = Some(a); cdl.countDown})
+    cdl.await
+    result.get // YOLO
+  })
 }
 
 trait TaskInstances {
@@ -112,7 +102,7 @@ trait TaskInstances {
     override def pure[A](a: A): Task[A] = Task.now(a)
     override def map[A,B](fa: Task[A])(f: A => B): Task[B] = fa map f
     override def flatMap[A,B](fa: Task[A])(f: A => Task[B]): Task[B] = fa flatMap f
-    override def pureEval[A](x: Eval[A]): Task[A] = Task.Value(x)
+    override def pureEval[A](x: Eval[A]): Task[A] = new Task(x)
   }
 
   implicit def taskSemigroup[A](implicit A: Semigroup[A]): Semigroup[Task[A]] = new Semigroup[Task[A]] {
