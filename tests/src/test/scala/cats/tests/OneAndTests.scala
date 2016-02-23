@@ -4,7 +4,7 @@ package tests
 import algebra.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{NonEmptyList, OneAnd}
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests}
+import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary.{evalArbitrary, oneAndArbitrary}
 import cats.laws.discipline.eq._
 
@@ -15,6 +15,9 @@ class OneAndTests extends CatsSuite {
 
   checkAll("OneAnd[List, Int] with Option", TraverseTests[OneAnd[List, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[OneAnd[List, A]]", SerializableTests.serializable(Traverse[OneAnd[List, ?]]))
+
+  checkAll("OneAnd[List, Int]", ReducibleTests[OneAnd[List, ?]].reducible[Int, Int])
+  checkAll("Reducible[OneAnd[List, ?]]", SerializableTests.serializable(Reducible[OneAnd[List, ?]]))
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.oneAndFunctor(ListWrapper.functor))
 
