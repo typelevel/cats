@@ -76,4 +76,12 @@ class OptionTests extends CatsSuite {
       isEq.lhs should === (isEq.rhs)
     }
   }
+
+  // OptionIdOps tests
+
+  test(".some with null argument still results in Some #871") {
+    val s: String = null
+    // can't use `s.some should === (Some(null))` here, because it leads to NullPointerException
+    s.some.exists(_ == null) should ===(true)
+  }
 }
