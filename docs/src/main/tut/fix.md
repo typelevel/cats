@@ -83,7 +83,7 @@ So here we go:
 
 ## List Fixed Point example: Traverse
 
-So how do we *tarverse* lists.
+So how do we *traverse* lists.
 It suffices to define an `object ListTraversableFunctor extends FixTraverse[ListFunctor]`.
 For this it suffices to define a algebra `def traverseAlgebra[A[_] : Applicative, Z, Y](z2ay: Z => A[Y]): ListFunctor[Z, A[Fix[ListFunctor[Y, ?]]]] => A[Fix[ListFunctor[Y, ?]]]`.
 
