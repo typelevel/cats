@@ -91,6 +91,20 @@ class EvalTests extends CatsSuite {
     }
   }
 
+  test("eval should be stack-safe") {
+    val ones = List(Eval.now(1),
+                    Eval.later(1),
+                    Eval.always(1))
+    import data.Streaming
+    // an infinite stream of ones
+    val onesStream: Streaming[Eval[Int]] = Streaming.continually(Streaming.fromList(ones)).flatMap(x => x)
+
+    val howmany = 1000000
+    onesStream.take(howmany).sequence.value.foldLeft(0)((x, _) => x + 1) should be (howmany)
+
+  }
+
+
   {
     implicit val iso = CartesianTests.Isomorphisms.invariant[Eval]
     checkAll("Eval[Int]", BimonadTests[Eval].bimonad[Int, Int, Int])
