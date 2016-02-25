@@ -202,6 +202,17 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val d0 = fab.bifoldMap(f2, g2)
   }
 
+  def testBitraverse[F[_, _]: Bitraverse, G[_]: Applicative, A, B, C, D]: Unit = {
+    val f = mock[A => G[C]]
+    val g = mock[B => G[D]]
+
+    val fab = mock[F[A, B]]
+    val gfcd = fab.bitraverse(f, g)
+
+    val fgagb = mock[F[G[A], G[B]]]
+    val gfab = fgagb.bisequence
+  }
+
   def testApplicative[F[_]: Applicative, A]: Unit = {
     val a = mock[A]
     val fa = a.pure[F]
