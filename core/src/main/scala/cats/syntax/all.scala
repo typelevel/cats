@@ -6,6 +6,7 @@ trait AllSyntax
     with ApplySyntax
     with BifunctorSyntax
     with BifoldableSyntax
+    with BitraverseSyntax
     with CartesianSyntax
     with CoflatMapSyntax
     with ComonadSyntax
