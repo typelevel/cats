@@ -32,6 +32,7 @@ trait AllSyntax
     with Show.ToShowOps
     with SplitSyntax
     with StreamingSyntax
+    with StringSyntax
     with StrongSyntax
     with TransLiftSyntax
     with TraverseSyntax
