@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.data._
+import cats.laws.discipline.SerializableTests
 
 // the things we assert here are not so much important, what is
 // important is that this stuff compiles at all.
@@ -26,4 +27,6 @@ class UnapplyTests extends CatsSuite {
     z should be (List(Option((1,3)), Option((1,4)),
                       Option((2,3)), Option((2,4))))
   }
+
+  checkAll("Unapply[Functor, Option[String]]", SerializableTests.serializable(Unapply[Functor, Option[String]]))
 }
