@@ -13,7 +13,7 @@ package cats
  * Functor for Map[A,?] for any A, and for Either[A,?] for any A,
  * however the Scala compiler will not find them without some coercing.
  */
-trait Unapply[TC[_[_]], MA] {
+trait Unapply[TC[_[_]], MA] extends Serializable {
   // a type constructor which is properly kinded for the type class
   type M[_]
   // the type applied to the type constructor to make an MA
