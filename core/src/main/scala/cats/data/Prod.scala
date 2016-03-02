@@ -8,21 +8,7 @@ package data
   */
 final case class Prod[F[_], G[_], A](first: F[A], second: G[A])
 
-object Prod extends ProdInstances {
-  type EvalLifted[F[_], A] = Eval[F[A]]
-
-  def always[F[_], G[_], A](first: => F[A], second: => G[A]): Prod[EvalLifted[F, ?], EvalLifted[G, ?], A] = {
-    val firstThunk: Eval[F[A]] = Always(first)
-    val secondThunk: Eval[G[A]] = Always(second)
-    Prod[EvalLifted[F, ?], EvalLifted[G, ?], A](firstThunk, secondThunk)
-  }
-
-  def later[F[_], G[_], A](first: => F[A], second: => G[A]): Prod[EvalLifted[F, ?], EvalLifted[G, ?], A] = {
-    val firstThunk: Eval[F[A]] = Later(first)
-    val secondThunk: Eval[G[A]] = Later(second)
-    Prod[EvalLifted[F, ?], EvalLifted[G, ?], A](firstThunk, secondThunk)
-  }
-}
+object Prod extends ProdInstances
 
 private[data] sealed abstract class ProdInstances extends ProdInstances0 {
   implicit def prodAlternative[F[_], G[_]](implicit FF: Alternative[F], GG: Alternative[G]): Alternative[Lambda[X => Prod[F, G, X]]] = new ProdAlternative[F, G] {
