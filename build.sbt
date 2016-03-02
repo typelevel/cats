@@ -95,22 +95,22 @@ lazy val cats = project.in(file("."))
   .settings(moduleName := "root")
   .settings(catsSettings)
   .settings(noPublishSettings)
-  .aggregate(catsJVM, catsJS)
-  .dependsOn(catsJVM, catsJS, testsJVM % "test-internal -> test", bench % "compile-internal;test-internal -> test")
+  .aggregate(catsJVM, catsJS, ioJVM, ioJS)
+  .dependsOn(catsJVM, catsJS, ioJVM, ioJS, testsJVM % "test-internal -> test", bench % "compile-internal;test-internal -> test")
 
 lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, coreJVM, lawsJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, coreJVM, lawsJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, coreJVM, ioJVM, lawsJVM, testsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, coreJVM, ioJVM, lawsJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, coreJS, lawsJS, testsJS, js)
-  .dependsOn(macrosJS, coreJS, lawsJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, coreJS, ioJS, lawsJS, testsJS, js)
+  .dependsOn(macrosJS, coreJS, ioJS, lawsJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -138,6 +138,17 @@ lazy val core = crossProject.crossType(CrossType.Pure)
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
+
+lazy val io = crossProject.crossType(CrossType.Pure)
+  .dependsOn(core, tests % "test-internal -> test")
+  .settings(moduleName := "cats-io")
+  .settings(catsSettings: _*)
+  .jsSettings(commonJsSettings: _*)
+  .jsSettings()
+  .jvmSettings(commonJvmSettings: _*)
+
+lazy val ioJVM = io.jvm
+lazy val ioJS = io.js
 
 lazy val laws = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core)
@@ -259,11 +270,11 @@ lazy val publishSettings = Seq(
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;coreJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
+addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;coreJVM/test;ioJVM/compile;lawsJVM/compile;testsJVM/test;ioJVM/test;jvm/test;bench/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
-addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;js/test")
+addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;ioJS/compile;ioJS/test;lawsJS/compile;testsJS/test;js/test")
 
 addCommandAlias("validate", ";validateJS;validateJVM")
 
