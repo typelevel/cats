@@ -2,12 +2,14 @@ package cats
 package js
 package tests
 
+import algebra.laws.{GroupLaws, OrderLaws}
+
 import cats.data.Xor
 import cats.laws.discipline._
 import cats.laws.discipline.eq.tuple3Eq
 import cats.js.std.Await
 import cats.js.std.future.{futureEq, futureComonad}
-import cats.tests.CatsSuite
+import cats.tests.{CatsSuite, ListWrapper}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
@@ -42,4 +44,19 @@ class FutureTests extends CatsSuite {
 
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
+
+  {
+    implicit val order = ListWrapper.order[Int]
+    checkAll("Future[ListWrapper[Int]]", OrderLaws[ListWrapper[Int]].order)
+  }
+
+  {
+    implicit val partialOrder = ListWrapper.partialOrder[Int]
+    checkAll("Future[ListWrapper[Int]]", OrderLaws[ListWrapper[Int]].partialOrder)
+  }
+
+  {
+    implicit val eqv = ListWrapper.eqv[Int]
+    checkAll("Future[ListWrapper[Int]]", OrderLaws[ListWrapper[Int]].eqv)
+  }
 }
