@@ -11,8 +11,16 @@ trait MonadWriter[F[_], W] extends Monad[F] {
   /** Apply the effectful function to the accumulator */
   def pass[A](fa: F[(A, W => W)]): F[A]
 
-  /** An effect that when run, logs w */
+  /** Lift the log into the effect */
   def tell(w: W): F[Unit] = writer(((), w))
+
+  /** Pair the value with an inspection of the accumulator */
+  def listens[A, B](fa: F[A])(f: W => B): F[(A, B)] =
+    map(listen(fa)) { case (a, w) => (a, f(w)) }
+
+  /** Modify the accumulator */
+  def censor[A](fa: F[A])(f: W => W): F[A] =
+    flatMap(listen(fa)) { case (a, w) => writer((a, f(w))) }
 }
 
 object MonadWriter {
