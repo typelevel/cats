@@ -54,7 +54,7 @@ import cats.std.list._
 
   def sequence[G[_], A](as: G[F[A]])(implicit G: Traverse[G]): F[G[A]] =
     G.sequence(as)(this)
-  selese
+  
 }
 
 trait CompositeApplicative[F[_],G[_]]
