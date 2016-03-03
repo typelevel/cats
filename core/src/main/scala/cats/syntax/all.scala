@@ -31,7 +31,6 @@ trait AllSyntax
     with SemigroupKSyntax
     with Show.ToShowOps
     with SplitSyntax
-    with StreamingSyntax
     with StrongSyntax
     with TransLiftSyntax
     with TraverseSyntax

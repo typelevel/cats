@@ -59,27 +59,6 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def appFuncArbitrary[F[_], A, B](implicit F: Arbitrary[F[B]], FF: Applicative[F]): Arbitrary[AppFunc[F, A, B]] =
     Arbitrary(F.arbitrary.map(fb => Func.appFunc[F, A, B](_ => fb)))
 
-  def streamingGen[A:Arbitrary](maxDepth: Int): Gen[Streaming[A]] =
-    if (maxDepth <= 1)
-      Gen.const(Streaming.empty[A])
-    else {
-      // the arbitrary instance for the next layer of the stream
-      implicit val A = Arbitrary(streamingGen[A](maxDepth - 1))
-      Gen.frequency(
-        // Empty
-        1 -> Gen.const(Streaming.empty[A]),
-        // Wait
-        2 -> getArbitrary[Eval[Streaming[A]]].map(Streaming.wait(_)),
-        // Cons
-        6 -> (for {
-          a <- getArbitrary[A]
-          tail <- getArbitrary[Eval[Streaming[A]]]
-        } yield Streaming.cons(a, tail)))
-    }
-
-  implicit def streamingArbitrary[A:Arbitrary]: Arbitrary[Streaming[A]] =
-    Arbitrary(streamingGen[A](8))
-
   implicit def writerArbitrary[L:Arbitrary, V:Arbitrary]: Arbitrary[Writer[L, V]] =
     writerTArbitrary[Id, L, V]
 
