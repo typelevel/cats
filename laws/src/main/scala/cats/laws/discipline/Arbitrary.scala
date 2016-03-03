@@ -59,54 +59,6 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def appFuncArbitrary[F[_], A, B](implicit F: Arbitrary[F[B]], FF: Applicative[F]): Arbitrary[AppFunc[F, A, B]] =
     Arbitrary(F.arbitrary.map(fb => Func.appFunc[F, A, B](_ => fb)))
 
-  def streamingGen[A:Arbitrary](maxDepth: Int): Gen[Streaming[A]] =
-    if (maxDepth <= 1)
-      Gen.const(Streaming.empty[A])
-    else {
-      // the arbitrary instance for the next layer of the stream
-      implicit val A = Arbitrary(streamingGen[A](maxDepth - 1))
-      Gen.frequency(
-        // Empty
-        1 -> Gen.const(Streaming.empty[A]),
-        // Wait
-        2 -> getArbitrary[Eval[Streaming[A]]].map(Streaming.wait(_)),
-        // Cons
-        6 -> (for {
-          a <- getArbitrary[A]
-          tail <- getArbitrary[Eval[Streaming[A]]]
-        } yield Streaming.cons(a, tail)))
-    }
-
-  implicit def streamingArbitrary[A:Arbitrary]: Arbitrary[Streaming[A]] =
-    Arbitrary(streamingGen[A](8))
-
-  def emptyStreamingTGen[F[_], A]: Gen[StreamingT[F, A]] =
-    Gen.const(StreamingT.empty[F, A])
-
-  def streamingTGen[F[_], A](maxDepth: Int)(implicit F: Monad[F], A: Arbitrary[A]): Gen[StreamingT[F, A]] = {
-    if (maxDepth <= 1)
-      emptyStreamingTGen[F, A]
-    else Gen.frequency(
-      // Empty
-      1 -> emptyStreamingTGen[F, A],
-      // Wait
-      2 -> streamingTGen[F, A](maxDepth - 1).map(s =>
-        StreamingT.wait(F.pure(s))),
-      // Cons
-      6 -> (for {
-        a <- A.arbitrary
-        s <- streamingTGen[F, A](maxDepth - 1)
-      } yield StreamingT.cons(a, F.pure(s))))
-  }
-
-  // The max possible size of a StreamingT instance (n) will result in
-  // instances of up to n^3 in length when testing flatMap
-  // composition. The current value (8) could result in streams of up
-  // to 512 elements in length. Thus, since F may not be stack-safe,
-  // we want to keep n relatively small.
-  implicit def streamingTArbitrary[F[_], A](implicit F: Monad[F], A: Arbitrary[A]): Arbitrary[StreamingT[F, A]] =
-    Arbitrary(streamingTGen[F, A](8))
-
   implicit def writerArbitrary[L:Arbitrary, V:Arbitrary]: Arbitrary[Writer[L, V]] =
     writerTArbitrary[Id, L, V]
 

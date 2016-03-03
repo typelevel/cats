@@ -5,9 +5,7 @@ import org.scalatest.prop.PropertyChecks
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
-import cats.data.Streaming
 import cats.std.all._
-import cats.laws.discipline.arbitrary._
 
 abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite with PropertyChecks {
 
@@ -37,7 +35,6 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   test("toList/isEmpty/nonEmpty") {
     forAll { (fa: F[Int]) =>
       fa.toList should === (iterator(fa).toList)
-      fa.toStreaming.toList should === (iterator(fa).toList)
       fa.isEmpty should === (iterator(fa).isEmpty)
       fa.nonEmpty should === (iterator(fa).nonEmpty)
     }
@@ -100,9 +97,6 @@ class FoldableTestsAdditional extends CatsSuite {
     // test trampolining
     val large = Stream((1 to 10000): _*)
     assert(contains(large, 10000).value)
-
-    // toStreaming should be lazy
-    assert(dangerous.toStreaming.take(3).toList == List(0, 1, 2))
   }
 }
 
@@ -116,10 +110,6 @@ class FoldableVectorCheck extends FoldableCheck[Vector]("vector") {
 
 class FoldableStreamCheck extends FoldableCheck[Stream]("stream") {
   def iterator[T](stream: Stream[T]): Iterator[T] = stream.iterator
-}
-
-class FoldableStreamingCheck extends FoldableCheck[Streaming]("streaming") {
-  def iterator[T](streaming: Streaming[T]): Iterator[T] = streaming.iterator
 }
 
 class FoldableMapCheck extends FoldableCheck[Map[Int, ?]]("map") {
