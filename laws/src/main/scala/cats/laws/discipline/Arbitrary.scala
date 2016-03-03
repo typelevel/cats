@@ -80,33 +80,6 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def streamingArbitrary[A:Arbitrary]: Arbitrary[Streaming[A]] =
     Arbitrary(streamingGen[A](8))
 
-  def emptyStreamingTGen[F[_], A]: Gen[StreamingT[F, A]] =
-    Gen.const(StreamingT.empty[F, A])
-
-  def streamingTGen[F[_], A](maxDepth: Int)(implicit F: Monad[F], A: Arbitrary[A]): Gen[StreamingT[F, A]] = {
-    if (maxDepth <= 1)
-      emptyStreamingTGen[F, A]
-    else Gen.frequency(
-      // Empty
-      1 -> emptyStreamingTGen[F, A],
-      // Wait
-      2 -> streamingTGen[F, A](maxDepth - 1).map(s =>
-        StreamingT.wait(F.pure(s))),
-      // Cons
-      6 -> (for {
-        a <- A.arbitrary
-        s <- streamingTGen[F, A](maxDepth - 1)
-      } yield StreamingT.cons(a, F.pure(s))))
-  }
-
-  // The max possible size of a StreamingT instance (n) will result in
-  // instances of up to n^3 in length when testing flatMap
-  // composition. The current value (8) could result in streams of up
-  // to 512 elements in length. Thus, since F may not be stack-safe,
-  // we want to keep n relatively small.
-  implicit def streamingTArbitrary[F[_], A](implicit F: Monad[F], A: Arbitrary[A]): Arbitrary[StreamingT[F, A]] =
-    Arbitrary(streamingTGen[F, A](8))
-
   implicit def writerArbitrary[L:Arbitrary, V:Arbitrary]: Arbitrary[Writer[L, V]] =
     writerTArbitrary[Id, L, V]
 
