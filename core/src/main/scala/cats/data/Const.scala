@@ -69,6 +69,15 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
     def combine(x: Const[A, B], y: Const[A, B]): Const[A, B] =
       x combine y
   }
+
+  implicit val constBifoldable: Bifoldable[Const] =
+    new Bifoldable[Const] {
+      def bifoldLeft[A, B, C](fab: Const[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
+        f(c, fab.getConst)
+
+      def bifoldRight[A, B, C](fab: Const[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+        f(fab.getConst, c)
+    }
 }
 
 private[data] sealed abstract class ConstInstances0 extends ConstInstances1 {

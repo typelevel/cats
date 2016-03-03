@@ -44,6 +44,24 @@ class WriterTTests extends CatsSuite {
     }
   }
 
+  test("tell + written is identity") {
+    forAll { (i: Int) =>
+      WriterT.tell[Id, Int](i).written should === (i)
+    }
+  }
+
+  test("value + value is identity") {
+    forAll { (i: Int) =>
+      WriterT.value[Id, Int, Int](i).value should === (i)
+    }
+  }
+
+  test("valueT + value is identity") {
+    forAll { (i: Int) =>
+      WriterT.valueT[Id, Int, Int](i).value should === (i)
+    }
+  }
+
   {
     // F has a SemigroupK
     implicit val F: SemigroupK[ListWrapper] = ListWrapper.semigroupK

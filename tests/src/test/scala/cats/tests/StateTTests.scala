@@ -77,6 +77,19 @@ class StateTTests extends CatsSuite {
     }
   }
 
+  test(".get and then .run produces same state as value"){
+    forAll { (s: State[Long, Int], initial: Long) =>
+      val (finalS, finalA) = s.get.run(initial).value
+      finalS should === (finalA)
+    }
+  }
+
+  test(".get equivalent to flatMap with State.get"){
+    forAll { (s: State[Long, Int]) =>
+      s.get should === (s.flatMap(_ => State.get))
+    }
+  }
+
   test("StateT#transformS with identity is identity") {
     forAll { (s: StateT[List, Long, Int]) =>
       s.transformS[Long](identity, (s, i) => i) should === (s)

@@ -4,7 +4,7 @@ package tests
 import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadErrorTests, SerializableTests, CartesianTests}
+import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadErrorTests, SerializableTests, CartesianTests}
 import cats.laws.discipline.eq.tuple3Eq
 import algebra.laws.{GroupLaws, OrderLaws}
 import org.scalacheck.{Arbitrary, Gen}
@@ -54,7 +54,8 @@ class XorTests extends CatsSuite {
     } yield xor
   }
 
-  checkAll("? Xor ?", BifunctorTests[Xor].bifunctor[Int, Int, Int, String, String, String])
+  checkAll("? Xor ?", BitraverseTests[Xor].bitraverse[Option, Int, Int, Int, String, String, String])
+  checkAll("Bitraverse[Xor]", SerializableTests.serializable(Bitraverse[Xor]))
 
   test("catchOnly catches matching exceptions") {
     assert(Xor.catchOnly[NumberFormatException]{ "foo".toInt }.isInstanceOf[Xor.Left[NumberFormatException]])
