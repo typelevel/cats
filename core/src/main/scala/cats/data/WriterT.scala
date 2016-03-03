@@ -48,9 +48,8 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 object WriterT extends WriterTInstances with WriterTFunctions
 
 private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
-
   implicit def writerTIdMonad[L:Monoid]: Monad[WriterT[Id, L, ?]] =
-    writerTMonad[Id, L]
+    writerTMonadWriter[Id, L]
 
   // The Eq[(L, V)] can be derived from an Eq[L] and Eq[V], but we are waiting
   // on an algebra release that includes https://github.com/non/algebra/pull/82
@@ -95,8 +94,8 @@ private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 
     }
 }
 private[data] sealed abstract class WriterTInstances2 extends WriterTInstances3 {
-  implicit def writerTMonad[F[_], L](implicit F: Monad[F], L: Monoid[L]): Monad[WriterT[F, L, ?]] =
-    new WriterTMonad[F, L] {
+  implicit def writerTMonadWriter[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadWriter[WriterT[F, L, ?], L] =
+    new WriterTMonadWriter[F, L] {
       implicit val F0: Monad[F] = F
       implicit val L0: Monoid[L] = L
     }
@@ -189,6 +188,17 @@ private[data] sealed trait WriterTMonad[F[_], L] extends WriterTApplicative[F, L
 
   def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
     fa.flatMap(f)
+}
+
+private[data] sealed trait WriterTMonadWriter[F[_], L] extends MonadWriter[WriterT[F, L, ?], L] with WriterTMonad[F, L] {
+  def writer[A](aw: (A, L)): WriterT[F, L, A] =
+    WriterT.put(aw._1)(aw._2)
+
+  def listen[A](fa: WriterT[F, L, A]): WriterT[F, L, (A, L)] =
+    WriterT(F0.flatMap(fa.value)(a => F0.map(fa.written)(l => (l, (a, l)))))
+
+  def pass[A](fa: WriterT[F, L, (A, L => L)]): WriterT[F, L, A] =
+    WriterT(F0.flatMap(fa.value) { case (a, f) => F0.map(fa.written)(l => (f(l), a)) })
 }
 
 private[data] sealed trait WriterTSemigroupK[F[_], L] extends SemigroupK[WriterT[F, L, ?]] {
