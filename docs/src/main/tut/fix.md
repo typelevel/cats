@@ -7,8 +7,8 @@ scaladoc: "#cats.fix.Fix"
 -------------------------
 # Fixed Points
 
-`Fix` uses the [`Functor`](functor.html) type class to define a *structural recursive* function `fold` over the fixed point `Fix[F]` of a functor `F`.
-As such, `fold` can be seen as a generalization of the function `foldRight` on `List[A]`.
+`Fix` uses the [`Functor`](functor.html) type class to define a *structural recursive* function `cata` over the fixed point `Fix[F]` of a functor `F`.
+As such, `cata` can be seen as a generalization of the function `foldRight` on `List[A]`.
 
 In order to `traverse` the least fixed point of a functor `F`, resulting in a value of type `A[Fix[F[Y, ?]]]`,
 it suffices to define an appropriate algebra of type `F[Z, A[Fix[F[Y, ?]]]] => A[Fix[F[Y, ?]]]`.
@@ -74,7 +74,7 @@ So here we go:
     }
 
     def showList[Z]: List[Z] => String =
-      _.fold[String](showListAlgebra)
+      _.cata[String](showListAlgebra)
 
     implicit def implicitShowList[Z]: Show[List[Z]] = new Show[List[Z]] {
       def show(list: List[Z]): String = showList(list)
@@ -98,12 +98,12 @@ So here we go:
         case Cons(z, a_ys) => Applicative[A].map2(z2ay(z), a_ys)(cons[Y])
       }
 
-      def foldLeft[Z, Y](fix: Fix[ListFunctor[Z, ?]], y: Y)(yz2y: (Y, Z) => Y): Y = fix.fold[Y] {
+      def foldLeft[Z, Y](fix: Fix[ListFunctor[Z, ?]], y: Y)(yz2y: (Y, Z) => Y): Y = fix.cata[Y] {
         case Nil() => y
         case Cons(z, y) => yz2y(y, z)
       }
 
-      def foldRight[Z, Y](fix: Fix[ListFunctor[Z, ?]], ly: Eval[Y])(zly2ly: (Z, Eval[Y]) => Eval[Y]): Eval[Y] = fix.fold[Eval[Y]] {
+      def foldRight[Z, Y](fix: Fix[ListFunctor[Z, ?]], ly: Eval[Y])(zly2ly: (Z, Eval[Y]) => Eval[Y]): Eval[Y] = fix.cata[Eval[Y]] {
         case Nil() => ly
         case Cons(z, ly) => zly2ly(z, ly)
       }
@@ -152,7 +152,7 @@ Here is a typical example: *traversing a list of strings, trying to parse them a
 ## What about evaluation?
 
 As you may know, structural recursion may benefit from different evaluation strategies.
-Since `fold` works for *all* algebras, it suffices to replace `A` with one of the `Eval[]` case classes (`Now[A]`, `Later[A]` or `Always[A]`)
+Since `cata` works for *all* algebras, it suffices to replace `A` with one of the `Eval[]` case classes (`Now[A]`, `Later[A]` or `Always[A]`)
 
 For example, `show` related stuff might as well have been defined as follows:
 
@@ -175,13 +175,13 @@ For example, `show` related stuff might as well have been defined as follows:
 
 
     def showListNow[Z]: List[Z] => String =
-      _.fold[Now[String]](showListNowAlgebra).value
+      _.cata[Now[String]](showListNowAlgebra).value
 
     def showListLater[Z]: List[Z] => String =
-      _.fold[Later[String]](showListLaterAlgebra).value
+      _.cata[Later[String]](showListLaterAlgebra).value
 
     def showListAlways[Z]: List[Z] => String =
-      _.fold[Always[String]](showListAlwaysAlgebra).value
+      _.cata[Always[String]](showListAlwaysAlgebra).value
 
 ```
 

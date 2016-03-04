@@ -9,11 +9,11 @@ trait FixLaws[F[_]] {
   implicit def F: Functor[F]
 
 
-  def foldReflectionLaw(fix: Fix[F]): IsEq[Fix[F]] =
-    fix.fold[Fix[F]](Fix(_)) <-> fix
+  def cataReflectionLaw(fix: Fix[F]): IsEq[Fix[F]] =
+    fix.cata[Fix[F]](Fix(_)) <-> fix
 
-  def foldCancellationLaw[A](unFix: F[Fix[F]], algebra: F[A] => A): IsEq[A] =
-    Fix(unFix).fold[A](algebra) <-> algebra(unFix.map(_.fold[A](algebra)))
+  def cataCancellationLaw[A](unFix: F[Fix[F]], algebra: F[A] => A): IsEq[A] =
+    Fix(unFix).cata[A](algebra) <-> algebra(unFix.map(_.cata[A](algebra)))
 
 }
 
