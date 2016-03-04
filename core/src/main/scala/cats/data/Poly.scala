@@ -3,7 +3,6 @@ package cats.data
 import cats.Functor
 import cats.fix.Fix
 import Types._
-import cats.fix.Types.Algebra
 
 /**
   *

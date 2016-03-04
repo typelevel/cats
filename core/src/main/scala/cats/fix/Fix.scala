@@ -86,9 +86,9 @@ case class Fix[F[_] : Functor](unFix: F[Fix[F]]) {
   *
   */
 
-trait FixTraverse[F[_, _]] extends Traverse[({type λ[Z] = Fix[F[Z, ?]]})#λ] {
-  def traverseAlgebra[A[_] : Applicative, Z, Y](z2ay: Z => A[Y]): F[Z, A[Fix[F[Y, ?]]]] => A[Fix[F[Y, ?]]]
+trait FixTraverse[F[_, _]] extends Traverse[λ[Z => Fix[λ[ζ => F[Z, ζ]]]]] {
+  def traverseAlgebra[A[_] : Applicative, Z, Y](z2ay: Z => A[Y]): Algebra[λ[ζ => F[Z, ζ]], A[Fix[λ[ζ => F[Y, ζ]]]]]
 
-  def traverse[A[_] : Applicative, Z, Y](fix: Fix[F[Z, ?]])(z2ay: Z => A[Y]): A[Fix[F[Y, ?]]] = fix.cata(traverseAlgebra(z2ay))
+  def traverse[A[_] : Applicative, Z, Y](fix: Fix[λ[ζ => F[Z, ζ]]])(z2ay: Z => A[Y]): A[Fix[λ[ζ => F[Y, ζ]]]] = fix.cata(traverseAlgebra(z2ay))
 }
 
