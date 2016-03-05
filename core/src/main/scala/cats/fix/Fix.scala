@@ -2,16 +2,18 @@ package cats.fix
 
 import cats.{Applicative, Traverse, Functor}
 import cats.syntax.functor._
+import Types._
 
- /**
-  * `Fix`
-  *
-  * `Fix[F]` is the least fixed point of the functor `F`
-  *
+/**
   *
   * `Algebra`
   *
   * a function of type `F[A] => A` is an algebra of the functor `F`
+  *
+  *
+  * `Fix`
+  *
+  * `Fix[F]` is the least fixed point of the functor `F`
   *
   *
   * `cata`
@@ -48,14 +50,14 @@ import cats.syntax.functor._
   *
   * Why is all this useful?
   *
-  * `cata` generalizes structural recursion over recursive lists (using `cataRight`)
+  * `cata` generalizes structural recursion over recursive lists (a.k.a. `foldRight`)
   * to a whole range of recursive data structures of type `Fix[F]`
   *
   * in order to define a structural recursive function of type `Fix[F] => A`
   * it suffices to define a function (referred to as algebra) of type `F[A] => A`
   *
-  * the nice thing about functions of type `F[A] => A` is that they can be defined in a *modular* way
-  * because recursion and algebraic operations (sum and product) are strictly separated
+  * the nice thing about structural recursive functions is that they can be defined in a *modular* way
+  * because algebraic operations (sum and product) and recursion are strictly separated
   *
   * See [[https://www.researchgate.net/publication/2550340_Using_Catamorphisms_Subtypes_and_Monad_Transformers_for_Writing_Modular_Functional_Interpreters]]
   *
@@ -68,17 +70,15 @@ import cats.syntax.functor._
   */
 
 object Types {
-   type Algebra[F[_], A] = F[A] => A
- }
-
-import Types._
+  type Algebra[F[_], A] = F[A] => A
+}
 
 case class Fix[F[_] : Functor](unFix: F[Fix[F]]) {
   def cata[A](algebra: Algebra[F, A]): A =
     algebra(unFix.map(_.cata(algebra)))
 }
 
- /**
+/**
   * `FixTraverse`
   *
   * in order to traverse the least fixed point of a functor
@@ -89,6 +89,7 @@ case class Fix[F[_] : Functor](unFix: F[Fix[F]]) {
 trait FixTraverse[F[_, _]] extends Traverse[λ[Z => Fix[λ[ζ => F[Z, ζ]]]]] {
   def traverseAlgebra[A[_] : Applicative, Z, Y](z2ay: Z => A[Y]): Algebra[λ[ζ => F[Z, ζ]], A[Fix[λ[ζ => F[Y, ζ]]]]]
 
-  def traverse[A[_] : Applicative, Z, Y](fix: Fix[λ[ζ => F[Z, ζ]]])(z2ay: Z => A[Y]): A[Fix[λ[ζ => F[Y, ζ]]]] = fix.cata(traverseAlgebra(z2ay))
+  def traverse[A[_] : Applicative, Z, Y](fix: Fix[λ[ζ => F[Z, ζ]]])(z2ay: Z => A[Y]): A[Fix[λ[ζ => F[Y, ζ]]]] =
+    fix.cata(traverseAlgebra(z2ay))
 }
 

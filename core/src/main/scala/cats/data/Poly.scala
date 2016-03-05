@@ -1,7 +1,6 @@
 package cats.data
 
 import cats.Functor
-import cats.fix.Fix
 import Types._
 
 /**
@@ -36,13 +35,13 @@ class IdentityFunctor[Y] extends Functor[λ[ζ => ζ]] {
 }
 
 class ProductFunctor[F[_, _], G[_, _], Y](F: Functor[λ[ζ => F[Y, ζ]]], G: Functor[λ[ζ => G[Y, ζ]]]) extends Functor[λ[ζ => Product[F, G, Y, ζ]]] {
-  def map[Z, X](prod: Product[F, G, Y, Z])(z2x: Z => X): Product[F, G, Y, X] =
-    prod.bimap(F.map(_)(z2x), G.map(_)(z2x))
+  def map[Z, X](product: Product[F, G, Y, Z])(z2x: Z => X): Product[F, G, Y, X] =
+    product.bimap(F.map(_)(z2x), G.map(_)(z2x))
 }
 
 
 class SumFunctor[F[_, _], G[_, _], Y](F: Functor[λ[ζ => F[Y, ζ]]], G: Functor[λ[ζ => G[Y, ζ]]]) extends Functor[λ[ζ => Sum[F, G, Y, ζ]]] {
-  def map[Z, X](xor: Sum[F, G, Y, Z])(z2x: Z => X): Sum[F, G, Y, X] =
-    xor.bimap(F.map(_)(z2x), G.map(_)(z2x))
+  def map[Z, X](sum: Sum[F, G, Y, Z])(z2x: Z => X): Sum[F, G, Y, X] =
+    sum.bimap(F.map(_)(z2x), G.map(_)(z2x))
 }
 

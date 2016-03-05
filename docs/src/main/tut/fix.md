@@ -7,14 +7,14 @@ scaladoc: "#cats.fix.Fix"
 -------------------------
 # Fixed Points
 
-`Fix` uses the [`Functor`](functor.html) type class to define a *structural recursive* function `cata` over the fixed point `Fix[F]` of a functor `F`.
-As such, `cata` can be seen as a generalization of the function `foldRight` on `List[A]`.
+`Fix` uses the [`Functor`](functor.html) type class to define a *structural recursive* function `cata` over the least fixed point `Fix[F]` of a functor `F`.
+As such, `cata` can be seen as a generalization of the function `foldRight` on `List[Z]`.
 
-In order to `traverse` the least fixed point of a functor `F`, resulting in a value of type `A[Fix[F[Y, ?]]]`,
-it suffices to define an appropriate algebra of type `F[Z, A[Fix[F[Y, ?]]]] => A[Fix[F[Y, ?]]]`.
+In order to `traverse` the least fixed point of a functor `F`, resulting in a value of type `A[Fix[λ[ζ => F[Y, ζ]]]]`,
+it suffices to define an appropriate algebra of type `Algebra[λ[ζ => F[Z, ζ]], A[Fix[λ[ζ => F[Y, ζ]]]]]`.
 
-The nice thing about algebras of type `F[A] => A` as opposed to the structural recursive functions of type `Fix[F] => A` defined in terms of them
-is that they can be defined in a *modular* way because *recursion* and *algebraic functor operations* (*sum* and *product*) are strictly separated.
+The nice thing about structural recursive functions of type `Fix[F] => A` defined in terms of algebras of type `F[A] => A`
+is that they can be defined in a *modular* way because *recursion* and *algebraic operations* (*constant*, *identity*, sum* and *product*) are strictly separated.
 See [Using Catamorphisms Subtypes and Monad Transformers for Writing Modular Functional Interpreters](https://www.researchgate.net/publication/2550340_Using_Catamorphisms_Subtypes_and_Monad_Transformers_for_Writing_Modular_Functional_Interpreters) for more information.
 
 ## Fixed Point example: imports
