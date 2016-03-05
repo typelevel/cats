@@ -115,9 +115,11 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
         fa.local(f)
     }
 
-  implicit def kleisliTransLift[M[_], A]: TransLift[({type λ[α[_], β] = Kleisli[α, A, β]})#λ, M] =
-    new TransLift[({type λ[α[_], β] = Kleisli[α, A, β]})#λ, M] {
-      def liftT[B](ma: M[B]): Kleisli[M, A, B] = Kleisli[M, A, B](a => ma)
+  implicit def kleisliTransLift[A]: TransLift.AuxId[Kleisli[?[_], A, ?]] =
+    new TransLift[Kleisli[?[_], A, ?]] {
+      type TC[M[_]] = Unit =:= Unit
+
+      def liftT[M[_], B](ma: M[B])(implicit ev: Unit =:= Unit): Kleisli[M, A, B] = Kleisli[M, A, B](a => ma)
     }
 }
 
@@ -244,7 +246,7 @@ private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] {
 private trait KleisliSemigroup[F[_], A, B] extends Semigroup[Kleisli[F, A, B]] {
   implicit def FB: Semigroup[F[B]]
 
-  override def combine(a: Kleisli[F, A, B], b: Kleisli[F, A, B]): Kleisli[F, A, B] = 
+  override def combine(a: Kleisli[F, A, B], b: Kleisli[F, A, B]): Kleisli[F, A, B] =
     Kleisli[F, A, B](x => FB.combine(a.run(x), b.run(x)))
 }
 
