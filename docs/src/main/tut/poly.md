@@ -9,15 +9,15 @@ scaladoc: "#cats.data.Poly"
 
 *Polynomial functors* are functors (see [`Functor`](functor.html)) that are, *recursively*, defined in terms of 
 
- * `Constant`, a.k.a. `a`, `b`, `c`, ...
- * `Identity`, a.k.a. a *variable*, say `z`
- * `Product`, a.k.a. `*`
- * `Sum`, a.k.a. `+`
+ * `Constant`, cfr. *constants* `a`, `b`, `c`, ... , but also carrying *data*
+ * `Identity`, cfr. a *variable* `z` , but also carrying *data*
+ * `Product`, cfr. *product* `*` , but also carrying *data*
+ * `Sum`, cfr. *sum* `+` , but also carrying *data*
  
  Many recursive data structures can be seen as least fixed points (see [`Fix`](fix.html)) of polynomial functors
  
-  * `List` corresponds to the *linear* polynomial `u + (a * z)` (`u` being the *unit* constant)
-  * `Tree` corresponds to the *quadratic* polynomial `a + (z * z)`
+  * `List` corresponds to the *linear polynomial* `u + (a * z)` (`u` being a special *unit constant* not carrying any data)
+  * `Tree` corresponds to the *quadraticpolynomial*  `a + (z * z)`
   
   
 # An example: lists
@@ -31,7 +31,7 @@ import cats.fix.Fix
 
 ```
 
-Let's start with some convenient *type aliases*
+Let's start with some convenient *type aliases* (whose names you'll probably recognize)
   
 ```tut
   type Nil[Y, Z] = Constant[Unit, Z]
@@ -129,10 +129,10 @@ the code for `Tree` is almost exactly the same as the code for `List`
 
 
   
-# An very similar example: trees
+# A very similar example: trees
   
 
-Let's start with some convenient *type aliases*
+Let's start with some convenient *type aliases* (whose names you'll probably recognize)
   
 ```tut
   type Leaf[Y, Z] = Constant[Y, Z]

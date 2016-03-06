@@ -15,15 +15,10 @@ import Types._
   *
   * `Fix[F]` is the least fixed point of the functor `F`
   *
+  * and
   *
-  * `cata`
+  * `Fix: F[ Fix[F] ] => Fix[F]` is the initial algebra of `F`
   *
-  * `cata` is a catamorphism over the least fixed point of a the functor `F`
-  *
-  *
-  * remark:
-  *
-  * `Fix` can be seen as the initial algebra of `F`
   *
   *                algebra
   * F[A] ------------------------> A
@@ -32,10 +27,10 @@ import Types._
   * | _.map(_.cata(algebra)        | _.cata(algebra)
   * |                              |
   * |              Fix             |
-  * F[Fix[F]] -------------------> Fix[F]
+  * F[ Fix[F] ] -----------------> Fix[F]
   *
   *
-  * which, by the way, naturally leads to its definition
+  * which naturally leads to the definition of `cata`
   *
   *
   *                algebra
@@ -45,19 +40,20 @@ import Types._
   * | _.map(_.cata(algebra)        | _.cata(algebra)
   * |                              |
   * |              _.unFix         |
-  * F[Fix[F]] <------------------- Fix[F]
+  * F[ Fix[F] ] <----------------- Fix[F]
   *
   *
   * Why is all this useful?
   *
-  * `cata` generalizes structural recursion over recursive lists (a.k.a. `foldRight`)
+  * `cata` generalizes structural recursion over common recursive types
+  * for example, structural recursion over recursive lists (a.k.a. `foldRight`)
   * to a whole range of recursive data structures of type `Fix[F]`
   *
   * in order to define a structural recursive function of type `Fix[F] => A`
-  * it suffices to define a function (referred to as algebra) of type `F[A] => A`
+  * it suffices to define an algebra of type `F[A] => A`
   *
-  * the nice thing about structural recursive functions is that they can be defined in a *modular* way
-  * because algebraic operations (sum and product) and recursion are strictly separated
+  * the nice thing about such structural recursive functions is that they can be defined in a *modular* way
+  * because algebraic operations (constant, identity, sum and product) and recursion are strictly separated
   *
   * See [[https://www.researchgate.net/publication/2550340_Using_Catamorphisms_Subtypes_and_Monad_Transformers_for_Writing_Modular_Functional_Interpreters]]
   *

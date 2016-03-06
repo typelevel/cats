@@ -5,7 +5,12 @@ import Types._
 
 /**
   *
-  * Polynomial Types
+  * Polynomial Types can, recursively, be defined in terms of
+  *
+  *  `Constant`
+  *  `Identity`
+  *  `Product`
+  *  `Sum`
   *
   */
 
@@ -16,13 +21,24 @@ object Types {
   type Product[F[_, _], G[_, _], Y, Z] = Prod[λ[ψ => F[Y, ψ]], λ[ψ => G[Y, ψ]], Z]
   type Sum[F[_, _], G[_, _], Y, Z] = Xor[F[Y, Z], G[Y, Z]]
 
+  /**
+    *
+    * special case (sometimes `Y` is not important at all)
+    *
+    */
+
   type ConstantUnit[Y, Z] = Constant[Unit, Z]
 
 }
 
 /**
   *
-  * Polynomial Functors
+  * Polynomial Functors can, recursively, be defined in terms of
+  *
+  *  `ConstantFunctor`
+  *  `IdentityFunctor`
+  *  `ProductFunctor`
+  *  `SumFunctor`
   *
   */
 
