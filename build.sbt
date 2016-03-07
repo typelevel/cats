@@ -41,7 +41,19 @@ lazy val commonSettings = Seq(
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport
 
+lazy val tagName = Def.setting{
+ s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
+}
+
 lazy val commonJsSettings = Seq(
+  scalacOptions += {
+    val tagOrHash =
+      if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lines_!.head
+      else tagName.value
+    val a = (baseDirectory in LocalRootProject).value.toURI.toString
+    val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
+    s"-P:scalajs:mapSourceURI:$a->$g/"
+  },
   scalaJSStage in Global := FastOptStage,
   parallelExecution := false
 )
@@ -327,6 +339,7 @@ lazy val commonScalacOptions = Seq(
 
 lazy val sharedPublishSettings = Seq(
   releaseCrossBuild := true,
+  releaseTagName := tagName.value,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
   publishArtifact in Test := false,
