@@ -5,7 +5,7 @@ package functor
  * A type class of types which give rise to two independent, covariant
  * functors.
  */
-trait Bifunctor[F[_, _]] extends Serializable { self =>
+trait Bifunctor[F[_, _]] extends Any with Serializable { self =>
 
   /**
    * The quintessential method of the Bifunctor trait, it applies a
