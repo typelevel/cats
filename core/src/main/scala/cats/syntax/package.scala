@@ -35,4 +35,5 @@ package object syntax {
   object traverse extends TraverseSyntax
   object xor extends XorSyntax
   object validated extends ValidatedSyntax
+  object writer extends WriterSyntax
 }

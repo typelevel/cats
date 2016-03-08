@@ -37,3 +37,4 @@ trait AllSyntax
     with XorSyntax
     with ValidatedSyntax
     with CoproductSyntax
+    with WriterSyntax
