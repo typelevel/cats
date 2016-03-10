@@ -16,3 +16,4 @@ TAGS
 .sbtrc
 *.sublime-project
 *.sublime-workspace
+tests.iml
