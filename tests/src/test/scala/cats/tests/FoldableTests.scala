@@ -63,9 +63,9 @@ class FoldableTestsAdditional extends CatsSuite {
     // more basic checks
     val names = List("Aaron", "Betty", "Calvin", "Deirdra")
     F.foldMap(names)(_.length) should === (names.map(_.length).sum)
-    val sumM = F.foldM(names, Eval.later { "" }) { (acc, x) => (Some(acc + x): Option[String]) }
+    val sumM = F.foldM(names, "") { (acc, x) => (Some(acc + x): Option[String]) }
     assert(sumM == Some("AaronBettyCalvinDeirdra"))
-    val notCalvin = F.foldM(names, Eval.later { "" }) { (acc, x) =>
+    val notCalvin = F.foldM(names, "") { (acc, x) =>
       if (x == "Calvin") (None: Option[String])
       else (Some(acc + x): Option[String]) }
     assert(notCalvin == None)
@@ -77,6 +77,16 @@ class FoldableTestsAdditional extends CatsSuite {
     // safely build large lists
     val larger = F.foldRight(large, Now(List.empty[Int]))((x, lxs) => lxs.map((x + 1) :: _))
     larger.value should === (large.map(_ + 1))
+  }
+
+  test("Foldable[List].foldM stack safety") {
+    def nonzero(acc: Long, x: Long): Option[Long] =
+      if (x == 0) None else Some(acc + x)
+
+    val n = 100000L
+    val expected = n*(n+1)/2
+    val actual = Foldable[List].foldM((1L to n).toList, 0L)(nonzero)
+    assert(actual.get == expected)
   }
 
   test("Foldable[Stream]") {
