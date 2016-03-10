@@ -7,7 +7,7 @@ scaladoc: "#cats.fix.Fix"
 -------------------------
 # Fixed Points
 
-`Fix` uses the [`Functor`](functor.html) type class to define a *structural recursive* function `cata` over the least fixed point `Fix[F]` of a functor `F`.
+`Fix` uses the [`Functor`](functor.html) type class to define a *structurally recursive* function `cata` over the least fixed point `Fix[F]` of a functor `F`.
 As such, `cata` can be seen as a generalization of the function `foldRight` on `List[Z]`.
 
 In order to `traverse` the least fixed point of a functor `F`, resulting in a value of type `A[Fix[λ[ζ => F[Y, ζ]]]]`,
@@ -152,7 +152,7 @@ Here is a typical example: *traversing a list of strings, trying to parse them a
 ## What about evaluation?
 
 As you may know, structural recursion may benefit from different evaluation strategies.
-Since `cata` works for *all* algebras, it suffices to replace `A` with one of the `Eval[]` case classes (`Now[A]`, `Later[A]` or `Always[A]`)
+Since `cata` works for *all* algebras, it suffices to replace `A` with one of the `Eval[A]` case classes (`Now[A]`, `Later[A]` or `Always[A]`)
 
 For example, `show` related stuff might as well have been defined as follows:
 
