@@ -77,6 +77,19 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def showArbitrary[A: Arbitrary]: Arbitrary[Show[A]] =
     Arbitrary(Show.fromToString[A])
 
+  implicit def partialOrderArbitrary[A: Arbitrary]: Arbitrary[PartialOrder[A]] =
+    Arbitrary(Gen.oneOf(
+      PartialOrder.from[A]((_: A, _: A) => Double.NaN),
+      PartialOrder.from[A]((_: A, _: A) => -1.0),
+      PartialOrder.from[A]((_: A, _: A) => 0.0),
+      PartialOrder.from[A]((_: A, _: A) => 1.0)))
+
+  implicit def orderArbitrary[A: Arbitrary]: Arbitrary[Order[A]] =
+    Arbitrary(Gen.oneOf(
+      Order.from[A]((_: A, _: A) => -1),
+      Order.from[A]((_: A, _: A) => 0),
+      Order.from[A]((_: A, _: A) => 1)))
+
   implicit def function0Arbitrary[A: Arbitrary]: Arbitrary[() => A] =
     Arbitrary(getArbitrary[A].map(() => _))
 

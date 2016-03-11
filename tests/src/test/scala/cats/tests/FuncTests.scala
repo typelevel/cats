@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.data.{ Func, AppFunc }
+import cats.functor.Contravariant
 import Func.appFunc
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -35,6 +36,12 @@ class FuncTests extends CatsSuite {
     implicit val catsDataFunctorForFunc = Func.catsDataFunctorForFunc[Option, Int]
     checkAll("Func[Option, Int, Int]", FunctorTests[Func[Option, Int, ?]].functor[Int, Int, Int])
     checkAll("Functor[Func[Option, Int, ?]]", SerializableTests.serializable(Functor[Func[Option, Int, ?]]))
+  }
+
+  {
+    implicit val funcContravariant = Func.catsDataContravariantForFunc[Show, Int]
+    checkAll("Func[Show, Int, Int]", ContravariantTests[Func[Show, ?, Int]].contravariant[Int, Int, Int])
+    checkAll("Contravariant[Func[Show, ?, Int]]", SerializableTests.serializable(Contravariant[Func[Show, ?, Int]]))
   }
 
   {
