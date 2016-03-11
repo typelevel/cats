@@ -44,6 +44,8 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 
   def reset(implicit monoidL: Monoid[L], functorF: Functor[F]): WriterT[F, L, V] =
     mapWritten(_ => monoidL.empty)
+
+  def show(implicit F: Show[F[(L, V)]]): String = F.show(run)
 }
 object WriterT extends WriterTInstances with WriterTFunctions
 
@@ -68,6 +70,10 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
       def liftT[A](ma: M[A]): WriterT[M, W, A] =
         WriterT(M.map(ma)((W.empty, _)))
     }
+
+  implicit def writerTShow[F[_], L, V](implicit F: Show[F[(L, V)]]): Show[WriterT[F, L, V]] = new Show[WriterT[F, L, V]] {
+    override def show(f: WriterT[F, L, V]): String = f.show
+  }
 }
 
 private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 {

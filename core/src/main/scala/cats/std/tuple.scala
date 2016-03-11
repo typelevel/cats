@@ -15,4 +15,13 @@ sealed trait Tuple2Instances {
       def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
         g(fab._2, f(fab._1, c))
     }
+
+  implicit def tuple2Show[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] = new Show[(A, B)] {
+    override def show(f: (A, B)): String = {
+      // Note: the toString method for Tuple2 does not always include a space after the comma. For example,
+      // ("foo", "").toString returns "(foo,)" instead of "(foo, )" and ("","쾷").toString returns "(,쾷)".  This
+      // implementation avoids this question of consistency by never including a space.
+      s"(${aShow.show(f._1)},${bShow.show(f._2)})"
+    }
+  }
 }
