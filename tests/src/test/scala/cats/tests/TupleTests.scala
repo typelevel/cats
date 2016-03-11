@@ -12,7 +12,7 @@ class TupleTests extends CatsSuite {
     (1, 2).show should === ("(1,2)")
 
     forAll { fs: (String, String) =>
-      fs.show should === (s"(${fs._1},${fs._2})")
+      fs.show should === (fs.toString)
     }
 
     // Provide some "non-standard" Show instances to make sure the tuple2 is actually use the Show instances for the
