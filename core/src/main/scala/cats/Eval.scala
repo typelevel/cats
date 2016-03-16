@@ -228,17 +228,23 @@ object Eval extends EvalInstances {
 
   object Call {
     /** Collapse the call stack for eager evaluations */
-    private def loop[A](fa: Eval[A]): Eval[A] = fa match {
+    @tailrec private def loop[A](fa: Eval[A]): Eval[A] = fa match {
       case call: Eval.Call[A] =>
         loop(call.thunk())
       case compute: Eval.Compute[A] =>
         new Eval.Compute[A] {
           type Start = compute.Start
           val start: () => Eval[Start] = () => compute.start()
-          val run: Start => Eval[A] = s => loop(compute.run(s))
+          val run: Start => Eval[A] = s => loop1(compute.run(s))
         }
       case other => other
     }
+
+    /**
+     * Alias for loop that can be called in a non-tail position
+     * from an otherwise tailrec-optimized loop.
+     */
+    private def loop1[A](fa: Eval[A]): Eval[A] = loop(fa)
   }
 
   /**
