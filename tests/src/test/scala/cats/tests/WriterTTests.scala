@@ -62,6 +62,11 @@ class WriterTTests extends CatsSuite {
     }
   }
 
+  test("show") {
+    val writerT: WriterT[Id, List[String], String] = WriterT.put("foo")(List("Some log message"))
+    writerT.show should === ("(List(Some log message),foo)")
+  }
+
   {
     // F has a SemigroupK
     implicit val F: SemigroupK[ListWrapper] = ListWrapper.semigroupK

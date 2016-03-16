@@ -15,4 +15,10 @@ sealed trait Tuple2Instances {
       def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
         g(fab._2, f(fab._1, c))
     }
+
+  implicit def tuple2Show[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] = new Show[(A, B)] {
+    override def show(f: (A, B)): String = {
+      s"(${aShow.show(f._1)},${bShow.show(f._2)})"
+    }
+  }
 }
