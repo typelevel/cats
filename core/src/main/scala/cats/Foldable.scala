@@ -77,6 +77,12 @@ import simulacrum.typeclass
     foldLeft(fa, B.empty)((b, a) => B.combine(b, f(a)))
 
   /**
+   * Left associative monadic folding on `F`.
+   */
+  def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
+    foldLeft(fa, G.pure(z))((gb, a) => G.flatMap(gb)(f(_, a)))
+
+  /**
    * Traverse `F[A]` using `Applicative[G]`.
    *
    * `A` values will be mapped into `G[B]` and combined using
