@@ -251,4 +251,28 @@ class XorTTests extends CatsSuite {
       x.toEither.map(_.right.toOption) should === (x.toOption.value)
     }
   }
+
+  test("ensure on left is identity") {
+    forAll { (x: XorT[Id, String, Int], s: String, p: Int => Boolean) =>
+      if (x.isLeft) {
+        x.ensure(s)(p) should === (x)
+      }
+    }
+  }
+
+  test("ensure on right is identity if predicate satisfied") {
+    forAll { (x: XorT[Id, String, Int], s: String, p: Int => Boolean) =>
+      if (x.isRight && p(x getOrElse 0)) {
+        x.ensure(s)(p) should === (x)
+      }
+    }
+  }
+
+  test("ensure should fail if predicate not satisfied") {
+    forAll { (x: XorT[Id, String, Int], s: String, p: Int => Boolean) =>
+      if (x.isRight && !p(x getOrElse 0)) {
+        x.ensure(s)(p) should === (XorT.left[Id, String, Int](s))
+      }
+    }
+  }
 }
