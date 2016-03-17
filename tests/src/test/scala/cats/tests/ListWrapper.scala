@@ -1,9 +1,7 @@
 package cats
 package tests
 
-import cats.data.OneAnd
 import cats.std.list._
-import cats.laws.discipline.arbitrary.oneAndArbitrary
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary

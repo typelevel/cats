@@ -5,8 +5,7 @@ import cats.arrow.NaturalTransformation
 import cats.free.Coyoneda
 import cats.laws.discipline.{FunctorTests, SerializableTests}
 
-import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Arbitrary
 
 class CoyonedaTests extends CatsSuite {
   implicit def coyonedaArbitrary[F[_] : Functor, A : Arbitrary](implicit F: Arbitrary[F[A]]): Arbitrary[Coyoneda[F, A]] =

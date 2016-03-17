@@ -3,13 +3,7 @@ package tests
 
 import cats.std.AllInstances
 import cats.syntax.AllSyntax
-import algebra.laws.GroupLaws
 import cats.functor.{Invariant, Contravariant}
-import cats.laws.discipline.SerializableTests
-
-import org.scalacheck.{Arbitrary}
-import org.scalatest.prop.PropertyChecks
-import scala.reflect.runtime.universe.TypeTag
 
 /**
  * Test that our syntax implicits are working.

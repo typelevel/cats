@@ -2,8 +2,7 @@ package cats
 package tests
 
 import org.scalatest.prop.PropertyChecks
-import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Arbitrary
 
 import cats.std.all._
 

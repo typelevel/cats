@@ -1,8 +1,6 @@
 package cats
 package tests
 
-import org.scalacheck.Arbitrary
-
 import cats.arrow.{Arrow, Choice}
 import cats.functor.Contravariant
 import cats.laws.discipline._

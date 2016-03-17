@@ -8,7 +8,6 @@ import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 
 import algebra.laws.OrderLaws
-import org.scalacheck.Prop.forAll
 
 class WriterTTests extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]

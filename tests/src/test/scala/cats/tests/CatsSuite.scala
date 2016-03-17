@@ -7,7 +7,7 @@ import cats.std.AllInstances
 import cats.syntax.{AllSyntax, EqOps}
 
 import org.scalactic.anyvals.{PosZDouble, PosInt}
-import org.scalatest.{FunSuite, PropSpec, Matchers}
+import org.scalatest.{FunSuite, Matchers}
 import org.scalatest.prop.{Configuration, GeneratorDrivenPropertyChecks}
 import org.typelevel.discipline.scalatest.Discipline
 

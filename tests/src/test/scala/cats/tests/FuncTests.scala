@@ -1,8 +1,8 @@
 package cats
 package tests
 
-import cats.data.{ Func, AppFunc, Const }
-import Func.{ appFunc, appFuncU }
+import cats.data.{ Func, AppFunc }
+import Func.appFunc
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary

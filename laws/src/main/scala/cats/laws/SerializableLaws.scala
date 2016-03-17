@@ -2,7 +2,7 @@ package cats
 package laws
 
 import org.scalacheck.Prop
-import org.scalacheck.Prop.{ Exception, False, Proof, Result }
+import org.scalacheck.Prop.{ Exception, Proof, Result }
 
 import catalysts.Platform
 
