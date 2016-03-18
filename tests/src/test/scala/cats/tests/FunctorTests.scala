@@ -17,4 +17,13 @@ class FunctorTest extends CatsSuite {
       m.as(i) should === (m.keys.map(k => (k, i)).toMap)
     }
   }
+
+  test("widen equals map(identity)") {
+    forAll { (i: Int) =>
+      val list: List[Some[Int]] = List(Some(i))
+      val widened: List[Option[Int]] = list.widen[Option[Int]]
+      widened should === (list.map(identity[Option[Int]]))
+      assert(widened eq list)
+    }
+  }
 }
