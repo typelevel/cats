@@ -16,7 +16,7 @@ trait MonadWriterTests[F[_], W] extends MonadTests[F] {
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
     EqFA: Eq[F[A]],
-    EqFAW: Eq[F[(A, W)]],
+    EqFAW: Eq[F[(W, A)]],
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
     EqFU: Eq[F[Unit]],

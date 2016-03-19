@@ -5,16 +5,16 @@ trait MonadWriterLaws[F[_], W] extends MonadLaws[F] {
   implicit override def F: MonadWriter[F, W]
 
   def monadWriterWriterPure[A](a: A)(implicit W: Monoid[W]): IsEq[F[A]] =
-    F.writer((a, W.empty)) <-> F.pure(a)
+    F.writer((W.empty, a)) <-> F.pure(a)
 
   def monadWriterTellFusion(x: W, y: W)(implicit W: Monoid[W]): IsEq[F[Unit]] =
     F.flatMap(F.tell(x))(_ => F.tell(y)) <-> F.tell(W.combine(x, y))
 
-  def monadWriterListenPure[A](a: A)(implicit W: Monoid[W]): IsEq[F[(A, W)]] =
-    F.listen(F.pure(a)) <-> F.pure((a, W.empty))
+  def monadWriterListenPure[A](a: A)(implicit W: Monoid[W]): IsEq[F[(W, A)]] =
+    F.listen(F.pure(a)) <-> F.pure((W.empty, a))
 
-  def monadWriterListenWriter[A](aw: (A, W)): IsEq[F[(A, W)]] =
-    F.listen(F.writer(aw)) <-> F.map(F.tell(aw._2))(_ => aw)
+  def monadWriterListenWriter[A](aw: (W, A)): IsEq[F[(W, A)]] =
+    F.listen(F.writer(aw)) <-> F.map(F.tell(aw._1))(_ => aw)
 }
 
 object MonadWriterLaws {

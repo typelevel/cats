@@ -191,14 +191,14 @@ private[data] sealed trait WriterTMonad[F[_], L] extends WriterTApplicative[F, L
 }
 
 private[data] sealed trait WriterTMonadWriter[F[_], L] extends MonadWriter[WriterT[F, L, ?], L] with WriterTMonad[F, L] {
-  def writer[A](aw: (A, L)): WriterT[F, L, A] =
-    WriterT.put(aw._1)(aw._2)
+  def writer[A](aw: (L, A)): WriterT[F, L, A] =
+    WriterT.put(aw._2)(aw._1)
 
-  def listen[A](fa: WriterT[F, L, A]): WriterT[F, L, (A, L)] =
-    WriterT(F0.flatMap(fa.value)(a => F0.map(fa.written)(l => (l, (a, l)))))
+  def listen[A](fa: WriterT[F, L, A]): WriterT[F, L, (L, A)] =
+    WriterT(F0.flatMap(fa.value)(a => F0.map(fa.written)(l => (l, (l, a)))))
 
-  def pass[A](fa: WriterT[F, L, (A, L => L)]): WriterT[F, L, A] =
-    WriterT(F0.flatMap(fa.value) { case (a, f) => F0.map(fa.written)(l => (f(l), a)) })
+  def pass[A](fa: WriterT[F, L, (L => L, A)]): WriterT[F, L, A] =
+    WriterT(F0.flatMap(fa.value) { case (f, a) => F0.map(fa.written)(l => (f(l), a)) })
 }
 
 private[data] sealed trait WriterTSemigroupK[F[_], L] extends SemigroupK[WriterT[F, L, ?]] {
