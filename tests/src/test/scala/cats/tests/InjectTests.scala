@@ -3,7 +3,6 @@ package tests
 
 import cats.data.{Xor, Coproduct}
 import cats.free.{Free, Inject,:<:}
-import cats.laws.discipline.arbitrary
 import org.scalacheck._
 
 class InjectTests extends CatsSuite {

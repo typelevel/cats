@@ -2,7 +2,6 @@ package cats
 package laws
 
 import cats.Id
-import cats.arrow.Compose
 import cats.data.Const
 import cats.syntax.traverse._
 import cats.syntax.foldable._

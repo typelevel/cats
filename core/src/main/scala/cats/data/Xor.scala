@@ -1,8 +1,6 @@
 package cats
 package data
 
-import cats.functor.Bifunctor
-
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 

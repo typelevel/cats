@@ -6,7 +6,6 @@ import cats.data.Xor
 
 import scala.util.control.NonFatal
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration.FiniteDuration
 
 trait FutureInstances extends FutureInstances1 {
 

@@ -7,7 +7,7 @@ import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary.function0Arbitrary
 import org.scalacheck.{Arbitrary, Gen}
-import Arbitrary.{arbitrary, arbFunction1}
+import Arbitrary.arbFunction1
 
 class FreeTests extends CatsSuite {
   import FreeTests._
