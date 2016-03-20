@@ -21,9 +21,9 @@ object TLExtract {
     val TC = TC0
   }
 
-  implicit def extract1Id[MT[_[_], _], M[_]](implicit TL0: TransLift.Aux[MT, λ[X[_] => Unit =:= Unit]], TC0: Unit =:= Unit): TLExtract[MT, M] = extract1[MT, M, λ[X[_] => Unit =:= Unit]]
+  implicit def extract1Id[MT[_[_], _], M[_]](implicit TL0: TransLift.Aux[MT, Trivial.PH1], TC0: Trivial): TLExtract[MT, M] = extract1[MT, M, Trivial.PH1]
 
   // sigh...
   implicit def extract2[MT[_[_], _, _], Z, M[_], TC[_[_]]](implicit TL0: TransLift.Aux[MT[?[_], Z, ?], TC], TC0: TC[M]): TLExtract[MT[?[_], Z, ?], M] = extract1[MT[?[_], Z, ?], M, TC]
-  implicit def extract2Id[MT[_[_], _, _], Z, M[_]](implicit TL0: TransLift.Aux[MT[?[_], Z, ?], λ[X[_] => Unit =:= Unit]], TC0: Unit =:= Unit): TLExtract[MT[?[_], Z, ?], M] = extract1[MT[?[_], Z, ?], M, λ[X[_] => Unit =:= Unit]]
+  implicit def extract2Id[MT[_[_], _, _], Z, M[_]](implicit TL0: TransLift.Aux[MT[?[_], Z, ?], Trivial.PH1], TC0: Trivial): TLExtract[MT[?[_], Z, ?], M] = extract1[MT[?[_], Z, ?], M, Trivial.PH1]
 }

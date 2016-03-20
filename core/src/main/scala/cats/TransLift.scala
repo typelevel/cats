@@ -24,5 +24,5 @@ trait TransLift[MT[_[_], _]] {
 
 object TransLift {
   type Aux[MT[_[_], _], TC0[_[_]]] = TransLift[MT] { type TC[M[_]] = TC0[M] }
-  type AuxId[MT[_[_], _]] = Aux[MT, λ[X[_] => Unit =:= Unit]]   // TODO we need a Trivial typeclass
+  type AuxId[MT[_[_], _]] = Aux[MT, Trivial.PH1]
 }

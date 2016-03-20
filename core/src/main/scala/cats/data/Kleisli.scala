@@ -117,9 +117,9 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
 
   implicit def kleisliTransLift[A]: TransLift.AuxId[Kleisli[?[_], A, ?]] =
     new TransLift[Kleisli[?[_], A, ?]] {
-      type TC[M[_]] = Unit =:= Unit
+      type TC[M[_]] = Trivial
 
-      def liftT[M[_], B](ma: M[B])(implicit ev: Unit =:= Unit): Kleisli[M, A, B] = Kleisli[M, A, B](a => ma)
+      def liftT[M[_], B](ma: M[B])(implicit ev: Trivial): Kleisli[M, A, B] = Kleisli[M, A, B](a => ma)
     }
 }
 
