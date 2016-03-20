@@ -5,25 +5,31 @@ trait TransLiftSyntax {
   implicit def transLiftSyntax[M[_], A](ma: M[A]): TransLiftOps[M, A] = new TransLiftOps(ma)
 }
 
-final class TransLiftOps[M[_], A](val ma: M[A]) extends AnyVal {
-  def liftT[MT[_[_],_]](implicit extract: TLExtract[MT, M]): MT[M, A] = extract.TL.liftT(ma)(extract.TC)
+final class TransLiftOps[M0[_], A](val ma: M0[A]) extends AnyVal {
+  import TLExtract._
+
+  def liftT[MT0[_[_],_]](implicit extract: TLExtract[SingletonMT { type MT[F[_], B] = MT0[F, B] }, SingletonM { type M[B] = M0[B] }]): MT0[M0, A] = extract.TL.liftT(ma)(extract.TC)
 }
 
-trait TLExtract[MT[_[_], _], M[_]] {
-  val TL: TransLift[MT]
-  val TC: TL.TC[M]
+trait TLExtract[MTS <: TLExtract.SingletonMT, MS <: TLExtract.SingletonM] {
+  val TL: TransLift[MTS#MT]
+  val TC: TL.TC[MS#M]
 }
 
 object TLExtract {
 
-  implicit def extract1[MT[_[_], _], M[_], TC[_[_]]](implicit TL0: TransLift.Aux[MT, TC], TC0: TC[M]): TLExtract[MT, M] = new TLExtract[MT, M] {
+  trait SingletonMT {
+    type MT[F[_], A]
+  }
+
+  trait SingletonM {
+    type M[A]
+  }
+
+  implicit def extract[MTS <: SingletonMT, MS <: SingletonM, TC[_[_]]](implicit TL0: TransLift.Aux[MTS#MT, TC], TC0: TC[MS#M]): TLExtract[MTS, MS] = new TLExtract[MTS, MS] {
     val TL = TL0
     val TC = TC0
   }
 
-  implicit def extract1Id[MT[_[_], _], M[_]](implicit TL0: TransLift.Aux[MT, Trivial.PH1], TC0: Trivial): TLExtract[MT, M] = extract1[MT, M, Trivial.PH1]
-
-  // sigh...
-  implicit def extract2[MT[_[_], _, _], Z, M[_], TC[_[_]]](implicit TL0: TransLift.Aux[MT[?[_], Z, ?], TC], TC0: TC[M]): TLExtract[MT[?[_], Z, ?], M] = extract1[MT[?[_], Z, ?], M, TC]
-  implicit def extract2Id[MT[_[_], _, _], Z, M[_]](implicit TL0: TransLift.Aux[MT[?[_], Z, ?], Trivial.PH1], TC0: Trivial): TLExtract[MT[?[_], Z, ?], M] = extract1[MT[?[_], Z, ?], M, Trivial.PH1]
+  implicit def extractId[MTS <: SingletonMT, MS <: SingletonM](implicit TL0: TransLift.Aux[MTS#MT, Trivial.PH1]): TLExtract[MTS, MS] = extract[MTS, MS, Trivial.PH1]
 }
