@@ -3,13 +3,13 @@ package laws
 package discipline
 
 import cats.laws.discipline.CartesianTests.Isomorphisms
-import org.scalacheck.{Arbitrary, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop.forAll
 
 trait MonadStateTests[F[_], S] extends MonadTests[F] {
   def laws: MonadStateLaws[F, S]
 
-  def monadState[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
+  def monadState[A: Arbitrary: Cogen: Eq, B: Arbitrary: Cogen: Eq, C: Arbitrary: Cogen: Eq](implicit
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],

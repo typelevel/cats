@@ -3,20 +3,13 @@ package laws
 package discipline
 
 import cats.data._
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
 
 /**
  * Arbitrary instances for cats.data
  */
-object arbitrary extends ArbitraryInstances0 {
-
-  // A special function1Arbitrary for testing operations like dropWhile specifically
-  // in the context of Int => Boolean. Once scalacheck supports better Function1 arbitrary
-  // instances this can be removed.
-  implicit def function1Arbitrary: Arbitrary[(Int) => Boolean] =
-    Arbitrary(getArbitrary[Int].map(x => (input) => input < x))
-
+object arbitrary extends CogenInstances with ArbitraryInstances0 {
   implicit def constArbitrary[A, B](implicit A: Arbitrary[A]): Arbitrary[Const[A, B]] =
     Arbitrary(A.arbitrary.map(Const[A, B]))
 
@@ -81,4 +74,29 @@ object arbitrary extends ArbitraryInstances0 {
 private[discipline] sealed trait ArbitraryInstances0 {
   implicit def writerTArbitrary[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
     Arbitrary(F.arbitrary.map(WriterT(_)))
+}
+
+private[discipline] sealed trait CogenInstances extends StdLibCogen {
+  implicit def coproductCogen[F[_], G[_], A](implicit
+    CogenFA: Cogen[F[A]],
+    CogenGA: Cogen[G[A]]
+  ): Cogen[Coproduct[F, G, A]] =
+    Cogen[Xor[F[A], G[A]]].contramap(_.run)
+
+  implicit def evalCogen[A: Cogen]: Cogen[Eval[A]] =
+    Cogen((seed, evalA) => Cogen[A].perturb(seed, evalA.value))
+
+  implicit def oneAndCogen[F[_], A](implicit FA: Cogen[(A, F[A])]): Cogen[OneAnd[F, A]] =
+    FA.contramap(o => (o.head, o.tail))
+
+  implicit def xorCogen[A: Cogen, B: Cogen]: Cogen[Xor[A, B]] =
+    Cogen[Either[A, B]].contramap(_.toEither)
+}
+
+private[discipline] sealed trait StdLibCogen {
+  implicit def function0Cogen[A: Cogen]: Cogen[Function0[A]] =
+    Cogen[A].contramap(_())
+
+  implicit def streamCogen[A: Cogen]: Cogen[Stream[A]] =
+    Cogen[List[A]].contramap(_.toList)
 }

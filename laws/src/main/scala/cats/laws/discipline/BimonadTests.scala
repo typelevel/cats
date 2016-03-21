@@ -3,15 +3,16 @@ package laws
 package discipline
 
 import cats.laws.discipline.CartesianTests.Isomorphisms
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait BimonadTests[F[_]] extends MonadTests[F] with ComonadTests[F] {
   def laws: BimonadLaws[F]
 
-  def bimonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
+  def bimonad[A: Arbitrary: Cogen: Eq, B: Arbitrary: Cogen: Eq, C: Arbitrary: Cogen: Eq](implicit
     ArbFA: Arbitrary[F[A]],
+    CogenFA: Cogen[F[A]],
+    CogenFB: Cogen[F[B]],
     ArbFFA: Arbitrary[F[F[A]]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],

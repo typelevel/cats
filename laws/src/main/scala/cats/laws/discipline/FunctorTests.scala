@@ -2,14 +2,13 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait FunctorTests[F[_]] extends InvariantTests[F] {
   def laws: FunctorLaws[F]
 
-  def functor[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
+  def functor[A: Arbitrary: Cogen, B: Arbitrary: Cogen, C: Arbitrary: Cogen](implicit
     ArbFA: Arbitrary[F[A]],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]]

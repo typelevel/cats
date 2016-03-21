@@ -3,14 +3,13 @@ package laws
 package discipline
 
 import cats.laws.discipline.CartesianTests.Isomorphisms
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait AlternativeTests[F[_]] extends ApplicativeTests[F] with MonoidKTests[F]  {
   def laws: AlternativeLaws[F]
 
-  def alternative[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
+  def alternative[A: Arbitrary: Cogen, B: Arbitrary: Cogen, C: Arbitrary: Cogen](implicit
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],
