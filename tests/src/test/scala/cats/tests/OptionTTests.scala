@@ -134,6 +134,10 @@ class OptionTTests extends CatsSuite {
     OptionT[Xor[String, ?], Int](xor).show should === ("Xor.Right(Some(1))")
   }
 
+  test("none") {
+    OptionT.none[List,Int] should === (OptionT[List,Int](List(None)))
+  }
+
   test("implicit Show[OptionT] instance and explicit show method are consistent") {
     forAll { optionT: OptionT[List, Int] =>
       optionT.show should === (implicitly[Show[OptionT[List, Int]]].show(optionT))
