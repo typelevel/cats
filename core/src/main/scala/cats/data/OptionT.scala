@@ -94,6 +94,10 @@ object OptionT extends OptionTInstances {
   def pure[F[_], A](a: A)(implicit F: Applicative[F]): OptionT[F, A] =
     OptionT(F.pure(Some(a)))
 
+  /** An alias for pure */
+  def some[F[_], A](a: A)(implicit F: Applicative[F]): OptionT[F, A] =
+    pure(a)
+
   def none[F[_], A](implicit F: Applicative[F]) : OptionT[F, A] =
     OptionT(F.pure(None))
 
