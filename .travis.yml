@@ -8,7 +8,7 @@ scala:
 - 2.11.8
 
 script:
-  - scripts/travis-publish.sh
+  - travis_wait scripts/travis-publish.sh
 
 notifications:
   webhooks:
