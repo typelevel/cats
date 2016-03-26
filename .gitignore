@@ -2,6 +2,7 @@ project/boot
 target
 .ensime
 .ensime_lucene
+.ensime_cache
 TAGS
 \#*#
 *~
