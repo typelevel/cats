@@ -26,6 +26,8 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
     case Xor.Right(b) => fb(b)
   }
 
+  def fold[C](fa: A => C): (B => C) => C = fold(fa, _)
+
   def isLeft: Boolean = fold(_ => true, _ => false)
 
   def isRight: Boolean = fold(_ => false, _ => true)
