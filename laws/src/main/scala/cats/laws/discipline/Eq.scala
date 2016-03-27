@@ -13,7 +13,7 @@ object eq {
    */
   implicit def function1Eq[A, B](implicit A: Arbitrary[A], B: Eq[B]): Eq[A => B] = new Eq[A => B] {
     def eqv(f: A => B, g: A => B): Boolean = {
-      val samples = List.fill(100)(A.arbitrary.sample).collect{
+      val samples = List.fill(10)(A.arbitrary.sample).collect{
         case Some(a) => a
         case None => sys.error("Could not generate arbitrary values to compare two functions")
       }
