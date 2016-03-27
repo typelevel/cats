@@ -5,6 +5,8 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
 
+lazy val botBuild = settingKey[Boolean]("Jenkins/TravisCI build mode")
+
 lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageMinimum := 60,
   ScoverageKeys.coverageFailOnMinimum := false,
@@ -55,7 +57,11 @@ lazy val commonJsSettings = Seq(
     s"-P:scalajs:mapSourceURI:$a->$g/"
   },
   scalaJSStage in Global := FastOptStage,
-  parallelExecution := false
+  parallelExecution := false,
+  // Only use for scala.js for now
+  botBuild := sys.props.getOrElse("CATS_BOT_BUILD", default="false") == "true",
+  // batch mode decreases the amount of memory needed to compile scala.js code
+  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value)
 )
 
 lazy val commonJvmSettings = Seq(
