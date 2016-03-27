@@ -55,7 +55,11 @@ lazy val commonJsSettings = Seq(
     s"-P:scalajs:mapSourceURI:$a->$g/"
   },
   scalaJSStage in Global := FastOptStage,
-  parallelExecution := false
+  parallelExecution := false,
+  // Using Rhino as jsEnv to build scala.js code can lead to OOM, switch to PhantomJS by default
+  scalaJSUseRhino := false,
+  requiresDOM := false,
+  jsEnv := NodeJSEnv().value
 )
 
 lazy val commonJvmSettings = Seq(
