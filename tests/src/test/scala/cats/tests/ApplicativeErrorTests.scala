@@ -27,7 +27,6 @@ class ApplicativeErrorCheck extends CatsSuite {
   }
 
   test("attemptT syntax creates an XorT") {
-    type ErrorOrT[A] = XorT[ErrorOr, String, A]
     failed.attemptT should === (XorT[ErrorOr, String, Int](failed.right))
   }
 
