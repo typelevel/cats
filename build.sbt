@@ -5,6 +5,8 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
 
+lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev environment")
+
 lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageMinimum := 60,
   ScoverageKeys.coverageFailOnMinimum := false,
@@ -55,7 +57,15 @@ lazy val commonJsSettings = Seq(
     s"-P:scalajs:mapSourceURI:$a->$g/"
   },
   scalaJSStage in Global := FastOptStage,
-  parallelExecution := false
+  parallelExecution := false,
+  // Using Rhino as jsEnv to build scala.js code can lead to OOM, switch to PhantomJS by default
+  scalaJSUseRhino := false,
+  requiresDOM := false,
+  jsEnv := NodeJSEnv().value,
+  // Only used for scala.js for now
+  botBuild := sys.props.getOrElse("CATS_BOT_BUILD", default="false") == "true",
+  // batch mode decreases the amount of memory needed to compile scala.js code
+  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value)
 )
 
 lazy val commonJvmSettings = Seq(
