@@ -83,9 +83,21 @@ lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
 )
 
+/**
+ * Remove 2.10 projects from doc generation, as the macros used in the projects
+ * cause problems generating the documentation on scala 2.10. As the APIs for 2.10
+ * and 2.11 are the same this has no effect on the resultant documentation, though
+ * it does mean that the scaladocs cannot be generated when the build is in 2.10 mode.
+ */
+def noDocProjects(sv: String): Seq[ProjectReference] = CrossVersion.partialVersion(sv) match {
+    case Some((2, 10)) => Seq[ProjectReference](coreJVM)
+    case _ => Nil
+  }
+
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) :=
+    inProjects(coreJVM) -- inProjects(noDocProjects(scalaVersion.value): _*),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
