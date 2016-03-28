@@ -155,6 +155,16 @@ class ValidatedTests extends CatsSuite {
     }
   }
 
+  test("fold curried works") {
+    forAll { (x: Validated[String, Int], s: String, t: String) =>
+      val folded = x.fold(_ => s)(_ => t)
+      if (x.isValid)
+        folded should === (t)
+      else
+        folded should === (s)
+    }
+  }
+
   test("isValid after combine, iff both are valid") {
     forAll { (lhs: Validated[Int, String], rhs: Validated[Int, String]) =>
       lhs.combine(rhs).isValid should === (lhs.isValid && rhs.isValid)
