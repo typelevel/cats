@@ -3,6 +3,7 @@ package syntax
 
 trait AllSyntax
     extends ApplicativeSyntax
+    with ApplicativeErrorSyntax
     with ApplySyntax
     with BifunctorSyntax
     with BifoldableSyntax

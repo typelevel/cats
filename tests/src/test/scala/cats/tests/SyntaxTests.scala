@@ -214,4 +214,29 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val la = mock[Eval[A]]
     val lfa = la.pureEval[F]
   }
+
+  def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, ?], E]): Unit = {
+    type G[X] = F[E, X]
+
+    val e = mock[E]
+    val ga = e.raiseError[G, A]
+
+    val gea = mock[G[A]]
+
+    val ea = mock[E => A]
+    val gea1 = ga.handleError(ea)
+
+    val egea = mock[E => G[A]]
+    val gea2 = ga.handleErrorWith(egea)
+
+    val gxea = ga.attempt
+
+    val gxtea = ga.attemptT
+
+    val pfea = mock[PartialFunction[E, A]]
+    val gea3 = ga.recover(pfea)
+
+    val pfegea = mock[PartialFunction[E, G[A]]]
+    val gea4 = ga.recoverWith(pfegea)
+  }
 }
