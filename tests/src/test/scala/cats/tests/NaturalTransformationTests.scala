@@ -29,11 +29,11 @@ class NaturalTransformationTests extends CatsSuite {
   case class Test2[A](v : A) extends Test2Algebra[A]
 
   object Test1NT extends (Test1Algebra ~> Id) {
-    override def apply[A](fa: Test1Algebra[A]): Id[A] = Id.pure(fa.v)
+    override def apply[A](fa: Test1Algebra[A]): Id[A] = fa.v
   }
 
   object Test2NT extends (Test2Algebra ~> Id) {
-    override def apply[A](fa: Test2Algebra[A]): Id[A] = Id.pure(fa.v)
+    override def apply[A](fa: Test2Algebra[A]): Id[A] = fa.v
   }
 
   type T[A] = Coproduct[Test1Algebra, Test2Algebra, A]
@@ -61,8 +61,8 @@ class NaturalTransformationTests extends CatsSuite {
   test("or") {
     val combinedInterpreter = Test1NT or Test2NT
     forAll { (a : Int, b : Int) =>
-      combinedInterpreter(Coproduct.left(Test1(a))) should === (Id.pure(a))
-      combinedInterpreter(Coproduct.right(Test2(b))) should === (Id.pure(b))
+      combinedInterpreter(Coproduct.left(Test1(a))) should === (a)
+      combinedInterpreter(Coproduct.right(Test2(b))) should === (b)
     }
   }
 }
