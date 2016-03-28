@@ -90,14 +90,14 @@ lazy val disciplineDependencies = Seq(
  * it does mean that the scaladocs cannot be generated when the build is in 2.10 mode.
  */
 def noDocProjects(sv: String): Seq[ProjectReference] = CrossVersion.partialVersion(sv) match {
-    case Some((2, 10)) => Seq[ProjectReference](coreJVM)
+    case Some((2, 10)) => Seq[ProjectReference](coreJVM, lawsJVM)
     case _ => Nil
   }
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) :=
-    inProjects(coreJVM) -- inProjects(noDocProjects(scalaVersion.value): _*),
+    inProjects(coreJVM, lawsJVM) -- inProjects(noDocProjects(scalaVersion.value): _*),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,

@@ -4,7 +4,6 @@ package laws
 import cats.Id
 import cats.data.Const
 import cats.syntax.traverse._
-import cats.syntax.foldable._
 
 trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
   implicit override def F: Traverse[F]
@@ -64,7 +63,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
     f: A => B
   )(implicit B: Monoid[B]): IsEq[B] = {
     val lhs: B = fa.traverse[Const[B, ?], B](a => Const(f(a))).getConst
-    val rhs: B = fa.foldMap(f)
+    val rhs: B = F.foldMap(fa)(f)
     lhs <-> rhs
   }
 }
