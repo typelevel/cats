@@ -3,6 +3,7 @@ package cats
 package object syntax {
   object all extends AllSyntax
   object applicative extends ApplicativeSyntax
+  object applicativeError extends ApplicativeErrorSyntax
   object apply extends ApplySyntax
   object bifunctor extends BifunctorSyntax
   object bifoldable extends BifoldableSyntax
