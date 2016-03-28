@@ -127,7 +127,7 @@ class XorTests extends CatsSuite {
 
   test("fold curried works") {
     forAll { (x: Int Xor String, s: String, t: String) =>
-      val folded = x.fold(_ => s)(_ => t)
+      val folded = x.foldC(_ => s)(_ => t)
       if (x.isRight)
         folded should === (t)
       else

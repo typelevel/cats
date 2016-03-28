@@ -15,7 +15,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case Valid(a) => fa(a)
     }
 
-  def fold[B](fe: E => B): (A => B) => B = fold(fe, _)
+  def foldC[B](fe: E => B): (A => B) => B = fold(fe, _)
 
   def isValid: Boolean = fold(_ => false, _ => true)
   def isInvalid: Boolean = fold(_ => true, _ => false)
