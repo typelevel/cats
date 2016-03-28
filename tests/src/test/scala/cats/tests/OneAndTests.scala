@@ -151,6 +151,7 @@ class OneAndTests extends CatsSuite {
       val expected = nel.tail.foldLeft(Option(f(nel.head))) { (opt, i) =>
         opt.map(s => g(s, i))
       }
+      nel.reduceLeftToOption(f)(g) should === (expected)
     }
   }
 
