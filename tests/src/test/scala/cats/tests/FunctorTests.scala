@@ -1,18 +1,19 @@
 package cats
 package tests
 
+import cats.data.Xor
 import cats.functor.Contravariant
 import cats.laws.discipline.{ContravariantTests, FunctorTests, SerializableTests}
-import cats.laws.discipline.arbitrary.showArbitrary
+import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq.showEq
 
 class FunctorTest extends CatsSuite {
-  type OptionList[A] = Option[List[A]]
+  type OptionXor[A] = Option[Xor[String, A]]
 
-  val optionListFunctor: Functor[OptionList] =
-    Functor[Option].compose[List]
-  checkAll("Option compose List", FunctorTests(optionListFunctor).functor[Int, Int, Int])
-  checkAll("Functor[Option compose List]", SerializableTests.serializable(optionListFunctor))
+  val optionXorFunctor: Functor[OptionXor] =
+    Functor[Option].compose[Xor[String, ?]]
+  checkAll("Option compose Xor", FunctorTests(optionXorFunctor).functor[Int, Int, Int])
+  checkAll("Functor[Option compose Xor]", SerializableTests.serializable(optionXorFunctor))
 
   type OptionShow[A] = Option[Show[A]]
   val optionShowContravariant: Contravariant[OptionShow] =

@@ -3,6 +3,7 @@ package laws
 package discipline
 
 import algebra.Eq
+import cats.std.string._
 import org.scalacheck.Arbitrary
 
 object eq {
@@ -26,9 +27,6 @@ object eq {
     Eq.by[Show[A], A => String] { showInstance =>
       (a: A) => showInstance.show(a)
     }
-
-  // Temporary, see https://github.com/non/algebra/pull/143
-  implicit val stringEq: Eq[String] = Eq.fromUniversalEquals
 
   // Temporary, see https://github.com/non/algebra/pull/82
   implicit def tuple2Eq[A, B](implicit A: Eq[A], B: Eq[B]): Eq[(A, B)] =

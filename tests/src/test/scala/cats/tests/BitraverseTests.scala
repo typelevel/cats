@@ -11,6 +11,6 @@ class BitraverseTest extends CatsSuite {
   val xorComposeTuple2: Bitraverse[XorTuple2] =
     Bitraverse[Xor].compose[Tuple2]
 
-  checkAll("Xor compose Tuple2", BitraverseTests(xorComposeTuple2).bitraverse[List, Int, Int, Int, String, String, String])
+  checkAll("Xor compose Tuple2", BitraverseTests(xorComposeTuple2).bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Xor compose Tuple2]", SerializableTests.serializable(xorComposeTuple2))
 }
