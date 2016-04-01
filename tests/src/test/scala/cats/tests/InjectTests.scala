@@ -41,13 +41,13 @@ class InjectTests extends CatsSuite {
 
   object Test1Interpreter extends (Test1Algebra ~> Id) {
     override def apply[A](fa: Test1Algebra[A]): Id[A] = fa match {
-      case Test1(k, h) => Id.pure[A](h(k))
+      case Test1(k, h) => h(k)
     }
   }
 
   object Test2Interpreter extends (Test2Algebra ~> Id) {
     override def apply[A](fa: Test2Algebra[A]): Id[A] = fa match {
-      case Test2(k, h) => Id.pure[A](h(k))
+      case Test2(k, h) => h(k)
     }
   }
 
@@ -65,7 +65,7 @@ class InjectTests extends CatsSuite {
             b <- Free.inject[Test2Algebra, F](Test2(y, identity))
           } yield a + b
         }
-      (res[T] foldMap coProductInterpreter) == Id.pure(x + y) should ===(true)
+      (res[T] foldMap coProductInterpreter) == (x + y) should ===(true)
     }
   }
 
