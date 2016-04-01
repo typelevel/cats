@@ -2,14 +2,14 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws
 
 trait BifoldableTests[F[_, _]] extends Laws {
   def laws: BifoldableLaws[F]
 
-  def bifoldable[A: Arbitrary, B: Arbitrary, C: Arbitrary: Monoid: Eq](implicit
+  def bifoldable[A: Arbitrary: Cogen, B: Arbitrary: Cogen, C: Arbitrary: Monoid: Eq](implicit
     ArbFAB: Arbitrary[F[A, B]]
   ): RuleSet =
     new DefaultRuleSet(

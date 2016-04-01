@@ -2,14 +2,14 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.{Prop, Arbitrary}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 
 trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] {
   def laws: TraverseLaws[F]
 
-  def traverse[A: Arbitrary, B: Arbitrary, C: Arbitrary, M: Arbitrary, X[_]: Applicative, Y[_]: Applicative](implicit
+  def traverse[A: Arbitrary: Cogen, B: Arbitrary: Cogen, C: Arbitrary: Cogen, M: Arbitrary, X[_]: Applicative, Y[_]: Applicative](implicit
     ArbFA: Arbitrary[F[A]],
     ArbXB: Arbitrary[X[B]],
     ArbYB: Arbitrary[Y[B]],

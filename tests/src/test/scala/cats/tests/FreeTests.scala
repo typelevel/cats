@@ -6,8 +6,8 @@ import cats.free.{Free, Trampoline}
 import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary.function0Arbitrary
-import org.scalacheck.{Arbitrary, Gen}
-import Arbitrary.arbFunction1
+import org.scalacheck.{Arbitrary, Cogen, Gen}
+import Arbitrary.{arbFunction1, arbitrary}
 
 class FreeTests extends CatsSuite {
   import FreeTests._
@@ -69,19 +69,33 @@ class FreeTests extends CatsSuite {
 object FreeTests extends FreeTestsInstances {
   import cats.std.function._
 
-  implicit def trampolineArbitrary[A:Arbitrary]: Arbitrary[Trampoline[A]] =
+  implicit def trampolineArbitrary[A: Arbitrary: Cogen]: Arbitrary[Trampoline[A]] =
     freeArbitrary[Function0, A]
 
   implicit def trampolineEq[A:Eq]: Eq[Trampoline[A]] =
     freeEq[Function0, A]
 }
 
-sealed trait FreeTestsInstances {
+sealed trait FreeTestsInstances extends FreeTestsInstances1 {
   val headOptionU: List ~> Option = new (List ~> Option) {
     def apply[A](fa: List[A]): Option[A] = fa.headOption
   }
 
-  private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {
+  implicit def freeArbitraryFunction[F[_], A, B](implicit F: Arbitrary[F[A => B]]): Arbitrary[Free[F, A => B]] =
+    Arbitrary(arbitrary[F[A => B]].map(Free.liftF))
+
+  implicit def freeEq[S[_]: Monad, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
+    new Eq[Free[S, A]] {
+      def eqv(a: Free[S, A], b: Free[S, A]): Boolean =
+        SA.eqv(a.runM(identity),  b.runM(identity))
+    }
+}
+
+sealed trait FreeTestsInstances1 {
+  implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A], A0: Cogen[A]): Arbitrary[Free[F, A]] =
+    Arbitrary(freeGen[F, A](4))
+
+  protected def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A], A0: Cogen[A]): Gen[Free[F, A]] = {
     val noGosub = Gen.oneOf(
       A.arbitrary.map(Free.pure[F, A]),
       F.arbitrary.map(Free.liftF[F, A]))
@@ -91,7 +105,7 @@ sealed trait FreeTestsInstances {
     def withGosub = for {
       fDepth <- nextDepth
       freeDepth <- nextDepth
-      f <- arbFunction1[A, Free[F, A]](Arbitrary(freeGen[F, A](fDepth))).arbitrary
+      f <- arbFunction1[A, Free[F, A]](Arbitrary(freeGen[F, A](fDepth)), A0).arbitrary
       freeFA <- freeGen[F, A](freeDepth)
     } yield freeFA.flatMap(f)
 
@@ -99,12 +113,4 @@ sealed trait FreeTestsInstances {
     else Gen.oneOf(noGosub, withGosub)
   }
 
-  implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
-    Arbitrary(freeGen[F, A](4))
-
-  implicit def freeEq[S[_]: Monad, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
-    new Eq[Free[S, A]] {
-      def eqv(a: Free[S, A], b: Free[S, A]): Boolean =
-        SA.eqv(a.runM(identity),  b.runM(identity))
-    }
 }

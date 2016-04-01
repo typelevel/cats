@@ -3,15 +3,14 @@ package laws
 package discipline
 
 import cats.functor.Profunctor
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 import org.typelevel.discipline.Laws
 
 trait ProfunctorTests[F[_, _]] extends Laws {
   def laws: ProfunctorLaws[F]
 
-  def profunctor[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
+  def profunctor[A: Arbitrary: Cogen, B: Arbitrary: Cogen, C: Arbitrary: Cogen, D: Arbitrary: Cogen, E: Arbitrary: Cogen, G: Arbitrary](implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFCD: Arbitrary[F[C, D]],
     EqFAB: Eq[F[A, B]],

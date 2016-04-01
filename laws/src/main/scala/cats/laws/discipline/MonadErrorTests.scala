@@ -4,19 +4,20 @@ package discipline
 
 import cats.data.{ Xor, XorT }
 import cats.laws.discipline.CartesianTests.Isomorphisms
-import org.scalacheck.{Arbitrary, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop.forAll
 
 trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTests[F] {
   def laws: MonadErrorLaws[F, E]
 
-  def monadError[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
+  def monadError[A: Arbitrary: Cogen: Eq, B: Arbitrary: Cogen: Eq, C: Arbitrary: Cogen: Eq](implicit
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
     ArbE: Arbitrary[E],
+    CogenE: Cogen[E],
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],

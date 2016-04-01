@@ -3,14 +3,13 @@ package laws
 package discipline
 
 import cats.functor.Strong
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait StrongTests[F[_, _]] extends ProfunctorTests[F] {
   def laws: StrongLaws[F]
 
-  def strong[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
+  def strong[A: Arbitrary: Cogen, B: Arbitrary: Cogen, C: Arbitrary: Cogen, D: Arbitrary: Cogen, E: Arbitrary: Cogen, G: Arbitrary](implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFBC: Arbitrary[F[B, C]],
     ArbFCD: Arbitrary[F[C, D]],

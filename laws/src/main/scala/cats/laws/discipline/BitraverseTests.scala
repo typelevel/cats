@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop.forAll
 
 trait BitraverseTests[F[_, _]] extends BifoldableTests[F] with BifunctorTests[F] {
@@ -22,6 +22,11 @@ trait BitraverseTests[F[_, _]] extends BifoldableTests[F] with BifunctorTests[F]
     ArbC: Arbitrary[C],
     ArbE: Arbitrary[E],
     ArbH: Arbitrary[H],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    CogenD: Cogen[D],
+    CogenE: Cogen[E],
     EqFAB: Eq[F[A, B]],
     EqFAD: Eq[F[A, D]],
     EqFAH: Eq[F[A, H]],
