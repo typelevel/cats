@@ -97,7 +97,7 @@ import simulacrum.typeclass
    * that we only need `Apply[G]` here, since we don't need to call
    * `Applicative#pure` for a starting value.
    */
-  def sequence1_[G[_], A, B](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
+  def sequence1_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
     G.map(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))(_ => ())
 
   /**

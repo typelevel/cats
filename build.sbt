@@ -5,6 +5,8 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
 
+lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev environment")
+
 lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageMinimum := 60,
   ScoverageKeys.coverageFailOnMinimum := false,
@@ -55,7 +57,15 @@ lazy val commonJsSettings = Seq(
     s"-P:scalajs:mapSourceURI:$a->$g/"
   },
   scalaJSStage in Global := FastOptStage,
-  parallelExecution := false
+  parallelExecution := false,
+  // Using Rhino as jsEnv to build scala.js code can lead to OOM, switch to PhantomJS by default
+  scalaJSUseRhino := false,
+  requiresDOM := false,
+  jsEnv := NodeJSEnv().value,
+  // Only used for scala.js for now
+  botBuild := sys.props.getOrElse("CATS_BOT_BUILD", default="false") == "true",
+  // batch mode decreases the amount of memory needed to compile scala.js code
+  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value)
 )
 
 lazy val commonJvmSettings = Seq(
@@ -73,9 +83,21 @@ lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
 )
 
+/**
+ * Remove 2.10 projects from doc generation, as the macros used in the projects
+ * cause problems generating the documentation on scala 2.10. As the APIs for 2.10
+ * and 2.11 are the same this has no effect on the resultant documentation, though
+ * it does mean that the scaladocs cannot be generated when the build is in 2.10 mode.
+ */
+def noDocProjects(sv: String): Seq[ProjectReference] = CrossVersion.partialVersion(sv) match {
+    case Some((2, 10)) => Seq[ProjectReference](coreJVM)
+    case _ => Nil
+  }
+
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) :=
+    inProjects(coreJVM) -- inProjects(noDocProjects(scalaVersion.value): _*),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -209,6 +231,12 @@ lazy val publishSettings = Seq(
   scmInfo := Some(ScmInfo(url("https://github.com/typelevel/cats"), "scm:git:git@github.com:typelevel/cats.git")),
   autoAPIMappings := true,
   apiURL := Some(url("http://typelevel.org/cats/api/")),
+  publishArtifact in (Compile, packageDoc) := {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 10)) => false  // don't package scaladoc when publishing for 2.10
+      case _ => true
+    }
+  },
   pomExtra := (
     <developers>
       <developer>

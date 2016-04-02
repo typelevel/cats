@@ -3,16 +3,15 @@ layout: default
 title:  "Home"
 section: "home"
 ---
-Cats is an experimental library intended to provide abstractions for
-functional programming in the
-[Scala programming language](https://scala-lang.org). The name is a
-playful shortening of the word *category*.
+Cats is a library which provides abstractions for functional
+programming in the [Scala programming language](https://scala-lang.org).
+The name is a playful shortening of the word *category*.
 
-<div class="msg warn"> <p><strong> Cats is currently an experimental
-  project under active development</strong>. Feedback and
-  contributions are welcomed as we look to improve the project. This
-  project is evolving quickly and we currently make no guarantees about what
-  might drastically change in the near future.</p> </div>
+<div class="msg warn"> <p><strong> Cats is a new project under active
+  development</strong>. Feedback and contributions are welcomed as we look
+  to improve it. This project is evolving quickly and we are making no
+  guarantees about stability until a 1.0 release is made (current est.
+  around Q3 2016).</p> </div>
 
 
 <a name="getting-started"></a>
