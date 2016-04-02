@@ -11,8 +11,8 @@ trait TransLift[MT[_[_], _]] {
    * The typeclass which constrains liftT as a function of the type
    * constructor it is given. A safe "identity" value for this type
    * if your transformer does not constrain its lifted effects would
-   * be `type TC[M[_]] = Unit =:= Unit`.  A more common constraint
-   * might be `type TC[M[_]] = Monad[M]`.
+   * be `type TC[M[_]] = Trivial`.  A more common constraint might be
+   * `type TC[M[_]] = Monad[M]`.
    */
   type TC[M[_]]
 
