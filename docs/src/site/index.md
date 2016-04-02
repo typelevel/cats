@@ -3,7 +3,7 @@ layout: default
 title:  "Home"
 section: "home"
 ---
-Cats is a library intended to provide abstractions for functional
+Cats is a library which provides abstractions for functional
 programming in the [Scala programming language](https://scala-lang.org).
 The name is a playful shortening of the word *category*.
 
