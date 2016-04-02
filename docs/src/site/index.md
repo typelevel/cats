@@ -9,7 +9,7 @@ The name is a playful shortening of the word *category*.
 
 <div class="msg warn"> <p><strong> Cats is a new project under active
   development</strong>. Feedback and contributions are welcomed as we look
-  to improve the it. This project is evolving quickly and we are making no
+  to improve it. This project is evolving quickly and we are making no
   guarantees about stability until a 1.0 release is made (current est.
   around Q3 2016).</p> </div>
 
