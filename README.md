@@ -8,8 +8,7 @@
 
 ### Overview
 
-Cats is a proof-of-concept library intended to provide abstractions
-for functional programming in Scala.
+Cats is a library intended to provide abstractions for functional programming in Scala.
 
 The name is a playful shortening of the word *category*.
 
