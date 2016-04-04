@@ -153,10 +153,10 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
     def ap[B, C](f: Kleisli[F, A, B => C])(fa: Kleisli[F, A, B]): Kleisli[F, A, C] =
       fa(f)
 
-    def map[B, C](fb: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
+    override def map[B, C](fb: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
       fb.map(f)
 
-    def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
+    override def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
       Kleisli(a => Applicative[F].product(fb.run(a), fc.run(a)))
   }
 }
@@ -166,7 +166,7 @@ private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 
     def ap[B, C](f: Kleisli[F, A, B => C])(fa: Kleisli[F, A, B]): Kleisli[F, A, C] =
       fa(f)
 
-    def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
+    override def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
       Kleisli(a => Apply[F].product(fb.run(a), fc.run(a)))
 
     def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =

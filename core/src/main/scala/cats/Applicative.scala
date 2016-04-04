@@ -29,6 +29,9 @@ import cats.std.list._
    */
   def pureEval[A](x: Eval[A]): F[A] = pure(x.value)
 
+  override def map[A, B](fa: F[A])(f: A => B): F[B] =
+    ap(pure(f))(fa)
+
   /**
     * Given `fa` and `n`, apply `fa` `n` times to construct an `F[List[A]]` value.
     */
