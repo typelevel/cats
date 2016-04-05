@@ -254,7 +254,7 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
       def ap[A,B](f: Validated[E,A=>B])(fa: Validated[E,A]): Validated[E, B] =
         fa.ap(f)(E)
 
-      def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
+      override def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
         fa.product(fb)(E)
 
       def handleErrorWith[A](fa: Validated[E, A])(f: E => Validated[E, A]): Validated[E, A] =

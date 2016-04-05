@@ -26,9 +26,6 @@ implicit val optionApply: Apply[Option] = new Apply[Option] {
     fa.flatMap (a => f.map (ff => ff(a)))
 
   def map[A,B](fa: Option[A])(f: A => B): Option[B] = fa map f
-  
-  def product[A, B](fa: Option[A], fb: Option[B]): Option[(A, B)] =
-    fa.flatMap(a => fb.map(b => (a, b)))
 }
 
 implicit val listApply: Apply[List] = new Apply[List] {
@@ -36,9 +33,6 @@ implicit val listApply: Apply[List] = new Apply[List] {
     fa.flatMap (a => f.map (ff => ff(a)))
 
   def map[A,B](fa: List[A])(f: A => B): List[B] = fa map f
-  
-  def product[A, B](fa: List[A], fb: List[B]): List[(A, B)] =
-    fa.zip(fb)
 }
 ```
 
