@@ -9,7 +9,7 @@ import cats.functor.{Contravariant, Strong}
  */
 final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
 
-  def apply[C](f: Kleisli[F, A, B => C])(implicit F: Apply[F]): Kleisli[F, A, C] =
+  def ap[C](f: Kleisli[F, A, B => C])(implicit F: Apply[F]): Kleisli[F, A, C] =
     Kleisli(a => F.ap(f.run(a))(run(a)))
 
   def dimap[C, D](f: C => A)(g: B => D)(implicit F: Functor[F]): Kleisli[F, C, D] =
@@ -59,6 +59,8 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
 
   def second[C](implicit F: Functor[F]): Kleisli[F, (C, A), (C, B)] =
     Kleisli{ case (c, a) => F.map(run(a))(c -> _)}
+
+  def apply(a: A): F[B] = run(a)
 }
 
 object Kleisli extends KleisliInstances with KleisliFunctions
@@ -151,7 +153,7 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
       Kleisli.pure[F, A, B](x)
 
     def ap[B, C](f: Kleisli[F, A, B => C])(fa: Kleisli[F, A, B]): Kleisli[F, A, C] =
-      fa(f)
+      fa.ap(f)
 
     def map[B, C](fb: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
       fb.map(f)
@@ -164,7 +166,7 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
 private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 {
   implicit def kleisliApply[F[_]: Apply, A]: Apply[Kleisli[F, A, ?]] = new Apply[Kleisli[F, A, ?]] {
     def ap[B, C](f: Kleisli[F, A, B => C])(fa: Kleisli[F, A, B]): Kleisli[F, A, C] =
-      fa(f)
+      fa.ap(f)
 
     def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
       Kleisli(a => Apply[F].product(fb.run(a), fc.run(a)))
