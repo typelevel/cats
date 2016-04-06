@@ -70,6 +70,10 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def toValidated: Validated[A,B] = fold(Validated.Invalid.apply, Validated.Valid.apply)
 
+  /** Returns a [[ValidatedNel]] representation of this disjunction with the `Left` value
+   * as a single element on the `Invalid` side of the [[NonEmptyList]]. */
+  def toValidatedNel[AA >: A]: ValidatedNel[AA,B] = fold(Validated.invalidNel, Validated.valid)
+
   def withValidated[AA,BB](f: Validated[A,B] => Validated[AA,BB]): AA Xor BB =
     f(toValidated).toXor
 
