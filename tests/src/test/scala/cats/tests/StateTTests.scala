@@ -40,6 +40,12 @@ class StateTTests extends CatsSuite {
     }
   }
 
+  test("flatMap and flatMapF consistent") {
+    forAll { (stateT: StateT[Option, Long, Int], f: Int => Option[Int]) =>
+      stateT.flatMap(a => StateT(s => f(a).map(b => (s, b)))) should === (stateT.flatMapF(f))
+    }
+  }
+
   test("runEmpty, runEmptyS, and runEmptyA consistent"){
     forAll { (f: StateT[List, Long, Int]) =>
       (f.runEmptyS zip f.runEmptyA) should === (f.runEmpty)
