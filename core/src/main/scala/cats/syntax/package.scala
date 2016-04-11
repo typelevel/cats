@@ -37,4 +37,5 @@ package object syntax {
   object xor extends XorSyntax
   object validated extends ValidatedSyntax
   object writer extends WriterSyntax
+  object copair extends CopairSyntax
 }
