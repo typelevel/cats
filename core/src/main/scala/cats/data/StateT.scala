@@ -17,6 +17,15 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
         }
       })
 
+  def flatMapF[B](faf: A => F[B])(implicit F: Monad[F]): StateT[F, S, B] =
+    StateT(s =>
+      F.flatMap(runF) { fsf =>
+        F.flatMap(fsf(s)) { case (s, a) =>
+          F.map(faf(a))((s, _))
+        }
+      }
+    )
+
   def map[B](f: A => B)(implicit F: Monad[F]): StateT[F, S, B] =
     transform { case (s, a) => (s, f(a)) }
 
