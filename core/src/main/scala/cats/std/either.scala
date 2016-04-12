@@ -2,6 +2,19 @@ package cats
 package std
 
 trait EitherInstances extends EitherInstances1 {
+
+  implicit def eitherCopair: Copair[Either] =
+    new Copair[Either] {
+      def fold[A, B, C](f: Either[A, B])(fa: (A) => C, fb: (B) => C): C =
+        f match {
+          case Left(a) => fa(a)
+          case Right(b) => fb(b)
+        }
+
+      def left[A, B](a: A): Either[A, B] = Left(a)
+      def right[A, B](b: B): Either[A, B] = Right(b)
+    }
+
   implicit val eitherBitraverse: Bitraverse[Either] =
     new Bitraverse[Either] {
       def bitraverse[G[_], A, B, C, D](fab: Either[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Either[C, D]] =

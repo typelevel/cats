@@ -168,6 +168,18 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
+  implicit def xorCopair: Copair[Xor] =
+    new Copair[Xor] {
+      def fold[A, B, C](f: Xor[A, B])(fa: (A) => C, fb: (B) => C): C =
+        f match {
+          case Xor.Left(a) => fa(a)
+          case Xor.Right(b) => fb(b)
+        }
+
+      def left[A, B](a: A): Xor[A, B] = Xor.Left(a)
+      def right[A, B](b: B): Xor[A, B] = Xor.Right(b)
+    }
+
   implicit def xorBifunctor: Bitraverse[Xor] =
     new Bitraverse[Xor] {
       def bitraverse[G[_], A, B, C, D](fab: Xor[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Xor[C, D]] =
