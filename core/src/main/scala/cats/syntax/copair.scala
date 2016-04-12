@@ -1,10 +1,6 @@
 package cats
 package syntax
 
-
-/**
-  * Created by jbarber on 4/10/16.
-  */
 trait CopairSyntax {
   implicit def copairSyntax[F[_, _]: Copair, A, B](fab: F[A, B]): CopairOps[F, A, B] =
     new CopairOps[F, A, B](fab)
