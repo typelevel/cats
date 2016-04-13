@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.data.Validated.{Invalid, Valid}
-import cats.functor.Bifunctor
 
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
@@ -228,7 +227,7 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
     def show(f: Validated[A,B]): String = f.show
   }
 
-  implicit def validatedCopair: Copair[Validated] =
+  implicit def validatedBifunctor: Copair[Validated] =
     new Copair[Validated] {
       def fold[A, B, C](f: Validated[A, B])(fa: (A) => C, fb: (B) => C): C =
         f match {
@@ -238,12 +237,6 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
 
       def left[A, B](a: A): Validated[A, B] = Invalid(a)
       def right[A, B](b: B): Validated[A, B] = Valid(b)
-    }
-
-  implicit def validatedBifunctor: Bifunctor[Validated] =
-    new Bifunctor[Validated] {
-      override def bimap[A, B, C, D](fab: Validated[A, B])(f: A => C, g: B => D): Validated[C, D] = fab.bimap(f, g)
-      override def leftMap[A, B, C](fab: Validated[A, B])(f: A => C): Validated[C, B] = fab.leftMap(f)
     }
 
   implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =
