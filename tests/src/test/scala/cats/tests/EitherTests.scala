@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadTests, SerializableTests, CartesianTests}
+import cats.laws.discipline.{CopairTests, TraverseTests, MonadTests, SerializableTests, CartesianTests}
 import cats.laws.discipline.eq._
 import algebra.laws.OrderLaws
 
@@ -18,7 +18,7 @@ class EitherTests extends CatsSuite {
   checkAll("Either[Int, Int] with Option", TraverseTests[Either[Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Either[Int, ?]", SerializableTests.serializable(Traverse[Either[Int, ?]]))
 
-  checkAll("Either[?, ?]", BitraverseTests[Either].bitraverse[Option, Int, Int, Int, String, String, String])
+  checkAll("Either[?, ?]", CopairTests[Either].copair[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Either]", SerializableTests.serializable(Bitraverse[Either]))
 
   val partialOrder = eitherPartialOrder[Int, String]
