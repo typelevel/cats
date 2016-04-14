@@ -29,41 +29,22 @@ class CopairTest extends CatsSuite {
       }
     }
 
-    /**
-      * The tests defined below have a def that tests the [[Copair]] implementation,
-      * followed by a comparison to the [[Xor]] implementation.
-      *
-      * They should follow this template:
-      *   def copairFoo[A, B](f: F[A,B])...
-      *   copairFoo(copair) should === (copair.foo)
-      */
-
     test(s"$ofType Copair for-all") {
       forAll { copair: F[String, Int] =>
-
-        def copairForAll[A, B](f: F[A, B])(fb: B => Boolean): Boolean = f.forall(fb)
-
-        copairForAll(copair)(_ % 2 == 0) should ===(copair.forall(_ % 2 == 0))
+        copair.forall(_ % 2 == 0) should === (copair.fold(_ => true, _ % 2 == 0))
       }
     }
 
     test(s"$ofType Copair exists") {
       forAll { copair: F[String, Int] =>
-
-        def copairExists[A, B](f: F[A, B])(fb: B => Boolean): Boolean = f.exists(fb)
-
-        copairExists(copair)(_ % 2 == 0) should ===(copair.exists(_ % 2 == 0))
+        copair.exists(_ % 2 == 0) should === (copair.fold(_ => false, _ % 2 == 0))
       }
     }
 
     test(s"$ofType Copair left/right") {
       forAll { copair: F[String, Int] =>
-
-        def copairIsLeft(f: F[_, _]): Boolean = f.isLeft
-        def copairIsRight(f: F[_, _]): Boolean = f.isRight
-
-        copairIsLeft(copair) should ===(copair.isLeft)
-        copairIsRight(copair) should ===(copair.isRight)
+        copair.isLeft should === (copair.fold(_ => true, _ => false))
+        copair.isRight should === (copair.fold(_ => false, _ => true))
       }
     }
 
