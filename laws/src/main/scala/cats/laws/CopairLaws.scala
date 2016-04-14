@@ -12,11 +12,12 @@ trait CopairLaws[F[_,_]] extends BitraverseLaws[F] with BifoldableLaws[F] with B
   def copairSwapIdentity[A,B](fab: F[A,B]): IsEq[F[A,B]] =
     fab <-> fab.swap.swap
 
-  def copairLeftAssociativeIdentity[A, B, C](a: A, fa: A => C, fb: B => C): IsEq[C] =
+  def copairLeftIdentity[A, B, C](a: A, fa: A => C, fb: B => C): IsEq[C] =
     a.leftC[F, B].fold(fa, fb) <-> fa(a)
 
-  def copairRightAssociativeIdentity[A, B, C](b: B, fa: A => C, fb: B => C): IsEq[C] =
+  def copairRightIdentity[A, B, C](b: B, fa: A => C, fb: B => C): IsEq[C] =
     b.rightC[F, A].fold(fa, fb) <-> fb(b)
+
 }
 
 object CopairLaws {

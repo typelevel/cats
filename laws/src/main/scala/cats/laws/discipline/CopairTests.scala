@@ -37,8 +37,8 @@ trait CopairTests[F[_,_]] extends BitraverseTests[F] with BifoldableTests[F] wit
       val props = Seq(
         "copair fold identity" -> forAll(laws.copairFoldIdentity[A, B] _),
         "copair swap identity" -> forAll(laws.copairSwapIdentity[A,B] _),
-        "copair left identity" -> forAll(laws.copairLeftAssociativeIdentity[A,B,C] _),
-        "copair right identity" -> forAll(laws.copairRightAssociativeIdentity[A,B,C] _)
+        "copair left identity" -> forAll(laws.copairLeftIdentity[A,B,C] _),
+        "copair right identity" -> forAll(laws.copairRightIdentity[A,B,C] _)
       )
     }
 }
