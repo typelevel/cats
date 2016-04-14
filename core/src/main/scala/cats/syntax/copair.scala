@@ -23,6 +23,7 @@ final class CopairOps[F[_,_], A, B](pair: F[A,B])(implicit F: Copair[F]) {
 
   def exists(fn: B => Boolean): Boolean = F.exists(pair)(fn)
 
+  def to[G[_, _]](implicit G: Copair[G]): G[A,B] = F.to[G,A,B](pair)
 }
 
 final class CopairIdOps[A](a: A) {

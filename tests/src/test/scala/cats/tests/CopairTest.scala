@@ -45,6 +45,15 @@ class CopairTest extends CatsSuite {
       }
     }
 
+    test(s"$ofType Copair to") {
+      forAll { copair: F[String, Int] =>
+        copair.to[Xor].isLeft should === (copair.isLeft)
+        copair.to[Xor].isRight should === (copair.isRight)
+
+        val (strFold, intFold): (String => String, Int => String) = (_ => "string", _ => "int")
+        copair.to[Xor].fold(strFold, intFold) should === (copair.fold(strFold, intFold))
+      }
+    }
 
   }
 }

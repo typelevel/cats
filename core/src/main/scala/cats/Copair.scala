@@ -17,6 +17,8 @@ trait Copair[F[_,_]] extends Bitraverse[F] {
 
   def exists[A, B](f: F[A,B])(fn: B => Boolean): Boolean = fold(f)(_ => false, fn)
 
+  def to[G[_, _], A, B](f: F[A, B])(implicit G: Copair[G]): G[A,B] = fold(f)(G.left, G.right)
+
   def bitraverse[G[_], A, B, C, D](fab: F[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[F[C, D]] =
     fold(fab)(
       l => G.map(f(l))(left),
