@@ -2,13 +2,13 @@ package cats.tests
 
 import cats.Copair
 import cats.data.{Validated, Xor}
-import cats.laws.discipline.{CopairTests => CopairLaws}
+import cats.laws.discipline.CopairTests
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 
-class CopairTests extends CatsSuite {
+class CopairTest extends CatsSuite {
 
-  checkAll("Xor", CopairLaws[Xor].copair[Option, Int, Int, Int, String, String, String])
+  checkAll("Xor", CopairTests[Xor].copair[Option, Int, Int, Int, String, String, String])
 
   testCopairs[Xor]("Xor")
   testCopairs[Either]("Either")
