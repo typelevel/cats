@@ -19,11 +19,8 @@ class CopairTest extends CatsSuite {
     test(s"$ofType Copair for-each performs side-effect") {
 
       forAll { copair: F[String, Int] =>
-
-        def copairForeach[A, B](f: F[A,B])(fb: B => Unit): Unit = f.foreach(fb)
-
         var sideEffectOccurred = false
-        copairForeach(copair)(_ => sideEffectOccurred = true)
+        copair.foreach(_ => sideEffectOccurred = true)
 
         sideEffectOccurred should === (copair.isRight)
       }
