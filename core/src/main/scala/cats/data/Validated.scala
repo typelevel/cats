@@ -203,6 +203,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     case Valid(a) => Invalid(a)
     case Invalid(e) => Valid(e)
   }
+
+  /**
+   * Ensure that a successful result passes the given predicate,
+   * falling back to an Invalid of `onFailure` if the predicate
+   * returns false.
+   *
+   * For example:
+   * {{{
+   * scala> Validated.valid("").ensure(new IllegalArgumentException("Must not be empty"))(_.nonEmpty)
+   * res0: Validated[IllegalArgumentException,String] = Invalid(java.lang.IllegalArgumentException: Must not be empty)
+   * }}}
+   */
+  def ensure[EE >: E](onFailure: => EE)(f: A => Boolean): Validated[EE, A] =
+    fold(_ => this, a => if (f(a)) this else Validated.invalid(onFailure))
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions{
