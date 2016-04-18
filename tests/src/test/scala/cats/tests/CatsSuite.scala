@@ -6,7 +6,7 @@ import catalysts.Platform
 import cats.std.AllInstances
 import cats.syntax.{AllSyntax, EqOps}
 
-import org.scalactic.anyvals.{PosZDouble, PosInt}
+import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}
 import org.scalatest.{FunSuite, Matchers}
 import org.scalatest.prop.{Configuration, GeneratorDrivenPropertyChecks}
 import org.typelevel.discipline.scalatest.Discipline
@@ -20,8 +20,11 @@ trait TestSettings extends Configuration with Matchers {
 
   lazy val checkConfiguration: PropertyCheckConfiguration =
     PropertyCheckConfiguration(
-      minSuccessful = if (Platform.isJvm) PosInt(100) else PosInt(10),
-      maxDiscardedFactor = if (Platform.isJvm) PosZDouble(5.0) else PosZDouble(50.0))
+      minSuccessful = if (Platform.isJvm) PosInt(50) else PosInt(5),
+      maxDiscardedFactor = if (Platform.isJvm) PosZDouble(5.0) else PosZDouble(50.0),
+      minSize = PosZInt(0),
+      sizeRange = if (Platform.isJvm) PosZInt(10) else PosZInt(5),
+      workers = PosInt(1))
 
   lazy val slowCheckConfiguration: PropertyCheckConfiguration =
     if (Platform.isJvm) checkConfiguration
