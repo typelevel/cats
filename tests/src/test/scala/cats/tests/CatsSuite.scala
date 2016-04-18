@@ -20,10 +20,10 @@ trait TestSettings extends Configuration with Matchers {
 
   lazy val checkConfiguration: PropertyCheckConfiguration =
     PropertyCheckConfiguration(
-      minSuccessful = PosInt(5),
+      minSuccessful = if (Platform.isJvm) PosInt(50) else PosInt(5),
       maxDiscardedFactor = if (Platform.isJvm) PosZDouble(5.0) else PosZDouble(50.0),
       minSize = PosZInt(0),
-      sizeRange = PosZInt(5),
+      sizeRange = if (Platform.isJvm) PosZInt(10) else PosZInt(5),
       workers = PosInt(1))
 
   lazy val slowCheckConfiguration: PropertyCheckConfiguration =
