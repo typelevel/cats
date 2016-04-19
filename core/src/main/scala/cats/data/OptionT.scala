@@ -94,6 +94,13 @@ object OptionT extends OptionTInstances {
   def pure[F[_], A](a: A)(implicit F: Applicative[F]): OptionT[F, A] =
     OptionT(F.pure(Some(a)))
 
+  /** An alias for pure */
+  def some[F[_], A](a: A)(implicit F: Applicative[F]): OptionT[F, A] =
+    pure(a)
+
+  def none[F[_], A](implicit F: Applicative[F]) : OptionT[F, A] =
+    OptionT(F.pure(None))
+
   /**
    * Transforms an `Option` into an `OptionT`, lifted into the specified `Applicative`.
    *
@@ -129,9 +136,12 @@ private[data] sealed trait OptionTInstances1 {
         fa.map(f)
     }
 
-  implicit def optionTTransLift[M[_]: Functor]: TransLift[OptionT, M] =
-    new TransLift[OptionT, M] {
-      def liftT[A](ma: M[A]): OptionT[M, A] = OptionT.liftF(ma)
+  // do NOT change this to val! I know it looks like it should work, and really I agree, but it doesn't (for... reasons)
+  implicit def optionTTransLift: TransLift.Aux[OptionT, Functor] =
+    new TransLift[OptionT] {
+      type TC[M[_]] = Functor[M]
+
+      def liftT[M[_]: Functor, A](ma: M[A]): OptionT[M, A] = OptionT.liftF(ma)
     }
 }
 

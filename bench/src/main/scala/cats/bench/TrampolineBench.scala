@@ -6,8 +6,6 @@ import cats._
 import cats.implicits._
 import cats.free.Trampoline
 
-import scala.util.control.TailCalls
-
 @State(Scope.Benchmark)
 class TrampolineBench {
 

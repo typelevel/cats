@@ -51,6 +51,8 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def exists(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.exists(f))
 
+  def ensure[AA >: A](onFailure: => AA)(f: B => Boolean)(implicit F: Functor[F]): XorT[F, AA, B] = XorT(F.map(value)(_.ensure(onFailure)(f)))
+
   def toEither(implicit F: Functor[F]): F[Either[A, B]] = F.map(value)(_.toEither)
 
   def toOption(implicit F: Functor[F]): OptionT[F, B] = OptionT(F.map(value)(_.toOption))
@@ -194,10 +196,12 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
       val F0: Traverse[F] = F
     }
 
-  implicit def xortTransLift[M[_],E](implicit M: Functor[M]): TransLift[({type λ[α[_], β] = XorT[α,E,β]})#λ, M] =
-    new TransLift[({type λ[α[_], β] = XorT[α,E,β]})#λ, M] {
-      def liftT[A](ma: M[A]): XorT[M,E,A] =
-        XorT(M.map(ma)(Xor.right))
+  implicit def xortTransLift[E]: TransLift.Aux[XorT[?[_], E, ?], Functor] =
+    new TransLift[XorT[?[_], E, ?]] {
+      type TC[M[_]] = Functor[M]
+
+      def liftT[M[_]: Functor, A](ma: M[A]): XorT[M,E,A] =
+        XorT(Functor[M].map(ma)(Xor.right))
     }
 
 }

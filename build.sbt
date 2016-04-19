@@ -5,6 +5,8 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
 
+lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev environment")
+
 lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageMinimum := 60,
   ScoverageKeys.coverageFailOnMinimum := false,
@@ -14,8 +16,8 @@ lazy val scoverageSettings = Seq(
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
-  scalaVersion := "2.11.7",
-  crossScalaVersions := Seq("2.10.6", "2.11.7")
+  scalaVersion := "2.11.8",
+  crossScalaVersions := Seq("2.10.6", "2.11.8")
 )
 
 lazy val catsDoctestSettings = Seq(
@@ -34,16 +36,36 @@ lazy val commonSettings = Seq(
     "org.spire-math" %%% "algebra" % "0.3.1",
     "org.spire-math" %%% "algebra-std" % "0.3.1",
     "org.typelevel" %%% "machinist" % "0.4.1",
-    compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0-M5" cross CrossVersion.full),
+    compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport
 
+lazy val tagName = Def.setting{
+ s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
+}
+
 lazy val commonJsSettings = Seq(
+  scalacOptions += {
+    val tagOrHash =
+      if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lines_!.head
+      else tagName.value
+    val a = (baseDirectory in LocalRootProject).value.toURI.toString
+    val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
+    s"-P:scalajs:mapSourceURI:$a->$g/"
+  },
   scalaJSStage in Global := FastOptStage,
-  parallelExecution := false
+  parallelExecution := false,
+  // Using Rhino as jsEnv to build scala.js code can lead to OOM, switch to PhantomJS by default
+  scalaJSUseRhino := false,
+  requiresDOM := false,
+  jsEnv := NodeJSEnv().value,
+  // Only used for scala.js for now
+  botBuild := sys.props.getOrElse("CATS_BOT_BUILD", default="false") == "true",
+  // batch mode decreases the amount of memory needed to compile scala.js code
+  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value)
 )
 
 lazy val commonJvmSettings = Seq(
@@ -61,9 +83,21 @@ lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
 )
 
+/**
+ * Remove 2.10 projects from doc generation, as the macros used in the projects
+ * cause problems generating the documentation on scala 2.10. As the APIs for 2.10
+ * and 2.11 are the same this has no effect on the resultant documentation, though
+ * it does mean that the scaladocs cannot be generated when the build is in 2.10 mode.
+ */
+def noDocProjects(sv: String): Seq[ProjectReference] = CrossVersion.partialVersion(sv) match {
+    case Some((2, 10)) => Seq[ProjectReference](coreJVM)
+    case _ => Nil
+  }
+
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) :=
+    inProjects(coreJVM) -- inProjects(noDocProjects(scalaVersion.value): _*),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -197,6 +231,12 @@ lazy val publishSettings = Seq(
   scmInfo := Some(ScmInfo(url("https://github.com/typelevel/cats"), "scm:git:git@github.com:typelevel/cats.git")),
   autoAPIMappings := true,
   apiURL := Some(url("http://typelevel.org/cats/api/")),
+  publishArtifact in (Compile, packageDoc) := {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 10)) => false  // don't package scaladoc when publishing for 2.10
+      case _ => true
+    }
+  },
   pomExtra := (
     <developers>
       <developer>
@@ -268,7 +308,7 @@ addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;lawsJS/compile;t
 addCommandAlias("validate", ";validateJS;validateJVM")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Base Build Settings - Should not need to edit below this line. 
+// Base Build Settings - Should not need to edit below this line.
 // These settings could also come from another file or a plugin.
 // The only issue if coming from a plugin is that the Macro lib versions
 // are hard coded, so an overided facility would be required.
@@ -327,6 +367,7 @@ lazy val commonScalacOptions = Seq(
 
 lazy val sharedPublishSettings = Seq(
   releaseCrossBuild := true,
+  releaseTagName := tagName.value,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
   publishArtifact in Test := false,
@@ -339,7 +380,7 @@ lazy val sharedPublishSettings = Seq(
       Some("Releases" at nexus + "service/local/staging/deploy/maven2")
   }
 )
- 
+
 lazy val sharedReleaseProcess = Seq(
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,

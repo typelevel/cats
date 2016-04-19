@@ -1,8 +1,6 @@
 package cats
 package data
 
-import cats.functor.Bifunctor
-
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
@@ -59,8 +57,8 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def exists(f: B => Boolean): Boolean = fold(_ => false, f)
 
-  def ensure[AA >: A](ifLeft: => AA)(f: B => Boolean): AA Xor B =
-    fold(_ => this, b => if (f(b)) this else Xor.Left(ifLeft))
+  def ensure[AA >: A](onFailure: => AA)(f: B => Boolean): AA Xor B =
+    fold(_ => this, b => if (f(b)) this else Xor.Left(onFailure))
 
   def toIor: A Ior B = fold(Ior.left, Ior.right)
 
@@ -71,6 +69,10 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
   def toList: List[B] = fold(_ => Nil, _ :: Nil)
 
   def toValidated: Validated[A,B] = fold(Validated.Invalid.apply, Validated.Valid.apply)
+
+  /** Returns a [[ValidatedNel]] representation of this disjunction with the `Left` value
+   * as a single element on the `Invalid` side of the [[NonEmptyList]]. */
+  def toValidatedNel[AA >: A]: ValidatedNel[AA,B] = fold(Validated.invalidNel, Validated.valid)
 
   def withValidated[AA,BB](f: Validated[A,B] => Validated[AA,BB]): AA Xor BB =
     f(toValidated).toXor
@@ -166,14 +168,20 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def xorBifunctor: Bifunctor[Xor] with Bifoldable[Xor] =
-    new Bifunctor[Xor] with Bifoldable[Xor]{
-      override def bimap[A, B, C, D](fab: A Xor B)(f: A => C, g: B => D): C Xor D = fab.bimap(f, g)
+  implicit def xorBifunctor: Bitraverse[Xor] =
+    new Bitraverse[Xor] {
+      def bitraverse[G[_], A, B, C, D](fab: Xor[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Xor[C, D]] =
+        fab match {
+          case Xor.Left(a) => G.map(f(a))(Xor.left)
+          case Xor.Right(b) => G.map(g(b))(Xor.right)
+        }
+
       def bifoldLeft[A, B, C](fab: Xor[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
         fab match {
           case Xor.Left(a) => f(c, a)
           case Xor.Right(b) => g(c, b)
         }
+
       def bifoldRight[A, B, C](fab: Xor[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
         fab match {
           case Xor.Left(a) => f(a, c)

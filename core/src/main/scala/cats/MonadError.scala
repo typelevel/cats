@@ -1,7 +1,5 @@
 package cats
 
-import cats.data.{Xor, XorT}
-
 /**
  * A monad that also allows you to raise and or handle an error value.
  *

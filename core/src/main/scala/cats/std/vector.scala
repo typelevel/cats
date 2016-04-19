@@ -1,7 +1,6 @@
 package cats
 package std
 
-import cats.data.Streaming
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -52,9 +51,6 @@ trait VectorInstances {
         fa.exists(p)
 
       override def isEmpty[A](fa: Vector[A]): Boolean = fa.isEmpty
-
-      override def toStreaming[A](fa: Vector[A]): Streaming[A] =
-        Streaming.fromVector(fa)
     }
 
   implicit def vectorShow[A:Show]: Show[Vector[A]] =

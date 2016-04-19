@@ -98,10 +98,10 @@ private[data] sealed abstract class ConstInstances0 extends ConstInstances1 {
     def ap[A, B](f: Const[C, A => B])(fa: Const[C, A]): Const[C, B] =
       f.retag[B] combine fa.retag[B]
 
-    def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =
+    override def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =
       fa.retag[B]
 
-    def product[A, B](fa: Const[C, A], fb: Const[C, B]): Const[C, (A, B)] =
+    override def product[A, B](fa: Const[C, A], fb: Const[C, B]): Const[C, (A, B)] =
       fa.retag[(A, B)] combine fb.retag[(A, B)]
   }
 }
@@ -116,7 +116,7 @@ private[data] sealed abstract class ConstInstances1 {
     def ap[A, B](f: Const[C, A => B])(fa: Const[C, A]): Const[C, B] =
       fa.retag[B] combine f.retag[B]
 
-    def product[A, B](fa: Const[C, A], fb: Const[C, B]): Const[C, (A, B)] =
+    override def product[A, B](fa: Const[C, A], fb: Const[C, B]): Const[C, (A, B)] =
       fa.retag[(A, B)] combine fb.retag[(A, B)]
 
     def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =

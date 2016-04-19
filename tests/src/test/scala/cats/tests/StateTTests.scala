@@ -1,11 +1,11 @@
 package cats
 package tests
 
-import cats.laws.discipline.{CartesianTests, MonadStateTests, MonoidKTests, SerializableTests}
+import cats.laws.discipline.{CartesianTests, MonadStateTests, SerializableTests}
 import cats.data.{State, StateT}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary
 
 class StateTTests extends CatsSuite {
   import StateTTests._
@@ -37,6 +37,12 @@ class StateTTests extends CatsSuite {
     forAll { (s: String, i: Int) =>
       State.inspect[Int, String](_.toString).run(i) should === (
         State.pure[Int, Unit](()).inspect(_.toString).run(i))
+    }
+  }
+
+  test("flatMap and flatMapF consistent") {
+    forAll { (stateT: StateT[Option, Long, Int], f: Int => Option[Int]) =>
+      stateT.flatMap(a => StateT(s => f(a).map(b => (s, b)))) should === (stateT.flatMapF(f))
     }
   }
 

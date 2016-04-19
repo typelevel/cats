@@ -26,9 +26,6 @@ implicit val optionApply: Apply[Option] = new Apply[Option] {
     fa.flatMap (a => f.map (ff => ff(a)))
 
   def map[A,B](fa: Option[A])(f: A => B): Option[B] = fa map f
-  
-  def product[A, B](fa: Option[A], fb: Option[B]): Option[(A, B)] =
-    fa.flatMap(a => fb.map(b => (a, b)))
 }
 
 implicit val listApply: Apply[List] = new Apply[List] {
@@ -36,9 +33,6 @@ implicit val listApply: Apply[List] = new Apply[List] {
     fa.flatMap (a => f.map (ff => ff(a)))
 
   def map[A,B](fa: List[A])(f: A => B): List[B] = fa map f
-  
-  def product[A, B](fa: List[A], fb: List[B]): List[(A, B)] =
-    fa.zip(fb)
 }
 ```
 
@@ -121,7 +115,7 @@ Apply[Option].tuple3(Some(1), Some(2), Some(3))
 
 The `|@|` operator offers an alternative syntax for the higher-arity `Apply`
 functions (`apN`, `mapN` and `tupleN`).
-In order to use it, first import `cats.syntax.all._` or `cats.syntax.apply._`.
+In order to use it, first import `cats.syntax.all._` or `cats.syntax.cartesian._`.
 Here we see that the following two functions, `f1` and `f2`, are equivalent:
 
 ```tut

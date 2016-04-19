@@ -8,7 +8,6 @@ import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 
 import algebra.laws.OrderLaws
-import org.scalacheck.Prop.forAll
 
 class WriterTTests extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]
@@ -42,6 +41,29 @@ class WriterTTests extends CatsSuite {
       // if the value is the same, everything should be the same
       w1.map(_ => i).reset should === (w2.map(_ => i).reset)
     }
+  }
+
+  test("tell + written is identity") {
+    forAll { (i: Int) =>
+      WriterT.tell[Id, Int](i).written should === (i)
+    }
+  }
+
+  test("value + value is identity") {
+    forAll { (i: Int) =>
+      WriterT.value[Id, Int, Int](i).value should === (i)
+    }
+  }
+
+  test("valueT + value is identity") {
+    forAll { (i: Int) =>
+      WriterT.valueT[Id, Int, Int](i).value should === (i)
+    }
+  }
+
+  test("show") {
+    val writerT: WriterT[Id, List[String], String] = WriterT.put("foo")(List("Some log message"))
+    writerT.show should === ("(List(Some log message),foo)")
   }
 
   {
@@ -160,8 +182,8 @@ class WriterTTests extends CatsSuite {
     Apply[WriterT[ListWrapper, ListWrapper[Int], ?]]
     Applicative[WriterT[ListWrapper, ListWrapper[Int], ?]]
     FlatMap[WriterT[ListWrapper, ListWrapper[Int], ?]]
-    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", MonadTests[WriterT[ListWrapper, ListWrapper[Int], ?]].monad[Int, Int, Int])
-    checkAll("Monad[WriterT[ListWrapper, ListWrapper[Int], ?]]", SerializableTests.serializable(Monad[WriterT[ListWrapper, ListWrapper[Int], ?]]))
+    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", MonadWriterTests[WriterT[ListWrapper, ListWrapper[Int], ?], ListWrapper[Int]].monadWriter[Int, Int, Int])
+    checkAll("MonadWriter[WriterT[ListWrapper, ListWrapper[Int], ?], List[String]]", SerializableTests.serializable(MonadWriter[WriterT[ListWrapper, ListWrapper[Int], ?], ListWrapper[Int]]))
 
     Functor[WriterT[Id, ListWrapper[Int], ?]]
     Apply[WriterT[Id, ListWrapper[Int], ?]]

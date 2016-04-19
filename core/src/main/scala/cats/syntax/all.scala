@@ -2,9 +2,12 @@ package cats
 package syntax
 
 trait AllSyntax
-    extends ApplySyntax
+    extends ApplicativeSyntax
+    with ApplicativeErrorSyntax
+    with ApplySyntax
     with BifunctorSyntax
     with BifoldableSyntax
+    with BitraverseSyntax
     with CartesianSyntax
     with CoflatMapSyntax
     with ComonadSyntax
@@ -29,10 +32,10 @@ trait AllSyntax
     with SemigroupKSyntax
     with Show.ToShowOps
     with SplitSyntax
-    with StreamingSyntax
     with StrongSyntax
     with TransLiftSyntax
     with TraverseSyntax
     with XorSyntax
     with ValidatedSyntax
     with CoproductSyntax
+    with WriterSyntax

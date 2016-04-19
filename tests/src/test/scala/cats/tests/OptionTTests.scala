@@ -1,11 +1,10 @@
 package cats.tests
 
-import cats.{Applicative, Id, Monad, Cartesian, Show}
-import cats.data.{OptionT, Validated, Xor}
-import cats.laws.discipline.{ApplicativeTests, FunctorTests, MonadCombineTests, SerializableTests, CartesianTests, MonadTests}
+import cats.{Id, Monad, Cartesian, Show}
+import cats.data.{OptionT, Xor}
+import cats.laws.discipline.{FunctorTests, SerializableTests, CartesianTests, MonadTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import org.scalacheck.{Arbitrary, Gen}
 
 class OptionTTests extends CatsSuite {
 
@@ -132,6 +131,10 @@ class OptionTTests extends CatsSuite {
   test("show") {
     val xor: String Xor Option[Int] = Xor.right(Some(1))
     OptionT[Xor[String, ?], Int](xor).show should === ("Xor.Right(Some(1))")
+  }
+
+  test("none") {
+    OptionT.none[List,Int] should === (OptionT[List,Int](List(None)))
   }
 
   test("implicit Show[OptionT] instance and explicit show method are consistent") {

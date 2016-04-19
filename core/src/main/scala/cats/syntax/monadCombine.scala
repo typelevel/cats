@@ -14,10 +14,10 @@ final class NestedMonadCombineOps[F[_], G[_], A](fga: F[G[A]])(implicit F: Monad
    *
    * Example:
    * {{{
-   * scala> import cats.data.Streaming
    * scala> import cats.std.list._
+    * scala> import cats.std.vector._
    * scala> import cats.syntax.monadCombine._
-   * scala> val x: List[Streaming[Int]] = List(Streaming(1, 2), Streaming(3, 4))
+   * scala> val x: List[Vector[Int]] = List(Vector(1, 2), Vector(3, 4))
    * scala> x.unite
    * res0: List[Int] = List(1, 2, 3, 4)
    * }}}

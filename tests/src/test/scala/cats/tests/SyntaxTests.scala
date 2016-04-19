@@ -3,13 +3,7 @@ package tests
 
 import cats.std.AllInstances
 import cats.syntax.AllSyntax
-import algebra.laws.GroupLaws
 import cats.functor.{Invariant, Contravariant}
-import cats.laws.discipline.SerializableTests
-
-import org.scalacheck.{Arbitrary}
-import org.scalatest.prop.PropertyChecks
-import scala.reflect.runtime.universe.TypeTag
 
 /**
  * Test that our syntax implicits are working.
@@ -200,5 +194,49 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val f2 = mock[A => D]
     val g2 = mock[B => D]
     val d0 = fab.bifoldMap(f2, g2)
+  }
+
+  def testBitraverse[F[_, _]: Bitraverse, G[_]: Applicative, A, B, C, D]: Unit = {
+    val f = mock[A => G[C]]
+    val g = mock[B => G[D]]
+
+    val fab = mock[F[A, B]]
+    val gfcd = fab.bitraverse(f, g)
+
+    val fgagb = mock[F[G[A], G[B]]]
+    val gfab = fgagb.bisequence
+  }
+
+  def testApplicative[F[_]: Applicative, A]: Unit = {
+    val a = mock[A]
+    val fa = a.pure[F]
+
+    val la = mock[Eval[A]]
+    val lfa = la.pureEval[F]
+  }
+
+  def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, ?], E]): Unit = {
+    type G[X] = F[E, X]
+
+    val e = mock[E]
+    val ga = e.raiseError[G, A]
+
+    val gea = mock[G[A]]
+
+    val ea = mock[E => A]
+    val gea1 = ga.handleError(ea)
+
+    val egea = mock[E => G[A]]
+    val gea2 = ga.handleErrorWith(egea)
+
+    val gxea = ga.attempt
+
+    val gxtea = ga.attemptT
+
+    val pfea = mock[PartialFunction[E, A]]
+    val gea3 = ga.recover(pfea)
+
+    val pfegea = mock[PartialFunction[E, G[A]]]
+    val gea4 = ga.recoverWith(pfegea)
   }
 }

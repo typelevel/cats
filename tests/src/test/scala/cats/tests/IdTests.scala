@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import org.scalacheck.Prop.forAll
 import cats.laws.discipline._
 import cats.laws.discipline.eq.tuple3Eq
 

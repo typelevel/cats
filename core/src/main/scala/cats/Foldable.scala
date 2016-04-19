@@ -1,7 +1,5 @@
 package cats
 
-import cats.data.Streaming
-
 import scala.collection.mutable
 import simulacrum.typeclass
 
@@ -77,6 +75,12 @@ import simulacrum.typeclass
    */
   def foldMap[A, B](fa: F[A])(f: A => B)(implicit B: Monoid[B]): B =
     foldLeft(fa, B.empty)((b, a) => B.combine(b, f(a)))
+
+  /**
+   * Left associative monadic folding on `F`.
+   */
+  def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
+    foldLeft(fa, G.pure(z))((gb, a) => G.flatMap(gb)(f(_, a)))
 
   /**
    * Traverse `F[A]` using `Applicative[G]`.
@@ -274,11 +278,6 @@ import simulacrum.typeclass
       val F = self
       val G = ev
     }
-
-  def toStreaming[A](fa: F[A]): Streaming[A] =
-    foldRight(fa, Now(Streaming.empty[A])){ (a, ls) =>
-      Now(Streaming.cons(a, ls))
-    }.value
 }
 
 /**

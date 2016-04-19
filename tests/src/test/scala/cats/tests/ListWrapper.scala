@@ -1,9 +1,7 @@
 package cats
 package tests
 
-import cats.data.OneAnd
 import cats.std.list._
-import cats.laws.discipline.arbitrary.oneAndArbitrary
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
@@ -85,6 +83,9 @@ object ListWrapper {
   }
 
   val monad: Monad[ListWrapper] = monadCombine
+
+  /** apply is taken due to ListWrapper being a case class */
+  val applyInstance: Apply[ListWrapper] = monadCombine
 
   def monoidK: MonoidK[ListWrapper] = monadCombine
 

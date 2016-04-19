@@ -4,11 +4,12 @@ package tests
 
 import cats.data.Xor
 import cats.laws.discipline._
+import cats.laws.discipline.arbitrary.evalArbitrary
 import cats.laws.discipline.eq.tuple3Eq
-import cats.jvm.std.future.{futureEq, futureComonad}
+import cats.jvm.std.future.futureComonad
 import cats.tests.CatsSuite
 
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -40,4 +41,10 @@ class FutureTests extends CatsSuite {
 
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
+
+  test("pureEval lifts a potentially lazy value into Future") {
+    forAll { e: Eval[Int] =>
+      e.pureEval[Future].extract should === (e.value)
+    }
+  }
 }
