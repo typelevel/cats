@@ -21,7 +21,7 @@ import simulacrum.typeclass
     * {{{
     * scala> import cats.Id
     * scala> import cats.Comonad
-    * scala> val id = Id.pure(3)
+    * scala> val id: Id[Int] = 3
     * scala> Comonad[Id].extract(id)
     * res0: cats.Id[Int] = 3
     * }}}
