@@ -32,7 +32,7 @@ class TrampolineBench {
 
   // // TailRec[A] only has .flatMap in 2.11.
   // import scala.util.control.TailCalls
-  // 
+  //
   // @Benchmark
   // def stdlib(): Int = stdlibFib(N).result
   // 
