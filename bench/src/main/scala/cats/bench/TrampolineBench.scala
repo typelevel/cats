@@ -35,7 +35,7 @@ class TrampolineBench {
   //
   // @Benchmark
   // def stdlib(): Int = stdlibFib(N).result
-  // 
+  //
   // def stdlibFib(n: Int): TailCalls.TailRec[Int] =
   //   if (n < 2) TailCalls.done(n) else for {
   //     x <- TailCalls.tailcall(stdlibFib(n - 1))
