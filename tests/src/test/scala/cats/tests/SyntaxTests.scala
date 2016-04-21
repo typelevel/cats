@@ -207,6 +207,14 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val gfab = fgagb.bisequence
   }
 
+  def testMonadCombine[F[_]: MonadCombine, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+    val fga = mock[F[G[A]]]
+    val fa = fga.unite
+
+    val fhab = mock[F[H[A, B]]]
+    val fafb = fhab.separate
+  }
+
   def testApplicative[F[_]: Applicative, A]: Unit = {
     val a = mock[A]
     val fa = a.pure[F]
