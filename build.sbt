@@ -97,7 +97,7 @@ def noDocProjects(sv: String): Seq[ProjectReference] = CrossVersion.partialVersi
 lazy val docSettings = Seq(
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) :=
-    inProjects(coreJVM) -- inProjects(noDocProjects(scalaVersion.value): _*),
+    inProjects(coreJVM, freeJVM) -- inProjects(noDocProjects(scalaVersion.value): _*),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -123,7 +123,7 @@ lazy val docs = project
   .settings(tutSettings)
   .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
-  .dependsOn(coreJVM)
+  .dependsOn(coreJVM, freeJVM)
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "root")
@@ -136,15 +136,15 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, coreJVM, lawsJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, coreJVM, lawsJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, coreJVM, lawsJVM, freeJVM, testsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, coreJVM, lawsJVM, freeJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, coreJS, lawsJS, testsJS, js)
-  .dependsOn(macrosJS, coreJS, lawsJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, coreJS, lawsJS, freeJS, testsJS, js)
+  .dependsOn(macrosJS, coreJS, lawsJS, freeJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -187,6 +187,16 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
 
+lazy val free = crossProject.crossType(CrossType.Pure)
+  .dependsOn(macros, core, tests % "test-internal -> test")
+  .settings(moduleName := "cats-free")
+  .settings(catsSettings:_*)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val freeJVM = free.jvm
+lazy val freeJS = free.js
+
 lazy val tests = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, laws)
   .settings(moduleName := "cats-tests")
@@ -210,7 +220,7 @@ lazy val jvm = project
   .settings(commonJvmSettings:_*)
 
 // bench is currently JVM-only
-lazy val bench = project.dependsOn(macrosJVM, coreJVM, lawsJVM)
+lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
   .settings(noPublishSettings)

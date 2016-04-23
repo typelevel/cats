@@ -1,8 +1,8 @@
 package cats
-package tests
+package free
 
+import cats.tests.CatsSuite
 import cats.data.{Xor, Coproduct}
-import cats.free.{Free, Inject,:<:}
 import org.scalacheck._
 
 class InjectTests extends CatsSuite {
