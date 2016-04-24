@@ -5,6 +5,7 @@ import cats.data.{NonEmptyList, Validated, ValidatedNel, Xor, XorT}
 import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeErrorTests, SerializableTests, CartesianTests}
 import org.scalacheck.Arbitrary._
+import cats.laws.discipline.{SemigroupKTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq.tuple3Eq
 import algebra.laws.{OrderLaws, GroupLaws}
@@ -32,6 +33,12 @@ class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int]", GroupLaws[Validated[String, Int]].monoid)
 
   checkAll("Validated[String, NonEmptyList[Int]]", GroupLaws[Validated[String, NonEmptyList[Int]]].semigroup)
+
+  {
+    implicit val L = ListWrapper.semigroup[String]
+    checkAll("Validated[ListWrapper[String], ?]", SemigroupKTests[Validated[ListWrapper[String], ?]].semigroupK[Int])
+    checkAll("SemigroupK[Validated[ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[Validated[ListWrapper[String], ?]]))
+  }
 
   {
     implicit val S = ListWrapper.partialOrder[String]
