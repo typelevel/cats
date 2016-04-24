@@ -3,6 +3,9 @@ language: scala
 git:
   depth: 9999
 
+install:
+  - pip install --user codecov
+
 scala:
 - 2.10.6
 - 2.11.8
