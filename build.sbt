@@ -25,9 +25,9 @@ lazy val catsDoctestSettings = Seq(
 ) ++ doctestSettings
 
 lazy val kernelSettings = Seq(
+  // don't warn on value discarding because it's broken on 2.10 with @sp(Unit)
   scalacOptions ++= commonScalacOptions.filter(_ != "-Ywarn-value-discard"),
   resolvers ++= Seq(
-    "bintray/non" at "http://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
