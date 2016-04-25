@@ -5,6 +5,14 @@ package object short extends ShortInstances
 
 trait ShortInstances {
   implicit val shortOrder: Order[Short] = new ShortOrder
+  implicit val shortGroup: CommutativeGroup[Short] = new ShortGroup
+}
+
+class ShortGroup extends CommutativeGroup[Short] {
+  def combine(x: Short, y: Short): Short = (x + y).toShort
+  def empty: Short = 0
+  def inverse(x: Short): Short = (-x).toShort
+  override def remove(x: Short, y: Short): Short = (x - y).toShort
 }
 
 class ShortOrder extends Order[Short] {

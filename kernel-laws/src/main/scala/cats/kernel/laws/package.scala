@@ -8,7 +8,7 @@ import Prop.{False, Proof, Result}
 
 package object laws {
 
-  implicit def PredicateFromMonoid[A](implicit ev: Eq[A], A: Monoid[A]): Predicate[A] =
+  implicit def nonEmptyPredicate[A](implicit ev: Eq[A], A: Monoid[A]): Predicate[A] =
     new Predicate[A] {
       def apply(a: A) = ev.neqv(a, A.empty)
     }

@@ -7,8 +7,8 @@ trait SetInstances {
   implicit def setPartialOrder[A]: PartialOrder[Set[A]] =
     new SetPartialOrder[A]
 
-  implicit def setMonoid[A]: Monoid[Set[A]] =
-    new SetMonoid[A]
+  implicit def setSemilattice[A]: BoundedSemilattice[Set[A]] =
+    new SetSemilattice[A]
 }
 
 class SetPartialOrder[A] extends PartialOrder[Set[A]] {
@@ -22,7 +22,7 @@ class SetPartialOrder[A] extends PartialOrder[Set[A]] {
     x == y
 }
 
-class SetMonoid[A] extends Monoid[Set[A]] {
+class SetSemilattice[A] extends BoundedSemilattice[Set[A]] {
   def empty: Set[A] = Set.empty
   def combine(x: Set[A], y: Set[A]): Set[A] = x | y
 }

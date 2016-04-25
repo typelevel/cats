@@ -81,45 +81,6 @@ trait GroupLaws[A] extends Laws {
     parents = List(group, commutativeMonoid)
   )
 
-  // // additive groups
-  // 
-  // def additiveSemigroup(implicit A: AdditiveSemigroup[A]) = new AdditiveProperties(
-  //   base = semigroup(A.additive),
-  //   parents = Nil,
-  //   Rules.serializable(A),
-  //   Rules.repeat1("sumN")(A.sumN),
-  //   Rules.repeat2("sumN", "+")(A.sumN)(A.plus)
-  // )
-  // 
-  // def additiveCommutativeSemigroup(implicit A: AdditiveCommutativeSemigroup[A]) = new AdditiveProperties(
-  //   base = commutativeSemigroup(A.additive),
-  //   parents = List(additiveSemigroup)
-  // )
-  // 
-  // def additiveMonoid(implicit A: AdditiveMonoid[A]) = new AdditiveProperties(
-  //   base = monoid(A.additive),
-  //   parents = List(additiveSemigroup),
-  //   Rules.repeat0("sumN", "zero", A.zero)(A.sumN),
-  //   Rules.collect0("sum", "zero", A.zero)(A.sum)
-  // )
-  // 
-  // def additiveCommutativeMonoid(implicit A: AdditiveCommutativeMonoid[A]) = new AdditiveProperties(
-  //   base = commutativeMonoid(A.additive),
-  //   parents = List(additiveMonoid)
-  // )
-  // 
-  // def additiveGroup(implicit A: AdditiveGroup[A]) = new AdditiveProperties(
-  //   base = group(A.additive),
-  //   parents = List(additiveMonoid),
-  //   Rules.consistentInverse("subtract")(A.minus)(A.plus)(A.negate)
-  // )
-  // 
-  // def additiveCommutativeGroup(implicit A: AdditiveCommutativeGroup[A]) = new AdditiveProperties(
-  //   base = commutativeGroup(A.additive),
-  //   parents = List(additiveGroup)
-  // )
-
-
   // property classes
 
   class GroupProperties(
@@ -129,14 +90,4 @@ trait GroupLaws[A] extends Laws {
   ) extends RuleSet {
     val bases = Nil
   }
-
-  // class AdditiveProperties(
-  //   val base: GroupProperties,
-  //   val parents: Seq[AdditiveProperties],
-  //   val props: (String, Prop)*
-  // ) extends RuleSet {
-  //   val name = base.name
-  //   val bases = List("base" -> base)
-  // }
-
 }

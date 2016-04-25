@@ -5,6 +5,14 @@ package object byte extends ByteInstances
 
 trait ByteInstances {
   implicit val byteOrder: Order[Byte] = new ByteOrder
+  implicit val byteGroup: CommutativeGroup[Byte] = new ByteGroup
+}
+
+class ByteGroup extends CommutativeGroup[Byte] {
+  def combine(x: Byte, y: Byte): Byte = (x + y).toByte
+  def empty: Byte = 0
+  def inverse(x: Byte): Byte = (-x).toByte
+  override def remove(x: Byte, y: Byte): Byte = (x - y).toByte
 }
 
 class ByteOrder extends Order[Byte] {

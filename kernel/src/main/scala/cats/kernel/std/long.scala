@@ -4,7 +4,15 @@ package std
 package object long extends LongInstances
 
 trait LongInstances {
-  implicit val longOrder = new LongOrder
+  implicit val longOrder: Order[Long] = new LongOrder
+  implicit val longGroup: CommutativeGroup[Long] = new LongGroup
+}
+
+class LongGroup extends CommutativeGroup[Long] {
+  def combine(x: Long, y: Long): Long = x + y
+  def empty: Long = 0L
+  def inverse(x: Long): Long = -x
+  override def remove(x: Long, y: Long): Long = x - y
 }
 
 class LongOrder extends Order[Long] {

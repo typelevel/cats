@@ -6,6 +6,15 @@ package object bigInt extends BigIntInstances
 trait BigIntInstances {
   implicit val bigIntOrder: Order[BigInt] =
     new BigIntOrder
+  implicit val bigIntGroup: CommutativeGroup[BigInt] =
+    new BigIntGroup
+}
+
+class BigIntGroup extends CommutativeGroup[BigInt] {
+  val empty: BigInt = BigInt(0)
+  def combine(x: BigInt, y: BigInt): BigInt = x + y
+  def inverse(x: BigInt): BigInt = -x
+  override def remove(x: BigInt, y: BigInt): BigInt = x - y
 }
 
 class BigIntOrder extends Order[BigInt] {

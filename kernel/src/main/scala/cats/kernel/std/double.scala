@@ -5,6 +5,14 @@ import java.lang.Math
 
 trait DoubleInstances {
   implicit val doubleOrder: Order[Double] = new DoubleOrder
+  implicit val doubleGroup: CommutativeGroup[Double] = new DoubleGroup
+}
+
+class DoubleGroup extends CommutativeGroup[Double] {
+  def combine(x: Double, y: Double): Double = x + y
+  def empty: Double = 0D
+  def inverse(x: Double): Double = -x
+  override def remove(x: Double, y: Double): Double = x - y
 }
 
 class DoubleOrder extends Order[Double] {

@@ -177,13 +177,14 @@ object Order extends OrderFunctions {
   /**
    * An `Order` instance that considers all `A` instances to be equal.
    */
-  def allEqual[A]: Order[A] = new Order[A] {
-    def compare(x: A, y: A): Int = 0
-  }
+  def allEqual[A]: Order[A] =
+    new Order[A] {
+      def compare(x: A, y: A): Int = 0
+    }
 
 
   /**
-   * A `Monoid[Order[A]]` can be generated for all `A` with the following
+   * A `Band[Order[A]]` can be generated for all `A` with the following
    * properties:
    *
    * `empty` returns a trivial `Order[A]` which considers all `A` instances to
@@ -194,16 +195,16 @@ object Order extends OrderFunctions {
    *
    * @see [[Order.whenEqual]]
    */
-  def whenEqualMonoid[A]: Monoid[Order[A]] =
-    new Monoid[Order[A]] {
+  def whenEqualMonoid[A]: Band[Order[A]] =
+    new Band[Order[A]] {
       val empty: Order[A] = allEqual[A]
-
       def combine(x: Order[A], y: Order[A]): Order[A] = x whenEqual y
     }
 
-  def fromOrdering[A](implicit ev: Ordering[A]): Order[A] = new Order[A] {
-    def compare(x: A, y: A): Int = ev.compare(x, y)
+  def fromOrdering[A](implicit ev: Ordering[A]): Order[A] =
+    new Order[A] {
+      def compare(x: A, y: A): Int = ev.compare(x, y)
 
-    override def toOrdering: Ordering[A] = ev
-  }
+      override def toOrdering: Ordering[A] = ev
+    }
 }

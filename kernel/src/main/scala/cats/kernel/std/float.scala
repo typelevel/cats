@@ -2,7 +2,18 @@ package cats.kernel
 package std
 
 trait FloatInstances {
-  implicit val floatOrder = new FloatOrder
+  implicit val floatOrder: Order[Float] = new FloatOrder
+  implicit val floatGroup: CommutativeGroup[Float] = new FloatGroup
+}
+
+/**
+ * This is only approximately associative.
+ */
+class FloatGroup extends CommutativeGroup[Float] {
+  def combine(x: Float, y: Float): Float = x + y
+  def empty: Float = 0F
+  def inverse(x: Float): Float = -x
+  override def remove(x: Float, y: Float): Float = x - y
 }
 
 /**

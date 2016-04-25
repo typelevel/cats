@@ -5,6 +5,14 @@ package object int extends IntInstances
 
 trait IntInstances {
   implicit val intOrder: Order[Int] = new IntOrder
+  implicit val intGroup: CommutativeGroup[Int] = new IntGroup
+}
+
+class IntGroup extends CommutativeGroup[Int] {
+  def combine(x: Int, y: Int): Int = x + y
+  def empty: Int = 0
+  def inverse(x: Int): Int = -x
+  override def remove(x: Int, y: Int): Int = x - y
 }
 
 class IntOrder extends Order[Int] {
