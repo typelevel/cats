@@ -14,6 +14,7 @@ trait AnyValInstances
   with    DoubleInstances
   with    BooleanInstances
   with    UnitInstances
+  with    TupleInstances
 
 trait IntInstances extends algebra.std.IntInstances {
 

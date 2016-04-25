@@ -2,7 +2,6 @@ package cats
 package tests
 
 import cats.data.Writer
-import cats.laws.discipline.eq._
 
 class WriterTests extends CatsSuite {
   test("pure syntax creates a writer with an empty log"){
