@@ -25,12 +25,11 @@ lazy val catsDoctestSettings = Seq(
 ) ++ doctestSettings
 
 lazy val kernelSettings = Seq(
-  scalacOptions ++= commonScalacOptions,
+  scalacOptions ++= commonScalacOptions.filter(_ != "-Ywarn-value-discard"),
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots")
-  ),
+    Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport
