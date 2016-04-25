@@ -24,6 +24,17 @@ lazy val catsDoctestSettings = Seq(
   doctestWithDependencies := false
 ) ++ doctestSettings
 
+lazy val kernelSettings = Seq(
+  scalacOptions ++= commonScalacOptions,
+  resolvers ++= Seq(
+    "bintray/non" at "http://dl.bintray.com/non/maven",
+    Resolver.sonatypeRepo("releases"),
+    Resolver.sonatypeRepo("snapshots")
+  ),
+  parallelExecution in Test := false,
+  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+) ++ warnUnusedImport
+
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions,
   resolvers ++= Seq(
@@ -136,15 +147,15 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, coreJVM, lawsJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, coreJVM, lawsJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, testsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, coreJS, lawsJS, testsJS, js)
-  .dependsOn(macrosJS, coreJS, lawsJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, testsJS, js)
+  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -158,6 +169,31 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
+lazy val kernel = crossProject.crossType(CrossType.Pure)
+  .in(file("kernel"))
+  .settings(moduleName := "cats-kernel")
+  .settings(kernelSettings: _*)
+  .settings(buildSettings: _*)
+  .settings(publishSettings: _*)
+  .settings(scoverageSettings: _*)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val kernelJVM = kernel.jvm
+lazy val kernelJS = kernel.js
+
+lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
+  .in(file("kernel-laws"))
+  .settings(moduleName := "cats-kernel-laws")
+  .settings(kernelSettings: _*)
+  .settings(buildSettings: _*)
+  .settings(publishSettings: _*)
+  .settings(scoverageSettings: _*)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val kernelLawsJVM = kernelLaws.jvm
+lazy val kernelLawsJS = kernelLaws.js
 
 lazy val core = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros)
