@@ -3,10 +3,7 @@ package laws
 
 import org.scalacheck.Prop
 import org.scalacheck.Prop._
-import scala.util.control.NonFatal
-
 import org.scalacheck.{Arbitrary, Prop}
-
 import cats.kernel.std.boolean._
 
 object Rules {
@@ -99,30 +96,9 @@ object Rules {
   // ugly platform-specific code follows
 
   def serializable[M](m: M): (String, Prop) =
-    "serializable" -> (IsSerializable() match {
-      case false =>
-        Prop(_ => Result(status = Proof))
-      case true =>
-        Prop { _ =>
-          import java.io._
-          val baos = new ByteArrayOutputStream()
-          val oos = new ObjectOutputStream(baos)
-          var ois: ObjectInputStream = null
-          try {
-            oos.writeObject(m)
-            oos.close()
-            val bais = new ByteArrayInputStream(baos.toByteArray())
-            ois = new ObjectInputStream(bais)
-            val m2 = ois.readObject() // just ensure we can read it back
-            ois.close()
-            Result(status = Proof)
-          } catch { case NonFatal(t) =>
-              Result(status = Exception(t))
-          } finally {
-            oos.close()
-            if (ois != null) ois.close()
-          }
-        }
+    "serializable" -> (if (IsSerializable()) {
+      Prop(_ => Result(status = Proof))
+    } else {
+      Prop(_ => IsSerializable.testSerialization(m))
     })
-
 }
