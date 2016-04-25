@@ -91,8 +91,11 @@ lazy val scalacheckVersion = "1.12.5"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion,
-  libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
-)
+  libraryDependencies += "org.typelevel" %%% "discipline" % "0.4")
+
+lazy val testingDependencies = Seq(
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.2",
+  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test")
 
 /**
  * Remove 2.10 projects from doc generation, as the macros used in the projects
@@ -190,8 +193,11 @@ lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
   .settings(buildSettings: _*)
   .settings(publishSettings: _*)
   .settings(scoverageSettings: _*)
+  .settings(disciplineDependencies: _*)
+  .settings(testingDependencies: _*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
+  .dependsOn(kernel)
 
 lazy val kernelLawsJVM = kernelLaws.jvm
 lazy val kernelLawsJS = kernelLaws.js
@@ -228,9 +234,7 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
   .settings(noPublishSettings:_*)
-  .settings(libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test",
-    "org.typelevel" %%% "catalysts-platform" % "0.0.2" % "test"))
+  .settings(testingDependencies: _*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
