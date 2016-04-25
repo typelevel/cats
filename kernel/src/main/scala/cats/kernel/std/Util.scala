@@ -37,19 +37,6 @@ object StaticMethods {
     wrapMutableMap(m)
   }
 
-  def subtractMap[K, V](x: Map[K, V], y: Map[K, V])(subtract: (V, V) => V)(negate: V => V): Map[K, V] = {
-    // even if x is smaller, we'd need to call map/foreach on y to
-    // negate all its values, so this is just as fast or faster.
-    val m = initMutableMap(x)
-    y.foreach { case (k, v2) =>
-      m(k) = m.get(k) match {
-        case Some(v1) => subtract(v1, v2)
-        case None => negate(v2)
-      }
-    }
-    wrapMutableMap(m)
-  }
-
   def iteratorCompare[A](xs: Iterator[A], ys: Iterator[A])(implicit ev: Order[A]): Int = {
     while (true) {
       if (xs.hasNext) {
@@ -90,7 +77,7 @@ object StaticMethods {
     while (true) {
       if (xs.hasNext) {
         if (ys.hasNext) {
-          if (ev.eqv(xs.next, ys.next)) return true
+          if (ev.neqv(xs.next, ys.next)) return false
         } else {
           return false
         }

@@ -4,7 +4,8 @@ package std
 package object all extends AllInstances
 
 trait AllInstances
-    extends BigIntInstances
+    extends ArrayInstances
+    with BigIntInstances
     with BooleanInstances
     with ByteInstances
     with CharInstances
@@ -17,7 +18,8 @@ trait AllInstances
     with OptionInstances
     with SetInstances
     with ShortInstances
+    with StreamInstances
     with StringInstances
     with TupleInstances
     with UnitInstances
-    with ArrayInstances
+    with VectorInstances

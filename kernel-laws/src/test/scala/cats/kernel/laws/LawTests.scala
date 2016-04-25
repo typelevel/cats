@@ -25,19 +25,19 @@ class LawTests extends FunSuite with Discipline {
   implicit def orderLaws[A: Eq: Arbitrary] = OrderLaws[A]
   implicit def groupLaws[A: Eq: Arbitrary] = GroupLaws[A]
 
+  laws[OrderLaws, Map[String, HasEq[Int]]].check(_.eqv)
   laws[OrderLaws, List[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, List[HasEq[String]]].check(_.eqv)
   laws[OrderLaws, Option[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, Option[HasEq[String]]].check(_.eqv)
-  laws[OrderLaws, Map[Char, Int]].check(_.eqv)
-  laws[OrderLaws, Map[Int, BigInt]].check(_.eqv)
+  laws[OrderLaws, Array[HasEq[Int]]].check(_.eqv)
+  laws[OrderLaws, Vector[HasEq[Int]]].check(_.eqv)
+  laws[OrderLaws, Stream[HasEq[Int]]].check(_.eqv)
 
-  laws[OrderLaws, Option[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, Option[HasPartialOrder[String]]].check(_.partialOrder)
-  laws[OrderLaws, List[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, List[HasPartialOrder[String]]].check(_.partialOrder)
   laws[OrderLaws, Set[Int]].check(_.partialOrder)
-  laws[OrderLaws, Array[Int]].check(_.partialOrder)
+  laws[OrderLaws, Option[HasPartialOrder[Int]]].check(_.partialOrder)
+  laws[OrderLaws, List[HasPartialOrder[Int]]].check(_.partialOrder)
+  laws[OrderLaws, Array[HasPartialOrder[Int]]].check(_.partialOrder)
+  laws[OrderLaws, Vector[HasPartialOrder[Int]]].check(_.partialOrder)
+  laws[OrderLaws, Stream[HasPartialOrder[Int]]].check(_.partialOrder)
 
   laws[OrderLaws, Unit].check(_.order)
   laws[OrderLaws, Boolean].check(_.order)
@@ -51,25 +51,32 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Option[String]].check(_.order)
   laws[OrderLaws, List[String]].check(_.order)
   laws[OrderLaws, Array[Int]].check(_.order)
+  laws[OrderLaws, Vector[Int]].check(_.order)
+  laws[OrderLaws, Stream[Int]].check(_.order)
   laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
 
-  laws[GroupLaws, Int].check(_.monoid)
   laws[GroupLaws, String].check(_.monoid)
   laws[GroupLaws, Option[Int]].check(_.monoid)
   laws[GroupLaws, Option[String]].check(_.monoid)
   laws[GroupLaws, List[Int]].check(_.monoid)
+  laws[GroupLaws, Vector[Int]].check(_.monoid)
+  laws[GroupLaws, Stream[Int]].check(_.monoid)
   laws[GroupLaws, List[String]].check(_.monoid)
+  laws[GroupLaws, Map[String, Int]].check(_.monoid)
+
+  laws[GroupLaws, Unit].check(_.commutativeGroup)
+  laws[GroupLaws, Byte].check(_.commutativeGroup)
+  laws[GroupLaws, Short].check(_.commutativeGroup)
+  laws[GroupLaws, Int].check(_.commutativeGroup)
+  laws[GroupLaws, Long].check(_.commutativeGroup)
+  //laws[GroupLaws, Float].check(_.commutativeGroup) // approximately associative
+  //laws[GroupLaws, Double].check(_.commutativeGroup) // approximately associative
+  laws[GroupLaws, BigInt].check(_.commutativeGroup)
 
   laws[GroupLaws, (Int, Int)].check(_.band)
 
+  laws[GroupLaws, Unit].check(_.boundedSemilattice)
   // esoteric machinery follows...
-
-  implicit lazy val intGroup: Group[Int] =
-    new Group[Int] {
-      def empty: Int = 0
-      def combine(x: Int, y: Int): Int = x + y
-      def inverse(x: Int): Int = -x
-    }
 
   implicit lazy val band: Band[(Int, Int)] =
     new Band[(Int, Int)] {
@@ -109,8 +116,9 @@ class LawTests extends FunSuite with Discipline {
           .forall { case (x, y) => a.eqv(x, y) == b.eqv(x, y) }
     }
 
-    implicit val monoidOrderN: Monoid[Order[N]] = Order.whenEqualMonoid[N]
+    implicit val monoidOrderN = Order.whenEqualMonoid[N]
     laws[GroupLaws, Order[N]].check(_.monoid)
+    laws[GroupLaws, Order[N]].check(_.band)
 
     {
       implicit val bsEqN: BoundedSemilattice[Eq[N]] = Eq.allEqualBoundedSemilattice[N]

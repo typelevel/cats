@@ -195,8 +195,8 @@ object Order extends OrderFunctions {
    *
    * @see [[Order.whenEqual]]
    */
-  def whenEqualMonoid[A]: Band[Order[A]] =
-    new Band[Order[A]] {
+  def whenEqualMonoid[A]: Monoid[Order[A]] with Band[Order[A]] =
+    new Monoid[Order[A]] with Band[Order[A]] {
       val empty: Order[A] = allEqual[A]
       def combine(x: Order[A], y: Order[A]): Order[A] = x whenEqual y
     }
