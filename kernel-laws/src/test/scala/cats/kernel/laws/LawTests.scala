@@ -13,7 +13,14 @@ import Arbitrary.arbitrary
 import org.scalatest.FunSuite
 import scala.util.Random
 
-trait LawTests extends FunSuite with Discipline {
+class LawTests extends FunSuite with Discipline {
+
+  // The scalacheck defaults (100,100) are too high for scala-js.
+  final val PropMaxSize = if (Platform.isJs) 10 else 100
+  final val PropMinSuccessful = if (Platform.isJs) 10 else 100
+
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfig(maxSize = PropMaxSize, minSuccessful = PropMinSuccessful)
 
   implicit def orderLaws[A: Eq: Arbitrary] = OrderLaws[A]
   implicit def groupLaws[A: Eq: Arbitrary] = GroupLaws[A]
@@ -55,14 +62,16 @@ trait LawTests extends FunSuite with Discipline {
 
   laws[GroupLaws, (Int, Int)].check(_.band)
 
-  implicit val intGroup: Group[Int] =
+  // esoteric machinery follows...
+
+  implicit lazy val intGroup: Group[Int] =
     new Group[Int] {
       def empty: Int = 0
       def combine(x: Int, y: Int): Int = x + y
       def inverse(x: Int): Int = -x
     }
 
-  implicit val band: Band[(Int, Int)] =
+  implicit lazy val band: Band[(Int, Int)] =
     new Band[(Int, Int)] {
       def combine(a: (Int, Int), b: (Int, Int)) = (a._1, b._2)
     }
@@ -112,17 +121,6 @@ trait LawTests extends FunSuite with Discipline {
       laws[GroupLaws, Eq[N]].check(_.semilattice)
     }
   }
-
-
-  // esoteric machinery follows...
-
-
-  // The scalacheck defaults (100,100) are too high for scala-js.
-  val PropMaxSize = if (Platform.isJs) 10 else 100
-  val PropMinSuccessful = if (Platform.isJs) 10 else 100
-
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfig(maxSize = PropMaxSize, minSuccessful = PropMinSuccessful)
 
   case class HasEq[A](a: A)
 
