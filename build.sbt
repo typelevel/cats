@@ -204,7 +204,7 @@ lazy val kernelLawsJVM = kernelLaws.jvm
 lazy val kernelLawsJS = kernelLaws.js
 
 lazy val core = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros)
+  .dependsOn(macros, kernel)
   .settings(moduleName := "cats-core")
   .settings(catsSettings:_*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
@@ -216,7 +216,7 @@ lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
 lazy val laws = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core)
+  .dependsOn(macros, kernel, core, kernelLaws)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)

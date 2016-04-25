@@ -1,8 +1,7 @@
 package cats.tests
 
-import algebra.Eq
-import algebra.laws.OrderLaws
 import cats._
+import cats.kernel.laws.OrderLaws
 import cats.data.Coproduct
 import cats.functor.Contravariant
 import cats.laws.discipline._

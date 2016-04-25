@@ -7,7 +7,7 @@ import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeErrorTest
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq.tuple3Eq
-import algebra.laws.{OrderLaws, GroupLaws}
+import cats.kernel.laws.{OrderLaws, GroupLaws}
 
 import scala.util.Try
 

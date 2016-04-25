@@ -3,7 +3,7 @@ package tests
 
 import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadTests, SerializableTests, CartesianTests}
 import cats.laws.discipline.eq._
-import algebra.laws.OrderLaws
+import cats.kernel.laws.OrderLaws
 
 class EitherTests extends CatsSuite {
 

@@ -3,7 +3,6 @@ package laws
 package discipline
 
 import catalysts.Platform
-import algebra.Eq
 import cats.std.string._
 import org.scalacheck.Arbitrary
 
@@ -26,10 +25,12 @@ object eq {
   }
 
   /** Create an approximation of Eq[Show[A]] by using function1Eq[A, String] */
-  implicit def showEq[A: Arbitrary]: Eq[Show[A]] =
+  implicit def showEq[A: Arbitrary]: Eq[Show[A]] = {
+    val xyz = function1Eq[A, String]
     Eq.by[Show[A], A => String] { showInstance =>
       (a: A) => showInstance.show(a)
     }
+  }
 
   // Temporary, see https://github.com/non/algebra/pull/82
   implicit def tuple2Eq[A, B](implicit A: Eq[A], B: Eq[B]): Eq[(A, B)] =

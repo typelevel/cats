@@ -6,7 +6,7 @@ import cats.laws.ComonadLaws
 import cats.laws.discipline.{CartesianTests, BimonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import algebra.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 class EvalTests extends CatsSuite {
 

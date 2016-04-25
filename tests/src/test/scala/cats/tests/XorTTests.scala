@@ -6,7 +6,7 @@ import cats.data.{Xor, XorT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq.tuple3Eq
-import algebra.laws.OrderLaws
+import cats.kernel.laws.OrderLaws
 
 class XorTTests extends CatsSuite {
   implicit val eq0 = XorT.xorTEq[List, String, String Xor Int]

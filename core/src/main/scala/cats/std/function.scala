@@ -1,12 +1,12 @@
 package cats
 package std
 
-import algebra.Eq
 import cats.arrow.{Arrow, Choice}
 import cats.data.Xor
 import cats.functor.Contravariant
 
 private[std] sealed trait Function0Instances {
+
   implicit val function0Instance: Bimonad[Function0] =
     new Bimonad[Function0] {
       def extract[A](x: () => A): A = x()

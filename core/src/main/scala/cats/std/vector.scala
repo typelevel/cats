@@ -7,7 +7,7 @@ import scala.annotation.tailrec
 import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
 
-trait VectorInstances {
+trait VectorInstances extends cats.kernel.std.VectorInstances {
   implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
     new Traverse[Vector] with MonadCombine[Vector] with CoflatMap[Vector] {
 
@@ -56,19 +56,5 @@ trait VectorInstances {
   implicit def vectorShow[A:Show]: Show[Vector[A]] =
     new Show[Vector[A]] {
       def show(fa: Vector[A]): String = fa.map(_.show).mkString("Vector(", ", ", ")")
-    }
-
-  // TODO: eventually use algebra's instances (which will deal with
-  // implicit priority between Eq/PartialOrder/Order).
-
-  implicit def eqVector[A](implicit ev: Eq[A]): Eq[Vector[A]] =
-    new Eq[Vector[A]] {
-      def eqv(x: Vector[A], y: Vector[A]): Boolean = {
-        @tailrec def loop(to: Int): Boolean =
-          if(to == -1) true
-          else ev.eqv(x(to), y(to)) && loop(to - 1)
-
-        (x.size == y.size) && loop(x.size - 1)
-      }
     }
 }
