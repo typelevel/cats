@@ -28,11 +28,11 @@ class NaturalTransformationTests extends CatsSuite {
 
   case class Test2[A](v : A) extends Test2Algebra[A]
 
-  object Test1NT extends (Test1Algebra ~> Id) {
+  object Test1NT extends NaturalTransformation[Test1Algebra,Id] {
     override def apply[A](fa: Test1Algebra[A]): Id[A] = fa.v
   }
 
-  object Test2NT extends (Test2Algebra ~> Id) {
+  object Test2NT extends NaturalTransformation[Test2Algebra,Id] {
     override def apply[A](fa: Test2Algebra[A]): Id[A] = fa.v
   }
 

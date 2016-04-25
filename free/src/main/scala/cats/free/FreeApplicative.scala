@@ -27,7 +27,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   /** Interprets/Runs the sequence of operations using the semantics of Applicative G
     * Tail recursive only if G provides tail recursive interpretation (ie G is FreeMonad)
     */
-  final def foldMap[G[_]](f: F ~> G)(implicit G: Applicative[G]): G[A] =
+  final def foldMap[G[_]](f: NaturalTransformation[F,G])(implicit G: Applicative[G]): G[A] =
     this match {
       case Pure(a) => G.pure(a)
       case Ap(pivot, fn) => G.map2(f(pivot), fn.foldMap(f))((a, g) => g(a))
@@ -40,7 +40,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
     foldMap(NaturalTransformation.id[F])
 
   /** Interpret this algebra into another FreeApplicative */
-  final def compile[G[_]](f: F ~> G): FA[G, A] =
+  final def compile[G[_]](f: NaturalTransformation[F,G]): FA[G, A] =
     foldMap[FA[G, ?]] {
       new NaturalTransformation[F, FA[G, ?]] {
         def apply[B](fa: F[B]): FA[G, B] = lift(f(fa))
@@ -48,8 +48,8 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
     }
 
   /** Interpret this algebra into a Monoid */
-  final def analyze[M:Monoid](f: F ~> λ[α => M]): M =
-    foldMap[Const[M, ?]](new (F ~> Const[M, ?]) {
+  final def analyze[M:Monoid](f: NaturalTransformation[F,λ[α => M]]): M =
+    foldMap[Const[M, ?]](new (NaturalTransformation[F,Const[M, ?]]) {
       def apply[X](x: F[X]): Const[M,X] = Const(f(x))
     }).getConst
 
