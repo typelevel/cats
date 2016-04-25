@@ -4,7 +4,11 @@ package std
 package object set extends SetInstances
 
 trait SetInstances {
-  implicit def setPartialOrder[A]: PartialOrder[Set[A]] = new SetPartialOrder[A]
+  implicit def setPartialOrder[A]: PartialOrder[Set[A]] =
+    new SetPartialOrder[A]
+
+  implicit def setMonoid[A]: Monoid[Set[A]] =
+    new SetMonoid[A]
 }
 
 class SetPartialOrder[A] extends PartialOrder[Set[A]] {
@@ -14,5 +18,11 @@ class SetPartialOrder[A] extends PartialOrder[Set[A]] {
     else if (x == y) 0.0
     else Double.NaN
 
-  override def eqv(x: Set[A], y: Set[A]): Boolean = x == y
+  override def eqv(x: Set[A], y: Set[A]): Boolean =
+    x == y
+}
+
+class SetMonoid[A] extends Monoid[Set[A]] {
+  def empty: Set[A] = Set.empty
+  def combine(x: Set[A], y: Set[A]): Set[A] = x | y
 }
