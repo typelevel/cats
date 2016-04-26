@@ -28,14 +28,12 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Map[String, HasEq[Int]]].check(_.eqv)
   laws[OrderLaws, List[HasEq[Int]]].check(_.eqv)
   laws[OrderLaws, Option[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, Array[HasEq[Int]]].check(_.eqv)
   laws[OrderLaws, Vector[HasEq[Int]]].check(_.eqv)
   laws[OrderLaws, Stream[HasEq[Int]]].check(_.eqv)
 
   laws[OrderLaws, Set[Int]].check(_.partialOrder)
   laws[OrderLaws, Option[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, List[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, Array[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, Vector[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, Stream[HasPartialOrder[Int]]].check(_.partialOrder)
 
@@ -50,7 +48,6 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, List[Int]].check(_.order)
   laws[OrderLaws, Option[String]].check(_.order)
   laws[OrderLaws, List[String]].check(_.order)
-  laws[OrderLaws, Array[Int]].check(_.order)
   laws[OrderLaws, Vector[Int]].check(_.order)
   laws[OrderLaws, Stream[Int]].check(_.order)
   laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))

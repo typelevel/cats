@@ -4,16 +4,20 @@ package std
 package object option extends OptionInstances
 
 trait OptionInstances extends OptionInstances1 {
-  implicit def optionOrder[A: Order] = new OptionOrder[A]
-  implicit def optionMonoid[A: Semigroup] = new OptionMonoid[A]
+  implicit def optionOrder[A: Order]: Order[Option[A]] =
+    new OptionOrder[A]
+  implicit def optionMonoid[A: Semigroup]: Monoid[Option[A]] =
+    new OptionMonoid[A]
 }
 
 trait OptionInstances1 extends OptionInstances0 {
-  implicit def optionPartialOrder[A: PartialOrder] = new OptionPartialOrder[A]
+  implicit def optionPartialOrder[A: PartialOrder]: PartialOrder[Option[A]] =
+    new OptionPartialOrder[A]
 }
 
 trait OptionInstances0 {
-  implicit def optionEq[A: Eq] = new OptionEq[A]
+  implicit def optionEq[A: Eq]: Eq[Option[A]] =
+    new OptionEq[A]
 }
 
 class OptionOrder[A](implicit A: Order[A]) extends Order[Option[A]] {

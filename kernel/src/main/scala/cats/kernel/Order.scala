@@ -184,7 +184,7 @@ object Order extends OrderFunctions {
 
 
   /**
-   * A `Band[Order[A]]` can be generated for all `A` with the following
+   * A `Monoid[Order[A]]` can be generated for all `A` with the following
    * properties:
    *
    * `empty` returns a trivial `Order[A]` which considers all `A` instances to
@@ -192,6 +192,9 @@ object Order extends OrderFunctions {
    *
    * `combine(x: Order[A], y: Order[A])` creates an `Order[A]` that first
    * orders by `x` and then (if two elements are equal) falls back to `y`.
+   *
+   * This monoid is also a `Band[Order[A]]` since its combine
+   * operations is idempotent.
    *
    * @see [[Order.whenEqual]]
    */

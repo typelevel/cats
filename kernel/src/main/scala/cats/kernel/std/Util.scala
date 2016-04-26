@@ -22,15 +22,13 @@ object StaticMethods {
     def -(key: K): Map[K, V] = m.toMap - key
   }
 
-  def addMap[K, V](x: Map[K, V], y: Map[K, V])(f: (V, V) => V): Map[K, V] = {
-    val (small, big, g) =
-      if (x.size <= y.size) (x, y, f)
-      else (y, x, (v1: V, v2: V) => f(v2, v1))
-
+  // the caller should arrange so that the smaller map is the first
+  // argument, and the larger map is the second.
+  def addMap[K, V](small: Map[K, V], big: Map[K, V])(f: (V, V) => V): Map[K, V] = {
     val m = initMutableMap(big)
     small.foreach { case (k, v1) =>
       m(k) = m.get(k) match {
-        case Some(v2) => g(v1, v2)
+        case Some(v2) => f(v1, v2)
         case None => v1
       }
     }

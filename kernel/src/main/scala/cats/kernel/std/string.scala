@@ -5,7 +5,7 @@ package object string extends StringInstances
 
 trait StringInstances {
   implicit val stringOrder: Order[String] = new StringOrder
-  implicit val stringMonoid = new StringMonoid
+  implicit val stringMonoid: Monoid[String] = new StringMonoid
 }
 
 class StringOrder extends Order[String] {

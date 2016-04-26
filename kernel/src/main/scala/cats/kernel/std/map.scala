@@ -8,7 +8,7 @@ package object map extends MapInstances
 trait MapInstances {
   implicit def mapEq[K, V: Eq]: Eq[Map[K, V]] =
     new MapEq[K, V]
-  implicit def mapMonoid[K, V: Semigroup]: MapMonoid[K, V] =
+  implicit def mapMonoid[K, V: Semigroup]: Monoid[Map[K, V]] =
     new MapMonoid[K, V]
 }
 
@@ -26,6 +26,10 @@ class MapEq[K, V](implicit V: Eq[V]) extends Eq[Map[K, V]] {
 class MapMonoid[K, V](implicit V: Semigroup[V]) extends Monoid[Map[K, V]]  {
   def empty: Map[K, V] = Map.empty
 
-  def combine(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    addMap(x, y)(V.combine)
+  def combine(xs: Map[K, V], ys: Map[K, V]): Map[K, V] =
+    if (xs.size <= ys.size) {
+      addMap(xs, ys)((x, y) => V.combine(x, y))
+    } else {
+      addMap(ys, xs)((y, x) => V.combine(x, y))
+    }
 }

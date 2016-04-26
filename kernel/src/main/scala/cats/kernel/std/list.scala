@@ -7,16 +7,20 @@ import scala.collection.mutable
 package object list extends ListInstances
 
 trait ListInstances extends ListInstances1 {
-  implicit def listOrder[A: Order] = new ListOrder[A]
-  implicit def listMonoid[A] = new ListMonoid[A]
+  implicit def listOrder[A: Order]: Order[List[A]] =
+    new ListOrder[A]
+  implicit def listMonoid[A]: Monoid[List[A]] =
+    new ListMonoid[A]
 }
 
 trait ListInstances1 extends ListInstances2 {
-  implicit def listPartialOrder[A: PartialOrder] = new ListPartialOrder[A]
+  implicit def listPartialOrder[A: PartialOrder]: PartialOrder[List[A]] =
+    new ListPartialOrder[A]
 }
 
 trait ListInstances2 {
-  implicit def listEq[A: Eq] = new ListEq[A]
+  implicit def listEq[A: Eq]: Eq[List[A]] =
+    new ListEq[A]
 }
 
 class ListOrder[A](implicit ev: Order[A]) extends Order[List[A]] {
