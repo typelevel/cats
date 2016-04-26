@@ -20,17 +20,20 @@ trait VectorInstances2 {
 
 class VectorOrder[A](implicit ev: Order[A]) extends Order[Vector[A]] {
   def compare(xs: Vector[A], ys: Vector[A]): Int =
-    StaticMethods.iteratorCompare(xs.iterator, ys.iterator)
+    if (xs eq ys) 0
+    else StaticMethods.iteratorCompare(xs.iterator, ys.iterator)
 }
 
 class VectorPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[Vector[A]] {
   def partialCompare(xs: Vector[A], ys: Vector[A]): Double =
-    StaticMethods.iteratorPartialCompare(xs.iterator, ys.iterator)
+    if (xs eq ys) 0.0
+    else StaticMethods.iteratorPartialCompare(xs.iterator, ys.iterator)
 }
 
 class VectorEq[A](implicit ev: Eq[A]) extends Eq[Vector[A]] {
   def eqv(xs: Vector[A], ys: Vector[A]): Boolean =
-    StaticMethods.iteratorEq(xs.iterator, ys.iterator)
+    if (xs eq ys) true
+    else StaticMethods.iteratorEq(xs.iterator, ys.iterator)
 }
 
 class VectorMonoid[A] extends Monoid[Vector[A]] {

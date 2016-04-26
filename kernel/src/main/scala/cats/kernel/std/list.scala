@@ -33,7 +33,7 @@ class ListOrder[A](implicit ev: Order[A]) extends Order[List[A]] {
               if (n != 0) n else loop(xs, ys)
           }
       }
-    loop(xs, ys)
+    if (xs eq ys) 0 else loop(xs, ys)
   }
 }
 
@@ -51,12 +51,12 @@ class ListPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[Lis
               if (n != 0.0) n else loop(xs, ys)
           }
       }
-    loop(xs, ys)
+    if (xs eq ys) 0.0 else loop(xs, ys)
   }
 }
 
 class ListEq[A](implicit ev: Eq[A]) extends Eq[List[A]] {
-  def eqv(x: List[A], y: List[A]): Boolean = {
+  def eqv(xs: List[A], ys: List[A]): Boolean = {
     def loop(xs: List[A], ys: List[A]): Boolean =
       xs match {
         case Nil =>
@@ -69,7 +69,7 @@ class ListEq[A](implicit ev: Eq[A]) extends Eq[List[A]] {
               false
           }
       }
-    loop(x, y)
+    (xs eq ys) || loop(xs, ys)
   }
 }
 

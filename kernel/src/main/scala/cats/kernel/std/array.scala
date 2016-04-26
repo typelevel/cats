@@ -22,6 +22,7 @@ object ArraySupport {
     else 0
 
   def eqv[@sp A: Eq](x: Array[A], y: Array[A]): Boolean = {
+    if (x eq y) return true
     var i = 0
     if (x.length != y.length) return false
     while (i < x.length && i < y.length && Eq.eqv(x(i), y(i))) i += 1
@@ -29,6 +30,7 @@ object ArraySupport {
   }
 
   def compare[@sp A: Order](x: Array[A], y: Array[A]): Int = {
+    if (x eq y) return 0
     var i = 0
     while (i < x.length && i < y.length) {
       val cmp = Order.compare(x(i), y(i))
@@ -39,6 +41,7 @@ object ArraySupport {
   }
 
   def partialCompare[@sp A: PartialOrder](x: Array[A], y: Array[A]): Double = {
+    if (x eq y) return 0.0
     var i = 0
     while (i < x.length && i < y.length) {
       val cmp = PartialOrder.partialCompare(x(i), y(i))

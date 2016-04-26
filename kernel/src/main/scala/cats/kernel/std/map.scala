@@ -14,7 +14,8 @@ trait MapInstances {
 
 class MapEq[K, V](implicit V: Eq[V]) extends Eq[Map[K, V]] {
   def eqv(x: Map[K, V], y: Map[K, V]): Boolean =
-    x.size == y.size && x.forall { case (k, v1) =>
+    if (x eq y) true
+    else x.size == y.size && x.forall { case (k, v1) =>
       y.get(k) match {
         case Some(v2) => V.eqv(v1, v2)
         case None => false

@@ -21,8 +21,8 @@ class BigIntOrder extends Order[BigInt] {
 
   def compare(x: BigInt, y: BigInt): Int = x compare y
 
-  override def eqv(x:BigInt, y:BigInt): Boolean = x == y
-  override def neqv(x:BigInt, y:BigInt): Boolean = x != y
+  override def eqv(x: BigInt, y: BigInt): Boolean = x == y
+  override def neqv(x: BigInt, y: BigInt): Boolean = x != y
   override def gt(x: BigInt, y: BigInt): Boolean = x > y
   override def gteqv(x: BigInt, y: BigInt): Boolean = x >= y
   override def lt(x: BigInt, y: BigInt): Boolean = x < y

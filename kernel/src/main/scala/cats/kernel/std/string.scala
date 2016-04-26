@@ -9,7 +9,10 @@ trait StringInstances {
 }
 
 class StringOrder extends Order[String] {
-  def compare(x: String, y: String): Int = x compare y
+  override def eqv(x: String, y: String): Boolean =
+    x == y
+  def compare(x: String, y: String): Int =
+    if (x eq y) 0 else x compareTo y
 }
 
 class StringMonoid extends Monoid[String] {

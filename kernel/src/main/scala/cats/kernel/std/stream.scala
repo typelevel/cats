@@ -20,17 +20,20 @@ trait StreamInstances2 {
 
 class StreamOrder[A](implicit ev: Order[A]) extends Order[Stream[A]] {
   def compare(xs: Stream[A], ys: Stream[A]): Int =
-    StaticMethods.iteratorCompare(xs.iterator, ys.iterator)
+    if (xs eq ys) 0
+    else StaticMethods.iteratorCompare(xs.iterator, ys.iterator)
 }
 
 class StreamPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[Stream[A]] {
   def partialCompare(xs: Stream[A], ys: Stream[A]): Double =
-    StaticMethods.iteratorPartialCompare(xs.iterator, ys.iterator)
+    if (xs eq ys) 0.0
+    else StaticMethods.iteratorPartialCompare(xs.iterator, ys.iterator)
 }
 
 class StreamEq[A](implicit ev: Eq[A]) extends Eq[Stream[A]] {
   def eqv(xs: Stream[A], ys: Stream[A]): Boolean =
-    StaticMethods.iteratorEq(xs.iterator, ys.iterator)
+    if (xs eq ys) true
+    else StaticMethods.iteratorEq(xs.iterator, ys.iterator)
 }
 
 class StreamMonoid[A] extends Monoid[Stream[A]] {
