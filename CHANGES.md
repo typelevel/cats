@@ -28,6 +28,8 @@ And additions:
 * [#947](https://github.com/typelevel/cats/pull/947): Syntax for `ApplicativeError`
 * [#971](https://github.com/typelevel/cats/pull/971): Add `toValidatedNel` to `Xor`
 * [#973](https://github.com/typelevel/cats/pull/973): Add `flatMapF` for `StateT`
+* [#985](https://github.com/typelevel/cats/pull/985): Add object `reducible` for reducible syntax
+* [#994](https://github.com/typelevel/cats/pull/994): updated to latest algebra (brought in all the new goodies)
 
 
 And bug fixes:
@@ -66,7 +68,8 @@ And some other improvements to the documentation, tutorials, laws and tests, inc
 * [#964](https://github.com/typelevel/cats/pull/964): Clarify stabilty guarantees; drop 'proof of concept' and 'experimental'
 * [#972](https://github.com/typelevel/cats/pull/972): Fix swapped f and g in `invariant` docs
 * [#979](https://github.com/typelevel/cats/pull/979): Fix outdated import for `cats.syntax.apply._`
-
+* [#995](https://github.com/typelevel/cats/pull/995): Move coverage away from bash
+* [#1002](https://github.com/typelevel/cats/pull/1002): correct the url to Data types à la carte
 
 As always thanks to everyone who filed issues, participated in the Cats Gitter
 channel, submitted code, or helped review pull requests.
