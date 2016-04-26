@@ -24,6 +24,8 @@ lazy val catsDoctestSettings = Seq(
   doctestWithDependencies := false
 ) ++ doctestSettings
 
+lazy val algebraVersion = "0.4.2"
+
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions,
   resolvers ++= Seq(
@@ -33,8 +35,8 @@ lazy val commonSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.7.0",
-    "org.spire-math" %%% "algebra" % "0.3.1",
-    "org.spire-math" %%% "algebra-std" % "0.3.1",
+    "org.spire-math" %%% "algebra" % algebraVersion,
+    "org.spire-math" %%% "algebra-std" % algebraVersion,
     "org.typelevel" %%% "machinist" % "0.4.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
@@ -179,7 +181,7 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
   .settings(libraryDependencies ++= Seq(
-    "org.spire-math" %%% "algebra-laws" % "0.3.1",
+    "org.spire-math" %%% "algebra-laws" % algebraVersion,
     "org.typelevel" %%% "catalysts-platform" % "0.0.2"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)

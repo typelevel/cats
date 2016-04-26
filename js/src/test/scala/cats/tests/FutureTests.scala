@@ -4,7 +4,6 @@ package tests
 
 import cats.data.Xor
 import cats.laws.discipline._
-import cats.laws.discipline.eq.tuple3Eq
 import cats.js.std.Await
 import cats.js.std.future.futureComonad
 import cats.tests.CatsSuite
