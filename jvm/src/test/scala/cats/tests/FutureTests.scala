@@ -5,7 +5,6 @@ package tests
 import cats.data.Xor
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary.evalArbitrary
-import cats.laws.discipline.eq.tuple3Eq
 import cats.jvm.std.future.futureComonad
 import cats.tests.CatsSuite
 

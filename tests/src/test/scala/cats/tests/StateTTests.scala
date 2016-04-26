@@ -1,6 +1,7 @@
 package cats
 package tests
 
+import cats.kernel.std.tuple._
 import cats.laws.discipline.{CartesianTests, MonadStateTests, SerializableTests}
 import cats.data.{State, StateT}
 import cats.laws.discipline.eq._

@@ -32,18 +32,6 @@ object eq {
     }
   }
 
-  // Temporary, see https://github.com/non/algebra/pull/82
-  implicit def tuple2Eq[A, B](implicit A: Eq[A], B: Eq[B]): Eq[(A, B)] =
-    new Eq[(A, B)] {
-      def eqv(x: (A, B), y: (A, B)): Boolean =
-        A.eqv(x._1, y._1) && B.eqv(x._2, y._2)
-    }
-
-  implicit def tuple3Eq[A, B, C](implicit EqA: Eq[A], EqB: Eq[B], EqC: Eq[C]): Eq[(A, B, C)] =
-    new Eq[(A, B, C)] {
-      def eqv(x: (A, B, C), y: (A, B, C)): Boolean = EqA.eqv(x._1, y._1) && EqB.eqv(x._2, y._2) && EqC.eqv(x._3, y._3)
-    }
-
   /**
    * Create an approximation of Eq[Semigroup[A]] by generating values for A
    * and comparing the application of the two combine functions.

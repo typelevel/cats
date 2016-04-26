@@ -3,7 +3,6 @@ package tests
 
 import cats.data.Xor
 import cats.laws.discipline.arbitrary.xorArbitrary
-import cats.laws.discipline.eq.tuple2Eq
 
 class MonadCombineTest extends CatsSuite {
   test("separate") {

@@ -217,9 +217,7 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
-  .settings(libraryDependencies ++= Seq(
-    "org.spire-math" %%% "algebra-laws" % "0.3.1",
-    "org.typelevel" %%% "catalysts-platform" % "0.0.2"))
+  .settings(libraryDependencies ++= Seq("org.typelevel" %%% "catalysts-platform" % "0.0.2"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 

@@ -5,7 +5,6 @@ import cats.functor.Bifunctor
 import cats.data.{Xor, XorT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq.tuple3Eq
 import cats.kernel.laws.OrderLaws
 
 class XorTTests extends CatsSuite {

@@ -4,7 +4,6 @@ package tests
 import cats.data.Prod
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
 
 class ProdTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[Prod[Option, List, ?]]

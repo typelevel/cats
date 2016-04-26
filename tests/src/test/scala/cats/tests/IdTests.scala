@@ -2,7 +2,6 @@ package cats
 package tests
 
 import cats.laws.discipline._
-import cats.laws.discipline.eq.tuple3Eq
 
 class IdTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[Id]

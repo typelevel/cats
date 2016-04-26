@@ -6,7 +6,6 @@ import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeErrorTests, SerializableTests, CartesianTests}
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq.tuple3Eq
 import cats.kernel.laws.{OrderLaws, GroupLaws}
 
 import scala.util.Try

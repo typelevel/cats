@@ -4,7 +4,6 @@ package tests
 import cats.data.{Xor, Ior}
 import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadTests, SerializableTests, CartesianTests}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary._
 
 class IorTests extends CatsSuite {

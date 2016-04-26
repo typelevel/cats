@@ -11,6 +11,7 @@ trait AnyValInstances
   with    DoubleInstances
   with    BooleanInstances
   with    UnitInstances
+  with    TupleInstances
 
 trait IntInstances extends cats.kernel.std.IntInstances {
   implicit val intShow: Show[Int] = Show.fromToString[Int]
