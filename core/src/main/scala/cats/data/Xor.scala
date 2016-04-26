@@ -168,14 +168,11 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def xorSemigroupK[L](implicit ev: Semigroup[L]): SemigroupK[Xor[L,?]] = 
+  implicit def xorSemigroupK[L]: SemigroupK[Xor[L,?]] =
     new SemigroupK[Xor[L,?]] {
       def combineK[A](x: Xor[L,A], y: Xor[L,A]): Xor[L,A] = x match {
-        case Xor.Left(lx) => y match {
-          case Xor.Left(ly) => Xor.Left(ev.combine(lx,ly))
-          case r @ Xor.Right(_) => r
-        }
-          case _ => x
+        case Xor.Left(_) => y
+        case Xor.Right(_) => x
       }
     }
 
