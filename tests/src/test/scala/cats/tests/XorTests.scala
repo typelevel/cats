@@ -48,7 +48,6 @@ class XorTests extends CatsSuite {
   }
 
   {
-    implicit val L = ListWrapper.semigroup[String]
     checkAll("Xor[ListWrapper[String], ?]", SemigroupKTests[Xor[ListWrapper[String], ?]].semigroupK[Int])
     checkAll("SemigroupK[Xor[ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[Xor[ListWrapper[String], ?]]))
   }
