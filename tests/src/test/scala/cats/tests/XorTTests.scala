@@ -20,6 +20,8 @@ class XorTTests extends CatsSuite {
   checkAll("Traverse[XorT[List, Int, ?]]", SerializableTests.serializable(Traverse[XorT[List, Int, ?]]))
   checkAll("XorT[List, String, Int]", OrderLaws[XorT[List, String, Int]].order)
   checkAll("Order[XorT[List, String, Int]]", SerializableTests.serializable(Order[XorT[List, String, Int]]))
+  checkAll("XorT[Option, ListWrapper[String], ?]", SemigroupKTests[XorT[Option, ListWrapper[String], ?]].semigroupK[Int])
+  checkAll("SemigroupK[XorT[Option, ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[XorT[Option, ListWrapper[String], ?]]))
 
   {
     implicit val F = ListWrapper.foldable
@@ -43,11 +45,6 @@ class XorTTests extends CatsSuite {
     implicit val F = ListWrapper.eqv[String Xor Int]
     checkAll("XorT[ListWrapper, String, Int]", OrderLaws[XorT[ListWrapper, String, Int]].eqv)
     checkAll("Eq[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(Eq[XorT[ListWrapper, String, Int]]))
-  }
-
-  {
-    checkAll("XorT[Option, ListWrapper[String], ?]", SemigroupKTests[XorT[Option, ListWrapper[String], ?]].semigroupK[Int])
-    checkAll("SemigroupK[XorT[Option, ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[XorT[Option, ListWrapper[String], ?]]))
   }
 
   // make sure that the Monad and Traverse instances don't result in ambiguous

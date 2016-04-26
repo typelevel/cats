@@ -33,6 +33,9 @@ class XorTests extends CatsSuite {
 
   checkAll("Xor[Int, String]", OrderLaws[String Xor Int].order)
 
+  checkAll("Xor[ListWrapper[String], ?]", SemigroupKTests[Xor[ListWrapper[String], ?]].semigroupK[Int])
+  checkAll("SemigroupK[Xor[ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[Xor[ListWrapper[String], ?]]))
+
   {
     implicit val S = ListWrapper.partialOrder[String]
     implicit val I = ListWrapper.partialOrder[Int]
@@ -45,11 +48,6 @@ class XorTests extends CatsSuite {
     implicit val I = ListWrapper.eqv[Int]
     checkAll("ListWrapper[String] Xor ListWrapper[Int]", OrderLaws[ListWrapper[String] Xor ListWrapper[Int]].eqv)
     checkAll("Eq[ListWrapper[String] Xor ListWrapper[Int]]", SerializableTests.serializable(Eq[ListWrapper[String] Xor ListWrapper[Int]]))
-  }
-
-  {
-    checkAll("Xor[ListWrapper[String], ?]", SemigroupKTests[Xor[ListWrapper[String], ?]].semigroupK[Int])
-    checkAll("SemigroupK[Xor[ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[Xor[ListWrapper[String], ?]]))
   }
 
   implicit val arbitraryXor: Arbitrary[Xor[Int, String]] = Arbitrary {
