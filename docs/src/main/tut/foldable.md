@@ -21,7 +21,7 @@ used by the associated `Foldable[_]` instance.
  - `foldRight(fa, b)(f)` lazily folds `fa` from right-to-left.
  
 These form the basis for many other operations, see also: 
-[A tutorial on the universality and expressiveness of fold](https://www.cs.nott.ac.uk/~gmh/fold.pdf) 
+[A tutorial on the universality and expressiveness of fold](http://www.cs.nott.ac.uk/~gmh/fold.pdf)
 
 First some standard imports.
 
