@@ -122,38 +122,27 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
   }
 }
 
-trait OrderFunctions {
-  def compare[@sp A](x: A, y: A)(implicit ev: Order[A]): Int =
+abstract class OrderFunctions[O[T] <: Order[T]] extends PartialOrderFunctions[O] {
+
+  def compare[@sp A](x: A, y: A)(implicit ev: O[A]): Int =
     ev.compare(x, y)
 
-  def eqv[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
-    ev.eqv(x, y)
-  def neqv[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
-    ev.neqv(x, y)
-  def gt[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
-    ev.gt(x, y)
-  def gteqv[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
-    ev.gteqv(x, y)
-  def lt[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
-    ev.lt(x, y)
-  def lteqv[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
-    ev.lteqv(x, y)
-
-  def min[@sp A](x: A, y: A)(implicit ev: Order[A]): A =
+  def min[@sp A](x: A, y: A)(implicit ev: O[A]): A =
     ev.min(x, y)
-  def max[@sp A](x: A, y: A)(implicit ev: Order[A]): A =
+
+  def max[@sp A](x: A, y: A)(implicit ev: O[A]): A =
     ev.max(x, y)
 }
 
 object Order extends OrderFunctions {
 
   /**
-   * Access an implicit `Eq[A]`.
+   * Access an implicit `Order[A]`.
    */
   @inline final def apply[A](implicit ev: Order[A]) = ev
 
   /**
-   * Convert an implicit `Order[A]` to an `Order[B]` using the given
+   * Convert an implicit `Order[B]` to an `Order[A]` using the given
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Order[B]): Order[A] =

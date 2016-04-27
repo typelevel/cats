@@ -48,15 +48,17 @@ trait Eq[@sp A] extends Any with Serializable { self =>
     }
 }
 
-trait EqFunctions {
-  def eqv[@sp A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
+abstract class EqFunctions[E[T] <: Eq[T]] {
+
+  def eqv[@sp A](x: A, y: A)(implicit ev: E[A]): Boolean =
     ev.eqv(x, y)
 
-  def neqv[@sp A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
+  def neqv[@sp A](x: A, y: A)(implicit ev: E[A]): Boolean =
     ev.neqv(x, y)
+
 }
 
-object Eq extends EqFunctions {
+object Eq extends EqFunctions[Eq] {
 
   /**
    * Access an implicit `Eq[A]`.
@@ -120,6 +122,7 @@ object Eq extends EqFunctions {
         })
       }
   }
+
   /**
    * This is a monoid that creates an Eq that
    * checks that at least one equality check passes

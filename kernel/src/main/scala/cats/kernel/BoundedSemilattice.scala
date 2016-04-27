@@ -4,7 +4,7 @@ import scala.{specialized => sp}
 
 trait BoundedSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Semilattice[A] with CommutativeMonoid[A]
 
-object BoundedSemilattice {
+object BoundedSemilattice extends SemilatticeFunctions[BoundedSemilattice] {
 
   /**
    * Access an implicit `BoundedSemilattice[A]`.

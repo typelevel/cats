@@ -1,5 +1,6 @@
 package cats.kernel
 
+import java.lang.Double.isNaN
 import scala.{specialized => sp}
 
 /**
@@ -43,7 +44,7 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
    */  
   def tryCompare(x: A, y: A): Option[Int] = {
     val c = partialCompare(x, y)
-    if (c.isNaN) None else Some(c.signum)
+    if (isNaN(c)) None else Some(c.signum)
   }
 
   /**
@@ -111,40 +112,38 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
   def gt(x: A, y: A): Boolean = partialCompare(x, y) > 0
 }
 
-trait PartialOrderFunctions {
+abstract class PartialOrderFunctions[P[T] <: PartialOrder[T]] extends EqFunctions[P] {
 
-  def partialCompare[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Double =
+  def partialCompare[@sp A](x: A, y: A)(implicit ev: P[A]): Double =
     ev.partialCompare(x, y)
-  def tryCompare[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Option[Int] =
+  def tryCompare[@sp A](x: A, y: A)(implicit ev: P[A]): Option[Int] =
     ev.tryCompare(x, y)
 
-  def pmin[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Option[A] =
+  def pmin[@sp A](x: A, y: A)(implicit ev: P[A]): Option[A] =
     ev.pmin(x, y)
-  def pmax[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Option[A] =
+  def pmax[@sp A](x: A, y: A)(implicit ev: P[A]): Option[A] =
     ev.pmax(x, y)
 
-  def eqv[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
-    ev.eqv(x, y)
-  def lteqv[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
+  def lteqv[@sp A](x: A, y: A)(implicit ev: P[A]): Boolean =
     ev.lteqv(x, y)
-  def lt[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
+  def lt[@sp A](x: A, y: A)(implicit ev: P[A]): Boolean =
     ev.lt(x, y)
-  def gteqv[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
+  def gteqv[@sp A](x: A, y: A)(implicit ev: P[A]): Boolean =
     ev.gteqv(x, y)
-  def gt[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
+  def gt[@sp A](x: A, y: A)(implicit ev: P[A]): Boolean =
     ev.gt(x, y)
 }
 
 object PartialOrder extends PartialOrderFunctions {
 
   /**
-   * Access an implicit `Eq[A]`.
+   * Access an implicit `PartialOrder[A]`.
    */
   @inline final def apply[A](implicit ev: PartialOrder[A]) = ev
 
   /**
-   * Convert an implicit `PartialOrder[A]` to an `PartialOrder[B]`
-   * using the given function `f`.
+   * Convert an implicit `PartialOrder[B]` to an `PartialOrder[A]` using the given
+   * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: PartialOrder[B]): PartialOrder[A] =
     ev.on(f)

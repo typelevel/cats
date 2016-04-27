@@ -53,7 +53,14 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any
     }
 }
 
-object Semilattice {
+abstract class SemilatticeFunctions[S[T] <: Semilattice[T]] extends SemigroupFunctions[S] {
+  def asMeetPartialOrder[A](implicit s: S[A], ev: Eq[A]): PartialOrder[A] =
+    s.asMeetPartialOrder(ev)
+  def asJoinPartialOrder[A](implicit s: S[A], ev: Eq[A]): PartialOrder[A] =
+    s.asJoinPartialOrder(ev)
+}
+
+object Semilattice extends SemilatticeFunctions[Semilattice] {
 
   /**
    * Access an implicit `Semilattice[A]`.

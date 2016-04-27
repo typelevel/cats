@@ -18,7 +18,8 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
   /**
    * Tests if `a` is the identity.
    */
-  def isEmpty(a: A)(implicit ev: Eq[A]) = ev.eqv(a, empty)
+  def isEmpty(a: A)(implicit ev: Eq[A]): Boolean =
+    ev.eqv(a, empty)
 
   /**
    * Return `a` appended to itself `n` times.
@@ -35,9 +36,12 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
     as.foldLeft(empty)(combine)
 }
 
-trait MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] {
+abstract class MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] {
   def empty[@sp(Int, Long, Float, Double) A](implicit ev: M[A]): A =
     ev.empty
+
+  def isEmpty[@sp(Int, Long, Float, Double) A](a: A)(implicit m: M[A], ev: Eq[A]): Boolean =
+    m.isEmpty(a)
 
   def combineAll[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: M[A]): A =
     ev.combineAll(as)

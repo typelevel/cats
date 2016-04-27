@@ -41,7 +41,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
     as.reduceOption(combine)
 }
 
-trait SemigroupFunctions[S[T] <: Semigroup[T]] {
+abstract class SemigroupFunctions[S[T] <: Semigroup[T]] {
   def combine[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: S[A]): A =
     ev.combine(x, y)
 

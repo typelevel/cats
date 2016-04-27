@@ -9,7 +9,7 @@ import scala.{specialized => sp}
  */
 trait Band[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A]
 
-object Band {
+object Band extends SemigroupFunctions[Band] {
 
   /**
    * Access an implicit `Band[A]`.
