@@ -215,16 +215,6 @@ private[data] abstract class XorTInstances1 extends XorTInstances2 {
   }
   */
 
- /* TODO delete this when MonadCombine instance is re-enabled */
- implicit def xorTMonoidK[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonoidK[XorT[F, L, ?]] = {
-    implicit val F0 = F
-    implicit val L0 = L
-    new MonoidK[XorT[F, L, ?]] with XorTSemigroupK[F, L] {
-      implicit val F = F0; implicit val L = L0
-      def empty[A]: XorT[F, L, A] = XorT.left(F.pure(L.empty))(F)
-    }
-  }
-
   implicit def xorTFoldable[F[_], L](implicit F: Foldable[F]): Foldable[XorT[F, L, ?]] =
     new XorTFoldable[F, L] {
       val F0: Foldable[F] = F
@@ -242,10 +232,13 @@ private[data] abstract class XorTInstances2 extends XorTInstances3 {
     new XorTMonadError[F, L] { implicit val F = F0 }
   }
 
-  implicit def xorTSemigroupK[F[_], L](implicit F: Monad[F], L: Semigroup[L]): SemigroupK[XorT[F, L, ?]] = {
-    implicit val F0 = F
-    implicit val L0 = L
-    new XorTSemigroupK[F, L] { implicit val F = F0; implicit val L = L0 }
+  implicit def xorTSemigroupK[F[_], L](implicit F: Monad[F]): SemigroupK[XorT[F, L, ?]] =
+    new SemigroupK[XorT[F,L,?]] {
+      def combineK[A](x: XorT[F,L,A], y: XorT[F, L, A]): XorT[F, L, A] =
+        XorT(F.flatMap(x.value) {
+          case l @ Xor.Left(_) => y.value
+          case r @ Xor.Right(_) => F.pure(r)
+        })
   }
 
   implicit def xorTEq[F[_], L, R](implicit F: Eq[F[L Xor R]]): Eq[XorT[F, L, R]] =
@@ -286,19 +279,6 @@ private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L]
     fla.recover(pf)
   override def recoverWith[A](fla: XorT[F, L, A])(pf: PartialFunction[L, XorT[F, L, A]]): XorT[F, L, A] =
     fla.recoverWith(pf)
-}
-
-private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
-  implicit val F: Monad[F]
-  implicit val L: Semigroup[L]
-  def combineK[A](x: XorT[F, L, A], y: XorT[F, L, A]): XorT[F, L, A] =
-    XorT(F.flatMap(x.value) {
-      case Xor.Left(l1) => F.map(y.value) {
-        case Xor.Left(l2) => Xor.Left(L.combine(l1, l2))
-        case r @ Xor.Right(_) => r
-      }
-      case r @ Xor.Right(_) => F.pure[L Xor A](r)
-    })
 }
 
 private[data] trait XorTMonadFilter[F[_], L] extends MonadFilter[XorT[F, L, ?]] with XorTMonadError[F, L] {
