@@ -30,6 +30,8 @@ And additions:
 * [#973](https://github.com/typelevel/cats/pull/973): Add `flatMapF` for `StateT`
 * [#985](https://github.com/typelevel/cats/pull/985): Add object `reducible` for reducible syntax
 * [#994](https://github.com/typelevel/cats/pull/994): updated to latest algebra (brought in all the new goodies)
+* [#996](https://github.com/typelevel/cats/pull/996): Add `SemigroupK` instance for `Xor`
+* [#998](https://github.com/typelevel/cats/pull/998): Add `SemigroupK` instance for `Validated`
 
 
 And bug fixes:
@@ -69,7 +71,8 @@ And some other improvements to the documentation, tutorials, laws and tests, inc
 * [#972](https://github.com/typelevel/cats/pull/972): Fix swapped f and g in `invariant` docs
 * [#979](https://github.com/typelevel/cats/pull/979): Fix outdated import for `cats.syntax.apply._`
 * [#995](https://github.com/typelevel/cats/pull/995): Move coverage away from bash
-* [#1002](https://github.com/typelevel/cats/pull/1002): correct the url to Data types à la carte
+* [#1002](https://github.com/typelevel/cats/pull/1002): Correct the URL for *Data types à la carte*
+
 
 As always thanks to everyone who filed issues, participated in the Cats Gitter
 channel, submitted code, or helped review pull requests.
