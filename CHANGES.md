@@ -1,6 +1,6 @@
 ## Version 0.5.0
 
-> 2016 April 15
+> 2016 April 28
 
 Version 0.5.0 is the fifth release.
 
@@ -32,6 +32,7 @@ And additions:
 * [#994](https://github.com/typelevel/cats/pull/994): updated to latest algebra (brought in all the new goodies)
 * [#996](https://github.com/typelevel/cats/pull/996): Add `SemigroupK` instance for `Xor`
 * [#998](https://github.com/typelevel/cats/pull/998): Add `SemigroupK` instance for `Validated`
+* [#986](https://github.com/typelevel/cats/pull/986): Add `Bitraverse` instances for `Validated` and `XorT`
 
 
 And bug fixes:
@@ -72,6 +73,7 @@ And some other improvements to the documentation, tutorials, laws and tests, inc
 * [#979](https://github.com/typelevel/cats/pull/979): Fix outdated import for `cats.syntax.apply._`
 * [#995](https://github.com/typelevel/cats/pull/995): Move coverage away from bash
 * [#1002](https://github.com/typelevel/cats/pull/1002): Correct the URL for *Data types à la carte*
+* [#1005](https://github.com/typelevel/cats/pull/1005): fix broken link in foldable docs
 
 
 As always thanks to everyone who filed issues, participated in the Cats Gitter
