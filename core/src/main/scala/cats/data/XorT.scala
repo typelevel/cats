@@ -65,6 +65,9 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): XorT[F, C, D] = XorT(F.map(value)(_.bimap(fa, fb)))
 
+  def bitraverse[G[_], C, D](f: A => G[C], g: B => G[D])(implicit traverseF: Traverse[F], applicativeG: Applicative[G]): G[XorT[F, C, D]] =
+    applicativeG.map(traverseF.traverse(value)(axb => Bitraverse[Xor].bitraverse(axb)(f, g)))(XorT.apply)
+
   def applyAlt[D](ff: XorT[F, A, B => D])(implicit F: Apply[F]): XorT[F, A, D] =
     XorT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[A Xor ?].ap(xbd)(xb)))
 
@@ -96,8 +99,8 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
   def ===(that: XorT[F, A, B])(implicit eq: Eq[F[A Xor B]]): Boolean =
     eq.eqv(value, that.value)
 
-  def traverse[G[_], D](f: B => G[D])(implicit traverseF: Traverse[F], traverseXorA: Traverse[A Xor ?], applicativeG: Applicative[G]): G[XorT[F, A, D]] =
-    applicativeG.map(traverseF.traverse(value)(axb => traverseXorA.traverse(axb)(f)))(XorT.apply)
+  def traverse[G[_], D](f: B => G[D])(implicit traverseF: Traverse[F], applicativeG: Applicative[G]): G[XorT[F, A, D]] =
+    applicativeG.map(traverseF.traverse(value)(axb => Traverse[A Xor ?].traverse(axb)(f)))(XorT.apply)
 
   def foldLeft[C](c: C)(f: (C, B) => C)(implicit F: Foldable[F]): C =
     F.foldLeft(value, c)((c, axb) => axb.foldLeft(c)(f))
@@ -185,11 +188,10 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
   implicit def xorTShow[F[_], L, R](implicit sh: Show[F[L Xor R]]): Show[XorT[F, L, R]] =
     functor.Contravariant[Show].contramap(sh)(_.value)
 
-  implicit def xorTBifunctor[F[_]](implicit F: Functor[F]): Bifunctor[XorT[F, ?, ?]] = {
+  implicit def xorTBifunctor[F[_]](implicit F: Functor[F]): Bifunctor[XorT[F, ?, ?]] =
     new Bifunctor[XorT[F, ?, ?]] {
       override def bimap[A, B, C, D](fab: XorT[F, A, B])(f: A => C, g: B => D): XorT[F, C, D] = fab.bimap(f, g)
     }
-  }
 
   implicit def xorTTraverse[F[_], L](implicit F: Traverse[F]): Traverse[XorT[F, L, ?]] =
     new XorTTraverse[F, L] {
@@ -223,6 +225,11 @@ private[data] abstract class XorTInstances1 extends XorTInstances2 {
   implicit def xorTPartialOrder[F[_], L, R](implicit F: PartialOrder[F[L Xor R]]): PartialOrder[XorT[F, L, R]] =
     new XorTPartialOrder[F, L, R] {
       val F0: PartialOrder[F[L Xor R]] = F
+    }
+
+  implicit def xorTBitraverse[F[_]](implicit F: Traverse[F]): Bitraverse[XorT[F, ?, ?]] =
+    new XorTBitraverse[F] {
+      val F0: Traverse[F] = F
     }
 }
 
@@ -309,6 +316,23 @@ private[data] sealed trait XorTTraverse[F[_], L] extends Traverse[XorT[F, L, ?]]
 
   override def traverse[G[_]: Applicative, A, B](fa: XorT[F, L, A])(f: A => G[B]): G[XorT[F, L, B]] =
     fa traverse f
+}
+
+private[data] sealed trait XorTBifoldable[F[_]] extends Bifoldable[XorT[F, ?, ?]] {
+  implicit def F0: Foldable[F]
+
+  def bifoldLeft[A, B, C](fab: XorT[F, A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
+    F0.foldLeft(fab.value, c)( (acc, axb) => Bifoldable[Xor].bifoldLeft(axb, acc)(f, g))
+
+  def bifoldRight[A, B, C](fab: XorT[F, A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+    F0.foldRight(fab.value, c)( (axb, acc) => Bifoldable[Xor].bifoldRight(axb, acc)(f, g))
+}
+
+private[data] sealed trait XorTBitraverse[F[_]] extends Bitraverse[XorT[F, ?, ?]] with XorTBifoldable[F] {
+  override implicit def F0: Traverse[F]
+
+  override def bitraverse[G[_], A, B, C, D](fab: XorT[F, A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[XorT[F, C, D]] =
+    fab.bitraverse(f, g)
 }
 
 private[data] sealed trait XorTEq[F[_], L, A] extends Eq[XorT[F, L, A]] {

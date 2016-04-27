@@ -15,6 +15,8 @@ class XorTTests extends CatsSuite {
   checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, String, ?], String]))
   checkAll("XorT[List, ?, ?]", BifunctorTests[XorT[List, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
   checkAll("Bifunctor[XorT[List, ?, ?]]", SerializableTests.serializable(Bifunctor[XorT[List, ?, ?]]))
+  checkAll("XorT[List, ?, ?]", BitraverseTests[XorT[List, ?, ?]].bitraverse[Option, Int, Int, Int, String, String, String])
+  checkAll("Bitraverse[XorT[List, ?, ?]]", SerializableTests.serializable(Bitraverse[XorT[List, ?, ?]]))
   checkAll("XorT[List, Int, ?]", TraverseTests[XorT[List, Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[XorT[List, Int, ?]]", SerializableTests.serializable(Traverse[XorT[List, Int, ?]]))
   checkAll("XorT[List, String, Int]", OrderLaws[XorT[List, String, Int]].order)

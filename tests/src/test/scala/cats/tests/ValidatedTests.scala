@@ -3,7 +3,7 @@ package tests
 
 import cats.data.{NonEmptyList, Validated, ValidatedNel, Xor, XorT}
 import cats.data.Validated.{Valid, Invalid}
-import cats.laws.discipline.{BifunctorTests, TraverseTests, ApplicativeErrorTests, SerializableTests, CartesianTests}
+import cats.laws.discipline.{BitraverseTests, TraverseTests, ApplicativeErrorTests, SerializableTests, CartesianTests}
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.{SemigroupKTests}
 import cats.laws.discipline.arbitrary._
@@ -16,7 +16,8 @@ class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int]", CartesianTests[Validated[String,?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Validated[String,?]]", SerializableTests.serializable(Cartesian[Validated[String,?]]))
 
-  checkAll("Validated[?, ?]", BifunctorTests[Validated].bifunctor[Int, Int, Int, Int, Int, Int])
+  checkAll("Validated[?, ?]", BitraverseTests[Validated].bitraverse[Option, Int, Int, Int, String, String, String])
+  checkAll("Bitraverse[Validated]", SerializableTests.serializable(Bitraverse[Validated]))
 
   implicit val eq0 = XorT.xorTEq[Validated[String, ?], String, Int]
 
