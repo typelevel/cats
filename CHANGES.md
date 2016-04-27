@@ -30,6 +30,8 @@ And additions:
 * [#973](https://github.com/typelevel/cats/pull/973): Add `flatMapF` for `StateT`
 * [#985](https://github.com/typelevel/cats/pull/985): Add object `reducible` for reducible syntax
 * [#994](https://github.com/typelevel/cats/pull/994): updated to latest algebra (brought in all the new goodies)
+* [#996](https://github.com/typelevel/cats/pull/996): Add `SemigroupK` instance for `Xor`
+* [#998](https://github.com/typelevel/cats/pull/998): Add `SemigroupK` instance for `Validated`
 
 
 And bug fixes:
