@@ -233,12 +233,6 @@ lazy val publishSettings = Seq(
   scmInfo := Some(ScmInfo(url("https://github.com/typelevel/cats"), "scm:git:git@github.com:typelevel/cats.git")),
   autoAPIMappings := true,
   apiURL := Some(url("http://typelevel.org/cats/api/")),
-  publishArtifact in (Compile, packageDoc) := {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 10)) => false  // don't package scaladoc when publishing for 2.10
-      case _ => true
-    }
-  },
   pomExtra := (
     <developers>
       <developer>
