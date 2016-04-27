@@ -69,7 +69,8 @@ And some other improvements to the documentation, tutorials, laws and tests, inc
 * [#972](https://github.com/typelevel/cats/pull/972): Fix swapped f and g in `invariant` docs
 * [#979](https://github.com/typelevel/cats/pull/979): Fix outdated import for `cats.syntax.apply._`
 * [#995](https://github.com/typelevel/cats/pull/995): Move coverage away from bash
-* [#1002](https://github.com/typelevel/cats/pull/1002): correct the url to Data types à la carte
+* [#1002](https://github.com/typelevel/cats/pull/1002): Correct the URL for *Data types à la carte*
+
 
 As always thanks to everyone who filed issues, participated in the Cats Gitter
 channel, submitted code, or helped review pull requests.
