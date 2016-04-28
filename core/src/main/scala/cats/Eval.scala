@@ -141,7 +141,7 @@ final class Later[A](f: () => A) extends Eval[A] with Externalizable {
   // we use lock to prevent possible problems with someone else
   // synchronizing on 'this'.
   private[this] val lock = new Object()
-  private[this] var thunk: Function0[A] = f
+  @volatile private[this] var thunk: Function0[A] = f
   private[this] var result: A = _
 
   final def value: A =
@@ -162,7 +162,7 @@ final class Later[A](f: () => A) extends Eval[A] with Externalizable {
 
   def this() =
     this(() => null.asInstanceOf[A])
-  
+
   def writeExternal(out: ObjectOutput): Unit =
     thunk match {
       case null =>
