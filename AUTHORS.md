@@ -13,6 +13,7 @@ This file lists the people whose contributions have made Cats
 possible:
 
  * 3rdLaw
+ * Aaron Levin
  * Adelbert Chang
  * Aldo Stracquadanio
  * Alessandro Lacava
