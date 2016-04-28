@@ -6,10 +6,12 @@ Version 0.5.0 is the fifth release.
 
 This release includes some API changes:
 
+`cats.laws.discipline.eq` no longer provides `Eq` instances for `tuple2` and `tuple3`, these instances and together with some other new instances for `tuple`s are not provided by `cats.std.tuple` (through inheriting the instance trait defined in algebra 0.4.2).
+
 * [#910](https://github.com/typelevel/cats/pull/910): Remove `Streaming` and `StreamingT`
 * [#967](https://github.com/typelevel/cats/pull/967): `product` and `map` can be implemented in terms of `ap`
 * [#970](https://github.com/typelevel/cats/pull/970): Renamed `Kleisli#apply`to `ap`
-
+* [#994](https://github.com/typelevel/cats/pull/994): updated to latest algebra (brought in all the new goodies)
 
 And additions:
 
