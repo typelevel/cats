@@ -6,7 +6,7 @@ import cats.functor.Bifunctor
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
-import algebra.laws.OrderLaws
+import cats.kernel.laws.OrderLaws
 
 class WriterTTests extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]

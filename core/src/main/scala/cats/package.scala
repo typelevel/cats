@@ -45,17 +45,17 @@ package object cats {
         f(a)
   }
 
-  type Eq[A] = algebra.Eq[A]
-  type PartialOrder[A] = algebra.PartialOrder[A]
-  type Order[A] = algebra.Order[A]
-  type Semigroup[A] = algebra.Semigroup[A]
-  type Monoid[A] = algebra.Monoid[A]
-  type Group[A] = algebra.Group[A]
+  type Eq[A] = cats.kernel.Eq[A]
+  type PartialOrder[A] = cats.kernel.PartialOrder[A]
+  type Order[A] = cats.kernel.Order[A]
+  type Semigroup[A] = cats.kernel.Semigroup[A]
+  type Monoid[A] = cats.kernel.Monoid[A]
+  type Group[A] = cats.kernel.Group[A]
 
-  val Eq = algebra.Eq
-  val PartialOrder = algebra.PartialOrder
-  val Order = algebra.Order
-  val Semigroup = algebra.Semigroup
-  val Monoid = algebra.Monoid
-  val Group = algebra.Group
+  val Eq = cats.kernel.Eq
+  val PartialOrder = cats.kernel.PartialOrder
+  val Order = cats.kernel.Order
+  val Semigroup = cats.kernel.Semigroup
+  val Monoid = cats.kernel.Monoid
+  val Group = cats.kernel.Group
 }

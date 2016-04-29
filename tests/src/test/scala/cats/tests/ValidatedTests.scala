@@ -7,7 +7,7 @@ import cats.laws.discipline.{BitraverseTests, TraverseTests, ApplicativeErrorTes
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.{SemigroupKTests}
 import cats.laws.discipline.arbitrary._
-import algebra.laws.{OrderLaws, GroupLaws}
+import cats.kernel.laws.{OrderLaws, GroupLaws}
 
 import scala.util.Try
 

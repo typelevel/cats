@@ -1,8 +1,8 @@
 package cats
 package tests
 
-import algebra.laws.OrderLaws
 import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadTests, SerializableTests, CartesianTests}
+import cats.kernel.laws.OrderLaws
 
 class EitherTests extends CatsSuite {
 

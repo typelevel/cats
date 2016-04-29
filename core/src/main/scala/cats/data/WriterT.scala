@@ -1,7 +1,7 @@
 package cats
 package data
 
-import algebra.std.tuple.tuple2Eq
+import cats.kernel.std.tuple._
 import cats.functor.Bifunctor
 
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {

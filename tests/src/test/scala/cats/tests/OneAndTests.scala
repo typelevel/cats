@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import algebra.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{NonEmptyList, OneAnd}
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests}

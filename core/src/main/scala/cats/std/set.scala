@@ -3,7 +3,8 @@ package std
 
 import cats.syntax.show._
 
-trait SetInstances extends algebra.std.SetInstances {
+trait SetInstances extends cats.kernel.std.SetInstances {
+
   implicit val setInstance: Foldable[Set] with MonoidK[Set] =
     new Foldable[Set] with MonoidK[Set] {
 
@@ -25,8 +26,6 @@ trait SetInstances extends algebra.std.SetInstances {
 
       override def isEmpty[A](fa: Set[A]): Boolean = fa.isEmpty
     }
-
-    implicit def setMonoid[A]: Monoid[Set[A]] = MonoidK[Set].algebra[A]
 
   implicit def setShow[A:Show]: Show[Set[A]] = new Show[Set[A]] {
     def show(fa: Set[A]): String =
