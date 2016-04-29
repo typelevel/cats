@@ -6,7 +6,7 @@ Version 0.5.0 is the fifth release.
 
 This release includes some API changes:
 
-`cats.laws.discipline.eq` no longer provides `Eq` instances for `tuple2` and `tuple3`, these instances and together with some other new instances for `tuple`s are now provided by `cats.std.tuple` (through inheriting the instance trait defined in algebra 0.4.2).
+`cats.laws.discipline.eq` no longer provides `Eq` instances for `Tuple2` and `Tuple3`, these instances and together with some other new instances for `Tuple`s are now provided by `cats.std.tuple` (through inheriting the instance trait defined in algebra 0.4.2).
 
 * [#910](https://github.com/typelevel/cats/pull/910): Remove `Streaming` and `StreamingT`
 * [#967](https://github.com/typelevel/cats/pull/967): `product` and `map` can be implemented in terms of `ap`
@@ -31,7 +31,6 @@ And additions:
 * [#971](https://github.com/typelevel/cats/pull/971): Add `toValidatedNel` to `Xor`
 * [#973](https://github.com/typelevel/cats/pull/973): Add `flatMapF` for `StateT`
 * [#985](https://github.com/typelevel/cats/pull/985): Add object `reducible` for reducible syntax
-* [#994](https://github.com/typelevel/cats/pull/994): updated to latest algebra (brought in all the new goodies)
 * [#996](https://github.com/typelevel/cats/pull/996): Add `SemigroupK` instance for `Xor`
 * [#998](https://github.com/typelevel/cats/pull/998): Add `SemigroupK` instance for `Validated`
 * [#986](https://github.com/typelevel/cats/pull/986): Add `Bitraverse` instances for `Validated` and `XorT`
