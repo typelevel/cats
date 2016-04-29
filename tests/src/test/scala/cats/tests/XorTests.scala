@@ -3,6 +3,7 @@ package tests
 
 import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
+import cats.laws.discipline.{SemigroupKTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadErrorTests, SerializableTests, CartesianTests}
 import cats.kernel.laws.{GroupLaws, OrderLaws}
@@ -30,6 +31,9 @@ class XorTests extends CatsSuite {
   checkAll("Traverse[Xor[String,?]]", SerializableTests.serializable(Traverse[Xor[String, ?]]))
 
   checkAll("Xor[Int, String]", OrderLaws[String Xor Int].order)
+
+  checkAll("Xor[ListWrapper[String], ?]", SemigroupKTests[Xor[ListWrapper[String], ?]].semigroupK[Int])
+  checkAll("SemigroupK[Xor[ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[Xor[ListWrapper[String], ?]]))
 
   {
     implicit val S = ListWrapper.partialOrder[String]
