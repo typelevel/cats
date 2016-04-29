@@ -1,6 +1,7 @@
 package cats
 package tests
 
+import catalysts.Platform
 import scala.math.min
 import cats.laws.ComonadLaws
 import cats.laws.discipline.{CartesianTests, BimonadTests, SerializableTests}
@@ -147,43 +148,48 @@ class EvalTests extends CatsSuite {
 
   test("later synchronization") {
 
-    // this test helps ensure that Later's initialization code is
-    // properly synchronized. you can see if fail by
-    // removing @volatile from Later#thunk.
+    if (Platform.isJvm) {
 
-    def fortyTwo() = Later(42)
+      // this test helps ensure that Later's initialization code is
+      // properly synchronized. you can see if fail by
+      // removing @volatile from Later#thunk.
 
-    var eval: Eval[Int] = fortyTwo()
-    val errors = new AtomicInteger(0)
-    val iterations = 1000000
-    val threads = 4
+      def fortyTwo() = Later(42)
 
-    def thread[U](body: => U): Thread =
-      new Thread {
-        override def run(): Unit = { body; () }
+      var eval: Eval[Int] = fortyTwo()
+      val errors = new AtomicInteger(0)
+      val iterations = 1000000
+      val threads = 4
+
+      def thread[U](body: => U): Thread =
+        new Thread {
+          override def run(): Unit = { body; () }
+        }
+
+      val t0 = thread {
+        var i = 0
+        while(i < iterations) {
+          eval = fortyTwo()
+          i += 1
+        }
       }
 
-    val t0 = thread {
-      var i = 0
-      while(i < iterations) {
-        eval = fortyTwo()
-        i += 1
+      val t = thread {
+        var fails = 0
+        var i = 0
+        while (i < iterations) {
+          if (eval.value != 42) fails += 1
+          i += 1
+        }
+        errors.addAndGet(fails)
       }
+
+      val ts = t0 :: List.fill(threads)(new Thread(t))
+      ts.foreach(_.start)
+      ts.foreach(_.join)
+      errors.get() shouldBe 0
+    } else {
+      ()
     }
-
-    val t = thread {
-      var fails = 0
-      var i = 0
-      while (i < iterations) {
-        if (eval.value != 42) fails += 1
-        i += 1
-      }
-      errors.addAndGet(fails)
-    }
-
-    val ts = t0 :: List.fill(threads)(new Thread(t))
-    ts.foreach(_.start)
-    ts.foreach(_.join)
-    errors.get() shouldBe 0
   }
 }
