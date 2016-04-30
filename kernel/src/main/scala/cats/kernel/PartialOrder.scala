@@ -134,7 +134,7 @@ abstract class PartialOrderFunctions[P[T] <: PartialOrder[T]] extends EqFunction
     ev.gt(x, y)
 }
 
-object PartialOrder extends PartialOrderFunctions {
+object PartialOrder extends PartialOrderFunctions[PartialOrder] {
 
   /**
    * Access an implicit `PartialOrder[A]`.

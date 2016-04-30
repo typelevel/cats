@@ -134,7 +134,7 @@ abstract class OrderFunctions[O[T] <: Order[T]] extends PartialOrderFunctions[O]
     ev.max(x, y)
 }
 
-object Order extends OrderFunctions {
+object Order extends OrderFunctions[Order] {
 
   /**
    * Access an implicit `Order[A]`.
