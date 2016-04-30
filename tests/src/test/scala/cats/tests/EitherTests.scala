@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.discipline.{CopairTests, BitraverseTests, TraverseTests, MonadTests, SerializableTests, CartesianTests}
+import cats.laws.discipline.{CopairTests, TraverseTests, MonadTests, SerializableTests, CartesianTests}
 import cats.kernel.laws.OrderLaws
 
 class EitherTests extends CatsSuite {

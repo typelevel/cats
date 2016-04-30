@@ -5,7 +5,7 @@ import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
 import cats.laws.discipline.{SemigroupKTests}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{CopairTests, BitraverseTests, TraverseTests, MonadErrorTests, SerializableTests, CartesianTests}
+import cats.laws.discipline.{CopairTests, TraverseTests, MonadErrorTests, SerializableTests, CartesianTests}
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary._
