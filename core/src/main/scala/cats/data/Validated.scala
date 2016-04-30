@@ -209,8 +209,18 @@ object Validated extends ValidatedInstances with ValidatedFunctions{
   final case class Invalid[+E](e: E) extends Validated[E, Nothing]
 }
 
-
 private[data] sealed abstract class ValidatedInstances extends ValidatedInstances1 {
+
+  implicit def validatedSemigroupK[A](implicit A: Semigroup[A]): SemigroupK[Validated[A,?]] =
+    new SemigroupK[Validated[A,?]] {
+      def combineK[B](x: Validated[A,B], y: Validated[A,B]): Validated[A,B] = x match {
+        case v @ Valid(_) => v
+        case Invalid(ix) => y match {
+          case Invalid(iy) => Invalid(A.combine(ix,iy))
+          case v @ Valid(_) => v
+        }
+      }
+    }
 
   implicit def validatedMonoid[A, B](implicit A: Semigroup[A], B: Monoid[B]): Monoid[Validated[A, B]] = new Monoid[Validated[A, B]] {
     def empty: Validated[A, B] = Valid(B.empty)
@@ -227,7 +237,7 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
     def show(f: Validated[A,B]): String = f.show
   }
 
-  implicit def validatedBifunctor: Copair[Validated] =
+  implicit def validatedCopair: Copair[Validated] =
     new Copair[Validated] {
       def fold[A, B, C](f: Validated[A, B])(fa: (A) => C, fb: (B) => C): C =
         f match {

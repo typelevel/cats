@@ -292,7 +292,7 @@ val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(
 ## Composing Free monads ADTs.
 
 Real world applications often time combine different algebras.
-The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
+The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf)
 lets us compose different algebras in the context of `Free`.
 
 Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.

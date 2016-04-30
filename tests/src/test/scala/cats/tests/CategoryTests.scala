@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import algebra.laws.GroupLaws
+import cats.kernel.laws.GroupLaws
 
 import cats.arrow.Category
 import cats.laws.discipline.{MonoidKTests, SerializableTests}

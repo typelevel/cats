@@ -24,6 +24,16 @@ lazy val catsDoctestSettings = Seq(
   doctestWithDependencies := false
 ) ++ doctestSettings
 
+lazy val kernelSettings = Seq(
+  // don't warn on value discarding because it's broken on 2.10 with @sp(Unit)
+  scalacOptions ++= commonScalacOptions.filter(_ != "-Ywarn-value-discard"),
+  resolvers ++= Seq(
+    Resolver.sonatypeRepo("releases"),
+    Resolver.sonatypeRepo("snapshots")),
+  parallelExecution in Test := false,
+  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+) ++ warnUnusedImport
+
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions,
   resolvers ++= Seq(
@@ -33,8 +43,6 @@ lazy val commonSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.7.0",
-    "org.spire-math" %%% "algebra" % "0.3.1",
-    "org.spire-math" %%% "algebra-std" % "0.3.1",
     "org.typelevel" %%% "machinist" % "0.4.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
@@ -80,8 +88,12 @@ lazy val scalacheckVersion = "1.12.5"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion,
-  libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
-)
+  libraryDependencies += "org.typelevel" %%% "discipline" % "0.4")
+
+lazy val testingDependencies = Seq(
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.2",
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.2" % "test",
+  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test")
 
 /**
  * Remove 2.10 projects from doc generation, as the macros used in the projects
@@ -136,15 +148,15 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, coreJVM, lawsJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, coreJVM, lawsJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, testsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, coreJS, lawsJS, testsJS, js)
-  .dependsOn(macrosJS, coreJS, lawsJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, testsJS, js)
+  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -158,14 +170,41 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
+lazy val kernel = crossProject.crossType(CrossType.Pure)
+  .in(file("kernel"))
+  .settings(moduleName := "cats-kernel")
+  .settings(kernelSettings: _*)
+  .settings(buildSettings: _*)
+  .settings(publishSettings: _*)
+  .settings(scoverageSettings: _*)
+  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(KernelBoiler.gen))
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val kernelJVM = kernel.jvm
+lazy val kernelJS = kernel.js
+
+lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
+  .in(file("kernel-laws"))
+  .settings(moduleName := "cats-kernel-laws")
+  .settings(kernelSettings: _*)
+  .settings(buildSettings: _*)
+  .settings(publishSettings: _*)
+  .settings(scoverageSettings: _*)
+  .settings(disciplineDependencies: _*)
+  .settings(testingDependencies: _*)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+  .dependsOn(kernel)
+
+lazy val kernelLawsJVM = kernelLaws.jvm
+lazy val kernelLawsJS = kernelLaws.js
 
 lazy val core = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros)
+  .dependsOn(macros, kernel)
   .settings(moduleName := "cats-core")
   .settings(catsSettings:_*)
-  .settings(
-    sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
-  )
+  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion % "test")
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
@@ -174,13 +213,11 @@ lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
 lazy val laws = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core)
+  .dependsOn(macros, kernel, core, kernelLaws)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
-  .settings(libraryDependencies ++= Seq(
-    "org.spire-math" %%% "algebra-laws" % "0.3.1",
-    "org.typelevel" %%% "catalysts-platform" % "0.0.2"))
+  .settings(libraryDependencies ++= Seq("org.typelevel" %%% "catalysts-platform" % "0.0.2"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -193,9 +230,7 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
   .settings(noPublishSettings:_*)
-  .settings(libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test",
-    "org.typelevel" %%% "catalysts-platform" % "0.0.2" % "test"))
+  .settings(testingDependencies: _*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
@@ -231,12 +266,6 @@ lazy val publishSettings = Seq(
   scmInfo := Some(ScmInfo(url("https://github.com/typelevel/cats"), "scm:git:git@github.com:typelevel/cats.git")),
   autoAPIMappings := true,
   apiURL := Some(url("http://typelevel.org/cats/api/")),
-  publishArtifact in (Compile, packageDoc) := {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 10)) => false  // don't package scaladoc when publishing for 2.10
-      case _ => true
-    }
-  },
   pomExtra := (
     <developers>
       <developer>

@@ -1,3 +1,87 @@
+## Version 0.5.0
+
+> 2016 April 28
+
+Version 0.5.0 is the fifth release.
+
+This release includes some API changes:
+
+`cats.laws.discipline.eq` no longer provides `Eq` instances for `Tuple2` and `Tuple3`, these instances and together with some other new instances for `Tuple`s are now provided by `cats.std.tuple` (through inheriting the instance trait defined in algebra 0.4.2).
+
+* [#910](https://github.com/typelevel/cats/pull/910): Remove `Streaming` and `StreamingT`
+* [#967](https://github.com/typelevel/cats/pull/967): `product` and `map` can be implemented in terms of `ap`
+* [#970](https://github.com/typelevel/cats/pull/970): Renamed `Kleisli#apply`to `ap`
+* [#994](https://github.com/typelevel/cats/pull/994): updated to latest algebra (brought in all the new goodies)
+
+And additions:
+
+* [#853](https://github.com/typelevel/cats/pull/853): Adds a new `LiftTrans` typeclass
+* [#864](https://github.com/typelevel/cats/pull/864): Add `Bifoldable`
+* [#875](https://github.com/typelevel/cats/pull/875): Add `.get` method to `StateT`
+* [#884](https://github.com/typelevel/cats/pull/884): Add `Applicative` syntax
+* [#886](https://github.com/typelevel/cats/pull/886): Add `map` method to `OneAnd`
+* [#927](https://github.com/typelevel/cats/pull/927): `XorT.ensure` method
+* [#925](https://github.com/typelevel/cats/pull/925): Stack-safe `foldM`
+* [#922](https://github.com/typelevel/cats/pull/922): Add `tell` and `writer` syntax for creating `Writers`.
+* [#903](https://github.com/typelevel/cats/pull/903): Add `Bitraverse`
+* [#928](https://github.com/typelevel/cats/pull/928): Add missing `Show` instances
+* [#940](https://github.com/typelevel/cats/pull/940): More flexible `TransLift`
+* [#946](https://github.com/typelevel/cats/pull/946): Added `OptionT.none`
+* [#947](https://github.com/typelevel/cats/pull/947): Syntax for `ApplicativeError`
+* [#971](https://github.com/typelevel/cats/pull/971): Add `toValidatedNel` to `Xor`
+* [#973](https://github.com/typelevel/cats/pull/973): Add `flatMapF` for `StateT`
+* [#985](https://github.com/typelevel/cats/pull/985): Add object `reducible` for reducible syntax
+* [#996](https://github.com/typelevel/cats/pull/996): Add `SemigroupK` instance for `Xor`
+* [#998](https://github.com/typelevel/cats/pull/998): Add `SemigroupK` instance for `Validated`
+* [#986](https://github.com/typelevel/cats/pull/986): Add `Bitraverse` instances for `Validated` and `XorT`
+
+
+And bug fixes:
+
+* [#873](https://github.com/typelevel/cats/pull/873): Fix `OptionIdOps.some` to always return `Some`
+* [#958](https://github.com/typelevel/cats/pull/958): Switch off scaladoc generation for Scala 2.10 due to macro problems
+* [#955](https://github.com/typelevel/cats/pull/955): Rename `Id` instances to `idInstances` to make selective import easier
+
+
+And removals:
+
+* [#910](https://github.com/typelevel/cats/pull/910): Remove `Streaming` and `StreamingT`
+
+
+And some other improvements to the documentation, tutorials, laws and tests, including:
+
+* [#880](https://github.com/typelevel/cats/pull/880): Optimize `Eq[Vector[A]]` instance
+* [#878](https://github.com/typelevel/cats/pull/878): Fix bug in freemonad doc
+* [#870](https://github.com/typelevel/cats/pull/870): Fixed doc string for `StateT`'s `runEmptyA()`
+* [#866](https://github.com/typelevel/cats/pull/866): Add some tests for `Coproduct` and `WriterT`
+* [#883](https://github.com/typelevel/cats/pull/883): Delegate to `Traverse.sequence` in `Applicative.sequence`
+* [#893](https://github.com/typelevel/cats/pull/893): Add `Reducible` laws
+* [#923](https://github.com/typelevel/cats/pull/923): Make `Call.loop` `@tailrec` optimized
+* [#916](https://github.com/typelevel/cats/pull/916): add `-P:scalajs:mapSourceURI` option
+* [#909](https://github.com/typelevel/cats/pull/909): Make `Bifunctor` universal
+* [#905](https://github.com/typelevel/cats/pull/905): make `Unapply` serializable
+* [#902](https://github.com/typelevel/cats/pull/902): Make table in `Kleisli` readable
+* [#897](https://github.com/typelevel/cats/pull/897): Add `Prod` tests
+* [#938](https://github.com/typelevel/cats/pull/938): Onward to scala 2.11.8
+* [#941](https://github.com/typelevel/cats/pull/941): Type class composition and `MonadState` tests
+* [#949](https://github.com/typelevel/cats/pull/949): Add .ensime_cache to gitignore
+* [#954](https://github.com/typelevel/cats/pull/954): Switch to use nodeJsEnv as default jsEnv to build scala.js
+* [#956](https://github.com/typelevel/cats/pull/956): Upgrade scala.js from 0.6.7 -> 0.6.8
+* [#960](https://github.com/typelevel/cats/pull/960): More `Reducible` tests
+* [#962](https://github.com/typelevel/cats/pull/962): Improving test coverage
+* [#964](https://github.com/typelevel/cats/pull/964): Clarify stabilty guarantees; drop 'proof of concept' and 'experimental'
+* [#972](https://github.com/typelevel/cats/pull/972): Fix swapped f and g in `invariant` docs
+* [#979](https://github.com/typelevel/cats/pull/979): Fix outdated import for `cats.syntax.apply._`
+* [#995](https://github.com/typelevel/cats/pull/995): Move coverage away from bash
+* [#1002](https://github.com/typelevel/cats/pull/1002): Correct the URL for *Data types à la carte*
+* [#1005](https://github.com/typelevel/cats/pull/1005): fix broken link in foldable docs
+
+
+As always thanks to everyone who filed issues, participated in the Cats Gitter
+channel, submitted code, or helped review pull requests.
+
+
+
 ## Version 0.4.1
 
 > 2016 February 4

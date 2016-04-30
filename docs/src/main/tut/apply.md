@@ -115,7 +115,7 @@ Apply[Option].tuple3(Some(1), Some(2), Some(3))
 
 The `|@|` operator offers an alternative syntax for the higher-arity `Apply`
 functions (`apN`, `mapN` and `tupleN`).
-In order to use it, first import `cats.syntax.all._` or `cats.syntax.apply._`.
+In order to use it, first import `cats.syntax.all._` or `cats.syntax.cartesian._`.
 Here we see that the following two functions, `f1` and `f2`, are equivalent:
 
 ```tut
