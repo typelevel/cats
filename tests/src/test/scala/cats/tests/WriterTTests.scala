@@ -246,4 +246,12 @@ class WriterTTests extends CatsSuite {
     checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", MonadCombineTests[WriterT[ListWrapper, ListWrapper[Int], ?]].monadCombine[Int, Int, Int])
     checkAll("MonadCombine[WriterT[ListWrapper, ListWrapper[Int], ?]]", SerializableTests.serializable(MonadCombine[WriterT[ListWrapper, ListWrapper[Int], ?]]))
   }
+
+  {
+     //F[(L, V)] has a monoid
+    implicit val FLV: Monoid[ListWrapper[(ListWrapper[Int], ListWrapper[Int])]] = ListWrapper.monoid[(ListWrapper[Int], ListWrapper[Int])]
+
+    Monoid[WriterT[ListWrapper, ListWrapper[Int], ListWrapper[Int]]]
+    Semigroup[WriterT[ListWrapper, ListWrapper[Int], ListWrapper[Int]]]
+  }
 }
