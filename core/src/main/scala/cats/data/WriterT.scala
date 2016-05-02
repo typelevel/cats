@@ -75,6 +75,11 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
   implicit def writerTShow[F[_], L, V](implicit F: Show[F[(L, V)]]): Show[WriterT[F, L, V]] = new Show[WriterT[F, L, V]] {
     override def show(f: WriterT[F, L, V]): String = f.show
   }
+
+  implicit def writerTMonoid[F[_], L, V](implicit W: Monoid[F[(L, V)]]): Monoid[WriterT[F, L, V]] = new Monoid[WriterT[F, L, V]] {
+    def empty = WriterT[F, L, V](W.empty)
+    def combine(x: WriterT[F, L, V], y: WriterT[F, L, V]): WriterT[F, L, V] = WriterT(W.combine(x.run, y.run))
+  }
 }
 
 private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 {
