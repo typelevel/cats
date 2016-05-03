@@ -2,7 +2,6 @@ package cats
 package laws
 
 import cats.data.Kleisli
-import cats.syntax.apply._
 import cats.syntax.flatMap._
 import cats.syntax.functor._
 
@@ -16,7 +15,7 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
     fa.flatMap(f).flatMap(g) <-> fa.flatMap(a => f(a).flatMap(g))
 
   def flatMapConsistentApply[A, B](fa: F[A], fab: F[A => B]): IsEq[F[B]] =
-    fab.ap(fa) <-> fab.flatMap(f => fa.map(f))
+    F.ap(fab)(fa) <-> fab.flatMap(f => fa.map(f))
 
   /**
    * The composition of `cats.data.Kleisli` arrows is associative. This is

@@ -2,7 +2,7 @@ package cats
 package laws
 
 /**
- * Laws that must be obeyed by any `Bimonad`.
+ * Laws that must be obeyed by any [[Bimonad]].
  *
  * For more information, see definition 4.1 from this paper:
  * http://arxiv.org/pdf/0710.1163v3.pdf

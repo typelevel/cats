@@ -1,7 +1,6 @@
 package cats
 package laws
 
-import cats.syntax.apply._
 import cats.syntax.functor._
 
 /**
@@ -11,16 +10,16 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
   implicit override def F: Applicative[F]
 
   def applicativeIdentity[A](fa: F[A]): IsEq[F[A]] =
-    F.pure((a: A) => a).ap(fa) <-> fa
+    F.ap(F.pure((a: A) => a))(fa) <-> fa
 
   def applicativeHomomorphism[A, B](a: A, f: A => B): IsEq[F[B]] =
-    F.pure(f).ap(F.pure(a)) <-> F.pure(f(a))
+    F.ap(F.pure(f))(F.pure(a)) <-> F.pure(f(a))
 
   def applicativeInterchange[A, B](a: A, ff: F[A => B]): IsEq[F[B]] =
-    ff.ap(F.pure(a)) <-> F.pure((f: A => B) => f(a)).ap(ff)
+    F.ap(ff)(F.pure(a)) <-> F.ap(F.pure((f: A => B) => f(a)))(ff)
 
   def applicativeMap[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
-    fa.map(f) <-> F.pure(f).ap(fa)
+    fa.map(f) <-> F.ap(F.pure(f))(fa)
 
   /**
    * This law is [[applyComposition]] stated in terms of `pure`. It is a
@@ -29,7 +28,7 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
    */
   def applicativeComposition[A, B, C](fa: F[A], fab: F[A => B], fbc: F[B => C]): IsEq[F[C]] = {
     val compose: (B => C) => (A => B) => (A => C) = _.compose
-    F.pure(compose).ap(fbc).ap(fab).ap(fa) <-> fbc.ap(fab.ap(fa))
+    F.ap(F.ap(F.ap(F.pure(compose))(fbc))(fab))(fa) <-> F.ap(fbc)(F.ap(fab)(fa))
   }
 
   def apProductConsistent[A, B](fa: F[A], f: F[A => B]): IsEq[F[B]] =

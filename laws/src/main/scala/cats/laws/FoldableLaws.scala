@@ -12,7 +12,7 @@ trait FoldableLaws[F[_]] {
   )(implicit
     M: Monoid[B]
   ): IsEq[B] = {
-    fa.foldMap(f) <-> fa.foldLeft(M.empty) { (b, a) => b |+| f(a) }
+    F.foldMap(fa)(f) <-> F.foldLeft(fa, M.empty) { (b, a) => b |+| f(a) }
   }
 
   def rightFoldConsistentWithFoldMap[A, B](
@@ -21,7 +21,7 @@ trait FoldableLaws[F[_]] {
   )(implicit
     M: Monoid[B]
   ): IsEq[B] = {
-    fa.foldMap(f) <-> fa.foldRight(Later(M.empty))((a, lb) => lb.map(f(a) |+| _)).value
+    F.foldMap(fa)(f) <-> F.foldRight(fa, Later(M.empty))((a, lb) => lb.map(f(a) |+| _)).value
   }
 
   def existsConsistentWithFind[A](
