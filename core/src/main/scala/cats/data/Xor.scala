@@ -208,6 +208,8 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
         fab recover pf
       override def recoverWith[B](fab: A Xor B)(pf: PartialFunction[A, A Xor B]): A Xor B =
         fab recoverWith pf
+      override def ensure[B](fab: A Xor B)(error: => A)(predicate: B => Boolean): A Xor B =
+        fab.ensure(error)(predicate)
     }
 }
 
