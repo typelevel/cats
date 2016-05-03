@@ -253,5 +253,6 @@ class WriterTTests extends CatsSuite {
 
     Monoid[WriterT[ListWrapper, ListWrapper[Int], ListWrapper[Int]]]
     Semigroup[WriterT[ListWrapper, ListWrapper[Int], ListWrapper[Int]]]
+    checkAll("WriterT[ListWrapper, ListWrapper[Int], ListWrapper[Int]]", cats.kernel.laws.GroupLaws[WriterT[ListWrapper, ListWrapper[Int], ListWrapper[Int]]].monoid)
   }
 }
