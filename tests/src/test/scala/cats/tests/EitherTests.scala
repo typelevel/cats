@@ -49,4 +49,10 @@ class EitherTests extends CatsSuite {
       show.show(e).nonEmpty should === (true)
     }
   }
+
+  test("map2Eval is lazy") {
+    val bomb: Eval[Either[String, Int]] = Later(sys.error("boom"))
+    val x: Either[String, Int] = Left("l")
+    x.map2Eval(bomb)(_ + _).value should === (x)
+  }
 }

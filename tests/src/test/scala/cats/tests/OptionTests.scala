@@ -83,4 +83,9 @@ class OptionTests extends CatsSuite {
     // can't use `s.some should === (Some(null))` here, because it leads to NullPointerException
     s.some.exists(_ == null) should ===(true)
   }
+
+  test("map2Eval is lazy") {
+    val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
+    none[Int].map2Eval(bomb)(_ + _).value should === (None)
+  }
 }

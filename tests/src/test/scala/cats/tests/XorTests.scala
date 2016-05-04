@@ -235,4 +235,10 @@ class XorTests extends CatsSuite {
     }
   }
 
+  test("map2Eval is lazy") {
+    val bomb: Eval[String Xor Int] = Later(sys.error("boom"))
+    val x = Xor.left[String, Int]("l")
+    x.map2Eval(bomb)(_ + _).value should === (x)
+  }
+
 }

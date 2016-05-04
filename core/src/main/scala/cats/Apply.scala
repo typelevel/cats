@@ -34,14 +34,45 @@ trait Apply[F[_]] extends Functor[F] with Cartesian[F] with ApplyArityFunctions[
     map(product(fa, fb)) { case (a, b) => f(a, b) }
 
   /**
+   * Similar to [[map2]] but uses [[Eval]] to allow for laziness in the `F[B]`
+   * argument. This can allow for "short-circuiting" of computations.
+   *
+   * NOTE: the default implementation of `map2Eval` does does not short-circuit
+   * computations. For data structures that can benefit from laziness, [[Apply]]
+   * instances should override this method.
+   *
+   * In the following example, `x.map2(bomb)(_ + _)` would result in an error,
+   * but `map2Eval` "short-circuits" the computation. `x` is `None` and thus the
+   * result of `bomb` doesn't even need to be evaluated in order to determine
+   * that the result of `map2Eval` should be `None`.
+   *
+   * {{{
+   * scala> import cats.{Eval, Later}
+   * scala> import cats.implicits._
+   * scala> val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
+   * scala> val x: Option[Int] = None
+   * scala> x.map2Eval(bomb)(_ + _).value
+   * res0: Option[Int] = None
+   * }}}
+   */
+  def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
+    fb.map(fb => map2(fa, fb)(f))
+
+  /**
    * Two sequentially dependent Applys can be composed.
    *
    * The composition of Applys `F` and `G`, `F[G[x]]`, is also an Apply.
    *
-   * val ap = Apply[Option].compose[List]
-   * val x = Some(List(1, 2))
-   * val y = Some(List(10, 20))
-   * ap.map2(x, y)(_ + _) == Some(List(11, 12, 21, 22))
+   * Example:
+   * {{{
+   * scala> import cats.Apply
+   * scala> import cats.implicits._
+   * scala> val ap = Apply[Option].compose[List]
+   * scala> val x: Option[List[Int]] = Some(List(1, 2))
+   * scala> val y: Option[List[Int]] = Some(List(10, 20))
+   * scala> ap.map2(x, y)(_ + _)
+   * res0: Option[List[Int]] = Some(List(11, 21, 12, 22))
+   * }}}
    */
   def compose[G[_]](implicit GG: Apply[G]): Apply[Lambda[X => F[G[X]]]] =
     new CompositeApply[F, G] {
