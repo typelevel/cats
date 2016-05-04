@@ -90,7 +90,7 @@ lazy val disciplineDependencies = Seq(
  * it does mean that the scaladocs cannot be generated when the build is in 2.10 mode.
  */
 def noDocProjects(sv: String): Seq[ProjectReference] = CrossVersion.partialVersion(sv) match {
-    case Some((2, 10)) => Seq[ProjectReference](coreJVM)
+//    case Some((2, 10)) => Seq[ProjectReference](coreJVM)
     case _ => Nil
   }
 
