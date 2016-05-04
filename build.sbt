@@ -96,8 +96,8 @@ def noDocProjects(sv: String): Seq[ProjectReference] = CrossVersion.partialVersi
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) :=
-    inProjects(coreJVM) -- inProjects(noDocProjects(scalaVersion.value): _*),
+//  unidocProjectFilter in (ScalaUnidoc, unidoc) :=
+//    inProjects(coreJVM, coreJS) -- inProjects(noDocProjects(scalaVersion.value): _*),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -231,12 +231,12 @@ lazy val publishSettings = Seq(
   scmInfo := Some(ScmInfo(url("https://github.com/typelevel/cats"), "scm:git:git@github.com:typelevel/cats.git")),
   autoAPIMappings := true,
   apiURL := Some(url("http://typelevel.org/cats/api/")),
-  publishArtifact in (Compile, packageDoc) := {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 10)) => false  // don't package scaladoc when publishing for 2.10
-      case _ => true
-    }
-  },
+  publishArtifact in (Compile, packageDoc) := true, // {
+//    CrossVersion.partialVersion(scalaVersion.value) match {
+//      case Some((2, 10)) => false  // don't package scaladoc when publishing for 2.10
+//      case _ => true
+//    }
+//  },
   pomExtra := (
     <developers>
       <developer>
