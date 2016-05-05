@@ -4,8 +4,8 @@ package free
 import cats.tests.CatsSuite
 import cats.arrow.NaturalTransformation
 import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
-import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary.function0Arbitrary
+
 import org.scalacheck.{Arbitrary, Gen}
 import Arbitrary.arbFunction1
 

@@ -1,6 +1,7 @@
 package cats
 package data
 
+import cats.kernel.std.tuple._
 import cats.functor.Bifunctor
 
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {
@@ -50,12 +51,11 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 object WriterT extends WriterTInstances with WriterTFunctions
 
 private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
+
   implicit def writerTIdMonad[L:Monoid]: Monad[WriterT[Id, L, ?]] =
     writerTMonadWriter[Id, L]
 
-  // The Eq[(L, V)] can be derived from an Eq[L] and Eq[V], but we are waiting
-  // on an algebra release that includes https://github.com/non/algebra/pull/82
-  implicit def writerTIdEq[L, V](implicit E: Eq[(L, V)]): Eq[WriterT[Id, L, V]] =
+  implicit def writerTIdEq[L: Eq, V: Eq]: Eq[WriterT[Id, L, V]] =
     writerTEq[Id, L, V]
 
   implicit def writerTBifunctor[F[_]:Functor]: Bifunctor[WriterT[F, ?, ?]] =

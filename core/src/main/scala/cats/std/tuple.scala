@@ -1,7 +1,7 @@
 package cats
 package std
 
-trait TupleInstances extends Tuple2Instances
+trait TupleInstances extends Tuple2Instances with cats.kernel.std.TupleInstances
 
 sealed trait Tuple2Instances {
   implicit val tuple2Bitraverse: Bitraverse[Tuple2] =

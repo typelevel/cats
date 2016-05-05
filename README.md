@@ -22,7 +22,7 @@ To get started with SBT, simply add the following to your `build.sbt`
 file:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats" % "0.4.1"
+libraryDependencies += "org.typelevel" %% "cats" % "0.5.0"
 ```
 
 This will pull in all of Cats' modules. If you only require some
@@ -35,7 +35,7 @@ functionality, you can pick-and-choose from amongst these modules
 
 Release notes for Cats are available in [CHANGES.md](CHANGES.md).
 
-*Cats 0.4.1 is a pre-release: there are not currently source- or
+*Cats 0.5.0 is a pre-release: there are not currently source- or
 binary-compatibility guarantees.*
 
 ### Documentation
