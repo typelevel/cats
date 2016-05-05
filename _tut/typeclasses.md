@@ -26,7 +26,7 @@ get a compilation error:
 
 ```scala
 scala> log("a string")
-<console>:14: error: could not find implicit value for parameter s: Show[String]
+<console>:15: error: could not find implicit value for parameter s: Show[String]
        log("a string")
           ^
 ```

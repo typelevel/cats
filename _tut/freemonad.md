@@ -2,7 +2,7 @@
 layout: default
 title:  "FreeMonads"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/free/Free.scala"
+source: "core/src/main/scala/cats/free/Free.scala"
 scaladoc: "#cats.free.Free"
 ---
 
@@ -171,13 +171,14 @@ value store:
 import cats.{Id, ~>}
 import scala.collection.mutable
 
-// a very simple (and imprecise) key-value store
-val kvs = mutable.Map.empty[String, Any]
-
 // the program will crash if a key is not found,
 // or if a type is incorrectly specified.
-def impureCompiler =
+def impureCompiler: KVStoreA ~> Id  =
   new (KVStoreA ~> Id) {
+
+    // a very simple (and imprecise) key-value store
+    val kvs = mutable.Map.empty[String, Any]
+
     def apply[A](fa: KVStoreA[A]): Id[A] =
       fa match {
         case Put(key, value) =>
@@ -281,7 +282,7 @@ val pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
     fa match {
       case Put(key, value) => State.modify(_.updated(key, value))
       case Get(key) =>
-        State.pure(kvs.get(key).map(_.asInstanceOf[A]))
+        State.inspect(_.get(key).map(_.asInstanceOf[A]))
       case Delete(key) => State.modify(_ - key)
     }
 }
@@ -293,13 +294,13 @@ it's not too hard to get around.)
 
 ```scala
 scala> val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(Map.empty).value
-result: (Map[String,Any], Option[Int]) = (Map(wild-cats -> 26),Some(14))
+result: (Map[String,Any], Option[Int]) = (Map(wild-cats -> 14),Some(14))
 ```
 
 ## Composing Free monads ADTs.
 
 Real world applications often time combine different algebras.
-The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
+The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf)
 lets us compose different algebras in the context of `Free`.
 
 Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.

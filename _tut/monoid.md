@@ -73,23 +73,9 @@ res6: String = 12345
 ```
 
 To use this
-with a function that produces a tuple, we can define a `Monoid` for a tuple 
+with a function that produces a tuple, cats also provides a `Monoid` for a tuple
 that will be valid for any tuple where the types it contains also have a 
-`Monoid` available:
-
-```scala
-implicit def tupleMonoid[A : Monoid, B : Monoid]: Monoid[(A, B)] =
-   new Monoid[(A, B)] {
-     def combine(x: (A, B), y: (A, B)): (A, B) = {
-       val (xa, xb) = x
-       val (ya, yb) = y
-       (Monoid[A].combine(xa, ya), Monoid[B].combine(xb, yb))
-     }
-     def empty: (A, B) = (Monoid[A].empty, Monoid[B].empty)
-   }
-```
-
-Thus.
+`Monoid` available, thus.
 
 ```scala
 scala> l.foldMap(i => (i, i.toString)) // do both of the above in one pass, hurrah!
@@ -102,6 +88,7 @@ N.B.
 Cats does not define a `Monoid` type class itself, it uses the [`Monoid`
 trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Monoid.scala)
 which is defined in the [algebra project](https://github.com/non/algebra) on 
-which it depends. The [`cats` package object](https://github.com/non/cats/blob/master/core/src/main/scala/cats/package.scala)
+which it depends. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
 defines type aliases to the `Monoid` from algebra, so that you can
-`import cats.Monoid`.
+`import cats.Monoid`. Also the `Monoid` instance for tuple is also [implemented in algebra](https://github.com/non/algebra/blob/v0.4.2/project/Boilerplate.scala#L80-L217), 
+cats merely provides it through [inheritance](https://github.com/typelevel/cats/blob/v0.5.0/core/src/main/scala/cats/std/tuple.scala). 

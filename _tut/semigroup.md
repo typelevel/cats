@@ -114,12 +114,12 @@ Option. If we try to use Some and None, we'll get errors:
 
 ```scala
 scala> Some(1) |+| None
-<console>:30: error: value |+| is not a member of Some[Int]
+<console>:31: error: value |+| is not a member of Some[Int]
        Some(1) |+| None
                ^
 
 scala> None |+| Some(1)
-<console>:30: error: value |+| is not a member of object None
+<console>:31: error: value |+| is not a member of object None
        None |+| Some(1)
             ^
 ```
@@ -128,6 +128,6 @@ N.B.
 Cats does not define a `Semigroup` type class itself, it uses the [`Semigroup`
 trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala)
 which is defined in the [algebra project](https://github.com/non/algebra) on 
-which it depends. The [`cats` package object](https://github.com/non/cats/blob/master/core/src/main/scala/cats/package.scala)
+which it depends. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
 defines type aliases to the `Semigroup` from algebra, so that you can
 `import cats.Semigroup`.

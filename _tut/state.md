@@ -2,7 +2,7 @@
 layout: default
 title:  "State"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/StateT.scala"
+source: "core/src/main/scala/cats/data/StateT.scala"
 scaladoc: "#cats.data.StateT"
 ---
 # State

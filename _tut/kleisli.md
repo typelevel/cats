@@ -2,7 +2,7 @@
 layout: default
 title:  "Kleisli"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/Kleisli.scala"
+source: "core/src/main/scala/cats/data/Kleisli.scala"
 scaladoc: "#cats.data.Kleisli"
 ---
 # Kleisli
@@ -143,6 +143,7 @@ implicit def kleisliFlatMap[F[_], Z](implicit F: FlatMap[F]): FlatMap[Kleisli[F,
 
 Below is a table of some of the type class instances `Kleisli` can have depending on what instances `F[_]` has.
 
+```
 Type class     | Constraint on `F[_]`
 -------------- | -------------------
 Functor        | Functor
@@ -155,6 +156,7 @@ Split          | FlatMap
 Strong         | Functor
 SemigroupK*    | FlatMap
 MonoidK*       | Monad
+```
 
 *These instances only exist for Kleisli arrows with identical input and output types; that is, 
 `Kleisli[F, A, A]` for some type A. These instances use Kleisli composition as the `combine` operation,

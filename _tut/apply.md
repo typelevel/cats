@@ -2,7 +2,7 @@
 layout: default
 title:  "Apply"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Apply.scala"
+source: "core/src/main/scala/cats/Apply.scala"
 scaladoc: "#cats.Apply"
 ---
 # Apply
@@ -26,9 +26,6 @@ implicit val optionApply: Apply[Option] = new Apply[Option] {
     fa.flatMap (a => f.map (ff => ff(a)))
 
   def map[A,B](fa: Option[A])(f: A => B): Option[B] = fa map f
-  
-  def product[A, B](fa: Option[A], fb: Option[B]): Option[(A, B)] =
-    fa.flatMap(a => fb.map(b => (a, b)))
 }
 
 implicit val listApply: Apply[List] = new Apply[List] {
@@ -36,9 +33,6 @@ implicit val listApply: Apply[List] = new Apply[List] {
     fa.flatMap (a => f.map (ff => ff(a)))
 
   def map[A,B](fa: List[A])(f: A => B): List[B] = fa map f
-  
-  def product[A, B](fa: List[A], fb: List[B]): List[(A, B)] =
-    fa.zip(fb)
 }
 ```
 
@@ -63,7 +57,7 @@ And like functors, `Apply` instances also compose:
 
 ```scala
 scala> val listOpt = Apply[List] compose Apply[Option]
-listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@4213211d
+listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@669537d8
 
 scala> val plusOne = (x:Int) => x + 1
 plusOne: Int => Int = <function1>
@@ -153,7 +147,7 @@ res19: Option[(Int, Int, Int)] = Some((1,2,3))
 
 The `|@|` operator offers an alternative syntax for the higher-arity `Apply`
 functions (`apN`, `mapN` and `tupleN`).
-In order to use it, first import `cats.syntax.all._` or `cats.syntax.apply._`.
+In order to use it, first import `cats.syntax.all._` or `cats.syntax.cartesian._`.
 Here we see that the following two functions, `f1` and `f2`, are equivalent:
 
 ```scala
@@ -179,10 +173,10 @@ All instances created by `|@|` have `map`, `ap`, and `tupled` methods of the app
 
 ```scala
 scala> val option2 = Option(1) |@| Option(2)
-option2: cats.syntax.CartesianBuilder[Option]#CartesianBuilder2[Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder2@19caf263
+option2: cats.syntax.CartesianBuilder[Option]#CartesianBuilder2[Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder2@51f4d463
 
 scala> val option3 = option2 |@| Option.empty[Int]
-option3: cats.syntax.CartesianBuilder[Option]#CartesianBuilder3[Int,Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder3@44b3ace5
+option3: cats.syntax.CartesianBuilder[Option]#CartesianBuilder3[Int,Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder3@20ab71eb
 
 scala> option2 map addArity2
 res22: Option[Int] = Some(3)

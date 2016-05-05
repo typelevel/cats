@@ -2,7 +2,7 @@
 layout: default
 title:  "Validated"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/Validated.scala"
+source: "core/src/main/scala/cats/data/Validated.scala"
 scaladoc: "#cats.data.Validated"
 ---
 # Validated
@@ -204,9 +204,6 @@ implicit def validatedApplicative[E : Semigroup]: Applicative[Validated[E, ?]] =
       }
 
     def pure[A](x: A): Validated[E, A] = Validated.valid(x)
-    def map[A, B](fa: Validated[E, A])(f: A => B): Validated[E, B] = fa.map(f)
-    def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
-      ap(fa.map(a => (b: B) => (a, b)))(fb)
   }
 ```
 

@@ -2,7 +2,7 @@
 layout: default
 title:  "Functor"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Functor.scala"
+source: "core/src/main/scala/cats/Functor.scala"
 scaladoc: "#cats.Functor"
 ---
 # Functor
@@ -130,19 +130,19 @@ create a new functor `F[G[_]]` by composing them:
 
 ```scala
 scala> val listOpt = Functor[List] compose Functor[Option]
-listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@73069aee
+listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@4d515c11
 
 scala> listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
 res10: List[Option[Int]] = List(Some(2), None, Some(4))
 
 scala> val optList = Functor[Option] compose Functor[List]
-optList: cats.Functor[[X]Option[List[X]]] = cats.Functor$$anon$1@41053dee
+optList: cats.Functor[[X]Option[List[X]]] = cats.Functor$$anon$1@3db0f5d2
 
 scala> optList.map(Some(List(1, 2, 3)))(_ + 1)
 res11: Option[List[Int]] = Some(List(2, 3, 4))
 
 scala> val listOptList = listOpt compose Functor[List]
-listOptList: cats.Functor[[X]List[Option[List[X]]]] = cats.Functor$$anon$1@6de8a9cf
+listOptList: cats.Functor[[X]List[Option[List[X]]]] = cats.Functor$$anon$1@3a8f557c
 
 scala> listOptList.map(List(Some(List(1,2)), None, Some(List(3,4))))(_ + 1)
 res12: List[Option[List[Int]]] = List(Some(List(2, 3)), None, Some(List(4, 5)))

@@ -2,7 +2,7 @@
 layout: default
 title:  "Id"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/package.scala"
+source: "core/src/main/scala/cats/package.scala"
 scaladoc: "#cats.Id$"
 ---
 # Id

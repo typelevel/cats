@@ -2,7 +2,7 @@
 layout: default
 title:  "OptionT"
 section: "data"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/data/OptionT.scala"
+source: "core/src/main/scala/cats/data/OptionT.scala"
 scaladoc: "#cats.data.OptionT"
 ---
 # OptionT
@@ -71,6 +71,23 @@ val ot: OptionT[Future, String] = for {
 val result: Future[Option[String]] = ot.value // Future(Some("Hello Jane Doe"))
 
 ```
+
+## From `A` to `OptionT[F,A]`
+
+If you have only an `A` and you wish to *lift* it into an `OptionT[F,A]` assuming you have an [`Applicative`]({{ site.baseurl }}/tut/applicative.html) instance for `F` you can use `some` which is an alias for `pure`. There also exists a `none` method which can be used to create an `OptionT[F,A]`, where the `Option` wrapped `A` type is actually a `None`:
+
+```scala
+
+import cats.std.future._
+
+val greet: OptionT[Future,String] = OptionT.pure("Hola!")
+
+val greetAlt: OptionT[Future,String] = OptionT.some("Hi!")
+
+val failedGreet: OptionT[Future,String] = OptionT.none
+
+```
+
 
 ## Beyond map
 

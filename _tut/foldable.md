@@ -2,7 +2,7 @@
 layout: default
 title:  "Foldable"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/Foldable.scala"
+source: "core/src/main/scala/cats/Foldable.scala"
 scaladoc: "#cats.Foldable"
 ---
 # Foldable
@@ -21,7 +21,7 @@ used by the associated `Foldable[_]` instance.
  - `foldRight(fa, b)(f)` lazily folds `fa` from right-to-left.
  
 These form the basis for many other operations, see also: 
-[A tutorial on the universality and expressiveness of fold](https://www.cs.nott.ac.uk/~gmh/fold.pdf) 
+[A tutorial on the universality and expressiveness of fold](http://www.cs.nott.ac.uk/~gmh/fold.pdf)
 
 First some standard imports.
 
@@ -100,7 +100,7 @@ scala> Foldable[List].sequence_(List(Option(1), None))
 res20: Option[Unit] = None
 
 scala> val prints: Eval[Unit] = List(Eval.always(println(1)), Eval.always(println(2))).sequence_
-prints: cats.Eval[Unit] = cats.Eval$$anon$5@558c22d3
+prints: cats.Eval[Unit] = cats.Eval$$anon$5@5a5c5bde
 
 scala> prints.value
 1
@@ -113,7 +113,7 @@ scala> Foldable[List].dropWhile_(List[Int](1,2,4,5,6,7))(_ % 2 == 0)
 res23: List[Int] = List(1, 2, 4, 5, 6, 7)
 
 scala> val FoldableListOption = Foldable[List].compose[Option]
-FoldableListOption: cats.Foldable[[α]List[Option[α]]] = cats.Foldable$$anon$1@15745ded
+FoldableListOption: cats.Foldable[[α]List[Option[α]]] = cats.Foldable$$anon$1@23f22521
 
 scala> FoldableListOption.fold(List(Option(1), Option(2), Option(3), Option(4)))
 res24: Int = 10
