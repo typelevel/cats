@@ -248,11 +248,24 @@ class WriterTTests extends CatsSuite {
   }
 
   {
-     //F[(L, V)] has a monoid
-    implicit val FLV: Monoid[ListWrapper[(ListWrapper[Int], ListWrapper[Int])]] = ListWrapper.monoid[(ListWrapper[Int], ListWrapper[Int])]
+     // F[(L, V)] has a monoid
+    implicit val FLV: Monoid[ListWrapper[(Int, Int)]] = ListWrapper.monoid[(Int, Int)]
 
-    Monoid[WriterT[ListWrapper, ListWrapper[Int], ListWrapper[Int]]]
-    Semigroup[WriterT[ListWrapper, ListWrapper[Int], ListWrapper[Int]]]
-    checkAll("WriterT[ListWrapper, ListWrapper[Int], ListWrapper[Int]]", kernel.laws.GroupLaws[WriterT[ListWrapper, ListWrapper[Int], ListWrapper[Int]]].monoid)
+    Monoid[WriterT[ListWrapper, Int, Int]]
+    Semigroup[WriterT[ListWrapper, Int, Int]]
+    checkAll("WriterT[ListWrapper, Int, Int]", kernel.laws.GroupLaws[WriterT[ListWrapper, Int, Int]].monoid)
+
+    Monoid[WriterT[Id, Int, Int]]
+    Semigroup[WriterT[Id, Int, Int]]
+  }
+
+  {
+    // F[(L, V)] has a semigroup
+    implicit val FLV: Semigroup[ListWrapper[(Int, Int)]] = ListWrapper.semigroup[(Int, Int)]
+
+    Semigroup[WriterT[ListWrapper, Int, Int]]
+    checkAll("WriterT[ListWrapper, Int, Int]", kernel.laws.GroupLaws[WriterT[ListWrapper, Int, Int]].semigroup)
+
+    Semigroup[WriterT[Id, Int, Int]]
   }
 }
