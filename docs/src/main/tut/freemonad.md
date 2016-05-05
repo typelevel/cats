@@ -2,7 +2,7 @@
 layout: default
 title:  "FreeMonads"
 section: "data"
-source: "core/src/main/scala/cats/free/Free.scala"
+source: "free/src/main/scala/cats/free/Free.scala"
 scaladoc: "#cats.free.Free"
 ---
 
@@ -24,6 +24,9 @@ In particular, *free monads* provide a practical way to:
 > (In cats, the type representing a *free monad* is abbreviated as `Free[_]`.)
 
 ## Using Free Monads
+
+If you'd like to use cats' free monad, you'll need to add a library dependency
+for the `cats-free` module.
 
 A good way to get a sense for how *free monads* work is to see them in
 action. The next section uses `Free[_]` to create an embedded DSL

@@ -30,6 +30,7 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-macros`: Macros used by Cats syntax (*required*).
  * `cats-core`: Core type classes and functionality (*required*).
  * `cats-laws`: Laws for testing type class instances.
+ * `cats-free`: Free structures such as the free monad, and supporting type classes.
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
@@ -86,6 +87,7 @@ In an attempt to be more modular, Cats is broken up into a number of sub-project
 * *core* - contains type class definitions (e.g. Functor, Applicative, Monad), essential datatypes, and
   type class instances for those datatypes and standard library types
 * *laws* - laws for the type classes, used to validate type class instances
+ * *cats-free* - free structures such as the free monad, and supporting type classes.
 * *tests* - tests that check type class instances with laws from *laws*
 * *docs* - The source for this website
 
