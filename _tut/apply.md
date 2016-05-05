@@ -57,7 +57,7 @@ And like functors, `Apply` instances also compose:
 
 ```scala
 scala> val listOpt = Apply[List] compose Apply[Option]
-listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@669537d8
+listOpt: cats.Apply[[X]List[Option[X]]] = cats.Apply$$anon$1@3364b126
 
 scala> val plusOne = (x:Int) => x + 1
 plusOne: Int => Int = <function1>
@@ -173,10 +173,10 @@ All instances created by `|@|` have `map`, `ap`, and `tupled` methods of the app
 
 ```scala
 scala> val option2 = Option(1) |@| Option(2)
-option2: cats.syntax.CartesianBuilder[Option]#CartesianBuilder2[Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder2@51f4d463
+option2: cats.syntax.CartesianBuilder[Option]#CartesianBuilder2[Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder2@44afc0cd
 
 scala> val option3 = option2 |@| Option.empty[Int]
-option3: cats.syntax.CartesianBuilder[Option]#CartesianBuilder3[Int,Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder3@20ab71eb
+option3: cats.syntax.CartesianBuilder[Option]#CartesianBuilder3[Int,Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder3@51ef7762
 
 scala> option2 map addArity2
 res22: Option[Int] = Some(3)

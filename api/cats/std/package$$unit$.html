@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="UnitInstances.html" class="extype" name="cats.std.UnitInstances">UnitInstances</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="UnitInstances.html" class="extype" name="cats.std.UnitInstances">UnitInstances</a>, <span class="extype" name="cats.kernel.std.UnitInstances">kernel.std.UnitInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.unit"><span>unit</span></li><li class="in" name="cats.std.UnitInstances"><span>UnitInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.unit"><span>unit</span></li><li class="in" name="cats.std.UnitInstances"><span>UnitInstances</span></li><li class="in" name="cats.kernel.std.UnitInstances"><span>UnitInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -378,23 +378,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.std.UnitInstances#unitAlgebra" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="unitAlgebra:algebra.CommutativeGroup[Unit]withcats.Order[Unit]"></a>
-      <a id="unitAlgebra:CommutativeGroup[Unit]withOrder[Unit]"></a>
+    </li><li name="cats.kernel.std.UnitInstances#unitAlgebra" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unitAlgebra:cats.kernel.BoundedSemilattice[Unit]withcats.kernel.CommutativeGroup[Unit]"></a>
+      <a id="unitAlgebra:BoundedSemilattice[Unit]withCommutativeGroup[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">unitAlgebra</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.CommutativeGroup" class="extype" target="_top">CommutativeGroup</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>] with <a href="../package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">unitAlgebra</span><span class="result">: <span class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>] with <span class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$unit$@unitAlgebra:algebra.CommutativeGroup[Unit]withcats.Order[Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$unit$@unitAlgebra:cats.kernel.BoundedSemilattice[Unit]withcats.kernel.CommutativeGroup[Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="UnitInstances.html" class="extype" name="cats.std.UnitInstances">UnitInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>UnitInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.UnitInstances#unitOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unitOrder:cats.kernel.Order[Unit]"></a>
+      <a id="unitOrder:kernel.Order[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unitOrder</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.package$$unit$@unitOrder:cats.kernel.Order[Unit]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>UnitInstances</dd></dl></div>
     </li><li name="cats.std.UnitInstances#unitShow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unitShow:cats.Show[Unit]"></a>
       <a id="unitShow:Show[Unit]"></a>
@@ -492,6 +509,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.std.UnitInstances">
               <h3>Inherited from <a href="UnitInstances.html" class="extype" name="cats.std.UnitInstances">UnitInstances</a></h3>
+            </div><div class="parent" name="cats.kernel.std.UnitInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.UnitInstances">kernel.std.UnitInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

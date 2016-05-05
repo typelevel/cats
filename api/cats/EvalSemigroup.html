@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">EvalSemigroup</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalSemigroup.A">A</span>]]</span>
+        <span class="name">EvalSemigroup</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalSemigroup.A">A</span>]]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Eval.scala" target="_blank">Eval.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="https://non.github.io/algebra/api/index.html#algebra.Semigroup" class="extype" target="_top">algebra.Semigroup</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalSemigroup.A">A</span>]], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</span>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalSemigroup.A">A</span>]], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="EvalGroup.html" class="extype" name="cats.EvalGroup">EvalGroup</a>, <a href="EvalMonoid.html" class="extype" name="cats.EvalMonoid">EvalMonoid</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.EvalSemigroup"><span>EvalSemigroup</span></li><li class="in" name="algebra.Semigroup"><span>Semigroup</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.EvalSemigroup"><span>EvalSemigroup</span></li><li class="in" name="cats.kernel.Semigroup"><span>Semigroup</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -104,7 +104,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">algebra</span><span class="result">: <a href="package.html#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.EvalSemigroup.A">A</span>]</span>
+        <span class="name">algebra</span><span class="result">: <a href="package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.EvalSemigroup.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.EvalSemigroup@algebra:cats.Semigroup[A]" title="Permalink" target="_top">
@@ -225,7 +225,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.EvalSemigroup">EvalSemigroup</a> → Semigroup</dd></dl></div>
-    </li><li name="algebra.Semigroup#combineAllOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="cats.kernel.Semigroup#combineAllOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="combineAllOption(as:TraversableOnce[A]):Option[A]"></a>
       <a id="combineAllOption(TraversableOnce[Eval[A]]):Option[Eval[A]]"></a>
       <h4 class="signature">
@@ -242,7 +242,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Semigroup</dd></dl></div>
-    </li><li name="algebra.Semigroup#combineN" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="cats.kernel.Semigroup#combineN" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="combineN(a:A,n:Int):A"></a>
       <a id="combineN(Eval[A],Int):Eval[A]"></a>
       <h4 class="signature">
@@ -418,7 +418,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="algebra.Semigroup#repeatedCombineN" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="cats.kernel.Semigroup#repeatedCombineN" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="repeatedCombineN(a:A,n:Int):A"></a>
       <a id="repeatedCombineN(Eval[A],Int):Eval[A]"></a>
       <h4 class="signature">
@@ -547,8 +547,8 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="algebra.Semigroup">
-              <h3>Inherited from <a href="https://non.github.io/algebra/api/index.html#algebra.Semigroup" class="extype" target="_top">algebra.Semigroup</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalSemigroup.A">A</span>]]</h3>
+        <div class="parent" name="cats.kernel.Semigroup">
+              <h3>Inherited from <span class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</span>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalSemigroup.A">A</span>]]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">

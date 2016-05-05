@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">SetInstances</span><span class="result"> extends <a href="https://non.github.io/algebra/api/index.html#algebra.std.SetInstances" class="extype" target="_top">algebra.std.SetInstances</a></span>
+        <span class="name">SetInstances</span><span class="result"> extends <span class="extype" name="cats.kernel.std.SetInstances">kernel.std.SetInstances</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/set.scala" target="_blank">set.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="https://non.github.io/algebra/api/index.html#algebra.std.SetInstances" class="extype" target="_top">algebra.std.SetInstances</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.kernel.std.SetInstances">kernel.std.SetInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllInstances.html" class="extype" name="cats.std.AllInstances">AllInstances</a>, <a href="package$$all$.html" class="extype" name="cats.std.all">all</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a>, <a href="package$$set$.html" class="extype" name="cats.std.set">set</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.SetInstances"><span>SetInstances</span></li><li class="in" name="algebra.std.SetInstances"><span>SetInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.SetInstances"><span>SetInstances</span></li><li class="in" name="cats.kernel.std.SetInstances"><span>SetInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -347,23 +347,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="algebra.std.SetInstances#setBoolRng" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setBoolRng[A]:algebra.std.SetBoolRng[A]"></a>
-      <a id="setBoolRng[A]:SetBoolRng[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setBoolRng</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <span class="extype" name="algebra.std.SetBoolRng">SetBoolRng</span>[<span class="extype" name="algebra.std.SetInstances.setBoolRng.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.SetInstances@setBoolRng[A]:algebra.std.SetBoolRng[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SetInstances</dd></dl></div>
     </li><li name="cats.std.SetInstances#setInstance" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="setInstance:cats.Foldable[Set]withcats.MonoidK[Set]"></a>
       <a id="setInstance:Foldable[Set]withMonoidK[Set]"></a>
@@ -381,70 +364,36 @@
       </a>
     </span>
       
-    </li><li name="algebra.std.SetInstances#setLattice" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setLattice[A]:algebra.lattice.GenBool[Set[A]]"></a>
-      <a id="setLattice[A]:GenBool[Set[A]]"></a>
+    </li><li name="cats.kernel.std.SetInstances#setPartialOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setPartialOrder[A]:cats.kernel.PartialOrder[Set[A]]"></a>
+      <a id="setPartialOrder[A]:kernel.PartialOrder[Set[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setLattice</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.lattice.GenBool" class="extype" target="_top">GenBool</a>[<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="algebra.std.SetInstances.setLattice.A">A</span>]]</span>
+        <span class="name">setPartialOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <span class="extype" name="cats.kernel.PartialOrder">kernel.PartialOrder</span>[<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="cats.kernel.std.SetInstances.setPartialOrder.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.SetInstances@setLattice[A]:algebra.lattice.GenBool[Set[A]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.SetInstances@setPartialOrder[A]:cats.kernel.PartialOrder[Set[A]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SetInstances</dd></dl></div>
-    </li><li name="cats.std.SetInstances#setMonoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="setMonoid[A]:cats.Monoid[Set[A]]"></a>
-      <a id="setMonoid[A]:Monoid[Set[A]]"></a>
+    </li><li name="cats.kernel.std.SetInstances#setSemilattice" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setSemilattice[A]:cats.kernel.BoundedSemilattice[Set[A]]"></a>
+      <a id="setSemilattice[A]:BoundedSemilattice[Set[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setMonoid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../package.html#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="cats.std.SetInstances.setMonoid.A">A</span>]]</span>
+        <span class="name">setSemilattice</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <span class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</span>[<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="cats.kernel.std.SetInstances.setSemilattice.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.SetInstances@setMonoid[A]:cats.Monoid[Set[A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="algebra.std.SetInstances#setPartialOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setPartialOrder[A]:algebra.PartialOrder[Set[A]]"></a>
-      <a id="setPartialOrder[A]:algebra.PartialOrder[Set[A]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setPartialOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.PartialOrder" class="extype" target="_top">algebra.PartialOrder</a>[<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="algebra.std.SetInstances.setPartialOrder.A">A</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.SetInstances@setPartialOrder[A]:algebra.PartialOrder[Set[A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SetInstances</dd></dl></div>
-    </li><li name="algebra.std.SetInstances#setSemiring" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setSemiring[A]:algebra.std.SetSemiring[A]"></a>
-      <a id="setSemiring[A]:SetSemiring[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setSemiring</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.std.SetSemiring" class="extype" target="_top">SetSemiring</a>[<span class="extype" name="algebra.std.SetInstances.setSemiring.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.SetInstances@setSemiring[A]:algebra.std.SetSemiring[A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.SetInstances@setSemilattice[A]:cats.kernel.BoundedSemilattice[Set[A]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -578,8 +527,8 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="algebra.std.SetInstances">
-              <h3>Inherited from <a href="https://non.github.io/algebra/api/index.html#algebra.std.SetInstances" class="extype" target="_top">algebra.std.SetInstances</a></h3>
+        <div class="parent" name="cats.kernel.std.SetInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.SetInstances">kernel.std.SetInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

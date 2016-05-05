@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="StringInstances.html" class="extype" name="cats.std.StringInstances">StringInstances</a>, <a href="https://non.github.io/algebra/api/index.html#algebra.std.StringInstances" class="extype" target="_top">algebra.std.StringInstances</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="StringInstances.html" class="extype" name="cats.std.StringInstances">StringInstances</a>, <span class="extype" name="cats.kernel.std.StringInstances">kernel.std.StringInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.string"><span>string</span></li><li class="in" name="cats.std.StringInstances"><span>StringInstances</span></li><li class="in" name="algebra.std.StringInstances"><span>StringInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.string"><span>string</span></li><li class="in" name="cats.std.StringInstances"><span>StringInstances</span></li><li class="in" name="cats.kernel.std.StringInstances"><span>StringInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -344,36 +344,36 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="algebra.std.StringInstances#stringMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="stringMonoid:algebra.std.StringMonoid"></a>
-      <a id="stringMonoid:StringMonoid"></a>
+    </li><li name="cats.kernel.std.StringInstances#stringMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="stringMonoid:cats.kernel.Monoid[String]"></a>
+      <a id="stringMonoid:kernel.Monoid[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">stringMonoid</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.std.StringMonoid" class="extype" target="_top">StringMonoid</a></span>
+        <span class="name">stringMonoid</span><span class="result">: <span class="extype" name="cats.kernel.Monoid">kernel.Monoid</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$string$@stringMonoid:algebra.std.StringMonoid" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$string$@stringMonoid:cats.kernel.Monoid[String]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringInstances</dd></dl></div>
-    </li><li name="algebra.std.StringInstances#stringOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="stringOrder:algebra.Order[String]"></a>
-      <a id="stringOrder:algebra.Order[String]"></a>
+    </li><li name="cats.kernel.std.StringInstances#stringOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="stringOrder:cats.kernel.Order[String]"></a>
+      <a id="stringOrder:kernel.Order[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">stringOrder</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.Order" class="extype" target="_top">algebra.Order</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">stringOrder</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$string$@stringOrder:algebra.Order[String]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$string$@stringOrder:cats.kernel.Order[String]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -509,8 +509,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.std.StringInstances">
               <h3>Inherited from <a href="StringInstances.html" class="extype" name="cats.std.StringInstances">StringInstances</a></h3>
-            </div><div class="parent" name="algebra.std.StringInstances">
-              <h3>Inherited from <a href="https://non.github.io/algebra/api/index.html#algebra.std.StringInstances" class="extype" target="_top">algebra.std.StringInstances</a></h3>
+            </div><div class="parent" name="cats.kernel.std.StringInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.StringInstances">kernel.std.StringInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

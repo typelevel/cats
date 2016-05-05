@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">BooleanInstances</span><span class="result"> extends <a href="https://non.github.io/algebra/api/index.html#algebra.std.BooleanInstances" class="extype" target="_top">algebra.std.BooleanInstances</a></span>
+        <span class="name">BooleanInstances</span><span class="result"> extends <span class="extype" name="cats.kernel.std.BooleanInstances">kernel.std.BooleanInstances</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/anyval.scala" target="_blank">anyval.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="https://non.github.io/algebra/api/index.html#algebra.std.BooleanInstances" class="extype" target="_top">algebra.std.BooleanInstances</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.kernel.std.BooleanInstances">kernel.std.BooleanInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllInstances.html" class="extype" name="cats.std.AllInstances">AllInstances</a>, <a href="AnyValInstances.html" class="extype" name="cats.std.AnyValInstances">AnyValInstances</a>, <a href="package$$all$.html" class="extype" name="cats.std.all">all</a>, <a href="package$$boolean$.html" class="extype" name="cats.std.boolean">boolean</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.BooleanInstances"><span>BooleanInstances</span></li><li class="in" name="algebra.std.BooleanInstances"><span>BooleanInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.BooleanInstances"><span>BooleanInstances</span></li><li class="in" name="cats.kernel.std.BooleanInstances"><span>BooleanInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -165,36 +165,19 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="algebra.std.BooleanInstances#booleanAlgebra" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="booleanAlgebra:algebra.std.BooleanAlgebra"></a>
-      <a id="booleanAlgebra:BooleanAlgebra"></a>
+    </li><li name="cats.kernel.std.BooleanInstances#booleanOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="booleanOrder:cats.kernel.Order[Boolean]"></a>
+      <a id="booleanOrder:kernel.Order[Boolean]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">booleanAlgebra</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.std.BooleanAlgebra" class="extype" target="_top">BooleanAlgebra</a></span>
+        <span class="name">booleanOrder</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.BooleanInstances@booleanAlgebra:algebra.std.BooleanAlgebra" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>BooleanInstances</dd></dl></div>
-    </li><li name="algebra.std.BooleanInstances#booleanRing" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="booleanRing:algebra.ring.BoolRing[Boolean]"></a>
-      <a id="booleanRing:BoolRing[Boolean]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">booleanRing</span><span class="result">: <span class="extype" name="algebra.ring.BoolRing">BoolRing</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.BooleanInstances@booleanRing:algebra.ring.BoolRing[Boolean]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.BooleanInstances@booleanOrder:cats.kernel.Order[Boolean]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -510,8 +493,8 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="algebra.std.BooleanInstances">
-              <h3>Inherited from <a href="https://non.github.io/algebra/api/index.html#algebra.std.BooleanInstances" class="extype" target="_top">algebra.std.BooleanInstances</a></h3>
+        <div class="parent" name="cats.kernel.std.BooleanInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.BooleanInstances">kernel.std.BooleanInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

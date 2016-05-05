@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">VectorInstances</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">VectorInstances</span><span class="result"> extends <span class="extype" name="cats.kernel.std.VectorInstances">kernel.std.VectorInstances</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/vector.scala" target="_blank">vector.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.kernel.std.VectorInstances">kernel.std.VectorInstances</span>, <span class="extype" name="cats.kernel.std.VectorInstances1">VectorInstances1</span>, <span class="extype" name="cats.kernel.std.VectorInstances2">VectorInstances2</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllInstances.html" class="extype" name="cats.std.AllInstances">AllInstances</a>, <a href="package$$all$.html" class="extype" name="cats.std.all">all</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a>, <a href="package$$vector$.html" class="extype" name="cats.std.vector">vector</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.VectorInstances"><span>VectorInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.VectorInstances"><span>VectorInstances</span></li><li class="in" name="cats.kernel.std.VectorInstances"><span>VectorInstances</span></li><li class="in" name="cats.kernel.std.VectorInstances1"><span>VectorInstances1</span></li><li class="in" name="cats.kernel.std.VectorInstances2"><span>VectorInstances2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -205,23 +205,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.std.VectorInstances#eqVector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="eqVector[A](implicitev:cats.Eq[A]):cats.Eq[Vector[A]]"></a>
-      <a id="eqVector[A](Eq[A]):Eq[Vector[A]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">eqVector</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.std.VectorInstances.eqVector.A">A</span>]</span>)</span><span class="result">: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="cats.std.VectorInstances.eqVector.A">A</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.VectorInstances@eqVector[A](implicitev:cats.Eq[A]):cats.Eq[Vector[A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
       <a id="equals(Any):Boolean"></a>
@@ -398,6 +381,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.kernel.std.VectorInstances2#vectorEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="vectorEq[A](implicitevidence$3:cats.kernel.Eq[A]):cats.kernel.Eq[Vector[A]]"></a>
+      <a id="vectorEq[A](kernel.Eq[A]):kernel.Eq[Vector[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">vectorEq</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="cats.kernel.Eq">kernel.Eq</span>[<span class="extype" name="cats.kernel.std.VectorInstances2.vectorEq.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.kernel.Eq">kernel.Eq</span>[<span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="cats.kernel.std.VectorInstances2.vectorEq.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.VectorInstances@vectorEq[A](implicitevidence$3:cats.kernel.Eq[A]):cats.kernel.Eq[Vector[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>VectorInstances2</dd></dl></div>
     </li><li name="cats.std.VectorInstances#vectorInstance" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="vectorInstance:cats.Traverse[Vector]withcats.MonadCombine[Vector]withcats.CoflatMap[Vector]"></a>
       <a id="vectorInstance:Traverse[Vector]withMonadCombine[Vector]withCoflatMap[Vector]"></a>
@@ -415,6 +415,57 @@
       </a>
     </span>
       
+    </li><li name="cats.kernel.std.VectorInstances#vectorMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="vectorMonoid[A]:cats.kernel.Monoid[Vector[A]]"></a>
+      <a id="vectorMonoid[A]:kernel.Monoid[Vector[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">vectorMonoid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <span class="extype" name="cats.kernel.Monoid">kernel.Monoid</span>[<span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="cats.kernel.std.VectorInstances.vectorMonoid.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.VectorInstances@vectorMonoid[A]:cats.kernel.Monoid[Vector[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>VectorInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.VectorInstances#vectorOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="vectorOrder[A](implicitevidence$1:cats.kernel.Order[A]):cats.kernel.Order[Vector[A]]"></a>
+      <a id="vectorOrder[A](kernel.Order[A]):kernel.Order[Vector[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">vectorOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<span class="extype" name="cats.kernel.std.VectorInstances.vectorOrder.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="cats.kernel.std.VectorInstances.vectorOrder.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.VectorInstances@vectorOrder[A](implicitevidence$1:cats.kernel.Order[A]):cats.kernel.Order[Vector[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>VectorInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.VectorInstances1#vectorPartialOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="vectorPartialOrder[A](implicitevidence$2:cats.kernel.PartialOrder[A]):cats.kernel.PartialOrder[Vector[A]]"></a>
+      <a id="vectorPartialOrder[A](kernel.PartialOrder[A]):kernel.PartialOrder[Vector[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">vectorPartialOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="cats.kernel.PartialOrder">kernel.PartialOrder</span>[<span class="extype" name="cats.kernel.std.VectorInstances1.vectorPartialOrder.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.kernel.PartialOrder">kernel.PartialOrder</span>[<span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="cats.kernel.std.VectorInstances1.vectorPartialOrder.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.VectorInstances@vectorPartialOrder[A](implicitevidence$2:cats.kernel.PartialOrder[A]):cats.kernel.PartialOrder[Vector[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>VectorInstances1</dd></dl></div>
     </li><li name="cats.std.VectorInstances#vectorShow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="vectorShow[A](implicitevidence$1:cats.Show[A]):cats.Show[Vector[A]]"></a>
       <a id="vectorShow[A](Show[A]):Show[Vector[A]]"></a>
@@ -510,7 +561,13 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="cats.kernel.std.VectorInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.VectorInstances">kernel.std.VectorInstances</span></h3>
+            </div><div class="parent" name="cats.kernel.std.VectorInstances1">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.VectorInstances1">VectorInstances1</span></h3>
+            </div><div class="parent" name="cats.kernel.std.VectorInstances2">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.VectorInstances2">VectorInstances2</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

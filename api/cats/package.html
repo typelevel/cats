@@ -501,7 +501,7 @@ values), this class is able to reduce <code>F[G[A]]</code> values.
     </span>
       
     </li><li name="cats.Eq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Eq[A]=algebra.Eq[A]"></a>
+      <a id="Eq[A]=cats.kernel.Eq[A]"></a>
       <a id="Eq[A]:Eq[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -509,10 +509,10 @@ values), this class is able to reduce <code>F[G[A]]</code> values.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Eq</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="https://non.github.io/algebra/api/index.html#algebra.Eq" class="extype" target="_top">algebra.Eq</a>[<span class="extype" name="cats.Eq.A">A</span>]</span>
+        <span class="name">Eq</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.Eq">cats.kernel.Eq</span>[<span class="extype" name="cats.Eq.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Eq[A]=algebra.Eq[A]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Eq[A]=cats.kernel.Eq[A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -557,7 +557,7 @@ overflows.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="EvalGroup.html"><span class="name">EvalGroup</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="#Group[A]=algebra.Group[A]" class="extmbr" name="cats.Group">Group</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]] with <a href="EvalMonoid.html" class="extype" name="cats.EvalMonoid">EvalMonoid</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]</span>
+        <a href="EvalGroup.html"><span class="name">EvalGroup</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="#Group[A]=cats.kernel.Group[A]" class="extmbr" name="cats.Group">Group</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]] with <a href="EvalMonoid.html" class="extype" name="cats.EvalMonoid">EvalMonoid</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@EvalGroup[A]extendscats.Group[cats.Eval[A]]withEvalMonoid[A]" title="Permalink" target="_top">
@@ -574,7 +574,7 @@ overflows.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="EvalMonoid.html"><span class="name">EvalMonoid</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalMonoid.A">A</span>]] with <a href="EvalSemigroup.html" class="extype" name="cats.EvalSemigroup">EvalSemigroup</a>[<span class="extype" name="cats.EvalMonoid.A">A</span>]</span>
+        <a href="EvalMonoid.html"><span class="name">EvalMonoid</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalMonoid.A">A</span>]] with <a href="EvalSemigroup.html" class="extype" name="cats.EvalSemigroup">EvalSemigroup</a>[<span class="extype" name="cats.EvalMonoid.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@EvalMonoid[A]extendscats.Monoid[cats.Eval[A]]withEvalSemigroup[A]" title="Permalink" target="_top">
@@ -591,7 +591,7 @@ overflows.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="EvalSemigroup.html"><span class="name">EvalSemigroup</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="#Semigroup[A]=algebra.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalSemigroup.A">A</span>]]</span>
+        <a href="EvalSemigroup.html"><span class="name">EvalSemigroup</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalSemigroup.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@EvalSemigroup[A]extendscats.Semigroup[cats.Eval[A]]" title="Permalink" target="_top">
@@ -668,7 +668,7 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
       <p class="shortcomment cmt">Functor.</p><div class="fullcomment"><div class="comment cmt"><p>Functor.</p><p>The name is short for &quot;covariant functor&quot;.</p><p>Must obey the laws defined in cats.laws.FunctorLaws.
 </p></div></div>
     </li><li name="cats.Group" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Group[A]=algebra.Group[A]"></a>
+      <a id="Group[A]=cats.kernel.Group[A]"></a>
       <a id="Group[A]:Group[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -676,10 +676,10 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Group</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="https://non.github.io/algebra/api/index.html#algebra.Group" class="extype" target="_top">algebra.Group</a>[<span class="extype" name="cats.Group.A">A</span>]</span>
+        <span class="name">Group</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.Group">cats.kernel.Group</span>[<span class="extype" name="cats.Group.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Group[A]=algebra.Group[A]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Group[A]=cats.kernel.Group[A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -872,7 +872,7 @@ dealing with large monad transformer stacks. For instance:</p><pre><span class="
     </span>
       <p class="shortcomment cmt">A monad that support monoidal accumulation (e.g.</p><div class="fullcomment"><div class="comment cmt"><p>A monad that support monoidal accumulation (e.g. logging List[String])</p></div></div>
     </li><li name="cats.Monoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Monoid[A]=algebra.Monoid[A]"></a>
+      <a id="Monoid[A]=cats.kernel.Monoid[A]"></a>
       <a id="Monoid[A]:Monoid[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -880,10 +880,10 @@ dealing with large monad transformer stacks. For instance:</p><pre><span class="
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Monoid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="https://non.github.io/algebra/api/index.html#algebra.Monoid" class="extype" target="_top">algebra.Monoid</a>[<span class="extype" name="cats.Monoid.A">A</span>]</span>
+        <span class="name">Monoid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.Monoid">cats.kernel.Monoid</span>[<span class="extype" name="cats.Monoid.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Monoid[A]=algebra.Monoid[A]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Monoid[A]=cats.kernel.Monoid[A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -975,7 +975,7 @@ parameter is omitted.
 when the computation to produce an A value is pure and very fast.
 </p></div></div>
     </li><li name="cats.Order" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Order[A]=algebra.Order[A]"></a>
+      <a id="Order[A]=cats.kernel.Order[A]"></a>
       <a id="Order[A]:Order[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -983,16 +983,16 @@ when the computation to produce an A value is pure and very fast.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Order</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="https://non.github.io/algebra/api/index.html#algebra.Order" class="extype" target="_top">algebra.Order</a>[<span class="extype" name="cats.Order.A">A</span>]</span>
+        <span class="name">Order</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.Order">cats.kernel.Order</span>[<span class="extype" name="cats.Order.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Order[A]=algebra.Order[A]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Order[A]=cats.kernel.Order[A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="cats.PartialOrder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="PartialOrder[A]=algebra.PartialOrder[A]"></a>
+      <a id="PartialOrder[A]=cats.kernel.PartialOrder[A]"></a>
       <a id="PartialOrder[A]:PartialOrder[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1000,10 +1000,10 @@ when the computation to produce an A value is pure and very fast.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">PartialOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="https://non.github.io/algebra/api/index.html#algebra.PartialOrder" class="extype" target="_top">algebra.PartialOrder</a>[<span class="extype" name="cats.PartialOrder.A">A</span>]</span>
+        <span class="name">PartialOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.PartialOrder">cats.kernel.PartialOrder</span>[<span class="extype" name="cats.PartialOrder.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@PartialOrder[A]=algebra.PartialOrder[A]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@PartialOrder[A]=cats.kernel.PartialOrder[A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1030,7 +1030,7 @@ value.</p><p>In addition to the methods needed by <code>Foldable</code>, <code>R
 implemented in terms of two methods:</p><ul><li><code>reduceLeftTo(fa)(f)(g)</code> eagerly reduces with an additional mapping function</li><li><code>reduceRightTo(fa)(f)(g)</code> lazily reduces with an additional mapping function
 </li></ul></div></div>
     </li><li name="cats.Semigroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Semigroup[A]=algebra.Semigroup[A]"></a>
+      <a id="Semigroup[A]=cats.kernel.Semigroup[A]"></a>
       <a id="Semigroup[A]:Semigroup[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1038,10 +1038,10 @@ implemented in terms of two methods:</p><ul><li><code>reduceLeftTo(fa)(f)(g)</co
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Semigroup</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="https://non.github.io/algebra/api/index.html#algebra.Semigroup" class="extype" target="_top">algebra.Semigroup</a>[<span class="extype" name="cats.Semigroup.A">A</span>]</span>
+        <span class="name">Semigroup</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.Semigroup">cats.kernel.Semigroup</span>[<span class="extype" name="cats.Semigroup.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Semigroup[A]=algebra.Semigroup[A]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Semigroup[A]=cats.kernel.Semigroup[A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1128,7 +1128,7 @@ MonadTransformer
     </span>
       <p class="shortcomment cmt">Traverse, also known as Traversable.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse, also known as Traversable.</p><p>Traversal over a structure with an effect.</p><p>Traversing with the <a href="#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a> effect is equivalent to <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
 Traversing with the <a href="data/Const.html" class="extype" name="cats.data.Const">cats.data.Const</a> effect where the first type parameter has
-a <a href="#Monoid[A]=algebra.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a> instance is equivalent to <a href="Foldable.html" class="extype" name="cats.Foldable">cats.Foldable</a>#fold.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
+a <a href="#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a> instance is equivalent to <a href="Foldable.html" class="extype" name="cats.Foldable">cats.Foldable</a>#fold.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
 </p></div></div>
     </li><li name="cats.Trivial" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="TrivialextendsAnyRef"></a>
@@ -1427,18 +1427,18 @@ however the Scala compiler will not find them without some coercing.
     </span>
       
     </li><li name="cats#Eq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Eq:algebra.Eq.type"></a>
-      <a id="Eq:algebra.Eq.type"></a>
+      <a id="Eq:cats.kernel.Eq.type"></a>
+      <a id="Eq:cats.kernel.Eq.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Eq</span><span class="result">: <span class="extype" name="algebra.Eq">algebra.Eq</span>.type</span>
+        <span class="name">Eq</span><span class="result">: <span class="extype" name="cats.kernel.Eq">cats.kernel.Eq</span>.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Eq:algebra.Eq.type" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Eq:cats.kernel.Eq.type" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1512,18 +1512,18 @@ however the Scala compiler will not find them without some coercing.
     </span>
       
     </li><li name="cats#Group" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Group:algebra.Group.type"></a>
-      <a id="Group:algebra.Group.type"></a>
+      <a id="Group:cats.kernel.Group.type"></a>
+      <a id="Group:cats.kernel.Group.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Group</span><span class="result">: <span class="extype" name="algebra.Group">algebra.Group</span>.type</span>
+        <span class="name">Group</span><span class="result">: <span class="extype" name="cats.kernel.Group">cats.kernel.Group</span>.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Group:algebra.Group.type" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Group:cats.kernel.Group.type" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1665,18 +1665,18 @@ however the Scala compiler will not find them without some coercing.
     </span>
       
     </li><li name="cats#Monoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Monoid:algebra.Monoid.type"></a>
-      <a id="Monoid:algebra.Monoid.type"></a>
+      <a id="Monoid:cats.kernel.Monoid.type"></a>
+      <a id="Monoid:cats.kernel.Monoid.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Monoid</span><span class="result">: <span class="extype" name="algebra.Monoid">algebra.Monoid</span>.type</span>
+        <span class="name">Monoid</span><span class="result">: <span class="extype" name="cats.kernel.Monoid">cats.kernel.Monoid</span>.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Monoid:algebra.Monoid.type" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Monoid:cats.kernel.Monoid.type" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1716,35 +1716,35 @@ however the Scala compiler will not find them without some coercing.
     </span>
       
     </li><li name="cats#Order" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Order:algebra.Order.type"></a>
-      <a id="Order:algebra.Order.type"></a>
+      <a id="Order:cats.kernel.Order.type"></a>
+      <a id="Order:cats.kernel.Order.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Order</span><span class="result">: <span class="extype" name="algebra.Order">algebra.Order</span>.type</span>
+        <span class="name">Order</span><span class="result">: <span class="extype" name="cats.kernel.Order">cats.kernel.Order</span>.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Order:algebra.Order.type" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Order:cats.kernel.Order.type" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="cats#PartialOrder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="PartialOrder:algebra.PartialOrder.type"></a>
-      <a id="PartialOrder:algebra.PartialOrder.type"></a>
+      <a id="PartialOrder:cats.kernel.PartialOrder.type"></a>
+      <a id="PartialOrder:cats.kernel.PartialOrder.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">PartialOrder</span><span class="result">: <span class="extype" name="algebra.PartialOrder">algebra.PartialOrder</span>.type</span>
+        <span class="name">PartialOrder</span><span class="result">: <span class="extype" name="cats.kernel.PartialOrder">cats.kernel.PartialOrder</span>.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@PartialOrder:algebra.PartialOrder.type" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@PartialOrder:cats.kernel.PartialOrder.type" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1767,18 +1767,18 @@ however the Scala compiler will not find them without some coercing.
     </span>
       
     </li><li name="cats#Semigroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Semigroup:algebra.Semigroup.type"></a>
-      <a id="Semigroup:algebra.Semigroup.type"></a>
+      <a id="Semigroup:cats.kernel.Semigroup.type"></a>
+      <a id="Semigroup:cats.kernel.Semigroup.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Semigroup</span><span class="result">: <span class="extype" name="algebra.Semigroup">algebra.Semigroup</span>.type</span>
+        <span class="name">Semigroup</span><span class="result">: <span class="extype" name="cats.kernel.Semigroup">cats.kernel.Semigroup</span>.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Semigroup:algebra.Semigroup.type" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Semigroup:cats.kernel.Semigroup.type" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

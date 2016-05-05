@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="ByteInstances.html" class="extype" name="cats.std.ByteInstances">ByteInstances</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ByteInstances.html" class="extype" name="cats.std.ByteInstances">ByteInstances</a>, <span class="extype" name="cats.kernel.std.ByteInstances">kernel.std.ByteInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.byte"><span>byte</span></li><li class="in" name="cats.std.ByteInstances"><span>ByteInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.byte"><span>byte</span></li><li class="in" name="cats.std.ByteInstances"><span>ByteInstances</span></li><li class="in" name="cats.kernel.std.ByteInstances"><span>ByteInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -162,23 +162,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.std.ByteInstances#byteAlgebra" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="byteAlgebra:algebra.CommutativeGroup[Byte]withcats.Order[Byte]"></a>
-      <a id="byteAlgebra:CommutativeGroup[Byte]withOrder[Byte]"></a>
+    </li><li name="cats.kernel.std.ByteInstances#byteGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="byteGroup:cats.kernel.CommutativeGroup[Byte]"></a>
+      <a id="byteGroup:CommutativeGroup[Byte]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">byteAlgebra</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.CommutativeGroup" class="extype" target="_top">CommutativeGroup</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Byte" class="extype" target="_top">Byte</a>] with <a href="../package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Byte" class="extype" target="_top">Byte</a>]</span>
+        <span class="name">byteGroup</span><span class="result">: <span class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Byte" class="extype" target="_top">Byte</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$byte$@byteAlgebra:algebra.CommutativeGroup[Byte]withcats.Order[Byte]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$byte$@byteGroup:cats.kernel.CommutativeGroup[Byte]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ByteInstances.html" class="extype" name="cats.std.ByteInstances">ByteInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ByteInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.ByteInstances#byteOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="byteOrder:cats.kernel.Order[Byte]"></a>
+      <a id="byteOrder:kernel.Order[Byte]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">byteOrder</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Byte" class="extype" target="_top">Byte</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.package$$byte$@byteOrder:cats.kernel.Order[Byte]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ByteInstances</dd></dl></div>
     </li><li name="cats.std.ByteInstances#byteShow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="byteShow:cats.Show[Byte]"></a>
       <a id="byteShow:Show[Byte]"></a>
@@ -492,6 +509,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.std.ByteInstances">
               <h3>Inherited from <a href="ByteInstances.html" class="extype" name="cats.std.ByteInstances">ByteInstances</a></h3>
+            </div><div class="parent" name="cats.kernel.std.ByteInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.ByteInstances">kernel.std.ByteInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

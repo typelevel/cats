@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="FloatInstances.html" class="extype" name="cats.std.FloatInstances">FloatInstances</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="FloatInstances.html" class="extype" name="cats.std.FloatInstances">FloatInstances</a>, <span class="extype" name="cats.kernel.std.FloatInstances">kernel.std.FloatInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.float"><span>float</span></li><li class="in" name="cats.std.FloatInstances"><span>FloatInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.float"><span>float</span></li><li class="in" name="cats.std.FloatInstances"><span>FloatInstances</span></li><li class="in" name="cats.kernel.std.FloatInstances"><span>FloatInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -242,23 +242,40 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.std.FloatInstances#floatAlgebra" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="floatAlgebra:algebra.CommutativeGroup[Float]withcats.Order[Float]"></a>
-      <a id="floatAlgebra:CommutativeGroup[Float]withOrder[Float]"></a>
+    </li><li name="cats.kernel.std.FloatInstances#floatGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="floatGroup:cats.kernel.CommutativeGroup[Float]"></a>
+      <a id="floatGroup:CommutativeGroup[Float]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">floatAlgebra</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.CommutativeGroup" class="extype" target="_top">CommutativeGroup</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Float" class="extype" target="_top">Float</a>] with <a href="../package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Float" class="extype" target="_top">Float</a>]</span>
+        <span class="name">floatGroup</span><span class="result">: <span class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Float" class="extype" target="_top">Float</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$float$@floatAlgebra:algebra.CommutativeGroup[Float]withcats.Order[Float]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$float$@floatGroup:cats.kernel.CommutativeGroup[Float]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FloatInstances.html" class="extype" name="cats.std.FloatInstances">FloatInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FloatInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.FloatInstances#floatOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="floatOrder:cats.kernel.Order[Float]"></a>
+      <a id="floatOrder:kernel.Order[Float]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">floatOrder</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Float" class="extype" target="_top">Float</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.package$$float$@floatOrder:cats.kernel.Order[Float]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FloatInstances</dd></dl></div>
     </li><li name="cats.std.FloatInstances#floatShow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="floatShow:cats.Show[Float]"></a>
       <a id="floatShow:Show[Float]"></a>
@@ -492,6 +509,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.std.FloatInstances">
               <h3>Inherited from <a href="FloatInstances.html" class="extype" name="cats.std.FloatInstances">FloatInstances</a></h3>
+            </div><div class="parent" name="cats.kernel.std.FloatInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.FloatInstances">kernel.std.FloatInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

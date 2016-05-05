@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="IntInstances.html" class="extype" name="cats.std.IntInstances">IntInstances</a>, <a href="https://non.github.io/algebra/api/index.html#algebra.std.IntInstances" class="extype" target="_top">algebra.std.IntInstances</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="IntInstances.html" class="extype" name="cats.std.IntInstances">IntInstances</a>, <span class="extype" name="cats.kernel.std.IntInstances">kernel.std.IntInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.int"><span>int</span></li><li class="in" name="cats.std.IntInstances"><span>IntInstances</span></li><li class="in" name="algebra.std.IntInstances"><span>IntInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.int"><span>int</span></li><li class="in" name="cats.std.IntInstances"><span>IntInstances</span></li><li class="in" name="cats.kernel.std.IntInstances"><span>IntInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -145,23 +145,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="algebra.std.IntInstances#IntMinMaxLattice" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="IntMinMaxLattice:algebra.lattice.BoundedDistributiveLattice[Int]"></a>
-      <a id="IntMinMaxLattice:BoundedDistributiveLattice[Int]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">IntMinMaxLattice</span><span class="result">: <span class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$int$@IntMinMaxLattice:algebra.lattice.BoundedDistributiveLattice[Int]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IntInstances</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -293,25 +276,8 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="algebra.std.IntInstances#intAlgebra" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="intAlgebra:algebra.std.IntAlgebra"></a>
-      <a id="intAlgebra:IntAlgebra"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">intAlgebra</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.std.IntAlgebra" class="extype" target="_top">IntAlgebra</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$int$@intAlgebra:algebra.std.IntAlgebra" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IntInstances</dd></dl></div>
-    </li><li name="cats.std.IntInstances#intGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="intGroup:algebra.CommutativeGroup[Int]"></a>
+    </li><li name="cats.kernel.std.IntInstances#intGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="intGroup:cats.kernel.CommutativeGroup[Int]"></a>
       <a id="intGroup:CommutativeGroup[Int]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -319,14 +285,31 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">intGroup</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.CommutativeGroup" class="extype" target="_top">CommutativeGroup</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+        <span class="name">intGroup</span><span class="result">: <span class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$int$@intGroup:algebra.CommutativeGroup[Int]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$int$@intGroup:cats.kernel.CommutativeGroup[Int]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="IntInstances.html" class="extype" name="cats.std.IntInstances">IntInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IntInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.IntInstances#intOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="intOrder:cats.kernel.Order[Int]"></a>
+      <a id="intOrder:kernel.Order[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">intOrder</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.package$$int$@intOrder:cats.kernel.Order[Int]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IntInstances</dd></dl></div>
     </li><li name="cats.std.IntInstances#intShow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="intShow:cats.Show[Int]"></a>
       <a id="intShow:Show[Int]"></a>
@@ -526,8 +509,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.std.IntInstances">
               <h3>Inherited from <a href="IntInstances.html" class="extype" name="cats.std.IntInstances">IntInstances</a></h3>
-            </div><div class="parent" name="algebra.std.IntInstances">
-              <h3>Inherited from <a href="https://non.github.io/algebra/api/index.html#algebra.std.IntInstances" class="extype" target="_top">algebra.std.IntInstances</a></h3>
+            </div><div class="parent" name="cats.kernel.std.IntInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.IntInstances">kernel.std.IntInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

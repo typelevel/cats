@@ -100,7 +100,7 @@ scala> Foldable[List].sequence_(List(Option(1), None))
 res20: Option[Unit] = None
 
 scala> val prints: Eval[Unit] = List(Eval.always(println(1)), Eval.always(println(2))).sequence_
-prints: cats.Eval[Unit] = cats.Eval$$anon$5@5a5c5bde
+prints: cats.Eval[Unit] = cats.Eval$$anon$5@7337c76a
 
 scala> prints.value
 1
@@ -113,7 +113,7 @@ scala> Foldable[List].dropWhile_(List[Int](1,2,4,5,6,7))(_ % 2 == 0)
 res23: List[Int] = List(1, 2, 4, 5, 6, 7)
 
 scala> val FoldableListOption = Foldable[List].compose[Option]
-FoldableListOption: cats.Foldable[[α]List[Option[α]]] = cats.Foldable$$anon$1@23f22521
+FoldableListOption: cats.Foldable[[α]List[Option[α]]] = cats.Foldable$$anon$1@5945cd64
 
 scala> FoldableListOption.fold(List(Option(1), Option(2), Option(3), Option(4)))
 res24: Int = 10

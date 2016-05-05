@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">MapInstances</span><span class="result"> extends <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapInstances" class="extype" target="_top">algebra.std.MapInstances</a></span>
+        <span class="name">MapInstances</span><span class="result"> extends <span class="extype" name="cats.kernel.std.MapInstances">kernel.std.MapInstances</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/map.scala" target="_blank">map.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="https://non.github.io/algebra/api/index.html#algebra.std.MapInstances" class="extype" target="_top">algebra.std.MapInstances</a>, <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapInstances3" class="extype" target="_top">MapInstances3</a>, <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapInstances2" class="extype" target="_top">MapInstances2</a>, <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapInstances1" class="extype" target="_top">MapInstances1</a>, <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapInstances0" class="extype" target="_top">MapInstances0</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.kernel.std.MapInstances">kernel.std.MapInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllInstances.html" class="extype" name="cats.std.AllInstances">AllInstances</a>, <a href="package$$all$.html" class="extype" name="cats.std.all">all</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a>, <a href="package$$map$.html" class="extype" name="cats.std.map">map</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.MapInstances"><span>MapInstances</span></li><li class="in" name="algebra.std.MapInstances"><span>MapInstances</span></li><li class="in" name="algebra.std.MapInstances3"><span>MapInstances3</span></li><li class="in" name="algebra.std.MapInstances2"><span>MapInstances2</span></li><li class="in" name="algebra.std.MapInstances1"><span>MapInstances1</span></li><li class="in" name="algebra.std.MapInstances0"><span>MapInstances0</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.MapInstances"><span>MapInstances</span></li><li class="in" name="cats.kernel.std.MapInstances"><span>MapInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -148,23 +148,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.std.MapInstances#MapEq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="MapEq[A,B](implicitevidence$1:cats.Eq[B]):cats.Eq[Map[A,B]]"></a>
-      <a id="MapEq[A,B](Eq[B]):Eq[Map[A,B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">MapEq</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.std.MapInstances.MapEq.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="cats.std.MapInstances.MapEq.A">A</span>, <span class="extype" name="cats.std.MapInstances.MapEq.B">B</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.MapInstances@MapEq[A,B](implicitevidence$1:cats.Eq[B]):cats.Eq[Map[A,B]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="cats.std.MapInstances#MapShow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="MapShow[A,B](implicitshowA:cats.Show[A],implicitshowB:cats.Show[B]):cats.Show[Map[A,B]]"></a>
       <a id="MapShow[A,B](Show[A],Show[B]):Show[Map[A,B]]"></a>
@@ -330,74 +313,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="algebra.std.MapInstances1#mapAdditiveGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mapAdditiveGroup[K,V](implicitevidence$4:algebra.ring.AdditiveGroup[V]):algebra.std.MapAdditiveGroup[K,V]"></a>
-      <a id="mapAdditiveGroup[K,V](AdditiveGroup[V]):MapAdditiveGroup[K,V]"></a>
+    </li><li name="cats.kernel.std.MapInstances#mapEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapEq[K,V](implicitevidence$1:cats.kernel.Eq[V]):cats.kernel.Eq[Map[K,V]]"></a>
+      <a id="mapEq[K,V](kernel.Eq[V]):kernel.Eq[Map[K,V]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">mapAdditiveGroup</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://non.github.io/algebra/api/index.html#algebra.ring.AdditiveGroup" class="extype" target="_top">AdditiveGroup</a>[<span class="extype" name="algebra.std.MapInstances1.mapAdditiveGroup.V">V</span>]</span>)</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapAdditiveGroup" class="extype" target="_top">MapAdditiveGroup</a>[<span class="extype" name="algebra.std.MapInstances1.mapAdditiveGroup.K">K</span>, <span class="extype" name="algebra.std.MapInstances1.mapAdditiveGroup.V">V</span>]</span>
+        <span class="name">mapEq</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="cats.kernel.Eq">kernel.Eq</span>[<span class="extype" name="cats.kernel.std.MapInstances.mapEq.V">V</span>]</span>)</span><span class="result">: <span class="extype" name="cats.kernel.Eq">kernel.Eq</span>[<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="cats.kernel.std.MapInstances.mapEq.K">K</span>, <span class="extype" name="cats.kernel.std.MapInstances.mapEq.V">V</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.MapInstances@mapAdditiveGroup[K,V](implicitevidence$4:algebra.ring.AdditiveGroup[V]):algebra.std.MapAdditiveGroup[K,V]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.MapInstances@mapEq[K,V](implicitevidence$1:cats.kernel.Eq[V]):cats.kernel.Eq[Map[K,V]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapInstances1</dd></dl></div>
-    </li><li name="algebra.std.MapInstances0#mapAdditiveMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mapAdditiveMonoid[K,V](implicitevidence$8:algebra.ring.AdditiveSemigroup[V]):algebra.std.MapAdditiveMonoid[K,V]"></a>
-      <a id="mapAdditiveMonoid[K,V](AdditiveSemigroup[V]):MapAdditiveMonoid[K,V]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">mapAdditiveMonoid</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://non.github.io/algebra/api/index.html#algebra.ring.AdditiveSemigroup" class="extype" target="_top">AdditiveSemigroup</a>[<span class="extype" name="algebra.std.MapInstances0.mapAdditiveMonoid.V">V</span>]</span>)</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapAdditiveMonoid" class="extype" target="_top">MapAdditiveMonoid</a>[<span class="extype" name="algebra.std.MapInstances0.mapAdditiveMonoid.K">K</span>, <span class="extype" name="algebra.std.MapInstances0.mapAdditiveMonoid.V">V</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.MapInstances@mapAdditiveMonoid[K,V](implicitevidence$8:algebra.ring.AdditiveSemigroup[V]):algebra.std.MapAdditiveMonoid[K,V]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapInstances0</dd></dl></div>
-    </li><li name="algebra.std.MapInstances0#mapEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mapEq[K,V](implicitevidence$5:algebra.Eq[V],implicitevidence$6:algebra.ring.AdditiveMonoid[V]):algebra.Eq[Map[K,V]]"></a>
-      <a id="mapEq[K,V](algebra.Eq[V],AdditiveMonoid[V]):algebra.Eq[Map[K,V]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">mapEq</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://non.github.io/algebra/api/index.html#algebra.Eq" class="extype" target="_top">algebra.Eq</a>[<span class="extype" name="algebra.std.MapInstances0.mapEq.V">V</span>]</span>, <span name="arg1">arg1: <a href="https://non.github.io/algebra/api/index.html#algebra.ring.AdditiveMonoid" class="extype" target="_top">AdditiveMonoid</a>[<span class="extype" name="algebra.std.MapInstances0.mapEq.V">V</span>]</span>)</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.Eq" class="extype" target="_top">algebra.Eq</a>[<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="algebra.std.MapInstances0.mapEq.K">K</span>, <span class="extype" name="algebra.std.MapInstances0.mapEq.V">V</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.MapInstances@mapEq[K,V](implicitevidence$5:algebra.Eq[V],implicitevidence$6:algebra.ring.AdditiveMonoid[V]):algebra.Eq[Map[K,V]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapInstances0</dd></dl></div>
-    </li><li name="algebra.std.MapInstances1#mapGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mapGroup[K,V](implicitevidence$3:algebra.Group[V]):algebra.std.MapGroup[K,V]"></a>
-      <a id="mapGroup[K,V](algebra.Group[V]):MapGroup[K,V]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">mapGroup</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://non.github.io/algebra/api/index.html#algebra.Group" class="extype" target="_top">algebra.Group</a>[<span class="extype" name="algebra.std.MapInstances1.mapGroup.V">V</span>]</span>)</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapGroup" class="extype" target="_top">MapGroup</a>[<span class="extype" name="algebra.std.MapInstances1.mapGroup.K">K</span>, <span class="extype" name="algebra.std.MapInstances1.mapGroup.V">V</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.MapInstances@mapGroup[K,V](implicitevidence$3:algebra.Group[V]):algebra.std.MapGroup[K,V]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapInstances1</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapInstances</dd></dl></div>
     </li><li name="cats.std.MapInstances#mapInstance" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="mapInstance[K]:cats.Traverse[[β]scala.collection.immutable.Map[K,β]]withcats.FlatMap[[β]scala.collection.immutable.Map[K,β]]"></a>
       <a id="mapInstance[K]:Traverse[[β]Map[K,β]]withFlatMap[[β]Map[K,β]]"></a>
@@ -415,57 +347,23 @@
       </a>
     </span>
       
-    </li><li name="algebra.std.MapInstances0#mapMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mapMonoid[K,V](implicitevidence$7:algebra.Semigroup[V]):algebra.std.MapMonoid[K,V]"></a>
-      <a id="mapMonoid[K,V](algebra.Semigroup[V]):MapMonoid[K,V]"></a>
+    </li><li name="cats.kernel.std.MapInstances#mapMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapMonoid[K,V](implicitevidence$2:cats.kernel.Semigroup[V]):cats.kernel.Monoid[Map[K,V]]"></a>
+      <a id="mapMonoid[K,V](kernel.Semigroup[V]):kernel.Monoid[Map[K,V]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">mapMonoid</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://non.github.io/algebra/api/index.html#algebra.Semigroup" class="extype" target="_top">algebra.Semigroup</a>[<span class="extype" name="algebra.std.MapInstances0.mapMonoid.V">V</span>]</span>)</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapMonoid" class="extype" target="_top">MapMonoid</a>[<span class="extype" name="algebra.std.MapInstances0.mapMonoid.K">K</span>, <span class="extype" name="algebra.std.MapInstances0.mapMonoid.V">V</span>]</span>
+        <span class="name">mapMonoid</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</span>[<span class="extype" name="cats.kernel.std.MapInstances.mapMonoid.V">V</span>]</span>)</span><span class="result">: <span class="extype" name="cats.kernel.Monoid">kernel.Monoid</span>[<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="cats.kernel.std.MapInstances.mapMonoid.K">K</span>, <span class="extype" name="cats.kernel.std.MapInstances.mapMonoid.V">V</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.MapInstances@mapMonoid[K,V](implicitevidence$7:algebra.Semigroup[V]):algebra.std.MapMonoid[K,V]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.MapInstances@mapMonoid[K,V](implicitevidence$2:cats.kernel.Semigroup[V]):cats.kernel.Monoid[Map[K,V]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapInstances0</dd></dl></div>
-    </li><li name="algebra.std.MapInstances3#mapRng" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mapRng[K,V](implicitevidence$1:algebra.ring.Rng[V]):algebra.std.MapRng[K,V]"></a>
-      <a id="mapRng[K,V](Rng[V]):MapRng[K,V]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">mapRng</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://non.github.io/algebra/api/index.html#algebra.ring.Rng" class="extype" target="_top">Rng</a>[<span class="extype" name="algebra.std.MapInstances3.mapRng.V">V</span>]</span>)</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapRng" class="extype" target="_top">MapRng</a>[<span class="extype" name="algebra.std.MapInstances3.mapRng.K">K</span>, <span class="extype" name="algebra.std.MapInstances3.mapRng.V">V</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.MapInstances@mapRng[K,V](implicitevidence$1:algebra.ring.Rng[V]):algebra.std.MapRng[K,V]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapInstances3</dd></dl></div>
-    </li><li name="algebra.std.MapInstances2#mapSemiring" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mapSemiring[K,V](implicitevidence$2:algebra.ring.Semiring[V]):algebra.std.MapSemiring[K,V]"></a>
-      <a id="mapSemiring[K,V](Semiring[V]):MapSemiring[K,V]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">mapSemiring</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://non.github.io/algebra/api/index.html#algebra.ring.Semiring" class="extype" target="_top">Semiring</a>[<span class="extype" name="algebra.std.MapInstances2.mapSemiring.V">V</span>]</span>)</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapSemiring" class="extype" target="_top">MapSemiring</a>[<span class="extype" name="algebra.std.MapInstances2.mapSemiring.K">K</span>, <span class="extype" name="algebra.std.MapInstances2.mapSemiring.V">V</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.MapInstances@mapSemiring[K,V](implicitevidence$2:algebra.ring.Semiring[V]):algebra.std.MapSemiring[K,V]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapInstances2</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapInstances</dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -629,16 +527,8 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="algebra.std.MapInstances">
-              <h3>Inherited from <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapInstances" class="extype" target="_top">algebra.std.MapInstances</a></h3>
-            </div><div class="parent" name="algebra.std.MapInstances3">
-              <h3>Inherited from <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapInstances3" class="extype" target="_top">MapInstances3</a></h3>
-            </div><div class="parent" name="algebra.std.MapInstances2">
-              <h3>Inherited from <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapInstances2" class="extype" target="_top">MapInstances2</a></h3>
-            </div><div class="parent" name="algebra.std.MapInstances1">
-              <h3>Inherited from <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapInstances1" class="extype" target="_top">MapInstances1</a></h3>
-            </div><div class="parent" name="algebra.std.MapInstances0">
-              <h3>Inherited from <a href="https://non.github.io/algebra/api/index.html#algebra.std.MapInstances0" class="extype" target="_top">MapInstances0</a></h3>
+        <div class="parent" name="cats.kernel.std.MapInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.MapInstances">kernel.std.MapInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="ShortInstances.html" class="extype" name="cats.std.ShortInstances">ShortInstances</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ShortInstances.html" class="extype" name="cats.std.ShortInstances">ShortInstances</a>, <span class="extype" name="cats.kernel.std.ShortInstances">kernel.std.ShortInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.short"><span>short</span></li><li class="in" name="cats.std.ShortInstances"><span>ShortInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.short"><span>short</span></li><li class="in" name="cats.std.ShortInstances"><span>ShortInstances</span></li><li class="in" name="cats.kernel.std.ShortInstances"><span>ShortInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -344,23 +344,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.std.ShortInstances#shortAlgebra" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="shortAlgebra:algebra.CommutativeGroup[Short]withcats.Order[Short]"></a>
-      <a id="shortAlgebra:CommutativeGroup[Short]withOrder[Short]"></a>
+    </li><li name="cats.kernel.std.ShortInstances#shortGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="shortGroup:cats.kernel.CommutativeGroup[Short]"></a>
+      <a id="shortGroup:CommutativeGroup[Short]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">shortAlgebra</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.CommutativeGroup" class="extype" target="_top">CommutativeGroup</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Short" class="extype" target="_top">Short</a>] with <a href="../package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Short" class="extype" target="_top">Short</a>]</span>
+        <span class="name">shortGroup</span><span class="result">: <span class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Short" class="extype" target="_top">Short</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$short$@shortAlgebra:algebra.CommutativeGroup[Short]withcats.Order[Short]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$short$@shortGroup:cats.kernel.CommutativeGroup[Short]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ShortInstances.html" class="extype" name="cats.std.ShortInstances">ShortInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ShortInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.ShortInstances#shortOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="shortOrder:cats.kernel.Order[Short]"></a>
+      <a id="shortOrder:kernel.Order[Short]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">shortOrder</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Short" class="extype" target="_top">Short</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.package$$short$@shortOrder:cats.kernel.Order[Short]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ShortInstances</dd></dl></div>
     </li><li name="cats.std.ShortInstances#shortShow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="shortShow:cats.Show[Short]"></a>
       <a id="shortShow:Show[Short]"></a>
@@ -492,6 +509,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.std.ShortInstances">
               <h3>Inherited from <a href="ShortInstances.html" class="extype" name="cats.std.ShortInstances">ShortInstances</a></h3>
+            </div><div class="parent" name="cats.kernel.std.ShortInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.ShortInstances">kernel.std.ShortInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

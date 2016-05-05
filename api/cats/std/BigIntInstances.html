@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">BigIntInstances</span><span class="result"> extends <a href="https://non.github.io/algebra/api/index.html#algebra.std.BigIntInstances" class="extype" target="_top">algebra.std.BigIntInstances</a></span>
+        <span class="name">BigIntInstances</span><span class="result"> extends <span class="extype" name="cats.kernel.std.BigIntInstances">kernel.std.BigIntInstances</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/bigInt.scala" target="_blank">bigInt.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="https://non.github.io/algebra/api/index.html#algebra.std.BigIntInstances" class="extype" target="_top">algebra.std.BigIntInstances</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.kernel.std.BigIntInstances">kernel.std.BigIntInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllInstances.html" class="extype" name="cats.std.AllInstances">AllInstances</a>, <a href="package$$all$.html" class="extype" name="cats.std.all">all</a>, <a href="package$$bigInt$.html" class="extype" name="cats.std.bigInt">bigInt</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.BigIntInstances"><span>BigIntInstances</span></li><li class="in" name="algebra.std.BigIntInstances"><span>BigIntInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.BigIntInstances"><span>BigIntInstances</span></li><li class="in" name="cats.kernel.std.BigIntInstances"><span>BigIntInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -165,19 +165,36 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="algebra.std.BigIntInstances#bigIntAlgebra" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bigIntAlgebra:algebra.std.BigIntAlgebra"></a>
-      <a id="bigIntAlgebra:BigIntAlgebra"></a>
+    </li><li name="cats.kernel.std.BigIntInstances#bigIntGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bigIntGroup:cats.kernel.CommutativeGroup[BigInt]"></a>
+      <a id="bigIntGroup:CommutativeGroup[BigInt]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">bigIntAlgebra</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.std.BigIntAlgebra" class="extype" target="_top">BigIntAlgebra</a></span>
+        <span class="name">bigIntGroup</span><span class="result">: <span class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</span>[<span class="extype" name="scala.BigInt">BigInt</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.BigIntInstances@bigIntAlgebra:algebra.std.BigIntAlgebra" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.BigIntInstances@bigIntGroup:cats.kernel.CommutativeGroup[BigInt]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>BigIntInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.BigIntInstances#bigIntOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bigIntOrder:cats.kernel.Order[BigInt]"></a>
+      <a id="bigIntOrder:kernel.Order[BigInt]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bigIntOrder</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<span class="extype" name="scala.BigInt">BigInt</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.BigIntInstances@bigIntOrder:cats.kernel.Order[BigInt]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -493,8 +510,8 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="algebra.std.BigIntInstances">
-              <h3>Inherited from <a href="https://non.github.io/algebra/api/index.html#algebra.std.BigIntInstances" class="extype" target="_top">algebra.std.BigIntInstances</a></h3>
+        <div class="parent" name="cats.kernel.std.BigIntInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.BigIntInstances">kernel.std.BigIntInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

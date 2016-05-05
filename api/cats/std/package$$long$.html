@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="LongInstances.html" class="extype" name="cats.std.LongInstances">LongInstances</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="LongInstances.html" class="extype" name="cats.std.LongInstances">LongInstances</a>, <span class="extype" name="cats.kernel.std.LongInstances">kernel.std.LongInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.long"><span>long</span></li><li class="in" name="cats.std.LongInstances"><span>LongInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.long"><span>long</span></li><li class="in" name="cats.std.LongInstances"><span>LongInstances</span></li><li class="in" name="cats.kernel.std.LongInstances"><span>LongInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -293,23 +293,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.std.LongInstances#longAlgebra" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="longAlgebra:algebra.CommutativeGroup[Long]withcats.Order[Long]"></a>
-      <a id="longAlgebra:CommutativeGroup[Long]withOrder[Long]"></a>
+    </li><li name="cats.kernel.std.LongInstances#longGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="longGroup:cats.kernel.CommutativeGroup[Long]"></a>
+      <a id="longGroup:CommutativeGroup[Long]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">longAlgebra</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.CommutativeGroup" class="extype" target="_top">CommutativeGroup</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a>] with <a href="../package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a>]</span>
+        <span class="name">longGroup</span><span class="result">: <span class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.package$$long$@longAlgebra:algebra.CommutativeGroup[Long]withcats.Order[Long]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.package$$long$@longGroup:cats.kernel.CommutativeGroup[Long]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LongInstances.html" class="extype" name="cats.std.LongInstances">LongInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>LongInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.LongInstances#longOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="longOrder:cats.kernel.Order[Long]"></a>
+      <a id="longOrder:kernel.Order[Long]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">longOrder</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.package$$long$@longOrder:cats.kernel.Order[Long]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>LongInstances</dd></dl></div>
     </li><li name="cats.std.LongInstances#longShow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="longShow:cats.Show[Long]"></a>
       <a id="longShow:Show[Long]"></a>
@@ -492,6 +509,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.std.LongInstances">
               <h3>Inherited from <a href="LongInstances.html" class="extype" name="cats.std.LongInstances">LongInstances</a></h3>
+            </div><div class="parent" name="cats.kernel.std.LongInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.LongInstances">kernel.std.LongInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

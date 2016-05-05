@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">DoubleInstances</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">DoubleInstances</span><span class="result"> extends <span class="extype" name="cats.kernel.std.DoubleInstances">kernel.std.DoubleInstances</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/anyval.scala" target="_blank">anyval.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.kernel.std.DoubleInstances">kernel.std.DoubleInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllInstances.html" class="extype" name="cats.std.AllInstances">AllInstances</a>, <a href="AnyValInstances.html" class="extype" name="cats.std.AnyValInstances">AnyValInstances</a>, <a href="package$$all$.html" class="extype" name="cats.std.all">all</a>, <a href="package$$double$.html" class="extype" name="cats.std.double">double</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.DoubleInstances"><span>DoubleInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.DoubleInstances"><span>DoubleInstances</span></li><li class="in" name="cats.kernel.std.DoubleInstances"><span>DoubleInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -188,23 +188,40 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.std.DoubleInstances#doubleAlgebra" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="doubleAlgebra:algebra.CommutativeGroup[Double]withcats.Order[Double]"></a>
-      <a id="doubleAlgebra:CommutativeGroup[Double]withOrder[Double]"></a>
+    </li><li name="cats.kernel.std.DoubleInstances#doubleGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="doubleGroup:cats.kernel.CommutativeGroup[Double]"></a>
+      <a id="doubleGroup:CommutativeGroup[Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">doubleAlgebra</span><span class="result">: <a href="https://non.github.io/algebra/api/index.html#algebra.CommutativeGroup" class="extype" target="_top">CommutativeGroup</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Double" class="extype" target="_top">Double</a>] with <a href="../package.html#Order[A]=algebra.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>
+        <span class="name">doubleGroup</span><span class="result">: <span class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.std.DoubleInstances@doubleAlgebra:algebra.CommutativeGroup[Double]withcats.Order[Double]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.std.DoubleInstances@doubleGroup:cats.kernel.CommutativeGroup[Double]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DoubleInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.DoubleInstances#doubleOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="doubleOrder:cats.kernel.Order[Double]"></a>
+      <a id="doubleOrder:kernel.Order[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">doubleOrder</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.DoubleInstances@doubleOrder:cats.kernel.Order[Double]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DoubleInstances</dd></dl></div>
     </li><li name="cats.std.DoubleInstances#doubleShow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="doubleShow:cats.Show[Double]"></a>
       <a id="doubleShow:Show[Double]"></a>
@@ -493,7 +510,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="cats.kernel.std.DoubleInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.DoubleInstances">kernel.std.DoubleInstances</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

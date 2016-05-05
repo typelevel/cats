@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">StreamInstances</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">StreamInstances</span><span class="result"> extends <span class="extype" name="cats.kernel.std.StreamInstances">kernel.std.StreamInstances</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/std/stream.scala" target="_blank">stream.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.kernel.std.StreamInstances">kernel.std.StreamInstances</span>, <span class="extype" name="cats.kernel.std.StreamInstances1">StreamInstances1</span>, <span class="extype" name="cats.kernel.std.StreamInstances2">StreamInstances2</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllInstances.html" class="extype" name="cats.std.AllInstances">AllInstances</a>, <a href="package$$all$.html" class="extype" name="cats.std.all">all</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a>, <a href="package$$stream$.html" class="extype" name="cats.std.stream">stream</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.std.StreamInstances"><span>StreamInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.std.StreamInstances"><span>StreamInstances</span></li><li class="in" name="cats.kernel.std.StreamInstances"><span>StreamInstances</span></li><li class="in" name="cats.kernel.std.StreamInstances1"><span>StreamInstances1</span></li><li class="in" name="cats.kernel.std.StreamInstances2"><span>StreamInstances2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -205,23 +205,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.std.StreamInstances#eqStream" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="eqStream[A](implicitev:cats.Eq[A]):cats.Eq[Stream[A]]"></a>
-      <a id="eqStream[A](Eq[A]):Eq[Stream[A]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">eqStream</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.std.StreamInstances.eqStream.A">A</span>]</span>)</span><span class="result">: <a href="../package.html#Eq[A]=algebra.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="cats.std.StreamInstances.eqStream.A">A</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.std.StreamInstances@eqStream[A](implicitev:cats.Eq[A]):cats.Eq[Stream[A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
       <a id="equals(Any):Boolean"></a>
@@ -364,6 +347,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.kernel.std.StreamInstances2#streamEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="streamEq[A](implicitevidence$3:cats.kernel.Eq[A]):cats.kernel.Eq[Stream[A]]"></a>
+      <a id="streamEq[A](kernel.Eq[A]):kernel.Eq[Stream[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">streamEq</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="cats.kernel.Eq">kernel.Eq</span>[<span class="extype" name="cats.kernel.std.StreamInstances2.streamEq.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.kernel.Eq">kernel.Eq</span>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="cats.kernel.std.StreamInstances2.streamEq.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.StreamInstances@streamEq[A](implicitevidence$3:cats.kernel.Eq[A]):cats.kernel.Eq[Stream[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StreamInstances2</dd></dl></div>
     </li><li name="cats.std.StreamInstances#streamInstance" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="streamInstance:cats.Traverse[Stream]withcats.MonadCombine[Stream]withcats.CoflatMap[Stream]"></a>
       <a id="streamInstance:Traverse[Stream]withMonadCombine[Stream]withCoflatMap[Stream]"></a>
@@ -381,6 +381,57 @@
       </a>
     </span>
       
+    </li><li name="cats.kernel.std.StreamInstances#streamMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="streamMonoid[A]:cats.kernel.Monoid[Stream[A]]"></a>
+      <a id="streamMonoid[A]:kernel.Monoid[Stream[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">streamMonoid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <span class="extype" name="cats.kernel.Monoid">kernel.Monoid</span>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="cats.kernel.std.StreamInstances.streamMonoid.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.StreamInstances@streamMonoid[A]:cats.kernel.Monoid[Stream[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StreamInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.StreamInstances#streamOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="streamOrder[A](implicitevidence$1:cats.kernel.Order[A]):cats.kernel.Order[Stream[A]]"></a>
+      <a id="streamOrder[A](kernel.Order[A]):kernel.Order[Stream[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">streamOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<span class="extype" name="cats.kernel.std.StreamInstances.streamOrder.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.kernel.Order">kernel.Order</span>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="cats.kernel.std.StreamInstances.streamOrder.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.StreamInstances@streamOrder[A](implicitevidence$1:cats.kernel.Order[A]):cats.kernel.Order[Stream[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StreamInstances</dd></dl></div>
+    </li><li name="cats.kernel.std.StreamInstances1#streamPartialOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="streamPartialOrder[A](implicitevidence$2:cats.kernel.PartialOrder[A]):cats.kernel.PartialOrder[Stream[A]]"></a>
+      <a id="streamPartialOrder[A](kernel.PartialOrder[A]):kernel.PartialOrder[Stream[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">streamPartialOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="cats.kernel.PartialOrder">kernel.PartialOrder</span>[<span class="extype" name="cats.kernel.std.StreamInstances1.streamPartialOrder.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.kernel.PartialOrder">kernel.PartialOrder</span>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="cats.kernel.std.StreamInstances1.streamPartialOrder.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.std.StreamInstances@streamPartialOrder[A](implicitevidence$2:cats.kernel.PartialOrder[A]):cats.kernel.PartialOrder[Stream[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StreamInstances1</dd></dl></div>
     </li><li name="cats.std.StreamInstances#streamShow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="streamShow[A](implicitevidence$1:cats.Show[A]):cats.Show[Stream[A]]"></a>
       <a id="streamShow[A](Show[A]):Show[Stream[A]]"></a>
@@ -510,7 +561,13 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="cats.kernel.std.StreamInstances">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.StreamInstances">kernel.std.StreamInstances</span></h3>
+            </div><div class="parent" name="cats.kernel.std.StreamInstances1">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.StreamInstances1">StreamInstances1</span></h3>
+            </div><div class="parent" name="cats.kernel.std.StreamInstances2">
+              <h3>Inherited from <span class="extype" name="cats.kernel.std.StreamInstances2">StreamInstances2</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
