@@ -148,8 +148,8 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM, docs, bench)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM % "test-internal -> test", bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
@@ -247,13 +247,6 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
 lazy val testsJVM = tests.jvm
 lazy val testsJS = tests.js
 
-// cats-jvm is JVM-only
-lazy val jvm = project
-  .dependsOn(macrosJVM, coreJVM, testsJVM % "test-internal -> test")
-  .settings(moduleName := "cats-jvm")
-  .settings(catsSettings:_*)
-  .settings(commonJvmSettings:_*)
-
 // bench is currently JVM-only
 lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(moduleName := "cats-bench")
@@ -338,7 +331,7 @@ lazy val publishSettings = Seq(
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;coreJVM/test;lawsJVM/compile;freeJVM/compile;testsJVM/test;freeJVM/test;jvm/test;bench/test")
+addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;coreJVM/test;lawsJVM/compile;freeJVM/compile;testsJVM/test;freeJVM/test;bench/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
