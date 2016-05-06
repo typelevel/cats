@@ -9,7 +9,11 @@ package data
 sealed trait Prod[F[_], G[_], A] {
   def first: F[A]
   def second: G[A]
+
+  def bimap[B](f: F[A] => F[B], g: G[A] => G[B]): Prod[F, G, B] =
+    Prod.apply(f(first), g(second))
 }
+
 object Prod extends ProdInstances {
   def apply[F[_], G[_], A](first0: => F[A], second0: => G[A]): Prod[F, G, A] = new Prod[F, G, A] {
     val firstThunk: Eval[F[A]] = Later(first0)
