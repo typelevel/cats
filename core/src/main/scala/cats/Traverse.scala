@@ -30,6 +30,12 @@ import simulacrum.typeclass
     U.TC.traverse(fa)(a => U.subst(f(a)))(this)
 
   /**
+   * A traverse followed by flattening the inner result.
+   */
+  def traverseM[G[_], A, B](fa: F[A])(f: A => G[F[B]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[B]] =
+    G.map(traverse(fa)(f))(F.flatten)
+
+  /**
    * Thread all the G effects through the F structure to invert the
    * structure from F[G[A]] to G[F[A]].
    */
