@@ -10,14 +10,6 @@ import simulacrum.typeclass
   def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
 
   /**
-   * Compose 2 invariant Functors F and G to get a new Invariant Functor for F[G[_]].
-   */
-  def compose[G[_]: Invariant](implicit GG: Invariant[G]): Invariant[Lambda[X => F[G[X]]]] = new Invariant.Composite[F, G] {
-    def F: Invariant[F] = self
-    def G: Invariant[G] = GG
-  }
-
-  /**
    * Compose the Invariant Functor F with a normal (Covariant) Functor to get a new Invariant Functor for [F[G[_]].
    */
   def composeWithFunctor[G[_]](implicit GG: Functor[G]): Invariant[Lambda[X => F[G[X]]]] = new Invariant.CovariantComposite[F, G] {
@@ -35,14 +27,6 @@ import simulacrum.typeclass
 }
 
 object Invariant extends AlgebraInvariantInstances {
-  trait Composite[F[_], G[_]] extends Invariant[Lambda[X => F[G[X]]]] {
-    def F: Invariant[F]
-    def G: Invariant[G]
-
-    override def imap[A, B](fga: F[G[A]])(f: A => B)(g: B => A): F[G[B]] =
-      F.imap(fga)(ga => G.imap(ga)(f)(g))(gb => G.imap(gb)(g)(f))
-  }
-
   trait CovariantComposite[F[_], G[_]] extends Invariant[Lambda[X => F[G[X]]]] {
     def F: Invariant[F]
     def G: Functor[G]

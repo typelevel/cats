@@ -268,36 +268,6 @@ import simulacrum.typeclass
 
   def nonEmpty[A](fa: F[A]): Boolean =
     !isEmpty(fa)
-
-  /**
-   * Compose this `Foldable[F]` with a `Foldable[G]` to create
-   * a `Foldable[F[G]]` instance.
-   */
-  def compose[G[_]](implicit ev: Foldable[G]): Foldable[λ[α => F[G[α]]]] =
-    new CompositeFoldable[F, G] {
-      val F = self
-      val G = ev
-    }
-}
-
-/**
- *  Methods that apply to 2 nested Foldable instances
- */
-trait CompositeFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] {
-  implicit def F: Foldable[F]
-  implicit def G: Foldable[G]
-
-  /**
-   *  Left associative fold on F[G[A]] using 'f'
-   */
-  def foldLeft[A, B](fga: F[G[A]], b: B)(f: (B, A) => B): B =
-    F.foldLeft(fga, b)((b, a) => G.foldLeft(a, b)(f))
-
-  /**
-   *  Right associative lazy fold on `F` using the folding function 'f'.
-   */
-  def foldRight[A, B](fga: F[G[A]], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    F.foldRight(fga, lb)((ga, lb) => G.foldRight(ga, lb)(f))
 }
 
 object Foldable {
