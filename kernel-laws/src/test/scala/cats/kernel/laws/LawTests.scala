@@ -36,6 +36,8 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, List[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, Vector[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, Stream[HasPartialOrder[Int]]].check(_.partialOrder)
+  laws[OrderLaws, Set[Int]]("asMeetPartialOrder").check(_.partialOrder(Semilattice.asMeetPartialOrder[Set[Int]]))
+  laws[OrderLaws, Set[Int]]("asJoinPartialOrder").check(_.partialOrder(Semilattice.asJoinPartialOrder[Set[Int]]))
 
   laws[OrderLaws, Unit].check(_.order)
   laws[OrderLaws, Boolean].check(_.order)
