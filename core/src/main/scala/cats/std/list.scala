@@ -48,7 +48,7 @@ trait ListInstances extends cats.kernel.std.ListInstances {
       }
 
       def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
-        foldRight[A, G[List[B]]](fa, Later(G.pure(List.empty))){ (a, lglb) =>
+        foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglb) =>
           G.map2Eval(f(a), lglb)(_ :: _)
         }.value
 

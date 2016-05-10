@@ -15,7 +15,7 @@ trait MapInstances extends cats.kernel.std.MapInstances {
     new Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] {
 
       def traverse[G[_], A, B](fa: Map[K, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
-        val gba: Eval[G[Map[K, B]]] = Later(G.pure(Map.empty))
+        val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
         val gbb = Foldable.iterateRight(fa.iterator, gba){ (kv, lbuf) =>
           G.map2Eval(f(kv._2), lbuf)({ (b, buf) => buf + (kv._1 -> b)})
         }.value
