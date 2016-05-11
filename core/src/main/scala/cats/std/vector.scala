@@ -45,7 +45,9 @@ trait VectorInstances extends cats.kernel.std.VectorInstances {
       }
 
       def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
-        fa.foldLeft(G.pure(Vector.empty[B]))((buf, a) => G.map2(buf, f(a))(_ :+ _))
+      foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
+        G.map2Eval(f(a), lgvb)(_ +: _)
+      }.value
 
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)

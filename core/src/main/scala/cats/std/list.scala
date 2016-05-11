@@ -47,11 +47,10 @@ trait ListInstances extends cats.kernel.std.ListInstances {
         Eval.defer(loop(fa))
       }
 
-      def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] = {
-        val gba = G.pure(Vector.empty[B])
-        val gbb = fa.foldLeft(gba)((buf, a) => G.map2(buf, f(a))(_ :+ _))
-        G.map(gbb)(_.toList)
-      }
+      def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
+        foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglb) =>
+          G.map2Eval(f(a), lglb)(_ :: _)
+        }.value
 
       override def exists[A](fa: List[A])(p: A => Boolean): Boolean =
         fa.exists(p)

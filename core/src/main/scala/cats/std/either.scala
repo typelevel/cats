@@ -33,6 +33,15 @@ trait EitherInstances extends EitherInstances1 {
       override def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
         fa.right.map(f)
 
+      override def map2Eval[B, C, Z](fb: Either[A, B], fc: Eval[Either[A, C]])(f: (B, C) => Z): Eval[Either[A, Z]] =
+        fb match {
+          // This should be safe, but we are forced to use `asInstanceOf`,
+          // because `Left[+A, +B]` extends Either[A, B] instead of
+          // `Either[A, Nothing]`
+          case l @ Left(_) => Now(l.asInstanceOf[Either[A, Z]])
+          case Right(b) => fc.map(_.right.map(f(b, _)))
+        }
+
       def traverse[F[_], B, C](fa: Either[A, B])(f: B => F[C])(implicit F: Applicative[F]): F[Either[A, C]] =
         fa.fold(
           a => F.pure(Left(a)),
