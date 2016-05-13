@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
-import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests, CartesianTests}
+import cats.laws.discipline._
 
 class OptionTests extends CatsSuite {
   checkAll("Option[Int]", CartesianTests[Option].cartesian[Int, Int, Int])
@@ -16,6 +16,8 @@ class OptionTests extends CatsSuite {
 
   checkAll("Option[Int] with Option", TraverseTests[Option].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Option]", SerializableTests.serializable(Traverse[Option]))
+
+  checkAll("MonadError[Option, Unit]", MonadErrorTests[Option, Unit].monadError[Int, Int, Int])
 
   test("show") {
     none[Int].show should === ("None")
