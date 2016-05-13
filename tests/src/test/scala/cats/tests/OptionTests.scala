@@ -17,7 +17,8 @@ class OptionTests extends CatsSuite {
   checkAll("Option[Int] with Option", TraverseTests[Option].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Option]", SerializableTests.serializable(Traverse[Option]))
 
-  checkAll("MonadError[Option, Unit]", MonadErrorTests[Option, Unit].monadError[Int, Int, Int])
+  checkAll("Option with Unit", MonadErrorTests[Option, Unit].monadError[Int, Int, Int])
+  checkAll("MonadError[Option, Unit]", SerializableTests.serializable(MonadError[Option, Unit]))
 
   test("show") {
     none[Int].show should === ("None")
