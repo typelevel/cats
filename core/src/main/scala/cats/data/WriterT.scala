@@ -75,6 +75,9 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
   implicit def writerTShow[F[_], L, V](implicit F: Show[F[(L, V)]]): Show[WriterT[F, L, V]] = new Show[WriterT[F, L, V]] {
     override def show(f: WriterT[F, L, V]): String = f.show
   }
+
+  implicit def writerTIdMonoid[L:Monoid, V:Monoid]: Monoid[WriterT[Id, L, V]] =
+    writerTMonoid[Id, L, V]
 }
 
 private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 {
@@ -92,6 +95,9 @@ private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 
 
   implicit def writerTEq[F[_], L, V](implicit F: Eq[F[(L, V)]]): Eq[WriterT[F, L, V]] =
     F.on(_.run)
+
+  implicit def writerTIdSemigroup[L:Semigroup, V:Semigroup]: Semigroup[WriterT[Id, L, V]] =
+    writerTSemigroup[Id, L, V]
 }
 
 private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 {
@@ -100,12 +106,22 @@ private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 
       implicit val F0: MonadFilter[F] = F
       implicit val L0: Monoid[L] = L
     }
+
+  implicit def writerTMonoid[F[_], L, V](implicit W: Monoid[F[(L, V)]]): Monoid[WriterT[F, L, V]] =
+    new WriterTMonoid[F, L, V] {
+      implicit val F0: Monoid[F[(L, V)]] = W
+    }
 }
 private[data] sealed abstract class WriterTInstances2 extends WriterTInstances3 {
   implicit def writerTMonadWriter[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadWriter[WriterT[F, L, ?], L] =
     new WriterTMonadWriter[F, L] {
       implicit val F0: Monad[F] = F
       implicit val L0: Monoid[L] = L
+    }
+
+  implicit def writerTSemigroup[F[_], L, V](implicit W: Semigroup[F[(L, V)]]): Semigroup[WriterT[F, L, V]] =
+    new WriterTSemigroup[F, L, V] {
+      implicit val F0: Semigroup[F[(L, V)]] = W
     }
 }
 
@@ -234,6 +250,19 @@ private[data] sealed trait WriterTMonadFilter[F[_], L] extends MonadFilter[Write
 
 private[data] sealed trait WriterTMonadCombine[F[_], L] extends MonadCombine[WriterT[F, L, ?]] with WriterTMonad[F, L] with WriterTAlternative[F, L] {
   override implicit def F0: MonadCombine[F]
+}
+
+private[data] sealed trait WriterTSemigroup[F[_], L, A] extends Semigroup[WriterT[F, L, A]] {
+  implicit def F0: Semigroup[F[(L, A)]]
+
+  def combine(x: WriterT[F, L, A], y: WriterT[F, L, A]): WriterT[F, L, A] =
+    WriterT(F0.combine(x.run, y.run))
+}
+
+private[data] sealed trait WriterTMonoid[F[_], L, A] extends Monoid[WriterT[F, L, A]] with WriterTSemigroup[F, L, A]{
+  override implicit def F0: Monoid[F[(L, A)]]
+
+  def empty: WriterT[F, L, A] = WriterT(F0.empty)
 }
 
 trait WriterTFunctions {
