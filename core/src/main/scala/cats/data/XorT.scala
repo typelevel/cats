@@ -168,6 +168,13 @@ trait XorTFunctions {
     def apply[E, A](xor: Xor[E, A])(implicit F: Applicative[F]): XorT[F, E, A] =
       XorT(F.pure(xor))
   }
+
+  final def fromEither[F[_]]: FromEitherPartiallyApplied[F] = new FromEitherPartiallyApplied
+
+  final class FromEitherPartiallyApplied[F[_]] private[XorTFunctions] {
+    def apply[E, A](eit: Either[E,A])(implicit F: Applicative[F]): XorT[F, E, A] =
+      XorT(F.pure(Xor.fromEither(eit)))
+  }
 }
 
 private[data] abstract class XorTInstances extends XorTInstances1 {

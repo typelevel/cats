@@ -41,11 +41,8 @@ trait StreamInstances extends cats.kernel.std.StreamInstances {
         // We use foldRight to avoid possible stack overflows. Since
         // we don't want to return a Eval[_] instance, we call .value
         // at the end.
-        //
-        // (We don't worry about internal laziness because traverse
-        // has to evaluate the entire stream anyway.)
         foldRight(fa, Later(init)) { (a, lgsb) =>
-          lgsb.map(gsb => G.map2(f(a), gsb)(_ #:: _))
+          G.map2Eval(f(a), lgsb)(_ #:: _)
         }.value
       }
 
