@@ -123,6 +123,9 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
 
       def liftT[M[_], B](ma: M[B])(implicit ev: Trivial): Kleisli[M, A, B] = Kleisli[M, A, B](a => ma)
     }
+
+  implicit def kleisliApplicativeError[F[_], A, E](implicit AE: ApplicativeError[F, E]): ApplicativeError[Kleisli[F, A, ?], E]
+    = new KleisliApplicativeError[F, A, E] { implicit def AF: ApplicativeError[F, E]  = AE }
 }
 
 private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 {
@@ -145,21 +148,12 @@ private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 
 
   implicit def kleisliSemigroupK[F[_]](implicit ev: FlatMap[F]): SemigroupK[Lambda[A => Kleisli[F, A, A]]] =
     new KleisliSemigroupK[F] { def F: FlatMap[F] = ev }
+
 }
 
 private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 {
-  implicit def kleisliApplicative[F[_]: Applicative, A]: Applicative[Kleisli[F, A, ?]] = new Applicative[Kleisli[F, A, ?]] {
-    def pure[B](x: B): Kleisli[F, A, B] =
-      Kleisli.pure[F, A, B](x)
-
-    def ap[B, C](f: Kleisli[F, A, B => C])(fa: Kleisli[F, A, B]): Kleisli[F, A, C] =
-      fa.ap(f)
-
-    override def map[B, C](fb: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
-      fb.map(f)
-
-    override def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
-      Kleisli(a => Applicative[F].product(fb.run(a), fc.run(a)))
+  implicit def kleisliApplicative[F[_], A](implicit A : Applicative[F]): Applicative[Kleisli[F, A, ?]] = new KleisliApplicative[F, A] {
+    implicit def F: Applicative[F] = A
   }
 }
 
@@ -268,4 +262,37 @@ private trait KleisliMonoidK[F[_]] extends MonoidK[Lambda[A => Kleisli[F, A, A]]
   implicit def F: Monad[F]
 
   override def empty[A]: Kleisli[F, A, A] = Kleisli(F.pure[A])
+}
+
+
+private trait KleisliApplicativeError[F[_], A, E] extends KleisliApplicative[F, A] with ApplicativeError[Kleisli[F, A, ?], E] {
+  type K[T] = Kleisli[F, A, T]
+
+  implicit def AF: ApplicativeError[F, E]
+
+  implicit def F: Applicative[F] = AF
+
+  def raiseError[B](e: E): K[B] = Kleisli(_ => AF.raiseError(e))
+
+  def handleErrorWith[B](kb: K[B])(f: E => K[B]): K[B] = Kleisli { a: A =>
+    AF.handleErrorWith(kb.run(a))((e: E) => f(e).run(a))
+  }
+
+}
+
+
+private trait KleisliApplicative[F[_], A] extends Applicative[Kleisli[F, A, ?]] {
+  implicit def F: Applicative[F]
+
+  def pure[B](x: B): Kleisli[F, A, B] =
+    Kleisli.pure[F, A, B](x)
+
+  def ap[B, C](f: Kleisli[F, A, B => C])(fa: Kleisli[F, A, B]): Kleisli[F, A, C] =
+    fa.ap(f)
+
+  override def map[B, C](fb: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
+    fb.map(f)
+
+  override def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
+    Kleisli(a => Applicative[F].product(fb.run(a), fc.run(a)))
 }

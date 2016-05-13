@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.arrow.{Arrow, Choice, Split}
-import cats.data.{Kleisli, Reader}
+import cats.data.{XorT, Kleisli, Reader}
 import cats.functor.{Contravariant, Strong}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -15,8 +15,11 @@ class KleisliTests extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
     Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
+  implicit val xorTEq = XorT.xorTEq[Kleisli[Option, Int, ?], Unit, Int]
+
   implicit val iso = CartesianTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
 
+  checkAll("ApplicativeError[Klesili[Option, Int, Int], Unit]", ApplicativeErrorTests[Kleisli[Option, Int, ?], Unit].applicativeError[Int, Int, Int])
   checkAll("Kleisli[Option, Int, Int]", CartesianTests[Kleisli[Option, Int, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Cartesian[Kleisli[Option, Int, ?]]))
 
