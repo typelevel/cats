@@ -83,9 +83,16 @@ import simulacrum.typeclass
    * `A` values will be mapped into `G[B]` and combined using
    * `Applicative#map2`.
    *
-   * This method does the same thing as `Foldable#traverse_`.  The
-   * difference is that we only need `Apply[G]` here, since we don't
-   * need to call `Applicative#pure` for a starting value.
+   * This method is similar to [[Foldable.traverse_]]. There are two
+   * main differences:
+   *
+   * 1. We only need an [[Apply]] instance for `G` here, since we
+   * don't need to call [[Applicative.pure]] for a starting value.
+   * 2. This performs a strict left-associative traversal and thus
+   * must always traverse the entire data structure. Prefer
+   * [[Foldable.traverse_]] if you have an [[Applicative]] instance
+   * available for `G` and want to take advantage of short-circuiting
+   * the traversal.
    */
   def traverse1_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
     G.map(reduceLeftTo(fa)(f)((x, y) => G.map2(x, f(y))((_, b) => b)))(_ => ())
@@ -93,9 +100,9 @@ import simulacrum.typeclass
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.
    *
-   * This method is similar to `Foldable#sequence_`. The difference is
-   * that we only need `Apply[G]` here, since we don't need to call
-   * `Applicative#pure` for a starting value.
+   * This method is similar to [[Foldable.sequence_]] but requires only
+   * an [[Apply]] instance for `G` instead of [[Applicative]]. See the
+   * [[traverse1_]] documentation for a description of the differences.
    */
   def sequence1_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
     G.map(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))(_ => ())

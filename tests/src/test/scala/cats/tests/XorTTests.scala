@@ -70,6 +70,12 @@ class XorTTests extends CatsSuite {
     }
   }
 
+  test("fromEither") {
+    forAll { (either: Either[String, Int]) =>
+      Some(either.isLeft) should === (XorT.fromEither[Option](either).isLeft)
+    }
+  }
+
   test("isLeft negation of isRight") {
     forAll { (xort: XorT[List, String, Int]) =>
       xort.isLeft should === (xort.isRight.map(! _))

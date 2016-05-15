@@ -107,9 +107,9 @@ import simulacrum.typeclass
    * needed.
    */
   def traverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
-    foldLeft(fa, G.pure(())) { (acc, a) =>
-      G.map2(acc, f(a)) { (_, _) => () }
-    }
+    foldRight(fa, Always(G.pure(()))) { (a, acc) =>
+      G.map2Eval(f(a), acc) { (_, _) => () }
+    }.value
 
   /**
    * Behaves like traverse_, but uses [[Unapply]] to find the

@@ -3,8 +3,8 @@ package std
 
 trait OptionInstances extends cats.kernel.std.OptionInstances {
 
-  implicit val optionInstance: Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] =
-    new Traverse[Option] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] {
+  implicit val optionInstance: Traverse[Option] with MonadError[Option, Unit] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] =
+    new Traverse[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] {
 
       def empty[A]: Option[A] = None
 
@@ -20,6 +20,12 @@ trait OptionInstances extends cats.kernel.std.OptionInstances {
 
       override def map2[A, B, Z](fa: Option[A], fb: Option[B])(f: (A, B) => Z): Option[Z] =
         fa.flatMap(a => fb.map(b => f(a, b)))
+
+      override def map2Eval[A, B, Z](fa: Option[A], fb: Eval[Option[B]])(f: (A, B) => Z): Eval[Option[Z]] =
+        fa match {
+          case None => Now(None)
+          case Some(a) => fb.map(_.map(f(a, _)))
+        }
 
       def coflatMap[A, B](fa: Option[A])(f: Option[A] => B): Option[B] =
         if (fa.isDefined) Some(f(fa)) else None
@@ -41,6 +47,10 @@ trait OptionInstances extends cats.kernel.std.OptionInstances {
           case None => Applicative[G].pure(None)
           case Some(a) => Applicative[G].map(f(a))(Some(_))
         }
+
+      def raiseError[A](e: Unit): Option[A] = None
+
+      def handleErrorWith[A](fa: Option[A])(f: (Unit) => Option[A]): Option[A] = fa orElse f(())
 
       override def exists[A](fa: Option[A])(p: A => Boolean): Boolean =
         fa.exists(p)

@@ -32,10 +32,14 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Stream[HasEq[Int]]].check(_.eqv)
 
   laws[OrderLaws, Set[Int]].check(_.partialOrder)
+  laws[OrderLaws, Set[Int]]("reverse").check(_.partialOrder(PartialOrder[Set[Int]].reverse))
+  laws[OrderLaws, Set[Int]]("reverse.reverse").check(_.partialOrder(PartialOrder[Set[Int]].reverse.reverse))
   laws[OrderLaws, Option[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, List[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, Vector[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, Stream[HasPartialOrder[Int]]].check(_.partialOrder)
+  laws[OrderLaws, Set[Int]]("asMeetPartialOrder").check(_.partialOrder(Semilattice.asMeetPartialOrder[Set[Int]]))
+  laws[OrderLaws, Set[Int]]("asJoinPartialOrder").check(_.partialOrder(Semilattice.asJoinPartialOrder[Set[Int]]))
 
   laws[OrderLaws, Unit].check(_.order)
   laws[OrderLaws, Boolean].check(_.order)
@@ -51,6 +55,8 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Vector[Int]].check(_.order)
   laws[OrderLaws, Stream[Int]].check(_.order)
   laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
+  laws[OrderLaws, Int]("reverse").check(_.order(Order[Int].reverse))
+  laws[OrderLaws, Int]("reverse.reverse").check(_.order(Order[Int].reverse.reverse))
 
   laws[GroupLaws, String].check(_.monoid)
   laws[GroupLaws, Option[Int]].check(_.monoid)

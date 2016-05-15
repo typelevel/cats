@@ -50,6 +50,12 @@ class OptionTTests extends CatsSuite {
     }
   }
 
+  test("OptionT[Id, A].withFilter consistent with Option.withFilter"){
+    forAll { (o: Option[Int], f: Int => Boolean) =>
+      (for {x <- o if f(x)} yield x) should === ((for {x <- OptionT[Id, Int](o) if f(x)} yield x).value)
+    }
+  }
+
   test("OptionT[Id, A].filterNot consistent with Option.filterNot") {
     forAll { (o: Option[Int], f: Int => Boolean) =>
       o.filterNot(f) should === (OptionT[Id, Int](o).filterNot(f).value)

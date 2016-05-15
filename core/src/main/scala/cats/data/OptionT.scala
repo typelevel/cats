@@ -2,7 +2,7 @@ package cats
 package data
 
 /**
- * `OptionT[F[_], A` is a light wrapper on an `F[Option[A]]` with some
+ * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some
  * convenient methods for working with this nested structure.
  *
  * It may also be said that `OptionT` is a monad transformer for `Option`.
@@ -58,6 +58,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def filter(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
     OptionT(F.map(value)(_.filter(p)))
+
+  def withFilter(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
+    filter(p)(F)
 
   def filterNot(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
     OptionT(F.map(value)(_.filterNot(p)))

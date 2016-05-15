@@ -1,8 +1,8 @@
 package cats
-package tests
+package free
 
+import cats.tests.CatsSuite
 import cats.arrow.NaturalTransformation
-import cats.free.FreeApplicative
 import cats.laws.discipline.{CartesianTests, ApplicativeTests, SerializableTests}
 import cats.data.State
 

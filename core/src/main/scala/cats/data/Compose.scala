@@ -48,13 +48,13 @@ private[data] sealed abstract class ComposeInstances3 extends ComposeInstances4 
 }
 
 private[data] sealed abstract class ComposeInstances4 extends ComposeInstances5 {
- 	/**
- 	 * Two sequentially dependent Applicatives can be composed.
- 	 *
- 	 * The composition of Applicatives `F` and `G`, `F[G[x]]`, is also an Applicative
- 	 *
- 	 * Applicative[Option].compose[List].pure(10) = Some(List(10))
- 	 */
+  /**
+   * Two sequentially dependent Applicatives can be composed.
+   *
+   * The composition of Applicatives `F` and `G`, `F[G[x]]`, is also an Applicative
+   *
+   * Applicative[Option].compose[List].pure(10) = Some(List(10))
+   */
   implicit def composeApplicative[F[_]: Applicative, G[_]: Applicative]: Applicative[Compose[F, G, ?]] =
     new ComposeApplicative[F, G] {
       val F = Applicative[F]
@@ -73,10 +73,16 @@ private[data] sealed abstract class ComposeInstances5 extends ComposeInstances6 
    *
    * The composition of Applys `F` and `G`, `F[G[x]]`, is also an Apply.
    *
-   * val ap = Apply[Option].compose[List]
-   * val x = Some(List(1, 2))
-   * val y = Some(List(10, 20))
-   * ap.map2(x, y)(_ + _) == Some(List(11, 12, 21, 22))
+   * Example:
+   * {{{
+   * scala> import cats.Apply
+   * scala> import cats.implicits._
+   * scala> val ap = Apply[Option].compose[List]
+   * scala> val x: Option[List[Int]] = Some(List(1, 2))
+   * scala> val y: Option[List[Int]] = Some(List(10, 20))
+   * scala> ap.map2(x, y)(_ + _)
+   * res0: Option[List[Int]] = Some(List(11, 21, 12, 22))
+   * }}}
    */
   implicit def composeApply[F[_]: Apply, G[_]: Apply]: Apply[Compose[F, G, ?]] =
     new ComposeApply[F, G] {
@@ -128,6 +134,9 @@ private[data] trait ComposeApply[F[_], G[_]] extends Apply[Compose[F, G, ?]] wit
 
   override def ap[A, B](ff: Compose[F, G, A => B])(fa: Compose[F, G, A]): Compose[F, G, B] =
     Compose(F.ap(F.map(ff.value)(gab => G.ap(gab)(_)))(fa.value))
+
+  override def product[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[(A, B)]] =
+    F.map2(fa, fb)(G.product)
 }
 
 private[data] trait ComposeApplicative[F[_], G[_]] extends Applicative[Compose[F, G, ?]] with ComposeApply[F, G] {

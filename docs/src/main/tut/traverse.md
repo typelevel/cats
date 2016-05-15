@@ -108,19 +108,7 @@ Examples.
 val x1 = List("1", "2", "3").traverseU(parseIntXor)
 val x2 = List("1", "abc", "3").traverseU(parseIntXor)
 val x3 = List("1", "abc", "def").traverseU(parseIntXor)
-```
 
-We need proof that `NonEmptyList[A]` is a `Semigroup `for there to be an `Applicative` instance for 
-`ValidatedNel`.
-
-```tut:silent
-implicit def nelSemigroup[A]: Semigroup[NonEmptyList[A]] =
-  OneAnd.oneAndSemigroupK[List].algebra[A]
-```
-
-Thus.
-
-```tut
 val v1 = List("1", "2", "3").traverseU(parseIntValidated)
 val v2 = List("1", "abc", "3").traverseU(parseIntValidated)
 val v3 = List("1", "abc", "def").traverseU(parseIntValidated)
