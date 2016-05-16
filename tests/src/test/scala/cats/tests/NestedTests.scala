@@ -29,16 +29,16 @@ class NestedTests extends CatsSuite {
 
   {
     // Invariant + Covariant = Invariant
-    implicit val instance = ListWrapper.invariant
-    checkAll("Nested[ListWrapper, Option]", InvariantTests[Nested[ListWrapper, Option, ?]].invariant[Int, Int, Int])
-    checkAll("Invariant[Nested[ListWrapper, Option, ?]]", SerializableTests.serializable(Invariant[Nested[ListWrapper, Option, ?]]))
+    val instance = Nested.nestedInvariantCovariant(ListWrapper.invariant, ListWrapper.functor)
+    checkAll("Nested[ListWrapper, ListWrapper] - Invariant + Covariant", InvariantTests[Nested[ListWrapper, ListWrapper, ?]](instance).invariant[Int, Int, Int])
+    checkAll("Invariant[Nested[ListWrapper, ListWrapper, ?]] - Invariant + Covariant", SerializableTests.serializable(instance))
   }
 
   {
     // Invariant + Contravariant = Invariant
-    implicit val instance = ListWrapper.invariant
-    checkAll("Nested[ListWrapper, Show]", InvariantTests[Nested[ListWrapper, Show, ?]].invariant[Int, Int, Int])
-    checkAll("Invariant[Nested[ListWrapper, Show, ?]]", SerializableTests.serializable(Invariant[Nested[ListWrapper, Show, ?]]))
+    val instance = Nested.nestedInvariantContravariant(ListWrapper.invariant, Contravariant[Show])
+    checkAll("Nested[ListWrapper, Show]", InvariantTests[Nested[ListWrapper, Show, ?]](instance).invariant[Int, Int, Int])
+    checkAll("Invariant[Nested[ListWrapper, Show, ?]]", SerializableTests.serializable(instance))
   }
 
   {

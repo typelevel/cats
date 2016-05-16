@@ -122,7 +122,7 @@ private[data] sealed abstract class NestedInstances7 extends NestedInstances8 {
     }
 }
 
-private[data] sealed abstract class NestedInstances8 {
+private[data] sealed abstract class NestedInstances8 extends NestedInstances9 {
   implicit def nestedInvariantCovariant[F[_]: Invariant, G[_]: Functor]: Invariant[Nested[F, G, ?]] =
     new NestedInvariantCovariant[F, G] {
       val F = Invariant[F]
