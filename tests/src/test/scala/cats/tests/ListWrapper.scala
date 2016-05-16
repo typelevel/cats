@@ -84,6 +84,8 @@ object ListWrapper {
 
   val monad: Monad[ListWrapper] = monadCombine
 
+  val applicative: Applicative[ListWrapper] = monadCombine
+
   /** apply is taken due to ListWrapper being a case class */
   val applyInstance: Apply[ListWrapper] = monadCombine
 

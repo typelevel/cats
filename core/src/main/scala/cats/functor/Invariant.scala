@@ -8,41 +8,9 @@ import simulacrum.typeclass
  */
 @typeclass trait Invariant[F[_]] { self =>
   def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
-
-  /**
-   * Compose the Invariant Functor F with a normal (Covariant) Functor to get a new Invariant Functor for [F[G[_]].
-   */
-  def composeWithFunctor[G[_]](implicit GG: Functor[G]): Invariant[Lambda[X => F[G[X]]]] = new Invariant.CovariantComposite[F, G] {
-    def F: Invariant[F] = self
-    def G: Functor[G] = GG
-  }
-
-  /**
-   * Compose the Invariant Functor F with a Contravariant Functor to get a new Invariant Functor for [F[G[_]]].
-   */
-  def composeWithContravariant[G[_]](implicit GG: Contravariant[G]): Invariant[Lambda[X => F[G[X]]]] = new Invariant.ContravariantComposite[F, G] {
-    def F: Invariant[F] = self
-    def G: Contravariant[G] = GG
-  }
 }
 
-object Invariant extends AlgebraInvariantInstances {
-  trait CovariantComposite[F[_], G[_]] extends Invariant[Lambda[X => F[G[X]]]] {
-    def F: Invariant[F]
-    def G: Functor[G]
-
-    override def imap[A, B](fga: F[G[A]])(f: A => B)(g: B => A): F[G[B]] =
-      F.imap(fga)(ga => G.map(ga)(f))(gb => G.map(gb)(g))
-  }
-
-  trait ContravariantComposite[F[_], G[_]] extends Invariant[Lambda[X => F[G[X]]]] {
-    def F: Invariant[F]
-    def G: Contravariant[G]
-
-    override def imap[A, B](fga: F[G[A]])(f: A => B)(g: B => A): F[G[B]] =
-      F.imap(fga)(ga => G.contramap(ga)(g))(gb => G.contramap(gb)(f))
-  }
-}
+object Invariant extends AlgebraInvariantInstances
 
 /**
  * Invariant instances for types that are housed in Algebra and therefore

@@ -48,12 +48,14 @@ Apply[Option].map(None)(double)
 
 ### compose
 
-And like functors, `Apply` instances also compose:
+And like functors, `Apply` instances also compose (via the `Nested` data type):
 
 ```tut
-val listOpt = Apply[List] compose Apply[Option]
+import cats.data.Nested
+val listOpt = Nested[List, Option, Int](List(Some(1), None, Some(3)))
 val plusOne = (x:Int) => x + 1
-listOpt.ap(List(Some(plusOne)))(List(Some(1), None, Some(3)))
+val f = Nested[List, Option, Int => Int](List(Some(plusOne)))
+Apply[Nested[List, Option, ?]].ap(f)(listOpt)
 ```
 
 ### ap
