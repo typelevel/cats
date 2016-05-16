@@ -1,6 +1,7 @@
 package cats
 package tests
 
+import cats.functor.Invariant
 import cats.std.list._
 
 import org.scalacheck.Arbitrary
@@ -57,6 +58,8 @@ object ListWrapper {
       def map[A, B](fa: ListWrapper[A])(f: A => B): ListWrapper[B] =
         ListWrapper(Functor[List].map(fa.list)(f))
     }
+
+  val invariant: Invariant[ListWrapper] = functor
 
   val semigroupK: SemigroupK[ListWrapper] =
     new SemigroupK[ListWrapper] {

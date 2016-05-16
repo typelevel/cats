@@ -128,7 +128,9 @@ private[data] sealed abstract class NestedInstances8 {
       val F = Invariant[F]
       val G = Functor[G]
     }
+}
 
+private[data] sealed abstract class NestedInstances9 {
   implicit def nestedInvariantContravariant[F[_]: Invariant, G[_]: Contravariant]: Invariant[Nested[F, G, ?]] =
     new NestedInvariantContravariant[F, G] {
       val F = Invariant[F]

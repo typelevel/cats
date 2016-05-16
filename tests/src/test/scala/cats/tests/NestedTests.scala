@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data._
-import cats.functor.Contravariant
+import cats.functor._
 import cats.laws.discipline._
 import cats.laws.discipline.CartesianTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._
@@ -21,6 +21,27 @@ class NestedTests extends CatsSuite {
   }
 
   {
+    // Invariant composition
+    implicit val instance = ListWrapper.invariant
+    checkAll("Nested[ListWrapper, ListWrapper]", InvariantTests[Nested[ListWrapper, ListWrapper, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[Nested[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Invariant[Nested[ListWrapper, ListWrapper, ?]]))
+  }
+
+  {
+    // Invariant + Covariant = Invariant
+    implicit val instance = ListWrapper.invariant
+    checkAll("Nested[ListWrapper, Option]", InvariantTests[Nested[ListWrapper, Option, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[Nested[ListWrapper, Option, ?]]", SerializableTests.serializable(Invariant[Nested[ListWrapper, Option, ?]]))
+  }
+
+  {
+    // Invariant + Contravariant = Invariant
+    implicit val instance = ListWrapper.invariant
+    checkAll("Nested[ListWrapper, Show]", InvariantTests[Nested[ListWrapper, Show, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[Nested[ListWrapper, Show, ?]]", SerializableTests.serializable(Invariant[Nested[ListWrapper, Show, ?]]))
+  }
+
+  {
     // Functor composition
     implicit val instance = ListWrapper.functor
     checkAll("Nested[Option, ListWrapper, ?]", FunctorTests[Nested[Option, ListWrapper, ?]].functor[Int, Int, Int])
@@ -31,6 +52,23 @@ class NestedTests extends CatsSuite {
     // Covariant + contravariant functor composition
     checkAll("Nested[Option, Show, ?]", ContravariantTests[Nested[Option, Show, ?]].contravariant[Int, Int, Int])
     checkAll("Contravariant[Nested[Option, Show, ?]]", SerializableTests.serializable(Contravariant[Nested[Option, Show, ?]]))
+  }
+
+  {
+    // Contravariant + Contravariant = Functor
+    type ConstInt[A] = Const[Int, A]
+    // SI-2712
+    implicit val instance = Nested.nestedContravariant[ConstInt, Show]
+    implicit val arbitrary = nestedArbitrary[ConstInt, Show, Int]
+    implicit val eqv = Nested.nestedEq[ConstInt, Show, Int]
+    checkAll("Nested[Const[Int, ?], Show, ?]", FunctorTests[Nested[ConstInt, Show, ?]].functor[Int, Int, Int])
+    checkAll("Functor[Nested[Const[Int, ?], Show, ?]]", SerializableTests.serializable(instance))
+  }
+
+  {
+    // Contravariant + Functor = Contravariant
+    checkAll("Nested[Show, Option, ?]", ContravariantTests[Nested[Show, Option, ?]].contravariant[Int, Int, Int])
+    checkAll("Contravariant[Nested[Show, Option, ?]]", SerializableTests.serializable(Contravariant[Nested[Show, Option, ?]]))
   }
 
   {
@@ -69,14 +107,14 @@ class NestedTests extends CatsSuite {
   {
     // SemigroupK composition
     implicit val instance = ListWrapper.semigroupK
-    checkAll("Nested[List, ListWrapper, ?]", SemigroupKTests[Nested[List, ListWrapper, ?]].semigroupK[Int])
-    checkAll("SemigroupK[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(SemigroupK[Nested[List, ListWrapper, ?]]))
+    checkAll("Nested[ListWrapper, Option, ?]", SemigroupKTests[Nested[ListWrapper, Option, ?]].semigroupK[Int])
+    checkAll("SemigroupK[Nested[ListWrapper, Option, ?]]", SerializableTests.serializable(SemigroupK[Nested[ListWrapper, Option, ?]]))
   }
 
   {
     // MonoidK composition
     implicit val instance = ListWrapper.monoidK
-    checkAll("Nested[List, ListWrapper, ?]", MonoidKTests[Nested[List, ListWrapper, ?]].monoidK[Int])
-    checkAll("MonoidK[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(MonoidK[Nested[List, ListWrapper, ?]]))
+    checkAll("Nested[ListWrapper, Option, ?]", MonoidKTests[Nested[ListWrapper, Option, ?]].monoidK[Int])
+    checkAll("MonoidK[Nested[ListWrapper, Option, ?]]", SerializableTests.serializable(MonoidK[Nested[ListWrapper, Option, ?]]))
   }
 }
