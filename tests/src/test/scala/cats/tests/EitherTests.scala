@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadTests, SerializableTests, CartesianTests}
+import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadRecTests, SerializableTests, CartesianTests}
 import cats.kernel.laws.OrderLaws
 
 class EitherTests extends CatsSuite {
@@ -11,8 +11,8 @@ class EitherTests extends CatsSuite {
   checkAll("Either[Int, Int]", CartesianTests[Either[Int, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Either[Int, ?]]", SerializableTests.serializable(Cartesian[Either[Int, ?]]))
 
-  checkAll("Either[Int, Int]", MonadTests[Either[Int, ?]].monad[Int, Int, Int])
-  checkAll("Monad[Either[Int, ?]]", SerializableTests.serializable(Monad[Either[Int, ?]]))
+  checkAll("Either[Int, Int]", MonadRecTests[Either[Int, ?]].monadRec[Int, Int, Int])
+  checkAll("MonadRec[Either[Int, ?]]", SerializableTests.serializable(MonadRec[Either[Int, ?]]))
 
   checkAll("Either[Int, Int] with Option", TraverseTests[Either[Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Either[Int, ?]", SerializableTests.serializable(Traverse[Either[Int, ?]]))

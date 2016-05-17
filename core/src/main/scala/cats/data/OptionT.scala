@@ -132,7 +132,7 @@ object OptionT extends OptionTInstances {
   def liftF[F[_], A](fa: F[A])(implicit F: Functor[F]): OptionT[F, A] = OptionT(F.map(fa)(Some(_)))
 }
 
-private[data] sealed trait OptionTInstances1 {
+private[data] sealed trait OptionTInstances2 {
   implicit def catsDataFunctorForOptionT[F[_]:Functor]: Functor[OptionT[F, ?]] =
     new Functor[OptionT[F, ?]] {
       override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
@@ -148,22 +148,42 @@ private[data] sealed trait OptionTInstances1 {
     }
 }
 
+private[data] sealed trait OptionTInstances1 extends OptionTInstances2 {
+
+  implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
+    new OptionTMonad[F] { implicit val F = F0 }
+}
+
 private[data] sealed trait OptionTInstances extends OptionTInstances1 {
-
-  implicit def catsDataMonadForOptionT[F[_]](implicit F: Monad[F]): Monad[OptionT[F, ?]] =
-    new Monad[OptionT[F, ?]] {
-      def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
-
-      def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
-        fa.flatMap(f)
-
-      override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
-        fa.map(f)
-    }
+  implicit def catsDataMonadRecForOptionT[F[_]](implicit F0: MonadRec[F]): MonadRec[OptionT[F, ?]] =
+    new OptionTMonadRec[F] { implicit val F = F0 }
 
   implicit def catsDataEqForOptionT[F[_], A](implicit FA: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     FA.on(_.value)
 
   implicit def catsDataShowForOptionT[F[_], A](implicit F: Show[F[Option[A]]]): Show[OptionT[F, A]] =
     functor.Contravariant[Show].contramap(F)(_.value)
+}
+
+private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
+  implicit val F: Monad[F]
+
+  def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
+
+  def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
+    fa.flatMap(f)
+
+  override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
+    fa.map(f)
+}
+
+private[data] trait OptionTMonadRec[F[_]] extends MonadRec[OptionT[F, ?]] with OptionTMonad[F] {
+  implicit val F: MonadRec[F]
+
+  def tailRecM[A, B](a: A)(f: A => OptionT[F, A Xor B]): OptionT[F, B] =
+    OptionT(F.tailRecM(a)(a0 => F.map(f(a0).value){
+      case None => Xor.Right(None)
+      case Some(Xor.Left(a1)) => Xor.Left(a1)
+      case Some(Xor.Right(b)) => Xor.Right(Some(b))
+    }))
 }

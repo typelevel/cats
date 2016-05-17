@@ -1,8 +1,8 @@
 package cats.tests
 
-import cats.{Id, Monad, Cartesian, Show}
+import cats.{Id, MonadRec, Cartesian, Show}
 import cats.data.{OptionT, Xor}
-import cats.laws.discipline.{FunctorTests, SerializableTests, CartesianTests, MonadTests}
+import cats.laws.discipline.{FunctorTests, SerializableTests, CartesianTests, MonadRecTests}
 import cats.laws.discipline.arbitrary._
 
 class OptionTTests extends CatsSuite {
@@ -160,8 +160,8 @@ class OptionTTests extends CatsSuite {
     }
   }
 
-  checkAll("Monad[OptionT[List, Int]]", MonadTests[OptionT[List, ?]].monad[Int, Int, Int])
-  checkAll("Monad[OptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
+  checkAll("OptionT[List, Int]", MonadRecTests[OptionT[List, ?]].monadRec[Int, Int, Int])
+  checkAll("MonadRec[OptionT[List, ?]]", SerializableTests.serializable(MonadRec[OptionT[List, ?]]))
 
   {
     implicit val F = ListWrapper.functor

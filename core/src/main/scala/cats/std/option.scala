@@ -1,10 +1,13 @@
 package cats
 package std
 
+import scala.annotation.tailrec
+import cats.data.Xor
+
 trait OptionInstances extends cats.kernel.std.OptionInstances {
 
-  implicit val catsStdInstancesForOption: Traverse[Option] with MonadError[Option, Unit] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] =
-    new Traverse[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] {
+  implicit val catsStdInstancesForOption: Traverse[Option] with MonadError[Option, Unit] with MonadCombine[Option] with MonadRec[Option] with CoflatMap[Option] with Alternative[Option] =
+    new Traverse[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with MonadRec[Option] with CoflatMap[Option] with Alternative[Option] {
 
       def empty[A]: Option[A] = None
 
@@ -17,6 +20,14 @@ trait OptionInstances extends cats.kernel.std.OptionInstances {
 
       def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =
         fa.flatMap(f)
+
+      @tailrec
+      def tailRecM[A, B](a: A)(f: A => Option[A Xor B]): Option[B] =
+        f(a) match {
+          case None => None
+          case Some(Xor.Left(a1)) => tailRecM(a1)(f)
+          case Some(Xor.Right(b)) => Some(b)
+        }
 
       override def map2[A, B, Z](fa: Option[A], fb: Option[B])(f: (A, B) => Z): Option[Z] =
         fa.flatMap(a => fb.map(b => f(a, b)))

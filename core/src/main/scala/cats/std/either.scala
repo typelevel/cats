@@ -1,6 +1,9 @@
 package cats
 package std
 
+import scala.annotation.tailrec
+import cats.data.Xor
+
 trait EitherInstances extends EitherInstances1 {
   implicit val catsStdBitraverseForEither: Bitraverse[Either] =
     new Bitraverse[Either] {
@@ -23,8 +26,8 @@ trait EitherInstances extends EitherInstances1 {
         }
     }
 
-  implicit def catsStdInstancesForEither[A]: Monad[Either[A, ?]] with Traverse[Either[A, ?]] =
-    new Monad[Either[A, ?]] with Traverse[Either[A, ?]] {
+  implicit def catsStdInstancesForEither[A]: MonadRec[Either[A, ?]] with Traverse[Either[A, ?]] =
+    new MonadRec[Either[A, ?]] with Traverse[Either[A, ?]] {
       def pure[B](b: B): Either[A, B] = Right(b)
 
       def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =
@@ -32,6 +35,14 @@ trait EitherInstances extends EitherInstances1 {
 
       override def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
         fa.right.map(f)
+
+      @tailrec
+      def tailRecM[B, C](b: B)(f: B => Either[A, B Xor C]): Either[A, C] =
+        f(b) match {
+          case Left(a) => Left(a)
+          case Right(Xor.Left(b1)) => tailRecM(b1)(f)
+          case Right(Xor.Right(c)) => Right(c)
+        }
 
       override def map2Eval[B, C, Z](fb: Either[A, B], fc: Eval[Either[A, C]])(f: (B, C) => Z): Eval[Either[A, Z]] =
         fb match {

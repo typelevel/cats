@@ -13,6 +13,8 @@ class XorTTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[XorT[List, String, ?]]
   checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, String, ?], String]))
+  checkAll("XorT[List, String, Int]", MonadRecTests[XorT[List, String, ?]].monadRec[Int, Int, Int])
+  checkAll("MonadRec[XorT[List, String, ?]]", SerializableTests.serializable(MonadRec[XorT[List, String, ?]]))
   checkAll("XorT[List, ?, ?]", BifunctorTests[XorT[List, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
   checkAll("Bifunctor[XorT[List, ?, ?]]", SerializableTests.serializable(Bifunctor[XorT[List, ?, ?]]))
   checkAll("XorT[List, ?, ?]", BitraverseTests[XorT[List, ?, ?]].bitraverse[Option, Int, Int, Int, String, String, String])

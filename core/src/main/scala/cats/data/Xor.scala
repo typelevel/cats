@@ -1,6 +1,7 @@
 package cats
 package data
 
+import scala.annotation.tailrec
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
@@ -233,13 +234,19 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
         }
     }
 
-  implicit def catsDataInstancesForXor[A]: Traverse[A Xor ?] with MonadError[Xor[A, ?], A] =
-    new Traverse[A Xor ?] with MonadError[Xor[A, ?], A] {
+  implicit def catsDataInstancesForXor[A]: Traverse[A Xor ?] with MonadRec[A Xor ?] with MonadError[Xor[A, ?], A] =
+    new Traverse[A Xor ?] with MonadRec[A Xor ?] with MonadError[Xor[A, ?], A] {
       def traverse[F[_]: Applicative, B, C](fa: A Xor B)(f: B => F[C]): F[A Xor C] = fa.traverse(f)
       def foldLeft[B, C](fa: A Xor B, c: C)(f: (C, B) => C): C = fa.foldLeft(c)(f)
       def foldRight[B, C](fa: A Xor B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] = fa.foldRight(lc)(f)
       def flatMap[B, C](fa: A Xor B)(f: B => A Xor C): A Xor C = fa.flatMap(f)
       def pure[B](b: B): A Xor B = Xor.right(b)
+      @tailrec def tailRecM[B, C](b: B)(f: B => A Xor (B Xor C)): A Xor C =
+        f(b) match {
+          case Xor.Left(a) => Xor.Left(a)
+          case Xor.Right(Xor.Left(b1)) => tailRecM(b1)(f)
+          case Xor.Right(Xor.Right(c)) => Xor.Right(c)
+        }
       def handleErrorWith[B](fea: Xor[A, B])(f: A => Xor[A, B]): Xor[A, B] =
         fea match {
           case Xor.Left(e) => f(e)
