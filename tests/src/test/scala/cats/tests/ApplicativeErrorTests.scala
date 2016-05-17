@@ -38,4 +38,9 @@ class ApplicativeErrorCheck extends CatsSuite {
     failed.recoverWith { case error => error.length.right } should === (7.right)
   }
 
+  test("syntax summon with F[_] ") {
+    val failedOption: Option[String] = None
+    failedOption.recoverWith { case error => Some("error") } should === (Some("error"))
+  }
+
 }
