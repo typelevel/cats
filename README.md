@@ -36,8 +36,12 @@ functionality, you can pick-and-choose from amongst these modules
 
 Release notes for Cats are available in [CHANGES.md](CHANGES.md).
 
-*Cats 0.5.0 is a pre-release: there are not currently source- or
-binary-compatibility guarantees.*
+*Cats is still under active development. While we don't anticipate any
+ major redesigns, changes that are neither source nor binary
+ compatibility are to be expected in upcoming cats releases. We will
+ update the minor version of cats accordingly for such changes. Once
+ cats 1.0 is released (ETA: Q3 2016), there will be an increased focus
+ on making changes in compatible ways.*
 
 ### Documentation
 Among the goals of Cats is to provide approachable and useful documentation.
