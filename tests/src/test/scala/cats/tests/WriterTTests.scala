@@ -4,10 +4,9 @@ package tests
 import cats.data.{Writer, WriterT}
 import cats.functor.Bifunctor
 import cats.laws.discipline._
-import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 
-import algebra.laws.OrderLaws
+import cats.kernel.laws.OrderLaws
 
 class WriterTTests extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]
@@ -246,5 +245,27 @@ class WriterTTests extends CatsSuite {
     MonoidK[WriterT[ListWrapper, ListWrapper[Int], ?]]
     checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", MonadCombineTests[WriterT[ListWrapper, ListWrapper[Int], ?]].monadCombine[Int, Int, Int])
     checkAll("MonadCombine[WriterT[ListWrapper, ListWrapper[Int], ?]]", SerializableTests.serializable(MonadCombine[WriterT[ListWrapper, ListWrapper[Int], ?]]))
+  }
+
+  {
+     // F[(L, V)] has a monoid
+    implicit val FLV: Monoid[ListWrapper[(Int, Int)]] = ListWrapper.monoid[(Int, Int)]
+
+    Monoid[WriterT[ListWrapper, Int, Int]]
+    Semigroup[WriterT[ListWrapper, Int, Int]]
+    checkAll("WriterT[ListWrapper, Int, Int]", kernel.laws.GroupLaws[WriterT[ListWrapper, Int, Int]].monoid)
+
+    Monoid[WriterT[Id, Int, Int]]
+    Semigroup[WriterT[Id, Int, Int]]
+  }
+
+  {
+    // F[(L, V)] has a semigroup
+    implicit val FLV: Semigroup[ListWrapper[(Int, Int)]] = ListWrapper.semigroup[(Int, Int)]
+
+    Semigroup[WriterT[ListWrapper, Int, Int]]
+    checkAll("WriterT[ListWrapper, Int, Int]", kernel.laws.GroupLaws[WriterT[ListWrapper, Int, Int]].semigroup)
+
+    Semigroup[WriterT[Id, Int, Int]]
   }
 }

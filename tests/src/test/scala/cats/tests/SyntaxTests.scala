@@ -110,7 +110,14 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val as2: List[A] = fa.dropWhile_(f5)
   }
 
-  def testTraverse[F[_]: Traverse, G[_]: Applicative, A]: Unit = {
+  def testTraverse[F[_]: Traverse: FlatMap, G[_]: Applicative, A, B]: Unit = {
+    val fa = mock[F[A]]
+    val f1 = mock[A => G[B]]
+    val gfb: G[F[B]] = fa.traverse(f1)
+
+    val f2 = mock[A => G[F[B]]]
+    val gfb2: G[F[B]] = fa.traverseM(f2)
+
     val fga = mock[F[G[A]]]
     val gunit: G[F[A]] = fga.sequence
   }
@@ -205,6 +212,14 @@ class SyntaxTests extends AllInstances with AllSyntax {
 
     val fgagb = mock[F[G[A], G[B]]]
     val gfab = fgagb.bisequence
+  }
+
+  def testMonadCombine[F[_]: MonadCombine, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+    val fga = mock[F[G[A]]]
+    val fa = fga.unite
+
+    val fhab = mock[F[H[A, B]]]
+    val fafb = fhab.separate
   }
 
   def testApplicative[F[_]: Applicative, A]: Unit = {

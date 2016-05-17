@@ -1,10 +1,9 @@
 package cats
 package std
 
-import scala.collection.immutable.Stream.Empty
 import cats.syntax.show._
 
-trait StreamInstances {
+trait StreamInstances extends cats.kernel.std.StreamInstances {
   implicit val streamInstance: Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] =
     new Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] {
 
@@ -42,11 +41,8 @@ trait StreamInstances {
         // We use foldRight to avoid possible stack overflows. Since
         // we don't want to return a Eval[_] instance, we call .value
         // at the end.
-        //
-        // (We don't worry about internal laziness because traverse
-        // has to evaluate the entire stream anyway.)
         foldRight(fa, Later(init)) { (a, lgsb) =>
-          lgsb.map(gsb => G.map2(f(a), gsb)(_ #:: _))
+          G.map2Eval(f(a), lgsb)(_ #:: _)
         }.value
       }
 
@@ -63,24 +59,4 @@ trait StreamInstances {
     new Show[Stream[A]] {
       def show(fa: Stream[A]): String = if(fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
     }
-
-  // TODO: eventually use algebra's instances (which will deal with
-  // implicit priority between Eq/PartialOrder/Order).
-
-  implicit def eqStream[A](implicit ev: Eq[A]): Eq[Stream[A]] =
-    new Eq[Stream[A]] {
-      def eqv(x: Stream[A], y: Stream[A]): Boolean = {
-        def loop(xs: Stream[A], ys: Stream[A]): Boolean =
-          xs match {
-            case Empty => ys.isEmpty
-            case a #:: xs =>
-              ys match {
-                case Empty => false
-                case b #:: ys => if (ev.neqv(a, b)) false else loop(xs, ys)
-              }
-          }
-        loop(x, y)
-      }
-    }
-
 }

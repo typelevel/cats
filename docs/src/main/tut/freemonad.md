@@ -2,7 +2,7 @@
 layout: default
 title:  "FreeMonads"
 section: "data"
-source: "core/src/main/scala/cats/free/Free.scala"
+source: "free/src/main/scala/cats/free/Free.scala"
 scaladoc: "#cats.free.Free"
 ---
 
@@ -24,6 +24,9 @@ In particular, *free monads* provide a practical way to:
 > (In cats, the type representing a *free monad* is abbreviated as `Free[_]`.)
 
 ## Using Free Monads
+
+If you'd like to use cats' free monad, you'll need to add a library dependency
+for the `cats-free` module.
 
 A good way to get a sense for how *free monads* work is to see them in
 action. The next section uses `Free[_]` to create an embedded DSL
@@ -292,7 +295,7 @@ val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(
 ## Composing Free monads ADTs.
 
 Real world applications often time combine different algebras.
-The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
+The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf)
 lets us compose different algebras in the context of `Free`.
 
 Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.

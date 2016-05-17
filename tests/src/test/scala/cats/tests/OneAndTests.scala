@@ -1,12 +1,11 @@
 package cats
 package tests
 
-import algebra.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{NonEmptyList, OneAnd}
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
 
 class OneAndTests extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit

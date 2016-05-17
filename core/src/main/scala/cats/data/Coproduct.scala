@@ -1,6 +1,7 @@
 package cats
 package data
 
+import cats.arrow.NaturalTransformation
 import cats.functor.Contravariant
 
 /** `F` on the left and `G` on the right of [[Xor]].
@@ -57,6 +58,28 @@ final case class Coproduct[F[_], G[_], A](run: F[A] Xor G[A]) {
   def toValidated: Validated[F[A], G[A]] =
     run.toValidated
 
+  /**
+   * Fold this coproduct into a new type constructor using two natural transformations.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.arrow.NaturalTransformation
+   * scala> import cats.data.Coproduct
+   * scala> val listToOption =
+   *      |   new NaturalTransformation[List, Option] {
+   *      |     def apply[A](fa: List[A]): Option[A] = fa.headOption
+   *      |   }
+   * scala> val optionToOption = NaturalTransformation.id[Option]
+   * scala> val cp1: Coproduct[List, Option, Int] = Coproduct.leftc(List(1,2,3))
+   * scala> val cp2: Coproduct[List, Option, Int] = Coproduct.rightc(Some(4))
+   * scala> cp1.fold(listToOption, optionToOption)
+   * res0: Option[Int] = Some(1)
+   * scala> cp2.fold(listToOption, optionToOption)
+   * res1: Option[Int] = Some(4)
+   * }}}
+   */
+  def fold[H[_]](f: NaturalTransformation[F, H], g: NaturalTransformation[G, H]): H[A] =
+    run.fold(f.apply, g.apply)
 }
 
 object Coproduct extends CoproductInstances {
@@ -78,7 +101,6 @@ object Coproduct extends CoproductInstances {
   def left[G[_]]: CoproductLeft[G] = new CoproductLeft[G]
 
   def right[F[_]]: CoproductRight[F] = new CoproductRight[F]
-
 }
 
 private[data] sealed abstract class CoproductInstances3 {

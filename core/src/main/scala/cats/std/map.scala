@@ -1,23 +1,7 @@
 package cats
 package std
 
-import cats.syntax.eq._
-
-trait MapInstances extends algebra.std.MapInstances {
-
-  implicit def MapEq[A, B: Eq]: Eq[Map[A, B]] =
-    new Eq[Map[A, B]] {
-      def eqv(lhs: Map[A, B], rhs: Map[A, B]): Boolean = {
-        def checkKeys: Boolean =
-          lhs.forall { case (k, v1) =>
-            rhs.get(k) match {
-              case Some(v2) => v1 === v2
-              case None => false
-            }
-          }
-        (lhs eq rhs) || (lhs.size == rhs.size && checkKeys)
-      }
-    }
+trait MapInstances extends cats.kernel.std.MapInstances {
 
   implicit def MapShow[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =
     Show.show[Map[A, B]] { m =>
@@ -30,12 +14,11 @@ trait MapInstances extends algebra.std.MapInstances {
   implicit def mapInstance[K]: Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] =
     new Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] {
 
-      def traverse[G[_] : Applicative, A, B](fa: Map[K, A])(f: (A) => G[B]): G[Map[K, B]] = {
-        val G = Applicative[G]
-        val gba = G.pure(Map.empty[K, B])
-        val gbb = fa.foldLeft(gba) { (buf, a) =>
-          G.map2(buf, f(a._2))({ case(x, y) => x + (a._1 -> y)})
-        }
+      def traverse[G[_], A, B](fa: Map[K, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
+        val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
+        val gbb = Foldable.iterateRight(fa.iterator, gba){ (kv, lbuf) =>
+          G.map2Eval(f(kv._2), lbuf)({ (b, buf) => buf + (kv._1 -> b)})
+        }.value
         G.map(gbb)(_.toMap)
       }
 

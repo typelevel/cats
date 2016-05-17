@@ -2,7 +2,6 @@ package cats
 package tests
 
 import cats.laws.discipline.{TraverseTests, FlatMapTests, SerializableTests, CartesianTests}
-import cats.laws.discipline.eq._
 
 class MapTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[Map[Int, ?]]

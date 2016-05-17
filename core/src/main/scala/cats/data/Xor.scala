@@ -90,6 +90,12 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
     case Xor.Right(b)    => Xor.Right(f(b))
   }
 
+  def map2Eval[AA >: A, C, Z](fc: Eval[AA Xor C])(f: (B, C) => Z): Eval[AA Xor Z] =
+    this match {
+      case l @ Xor.Left(_) => Now(l)
+      case Xor.Right(b) => fc.map(_.map(f(b, _)))
+    }
+
   def leftMap[C](f: A => C): C Xor B = this match {
     case Xor.Left(a)      => Xor.Left(f(a))
     case r @ Xor.Right(_) => r
@@ -168,7 +174,15 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def xorBifunctor: Bitraverse[Xor] =
+  implicit def xorSemigroupK[L]: SemigroupK[Xor[L,?]] =
+    new SemigroupK[Xor[L,?]] {
+      def combineK[A](x: Xor[L,A], y: Xor[L,A]): Xor[L,A] = x match {
+        case Xor.Left(_) => y
+        case Xor.Right(_) => x
+      }
+    }
+
+  implicit val xorBitraverse: Bitraverse[Xor] =
     new Bitraverse[Xor] {
       def bitraverse[G[_], A, B, C, D](fab: Xor[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Xor[C, D]] =
         fab match {
@@ -203,6 +217,8 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
         }
       def raiseError[B](e: A): Xor[A, B] = Xor.left(e)
       override def map[B, C](fa: A Xor B)(f: B => C): A Xor C = fa.map(f)
+      override def map2Eval[B, C, Z](fb: A Xor B, fc: Eval[A Xor C])(f: (B, C) => Z): Eval[A Xor Z] =
+        fb.map2Eval(fc)(f)
       override def attempt[B](fab: A Xor B): A Xor (A Xor B) = Xor.right(fab)
       override def recover[B](fab: A Xor B)(pf: PartialFunction[A, B]): A Xor B =
         fab recover pf

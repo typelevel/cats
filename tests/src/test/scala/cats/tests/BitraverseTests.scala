@@ -4,7 +4,6 @@ package tests
 import cats.data.Xor
 import cats.laws.discipline.{BitraverseTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq.tuple2Eq
 
 class BitraverseTest extends CatsSuite {
   type XorTuple2[A, B] = Xor[(A, B), (A, B)]

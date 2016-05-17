@@ -13,6 +13,7 @@ script:
 # http://austinpray.com/ops/2015/09/20/change-travis-node-version.html
 install:
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
+  - pip install --user codecov
 
 notifications:
   webhooks:

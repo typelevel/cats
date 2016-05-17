@@ -4,7 +4,6 @@ import cats.{Id, Monad, Cartesian, Show}
 import cats.data.{OptionT, Xor}
 import cats.laws.discipline.{FunctorTests, SerializableTests, CartesianTests, MonadTests}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
 
 class OptionTTests extends CatsSuite {
 
@@ -48,6 +47,12 @@ class OptionTTests extends CatsSuite {
   test("OptionT[Id, A].filter consistent with Option.filter") {
     forAll { (o: Option[Int], f: Int => Boolean) =>
       o.filter(f) should === (OptionT[Id, Int](o).filter(f).value)
+    }
+  }
+
+  test("OptionT[Id, A].withFilter consistent with Option.withFilter"){
+    forAll { (o: Option[Int], f: Int => Boolean) =>
+      (for {x <- o if f(x)} yield x) should === ((for {x <- OptionT[Id, Int](o) if f(x)} yield x).value)
     }
   }
 

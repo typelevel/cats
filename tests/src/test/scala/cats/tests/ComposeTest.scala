@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import algebra.laws.GroupLaws
+import cats.kernel.laws.GroupLaws
 
 import cats.arrow.Compose
 import cats.laws.discipline.{SemigroupKTests, SerializableTests}

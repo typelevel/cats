@@ -2,7 +2,7 @@
 layout: default
 title:  "FreeApplicatives"
 section: "data"
-source: "core/src/main/scala/cats/free/FreeApplicative.scala"
+source: "free/src/main/scala/cats/free/FreeApplicative.scala"
 scaladoc: "#cats.free.FreeApplicative"
 ---
 # Free Applicative
@@ -11,6 +11,11 @@ scaladoc: "#cats.free.FreeApplicative"
 computations as data and are useful for building embedded DSLs (EDSLs). However, they differ
 from `Free` in that the kinds of operations they support are limited, much like the distinction
 between `Applicative` and `Monad`.
+
+## Dependency
+
+If you'd like to use cats' free applicative, you'll need to add a library dependency
+for the `cats-free` module.
 
 ## Example
 Consider building an EDSL for validating strings - to keep things simple we'll just have

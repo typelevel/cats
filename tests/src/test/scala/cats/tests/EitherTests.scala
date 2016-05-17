@@ -2,8 +2,7 @@ package cats
 package tests
 
 import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadTests, SerializableTests, CartesianTests}
-import cats.laws.discipline.eq._
-import algebra.laws.OrderLaws
+import cats.kernel.laws.OrderLaws
 
 class EitherTests extends CatsSuite {
 
@@ -49,5 +48,11 @@ class EitherTests extends CatsSuite {
     forAll { (e: Either[Int, String]) =>
       show.show(e).nonEmpty should === (true)
     }
+  }
+
+  test("map2Eval is lazy") {
+    val bomb: Eval[Either[String, Int]] = Later(sys.error("boom"))
+    val x: Either[String, Int] = Left("l")
+    x.map2Eval(bomb)(_ + _).value should === (x)
   }
 }
