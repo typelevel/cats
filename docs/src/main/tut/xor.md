@@ -100,6 +100,8 @@ over `M[_] : Monad`).
 Since we only ever want the computation to continue in the case of `Xor.Right` (as captured
 by the right-bias nature), we fix the left type parameter and leave the right one free.
 
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
+
 ```tut:silent
 import cats.Monad
 
