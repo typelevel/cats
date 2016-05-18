@@ -27,6 +27,11 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
         fa.forall(p)
 
       override def isEmpty[A](fa: Set[A]): Boolean = fa.isEmpty
+
+      override def foldMRec[G[_], A, B](fa: Set[A], z: B)(f: (B, A) => G[B])(implicit G: MonadRec[G]): G[B] =
+        // Repeatedly calling .tail on a large set is really slow, so we
+        // convert to a stream first.
+        Foldable.iterableFoldMRec(fa.toStream, z)(f)
     }
 
   implicit def catsStdShowForSet[A:Show]: Show[Set[A]] = new Show[Set[A]] {
