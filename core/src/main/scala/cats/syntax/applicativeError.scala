@@ -3,17 +3,12 @@ package syntax
 
 import cats.data.{Xor, XorT}
 
-trait ApplicativeErrorSyntax1 {
-  implicit def applicativeErrorSyntax[F[_], E, A](fa: F[A])(implicit F: ApplicativeError[F, E]): ApplicativeErrorOps[F, E, A] =
-    new ApplicativeErrorOps[F, E, A](fa)
-}
-
-trait ApplicativeErrorSyntax extends ApplicativeErrorSyntax1 {
+trait ApplicativeErrorSyntax {
   implicit def applicativeErrorIdSyntax[E](e: E): ApplicativeErrorIdOps[E] =
     new ApplicativeErrorIdOps(e)
 
-  implicit def applicativeErrorSyntax2[F[_, _], E, A](fa: F[E, A])(implicit F: ApplicativeError[F[E, ?], E]): ApplicativeErrorOps[F[E, ?], E, A] =
-    new ApplicativeErrorOps[F[E, ?], E, A](fa)
+  implicit def applicativeErrorSyntax[F[_], E, A](fa: F[A])(implicit F: ApplicativeError[F, E]): ApplicativeErrorOps[F, E, A] =
+    new ApplicativeErrorOps[F, E, A](fa)
 
 }
 
