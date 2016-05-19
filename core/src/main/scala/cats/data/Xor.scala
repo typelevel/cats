@@ -133,13 +133,43 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def merge[AA >: A](implicit ev: B <:< AA): AA = fold(identity, ev.apply)
 
-  final def combine[AA >: A, BB >: B](that: AA Xor BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Xor BB = this match {
-    case Xor.Left(a1) => that match {
-      case Xor.Left(a2) => Xor.Left(AA.combine(a1, a2))
-      case Xor.Right(b2) => Xor.Left(a1)
-    }
+  /**
+   * Combine with another `Xor` value.
+   *
+   * If this `Xor` is a `Left` then it will be returned as-is.
+   * If this `Xor` is a `Right` and `that` `Xor` is a left, then `that` will be
+   * returned.
+   * If both `Xor`s are `Right`s, then the `Semigroup[BB]` instance will be used
+   * to combine both values and return them as a `Right`.
+   * Note: If both `Xor`s are `Left`s then their values are not combined. Use
+   * `Validated` if you prefer to combine `Left` values.
+   *
+   * Examples:
+   * {{{
+   * scala> import cats.data.Xor
+   * scala> import cats.implicits._
+   * scala> val l1: Xor[String, Int] = Xor.left("error 1")
+   * scala> val l2: Xor[String, Int] = Xor.left("error 2")
+   * scala> val r3: Xor[String, Int] = Xor.right(3)
+   * scala> val r4: Xor[String, Int] = Xor.right(4)
+   *
+   * scala> l1 combine l2
+   * res0: Xor[String, Int] = Left(error 1)
+   *
+   * scala> l1 combine r3
+   * res1: Xor[String, Int] = Left(error 1)
+   *
+   * scala> r3 combine l1
+   * res2: Xor[String, Int] = Left(error 1)
+   *
+   * scala> r3 combine r4
+   * res3: Xor[String, Int] = Right(7)
+   * }}}
+   */
+  final def combine[AA >: A, BB >: B](that: AA Xor BB)(implicit BB: Semigroup[BB]): AA Xor BB = this match {
+    case left @ Xor.Left(_) => left
     case Xor.Right(b1) => that match {
-      case Xor.Left(a2) => Xor.Left(a2)
+      case left @ Xor.Left(_) => left
       case Xor.Right(b2) => Xor.Right(BB.combine(b1, b2))
     }
   }
@@ -168,7 +198,7 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       def show(f: A Xor B): String = f.show
     }
 
-  implicit def xorMonoid[A, B](implicit A: Semigroup[A], B: Monoid[B]): Monoid[A Xor B] =
+  implicit def xorMonoid[A, B](implicit B: Monoid[B]): Monoid[A Xor B] =
     new Monoid[A Xor B] {
       def empty: A Xor B = Xor.Right(B.empty)
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
@@ -229,7 +259,7 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
 
 private[data] sealed abstract class XorInstances1 extends XorInstances2 {
 
-  implicit def xorSemigroup[A, B](implicit A: Semigroup[A], B: Semigroup[B]): Semigroup[A Xor B] =
+  implicit def xorSemigroup[A, B](implicit B: Semigroup[B]): Semigroup[A Xor B] =
     new Semigroup[A Xor B] {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
