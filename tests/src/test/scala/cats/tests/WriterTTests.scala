@@ -268,4 +268,15 @@ class WriterTTests extends CatsSuite {
 
     Semigroup[WriterT[Id, Int, Int]]
   }
+
+  {
+    // F has a functor
+    implicit val F: Functor[ListWrapper] = ListWrapper.functor
+
+    CoflatMap[WriterT[ListWrapper, Int, ?]]
+    checkAll("WriterT[Listwrapper, Int, ?]", CoflatMapTests[WriterT[ListWrapper, Int, ?]].coflatMap[Int, Int, Int])
+
+    // Id has a Functor
+    CoflatMap[WriterT[Id, Int, ?]]
+  }
 }
