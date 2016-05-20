@@ -1,41 +1,43 @@
 package cats
 package tests
 
-import cats.data.{Xor, XorT}
+import cats.data.{XorT}
+
 
 class ApplicativeErrorCheck extends CatsSuite {
 
-  type ErrorOr[A] = String Xor A
 
-  val failed: String Xor Int =
-    "Badness".raiseError[ErrorOr, Int]
 
-  test("raiseError syntax creates an Xor with the correct type parameters") {
-    failed should === ("Badness".left[Int])
+  val failed: Option[Int] =
+    (()).raiseError[Option, Int]
+
+  test("raiseError syntax creates an Option with the correct value") {
+    failed should === (None: Option[Int])
   }
 
   test("handleError syntax transforms an error to a success") {
-    failed.handleError(error => error.length) should === (7.right)
+    failed.handleError(_ => 7) should === (Some(7))
   }
 
   test("handleErrorWith transforms an error to a success") {
-    failed.handleErrorWith(error => error.length.right) should === (7.right)
+    failed.handleErrorWith(_ => Some(7)) should === (Some(7))
   }
 
   test("attempt syntax creates a wrapped Xor") {
-    failed.attempt should === ("Badness".left.right)
+    failed.attempt should === (Option(().left))
   }
 
   test("attemptT syntax creates an XorT") {
-    failed.attemptT should === (XorT[ErrorOr, String, Int](failed.right))
+    failed.attemptT should === (XorT[Option, Unit, Int](Option(().left)))
   }
 
   test("recover syntax transforms an error to a success") {
-    failed.recover { case error => error.length } should === (7.right)
+    failed.recover { case _ => 7 } should === (Some(7))
   }
 
   test("recoverWith transforms an error to a success") {
-    failed.recoverWith { case error => error.length.right } should === (7.right)
+    failed.recoverWith { case _ => Some(7) } should === (Some(7))
   }
+
 
 }
