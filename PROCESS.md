@@ -87,7 +87,8 @@ does not account for conversations that occured on Github.
 Once the relevant documentation changes have been committed, new
 [release notes](https://github.com/typelevel/cats/releases) should be
 added. You can add a release by clicking the "Draft a new release" button
-on that page.
+on that page, or if the relevant release already exists, you can click
+"Edit release".
 
 The website should then be updated via `sbt docs/ghpagesPushSite`.
 
