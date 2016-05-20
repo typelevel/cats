@@ -270,11 +270,12 @@ class WriterTTests extends CatsSuite {
   }
 
   {
-    // F has a functor
+    // F has a Functor
     implicit val F: Functor[ListWrapper] = ListWrapper.functor
 
     CoflatMap[WriterT[ListWrapper, Int, ?]]
     checkAll("WriterT[Listwrapper, Int, ?]", CoflatMapTests[WriterT[ListWrapper, Int, ?]].coflatMap[Int, Int, Int])
+    checkAll("WriterT[ListWrapper, Int, ?]", SerializableTests.serializable(CoflatMap[WriterT[ListWrapper, Int, ?]]))
 
     // Id has a Functor
     CoflatMap[WriterT[Id, Int, ?]]
