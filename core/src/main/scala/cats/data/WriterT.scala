@@ -87,8 +87,6 @@ private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 
       implicit val L0: Monoid[L] = L
     }
 
-  def writerTIdFunctor[L]: Functor[WriterT[Id, L, ?]] = writerTIdCoflatMap
-
   implicit def writerTIdFlatMap[L:Semigroup]: FlatMap[WriterT[Id, L, ?]] =
     writerTFlatMap[Id, L]
 
@@ -111,7 +109,7 @@ private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 
       implicit val F0: Monoid[F[(L, V)]] = W
     }
 
-  implicit def writerTIdCoflatMap[L]: CoflatMap[WriterT[Id, L, ?]] = 
+  implicit def writerTIdCoflatMap[L]: CoflatMap[WriterT[Id, L, ?]] =
     writerTCoflatMap[Id, L]
 }
 
@@ -164,6 +162,7 @@ private[data] sealed abstract class WriterTInstances5 extends WriterTInstances6 
 }
 
 private[data] sealed abstract class WriterTInstances6 extends WriterTInstances7 {
+
   implicit def writerTApply[F[_], L](implicit F: Apply[F], L: Semigroup[L]): Apply[WriterT[F, L, ?]] =
     new WriterTApply[F, L] {
       implicit val F0: Apply[F] = F
@@ -173,9 +172,8 @@ private[data] sealed abstract class WriterTInstances6 extends WriterTInstances7 
 
 private[data] sealed abstract class WriterTInstances7 {
 
-  def writerTFunctor[F[_], L](implicit F: Functor[F]): Functor[WriterT[F, L, ?]] = writerTCoflatMap
-
-  implicit def writerTCoflatMap[F[_], L](implicit F: Functor[F]): WriterTCoflatMap[F, L] = new WriterTCoflatMap[F, L] {
+  implicit def writerTCoflatMap[F[_], L](implicit F: Functor[F]): WriterTCoflatMap[F, L] = 
+    new WriterTCoflatMap[F, L] {
     implicit val F0: Functor[F] = F
   }
 }
