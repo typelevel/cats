@@ -313,7 +313,7 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="cats.data.KleisliInstances1#kleisliApplicative" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="kleisliApplicative[F[_],A](implicitevidence$2:cats.Applicative[F]):cats.Applicative[[γ]cats.data.Kleisli[F,A,γ]]"></a>
+      <a id="kleisliApplicative[F[_],A](implicitA:cats.Applicative[F]):cats.Applicative[[γ]cats.data.Kleisli[F,A,γ]]"></a>
       <a id="kleisliApplicative[F[_],A](Applicative[F]):Applicative[[γ]Kleisli[F,A,γ]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -321,16 +321,33 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">kleisliApplicative</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.KleisliInstances1.kleisliApplicative.F">F</span>]</span>)</span><span class="result">: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[γ]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.kleisliApplicative.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.kleisliApplicative.A">A</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ">γ</span>]]</span>
+        <span class="name">kleisliApplicative</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.KleisliInstances1.kleisliApplicative.F">F</span>]</span>)</span><span class="result">: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[γ]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.kleisliApplicative.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.kleisliApplicative.A">A</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ">γ</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Kleisli$@kleisliApplicative[F[_],A](implicitevidence$2:cats.Applicative[F]):cats.Applicative[[γ]cats.data.Kleisli[F,A,γ]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Kleisli$@kleisliApplicative[F[_],A](implicitA:cats.Applicative[F]):cats.Applicative[[γ]cats.data.Kleisli[F,A,γ]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances1</dd></dl></div>
+    </li><li name="cats.data.KleisliInstances#kleisliApplicativeError" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="kleisliApplicativeError[F[_],A,E](implicitAE:cats.ApplicativeError[F,E]):cats.ApplicativeError[[γ]cats.data.Kleisli[F,A,γ],E]"></a>
+      <a id="kleisliApplicativeError[F[_],A,E](ApplicativeError[F,E]):ApplicativeError[[γ]Kleisli[F,A,γ],E]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kleisliApplicativeError</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="AE">AE: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[<span class="extype" name="cats.data.KleisliInstances.kleisliApplicativeError.F">F</span>, <span class="extype" name="cats.data.KleisliInstances.kleisliApplicativeError.E">E</span>]</span>)</span><span class="result">: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[[γ]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances.kleisliApplicativeError.F">F</span>, <span class="extype" name="cats.data.KleisliInstances.kleisliApplicativeError.A">A</span>, <span class="extype" name="cats.data.KleisliInstances.&lt;refinement&gt;.Λ$.γ">γ</span>], <span class="extype" name="cats.data.KleisliInstances.kleisliApplicativeError.E">E</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Kleisli$@kleisliApplicativeError[F[_],A,E](implicitAE:cats.ApplicativeError[F,E]):cats.ApplicativeError[[γ]cats.data.Kleisli[F,A,γ],E]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances</dd></dl></div>
     </li><li name="cats.data.KleisliInstances2#kleisliApply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="kleisliApply[F[_],A](implicitevidence$3:cats.Apply[F]):cats.Apply[[γ]cats.data.Kleisli[F,A,γ]]"></a>
+      <a id="kleisliApply[F[_],A](implicitevidence$2:cats.Apply[F]):cats.Apply[[γ]cats.data.Kleisli[F,A,γ]]"></a>
       <a id="kleisliApply[F[_],A](Apply[F]):Apply[[γ]Kleisli[F,A,γ]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -341,7 +358,7 @@
         <span class="name">kleisliApply</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.data.KleisliInstances2.kleisliApply.F">F</span>]</span>)</span><span class="result">: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[γ]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances2.kleisliApply.F">F</span>, <span class="extype" name="cats.data.KleisliInstances2.kleisliApply.A">A</span>, <span class="extype" name="cats.data.KleisliInstances2.&lt;refinement&gt;.Λ$.γ">γ</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Kleisli$@kleisliApply[F[_],A](implicitevidence$3:cats.Apply[F]):cats.Apply[[γ]cats.data.Kleisli[F,A,γ]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Kleisli$@kleisliApply[F[_],A](implicitevidence$2:cats.Apply[F]):cats.Apply[[γ]cats.data.Kleisli[F,A,γ]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -415,7 +432,7 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances0</dd></dl></div>
     </li><li name="cats.data.KleisliInstances3#kleisliFunctor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="kleisliFunctor[F[_],A](implicitevidence$4:cats.Functor[F]):cats.Functor[[γ]cats.data.Kleisli[F,A,γ]]"></a>
+      <a id="kleisliFunctor[F[_],A](implicitevidence$3:cats.Functor[F]):cats.Functor[[γ]cats.data.Kleisli[F,A,γ]]"></a>
       <a id="kleisliFunctor[F[_],A](Functor[F]):Functor[[γ]Kleisli[F,A,γ]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -426,7 +443,7 @@
         <span class="name">kleisliFunctor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.KleisliInstances3.kleisliFunctor.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[γ]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances3.kleisliFunctor.F">F</span>, <span class="extype" name="cats.data.KleisliInstances3.kleisliFunctor.A">A</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ">γ</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Kleisli$@kleisliFunctor[F[_],A](implicitevidence$4:cats.Functor[F]):cats.Functor[[γ]cats.data.Kleisli[F,A,γ]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Kleisli$@kleisliFunctor[F[_],A](implicitevidence$3:cats.Functor[F]):cats.Functor[[γ]cats.data.Kleisli[F,A,γ]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -500,7 +517,7 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances</dd></dl></div>
     </li><li name="cats.data.KleisliInstances4#kleisliMonadReader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="kleisliMonadReader[F[_],A](implicitevidence$5:cats.Monad[F]):cats.MonadReader[[γ]cats.data.Kleisli[F,A,γ],A]"></a>
+      <a id="kleisliMonadReader[F[_],A](implicitevidence$4:cats.Monad[F]):cats.MonadReader[[γ]cats.data.Kleisli[F,A,γ],A]"></a>
       <a id="kleisliMonadReader[F[_],A](Monad[F]):MonadReader[[γ]Kleisli[F,A,γ],A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -511,7 +528,7 @@
         <span class="name">kleisliMonadReader</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.KleisliInstances4.kleisliMonadReader.F">F</span>]</span>)</span><span class="result">: <a href="../MonadReader.html" class="extype" name="cats.MonadReader">MonadReader</a>[[γ]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances4.kleisliMonadReader.F">F</span>, <span class="extype" name="cats.data.KleisliInstances4.kleisliMonadReader.A">A</span>, <span class="extype" name="cats.data.KleisliInstances4.&lt;refinement&gt;.Λ$.γ">γ</span>], <span class="extype" name="cats.data.KleisliInstances4.kleisliMonadReader.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Kleisli$@kleisliMonadReader[F[_],A](implicitevidence$5:cats.Monad[F]):cats.MonadReader[[γ]cats.data.Kleisli[F,A,γ],A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Kleisli$@kleisliMonadReader[F[_],A](implicitevidence$4:cats.Monad[F]):cats.MonadReader[[γ]cats.data.Kleisli[F,A,γ],A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

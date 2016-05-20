@@ -102,6 +102,8 @@ instructions on how to compose any outer monad (`F` in the following
 example) with a specific inner monad (`Option` in the following
 example).
 
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
+
 ```scala
 case class OptionT[F[_], A](value: F[Option[A]])
 
@@ -121,3 +123,4 @@ implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
 
 This sort of construction is called a monad transformer.
 
+Cats has an [`OptionT`](optiont.html) monad transformer, which adds a lot of useful functions to the simple implementation above.

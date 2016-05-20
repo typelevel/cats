@@ -440,23 +440,23 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"><code>OptionT[F[_], A</code> is a light wrapper on an <code>F[Option[A]]</code> with some
-convenient methods for working with this nested structure.</p><div class="fullcomment"><div class="comment cmt"><p><code>OptionT[F[_], A</code> is a light wrapper on an <code>F[Option[A]]</code> with some
+      <p class="shortcomment cmt"><code>OptionT[F[_], A]</code> is a light wrapper on an <code>F[Option[A]]</code> with some
+convenient methods for working with this nested structure.</p><div class="fullcomment"><div class="comment cmt"><p><code>OptionT[F[_], A]</code> is a light wrapper on an <code>F[Option[A]]</code> with some
 convenient methods for working with this nested structure.</p><p>It may also be said that <code>OptionT</code> is a monad transformer for <code>Option</code>.</p><p>For more information, see the <a href="http://non.github.io/cats/tut/optiont.html" target="_blank">documentation</a>.
 </p></div></div>
-    </li><li name="cats.data.Prod" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Prod[F[_],G[_],A]extendsAnyRef"></a>
+    </li><li name="cats.data.Prod" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Prod[F[_],G[_],A]extendsProductwithSerializable"></a>
       <a id="Prod[F[_],G[_],A]:Prod[F,G,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">sealed </span>
-        <span class="kind">trait</span>
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Prod.html"><span class="name">Prod</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Prod.html"><span class="name">Prod</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="first">first: <span class="extype" name="cats.data.Prod.F">F</span>[<span class="extype" name="cats.data.Prod.A">A</span>]</span>, <span name="second">second: <span class="extype" name="cats.data.Prod.G">G</span>[<span class="extype" name="cats.data.Prod.A">A</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@Prod[F[_],G[_],A]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@Prod[F[_],G[_],A]extendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1107,7 +1107,7 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Prod$.html"><span class="name">Prod</span></a><span class="result"> extends <span class="extype" name="cats.data.ProdInstances">ProdInstances</span></span>
+        <a href="Prod$.html"><span class="name">Prod</span></a><span class="result"> extends <span class="extype" name="cats.data.ProdInstances">ProdInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.package@Prod" title="Permalink" target="_top">

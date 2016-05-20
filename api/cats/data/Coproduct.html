@@ -316,6 +316,35 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.Coproduct#fold" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fold[H[_]](f:cats.arrow.NaturalTransformation[F,H],g:cats.arrow.NaturalTransformation[G,H]):H[A]"></a>
+      <a id="fold[H[_]](NaturalTransformation[F,H],NaturalTransformation[G,H]):H[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fold</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../arrow/NaturalTransformation.html" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.data.Coproduct.F">F</span>, <span class="extype" name="cats.data.Coproduct.fold.H">H</span>]</span>, <span name="g">g: <a href="../arrow/NaturalTransformation.html" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.data.Coproduct.G">G</span>, <span class="extype" name="cats.data.Coproduct.fold.H">H</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.Coproduct.fold.H">H</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Coproduct@fold[H[_]](f:cats.arrow.NaturalTransformation[F,H],g:cats.arrow.NaturalTransformation[G,H]):H[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Fold this coproduct into a new type constructor using two natural transformations.</p><div class="fullcomment"><div class="comment cmt"><p>Fold this coproduct into a new type constructor using two natural transformations.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.arrow.NaturalTransformation
+scala&gt; <span class="kw">import</span> cats.data.Coproduct
+scala&gt; <span class="kw">val</span> listToOption =
+     |   <span class="kw">new</span> NaturalTransformation[<span class="std">List</span>, <span class="std">Option</span>] {
+     |     <span class="kw">def</span> apply[A](fa: <span class="std">List</span>[A]): <span class="std">Option</span>[A] = fa.headOption
+     |   }
+scala&gt; <span class="kw">val</span> optionToOption = NaturalTransformation.id[<span class="std">Option</span>]
+scala&gt; <span class="kw">val</span> cp1: Coproduct[<span class="std">List</span>, <span class="std">Option</span>, <span class="std">Int</span>] = Coproduct.leftc(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>))
+scala&gt; <span class="kw">val</span> cp2: Coproduct[<span class="std">List</span>, <span class="std">Option</span>, <span class="std">Int</span>] = Coproduct.rightc(<span class="std">Some</span>(<span class="num">4</span>))
+scala&gt; cp1.fold(listToOption, optionToOption)
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)
+scala&gt; cp2.fold(listToOption, optionToOption)
+res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">4</span>)</pre></div></div>
     </li><li name="cats.data.Coproduct#foldLeft" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="foldLeft[B](z:B)(f:(B,A)=&gt;B)(implicitF:cats.Foldable[F],implicitG:cats.Foldable[G]):B"></a>
       <a id="foldLeft[B](B)((B,A)⇒B)(Foldable[F],Foldable[G]):B"></a>

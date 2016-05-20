@@ -121,7 +121,9 @@ instance, `Kleisli[F, A, B]` has a `Functor` instance so long as the chosen `F[_
 instance so long as the chosen `F[_]` does. The instances in Cats are laid out in a way such that implicit
 resolution will pick up the most specific instance it can (depending on the `F[_]`).
 
-An example of a `Monad` instance for `Kleisli` would be:
+An example of a `Monad` instance for `Kleisli` is shown below.
+
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
 
 ```scala
 import cats.syntax.flatMap._

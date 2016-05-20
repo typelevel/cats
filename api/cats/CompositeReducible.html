@@ -868,9 +868,9 @@ with every other value using the given function <code>g</code>.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Sequence <code>F[G[A]]</code> using <code>Apply[G]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Sequence <code>F[G[A]]</code> using <code>Apply[G]</code>.</p><p>This method is similar to <code>Foldable#sequence_</code>. The difference is
-that we only need <code>Apply[G]</code> here, since we don't need to call
-<code>Applicative#pure</code> for a starting value.
+      <p class="shortcomment cmt">Sequence <code>F[G[A]]</code> using <code>Apply[G]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Sequence <code>F[G[A]]</code> using <code>Apply[G]</code>.</p><p>This method is similar to <a href="Foldable.html#sequence_[G[_],A](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]" class="extmbr" name="cats.Foldable#sequence_">Foldable.sequence_</a> but requires only
+an <a href="Apply.html" class="extype" name="cats.Apply">Apply</a> instance for <code>G</code> instead of <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>. See the
+<a href="Reducible.html#traverse1_[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitG:cats.Apply[G]):G[Unit]" class="extmbr" name="cats.Reducible#traverse1_">traverse1_</a> documentation for a description of the differences.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a></dd></dl></div>
     </li><li name="cats.Foldable#sequenceU_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sequenceU_[GA](fa:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[Unit]"></a>
@@ -1015,9 +1015,14 @@ match <code>p</code>.
       </a>
     </span>
       <p class="shortcomment cmt">Traverse <code>F[A]</code> using <code>Apply[G]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse <code>F[A]</code> using <code>Apply[G]</code>.</p><p><code>A</code> values will be mapped into <code>G[B]</code> and combined using
-<code>Applicative#map2</code>.</p><p>This method does the same thing as <code>Foldable#traverse_</code>.  The
-difference is that we only need <code>Apply[G]</code> here, since we don't
-need to call <code>Applicative#pure</code> for a starting value.
+<code>Applicative#map2</code>.</p><p>This method is similar to <a href="Foldable.html#traverse_[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitG:cats.Applicative[G]):G[Unit]" class="extmbr" name="cats.Foldable#traverse_">Foldable.traverse_</a>. There are two
+main differences:</p><p>1. We only need an <a href="Apply.html" class="extype" name="cats.Apply">Apply</a> instance for <code>G</code> here, since we
+don't need to call <a href="Applicative.html#pure[A](x:A):F[A]" class="extmbr" name="cats.Applicative#pure">Applicative.pure</a> for a starting value.
+2. This performs a strict left-associative traversal and thus
+must always traverse the entire data structure. Prefer
+<a href="Foldable.html#traverse_[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitG:cats.Applicative[G]):G[Unit]" class="extmbr" name="cats.Foldable#traverse_">Foldable.traverse_</a> if you have an <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance
+available for <code>G</code> and want to take advantage of short-circuiting
+the traversal.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a></dd></dl></div>
     </li><li name="cats.Foldable#traverseU_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverseU_[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[Unit]"></a>

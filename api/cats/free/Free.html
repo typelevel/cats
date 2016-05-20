@@ -54,7 +54,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A free operational monad for some functor <code>S</code>. Binding is done
 using the heap instead of the stack, allowing tail-call
 elimination.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/free/Free.scala" target="_blank">Free.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/free/src/main/scala/cats/free/Free.scala" target="_blank">Free.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -245,18 +245,18 @@ elimination.
               
         </dd></dl></div>
     </li><li name="cats.free.Free#compile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="compile[T[_]](f:cats.~&gt;[S,T]):cats.free.Free[T,A]"></a>
-      <a id="compile[T[_]](~&gt;[S,T]):Free[T,A]"></a>
+      <a id="compile[T[_]](f:cats.arrow.NaturalTransformation[S,T]):cats.free.Free[T,A]"></a>
+      <a id="compile[T[_]](NaturalTransformation[S,T]):Free[T,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compile</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../package.html#~&gt;[F[_],G[_]]=cats.arrow.NaturalTransformation[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.compile.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.compile.T">T</span>, <span class="extype" name="cats.free.Free.A">A</span>]</span>
+        <span class="name">compile</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../arrow/NaturalTransformation.html" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.compile.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.compile.T">T</span>, <span class="extype" name="cats.free.Free.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.Free@compile[T[_]](f:cats.~&gt;[S,T]):cats.free.Free[T,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.Free@compile[T[_]](f:cats.arrow.NaturalTransformation[S,T]):cats.free.Free[T,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -357,18 +357,18 @@ All left-associated binds are reassociated to the right.
 the second given function.
 </p></div></div>
     </li><li name="cats.free.Free#foldMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldMap[M[_]](f:cats.~&gt;[S,M])(implicitM:cats.Monad[M]):M[A]"></a>
-      <a id="foldMap[M[_]](~&gt;[S,M])(Monad[M]):M[A]"></a>
+      <a id="foldMap[M[_]](f:cats.arrow.NaturalTransformation[S,M])(implicitM:cats.Monad[M]):M[A]"></a>
+      <a id="foldMap[M[_]](NaturalTransformation[S,M])(Monad[M]):M[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldMap</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../package.html#~&gt;[F[_],G[_]]=cats.arrow.NaturalTransformation[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.foldMap.M">M</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.free.Free.foldMap.M">M</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.Free.foldMap.M">M</span>[<span class="extype" name="cats.free.Free.A">A</span>]</span>
+        <span class="name">foldMap</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../arrow/NaturalTransformation.html" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.foldMap.M">M</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.free.Free.foldMap.M">M</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.Free.foldMap.M">M</span>[<span class="extype" name="cats.free.Free.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.Free@foldMap[M[_]](f:cats.~&gt;[S,M])(implicitM:cats.Monad[M]):M[A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.Free@foldMap[M[_]](f:cats.arrow.NaturalTransformation[S,M])(implicitM:cats.Monad[M]):M[A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -462,18 +462,18 @@ from its suspension functor.</p>
     </span>
       
     </li><li name="cats.free.Free#mapSuspension" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mapSuspension[T[_]](f:cats.~&gt;[S,T]):cats.free.Free[T,A]"></a>
-      <a id="mapSuspension[T[_]](~&gt;[S,T]):Free[T,A]"></a>
+      <a id="mapSuspension[T[_]](f:cats.arrow.NaturalTransformation[S,T]):cats.free.Free[T,A]"></a>
+      <a id="mapSuspension[T[_]](NaturalTransformation[S,T]):Free[T,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">mapSuspension</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../package.html#~&gt;[F[_],G[_]]=cats.arrow.NaturalTransformation[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.mapSuspension.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.mapSuspension.T">T</span>, <span class="extype" name="cats.free.Free.A">A</span>]</span>
+        <span class="name">mapSuspension</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../arrow/NaturalTransformation.html" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.mapSuspension.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.mapSuspension.T">T</span>, <span class="extype" name="cats.free.Free.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.Free@mapSuspension[T[_]](f:cats.~&gt;[S,T]):cats.free.Free[T,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.Free@mapSuspension[T[_]](f:cats.arrow.NaturalTransformation[S,T]):cats.free.Free[T,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

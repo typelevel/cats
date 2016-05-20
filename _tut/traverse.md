@@ -114,19 +114,7 @@ x2: cats.data.Xor[NumberFormatException,List[Int]] = Left(java.lang.NumberFormat
 
 scala> val x3 = List("1", "abc", "def").traverseU(parseIntXor)
 x3: cats.data.Xor[NumberFormatException,List[Int]] = Left(java.lang.NumberFormatException: For input string: "abc")
-```
 
-We need proof that `NonEmptyList[A]` is a `Semigroup `for there to be an `Applicative` instance for 
-`ValidatedNel`.
-
-```scala
-implicit def nelSemigroup[A]: Semigroup[NonEmptyList[A]] =
-  OneAnd.oneAndSemigroupK[List].algebra[A]
-```
-
-Thus.
-
-```scala
 scala> val v1 = List("1", "2", "3").traverseU(parseIntValidated)
 v1: cats.data.Validated[cats.data.OneAnd[[+A]List[A],NumberFormatException],List[Int]] = Valid(List(1, 2, 3))
 

@@ -2,7 +2,7 @@
 layout: default
 title:  "FreeApplicatives"
 section: "data"
-source: "core/src/main/scala/cats/free/FreeApplicative.scala"
+source: "free/src/main/scala/cats/free/FreeApplicative.scala"
 scaladoc: "#cats.free.FreeApplicative"
 ---
 # Free Applicative
@@ -11,6 +11,11 @@ scaladoc: "#cats.free.FreeApplicative"
 computations as data and are useful for building embedded DSLs (EDSLs). However, they differ
 from `Free` in that the kinds of operations they support are limited, much like the distinction
 between `Applicative` and `Monad`.
+
+## Dependency
+
+If you'd like to use cats' free applicative, you'll need to add a library dependency
+for the `cats-free` module.
 
 ## Example
 Consider building an EDSL for validating strings - to keep things simple we'll just have
@@ -52,8 +57,11 @@ import cats.Id
 import cats.arrow.NaturalTransformation
 import cats.std.function._
 
+// a function that takes a string as input
+type FromString[A] = String => A
+
 val compiler =
-  new NaturalTransformation[ValidationOp, String => ?] {
+  new NaturalTransformation[ValidationOp, FromString] {
     def apply[A](fa: ValidationOp[A]): String => A =
       str =>
         fa match {
@@ -64,14 +72,14 @@ val compiler =
 ```
 
 ```scala
-scala> val validator = prog.foldMap[String => ?](compiler)
-validator: String => Boolean = <function1>
+scala> val validator = prog.foldMap[FromString](compiler)
+validator: FromString[Boolean] = <function1>
 
 scala> validator("1234")
-res5: Boolean = false
+res7: Boolean = false
 
 scala> validator("12345")
-res6: Boolean = true
+res8: Boolean = true
 ```
 
 ## Differences from `Free`
@@ -141,13 +149,13 @@ def logValidation[A](validation: Validation[A]): List[String] =
 
 ```scala
 scala> logValidation(prog)
-res14: List[String] = List(size >= 5, has number)
+res16: List[String] = List(size >= 5, has number)
 
 scala> logValidation(size(5) *> hasNumber *> size(10))
-res15: List[String] = List(size >= 5, has number, size >= 10)
+res17: List[String] = List(size >= 5, has number, size >= 10)
 
 scala> logValidation((hasNumber |@| size(3)).map(_ || _))
-res16: List[String] = List(has number, size >= 3)
+res18: List[String] = List(has number, size >= 3)
 ```
 
 ### Why not both?

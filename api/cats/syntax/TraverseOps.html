@@ -364,7 +364,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.syntax.TraverseOps#sequence" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.syntax.TraverseOps#sequence" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sequence[G[_],B](implicitG:cats.Applicative[G],implicitev:=:=[A,G[B]]):G[F[B]]"></a>
       <a id="sequence[G[_],B](Applicative[G],=:=[A,G[B]]):G[F[B]]"></a>
       <h4 class="signature">
@@ -380,8 +380,17 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="cats.syntax.TraverseOps#sequenceU" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Traverse.html#sequence[G[_],A](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[F[A]]" class="extmbr" name="cats.Traverse#sequence">Traverse.sequence</a>
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">import</span> cats.std.option._
+scala&gt; <span class="kw">import</span> cats.syntax.traverse._
+scala&gt; <span class="kw">val</span> x: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">Int</span>]] = <span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">Some</span>(<span class="num">2</span>))
+scala&gt; <span class="kw">val</span> y: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">Int</span>]] = <span class="std">List</span>(<span class="std">None</span>, <span class="std">Some</span>(<span class="num">2</span>))
+scala&gt; x.sequence
+res0: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">Some</span>(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>))
+scala&gt; y.sequence
+res1: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">None</span></pre></span></dd></dl></div>
+    </li><li name="cats.syntax.TraverseOps#sequenceU" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sequenceU(implicitU:cats.Unapply[cats.Applicative,A]):U.M[F[U.A]]"></a>
       <a id="sequenceU(Unapply[Applicative,A]):M[F[A]]"></a>
       <h4 class="signature">
@@ -397,7 +406,15 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Traverse.html#sequenceU[GA](fga:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[F[U.A]]" class="extmbr" name="cats.Traverse#sequenceU">Traverse.sequenceU</a>
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.{Validated, ValidatedNel}
+scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">import</span> cats.syntax.traverse._
+scala&gt; <span class="kw">val</span> x: <span class="std">List</span>[ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">List</span>(Validated.valid(<span class="num">1</span>), Validated.invalid(<span class="lit">"a"</span>), Validated.invalid(<span class="lit">"b"</span>)).map(_.toValidatedNel)
+scala&gt; x.sequenceU
+res0: cats.data.ValidatedNel[<span class="std">String</span>,<span class="std">List</span>[<span class="std">Int</span>]] = Invalid(OneAnd(a,<span class="std">List</span>(b)))
+scala&gt; x.sequence[ValidatedNel[<span class="std">String</span>, ?], <span class="std">Int</span>]
+res1: cats.data.ValidatedNel[<span class="std">String</span>,<span class="std">List</span>[<span class="std">Int</span>]] = Invalid(OneAnd(a,<span class="std">List</span>(b)))</pre></span></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -432,7 +449,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.syntax.TraverseOps#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.syntax.TraverseOps#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverse[G[_],B](f:A=&gt;G[B])(implicitevidence$3:cats.Applicative[G]):G[F[B]]"></a>
       <a id="traverse[G[_],B]((A)⇒G[B])(Applicative[G]):G[F[B]]"></a>
       <h4 class="signature">
@@ -448,8 +465,42 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="cats.syntax.TraverseOps#traverseU" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Traverse.html#traverse[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitevidence$1:cats.Applicative[G]):G[F[B]]" class="extmbr" name="cats.Traverse#traverse">Traverse.traverse</a>
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
+scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">import</span> cats.std.option._
+scala&gt; <span class="kw">import</span> cats.syntax.traverse._
+scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): <span class="std">Option</span>[<span class="std">Int</span>] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
+scala&gt; <span class="std">List</span>(<span class="lit">"1"</span>, <span class="lit">"2"</span>, <span class="lit">"3"</span>).traverse(parseInt)
+res0: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">Some</span>(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>))
+scala&gt; <span class="std">List</span>(<span class="lit">"1"</span>, <span class="lit">"two"</span>, <span class="lit">"3"</span>).traverse(parseInt)
+res1: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">None</span></pre></span></dd></dl></div>
+    </li><li name="cats.syntax.TraverseOps#traverseM" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="traverseM[G[_],B](f:A=&gt;G[F[B]])(implicitevidence$4:cats.Applicative[G],implicitF2:cats.FlatMap[F]):G[F[B]]"></a>
+      <a id="traverseM[G[_],B]((A)⇒G[F[B]])(Applicative[G],FlatMap[F]):G[F[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverseM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.syntax.TraverseOps.A">A</span>) ⇒ <span class="extype" name="cats.syntax.TraverseOps.traverseM.G">G</span>[<span class="extype" name="cats.syntax.TraverseOps.F">F</span>[<span class="extype" name="cats.syntax.TraverseOps.traverseM.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.syntax.TraverseOps.traverseM.G">G</span>]</span>, <span name="F2">F2: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.syntax.TraverseOps.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.TraverseOps.traverseM.G">G</span>[<span class="extype" name="cats.syntax.TraverseOps.F">F</span>[<span class="extype" name="cats.syntax.TraverseOps.traverseM.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.TraverseOps@traverseM[G[_],B](f:A=&gt;G[F[B]])(implicitevidence$4:cats.Applicative[G],implicitF2:cats.FlatMap[F]):G[F[B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Traverse.html#traverseM[G[_],A,B](fa:F[A])(f:A=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]" class="extmbr" name="cats.Traverse#traverseM">Traverse.traverseM</a>
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
+scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">import</span> cats.std.option._
+scala&gt; <span class="kw">import</span> cats.syntax.traverse._
+scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): <span class="std">Option</span>[<span class="std">Int</span>] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
+scala&gt; <span class="kw">val</span> x = <span class="std">Option</span>(<span class="std">List</span>(<span class="lit">"1"</span>, <span class="lit">"two"</span>, <span class="lit">"3"</span>))
+scala&gt; x.traverseM(_.map(parseInt))
+res0: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">Int</span>]] = <span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">None</span>, <span class="std">Some</span>(<span class="num">3</span>))</pre></span></dd></dl></div>
+    </li><li name="cats.syntax.TraverseOps#traverseU" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverseU[GB](f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[F[U.A]]"></a>
       <a id="traverseU[GB]((A)⇒GB)(Unapply[Applicative,GB]):M[F[A]]"></a>
       <h4 class="signature">
@@ -465,7 +516,16 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Traverse.html#traverse[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitevidence$1:cats.Applicative[G]):G[F[B]]" class="extmbr" name="cats.Traverse#traverse">Traverse.traverse</a>
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
+scala&gt; <span class="kw">import</span> cats.std.list._
+scala&gt; <span class="kw">import</span> cats.syntax.traverse._
+scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): Xor[<span class="std">String</span>, <span class="std">Int</span>] = Xor.catchOnly[NumberFormatException](s.toInt).leftMap(_ <span class="kw">=&gt;</span> <span class="lit">"no number"</span>)
+scala&gt; <span class="kw">val</span> ns = <span class="std">List</span>(<span class="lit">"1"</span>, <span class="lit">"2"</span>, <span class="lit">"3"</span>)
+scala&gt; ns.traverseU(parseInt)
+res0: Xor[<span class="std">String</span>, <span class="std">List</span>[<span class="std">Int</span>]] = Right(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>))
+scala&gt; ns.traverse[Xor[<span class="std">String</span>, ?], <span class="std">Int</span>](parseInt)
+res1: Xor[<span class="std">String</span>, <span class="std">List</span>[<span class="std">Int</span>]] = Right(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>))</pre></span></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

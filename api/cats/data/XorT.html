@@ -295,23 +295,53 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </a>
     </span>
       
-    </li><li name="cats.data.XorT#combine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="combine(that:cats.data.XorT[F,A,B])(implicitF:cats.Apply[F],implicitA:cats.Semigroup[A],implicitB:cats.Semigroup[B]):cats.data.XorT[F,A,B]"></a>
-      <a id="combine(XorT[F,A,B])(Apply[F],Semigroup[A],Semigroup[B]):XorT[F,A,B]"></a>
+    </li><li name="cats.data.XorT#combine" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="combine(that:cats.data.XorT[F,A,B])(implicitF:cats.Apply[F],implicitB:cats.Semigroup[B]):cats.data.XorT[F,A,B]"></a>
+      <a id="combine(XorT[F,A,B])(Apply[F],Semigroup[B]):XorT[F,A,B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">combine</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>, <span name="A">A: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.XorT.A">A</span>]</span>, <span name="B">B: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.XorT.B">B</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.B">B</span>]</span>
+        <span class="name">combine</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>, <span name="B">B: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.XorT.B">B</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.XorT@combine(that:cats.data.XorT[F,A,B])(implicitF:cats.Apply[F],implicitA:cats.Semigroup[A],implicitB:cats.Semigroup[B]):cats.data.XorT[F,A,B]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.XorT@combine(that:cats.data.XorT[F,A,B])(implicitF:cats.Apply[F],implicitB:cats.Semigroup[B]):cats.data.XorT[F,A,B]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Similar to <a href="Xor.html#combine[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]" class="extmbr" name="cats.data.Xor#combine">Xor.combine</a> but mapped over an <code>F</code> context.</p><div class="fullcomment"><div class="comment cmt"><p>Similar to <a href="Xor.html#combine[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]" class="extmbr" name="cats.data.Xor#combine">Xor.combine</a> but mapped over an <code>F</code> context.</p><p>Examples:</p><pre>scala&gt; <span class="kw">import</span> cats.data.XorT
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> l1: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT.left(<span class="std">Some</span>(<span class="lit">"error 1"</span>))
+scala&gt; <span class="kw">val</span> l2: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT.left(<span class="std">Some</span>(<span class="lit">"error 2"</span>))
+scala&gt; <span class="kw">val</span> r3: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT.right(<span class="std">Some</span>(<span class="num">3</span>))
+scala&gt; <span class="kw">val</span> r4: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT.right(<span class="std">Some</span>(<span class="num">4</span>))
+scala&gt; <span class="kw">val</span> noneXorT: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT.left(<span class="std">None</span>)
+
+scala&gt; l1 combine l2
+res0: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT(<span class="std">Some</span>(Left(error <span class="num">1</span>)))
+
+scala&gt; l1 combine r3
+res1: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT(<span class="std">Some</span>(Left(error <span class="num">1</span>)))
+
+scala&gt; r3 combine l1
+res2: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT(<span class="std">Some</span>(Left(error <span class="num">1</span>)))
+
+scala&gt; r3 combine r4
+res3: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT(<span class="std">Some</span>(Right(<span class="num">7</span>)))
+
+scala&gt; l1 combine noneXorT
+res4: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT(<span class="std">None</span>)
+
+scala&gt; noneXorT combine l1
+res5: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT(<span class="std">None</span>)
+
+scala&gt; r3 combine noneXorT
+res6: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT(<span class="std">None</span>)
+
+scala&gt; noneXorT combine r4
+res7: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT(<span class="std">None</span>)</pre></div></div>
     </li><li name="cats.data.XorT#compare" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="compare(that:cats.data.XorT[F,A,B])(implicito:cats.Order[F[cats.data.Xor[A,B]]]):Int"></a>
       <a id="compare(XorT[F,A,B])(Order[F[Xor[A,B]]]):Int"></a>

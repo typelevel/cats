@@ -704,11 +704,13 @@ function to the value.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Two sequentially dependent Applys can be composed.</p><div class="fullcomment"><div class="comment cmt"><p>Two sequentially dependent Applys can be composed.</p><p>The composition of Applys <code>F</code> and <code>G</code>, <code>F[G[x]]</code>, is also an Apply.</p><p>val ap = Apply[Option].compose[List]
-val x = Some(List(1, 2))
-val y = Some(List(10, 20))
-ap.map2(x, y)(_ + _) == Some(List(11, 12, 21, 22))
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd></dl></div>
+      <p class="shortcomment cmt">Two sequentially dependent Applys can be composed.</p><div class="fullcomment"><div class="comment cmt"><p>Two sequentially dependent Applys can be composed.</p><p>The composition of Applys <code>F</code> and <code>G</code>, <code>F[G[x]]</code>, is also an Apply.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.Apply
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> ap = Apply[<span class="std">Option</span>].compose[<span class="std">List</span>]
+scala&gt; <span class="kw">val</span> x: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">Some</span>(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>))
+scala&gt; <span class="kw">val</span> y: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">Some</span>(<span class="std">List</span>(<span class="num">10</span>, <span class="num">20</span>))
+scala&gt; ap.map2(x, y)(_ + _)
+res0: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">Some</span>(<span class="std">List</span>(<span class="num">11</span>, <span class="num">21</span>, <span class="num">12</span>, <span class="num">22</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd></dl></div>
     </li><li name="cats.Functor#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose[G[_]](implicitGG:cats.Functor[G]):cats.Functor[[X]F[G[X]]]"></a>
       <a id="compose[G[_]](Functor[G]):Functor[[X]F[G[X]]]"></a>
@@ -1227,6 +1229,35 @@ with the value
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a></dd></dl></div>
+    </li><li name="cats.Apply#map2Eval" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map2Eval[A,B,Z](fa:F[A],fb:cats.Eval[F[B]])(f:(A,B)=&gt;Z):cats.Eval[F[Z]]"></a>
+      <a id="map2Eval[A,B,Z](F[A],Eval[F[B]])((A,B)⇒Z):Eval[F[Z]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map2Eval</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Apply.map2Eval.A">A</span>]</span>, <span name="fb">fb: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Apply.map2Eval.B">B</span>]]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Apply.map2Eval.A">A</span>, <span class="extype" name="cats.Apply.map2Eval.B">B</span>) ⇒ <span class="extype" name="cats.Apply.map2Eval.Z">Z</span></span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Apply.map2Eval.Z">Z</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Alternative@map2Eval[A,B,Z](fa:F[A],fb:cats.Eval[F[B]])(f:(A,B)=&gt;Z):cats.Eval[F[Z]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Similar to <a href="Apply.html#map2[A,B,Z](fa:F[A],fb:F[B])(f:(A,B)=&gt;Z):F[Z]" class="extmbr" name="cats.Apply#map2">map2</a> but uses <a href="Eval.html" class="extype" name="cats.Eval">Eval</a> to allow for laziness in the <code>F[B]</code>
+argument.</p><div class="fullcomment"><div class="comment cmt"><p>Similar to <a href="Apply.html#map2[A,B,Z](fa:F[A],fb:F[B])(f:(A,B)=&gt;Z):F[Z]" class="extmbr" name="cats.Apply#map2">map2</a> but uses <a href="Eval.html" class="extype" name="cats.Eval">Eval</a> to allow for laziness in the <code>F[B]</code>
+argument. This can allow for &quot;short-circuiting&quot; of computations.</p><p>NOTE: the default implementation of <code>map2Eval</code> does does not short-circuit
+computations. For data structures that can benefit from laziness, <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>
+instances should override this method.</p><p>In the following example, <code>x.map2(bomb)(_ + _)</code> would result in an error,
+but <code>map2Eval</code> &quot;short-circuits&quot; the computation. <code>x</code> is <code>None</code> and thus the
+result of <code>bomb</code> doesn't even need to be evaluated in order to determine
+that the result of <code>map2Eval</code> should be <code>None</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.{Eval, Later}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> bomb: Eval[<span class="std">Option</span>[<span class="std">Int</span>]] = Later(sys.error(<span class="lit">"boom"</span>))
+scala&gt; <span class="kw">val</span> x: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
+scala&gt; x.map2Eval(bomb)(_ + _).value
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd></dl></div>
     </li><li name="cats.ApplyArityFunctions#map3" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="map3[A0,A1,A2,Z](f0:F[A0],f1:F[A1],f2:F[A2])(f:(A0,A1,A2)=&gt;Z):F[Z]"></a>
       <a id="map3[A0,A1,A2,Z](F[A0],F[A1],F[A2])((A0,A1,A2)⇒Z):F[Z]"></a>

@@ -257,22 +257,45 @@
               
         </dd></dl></div>
     </li><li name="cats.data.Xor#combine" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="combine[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]"></a>
-      <a id="combine[AA&gt;:Nothing,BB&gt;:B](Xor[AA,BB])(Semigroup[AA],Semigroup[BB]):Xor[AA,BB]"></a>
+      <a id="combine[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]"></a>
+      <a id="combine[AA&gt;:Nothing,BB&gt;:B](Xor[AA,BB])(Semigroup[BB]):Xor[AA,BB]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">combine</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="scala.Nothing">Nothing</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.Right.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.combine.AA">AA</span>, <span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Xor.combine.AA">AA</span>]</span>, <span name="BB">BB: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>)</span><span class="result">: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.combine.AA">AA</span>, <span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>
+        <span class="name">combine</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="scala.Nothing">Nothing</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Xor.Right.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.combine.AA">AA</span>, <span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="BB">BB: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>)</span><span class="result">: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.combine.AA">AA</span>, <span class="extype" name="cats.data.Xor.combine.BB">BB</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$$Right@combine[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Xor$$Right@combine[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitBB:cats.Semigroup[BB]):cats.data.Xor[AA,BB]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a></dd></dl></div>
+      <p class="shortcomment cmt">Combine with another <code>Xor</code> value.</p><div class="fullcomment"><div class="comment cmt"><p>Combine with another <code>Xor</code> value.</p><p>If this <code>Xor</code> is a <code>Left</code> then it will be returned as-is.
+If this <code>Xor</code> is a <code>Right</code> and <code>that</code> <code>Xor</code> is a left, then <code>that</code> will be
+returned.
+If both <code>Xor</code>s are <code>Right</code>s, then the <code>Semigroup[BB]</code> instance will be used
+to combine both values and return them as a <code>Right</code>.
+Note: If both <code>Xor</code>s are <code>Left</code>s then their values are not combined. Use
+<code>Validated</code> if you prefer to combine <code>Left</code> values.</p><p>Examples:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> l1: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Xor.left(<span class="lit">"error 1"</span>)
+scala&gt; <span class="kw">val</span> l2: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Xor.left(<span class="lit">"error 2"</span>)
+scala&gt; <span class="kw">val</span> r3: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Xor.right(<span class="num">3</span>)
+scala&gt; <span class="kw">val</span> r4: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Xor.right(<span class="num">4</span>)
+
+scala&gt; l1 combine l2
+res0: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Left(error <span class="num">1</span>)
+
+scala&gt; l1 combine r3
+res1: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Left(error <span class="num">1</span>)
+
+scala&gt; r3 combine l1
+res2: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Left(error <span class="num">1</span>)
+
+scala&gt; r3 combine r4
+res3: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Right(<span class="num">7</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a></dd></dl></div>
     </li><li name="cats.data.Xor#compare" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compare[AA&gt;:A,BB&gt;:B](that:cats.data.Xor[AA,BB])(implicitAA:cats.Order[AA],implicitBB:cats.Order[BB]):Int"></a>
       <a id="compare[AA&gt;:Nothing,BB&gt;:B](Xor[AA,BB])(Order[AA],Order[BB]):Int"></a>
@@ -581,6 +604,23 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor$$Right@map[D](f:B=&gt;D):cats.data.Xor[A,D]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a></dd></dl></div>
+    </li><li name="cats.data.Xor#map2Eval" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map2Eval[AA&gt;:A,C,Z](fc:cats.Eval[cats.data.Xor[AA,C]])(f:(B,C)=&gt;Z):cats.Eval[cats.data.Xor[AA,Z]]"></a>
+      <a id="map2Eval[AA&gt;:Nothing,C,Z](Eval[Xor[AA,C]])((B,C)⇒Z):Eval[Xor[AA,Z]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map2Eval</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="scala.Nothing">Nothing</span></span>, <span name="C">C</span>, <span name="Z">Z</span>]</span><span class="params">(<span name="fc">fc: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.map2Eval.AA">AA</span>, <span class="extype" name="cats.data.Xor.map2Eval.C">C</span>]]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Xor.Right.B">B</span>, <span class="extype" name="cats.data.Xor.map2Eval.C">C</span>) ⇒ <span class="extype" name="cats.data.Xor.map2Eval.Z">Z</span></span>)</span><span class="result">: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.map2Eval.AA">AA</span>, <span class="extype" name="cats.data.Xor.map2Eval.Z">Z</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$$Right@map2Eval[AA&gt;:A,C,Z](fc:cats.Eval[cats.data.Xor[AA,C]])(f:(B,C)=&gt;Z):cats.Eval[cats.data.Xor[AA,Z]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

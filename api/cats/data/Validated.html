@@ -361,6 +361,28 @@ supplied <code>Validated</code> instance are also <code>Valid</code>.
       </a>
     </span>
       
+    </li><li name="cats.data.Validated#ensure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ensure[EE&gt;:E](onFailure:=&gt;EE)(f:A=&gt;Boolean):cats.data.Validated[EE,A]"></a>
+      <a id="ensure[EE&gt;:E](⇒EE)((A)⇒Boolean):Validated[EE,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ensure</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>]</span><span class="params">(<span name="onFailure">onFailure: ⇒ <span class="extype" name="cats.data.Validated.ensure.EE">EE</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.ensure.EE">EE</span>, <span class="extype" name="cats.data.Validated.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Validated@ensure[EE&gt;:E](onFailure:=&gt;EE)(f:A=&gt;Boolean):cats.data.Validated[EE,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Ensure that a successful result passes the given predicate,
+falling back to an Invalid of <code>onFailure</code> if the predicate
+returns false.</p><div class="fullcomment"><div class="comment cmt"><p>Ensure that a successful result passes the given predicate,
+falling back to an Invalid of <code>onFailure</code> if the predicate
+returns false.</p><p>For example:</p><pre>scala&gt; Validated.valid(<span class="lit">""</span>).ensure(<span class="kw">new</span> IllegalArgumentException(<span class="lit">"Must not be empty"</span>))(_.nonEmpty)
+res0: Validated[IllegalArgumentException,<span class="std">String</span>] = Invalid(java.lang.IllegalArgumentException: Must not be empty)</pre></div></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>

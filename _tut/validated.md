@@ -190,6 +190,8 @@ Which can be defined in terms of `Apply#ap` and `Apply#map`, the very functions 
 
 Can we perhaps define an `Apply` instance for `Validated`? Better yet, can we define an `Applicative` instance?
 
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
+
 ```scala
 import cats.Applicative
 

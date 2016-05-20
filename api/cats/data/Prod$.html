@@ -28,11 +28,11 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a href="Prod.html" title="See companion trait"><img alt="Object/Trait" src="../../lib/object_to_trait_big.png" /></a>
+        <a href="Prod.html" title="See companion class"><img alt="Object/Class" src="../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.data">data</a></p>
-        <h1><a href="Prod.html" title="See companion trait">Prod</a></h1><h3><span class="morelinks"><div>
+        <h1><a href="Prod.html" title="See companion class">Prod</a></h1><h3><span class="morelinks"><div>
             Related Docs:
-            <a href="Prod.html" title="See companion trait">trait Prod</a>
+            <a href="Prod.html" title="See companion class">class Prod</a>
             | <a href="package.html" class="extype" name="cats.data">package data</a>
           </div></span></h3><span class="permalink">
       <a href="../../index.html#cats.data.Prod$" title="Permalink" target="_top">
@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Prod</span><span class="result"> extends <span class="extype" name="cats.data.ProdInstances">ProdInstances</span></span>
+        <span class="name">Prod</span><span class="result"> extends <span class="extype" name="cats.data.ProdInstances">ProdInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Prod.scala" target="_blank">Prod.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="cats.data.ProdInstances">ProdInstances</span>, <span class="extype" name="cats.data.ProdInstances0">ProdInstances0</span>, <span class="extype" name="cats.data.ProdInstances1">ProdInstances1</span>, <span class="extype" name="cats.data.ProdInstances2">ProdInstances2</span>, <span class="extype" name="cats.data.ProdInstances3">ProdInstances3</span>, <span class="extype" name="cats.data.ProdInstances4">ProdInstances4</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.ProdInstances">ProdInstances</span>, <span class="extype" name="cats.data.ProdInstances0">ProdInstances0</span>, <span class="extype" name="cats.data.ProdInstances1">ProdInstances1</span>, <span class="extype" name="cats.data.ProdInstances2">ProdInstances2</span>, <span class="extype" name="cats.data.ProdInstances3">ProdInstances3</span>, <span class="extype" name="cats.data.ProdInstances4">ProdInstances4</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.data.Prod"><span>Prod</span></li><li class="in" name="cats.data.ProdInstances"><span>ProdInstances</span></li><li class="in" name="cats.data.ProdInstances0"><span>ProdInstances0</span></li><li class="in" name="cats.data.ProdInstances1"><span>ProdInstances1</span></li><li class="in" name="cats.data.ProdInstances2"><span>ProdInstances2</span></li><li class="in" name="cats.data.ProdInstances3"><span>ProdInstances3</span></li><li class="in" name="cats.data.ProdInstances4"><span>ProdInstances4</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.data.Prod"><span>Prod</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.ProdInstances"><span>ProdInstances</span></li><li class="in" name="cats.data.ProdInstances0"><span>ProdInstances0</span></li><li class="in" name="cats.data.ProdInstances1"><span>ProdInstances1</span></li><li class="in" name="cats.data.ProdInstances2"><span>ProdInstances2</span></li><li class="in" name="cats.data.ProdInstances3"><span>ProdInstances3</span></li><li class="in" name="cats.data.ProdInstances4"><span>ProdInstances4</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -147,23 +147,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.data.Prod#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply[F[_],G[_],A](first0:=&gt;F[A],second0:=&gt;G[A]):cats.data.Prod[F,G,A]"></a>
-      <a id="apply[F[_],G[_],A](⇒F[A],⇒G[A]):Prod[F,G,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="first0">first0: ⇒ <span class="extype" name="cats.data.Prod.apply.F">F</span>[<span class="extype" name="cats.data.Prod.apply.A">A</span>]</span>, <span name="second0">second0: ⇒ <span class="extype" name="cats.data.Prod.apply.G">G</span>[<span class="extype" name="cats.data.Prod.apply.A">A</span>]</span>)</span><span class="result">: <a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.Prod.apply.F">F</span>, <span class="extype" name="cats.data.Prod.apply.G">G</span>, <span class="extype" name="cats.data.Prod.apply.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Prod$@apply[F[_],G[_],A](first0:=&gt;F[A],second0:=&gt;G[A]):cats.data.Prod[F,G,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -516,23 +499,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.data.Prod#unapply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="unapply[F[_],G[_],A](x:cats.data.Prod[F,G,A]):Option[(F[A],G[A])]"></a>
-      <a id="unapply[F[_],G[_],A](Prod[F,G,A]):Option[(F[A],G[A])]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">unapply</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="x">x: <a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.Prod.unapply.F">F</span>, <span class="extype" name="cats.data.Prod.unapply.G">G</span>, <span class="extype" name="cats.data.Prod.unapply.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[(<span class="extype" name="cats.data.Prod.unapply.F">F</span>[<span class="extype" name="cats.data.Prod.unapply.A">A</span>], <span class="extype" name="cats.data.Prod.unapply.G">G</span>[<span class="extype" name="cats.data.Prod.unapply.A">A</span>])]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Prod$@unapply[F[_],G[_],A](x:cats.data.Prod[F,G,A]):Option[(F[A],G[A])]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -611,7 +577,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="cats.data.ProdInstances">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="cats.data.ProdInstances">
               <h3>Inherited from <span class="extype" name="cats.data.ProdInstances">ProdInstances</span></h3>
             </div><div class="parent" name="cats.data.ProdInstances0">
               <h3>Inherited from <span class="extype" name="cats.data.ProdInstances0">ProdInstances0</span></h3>

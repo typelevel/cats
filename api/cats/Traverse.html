@@ -1019,6 +1019,23 @@ match <code>p</code>.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.Traverse#traverseM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="traverseM[G[_],A,B](fa:F[A])(f:A=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]"></a>
+      <a id="traverseM[G[_],A,B](F[A])((A)⇒G[F[B]])(Applicative[G],FlatMap[F]):G[F[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverseM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Traverse.traverseM.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.traverseM.A">A</span>) ⇒ <span class="extype" name="cats.Traverse.traverseM.G">G</span>[<span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Traverse.traverseM.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.traverseM.G">G</span>]</span>, <span name="F">F: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Traverse.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.traverseM.G">G</span>[<span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Traverse.traverseM.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Traverse@traverseM[G[_],A,B](fa:F[A])(f:A=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A traverse followed by flattening the inner result.</p>
     </li><li name="cats.Traverse#traverseU" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="traverseU[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[F[U.A]]"></a>
       <a id="traverseU[A,GB](F[A])((A)⇒GB)(Unapply[Applicative,GB]):M[F[A]]"></a>
