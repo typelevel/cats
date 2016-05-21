@@ -1,5 +1,7 @@
 package cats
 
+import cats.data.NestedSemigroupK
+
 import simulacrum.typeclass
 
 /**
@@ -34,5 +36,10 @@ import simulacrum.typeclass
   def algebra[A]: Semigroup[F[A]] =
     new Semigroup[F[A]] {
       def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
+    }
+
+  def nest[G[_]]: SemigroupK[Lambda[A => F[G[A]]]] =
+    new NestedSemigroupK[F, G] {
+      val F = self
     }
 }

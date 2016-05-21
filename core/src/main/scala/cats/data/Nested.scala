@@ -32,236 +32,333 @@ private[data] sealed abstract class NestedInstances extends NestedInstances1 {
     FGA.on(_.value)
 
   implicit def nestedTraverse[F[_]: Traverse, G[_]: Traverse]: Traverse[Nested[F, G, ?]] =
-    new NestedTraverse[F, G] {
-      val F = Traverse[F]
-      val G = Traverse[G]
+    new Traverse[Nested[F, G, ?]] {
+      val instance = Traverse[F].nest[G]
+
+      def traverse[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
+        Applicative[H].map(instance.traverse(fga.value)(f))(Nested(_))
+
+      def foldLeft[A, B](fga: Nested[F, G, A], b: B)(f: (B, A) => B): B =
+        instance.foldLeft(fga.value, b)(f)
+
+      def foldRight[A, B](fga: Nested[F, G, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        instance.foldRight(fga.value, lb)(f)
+
+      override def map[A, B](fga: Nested[F, G, A])(f: A => B): Nested[F, G, B] =
+        Nested(instance.map(fga.value)(f))
+
+      override def imap[A, B](fga: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
+        Nested(instance.imap(fga.value)(f)(g))
     }
 }
 
 private[data] sealed abstract class NestedInstances1 extends NestedInstances2 {
   implicit def nestedReducible[F[_]: Reducible, G[_]: Reducible]: Reducible[Nested[F, G, ?]] =
-    new NestedReducible[F, G] {
-      val F = Reducible[F]
-      val G = Reducible[G]
+    new Reducible[Nested[F, G, ?]] {
+      val instance = Reducible[F].nest[G]
+
+      def reduceLeftTo[A, B](fga: Nested[F, G, A])(f: A => B)(g: (B, A) => B): B =
+        instance.reduceLeftTo(fga.value)(f)(g)
+
+      def reduceRightTo[A, B](fga: Nested[F, G, A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        instance.reduceRightTo(fga.value)(f)(g)
+
+      def foldLeft[A, B](fga: Nested[F, G, A], b: B)(f: (B, A) => B): B =
+        instance.foldLeft(fga.value, b)(f)
+
+      def foldRight[A, B](fga: Nested[F, G, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        instance.foldRight(fga.value, lb)(f)
     }
 
   implicit def nestedContravariant[F[_]: Contravariant, G[_]: Contravariant]: Functor[Nested[F, G, ?]] =
-    new NestedContravariant[F, G] {
-      val F = Contravariant[F]
-      val G = Contravariant[G]
+    new Functor[Nested[F, G, ?]] {
+      val instance = Contravariant[F].nest[G]
+
+      def map[A, B](fga: Nested[F, G, A])(f: A => B): Nested[F, G, B] =
+        Nested(instance.map(fga.value)(f))
     }
+
 }
 
 private[data] sealed abstract class NestedInstances2 extends NestedInstances3 {
   implicit def nestedFoldable[F[_]: Foldable, G[_]: Foldable]: Foldable[Nested[F, G, ?]] =
-    new NestedFoldable[F, G] {
-      val F = Foldable[F]
-      val G = Foldable[G]
+    new Foldable[Nested[F, G, ?]] {
+      val instance = Foldable[F].nest[G]
+
+      def foldLeft[A, B](fga: Nested[F, G, A], b: B)(f: (B, A) => B): B =
+        instance.foldLeft(fga.value, b)(f)
+
+      def foldRight[A, B](fga: Nested[F, G, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        instance.foldRight(fga.value, lb)(f)
     }
 
+
   implicit def nestedContravariantCovariant[F[_]: Contravariant, G[_]: Functor]: Contravariant[Nested[F, G, ?]] =
-    new NestedContravariantCovariant[F, G] {
-      val F = Contravariant[F]
-      val G = Functor[G]
+    new Contravariant[Nested[F, G, ?]] {
+      val instance = Contravariant[F].nestFunctor[G]
+
+      def contramap[A, B](fga: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
+        Nested(instance.contramap(fga.value)(f))
     }
 }
 
 private[data] sealed abstract class NestedInstances3 extends NestedInstances4 {
   implicit def nestedAlternative[F[_]: Alternative, G[_]: Applicative]: Alternative[Nested[F, G, ?]] =
-    new CompositeAlternative[F, G] {
-      val F = Alternative[F]
-      val G = Applicative[G]
+    new Alternative[Nested[F, G, ?]] {
+      val instance = Alternative[F].nest[G]
+
+      override def imap[A, B](fga: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
+        Nested(instance.imap(fga.value)(f)(g))
+
+      override def map[A, B](fga: Nested[F, G, A])(f: A => B): Nested[F, G, B] =
+        Nested(instance.map(fga.value)(f))
+
+      def ap[A, B](fgf: Nested[F, G, A => B])(fga: Nested[F, G, A]): Nested[F, G, B] =
+        Nested(instance.ap(fgf.value)(fga.value))
+
+      override def product[A, B](fga: Nested[F, G, A], fgb: Nested[F, G, B]): Nested[F, G, (A, B)] =
+        Nested(instance.product(fga.value, fgb.value))
+
+      def pure[A](x: A): Nested[F, G, A] = Nested(instance.pure(x))
+
+      def combineK[A](x: Nested[F, G, A], y: Nested[F, G, A]): Nested[F, G, A] = Nested(instance.combineK(x.value, y.value))
+
+      def empty[A]: Nested[F, G, A] = Nested(instance.empty[A])
     }
 
   implicit def nestedCovariantContravariant[F[_]: Functor, G[_]: Contravariant]: Contravariant[Nested[F, G, ?]] =
-    new NestedCovariantContravariant[F, G] {
-      val F = Functor[F]
-      val G = Contravariant[G]
+    new Contravariant[Nested[F, G, ?]] {
+      val instance = Functor[F].nestContravariant[G]
+
+      def contramap[A, B](fga: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
+        Nested(instance.contramap(fga.value)(f))
     }
 }
 
 private[data] sealed abstract class NestedInstances4 extends NestedInstances5 {
   implicit def nestedApplicative[F[_]: Applicative, G[_]: Applicative]: Applicative[Nested[F, G, ?]] =
-    new NestedApplicative[F, G] {
-      val F = Applicative[F]
-      val G = Applicative[G]
+    new Applicative[Nested[F, G, ?]] {
+      val instance = Applicative[F].nest[G]
+
+      override def imap[A, B](fga: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
+        Nested(instance.imap(fga.value)(f)(g))
+
+      override def map[A, B](fga: Nested[F, G, A])(f: A => B): Nested[F, G, B] =
+        Nested(instance.map(fga.value)(f))
+
+      def ap[A, B](fgf: Nested[F, G, A => B])(fga: Nested[F, G, A]): Nested[F, G, B] =
+        Nested(instance.ap(fgf.value)(fga.value))
+
+      override def product[A, B](fga: Nested[F, G, A], fgb: Nested[F, G, B]): Nested[F, G, (A, B)] =
+        Nested(instance.product(fga.value, fgb.value))
+
+      def pure[A](x: A): Nested[F, G, A] = Nested(instance.pure(x))
     }
 
   implicit def nestedMonoidK[F[_]: MonoidK, G[_]]: MonoidK[Nested[F, G, ?]] =
-    new NestedMonoidK[F, G] {
-      val F = MonoidK[F]
+    new MonoidK[Nested[F, G, ?]] {
+      val instance = MonoidK[F].nest[G]
+
+      def combineK[A](x: Nested[F, G, A], y: Nested[F, G, A]): Nested[F, G, A] = Nested(instance.combineK(x.value, y.value))
+
+      def empty[A]: Nested[F, G, A] = Nested(instance.empty[A])
     }
 }
 
 private[data] sealed abstract class NestedInstances5 extends NestedInstances6 {
   implicit def nestedApply[F[_]: Apply, G[_]: Apply]: Apply[Nested[F, G, ?]] =
-    new NestedApply[F, G] {
-      val F = Apply[F]
-      val G = Apply[G]
+    new Apply[Nested[F, G, ?]] {
+      val instance = Apply[F].nest[G]
+
+      def ap[A, B](fgf: Nested[F, G, A => B])(fga: Nested[F, G, A]): Nested[F, G, B] =
+        Nested(instance.ap(fgf.value)(fga.value))
+
+      override def product[A, B](fga: Nested[F, G, A], fgb: Nested[F, G, B]): Nested[F, G, (A, B)] =
+        Nested(instance.product(fga.value, fgb.value))
+
+      def map[A, B](fga: Nested[F, G, A])(f: A => B): Nested[F, G, B] =
+        Nested(instance.map(fga.value)(f))
     }
 
   implicit def nestedSemigroupK[F[_]: SemigroupK, G[_]]: SemigroupK[Nested[F, G, ?]] =
-    new NestedSemigroupK[F, G] {
-      val F = SemigroupK[F]
+    new SemigroupK[Nested[F, G, ?]] {
+      val instance = SemigroupK[F].nest[G]
+
+      def combineK[A](x: Nested[F, G, A], y: Nested[F, G, A]): Nested[F, G, A] = Nested(instance.combineK(x.value, y.value))
     }
 }
 
 private[data] sealed abstract class NestedInstances6 extends NestedInstances7 {
   implicit def nestedFunctor[F[_]: Functor, G[_]: Functor]: Functor[Nested[F, G, ?]] =
-    new NestedFunctor[F, G] {
-      val F = Functor[F]
-      val G = Functor[G]
+    new Functor[Nested[F, G, ?]] {
+      val instance = Functor[F].nest[G]
+
+      def map[A, B](fga: Nested[F, G, A])(f: A => B): Nested[F, G, B] =
+        Nested(instance.map(fga.value)(f))
+
+      override def imap[A, B](fga: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
+        Nested(instance.imap(fga.value)(f)(g))
     }
 }
 
 private[data] sealed abstract class NestedInstances7 extends NestedInstances8 {
   implicit def nestedInvariant[F[_]: Invariant, G[_]: Invariant]: Invariant[Nested[F, G, ?]] =
-    new NestedInvariant[F, G] {
-      val F = Invariant[F]
-      val G = Invariant[G]
+    new Invariant[Nested[F, G, ?]] {
+      val instance = Invariant[F].nest[G]
+
+      def imap[A, B](fga: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
+        Nested(instance.imap(fga.value)(f)(g))
     }
 }
 
 private[data] sealed abstract class NestedInstances8 extends NestedInstances9 {
   implicit def nestedInvariantCovariant[F[_]: Invariant, G[_]: Functor]: Invariant[Nested[F, G, ?]] =
-    new NestedInvariantCovariant[F, G] {
-      val F = Invariant[F]
-      val G = Functor[G]
+    new Invariant[Nested[F, G, ?]] {
+      val instance = Invariant[F].nestFunctor[G]
+
+      def imap[A, B](fga: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
+        Nested(instance.imap(fga.value)(f)(g))
     }
 }
 
 private[data] sealed abstract class NestedInstances9 {
   implicit def nestedInvariantContravariant[F[_]: Invariant, G[_]: Contravariant]: Invariant[Nested[F, G, ?]] =
-    new NestedInvariantContravariant[F, G] {
-      val F = Invariant[F]
-      val G = Contravariant[G]
+    new Invariant[Nested[F, G, ?]] {
+      val instance = Invariant[F].nestContravariant[G]
+
+      def imap[A, B](fga: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
+        Nested(instance.imap(fga.value)(f)(g))
     }
 }
 
-private[data] trait NestedInvariant[F[_], G[_]] extends Invariant[Nested[F, G, ?]] {
+/********************
+** Implementations **
+********************/
+
+private[cats] trait NestedInvariant[F[_], G[_]] extends Invariant[Lambda[A => F[G[A]]]] { outer =>
   def F: Invariant[F]
   def G: Invariant[G]
 
-  override def imap[A, B](fga: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
-    Nested(F.imap(fga.value)(ga => G.imap(ga)(f)(g))(gb => G.imap(gb)(g)(f)))
+  override def imap[A, B](fga: F[G[A]])(f: A => B)(g: B => A): F[G[B]] =
+    F.imap(fga)(ga => G.imap(ga)(f)(g))(gb => G.imap(gb)(g)(f))
 }
 
-private[data] trait NestedFunctor[F[_], G[_]] extends Functor[Nested[F, G, ?]] with NestedInvariant[F, G] {
+private[cats] trait NestedFunctor[F[_], G[_]] extends Functor[Lambda[A => F[G[A]]]] with NestedInvariant[F, G] { outer =>
   def F: Functor[F]
   def G: Functor[G]
 
-  override def map[A, B](fga: Nested[F, G, A])(f: A => B): Nested[F, G, B] =
-    Nested(F.map(fga.value)(ga => G.map(ga)(f)))
+  override def map[A, B](fga: F[G[A]])(f: A => B): F[G[B]] =
+    F.map(fga)(ga => G.map(ga)(f))
 }
 
-private[data] trait NestedApply[F[_], G[_]] extends Apply[Nested[F, G, ?]] with NestedFunctor[F, G] {
+private[cats] trait NestedApply[F[_], G[_]] extends Apply[Lambda[A => F[G[A]]]] with NestedFunctor[F, G] { outer =>
   def F: Apply[F]
   def G: Apply[G]
 
-  override def ap[A, B](ff: Nested[F, G, A => B])(fa: Nested[F, G, A]): Nested[F, G, B] =
-    Nested(F.ap(F.map(ff.value)(gab => G.ap(gab)(_)))(fa.value))
+  override def ap[A, B](fgf: F[G[A => B]])(fga: F[G[A]]): F[G[B]] =
+    F.ap(F.map(fgf)(gf => G.ap(gf)(_)))(fga)
 
-  override def product[A, B](fa: Nested[F, G, A], fb: Nested[F, G, B]): Nested[F, G, (A, B)] =
-    Nested(F.map2(fa.value, fb.value)(G.product))
+  override def product[A, B](fga: F[G[A]], fgb: F[G[B]]): F[G[(A, B)]] =
+    F.map2(fga, fgb)(G.product)
 }
 
-private[data] trait NestedApplicative[F[_], G[_]] extends Applicative[Nested[F, G, ?]] with NestedApply[F, G] {
+private[cats] trait NestedApplicative[F[_], G[_]] extends Applicative[Lambda[A => F[G[A]]]] with NestedApply[F, G] { outer =>
   def F: Applicative[F]
   def G: Applicative[G]
 
-  override def pure[A](x: A): Nested[F, G, A] = Nested(F.pure(G.pure(x)))
+  override def pure[A](x: A): F[G[A]] = F.pure(G.pure(x))
 }
 
-private[data] trait NestedSemigroupK[F[_], G[_]] extends SemigroupK[Nested[F, G, ?]] {
+private[cats] trait NestedSemigroupK[F[_], G[_]] extends SemigroupK[Lambda[A => F[G[A]]]] { outer =>
   def F: SemigroupK[F]
 
-  override def combineK[A](x: Nested[F, G, A], y: Nested[F, G, A]): Nested[F, G, A] = Nested(F.combineK(x.value, y.value))
+  override def combineK[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = F.combineK(x, y)
 }
 
-private[data] trait NestedMonoidK[F[_], G[_]] extends MonoidK[Nested[F, G, ?]] with NestedSemigroupK[F, G] {
+private[cats] trait NestedMonoidK[F[_], G[_]] extends MonoidK[Lambda[A => F[G[A]]]] with NestedSemigroupK[F, G] { outer =>
   def F: MonoidK[F]
 
-  override def empty[A]: Nested[F, G, A] = Nested(F.empty)
+  override def empty[A]: F[G[A]] = F.empty
 }
 
-private[data] trait CompositeAlternative[F[_], G[_]] extends Alternative[Nested[F, G, ?]] with NestedApplicative[F, G] with NestedMonoidK[F, G] {
+private[cats] trait NestedAlternative[F[_], G[_]] extends Alternative[Lambda[A => F[G[A]]]] with NestedApplicative[F, G] with NestedMonoidK[F, G] { outer =>
   def F: Alternative[F]
 }
 
-private[data] trait NestedFoldable[F[_], G[_]] extends Foldable[Nested[F, G, ?]] {
+private[cats] trait NestedFoldable[F[_], G[_]] extends Foldable[Lambda[A => F[G[A]]]] { outer =>
   def F: Foldable[F]
   def G: Foldable[G]
 
-  override def foldLeft[A, B](fga: Nested[F, G, A], b: B)(f: (B, A) => B): B =
-    F.foldLeft(fga.value, b)((b, a) => G.foldLeft(a, b)(f))
+  override def foldLeft[A, B](fga: F[G[A]], b: B)(f: (B, A) => B): B =
+    F.foldLeft(fga, b)((b, a) => G.foldLeft(a, b)(f))
 
-  override def foldRight[A, B](fga: Nested[F, G, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    F.foldRight(fga.value, lb)((ga, lb) => G.foldRight(ga, lb)(f))
+  override def foldRight[A, B](fga: F[G[A]], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    F.foldRight(fga, lb)((ga, lb) => G.foldRight(ga, lb)(f))
 }
 
-private[data] trait NestedTraverse[F[_], G[_]] extends Traverse[Nested[F, G, ?]] with NestedFoldable[F, G] with NestedFunctor[F, G] {
+private[cats] trait NestedTraverse[F[_], G[_]] extends Traverse[Lambda[A => F[G[A]]]] with NestedFoldable[F, G] with NestedFunctor[F, G] { outer =>
   def F: Traverse[F]
   def G: Traverse[G]
 
-  override def traverse[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
-    Applicative[H].map(F.traverse(fga.value)(ga => G.traverse(ga)(f)))(Nested(_))
+  override def traverse[H[_]: Applicative, A, B](fga: F[G[A]])(f: A => H[B]): H[F[G[B]]] =
+    F.traverse(fga)(ga => G.traverse(ga)(f))
 }
 
-private[data] trait NestedReducible[F[_], G[_]] extends Reducible[Nested[F, G, ?]] with NestedFoldable[F, G] {
+private[cats] trait NestedReducible[F[_], G[_]] extends Reducible[Lambda[A => F[G[A]]]] with NestedFoldable[F, G] { outer =>
   def F: Reducible[F]
   def G: Reducible[G]
 
-  override def reduceLeftTo[A, B](fga: Nested[F, G, A])(f: A => B)(g: (B, A) => B): B = {
+  override def reduceLeftTo[A, B](fga: F[G[A]])(f: A => B)(g: (B, A) => B): B = {
     def toB(ga: G[A]): B = G.reduceLeftTo(ga)(f)(g)
-    F.reduceLeftTo(fga.value)(toB) { (b, ga) =>
+    F.reduceLeftTo(fga)(toB) { (b, ga) =>
       G.foldLeft(ga, b)(g)
     }
   }
 
-  override def reduceRightTo[A, B](fga: Nested[F, G, A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
+  override def reduceRightTo[A, B](fga: F[G[A]])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def toB(ga: G[A]): B = G.reduceRightTo(ga)(f)(g).value
-    F.reduceRightTo(fga.value)(toB) { (ga, lb) =>
+    F.reduceRightTo(fga)(toB) { (ga, lb) =>
       G.foldRight(ga, lb)(g)
     }
   }
 }
 
-private[data] trait NestedContravariant[F[_], G[_]] extends Functor[Nested[F, G, ?]] {
+private[cats] trait NestedContravariant[F[_], G[_]] extends Functor[Lambda[A => F[G[A]]]] { outer =>
   def F: Contravariant[F]
   def G: Contravariant[G]
 
-  override def map[A, B](fga: Nested[F, G, A])(f: A => B): Nested[F, G, B] =
-    Nested(F.contramap(fga.value)(gb => G.contramap(gb)(f)))
+  override def map[A, B](fga: F[G[A]])(f: A => B): F[G[B]] =
+    F.contramap(fga)(gb => G.contramap(gb)(f))
 }
 
-private[data] trait NestedContravariantCovariant[F[_], G[_]] extends Contravariant[Nested[F, G, ?]] {
+private[cats] trait NestedContravariantCovariant[F[_], G[_]] extends Contravariant[Lambda[A => F[G[A]]]] { outer =>
   def F: Contravariant[F]
   def G: Functor[G]
 
-  override def contramap[A, B](fga: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
-    Nested(F.contramap(fga.value)(gb => G.map(gb)(f)))
+  override def contramap[A, B](fga: F[G[A]])(f: B => A): F[G[B]] =
+    F.contramap(fga)(gb => G.map(gb)(f))
 }
 
-private[data] trait NestedCovariantContravariant[F[_], G[_]] extends Contravariant[Nested[F, G, ?]] {
+private[cats] trait NestedCovariantContravariant[F[_], G[_]] extends Contravariant[Lambda[A => F[G[A]]]] { outer =>
   def F: Functor[F]
   def G: Contravariant[G]
 
-  override def contramap[A, B](fga: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
-    Nested(F.map(fga.value)(ga => G.contramap(ga)(f)))
+  override def contramap[A, B](fga: F[G[A]])(f: B => A): F[G[B]] =
+    F.map(fga)(ga => G.contramap(ga)(f))
 }
 
-private[data] trait NestedInvariantCovariant[F[_], G[_]] extends Invariant[Nested[F, G, ?]] {
+private[cats] trait NestedInvariantCovariant[F[_], G[_]] extends Invariant[Lambda[A => F[G[A]]]] { outer =>
   def F: Invariant[F]
   def G: Functor[G]
 
-  override def imap[A, B](fga: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
-    Nested(F.imap(fga.value)(ga => G.map(ga)(f))(gb => G.map(gb)(g)))
+  override def imap[A, B](fga: F[G[A]])(f: A => B)(g: B => A): F[G[B]] =
+    F.imap(fga)(ga => G.map(ga)(f))(gb => G.map(gb)(g))
 }
 
-private[data] trait NestedInvariantContravariant[F[_], G[_]] extends Invariant[Nested[F, G, ?]] {
+private[cats] trait NestedInvariantContravariant[F[_], G[_]] extends Invariant[Lambda[A => F[G[A]]]] { outer =>
   def F: Invariant[F]
   def G: Contravariant[G]
 
-  override def imap[A, B](fga: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
-    Nested(F.imap(fga.value)(ga => G.contramap(ga)(g))(gb => G.contramap(gb)(f)))
+  override def imap[A, B](fga: F[G[A]])(f: A => B)(g: B => A): F[G[B]] =
+    F.imap(fga)(ga => G.contramap(ga)(g))(gb => G.contramap(gb)(f))
 }

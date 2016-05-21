@@ -1,7 +1,8 @@
 package cats
 
-import simulacrum.typeclass
+import cats.data.NestedApplicative
 import cats.std.list._
+import simulacrum.typeclass
 
 /**
  * Applicative functor.
@@ -43,4 +44,10 @@ import cats.std.list._
 
   def sequence[G[_], A](as: G[F[A]])(implicit G: Traverse[G]): F[G[A]] =
     G.sequence(as)(this)
+
+  def nest[G[_]: Applicative]: Applicative[Lambda[A => F[G[A]]]] =
+    new NestedApplicative[F, G] {
+      val F = self
+      val G = Applicative[G]
+    }
 }
