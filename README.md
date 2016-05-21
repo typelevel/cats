@@ -14,6 +14,13 @@ The name is a playful shortening of the word *category*.
 
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
+#### Why?
+
+Scala provides many tools for functional programming such as algebraic data types, higher kinded types
+and implicits. However, common abstractions such as `Monoid`, `Monad`, and `Traverse` are currently missing from
+the standard library, leaving a bit to be desired. Among the goals of Cats is to fill this gap, and to provide a
+foundation for an [ecosystem of pure, typeful libraries](http://typelevel.org/projects/).
+
 ### Getting Started
 
 Cats is currently available for Scala 2.10 and 2.11.
