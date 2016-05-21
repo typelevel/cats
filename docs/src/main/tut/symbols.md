@@ -1,3 +1,3 @@
 Apply builder
 
-`|@|` ap
+`|@|` `cats.syntax.CartesianOps`
