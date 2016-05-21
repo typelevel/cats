@@ -82,7 +82,7 @@ lazy val commonJvmSettings = Seq(
 // JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
 ) ++ catsDoctestSettings
 
-lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
+lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings ++ skip210DocSettings
 
 lazy val scalacheckVersion = "1.12.5"
 
@@ -105,6 +105,14 @@ def noDocProjects(sv: String): Seq[ProjectReference] = CrossVersion.partialVersi
     case Some((2, 10)) => Seq[ProjectReference](coreJVM)
     case _ => Nil
   }
+
+lazy val skip210DocSettings = Seq(
+  sources in (Compile, doc) := (
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 10)) => Nil
+      case _ => (sources in (Compile, doc)).value
+    })
+)
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
