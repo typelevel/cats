@@ -172,9 +172,9 @@ private[data] sealed abstract class WriterTInstances6 extends WriterTInstances7 
 
 private[data] sealed abstract class WriterTInstances7 {
 
-  implicit def writerTCoflatMap[F[_], L](implicit F: Functor[F]): WriterTCoflatMap[F, L] = 
+  implicit def writerTCoflatMap[F[_], L](implicit F: Functor[F]): CoflatMap[WriterT[F, L, ?]] = 
     new WriterTCoflatMap[F, L] {
-    implicit val F0: Functor[F] = F
+      implicit val F0: Functor[F] = F
   }
 }
 
