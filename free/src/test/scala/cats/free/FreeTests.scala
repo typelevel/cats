@@ -56,7 +56,7 @@ class FreeTests extends CatsSuite {
       z <- if (j<10000) a(j) else Free.pure[FTestApi, Int](j)
     } yield z
 
-    def runner: FTestApi ~> Id = new (FTestApi ~> Id) {
+    def runner: NaturalTransformation[FTestApi,Id] = new NaturalTransformation[FTestApi,Id] {
       def apply[A](fa: FTestApi[A]): Id[A] = fa match {
         case TB(i) => i+1
       }
@@ -77,7 +77,7 @@ object FreeTests extends FreeTestsInstances {
 }
 
 sealed trait FreeTestsInstances {
-  val headOptionU: List ~> Option = new (List ~> Option) {
+  val headOptionU: NaturalTransformation[List,Option] = new NaturalTransformation[List,Option] {
     def apply[A](fa: List[A]): Option[A] = fa.headOption
   }
 

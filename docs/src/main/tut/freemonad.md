@@ -165,12 +165,15 @@ DSL. By itself, this DSL only represents a sequence of operations
 
 To do this, we will use a *natural transformation* between type
 containers.  Natural transformations go between types like `F[_]` and
-`G[_]` (this particular transformation would be written as `F ~> G`).
+`G[_]` (this particular transformation would be written as
+`NaturalTransformation[F,G]` or as done here using the symbolic
+alternative as `F ~> G`).
 
 In our case, we will use a simple mutable map to represent our key
 value store:
 
 ```tut:silent
+import cats.arrow.NaturalTransformation
 import cats.{Id, ~>}
 import scala.collection.mutable
 
@@ -215,7 +218,7 @@ behavior, such as:
  - `Future[_]` for asynchronous computation
  - `List[_]` for gathering multiple results
  - `Option[_]` to support optional results
- - `Validated[_]` (or `Xor[E, ?]`) to support failure
+ - `Xor[E, ?]` to support failure
  - a pseudo-random monad to support non-determinism
  - and so on...
 
@@ -241,7 +244,7 @@ recursive structure by:
 This operation is called `Free.foldMap`:
 
 ```scala
-final def foldMap[M[_]](f: S ~> M)(M: Monad[M]): M[A] = ...
+final def foldMap[M[_]](f: NaturalTransformation[S,M])(M: Monad[M]): M[A] = ...
 ```
 
 `M` must be a `Monad` to be flattenable (the famous monoid aspect

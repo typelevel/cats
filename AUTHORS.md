@@ -26,6 +26,7 @@ possible:
  * Antoine Comte
  * Arya Irani
  * Ash Pook
+ * Aλ
  * Benjamin Thuillier
  * Binh Nguyen
  * Bobby Rauchenberg
@@ -86,6 +87,7 @@ possible:
  * Sarunas Valaskevicius
  * Shunsuke Otani
  * Sinisa Louc
+ * Stephen Carman
  * Stephen Judkins
  * Stew O'Connor
  * Sumedh Mungee
@@ -93,6 +95,7 @@ possible:
  * Travis Brown
  * Wedens
  * Yosef Fertel
+ * yilinwei
  * Zach Abbott
 
 We've tried to include everyone, but if you've made a contribution to

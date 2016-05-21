@@ -97,7 +97,7 @@ class FreeApplicativeTests extends CatsSuite {
 
     type Tracked[A] = State[String, A]
 
-    val f: Foo ~> Tracked = new (Foo ~> Tracked) {
+    val f: NaturalTransformation[Foo,Tracked] = new NaturalTransformation[Foo,Tracked] {
       def apply[A](fa: Foo[A]): Tracked[A] = State[String, A]{ s0 =>
         (s0 + fa.toString + ";", fa.getA)
       }
@@ -120,7 +120,7 @@ class FreeApplicativeTests extends CatsSuite {
 
     val z = Apply[Dsl].map2(x, y)((_, _) => ())
 
-    val asString: Id ~> λ[α => String] = new (Id ~> λ[α => String]) {
+    val asString: NaturalTransformation[Id,λ[α => String]] = new NaturalTransformation[Id,λ[α => String]] {
       def apply[A](a: A): String = a.toString
     }
 

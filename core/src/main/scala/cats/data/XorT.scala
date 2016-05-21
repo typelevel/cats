@@ -110,7 +110,45 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def merge[AA >: A](implicit ev: B <:< AA, F: Functor[F]): F[AA] = F.map(value)(_.fold(identity, ev.apply))
 
-  def combine(that: XorT[F, A, B])(implicit F: Apply[F], A: Semigroup[A], B: Semigroup[B]): XorT[F, A, B] =
+  /**
+   * Similar to [[Xor.combine]] but mapped over an `F` context.
+   *
+   * Examples:
+   * {{{
+   * scala> import cats.data.XorT
+   * scala> import cats.implicits._
+   * scala> val l1: XorT[Option, String, Int] = XorT.left(Some("error 1"))
+   * scala> val l2: XorT[Option, String, Int] = XorT.left(Some("error 2"))
+   * scala> val r3: XorT[Option, String, Int] = XorT.right(Some(3))
+   * scala> val r4: XorT[Option, String, Int] = XorT.right(Some(4))
+   * scala> val noneXorT: XorT[Option, String, Int] = XorT.left(None)
+   *
+   * scala> l1 combine l2
+   * res0: XorT[Option, String, Int] = XorT(Some(Left(error 1)))
+   *
+   * scala> l1 combine r3
+   * res1: XorT[Option, String, Int] = XorT(Some(Left(error 1)))
+   *
+   * scala> r3 combine l1
+   * res2: XorT[Option, String, Int] = XorT(Some(Left(error 1)))
+   *
+   * scala> r3 combine r4
+   * res3: XorT[Option, String, Int] = XorT(Some(Right(7)))
+   *
+   * scala> l1 combine noneXorT
+   * res4: XorT[Option, String, Int] = XorT(None)
+   *
+   * scala> noneXorT combine l1
+   * res5: XorT[Option, String, Int] = XorT(None)
+   *
+   * scala> r3 combine noneXorT
+   * res6: XorT[Option, String, Int] = XorT(None)
+   *
+   * scala> noneXorT combine r4
+   * res7: XorT[Option, String, Int] = XorT(None)
+   * }}}
+   */
+  def combine(that: XorT[F, A, B])(implicit F: Apply[F], B: Semigroup[B]): XorT[F, A, B] =
     XorT(F.map2(this.value, that.value)(_ combine _))
 
   def toValidated(implicit F: Functor[F]): F[Validated[A, B]] =

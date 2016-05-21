@@ -57,8 +57,11 @@ import cats.Id
 import cats.arrow.NaturalTransformation
 import cats.std.function._
 
+// a function that takes a string as input
+type FromString[A] = String => A
+
 val compiler =
-  new NaturalTransformation[ValidationOp, String => ?] {
+  new NaturalTransformation[ValidationOp, FromString] {
     def apply[A](fa: ValidationOp[A]): String => A =
       str =>
         fa match {
@@ -69,7 +72,7 @@ val compiler =
 ```
 
 ```tut
-val validator = prog.foldMap[String => ?](compiler)
+val validator = prog.foldMap[FromString](compiler)
 validator("1234")
 validator("12345")
 ```
