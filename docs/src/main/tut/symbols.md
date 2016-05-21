@@ -4,3 +4,6 @@
 | `===`  | Equals            | Equality check on  `Eq`   | TBD |
 | `=!=`  | Not Equals        | Inequality check on `Eq`  | TBD |
 | `|+|`  | Semigroup plus    | TBD                       | TBD |
+| `~>`   | Natural transformation | TBD                  | TBD |
+| `⊥`    | Nothing           | TBD                       | TBD | 
+| `⊤`    | Any               |                           | TBD |
