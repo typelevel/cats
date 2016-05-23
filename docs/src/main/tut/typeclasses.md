@@ -38,7 +38,7 @@ implicit val stringShow = new Show[String] {
 
 and now our call to Log succeeds
 
-```tut
+```tut:book
 log("a string")
 ```
 
@@ -67,7 +67,7 @@ implicit def optionShow[A](implicit sa: Show[A]) = new Show[Option[A]] {
 Now we can call our log function with a `Option[String]` or a
 `Option[Option[String]]`:
 
-```tut
+```tut:book
 log(Option(Option("hello")))
 ```
 

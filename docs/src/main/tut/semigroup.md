@@ -37,7 +37,7 @@ import cats.implicits._
 
 Examples.
 
-```tut
+```tut:book
 Semigroup[Int].combine(1, 2)
 Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
 Semigroup[Option[Int]].combine(Option(1), Option(2))
@@ -50,14 +50,14 @@ which allow for such combining, e.g. `++` on List, but the
 value of having a `Semigroup` type class available is that these
 compose, so for instance, we can say
 
-```tut
+```tut:book
 Map("foo" -> Map("bar" -> 5)).combine(Map("foo" -> Map("bar" -> 6), "baz" -> Map()))
 Map("foo" -> List(1, 2)).combine(Map("foo" -> List(3,4), "bar" -> List(42)))
 ```
 
 which is far more likely to be useful than
 
-```tut
+```tut:book
 Map("foo" -> Map("bar" -> 5)) ++  Map("foo" -> Map("bar" -> 6), "baz" -> Map())
 Map("foo" -> List(1, 2)) ++ Map("foo" -> List(3,4), "bar" -> List(42))
 ```
@@ -78,7 +78,7 @@ val n: Option[Int] = None
 
 Thus.
 
-```tut
+```tut:book
 one |+| two
 n |+| two
 n |+| n

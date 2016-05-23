@@ -32,7 +32,7 @@ import cats.implicits._
 
 And examples.
 
-```tut
+```tut:book
 Foldable[List].fold(List("a", "b", "c"))
 Foldable[List].foldMap(List(1, 2, 4))(_.toString)
 Foldable[List].foldK(List(List(1,2,3), List(2,3,4)))
@@ -95,7 +95,7 @@ Scala's standard library might expect. This will prevent operations
 which are lazy in their right hand argument to traverse the entire
 structure unnecessarily. For example, if you have:
 
-```tut
+```tut:book
 val allFalse = Stream.continually(false)
 ```
 
@@ -108,7 +108,7 @@ value. Using `foldRight` from the standard library *will* try to
 consider the entire stream, and thus will eventually cause a stack
 overflow:
 
-```tut
+```tut:book
 try {
   allFalse.foldRight(true)(_ && _)
 } catch {
@@ -119,6 +119,6 @@ try {
 With the lazy `foldRight` on `Foldable`, the calculation terminates
 after looking at only one value:
 
-```tut
+```tut:book
 Foldable[Stream].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.now(false)).value
 ```

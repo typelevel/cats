@@ -41,7 +41,7 @@ def createRobot(): Robot = {
 }
 ```
 
-```tut
+```tut:book
 val robot = createRobot()
 ```
 
@@ -62,7 +62,7 @@ def createRobot(): Robot = {
 }
 ```
 
-```tut
+```tut:book
 val robot = createRobot()
 ```
 
@@ -114,7 +114,7 @@ def createRobot(seed: Seed): Robot = {
 val initialSeed = Seed(13L)
 ```
 
-```tut
+```tut:book
 val robot = createRobot(initialSeed)
 ```
 
@@ -160,13 +160,13 @@ val createRobot: State[Seed, Robot] =
 
 At this point, we have not yet created a robot; we have written instructions for creating a robot. We need to pass in an initial seed value, and then we can call `value` to actually create the robot:
 
-```tut
+```tut:book
 val (finalState, robot) = createRobot.run(initialSeed).value
 ```
 
 If we only care about the robot and not the final state, then we can use `runA`:
 
-```tut
+```tut:book
 val robot = createRobot.runA(initialSeed).value
 ```
 
@@ -187,7 +187,7 @@ val createRobot: State[Seed, Robot] = {
 }
 ```
 
-```tut
+```tut:book
 val robot = createRobot.runA(initialSeed).value
 ```
 

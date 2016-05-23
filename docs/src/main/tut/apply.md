@@ -40,7 +40,7 @@ implicit val listApply: Apply[List] = new Apply[List] {
 
 Since `Apply` extends `Functor`, we can use the `map` method from `Functor`:
 
-```tut
+```tut:book
 Apply[Option].map(Some(1))(intToString)
 Apply[Option].map(Some(1))(double)
 Apply[Option].map(None)(double)
@@ -50,7 +50,7 @@ Apply[Option].map(None)(double)
 
 And like functors, `Apply` instances also compose:
 
-```tut
+```tut:book
 val listOpt = Apply[List] compose Apply[Option]
 val plusOne = (x:Int) => x + 1
 listOpt.ap(List(Some(plusOne)))(List(Some(1), None, Some(3)))
@@ -59,7 +59,7 @@ listOpt.ap(List(Some(plusOne)))(List(Some(1), None, Some(3)))
 ### ap
 The `ap` method is a method that `Functor` does not have:
 
-```tut
+```tut:book
 Apply[Option].ap(Some(intToString))(Some(1))
 Apply[Option].ap(Some(double))(Some(1))
 Apply[Option].ap(Some(double))(None)
@@ -74,7 +74,7 @@ accept `N` arguments where `ap` accepts `1`:
 
 For example:
 
-```tut
+```tut:book
 val addArity2 = (a: Int, b: Int) => a + b
 Apply[Option].ap2(Some(addArity2))(Some(1), Some(2))
 
@@ -86,7 +86,7 @@ Note that if any of the arguments of this example is `None`, the
 final result is `None` as well.  The effects of the context we are operating on
 are carried through the entire computation:
 
-```tut
+```tut:book
 Apply[Option].ap2(Some(addArity2))(Some(1), None)
 Apply[Option].ap4(None)(Some(1), Some(2), Some(3), Some(4))
 ```
@@ -95,7 +95,7 @@ Apply[Option].ap4(None)(Some(1), Some(2), Some(3), Some(4))
 
 Similarly, `mapN` functions are available:
 
-```tut
+```tut:book
 Apply[Option].map2(Some(1), Some(2))(addArity2)
 
 Apply[Option].map3(Some(1), Some(2), Some(3))(addArity3)
@@ -105,7 +105,7 @@ Apply[Option].map3(Some(1), Some(2), Some(3))(addArity3)
 
 And `tupleN`:
 
-```tut
+```tut:book
 Apply[Option].tuple2(Some(1), Some(2))
 
 Apply[Option].tuple3(Some(1), Some(2), Some(3))
@@ -118,7 +118,7 @@ functions (`apN`, `mapN` and `tupleN`).
 In order to use it, first import `cats.syntax.all._` or `cats.syntax.cartesian._`.
 Here we see that the following two functions, `f1` and `f2`, are equivalent:
 
-```tut
+```tut:book
 import cats.syntax.cartesian._
 
 def f1(a: Option[Int], b: Option[Int], c: Option[Int]) =
@@ -133,7 +133,7 @@ f2(Some(1), Some(2), Some(3))
 
 All instances created by `|@|` have `map`, `ap`, and `tupled` methods of the appropriate arity:
 
-```tut
+```tut:book
 val option2 = Option(1) |@| Option(2)
 val option3 = option2 |@| Option.empty[Int]
 
