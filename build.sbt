@@ -11,7 +11,7 @@ lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageMinimum := 60,
   ScoverageKeys.coverageFailOnMinimum := false,
   ScoverageKeys.coverageHighlighting := scalaBinaryVersion.value != "2.10",
-  ScoverageKeys.coverageExcludedPackages := "cats\\.bench\\..*"
+  ScoverageKeys.coverageExcludedPackages := "cats\\.bench\\..*;cats\\.ApplyArityFunctions;cats\\.syntax\\.ApplyBuilder*"
 )
 
 lazy val buildSettings = Seq(
