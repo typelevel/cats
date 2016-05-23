@@ -101,7 +101,7 @@ class WriterTTests extends CatsSuite {
     checkAll("Bifunctor[WriterT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bifunctor[WriterT[ListWrapper, ?, ?]]))
   }
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[ListWrapper, ListWrapper[Int], ?]](WriterT.writerTFunctor(ListWrapper.functor))
+  implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[ListWrapper, ListWrapper[Int], ?]](WriterT.writerTCoflatMap(ListWrapper.functor))
 
   // We have varying instances available depending on `F` and `L`.
   // We also battle some inference issues with `Id`.
@@ -267,5 +267,19 @@ class WriterTTests extends CatsSuite {
     checkAll("WriterT[ListWrapper, Int, Int]", kernel.laws.GroupLaws[WriterT[ListWrapper, Int, Int]].semigroup)
 
     Semigroup[WriterT[Id, Int, Int]]
+  }
+
+  {
+    // F has a Functor
+    implicit val F: Functor[ListWrapper] = ListWrapper.functor
+
+    Functor[WriterT[ListWrapper, Int, ?]]
+    CoflatMap[WriterT[ListWrapper, Int, ?]]
+    checkAll("WriterT[Listwrapper, Int, ?]", CoflatMapTests[WriterT[ListWrapper, Int, ?]].coflatMap[Int, Int, Int])
+    checkAll("WriterT[ListWrapper, Int, ?]", SerializableTests.serializable(CoflatMap[WriterT[ListWrapper, Int, ?]]))
+
+    // Id has a Functor
+    Functor[WriterT[Id, Int, ?]]
+    CoflatMap[WriterT[Id, Int, ?]]
   }
 }

@@ -7,18 +7,25 @@ import org.scalacheck.Prop
 import Prop._
 import org.typelevel.discipline.Laws
 
-trait CoflatMapTests[F[_]] extends Laws {
+trait CoflatMapTests[F[_]] extends Laws with FunctorTests[F] {
   def laws: CoflatMapLaws[F]
 
   def coflatMap[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
     EqFA: Eq[F[A]],
-    EqFC: Eq[F[C]]
+    EqFC: Eq[F[C]],
+    EqFFA: Eq[F[F[A]]],
+    EqFB: Eq[F[B]],
+    EqFFFA: Eq[F[F[F[A]]]]
   ): RuleSet = {
     new DefaultRuleSet(
       name = "coflatMap",
-      parent = None,
-      "coflatMap associativity" -> forAll(laws.coflatMapAssociativity[A, B, C] _))
+      parent = Some(functor[A, B, C]),
+      "coflatMap associativity" -> forAll(laws.coflatMapAssociativity[A, B, C] _),
+      "coflatMap identity" -> forAll(laws.coflatMapIdentity[A, B] _),
+      "coflatten coherence" -> forAll(laws.coflattenCoherence[A, B] _),
+      "coflatten throughMap" -> forAll(laws.coflattenThroughMap[A] _)
+    )
   }
 }
 
