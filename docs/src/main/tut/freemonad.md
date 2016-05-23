@@ -420,14 +420,14 @@ _very simple_ Monad from any _functor_**.
 The above forgetful functor takes a `Monad` and:
 
  - forgets its *monadic* part (e.g. the `flatMap` function)
- - forgets its *applicative* part (e.g. the `pure` function)
+ - forgets its *pointed* part (e.g. the `pure` function)
  - finally keeps the *functor* part (e.g. the `map` function)
 
 By reversing all arrows to build the left-adjoint, we deduce that the
-forgetful functor is basically a construction that:
+free monad is basically a construction that:
 
  - takes a *functor*
- - adds the *applicative* part (e.g. `pure`)
+ - adds the *pointed* part (e.g. `pure`)
  - adds the *monadic* behavior (e.g. `flatMap`)
 
 In terms of implementation, to build a *monad* from a *functor* we use
