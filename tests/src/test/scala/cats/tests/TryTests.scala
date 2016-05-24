@@ -71,7 +71,9 @@ class TryTests extends CatsSuite {
   }
 
   test("map2Eval is lazy") {
-    val bomb: Eval[Try[Int]] = Later(sys.error("boom"))
-    Try(sys.error("boom0")).map2Eval(bomb)(_ + _).value should === (Failure(new Exception))
+    var evals = 0
+    val bomb: Eval[Try[Int]] = Later { evals += 1; Success(1) }
+    Try(sys.error("boom0")).map2Eval(bomb)(_ + _).value
+    evals should === (0)
   }
 }
