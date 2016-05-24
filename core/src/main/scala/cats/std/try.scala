@@ -18,12 +18,21 @@ trait TryInstances extends TryInstances1 {
         case _ => Try(x.value)
       }
 
-      override def map2[A, B, Z](ta: Try[A], tb: Try[B])(f: (A, B) => Z): Try[Z] =
-        ta.flatMap(a => tb.map(b => f(a, b)))
+      override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] = (ta, tb) match {
+        case (Success(a), Success(b)) => Success((a, b))
+        case (f: Failure[_], _) => f.asInstanceOf[Try[(A, B)]]
+        case (_, f: Failure[_]) => f.asInstanceOf[Try[(A, B)]]
+      }
+
+      override def map2[A, B, Z](ta: Try[A], tb: Try[B])(f: (A, B) => Z): Try[Z] = (ta, tb) match {
+        case (Success(a), Success(b)) => Try(f(a, b))
+        case (f: Failure[_], _) => f.asInstanceOf[Try[Z]]
+        case (_, f: Failure[_]) => f.asInstanceOf[Try[Z]]
+      }
 
       override def map2Eval[A, B, Z](ta: Try[A], tb: Eval[Try[B]])(f: (A, B) => Z): Eval[Try[Z]] =
         ta match {
-          case f@Failure(_) => Now(f.asInstanceOf[Try[Z]])
+          case f: Failure[_] => Now(f.asInstanceOf[Try[Z]])
           case Success(a) => tb.map(_.map(f(a, _)))
         }
 
