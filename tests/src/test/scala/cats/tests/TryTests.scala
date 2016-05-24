@@ -4,15 +4,19 @@ package tests
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline._
 
+import scala.util.{Success, Try}
+
 class TryTests extends CatsSuite {
+  implicit val eqThrow: Eq[Throwable] = Eq.allEqual
+
   checkAll("Try[Int]", CartesianTests[Try].cartesian[Int, Int, Int])
   checkAll("Cartesian[Try]", SerializableTests.serializable(Cartesian[Try]))
 
   checkAll("Try[Int]", CoflatMapTests[Try].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[Try]", SerializableTests.serializable(CoflatMap[Try]))
 
-  checkAll("Try with Unit", MonadErrorTests[Try, Unit].monadError[Int, Int, Int])
-  checkAll("MonadError[Try, Unit]", SerializableTests.serializable(MonadError[Try, Unit]))
+  checkAll("Try with Throwable", MonadErrorTests[Try, Throwable].monadError[Int, Int, Int])
+  checkAll("MonadError[Try, Throwable]", SerializableTests.serializable(MonadError[Try, Throwable]))
 
   test("show") {
     forAll { fs: Try[String] =>
@@ -73,7 +77,7 @@ class TryTests extends CatsSuite {
   test("map2Eval is lazy") {
     var evals = 0
     val bomb: Eval[Try[Int]] = Later { evals += 1; Success(1) }
-    Try(sys.error("boom0")).map2Eval(bomb)(_ + _).value
+    Try[Int](sys.error("boom0")).map2Eval(bomb)(_ + _).value
     evals should === (0)
   }
 }
