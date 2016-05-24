@@ -137,7 +137,7 @@ def parallelValidate[E : Semigroup, A, B, C](v1: Validated[E, A], v2: Validated[
 Perfect! But.. going back to our example, we don't have a way to combine `ConfigError`s. But as clients,
 we can change our `Validated` values where the error can be combined, say, a `List[ConfigError]`. It is
 more common however to use a `NonEmptyList[ConfigError]` - the `NonEmptyList` statically guarantees we
-have at least one value, which aligns with the fact that if we have an `Invalid`, then we most
+have at least one value, which aligns with the fact that if we have an `Invalid`, then we must
 certainly have at least one error. This technique is so common there is a convenient method on `Validated`
 called `toValidatedNel` that turns any `Validated[E, A]` value to a `Validated[NonEmptyList[E], A]`.
 Additionally, the type alias `ValidatedNel[E, A]` is provided.
