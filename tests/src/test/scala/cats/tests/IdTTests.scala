@@ -2,10 +2,12 @@ package cats.tests
 
 import cats.{Foldable, Functor, Monad, Traverse}
 import cats.data.IdT
-import cats.laws.discipline.{FoldableTests, FunctorTests, MonadTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{CartesianTests, FoldableTests, FunctorTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 
 class IdTTests extends CatsSuite {
+
+  implicit val iso = CartesianTests.Isomorphisms.invariant[IdT[List, ?]]
 
   checkAll("IdT[Functor, Int]", FunctorTests[IdT[List, ?]].functor[Int, Int, Int])
   checkAll("Functor[IdT[List, ?]]", SerializableTests.serializable(Functor[IdT[List, ?]]))
