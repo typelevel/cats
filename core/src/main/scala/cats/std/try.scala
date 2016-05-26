@@ -56,9 +56,6 @@ trait TryInstances extends TryInstances1 {
       override def map[A, B](ta: Try[A])(f: A => B): Try[B] = ta.map(f)
     }
 
-  implicit def tryGroup[A: Group]: Group[Try[A]] =
-    new TryGroup[A]
-
   implicit def showTry[A](implicit A: Show[A]): Show[Try[A]] =
     new Show[Try[A]] {
       def show(fa: Try[A]): String = fa match {
@@ -66,11 +63,16 @@ trait TryInstances extends TryInstances1 {
         case Failure(e) => s"Failure($e)"
       }
     }
-  implicit def eqTry[A](implicit A: Eq[A]): Eq[Try[A]] =
+  /**
+   * you may with to do equality by making `implicit val eqT: Eq[Throwable] = Eq.allEqual`
+   * doing a fine grained equality on Throwable can make the code very execution
+   * order dependent
+   */
+  implicit def eqTry[A, T](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] =
     new Eq[Try[A]] {
       def eqv(x: Try[A], y: Try[A]): Boolean = (x, y) match {
         case (Success(a), Success(b)) => A.eqv(a, b)
-        case (Failure(_), Failure(_)) => true // all failures are equivalent
+        case (Failure(a), Failure(b)) => T.eqv(a, b)
         case _ => false
       }
     }
@@ -101,14 +103,4 @@ private[cats] class TrySemigroup[A: Semigroup] extends Semigroup[Try[A]] {
 
 private[cats] class TryMonoid[A](implicit A: Monoid[A]) extends TrySemigroup[A] with Monoid[Try[A]] {
   def empty: Try[A] = Success(A.empty)
-}
-
-private[cats] class TryGroup[A](implicit A: Group[A]) extends TryMonoid[A] with Group[Try[A]] {
-  def inverse(fx: Try[A]): Try[A] =
-    fx.map(_.inverse)
-  override def remove(fx: Try[A], fy: Try[A]): Try[A] =
-    for {
-      x <- fx
-      y <- fy
-    } yield x |-| y
 }
