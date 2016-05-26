@@ -71,7 +71,7 @@ val compiler =
   }
 ```
 
-```tut
+```tut:book
 val validator = prog.foldMap[FromString](compiler)
 validator("1234")
 validator("12345")
@@ -142,7 +142,7 @@ def logValidation[A](validation: Validation[A]): List[String] =
   validation.foldMap[Log](logCompiler).getConst
 ```
 
-```tut
+```tut:book
 logValidation(prog)
 logValidation(size(5) *> hasNumber *> size(10))
 logValidation((hasNumber |@| size(3)).map(_ || _))

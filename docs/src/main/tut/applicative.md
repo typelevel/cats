@@ -20,7 +20,7 @@ obvious. For `Option`, the `pure` operation wraps the value in
 `Some`. For `List`, the `pure` operation returns a single element
 `List`:
 
-```tut
+```tut:book
 import cats._
 import cats.std.all._
 
@@ -34,7 +34,7 @@ you compose one `Applicative` with another, the resulting `pure`
 operation will lift the passed value into one context, and the result
 into the other context:
 
-```tut
+```tut:book
 (Applicative[List] compose Applicative[Option]).pure(1)
 ```
 

@@ -23,7 +23,7 @@ This method takes a function `A => B` and turns an `F[A]` into an
 method that exists on many classes in the Scala standard library, for
 example:
 
-```tut
+```tut:book
 Option(1).map(_ + 1)
 List(1,2,3).map(_ + 1)
 Vector(1,2,3).map(_.toString)
@@ -72,7 +72,7 @@ Without kind-projector, we'd have to write this as something like
 
 `List` is a functor which applies the function to each element of the list:
 
-```tut
+```tut:book
 val len: String => Int = _.length
 Functor[List].map(List("qwer", "adsfg"))(len)
 ```
@@ -80,7 +80,7 @@ Functor[List].map(List("qwer", "adsfg"))(len)
 `Option` is a functor which only applies the function when the `Option` value 
 is a `Some`:
 
-```tut
+```tut:book
 Functor[Option].map(Some("adsf"))(len) // Some(x) case: function is applied to x; result is wrapped in Some
 Functor[Option].map(None)(len) // None case: simply returns None (function is not applied)
 ```
@@ -91,7 +91,7 @@ Functor[Option].map(None)(len) // None case: simply returns None (function is no
 
 We can use `Functor` to "lift" a function from `A => B` to `F[A] => F[B]`:
 
-```tut
+```tut:book
 val lenOption: Option[String] => Option[Int] = Functor[Option].lift(len)
 lenOption(Some("abcd"))
 ```
@@ -101,7 +101,7 @@ lenOption(Some("abcd"))
 `Functor` provides an `fproduct` function which pairs a value with the
 result of applying a function to that value.
 
-```tut
+```tut:book
 val source = List("a", "aa", "b", "ccccc")
 Functor[List].fproduct(source)(len).toMap
 ```
@@ -111,7 +111,7 @@ Functor[List].fproduct(source)(len).toMap
 Functors compose! Given any functor `F[_]` and any functor `G[_]` we can
 create a new functor `F[G[_]]` by composing them:
 
-```tut
+```tut:book
 val listOpt = Functor[List] compose Functor[Option]
 listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
 val optList = Functor[Option] compose Functor[List]

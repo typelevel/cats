@@ -40,7 +40,7 @@ If we want to show a `Salary` instance, we can just convert it to a `Money` inst
 
 Let's use `Show`'s `Contravariant`:
   
-```tut
+```tut:book
 implicit val showSalary: Show[Salary] = showMoney.contramap(_.size)
 
 Salary(Money(1000)).show
@@ -52,7 +52,7 @@ Salary(Money(1000)).show
 
 `scala.math.Ordering` typeclass defines comparison operations, e.g. `compare`: 
 
-```tut
+```tut:book
 Ordering.Int.compare(2, 1)
 Ordering.Int.compare(1, 2)
 ```
@@ -67,7 +67,7 @@ In fact, it is just `contramap`, defined in a slightly different way! We supply 
 
 So let's use it in our advantage and get `Ordering[Money]` for free: 
 
-```tut
+```tut:book
 // we need this for `<` to work
 import scala.math.Ordered._
 

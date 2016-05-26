@@ -252,7 +252,7 @@ under `Monad`). As `Id` is a `Monad`, we can use `foldMap`.
 
 To run your `Free` with previous `impureCompiler`:
 
-```tut
+```tut:book
 val result: Option[Int] = program.foldMap(impureCompiler)
 ```
 
@@ -291,7 +291,7 @@ val pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
 support for pattern matching is limited by the JVM's type erasure, but
 it's not too hard to get around.)
 
-```tut
+```tut:book
 val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(Map.empty).value
 ```
 
@@ -403,7 +403,7 @@ Now if we run our program and type in "snuggles" when prompted, we see something
 import DataSource._, Interacts._
 ```
 
-```tut
+```tut:book
 val evaled: Unit = program.foldMap(interpreter)
 ```
 
