@@ -25,7 +25,7 @@ final case class IdT[F[_], A](value: F[A]) {
     G.map(F.traverse(value)(f))(IdT(_))
 
   def ap[B](f: IdT[F, A => B])(implicit F: Apply[F]): IdT[F, B] =
-    IdT(F.ap(value)(f.value))
+    IdT(F.ap(f.value)(value))
 
 }
 
