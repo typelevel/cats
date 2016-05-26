@@ -251,31 +251,16 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
     def show(f: Validated[A,B]): String = f.show
   }
 
-  implicit val validatedBitraverse: Bitraverse[Validated] =
-    new Bitraverse[Validated] {
-      def bitraverse[G[_], A, B, C, D](fab: Validated[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Validated[C, D]] =
-        fab match {
-          case Invalid(a) => G.map(f(a))(Validated.invalid)
-          case Valid(b) => G.map(g(b))(Validated.valid)
+  implicit def validatedCopair: Copair[Validated] =
+    new Copair[Validated] {
+      def fold[A, B, C](f: Validated[A, B])(fa: (A) => C, fb: (B) => C): C =
+        f match {
+          case Invalid(a) => fa(a)
+          case Valid(b) => fb(b)
         }
 
-      def bifoldLeft[A, B, C](fab: Validated[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
-        fab match {
-          case Invalid(a) => f(c, a)
-          case Valid(b) => g(c, b)
-        }
-
-      def bifoldRight[A, B, C](fab: Validated[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
-        fab match {
-          case Invalid(a) => f(a, c)
-          case Valid(b) => g(b, c)
-        }
-
-      override def bimap[A, B, C, D](fab: Validated[A, B])(f: A => C, g: B => D): Validated[C, D] =
-        fab.bimap(f, g)
-
-      override def leftMap[A, B, C](fab: Validated[A, B])(f: A => C): Validated[C, B] =
-        fab.leftMap(f)
+      def left[A, B](a: A): Validated[A, B] = Invalid(a)
+      def right[A, B](b: B): Validated[A, B] = Valid(b)
     }
 
   implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =

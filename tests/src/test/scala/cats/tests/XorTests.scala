@@ -5,7 +5,7 @@ import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
 import cats.laws.discipline.{SemigroupKTests}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadErrorTests, SerializableTests, CartesianTests}
+import cats.laws.discipline.{CopairTests, TraverseTests, MonadErrorTests, SerializableTests, CartesianTests}
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary._
@@ -57,7 +57,7 @@ class XorTests extends CatsSuite {
     } yield xor
   }
 
-  checkAll("? Xor ?", BitraverseTests[Xor].bitraverse[Option, Int, Int, Int, String, String, String])
+  checkAll("? Xor ?", CopairTests[Xor].copair[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Xor]", SerializableTests.serializable(Bitraverse[Xor]))
 
   test("catchOnly catches matching exceptions") {

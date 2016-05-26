@@ -212,25 +212,17 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       }
     }
 
-  implicit val xorBitraverse: Bitraverse[Xor] =
-    new Bitraverse[Xor] {
-      def bitraverse[G[_], A, B, C, D](fab: Xor[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Xor[C, D]] =
-        fab match {
-          case Xor.Left(a) => G.map(f(a))(Xor.left)
-          case Xor.Right(b) => G.map(g(b))(Xor.right)
+
+  implicit def xorCopair: Copair[Xor] =
+    new Copair[Xor] {
+      def fold[A, B, C](f: Xor[A, B])(fa: (A) => C, fb: (B) => C): C =
+        f match {
+          case Xor.Left(a) => fa(a)
+          case Xor.Right(b) => fb(b)
         }
 
-      def bifoldLeft[A, B, C](fab: Xor[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
-        fab match {
-          case Xor.Left(a) => f(c, a)
-          case Xor.Right(b) => g(c, b)
-        }
-
-      def bifoldRight[A, B, C](fab: Xor[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
-        fab match {
-          case Xor.Left(a) => f(a, c)
-          case Xor.Right(b) => g(b, c)
-        }
+      def left[A, B](a: A): Xor[A, B] = Xor.Left(a)
+      def right[A, B](b: B): Xor[A, B] = Xor.Right(b)
     }
 
   implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor[A, ?], A] =

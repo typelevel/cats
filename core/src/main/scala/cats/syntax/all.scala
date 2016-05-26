@@ -39,3 +39,4 @@ trait AllSyntax
     with ValidatedSyntax
     with CoproductSyntax
     with WriterSyntax
+    with CopairSyntax
