@@ -2,6 +2,6 @@ package cats
 package std
 
 trait StringInstances extends cats.kernel.std.StringInstances {
-  implicit val stringShow: Show[String] =
+  implicit val catsShowForString: Show[String] =
     Show.fromToString[String]
 }

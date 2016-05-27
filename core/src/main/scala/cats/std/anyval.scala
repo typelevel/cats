@@ -14,37 +14,37 @@ trait AnyValInstances
   with    TupleInstances
 
 trait IntInstances extends cats.kernel.std.IntInstances {
-  implicit val intShow: Show[Int] = Show.fromToString[Int]
+  implicit val catsShowForcatsForInt: Show[Int] = Show.fromToString[Int]
 }
 
 trait ByteInstances extends cats.kernel.std.ByteInstances {
-  implicit val byteShow: Show[Byte] = Show.fromToString[Byte]
+  implicit val catsShowForByte: Show[Byte] = Show.fromToString[Byte]
 }
 
 trait CharInstances extends cats.kernel.std.CharInstances {
-  implicit val charShow: Show[Char] = Show.fromToString[Char]
+  implicit val catsShowForChar: Show[Char] = Show.fromToString[Char]
 }
 
 trait ShortInstances extends cats.kernel.std.ShortInstances {
-  implicit val shortShow: Show[Short] = Show.fromToString[Short]
+  implicit val catsShowForShort: Show[Short] = Show.fromToString[Short]
 }
 
 trait LongInstances extends cats.kernel.std.LongInstances {
-  implicit val longShow: Show[Long] = Show.fromToString[Long]
+  implicit val catsShowForLong: Show[Long] = Show.fromToString[Long]
 }
 
 trait FloatInstances extends cats.kernel.std.FloatInstances {
-  implicit val floatShow: Show[Float] = Show.fromToString[Float]
+  implicit val catsShowForFloat: Show[Float] = Show.fromToString[Float]
 }
 
 trait DoubleInstances extends cats.kernel.std.DoubleInstances {
-  implicit val doubleShow: Show[Double] = Show.fromToString[Double]
+  implicit val catsShowForDouble: Show[Double] = Show.fromToString[Double]
 }
 
 trait BooleanInstances extends cats.kernel.std.BooleanInstances {
-  implicit val booleanShow: Show[Boolean] = Show.fromToString[Boolean]
+  implicit val catsShowForBoolean: Show[Boolean] = Show.fromToString[Boolean]
 }
 
 trait UnitInstances extends cats.kernel.std.UnitInstances {
-  implicit val unitShow: Show[Unit] = Show.fromToString[Unit]
+  implicit val catsShowForUnit: Show[Unit] = Show.fromToString[Unit]
 }

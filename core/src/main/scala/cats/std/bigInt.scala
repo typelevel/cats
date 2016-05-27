@@ -2,6 +2,6 @@ package cats
 package std
 
 trait BigIntInstances extends cats.kernel.std.BigIntInstances {
-  implicit val bigIntShow: Show[BigInt] =
+  implicit val catsShowForBigInt: Show[BigInt] =
     Show.fromToString[BigInt]
 }

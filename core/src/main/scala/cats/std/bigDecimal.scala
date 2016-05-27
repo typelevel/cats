@@ -2,6 +2,6 @@ package cats
 package std
 
 trait BigDecimalInstances {
-  implicit val bigDecimalShow: Show[BigDecimal] =
+  implicit val catsShowForBigDecimal: Show[BigDecimal] =
     Show.fromToString[BigDecimal]
 }

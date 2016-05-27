@@ -8,7 +8,7 @@ import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
 
 trait VectorInstances extends cats.kernel.std.VectorInstances {
-  implicit val vectorInstance: Traverse[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
+  implicit val catsTraverseMonadCombineCoflatMapForVector: Traverse[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
     new Traverse[Vector] with MonadCombine[Vector] with CoflatMap[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
@@ -55,7 +55,7 @@ trait VectorInstances extends cats.kernel.std.VectorInstances {
       override def isEmpty[A](fa: Vector[A]): Boolean = fa.isEmpty
     }
 
-  implicit def vectorShow[A:Show]: Show[Vector[A]] =
+  implicit def catsShowForVector[A:Show]: Show[Vector[A]] =
     new Show[Vector[A]] {
       def show(fa: Vector[A]): String = fa.map(_.show).mkString("Vector(", ", ", ")")
     }

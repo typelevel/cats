@@ -8,7 +8,7 @@ import scala.collection.mutable.ListBuffer
 
 trait ListInstances extends cats.kernel.std.ListInstances {
 
-  implicit val listInstance: Traverse[List] with MonadCombine[List] with CoflatMap[List] =
+  implicit val catsTraverseMonadCombineCoflatMapForList: Traverse[List] with MonadCombine[List] with CoflatMap[List] =
     new Traverse[List] with MonadCombine[List] with CoflatMap[List] {
 
       def empty[A]: List[A] = Nil
@@ -61,7 +61,7 @@ trait ListInstances extends cats.kernel.std.ListInstances {
       override def isEmpty[A](fa: List[A]): Boolean = fa.isEmpty
     }
 
-  implicit def listShow[A:Show]: Show[List[A]] =
+  implicit def catsShowForList[A:Show]: Show[List[A]] =
     new Show[List[A]] {
       def show(fa: List[A]): String = fa.map(_.show).mkString("List(", ", ", ")")
     }
