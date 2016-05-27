@@ -64,7 +64,7 @@ trait TryInstances extends TryInstances1 {
       }
     }
   /**
-   * you may with to do equality by making `implicit val eqT: Eq[Throwable] = Eq.allEqual`
+   * you may wish to do equality by making `implicit val eqT: Eq[Throwable] = Eq.allEqual`
    * doing a fine grained equality on Throwable can make the code very execution
    * order dependent
    */
