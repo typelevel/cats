@@ -3,7 +3,7 @@ package std
 
 trait OptionInstances extends cats.kernel.std.OptionInstances {
 
-  implicit val catsTraverseMonadErrorMonadCombineCoflatMapAlternativeForOption: Traverse[Option] with MonadError[Option, Unit] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] =
+  implicit val catsStdInstancesForOption: Traverse[Option] with MonadError[Option, Unit] with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] =
     new Traverse[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with CoflatMap[Option] with Alternative[Option] {
 
       def empty[A]: Option[A] = None
@@ -62,7 +62,7 @@ trait OptionInstances extends cats.kernel.std.OptionInstances {
         fa.isEmpty
     }
 
-  implicit def catsShowForOption[A](implicit A: Show[A]): Show[Option[A]] =
+  implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =
     new Show[Option[A]] {
       def show(fa: Option[A]): String = fa match {
         case Some(a) => s"Some(${A.show(a)})"

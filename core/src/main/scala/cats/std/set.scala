@@ -5,7 +5,7 @@ import cats.syntax.show._
 
 trait SetInstances extends cats.kernel.std.SetInstances {
 
-  implicit val catsFoldableMonoidKForSet: Foldable[Set] with MonoidK[Set] =
+  implicit val catsStdInstancesForSet: Foldable[Set] with MonoidK[Set] =
     new Foldable[Set] with MonoidK[Set] {
 
       def empty[A]: Set[A] = Set.empty[A]
@@ -27,7 +27,7 @@ trait SetInstances extends cats.kernel.std.SetInstances {
       override def isEmpty[A](fa: Set[A]): Boolean = fa.isEmpty
     }
 
-  implicit def catsShowForSet[A:Show]: Show[Set[A]] = new Show[Set[A]] {
+  implicit def catsStdShowForSet[A:Show]: Show[Set[A]] = new Show[Set[A]] {
     def show(fa: Set[A]): String =
       fa.toIterator.map(_.show).mkString("Set(", ", ", ")")
   }

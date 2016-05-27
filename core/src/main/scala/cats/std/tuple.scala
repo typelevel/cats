@@ -4,7 +4,7 @@ package std
 trait TupleInstances extends Tuple2Instances with cats.kernel.std.TupleInstances
 
 sealed trait Tuple2Instances {
-  implicit val catsBitraverseForTuple2: Bitraverse[Tuple2] =
+  implicit val catsStdBitraverseForTuple2: Bitraverse[Tuple2] =
     new Bitraverse[Tuple2] {
       def bitraverse[G[_]: Applicative, A, B, C, D](fab: (A, B))(f: A => G[C], g: B => G[D]): G[(C, D)] =
         Applicative[G].tuple2(f(fab._1), g(fab._2))
@@ -16,7 +16,7 @@ sealed trait Tuple2Instances {
         g(fab._2, f(fab._1, c))
     }
 
-  implicit def catsShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] = new Show[(A, B)] {
+  implicit def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] = new Show[(A, B)] {
     override def show(f: (A, B)): String = {
       s"(${aShow.show(f._1)},${bShow.show(f._2)})"
     }

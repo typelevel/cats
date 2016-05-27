@@ -20,7 +20,7 @@ class EitherTests extends CatsSuite {
   checkAll("Either[?, ?]", BitraverseTests[Either].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Either]", SerializableTests.serializable(Bitraverse[Either]))
 
-  val partialOrder = eitherPartialOrder[Int, String]
+  val partialOrder = catsStdPartialOrderForEither[Int, String]
   val order = implicitly[Order[Either[Int, String]]]
   val monad = implicitly[Monad[Either[Int, ?]]]
   val show = implicitly[Show[Either[Int, String]]]
@@ -38,7 +38,7 @@ class EitherTests extends CatsSuite {
 
 
   test("implicit instances resolve specifically") {
-    val eq = eitherEq[Int, String]
+    val eq = catsStdEqForEither[Int, String]
     assert(!eq.isInstanceOf[PartialOrder[_]])
     assert(!eq.isInstanceOf[Order[_]])
     assert(!partialOrder.isInstanceOf[Order[_]])

@@ -4,7 +4,7 @@ package std
 import cats.syntax.show._
 
 trait StreamInstances extends cats.kernel.std.StreamInstances {
-  implicit val catsTraverseMonadCombineCoflatMapForStream: Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] =
+  implicit val catsStdInstancesForStream: Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] =
     new Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
@@ -55,7 +55,7 @@ trait StreamInstances extends cats.kernel.std.StreamInstances {
       override def isEmpty[A](fa: Stream[A]): Boolean = fa.isEmpty
     }
 
-  implicit def catsShowForStream[A: Show]: Show[Stream[A]] =
+  implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =
     new Show[Stream[A]] {
       def show(fa: Stream[A]): String = if(fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
     }
