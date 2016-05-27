@@ -48,7 +48,7 @@ private[std] sealed trait Function1Instances extends Function1Instances0 {
         f.compose(fa)
     }
 
-  implicit val catsChoiceForFunction1: Choice[Function1] with Arrow[Function1] =
+  implicit val catsChoiceArrowForFunction1: Choice[Function1] with Arrow[Function1] =
     new Choice[Function1] with Arrow[Function1] {
       def choice[A, B, C](f: A => C, g: B => C): Xor[A, B] => C =
         _ match {
