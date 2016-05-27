@@ -14,7 +14,7 @@ trait AnyValInstances
   with    TupleInstances
 
 trait IntInstances extends cats.kernel.std.IntInstances {
-  implicit val catsShowForcatsForInt: Show[Int] = Show.fromToString[Int]
+  implicit val catsShowForInt: Show[Int] = Show.fromToString[Int]
 }
 
 trait ByteInstances extends cats.kernel.std.ByteInstances {
