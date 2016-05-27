@@ -4,8 +4,8 @@ package std
 import java.lang.Math
 
 trait DoubleInstances {
-  implicit val doubleOrder: Order[Double] = new DoubleOrder
-  implicit val doubleGroup: CommutativeGroup[Double] = new DoubleGroup
+  implicit val catsKernelStdOrderForDouble: Order[Double] = new DoubleOrder
+  implicit val catsKernelStdGroupForDouble: CommutativeGroup[Double] = new DoubleGroup
 }
 
 class DoubleGroup extends CommutativeGroup[Double] {

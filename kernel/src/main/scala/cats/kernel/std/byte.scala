@@ -4,8 +4,8 @@ package std
 package object byte extends ByteInstances
 
 trait ByteInstances {
-  implicit val byteOrder: Order[Byte] = new ByteOrder
-  implicit val byteGroup: CommutativeGroup[Byte] = new ByteGroup
+  implicit val catsKernelStdOrderForByte: Order[Byte] = new ByteOrder
+  implicit val catsKernelStdGroupForByte: CommutativeGroup[Byte] = new ByteGroup
 }
 
 class ByteGroup extends CommutativeGroup[Byte] {
