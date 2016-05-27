@@ -218,27 +218,27 @@ trait XorTFunctions {
 private[data] abstract class XorTInstances extends XorTInstances1 {
 
   /* TODO violates right absorbtion, right distributivity, and left distributivity -- re-enable when MonadCombine laws are split in to weak/strong
-  implicit def xorTMonadCombine[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadCombine[XorT[F, L, ?]] = {
+  implicit def catsDataMonadCombineForXorT[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadCombine[XorT[F, L, ?]] = {
     implicit val F0 = F
     implicit val L0 = L
     new XorTMonadCombine[F, L] { implicit val F = F0; implicit val L = L0 }
   }
   */
 
-  implicit def xorTOrder[F[_], L, R](implicit F: Order[F[L Xor R]]): Order[XorT[F, L, R]] =
+  implicit def catsDataOrderForXorT[F[_], L, R](implicit F: Order[F[L Xor R]]): Order[XorT[F, L, R]] =
     new XorTOrder[F, L, R] {
       val F0: Order[F[L Xor R]] = F
     }
 
-  implicit def xorTShow[F[_], L, R](implicit sh: Show[F[L Xor R]]): Show[XorT[F, L, R]] =
+  implicit def catsDataShowForXorT[F[_], L, R](implicit sh: Show[F[L Xor R]]): Show[XorT[F, L, R]] =
     functor.Contravariant[Show].contramap(sh)(_.value)
 
-  implicit def xorTBifunctor[F[_]](implicit F: Functor[F]): Bifunctor[XorT[F, ?, ?]] =
+  implicit def catsDataBifunctorForXorT[F[_]](implicit F: Functor[F]): Bifunctor[XorT[F, ?, ?]] =
     new Bifunctor[XorT[F, ?, ?]] {
       override def bimap[A, B, C, D](fab: XorT[F, A, B])(f: A => C, g: B => D): XorT[F, C, D] = fab.bimap(f, g)
     }
 
-  implicit def xorTTraverse[F[_], L](implicit F: Traverse[F]): Traverse[XorT[F, L, ?]] =
+  implicit def catsDataTraverseForXorT[F[_], L](implicit F: Traverse[F]): Traverse[XorT[F, L, ?]] =
     new XorTTraverse[F, L] {
       val F0: Traverse[F] = F
     }
@@ -255,36 +255,36 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
 
 private[data] abstract class XorTInstances1 extends XorTInstances2 {
   /* TODO violates monadFilter right empty law -- re-enable when MonadFilter laws are split in to weak/strong
-  implicit def xorTMonadFilter[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadFilter[XorT[F, L, ?]] = {
+  implicit def catsDataMonadFilterForXorT[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadFilter[XorT[F, L, ?]] = {
     implicit val F0 = F
     implicit val L0 = L
     new XorTMonadFilter[F, L] { implicit val F = F0; implicit val L = L0 }
   }
   */
 
-  implicit def xorTFoldable[F[_], L](implicit F: Foldable[F]): Foldable[XorT[F, L, ?]] =
+  implicit def catsDataFoldableForXorT[F[_], L](implicit F: Foldable[F]): Foldable[XorT[F, L, ?]] =
     new XorTFoldable[F, L] {
       val F0: Foldable[F] = F
     }
 
-  implicit def xorTPartialOrder[F[_], L, R](implicit F: PartialOrder[F[L Xor R]]): PartialOrder[XorT[F, L, R]] =
+  implicit def catsDataPartialOrderForXorT[F[_], L, R](implicit F: PartialOrder[F[L Xor R]]): PartialOrder[XorT[F, L, R]] =
     new XorTPartialOrder[F, L, R] {
       val F0: PartialOrder[F[L Xor R]] = F
     }
 
-  implicit def xorTBitraverse[F[_]](implicit F: Traverse[F]): Bitraverse[XorT[F, ?, ?]] =
+  implicit def catsDataBitraverseForXorT[F[_]](implicit F: Traverse[F]): Bitraverse[XorT[F, ?, ?]] =
     new XorTBitraverse[F] {
       val F0: Traverse[F] = F
     }
 }
 
 private[data] abstract class XorTInstances2 extends XorTInstances3 {
-  implicit def xorTMonadError[F[_], L](implicit F: Monad[F]): MonadError[XorT[F, L, ?], L] = {
+  implicit def catsDataMonadErrorForXorT[F[_], L](implicit F: Monad[F]): MonadError[XorT[F, L, ?], L] = {
     implicit val F0 = F
     new XorTMonadError[F, L] { implicit val F = F0 }
   }
 
-  implicit def xorTSemigroupK[F[_], L](implicit F: Monad[F]): SemigroupK[XorT[F, L, ?]] =
+  implicit def catsDataSemigroupKForXorT[F[_], L](implicit F: Monad[F]): SemigroupK[XorT[F, L, ?]] =
     new SemigroupK[XorT[F,L,?]] {
       def combineK[A](x: XorT[F,L,A], y: XorT[F, L, A]): XorT[F, L, A] =
         XorT(F.flatMap(x.value) {
@@ -293,14 +293,14 @@ private[data] abstract class XorTInstances2 extends XorTInstances3 {
         })
   }
 
-  implicit def xorTEq[F[_], L, R](implicit F: Eq[F[L Xor R]]): Eq[XorT[F, L, R]] =
+  implicit def catsDataEqForXorT[F[_], L, R](implicit F: Eq[F[L Xor R]]): Eq[XorT[F, L, R]] =
     new XorTEq[F, L, R] {
       val F0: Eq[F[L Xor R]] = F
     }
 }
 
 private[data] abstract class XorTInstances3 {
-  implicit def xorTFunctor[F[_], L](implicit F: Functor[F]): Functor[XorT[F, L, ?]] = {
+  implicit def catsDataFunctorForXorT[F[_], L](implicit F: Functor[F]): Functor[XorT[F, L, ?]] = {
     implicit val F0 = F
     new XorTFunctor[F, L] { implicit val F = F0 }
   }

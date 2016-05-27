@@ -22,7 +22,7 @@ class XorTests extends CatsSuite {
 
   checkAll("Xor[String, NonEmptyList[Int]]", GroupLaws[Xor[String, NonEmptyList[Int]]].semigroup)
 
-  implicit val eq0 = XorT.xorTEq[Xor[String, ?], String, Int]
+  implicit val eq0 = XorT.catsDataEqForXorT[Xor[String, ?], String, Int]
 
   checkAll("Xor[String, Int]", MonadErrorTests[Xor[String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor[String, ?], String]))

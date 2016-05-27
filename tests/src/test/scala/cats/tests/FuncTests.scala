@@ -20,19 +20,19 @@ class FuncTests extends CatsSuite {
   checkAll("Cartesian[Func[Option, Int, ?]]", SerializableTests.serializable(Cartesian[Func[Option, Int, ?]]))
 
   {
-    implicit val funcApp = Func.funcApplicative[Option, Int]
+    implicit val catsDataApplicativeForFunc = Func.catsDataApplicativeForFunc[Option, Int]
     checkAll("Func[Option, Int, Int]", ApplicativeTests[Func[Option, Int, ?]].applicative[Int, Int, Int])
     checkAll("Applicative[Func[Option, Int, ?]]", SerializableTests.serializable(Applicative[Func[Option, Int, ?]]))
   }
 
   {
-    implicit val funcApply = Func.funcApply[Option, Int]
+    implicit val catsDataApplyForFunc = Func.catsDataApplyForFunc[Option, Int]
     checkAll("Func[Option, Int, Int]", ApplyTests[Func[Option, Int, ?]].apply[Int, Int, Int])
     checkAll("Apply[Func[Option, Int, ?]]", SerializableTests.serializable(Apply[Func[Option, Int, ?]]))
   }
 
   {
-    implicit val funcFunctor = Func.funcFunctor[Option, Int]
+    implicit val catsDataFunctorForFunc = Func.catsDataFunctorForFunc[Option, Int]
     checkAll("Func[Option, Int, Int]", FunctorTests[Func[Option, Int, ?]].functor[Int, Int, Int])
     checkAll("Functor[Func[Option, Int, ?]]", SerializableTests.serializable(Functor[Func[Option, Int, ?]]))
   }

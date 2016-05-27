@@ -20,7 +20,7 @@ class OneAndTests extends CatsSuite {
   checkAll("OneAnd[List, Int]", ReducibleTests[OneAnd[List, ?]].reducible[Option, Int, Int])
   checkAll("Reducible[OneAnd[List, ?]]", SerializableTests.serializable(Reducible[OneAnd[List, ?]]))
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.oneAndFunctor(ListWrapper.functor))
+  implicit val iso = CartesianTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.catsDataFunctorForOneAnd(ListWrapper.functor))
 
   // Test instances that have more general constraints
   {

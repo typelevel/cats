@@ -136,7 +136,7 @@ object StateT extends StateTInstances {
 }
 
 private[data] sealed abstract class StateTInstances {
-  implicit def stateTMonadState[F[_], S](implicit F: Monad[F]): MonadState[StateT[F, S, ?], S] =
+  implicit def catsDataMonadStateForStateT[F[_], S](implicit F: Monad[F]): MonadState[StateT[F, S, ?], S] =
     new MonadState[StateT[F, S, ?], S] {
       def pure[A](a: A): StateT[F, S, A] =
         StateT.pure(a)
@@ -152,7 +152,7 @@ private[data] sealed abstract class StateTInstances {
         fa.map(f)
     }
 
-  implicit def stateTLift[S]: TransLift.Aux[StateT[?[_], S, ?], Applicative] =
+  implicit def catsDataLiftForStateT[S]: TransLift.Aux[StateT[?[_], S, ?], Applicative] =
     new TransLift[StateT[?[_], S, ?]] {
       type TC[M[_]] = Applicative[M]
 
