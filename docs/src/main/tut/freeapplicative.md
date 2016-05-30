@@ -54,14 +54,14 @@ at this point. To make our program useful we need to interpret it.
 
 ```tut:silent
 import cats.Id
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 import cats.std.function._
 
 // a function that takes a string as input
 type FromString[A] = String => A
 
 val compiler =
-  new NaturalTransformation[ValidationOp, FromString] {
+  new FunctionK[ValidationOp, FromString] {
     def apply[A](fa: ValidationOp[A]): String => A =
       str =>
         fa match {
@@ -103,7 +103,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 type ParValidator[A] = Kleisli[Future, String, A]
 
 val parCompiler =
-  new NaturalTransformation[ValidationOp, ParValidator] {
+  new FunctionK[ValidationOp, ParValidator] {
     def apply[A](fa: ValidationOp[A]): ParValidator[A] =
       Kleisli { str =>
         fa match {
@@ -130,7 +130,7 @@ import cats.std.list._
 type Log[A] = Const[List[String], A]
 
 val logCompiler =
-  new NaturalTransformation[ValidationOp, Log] {
+  new FunctionK[ValidationOp, Log] {
     def apply[A](fa: ValidationOp[A]): Log[A] =
       fa match {
         case Size(size) => Const(List(s"size >= $size"))
@@ -166,7 +166,7 @@ import cats.data.Prod
 type ValidateAndLog[A] = Prod[ParValidator, Log, A]
 
 val prodCompiler =
-  new NaturalTransformation[ValidationOp, ValidateAndLog] {
+  new FunctionK[ValidationOp, ValidateAndLog] {
     def apply[A](fa: ValidationOp[A]): ValidateAndLog[A] = {
       fa match {
         case Size(size) =>

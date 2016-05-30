@@ -2,7 +2,7 @@ package cats
 package free
 
 import cats.tests.CatsSuite
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 import cats.laws.discipline.{FunctorTests, SerializableTests}
 
 import org.scalacheck.Arbitrary
@@ -27,7 +27,7 @@ class CoyonedaTests extends CatsSuite {
 
   test("transform and run is same as applying natural trans") {
       val nt =
-        new NaturalTransformation[Option, List] {
+        new FunctionK[Option, List] {
           def apply[A](fa: Option[A]): List[A] = fa.toList
         }
       val o = Option("hello")

@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.arrow.{Arrow, Choice, Split, NaturalTransformation}
+import cats.arrow.{Arrow, Choice, Split, FunctionK}
 import cats.data.{XorT, Kleisli, Reader}
 import cats.functor.{Contravariant, Strong}
 import cats.laws.discipline._
@@ -126,7 +126,7 @@ class KleisliTests extends CatsSuite {
 
   test("transform") {
     val opt = Kleisli { (x: Int) => Option(x.toDouble) }
-    val optToList = new NaturalTransformation[Option,List] { def apply[A](fa: Option[A]): List[A] = fa.toList }
+    val optToList = new FunctionK[Option,List] { def apply[A](fa: Option[A]): List[A] = fa.toList }
     val list = opt.transform(optToList)
 
     val is = 0.to(10).toList

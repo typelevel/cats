@@ -6,8 +6,7 @@ import cats.data.Xor
  */
 package object cats {
 
-  type ~>[F[_], G[_]] = arrow.NaturalTransformation[F, G]
-  type <~[F[_], G[_]] = arrow.NaturalTransformation[G, F]
+  type ~>[F[_], G[_]] = arrow.FunctionK[F, G]
 
   type ⊥ = Nothing
   type ⊤ = Any

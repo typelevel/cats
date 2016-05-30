@@ -166,14 +166,14 @@ DSL. By itself, this DSL only represents a sequence of operations
 To do this, we will use a *natural transformation* between type
 containers.  Natural transformations go between types like `F[_]` and
 `G[_]` (this particular transformation would be written as
-`NaturalTransformation[F,G]` or as done here using the symbolic
+`FunctionK[F,G]` or as done here using the symbolic
 alternative as `F ~> G`).
 
 In our case, we will use a simple mutable map to represent our key
 value store:
 
 ```tut:silent
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 import cats.{Id, ~>}
 import scala.collection.mutable
 
@@ -244,7 +244,7 @@ recursive structure by:
 This operation is called `Free.foldMap`:
 
 ```scala
-final def foldMap[M[_]](f: NaturalTransformation[S,M])(M: Monad[M]): M[A] = ...
+final def foldMap[M[_]](f: FunctionK[S,M])(M: Monad[M]): M[A] = ...
 ```
 
 `M` must be a `Monad` to be flattenable (the famous monoid aspect
@@ -366,7 +366,7 @@ def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]): Free[Cats
 }
 ```
 
-Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so they can be
+Finally we write one interpreter per ADT and combine them with a `FunctionK` to `Coproduct` so they can be
 compiled and applied to our `Free` program.
 
 ```tut:invisible

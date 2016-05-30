@@ -4,7 +4,7 @@ package free
 import scala.annotation.tailrec
 
 import cats.data.Xor, Xor.{Left, Right}
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 
 object Free {
   /**
@@ -135,7 +135,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Run to completion, mapping the suspension with the given transformation at each step and
    * accumulating into the monad `M`.
    */
-  final def foldMap[M[_]](f: NaturalTransformation[S,M])(implicit M: Monad[M]): M[A] =
+  final def foldMap[M[_]](f: FunctionK[S,M])(implicit M: Monad[M]): M[A] =
     step match {
       case Pure(a) => M.pure(a)
       case Suspend(s) => f(s)
@@ -147,13 +147,13 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * using the given natural transformation.
    * Be careful if your natural transformation is effectful, effects are applied by mapSuspension.
    */
-  final def mapSuspension[T[_]](f: NaturalTransformation[S,T]): Free[T, A] =
+  final def mapSuspension[T[_]](f: FunctionK[S,T]): Free[T, A] =
     foldMap[Free[T, ?]] {
-      new NaturalTransformation[S, Free[T, ?]] {
+      new FunctionK[S, Free[T, ?]] {
         def apply[B](fa: S[B]): Free[T, B] = Suspend(f(fa))
       }
     }(Free.freeMonad)
 
-  final def compile[T[_]](f: NaturalTransformation[S,T]): Free[T, A] = mapSuspension(f)
+  final def compile[T[_]](f: FunctionK[S,T]): Free[T, A] = mapSuspension(f)
 
 }
