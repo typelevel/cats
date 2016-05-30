@@ -33,7 +33,7 @@ import cats.syntax.all._
  * Eval instance -- this can defeat the trampolining and lead to stack
  * overflows.
  */
-sealed abstract class Eval[A] extends Serializable { self =>
+sealed abstract class Eval[+A] extends Serializable { self =>
 
   /**
    * Evaluate the computation and return an A value.
@@ -279,7 +279,7 @@ object Eval extends EvalInstances {
                   cc.start().asInstanceOf[L],
                   cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
               case xx =>
-                loop(c.run(xx.value).asInstanceOf[L], fs)
+                loop(c.run(xx.value), fs)
             }
           case x =>
             fs match {
@@ -350,7 +350,7 @@ trait EvalMonoid[A] extends Monoid[Eval[A]] with EvalSemigroup[A] {
 trait EvalGroup[A] extends Group[Eval[A]] with EvalMonoid[A] {
   implicit def algebra: Group[A]
   def inverse(lx: Eval[A]): Eval[A] =
-    lx.map(_.inverse)
+    lx.map(_.inverse())
   override def remove(lx: Eval[A], ly: Eval[A]): Eval[A] =
     for { x <- lx; y <- ly } yield x |-| y
 }
