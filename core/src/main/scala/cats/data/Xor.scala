@@ -186,25 +186,25 @@ object Xor extends XorInstances with XorFunctions {
 }
 
 private[data] sealed abstract class XorInstances extends XorInstances1 {
-  implicit def xorOrder[A: Order, B: Order]: Order[A Xor B] =
+  implicit def catsDataOrderForXor[A: Order, B: Order]: Order[A Xor B] =
     new Order[A Xor B] {
       def compare(x: A Xor B, y: A Xor B): Int = x compare y
       override def partialCompare(x: A Xor B, y: A Xor B): Double = x partialCompare y
       override def eqv(x: A Xor B, y: A Xor B): Boolean = x === y
     }
 
-  implicit def xorShow[A, B](implicit A: Show[A], B: Show[B]): Show[A Xor B] =
+  implicit def catsDataShowForXor[A, B](implicit A: Show[A], B: Show[B]): Show[A Xor B] =
     new Show[A Xor B] {
       def show(f: A Xor B): String = f.show
     }
 
-  implicit def xorMonoid[A, B](implicit B: Monoid[B]): Monoid[A Xor B] =
+  implicit def catsDataMonoidForXor[A, B](implicit B: Monoid[B]): Monoid[A Xor B] =
     new Monoid[A Xor B] {
       def empty: A Xor B = Xor.Right(B.empty)
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def xorSemigroupK[L]: SemigroupK[Xor[L,?]] =
+  implicit def catsDataSemigroupKForXor[L]: SemigroupK[Xor[L,?]] =
     new SemigroupK[Xor[L,?]] {
       def combineK[A](x: Xor[L,A], y: Xor[L,A]): Xor[L,A] = x match {
         case Xor.Left(_) => y
@@ -212,7 +212,7 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       }
     }
 
-  implicit val xorBitraverse: Bitraverse[Xor] =
+  implicit val catsDataBitraverseForXor: Bitraverse[Xor] =
     new Bitraverse[Xor] {
       def bitraverse[G[_], A, B, C, D](fab: Xor[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Xor[C, D]] =
         fab match {
@@ -233,7 +233,7 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
         }
     }
 
-  implicit def xorInstances[A]: Traverse[A Xor ?] with MonadError[Xor[A, ?], A] =
+  implicit def catsDataInstancesForXor[A]: Traverse[A Xor ?] with MonadError[Xor[A, ?], A] =
     new Traverse[A Xor ?] with MonadError[Xor[A, ?], A] {
       def traverse[F[_]: Applicative, B, C](fa: A Xor B)(f: B => F[C]): F[A Xor C] = fa.traverse(f)
       def foldLeft[B, C](fa: A Xor B, c: C)(f: (C, B) => C): C = fa.foldLeft(c)(f)
@@ -259,19 +259,19 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
 
 private[data] sealed abstract class XorInstances1 extends XorInstances2 {
 
-  implicit def xorSemigroup[A, B](implicit B: Semigroup[B]): Semigroup[A Xor B] =
+  implicit def catsDataSemigroupForXor[A, B](implicit B: Semigroup[B]): Semigroup[A Xor B] =
     new Semigroup[A Xor B] {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def xorPartialOrder[A: PartialOrder, B: PartialOrder]: PartialOrder[A Xor B] = new PartialOrder[A Xor B] {
+  implicit def catsDataPartialOrderForXor[A: PartialOrder, B: PartialOrder]: PartialOrder[A Xor B] = new PartialOrder[A Xor B] {
     def partialCompare(x: A Xor B, y: A Xor B): Double = x partialCompare y
     override def eqv(x: A Xor B, y: A Xor B): Boolean = x === y
   }
 }
 
 private[data] sealed abstract class XorInstances2 {
-  implicit def xorEq[A: Eq, B: Eq]: Eq[A Xor B] =
+  implicit def catsDataEqForXor[A: Eq, B: Eq]: Eq[A Xor B] =
     new Eq[A Xor B] {
       def eqv(x: A Xor B, y: A Xor B): Boolean = x === y
     }

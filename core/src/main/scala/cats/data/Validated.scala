@@ -225,7 +225,7 @@ object Validated extends ValidatedInstances with ValidatedFunctions{
 
 private[data] sealed abstract class ValidatedInstances extends ValidatedInstances1 {
 
-  implicit def validatedSemigroupK[A](implicit A: Semigroup[A]): SemigroupK[Validated[A,?]] =
+  implicit def catsDataSemigroupKForValidated[A](implicit A: Semigroup[A]): SemigroupK[Validated[A,?]] =
     new SemigroupK[Validated[A,?]] {
       def combineK[B](x: Validated[A,B], y: Validated[A,B]): Validated[A,B] = x match {
         case v @ Valid(_) => v
@@ -236,22 +236,22 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
       }
     }
 
-  implicit def validatedMonoid[A, B](implicit A: Semigroup[A], B: Monoid[B]): Monoid[Validated[A, B]] = new Monoid[Validated[A, B]] {
+  implicit def catsDataMonoidForValidated[A, B](implicit A: Semigroup[A], B: Monoid[B]): Monoid[Validated[A, B]] = new Monoid[Validated[A, B]] {
     def empty: Validated[A, B] = Valid(B.empty)
     def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x combine y
   }
 
-  implicit def validatedOrder[A: Order, B: Order]: Order[Validated[A,B]] = new Order[Validated[A,B]] {
+  implicit def catsDataOrderForValidated[A: Order, B: Order]: Order[Validated[A,B]] = new Order[Validated[A,B]] {
     def compare(x: Validated[A,B], y: Validated[A,B]): Int = x compare y
     override def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
     override def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
   }
 
-  implicit def validatedShow[A, B](implicit A: Show[A], B: Show[B]): Show[Validated[A,B]] = new Show[Validated[A,B]] {
+  implicit def catsDataShowForValidated[A, B](implicit A: Show[A], B: Show[B]): Show[Validated[A,B]] = new Show[Validated[A,B]] {
     def show(f: Validated[A,B]): String = f.show
   }
 
-  implicit val validatedBitraverse: Bitraverse[Validated] =
+  implicit val catsDataBitraverseForValidated: Bitraverse[Validated] =
     new Bitraverse[Validated] {
       def bitraverse[G[_], A, B, C, D](fab: Validated[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Validated[C, D]] =
         fab match {
@@ -278,7 +278,7 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
         fab.leftMap(f)
     }
 
-  implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =
+  implicit def catsDataInstancesForValidated[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =
     new Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] {
       def traverse[F[_]: Applicative, A, B](fa: Validated[E,A])(f: A => F[B]): F[Validated[E,B]] =
         fa.traverse(f)

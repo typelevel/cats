@@ -133,14 +133,14 @@ object OptionT extends OptionTInstances {
 }
 
 private[data] sealed trait OptionTInstances1 {
-  implicit def optionTFunctor[F[_]:Functor]: Functor[OptionT[F, ?]] =
+  implicit def catsDataFunctorForOptionT[F[_]:Functor]: Functor[OptionT[F, ?]] =
     new Functor[OptionT[F, ?]] {
       override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] =
         fa.map(f)
     }
 
   // do NOT change this to val! I know it looks like it should work, and really I agree, but it doesn't (for... reasons)
-  implicit def optionTTransLift: TransLift.Aux[OptionT, Functor] =
+  implicit def catsDataTransLiftForOptionT: TransLift.Aux[OptionT, Functor] =
     new TransLift[OptionT] {
       type TC[M[_]] = Functor[M]
 
@@ -150,7 +150,7 @@ private[data] sealed trait OptionTInstances1 {
 
 private[data] sealed trait OptionTInstances extends OptionTInstances1 {
 
-  implicit def optionTMonad[F[_]](implicit F: Monad[F]): Monad[OptionT[F, ?]] =
+  implicit def catsDataMonadForOptionT[F[_]](implicit F: Monad[F]): Monad[OptionT[F, ?]] =
     new Monad[OptionT[F, ?]] {
       def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
 
@@ -161,9 +161,9 @@ private[data] sealed trait OptionTInstances extends OptionTInstances1 {
         fa.map(f)
     }
 
-  implicit def optionTEq[F[_], A](implicit FA: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
+  implicit def catsDataEqForOptionT[F[_], A](implicit FA: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     FA.on(_.value)
 
-  implicit def optionTShow[F[_], A](implicit F: Show[F[Option[A]]]): Show[OptionT[F, A]] =
+  implicit def catsDataShowForOptionT[F[_], A](implicit F: Show[F[Option[A]]]): Show[OptionT[F, A]] =
     functor.Contravariant[Show].contramap(F)(_.value)
 }

@@ -8,8 +8,8 @@ import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.OrderLaws
 
 class XorTTests extends CatsSuite {
-  implicit val eq0 = XorT.xorTEq[List, String, String Xor Int]
-  implicit val eq1 = XorT.xorTEq[XorT[List, String, ?], String, Int](eq0)
+  implicit val eq0 = XorT.catsDataEqForXorT[List, String, String Xor Int]
+  implicit val eq1 = XorT.catsDataEqForXorT[XorT[List, String, ?], String, Int](eq0)
   implicit val iso = CartesianTests.Isomorphisms.invariant[XorT[List, String, ?]]
   checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, String, ?], String]))
