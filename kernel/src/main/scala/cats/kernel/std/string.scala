@@ -4,8 +4,8 @@ package std
 package object string extends StringInstances
 
 trait StringInstances {
-  implicit val stringOrder: Order[String] = new StringOrder
-  implicit val stringMonoid: Monoid[String] = new StringMonoid
+  implicit val catsKernelStdOrderForString: Order[String] = new StringOrder
+  implicit val catsKernelStdMonoidForString: Monoid[String] = new StringMonoid
 }
 
 class StringOrder extends Order[String] {

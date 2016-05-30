@@ -4,8 +4,8 @@ package std
 package object int extends IntInstances
 
 trait IntInstances {
-  implicit val intOrder: Order[Int] = new IntOrder
-  implicit val intGroup: CommutativeGroup[Int] = new IntGroup
+  implicit val catsKernelStdOrderForInt: Order[Int] = new IntOrder
+  implicit val catsKernelStdGroupForInt: CommutativeGroup[Int] = new IntGroup
 }
 
 class IntGroup extends CommutativeGroup[Int] {

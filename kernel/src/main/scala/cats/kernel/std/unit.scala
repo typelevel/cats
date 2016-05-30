@@ -4,10 +4,10 @@ package std
 package object unit extends UnitInstances
 
 trait UnitInstances {
-  implicit val unitOrder: Order[Unit] =
+  implicit val catsKernelStdOrderForUnit: Order[Unit] =
     new UnitOrder
 
-  implicit val unitAlgebra: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =
+  implicit val catsKernelStdAlgebraForUnit: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =
     new UnitAlgebra
 }
 

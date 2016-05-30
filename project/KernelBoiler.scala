@@ -121,47 +121,47 @@ object KernelBoiler {
         |package std
         |
         |trait TupleInstances {
-        -  implicit def tuple${arity}Band[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =
+        -  implicit def catsKernelStdBandForTuple${arity}[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =
         -    new Band[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
         -    }
         -
-        -  implicit def tuple${arity}Group[${`A..N`}](implicit ${constraints("Group")}): Group[${`(A..N)`}] =
+        -  implicit def catsKernelStdGroupForTuple${arity}[${`A..N`}](implicit ${constraints("Group")}): Group[${`(A..N)`}] =
         -    new Group[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
         -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
         -      def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
         -    }
         -
-        -  implicit def tuple${arity}Eq[${`A..N`}](implicit ${constraints("Eq")}): Eq[${`(A..N)`}] =
+        -  implicit def catsKernelStdEqForTuple${arity}[${`A..N`}](implicit ${constraints("Eq")}): Eq[${`(A..N)`}] =
         -    new Eq[${`(A..N)`}] {
         -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
         -    }
         -
-        -  implicit def tuple${arity}Monoid[${`A..N`}](implicit ${constraints("Monoid")}): Monoid[${`(A..N)`}] =
+        -  implicit def catsKernelStdMonoidForTuple${arity}[${`A..N`}](implicit ${constraints("Monoid")}): Monoid[${`(A..N)`}] =
         -    new Monoid[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
         -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
         -    }
         -
-        -  implicit def tuple${arity}Order[${`A..N`}](implicit ${constraints("Order")}): Order[${`(A..N)`}] =
+        -  implicit def catsKernelStdOrderForTuple${arity}[${`A..N`}](implicit ${constraints("Order")}): Order[${`(A..N)`}] =
         -    new Order[${`(A..N)`}] {
         -      def compare(x: ${`(A..N)`}, y: ${`(A..N)`}): Int =
         -        ${binMethod("compare").mkString("Array(", ", ", ")")}.find(_ != 0).getOrElse(0)
         -    }
         -
-        -  implicit def tuple${arity}PartialOrder[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
+        -  implicit def catsKernelStdPartialOrderForTuple${arity}[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
         -    new PartialOrder[${`(A..N)`}] {
         -      def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
         -        ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
         -    }
         -
-        -  implicit def tuple${arity}Semigroup[${`A..N`}](implicit ${constraints("Semigroup")}): Semigroup[${`(A..N)`}] =
+        -  implicit def catsKernelStdSemigroupForTuple${arity}[${`A..N`}](implicit ${constraints("Semigroup")}): Semigroup[${`(A..N)`}] =
         -    new Semigroup[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
         -    }
         -
-        -  implicit def tuple${arity}Semilattice[${`A..N`}](implicit ${constraints("Semilattice")}): Semilattice[${`(A..N)`}] =
+        -  implicit def catsKernelStdSemilatticeForTuple${arity}[${`A..N`}](implicit ${constraints("Semilattice")}): Semilattice[${`(A..N)`}] =
         -    new Semilattice[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
         -    }
