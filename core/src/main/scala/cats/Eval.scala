@@ -260,35 +260,33 @@ object Eval extends EvalInstances {
    * trampoline are not exposed. This allows a slightly more efficient
    * implementation of the .value method.
    */
-  sealed abstract class Compute[A] extends Eval[A] {
+  sealed abstract class Compute[A] extends Eval[A] { self =>
     type Start
     val start: () => Eval[Start]
     val run: Start => Eval[A]
 
     def memoize: Eval[A] = Later(value)
 
-    def value: A = {
-      type L = Eval[Any]
-      type C = Any => Eval[Any]
-      @tailrec def loop(curr: L, fs: List[C]): Any =
-        curr match {
-          case c: Compute[_] =>
-            c.start() match {
-              case cc: Compute[_] =>
-                loop(
-                  cc.start().asInstanceOf[L],
-                  cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
-              case xx =>
-                loop(c.run(xx.value).asInstanceOf[L], fs)
-            }
-          case x =>
-            fs match {
-              case f :: fs => loop(f(x.value), fs)
-              case Nil => x.value
-            }
+    def value: A = eval
+
+    @tailrec private final def eval: A =
+      start() match {
+        case c: Compute[Start] =>
+          Compute[c.Start, A](c.start, s => c.run(s) flatMap self.run).eval
+        case x => run(x.value) match {
+          case c: Compute[A] => c.eval
+          case y => y.value
         }
-      loop(this.asInstanceOf[L], Nil).asInstanceOf[A]
-    }
+      }
+  }
+
+  object Compute {
+    def apply[S, A](start0: () => Eval[S], run0: S => Eval[A]): Compute[A] =
+      new Compute[A] {
+        type Start = S
+        val start = start0
+        val run = run0
+      }
   }
 }
 
