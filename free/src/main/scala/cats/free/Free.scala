@@ -40,11 +40,16 @@ object Free {
   /**
    * `Free[S, ?]` has a monad for any type constructor `S[_]`.
    */
-  implicit def freeMonad[S[_]]: Monad[Free[S, ?]] =
-    new Monad[Free[S, ?]] {
+  implicit def freeMonad[S[_]]: MonadRec[Free[S, ?]] =
+    new MonadRec[Free[S, ?]] {
       def pure[A](a: A): Free[S, A] = Free.pure(a)
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
+      def tailRecM[A, B](a: A)(f: A => Free[S, A Xor B]): Free[S, B] =
+        f(a).flatMap(_ match {
+          case Xor.Left(a1) => tailRecM(a1)(f) // recursion OK here, since Free is lazy
+          case Xor.Right(b) => pure(b)
+        })
     }
 }
 

@@ -3,7 +3,8 @@ package free
 
 import cats.tests.CatsSuite
 import cats.arrow.NaturalTransformation
-import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
+import cats.data.Xor
+import cats.laws.discipline.{CartesianTests, MonadRecTests, SerializableTests}
 import cats.laws.discipline.arbitrary.function0Arbitrary
 
 import org.scalacheck.{Arbitrary, Gen}
@@ -14,8 +15,8 @@ class FreeTests extends CatsSuite {
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[Free[Option, ?]]
 
-  checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
-  checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
+  checkAll("Free[Option, ?]", MonadRecTests[Free[Option, ?]].monadRec[Int, Int, Int])
+  checkAll("MonadRec[Free[Option, ?]]", SerializableTests.serializable(MonadRec[Free[Option, ?]]))
 
   test("mapSuspension id"){
     forAll { x: Free[List, Int] =>
@@ -41,6 +42,13 @@ class FreeTests extends CatsSuite {
       val folded = mapped.foldMap(NaturalTransformation.id[Option])
       folded should === (x.foldMap(headOptionU))
     }
+  }
+
+  test("tailRecM is stack safe") {
+    val n = 50000
+    val fa = MonadRec[Free[Option, ?]].tailRecM(0)(i =>
+      Free.pure[Option, Int Xor Int](if(i < n) Xor.Left(i+1) else Xor.Right(i)))
+    fa should === (Free.pure[Option, Int](n))
   }
 
   ignore("foldMap is stack safe") {

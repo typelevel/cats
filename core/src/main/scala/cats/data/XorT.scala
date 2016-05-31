@@ -279,6 +279,11 @@ private[data] abstract class XorTInstances1 extends XorTInstances2 {
 }
 
 private[data] abstract class XorTInstances2 extends XorTInstances3 {
+  implicit def catsDataMonadRecForXorT[F[_], L](implicit F0: MonadRec[F]): MonadRec[XorT[F, L, ?]] =
+    new XorTMonadRec[F, L] { implicit val F = F0 }
+}
+
+private[data] abstract class XorTInstances3 extends XorTInstances4 {
   implicit def catsDataMonadErrorForXorT[F[_], L](implicit F: Monad[F]): MonadError[XorT[F, L, ?], L] = {
     implicit val F0 = F
     new XorTMonadError[F, L] { implicit val F = F0 }
@@ -299,7 +304,7 @@ private[data] abstract class XorTInstances2 extends XorTInstances3 {
     }
 }
 
-private[data] abstract class XorTInstances3 {
+private[data] abstract class XorTInstances4 {
   implicit def catsDataFunctorForXorT[F[_], L](implicit F: Functor[F]): Functor[XorT[F, L, ?]] = {
     implicit val F0 = F
     new XorTFunctor[F, L] { implicit val F = F0 }
@@ -311,10 +316,13 @@ private[data] trait XorTFunctor[F[_], L] extends Functor[XorT[F, L, ?]] {
   override def map[A, B](fa: XorT[F, L, A])(f: A => B): XorT[F, L, B] = fa map f
 }
 
-private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L] with XorTFunctor[F, L] {
+private[data] trait XorTMonad[F[_], L] extends Monad[XorT[F, L, ?]] with XorTFunctor[F, L] {
   implicit val F: Monad[F]
   def pure[A](a: A): XorT[F, L, A] = XorT.pure[F, L, A](a)
   def flatMap[A, B](fa: XorT[F, L, A])(f: A => XorT[F, L, B]): XorT[F, L, B] = fa flatMap f
+}
+
+private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L] with XorTMonad[F, L] {
   def handleErrorWith[A](fea: XorT[F, L, A])(f: L => XorT[F, L, A]): XorT[F, L, A] =
     XorT(F.flatMap(fea.value) {
       case Xor.Left(e) => f(e).value
@@ -331,6 +339,16 @@ private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L]
     fla.recover(pf)
   override def recoverWith[A](fla: XorT[F, L, A])(pf: PartialFunction[L, XorT[F, L, A]]): XorT[F, L, A] =
     fla.recoverWith(pf)
+}
+
+private[data] trait XorTMonadRec[F[_], L] extends MonadRec[XorT[F, L, ?]] with XorTMonad[F, L] {
+  implicit val F: MonadRec[F]
+  def tailRecM[A, B](a: A)(f: A => XorT[F, L, A Xor B]): XorT[F, L, B] =
+    XorT(F.tailRecM(a)(a0 => F.map(f(a0).value){
+      case Xor.Left(l) => Xor.Right(Xor.Left(l))
+      case Xor.Right(Xor.Left(a1)) => Xor.Left(a1)
+      case Xor.Right(Xor.Right(b)) => Xor.Right(Xor.Right(b))
+    }))
 }
 
 private[data] trait XorTMonadFilter[F[_], L] extends MonadFilter[XorT[F, L, ?]] with XorTMonadError[F, L] {

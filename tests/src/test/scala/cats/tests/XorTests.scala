@@ -5,7 +5,7 @@ import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
 import cats.laws.discipline.{SemigroupKTests}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadErrorTests, SerializableTests, CartesianTests}
+import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadErrorTests, MonadRecTests, SerializableTests, CartesianTests}
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary._
@@ -26,6 +26,9 @@ class XorTests extends CatsSuite {
 
   checkAll("Xor[String, Int]", MonadErrorTests[Xor[String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor[String, ?], String]))
+
+  checkAll("Xor[String, Int]", MonadRecTests[Xor[String, ?]].monadRec[Int, Int, Int])
+  checkAll("MonadRec[Xor[String, ?]]", SerializableTests.serializable(MonadRec[Xor[String, ?]]))
 
   checkAll("Xor[String, Int] with Option", TraverseTests[Xor[String, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Xor[String,?]]", SerializableTests.serializable(Traverse[Xor[String, ?]]))
