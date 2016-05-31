@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{OptionT, Xor, XorT}
+import cats.data.{OptionT, StateT, Xor, XorT}
 
 class MonadRecInstancesTests extends CatsSuite {
   def tailRecMStackSafety[M[_]](implicit M: MonadRec[M], Eq: Eq[M[Int]]): Unit = {
@@ -36,6 +36,15 @@ class MonadRecInstancesTests extends CatsSuite {
 
   test("tailRecM stack-safety for List") {
     tailRecMStackSafety[List]
+  }
+
+  test("tailRecM stack-safety for Eval") {
+    tailRecMStackSafety[Eval]
+  }
+
+  test("tailRecM stack-safety for StateT") {
+    import StateTTests._ // import implicit Eq[StateT[...]]
+    tailRecMStackSafety[StateT[Option, Int, ?]]
   }
 
 }
