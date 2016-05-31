@@ -51,7 +51,7 @@ class FreeTests extends CatsSuite {
     fa should === (Free.pure[Option, Int](n))
   }
 
-  ignore("foldMap is stack safe") {
+  test("foldMap is stack safe") {
     trait FTestApi[A]
     case class TB(i: Int) extends FTestApi[Int]
 
