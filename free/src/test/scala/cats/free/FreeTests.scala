@@ -2,7 +2,7 @@ package cats
 package free
 
 import cats.tests.CatsSuite
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 import cats.data.Xor
 import cats.laws.discipline.{CartesianTests, MonadRecTests, SerializableTests}
 import cats.laws.discipline.arbitrary.function0Arbitrary
@@ -20,7 +20,7 @@ class FreeTests extends CatsSuite {
 
   test("mapSuspension id"){
     forAll { x: Free[List, Int] =>
-      x.mapSuspension(NaturalTransformation.id[List]) should === (x)
+      x.mapSuspension(FunctionK.id[List]) should === (x)
     }
   }
 
@@ -39,7 +39,7 @@ class FreeTests extends CatsSuite {
   test("mapSuspension consistent with foldMap"){
     forAll { x: Free[List, Int] =>
       val mapped = x.mapSuspension(headOptionU)
-      val folded = mapped.foldMap(NaturalTransformation.id[Option])
+      val folded = mapped.foldMap(FunctionK.id[Option])
       folded should === (x.foldMap(headOptionU))
     }
   }
@@ -64,7 +64,7 @@ class FreeTests extends CatsSuite {
       z <- if (j<10000) a(j) else Free.pure[FTestApi, Int](j)
     } yield z
 
-    def runner: NaturalTransformation[FTestApi,Id] = new NaturalTransformation[FTestApi,Id] {
+    def runner: FunctionK[FTestApi,Id] = new FunctionK[FTestApi,Id] {
       def apply[A](fa: FTestApi[A]): Id[A] = fa match {
         case TB(i) => i+1
       }
@@ -85,7 +85,7 @@ object FreeTests extends FreeTestsInstances {
 }
 
 sealed trait FreeTestsInstances {
-  val headOptionU: NaturalTransformation[List,Option] = new NaturalTransformation[List,Option] {
+  val headOptionU: FunctionK[List,Option] = new FunctionK[List,Option] {
     def apply[A](fa: List[A]): Option[A] = fa.headOption
   }
 

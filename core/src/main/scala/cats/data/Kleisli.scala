@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.arrow.{Arrow, Choice, Split, NaturalTransformation}
+import cats.arrow.{Arrow, Choice, Split, FunctionK}
 import cats.functor.{Contravariant, Strong}
 
 /**
@@ -48,7 +48,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def local[AA](f: AA => A): Kleisli[F, AA, B] =
     Kleisli(f.andThen(run))
 
-  def transform[G[_]](f: NaturalTransformation[F,G]): Kleisli[G, A, B] =
+  def transform[G[_]](f: FunctionK[F,G]): Kleisli[G, A, B] =
     Kleisli(a => f(run(a)))
 
   def lower(implicit F: Applicative[F]): Kleisli[F, A, F[B]] =

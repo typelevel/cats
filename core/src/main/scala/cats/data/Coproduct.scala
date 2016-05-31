@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 import cats.functor.Contravariant
 
 /** `F` on the left and `G` on the right of [[Xor]].
@@ -63,13 +63,13 @@ final case class Coproduct[F[_], G[_], A](run: F[A] Xor G[A]) {
    *
    * Example:
    * {{{
-   * scala> import cats.arrow.NaturalTransformation
+   * scala> import cats.arrow.FunctionK
    * scala> import cats.data.Coproduct
    * scala> val listToOption =
-   *      |   new NaturalTransformation[List, Option] {
+   *      |   new FunctionK[List, Option] {
    *      |     def apply[A](fa: List[A]): Option[A] = fa.headOption
    *      |   }
-   * scala> val optionToOption = NaturalTransformation.id[Option]
+   * scala> val optionToOption = FunctionK.id[Option]
    * scala> val cp1: Coproduct[List, Option, Int] = Coproduct.leftc(List(1,2,3))
    * scala> val cp2: Coproduct[List, Option, Int] = Coproduct.rightc(Some(4))
    * scala> cp1.fold(listToOption, optionToOption)
@@ -78,7 +78,7 @@ final case class Coproduct[F[_], G[_], A](run: F[A] Xor G[A]) {
    * res1: Option[Int] = Some(4)
    * }}}
    */
-  def fold[H[_]](f: NaturalTransformation[F, H], g: NaturalTransformation[G, H]): H[A] =
+  def fold[H[_]](f: FunctionK[F, H], g: FunctionK[G, H]): H[A] =
     run.fold(f.apply, g.apply)
 }
 

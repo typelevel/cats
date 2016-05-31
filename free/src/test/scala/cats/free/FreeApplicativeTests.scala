@@ -2,7 +2,7 @@ package cats
 package free
 
 import cats.tests.CatsSuite
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 import cats.laws.discipline.{CartesianTests, ApplicativeTests, SerializableTests}
 import cats.data.State
 
@@ -18,7 +18,7 @@ class FreeApplicativeTests extends CatsSuite {
   implicit def freeApplicativeEq[S[_]: Applicative, A](implicit SA: Eq[S[A]]): Eq[FreeApplicative[S, A]] =
     new Eq[FreeApplicative[S, A]] {
       def eqv(a: FreeApplicative[S, A], b: FreeApplicative[S, A]): Boolean = {
-        val nt = NaturalTransformation.id[S]
+        val nt = FunctionK.id[S]
         SA.eqv(a.foldMap(nt), b.foldMap(nt))
       }
     }
@@ -44,7 +44,7 @@ class FreeApplicativeTests extends CatsSuite {
     val x = FreeApplicative.lift[Id, Int](1)
     val y = FreeApplicative.pure[Id, Int](2)
     val f = x.map(i => (j: Int) => i + j)
-    val nt = NaturalTransformation.id[Id]
+    val nt = FunctionK.id[Id]
     val r1 = y.ap(f)
     val r2 = r1.compile(nt)
     r1.foldMap(nt) should === (r2.foldMap(nt))
@@ -57,7 +57,7 @@ class FreeApplicativeTests extends CatsSuite {
     val r1 = y.ap(f)
     val r2 = r1.monad
     val nt =
-      new NaturalTransformation[Id, Id] {
+      new FunctionK[Id, Id] {
         def apply[A](fa: Id[A]): Id[A] = fa
       }
     r1.foldMap(nt) should === (r2.foldMap(nt))
@@ -75,7 +75,7 @@ class FreeApplicativeTests extends CatsSuite {
 
   test("FreeApplicative#analyze") {
     type G[A] = List[Int]
-    val countingNT = new NaturalTransformation[List, G] {
+    val countingNT = new FunctionK[List, G] {
       def apply[A](la: List[A]): G[A] = List(la.length)
     }
 
@@ -97,7 +97,7 @@ class FreeApplicativeTests extends CatsSuite {
 
     type Tracked[A] = State[String, A]
 
-    val f: NaturalTransformation[Foo,Tracked] = new NaturalTransformation[Foo,Tracked] {
+    val f: FunctionK[Foo,Tracked] = new FunctionK[Foo,Tracked] {
       def apply[A](fa: Foo[A]): Tracked[A] = State[String, A]{ s0 =>
         (s0 + fa.toString + ";", fa.getA)
       }
@@ -120,7 +120,7 @@ class FreeApplicativeTests extends CatsSuite {
 
     val z = Apply[Dsl].map2(x, y)((_, _) => ())
 
-    val asString: NaturalTransformation[Id,λ[α => String]] = new NaturalTransformation[Id,λ[α => String]] {
+    val asString: FunctionK[Id,λ[α => String]] = new FunctionK[Id,λ[α => String]] {
       def apply[A](a: A): String = a.toString
     }
 
