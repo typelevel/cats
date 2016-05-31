@@ -78,6 +78,12 @@ class XorTTests extends CatsSuite {
     }
   }
 
+  test("fromOption isLeft consistent with Option.isEmpty") {
+    forAll { (o: Option[Int], s: String) =>
+      XorT.fromOption(o, s).isLeft should === (o.isEmpty)
+    }
+  }
+
   test("isLeft negation of isRight") {
     forAll { (xort: XorT[List, String, Int]) =>
       xort.isLeft should === (xort.isRight.map(! _))
