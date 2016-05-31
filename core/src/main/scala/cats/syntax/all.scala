@@ -22,6 +22,7 @@ trait AllSyntax
     with InvariantSyntax
     with ListSyntax
     with MonadCombineSyntax
+    with MonadErrorSyntax
     with MonadFilterSyntax
     with OptionSyntax
     with OrderSyntax
