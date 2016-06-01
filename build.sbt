@@ -30,8 +30,7 @@ lazy val kernelSettings = Seq(
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")),
-  parallelExecution in Test := false,
-  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+  parallelExecution in Test := false
 ) ++ warnUnusedImport
 
 lazy val commonSettings = Seq(
@@ -47,8 +46,7 @@ lazy val commonSettings = Seq(
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
-  parallelExecution in Test := false,
-  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+  parallelExecution in Test := false
 ) ++ warnUnusedImport
 
 lazy val tagName = Def.setting{
@@ -82,7 +80,7 @@ lazy val commonJvmSettings = Seq(
 // JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
 ) ++ catsDoctestSettings
 
-lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
+lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
 lazy val scalacheckVersion = "1.12.5"
 
@@ -95,37 +93,20 @@ lazy val testingDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.2" % "test",
   libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test")
 
-
-/**
-  * Remove 2.10 projects from doc generation, as the macros used in the projects
-  * cause problems generating the documentation on scala 2.10. As the APIs for 2.10
-  * and 2.11 are the same this has no effect on the resultant documentation, though
-  * it does mean that the scaladocs cannot be generated when the build is in 2.10 mode.
-  */
-def docsSourcesAndProjects(sv: String): (Boolean, Seq[ProjectReference]) =
-  CrossVersion.partialVersion(sv) match {
-    case Some((2, 10)) => (false, Nil)
-    case _ => (true, Seq(coreJVM, freeJVM))
-  }
-
-lazy val javadocSettings = Seq(
-  sources in (Compile, doc) := (if (docsSourcesAndProjects(scalaVersion.value)._1) (sources in (Compile, doc)).value else Nil)
-)
-
 lazy val docSettings = Seq(
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) :=
-    inProjects(docsSourcesAndProjects(scalaVersion.value)._2:_*),
+    inProjects(coreJVM, freeJVM, kernelJVM, kernelLawsJVM, lawsJVM, macrosJVM),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
   siteMappings += file("CONTRIBUTING.md") -> "contributing.md",
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
-    "-Xfatal-warnings",
     "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
     "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
     "-diagrams"
   ),
+  scalacOptions in (ScalaUnidoc, unidoc) ~= {_.filterNot("-Xfatal-warnings" == _)},
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
@@ -141,7 +122,7 @@ lazy val docs = project
   .settings(tutSettings)
   .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
-  .dependsOn(coreJVM, freeJVM)
+  .dependsOn(coreJVM, freeJVM, lawsJVM, kernelJVM, kernelLawsJVM , macrosJVM, testsJVM % "test-internal -> test")
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "root")
