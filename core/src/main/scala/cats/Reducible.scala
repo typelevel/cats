@@ -107,7 +107,7 @@ import simulacrum.typeclass
   def sequence1_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
     G.map(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))(_ => ())
 
-  def compose[G[_]: Reducible]: Reducible[Lambda[A => F[G[A]]]] =
+  def compose[G[_]: Reducible]: Reducible[λ[α => F[G[α]]]] =
     new ComposedReducible[F, G] {
       val F = self
       val G = Reducible[G]

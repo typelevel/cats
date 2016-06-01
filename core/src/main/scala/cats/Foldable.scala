@@ -269,7 +269,7 @@ import simulacrum.typeclass
   def nonEmpty[A](fa: F[A]): Boolean =
     !isEmpty(fa)
 
-  def compose[G[_]: Foldable]: Foldable[Lambda[A => F[G[A]]]] =
+  def compose[G[_]: Foldable]: Foldable[λ[α => F[G[α]]]] =
     new ComposedFoldable[F, G] {
       val F = self
       val G = Foldable[G]

@@ -58,7 +58,7 @@ trait Apply[F[_]] extends Functor[F] with Cartesian[F] with ApplyArityFunctions[
   def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
     fb.map(fb => map2(fa, fb)(f))
 
-  def compose[G[_]: Apply]: Apply[Lambda[A => F[G[A]]]] =
+  def compose[G[_]: Apply]: Apply[λ[α => F[G[α]]]] =
     new ComposedApply[F, G] {
       val F = self
       val G = Apply[G]

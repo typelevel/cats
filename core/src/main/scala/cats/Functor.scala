@@ -39,13 +39,13 @@ import simulacrum.typeclass
    */
   def as[A, B](fa: F[A], b: B): F[B] = map(fa)(_ => b)
 
-  def compose[G[_]: Functor]: Functor[Lambda[A => F[G[A]]]] =
+  def compose[G[_]: Functor]: Functor[λ[α => F[G[α]]]] =
     new ComposedFunctor[F, G] {
       val F = self
       val G = Functor[G]
     }
 
-  override def composeContravariant[G[_]: Contravariant]: Contravariant[Lambda[A => F[G[A]]]] =
+  override def composeContravariant[G[_]: Contravariant]: Contravariant[λ[α => F[G[α]]]] =
     new ComposedCovariantContravariant[F, G] {
       val F = self
       val G = Contravariant[G]

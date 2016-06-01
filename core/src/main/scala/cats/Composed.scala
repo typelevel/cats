@@ -2,7 +2,7 @@ package cats
 
 import cats.functor._
 
-private[cats] trait ComposedInvariant[F[_], G[_]] extends Invariant[Lambda[A => F[G[A]]]] { outer =>
+private[cats] trait ComposedInvariant[F[_], G[_]] extends Invariant[λ[α => F[G[α]]]] { outer =>
   def F: Invariant[F]
   def G: Invariant[G]
 
@@ -10,7 +10,7 @@ private[cats] trait ComposedInvariant[F[_], G[_]] extends Invariant[Lambda[A => 
     F.imap(fga)(ga => G.imap(ga)(f)(g))(gb => G.imap(gb)(g)(f))
 }
 
-private[cats] trait ComposedFunctor[F[_], G[_]] extends Functor[Lambda[A => F[G[A]]]] with ComposedInvariant[F, G] { outer =>
+private[cats] trait ComposedFunctor[F[_], G[_]] extends Functor[λ[α => F[G[α]]]] with ComposedInvariant[F, G] { outer =>
   def F: Functor[F]
   def G: Functor[G]
 
@@ -18,7 +18,7 @@ private[cats] trait ComposedFunctor[F[_], G[_]] extends Functor[Lambda[A => F[G[
     F.map(fga)(ga => G.map(ga)(f))
 }
 
-private[cats] trait ComposedApply[F[_], G[_]] extends Apply[Lambda[A => F[G[A]]]] with ComposedFunctor[F, G] { outer =>
+private[cats] trait ComposedApply[F[_], G[_]] extends Apply[λ[α => F[G[α]]]] with ComposedFunctor[F, G] { outer =>
   def F: Apply[F]
   def G: Apply[G]
 
@@ -29,30 +29,30 @@ private[cats] trait ComposedApply[F[_], G[_]] extends Apply[Lambda[A => F[G[A]]]
     F.map2(fga, fgb)(G.product)
 }
 
-private[cats] trait ComposedApplicative[F[_], G[_]] extends Applicative[Lambda[A => F[G[A]]]] with ComposedApply[F, G] { outer =>
+private[cats] trait ComposedApplicative[F[_], G[_]] extends Applicative[λ[α => F[G[α]]]] with ComposedApply[F, G] { outer =>
   def F: Applicative[F]
   def G: Applicative[G]
 
   override def pure[A](x: A): F[G[A]] = F.pure(G.pure(x))
 }
 
-private[cats] trait ComposedSemigroupK[F[_], G[_]] extends SemigroupK[Lambda[A => F[G[A]]]] { outer =>
+private[cats] trait ComposedSemigroupK[F[_], G[_]] extends SemigroupK[λ[α => F[G[α]]]] { outer =>
   def F: SemigroupK[F]
 
   override def combineK[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = F.combineK(x, y)
 }
 
-private[cats] trait ComposedMonoidK[F[_], G[_]] extends MonoidK[Lambda[A => F[G[A]]]] with ComposedSemigroupK[F, G] { outer =>
+private[cats] trait ComposedMonoidK[F[_], G[_]] extends MonoidK[λ[α => F[G[α]]]] with ComposedSemigroupK[F, G] { outer =>
   def F: MonoidK[F]
 
   override def empty[A]: F[G[A]] = F.empty
 }
 
-private[cats] trait ComposedAlternative[F[_], G[_]] extends Alternative[Lambda[A => F[G[A]]]] with ComposedApplicative[F, G] with ComposedMonoidK[F, G] { outer =>
+private[cats] trait ComposedAlternative[F[_], G[_]] extends Alternative[λ[α => F[G[α]]]] with ComposedApplicative[F, G] with ComposedMonoidK[F, G] { outer =>
   def F: Alternative[F]
 }
 
-private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[Lambda[A => F[G[A]]]] { outer =>
+private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] { outer =>
   def F: Foldable[F]
   def G: Foldable[G]
 
@@ -63,7 +63,7 @@ private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[Lambda[A => F[
     F.foldRight(fga, lb)((ga, lb) => G.foldRight(ga, lb)(f))
 }
 
-private[cats] trait ComposedTraverse[F[_], G[_]] extends Traverse[Lambda[A => F[G[A]]]] with ComposedFoldable[F, G] with ComposedFunctor[F, G] { outer =>
+private[cats] trait ComposedTraverse[F[_], G[_]] extends Traverse[λ[α => F[G[α]]]] with ComposedFoldable[F, G] with ComposedFunctor[F, G] { outer =>
   def F: Traverse[F]
   def G: Traverse[G]
 
@@ -71,7 +71,7 @@ private[cats] trait ComposedTraverse[F[_], G[_]] extends Traverse[Lambda[A => F[
     F.traverse(fga)(ga => G.traverse(ga)(f))
 }
 
-private[cats] trait ComposedReducible[F[_], G[_]] extends Reducible[Lambda[A => F[G[A]]]] with ComposedFoldable[F, G] { outer =>
+private[cats] trait ComposedReducible[F[_], G[_]] extends Reducible[λ[α => F[G[α]]]] with ComposedFoldable[F, G] { outer =>
   def F: Reducible[F]
   def G: Reducible[G]
 
@@ -90,7 +90,7 @@ private[cats] trait ComposedReducible[F[_], G[_]] extends Reducible[Lambda[A => 
   }
 }
 
-private[cats] trait ComposedContravariant[F[_], G[_]] extends Functor[Lambda[A => F[G[A]]]] { outer =>
+private[cats] trait ComposedContravariant[F[_], G[_]] extends Functor[λ[α => F[G[α]]]] { outer =>
   def F: Contravariant[F]
   def G: Contravariant[G]
 
@@ -98,7 +98,7 @@ private[cats] trait ComposedContravariant[F[_], G[_]] extends Functor[Lambda[A =
     F.contramap(fga)(gb => G.contramap(gb)(f))
 }
 
-private[cats] trait ComposedContravariantCovariant[F[_], G[_]] extends Contravariant[Lambda[A => F[G[A]]]] { outer =>
+private[cats] trait ComposedContravariantCovariant[F[_], G[_]] extends Contravariant[λ[α => F[G[α]]]] { outer =>
   def F: Contravariant[F]
   def G: Functor[G]
 
@@ -106,7 +106,7 @@ private[cats] trait ComposedContravariantCovariant[F[_], G[_]] extends Contravar
     F.contramap(fga)(gb => G.map(gb)(f))
 }
 
-private[cats] trait ComposedCovariantContravariant[F[_], G[_]] extends Contravariant[Lambda[A => F[G[A]]]] { outer =>
+private[cats] trait ComposedCovariantContravariant[F[_], G[_]] extends Contravariant[λ[α => F[G[α]]]] { outer =>
   def F: Functor[F]
   def G: Contravariant[G]
 
@@ -114,7 +114,7 @@ private[cats] trait ComposedCovariantContravariant[F[_], G[_]] extends Contravar
     F.map(fga)(ga => G.contramap(ga)(f))
 }
 
-private[cats] trait ComposedInvariantCovariant[F[_], G[_]] extends Invariant[Lambda[A => F[G[A]]]] { outer =>
+private[cats] trait ComposedInvariantCovariant[F[_], G[_]] extends Invariant[λ[α => F[G[α]]]] { outer =>
   def F: Invariant[F]
   def G: Functor[G]
 
@@ -122,7 +122,7 @@ private[cats] trait ComposedInvariantCovariant[F[_], G[_]] extends Invariant[Lam
     F.imap(fga)(ga => G.map(ga)(f))(gb => G.map(gb)(g))
 }
 
-private[cats] trait ComposedInvariantContravariant[F[_], G[_]] extends Invariant[Lambda[A => F[G[A]]]] { outer =>
+private[cats] trait ComposedInvariantContravariant[F[_], G[_]] extends Invariant[λ[α => F[G[α]]]] { outer =>
   def F: Invariant[F]
   def G: Contravariant[G]
 
