@@ -3,13 +3,7 @@ package tests
 
 import cats.std.AllInstances
 import cats.syntax.AllSyntax
-import algebra.laws.GroupLaws
 import cats.functor.{Invariant, Contravariant}
-import cats.laws.discipline.SerializableTests
-
-import org.scalacheck.{Arbitrary}
-import org.scalatest.prop.PropertyChecks
-import scala.reflect.runtime.universe.TypeTag
 
 /**
  * Test that our syntax implicits are working.
@@ -116,7 +110,14 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val as2: List[A] = fa.dropWhile_(f5)
   }
 
-  def testTraverse[F[_]: Traverse, G[_]: Applicative, A]: Unit = {
+  def testTraverse[F[_]: Traverse: FlatMap, G[_]: Applicative, A, B]: Unit = {
+    val fa = mock[F[A]]
+    val f1 = mock[A => G[B]]
+    val gfb: G[F[B]] = fa.traverse(f1)
+
+    val f2 = mock[A => G[F[B]]]
+    val gfb2: G[F[B]] = fa.traverseM(f2)
+
     val fga = mock[F[G[A]]]
     val gunit: G[F[A]] = fga.sequence
   }
@@ -213,11 +214,44 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val gfab = fgagb.bisequence
   }
 
+  def testMonadCombine[F[_]: MonadCombine, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+    val fga = mock[F[G[A]]]
+    val fa = fga.unite
+
+    val fhab = mock[F[H[A, B]]]
+    val fafb = fhab.separate
+  }
+
   def testApplicative[F[_]: Applicative, A]: Unit = {
     val a = mock[A]
     val fa = a.pure[F]
 
     val la = mock[Eval[A]]
     val lfa = la.pureEval[F]
+  }
+
+  def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, ?], E]): Unit = {
+    type G[X] = F[E, X]
+
+    val e = mock[E]
+    val ga = e.raiseError[G, A]
+
+    val gea = mock[G[A]]
+
+    val ea = mock[E => A]
+    val gea1 = ga.handleError(ea)
+
+    val egea = mock[E => G[A]]
+    val gea2 = ga.handleErrorWith(egea)
+
+    val gxea = ga.attempt
+
+    val gxtea = ga.attemptT
+
+    val pfea = mock[PartialFunction[E, A]]
+    val gea3 = ga.recover(pfea)
+
+    val pfegea = mock[PartialFunction[E, G[A]]]
+    val gea4 = ga.recoverWith(pfegea)
   }
 }

@@ -36,7 +36,7 @@ object CartesianTests {
   }
 
   object Isomorphisms {
-    import algebra.laws._
+    import cats.kernel.laws._
     implicit def invariant[F[_]](implicit F: functor.Invariant[F]): Isomorphisms[F] =
       new Isomorphisms[F] {
         def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)]))(implicit EqFABC: Eq[F[(A, B, C)]]) =

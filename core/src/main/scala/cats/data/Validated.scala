@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.data.Validated.{Invalid, Valid}
-import cats.functor.Bifunctor
 
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
@@ -203,6 +202,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     case Valid(a) => Invalid(a)
     case Invalid(e) => Valid(e)
   }
+
+  /**
+   * Ensure that a successful result passes the given predicate,
+   * falling back to an Invalid of `onFailure` if the predicate
+   * returns false.
+   *
+   * For example:
+   * {{{
+   * scala> Validated.valid("").ensure(new IllegalArgumentException("Must not be empty"))(_.nonEmpty)
+   * res0: Validated[IllegalArgumentException,String] = Invalid(java.lang.IllegalArgumentException: Must not be empty)
+   * }}}
+   */
+  def ensure[EE >: E](onFailure: => EE)(f: A => Boolean): Validated[EE, A] =
+    fold(_ => this, a => if (f(a)) this else Validated.invalid(onFailure))
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions{
@@ -210,31 +223,62 @@ object Validated extends ValidatedInstances with ValidatedFunctions{
   final case class Invalid[+E](e: E) extends Validated[E, Nothing]
 }
 
-
 private[data] sealed abstract class ValidatedInstances extends ValidatedInstances1 {
 
-  implicit def validatedMonoid[A, B](implicit A: Semigroup[A], B: Monoid[B]): Monoid[Validated[A, B]] = new Monoid[Validated[A, B]] {
+  implicit def catsDataSemigroupKForValidated[A](implicit A: Semigroup[A]): SemigroupK[Validated[A,?]] =
+    new SemigroupK[Validated[A,?]] {
+      def combineK[B](x: Validated[A,B], y: Validated[A,B]): Validated[A,B] = x match {
+        case v @ Valid(_) => v
+        case Invalid(ix) => y match {
+          case Invalid(iy) => Invalid(A.combine(ix,iy))
+          case v @ Valid(_) => v
+        }
+      }
+    }
+
+  implicit def catsDataMonoidForValidated[A, B](implicit A: Semigroup[A], B: Monoid[B]): Monoid[Validated[A, B]] = new Monoid[Validated[A, B]] {
     def empty: Validated[A, B] = Valid(B.empty)
     def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x combine y
   }
 
-  implicit def validatedOrder[A: Order, B: Order]: Order[Validated[A,B]] = new Order[Validated[A,B]] {
+  implicit def catsDataOrderForValidated[A: Order, B: Order]: Order[Validated[A,B]] = new Order[Validated[A,B]] {
     def compare(x: Validated[A,B], y: Validated[A,B]): Int = x compare y
     override def partialCompare(x: Validated[A,B], y: Validated[A,B]): Double = x partialCompare y
     override def eqv(x: Validated[A,B], y: Validated[A,B]): Boolean = x === y
   }
 
-  implicit def validatedShow[A, B](implicit A: Show[A], B: Show[B]): Show[Validated[A,B]] = new Show[Validated[A,B]] {
+  implicit def catsDataShowForValidated[A, B](implicit A: Show[A], B: Show[B]): Show[Validated[A,B]] = new Show[Validated[A,B]] {
     def show(f: Validated[A,B]): String = f.show
   }
 
-  implicit def validatedBifunctor: Bifunctor[Validated] =
-    new Bifunctor[Validated] {
-      override def bimap[A, B, C, D](fab: Validated[A, B])(f: A => C, g: B => D): Validated[C, D] = fab.bimap(f, g)
-      override def leftMap[A, B, C](fab: Validated[A, B])(f: A => C): Validated[C, B] = fab.leftMap(f)
+  implicit val catsDataBitraverseForValidated: Bitraverse[Validated] =
+    new Bitraverse[Validated] {
+      def bitraverse[G[_], A, B, C, D](fab: Validated[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Validated[C, D]] =
+        fab match {
+          case Invalid(a) => G.map(f(a))(Validated.invalid)
+          case Valid(b) => G.map(g(b))(Validated.valid)
+        }
+
+      def bifoldLeft[A, B, C](fab: Validated[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
+        fab match {
+          case Invalid(a) => f(c, a)
+          case Valid(b) => g(c, b)
+        }
+
+      def bifoldRight[A, B, C](fab: Validated[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+        fab match {
+          case Invalid(a) => f(a, c)
+          case Valid(b) => g(b, c)
+        }
+
+      override def bimap[A, B, C, D](fab: Validated[A, B])(f: A => C, g: B => D): Validated[C, D] =
+        fab.bimap(f, g)
+
+      override def leftMap[A, B, C](fab: Validated[A, B])(f: A => C): Validated[C, B] =
+        fab.leftMap(f)
     }
 
-  implicit def validatedInstances[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =
+  implicit def catsDataInstancesForValidated[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =
     new Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] {
       def traverse[F[_]: Applicative, A, B](fa: Validated[E,A])(f: A => F[B]): F[Validated[E,B]] =
         fa.traverse(f)
@@ -254,7 +298,7 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
       def ap[A,B](f: Validated[E,A=>B])(fa: Validated[E,A]): Validated[E, B] =
         fa.ap(f)(E)
 
-      def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
+      override def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
         fa.product(fb)(E)
 
       def handleErrorWith[A](fa: Validated[E, A])(f: E => Validated[E, A]): Validated[E, A] =

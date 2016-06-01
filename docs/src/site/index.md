@@ -3,16 +3,15 @@ layout: default
 title:  "Home"
 section: "home"
 ---
-Cats is an experimental library intended to provide abstractions for
-functional programming in the
-[Scala programming language](https://scala-lang.org). The name is a
-playful shortening of the word *category*.
+Cats is a library which provides abstractions for functional
+programming in the [Scala programming language](https://scala-lang.org).
+The name is a playful shortening of the word *category*.
 
-<div class="msg warn"> <p><strong> Cats is currently an experimental
-  project under active development</strong>. Feedback and
-  contributions are welcomed as we look to improve the project. This
-  project is evolving quickly and we currently make no guarantees about what
-  might drastically change in the near future.</p> </div>
+<div class="msg warn"> <p><strong> Cats is a new project under active
+  development</strong>. Feedback and contributions are welcomed as we look
+  to improve it. This project is evolving quickly and we are making no
+  guarantees about stability until a 1.0 release is made (current est.
+  around Q3 2016).</p> </div>
 
 
 <a name="getting-started"></a>
@@ -22,15 +21,17 @@ Cats is currently available for Scala 2.10 and 2.11.
 
 To get started with SBT, simply add the following to your build.sbt file:
 
-    libraryDependencies += "org.typelevel" %% "cats" % "0.4.1"
+    libraryDependencies += "org.typelevel" %% "cats" % "0.6.0"
 
 This will pull in all of Cats' modules. If you only require some
 functionality, you can pick-and-choose from amongst these modules
 (used in place of `"cats"`):
 
  * `cats-macros`: Macros used by Cats syntax (*required*).
- * `cats-core`: Core type classes and functionality (*required*).
+ * `cats-kernel`: Small set of basic type classes (*required*).
+ * `cats-core`: Most core type classes and functionality (*required*).
  * `cats-laws`: Laws for testing type class instances.
+ * `cats-free`: Free structures such as the free monad, and supporting type classes.
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
@@ -87,6 +88,7 @@ In an attempt to be more modular, Cats is broken up into a number of sub-project
 * *core* - contains type class definitions (e.g. Functor, Applicative, Monad), essential datatypes, and
   type class instances for those datatypes and standard library types
 * *laws* - laws for the type classes, used to validate type class instances
+ * *cats-free* - free structures such as the free monad, and supporting type classes.
 * *tests* - tests that check type class instances with laws from *laws*
 * *docs* - The source for this website
 

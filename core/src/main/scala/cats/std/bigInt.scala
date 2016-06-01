@@ -1,7 +1,7 @@
 package cats
 package std
 
-trait BigIntInstances extends algebra.std.BigIntInstances {
-  implicit val bigIntShow: Show[BigInt] =
+trait BigIntInstances extends cats.kernel.std.BigIntInstances {
+  implicit val catsStdShowForBigInt: Show[BigInt] =
     Show.fromToString[BigInt]
 }

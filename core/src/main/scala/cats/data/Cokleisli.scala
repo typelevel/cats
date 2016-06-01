@@ -44,10 +44,10 @@ object Cokleisli extends CokleisliInstances {
 }
 
 private[data] sealed abstract class CokleisliInstances extends CokleisliInstances0 {
-  implicit def cokleisliArrow[F[_]](implicit ev: Comonad[F]): Arrow[Cokleisli[F, ?, ?]] =
+  implicit def catsDataArrowForCokleisli[F[_]](implicit ev: Comonad[F]): Arrow[Cokleisli[F, ?, ?]] =
     new CokleisliArrow[F] { def F: Comonad[F] = ev }
 
-  implicit def cokleisliMonad[F[_], A]: Monad[Cokleisli[F, A, ?]] = new Monad[Cokleisli[F, A, ?]] {
+  implicit def catsDataMonadForCokleisli[F[_], A]: Monad[Cokleisli[F, A, ?]] = new Monad[Cokleisli[F, A, ?]] {
     def pure[B](x: B): Cokleisli[F, A, B] =
       Cokleisli.pure(x)
 
@@ -58,18 +58,18 @@ private[data] sealed abstract class CokleisliInstances extends CokleisliInstance
       fa.map(f)
   }
 
-  implicit def cokleisliMonoidK[F[_]](implicit ev: Comonad[F]): MonoidK[Lambda[A => Cokleisli[F, A, A]]] =
+  implicit def catsDataMonoidKForCokleisli[F[_]](implicit ev: Comonad[F]): MonoidK[Lambda[A => Cokleisli[F, A, A]]] =
     new CokleisliMonoidK[F] { def F: Comonad[F] = ev }
 }
 
 private[data] sealed abstract class CokleisliInstances0 {
-  implicit def cokleisliSplit[F[_]](implicit ev: CoflatMap[F]): Split[Cokleisli[F, ?, ?]] =
+  implicit def catsDataSplitForCokleisli[F[_]](implicit ev: CoflatMap[F]): Split[Cokleisli[F, ?, ?]] =
     new CokleisliSplit[F] { def F: CoflatMap[F] = ev }
 
-  implicit def cokleisliProfunctor[F[_]](implicit ev: Functor[F]): Profunctor[Cokleisli[F, ?, ?]] =
+  implicit def catsDataProfunctorForCokleisli[F[_]](implicit ev: Functor[F]): Profunctor[Cokleisli[F, ?, ?]] =
     new CokleisliProfunctor[F] { def F: Functor[F] = ev }
 
-  implicit def cokleisliSemigroupK[F[_]](implicit ev: CoflatMap[F]): SemigroupK[Lambda[A => Cokleisli[F, A, A]]] =
+  implicit def catsDataSemigroupKForCokleisli[F[_]](implicit ev: CoflatMap[F]): SemigroupK[Lambda[A => Cokleisli[F, A, A]]] =
     new CokleisliSemigroupK[F] { def F: CoflatMap[F] = ev }
 }
 

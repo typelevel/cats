@@ -1,11 +1,12 @@
 package cats
 package tests
 
-import cats.laws.discipline.{CartesianTests, MonadStateTests, MonoidKTests, SerializableTests}
+import cats.kernel.std.tuple._
+import cats.laws.discipline.{CartesianTests, MonadRecTests, MonadStateTests, SerializableTests}
 import cats.data.{State, StateT}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary
 
 class StateTTests extends CatsSuite {
   import StateTTests._
@@ -37,6 +38,12 @@ class StateTTests extends CatsSuite {
     forAll { (s: String, i: Int) =>
       State.inspect[Int, String](_.toString).run(i) should === (
         State.pure[Int, Unit](()).inspect(_.toString).run(i))
+    }
+  }
+
+  test("flatMap and flatMapF consistent") {
+    forAll { (stateT: StateT[Option, Long, Int], f: Int => Option[Int]) =>
+      stateT.flatMap(a => StateT(s => f(a).map(b => (s, b)))) should === (stateT.flatMapF(f))
     }
   }
 
@@ -109,14 +116,22 @@ class StateTTests extends CatsSuite {
 
   {
     implicit val iso = CartesianTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
+
     checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, Int, ?], Int].monadState[Int, Int, Int])
-    checkAll("MonadState[StateT[Option, ?, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, Int, ?], Int]))
+    checkAll("MonadState[StateT[Option, Int, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, Int, ?], Int]))
+
+    checkAll("StateT[Option, Int, Int]", MonadRecTests[StateT[Option, Int, ?]].monadRec[Int, Int, Int])
+    checkAll("MonadRec[StateT[Option, Int, ?]]", SerializableTests.serializable(MonadRec[StateT[Option, Int, ?]]))
   }
 
   {
     implicit val iso = CartesianTests.Isomorphisms.invariant[State[Long, ?]]
+
     checkAll("State[Long, ?]", MonadStateTests[State[Long, ?], Long].monadState[Int, Int, Int])
     checkAll("MonadState[State[Long, ?], Long]", SerializableTests.serializable(MonadState[State[Long, ?], Long]))
+
+    checkAll("State[Long, ?]", MonadRecTests[State[Long, ?]].monadRec[Int, Int, Int])
+    checkAll("MonadRec[State[Long, ?]]", SerializableTests.serializable(MonadRec[State[Long, ?]]))
   }
 }
 

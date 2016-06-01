@@ -1,11 +1,9 @@
 package cats.tests
 
-import cats.{Applicative, Id, Monad, Cartesian, Show}
-import cats.data.{OptionT, Validated, Xor}
-import cats.laws.discipline.{ApplicativeTests, FunctorTests, MonadCombineTests, SerializableTests, CartesianTests, MonadTests}
+import cats.{Id, MonadRec, Cartesian, Show}
+import cats.data.{OptionT, Xor}
+import cats.laws.discipline.{FunctorTests, SerializableTests, CartesianTests, MonadRecTests}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
-import org.scalacheck.{Arbitrary, Gen}
 
 class OptionTTests extends CatsSuite {
 
@@ -49,6 +47,12 @@ class OptionTTests extends CatsSuite {
   test("OptionT[Id, A].filter consistent with Option.filter") {
     forAll { (o: Option[Int], f: Int => Boolean) =>
       o.filter(f) should === (OptionT[Id, Int](o).filter(f).value)
+    }
+  }
+
+  test("OptionT[Id, A].withFilter consistent with Option.withFilter"){
+    forAll { (o: Option[Int], f: Int => Boolean) =>
+      (for {x <- o if f(x)} yield x) should === ((for {x <- OptionT[Id, Int](o) if f(x)} yield x).value)
     }
   }
 
@@ -134,6 +138,10 @@ class OptionTTests extends CatsSuite {
     OptionT[Xor[String, ?], Int](xor).show should === ("Xor.Right(Some(1))")
   }
 
+  test("none") {
+    OptionT.none[List,Int] should === (OptionT[List,Int](List(None)))
+  }
+
   test("implicit Show[OptionT] instance and explicit show method are consistent") {
     forAll { optionT: OptionT[List, Int] =>
       optionT.show should === (implicitly[Show[OptionT[List, Int]]].show(optionT))
@@ -152,8 +160,8 @@ class OptionTTests extends CatsSuite {
     }
   }
 
-  checkAll("Monad[OptionT[List, Int]]", MonadTests[OptionT[List, ?]].monad[Int, Int, Int])
-  checkAll("Monad[OptionT[List, ?]]", SerializableTests.serializable(Monad[OptionT[List, ?]]))
+  checkAll("OptionT[List, Int]", MonadRecTests[OptionT[List, ?]].monadRec[Int, Int, Int])
+  checkAll("MonadRec[OptionT[List, ?]]", SerializableTests.serializable(MonadRec[OptionT[List, ?]]))
 
   {
     implicit val F = ListWrapper.functor

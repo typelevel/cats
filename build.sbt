@@ -5,6 +5,8 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
 
+lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev environment")
+
 lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageMinimum := 60,
   ScoverageKeys.coverageFailOnMinimum := false,
@@ -14,13 +16,23 @@ lazy val scoverageSettings = Seq(
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
-  scalaVersion := "2.11.7",
-  crossScalaVersions := Seq("2.10.6", "2.11.7")
+  scalaVersion := "2.11.8",
+  crossScalaVersions := Seq("2.10.6", "2.11.8")
 )
 
 lazy val catsDoctestSettings = Seq(
   doctestWithDependencies := false
 ) ++ doctestSettings
+
+lazy val kernelSettings = Seq(
+  // don't warn on value discarding because it's broken on 2.10 with @sp(Unit)
+  scalacOptions ++= commonScalacOptions.filter(_ != "-Ywarn-value-discard"),
+  resolvers ++= Seq(
+    Resolver.sonatypeRepo("releases"),
+    Resolver.sonatypeRepo("snapshots")),
+  parallelExecution in Test := false,
+  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+) ++ warnUnusedImport
 
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions,
@@ -31,19 +43,37 @@ lazy val commonSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.7.0",
-    "org.spire-math" %%% "algebra" % "0.3.1",
-    "org.spire-math" %%% "algebra-std" % "0.3.1",
     "org.typelevel" %%% "machinist" % "0.4.1",
-    compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0-M5" cross CrossVersion.full),
+    compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport
 
+lazy val tagName = Def.setting{
+ s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
+}
+
 lazy val commonJsSettings = Seq(
+  scalacOptions += {
+    val tagOrHash =
+      if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lines_!.head
+      else tagName.value
+    val a = (baseDirectory in LocalRootProject).value.toURI.toString
+    val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
+    s"-P:scalajs:mapSourceURI:$a->$g/"
+  },
   scalaJSStage in Global := FastOptStage,
-  parallelExecution := false
+  parallelExecution := false,
+  // Using Rhino as jsEnv to build scala.js code can lead to OOM, switch to PhantomJS by default
+  scalaJSUseRhino := false,
+  requiresDOM := false,
+  jsEnv := NodeJSEnv().value,
+  // Only used for scala.js for now
+  botBuild := sys.props.getOrElse("CATS_BOT_BUILD", default="false") == "true",
+  // batch mode decreases the amount of memory needed to compile scala.js code
+  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value)
 )
 
 lazy val commonJvmSettings = Seq(
@@ -52,18 +82,40 @@ lazy val commonJvmSettings = Seq(
 // JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
 ) ++ catsDoctestSettings
 
-lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
+lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
 lazy val scalacheckVersion = "1.12.5"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion,
-  libraryDependencies += "org.typelevel" %%% "discipline" % "0.4"
+  libraryDependencies += "org.typelevel" %%% "discipline" % "0.4")
+
+lazy val testingDependencies = Seq(
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.2",
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.2" % "test",
+  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test")
+
+
+/**
+  * Remove 2.10 projects from doc generation, as the macros used in the projects
+  * cause problems generating the documentation on scala 2.10. As the APIs for 2.10
+  * and 2.11 are the same this has no effect on the resultant documentation, though
+  * it does mean that the scaladocs cannot be generated when the build is in 2.10 mode.
+  */
+def docsSourcesAndProjects(sv: String): (Boolean, Seq[ProjectReference]) =
+  CrossVersion.partialVersion(sv) match {
+    case Some((2, 10)) => (false, Nil)
+    case _ => (true, Seq(coreJVM, freeJVM))
+  }
+
+lazy val javadocSettings = Seq(
+  sources in (Compile, doc) := (if (docsSourcesAndProjects(scalaVersion.value)._1) (sources in (Compile, doc)).value else Nil)
 )
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) :=
+    inProjects(docsSourcesAndProjects(scalaVersion.value)._2:_*),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
@@ -89,7 +141,7 @@ lazy val docs = project
   .settings(tutSettings)
   .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
-  .dependsOn(coreJVM)
+  .dependsOn(coreJVM, freeJVM)
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "root")
@@ -102,15 +154,15 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, coreJVM, lawsJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, coreJVM, lawsJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM, docs, bench)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM % "test-internal -> test", bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, coreJS, lawsJS, testsJS, js)
-  .dependsOn(macrosJS, coreJS, lawsJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS, js)
+  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -124,14 +176,41 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
+lazy val kernel = crossProject.crossType(CrossType.Pure)
+  .in(file("kernel"))
+  .settings(moduleName := "cats-kernel")
+  .settings(kernelSettings: _*)
+  .settings(buildSettings: _*)
+  .settings(publishSettings: _*)
+  .settings(scoverageSettings: _*)
+  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(KernelBoiler.gen))
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val kernelJVM = kernel.jvm
+lazy val kernelJS = kernel.js
+
+lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
+  .in(file("kernel-laws"))
+  .settings(moduleName := "cats-kernel-laws")
+  .settings(kernelSettings: _*)
+  .settings(buildSettings: _*)
+  .settings(publishSettings: _*)
+  .settings(scoverageSettings: _*)
+  .settings(disciplineDependencies: _*)
+  .settings(testingDependencies: _*)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+  .dependsOn(kernel)
+
+lazy val kernelLawsJVM = kernelLaws.jvm
+lazy val kernelLawsJS = kernelLaws.js
 
 lazy val core = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros)
+  .dependsOn(macros, kernel)
   .settings(moduleName := "cats-core")
   .settings(catsSettings:_*)
-  .settings(
-    sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen)
-  )
+  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion % "test")
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
@@ -140,18 +219,26 @@ lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
 lazy val laws = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core)
+  .dependsOn(macros, kernel, core, kernelLaws)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
-  .settings(libraryDependencies ++= Seq(
-    "org.spire-math" %%% "algebra-laws" % "0.3.1",
-    "org.typelevel" %%% "catalysts-platform" % "0.0.2"))
+  .settings(libraryDependencies ++= Seq("org.typelevel" %%% "catalysts-platform" % "0.0.2"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
+
+lazy val free = crossProject.crossType(CrossType.Pure)
+  .dependsOn(macros, core, tests % "test-internal -> test")
+  .settings(moduleName := "cats-free")
+  .settings(catsSettings:_*)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val freeJVM = free.jvm
+lazy val freeJS = free.js
 
 lazy val tests = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, laws)
@@ -159,24 +246,15 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
   .settings(noPublishSettings:_*)
-  .settings(libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test",
-    "org.typelevel" %%% "catalysts-platform" % "0.0.2" % "test"))
+  .settings(testingDependencies: _*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val testsJVM = tests.jvm
 lazy val testsJS = tests.js
 
-// cats-jvm is JVM-only
-lazy val jvm = project
-  .dependsOn(macrosJVM, coreJVM, testsJVM % "test-internal -> test")
-  .settings(moduleName := "cats-jvm")
-  .settings(catsSettings:_*)
-  .settings(commonJvmSettings:_*)
-
 // bench is currently JVM-only
-lazy val bench = project.dependsOn(macrosJVM, coreJVM, lawsJVM)
+lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
   .settings(noPublishSettings)
@@ -259,16 +337,16 @@ lazy val publishSettings = Seq(
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;coreJVM/test;lawsJVM/compile;testsJVM/test;jvm/test;bench/test")
+addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;kernelLawsJVM/compile;lawsJVM/compile;freeJVM/compile;kernelLawsJVM/test;coreJVM/test;testsJVM/test;freeJVM/test;bench/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
-addCommandAlias("validateJS", ";macrosJS/compile;coreJS/compile;lawsJS/compile;testsJS/test;js/test")
+addCommandAlias("validateJS", ";macrosJS/compile;kernelJS/compile;coreJS/compile;kernelLawsJS/compile;lawsJS/compile;kernelLawsJS/test;testsJS/test;js/test")
 
 addCommandAlias("validate", ";validateJS;validateJVM")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Base Build Settings - Should not need to edit below this line. 
+// Base Build Settings - Should not need to edit below this line.
 // These settings could also come from another file or a plugin.
 // The only issue if coming from a plugin is that the Macro lib versions
 // are hard coded, so an overided facility would be required.
@@ -327,6 +405,7 @@ lazy val commonScalacOptions = Seq(
 
 lazy val sharedPublishSettings = Seq(
   releaseCrossBuild := true,
+  releaseTagName := tagName.value,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
   publishArtifact in Test := false,
@@ -339,7 +418,7 @@ lazy val sharedPublishSettings = Seq(
       Some("Releases" at nexus + "service/local/staging/deploy/maven2")
   }
 )
- 
+
 lazy val sharedReleaseProcess = Seq(
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,

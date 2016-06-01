@@ -1,25 +1,26 @@
 package cats
 package tests
 
-import algebra.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{NonEmptyList, OneAnd}
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests}
-import cats.laws.discipline.arbitrary.{evalArbitrary, oneAndArbitrary}
-import cats.laws.discipline.eq._
-
-import scala.util.Random
+import cats.laws.discipline.arbitrary._
 
 class OneAndTests extends CatsSuite {
+  // Lots of collections here.. telling ScalaCheck to calm down a bit
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfig(maxSize = 5, minSuccessful = 20)
+
   checkAll("OneAnd[List, Int]", OrderLaws[OneAnd[List, Int]].eqv)
 
   checkAll("OneAnd[List, Int] with Option", TraverseTests[OneAnd[List, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[OneAnd[List, A]]", SerializableTests.serializable(Traverse[OneAnd[List, ?]]))
 
-  checkAll("OneAnd[List, Int]", ReducibleTests[OneAnd[List, ?]].reducible[Int, Int])
+  checkAll("OneAnd[List, Int]", ReducibleTests[OneAnd[List, ?]].reducible[Option, Int, Int])
   checkAll("Reducible[OneAnd[List, ?]]", SerializableTests.serializable(Reducible[OneAnd[List, ?]]))
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.oneAndFunctor(ListWrapper.functor))
+  implicit val iso = CartesianTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.catsDataFunctorForOneAnd(ListWrapper.functor))
 
   // Test instances that have more general constraints
   {
@@ -117,6 +118,48 @@ class OneAndTests extends CatsSuite {
     forAll { (nel: NonEmptyList[Int], p: Int => String) =>
       val list = nel.unwrap
       nel.map(p).unwrap should === (list.map(p))
+    }
+  }
+
+  test("reduceLeft consistent with foldLeft") {
+    forAll { (nel: NonEmptyList[Int], f: (Int, Int) => Int) =>
+      nel.reduceLeft(f) should === (nel.tail.foldLeft(nel.head)(f))
+    }
+  }
+
+  test("reduceRight consistent with foldRight") {
+    forAll { (nel: NonEmptyList[Int], f: (Int, Eval[Int]) => Eval[Int]) =>
+      nel.reduceRight(f).value should === (nel.tail.foldRight(nel.head)((a, b) => f(a, Now(b)).value))
+    }
+  }
+
+  test("reduce consistent with fold") {
+    forAll { (nel: NonEmptyList[Int]) =>
+      nel.reduce should === (nel.fold)
+    }
+  }
+
+  test("reduce consistent with reduceK") {
+    forAll { (nel: NonEmptyList[Option[Int]]) =>
+      nel.reduce(SemigroupK[Option].algebra[Int]) should === (nel.reduceK)
+    }
+  }
+
+  test("reduceLeftToOption consistent with foldLeft + Option") {
+    forAll { (nel: NonEmptyList[Int], f: Int => String, g: (String, Int) => String) =>
+      val expected = nel.tail.foldLeft(Option(f(nel.head))) { (opt, i) =>
+        opt.map(s => g(s, i))
+      }
+      nel.reduceLeftToOption(f)(g) should === (expected)
+    }
+  }
+
+  test("reduceRightToOption consistent with foldRight + Option") {
+    forAll { (nel: NonEmptyList[Int], f: Int => String, g: (Int, Eval[String]) => Eval[String]) =>
+      val expected = nel.tail.foldRight(Option(f(nel.head))) { (i, opt) =>
+        opt.map(s => g(i, Now(s)).value)
+      }
+      nel.reduceRightToOption(f)(g).value should === (expected)
     }
   }
 }

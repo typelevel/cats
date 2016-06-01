@@ -4,11 +4,9 @@ package tests
 import cats.data.{Writer, WriterT}
 import cats.functor.Bifunctor
 import cats.laws.discipline._
-import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 
-import algebra.laws.OrderLaws
-import org.scalacheck.Prop.forAll
+import cats.kernel.laws.OrderLaws
 
 class WriterTTests extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]
@@ -62,6 +60,11 @@ class WriterTTests extends CatsSuite {
     }
   }
 
+  test("show") {
+    val writerT: WriterT[Id, List[String], String] = WriterT.put("foo")(List("Some log message"))
+    writerT.show should === ("(List(Some log message),foo)")
+  }
+
   {
     // F has a SemigroupK
     implicit val F: SemigroupK[ListWrapper] = ListWrapper.semigroupK
@@ -98,7 +101,7 @@ class WriterTTests extends CatsSuite {
     checkAll("Bifunctor[WriterT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bifunctor[WriterT[ListWrapper, ?, ?]]))
   }
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[ListWrapper, ListWrapper[Int], ?]](WriterT.writerTFunctor(ListWrapper.functor))
+  implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[ListWrapper, ListWrapper[Int], ?]](WriterT.catsDataCoflatMapForWriterT(ListWrapper.functor))
 
   // We have varying instances available depending on `F` and `L`.
   // We also battle some inference issues with `Id`.
@@ -178,8 +181,8 @@ class WriterTTests extends CatsSuite {
     Apply[WriterT[ListWrapper, ListWrapper[Int], ?]]
     Applicative[WriterT[ListWrapper, ListWrapper[Int], ?]]
     FlatMap[WriterT[ListWrapper, ListWrapper[Int], ?]]
-    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", MonadTests[WriterT[ListWrapper, ListWrapper[Int], ?]].monad[Int, Int, Int])
-    checkAll("Monad[WriterT[ListWrapper, ListWrapper[Int], ?]]", SerializableTests.serializable(Monad[WriterT[ListWrapper, ListWrapper[Int], ?]]))
+    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", MonadWriterTests[WriterT[ListWrapper, ListWrapper[Int], ?], ListWrapper[Int]].monadWriter[Int, Int, Int])
+    checkAll("MonadWriter[WriterT[ListWrapper, ListWrapper[Int], ?], List[String]]", SerializableTests.serializable(MonadWriter[WriterT[ListWrapper, ListWrapper[Int], ?], ListWrapper[Int]]))
 
     Functor[WriterT[Id, ListWrapper[Int], ?]]
     Apply[WriterT[Id, ListWrapper[Int], ?]]
@@ -242,5 +245,41 @@ class WriterTTests extends CatsSuite {
     MonoidK[WriterT[ListWrapper, ListWrapper[Int], ?]]
     checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", MonadCombineTests[WriterT[ListWrapper, ListWrapper[Int], ?]].monadCombine[Int, Int, Int])
     checkAll("MonadCombine[WriterT[ListWrapper, ListWrapper[Int], ?]]", SerializableTests.serializable(MonadCombine[WriterT[ListWrapper, ListWrapper[Int], ?]]))
+  }
+
+  {
+     // F[(L, V)] has a monoid
+    implicit val FLV: Monoid[ListWrapper[(Int, Int)]] = ListWrapper.monoid[(Int, Int)]
+
+    Monoid[WriterT[ListWrapper, Int, Int]]
+    Semigroup[WriterT[ListWrapper, Int, Int]]
+    checkAll("WriterT[ListWrapper, Int, Int]", kernel.laws.GroupLaws[WriterT[ListWrapper, Int, Int]].monoid)
+
+    Monoid[WriterT[Id, Int, Int]]
+    Semigroup[WriterT[Id, Int, Int]]
+  }
+
+  {
+    // F[(L, V)] has a semigroup
+    implicit val FLV: Semigroup[ListWrapper[(Int, Int)]] = ListWrapper.semigroup[(Int, Int)]
+
+    Semigroup[WriterT[ListWrapper, Int, Int]]
+    checkAll("WriterT[ListWrapper, Int, Int]", kernel.laws.GroupLaws[WriterT[ListWrapper, Int, Int]].semigroup)
+
+    Semigroup[WriterT[Id, Int, Int]]
+  }
+
+  {
+    // F has a Functor
+    implicit val F: Functor[ListWrapper] = ListWrapper.functor
+
+    Functor[WriterT[ListWrapper, Int, ?]]
+    CoflatMap[WriterT[ListWrapper, Int, ?]]
+    checkAll("WriterT[Listwrapper, Int, ?]", CoflatMapTests[WriterT[ListWrapper, Int, ?]].coflatMap[Int, Int, Int])
+    checkAll("WriterT[ListWrapper, Int, ?]", SerializableTests.serializable(CoflatMap[WriterT[ListWrapper, Int, ?]]))
+
+    // Id has a Functor
+    Functor[WriterT[Id, Int, ?]]
+    CoflatMap[WriterT[Id, Int, ?]]
   }
 }

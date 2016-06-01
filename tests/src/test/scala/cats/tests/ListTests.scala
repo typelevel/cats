@@ -4,7 +4,6 @@ package tests
 import cats.data.NonEmptyList
 import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests, CartesianTests}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
 
 class ListTests extends CatsSuite {
 

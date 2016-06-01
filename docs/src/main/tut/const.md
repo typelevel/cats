@@ -134,6 +134,8 @@ is to take an `A` and return it right back (lifted into `Const`).
 Before we plug and play however, note that `modifyF` has a `Functor` constraint on `F[_]`. This means we need to
 define a `Functor` instance for `Const`, where the first type parameter is fixed.
 
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
+
 ```tut:silent
 import cats.data.Const
 
@@ -219,10 +221,6 @@ implicit def constApplicative[Z]: Applicative[Const[Z, ?]] =
     def pure[A](a: A): Const[Z, A] = ???
 
     def ap[A, B](f: Const[Z, A => B])(fa: Const[Z, A]): Const[Z, B] = ???
-
-    def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] = ???
-
-    def product[A, B](fa: Const[Z, A],fb: Const[Z, B]): Const[Z, (A, B)] = ???
   }
 ```
 
@@ -246,12 +244,6 @@ implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, ?]] =
 
     def ap[A, B](f: Const[Z, A => B])(fa: Const[Z, A]): Const[Z, B] =
       Const(Monoid[Z].combine(fa.getConst, f.getConst))
-      
-    def map[A, B](fa: Const[Z, A])(f: A => B): Const[Z, B] =
-      Const(fa.getConst)
-
-    def product[A, B](fa: Const[Z, A],fb: Const[Z, B]): Const[Z, (A, B)] =
-      Const(Monoid[Z].combine(fa.getConst, fb.getConst))
   }
 ```
 

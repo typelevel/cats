@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum.{op, typeclass}
+import simulacrum.typeclass
 
 /**
  * SemigroupK is a universal semigroup which operates on kinds.
@@ -25,7 +25,7 @@ import simulacrum.{op, typeclass}
   /**
    * Combine two F[A] values.
    */
-  @op("<+>", alias=true)
+  @simulacrum.op("<+>", alias=true)
   def combineK[A](x: F[A], y: F[A]): F[A]
 
   /**

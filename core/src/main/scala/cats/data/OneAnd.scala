@@ -96,29 +96,29 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
 
 private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
 
-  implicit def oneAndEq[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
+  implicit def catsDataEqForOneAnd[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
     new Eq[OneAnd[F, A]]{
       def eqv(x: OneAnd[F, A], y: OneAnd[F, A]): Boolean = x === y
     }
 
-  implicit def oneAndShow[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[F, A]] =
+  implicit def catsDataShowForOneAnd[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[F, A]] =
     Show.show[OneAnd[F, A]](_.show)
 
-  implicit def oneAndSemigroupK[F[_]: MonadCombine]: SemigroupK[OneAnd[F, ?]] =
+  implicit def catsDataSemigroupKForOneAnd[F[_]: MonadCombine]: SemigroupK[OneAnd[F, ?]] =
     new SemigroupK[OneAnd[F, ?]] {
       def combineK[A](a: OneAnd[F, A], b: OneAnd[F, A]): OneAnd[F, A] =
         a combine b
     }
 
-  implicit def oneAndSemigroup[F[_]: MonadCombine, A]: Semigroup[OneAnd[F, A]] =
-    oneAndSemigroupK[F].algebra
+  implicit def catsDataSemigroupForOneAnd[F[_]: MonadCombine, A]: Semigroup[OneAnd[F, A]] =
+    catsDataSemigroupKForOneAnd[F].algebra
 
-  implicit def oneAndReducible[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
+  implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
     new NonEmptyReducible[OneAnd[F,?], F] {
       override def split[A](fa: OneAnd[F,A]): (A, F[A]) = (fa.head, fa.tail)
     }
 
-  implicit def oneAndMonad[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[F, ?]] =
+  implicit def catsDataMonadForOneAnd[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[F, ?]] =
     new Monad[OneAnd[F, ?]] {
       override def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
         fa map f
@@ -158,7 +158,7 @@ trait OneAndLowPriority0 {
 }
 
 trait OneAndLowPriority1 extends OneAndLowPriority0 {
-  implicit def oneAndFunctor[F[_]](implicit F: Functor[F]): Functor[OneAnd[F, ?]] =
+  implicit def catsDataFunctorForOneAnd[F[_]](implicit F: Functor[F]): Functor[OneAnd[F, ?]] =
     new Functor[OneAnd[F, ?]] {
       def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
         fa map f
@@ -167,12 +167,10 @@ trait OneAndLowPriority1 extends OneAndLowPriority0 {
 }
 
 trait OneAndLowPriority2 extends OneAndLowPriority1 {
-  implicit def oneAndTraverse[F[_]](implicit F: Traverse[F]): Traverse[OneAnd[F, ?]] =
+  implicit def catsDataTraverseForOneAnd[F[_]](implicit F: Traverse[F]): Traverse[OneAnd[F, ?]] =
     new Traverse[OneAnd[F, ?]] {
       def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {
-        val tail = F.traverse(fa.tail)(f)
-        val head = f(fa.head)
-        G.ap2[B, F[B], OneAnd[F, B]](G.pure(OneAnd(_, _)))(head, tail)
+        G.map2Eval(f(fa.head), Always(F.traverse(fa.tail)(f)))(OneAnd(_, _)).value
       }
 
       def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B = {

@@ -2,12 +2,9 @@ package cats
 package tests
 
 import org.scalatest.prop.PropertyChecks
-import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Arbitrary
 
-import cats.data.Streaming
 import cats.std.all._
-import cats.laws.discipline.arbitrary._
 
 abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite with PropertyChecks {
 
@@ -37,7 +34,6 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   test("toList/isEmpty/nonEmpty") {
     forAll { (fa: F[Int]) =>
       fa.toList should === (iterator(fa).toList)
-      fa.toStreaming.toList should === (iterator(fa).toList)
       fa.isEmpty should === (iterator(fa).isEmpty)
       fa.nonEmpty should === (iterator(fa).nonEmpty)
     }
@@ -66,6 +62,12 @@ class FoldableTestsAdditional extends CatsSuite {
     // more basic checks
     val names = List("Aaron", "Betty", "Calvin", "Deirdra")
     F.foldMap(names)(_.length) should === (names.map(_.length).sum)
+    val sumM = F.foldM(names, "") { (acc, x) => (Some(acc + x): Option[String]) }
+    assert(sumM == Some("AaronBettyCalvinDeirdra"))
+    val notCalvin = F.foldM(names, "") { (acc, x) =>
+      if (x == "Calvin") (None: Option[String])
+      else (Some(acc + x): Option[String]) }
+    assert(notCalvin == None)
 
     // test trampolining
     val large = (1 to 10000).toList
@@ -74,6 +76,16 @@ class FoldableTestsAdditional extends CatsSuite {
     // safely build large lists
     val larger = F.foldRight(large, Now(List.empty[Int]))((x, lxs) => lxs.map((x + 1) :: _))
     larger.value should === (large.map(_ + 1))
+  }
+
+  test("Foldable[List].foldM stack safety") {
+    def nonzero(acc: Long, x: Long): Option[Long] =
+      if (x == 0) None else Some(acc + x)
+
+    val n = 100000L
+    val expected = n*(n+1)/2
+    val actual = Foldable[List].foldM((1L to n).toList, 0L)(nonzero)
+    assert(actual.get == expected)
   }
 
   test("Foldable[Stream]") {
@@ -100,9 +112,6 @@ class FoldableTestsAdditional extends CatsSuite {
     // test trampolining
     val large = Stream((1 to 10000): _*)
     assert(contains(large, 10000).value)
-
-    // toStreaming should be lazy
-    assert(dangerous.toStreaming.take(3).toList == List(0, 1, 2))
   }
 }
 
@@ -116,10 +125,6 @@ class FoldableVectorCheck extends FoldableCheck[Vector]("vector") {
 
 class FoldableStreamCheck extends FoldableCheck[Stream]("stream") {
   def iterator[T](stream: Stream[T]): Iterator[T] = stream.iterator
-}
-
-class FoldableStreamingCheck extends FoldableCheck[Streaming]("streaming") {
-  def iterator[T](streaming: Streaming[T]): Iterator[T] = streaming.iterator
 }
 
 class FoldableMapCheck extends FoldableCheck[Map[Int, ?]]("map") {

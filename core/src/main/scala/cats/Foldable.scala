@@ -1,7 +1,5 @@
 package cats
 
-import cats.data.Streaming
-
 import scala.collection.mutable
 import simulacrum.typeclass
 
@@ -79,6 +77,12 @@ import simulacrum.typeclass
     foldLeft(fa, B.empty)((b, a) => B.combine(b, f(a)))
 
   /**
+   * Left associative monadic folding on `F`.
+   */
+  def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
+    foldLeft(fa, G.pure(z))((gb, a) => G.flatMap(gb)(f(_, a)))
+
+  /**
    * Traverse `F[A]` using `Applicative[G]`.
    *
    * `A` values will be mapped into `G[B]` and combined using
@@ -103,9 +107,9 @@ import simulacrum.typeclass
    * needed.
    */
   def traverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
-    foldLeft(fa, G.pure(())) { (acc, a) =>
-      G.map2(acc, f(a)) { (_, _) => () }
-    }
+    foldRight(fa, Always(G.pure(()))) { (a, acc) =>
+      G.map2Eval(f(a), acc) { (_, _) => () }
+    }.value
 
   /**
    * Behaves like traverse_, but uses [[Unapply]] to find the
@@ -274,11 +278,6 @@ import simulacrum.typeclass
       val F = self
       val G = ev
     }
-
-  def toStreaming[A](fa: F[A]): Streaming[A] =
-    foldRight(fa, Now(Streaming.empty[A])){ (a, ls) =>
-      Now(Streaming.cons(a, ls))
-    }.value
 }
 
 /**

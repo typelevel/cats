@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import algebra.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{Const, NonEmptyList}
 import cats.functor.Contravariant
@@ -10,7 +10,7 @@ import cats.laws.discipline.arbitrary.{constArbitrary, oneAndArbitrary}
 
 class ConstTests extends CatsSuite {
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Const[String, ?]](Const.constTraverse)
+  implicit val iso = CartesianTests.Isomorphisms.invariant[Const[String, ?]](Const.catsDataTraverseForConst)
 
   checkAll("Const[String, Int]", CartesianTests[Const[String, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Const[String, ?]]", SerializableTests.serializable(Cartesian[Const[String, ?]]))
@@ -24,7 +24,7 @@ class ConstTests extends CatsSuite {
   // Get Apply[Const[C : Semigroup, ?]], not Applicative[Const[C : Monoid, ?]]
   {
     implicit def nonEmptyListSemigroup[A]: Semigroup[NonEmptyList[A]] = SemigroupK[NonEmptyList].algebra
-    implicit val iso = CartesianTests.Isomorphisms.invariant[Const[NonEmptyList[String], ?]](Const.constContravariant)
+    implicit val iso = CartesianTests.Isomorphisms.invariant[Const[NonEmptyList[String], ?]](Const.catsDataContravariantForConst)
     checkAll("Apply[Const[NonEmptyList[String], Int]]", ApplyTests[Const[NonEmptyList[String], ?]].apply[Int, Int, Int])
     checkAll("Apply[Const[NonEmptyList[String], ?]]", SerializableTests.serializable(Apply[Const[NonEmptyList[String], ?]]))
   }

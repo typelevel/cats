@@ -1,7 +1,7 @@
 package cats
 package std
 
-trait StringInstances extends algebra.std.StringInstances {
-  implicit val stringShow: Show[String] =
+trait StringInstances extends cats.kernel.std.StringInstances {
+  implicit val catsStdShowForString: Show[String] =
     Show.fromToString[String]
 }

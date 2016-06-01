@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import data.{OptionT,XorT,WriterT,StreamingT, Kleisli, StateT}
+import data.{OptionT,XorT,WriterT,Kleisli, StateT}
 
 class TransLiftTests extends CatsSuite {
 
@@ -29,10 +29,7 @@ class TransLiftTests extends CatsSuite {
 
   }
 
-  test("transLift for StreamingT, StateT require Applicative Functor") {
-    import StreamingT._
-    
-    val b: StreamingT[JustAp, Int] = JustAp(1).liftT[StreamingT]
+  test("transLift for StateT requires Applicative Functor") {
     val f: StateT[JustAp, Int, Int]  = JustAp(1).liftT[({type λ[α[_], β] = StateT[α, Int, β]})#λ]
   }
 

@@ -5,23 +5,26 @@ import cats.functor.Bifunctor
 import cats.data.{Xor, XorT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq.tuple3Eq
-import algebra.laws.OrderLaws
+import cats.kernel.laws.OrderLaws
 
 class XorTTests extends CatsSuite {
-  implicit val eq0 = XorT.xorTEq[List, String, String Xor Int]
-  implicit val eq1 = XorT.xorTEq[XorT[List, String, ?], String, Int](eq0)
+  implicit val eq0 = XorT.catsDataEqForXorT[List, String, String Xor Int]
+  implicit val eq1 = XorT.catsDataEqForXorT[XorT[List, String, ?], String, Int](eq0)
   implicit val iso = CartesianTests.Isomorphisms.invariant[XorT[List, String, ?]]
   checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, String, ?], String]))
-  checkAll("XorT[List, String, Int]", MonoidKTests[XorT[List, String, ?]].monoidK[Int])
-  checkAll("MonoidK[XorT[List, String, ?]]", SerializableTests.serializable(MonoidK[XorT[List, String, ?]]))
+  checkAll("XorT[List, String, Int]", MonadRecTests[XorT[List, String, ?]].monadRec[Int, Int, Int])
+  checkAll("MonadRec[XorT[List, String, ?]]", SerializableTests.serializable(MonadRec[XorT[List, String, ?]]))
   checkAll("XorT[List, ?, ?]", BifunctorTests[XorT[List, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
   checkAll("Bifunctor[XorT[List, ?, ?]]", SerializableTests.serializable(Bifunctor[XorT[List, ?, ?]]))
+  checkAll("XorT[List, ?, ?]", BitraverseTests[XorT[List, ?, ?]].bitraverse[Option, Int, Int, Int, String, String, String])
+  checkAll("Bitraverse[XorT[List, ?, ?]]", SerializableTests.serializable(Bitraverse[XorT[List, ?, ?]]))
   checkAll("XorT[List, Int, ?]", TraverseTests[XorT[List, Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[XorT[List, Int, ?]]", SerializableTests.serializable(Traverse[XorT[List, Int, ?]]))
   checkAll("XorT[List, String, Int]", OrderLaws[XorT[List, String, Int]].order)
   checkAll("Order[XorT[List, String, Int]]", SerializableTests.serializable(Order[XorT[List, String, Int]]))
+  checkAll("XorT[Option, ListWrapper[String], ?]", SemigroupKTests[XorT[Option, ListWrapper[String], ?]].semigroupK[Int])
+  checkAll("SemigroupK[XorT[Option, ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[XorT[Option, ListWrapper[String], ?]]))
 
   {
     implicit val F = ListWrapper.foldable
@@ -47,12 +50,6 @@ class XorTTests extends CatsSuite {
     checkAll("Eq[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(Eq[XorT[ListWrapper, String, Int]]))
   }
 
-  {
-    implicit val L = ListWrapper.semigroup[String]
-    checkAll("XorT[Option, ListWrapper[String], ?]", SemigroupKTests[XorT[Option, ListWrapper[String], ?]].semigroupK[Int])
-    checkAll("SemigroupK[XorT[Option, ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[XorT[Option, ListWrapper[String], ?]]))
-  }
-
   // make sure that the Monad and Traverse instances don't result in ambiguous
   // Functor instances
   Functor[XorT[List, Int, ?]]
@@ -72,6 +69,12 @@ class XorTTests extends CatsSuite {
   test("fromXor") {
     forAll { (xor: Xor[String, Int]) =>
       Some(xor.isLeft) should === (XorT.fromXor[Option](xor).isLeft)
+    }
+  }
+
+  test("fromEither") {
+    forAll { (either: Either[String, Int]) =>
+      Some(either.isLeft) should === (XorT.fromEither[Option](either).isLeft)
     }
   }
 
@@ -249,6 +252,30 @@ class XorTTests extends CatsSuite {
   test("toEither consistent with toOption") {
     forAll { (x: XorT[List, String, Int]) =>
       x.toEither.map(_.right.toOption) should === (x.toOption.value)
+    }
+  }
+
+  test("ensure on left is identity") {
+    forAll { (x: XorT[Id, String, Int], s: String, p: Int => Boolean) =>
+      if (x.isLeft) {
+        x.ensure(s)(p) should === (x)
+      }
+    }
+  }
+
+  test("ensure on right is identity if predicate satisfied") {
+    forAll { (x: XorT[Id, String, Int], s: String, p: Int => Boolean) =>
+      if (x.isRight && p(x getOrElse 0)) {
+        x.ensure(s)(p) should === (x)
+      }
+    }
+  }
+
+  test("ensure should fail if predicate not satisfied") {
+    forAll { (x: XorT[Id, String, Int], s: String, p: Int => Boolean) =>
+      if (x.isRight && !p(x getOrElse 0)) {
+        x.ensure(s)(p) should === (XorT.left[Id, String, Int](s))
+      }
     }
   }
 }

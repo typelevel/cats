@@ -8,8 +8,7 @@
 
 ### Overview
 
-Cats is a proof-of-concept library intended to provide abstractions
-for functional programming in Scala.
+Cats is a library which provides abstractions for functional programming in Scala.
 
 The name is a playful shortening of the word *category*.
 
@@ -23,7 +22,7 @@ To get started with SBT, simply add the following to your `build.sbt`
 file:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats" % "0.4.1"
+libraryDependencies += "org.typelevel" %% "cats" % "0.6.0"
 ```
 
 This will pull in all of Cats' modules. If you only require some
@@ -31,13 +30,19 @@ functionality, you can pick-and-choose from amongst these modules
 (used in place of `"cats"`):
 
  * `cats-macros`: Macros used by Cats syntax (*required*).
- * `cats-core`: Core type classes and functionality (*required*).
+ * `cats-kernel`: Small set of basic type classes (*required*).
+ * `cats-core`: Most core type classes and functionality (*required*).
  * `cats-laws`: Laws for testing type class instances.
+ * `cats-free`: Free structures such as the free monad, and supporting type classes.
 
 Release notes for Cats are available in [CHANGES.md](CHANGES.md).
 
-*Cats 0.4.1 is a pre-release: there are not currently source- or
-binary-compatibility guarantees.*
+*Cats is still under active development. While we don't anticipate any
+ major redesigns, changes that are neither source nor binary
+ compatibility are to be expected in upcoming cats releases. We will
+ update the minor version of cats accordingly for such changes. Once
+ cats 1.0 is released (ETA: Q3 2016), there will be an increased focus
+ on making changes in compatible ways.*
 
 ### Documentation
 Among the goals of Cats is to provide approachable and useful documentation.
@@ -111,6 +116,7 @@ Initially Cats will support the following modules:
  * `macros`: Macro definitions needed for `core` and other projects.
  * `core`: Definitions for widely-used type classes and data types.
  * `laws`: The encoded laws for type classes, exported to assist third-party testing.
+ * `cats-free`: Free structures such as the free monad, and supporting type classes.
  * `tests`: Verifies the laws, and runs any other tests. Not published.
 
 As the type class families grow, it's possible that additional modules

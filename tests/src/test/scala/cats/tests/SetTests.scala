@@ -4,7 +4,7 @@ package tests
 import cats.laws.discipline.{FoldableTests, MonoidKTests, SerializableTests}
 
 class SetTests extends CatsSuite {
-  checkAll("Set[Int]", algebra.laws.GroupLaws[Set[Int]].monoid)
+  checkAll("Set[Int]", cats.kernel.laws.GroupLaws[Set[Int]].monoid)
 
   checkAll("Set[Int]", MonoidKTests[Set].monoidK[Int])
   checkAll("MonoidK[Set]", SerializableTests.serializable(MonoidK[Set]))
@@ -22,7 +22,8 @@ class SetTests extends CatsSuite {
   }
 
   test("show keeps separate entries for items that map to identical strings"){
-    implicit val intShow: Show[Int] = Show.show(_ => "1")
+    //note: this val name has to be the same to shadow the cats.std instance
+    implicit val catsStdShowForInt: Show[Int] = Show.show(_ => "1")
     // an implementation implemented as set.map(_.show).mkString(", ") would
     // only show one entry in the result instead of 3, because Set.map combines
     // duplicate items in the codomain.

@@ -2,6 +2,7 @@ project/boot
 target
 .ensime
 .ensime_lucene
+.ensime_cache
 TAGS
 \#*#
 *~
@@ -16,3 +17,4 @@ TAGS
 .sbtrc
 *.sublime-project
 *.sublime-workspace
+tests.iml

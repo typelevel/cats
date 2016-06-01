@@ -3,6 +3,7 @@ package syntax
 
 trait AllSyntax
     extends ApplicativeSyntax
+    with ApplicativeErrorSyntax
     with ApplySyntax
     with BifunctorSyntax
     with BifoldableSyntax
@@ -21,6 +22,7 @@ trait AllSyntax
     with InvariantSyntax
     with ListSyntax
     with MonadCombineSyntax
+    with MonadErrorSyntax
     with MonadFilterSyntax
     with OptionSyntax
     with OrderSyntax
@@ -31,10 +33,10 @@ trait AllSyntax
     with SemigroupKSyntax
     with Show.ToShowOps
     with SplitSyntax
-    with StreamingSyntax
     with StrongSyntax
     with TransLiftSyntax
     with TraverseSyntax
     with XorSyntax
     with ValidatedSyntax
     with CoproductSyntax
+    with WriterSyntax

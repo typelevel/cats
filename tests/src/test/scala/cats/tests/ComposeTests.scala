@@ -1,9 +1,8 @@
 package cats
 package tests
 
-import cats.data.{ NonEmptyList, NonEmptyVector, OneAnd }
-import cats.laws.discipline.{ AlternativeTests, ApplicativeTests, FoldableTests, CartesianTests, MonoidKTests, SemigroupKTests, arbitrary, eq }, arbitrary._, eq._
-import org.scalacheck.Arbitrary
+import cats.data.{ NonEmptyList, NonEmptyVector }
+import cats.laws.discipline.{ AlternativeTests, ApplicativeTests, FoldableTests, CartesianTests, MonoidKTests, SemigroupKTests, arbitrary }, arbitrary._
 
 class ComposeTests extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell

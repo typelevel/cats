@@ -2,7 +2,6 @@ package cats
 package tests
 
 import cats.laws.discipline.{MonadCombineTests, CoflatMapTests, SerializableTests, TraverseTests, CartesianTests}
-import cats.laws.discipline.eq.tuple3Eq
 
 class VectorTests extends CatsSuite {
   checkAll("Vector[Int]", CartesianTests[Vector].cartesian[Int, Int, Int])

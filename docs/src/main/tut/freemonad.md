@@ -2,7 +2,7 @@
 layout: default
 title:  "FreeMonads"
 section: "data"
-source: "core/src/main/scala/cats/free/Free.scala"
+source: "free/src/main/scala/cats/free/Free.scala"
 scaladoc: "#cats.free.Free"
 ---
 
@@ -24,6 +24,9 @@ In particular, *free monads* provide a practical way to:
 > (In cats, the type representing a *free monad* is abbreviated as `Free[_]`.)
 
 ## Using Free Monads
+
+If you'd like to use cats' free monad, you'll need to add a library dependency
+for the `cats-free` module.
 
 A good way to get a sense for how *free monads* work is to see them in
 action. The next section uses `Free[_]` to create an embedded DSL
@@ -162,12 +165,15 @@ DSL. By itself, this DSL only represents a sequence of operations
 
 To do this, we will use a *natural transformation* between type
 containers.  Natural transformations go between types like `F[_]` and
-`G[_]` (this particular transformation would be written as `F ~> G`).
+`G[_]` (this particular transformation would be written as
+`FunctionK[F,G]` or as done here using the symbolic
+alternative as `F ~> G`).
 
 In our case, we will use a simple mutable map to represent our key
 value store:
 
 ```tut:silent
+import cats.arrow.FunctionK
 import cats.{Id, ~>}
 import scala.collection.mutable
 
@@ -212,7 +218,7 @@ behavior, such as:
  - `Future[_]` for asynchronous computation
  - `List[_]` for gathering multiple results
  - `Option[_]` to support optional results
- - `Validated[_]` (or `Xor[E, ?]`) to support failure
+ - `Xor[E, ?]` to support failure
  - a pseudo-random monad to support non-determinism
  - and so on...
 
@@ -238,7 +244,7 @@ recursive structure by:
 This operation is called `Free.foldMap`:
 
 ```scala
-final def foldMap[M[_]](f: S ~> M)(M: Monad[M]): M[A] = ...
+final def foldMap[M[_]](f: FunctionK[S,M])(M: Monad[M]): M[A] = ...
 ```
 
 `M` must be a `Monad` to be flattenable (the famous monoid aspect
@@ -246,7 +252,7 @@ under `Monad`). As `Id` is a `Monad`, we can use `foldMap`.
 
 To run your `Free` with previous `impureCompiler`:
 
-```tut
+```tut:book
 val result: Option[Int] = program.foldMap(impureCompiler)
 ```
 
@@ -285,14 +291,14 @@ val pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
 support for pattern matching is limited by the JVM's type erasure, but
 it's not too hard to get around.)
 
-```tut
+```tut:book
 val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(Map.empty).value
 ```
 
 ## Composing Free monads ADTs.
 
 Real world applications often time combine different algebras.
-The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf)
+The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf)
 lets us compose different algebras in the context of `Free`.
 
 Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.
@@ -360,7 +366,7 @@ def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]): Free[Cats
 }
 ```
 
-Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so they can be
+Finally we write one interpreter per ADT and combine them with a `FunctionK` to `Coproduct` so they can be
 compiled and applied to our `Free` program.
 
 ```tut:invisible
@@ -397,7 +403,7 @@ Now if we run our program and type in "snuggles" when prompted, we see something
 import DataSource._, Interacts._
 ```
 
-```tut
+```tut:book
 val evaled: Unit = program.foldMap(interpreter)
 ```
 

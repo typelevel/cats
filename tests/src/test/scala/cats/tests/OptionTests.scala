@@ -2,8 +2,7 @@ package cats
 package tests
 
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
-import cats.laws.discipline.{TraverseTests, CoflatMapTests, MonadCombineTests, SerializableTests, CartesianTests}
-import cats.laws.discipline.eq._
+import cats.laws.discipline._
 
 class OptionTests extends CatsSuite {
   checkAll("Option[Int]", CartesianTests[Option].cartesian[Int, Int, Int])
@@ -15,8 +14,14 @@ class OptionTests extends CatsSuite {
   checkAll("Option[Int]", MonadCombineTests[Option].monadCombine[Int, Int, Int])
   checkAll("MonadCombine[Option]", SerializableTests.serializable(MonadCombine[Option]))
 
+  checkAll("Option[Int]", MonadRecTests[Option].monadRec[Int, Int, Int])
+  checkAll("MonadRec[Option]", SerializableTests.serializable(MonadRec[Option]))
+
   checkAll("Option[Int] with Option", TraverseTests[Option].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Option]", SerializableTests.serializable(Traverse[Option]))
+
+  checkAll("Option with Unit", MonadErrorTests[Option, Unit].monadError[Int, Int, Int])
+  checkAll("MonadError[Option, Unit]", SerializableTests.serializable(MonadError[Option, Unit]))
 
   test("show") {
     none[Int].show should === ("None")
@@ -83,5 +88,10 @@ class OptionTests extends CatsSuite {
     val s: String = null
     // can't use `s.some should === (Some(null))` here, because it leads to NullPointerException
     s.some.exists(_ == null) should ===(true)
+  }
+
+  test("map2Eval is lazy") {
+    val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
+    none[Int].map2Eval(bomb)(_ + _).value should === (None)
   }
 }

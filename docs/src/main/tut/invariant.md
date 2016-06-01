@@ -15,7 +15,7 @@ def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
 ```
 
 Every covariant (as well as [contravariant](contravariant.html)) functor gives rise to an invariant
-functor, by ignoring the `f` (or in case of contravariance, `g`) function.
+functor, by ignoring the `g` (or in case of contravariance, `f`) function.
 
 Examples for instances of `Invariant` are `Semigroup` and `Monoid`, in
 the following we will explain why this is the case using `Semigroup`, the
@@ -102,6 +102,6 @@ val today: Date = longToDate(1449088684104l)
 val timeLeft: Date = longToDate(1900918893l)
 ```
 
-```tut
+```tut:book
 today |+| timeLeft
 ```

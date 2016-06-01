@@ -1,13 +1,13 @@
 package cats
 package std
 
-import algebra.Eq
 import cats.arrow.{Arrow, Choice}
 import cats.data.Xor
 import cats.functor.Contravariant
 
 private[std] sealed trait Function0Instances {
-  implicit val function0Instance: Bimonad[Function0] =
+
+  implicit val catsStdBimonadForFunction0: Bimonad[Function0] =
     new Bimonad[Function0] {
       def extract[A](x: () => A): A = x()
 
@@ -20,20 +20,20 @@ private[std] sealed trait Function0Instances {
         () => f(fa())()
     }
 
-  implicit def eqFunction0[A](implicit A: Eq[A]): Eq[() => A] =
+  implicit def catsStdEqForFunction0[A](implicit A: Eq[A]): Eq[() => A] =
     new Eq[() => A] {
       def eqv(x: () => A, y: () => A): Boolean = A.eqv(x(), y())
     }
 }
 
 private[std] sealed trait Function1Instances extends Function1Instances0 {
-  implicit def function1Contravariant[R]: Contravariant[? => R] =
+  implicit def catsStdContravariantForFunction1[R]: Contravariant[? => R] =
     new Contravariant[? => R] {
       def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
         fa.compose(f)
     }
 
-  implicit def function1Covariant[T1]: MonadReader[T1 => ?, T1] =
+  implicit def catsStdMonadReaderForFunction1[T1]: MonadReader[T1 => ?, T1] =
     new MonadReader[T1 => ?, T1] {
       def pure[R](r: R): T1 => R = _ => r
 
@@ -48,7 +48,7 @@ private[std] sealed trait Function1Instances extends Function1Instances0 {
         f.compose(fa)
     }
 
-  implicit val function1Instance: Choice[Function1] with Arrow[Function1] =
+  implicit val catsStdInstancesForFunction1: Choice[Function1] with Arrow[Function1] =
     new Choice[Function1] with Arrow[Function1] {
       def choice[A, B, C](f: A => C, g: B => C): Xor[A, B] => C =
         _ match {
@@ -71,18 +71,18 @@ private[std] sealed trait Function1Instances extends Function1Instances0 {
       def compose[A, B, C](f: B => C, g: A => B): A => C = f.compose(g)
     }
 
-  implicit def function1Monoid[A,B](implicit M: Monoid[B]): Monoid[A => B] =
+  implicit def catsStdMonoidForFunction1[A,B](implicit M: Monoid[B]): Monoid[A => B] =
     new Function1Monoid[A, B] { def B: Monoid[B] = M }
 
-  implicit val function1MonoidK: MonoidK[Lambda[A => A => A]] =
+  implicit val catsStdMonoidKForFunction1: MonoidK[Lambda[A => A => A]] =
     new Function1MonoidK {}
 }
 
 private[std] sealed trait Function1Instances0 {
-  implicit def function1Semigroup[A,B](implicit S: Semigroup[B]): Semigroup[A => B] =
+  implicit def catsStdSemigroupForFunction1[A,B](implicit S: Semigroup[B]): Semigroup[A => B] =
     new Function1Semigroup[A, B] { def B: Semigroup[B] = S }
 
-  implicit val function1SemigroupK: SemigroupK[Lambda[A => A => A]] =
+  implicit val catsStdSemigroupKForFunction1: SemigroupK[Lambda[A => A => A]] =
     new Function1SemigroupK {}
 }
 

@@ -3,11 +3,11 @@ package tests
 
 import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
+import cats.laws.discipline.{SemigroupKTests}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadErrorTests, SerializableTests, CartesianTests}
-import cats.laws.discipline.eq.tuple3Eq
-import algebra.laws.{GroupLaws, OrderLaws}
-import org.scalacheck.{Arbitrary, Gen}
+import cats.laws.discipline.{BitraverseTests, TraverseTests, MonadErrorTests, MonadRecTests, SerializableTests, CartesianTests}
+import cats.kernel.laws.{GroupLaws, OrderLaws}
+import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary._
 
 import scala.util.Try
@@ -22,15 +22,21 @@ class XorTests extends CatsSuite {
 
   checkAll("Xor[String, NonEmptyList[Int]]", GroupLaws[Xor[String, NonEmptyList[Int]]].semigroup)
 
-  implicit val eq0 = XorT.xorTEq[Xor[String, ?], String, Int]
+  implicit val eq0 = XorT.catsDataEqForXorT[Xor[String, ?], String, Int]
 
   checkAll("Xor[String, Int]", MonadErrorTests[Xor[String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor[String, ?], String]))
+
+  checkAll("Xor[String, Int]", MonadRecTests[Xor[String, ?]].monadRec[Int, Int, Int])
+  checkAll("MonadRec[Xor[String, ?]]", SerializableTests.serializable(MonadRec[Xor[String, ?]]))
 
   checkAll("Xor[String, Int] with Option", TraverseTests[Xor[String, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Xor[String,?]]", SerializableTests.serializable(Traverse[Xor[String, ?]]))
 
   checkAll("Xor[Int, String]", OrderLaws[String Xor Int].order)
+
+  checkAll("Xor[ListWrapper[String], ?]", SemigroupKTests[Xor[ListWrapper[String], ?]].semigroupK[Int])
+  checkAll("SemigroupK[Xor[ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[Xor[ListWrapper[String], ?]]))
 
   {
     implicit val S = ListWrapper.partialOrder[String]
@@ -204,6 +210,7 @@ class XorTests extends CatsSuite {
       x.isLeft should === (x.toOption.isEmpty)
       x.isLeft should === (x.toList.isEmpty)
       x.isLeft should === (x.toValidated.isInvalid)
+      x.isLeft should === (x.toValidatedNel.isInvalid)
     }
   }
 
@@ -229,6 +236,12 @@ class XorTests extends CatsSuite {
     forAll { (x: Int Xor String) =>
       x.to[Option, String] should === (x.toOption)
     }
+  }
+
+  test("map2Eval is lazy") {
+    val bomb: Eval[String Xor Int] = Later(sys.error("boom"))
+    val x = Xor.left[String, Int]("l")
+    x.map2Eval(bomb)(_ + _).value should === (x)
   }
 
 }

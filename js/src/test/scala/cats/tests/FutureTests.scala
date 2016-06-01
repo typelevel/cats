@@ -4,18 +4,23 @@ package tests
 
 import cats.data.Xor
 import cats.laws.discipline._
-import cats.laws.discipline.eq.tuple3Eq
 import cats.js.std.Await
-import cats.js.std.future.{futureEq, futureComonad}
+import cats.js.std.future.futureComonad
 import cats.tests.CatsSuite
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 import scala.concurrent.duration._
-
-import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
+
+// https://issues.scala-lang.org/browse/SI-7934
+@deprecated("", "")
+class DeprecatedForwarder {
+  implicit def runNow = scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
+}
+object DeprecatedForwarder extends DeprecatedForwarder
+import DeprecatedForwarder.runNow
 
 class FutureTests extends CatsSuite {
   val timeout = 3.seconds
