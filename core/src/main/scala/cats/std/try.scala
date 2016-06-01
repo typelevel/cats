@@ -3,14 +3,15 @@ package std
 
 import cats.syntax.all._
 import cats.data.Xor
+import TryInstances.castFailure
 
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 
 trait TryInstances extends TryInstances1 {
 
-  implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] =
-    new TryCoflatMap with MonadError[Try, Throwable]{
+  implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] =
+    new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 
       override def pureEval[A](x: Eval[A]): Try[A] = x match {
@@ -20,23 +21,41 @@ trait TryInstances extends TryInstances1 {
 
       override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] = (ta, tb) match {
         case (Success(a), Success(b)) => Success((a, b))
-        case (f: Failure[_], _) => f.asInstanceOf[Try[(A, B)]]
-        case (_, f: Failure[_]) => f.asInstanceOf[Try[(A, B)]]
+        case (f: Failure[_], _) => castFailure[(A, B)](f)
+        case (_, f: Failure[_]) => castFailure[(A, B)](f)
       }
 
       override def map2[A, B, Z](ta: Try[A], tb: Try[B])(f: (A, B) => Z): Try[Z] = (ta, tb) match {
         case (Success(a), Success(b)) => Try(f(a, b))
-        case (f: Failure[_], _) => f.asInstanceOf[Try[Z]]
-        case (_, f: Failure[_]) => f.asInstanceOf[Try[Z]]
+        case (f: Failure[_], _) => castFailure[Z](f)
+        case (_, f: Failure[_]) => castFailure[Z](f)
       }
 
       override def map2Eval[A, B, Z](ta: Try[A], tb: Eval[Try[B]])(f: (A, B) => Z): Eval[Try[Z]] =
         ta match {
-          case f: Failure[_] => Now(f.asInstanceOf[Try[Z]])
+          case f: Failure[_] => Now(castFailure[Z](f))
           case Success(a) => tb.map(_.map(f(a, _)))
         }
 
       def flatMap[A, B](ta: Try[A])(f: A => Try[B]): Try[B] = ta.flatMap(f)
+
+      def foldLeft[A, B](fa: Try[A], b: B)(f: (B, A) => B): B =
+        fa match {
+          case Success(a) => f(b, a)
+          case Failure(_) => b
+        }
+
+      def foldRight[A, B](fa: Try[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa match {
+          case Success(a) => f(a, lb)
+          case Failure(_) => lb
+        }
+
+      def traverse[G[_], A, B](fa: Try[A])(f: A => G[B])(implicit G: Applicative[G]): G[Try[B]] =
+        fa match {
+          case Success(a) => G.map(f(a))(Success(_))
+          case f: Failure[_] => G.pure(castFailure[B](f))
+        }
 
       def handleErrorWith[A](ta: Try[A])(f: Throwable => Try[A]): Try[A] =
         ta.recoverWith { case t => f(t) }
@@ -76,6 +95,14 @@ trait TryInstances extends TryInstances1 {
         case _ => false
       }
     }
+}
+
+private[std] object TryInstances {
+  /**
+   * A `Failure` can be statically typed as `Try[A]` for all `A`, because it
+   * does not actually contain an `A` value (as `Success[A]` does).
+   */
+  def castFailure[A](f: Failure[_]): Try[A] = f.asInstanceOf[Try[A]]
 }
 
 private[std] sealed trait TryInstances1 extends TryInstances2 {
