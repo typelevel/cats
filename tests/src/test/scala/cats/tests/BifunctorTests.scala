@@ -3,7 +3,6 @@ package tests
 
 import cats.functor.Bifunctor
 import cats.laws.discipline.{SerializableTests, BifunctorTests}
-import cats.laws.discipline.eq.tuple2Eq
 
 class BifunctorTest extends CatsSuite {
   type Tuple2Either[A, B] = (Either[A, B], Either[A, B])
