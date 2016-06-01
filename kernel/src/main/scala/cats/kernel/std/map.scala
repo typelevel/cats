@@ -6,9 +6,9 @@ import cats.kernel.std.util.StaticMethods.addMap
 package object map extends MapInstances
 
 trait MapInstances {
-  implicit def mapEq[K, V: Eq]: Eq[Map[K, V]] =
+  implicit def catsKernelStdEqForMap[K, V: Eq]: Eq[Map[K, V]] =
     new MapEq[K, V]
-  implicit def mapMonoid[K, V: Semigroup]: Monoid[Map[K, V]] =
+  implicit def catsKernelStdMonoidForMap[K, V: Semigroup]: Monoid[Map[K, V]] =
     new MapMonoid[K, V]
 }
 

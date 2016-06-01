@@ -7,6 +7,19 @@ class TupleTests extends CatsSuite {
   checkAll("Tuple2", BitraverseTests[Tuple2].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Tuple2]", SerializableTests.serializable(Bitraverse[Tuple2]))
 
+  test("eqv") {
+    val eq = Eq[(Int, Long)]
+    forAll { t: (Int, Long) => eq.eqv(t, t) should === (true) }
+    forAll { t: (Int, Long) => eq.eqv(t, t._1 -> (t._2 + 1)) should === (false) }
+  }
+
+  test("order") {
+    forAll { t: (Int, Int) =>
+      val u = t.swap
+      Order[(Int, Int)].compare(t, u) should === (scala.math.Ordering[(Int, Int)].compare(t, u))
+    }
+  }
+
   test("show") {
     (1, 2).show should === ("(1,2)")
 

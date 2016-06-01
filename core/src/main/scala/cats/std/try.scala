@@ -9,7 +9,7 @@ import scala.util.{Failure, Success, Try}
 
 trait TryInstances extends TryInstances1 {
 
-  implicit def tryInstance: MonadError[Try, Throwable] with CoflatMap[Try] =
+  implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] =
     new TryCoflatMap with MonadError[Try, Throwable]{
       def pure[A](x: A): Try[A] = Success(x)
 
@@ -56,7 +56,7 @@ trait TryInstances extends TryInstances1 {
       override def map[A, B](ta: Try[A])(f: A => B): Try[B] = ta.map(f)
     }
 
-  implicit def showTry[A](implicit A: Show[A]): Show[Try[A]] =
+  implicit def catsStdShowForTry[A](implicit A: Show[A]): Show[Try[A]] =
     new Show[Try[A]] {
       def show(fa: Try[A]): String = fa match {
         case Success(a) => s"Success(${A.show(a)})"
@@ -68,7 +68,7 @@ trait TryInstances extends TryInstances1 {
    * doing a fine grained equality on Throwable can make the code very execution
    * order dependent
    */
-  implicit def eqTry[A, T](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] =
+  implicit def catsStdEqForTry[A, T](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] =
     new Eq[Try[A]] {
       def eqv(x: Try[A], y: Try[A]): Boolean = (x, y) match {
         case (Success(a), Success(b)) => A.eqv(a, b)
@@ -79,12 +79,12 @@ trait TryInstances extends TryInstances1 {
 }
 
 private[std] sealed trait TryInstances1 extends TryInstances2 {
-  implicit def tryMonoid[A: Monoid]: Monoid[Try[A]] =
+  implicit def catsStdMonoidForTry[A: Monoid]: Monoid[Try[A]] =
     new TryMonoid[A]
 }
 
 private[std] sealed trait TryInstances2 {
-  implicit def trySemigroup[A: Semigroup]: Semigroup[Try[A]] =
+  implicit def catsStdSemigroupForTry[A: Semigroup]: Semigroup[Try[A]] =
     new TrySemigroup[A]
 }
 

@@ -3,7 +3,7 @@ package tests
 
 import scala.math.min
 import cats.laws.ComonadLaws
-import cats.laws.discipline.{CartesianTests, BimonadTests, SerializableTests}
+import cats.laws.discipline.{BimonadTests, CartesianTests, MonadRecTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
@@ -93,8 +93,10 @@ class EvalTests extends CatsSuite {
   {
     implicit val iso = CartesianTests.Isomorphisms.invariant[Eval]
     checkAll("Eval[Int]", BimonadTests[Eval].bimonad[Int, Int, Int])
+    checkAll("Eval[Int]", MonadRecTests[Eval].monadRec[Int, Int, Int])
   }
   checkAll("Bimonad[Eval]", SerializableTests.serializable(Bimonad[Eval]))
+  checkAll("MonadRec[Eval]", SerializableTests.serializable(MonadRec[Eval]))
 
   checkAll("Eval[Int]", GroupLaws[Eval[Int]].group)
 

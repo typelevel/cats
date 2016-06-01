@@ -32,21 +32,21 @@ object Func extends FuncInstances {
 }
 
 private[data] abstract class FuncInstances extends FuncInstances0 {
-  implicit def funcApplicative[F[_], C](implicit FF: Applicative[F]): Applicative[Lambda[X => Func[F, C, X]]] =
+  implicit def catsDataApplicativeForFunc[F[_], C](implicit FF: Applicative[F]): Applicative[Lambda[X => Func[F, C, X]]] =
     new FuncApplicative[F, C] {
       def F: Applicative[F] = FF
     }
 }
 
 private[data] abstract class FuncInstances0 extends FuncInstances1 {
-  implicit def funcApply[F[_], C](implicit FF: Apply[F]): Apply[Lambda[X => Func[F, C, X]]] =
+  implicit def catsDataApplyForFunc[F[_], C](implicit FF: Apply[F]): Apply[Lambda[X => Func[F, C, X]]] =
     new FuncApply[F, C] {
       def F: Apply[F] = FF
     }
 }
 
 private[data] abstract class FuncInstances1 {
-  implicit def funcFunctor[F[_], C](implicit FF: Functor[F]): Functor[Lambda[X => Func[F, C, X]]] =
+  implicit def catsDataFunctorForFunc[F[_], C](implicit FF: Functor[F]): Functor[Lambda[X => Func[F, C, X]]] =
     new FuncFunctor[F, C] {
       def F: Functor[F] = FF
     }

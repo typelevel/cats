@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.kernel.std.tuple._
-import cats.laws.discipline.{CartesianTests, MonadStateTests, SerializableTests}
+import cats.laws.discipline.{CartesianTests, MonadRecTests, MonadStateTests, SerializableTests}
 import cats.data.{State, StateT}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
@@ -116,14 +116,22 @@ class StateTTests extends CatsSuite {
 
   {
     implicit val iso = CartesianTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
+
     checkAll("StateT[Option, Int, Int]", MonadStateTests[StateT[Option, Int, ?], Int].monadState[Int, Int, Int])
-    checkAll("MonadState[StateT[Option, ?, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, Int, ?], Int]))
+    checkAll("MonadState[StateT[Option, Int, ?], Int]", SerializableTests.serializable(MonadState[StateT[Option, Int, ?], Int]))
+
+    checkAll("StateT[Option, Int, Int]", MonadRecTests[StateT[Option, Int, ?]].monadRec[Int, Int, Int])
+    checkAll("MonadRec[StateT[Option, Int, ?]]", SerializableTests.serializable(MonadRec[StateT[Option, Int, ?]]))
   }
 
   {
     implicit val iso = CartesianTests.Isomorphisms.invariant[State[Long, ?]]
+
     checkAll("State[Long, ?]", MonadStateTests[State[Long, ?], Long].monadState[Int, Int, Int])
     checkAll("MonadState[State[Long, ?], Long]", SerializableTests.serializable(MonadState[State[Long, ?], Long]))
+
+    checkAll("State[Long, ?]", MonadRecTests[State[Long, ?]].monadRec[Int, Int, Int])
+    checkAll("MonadRec[State[Long, ?]]", SerializableTests.serializable(MonadRec[State[Long, ?]]))
   }
 }
 

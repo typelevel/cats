@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 import cats.functor.Contravariant
 
 /** `F` on the left and `G` on the right of [[Xor]].
@@ -63,13 +63,13 @@ final case class Coproduct[F[_], G[_], A](run: F[A] Xor G[A]) {
    *
    * Example:
    * {{{
-   * scala> import cats.arrow.NaturalTransformation
+   * scala> import cats.arrow.FunctionK
    * scala> import cats.data.Coproduct
    * scala> val listToOption =
-   *      |   new NaturalTransformation[List, Option] {
+   *      |   new FunctionK[List, Option] {
    *      |     def apply[A](fa: List[A]): Option[A] = fa.headOption
    *      |   }
-   * scala> val optionToOption = NaturalTransformation.id[Option]
+   * scala> val optionToOption = FunctionK.id[Option]
    * scala> val cp1: Coproduct[List, Option, Int] = Coproduct.leftc(List(1,2,3))
    * scala> val cp2: Coproduct[List, Option, Int] = Coproduct.rightc(Some(4))
    * scala> cp1.fold(listToOption, optionToOption)
@@ -78,7 +78,7 @@ final case class Coproduct[F[_], G[_], A](run: F[A] Xor G[A]) {
    * res1: Option[Int] = Some(4)
    * }}}
    */
-  def fold[H[_]](f: NaturalTransformation[F, H], g: NaturalTransformation[G, H]): H[A] =
+  def fold[H[_]](f: FunctionK[F, H], g: FunctionK[G, H]): H[A] =
     run.fold(f.apply, g.apply)
 }
 
@@ -105,17 +105,17 @@ object Coproduct extends CoproductInstances {
 
 private[data] sealed abstract class CoproductInstances3 {
 
-  implicit def coproductEq[F[_], G[_], A](implicit E: Eq[F[A] Xor G[A]]): Eq[Coproduct[F, G, A]] =
+  implicit def catsDataEqForCoproduct[F[_], G[_], A](implicit E: Eq[F[A] Xor G[A]]): Eq[Coproduct[F, G, A]] =
     Eq.by(_.run)
 
-  implicit def coproductFunctor[F[_], G[_]](implicit F0: Functor[F], G0: Functor[G]): Functor[Coproduct[F, G, ?]] =
+  implicit def catsDataFunctorForCoproduct[F[_], G[_]](implicit F0: Functor[F], G0: Functor[G]): Functor[Coproduct[F, G, ?]] =
     new CoproductFunctor[F, G] {
       implicit def F: Functor[F] = F0
 
       implicit def G: Functor[G] = G0
     }
 
-  implicit def coproductFoldable[F[_], G[_]](implicit F0: Foldable[F], G0: Foldable[G]): Foldable[Coproduct[F, G, ?]] =
+  implicit def catsDataFoldableForCoproduct[F[_], G[_]](implicit F0: Foldable[F], G0: Foldable[G]): Foldable[Coproduct[F, G, ?]] =
     new CoproductFoldable[F, G] {
       implicit def F: Foldable[F] = F0
 
@@ -125,7 +125,7 @@ private[data] sealed abstract class CoproductInstances3 {
 
 private[data] sealed abstract class CoproductInstances2 extends CoproductInstances3 {
 
-  implicit def coproductContravariant[F[_], G[_]](implicit F0: Contravariant[F], G0: Contravariant[G]): Contravariant[Coproduct[F, G, ?]] =
+  implicit def catsDataContravariantForCoproduct[F[_], G[_]](implicit F0: Contravariant[F], G0: Contravariant[G]): Contravariant[Coproduct[F, G, ?]] =
     new CoproductContravariant[F, G] {
       implicit def F: Contravariant[F] = F0
 
@@ -134,7 +134,7 @@ private[data] sealed abstract class CoproductInstances2 extends CoproductInstanc
 }
 
 private[data] sealed abstract class CoproductInstances1 extends CoproductInstances2 {
-  implicit def coproductCoflatMap[F[_], G[_]](implicit F0: CoflatMap[F], G0: CoflatMap[G]): CoflatMap[Coproduct[F, G, ?]] =
+  implicit def catsDataCoflatMapForCoproduct[F[_], G[_]](implicit F0: CoflatMap[F], G0: CoflatMap[G]): CoflatMap[Coproduct[F, G, ?]] =
     new CoproductCoflatMap[F, G] {
       implicit def F: CoflatMap[F] = F0
 
@@ -143,7 +143,7 @@ private[data] sealed abstract class CoproductInstances1 extends CoproductInstanc
 }
 
 private[data] sealed abstract class CoproductInstances0 extends CoproductInstances1 {
-  implicit def coproductTraverse[F[_], G[_]](implicit F0: Traverse[F], G0: Traverse[G]): Traverse[Coproduct[F, G, ?]] =
+  implicit def catsDataTraverseForCoproduct[F[_], G[_]](implicit F0: Traverse[F], G0: Traverse[G]): Traverse[Coproduct[F, G, ?]] =
     new CoproductTraverse[F, G] {
       implicit def F: Traverse[F] = F0
 
@@ -153,7 +153,7 @@ private[data] sealed abstract class CoproductInstances0 extends CoproductInstanc
 
 sealed abstract class CoproductInstances extends CoproductInstances0 {
 
-  implicit def coproductComonad[F[_], G[_]](implicit F0: Comonad[F], G0: Comonad[G]): Comonad[Coproduct[F, G, ?]] =
+  implicit def catsDataComonadForCoproduct[F[_], G[_]](implicit F0: Comonad[F], G0: Comonad[G]): Comonad[Coproduct[F, G, ?]] =
     new CoproductComonad[F, G] {
       implicit def F: Comonad[F] = F0
 

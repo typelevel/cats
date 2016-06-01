@@ -19,7 +19,7 @@ class ValidatedTests extends CatsSuite {
   checkAll("Validated[?, ?]", BitraverseTests[Validated].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Validated]", SerializableTests.serializable(Bitraverse[Validated]))
 
-  implicit val eq0 = XorT.xorTEq[Validated[String, ?], String, Int]
+  implicit val eq0 = XorT.catsDataEqForXorT[Validated[String, ?], String, Int]
 
   checkAll("Validated[String, Int]", ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
   checkAll("ApplicativeError[Xor, String]", SerializableTests.serializable(ApplicativeError[Validated[String, ?], String]))

@@ -4,8 +4,8 @@ package std
 package object long extends LongInstances
 
 trait LongInstances {
-  implicit val longOrder: Order[Long] = new LongOrder
-  implicit val longGroup: CommutativeGroup[Long] = new LongGroup
+  implicit val catsKernelStdOrderForLong: Order[Long] = new LongOrder
+  implicit val catsKernelStdGroupForLong: CommutativeGroup[Long] = new LongGroup
 }
 
 class LongGroup extends CommutativeGroup[Long] {

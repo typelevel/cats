@@ -4,9 +4,9 @@ package std
 package object bigInt extends BigIntInstances
 
 trait BigIntInstances {
-  implicit val bigIntOrder: Order[BigInt] =
+  implicit val catsKernelStdOrderForBigInt: Order[BigInt] =
     new BigIntOrder
-  implicit val bigIntGroup: CommutativeGroup[BigInt] =
+  implicit val catsKernelStdGroupForBigInt: CommutativeGroup[BigInt] =
     new BigIntGroup
 }
 

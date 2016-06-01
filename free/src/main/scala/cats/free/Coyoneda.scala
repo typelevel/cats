@@ -1,7 +1,7 @@
 package cats
 package free
 
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 
 /**
  * The dual view of the Yoneda lemma. Also a free functor on `F`.
@@ -38,7 +38,7 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
   final def map[B](f: A => B): Aux[F, B, Pivot] =
     apply(fi)(f compose k)
 
-  final def transform[G[_]](f: NaturalTransformation[F,G]): Aux[G, A, Pivot] =
+  final def transform[G[_]](f: FunctionK[F,G]): Aux[G, A, Pivot] =
     apply(f(fi))(k)
 
 }

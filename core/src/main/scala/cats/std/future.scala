@@ -9,7 +9,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait FutureInstances extends FutureInstances1 {
 
-  implicit def futureInstance(implicit ec: ExecutionContext): MonadError[Future, Throwable] with CoflatMap[Future] =
+  implicit def catsStdInstancesForFuture(implicit ec: ExecutionContext): MonadError[Future, Throwable] with CoflatMap[Future] =
     new FutureCoflatMap with MonadError[Future, Throwable]{
       def pure[A](x: A): Future[A] = Future.successful(x)
 
@@ -37,12 +37,12 @@ trait FutureInstances extends FutureInstances1 {
 }
 
 private[std] sealed trait FutureInstances1 extends FutureInstances2 {
-  implicit def futureMonoid[A: Monoid](implicit ec: ExecutionContext): Monoid[Future[A]] =
+  implicit def catsStdMonoidForFuture[A: Monoid](implicit ec: ExecutionContext): Monoid[Future[A]] =
     new FutureMonoid[A]
 }
 
 private[std] sealed trait FutureInstances2 {
-  implicit def futureSemigroup[A: Semigroup](implicit ec: ExecutionContext): Semigroup[Future[A]] =
+  implicit def catsStdSemigroupForFuture[A: Semigroup](implicit ec: ExecutionContext): Semigroup[Future[A]] =
     new FutureSemigroup[A]
 }
 
