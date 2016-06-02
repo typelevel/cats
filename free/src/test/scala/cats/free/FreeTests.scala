@@ -18,9 +18,9 @@ class FreeTests extends CatsSuite {
   checkAll("Free[Option, ?]", MonadRecTests[Free[Option, ?]].monadRec[Int, Int, Int])
   checkAll("MonadRec[Free[Option, ?]]", SerializableTests.serializable(MonadRec[Free[Option, ?]]))
 
-  test("mapSuspension id"){
+  test("compile id"){
     forAll { x: Free[List, Int] =>
-      x.mapSuspension(FunctionK.id[List]) should === (x)
+      x.compile(FunctionK.id[List]) should === (x)
     }
   }
 
@@ -36,9 +36,9 @@ class FreeTests extends CatsSuite {
     val _ = Free.suspend(yikes[Option, Int])
   }
 
-  test("mapSuspension consistent with foldMap"){
+  test("compile consistent with foldMap"){
     forAll { x: Free[List, Int] =>
-      val mapped = x.mapSuspension(headOptionU)
+      val mapped = x.compile(headOptionU)
       val folded = mapped.foldMap(FunctionK.id[Option])
       folded should === (x.foldMap(headOptionU))
     }
