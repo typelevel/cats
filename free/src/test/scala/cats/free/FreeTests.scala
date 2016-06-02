@@ -72,6 +72,25 @@ class FreeTests extends CatsSuite {
 
     assert(10000 == a(0).foldMap(runner))
   }
+
+  test(".runTailRec") {
+    val r = Free.pure[List, Int](12358)
+    def recurse(r: Free[List, Int], n: Int): Free[List, Int] =
+      if (n > 0) recurse(r.flatMap(x => Free.pure(x + 1)), n - 1) else r
+    val res = recurse(r, 100000).runTailRec
+    assert(res == List(112358))
+  }
+
+  test(".foldLeftM") {
+    // you can see .foldLeftM traversing the entire structure by
+    // changing the constant argument to .take and observing the time
+    // this test takes.
+    val ns = Stream.from(1).take(1000)
+    val res = Free.foldLeftM[Stream, Xor[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+      if (sum >= 2) Xor.left(sum) else Xor.right(sum + n)
+    }
+    assert(res == Xor.left(3))
+  }
 }
 
 object FreeTests extends FreeTestsInstances {

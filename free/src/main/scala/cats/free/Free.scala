@@ -207,6 +207,10 @@ object Free {
   /**
    * Perform a stack-safe monadic fold from the source context `F`
    * into the target monad `G`.
+   *
+   * This method can express short-circuiting semantics, but like
+   * other left folds will traverse the entire `F[A]` structure. This
+   * means it is not suitable for potentially infinite structures.
    */
   def foldLeftM[F[_], G[_]: MonadRec, A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit F: Foldable[F]): G[B] =
     F.foldM[Free[G, ?], A, B](fa, z) { (b, a) => Free.liftF(f(b, a)) }.runTailRec
