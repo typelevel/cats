@@ -1,7 +1,7 @@
 package cats
 package free
 
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 import cats.data.Const
 
 /** Applicative Functor for Free */
@@ -27,7 +27,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   /** Interprets/Runs the sequence of operations using the semantics of Applicative G
     * Tail recursive only if G provides tail recursive interpretation (ie G is FreeMonad)
     */
-  final def foldMap[G[_]](f: F ~> G)(implicit G: Applicative[G]): G[A] =
+  final def foldMap[G[_]](f: FunctionK[F,G])(implicit G: Applicative[G]): G[A] =
     this match {
       case Pure(a) => G.pure(a)
       case Ap(pivot, fn) => G.map2(f(pivot), fn.foldMap(f))((a, g) => g(a))
@@ -37,26 +37,26 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
     * Tail recursive only if `F` provides tail recursive interpretation.
     */
   final def fold(implicit F: Applicative[F]): F[A] =
-    foldMap(NaturalTransformation.id[F])
+    foldMap(FunctionK.id[F])
 
   /** Interpret this algebra into another FreeApplicative */
-  final def compile[G[_]](f: F ~> G): FA[G, A] =
+  final def compile[G[_]](f: FunctionK[F,G]): FA[G, A] =
     foldMap[FA[G, ?]] {
-      new NaturalTransformation[F, FA[G, ?]] {
+      new FunctionK[F, FA[G, ?]] {
         def apply[B](fa: F[B]): FA[G, B] = lift(f(fa))
       }
     }
 
   /** Interpret this algebra into a Monoid */
-  final def analyze[M:Monoid](f: F ~> λ[α => M]): M =
-    foldMap[Const[M, ?]](new (F ~> Const[M, ?]) {
+  final def analyze[M:Monoid](f: FunctionK[F,λ[α => M]]): M =
+    foldMap[Const[M, ?]](new (FunctionK[F,Const[M, ?]]) {
       def apply[X](x: F[X]): Const[M,X] = Const(f(x))
     }).getConst
 
   /** Compile this FreeApplicative algebra into a Free algebra. */
   final def monad: Free[F, A] =
     foldMap[Free[F, ?]] {
-      new NaturalTransformation[F, Free[F, ?]] {
+      new FunctionK[F, Free[F, ?]] {
         def apply[B](fa: F[B]): Free[F, B] = Free.liftF(fa)
       }
     }

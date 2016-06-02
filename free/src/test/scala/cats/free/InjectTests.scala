@@ -1,6 +1,7 @@
 package cats
 package free
 
+import cats.arrow.FunctionK
 import cats.tests.CatsSuite
 import cats.data.{Xor, Coproduct}
 import org.scalacheck._
@@ -39,19 +40,19 @@ class InjectTests extends CatsSuite {
   implicit def test2Arbitrary[A](implicit seqArb: Arbitrary[Int], intAArb : Arbitrary[Int => A]): Arbitrary[Test2[A]] =
     Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test2(s, f))
 
-  object Test1Interpreter extends (Test1Algebra ~> Id) {
+  object Test1Interpreter extends FunctionK[Test1Algebra,Id] {
     override def apply[A](fa: Test1Algebra[A]): Id[A] = fa match {
       case Test1(k, h) => h(k)
     }
   }
 
-  object Test2Interpreter extends (Test2Algebra ~> Id) {
+  object Test2Interpreter extends FunctionK[Test2Algebra,Id] {
     override def apply[A](fa: Test2Algebra[A]): Id[A] = fa match {
       case Test2(k, h) => h(k)
     }
   }
 
-  val coProductInterpreter: T ~> Id = Test1Interpreter or Test2Interpreter
+  val coProductInterpreter: FunctionK[T,Id] = Test1Interpreter or Test2Interpreter
 
   val x: Free[T, Int] = Free.inject[Test1Algebra, T](Test1(1, identity))
 

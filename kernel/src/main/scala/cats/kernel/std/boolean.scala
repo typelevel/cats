@@ -4,7 +4,7 @@ package std
 package object boolean extends BooleanInstances
 
 trait BooleanInstances {
-  implicit val booleanOrder: Order[Boolean] =
+  implicit val catsKernelStdOrderForBoolean: Order[Boolean] =
     new BooleanOrder
 }
 

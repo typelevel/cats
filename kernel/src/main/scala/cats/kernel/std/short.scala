@@ -4,8 +4,8 @@ package std
 package object short extends ShortInstances
 
 trait ShortInstances {
-  implicit val shortOrder: Order[Short] = new ShortOrder
-  implicit val shortGroup: CommutativeGroup[Short] = new ShortGroup
+  implicit val catsKernelStdOrderForShort: Order[Short] = new ShortOrder
+  implicit val catsKernelStdGroupForShort: CommutativeGroup[Short] = new ShortGroup
 }
 
 class ShortGroup extends CommutativeGroup[Short] {

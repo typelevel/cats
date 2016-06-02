@@ -1,6 +1,6 @@
 name: Cats Documentation
 markdown: redcarpet
-highlighter: pygments
+highlighter: rouge
 baseurl: /cats
 apidocs: /cats/api/
 sources: https://github.com/typelevel/cats/blob/master/

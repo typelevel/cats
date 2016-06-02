@@ -4,7 +4,7 @@ package free
 import scala.annotation.tailrec
 
 import cats.data.Xor, Xor.{Left, Right}
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 
 object Free {
   /**
@@ -40,11 +40,16 @@ object Free {
   /**
    * `Free[S, ?]` has a monad for any type constructor `S[_]`.
    */
-  implicit def freeMonad[S[_]]: Monad[Free[S, ?]] =
-    new Monad[Free[S, ?]] {
+  implicit def freeMonad[S[_]]: MonadRec[Free[S, ?]] =
+    new MonadRec[Free[S, ?]] {
       def pure[A](a: A): Free[S, A] = Free.pure(a)
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
+      def tailRecM[A, B](a: A)(f: A => Free[S, A Xor B]): Free[S, B] =
+        f(a).flatMap(_ match {
+          case Xor.Left(a1) => tailRecM(a1)(f) // recursion OK here, since Free is lazy
+          case Xor.Right(b) => pure(b)
+        })
     }
 }
 
@@ -130,26 +135,25 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Run to completion, mapping the suspension with the given transformation at each step and
    * accumulating into the monad `M`.
    */
-  final def foldMap[M[_]](f: S ~> M)(implicit M: Monad[M]): M[A] =
-    step match {
-      case Pure(a) => M.pure(a)
-      case Suspend(s) => f(s)
-      case Gosub(c, g) => M.flatMap(c.foldMap(f))(cc => g(cc).foldMap(f))
-    }
+  final def foldMap[M[_]](f: FunctionK[S,M])(implicit M: MonadRec[M]): M[A] =
+    M.tailRecM(this)(_.step match {
+      case Pure(a) => M.pure(Xor.right(a))
+      case Suspend(sa) => M.map(f(sa))(Xor.right)
+      case Gosub(c, g) => M.map(c.foldMap(f))(cc => Xor.left(g(cc)))
+    })
 
   /**
    * Compile your Free into another language by changing the suspension functor
    * using the given natural transformation.
    * Be careful if your natural transformation is effectful, effects are applied by mapSuspension.
    */
-  final def mapSuspension[T[_]](f: S ~> T): Free[T, A] =
+  final def mapSuspension[T[_]](f: FunctionK[S,T]): Free[T, A] =
     foldMap[Free[T, ?]] {
-      new NaturalTransformation[S, Free[T, ?]] {
+      new FunctionK[S, Free[T, ?]] {
         def apply[B](fa: S[B]): Free[T, B] = Suspend(f(fa))
       }
     }(Free.freeMonad)
 
-  final def compile[T[_]](f: S ~> T): Free[T, A] = mapSuspension(f)
+  final def compile[T[_]](f: FunctionK[S,T]): Free[T, A] = mapSuspension(f)
 
 }
-

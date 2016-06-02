@@ -135,30 +135,22 @@ object StateT extends StateTInstances {
     StateT(s => F.pure((s, a)))
 }
 
-private[data] sealed abstract class StateTInstances {
-  implicit def stateTMonadState[F[_], S](implicit F: Monad[F]): MonadState[StateT[F, S, ?], S] =
-    new MonadState[StateT[F, S, ?], S] {
-      def pure[A](a: A): StateT[F, S, A] =
-        StateT.pure(a)
+private[data] sealed abstract class StateTInstances extends StateTInstances1 {
+  implicit def catsDataMonadStateForStateT[F[_], S](implicit F0: Monad[F]): MonadState[StateT[F, S, ?], S] =
+    new StateTMonadState[F, S] { implicit def F = F0 }
 
-      def flatMap[A, B](fa: StateT[F, S, A])(f: A => StateT[F, S, B]): StateT[F, S, B] =
-        fa.flatMap(f)
-
-      val get: StateT[F, S, S] = StateT(a => F.pure((a, a)))
-
-      def set(s: S): StateT[F, S, Unit] = StateT(_ => F.pure((s, ())))
-
-      override def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] =
-        fa.map(f)
-    }
-
-  implicit def stateTLift[S]: TransLift.Aux[StateT[?[_], S, ?], Applicative] =
+  implicit def catsDataLiftForStateT[S]: TransLift.Aux[StateT[?[_], S, ?], Applicative] =
     new TransLift[StateT[?[_], S, ?]] {
       type TC[M[_]] = Applicative[M]
 
       def liftT[M[_]: Applicative, A](ma: M[A]): StateT[M, S, A] = StateT(s => Applicative[M].map(ma)(s -> _))
     }
 
+}
+
+private[data] sealed abstract class StateTInstances1 {
+  implicit def catsDataMonadRecForStateT[F[_], S](implicit F0: MonadRec[F]): MonadRec[StateT[F, S, ?]] =
+    new StateTMonadRec[F, S] { implicit def F = F0 }
 }
 
 // To workaround SI-7139 `object State` needs to be defined inside the package object
@@ -192,4 +184,32 @@ private[data] abstract class StateFunctions {
    * Set the state to `s` and return Unit.
    */
   def set[S](s: S): State[S, Unit] = State(_ => (s, ()))
+}
+
+private[data] sealed trait StateTMonad[F[_], S] extends Monad[StateT[F, S, ?]] {
+  implicit def F: Monad[F]
+
+  def pure[A](a: A): StateT[F, S, A] =
+    StateT.pure(a)
+
+  def flatMap[A, B](fa: StateT[F, S, A])(f: A => StateT[F, S, B]): StateT[F, S, B] =
+    fa.flatMap(f)
+
+  override def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] =
+    fa.map(f)
+}
+
+private[data] sealed trait StateTMonadState[F[_], S] extends MonadState[StateT[F, S, ?], S] with StateTMonad[F, S] {
+  val get: StateT[F, S, S] = StateT(s => F.pure((s, s)))
+
+  def set(s: S): StateT[F, S, Unit] = StateT(_ => F.pure((s, ())))
+}
+
+private[data] sealed trait StateTMonadRec[F[_], S] extends MonadRec[StateT[F, S, ?]] with StateTMonad[F, S] {
+  override implicit def F: MonadRec[F]
+
+  def tailRecM[A, B](a: A)(f: A => StateT[F, S, A Xor B]): StateT[F, S, B] =
+    StateT[F, S, B](s => F.tailRecM[(S, A), (S, B)]((s, a)) {
+      case (s, a) => F.map(f(a).run(s)) { case (s, ab) => ab.bimap((s, _), (s, _)) }
+    })
 }

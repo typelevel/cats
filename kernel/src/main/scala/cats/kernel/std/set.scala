@@ -4,10 +4,10 @@ package std
 package object set extends SetInstances
 
 trait SetInstances {
-  implicit def setPartialOrder[A]: PartialOrder[Set[A]] =
+  implicit def catsKernelStdPartialOrderForSet[A]: PartialOrder[Set[A]] =
     new SetPartialOrder[A]
 
-  implicit def setSemilattice[A]: BoundedSemilattice[Set[A]] =
+  implicit def catsKernelStdSemilatticeForSet[A]: BoundedSemilattice[Set[A]] =
     new SetSemilattice[A]
 }
 

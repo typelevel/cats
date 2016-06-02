@@ -3,7 +3,7 @@ package std
 
 trait MapInstances extends cats.kernel.std.MapInstances {
 
-  implicit def MapShow[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =
+  implicit def catsStdShowForMap[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =
     Show.show[Map[A, B]] { m =>
       val body = m.map { case (a, b) =>
         s"${showA.show(a)} -> ${showB.show(b)})"
@@ -11,7 +11,7 @@ trait MapInstances extends cats.kernel.std.MapInstances {
       s"Map($body)"
     }
 
-  implicit def mapInstance[K]: Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] =
+  implicit def catsStdInstancesForMap[K]: Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] =
     new Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] {
 
       def traverse[G[_], A, B](fa: Map[K, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {

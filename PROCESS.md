@@ -84,6 +84,14 @@ You can get a list of changes between release tags `v0.1.2` and
 messages is a good way to get a summary of what happened, although it
 does not account for conversations that occured on Github.
 
+Once the relevant documentation changes have been committed, new
+[release notes](https://github.com/typelevel/cats/releases) should be
+added. You can add a release by clicking the "Draft a new release" button
+on that page, or if the relevant release already exists, you can click
+"Edit release".
+
+The website should then be updated via `sbt docs/ghpagesPushSite`.
+
 ### Conclusion
 
 Ideally this document will evolve and grow as the project

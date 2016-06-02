@@ -64,7 +64,7 @@ This can be accomplished by using the `Either#right` method, which returns a `Ri
 instance. `RightProjection` does have `flatMap` and `map` on it, which acts on the right side
 and ignores the left - this property is referred to as "right-bias."
 
-```tut
+```tut:book
 val e1: Either[String, Int] = Right(5)
 e1.right.map(_ + 1)
 
@@ -80,7 +80,7 @@ the right side is most often chosen. This is the primary difference between `Xor
 `Xor` is right-biased. `Xor` also has some more convenient methods on it, but the most
 crucial one is the right-biased being built-in.
 
-```tut
+```tut:book
 import cats.data.Xor
 
 val xor1: Xor[String, Int] = Xor.right(5)
@@ -99,6 +99,8 @@ over `M[_] : Monad`).
 
 Since we only ever want the computation to continue in the case of `Xor.Right` (as captured
 by the right-bias nature), we fix the left type parameter and leave the right one free.
+
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
 
 ```tut:silent
 import cats.Monad
@@ -161,7 +163,7 @@ With the composite function that we actually care about, we can pass in strings 
 match on the exception. Because `Xor` is a sealed type (often referred to as an algebraic data type,
 or ADT), the compiler will complain if we do not check both the `Left` and `Right` case.
 
-```tut
+```tut:book
 magic("123") match {
   case Xor.Left(_: NumberFormatException) => println("not a number!")
   case Xor.Left(_: IllegalArgumentException) => println("can't take reciprocal of 0!")
@@ -207,7 +209,7 @@ exception classes as error values, we use one of the enumerated cases. Now when 
 match, we get much nicer matching. Moreover, since `Error` is `sealed`, no outside code can
 add additional subtypes which we might fail to handle.
 
-```tut
+```tut:book
 import XorStyle._
 
 magic("123") match {
@@ -335,7 +337,7 @@ def awesome =
 There will inevitably come a time when your nice `Xor` code will have to interact with exception-throwing
 code. Handling such situations is easy enough.
 
-```tut
+```tut:book
 val xor: Xor[NumberFormatException, Int] =
   try {
     Xor.right("abc".toInt)
@@ -348,21 +350,21 @@ However, this can get tedious quickly. `Xor` provides a `catchOnly` method on it
 that allows you to pass it a function, along with the type of exception you want to catch, and does the
 above for you.
 
-```tut
+```tut:book
 val xor: Xor[NumberFormatException, Int] =
   Xor.catchOnly[NumberFormatException]("abc".toInt)
 ```
 
 If you want to catch all (non-fatal) throwables, you can use `catchNonFatal`.
 
-```tut
+```tut:book
 val xor: Xor[Throwable, Int] =
   Xor.catchNonFatal("abc".toInt)
 ```
 
 ## Additional syntax
 
-```tut
+```tut:book
 import cats.syntax.xor._
 
 val xor3: Xor[String, Int] = 7.right[String]

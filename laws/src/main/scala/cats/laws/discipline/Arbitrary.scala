@@ -44,6 +44,9 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def optionTArbitrary[F[_], A](implicit F: Arbitrary[F[Option[A]]]): Arbitrary[OptionT[F, A]] =
     Arbitrary(F.arbitrary.map(OptionT.apply))
 
+  implicit def idTArbitrary[F[_], A](implicit F: Arbitrary[F[A]]): Arbitrary[IdT[F, A]] =
+    Arbitrary(F.arbitrary.map(IdT.apply))
+
   implicit def evalArbitrary[A: Arbitrary]: Arbitrary[Eval[A]] =
     Arbitrary(Gen.oneOf(
       getArbitrary[A].map(Eval.now(_)),
