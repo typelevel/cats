@@ -1,8 +1,6 @@
 package cats
 package functor
 
-import cats.data.{NestedInvariant, NestedInvariantContravariant, NestedInvariantCovariant}
-
 import simulacrum.typeclass
 
 /**
@@ -11,20 +9,20 @@ import simulacrum.typeclass
 @typeclass trait Invariant[F[_]] { self =>
   def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
 
-  def nest[G[_]: Invariant]: Invariant[Lambda[A => F[G[A]]]] =
-    new NestedInvariant[F, G] {
+  def compose[G[_]: Invariant]: Invariant[Lambda[A => F[G[A]]]] =
+    new ComposedInvariant[F, G] {
       val F = self
       val G = Invariant[G]
     }
 
-  def nestFunctor[G[_]: Functor]: Invariant[Lambda[A => F[G[A]]]] =
-    new NestedInvariantCovariant[F, G] {
+  def composeFunctor[G[_]: Functor]: Invariant[Lambda[A => F[G[A]]]] =
+    new ComposedInvariantCovariant[F, G] {
       val F = self
       val G = Functor[G]
     }
 
-  def nestContravariant[G[_]: Contravariant]: Invariant[Lambda[A => F[G[A]]]] =
-    new NestedInvariantContravariant[F, G] {
+  def composeContravariant[G[_]: Contravariant]: Invariant[Lambda[A => F[G[A]]]] =
+    new ComposedInvariantContravariant[F, G] {
       val F = self
       val G = Contravariant[G]
     }

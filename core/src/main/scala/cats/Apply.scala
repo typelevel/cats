@@ -1,7 +1,5 @@
 package cats
 
-import cats.data.NestedApply
-
 import simulacrum.typeclass
 
 /**
@@ -60,8 +58,8 @@ trait Apply[F[_]] extends Functor[F] with Cartesian[F] with ApplyArityFunctions[
   def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
     fb.map(fb => map2(fa, fb)(f))
 
-  def nest[G[_]: Apply]: Apply[Lambda[A => F[G[A]]]] =
-    new NestedApply[F, G] {
+  def compose[G[_]: Apply]: Apply[Lambda[A => F[G[A]]]] =
+    new ComposedApply[F, G] {
       val F = self
       val G = Apply[G]
     }

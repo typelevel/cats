@@ -1,6 +1,5 @@
 package cats
 
-import cats.data.NestedFoldable
 import scala.collection.mutable
 import simulacrum.typeclass
 
@@ -270,8 +269,8 @@ import simulacrum.typeclass
   def nonEmpty[A](fa: F[A]): Boolean =
     !isEmpty(fa)
 
-  def nest[G[_]: Foldable]: Foldable[Lambda[A => F[G[A]]]] =
-    new NestedFoldable[F, G] {
+  def compose[G[_]: Foldable]: Foldable[Lambda[A => F[G[A]]]] =
+    new ComposedFoldable[F, G] {
       val F = self
       val G = Foldable[G]
     }

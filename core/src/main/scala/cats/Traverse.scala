@@ -1,7 +1,5 @@
 package cats
 
-import cats.data.NestedTraverse
-
 import simulacrum.typeclass
 
 /**
@@ -51,10 +49,11 @@ import simulacrum.typeclass
   def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative,GA]): U.M[F[U.A]] =
     traverse(fga)(U.subst)(U.TC)
 
-  def nest[G[_]: Traverse]: Traverse[Lambda[A => F[G[A]]]] = new NestedTraverse[F, G] {
-    val F = self
-    val G = Traverse[G]
-  }
+  def compose[G[_]: Traverse]: Traverse[Lambda[A => F[G[A]]]] =
+    new ComposedTraverse[F, G] {
+      val F = self
+      val G = Traverse[G]
+    }
 
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     traverse[Id, A, B](fa)(f)

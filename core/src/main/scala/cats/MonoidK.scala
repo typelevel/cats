@@ -1,7 +1,5 @@
 package cats
 
-import cats.data.NestedMonoidK
-
 import simulacrum.typeclass
 
 /**
@@ -40,8 +38,8 @@ import simulacrum.typeclass
       def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
     }
 
-  override def nest[G[_]]: MonoidK[Lambda[A => F[G[A]]]] =
-    new NestedMonoidK[F, G] {
+  override def compose[G[_]]: MonoidK[Lambda[A => F[G[A]]]] =
+    new ComposedMonoidK[F, G] {
       val F = self
     }
 }
