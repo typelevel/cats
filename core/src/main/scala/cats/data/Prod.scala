@@ -11,47 +11,47 @@ final case class Prod[F[_], G[_], A](first: F[A], second: G[A])
 object Prod extends ProdInstances
 
 private[data] sealed abstract class ProdInstances extends ProdInstances0 {
-  implicit def prodAlternative[F[_], G[_]](implicit FF: Alternative[F], GG: Alternative[G]): Alternative[Lambda[X => Prod[F, G, X]]] = new ProdAlternative[F, G] {
+  implicit def catsDataAlternativeForProd[F[_], G[_]](implicit FF: Alternative[F], GG: Alternative[G]): Alternative[Lambda[X => Prod[F, G, X]]] = new ProdAlternative[F, G] {
     def F: Alternative[F] = FF
     def G: Alternative[G] = GG
   }
 
-  implicit def prodEq[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]]): Eq[Prod[F, G, A]] = new Eq[Prod[F, G, A]] {
+  implicit def catsDataEqForProd[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]]): Eq[Prod[F, G, A]] = new Eq[Prod[F, G, A]] {
     def eqv(x: Prod[F, G, A], y: Prod[F, G, A]): Boolean =
       FF.eqv(x.first, y.first) && GG.eqv(x.second, y.second)
   }
 }
 
 private[data] sealed abstract class ProdInstances0 extends ProdInstances1 {
-  implicit def prodMonoidK[F[_], G[_]](implicit FF: MonoidK[F], GG: MonoidK[G]): MonoidK[Lambda[X => Prod[F, G, X]]] = new ProdMonoidK[F, G] {
+  implicit def catsDataMonoidKForProd[F[_], G[_]](implicit FF: MonoidK[F], GG: MonoidK[G]): MonoidK[Lambda[X => Prod[F, G, X]]] = new ProdMonoidK[F, G] {
     def F: MonoidK[F] = FF
     def G: MonoidK[G] = GG
   }
 }
 
 private[data] sealed abstract class ProdInstances1 extends ProdInstances2 {
-  implicit def prodSemigroupK[F[_], G[_]](implicit FF: SemigroupK[F], GG: SemigroupK[G]): SemigroupK[Lambda[X => Prod[F, G, X]]] = new ProdSemigroupK[F, G] {
+  implicit def catsDataSemigroupKForProd[F[_], G[_]](implicit FF: SemigroupK[F], GG: SemigroupK[G]): SemigroupK[Lambda[X => Prod[F, G, X]]] = new ProdSemigroupK[F, G] {
     def F: SemigroupK[F] = FF
     def G: SemigroupK[G] = GG
   }
 }
 
 private[data] sealed abstract class ProdInstances2 extends ProdInstances3 {
-  implicit def prodApplicative[F[_], G[_]](implicit FF: Applicative[F], GG: Applicative[G]): Applicative[Lambda[X => Prod[F, G, X]]] = new ProdApplicative[F, G] {
+  implicit def catsDataApplicativeForProd[F[_], G[_]](implicit FF: Applicative[F], GG: Applicative[G]): Applicative[Lambda[X => Prod[F, G, X]]] = new ProdApplicative[F, G] {
     def F: Applicative[F] = FF
     def G: Applicative[G] = GG
   }
 }
 
 private[data] sealed abstract class ProdInstances3 extends ProdInstances4 {
-  implicit def prodApply[F[_], G[_]](implicit FF: Apply[F], GG: Apply[G]): Apply[Lambda[X => Prod[F, G, X]]] = new ProdApply[F, G] {
+  implicit def catsDataApplyForProd[F[_], G[_]](implicit FF: Apply[F], GG: Apply[G]): Apply[Lambda[X => Prod[F, G, X]]] = new ProdApply[F, G] {
     def F: Apply[F] = FF
     def G: Apply[G] = GG
   }
 }
 
 private[data] sealed abstract class ProdInstances4 {
-  implicit def prodFunctor[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[Lambda[X => Prod[F, G, X]]] = new ProdFunctor[F, G] {
+  implicit def catsDataFunctorForProd[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[Lambda[X => Prod[F, G, X]]] = new ProdFunctor[F, G] {
     def F: Functor[F] = FF
     def G: Functor[G] = GG
   }

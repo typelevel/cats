@@ -14,6 +14,9 @@ class OptionTests extends CatsSuite {
   checkAll("Option[Int]", MonadCombineTests[Option].monadCombine[Int, Int, Int])
   checkAll("MonadCombine[Option]", SerializableTests.serializable(MonadCombine[Option]))
 
+  checkAll("Option[Int]", MonadRecTests[Option].monadRec[Int, Int, Int])
+  checkAll("MonadRec[Option]", SerializableTests.serializable(MonadRec[Option]))
+
   checkAll("Option[Int] with Option", TraverseTests[Option].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Option]", SerializableTests.serializable(Traverse[Option]))
 

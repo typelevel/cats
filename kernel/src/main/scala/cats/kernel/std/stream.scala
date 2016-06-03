@@ -6,19 +6,19 @@ import cats.kernel.std.util.StaticMethods
 package object stream extends StreamInstances
 
 trait StreamInstances extends StreamInstances1 {
-  implicit def streamOrder[A: Order]: Order[Stream[A]] =
+  implicit def catsKernelStdOrderForStream[A: Order]: Order[Stream[A]] =
     new StreamOrder[A]
-  implicit def streamMonoid[A]: Monoid[Stream[A]] =
+  implicit def catsKernelStdMonoidForStream[A]: Monoid[Stream[A]] =
     new StreamMonoid[A]
 }
 
 trait StreamInstances1 extends StreamInstances2 {
-  implicit def streamPartialOrder[A: PartialOrder]: PartialOrder[Stream[A]] =
+  implicit def catsKernelStdPartialOrderForStream[A: PartialOrder]: PartialOrder[Stream[A]] =
     new StreamPartialOrder[A]
 }
 
 trait StreamInstances2 {
-  implicit def streamEq[A: Eq]: Eq[Stream[A]] =
+  implicit def catsKernelStdEqForStream[A: Eq]: Eq[Stream[A]] =
     new StreamEq[A]
 }
 

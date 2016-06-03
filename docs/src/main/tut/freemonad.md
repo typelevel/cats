@@ -166,14 +166,14 @@ DSL. By itself, this DSL only represents a sequence of operations
 To do this, we will use a *natural transformation* between type
 containers.  Natural transformations go between types like `F[_]` and
 `G[_]` (this particular transformation would be written as
-`NaturalTransformation[F,G]` or as done here using the symbolic
+`FunctionK[F,G]` or as done here using the symbolic
 alternative as `F ~> G`).
 
 In our case, we will use a simple mutable map to represent our key
 value store:
 
 ```tut:silent
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 import cats.{Id, ~>}
 import scala.collection.mutable
 
@@ -244,7 +244,7 @@ recursive structure by:
 This operation is called `Free.foldMap`:
 
 ```scala
-final def foldMap[M[_]](f: NaturalTransformation[S,M])(M: Monad[M]): M[A] = ...
+final def foldMap[M[_]](f: FunctionK[S,M])(M: Monad[M]): M[A] = ...
 ```
 
 `M` must be a `Monad` to be flattenable (the famous monoid aspect
@@ -252,7 +252,7 @@ under `Monad`). As `Id` is a `Monad`, we can use `foldMap`.
 
 To run your `Free` with previous `impureCompiler`:
 
-```tut
+```tut:book
 val result: Option[Int] = program.foldMap(impureCompiler)
 ```
 
@@ -291,7 +291,7 @@ val pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
 support for pattern matching is limited by the JVM's type erasure, but
 it's not too hard to get around.)
 
-```tut
+```tut:book
 val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(Map.empty).value
 ```
 
@@ -366,7 +366,7 @@ def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]): Free[Cats
 }
 ```
 
-Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so they can be
+Finally we write one interpreter per ADT and combine them with a `FunctionK` to `Coproduct` so they can be
 compiled and applied to our `Free` program.
 
 ```tut:invisible
@@ -403,7 +403,7 @@ Now if we run our program and type in "snuggles" when prompted, we see something
 import DataSource._, Interacts._
 ```
 
-```tut
+```tut:book
 val evaled: Unit = program.foldMap(interpreter)
 ```
 
@@ -420,14 +420,14 @@ _very simple_ Monad from any _functor_**.
 The above forgetful functor takes a `Monad` and:
 
  - forgets its *monadic* part (e.g. the `flatMap` function)
- - forgets its *applicative* part (e.g. the `pure` function)
+ - forgets its *pointed* part (e.g. the `pure` function)
  - finally keeps the *functor* part (e.g. the `map` function)
 
 By reversing all arrows to build the left-adjoint, we deduce that the
-forgetful functor is basically a construction that:
+free monad is basically a construction that:
 
  - takes a *functor*
- - adds the *applicative* part (e.g. `pure`)
+ - adds the *pointed* part (e.g. `pure`)
  - adds the *monadic* behavior (e.g. `flatMap`)
 
 In terms of implementation, to build a *monad* from a *functor* we use

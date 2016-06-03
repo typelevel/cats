@@ -132,20 +132,20 @@ object Ior extends IorInstances with IorFunctions {
 }
 
 private[data] sealed abstract class IorInstances extends IorInstances0 {
-  implicit def iorEq[A: Eq, B: Eq]: Eq[A Ior B] = new Eq[A Ior B] {
+  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] = new Eq[A Ior B] {
     def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
   }
 
-  implicit def iorShow[A: Show, B: Show]: Show[A Ior B] = new Show[A Ior B] {
+  implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] = new Show[A Ior B] {
     def show(f: A Ior B): String = f.show
   }
 
-  implicit def iorMonad[A: Semigroup]: Monad[A Ior ?] = new Monad[A Ior ?] {
+  implicit def catsDataMonadForIor[A: Semigroup]: Monad[A Ior ?] = new Monad[A Ior ?] {
     def pure[B](b: B): A Ior B = Ior.right(b)
     def flatMap[B, C](fa: A Ior B)(f: B => A Ior C): A Ior C = fa.flatMap(f)
   }
 
-  implicit def iorBifunctor: Bifunctor[Ior] =
+  implicit def catsDataBifunctorForIor: Bifunctor[Ior] =
     new Bifunctor[Ior] {
       override def bimap[A, B, C, D](fab: A Ior B)(f: A => C, g: B => D): C Ior D = fab.bimap(f, g)
     }
@@ -153,7 +153,7 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
 
 private[data] sealed abstract class IorInstances0 {
 
-  implicit def iorInstances[A]: Traverse[A Ior ?] with Functor[A Ior ?] = new Traverse[A Ior ?] with Functor[A Ior ?] {
+  implicit def catsDataTraverseFunctorForIor[A]: Traverse[A Ior ?] with Functor[A Ior ?] = new Traverse[A Ior ?] with Functor[A Ior ?] {
     def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =
       fa.traverse(f)
     def foldLeft[B, C](fa: A Ior B, b: C)(f: (C, B) => C): C =

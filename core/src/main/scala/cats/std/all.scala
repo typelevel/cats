@@ -15,4 +15,5 @@ trait AllInstances
   with    BigIntInstances
   with    BigDecimalInstances
   with    FutureInstances
+  with    TryInstances
   with    TupleInstances

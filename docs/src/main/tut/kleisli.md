@@ -36,7 +36,7 @@ val twiceAsManyCats: Int => String =
 
 Thus.
 
-```tut
+```tut:book
 twiceAsManyCats(1) // "2 cats"
 ```
 

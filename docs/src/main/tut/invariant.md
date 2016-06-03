@@ -102,6 +102,6 @@ val today: Date = longToDate(1449088684104l)
 val timeLeft: Date = longToDate(1900918893l)
 ```
 
-```tut
+```tut:book
 today |+| timeLeft
 ```

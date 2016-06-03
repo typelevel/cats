@@ -2,8 +2,8 @@ package cats.kernel
 package std
 
 trait FloatInstances {
-  implicit val floatOrder: Order[Float] = new FloatOrder
-  implicit val floatGroup: CommutativeGroup[Float] = new FloatGroup
+  implicit val catsKernelStdOrderForFloat: Order[Float] = new FloatOrder
+  implicit val catsKernelStdGroupForFloat: CommutativeGroup[Float] = new FloatGroup
 }
 
 /**
