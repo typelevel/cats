@@ -102,7 +102,7 @@ private[std] object TryInstances {
    * A `Failure` can be statically typed as `Try[A]` for all `A`, because it
    * does not actually contain an `A` value (as `Success[A]` does).
    */
-  def castFailure[A](f: Failure[_]): Try[A] = f.asInstanceOf[Try[A]]
+  @inline final def castFailure[A](f: Failure[_]): Try[A] = f.asInstanceOf[Try[A]]
 }
 
 private[std] sealed trait TryInstances1 extends TryInstances2 {
