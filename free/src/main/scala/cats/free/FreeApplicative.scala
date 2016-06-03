@@ -60,6 +60,8 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
         def apply[B](fa: F[B]): Free[F, B] = Free.liftF(fa)
       }
     }
+
+  override def toString(): String = "FreeApplicative(...)"
 }
 
 object FreeApplicative {

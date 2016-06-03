@@ -156,4 +156,5 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
 
   final def compile[T[_]](f: FunctionK[S,T]): Free[T, A] = mapSuspension(f)
 
+  override def toString(): String = "Free(...)"
 }
