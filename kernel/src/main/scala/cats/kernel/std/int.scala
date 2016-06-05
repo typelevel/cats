@@ -20,12 +20,12 @@ class IntOrder extends Order[Int] {
   def compare(x: Int, y: Int): Int =
     if (x < y) -1 else if (x > y) 1 else 0
 
-  override def eqv(x: Int, y: Int) = x == y
-  override def neqv(x: Int, y: Int) = x != y
-  override def gt(x: Int, y: Int) = x > y
-  override def gteqv(x: Int, y: Int) = x >= y
-  override def lt(x: Int, y: Int) = x < y
-  override def lteqv(x: Int, y: Int) = x <= y
+  override def eqv(x: Int, y: Int): Boolean = x == y
+  override def neqv(x: Int, y: Int): Boolean = x != y
+  override def gt(x: Int, y: Int): Boolean = x > y
+  override def gteqv(x: Int, y: Int): Boolean = x >= y
+  override def lt(x: Int, y: Int): Boolean = x < y
+  override def lteqv(x: Int, y: Int): Boolean = x <= y
 
   override def min(x: Int, y: Int): Int =
     java.lang.Math.min(x, y)

@@ -21,12 +21,12 @@ class ShortOrder extends Order[Short] {
   def compare(x: Short, y: Short): Int =
     if (x < y) -1 else if (x > y) 1 else 0
 
-  override def eqv(x: Short, y: Short) = x == y
-  override def neqv(x: Short, y: Short) = x != y
-  override def gt(x: Short, y: Short) = x > y
-  override def gteqv(x: Short, y: Short) = x >= y
-  override def lt(x: Short, y: Short) = x < y
-  override def lteqv(x: Short, y: Short) = x <= y
+  override def eqv(x: Short, y: Short): Boolean = x == y
+  override def neqv(x: Short, y: Short): Boolean = x != y
+  override def gt(x: Short, y: Short): Boolean = x > y
+  override def gteqv(x: Short, y: Short): Boolean = x >= y
+  override def lt(x: Short, y: Short): Boolean = x < y
+  override def lteqv(x: Short, y: Short): Boolean = x <= y
 
   override def min(x: Short, y: Short): Short =
     java.lang.Math.min(x.toInt, y.toInt).toShort

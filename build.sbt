@@ -48,7 +48,9 @@ lazy val commonSettings = Seq(
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
   parallelExecution in Test := false,
-  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
+  // workaround for https://github.com/scalastyle/scalastyle-sbt-plugin/issues/47
+  (scalastyleSources in Compile) <++= unmanagedSourceDirectories in Compile
 ) ++ warnUnusedImport
 
 lazy val tagName = Def.setting{

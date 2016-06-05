@@ -1,7 +1,7 @@
 package cats.kernel
 package std
 
-package object bigInt extends BigIntInstances
+package object bigInt extends BigIntInstances // scalastyle:ignore package.object.name
 
 trait BigIntInstances {
   implicit val catsKernelStdOrderForBigInt: Order[BigInt] =

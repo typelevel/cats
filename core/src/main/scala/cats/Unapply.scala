@@ -73,7 +73,7 @@ private[cats] sealed abstract class Unapply2Instances extends Unapply3Instances 
   }
 
   // the type we will instantiate when we find a type class instance
-  // for a type in the shape F[_[_],_] when we fix the right type, 
+  // for a type in the shape F[_[_],_] when we fix the right type
   type Aux2RightK[TC[_[_]], MA, F[_[_],_], AX[_], B] = Unapply[TC, MA] {
     type M[X] = F[AX,X]
     type A = B
