@@ -74,7 +74,7 @@ private[std] sealed trait Function1Instances extends Function1Instances0 {
   implicit def catsStdMonoidForFunction1[A,B](implicit M: Monoid[B]): Monoid[A => B] =
     new Function1Monoid[A, B] { def B: Monoid[B] = M }
 
-  implicit val catsStdMonoidKForFunction1: MonoidK[Lambda[A => A => A]] =
+  implicit val catsStdMonoidKForFunction1: MonoidK[λ[α => α => α]] =
     new Function1MonoidK {}
 }
 
@@ -82,7 +82,7 @@ private[std] sealed trait Function1Instances0 {
   implicit def catsStdSemigroupForFunction1[A,B](implicit S: Semigroup[B]): Semigroup[A => B] =
     new Function1Semigroup[A, B] { def B: Semigroup[B] = S }
 
-  implicit val catsStdSemigroupKForFunction1: SemigroupK[Lambda[A => A => A]] =
+  implicit val catsStdSemigroupKForFunction1: SemigroupK[λ[α => α => α]] =
     new Function1SemigroupK {}
 }
 
@@ -100,11 +100,11 @@ private[std] sealed trait Function1Monoid[A, B] extends Monoid[A => B] with Func
   override def empty: A => B = _ => B.empty
 }
 
-private[std] sealed trait Function1SemigroupK extends SemigroupK[Lambda[A => A => A]] {
+private[std] sealed trait Function1SemigroupK extends SemigroupK[λ[α => α => α]] {
   override def combineK[A](x: A => A, y: A => A): A => A = x compose y
 }
 
-private[std] sealed trait Function1MonoidK extends MonoidK[Lambda[A => A => A]] with Function1SemigroupK {
+private[std] sealed trait Function1MonoidK extends MonoidK[λ[α => α => α]] with Function1SemigroupK {
   override def empty[A]: A => A = identity[A]
 }
 

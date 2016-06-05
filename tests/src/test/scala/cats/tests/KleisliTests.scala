@@ -93,14 +93,14 @@ class KleisliTests extends CatsSuite {
 
   {
     implicit val catsDataMonoidKForKleisli = Kleisli.catsDataMonoidKForKleisli[Option]
-    checkAll("Kleisli[Option, Int, Int]", MonoidKTests[Lambda[A => Kleisli[Option, A, A]]].monoidK[Int])
-    checkAll("MonoidK[Lambda[A => Kleisli[Option, A, A]]]", SerializableTests.serializable(catsDataMonoidKForKleisli))
+    checkAll("Kleisli[Option, Int, Int]", MonoidKTests[λ[α => Kleisli[Option, α, α]]].monoidK[Int])
+    checkAll("MonoidK[λ[α => Kleisli[Option, α, α]]]", SerializableTests.serializable(catsDataMonoidKForKleisli))
   }
 
   {
     implicit val catsDataSemigroupKForKleisli = Kleisli.catsDataSemigroupKForKleisli[Option]
-    checkAll("Kleisli[Option, Int, Int]", SemigroupKTests[Lambda[A => Kleisli[Option, A, A]]].semigroupK[Int])
-    checkAll("SemigroupK[Lambda[A => Kleisli[Option, A, A]]]", SerializableTests.serializable(catsDataSemigroupKForKleisli))
+    checkAll("Kleisli[Option, Int, Int]", SemigroupKTests[λ[α => Kleisli[Option, α, α]]].semigroupK[Int])
+    checkAll("SemigroupK[λ[α => Kleisli[Option, α, α]]]", SerializableTests.serializable(catsDataSemigroupKForKleisli))
   }
 
   checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[Int, Int, Int])
@@ -155,14 +155,14 @@ class KleisliTests extends CatsSuite {
     Monad[Kleisli[List, Int, ?]]
     MonadReader[Kleisli[List, Int, ?], Int]
     Monoid[Kleisli[List, Int, String]]
-    MonoidK[Lambda[A => Kleisli[List, A, A]]]
+    MonoidK[λ[α => Kleisli[List, α, α]]]
     Arrow[Kleisli[List, ?, ?]]
     Choice[Kleisli[List, ?, ?]]
     Split[Kleisli[List, ?, ?]]
     Strong[Kleisli[List, ?, ?]]
     FlatMap[Kleisli[List, Int, ?]]
     Semigroup[Kleisli[List, Int, String]]
-    SemigroupK[Lambda[A => Kleisli[List, A, A]]]
+    SemigroupK[λ[α => Kleisli[List, α, α]]]
 
     // F is Id
     Functor[Kleisli[Id, Int, ?]]
@@ -171,14 +171,14 @@ class KleisliTests extends CatsSuite {
     Monad[Kleisli[Id, Int, ?]]
     MonadReader[Kleisli[Id, Int, ?], Int]
     Monoid[Kleisli[Id, Int, String]]
-    MonoidK[Lambda[A => Kleisli[Id, A, A]]]
+    MonoidK[λ[α => Kleisli[Id, α, α]]]
     Arrow[Kleisli[Id, ?, ?]]
     Choice[Kleisli[Id, ?, ?]]
     Split[Kleisli[Id, ?, ?]]
     Strong[Kleisli[Id, ?, ?]]
     FlatMap[Kleisli[Id, Int, ?]]
     Semigroup[Kleisli[Id, Int, String]]
-    SemigroupK[Lambda[A => Kleisli[Id, A, A]]]
+    SemigroupK[λ[α => Kleisli[Id, α, α]]]
 
     // using Reader alias instead of Kleisli with Id as F
     Functor[Reader[Int, ?]]
@@ -187,14 +187,14 @@ class KleisliTests extends CatsSuite {
     Monad[Reader[Int, ?]]
     MonadReader[Reader[Int, ?], Int]
     Monoid[Reader[Int, String]]
-    MonoidK[Lambda[A => Reader[A, A]]]
+    MonoidK[λ[α => Reader[α, α]]]
     Arrow[Reader[?, ?]]
     Choice[Reader[?, ?]]
     Split[Reader[?, ?]]
     Strong[Reader[?, ?]]
     FlatMap[Reader[Int, ?]]
     Semigroup[Reader[Int, String]]
-    SemigroupK[Lambda[A => Reader[A, A]]]
+    SemigroupK[λ[α => Reader[α, α]]]
 
     // using IntReader alias instead of Kleisli with Id as F and A as Int
     type IntReader[A] = Reader[Int, A]

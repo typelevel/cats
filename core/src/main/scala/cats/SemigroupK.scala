@@ -36,7 +36,7 @@ import simulacrum.typeclass
       def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
     }
 
-  def compose[G[_]]: SemigroupK[Lambda[A => F[G[A]]]] =
+  def compose[G[_]]: SemigroupK[λ[α => F[G[α]]]] =
     new ComposedSemigroupK[F, G] {
       val F = self
     }

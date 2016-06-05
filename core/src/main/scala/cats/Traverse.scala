@@ -49,7 +49,7 @@ import simulacrum.typeclass
   def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative,GA]): U.M[F[U.A]] =
     traverse(fga)(U.subst)(U.TC)
 
-  def compose[G[_]: Traverse]: Traverse[Lambda[A => F[G[A]]]] =
+  def compose[G[_]: Traverse]: Traverse[λ[α => F[G[α]]]] =
     new ComposedTraverse[F, G] {
       val F = self
       val G = Traverse[G]

@@ -126,7 +126,7 @@ class FreeApplicativeTests extends CatsSuite {
 
     val z = Apply[Dsl].map2(x, y)((_, _) => ())
 
-    val asString: FunctionK[Id,λ[α => String]] = new FunctionK[Id,λ[α => String]] {
+    val asString: FunctionK[Id, λ[α => String]] = new FunctionK[Id, λ[α => String]] {
       def apply[A](a: A): String = a.toString
     }
 

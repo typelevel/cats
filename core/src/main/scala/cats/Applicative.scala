@@ -44,7 +44,7 @@ import simulacrum.typeclass
   def sequence[G[_], A](as: G[F[A]])(implicit G: Traverse[G]): F[G[A]] =
     G.sequence(as)(this)
 
-  def compose[G[_]: Applicative]: Applicative[Lambda[A => F[G[A]]]] =
+  def compose[G[_]: Applicative]: Applicative[λ[α => F[G[α]]]] =
     new ComposedApplicative[F, G] {
       val F = self
       val G = Applicative[G]
