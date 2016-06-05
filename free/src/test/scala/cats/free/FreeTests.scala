@@ -97,6 +97,14 @@ class FreeTests extends CatsSuite {
     }
     assert(res == Xor.left(3))
   }
+
+  test(".foldLeftM short-circuiting") {
+    val ns = Stream.continually(1)
+    val res = Free.foldLeftM[Stream, Xor[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+      if (sum >= 100000) Xor.left(sum) else Xor.right(sum + n)
+    }
+    assert(res == Xor.left(100000))
+  }
 }
 
 object FreeTests extends FreeTestsInstances {
