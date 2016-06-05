@@ -28,6 +28,12 @@ class FreeApplicativeTests extends CatsSuite {
   checkAll("FreeApplicative[Option, ?]", ApplicativeTests[FreeApplicative[Option, ?]].applicative[Int, Int, Int])
   checkAll("Monad[FreeApplicative[Option, ?]]", SerializableTests.serializable(Applicative[FreeApplicative[Option, ?]]))
 
+  test("toString is stack-safe") {
+    val r = FreeApplicative.pure[List, Int](333)
+    val rr = (1 to 1000000).foldLeft(r)((r, _) => r.map(_ + 1))
+    rr.toString.length should be > 0
+  }
+
   test("FreeApplicative#fold") {
     val n = 2
     val o1 = Option(1)

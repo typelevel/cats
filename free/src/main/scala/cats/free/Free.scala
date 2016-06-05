@@ -215,4 +215,5 @@ object Free {
   def foldLeftM[F[_], G[_]: MonadRec, A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit F: Foldable[F]): G[B] =
     F.foldM[Free[G, ?], A, B](fa, z) { (b, a) => Free.liftF(f(b, a)) }.runTailRec
 
+  override def toString(): String = "Free(...)"
 }
