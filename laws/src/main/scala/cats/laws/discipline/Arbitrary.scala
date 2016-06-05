@@ -79,6 +79,9 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit def function0Arbitrary[A: Arbitrary]: Arbitrary[() => A] =
     Arbitrary(getArbitrary[A].map(() => _))
+
+  implicit def nestedArbitrary[F[_], G[_], A](implicit FG: Arbitrary[F[G[A]]]): Arbitrary[Nested[F, G, A]] =
+    Arbitrary(FG.arbitrary.map(Nested(_)))
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {

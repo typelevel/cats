@@ -109,13 +109,13 @@ Functor[List].fproduct(source)(len).toMap
 ### compose
 
 Functors compose! Given any functor `F[_]` and any functor `G[_]` we can
-create a new functor `F[G[_]]` by composing them:
+create a new functor `F[G[_]]` by composing them via the `Nested` data type:
 
 ```tut:book
-val listOpt = Functor[List] compose Functor[Option]
-listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
-val optList = Functor[Option] compose Functor[List]
-optList.map(Some(List(1, 2, 3)))(_ + 1)
-val listOptList = listOpt compose Functor[List]
-listOptList.map(List(Some(List(1,2)), None, Some(List(3,4))))(_ + 1)
+import cats.data.Nested
+val listOpt = Nested[List, Option, Int](List(Some(1), None, Some(3)))
+Functor[Nested[List, Option, ?]].map(listOpt)(_ + 1)
+
+val optList = Nested[Option, List, Int](Some(List(1, 2, 3)))
+Functor[Nested[Option, List, ?]].map(optList)(_ + 1)
 ```

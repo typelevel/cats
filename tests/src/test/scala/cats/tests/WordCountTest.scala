@@ -43,7 +43,7 @@ class WordCountTest extends CatsSuite {
     val wordCountState = allResults.first.first
     val lineCount = allResults.first.second
     val charCount = allResults.second
-    val wordCount = wordCountState.runA(false).value
+    val wordCount = wordCountState.value.runA(false).value
     charCount.getConst should === (96)
     lineCount.getConst should === (2)
     wordCount.getConst should === (17)

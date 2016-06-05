@@ -87,17 +87,14 @@ sealed abstract class AppFunc[F[_], A, B] extends Func[F, A, B] { self =>
       }
     }
 
-  def compose[G[_], C](g: AppFunc[G, C, A]): AppFunc[Lambda[X => G[F[X]]], C, B] =
-    {
-      implicit val FF: Applicative[F] = self.F
-      implicit val GG: Applicative[G] = g.F
-      implicit val GGFF: Applicative[Lambda[X => G[F[X]]]] = GG.compose(FF)
-      Func.appFunc[Lambda[X => G[F[X]]], C, B]({
-        c: C => GG.map(g.run(c))(self.run)
-      })
-    }
+  def compose[G[_], C](g: AppFunc[G, C, A]): AppFunc[Nested[G, F, ?], C, B] = {
+    implicit val gfApplicative: Applicative[Nested[G, F, ?]] = Nested.nestedApplicative[G, F](g.F, F)
+    Func.appFunc[Nested[G, F, ?], C, B]({
+      c: C => Nested(g.F.map(g.run(c))(self.run))
+    })
+  }
 
-  def andThen[G[_], C](g: AppFunc[G, B, C]): AppFunc[Lambda[X => F[G[X]]], A, C] =
+  def andThen[G[_], C](g: AppFunc[G, B, C]): AppFunc[Nested[F, G, ?], A, C] =
     g.compose(self)
 
   def map[C](f: B => C): AppFunc[F, A, C] =

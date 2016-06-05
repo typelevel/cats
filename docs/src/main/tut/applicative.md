@@ -35,7 +35,9 @@ operation will lift the passed value into one context, and the result
 into the other context:
 
 ```tut:book
-(Applicative[List] compose Applicative[Option]).pure(1)
+import cats.data.Nested
+val nested = Applicative[Nested[List, Option, ?]].pure(1)
+val unwrapped = nested.value
 ```
 
 ## Applicative Functors & Monads
