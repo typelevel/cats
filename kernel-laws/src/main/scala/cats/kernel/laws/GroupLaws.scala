@@ -8,7 +8,7 @@ import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 
 object GroupLaws {
-  def apply[A : Eq : Arbitrary] = new GroupLaws[A] {
+  def apply[A : Eq : Arbitrary]: GroupLaws[A] = new GroupLaws[A] {
     def Equ = Eq[A]
     def Arb = implicitly[Arbitrary[A]]
   }
@@ -21,7 +21,7 @@ trait GroupLaws[A] extends Laws {
 
   // groups
 
-  def semigroup(implicit A: Semigroup[A]) = new GroupProperties(
+  def semigroup(implicit A: Semigroup[A]): GroupProperties = new GroupProperties(
     name = "semigroup",
     parents = Nil,
     Rules.serializable(A),
@@ -30,25 +30,25 @@ trait GroupLaws[A] extends Laws {
     Rules.repeat2("combineN", "|+|")(A.combineN)(A.combine)
   )
 
-  def band(implicit A: Band[A]) = new GroupProperties(
+  def band(implicit A: Band[A]): GroupProperties = new GroupProperties(
     name = "band",
     parents = List(semigroup),
     Rules.idempotence(A.combine),
     "isIdempotent" -> Semigroup.isIdempotent[A]
   )
 
-  def commutativeSemigroup(implicit A: CommutativeSemigroup[A]) = new GroupProperties(
+  def commutativeSemigroup(implicit A: CommutativeSemigroup[A]): GroupProperties = new GroupProperties(
     name = "commutative semigroup",
     parents = List(semigroup),
     Rules.commutative(A.combine)
   )
 
-  def semilattice(implicit A: Semilattice[A]) = new GroupProperties(
+  def semilattice(implicit A: Semilattice[A]): GroupProperties = new GroupProperties(
     name = "semilattice",
     parents = List(band, commutativeSemigroup)
   )
 
-  def monoid(implicit A: Monoid[A]) = new GroupProperties(
+  def monoid(implicit A: Monoid[A]): GroupProperties = new GroupProperties(
     name = "monoid",
     parents = List(semigroup),
     Rules.leftIdentity(A.empty)(A.combine),
@@ -58,17 +58,17 @@ trait GroupLaws[A] extends Laws {
     Rules.isId("isEmpty", A.empty)(A.isEmpty)
   )
 
-  def commutativeMonoid(implicit A: CommutativeMonoid[A]) = new GroupProperties(
+  def commutativeMonoid(implicit A: CommutativeMonoid[A]): GroupProperties = new GroupProperties(
     name = "commutative monoid",
     parents = List(monoid, commutativeSemigroup)
   )
 
-  def boundedSemilattice(implicit A: BoundedSemilattice[A]) = new GroupProperties(
+  def boundedSemilattice(implicit A: BoundedSemilattice[A]): GroupProperties = new GroupProperties(
     name = "boundedSemilattice",
     parents = List(commutativeMonoid, semilattice)
   )
 
-  def group(implicit A: Group[A]) = new GroupProperties(
+  def group(implicit A: Group[A]): GroupProperties = new GroupProperties(
     name = "group",
     parents = List(monoid),
     Rules.leftInverse(A.empty)(A.combine)(A.inverse),
@@ -76,7 +76,7 @@ trait GroupLaws[A] extends Laws {
     Rules.consistentInverse("remove")(A.remove)(A.combine)(A.inverse)
   )
 
-  def commutativeGroup(implicit A: CommutativeGroup[A]) = new GroupProperties(
+  def commutativeGroup(implicit A: CommutativeGroup[A]): GroupProperties = new GroupProperties(
     name = "commutative group",
     parents = List(group, commutativeMonoid)
   )

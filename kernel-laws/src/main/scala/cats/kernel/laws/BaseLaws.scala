@@ -7,7 +7,7 @@ import org.typelevel.discipline.Laws
 import org.scalacheck.{Arbitrary, Prop}
 
 object BaseLaws {
-  def apply[A : Eq : Arbitrary] = new BaseLaws[A] {
+  def apply[A : Eq : Arbitrary]: BaseLaws[A] = new BaseLaws[A] {
     def Equ = Eq[A]
     def Arb = implicitly[Arbitrary[A]]
   }

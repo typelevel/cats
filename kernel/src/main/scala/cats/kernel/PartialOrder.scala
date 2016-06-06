@@ -141,7 +141,7 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] {
   /**
    * Access an implicit `PartialOrder[A]`.
    */
-  @inline final def apply[A](implicit ev: PartialOrder[A]) = ev
+  @inline final def apply[A](implicit ev: PartialOrder[A]): PartialOrder[A] = ev
 
   /**
    * Convert an implicit `PartialOrder[B]` to an `PartialOrder[A]` using the given

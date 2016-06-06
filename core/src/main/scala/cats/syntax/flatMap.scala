@@ -36,7 +36,7 @@ final class FlatMapOps[F[_], A](fa: F[A])(implicit F: FlatMap[F]) {
   def >>=[B](f: A => F[B]): F[B] = F.flatMap(fa)(f)
 
   /** Alias for [[followedBy]]. */
-  @inline final def >> [B](fb: F[B]): F[B] = followedBy(fb)
+  @inline final def >>[B](fb: F[B]): F[B] = followedBy(fb)
 
   /** Sequentially compose two actions, discarding any value produced by the first. */
   def followedBy[B](fb: F[B]): F[B] = F.flatMap(fa)(_ => fb)

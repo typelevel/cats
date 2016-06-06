@@ -4,7 +4,7 @@ package syntax
 import cats.data.{ Xor, Validated, ValidatedNel }
 
 trait OptionSyntax {
-  final def none[A] = Option.empty[A]
+  final def none[A]: Option[A] = Option.empty[A]
   implicit final def optionIdSyntax[A](a: A): OptionIdOps[A] = new OptionIdOps(a)
   implicit final def optionSyntax[A](oa: Option[A]): OptionOps[A] = new OptionOps(oa)
 }

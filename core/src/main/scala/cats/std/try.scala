@@ -10,6 +10,7 @@ import scala.util.{Failure, Success, Try}
 
 trait TryInstances extends TryInstances1 {
 
+  // scalastyle:off method.length
   implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] =
     new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] {
       def pure[A](x: A): Try[A] = Success(x)
@@ -74,6 +75,7 @@ trait TryInstances extends TryInstances1 {
 
       override def map[A, B](ta: Try[A])(f: A => B): Try[B] = ta.map(f)
     }
+  // scalastyle:on method.length
 
   implicit def catsStdShowForTry[A](implicit A: Show[A]): Show[Try[A]] =
     new Show[Try[A]] {

@@ -249,7 +249,7 @@ private trait KleisliSemigroup[F[_], A, B] extends Semigroup[Kleisli[F, A, B]] {
 private trait KleisliMonoid[F[_], A, B] extends Monoid[Kleisli[F, A, B]] with KleisliSemigroup[F, A, B] {
   implicit def FB: Monoid[F[B]]
 
-  override def empty = Kleisli[F, A, B](a => FB.empty)
+  override def empty: Kleisli[F, A, B] = Kleisli[F, A, B](a => FB.empty)
 }
 
 private trait KleisliSemigroupK[F[_]] extends SemigroupK[λ[α => Kleisli[F, α, α]]] {
