@@ -20,7 +20,7 @@ private[free] sealed abstract class InjectInstances {
     new Inject[F, F] {
       def inj[A](fa: F[A]): F[A] = fa
 
-      def prj[A](ga: F[A]): Option[F[A]] = Option(ga)
+      def prj[A](ga: F[A]): Option[F[A]] = Some(ga)
     }
 
   implicit def leftInjectInstance[F[_], G[_]]: Inject[F, Coproduct[F, G, ?]] =

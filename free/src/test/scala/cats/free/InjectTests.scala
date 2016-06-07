@@ -101,4 +101,10 @@ class InjectTests extends CatsSuite {
     }
   }
 
+  test("null identity") {
+    val listIntNull = null.asInstanceOf[List[Int]]
+    Inject.reflexiveInjectInstance[List].inj[Int](listIntNull) should ===(listIntNull)
+    Inject.reflexiveInjectInstance[List].prj[Int](listIntNull) should ===(Some(listIntNull))
+  }
+
 }
