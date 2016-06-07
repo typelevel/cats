@@ -67,7 +67,7 @@ object Kleisli extends KleisliInstances with KleisliFunctions
 
 private[data] sealed trait KleisliFunctions {
 
-  def const[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
+  def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
     Kleisli(_ => x)
 
   def pure[F[_], A, B](x: B)(implicit F: Applicative[F]): Kleisli[F, A, B] =
@@ -124,7 +124,7 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
     new TransLift[Kleisli[?[_], A, ?]] {
       type TC[M[_]] = Trivial
 
-      def liftT[M[_], B](ma: M[B])(implicit ev: Trivial): Kleisli[M, A, B] = Kleisli.const(ma)
+      def liftT[M[_], B](ma: M[B])(implicit ev: Trivial): Kleisli[M, A, B] = Kleisli.lift(ma)
     }
 
   implicit def catsDataApplicativeErrorForKleisli[F[_], A, E](implicit AE: ApplicativeError[F, E]): ApplicativeError[Kleisli[F, A, ?], E]
