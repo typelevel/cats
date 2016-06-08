@@ -117,6 +117,18 @@ class KleisliTests extends CatsSuite {
     checkAll("SemigroupK[λ[α => Kleisli[Option, α, α]]]", SerializableTests.serializable(catsDataSemigroupKForKleisli))
   }
 
+  {
+    implicit val catsDataSemigroupKForKleisliAB = Kleisli.catsDataSemigroupKForKleisliAB[Option, String]
+    checkAll("Kleisli[Option, String, Int]", SemigroupKTests[Kleisli[Option, String, ?]].semigroupK[Int])
+    checkAll("SemigroupK[Kleisli[Option, String, ?]]", SerializableTests.serializable(catsDataSemigroupKForKleisliAB))
+  }
+
+  {
+    implicit val catsDataMonoidKForKleisliAB = Kleisli.catsDataMonoidKForKleisliAB[Option, String]
+    checkAll("Kleisli[Option, String, Int]", MonoidKTests[Kleisli[Option, String, ?]].monoidK[Int])
+    checkAll("MonoidK[Kleisli[Option, String, ?]]", SerializableTests.serializable(catsDataMonoidKForKleisliAB))
+  }
+
   checkAll("Reader[Int, Int]", FunctorTests[Reader[Int, ?]].functor[Int, Int, Int])
 
   checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[Int, Int, Int])
