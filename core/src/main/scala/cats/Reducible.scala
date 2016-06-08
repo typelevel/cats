@@ -75,7 +75,7 @@ import simulacrum.typeclass
    * Overriden from `Foldable[_]` for efficiency.
    */
   override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
-    reduceRightTo(fa)(f)(g).map(Option(_))
+    reduceRightTo(fa)(f)(g).map(Some(_))
 
   /**
    * Traverse `F[A]` using `Apply[G]`.
