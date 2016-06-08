@@ -64,4 +64,10 @@
    <parameter name="ignoreOverride">false</parameter>
   </parameters>
  </check>
+ <check level="error" class="org.scalastyle.file.RegexChecker" enabled="true" customId="kind.projector.lambda">
+  <parameters>
+   <parameter name="regex">Lambda\[</parameter>
+  </parameters>
+  <customMessage><![CDATA[Use Greek characters in a kind projection (λ[α => ...]).]]></customMessage>
+ </check>
 </scalastyle>
