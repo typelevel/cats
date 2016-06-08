@@ -78,8 +78,8 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
   def withValidated[AA,BB](f: Validated[A,B] => Validated[AA,BB]): AA Xor BB =
     f(toValidated).toXor
 
-  def to[F[_], BB >: B](implicit monoidKF: MonoidK[F], applicativeF: Applicative[F]): F[BB] =
-    fold(_ => monoidKF.empty, applicativeF.pure)
+  def to[F[_], BB >: B](implicit F: Alternative[F]): F[BB] =
+    fold(_ => F.empty, F.pure)
 
   def bimap[C, D](fa: A => C, fb: B => D): C Xor D = this match {
     case Xor.Left(a) => Xor.Left(fa(a))
