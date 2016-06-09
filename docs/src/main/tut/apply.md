@@ -121,7 +121,7 @@ In order to use it, first import `cats.syntax.all._` or `cats.syntax.cartesian._
 Here we see that the following two functions, `f1` and `f2`, are equivalent:
 
 ```tut:book
-import cats.syntax.cartesian._
+import cats.implicits._
 
 def f1(a: Option[Int], b: Option[Int], c: Option[Int]) =
   (a |@| b |@| c) map { _ * _ * _ }

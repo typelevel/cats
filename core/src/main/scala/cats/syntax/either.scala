@@ -15,7 +15,7 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.syntax.either._
+   * scala> import cats.implicits._
    *
    * scala> val i: Either[String, Int] = Right(3)
    * scala> i.toXor
