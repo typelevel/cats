@@ -287,14 +287,8 @@ private[data] abstract class XorTInstances3 extends XorTInstances4 {
     new XorTMonadError[F, L] { implicit val F = F0 }
   }
 
-  implicit def catsDataSemigroupKForXorT[F[_], L](implicit F: Monad[F]): SemigroupK[XorT[F, L, ?]] =
-    new SemigroupK[XorT[F,L,?]] {
-      def combineK[A](x: XorT[F,L,A], y: XorT[F, L, A]): XorT[F, L, A] =
-        XorT(F.flatMap(x.value) {
-          case l @ Xor.Left(_) => y.value
-          case r @ Xor.Right(_) => F.pure(r)
-        })
-  }
+  implicit def catsDataSemigroupKForXorT[F[_], L](implicit F0: Applicative[F]): SemigroupK[XorT[F, L, ?]] =
+    new XorTSemigroupK[F, L] { implicit val F = F0 }
 
   implicit def catsDataEqForXorT[F[_], L, R](implicit F: Eq[F[L Xor R]]): Eq[XorT[F, L, R]] =
     new XorTEq[F, L, R] {
@@ -312,6 +306,15 @@ private[data] abstract class XorTInstances4 {
 private[data] trait XorTFunctor[F[_], L] extends Functor[XorT[F, L, ?]] {
   implicit val F: Functor[F]
   override def map[A, B](fa: XorT[F, L, A])(f: A => B): XorT[F, L, B] = fa map f
+}
+
+private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
+  implicit val F: Applicative[F]
+  def combineK[A](x: XorT[F,L,A], y: XorT[F, L, A]): XorT[F, L, A] = {
+    //need to write this out explicitly because orElse is lazy
+    val f = F.map(x.value)(xx => (yy: L Xor A) => xx.orElse(yy))
+    XorT(F.ap(f)(y.value))
+  }
 }
 
 private[data] trait XorTMonad[F[_], L] extends Monad[XorT[F, L, ?]] with XorTFunctor[F, L] {
