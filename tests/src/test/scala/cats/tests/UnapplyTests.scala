@@ -29,4 +29,11 @@ class UnapplyTests extends CatsSuite {
   }
 
   checkAll("Unapply[Functor, Option[String]]", SerializableTests.serializable(Unapply[Functor, Option[String]]))
+
+  test("Unapply works for F[_[_], _[_], _]") {
+    val x: List[Option[Int]] = List(Option(1), Option(2))
+    val y: Nested[List, Option, Int] = Nested(x)
+
+    y.map(_ + 1).value should === (x.map(_.map(_ + 1)))
+  }
 }
