@@ -16,7 +16,7 @@ import simulacrum.typeclass
     *
     * Example:
     * {{{
-    * scala> import cats.std.option._
+    * scala> import cats.implicits._
     * scala> import cats.Monad
     * scala> import cats.CoflatMap
     * scala> val fa = Monad[Option].pure(3)
@@ -35,7 +35,7 @@ import simulacrum.typeclass
     *
     * Example:
     * {{{
-    * scala> import cats.std.option._
+    * scala> import cats.implicits._
     * scala> import cats.Monad
     * scala> import cats.CoflatMap
     * scala> val fa = Monad[Option].pure(3)

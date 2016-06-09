@@ -110,7 +110,7 @@ object OptionT extends OptionTInstances {
    * Note: The return type is a FromOptionPartiallyApplied[F], which has an apply method
    * on it, allowing you to call fromOption like this:
    * {{{
-   * scala> import cats.std.list._
+   * scala> import cats.implicits._
    * scala> val o: Option[Int] = Some(2)
    * scala> OptionT.fromOption[List](o)
    * res0: OptionT[List, Int] = OptionT(List(Some(2)))

@@ -17,9 +17,7 @@ final class MonadCombineOps[F[_], G[_], A](fga: F[G[A]])(implicit F: MonadCombin
    *
    * Example:
    * {{{
-   * scala> import cats.std.list._
-   * scala> import cats.std.vector._
-   * scala> import cats.syntax.monadCombine._
+   * scala> import cats.implicits._
    * scala> val x: List[Vector[Int]] = List(Vector(1, 2), Vector(3, 4))
    * scala> x.unite
    * res0: List[Int] = List(1, 2, 3, 4)
@@ -36,8 +34,7 @@ final class SeparateOps[F[_], G[_, _], A, B](fgab: F[G[A, B]])(implicit F: Monad
    * Example:
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.list._
-   * scala> import cats.syntax.monadCombine._
+   * scala> import cats.implicits._
    * scala> val l: List[Xor[String, Int]] = List(Xor.right(1), Xor.left("error"))
    * scala> l.separate
    * res0: (List[String], List[Int]) = (List(error),List(1))

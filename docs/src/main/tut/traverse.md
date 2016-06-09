@@ -92,8 +92,7 @@ trivially satisfy the `F[_]` shape required by `Applicative`.
 ```tut:silent
 import cats.Semigroup
 import cats.data.{NonEmptyList, OneAnd, Validated, ValidatedNel, Xor}
-import cats.std.list._
-import cats.syntax.traverse._
+import cats.implicits._
 
 def parseIntXor(s: String): Xor[NumberFormatException, Int] =
   Xor.catchOnly[NumberFormatException](s.toInt)
@@ -188,7 +187,7 @@ for instance a `List[Option[A]]`. To make this easier to work with, you want a `
 Given `Option` has an `Applicative` instance, we can traverse over the list with the identity function.
 
 ```tut:book
-import cats.std.option._
+import cats.implicits._
 val l1 = List(Option(1), Option(2), Option(3)).traverse(identity)
 val l2 = List(Option(1), None, Option(3)).traverse(identity)
 ```
@@ -212,7 +211,7 @@ def writeToStore(data: Data): Future[Unit] = ???
 If we traverse using this, we end up with a funny type.
 
 ```tut:silent
-import cats.std.future._
+import cats.implicits._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 def writeManyToStore(data: List[Data]) =
@@ -227,7 +226,7 @@ is common, so `Foldable` (superclass of `Traverse`) provides `traverse_` and `se
 same thing as `traverse` and `sequence` but ignores any value produced along the way, returning `Unit` at the end.
 
 ```tut:silent
-import cats.syntax.foldable._
+import cats.implicits._
 
 def writeManyToStore(data: List[Data]) = 
   data.traverse_(writeToStore)

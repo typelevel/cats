@@ -22,7 +22,7 @@ obvious. For `Option`, the `pure` operation wraps the value in
 
 ```tut:book
 import cats._
-import cats.std.all._
+import cats.implicits._
 
 Applicative[Option].pure(1)
 Applicative[List].pure(1)

@@ -147,7 +147,7 @@ Time to parse.
 ```tut:silent
 import cats.SemigroupK
 import cats.data.NonEmptyList
-import cats.std.list._
+import cats.implicits._
 
 case class ConnectionParams(url: String, port: Int)
 

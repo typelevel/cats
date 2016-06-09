@@ -22,9 +22,7 @@ final class TraverseOps[F[_], A](fa: F[A])(implicit F: Traverse[F]) {
    * Example:
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.list._
-   * scala> import cats.std.option._
-   * scala> import cats.syntax.traverse._
+   * scala> import cats.implicits._
    * scala> def parseInt(s: String): Option[Int] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
    * scala> List("1", "2", "3").traverse(parseInt)
    * res0: Option[List[Int]] = Some(List(1, 2, 3))
@@ -41,8 +39,7 @@ final class TraverseOps[F[_], A](fa: F[A])(implicit F: Traverse[F]) {
    * Example:
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.list._
-   * scala> import cats.syntax.traverse._
+   * scala> import cats.implicits._
    * scala> def parseInt(s: String): Xor[String, Int] = Xor.catchOnly[NumberFormatException](s.toInt).leftMap(_ => "no number")
    * scala> val ns = List("1", "2", "3")
    * scala> ns.traverseU(parseInt)
@@ -60,9 +57,7 @@ final class TraverseOps[F[_], A](fa: F[A])(implicit F: Traverse[F]) {
    * Example:
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.list._
-   * scala> import cats.std.option._
-   * scala> import cats.syntax.traverse._
+   * scala> import cats.implicits._
    * scala> def parseInt(s: String): Option[Int] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
    * scala> val x = Option(List("1", "two", "3"))
    * scala> x.traverseM(_.map(parseInt))
@@ -77,9 +72,7 @@ final class TraverseOps[F[_], A](fa: F[A])(implicit F: Traverse[F]) {
    *
    * Example:
    * {{{
-   * scala> import cats.std.list._
-   * scala> import cats.std.option._
-   * scala> import cats.syntax.traverse._
+   * scala> import cats.implicits._
    * scala> val x: List[Option[Int]] = List(Some(1), Some(2))
    * scala> val y: List[Option[Int]] = List(None, Some(2))
    * scala> x.sequence
@@ -97,8 +90,7 @@ final class TraverseOps[F[_], A](fa: F[A])(implicit F: Traverse[F]) {
    * Example:
    * {{{
    * scala> import cats.data.{Validated, ValidatedNel}
-   * scala> import cats.std.list._
-   * scala> import cats.syntax.traverse._
+   * scala> import cats.implicits._
    * scala> val x: List[ValidatedNel[String, Int]] = List(Validated.valid(1), Validated.invalid("a"), Validated.invalid("b")).map(_.toValidatedNel)
    * scala> x.sequenceU
    * res0: cats.data.ValidatedNel[String,List[Int]] = Invalid(OneAnd(a,List(b)))

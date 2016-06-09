@@ -22,9 +22,7 @@ final class NestedFoldableOps[F[_], G[_], A](fga: F[G[A]])(implicit F: Foldable[
    *
    * Example:
    * {{{
-   * scala> import cats.std.list._
-   * scala> import cats.std.set._
-   * scala> import cats.syntax.foldable._
+   * scala> import cats.implicits._
    *
    * scala> val l: List[Set[Int]] = List(Set(1, 2), Set(2, 3), Set(3, 4))
    * scala> l.foldK

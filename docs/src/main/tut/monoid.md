@@ -28,7 +28,6 @@ First some imports.
 
 ```tut:silent
 import cats._
-import cats.std.all._
 import cats.implicits._
 ```
 

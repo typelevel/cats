@@ -31,7 +31,6 @@ First some imports.
 
 ```tut:silent
 import cats._
-import cats.std.all._
 import cats.implicits._
 ```
 
@@ -67,9 +66,7 @@ following the convention from scalaz, that `|+|` is the
 operator from `Semigroup`.
 
 ```tut:silent
-import cats.syntax.all._
 import cats.implicits._
-import cats.std._
 
 val one = Option(1)
 val two = Option(2)

@@ -161,9 +161,7 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
    *
    * Example:
    * {{{
-   * scala> import cats.std.option._
-   * scala> import cats.std.list._
-   * scala> import cats.syntax.cartesian._
+   * scala> import cats.implicits._
    * scala> type Error = String
    * scala> val v1: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList("error 1"))
    * scala> val v2: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList("error 2"))
@@ -192,7 +190,7 @@ trait XorTFunctions {
    * Note: The return type is a FromXorPartiallyApplied[F], which has an apply method
    * on it, allowing you to call fromXor like this:
    * {{{
-   * scala> import cats.std.option._
+   * scala> import cats.implicits._
    * scala> val t: Xor[String, Int] = Xor.right(3)
    * scala> XorT.fromXor[Option](t)
    * res0: XorT[Option, String, Int] = XorT(Some(Right(3)))

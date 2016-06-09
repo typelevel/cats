@@ -92,8 +92,7 @@ import simulacrum.typeclass
    *
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.list._
-   * scala> import cats.std.option._
+   * scala> import cats.implicits._
    * scala> def parseInt(s: String): Option[Int] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
    * scala> val F = Foldable[List]
    * scala> F.traverse_(List("333", "444"))(parseInt)
@@ -118,7 +117,7 @@ import simulacrum.typeclass
    *
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.list._
+   * scala> import cats.implicits._
    * scala> def parseInt(s: String): Xor[String, Int] =
    *      |   try { Xor.Right(s.toInt) }
    *      |   catch { case _: NumberFormatException => Xor.Left("boo") }
@@ -145,8 +144,7 @@ import simulacrum.typeclass
    * For example:
    *
    * {{{
-   * scala> import cats.std.list._
-   * scala> import cats.std.option._
+   * scala> import cats.implicits._
    * scala> val F = Foldable[List]
    * scala> F.sequence_(List(Option(1), Option(2), Option(3)))
    * res0: Option[Unit] = Some(())
@@ -164,7 +162,7 @@ import simulacrum.typeclass
    *
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.list._
+   * scala> import cats.implicits._
    * scala> val F = Foldable[List]
    * scala> F.sequenceU_(List(Xor.right[String, Int](333), Xor.Right(444)))
    * res0: Xor[String, Unit] = Right(())
@@ -188,7 +186,7 @@ import simulacrum.typeclass
    * For example:
    *
    * {{{
-   * scala> import cats.std.list._
+   * scala> import cats.implicits._
    * scala> val F = Foldable[List]
    * scala> F.foldK(List(1 :: 2 :: Nil, 3 :: 4 :: 5 :: Nil))
    * res0: List[Int] = List(1, 2, 3, 4, 5)

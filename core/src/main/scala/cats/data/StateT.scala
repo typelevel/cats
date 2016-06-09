@@ -85,7 +85,7 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
    * global state containing the various states needed for each individual `StateT`.
    *
    * {{{
-   * scala> import cats.std.option._ // needed for StateT.apply
+   * scala> import cats.implicits._ // needed for StateT.apply
    * scala> type GlobalEnv = (Int, String)
    * scala> val x: StateT[Option, Int, Double] = StateT((x: Int) => Option((x + 1, x.toDouble)))
    * scala> val xt: StateT[Option, GlobalEnv, Double] = x.transformS[GlobalEnv](_._1, (t, i) => (i, t._2))

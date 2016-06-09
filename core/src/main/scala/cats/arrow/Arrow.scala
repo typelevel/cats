@@ -16,7 +16,7 @@ trait Arrow[F[_, _]] extends Split[F] with Strong[F] with Category[F] { self =>
     *
     * Example:
     * {{{
-    * scala> import cats.std.function._
+    * scala> import cats.implicits._
     * scala> import cats.arrow.Arrow
     * scala> val fab: Double => Double = x => x + 0.3
     * scala> val f: Int => Double = x => x.toDouble / 2
@@ -34,7 +34,7 @@ trait Arrow[F[_, _]] extends Split[F] with Strong[F] with Category[F] { self =>
     *
     * Example:
     * {{{
-    * scala> import cats.std.function._
+    * scala> import cats.implicits._
     * scala> import cats.arrow.Arrow
     * scala> val f: Int => Int = _ * 2
     * scala> val fab = Arrow[Function1].first[Int,Int,Int](f)
@@ -49,7 +49,7 @@ trait Arrow[F[_, _]] extends Split[F] with Strong[F] with Category[F] { self =>
     *
     * Example:
     * {{{
-    * scala> import cats.std.function._
+    * scala> import cats.implicits._
     * scala> import cats.arrow.Arrow
     * scala> val f: Int => Int = _ * 2
     * scala> val fab = Arrow[Function1].second[Int,Int,Int](f)
@@ -68,7 +68,7 @@ trait Arrow[F[_, _]] extends Split[F] with Strong[F] with Category[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.std.function._
+   * scala> import cats.implicits._
    * scala> import cats.arrow.Arrow
    * scala> val toLong: Int => Long = _.toLong
    * scala> val toDouble: Float => Double = _.toDouble

@@ -39,7 +39,7 @@ scala common library:
 
 ```tut:silent
 import cats._
-import cats.std.all._
+import cats.implicits._
 ```
 
 Examples.
@@ -97,9 +97,7 @@ There is inline syntax available for both `Semigroup` and
 from `SemigroupK` (called `Plus` in scalaz).
 
 ```tut:silent
-import cats.syntax.all._
 import cats.implicits._
-import cats.std._
 
 val one = Option(1)
 val two = Option(2)

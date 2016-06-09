@@ -44,7 +44,7 @@ Because a `FreeApplicative` only supports the operations of `Applicative`, we do
 of a for-comprehension. We can however still use `Applicative` syntax provided by Cats.
 
 ```tut:silent
-import cats.syntax.cartesian._
+import cats.implicits._
 
 val prog: Validation[Boolean] = (size(5) |@| hasNumber).map { case (l, r) => l && r}
 ```
@@ -55,7 +55,7 @@ at this point. To make our program useful we need to interpret it.
 ```tut:silent
 import cats.Id
 import cats.arrow.FunctionK
-import cats.std.function._
+import cats.implicits._
 
 // a function that takes a string as input
 type FromString[A] = String => A
@@ -95,7 +95,7 @@ write a validator that validates in parallel.
 
 ```tut:silent
 import cats.data.Kleisli
-import cats.std.future._
+import cats.implicits._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -125,7 +125,7 @@ we can completely ignore the return type of the operation and return just a `Lis
 
 ```tut:silent
 import cats.data.Const
-import cats.std.list._
+import cats.implicits._
 
 type Log[A] = Const[List[String], A]
 
