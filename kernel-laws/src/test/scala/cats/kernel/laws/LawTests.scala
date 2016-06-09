@@ -117,7 +117,9 @@ class LawTests extends FunSuite with Discipline {
 
   test("signum . toInt . comparison = signum . compare") {
     check { (i: Int, j: Int) =>
-      Eq[Int].eqv(Order[Int].comparison(i, j).toInt.signum, Order[Int].compare(i, j).signum)
+      val found = Order[Int].comparison(i, j)
+      val expected = Order[Int].compare(i, j)
+      Eq[Int].eqv(found.toInt.signum, expected.signum)
     }
   }
 
