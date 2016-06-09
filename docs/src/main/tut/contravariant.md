@@ -28,6 +28,7 @@ Say we have class `Money` with a `Show` instance, and `Salary` class.
 
 ```tut:silent
 import cats._
+import cats.functor._
 import cats.implicits._
 
 case class Money(amount: Int)
@@ -76,3 +77,20 @@ implicit val moneyOrdering: Ordering[Money] = Ordering.by(_.amount)
 Money(100) < Money(200)
 ```
 
+## Subtyping
+
+Contravariant functors have a natural relationship with subtyping, dual to that of covariant functors:
+
+```tut:book
+class A
+class B extends A
+val b: B = new B
+val a: A = b
+val showA: Show[A] = Show.show(a => "a!")
+val showB1: Show[B] = showA.contramap(b => b: A)
+val showB2: Show[B] = showA.contramap(identity[A])
+val showB3: Show[B] = Contravariant[Show].narrow[A, B](showA)
+```
+
+Subtyping relationships are "lifted backwards" by contravariant functors, such that if `F` is a
+lawful contravariant functor and `A <: B` then `F[B] <: F[A]`, which is expressed by `Contravariant.narrow`.

@@ -119,3 +119,24 @@ Functor[Nested[List, Option, ?]].map(listOpt)(_ + 1)
 val optList = Nested[Option, List, Int](Some(List(1, 2, 3)))
 Functor[Nested[Option, List, ?]].map(optList)(_ + 1)
 ```
+
+## Subtyping
+
+Functors have a natural relationship with subtyping:
+
+```tut:book
+class A
+class B extends A
+val b: B = new B
+val a: A = b
+val listB: List[B] = List(new B)
+val listA1: List[A] = listB.map(b => b: A)
+val listA2: List[A] = listB.map(identity[A])
+val listA3: List[A] = Functor[List].widen[B, A](listB)
+```
+
+Subtyping relationships are "lifted" by functors, such that if `F` is a
+lawful functor and `A <: B` then `F[A] <: F[B]` - almost. Almost, because to
+convert an `F[B]` to an `F[A]` a call to `map(identity[A])` is needed
+(provided as `widen` for convenience). The functor laws guarantee that
+`fa map identity == fa`, however.

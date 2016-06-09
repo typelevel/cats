@@ -19,6 +19,12 @@ import simulacrum.typeclass
   // derived methods
 
   /**
+   * Lifts natural subtyping covariance of covariant Functors.
+   * could be implemented as map(identity), but the Functor laws say this is equivalent
+   */
+  def widen[A, B >: A](fa: F[A]): F[B] = fa.asInstanceOf[F[B]]
+
+  /**
    * Lift a function f to operate on Functors
    */
   def lift[A, B](f: A => B): F[A] => F[B] = map(_)(f)

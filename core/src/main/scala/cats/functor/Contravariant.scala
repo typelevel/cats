@@ -16,6 +16,12 @@ import simulacrum.typeclass
       val G = Contravariant[G]
     }
 
+  /**
+   * Lifts natural subtyping contravariance of contravariant Functors.
+   * could be implemented as contramap(identity), but the Functor laws say this is equivalent
+   */
+  def narrow[A, B <: A](fa: F[A]): F[B] = fa.asInstanceOf[F[B]]
+
   override def composeFunctor[G[_]: Functor]: Contravariant[λ[α => F[G[α]]]] =
     new ComposedContravariantCovariant[F, G] {
       val F = self
