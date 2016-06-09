@@ -57,8 +57,8 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def toOption(implicit F: Functor[F]): OptionT[F, B] = OptionT(F.map(value)(_.toOption))
 
-  def to[G[_]](implicit functorF: Functor[F], monoidKG: MonoidK[G], applicativeG: Applicative[G]): F[G[B]] =
-    functorF.map(value)(_.to[G, B])
+  def to[G[_]](implicit F: Functor[F], G: Alternative[G]): F[G[B]] =
+    F.map(value)(_.to[G, B])
 
   def collectRight(implicit F: MonadCombine[F]): F[B] =
     F.flatMap(value)(_.to[F, B])
