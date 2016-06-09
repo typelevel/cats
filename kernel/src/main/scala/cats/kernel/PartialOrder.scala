@@ -23,7 +23,6 @@ import scala.{specialized => sp}
  * false     true        = 1.0     (corresponds to x > y)
  */
 trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
-
   /**
    * Result of comparing `x` with `y`. Returns NaN if operands are not
    * comparable. If operands are comparable, returns a Double whose
@@ -33,6 +32,13 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
    * - positive iff `x > y`
    */
   def partialCompare(x: A, y: A): Double
+
+  /**
+   * Like `partialCompare`, but returns a [[cats.kernel.Comparison]] instead of an Double.
+   * Has the benefit of being able to pattern match on, but not as performant.
+   */
+  def partialComparison(x: A, y: A): Option[Comparison] =
+    Comparison.fromDouble(partialCompare(x, y))
 
   /**
    * Result of comparing `x` with `y`. Returns None if operands are
@@ -137,7 +143,6 @@ abstract class PartialOrderFunctions[P[T] <: PartialOrder[T]] extends EqFunction
 }
 
 object PartialOrder extends PartialOrderFunctions[PartialOrder] {
-
   /**
    * Access an implicit `PartialOrder[A]`.
    */

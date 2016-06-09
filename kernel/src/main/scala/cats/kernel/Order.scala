@@ -20,7 +20,6 @@ import scala.{specialized => sp}
  * By the totality law, x <= y and y <= x cannot be both false.
  */
 trait Order[@sp A] extends Any with PartialOrder[A] { self =>
-
   /**
    * Result of comparing `x` with `y`. Returns an Int whose sign is:
    * - negative iff `x < y`
@@ -33,12 +32,7 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    * Like `compare`, but returns a [[cats.kernel.Comparison]] instead of an Int.
    * Has the benefit of being able to pattern match on, but not as performant.
    */
-  def comparison(x: A, y: A): Comparison = {
-    val r = compare(x, y)
-    if (r > 0)       Comparison.GreaterThan
-    else if (r == 0) Comparison.EqualTo
-    else             Comparison.LessThan
-  }
+  def comparison(x: A, y: A): Comparison = Comparison.fromInt(compare(x, y))
 
   def partialCompare(x: A, y: A): Double = compare(x, y).toDouble
 
@@ -146,7 +140,6 @@ abstract class OrderFunctions[O[T] <: Order[T]] extends PartialOrderFunctions[O]
 }
 
 object Order extends OrderFunctions[Order] {
-
   /**
    * Access an implicit `Order[A]`.
    */

@@ -81,6 +81,18 @@ class LawTests extends FunSuite with Discipline {
   laws[GroupLaws, Unit].check(_.boundedSemilattice)
 
   // Comparison related
+
+  // Something that can give NaN for test
+  def subsetPartialOrder[A]: PartialOrder[Set[A]] = new PartialOrder[Set[A]] {
+    def partialCompare(x: Set[A], y: Set[A]): Double =
+      if (x == y) 0.0
+      else if (x subsetOf y) -1.0
+      else if (y subsetOf x) 1.0
+      else Double.NaN
+  }
+
+  laws[OrderLaws, Set[Int]]("subset").check(_.partialOrder(subsetPartialOrder[Int]))
+
   implicit val arbitraryComparison: Arbitrary[Comparison] =
     Arbitrary(Gen.oneOf(Comparison.GreaterThan, Comparison.EqualTo, Comparison.LessThan))
 
@@ -94,9 +106,26 @@ class LawTests extends FunSuite with Discipline {
     eqv.eqv(order.comparison(-1, 0), Comparison.LessThan)
   }
 
+  test("partialComparison") {
+    val po = subsetPartialOrder[Int]
+    val eqv = Eq[Option[Comparison]]
+    eqv.eqv(po.partialComparison(Set(1), Set()),        Some(Comparison.GreaterThan)) &&
+    eqv.eqv(po.partialComparison(Set(), Set()),         Some(Comparison.EqualTo))     &&
+    eqv.eqv(po.partialComparison(Set(), Set(1)),        Some(Comparison.LessThan))    &&
+    eqv.eqv(po.partialComparison(Set(1, 2), Set(2, 3)), None)
+  }
+
   test("signum . toInt . comparison = signum . compare") {
     check { (i: Int, j: Int) =>
       Eq[Int].eqv(Order[Int].comparison(i, j).toInt.signum, Order[Int].compare(i, j).signum)
+    }
+  }
+
+  test("signum . toDouble . partialComparison = signum . partialCompare") {
+    check { (x: Set[Int], y: Set[Int]) =>
+      val found = subsetPartialOrder[Int].partialComparison(x, y).map(_.toDouble.signum)
+      val expected = Some(subsetPartialOrder[Int].partialCompare(x, y)).filter(d => !d.isNaN).map(_.signum)
+      Eq[Option[Int]].eqv(found, expected)
     }
   }
 
