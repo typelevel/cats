@@ -29,6 +29,17 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    */
   def compare(x: A, y: A): Int
 
+  /**
+   * Like `compare`, but returns a [[cats.kernel.Comparison]] instead of an Int.
+   * Has the benefit of being able to pattern match on, but not as performant.
+   */
+  def comparison(x: A, y: A): Comparison = {
+    val r = compare(x, y)
+    if (r > 0)       Comparison.GreaterThan
+    else if (r == 0) Comparison.EqualTo
+    else             Comparison.LessThan
+  }
+
   def partialCompare(x: A, y: A): Double = compare(x, y).toDouble
 
   /**

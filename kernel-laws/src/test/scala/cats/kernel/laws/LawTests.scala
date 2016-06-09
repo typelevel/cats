@@ -8,7 +8,7 @@ import cats.kernel.std.all._
 
 import org.typelevel.discipline.{ Laws }
 import org.typelevel.discipline.scalatest.Discipline
-import org.scalacheck.{ Arbitrary }
+import org.scalacheck.{ Arbitrary, Gen }
 import Arbitrary.arbitrary
 import org.scalatest.FunSuite
 import scala.util.Random
@@ -79,6 +79,27 @@ class LawTests extends FunSuite with Discipline {
   laws[GroupLaws, (Int, Int)].check(_.band)
 
   laws[GroupLaws, Unit].check(_.boundedSemilattice)
+
+  // Comparison related
+  implicit val arbitraryComparison: Arbitrary[Comparison] =
+    Arbitrary(Gen.oneOf(Comparison.GreaterThan, Comparison.EqualTo, Comparison.LessThan))
+
+  laws[OrderLaws, Comparison].check(_.eqv)
+
+  test("comparison") {
+    val order = Order[Int]
+    val eqv = Eq[Comparison]
+    eqv.eqv(order.comparison(1, 0),  Comparison.GreaterThan) &&
+    eqv.eqv(order.comparison(0, 0),  Comparison.EqualTo)     &&
+    eqv.eqv(order.comparison(-1, 0), Comparison.LessThan)
+  }
+
+  test("signum . toInt . comparison = signum . compare") {
+    check { (i: Int, j: Int) =>
+      Eq[Int].eqv(Order[Int].comparison(i, j).toInt.signum, Order[Int].compare(i, j).signum)
+    }
+  }
+
   // esoteric machinery follows...
 
   implicit lazy val band: Band[(Int, Int)] =
