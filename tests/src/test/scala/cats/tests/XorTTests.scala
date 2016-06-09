@@ -5,7 +5,7 @@ import cats.functor.Bifunctor
 import cats.data.{Xor, XorT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.OrderLaws
+import cats.kernel.laws.{OrderLaws, GroupLaws}
 
 class XorTTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[XorT[ListWrapper, String, ?]](XorT.catsDataFunctorForXorT(ListWrapper.functor))
@@ -93,6 +93,22 @@ class XorTTests extends CatsSuite {
 
     checkAll("XorT[ListWrapper, String, Int]", OrderLaws[XorT[ListWrapper, String, Int]].partialOrder)
     checkAll("PartialOrder[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(PartialOrder[XorT[ListWrapper, String, Int]]))
+  }
+
+  {
+    implicit val F = ListWrapper.semigroup[String Xor Int]
+
+    checkAll("XorT[ListWrapper, String, Int]", GroupLaws[XorT[ListWrapper, String, Int]].semigroup)
+    checkAll("Semigroup[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(Semigroup[XorT[ListWrapper, String, Int]]))
+  }
+
+  {
+    implicit val F = ListWrapper.monoid[String Xor Int]
+
+    Semigroup[XorT[ListWrapper, String, Int]]
+
+    checkAll("XorT[ListWrapper, String, Int]", GroupLaws[XorT[ListWrapper, String, Int]].monoid)
+    checkAll("Monoid[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(Monoid[XorT[ListWrapper, String, Int]]))
   }
 
   {
