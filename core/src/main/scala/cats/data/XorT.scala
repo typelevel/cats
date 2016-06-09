@@ -288,7 +288,7 @@ private[data] abstract class XorTInstances3 extends XorTInstances4 {
   }
 
   implicit def catsDataSemigroupKForXorT[F[_], L](implicit F0: Applicative[F]): SemigroupK[XorT[F, L, ?]] =
-    new SemigroupK[XorT[F,L,?]] { implicit val F0 = F }
+    new XorTSemigroupK[F, L] { implicit val F = F0 }
 
   implicit def catsDataEqForXorT[F[_], L, R](implicit F: Eq[F[L Xor R]]): Eq[XorT[F, L, R]] =
     new XorTEq[F, L, R] {
