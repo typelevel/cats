@@ -70,17 +70,6 @@ class XorTTests extends CatsSuite {
   }
 
   {
-    //If an applicative is defined
-    implicit val F = ListWrapper.applicative
-
-    Functor[XorT[ListWrapper, String, ?]]
-
-    checkAll("XorT[ListWrapper, String, ?]", ApplicativeTests[XorT[ListWrapper, String, ?]].applicative[Int, Int, Int])
-    checkAll("Applicative[XorT[ListWrapper, String, ?]]", SerializableTests.serializable(Applicative[XorT[ListWrapper, String, ?]]))
-
-  }
-
-  {
     //If a foldable is defined
     implicit val F = ListWrapper.foldable
 
