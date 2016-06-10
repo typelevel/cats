@@ -4,7 +4,7 @@
 | `fa |@| fb`| Cartesian builder      | [`Cartesian[F[_]]`](../../../../core/src/main/scala/cats/Cartesian.scala)            | TBD                      |
 | `fa *> fb` | right apply            | [`Cartesian[F[_]]`](../../../../core/src/main/scala/cats/Cartesian.scala)            | TBD                      |
 | `fa <* fb` | left apply             | [`Cartesian[F[_]]`](../../../../core/src/main/scala/cats/Cartesian.scala)            | TBD                      |
-| `x === y`  | equals                 | [`Eq[A]`](../../../../kernel/src/main/scala/cats/kernel/Eq.scala)                    | `Eq.eqv(x, y)`           |
+| `x === y`  | equals                 | [`Eq[A]`](../../../../kernel/src/main/scala/cats/kernel/Eq.scala)                    | `eqv(x: A, y: A): Boolean`           |
 | `x =!= y`  | not equals             | [`Eq[A]`](../../../../kernel/src/main/scala/cats/kernel/Eq.scala)                    | `Eq.neqv(x, y)`          |
 | `fa >>= f` | flatMap                | [`FlatMap[F[_]]`](../../../../core/src/main/scala/cats/syntax/flatMap.scala)         | `FlatMap.flatMap(fa)(f)` |
 | `fa >> fb` | followed by            | [`FlatMap[F[_]]`](../../../../core/src/main/scala/cats/syntax/flatMap.scala)         | `FlatMap.flatMap(fa)(_ => fb)` |
