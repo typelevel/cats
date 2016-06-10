@@ -2,7 +2,7 @@ package cats
 package syntax
 
 trait ComonadSyntax1 {
-  implicit def comonadSyntaxU[FA](fa: FA)(implicit U: Unapply[Comonad, FA]): Comonad.Ops[U.M, U.A] =
+  implicit def catsSyntaxUComonad[FA](fa: FA)(implicit U: Unapply[Comonad, FA]): Comonad.Ops[U.M, U.A] =
     new Comonad.Ops[U.M, U.A] {
       val self = U.subst(fa)
       val typeClassInstance = U.TC

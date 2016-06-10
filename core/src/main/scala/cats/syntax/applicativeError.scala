@@ -4,10 +4,10 @@ package syntax
 import cats.data.{Xor, XorT}
 
 trait ApplicativeErrorSyntax {
-  implicit def applicativeErrorIdSyntax[E](e: E): ApplicativeErrorIdOps[E] =
+  implicit def catsSyntaxApplicativeErrorId[E](e: E): ApplicativeErrorIdOps[E] =
     new ApplicativeErrorIdOps(e)
 
-  implicit def applicativeErrorSyntax[F[_], E, A](fa: F[A])(implicit F: ApplicativeError[F, E]): ApplicativeErrorOps[F, E, A] =
+  implicit def catsSyntaxApplicativeError[F[_], E, A](fa: F[A])(implicit F: ApplicativeError[F, E]): ApplicativeErrorOps[F, E, A] =
     new ApplicativeErrorOps[F, E, A](fa)
 
 }

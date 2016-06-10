@@ -5,8 +5,8 @@ import cats.data.{ Xor, Validated, ValidatedNel }
 
 trait OptionSyntax {
   final def none[A]: Option[A] = Option.empty[A]
-  implicit final def optionIdSyntax[A](a: A): OptionIdOps[A] = new OptionIdOps(a)
-  implicit final def optionSyntax[A](oa: Option[A]): OptionOps[A] = new OptionOps(oa)
+  implicit final def catsSyntaxOptionId[A](a: A): OptionIdOps[A] = new OptionIdOps(a)
+  implicit final def catsSyntaxOption[A](oa: Option[A]): OptionOps[A] = new OptionOps(oa)
 }
 
 final class OptionIdOps[A](val a: A) extends AnyVal {

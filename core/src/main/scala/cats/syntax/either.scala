@@ -4,7 +4,7 @@ package syntax
 import cats.data.Xor
 
 trait EitherSyntax {
-  implicit def eitherSyntax[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)
+  implicit def catsSyntaxEither[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)
 }
 
 final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
