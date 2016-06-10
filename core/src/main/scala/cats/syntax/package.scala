@@ -39,6 +39,7 @@ package object syntax {
   object transLift extends TransLiftSyntax
   object traverse extends TraverseSyntax
   object traverseFilter extends TraverseFilterSyntax
+  object tuple extends TupleSyntax
   object validated extends ValidatedSyntax
   object writer extends WriterSyntax
   object xor extends XorSyntax
