@@ -1,6 +1,7 @@
 package cats
 package tests
 
+import cats.functor.Invariant
 import cats.std.list._
 
 import org.scalacheck.Arbitrary
@@ -58,6 +59,8 @@ object ListWrapper {
         ListWrapper(Functor[List].map(fa.list)(f))
     }
 
+  val invariant: Invariant[ListWrapper] = functor
+
   val semigroupK: SemigroupK[ListWrapper] =
     new SemigroupK[ListWrapper] {
       def combineK[A](x: ListWrapper[A], y: ListWrapper[A]): ListWrapper[A] =
@@ -83,6 +86,8 @@ object ListWrapper {
   }
 
   val monad: Monad[ListWrapper] = monadCombine
+
+  val applicative: Applicative[ListWrapper] = monadCombine
 
   /** apply is taken due to ListWrapper being a case class */
   val applyInstance: Apply[ListWrapper] = monadCombine

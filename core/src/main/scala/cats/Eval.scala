@@ -1,6 +1,7 @@
 package cats
 
 import scala.annotation.tailrec
+import cats.data.Xor
 import cats.syntax.all._
 
 /**
@@ -33,7 +34,7 @@ import cats.syntax.all._
  * Eval instance -- this can defeat the trampolining and lead to stack
  * overflows.
  */
-sealed abstract class Eval[A] extends Serializable { self =>
+sealed abstract class Eval[+A] extends Serializable { self =>
 
   /**
    * Evaluate the computation and return an A value.
@@ -279,7 +280,7 @@ object Eval extends EvalInstances {
                   cc.start().asInstanceOf[L],
                   cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
               case xx =>
-                loop(c.run(xx.value).asInstanceOf[L], fs)
+                loop(c.run(xx.value), fs)
             }
           case x =>
             fs match {
@@ -294,14 +295,19 @@ object Eval extends EvalInstances {
 
 private[cats] trait EvalInstances extends EvalInstances0 {
 
-  implicit val evalBimonad: Bimonad[Eval] =
-    new Bimonad[Eval] {
+  implicit val evalBimonad: Bimonad[Eval] with MonadRec[Eval] =
+    new Bimonad[Eval] with MonadRec[Eval] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
       def pure[A](a: A): Eval[A] = Now(a)
       override def pureEval[A](la: Eval[A]): Eval[A] = la
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
       def extract[A](la: Eval[A]): A = la.value
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
+      def tailRecM[A, B](a: A)(f: A => Eval[A Xor B]): Eval[B] =
+        f(a).flatMap(_ match {
+          case Xor.Left(a1) => tailRecM(a1)(f) // recursion OK here, since flatMap is lazy
+          case Xor.Right(b) => Eval.now(b)
+        })
     }
 
   implicit def evalOrder[A: Order]: Order[Eval[A]] =
@@ -350,7 +356,7 @@ trait EvalMonoid[A] extends Monoid[Eval[A]] with EvalSemigroup[A] {
 trait EvalGroup[A] extends Group[Eval[A]] with EvalMonoid[A] {
   implicit def algebra: Group[A]
   def inverse(lx: Eval[A]): Eval[A] =
-    lx.map(_.inverse)
+    lx.map(_.inverse())
   override def remove(lx: Eval[A], ly: Eval[A]): Eval[A] =
     for { x <- lx; y <- ly } yield x |-| y
 }

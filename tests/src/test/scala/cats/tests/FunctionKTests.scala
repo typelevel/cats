@@ -1,18 +1,18 @@
 package cats
 package tests
 
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 import cats.data.Coproduct
 
 
-class NaturalTransformationTests extends CatsSuite {
+class FunctionKTests extends CatsSuite {
   val listToOption =
-    new NaturalTransformation[List, Option] {
+    new FunctionK[List, Option] {
       def apply[A](fa: List[A]): Option[A] = fa.headOption
     }
 
   val optionToList =
-    new NaturalTransformation[Option, List] {
+    new FunctionK[Option, List] {
       def apply[A](fa: Option[A]): List[A] = fa.toList
     }
 
@@ -28,11 +28,11 @@ class NaturalTransformationTests extends CatsSuite {
 
   case class Test2[A](v : A) extends Test2Algebra[A]
 
-  object Test1NT extends NaturalTransformation[Test1Algebra,Id] {
+  object Test1NT extends FunctionK[Test1Algebra,Id] {
     override def apply[A](fa: Test1Algebra[A]): Id[A] = fa.v
   }
 
-  object Test2NT extends NaturalTransformation[Test2Algebra,Id] {
+  object Test2NT extends FunctionK[Test2Algebra,Id] {
     override def apply[A](fa: Test2Algebra[A]): Id[A] = fa.v
   }
 
@@ -54,7 +54,7 @@ class NaturalTransformationTests extends CatsSuite {
 
   test("id is identity") {
     forAll { (list: List[Int]) =>
-      NaturalTransformation.id[List].apply(list) should === (list)
+      FunctionK.id[List].apply(list) should === (list)
     }
   }
 

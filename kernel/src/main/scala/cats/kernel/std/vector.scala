@@ -6,19 +6,19 @@ import cats.kernel.std.util.StaticMethods
 package object vector extends VectorInstances
 
 trait VectorInstances extends VectorInstances1 {
-  implicit def vectorOrder[A: Order]: Order[Vector[A]] =
+  implicit def catsKernelStdOrderForVector[A: Order]: Order[Vector[A]] =
     new VectorOrder[A]
-  implicit def vectorMonoid[A]: Monoid[Vector[A]] =
+  implicit def catsKernelStdMonoidForVector[A]: Monoid[Vector[A]] =
     new VectorMonoid[A]
 }
 
 trait VectorInstances1 extends VectorInstances2 {
-  implicit def vectorPartialOrder[A: PartialOrder]: PartialOrder[Vector[A]] =
+  implicit def catsKernelStdPartialOrderForVector[A: PartialOrder]: PartialOrder[Vector[A]] =
     new VectorPartialOrder[A]
 }
 
 trait VectorInstances2 {
-  implicit def vectorEq[A: Eq]: Eq[Vector[A]] =
+  implicit def catsKernelStdEqForVector[A: Eq]: Eq[Vector[A]] =
     new VectorEq[A]
 }
 

@@ -57,17 +57,16 @@ class CokleisliTests extends SlowCatsSuite {
       cokleisliEqE[NonEmptyList, A](oneAndArbitrary, Eq[A])
 
     {
-      implicit val cokleisliMonoidK = Cokleisli.cokleisliMonoidK[NonEmptyList]
+      implicit val cokleisliMonoidK = Cokleisli.catsDataMonoidKForCokleisli[NonEmptyList]
       checkAll("Cokleisli[NonEmptyList, Int, Int]", MonoidKTests[CokleisliNELE].monoidK[Int])
-      checkAll("MonoidK[Lambda[A => Cokleisli[NonEmptyList, A, A]]]", SerializableTests.serializable(cokleisliMonoidK))
+      checkAll("MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]", SerializableTests.serializable(cokleisliMonoidK))
     }
 
     {
-      implicit val cokleisliSemigroupK = Cokleisli.cokleisliSemigroupK[NonEmptyList]
+      implicit val cokleisliSemigroupK = Cokleisli.catsDataSemigroupKForCokleisli[NonEmptyList]
       checkAll("Cokleisli[NonEmptyList, Int, Int]", SemigroupKTests[CokleisliNELE].semigroupK[Int])
-      checkAll("SemigroupK[Lambda[A => Cokleisli[NonEmptyList, A, A]]]", SerializableTests.serializable(cokleisliSemigroupK))
+      checkAll("SemigroupK[λ[α => Cokleisli[NonEmptyList, α, α]]]", SerializableTests.serializable(cokleisliSemigroupK))
     }
-
   }
 
   test("contramapValue with Id consistent with lmap"){

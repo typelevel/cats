@@ -14,7 +14,7 @@ trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
     bitraverse(fab)(identity, identity)
 
   /** If F and G are both [[cats.Bitraverse]] then so is their composition F[G[_, _], G[_, _]] */
-  def compose[G[_, _]](implicit ev: Bitraverse[G]): Bitraverse[Lambda[(A, B) => F[G[A, B], G[A, B]]]] =
+  def compose[G[_, _]](implicit ev: Bitraverse[G]): Bitraverse[λ[(α, β) => F[G[α, β], G[α, β]]]] =
     new CompositeBitraverse[F, G] {
       val F = self
       val G = ev
@@ -29,7 +29,7 @@ object Bitraverse {
 }
 
 trait CompositeBitraverse[F[_, _], G[_, _]]
-    extends Bitraverse[Lambda[(A, B) => F[G[A, B], G[A, B]]]]
+    extends Bitraverse[λ[(α, β) => F[G[α, β], G[α, β]]]]
     with    CompositeBifoldable[F, G] {
   def F: Bitraverse[F]
   def G: Bitraverse[G]

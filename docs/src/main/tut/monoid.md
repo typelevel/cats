@@ -28,13 +28,12 @@ First some imports.
 
 ```tut:silent
 import cats._
-import cats.std.all._
 import cats.implicits._
 ```
 
 Examples.
 
-```tut
+```tut:book
 Monoid[String].empty
 Monoid[String].combineAll(List("a", "b", "c"))
 Monoid[String].combineAll(List())
@@ -44,7 +43,7 @@ The advantage of using these type class provided methods, rather than the
 specific ones for each type, is that we can compose monoids to allow us to 
 operate on more complex types, e.g.
  
-```tut
+```tut:book
 Monoid[Map[String,Int]].combineAll(List(Map("a" -> 1, "b" -> 2), Map("a" -> 3)))
 Monoid[Map[String,Int]].combineAll(List())
 ```
@@ -53,7 +52,7 @@ This is also true if we define our own instances. As an example, let's use
 [`Foldable`](foldable.html)'s `foldMap`, which maps over values accumulating
 the results, using the available `Monoid` for the type mapped onto. 
 
-```tut
+```tut:book
 val l = List(1, 2, 3, 4, 5)
 l.foldMap(identity)
 l.foldMap(i => i.toString)
@@ -64,7 +63,7 @@ with a function that produces a tuple, cats also provides a `Monoid` for a tuple
 that will be valid for any tuple where the types it contains also have a 
 `Monoid` available, thus.
 
-```tut
+```tut:book
 l.foldMap(i => (i, i.toString)) // do both of the above in one pass, hurrah!
 ```
 

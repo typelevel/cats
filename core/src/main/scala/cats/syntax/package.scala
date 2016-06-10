@@ -1,6 +1,7 @@
 package cats
 
 package object syntax {
+  // scalastyle:off number.of.types
   object all extends AllSyntax
   object applicative extends ApplicativeSyntax
   object applicativeError extends ApplicativeErrorSyntax
@@ -38,4 +39,5 @@ package object syntax {
   object xor extends XorSyntax
   object validated extends ValidatedSyntax
   object writer extends WriterSyntax
+  // scalastyle:on number.of.types
 }

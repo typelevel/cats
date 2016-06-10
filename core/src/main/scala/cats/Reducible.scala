@@ -75,7 +75,7 @@ import simulacrum.typeclass
    * Overriden from `Foldable[_]` for efficiency.
    */
   override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
-    reduceRightTo(fa)(f)(g).map(Option(_))
+    reduceRightTo(fa)(f)(g).map(Some(_))
 
   /**
    * Traverse `F[A]` using `Apply[G]`.
@@ -107,44 +107,12 @@ import simulacrum.typeclass
   def sequence1_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
     G.map(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))(_ => ())
 
-  /**
-   * Compose two `Reducible` instances into a new one.
-   */
-  def compose[G[_]](implicit GG: Reducible[G]): Reducible[λ[α => F[G[α]]]] =
-    new CompositeReducible[F, G] {
-      implicit def F: Reducible[F] = self
-      implicit def G: Reducible[G] = GG
+  def compose[G[_]: Reducible]: Reducible[λ[α => F[G[α]]]] =
+    new ComposedReducible[F, G] {
+      val F = self
+      val G = Reducible[G]
     }
 }
-
-
-/**
- * This class composes two `Reducible` instances to provide an
- * instance for the nested types.
- *
- * In other words, given a `Reducible[F]` instance (which can reduce
- * `F[A]`) and a `Reducible[G]` instance (which can reduce `G[A]`
- * values), this class is able to reduce `F[G[A]]` values.
- */
-trait CompositeReducible[F[_], G[_]] extends Reducible[λ[α => F[G[α]]]] with CompositeFoldable[F, G] {
-  implicit def F: Reducible[F]
-  implicit def G: Reducible[G]
-
-  override def reduceLeftTo[A, B](fga: F[G[A]])(f: A => B)(g: (B, A) => B): B = {
-    def toB(ga: G[A]): B = G.reduceLeftTo(ga)(f)(g)
-    F.reduceLeftTo(fga)(toB) { (b, ga) =>
-      G.foldLeft(ga, b)(g)
-    }
-  }
-
-  override def reduceRightTo[A, B](fga: F[G[A]])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
-    def toB(ga: G[A]): B = G.reduceRightTo(ga)(f)(g).value
-    F.reduceRightTo(fga)(toB) { (ga, lb) =>
-      G.foldRight(ga, lb)(g)
-    }
-  }
-}
-
 
 /**
  * This class defines a `Reducible[F]` in terms of a `Foldable[G]`

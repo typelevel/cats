@@ -1,10 +1,13 @@
+import scala.annotation.tailrec
+import cats.data.Xor
+
 /**
  * Symbolic aliases for various types are defined here.
  */
 package object cats {
+  // scalastyle:off number.of.types
 
-  type ~>[F[_], G[_]] = arrow.NaturalTransformation[F, G]
-  type <~[F[_], G[_]] = arrow.NaturalTransformation[G, F]
+  type ~>[F[_], G[_]] = arrow.FunctionK[F, G]
 
   type ⊥ = Nothing
   type ⊤ = Any
@@ -26,12 +29,16 @@ package object cats {
  * encodes pure unary function application.
  */
   type Id[A] = A
-  implicit val idInstances: Bimonad[Id] with Traverse[Id] =
-    new Bimonad[Id] with Traverse[Id] {
+  implicit val idInstances: Bimonad[Id] with MonadRec[Id] with Traverse[Id] =
+    new Bimonad[Id] with MonadRec[Id] with Traverse[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
       def coflatMap[A, B](a: A)(f: A => B): B = f(a)
+      @tailrec def tailRecM[A, B](a: A)(f: A => A Xor B): B = f(a) match {
+        case Xor.Left(a1) => tailRecM(a1)(f)
+        case Xor.Right(b) => b
+      }
       override def map[A, B](fa: A)(f: A => B): B = f(fa)
       override def ap[A, B](ff: A => B)(fa: A): B = ff(fa)
       override def flatten[A](ffa: A): A = ffa
@@ -58,4 +65,6 @@ package object cats {
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group
+
+  // scalastyle:on number.of.types
 }

@@ -4,8 +4,8 @@ package std
 import java.lang.Math
 
 trait DoubleInstances {
-  implicit val doubleOrder: Order[Double] = new DoubleOrder
-  implicit val doubleGroup: CommutativeGroup[Double] = new DoubleGroup
+  implicit val catsKernelStdOrderForDouble: Order[Double] = new DoubleOrder
+  implicit val catsKernelStdGroupForDouble: CommutativeGroup[Double] = new DoubleGroup
 }
 
 class DoubleGroup extends CommutativeGroup[Double] {
@@ -20,12 +20,12 @@ class DoubleOrder extends Order[Double] {
   def compare(x: Double, y: Double): Int =
     java.lang.Double.compare(x, y)
 
-  override def eqv(x:Double, y:Double) = x == y
-  override def neqv(x:Double, y:Double) = x != y
-  override def gt(x: Double, y: Double) = x > y
-  override def gteqv(x: Double, y: Double) = x >= y
-  override def lt(x: Double, y: Double) = x < y
-  override def lteqv(x: Double, y: Double) = x <= y
+  override def eqv(x:Double, y:Double): Boolean = x == y
+  override def neqv(x:Double, y:Double): Boolean = x != y
+  override def gt(x: Double, y: Double): Boolean = x > y
+  override def gteqv(x: Double, y: Double): Boolean = x >= y
+  override def lt(x: Double, y: Double): Boolean = x < y
+  override def lteqv(x: Double, y: Double): Boolean = x <= y
 
   override def min(x: Double, y: Double): Double =
     Math.min(x, y)

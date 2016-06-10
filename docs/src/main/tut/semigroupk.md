@@ -39,12 +39,12 @@ scala common library:
 
 ```tut:silent
 import cats._
-import cats.std.all._
+import cats.implicits._
 ```
 
 Examples.
 
-```tut
+```tut:book
 Semigroup[Int].combine(1, 2)
 Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
 Semigroup[Option[Int]].combine(Option(1), Option(2))
@@ -67,7 +67,7 @@ and, in fact, the `K` in `SemigroupK` stands for `Kind`.
 For `List`, the `Semigroup` instance's `combine` operation and the `SemigroupK`
 instance's `combineK` operation are both list concatenation:
 
-```tut
+```tut:book
 SemigroupK[List].combineK(List(1,2,3), List(4,5,6)) == Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
 ```
 
@@ -84,7 +84,7 @@ two of them. Therefore, in the case of `Option` the
 `SemigroupK[Option].combineK` method has no choice but to use the
 `orElse` method of Option:
 
-```tut
+```tut:book
 Semigroup[Option[Int]].combine(Some(1), Some(2))
 SemigroupK[Option].combineK(Some(1), Some(2))
 SemigroupK[Option].combineK(Some(1), None)
@@ -97,9 +97,7 @@ There is inline syntax available for both `Semigroup` and
 from `SemigroupK` (called `Plus` in scalaz).
 
 ```tut:silent
-import cats.syntax.all._
 import cats.implicits._
-import cats.std._
 
 val one = Option(1)
 val two = Option(2)
@@ -108,7 +106,7 @@ val n: Option[Int] = None
 
 Thus.
 
-```tut
+```tut:book
 one |+| two
 one <+> two
 n |+| two

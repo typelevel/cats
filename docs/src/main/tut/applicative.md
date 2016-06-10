@@ -20,9 +20,9 @@ obvious. For `Option`, the `pure` operation wraps the value in
 `Some`. For `List`, the `pure` operation returns a single element
 `List`:
 
-```tut
+```tut:book
 import cats._
-import cats.std.all._
+import cats.implicits._
 
 Applicative[Option].pure(1)
 Applicative[List].pure(1)
@@ -34,8 +34,10 @@ you compose one `Applicative` with another, the resulting `pure`
 operation will lift the passed value into one context, and the result
 into the other context:
 
-```tut
-(Applicative[List] compose Applicative[Option]).pure(1)
+```tut:book
+import cats.data.Nested
+val nested = Applicative[Nested[List, Option, ?]].pure(1)
+val unwrapped = nested.value
 ```
 
 ## Applicative Functors & Monads

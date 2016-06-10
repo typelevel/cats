@@ -147,7 +147,7 @@ Time to parse.
 ```tut:silent
 import cats.SemigroupK
 import cats.data.NonEmptyList
-import cats.std.list._
+import cats.implicits._
 
 case class ConnectionParams(url: String, port: Int)
 
@@ -162,7 +162,7 @@ implicit val readInt: Read[Int] = Read.intRead
 
 Any and all errors are reported!
 
-```tut
+```tut:book
 val v1 = parallelValidate(config.parse[String]("url").toValidatedNel,
                           config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
 
@@ -224,7 +224,7 @@ case class Person(name: String, age: Int, address: Address)
 
 Thus.
 
-```tut
+```tut:book
 val personFromConfig: ValidatedNel[ConfigError, Person] =
   Apply[ValidatedNel[ConfigError, ?]].map4(config.parse[String]("name").toValidatedNel,
                                            config.parse[Int]("age").toValidatedNel,
@@ -271,7 +271,7 @@ trait Monad[F[_]] {
 However, the `ap` behavior defined in terms of `flatMap` does not behave the same as that of
 our `ap` defined above. Observe:
 
-```tut
+```tut:book
 val v = validatedMonad.tuple2(Validated.invalidNel[String, Int]("oops"), Validated.invalidNel[String, Double]("uh oh"))
 ```
 
@@ -294,7 +294,7 @@ If you do want error accumulation but occasionally run into places where you seq
 ### `andThen`
 The `andThen` method is similar to `flatMap` (such as `Xor.flatMap`). In the cause of success, it passes the valid value into a function that returns a new `Validated` instance.
 
-```tut
+```tut:book
 val houseNumber = config.parse[Int]("house_number").andThen{ n =>
    if (n >= 0) Validated.valid(n)
    else Validated.invalid(ParseError("house_number"))
@@ -315,7 +315,7 @@ def positive(field: String, i: Int): ConfigError Xor Int = {
 
 Thus.
 
-```tut
+```tut:book
 val houseNumber = config.parse[Int]("house_number").withXor{ xor: ConfigError Xor Int =>
   xor.flatMap{ i =>
     positive("house_number", i)

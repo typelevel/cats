@@ -1,12 +1,12 @@
 package cats.kernel
 package std
 
-package object bigInt extends BigIntInstances
+package object bigInt extends BigIntInstances // scalastyle:ignore package.object.name
 
 trait BigIntInstances {
-  implicit val bigIntOrder: Order[BigInt] =
+  implicit val catsKernelStdOrderForBigInt: Order[BigInt] =
     new BigIntOrder
-  implicit val bigIntGroup: CommutativeGroup[BigInt] =
+  implicit val catsKernelStdGroupForBigInt: CommutativeGroup[BigInt] =
     new BigIntGroup
 }
 

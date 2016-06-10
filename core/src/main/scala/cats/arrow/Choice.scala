@@ -13,7 +13,7 @@ trait Choice[F[_, _]] extends Category[F] {
    * Example:
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.function._
+   * scala> import cats.implicits._
    * scala> val b: Boolean => String = _ + " is a boolean"
    * scala> val i: Int => String =  _ + " is an integer"
    * scala> val f: (Boolean Xor Int) => String = Choice[Function1].choice(b, i)
@@ -34,7 +34,7 @@ trait Choice[F[_, _]] extends Category[F] {
    * Example:
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.function._
+   * scala> import cats.implicits._
    * scala> val f: (Int Xor Int) => Int = Choice[Function1].codiagonal[Int]
    *
    * scala> f(Xor.right(3))

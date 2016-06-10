@@ -264,3 +264,6 @@ hr {
     margin: 5px 12px;
 }
 
+h2:hover a:after {
+    content: '§';
+}

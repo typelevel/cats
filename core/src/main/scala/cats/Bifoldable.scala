@@ -17,7 +17,7 @@ trait Bifoldable[F[_, _]] extends Any with Serializable { self =>
       (c: C, b: B) => C.combine(c, g(b))
     )
 
-  def compose[G[_, _]](implicit ev: Bifoldable[G]): Bifoldable[Lambda[(A, B) => F[G[A, B], G[A, B]]]] =
+  def compose[G[_, _]](implicit ev: Bifoldable[G]): Bifoldable[λ[(α, β) => F[G[α, β], G[α, β]]]] =
     new CompositeBifoldable[F, G] {
       val F = self
       val G = ev
@@ -28,7 +28,7 @@ object Bifoldable {
   def apply[F[_, _]](implicit F: Bifoldable[F]): Bifoldable[F] = F
 }
 
-trait CompositeBifoldable[F[_, _], G[_, _]] extends Bifoldable[Lambda[(A, B) => F[G[A, B], G[A, B]]]] {
+trait CompositeBifoldable[F[_, _], G[_, _]] extends Bifoldable[λ[(α, β) => F[G[α, β], G[α, β]]]] {
   implicit def F: Bifoldable[F]
   implicit def G: Bifoldable[G]
 

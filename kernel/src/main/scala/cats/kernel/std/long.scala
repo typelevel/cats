@@ -4,8 +4,8 @@ package std
 package object long extends LongInstances
 
 trait LongInstances {
-  implicit val longOrder: Order[Long] = new LongOrder
-  implicit val longGroup: CommutativeGroup[Long] = new LongGroup
+  implicit val catsKernelStdOrderForLong: Order[Long] = new LongOrder
+  implicit val catsKernelStdGroupForLong: CommutativeGroup[Long] = new LongGroup
 }
 
 class LongGroup extends CommutativeGroup[Long] {
@@ -21,12 +21,12 @@ class LongOrder extends Order[Long] {
   def compare(x: Long, y: Long): Int =
     if (x < y) -1 else if (x > y) 1 else 0
 
-  override def eqv(x: Long, y: Long) = x == y
-  override def neqv(x: Long, y: Long) = x != y
-  override def gt(x: Long, y: Long) = x > y
-  override def gteqv(x: Long, y: Long) = x >= y
-  override def lt(x: Long, y: Long) = x < y
-  override def lteqv(x: Long, y: Long) = x <= y
+  override def eqv(x: Long, y: Long): Boolean = x == y
+  override def neqv(x: Long, y: Long): Boolean = x != y
+  override def gt(x: Long, y: Long): Boolean = x > y
+  override def gteqv(x: Long, y: Long): Boolean = x >= y
+  override def lt(x: Long, y: Long): Boolean = x < y
+  override def lteqv(x: Long, y: Long): Boolean = x <= y
 
   override def min(x: Long, y: Long): Long =
     java.lang.Math.min(x, y)

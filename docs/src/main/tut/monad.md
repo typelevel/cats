@@ -15,7 +15,7 @@ that we have a single context (ie. `F[A]`).
 The name `flatten` should remind you of the functions of the same name on many
 classes in the standard library.
 
-```tut
+```tut:book
 Option(Option(1)).flatten
 Option(None).flatten
 List(List(1),List(2,3)).flatten
@@ -63,7 +63,7 @@ Part of the reason for this is that name `flatMap` has special significance in
 scala, as for-comprehensions rely on this method to chain together operations
 in a monadic context.
 
-```tut
+```tut:book
 import scala.reflect.runtime.universe
 
 universe.reify(
@@ -80,7 +80,7 @@ universe.reify(
 the results of earlier ones. This is embodied in `ifM`, which lifts an `if`
 statement into the monadic context.
 
-```tut
+```tut:book
 Monad[List].ifM(List(true, false, true))(List(1, 2), List(3, 4))
 ```
 

@@ -35,6 +35,7 @@ object StaticMethods {
     wrapMutableMap(m)
   }
 
+  // scalastyle:off return
   def iteratorCompare[A](xs: Iterator[A], ys: Iterator[A])(implicit ev: Order[A]): Int = {
     while (true) {
       if (xs.hasNext) {
@@ -85,4 +86,5 @@ object StaticMethods {
     }
     true
   }
+  // scalastyle:on return
 }

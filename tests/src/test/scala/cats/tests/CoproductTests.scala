@@ -14,7 +14,7 @@ class CoproductTests extends CatsSuite {
   checkAll("Traverse[Coproduct[Option, Option, ?]]", SerializableTests.serializable(Traverse[Coproduct[Option, Option, ?]]))
 
   {
-    implicit val foldable = Coproduct.coproductFoldable[Option, Option]
+    implicit val foldable = Coproduct.catsDataFoldableForCoproduct[Option, Option]
     checkAll("Coproduct[Option, Option, ?]", FoldableTests[Coproduct[Option, Option, ?]].foldable[Int, Int])
     checkAll("Foldable[Coproduct[Option, Option, ?]]", SerializableTests.serializable(Foldable[Coproduct[Option, Option, ?]]))
   }
@@ -23,7 +23,7 @@ class CoproductTests extends CatsSuite {
   checkAll("Comonad[Coproduct[Eval, Eval, ?]]", SerializableTests.serializable(Comonad[Coproduct[Eval, Eval, ?]]))
 
   {
-    implicit val coflatMap = Coproduct.coproductCoflatMap[Eval, Eval]
+    implicit val coflatMap = Coproduct.catsDataCoflatMapForCoproduct[Eval, Eval]
     checkAll("Coproduct[Eval, Eval, ?]", CoflatMapTests[Coproduct[Eval, Eval, ?]].coflatMap[Int, Int, Int])
     checkAll("CoflatMap[Coproduct[Eval, Eval, ?]]", SerializableTests.serializable(CoflatMap[Coproduct[Eval, Eval, ?]]))
   }

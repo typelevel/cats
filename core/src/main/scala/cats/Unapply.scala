@@ -73,7 +73,7 @@ private[cats] sealed abstract class Unapply2Instances extends Unapply3Instances 
   }
 
   // the type we will instantiate when we find a type class instance
-  // for a type in the shape F[_[_],_] when we fix the right type, 
+  // for a type in the shape F[_[_],_] when we fix the right type
   type Aux2RightK[TC[_[_]], MA, F[_[_],_], AX[_], B] = Unapply[TC, MA] {
     type M[X] = F[AX,X]
     type A = B
@@ -168,4 +168,16 @@ private[cats] sealed abstract class Unapply3Instances {
      def TC: TC[F[AA, B, ?]] = tc
      def subst: F[AA, B, C] => M[A] = identity
    }
+
+  type Aux3Nested[TC[_[_]], MA, F[_[_], _[_], _], AA[_], BB[_], C] = Unapply[TC, MA] {
+    type M[X] = F[AA, BB, X]
+    type A = C
+  }
+
+  implicit def unapply3Nested[TC[_[_]], MA, F[_[_], _[_], _], AA[_], BB[_], C](implicit tc: TC[F[AA, BB, ?]]): Aux3Nested[TC, F[AA, BB, C], F, AA, BB, C] = new Unapply[TC, F[AA, BB, C]] {
+    type M[X] = F[AA, BB, X]
+    type A = C
+    def TC: TC[F[AA, BB, ?]] = tc
+    def subst: F[AA, BB, C] => M[C] = identity
+  }
 }
