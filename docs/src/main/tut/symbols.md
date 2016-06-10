@@ -15,6 +15,6 @@
 | `x <= y`   | less than or equal     | [`PartialOrder[A]`](kernel/src/main/scala/cats/kernel/PartialOrder.scala)| `PartialOrder.lteq(x, y)`|
 | `x |+| y`  | semigroup combine      | [`Semigroup[A]`](kernel/src/main/scala/cats/kernel/Semigroup.scala)      | `Semigroup.combine(x, y)`|
 | `x <+> y`  | semigroupk combine     | [`SemigroupK[F[_]]`](core/src/main/scala/cats/SemigroupK.scala)          | `SemigroupK.combineK(x, y)`|
-| `~>`       | natural transformation | [`FunctionK`](core/src/main/scala/cats/arrow/FunctionK.scala)            | TBD |
-| `⊥`        | bottom                 | [N/A](core/src/main/scala/cats/package.scala)                            | TBD |
-| `⊤`        | top                    | [N/A](core/src/main/scala/cats/package.scala)                            | TBD |
+| `F ~> G`   | natural transformation | [`FunctionK[F[_], G[_]]`](core/src/main/scala/cats/arrow/FunctionK.scala)| `FunctionK` alias        |
+| `⊥`        | bottom                 | [N/A](core/src/main/scala/cats/package.scala)                            | N/A                      |
+| `⊤`        | top                    | [N/A](core/src/main/scala/cats/package.scala)                            | N/A                      |
