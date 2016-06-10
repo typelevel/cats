@@ -16,7 +16,7 @@ object Free {
   private final case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
 
   /** Call a subroutine and continue with the given function. */
-  private final case class Gosub[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
+  private final case class FlatMapped[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 
   /**
    * Suspend a value within a functor lifting it to a Free.
@@ -70,7 +70,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * All left-associated binds are reassociated to the right.
    */
   final def flatMap[B](f: A => Free[S, B]): Free[S, B] =
-    Gosub(this, f)
+    FlatMapped(this, f)
 
   /**
    * Catamorphism. Run the first given function if Pure, otherwise,
@@ -82,8 +82,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   /** Takes one evaluation step in the Free monad, re-associating left-nested binds in the process. */
   @tailrec
   final def step: Free[S, A] = this match {
-    case Gosub(Gosub(c, f), g) => c.flatMap(cc => f(cc).flatMap(g)).step
-    case Gosub(Pure(a), f) => f(a).step
+    case FlatMapped(FlatMapped(c, f), g) => c.flatMap(cc => f(cc).flatMap(g)).step
+    case FlatMapped(Pure(a), f) => f(a).step
     case x => x
   }
 
@@ -94,11 +94,11 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def resume(implicit S: Functor[S]): S[Free[S, A]] Xor A = this match {
     case Pure(a) => Right(a)
     case Suspend(t) => Left(S.map(t)(Pure(_)))
-    case Gosub(c, f) =>
+    case FlatMapped(c, f) =>
       c match {
         case Pure(a) => f(a).resume
         case Suspend(t) => Left(S.map(t)(f))
-        case Gosub(d, g) => d.flatMap(dd => g(dd).flatMap(f)).resume
+        case FlatMapped(d, g) => d.flatMap(dd => g(dd).flatMap(f)).resume
       }
   }
 
@@ -139,7 +139,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     M.tailRecM(this)(_.step match {
       case Pure(a) => M.pure(Xor.right(a))
       case Suspend(sa) => M.map(f(sa))(Xor.right)
-      case Gosub(c, g) => M.map(c.foldMap(f))(cc => Xor.left(g(cc)))
+      case FlatMapped(c, g) => M.map(c.foldMap(f))(cc => Xor.left(g(cc)))
     })
 
   /**

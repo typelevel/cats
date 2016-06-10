@@ -477,16 +477,12 @@ If you look at implementation in cats, you will see another member of
 the `Free[_]` ADT:
 
 ```scala
-sealed abstract case class Gosub[S[_], B]() extends Free[S, B] {
-  type C
-  val a: () => Free[S, C]
-  val f: C => Free[S, B]
-}
+case class FlatMapped[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 ```
 
-`Gosub` represents a call to a subroutine `a` and when `a` is
+`FlatMapped` represents a call to a subroutine `c` and when `c` is
 finished, it continues the computation by calling the function `f`
-with the result of `a`.
+with the result of `c`.
 
 It is actually an optimization of `Free` structure allowing to solve a
 problem of quadratic complexity implied by very deep recursive `Free`
@@ -494,7 +490,7 @@ computations.
 
 It is exactly the same problem as repeatedly appending to a `List[_]`.
 As the sequence of operations becomes longer, the slower a `flatMap`
-"through" the structure will be. With `Gosub`, `Free` becomes a
+"through" the structure will be. With `FlatMapped`, `Free` becomes a
 right-associated structure not subject to quadratic complexity.
 
 ## Future Work (TODO)
