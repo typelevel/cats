@@ -2,8 +2,8 @@
 | -------------------------- | ---------------- | ------------ |----------- |
 | `<*>`      | apply                  | [`Apply`](core/src/main/scala/cats/Apply.scala)                       | TBD        |
 | `|@|`      | Cartesian builder      | [`Cartesian[F[_]]`](core/src/main/scala/cats/Cartesian.scala)               | TBD        |
-| `fa *> fb`       | right apply            | [`Cartesian[F[_]]`](core/src/main/scala/cats/Cartesian.scala)               | `Fun` |
-| `fa <* fb` | left apply             | [`Cartesian`](core/src/main/scala/cats/Cartesian.scala)               | `Functor.m` |
+| `fa *> fb`       | right apply            | [`Cartesian[F[_]]`](core/src/main/scala/cats/Cartesian.scala)               | TBD|
+| `fa <* fb` | left apply             | [`Cartesian`](core/src/main/scala/cats/Cartesian.scala)               | TBD |
 | `x === y`  | equals                 | [`Eq`](kernel/src/main/scala/cats/kernel/Eq.scala)                    | `Eq[A].eqv(x, y)`  |
 | `x =!= y`  | not equals             | [`Eq`](kernel/src/main/scala/cats/kernel/Eq.scala)                    | `Eq[A].neqv(x, y)` |
 | `fa >>= f` | flatMap                | [`FlatMap`](core/src/main/scala/cats/syntax/flatMap.scala)            | `FlatMap[A, B].flatMap(fa)(f)` |
