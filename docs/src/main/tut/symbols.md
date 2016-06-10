@@ -1,19 +1,19 @@
-| Symbol | Name                   | Typeclass      | Import                       | Source                                              |
-| ------ | ---------------------- | ------------   | --------------------------   | -------------------------------------------------   |
-| `<*>`  | apply                  | `Apply`        | TBA                          | core/src/main/scala/cats/Apply.scala                |
-| `|@|`  | Cartesian builder      | `Cartesian`    | `cats.syntax.cartesian._`    | core/src/main/scala/cats/Cartesian.scala            |
-| `*>`   | right apply            | `Cartesian`    | `cats.syntax.cartesian._`    | core/src/main/scala/cats/Cartesian.scala            |
-| `<*`   | left apply             | `Cartesian`    | `cats.syntax.cartesian._`    | core/src/main/scala/cats/Cartesian.scala            |
-| `===`  | equals                 | `Eq`           | `cats.syntax.eq._`           | kernel/src/main/scala/cats/kernel/Eq.scala          |
-| `=!=`  | not equals             | `Eq`           | `cats.syntax.eq._`           | kernel/src/main/scala/cats/kernel/Eq.scala          |
-| `>>=`  | flatMap                | `FlatMap`      | `cats.syntax.flatMap._`      | core/src/main/scala/cats/FlatMap.scala              |
-| `|-|`  | remove                 | `Group`        | `cats.syntax.group._`        | kernel/src/main/scala/cats/kernel/Group.scala       |
-| `>`    | greater than           | `PartialOrder` | `cats.syntax.partialOrder._` | kernel/src/main/scala/cats/kernel/PartialOrder.scala|
-| `>=`   | greater than or equal  | `PartialOrder` | `cats.syntax.partialOrder._` | kernel/src/main/scala/cats/kernel/PartialOrder.scala|
-| `<`    | less than              | `PartialOrder` | `cats.syntax.partialOrder._` | kernel/src/main/scala/cats/kernel/PartialOrder.scala|
-| `<=`   | less than or equal     | `PartialOrder` | `cats.syntax.partialOrder._` | kernel/src/main/scala/cats/kernel/PartialOrder.scala|
-| `|+|`  | plus                   | `Semigroup`    | `cats.syntax.semigroup._`    | kernel/src/main/scala/cats/kernel/Semigroup.scala   |
-| `<+>`  | combine                | `SemigroupK`   | `cats.syntax.semigroupk._`   | core/src/main/scala/cats/SemigroupK.scala           |
-| `~>`   | natural transformation | `FunctionK`    | `cats._`                     | core/src/main/scala/cats/arrow/FunctionK.scala      |
-| `⊥`    | bottom                 |  N/A           | `cats._`                     | core/src/main/scala/cats/package.scala              |
-| `⊤`    | top                    |  N/A           | `cats._`                     | core/src/main/scala/cats/package.scala              |
+| Symbol     | Name                   | Typeclass                                                             | Definition |
+| ------     | ---------------------- | --------------------------------------------------------------------- |----------- |
+| `<*>`      | apply                  | [`Apply`](core/src/main/scala/cats/Apply.scala)                       | TBD        |
+| `|@|`      | Cartesian builder      | [`Cartesian`](core/src/main/scala/cats/Cartesian.scala)               | TBD        |
+| `*>`       | right apply            | [`Cartesian`](core/src/main/scala/cats/Cartesian.scala)               | `Functor.map[A, B](Cartesian.product[A, B](fa, fb)) { case (a, b) => b }` |
+| `<*`       | left apply             | [`Cartesian`](core/src/main/scala/cats/Cartesian.scala)               | `Functor.map[A, B](Cartesian.product[A, B](fa, fb)) { case (a, b) => a }` |
+| `x === y`  | equals                 | [`Eq`](kernel/src/main/scala/cats/kernel/Eq.scala)                    | `Eq[A].eqv(x, y)`  |
+| `x =!= y`  | not equals             | [`Eq`](kernel/src/main/scala/cats/kernel/Eq.scala)                    | `Eq[A].neqv(x, y)` |
+| `fa >>= f` | flatMap                | [`FlatMap`](core/src/main/scala/cats/syntax/flatMap.scala)            | `FlatMap[A, B].flatMap(fa)(f)` |
+| `|-|`      | remove                 | [`Group`](kernel/src/main/scala/cats/kernel/Group.scala)              | TBD |
+| `>`        | greater than           | [`PartialOrder`](kernel/src/main/scala/cats/kernel/PartialOrder.scala)| TBD |
+| `>=`       | greater than or equal  | [`PartialOrder`](kernel/src/main/scala/cats/kernel/PartialOrder.scala)| TBD |
+| `<`        | less than              | [`PartialOrder`](kernel/src/main/scala/cats/kernel/PartialOrder.scala)| TBD |
+| `<=`       | less than or equal     | [`PartialOrder`](kernel/src/main/scala/cats/kernel/PartialOrder.scala)| TBD |
+| `|+|`      | plus                   | [`Semigroup`](kernel/src/main/scala/cats/kernel/Semigroup.scala)      | TBD |
+| `<+>`      | combine                | [`SemigroupK`](core/src/main/scala/cats/SemigroupK.scala)             | TBD |
+| `~>`       | natural transformation | [`FunctionK`](core/src/main/scala/cats/arrow/FunctionK.scala)         | TBD |
+| `⊥`        | bottom                 | [N/A](core/src/main/scala/cats/package.scala)                         | TBD |
+| `⊤`        | top                    | [N/A](core/src/main/scala/cats/package.scala)                         | TBD |
