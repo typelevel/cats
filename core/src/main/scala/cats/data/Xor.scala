@@ -180,8 +180,8 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
     b => s"Xor.Right(${BB.show(b)})"
   )
 
-  def ap[AA >: A, BB >: B, C](that: AA Xor (BB => C)): AA Xor C = flatMap(
-    a => that.map(f => f(a))
+  def ap[AA >: A, BB >: B, C](that: AA Xor (BB => C)): AA Xor C = that.flatMap(
+    f => this.map(a => f(a))
   )
 }
 
@@ -244,6 +244,7 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       def foldLeft[B, C](fa: A Xor B, c: C)(f: (C, B) => C): C = fa.foldLeft(c)(f)
       def foldRight[B, C](fa: A Xor B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] = fa.foldRight(lc)(f)
       def flatMap[B, C](fa: A Xor B)(f: B => A Xor C): A Xor C = fa.flatMap(f)
+      override def ap[B, C](x: A Xor (B => C))(y: A Xor B): A Xor C = y.ap(x)
       def pure[B](b: B): A Xor B = Xor.right(b)
       @tailrec def tailRecM[B, C](b: B)(f: B => A Xor (B Xor C)): A Xor C =
         f(b) match {

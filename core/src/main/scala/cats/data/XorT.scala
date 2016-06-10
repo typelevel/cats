@@ -300,15 +300,9 @@ private[data] abstract class XorTInstances3 extends XorTInstances4 {
     }
 }
 
-private[data] abstract class XorTInstances4 extends XorTInstances5 {
-  implicit def catsDataApplicativeForXorT[F[_], L](implicit F0: Applicative[F]): Applicative[XorT[F, L, ?]] =
-    new XorTApplicative[F, L] { implicit val F = F0 }
-}
-
-private[data] abstract class XorTInstances5 {
+private[data] abstract class XorTInstances4 {
   implicit def catsDataFunctorForXorT[F[_], L](implicit F0: Functor[F]): Functor[XorT[F, L, ?]] =
     new XorTFunctor[F, L] { implicit val F = F0 }
-
 }
 
 private[data] trait XorTSemigroup[F[_], L, A] extends Semigroup[XorT[F, L, A]] {
@@ -320,13 +314,6 @@ private[data] trait XorTSemigroup[F[_], L, A] extends Semigroup[XorT[F, L, A]] {
 private[data] trait XorTMonoid[F[_], L, A] extends Monoid[XorT[F, L, A]] with XorTSemigroup[F, L, A] {
   implicit val F0: Monoid[F[L Xor A]]
   def empty: XorT[F, L, A] = XorT(F0.empty)
-}
-
-private[data] trait XorTApplicative[F[_], L] extends Applicative[XorT[F, L, ?]] with XorTFunctor[F, L] {
-  implicit val F: Applicative[F]
-  def pure[A](a: A): XorT[F, L, A] = XorT(F.pure(Xor.right(a)))
-  def ap[A, B](x: XorT[F, L, A => B])(y: XorT[F, L, A]): XorT[F, L, B] =
-    XorT(F.ap(F.map(y.value)(_.ap[L, A, B] _))(x.value))
 }
 
 private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
@@ -345,8 +332,9 @@ private[data] trait XorTFunctor[F[_], L] extends Functor[XorT[F, L, ?]] {
 
 private[data] trait XorTMonad[F[_], L] extends Monad[XorT[F, L, ?]] with XorTFunctor[F, L] {
   implicit val F: Monad[F]
-  def pure[A](a: A): XorT[F, L, A] = XorT.pure[F, L, A](a)
+  def pure[A](a: A): XorT[F, L, A] = XorT(F.pure(Xor.right(a)))
   def flatMap[A, B](fa: XorT[F, L, A])(f: A => XorT[F, L, B]): XorT[F, L, B] = fa flatMap f
+  override def ap[A, B](x: XorT[F, L, A => B])(y: XorT[F, L, A]): XorT[F, L, B] = super.ap(x)(y)
 }
 
 private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L] with XorTMonad[F, L] {
