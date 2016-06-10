@@ -1,5 +1,5 @@
 | Symbol     | Name                   | Typeclass                                                             | Definition |
-| -----------     | ---------------------- | --------------------------------------------------------------------- |----------- |
+| ---------------- | ---------------------- | --------------------------------------------------------------------- |----------- |
 | `<*>`      | apply                  | [`Apply`](core/src/main/scala/cats/Apply.scala)                       | TBD        |
 | `|@|`      | Cartesian builder      | [`Cartesian[F[_]]`](core/src/main/scala/cats/Cartesian.scala)               | TBD        |
 | `fa *> fb` | right apply            | [`Cartesian[F[_]]`](core/src/main/scala/cats/Cartesian.scala)               | `Functor.map(Cartesian.product(fa, fb)) { case (a, b) => b }` |
