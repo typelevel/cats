@@ -254,23 +254,4 @@ object Free {
           case Right(b) => pure(b)
         }
     }
-
-  /**
-   * Perform a stack-safe monadic fold from the source context `F`
-   * into the target monad `G`.
-   *
-   * This method can express short-circuiting semantics. Even when
-   * `fa` is an infinite structure, this method can potentially
-   * terminate if the `foldRight` implementation for `F` and the
-   * `tailRecM` implementation for `G` are sufficiently lazy.
-   */
-  def foldLeftM[F[_]: Foldable, G[_]: Monad, A, B](fa: F[A], z: B)(f: (B, A) => G[B]): G[B] =
-    unsafeFoldLeftM[F, Free[G, ?], A, B](fa, z) { (b, a) =>
-      Free.liftF(f(b, a))
-    }.runTailRec
-
-  private def unsafeFoldLeftM[F[_], G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit F: Foldable[F], G: Monad[G]): G[B] =
-    F.foldRight(fa, Always((w: B) => G.pure(w))) { (a, lb) =>
-      Always((w: B) => G.flatMap(f(w, a))(lb.value))
-    }.value.apply(z)
 }
