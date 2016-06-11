@@ -1,6 +1,7 @@
 package cats
 
 import scala.collection.mutable
+import cats.std.long._
 import simulacrum.typeclass
 
 /**
@@ -55,6 +56,16 @@ import simulacrum.typeclass
         case None => Later(Some(f(a)))
       }
     }
+
+  /**
+   * The size of this Foldable.
+   *
+   * This is overriden in structures that have more efficient size implementations
+   * (e.g. Vector, Set, Map).
+   *
+   * Note: will not terminate for infinite-sized collections.
+   */
+  def size[A](fa: F[A]): Long = foldMap(fa)(_ => 1)
 
   /**
    * Fold implemented using the given Monoid[A] instance.
