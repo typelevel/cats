@@ -3,31 +3,16 @@ layout: default
 title:  "Contributing"
 section: "contributing"
 ---
+
 # Contributor guide
 
-Discussion around Cats is currently happening in the
-[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
-issue and PR pages. You can get an overview of who is working on what
-via [Waffle.io](https://waffle.io/typelevel/cats).
+## About this document
 
-Feel free to open an issue if you notice a bug, have an idea for a
-feature, or have a question about the code. Pull requests are also
-gladly accepted.
+This guide is for people who would like to be involved in building Cats.
 
-People are expected to follow the
-[Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
-discussing Cats on the Github page, Gitter channel, or other
-venues.
-
-We hope that our community will be respectful, helpful, and kind. If
-you find yourself embroiled in a situation that becomes heated, or
-that fails to live up to our expectations, you should disengage and
-contact one of the [project maintainers](README.md#maintainers) in private. We
-hope to avoid letting minor aggressions and misunderstandings escalate
-into larger problems.
-
-If you are being harassed, please contact one of [us](README.md#maintainers)
-immediately so that we can support you.
+This guide assumes that you have some experience doing Scala
+development. If you get stuck on any of these steps, please feel free
+to [ask for help](#getting-in-touch).
 
 ## How can I help?
 
@@ -199,7 +184,11 @@ issue number in the body of your pull request or commit message. For
 example, if your pull request addresses issue number 52, please
 include "fixes #52".
 
-If you make changes after you have opened your pull request, please add them as separate commits and avoid squashing or rebasing. Squashing and rebasing can lead to a tidier git history, but they can also be a hassle if somebody else has done work based on your branch.
+If you make changes after you have opened your pull request, please
+add them as separate commits and avoid squashing or
+rebasing. Squashing and rebasing can lead to a tidier git history, but
+they can also be a hassle if somebody else has done work based on your
+branch.
 
 ## How did we do?
 
@@ -215,3 +204,29 @@ over the project source code or lurking the
 contributing. In fact, if you encounter any confusion or frustration
 during the contribution process, please create a GitHub issue and
 we'll do our best to improve the process.
+
+## Getting in touch
+
+Discussion around Cats is currently happening in the
+[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
+issue and PR pages. You can get an overview of who is working on what
+via [Waffle.io](https://waffle.io/typelevel/cats).
+
+Feel free to open an issue if you notice a bug, have an idea for a
+feature, or have a question about the code. Pull requests are also
+gladly accepted.
+
+People are expected to follow the
+[Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
+discussing Cats on the Github page, Gitter channel, or other
+venues.
+
+We hope that our community will be respectful, helpful, and kind. If
+you find yourself embroiled in a situation that becomes heated, or
+that fails to live up to our expectations, you should disengage and
+contact one of the [project maintainers](README.md#maintainers) in private. We
+hope to avoid letting minor aggressions and misunderstandings escalate
+into larger problems.
+
+If you are being harassed, please contact one of [us](README.md#maintainers)
+immediately so that we can support you.
