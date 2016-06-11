@@ -5,6 +5,9 @@ section: "contributing"
 ---
 # Contributor guide
 
+* TOC
+{:toc}
+
 Discussion around Cats is currently happening in the
 [Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
 issue and PR pages. You can get an overview of who is working on what
