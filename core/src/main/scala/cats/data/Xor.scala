@@ -180,9 +180,7 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
     b => s"Xor.Right(${BB.show(b)})"
   )
 
-  def ap[AA >: A, BB >: B, C](that: AA Xor (BB => C)): AA Xor C = that.flatMap(
-    f => this.map(a => f(a))
-  )
+  def ap[AA >: A, BB >: B, C](that: AA Xor (BB => C)): AA Xor C = that.flatMap(this.map)
 }
 
 object Xor extends XorInstances with XorFunctions {
