@@ -51,6 +51,10 @@ Cats information and documentation is available on the
 
 We also have a Scaladoc [index](http://typelevel.org/cats/api/#package).
 
+Our goal is to have clear and comprehensive documentation. If you
+notice problems, omissions, or errors, please
+[let us know](CONTRIBUTING.md).
+
 ### How can I contribute to Cats?
 
 We welcome contributions to Cats and would love for you to help build
