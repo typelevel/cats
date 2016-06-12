@@ -2,18 +2,18 @@ package cats
 package syntax
 
 trait FlatMapSyntax1 {
-  implicit def flatMapSyntaxU[FA](fa: FA)(implicit U: Unapply[FlatMap, FA]): FlatMapOps[U.M, U.A] =
+  implicit def catsSyntaxUFlatMap[FA](fa: FA)(implicit U: Unapply[FlatMap, FA]): FlatMapOps[U.M, U.A] =
     new FlatMapOps[U.M, U.A](U.subst(fa))(U.TC)
 }
 
 trait FlatMapSyntax extends FlatMapSyntax1 {
-  implicit def flatMapSyntax[F[_]: FlatMap, A](fa: F[A]): FlatMapOps[F, A] =
+  implicit def catsSyntaxFlatMap[F[_]: FlatMap, A](fa: F[A]): FlatMapOps[F, A] =
     new FlatMapOps(fa)
 
-  implicit def flattenSyntax[F[_]: FlatMap, A](ffa: F[F[A]]): FlattenOps[F, A] =
+  implicit def catsSyntaxFlatten[F[_]: FlatMap, A](ffa: F[F[A]]): FlattenOps[F, A] =
     new FlattenOps[F, A](ffa)
 
-  implicit def ifMSyntax[F[_]: FlatMap](fa: F[Boolean]): IfMOps[F] =
+  implicit def catsSyntaxIfM[F[_]: FlatMap](fa: F[Boolean]): IfMOps[F] =
     new IfMOps[F](fa)
 }
 
