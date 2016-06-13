@@ -14,7 +14,7 @@ final case class NonEmptyList[A](head: A, tail: List[A] = List[A]()) {
   /**
    * Return the head and tail into a single list
    */
-  def unwrap: List[A] = head :: tail
+  def toList: List[A] = head :: tail
 
   /**
    * remove elements not matching the predicate
