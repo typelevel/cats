@@ -163,13 +163,17 @@ private[data] sealed trait OptionTInstances extends OptionTInstances0 {
 }
 
 private[data] sealed trait OptionTInstances0 extends OptionTInstances1 {
-  /* TODO violates right absorbtion, right distributivity, and left distributivity -- re-enable when MonadCombine laws are split in to weak/strong
-  implicit def catsDataMonadCombineForOptionT[F[_]](implicit F0: Monad[F]): MonadCombine[OptionT[F, ?]] =
-    new OptionTMonadCombine[F] { implicit val F = F0 }
-  */
+  implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
+    new OptionTMonad[F] { implicit val F = F0 }
+
+  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
+    new OptionTMonadError[F, E] { implicit val F = F0 }
 
   implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
     new OptionTTraverse[F] { implicit val F = F0 }
+
+  implicit def catsDataSemigroupK[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, ?]] =
+    new OptionTSemigroupK[F] { implicit val F = F0 }
 
   implicit def catsDataMonoidForOptionT[F[_], A](implicit F0: Monoid[F[Option[A]]]): Monoid[OptionT[F, A]] =
     new OptionTMonoid[F, A] { implicit val F = F0 }
@@ -178,11 +182,9 @@ private[data] sealed trait OptionTInstances0 extends OptionTInstances1 {
     new OptionTPartialOrder[F, A] { implicit val F = F0 }
 }
 
-private[data] sealed trait OptionTInstances1 extends OptionTInstances2 {
-  /* TODO violates monadFilter right empty law -- re-enable when MonadFilter laws are split in to weak/strong
-  implicit def catsDataMonadFilterForOptionT[F[_]](implicit F0: Monad[F]): MonadFilter[OptionT[F, ?]] =
-    new OptionTMonadFilter[F] { implicit val F = F0 }
-  */
+private[data] sealed trait OptionTInstances1 {
+  implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): Functor[OptionT[F, ?]] =
+    new OptionTFunctor[F] { implicit val F = F0 }
 
   // do NOT change this to val! I know it looks like it should work, and really I agree, but it doesn't (for... reasons)
   implicit def catsDataTransLiftForOptionT: TransLift.Aux[OptionT, Functor] =
@@ -192,27 +194,11 @@ private[data] sealed trait OptionTInstances1 extends OptionTInstances2 {
       def liftT[M[_]: Functor, A](ma: M[A]): OptionT[M, A] = OptionT.liftF(ma)
     }
 
-  implicit def catsDataSemigroupK[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, ?]] =
-    new OptionTSemigroupK[F] { implicit val F = F0 }
+  implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, ?]] =
+    new OptionTMonoidK[F] { implicit val F = F0 }
 
   implicit def catsDataEqForOptionT[F[_], A](implicit F0: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     new OptionTEq[F, A] { implicit val F = F0 }
-}
-
-private[data] sealed trait OptionTInstances2 extends OptionTInstances3 {
-  implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
-    new OptionTMonad[F] { implicit val F = F0 }
-
-  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
-    new OptionTMonadError[F, E] { implicit val F = F0 }
-
-  implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, ?]] =
-    new OptionTMonoidK[F] { implicit val F = F0 }
-}
-
-private[data] sealed trait OptionTInstances3 {
-  implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): Functor[OptionT[F, ?]] =
-    new OptionTFunctor[F] { implicit val F = F0 }
 }
 
 private[data] trait OptionTFunctor[F[_]] extends Functor[OptionT[F, ?]] {
@@ -230,12 +216,6 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
 
   override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] = fa.map(f)
 }
-
-private[data] trait OptionTMonadFilter[F[_]] extends MonadFilter[OptionT[F, ?]] with OptionTMonad[F] {
-  def empty[A]: OptionT[F, A] = OptionT.none[F, A]
-}
-
-private[data] trait OptionTMonadCombine[F[_]] extends MonadCombine[OptionT[F, ?]] with OptionTMonad[F] with OptionTMonoidK[F]
 
 private[data] trait OptionTMonadRec[F[_]] extends MonadRec[OptionT[F, ?]] with OptionTMonad[F] {
   implicit def F: MonadRec[F]
