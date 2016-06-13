@@ -1,15 +1,11 @@
 package cats
 package data
 
-import cats.std.list._
-//it needs a Functor
-//it needs semigroup - combine, filter
-
 /**
- *  A data type which represents a single element (head) and some other
- * structure (tail).
+ * A data type which represents a non empty list of A, with
+ * single element (head) and optional structure (tail).
  */
-final case class NonEmptyList[A](head: A, tail: List[A] = List[A]()) {
+final case class NonEmptyList[A](head: A, tail: List[A]) {
 
   /**
    * Return the head and tail into a single list
@@ -19,22 +15,20 @@ final case class NonEmptyList[A](head: A, tail: List[A] = List[A]()) {
   /**
    * remove elements not matching the predicate
    */
-  def filter(p: A => Boolean): List[A] = {
-    val rest = tail.filter(p)
-    if (p(head)) head :: rest else rest
-  }
+  def filter(p: A => Boolean): List[A] =
+    toList.filter(p)
 
   /**
    * Append another NonEmptyList
    */
   def combine(other: NonEmptyList[A]): NonEmptyList[A] =
-    NonEmptyList(head, MonadCombine[List].combineK(tail, other.head :: other.tail))
+    NonEmptyList(head, tail ::: other.toList)
 
   /**
    * Find the first element matching the predicate, if one exists
    */
   def find(p: A => Boolean): Option[A] =
-    if (p(head)) Some(head) else tail.find(p)
+    toList.find(p)
 
   /**
    * Check whether at least one element satisfies the predicate
@@ -52,13 +46,13 @@ final case class NonEmptyList[A](head: A, tail: List[A] = List[A]()) {
    * Left-associative fold on the structure using f.
    */
   def foldLeft[B](b: B)(f: (B, A) => B): B =
-    (head :: tail).foldLeft(b)(f)
+    tail.foldLeft(f(b, head))(f)
 
   /**
    * Right-associative fold on the structure using f.
    */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    (head :: tail).foldRight(lb)(f)
+    toList.foldRight(lb)(f)
 
   /**
    *  Applies f to all the elements of the structure
@@ -69,8 +63,10 @@ final case class NonEmptyList[A](head: A, tail: List[A] = List[A]()) {
 
 private[data] sealed trait NonEmptyListInstances extends NonEmptyListLowPriority2 {
 
+  def apply[A](head: A, tail: A*): NonEmptyList[A] = NonEmptyList(head, tail.toList)
+
   implicit def catsDataEqForNonEmptyList[A](implicit A: Eq[A]): Eq[NonEmptyList[A]] =
-    new Eq[NonEmptyList[A]]{
+    new Eq[NonEmptyList[A]] {
       def eqv(x: NonEmptyList[A], y: NonEmptyList[A]): Boolean = x === y
     }
 
@@ -97,7 +93,7 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListLowPriority
         fa map f
 
       def pure[A](x: A): NonEmptyList[F, A] =
-        NonEmptyList(x, monad.empty)
+        NonEmptyList(x, Nil)
 
       def flatMap[A, B](fa: NonEmptyList[F, A])(f: A => NonEmptyList[F, B]): NonEmptyList[F, B] = {
         val end = monad.flatMap(fa.tail) { a =>
