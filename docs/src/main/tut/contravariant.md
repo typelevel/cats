@@ -11,7 +11,7 @@ The `Contravariant` type class is for functors that define a `contramap`
 function with the following type:
 
 ```scala
-def contramap[A, B](f: B => A): F[A] => F[B]
+def contramap[A, B](fa: F[A])(f: B => A): F[B]
 ```
 
 It looks like regular (also called `Covariant`) [`Functor`](functor.html)'s `map`,
