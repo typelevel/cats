@@ -56,6 +56,8 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
 
   /**
    *  Applies f to all the elements of the structure
+   *  TODO It would be nice to have variance on this particular method def map[AA <: A, B](f: AA => B): NonEmptyList[B] so that you can pass a function for a supertype of A into map. @yilinwei
+   * https://github.com/typelevel/cats/pull/1120#discussion-diff-66881573
    */
   def map[B](f: A => B): NonEmptyList[B] =
     NonEmptyList(f(head), tail.map(f))
@@ -95,6 +97,7 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListLowPriority
       def pure[A](x: A): NonEmptyList[F, A] =
         NonEmptyList(x, Nil)
 
+      // TODO Could we move this method (and other type class methods) to NonEmptyList and then reference them in the instances? I think that will make the scaladoc for NonEmptyList a bit nicer. @non
       def flatMap[A, B](fa: NonEmptyList[F, A])(f: A => NonEmptyList[F, B]): NonEmptyList[F, B] = {
         val end = monad.flatMap(fa.tail) { a =>
           val fa = f(a)
@@ -102,6 +105,9 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListLowPriority
         }
         val fst = f(fa.head)
         NonEmptyList(fst.head, monad.combineK(fst.tail, end))
+        // TODO @yilinwei https://github.com/typelevel/cats/pull/1120#discussion_r66882139
+        // val xs = f(head) ++ tail.flatMap(f.andThen(_.toList))
+        // NonEmptyList(xs.head, xs.tail)
       }
     }
 }
