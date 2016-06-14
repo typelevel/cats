@@ -28,6 +28,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def getOrElse[B >: A](default: => B): B = fold(_ => default, identity)
 
   /**
+    * Return the Valid value, or the result of f if Invalid
+    */
+  def valueOr[B >: A](f: E => B): B = fold(f, identity)
+
+  /**
    * Is this Valid and matching the given predicate
    */
   def exists(predicate: A => Boolean): Boolean = fold(_ => false, predicate)
@@ -202,6 +207,8 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     case Valid(a) => Invalid(a)
     case Invalid(e) => Valid(e)
   }
+
+  def merge[EE >: E](implicit ev: A <:< EE): EE = fold(identity, ev.apply)
 
   /**
    * Ensure that a successful result passes the given predicate,
