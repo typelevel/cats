@@ -163,16 +163,10 @@ private[data] sealed trait OptionTInstances extends OptionTInstances0 {
 }
 
 private[data] sealed trait OptionTInstances0 extends OptionTInstances1 {
-  implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
-    new OptionTMonad[F] { implicit val F = F0 }
-
   implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
     new OptionTMonadError[F, E] { implicit val F = F0 }
 
-  implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
-    new OptionTTraverse[F] { implicit val F = F0 }
-
-  implicit def catsDataSemigroupK[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, ?]] =
+  implicit def catsDataSemigroupKForOptionT[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, ?]] =
     new OptionTSemigroupK[F] { implicit val F = F0 }
 
   implicit def catsDataMonoidForOptionT[F[_], A](implicit F0: Monoid[F[Option[A]]]): Monoid[OptionT[F, A]] =
@@ -182,9 +176,9 @@ private[data] sealed trait OptionTInstances0 extends OptionTInstances1 {
     new OptionTPartialOrder[F, A] { implicit val F = F0 }
 }
 
-private[data] sealed trait OptionTInstances1 {
-  implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): Functor[OptionT[F, ?]] =
-    new OptionTFunctor[F] { implicit val F = F0 }
+private[data] sealed trait OptionTInstances1 extends OptionTInstances2 {
+  implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
+    new OptionTMonad[F] { implicit val F = F0 }
 
   // do NOT change this to val! I know it looks like it should work, and really I agree, but it doesn't (for... reasons)
   implicit def catsDataTransLiftForOptionT: TransLift.Aux[OptionT, Functor] =
@@ -199,6 +193,16 @@ private[data] sealed trait OptionTInstances1 {
 
   implicit def catsDataEqForOptionT[F[_], A](implicit F0: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     new OptionTEq[F, A] { implicit val F = F0 }
+}
+
+private[data] sealed trait OptionTInstances2 extends OptionTInstances3 {
+  implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
+    new OptionTTraverse[F] { implicit val F = F0 }
+}
+
+private[data] sealed trait OptionTInstances3 {
+  implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): Functor[OptionT[F, ?]] =
+    new OptionTFunctor[F] { implicit val F = F0 }
 }
 
 private[data] trait OptionTFunctor[F[_]] extends Functor[OptionT[F, ?]] {

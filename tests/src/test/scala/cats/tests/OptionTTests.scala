@@ -295,4 +295,36 @@ class OptionTTests extends CatsSuite {
     }
   }
 
+
+  /**
+   * Testing that implicit resolution works. If it compiles, the "test" passes.
+   */
+  object ImplicitResolution{
+    Eq[OptionT[List, Int]]
+    PartialOrder[OptionT[List, Int]]
+    Order[OptionT[List, Int]]
+
+    Semigroup[OptionT[List, Int]]
+    Monoid[OptionT[List, Int]]
+
+    SemigroupK[OptionT[List, ?]]
+    MonoidK[OptionT[List, ?]]
+
+    Functor[OptionT[List, ?]]
+    Monad[OptionT[List, ?]]
+    MonadRec[OptionT[List, ?]]
+
+    import scala.util.Try
+    Functor[OptionT[Try, ?]]
+    Monad[OptionT[Try, ?]]
+    MonadError[OptionT[Try, ?], Throwable]
+
+    Foldable[OptionT[List, ?]]
+    Traverse[OptionT[List, ?]]
+
+    implicit val T = ListWrapper.traverse
+    implicit val M = ListWrapper.monad
+    Functor[OptionT[ListWrapper, ?]]
+  }
+
 }
