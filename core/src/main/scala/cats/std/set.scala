@@ -18,6 +18,8 @@ trait SetInstances extends cats.kernel.std.SetInstances {
       def foldRight[A, B](fa: Set[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         Foldable.iterateRight(fa.iterator, lb)(f)
 
+      override def size[A](fa: Set[A]): Long = fa.size.toLong
+
       override def exists[A](fa: Set[A])(p: A => Boolean): Boolean =
         fa.exists(p)
 
