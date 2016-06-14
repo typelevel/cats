@@ -107,7 +107,7 @@ private[data] sealed abstract class ConstInstances0 extends ConstInstances1 {
 }
 
 private[data] sealed abstract class ConstInstances1 {
-  implicit def constInvariantMonoidal[C: Monoid]: InvariantMonoidal[Const[C, ?]] = new InvariantMonoidal[Const[C, ?]] {
+  implicit def catsConstInvariantMonoidal[C: Monoid]: InvariantMonoidal[Const[C, ?]] = new InvariantMonoidal[Const[C, ?]] {
     def pure[A](a: A): Const[C, A] =
       Const.empty
 

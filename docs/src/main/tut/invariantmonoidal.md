@@ -43,7 +43,7 @@ def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] =
   }
 ```
 
-Given an instance of `InvariantMonoidal` for `Semigroup`, we are able to combine existing `Semigroup` instances to form a new `Semigroup` by using the `Catesian` syntax:
+Given an instance of `InvariantMonoidal` for `Semigroup`, we are able to combine existing `Semigroup` instances to form a new `Semigroup` by using the `Cartesian` syntax:
 
 ```tut:silent
 import cats.std.all._
@@ -150,7 +150,7 @@ val stringCodec: CsvCodec[String] =
     def write(a: String): CSV = List(a)
   }
 
-def numericSystemCodec(base: Int): CsvCodec[Int] = 
+def numericSystemCodec(base: Int): CsvCodec[Int] =
   new CsvCodec[Int] {
     def read(s: CSV): (Option[Int], CSV) =
       (s.headOption.flatMap(head => scala.util.Try(Integer.parseInt(head, base)).toOption), s.drop(1))

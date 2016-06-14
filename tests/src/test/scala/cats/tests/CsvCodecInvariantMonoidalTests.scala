@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.discipline.eq._
+import cats.laws.discipline.eq.catsLawsEqForFn1
 import cats.laws.discipline.{InvariantMonoidalTests, SerializableTests}
 import cats.std.all._
 import cats.syntax.cartesian._
@@ -80,7 +80,7 @@ object CsvCodecInvariantMonoidalTests {
     Arbitrary(Gen.choose(2, 16).map(numericSystemCodec))
 
   implicit def csvCodecsEq[A](implicit a: Arbitrary[A], e: Eq[A]): Eq[CsvCodec[A]] =
-    function1Eq[A, CSV].on[CsvCodec[A]](_.write) and function1Eq[CSV, (Option[A], CSV)].on[CsvCodec[A]](_.read)
+    catsLawsEqForFn1[A, CSV].on[CsvCodec[A]](_.write) and catsLawsEqForFn1[CSV, (Option[A], CSV)].on[CsvCodec[A]](_.read)
 }
 
 class CsvCodecInvariantMonoidalTests extends CatsSuite {

@@ -23,6 +23,6 @@ object Cartesian extends CartesianArityFunctions with AlgebraCartesianInstances
  * can't have instances for Cats type classes in their companion objects.
  */
 private[cats] sealed trait AlgebraCartesianInstances {
-  implicit val invariantSemigroup: Cartesian[Semigroup] = InvariantMonoidal.invariantMonoidalSemigroup
-  implicit val invariantMonoid: Cartesian[Monoid] = InvariantMonoidal.invariantMonoidalMonoid
+  implicit val catsInvariantSemigroup: Cartesian[Semigroup] = InvariantMonoidal.catsInvariantMonoidalSemigroup
+  implicit val catsInvariantMonoid: Cartesian[Monoid] = InvariantMonoidal.catsInvariantMonoidalMonoid
 }
