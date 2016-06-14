@@ -24,6 +24,39 @@ object eq {
     }
   }
 
+  /**
+   * Create an approximation of Eq[PartialOrder[A]] by generating 100 values for A
+   * and comparing the application of the two compare functions
+   */
+  implicit def partialOrderEq[A](implicit arbA: Arbitrary[(A, A)], optIntEq: Eq[Option[Int]]): Eq[PartialOrder[A]] = new Eq[PartialOrder[A]] {
+    def eqv(f: PartialOrder[A], g: PartialOrder[A]): Boolean = {
+      val samples = List.fill(100)(arbA.arbitrary.sample).collect {
+        case Some(a) => a
+        case None => sys.error("Could not generate arbitrary values to compare two PartialOrder[A]")
+      }
+      samples.forall {
+        case (l, r) => optIntEq.eqv(f.tryCompare(l, r), g.tryCompare(l, r))
+      }
+    }
+  }
+
+  /**
+   * Create an approximation of Eq[Order[A]] by generating 100 values for A
+   * and comparing the application of the two compare functions
+   */
+  implicit def orderEq[A](implicit arbA: Arbitrary[(A, A)], intEq: Eq[Int]): Eq[Order[A]] = new Eq[Order[A]] {
+    def eqv(f: Order[A], g: Order[A]): Boolean = {
+      val samples = List.fill(100)(arbA.arbitrary.sample).collect {
+        case Some(a) => a
+        case None => sys.error("Could not generate arbitrary values to compare two Order[A]")
+      }
+      samples.forall {
+        case (l, r) => intEq.eqv(f.compare(l, r), g.compare(l, r))
+      }
+    }
+  }
+
+
   /** Create an approximation of Eq[Show[A]] by using function1Eq[A, String] */
   implicit def showEq[A: Arbitrary]: Eq[Show[A]] = {
     val xyz = function1Eq[A, String]

@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Contravariant
+
 /**
  * [[Prod]] is a product to two independent functor values.
  *
@@ -55,12 +57,22 @@ private[data] sealed abstract class ProdInstances4 {
     def F: Functor[F] = FF
     def G: Functor[G] = GG
   }
+  implicit def catsDataContravariantForProd[F[_], G[_]](implicit FC: Contravariant[F], GC: Contravariant[G]): Contravariant[λ[α => Prod[F, G, α]]] = new ProdContravariant[F, G] {
+    def F: Contravariant[F] = FC
+    def G: Contravariant[G] = GC
+  }
 }
 
 sealed trait ProdFunctor[F[_], G[_]] extends Functor[λ[α => Prod[F, G, α]]] {
   def F: Functor[F]
   def G: Functor[G]
   override def map[A, B](fa: Prod[F, G, A])(f: A => B): Prod[F, G, B] = Prod(F.map(fa.first)(f), G.map(fa.second)(f))
+}
+
+sealed trait ProdContravariant[F[_], G[_]] extends Contravariant[λ[α => Prod[F, G, α]]] {
+  def F: Contravariant[F]
+  def G: Contravariant[G]
+  def contramap[A, B](fa: Prod[F, G, A])(f: B => A): Prod[F, G, B] = Prod(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
 }
 
 sealed trait ProdApply[F[_], G[_]] extends Apply[λ[α => Prod[F, G, α]]] with ProdFunctor[F, G] {
