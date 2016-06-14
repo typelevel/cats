@@ -69,6 +69,8 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def toList: List[B] = fold(_ => Nil, _ :: Nil)
 
+  def toTry(implicit ev: A <:< Throwable): Try[B] = fold(a => Failure(ev(a)), Success(_))
+
   def toValidated: Validated[A,B] = fold(Validated.Invalid.apply, Validated.Valid.apply)
 
   /** Returns a [[ValidatedNel]] representation of this disjunction with the `Left` value
