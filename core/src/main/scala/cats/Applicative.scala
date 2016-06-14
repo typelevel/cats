@@ -50,3 +50,7 @@ import simulacrum.typeclass
       val G = Applicative[G]
     }
 }
+
+abstract class ApplicativeMonoid[F[_], A](f: Applicative[F], monoid: Monoid[A]) extends ApplySemigroup(f, monoid) with Monoid[F[A]] {
+  def empty: F[A] = f.pure(monoid.empty)
+}
