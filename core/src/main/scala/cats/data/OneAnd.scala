@@ -138,7 +138,7 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
 }
 
 trait OneAndLowPriority0 {
-  implicit val nelComonad: Comonad[OneAnd[List, ?]] =
+  implicit val catsDataComonadForOneAnd: Comonad[OneAnd[List, ?]] =
     new Comonad[OneAnd[List, ?]] {
       def coflatMap[A, B](fa: OneAnd[List, A])(f: OneAnd[List, A] => B): OneAnd[List, B] = {
         @tailrec def consume(as: List[A], buf: ListBuffer[B]): List[B] =
