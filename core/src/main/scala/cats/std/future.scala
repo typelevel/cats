@@ -1,7 +1,6 @@
 package cats
 package std
 
-import cats.syntax.all._
 import cats.data.Xor
 
 import scala.util.control.NonFatal
@@ -51,12 +50,8 @@ private[cats] abstract class FutureCoflatMap(implicit ec: ExecutionContext) exte
   def coflatMap[A, B](fa: Future[A])(f: Future[A] => B): Future[B] = Future(f(fa))
 }
 
-private[cats] class FutureSemigroup[A: Semigroup](implicit ec: ExecutionContext) extends Semigroup[Future[A]] {
-  def combine(fx: Future[A], fy: Future[A]): Future[A] =
-    (fx zip fy).map { case (x, y) => x |+| y }
-}
+private[cats] class FutureSemigroup[A: Semigroup](implicit ec: ExecutionContext)
+  extends ApplySemigroup[Future, A](future.catsStdInstancesForFuture, implicitly)
 
-private[cats] class FutureMonoid[A](implicit A: Monoid[A], ec: ExecutionContext) extends FutureSemigroup[A] with Monoid[Future[A]] {
-  def empty: Future[A] =
-    Future.successful(A.empty)
-}
+private[cats] class FutureMonoid[A](implicit A: Monoid[A], ec: ExecutionContext)
+  extends ApplicativeMonoid[Future, A](future.catsStdInstancesForFuture, implicitly)
