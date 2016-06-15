@@ -51,6 +51,9 @@ Cats information and documentation is available on the
 
 We also have a Scaladoc [index](http://typelevel.org/cats/api/#package).
 
+Finally, we have a list of
+[frequently-asked questions](docs/src/main/tut/faq.md).
+
 Our goal is to have clear and comprehensive documentation. If you
 notice problems, omissions, or errors, please
 [let us know](CONTRIBUTING.md).
