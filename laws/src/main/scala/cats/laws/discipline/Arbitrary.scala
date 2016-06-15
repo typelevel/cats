@@ -56,6 +56,9 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def prodArbitrary[F[_], G[_], A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]]): Arbitrary[Prod[F, G, A]] =
     Arbitrary(F.arbitrary.flatMap(fa => G.arbitrary.map(ga => Prod[F, G, A](fa, ga))))
 
+  implicit def biprodArbitrary[F[_, _], G[_, _], A, B](implicit F: Arbitrary[F[A, B]], G: Arbitrary[G[A, B]]): Arbitrary[BiProd[F, G, A, B]] =
+    Arbitrary(F.arbitrary.flatMap(fab => G.arbitrary.map(gab => BiProd[F, G, A, B](fab, gab))))
+
   implicit def funcArbitrary[F[_], A, B](implicit F: Arbitrary[F[B]]): Arbitrary[Func[F, A, B]] =
     Arbitrary(F.arbitrary.map(fb => Func.func[F, A, B](_ => fb)))
 
