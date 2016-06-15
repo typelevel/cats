@@ -138,7 +138,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
       new FunctionK[S, Free[T, ?]] {
         def apply[B](fa: S[B]): Free[T, B] = Suspend(f(fa))
       }
-    }(Free.freeMonad)
+    }(Free.catsFreeMonadRecForFree)
 
   override def toString(): String =
     "Free(...)"
@@ -195,7 +195,7 @@ object Free {
   /**
    * `Free[S, ?]` has a monad for any type constructor `S[_]`.
    */
-  implicit def freeMonad[S[_]]: MonadRec[Free[S, ?]] =
+  implicit def catsFreeMonadRecForFree[S[_]]: MonadRec[Free[S, ?]] =
     new MonadRec[Free[S, ?]] {
       def pure[A](a: A): Free[S, A] = Free.pure(a)
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)

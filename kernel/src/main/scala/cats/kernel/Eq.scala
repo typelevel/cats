@@ -75,7 +75,7 @@ object Eq extends EqFunctions[Eq] {
   /**
    * This gives compatibility with scala's Equiv trait
    */
-  implicit def equiv[A](implicit ev: Eq[A]): Equiv[A] =
+  implicit def catsKernelEquivForEq[A](implicit ev: Eq[A]): Equiv[A] =
     new Equiv[A] {
       def equiv(a: A, b: A) = ev.eqv(a, b)
     }

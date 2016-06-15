@@ -70,7 +70,7 @@ private[data] sealed trait IdTTraverse[F[_]] extends Traverse[IdT[F, ?]] with Id
 }
 
 private[data] sealed abstract class IdTInstances1 {
-  implicit def idTFunctor[F[_]](implicit F: Functor[F]): Functor[IdT[F, ?]] =
+  implicit def catsDataFunctorForIdT[F[_]](implicit F: Functor[F]): Functor[IdT[F, ?]] =
     new IdTFunctor[F] {
       implicit val F0: Functor[F] = F
     }
@@ -78,30 +78,30 @@ private[data] sealed abstract class IdTInstances1 {
 
 private[data] sealed abstract class IdTInstances0 extends IdTInstances1 {
 
-  implicit def idTMonad[F[_]](implicit F: Monad[F]): Monad[IdT[F, ?]] =
+  implicit def catsDataMonadForIdT[F[_]](implicit F: Monad[F]): Monad[IdT[F, ?]] =
     new IdTMonad[F] {
       implicit val F0: Monad[F] = F
     }
 
-  implicit def idTFoldable[F[_]](implicit F: Foldable[F]): Foldable[IdT[F, ?]] =
+  implicit def catsDataFoldableForIdT[F[_]](implicit F: Foldable[F]): Foldable[IdT[F, ?]] =
     new IdTFoldable[F] {
       implicit val F0: Foldable[F] = F
     }
 
-  implicit def idTOrder[F[_], A](implicit F: Order[F[A]]): Order[IdT[F, A]] =
+  implicit def catsDataOrderForIdT[F[_], A](implicit F: Order[F[A]]): Order[IdT[F, A]] =
     F.on(_.value)
 }
 
 private[data] sealed abstract class IdTInstances extends IdTInstances0 {
 
-  implicit def idTTraverse[F[_]](implicit F: Traverse[F]): Traverse[IdT[F, ?]] =
+  implicit def catsDataTraverseForIdT[F[_]](implicit F: Traverse[F]): Traverse[IdT[F, ?]] =
     new IdTTraverse[F] {
       implicit val F0: Traverse[F] = F
     }
 
-  implicit def idTEq[F[_], A](implicit F: Eq[F[A]]): Eq[IdT[F, A]] =
+  implicit def catsDataEqForIdT[F[_], A](implicit F: Eq[F[A]]): Eq[IdT[F, A]] =
     F.on(_.value)
 
-  implicit def idTShow[F[_], A](implicit F: Show[F[A]]): Show[IdT[F, A]] =
+  implicit def catsDataShowForIdT[F[_], A](implicit F: Show[F[A]]): Show[IdT[F, A]] =
     functor.Contravariant[Show].contramap(F)(_.value)
 }

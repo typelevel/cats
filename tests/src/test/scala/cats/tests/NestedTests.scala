@@ -6,7 +6,7 @@ import cats.functor._
 import cats.laws.discipline._
 import cats.laws.discipline.CartesianTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq.showEq
+import cats.laws.discipline.eq.catsLawsEqForShow
 
 class NestedTests extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell
@@ -29,14 +29,14 @@ class NestedTests extends CatsSuite {
 
   {
     // Invariant + Covariant = Invariant
-    val instance = Nested.nestedInvariantCovariant(ListWrapper.invariant, ListWrapper.functor)
+    val instance = Nested.catsDataInvariantForCovariantNested(ListWrapper.invariant, ListWrapper.functor)
     checkAll("Nested[ListWrapper, ListWrapper] - Invariant + Covariant", InvariantTests[Nested[ListWrapper, ListWrapper, ?]](instance).invariant[Int, Int, Int])
     checkAll("Invariant[Nested[ListWrapper, ListWrapper, ?]] - Invariant + Covariant", SerializableTests.serializable(instance))
   }
 
   {
     // Invariant + Contravariant = Invariant
-    val instance = Nested.nestedInvariantContravariant(ListWrapper.invariant, Contravariant[Show])
+    val instance = Nested.catsDataInvariantForNestedContravariant(ListWrapper.invariant, Contravariant[Show])
     checkAll("Nested[ListWrapper, Show]", InvariantTests[Nested[ListWrapper, Show, ?]](instance).invariant[Int, Int, Int])
     checkAll("Invariant[Nested[ListWrapper, Show, ?]]", SerializableTests.serializable(instance))
   }
@@ -58,9 +58,9 @@ class NestedTests extends CatsSuite {
     // Contravariant + Contravariant = Functor
     type ConstInt[A] = Const[Int, A]
     // SI-2712
-    implicit val instance = Nested.nestedContravariant[ConstInt, Show]
-    implicit val arbitrary = nestedArbitrary[ConstInt, Show, Int]
-    implicit val eqv = Nested.nestedEq[ConstInt, Show, Int]
+    implicit val instance = Nested.catsDataContravariantForNested[ConstInt, Show]
+    implicit val arbitrary = catsLawsArbitraryForNested[ConstInt, Show, Int]
+    implicit val eqv = Nested.catsDataEqForNested[ConstInt, Show, Int]
     checkAll("Nested[Const[Int, ?], Show, ?]", FunctorTests[Nested[ConstInt, Show, ?]].functor[Int, Int, Int])
     checkAll("Functor[Nested[Const[Int, ?], Show, ?]]", SerializableTests.serializable(instance))
   }
@@ -96,9 +96,9 @@ class NestedTests extends CatsSuite {
     // SI-2712? It can resolve Reducible[NonEmptyList] and Reducible[NonEmptyVector] but not
     // Reducible[Nested[NonEmptyList, NonEmptyVector, ?]]
     // Similarly for Arbitrary.
-    implicit val reducible = Nested.nestedReducible[NonEmptyList, NonEmptyVector]
-    implicit val arbitrary0 = nestedArbitrary[NonEmptyList, NonEmptyVector, Int]
-    implicit val arbitrary1 = nestedArbitrary[NonEmptyList, NonEmptyVector, Option[Int]]
+    implicit val reducible = Nested.catsDataReducibleForNested[NonEmptyList, NonEmptyVector]
+    implicit val arbitrary0 = catsLawsArbitraryForNested[NonEmptyList, NonEmptyVector, Int]
+    implicit val arbitrary1 = catsLawsArbitraryForNested[NonEmptyList, NonEmptyVector, Option[Int]]
 
     checkAll("Nested[NonEmptyList, NonEmptyVector, ?]", ReducibleTests[Nested[NonEmptyList, NonEmptyVector, ?]].reducible[Option, Int, Int])
     checkAll("Reducible[Nested[NonEmptyList, NonEmptyVector, ?]]", SerializableTests.serializable(reducible))

@@ -40,10 +40,10 @@ class CokleisliTests extends SlowCatsSuite {
     type CokleisliNEL[A, B] = Cokleisli[NonEmptyList, A, B]
 
     implicit def ev0[A: Arbitrary, B: Arbitrary]: Arbitrary[CokleisliNEL[A, B]] =
-      cokleisliArbitrary
+      catsLawsArbitraryForCokleisli
 
     implicit def ev1[A: Arbitrary, B: Eq]: Eq[CokleisliNEL[A, B]] =
-      cokleisliEq[NonEmptyList, A, B](oneAndArbitrary, Eq[B])
+      cokleisliEq[NonEmptyList, A, B](catsLawsArbitraryForOneAnd, Eq[B])
 
     checkAll("Cokleisli[NonEmptyList, Int, Int]", ArrowTests[CokleisliNEL].arrow[Int, Int, Int, Int, Int, Int])
     checkAll("Arrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(Arrow[CokleisliNEL]))
@@ -54,10 +54,10 @@ class CokleisliTests extends SlowCatsSuite {
     type CokleisliNELE[A] = Cokleisli[NonEmptyList, A, A]
 
     implicit def ev0[A: Arbitrary]: Arbitrary[CokleisliNELE[A]] =
-      cokleisliArbitrary[NonEmptyList, A, A]
+      catsLawsArbitraryForCokleisli[NonEmptyList, A, A]
 
     implicit def ev1[A: Eq](implicit arb: Arbitrary[A]): Eq[CokleisliNELE[A]] =
-      cokleisliEqE[NonEmptyList, A](oneAndArbitrary, Eq[A])
+      cokleisliEqE[NonEmptyList, A](catsLawsArbitraryForOneAnd, Eq[A])
 
     {
       implicit val cokleisliMonoidK = Cokleisli.catsDataMonoidKForCokleisli[NonEmptyList]

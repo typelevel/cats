@@ -5,7 +5,7 @@ import cats.tests.CatsSuite
 import cats.arrow.FunctionK
 import cats.data.Xor
 import cats.laws.discipline.{CartesianTests, MonadRecTests, SerializableTests}
-import cats.laws.discipline.arbitrary.function0Arbitrary
+import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 
 import org.scalacheck.{Arbitrary, Gen}
 import Arbitrary.arbFunction1

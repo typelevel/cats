@@ -1,17 +1,10 @@
 package cats.kernel
 
-import org.typelevel.discipline.Predicate
-
 import org.scalacheck._
 import org.scalacheck.util.Pretty
 import Prop.{False, Proof, Result}
 
 package object laws {
-
-  implicit def nonEmptyPredicate[A](implicit ev: Eq[A], A: Monoid[A]): Predicate[A] =
-    new Predicate[A] {
-      def apply(a: A) = ev.neqv(a, A.empty)
-    }
 
   lazy val proved = Prop(Result(status = Proof))
 
