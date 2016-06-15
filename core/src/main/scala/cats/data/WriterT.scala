@@ -2,7 +2,7 @@ package cats
 package data
 
 import cats.kernel.std.tuple._
-import cats.functor.Bifunctor
+import cats.functor.{Bifunctor, Contravariant}
 
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {
   def written(implicit functorF: Functor[F]): F[L] =
@@ -20,6 +20,11 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
   def map[Z](fn: V => Z)(implicit functorF: Functor[F]): WriterT[F, L, Z] =
     WriterT {
       functorF.map(run) { z => (z._1, fn(z._2)) }
+    }
+
+  def contramap[Z](fn: Z => V)(implicit F: Contravariant[F]): WriterT[F, L, Z] =
+    WriterT {
+      F.contramap(run) { z => (z._1, fn(z._2)) }
     }
 
   def flatMap[U](f: V => WriterT[F, L, U])(implicit flatMapF: FlatMap[F], semigroupL: Semigroup[L]): WriterT[F, L, U] =
@@ -176,6 +181,10 @@ private[data] sealed abstract class WriterTInstances7 {
     new WriterTCoflatMap[F, L] {
       implicit val F0: Functor[F] = F
     }
+
+  implicit def catsDataContravariantForWriterT[F[_], L](implicit F: Contravariant[F]): Contravariant[WriterT[F, L, ?]] = new WriterTContravariant[F, L] {
+    implicit val F0: Contravariant[F] = F
+  }
 }
 
 private[data] sealed trait WriterTFunctor[F[_], L] extends Functor[WriterT[F, L, ?]] {
@@ -183,6 +192,13 @@ private[data] sealed trait WriterTFunctor[F[_], L] extends Functor[WriterT[F, L,
 
   def map[A, B](fa: WriterT[F, L, A])(f: A => B): WriterT[F, L, B] =
     fa.map(f)
+}
+
+private[data] sealed trait WriterTContravariant[F[_], L] extends Contravariant[WriterT[F, L, ?]] {
+  implicit def F0: Contravariant[F]
+
+  def contramap[A, B](fa: WriterT[F, L, A])(f: B => A): WriterT[F, L, B] =
+    fa.contramap(f)
 }
 
 private[data] sealed trait WriterTApply[F[_], L] extends WriterTFunctor[F, L] with Apply[WriterT[F, L, ?]] {

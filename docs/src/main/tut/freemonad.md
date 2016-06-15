@@ -461,10 +461,10 @@ From a computational point of view, `Free` recursive structure can be
 seen as a sequence of operations.
 
  - `Pure` returns an `A` value and ends the entire computation.
-- `Suspend` is a continuation; it suspends the current computation
-  with the suspension functor `F` (which can represent a command for
-  example) and hands control to the caller. `A` represents a value
-  bound to this computation.
+ - `Suspend` is a continuation; it suspends the current computation
+   with the suspension functor `F` (which can represent a command for
+   example) and hands control to the caller. `A` represents a value
+   bound to this computation.
 
 Please note this `Free` construction has the interesting quality of
 _encoding_ the recursion on the heap instead of the stack as classic

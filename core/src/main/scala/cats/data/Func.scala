@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.functor.Contravariant
+
 /**
  * [[Func]] is a function `A => F[B]`.
  *
@@ -50,12 +52,23 @@ private[data] abstract class FuncInstances1 {
     new FuncFunctor[F, C] {
       def F: Functor[F] = FF
     }
+
+    implicit def catsDataContravariantForFunc[F[_], C](implicit FC: Contravariant[F]): Contravariant[λ[α => Func[F, α, C]]] =
+    new FuncContravariant[F, C] {
+      def F: Contravariant[F] = FC
+    }
 }
 
 sealed trait FuncFunctor[F[_], C] extends Functor[λ[α => Func[F, C, α]]] {
   def F: Functor[F]
   override def map[A, B](fa: Func[F, C, A])(f: A => B): Func[F, C, B] =
     fa.map(f)(F)
+}
+
+sealed trait FuncContravariant[F[_], C] extends Contravariant[λ[α => Func[F, α, C]]] {
+  def F: Contravariant[F]
+  def contramap[A, B](fa: Func[F, A, C])(f: B => A): Func[F, B, C] =
+    Func.func(a => fa.run(f(a)))
 }
 
 sealed trait FuncApply[F[_], C] extends Apply[λ[α => Func[F, C, α]]] with FuncFunctor[F, C] {

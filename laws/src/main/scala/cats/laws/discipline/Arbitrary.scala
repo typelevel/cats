@@ -80,6 +80,19 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForFn0[A: Arbitrary]: Arbitrary[() => A] =
     Arbitrary(getArbitrary[A].map(() => _))
 
+  implicit def catsLawsArbitraryForPartialOrder[A: Arbitrary]: Arbitrary[PartialOrder[A]] =
+    Arbitrary(Gen.oneOf(
+      PartialOrder.from[A]((_: A, _: A) => Double.NaN),
+      PartialOrder.from[A]((_: A, _: A) => -1.0),
+      PartialOrder.from[A]((_: A, _: A) => 0.0),
+      PartialOrder.from[A]((_: A, _: A) => 1.0)))
+
+  implicit def catsLawsArbitraryForOrder[A: Arbitrary]: Arbitrary[Order[A]] =
+    Arbitrary(Gen.oneOf(
+      Order.from[A]((_: A, _: A) => -1),
+      Order.from[A]((_: A, _: A) => 0),
+      Order.from[A]((_: A, _: A) => 1)))
+
   implicit def catsLawsArbitraryForNested[F[_], G[_], A](implicit FG: Arbitrary[F[G[A]]]): Arbitrary[Nested[F, G, A]] =
     Arbitrary(FG.arbitrary.map(Nested(_)))
 }

@@ -3,7 +3,7 @@ package tests
 
 import cats.arrow.{Arrow, Split}
 import cats.data.{Cokleisli, NonEmptyList}
-import cats.functor.Profunctor
+import cats.functor.{Contravariant, Profunctor}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -31,6 +31,9 @@ class CokleisliTests extends SlowCatsSuite {
 
   checkAll("Cokleisli[Option, Int, Int]", SplitTests[Cokleisli[Option, ?, ?]].split[Int, Int, Int, Int, Int, Int])
   checkAll("Split[Cokleisli[Option, ?, ?]", SerializableTests.serializable(Split[Cokleisli[Option, ?, ?]]))
+
+  checkAll("Cokleisli[Option, Int, Int]", ContravariantTests[Cokleisli[Option, ?, Int]].contravariant[Int, Int, Int])
+  checkAll("Contravariant[Cokleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Cokleisli[Option, ?, Int]]))
 
   {
     // Ceremony to help scalac to do the right thing, see also #267.
