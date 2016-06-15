@@ -23,6 +23,7 @@ trait AllSyntax
     with ListSyntax
     with MonadCombineSyntax
     with MonadFilterSyntax
+    with MonoidSyntax
     with OptionSyntax
     with OrderSyntax
     with PartialOrderSyntax
