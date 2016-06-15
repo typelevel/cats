@@ -2,11 +2,12 @@ package cats
 package instances
 
 import cats.syntax.show._
+import scala.annotation.tailrec
 
 trait SetInstances extends cats.kernel.instances.SetInstances {
 
-  implicit val catsStdInstancesForSet: Foldable[Set] with MonoidK[Set] =
-    new Foldable[Set] with MonoidK[Set] {
+  implicit val catsStdInstancesForSet: Foldable[Set] with Unfoldable[Set] with MonoidK[Set] =
+    new Foldable[Set] with Unfoldable[Set] with MonoidK[Set] {
 
       def empty[A]: Set[A] = Set.empty[A]
 
@@ -30,6 +31,20 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
 
       override def foldM[G[_], A, B](fa: Set[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         Foldable.iteratorFoldM(fa.toIterator, z)(f)
+
+      def unfoldLeft[A, B](seed: B)(f: B => Option[(B, A)]): Set[A] = {
+        @tailrec def loop(seed: B)(xs: Set[A]): Set[A] = f(seed) match {
+          case None         => xs
+          case Some((b, a)) => loop(b)(xs + a)
+        }
+
+        loop(seed)(Set.empty)
+      }
+
+      override def none[A]: Set[A] = Set.empty
+      override def singleton[A](value: A): Set[A] = Set(value)
+      override def replicate[A](n: Int)(value: A): Set[A] = Set(value)
+      override def build[A](as: A*): Set[A] = as.toSet
     }
 
   implicit def catsStdShowForSet[A:Show]: Show[Set[A]] = new Show[Set[A]] {

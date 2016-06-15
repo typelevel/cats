@@ -8,8 +8,8 @@ import scala.collection.mutable.ListBuffer
 
 trait ListInstances extends cats.kernel.instances.ListInstances {
 
-  implicit val catsStdInstancesForList: TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] =
-    new TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] {
+  implicit val catsStdInstancesForList: TraverseFilter[List] with Unfoldable[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] =
+    new TraverseFilter[List] with Unfoldable[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] {
       def empty[A]: List[A] = Nil
 
       def combineK[A](x: List[A], y: List[A]): List[A] = x ++ y
@@ -77,6 +77,21 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         fa.forall(p)
 
       override def isEmpty[A](fa: List[A]): Boolean = fa.isEmpty
+
+      def unfoldLeft[A, B](seed: B)(f: B => Option[(B, A)]): List[A] = {
+        @tailrec def loop(seed: B)(xs: List[A]): List[A] = f(seed) match {
+          case None         => xs
+          case Some((b, a)) => loop(b)(a :: xs)
+        }
+
+        loop(seed)(Nil)
+      }
+
+      override def none[A]: List[A] = Nil
+      override def singleton[A](value: A): List[A] = List(value)
+      override def replicate[A](n: Int)(value: A): List[A] = List.fill(n)(value)
+      override def build[A](as: A*): List[A] = as.toList
+      override def fromFoldable[G[_], A](ga: G[A])(implicit G: Foldable[G]): List[A] = G.toList(ga)
 
       override def filter[A](fa: List[A])(f: A => Boolean): List[A] = fa.filter(f)
 

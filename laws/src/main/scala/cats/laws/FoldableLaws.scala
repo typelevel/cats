@@ -66,12 +66,12 @@ trait FoldableLaws[F[_]] {
   }
 
   /**
-   * If `F[A]` is empty, forall must return true.
-   */
+    * If `F[A]` is empty, forall must return true.
+    */
   def forallEmpty[A](
-    fa: F[A],
-    p: A => Boolean
-  ): Boolean = {
+                      fa: F[A],
+                      p: A => Boolean
+                    ): Boolean = {
     !F.isEmpty(fa) || F.forall(fa)(p)
   }
 }

@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.discipline.{FoldableTests, MonoidKTests, SerializableTests}
+import cats.laws.discipline.{FoldableTests, MonoidKTests, SerializableTests, UnfoldableTests}
 
 class SetTests extends CatsSuite {
   checkAll("Set[Int]", cats.kernel.laws.GroupLaws[Set[Int]].monoid)
@@ -11,6 +11,9 @@ class SetTests extends CatsSuite {
 
   checkAll("Set[Int]", FoldableTests[Set].foldable[Int, Int])
   checkAll("Foldable[Set]", SerializableTests.serializable(Foldable[Set]))
+
+  checkAll("Set[Int]", UnfoldableTests[Set].unfoldable[Int])
+  checkAll("Unfoldable[Set]", SerializableTests.serializable(Unfoldable[Set]))
 
   test("show"){
     Set(1, 1, 2, 3).show should === ("Set(1, 2, 3)")

@@ -7,8 +7,8 @@ import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
-  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
-    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] {
+  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with Unfoldable[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
+    new TraverseFilter[Vector] with Unfoldable[Vector] with MonadCombine[Vector] with CoflatMap[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 
@@ -89,6 +89,20 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         Foldable.iteratorFoldM(fa.toIterator, z)(f)
+
+      def unfoldLeft[A, B](seed: B)(f: B => Option[(B, A)]): Vector[A] = {
+        @tailrec def loop(seed: B)(xs: Vector[A]): Vector[A] = f(seed) match {
+          case None         => xs
+          case Some((b, a)) => loop(b)(a +: xs)
+        }
+
+        loop(seed)(Vector.empty)
+      }
+
+      override def none[A]: Vector[A] = Vector.empty
+      override def singleton[A](value: A): Vector[A] = Vector(value)
+      override def replicate[A](n: Int)(value: A): Vector[A] = Vector.fill(n)(value)
+      override def build[A](as: A*): Vector[A] = as.toVector
     }
 
   implicit def catsStdShowForVector[A:Show]: Show[Vector[A]] =

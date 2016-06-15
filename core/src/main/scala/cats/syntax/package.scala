@@ -40,6 +40,7 @@ package object syntax {
   object traverse extends TraverseSyntax
   object traverseFilter extends TraverseFilterSyntax
   object tuple extends TupleSyntax
+  object unfoldable extends UnfoldableSyntax
   object validated extends ValidatedSyntax
   object vector extends VectorSyntax
   object writer extends WriterSyntax

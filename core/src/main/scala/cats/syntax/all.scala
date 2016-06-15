@@ -41,6 +41,7 @@ trait AllSyntax
     with TraverseFilterSyntax
     with TraverseSyntax
     with TupleSyntax
+    with UnfoldableSyntax
     with ValidatedSyntax
     with VectorSyntax
     with WriterSyntax
