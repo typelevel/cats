@@ -40,6 +40,12 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val z: A = x |-| y
   }
 
+  def testMonoid[A: Monoid]: Unit = {
+    val x = mock[A]
+    implicit val y = mock[Eq[A]]
+    val z: Boolean = x.isEmpty
+  }
+
   def testEq[A: Eq]: Unit = {
     val x = mock[A]
     val y = mock[A]

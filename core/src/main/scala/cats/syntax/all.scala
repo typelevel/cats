@@ -24,6 +24,7 @@ trait AllSyntax
     with MonadCombineSyntax
     with MonadErrorSyntax
     with MonadFilterSyntax
+    with MonoidSyntax
     with OptionSyntax
     with OrderSyntax
     with PartialOrderSyntax
