@@ -2,16 +2,16 @@ package cats
 package syntax
 
 trait TraverseSyntax1 {
-  implicit def traverseSyntaxU[FA](fa: FA)(implicit U: Unapply[Traverse,FA]): TraverseOps[U.M, U.A] =
+  implicit def catsSyntaxUTraverse[FA](fa: FA)(implicit U: Unapply[Traverse,FA]): TraverseOps[U.M, U.A] =
     new TraverseOps(U.subst(fa))(U.TC)
 }
 
 trait TraverseSyntax extends TraverseSyntax1 {
   // TODO: use simulacrum instances eventually
-  implicit def traverseSyntax[F[_]: Traverse, A](fa: F[A]): TraverseOps[F, A] =
+  implicit def catsSyntaxTraverse[F[_]: Traverse, A](fa: F[A]): TraverseOps[F, A] =
     new TraverseOps(fa)
 
-  implicit def nestedTraverseSyntax[F[_]: Traverse, G[_], A](fga: F[G[A]]): NestedTraverseOps[F, G, A] =
+  implicit def catsSyntaxNestedTraverse[F[_]: Traverse, G[_], A](fga: F[G[A]]): NestedTraverseOps[F, G, A] =
     new NestedTraverseOps[F, G, A](fga)
 }
 

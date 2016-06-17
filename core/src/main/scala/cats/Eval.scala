@@ -295,7 +295,7 @@ object Eval extends EvalInstances {
 
 private[cats] trait EvalInstances extends EvalInstances0 {
 
-  implicit val evalBimonad: Bimonad[Eval] with MonadRec[Eval] =
+  implicit val catsBimonadForEval: Bimonad[Eval] with MonadRec[Eval] =
     new Bimonad[Eval] with MonadRec[Eval] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
       def pure[A](a: A): Eval[A] = Now(a)
@@ -310,35 +310,35 @@ private[cats] trait EvalInstances extends EvalInstances0 {
         })
     }
 
-  implicit def evalOrder[A: Order]: Order[Eval[A]] =
+  implicit def catsOrderForEval[A: Order]: Order[Eval[A]] =
     new Order[Eval[A]] {
       def compare(lx: Eval[A], ly: Eval[A]): Int =
         lx.value compare ly.value
     }
 
-  implicit def evalGroup[A: Group]: Group[Eval[A]] =
+  implicit def catsGroupForEval[A: Group]: Group[Eval[A]] =
     new EvalGroup[A] { val algebra: Group[A] = Group[A] }
 }
 
 private[cats] trait EvalInstances0 extends EvalInstances1 {
-  implicit def evalPartialOrder[A: PartialOrder]: PartialOrder[Eval[A]] =
+  implicit def catsPartialOrderForEval[A: PartialOrder]: PartialOrder[Eval[A]] =
     new PartialOrder[Eval[A]] {
       def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
         lx.value partialCompare ly.value
     }
 
-  implicit def evalMonoid[A: Monoid]: Monoid[Eval[A]] =
+  implicit def catsMonoidForEval[A: Monoid]: Monoid[Eval[A]] =
     new EvalMonoid[A] { val algebra = Monoid[A] }
 }
 
 private[cats] trait EvalInstances1 {
-  implicit def evalEq[A: Eq]: Eq[Eval[A]] =
+  implicit def catsEqForEval[A: Eq]: Eq[Eval[A]] =
     new Eq[Eval[A]] {
       def eqv(lx: Eval[A], ly: Eval[A]): Boolean =
         lx.value === ly.value
     }
 
-  implicit def evalSemigroup[A: Semigroup]: Semigroup[Eval[A]] =
+  implicit def catsSemigroupForEval[A: Semigroup]: Semigroup[Eval[A]] =
     new EvalSemigroup[A] { val algebra = Semigroup[A] }
 }
 

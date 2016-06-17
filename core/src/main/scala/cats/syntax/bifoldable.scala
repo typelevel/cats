@@ -2,7 +2,7 @@ package cats
 package syntax
 
 trait BifoldableSyntax {
-  implicit def bifoldableSyntax[F[_, _]: Bifoldable, A, B](fab: F[A, B]): BifoldableOps[F, A, B] =
+  implicit def catsSyntaxBifoldable[F[_, _]: Bifoldable, A, B](fab: F[A, B]): BifoldableOps[F, A, B] =
     new BifoldableOps[F, A, B](fab)
 }
 

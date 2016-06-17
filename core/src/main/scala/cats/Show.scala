@@ -25,7 +25,7 @@ object Show {
     def show(a: A): String = a.toString
   }
 
-  implicit val showContravariant: Contravariant[Show] = new Contravariant[Show] {
+  implicit val catsContravariantForShow: Contravariant[Show] = new Contravariant[Show] {
     def contramap[A, B](fa: Show[A])(f: B => A): Show[B] =
       show[B](fa.show _ compose f)
   }

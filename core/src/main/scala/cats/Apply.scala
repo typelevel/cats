@@ -64,3 +64,13 @@ trait Apply[F[_]] extends Functor[F] with Cartesian[F] with ApplyArityFunctions[
       val G = Apply[G]
     }
 }
+
+object Apply {
+  def semigroup[F[_], A](implicit f: Apply[F], sg: Semigroup[A]): Semigroup[F[A]] =
+    new ApplySemigroup[F, A](f, sg)
+}
+
+private[cats] class ApplySemigroup[F[_], A](f: Apply[F], sg: Semigroup[A]) extends Semigroup[F[A]] {
+  def combine(a: F[A], b: F[A]): F[A] =
+    f.map2(a, b)(sg.combine)
+}

@@ -19,5 +19,5 @@ object Trivial {
   type P3[A, B, C] = Trivial
   type P3H1[F[_], A, B, C] = Trivial
 
-  implicit val manifest: Trivial = new Trivial {}
+  implicit val catsTrivialInstance: Trivial = new Trivial {}
 }

@@ -4,7 +4,7 @@ package syntax
 import cats.macros.Ops
 
 trait OrderSyntax extends PartialOrderSyntax {
-  implicit def orderSyntax[A: Order](a: A): OrderOps[A] =
+  implicit def catsSyntaxOrder[A: Order](a: A): OrderOps[A] =
     new OrderOps[A](a)
 }
 

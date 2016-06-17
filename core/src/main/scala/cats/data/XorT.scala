@@ -241,7 +241,7 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
       val F0: Traverse[F] = F
     }
 
-  implicit def xortTransLift[E]: TransLift.Aux[XorT[?[_], E, ?], Functor] =
+  implicit def catsDataTransLiftForXorT[E]: TransLift.Aux[XorT[?[_], E, ?], Functor] =
     new TransLift[XorT[?[_], E, ?]] {
       type TC[M[_]] = Functor[M]
 

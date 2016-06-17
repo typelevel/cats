@@ -4,7 +4,7 @@ package syntax
 import cats.macros.Ops
 
 trait EqSyntax {
-  implicit def eqSyntax[A: Eq](a: A): EqOps[A] =
+  implicit def catsSyntaxEq[A: Eq](a: A): EqOps[A] =
     new EqOps[A](a)
 }
 
