@@ -52,8 +52,8 @@ final case class NonEmptyVector[A] private (vector: Vector[A]) {
   /**
    * Right-associative fold using f.
    */
-  def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = 
-    Eval.defer(vector.foldRight(lb)(f))
+  def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    Eval.defer(Foldable[Vector].foldRight(vector, lb)(f))
 
   /**
     * Applies f to all the elements
@@ -122,7 +122,7 @@ private[data] sealed trait NonEmptyVectorInstances extends NonEmptyVectorLowPrio
       def pure[A](x: A): NonEmptyVector[A] =
         NonEmptyVector(x, Vector.empty)
 
-      def flatMap[A, B](fa: NonEmptyVector[A])(f: A => NonEmptyVector[B]): NonEmptyVector[B] = 
+      def flatMap[A, B](fa: NonEmptyVector[A])(f: A => NonEmptyVector[B]): NonEmptyVector[B] =
         fa flatMap f
     }
 }
@@ -159,11 +159,11 @@ trait NonEmptyVectorLowPriority1 extends NonEmptyVectorLowPriority0 {
 trait NonEmptyVectorLowPriority2 extends NonEmptyVectorLowPriority1 {
   implicit def catsDataTraverseForNonEmptyVector: Traverse[NonEmptyVector] =
     new Traverse[NonEmptyVector] {
-      def traverse[G[_], A, B](fa: NonEmptyVector[A])(f: (A) => G[B])(implicit G: Applicative[G]): G[NonEmptyVector[B]] =   
+      def traverse[G[_], A, B](fa: NonEmptyVector[A])(f: (A) => G[B])(implicit G: Applicative[G]): G[NonEmptyVector[B]] =
       G.map2Eval(f(fa.head), Always(Traverse[Vector].traverse(fa.tail)(f)))(NonEmptyVector(_, _)).value
-      
 
-      def foldLeft[A, B](fa: NonEmptyVector[A], b: B)(f: (B, A) => B): B = 
+
+      def foldLeft[A, B](fa: NonEmptyVector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
       def foldRight[A, B](fa: NonEmptyVector[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
@@ -175,4 +175,5 @@ object NonEmptyVector extends NonEmptyVectorInstances {
 
   def apply[A](head: A, tail: Vector[A]): NonEmptyVector[A] = NonEmptyVector(head +: tail)
 
+  def apply[A](head: A, tail: A*): NonEmptyVector[A] = NonEmptyVector(head +: tail.toVector)
 }
