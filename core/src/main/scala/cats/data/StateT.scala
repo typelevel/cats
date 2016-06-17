@@ -207,7 +207,7 @@ private[data] sealed trait StateTMonad[F[_], S] extends Monad[StateT[F, S, ?]] {
 }
 
 private[data] sealed trait StateTMonadState[F[_], S] extends MonadState[StateT[F, S, ?], S] with StateTMonad[F, S] {
-  val get: StateT[F, S, S] = StateT(s => F.pure((s, s)))
+  lazy val get: StateT[F, S, S] = StateT(s => F.pure((s, s)))
 
   def set(s: S): StateT[F, S, Unit] = StateT(_ => F.pure((s, ())))
 }

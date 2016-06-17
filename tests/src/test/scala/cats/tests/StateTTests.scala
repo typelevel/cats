@@ -122,8 +122,7 @@ class StateTTests extends CatsSuite {
     implicit val F = ListWrapper.monad
 
     checkAll("StateT[ListWrapper, Int, Int]", MonadStateTests[StateT[ListWrapper, Int, ?], Int].monadState[Int, Int, Int])
-    // checkAll("MonadState[StateT[ListWrapper, Int, ?], Int]", SerializableTests.serializable(MonadState[StateT[ListWrapper, Int, ?], Int]))
-    checkAll("MonadState[StateT[List, Int, ?], Int]", SerializableTests.serializable(MonadState[StateT[List, Int, ?], Int]))
+    checkAll("MonadState[StateT[ListWrapper, Int, ?], Int]", SerializableTests.serializable(MonadState[StateT[ListWrapper, Int, ?], Int]))
 
     Monad[StateT[ListWrapper, Int, ?]]
     FlatMap[StateT[ListWrapper, Int, ?]]
