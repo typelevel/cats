@@ -10,64 +10,62 @@ import cats.std.vector._
  * (tail).  This can be used to represent a Vector which is guaranteed
  * to not be empty.
  */
-final case class NonEmptyVector[A](head: A, tail: Vector[A]) {
+final case class NonEmptyVector[A] private (vector: Vector[A]) {
 
-  /**
-   * Combine the head and tail into a single `Vector[A]` value.
-   */
-  def unwrap: Vector[A] = head +: tail
+  def unwrap: Vector[A] = vector
+
+  def head: A = vector.head
+
+  def tail: Vector[A] = vector.tail
 
   /**
    * remove elements not matching the predicate
    */
-  def filter(f: A => Boolean): Vector[A] = unwrap.filter(f)
+  def filter(f: A => Boolean): Vector[A] = vector.filter(f)
 
   /**
    * Append another NonEmptyVector to this
    */
-  def combine(other: NonEmptyVector[A]): NonEmptyVector[A] = NonEmptyVector(head, tail ++ other.unwrap)
+  def combine(other: NonEmptyVector[A]): NonEmptyVector[A] = NonEmptyVector(vector ++ other.vector)
 
   /**
    * find the first element matching the predicate, if one exists
    */
-  def find(f: A => Boolean): Option[A] = unwrap.find(f)
+  def find(f: A => Boolean): Option[A] = vector.find(f)
 
   /**
    * Check whether at least one element satisfies the predicate.
    */
-  def exists(f: A => Boolean): Boolean = unwrap.exists(f)
+  def exists(f: A => Boolean): Boolean = vector.exists(f)
 
   /**
    * Check whether all elements satisfy the predicate.
    */
-  def forall(f: A => Boolean): Boolean = unwrap.forall(f)
+  def forall(f: A => Boolean): Boolean = vector.forall(f)
 
   /**
    * Left-associative fold using f.
    */
   def foldLeft[B](b: B)(f: (B, A) => B): B =
-    unwrap.foldLeft(b)(f)
+    vector.foldLeft(b)(f)
 
   /**
    * Right-associative fold using f.
    */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = 
-    Eval.defer(unwrap.foldRight(lb)(f))
+    Eval.defer(vector.foldRight(lb)(f))
 
   /**
     * Applies f to all the elements
     */
   def map[B](f: A => B): NonEmptyVector[B] =
-    NonEmptyVector(f(head), tail.map(f))
+    NonEmptyVector(vector.map(f))
 
   /**
     *  Applies f to all elements and combines the result
     */
-  def flatMap[B](f: A => NonEmptyVector[B]): NonEmptyVector[B] = {
-    val end = tail.flatMap(a => f(a).unwrap)
-    val start = f(head)
-    NonEmptyVector(start.head, start.tail ++ end)
-  }
+  def flatMap[B](f: A => NonEmptyVector[B]): NonEmptyVector[B] =
+    NonEmptyVector(vector.flatMap(a => f(a).vector))
 
   /**
    * Typesafe equality operator.
@@ -77,8 +75,7 @@ final case class NonEmptyVector[A](head: A, tail: Vector[A]) {
    * equality provided by Eq[_] instances, rather than using the
    * universal equality provided by .equals.
    */
-  def ===(that: NonEmptyVector[A])(implicit A: Eq[A]): Boolean =
-    A.eqv(head, that.head) && Eq[Vector[A]].eqv(tail, that.tail)
+  def ===(that: NonEmptyVector[A])(implicit A: Eq[A]): Boolean = Eq[Vector[A]].eqv(vector, that.vector)
 
   /**
    * Typesafe stringification method.
@@ -174,4 +171,8 @@ trait NonEmptyVectorLowPriority2 extends NonEmptyVectorLowPriority1 {
     }
 }
 
-object NonEmptyVector extends NonEmptyVectorInstances
+object NonEmptyVector extends NonEmptyVectorInstances {
+
+  def apply[A](head: A, tail: Vector[A]): NonEmptyVector[A] = NonEmptyVector(head +: tail)
+
+}
