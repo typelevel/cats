@@ -2,7 +2,6 @@ package cats
 
 package object data {
   type NonEmptyList[A] = OneAnd[List, A]
-  type NonEmptyVector[A] = OneAnd[Vector, A]
   type NonEmptyStream[A] = OneAnd[Stream, A]
   type ValidatedNel[E, A] = Validated[NonEmptyList[E], A]
 
@@ -10,11 +9,6 @@ package object data {
     OneAnd(head, tail)
   def NonEmptyList[A](head: A, tail: A*): NonEmptyList[A] =
     OneAnd[List, A](head, tail.toList)
-
-  def NonEmptyVector[A](head: A, tail: Vector[A] = Vector.empty): NonEmptyVector[A] =
-    OneAnd(head, tail)
-  def NonEmptyVector[A](head: A, tail: A*): NonEmptyVector[A] =
-    OneAnd(head, tail.toVector)
 
   def NonEmptyStream[A](head: A, tail: Stream[A] = Stream.empty): NonEmptyStream[A] =
     OneAnd(head, tail)
