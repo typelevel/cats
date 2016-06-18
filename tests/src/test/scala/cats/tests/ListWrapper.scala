@@ -4,8 +4,7 @@ package tests
 import cats.functor.Invariant
 import cats.std.list._
 
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.{Arbitrary, Gen}
 
 /** This data type exists purely for testing.
   *
@@ -120,8 +119,12 @@ object ListWrapper {
 
   def monoid[A]: Monoid[ListWrapper[A]] = monadCombine.algebra[A]
 
-  implicit def listWrapperArbitrary[A: Arbitrary]: Arbitrary[ListWrapper[A]] =
-    Arbitrary(arbitrary[List[A]].map(ListWrapper.apply))
+  implicit def listWrapperArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[ListWrapper[A]] =
+    Arbitrary(
+      for {
+        size <- Gen.chooseNum(0, 3)
+        list <- Gen.listOfN(size, A.arbitrary)
+      } yield ListWrapper(list))
 
   implicit def listWrapperEq[A: Eq]: Eq[ListWrapper[A]] = Eq.by(_.list)
 }
