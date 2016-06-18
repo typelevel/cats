@@ -20,7 +20,7 @@ but with the `f` transformation reversed.
 Generally speaking, if you have some context `F[A]` for type `A`,
 and you can get an `A` value out of a `B` value — `Contravariant` allows you to get the `F[B]` context for `B`.
 
-Examples of `Contravariant` instances are [`Show`](show.html) and `scala.math.Ordering` (along with `algebra.Order`).
+Examples of `Contravariant` instances are [`Show`](show.html) and `scala.math.Ordering` (along with `cats.kernel.Order`).
 
 ## Contravariant instance for Show.
 
