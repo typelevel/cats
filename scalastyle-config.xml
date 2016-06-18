@@ -70,4 +70,18 @@
   </parameters>
   <customMessage><![CDATA[Use Greek characters in a kind projection (λ[α => ...]).]]></customMessage>
  </check>
+ <check enabled="true" class="org.scalastyle.scalariform.EnsureSingleSpaceAfterTokenChecker" level="error">
+  <parameters>
+   <parameter name="tokens">PACKAGE, WHILE, CASE, NEW, DO, EQUALS, SUBTYPE, SEALED, TYPE, FINAL, IMPORT, RETURN, VAL, VAR, ELSE, MATCH, TRY, SUPERTYPE, OP, CATCH, THROW, CLASS, DEF, FOR, LARROW, ABSTRACT, IF, OBJECT, COMMA, YIELD, PIPE, IMPLICIT, LAZY, TRAIT, FORSOME, FINALLY, OVERRIDE, ARROW, EXTENDS</parameter>
+  </parameters>
+ </check>
+ <check enabled="true" class="org.scalastyle.scalariform.EnsureSingleSpaceBeforeTokenChecker" level="error">
+   <parameters>
+     <parameter name="tokens">OP, PIPE, FORSOME</parameter>
+   </parameters>
+ </check>
+ <check enabled="true" class="org.scalastyle.scalariform.ForBraceChecker" level="error"/>
+ <check enabled="true" class="org.scalastyle.scalariform.ProcedureDeclarationChecker" level="error"/>
+ <check enabled="true" class="org.scalastyle.scalariform.RedundantIfChecker" level="error"/>
+ <check enabled="true" class="org.scalastyle.scalariform.SpaceAfterCommentStartChecker" level="error"/>
 </scalastyle>

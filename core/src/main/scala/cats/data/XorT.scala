@@ -167,7 +167,7 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
    * scala> val v2: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList("error 2"))
    * scala> val xort: XorT[Option, Error, Int] = XorT(Some(Xor.left("error 3")))
    * scala> xort.withValidated { v3 => (v1 |@| v2 |@| v3.leftMap(NonEmptyList(_))).map{ case (i, j, k) => i + j + k } }
-   * res0: XorT[Option, NonEmptyList[Error], Int] = XorT(Some(Left(OneAnd(error 1,List(error 2, error 3)))))
+   * res0: XorT[Option, NonEmptyList[Error], Int] = XorT(Some(Left(OneAnd(error 1, List(error 2, error 3)))))
    * }}}
    */
   def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB])(implicit F: Functor[F]): XorT[F, AA, BB] =
@@ -208,7 +208,7 @@ trait XorTFunctions {
   final def fromEither[F[_]]: FromEitherPartiallyApplied[F] = new FromEitherPartiallyApplied
 
   final class FromEitherPartiallyApplied[F[_]] private[XorTFunctions] {
-    def apply[E, A](eit: Either[E,A])(implicit F: Applicative[F]): XorT[F, E, A] =
+    def apply[E, A](eit: Either[E, A])(implicit F: Applicative[F]): XorT[F, E, A] =
       XorT(F.pure(Xor.fromEither(eit)))
   }
 }
@@ -245,7 +245,7 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
     new TransLift[XorT[?[_], E, ?]] {
       type TC[M[_]] = Functor[M]
 
-      def liftT[M[_]: Functor, A](ma: M[A]): XorT[M,E,A] =
+      def liftT[M[_]: Functor, A](ma: M[A]): XorT[M, E, A] =
         XorT(Functor[M].map(ma)(Xor.right))
     }
 
@@ -307,7 +307,7 @@ private[data] abstract class XorTInstances4 {
 
 private[data] trait XorTSemigroup[F[_], L, A] extends Semigroup[XorT[F, L, A]] {
   implicit val F0: Semigroup[F[L Xor A]]
-  def combine(x: XorT[F, L ,A], y: XorT[F, L , A]): XorT[F, L , A] =
+  def combine(x: XorT[F, L , A], y: XorT[F, L , A]): XorT[F, L , A] =
     XorT(F0.combine(x.value, y.value))
 }
 
@@ -318,7 +318,7 @@ private[data] trait XorTMonoid[F[_], L, A] extends Monoid[XorT[F, L, A]] with Xo
 
 private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
   implicit val F: Monad[F]
-  def combineK[A](x: XorT[F,L,A], y: XorT[F, L, A]): XorT[F, L, A] =
+  def combineK[A](x: XorT[F, L, A], y: XorT[F, L, A]): XorT[F, L, A] =
     XorT(F.flatMap(x.value) {
       case l @ Xor.Left(_) => y.value
       case r @ Xor.Right(_) => F.pure(r)

@@ -33,7 +33,7 @@ trait BifunctorLaws[F[_, _]] {
 }
 
 object BifunctorLaws {
-  def apply[F[_,_]](implicit ev: Bifunctor[F]): BifunctorLaws[F] =
+  def apply[F[_, _]](implicit ev: Bifunctor[F]): BifunctorLaws[F] =
     new BifunctorLaws[F] {
       def F: Bifunctor[F] = ev
     }

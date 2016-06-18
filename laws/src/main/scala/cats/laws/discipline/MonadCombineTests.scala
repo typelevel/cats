@@ -25,7 +25,7 @@ trait MonadCombineTests[F[_]] extends MonadFilterTests[F] with AlternativeTests[
     new RuleSet {
       def name: String = "monadCombine"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(monadFilter[A, B, C], alternative[A,B,C])
+      def parents: Seq[RuleSet] = Seq(monadFilter[A, B, C], alternative[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
         "monadCombine left distributivity" -> forAll(laws.monadCombineLeftDistributivity[A, B] _)
       )
