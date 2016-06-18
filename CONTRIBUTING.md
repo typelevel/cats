@@ -30,11 +30,12 @@ skip these steps and jump straight to submitting a pull request.
 
  1. [Find something that belongs in cats](#find-something-that-belongs-in-cats)
  2. [Let us know you are working on it](#let-us-know-you-are-working-on-it)
- 3. [Implement your contribution](#write-code)
- 4. [Write tests](#write-tests)
- 5. [Write documentation](#write-documentation)
- 6. [Write examples](#write-examples)
- 7. [Submit pull request](#submit-a-pull-request)
+ 3. [Build the project](#build-project)
+ 4. [Implement your contribution](#write-code)
+ 5. [Write tests](#write-tests)
+ 6. [Write documentation](#write-documentation)
+ 7. [Write examples](#write-examples)
+ 8. [Submit pull request](#submit-a-pull-request)
 
 ### Find something that belongs in cats
 
@@ -85,6 +86,39 @@ there isn't already an issue and it is a non-trivial task, it's a good
 idea to create one (and note that you're working on it). This prevents
 contributors from duplicating effort.
 
+### Build the project
+
+First you'll need to checkout a local copy of the code base:
+
+```sh
+git clone git@github.com:typelevel/cats.git
+```
+
+To build Cats you should have
+[sbt](http://www.scala-sbt.org/0.13/tutorial/Setup.html) and [Node.js](https://nodejs.org/)
+ installed. Run `sbt`, and then use any of the following commands:
+
+ * `compile`: compile the code
+ * `console`: launch a REPL
+ * `test`: run the tests
+ * `unidoc`: generate the documentation
+ * `scalastyle`: run the style-checker on the code
+ * `validate`: run tests, style-checker, and doc generation
+
+#### Scala and Scala-js
+
+Cats cross-compiles to both JVM and Javascript(JS). If you are not used to
+working with cross-compiling builds, the first things that you will notice is that
+builds:
+
+ * Will take longer: To build JVM only, just use the `catsJVM`, or `catsJS` for
+
+ JS only. And if you want the default project to be `catsJVM`, just copy the
+   file `scripts/sbtrc-JVM` to `.sbtrc` in the root directory.
+
+ * May run out of memory: We suggest you use
+   [Paul Philips's sbt script](https://github.com/paulp/sbt-extras) that will use the settings from Cats.
+
 ### Write code
 
 TODO
@@ -111,7 +145,7 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
  that the `Validated` data type supports.
  - An exception to this is serializability tests, where the type class name is also included in the name.
  For example, in the case of `Validated`, the serializability test would take the form,
- *"Applicative[Validated[String, Int]"*, to indicate that this test is verifying that the `Applicative` 
+ *"Applicative[Validated[String, Int]"*, to indicate that this test is verifying that the `Applicative`
  type class instance for the `Validated` data type is serializable.
  - This convention helps to ensure clear and easy to understand output, with minimal duplication in the output.
 - It is also a goal that, for every combination of data type and supported type class instance:
