@@ -85,7 +85,7 @@ final case class NonEmptyVector[A] private (vector: Vector[A]) {
    * universal .toString method.
    */
   def show(implicit A: Show[A]): String =
-    s"NonEmptyVector(${A.show(head)}, ${Show[Vector[A]].show(tail)})"
+    s"NonEmptyVector(${Show[Vector[A]].show(vector)})"
 }
 
 private[data] sealed trait NonEmptyVectorInstances extends NonEmptyVectorLowPriority2 {
