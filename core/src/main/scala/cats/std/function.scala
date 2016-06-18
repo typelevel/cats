@@ -1,11 +1,11 @@
 package cats
-package std
+package instances
 
 import cats.arrow.{Arrow, Choice}
 import cats.data.Xor
 import cats.functor.Contravariant
 
-private[std] sealed trait Function0Instances {
+private[instances] sealed trait Function0Instances {
 
   implicit val catsStdBimonadForFunction0: Bimonad[Function0] =
     new Bimonad[Function0] {
@@ -26,7 +26,7 @@ private[std] sealed trait Function0Instances {
     }
 }
 
-private[std] sealed trait Function1Instances extends Function1Instances0 {
+private[instances] sealed trait Function1Instances extends Function1Instances0 {
   implicit def catsStdContravariantForFunction1[R]: Contravariant[? => R] =
     new Contravariant[? => R] {
       def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
@@ -78,7 +78,7 @@ private[std] sealed trait Function1Instances extends Function1Instances0 {
     new Function1MonoidK {}
 }
 
-private[std] sealed trait Function1Instances0 {
+private[instances] sealed trait Function1Instances0 {
   implicit def catsStdSemigroupForFunction1[A,B](implicit S: Semigroup[B]): Semigroup[A => B] =
     new Function1Semigroup[A, B] { def B: Semigroup[B] = S }
 
@@ -86,7 +86,7 @@ private[std] sealed trait Function1Instances0 {
     new Function1SemigroupK {}
 }
 
-private[std] sealed trait Function1Semigroup[A, B] extends Semigroup[A => B] {
+private[instances] sealed trait Function1Semigroup[A, B] extends Semigroup[A => B] {
   implicit def B: Semigroup[B]
 
   override def combine(x: A => B, y: A => B): A => B = { a =>
@@ -94,17 +94,17 @@ private[std] sealed trait Function1Semigroup[A, B] extends Semigroup[A => B] {
   }
 }
 
-private[std] sealed trait Function1Monoid[A, B] extends Monoid[A => B] with Function1Semigroup[A, B] {
+private[instances] sealed trait Function1Monoid[A, B] extends Monoid[A => B] with Function1Semigroup[A, B] {
   implicit def B: Monoid[B]
 
   override def empty: A => B = _ => B.empty
 }
 
-private[std] sealed trait Function1SemigroupK extends SemigroupK[λ[α => α => α]] {
+private[instances] sealed trait Function1SemigroupK extends SemigroupK[λ[α => α => α]] {
   override def combineK[A](x: A => A, y: A => A): A => A = x compose y
 }
 
-private[std] sealed trait Function1MonoidK extends MonoidK[λ[α => α => α]] with Function1SemigroupK {
+private[instances] sealed trait Function1MonoidK extends MonoidK[λ[α => α => α]] with Function1SemigroupK {
   override def empty[A]: A => A = identity[A]
 }
 

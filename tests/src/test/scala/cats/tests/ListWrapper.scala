@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.functor.Invariant
-import cats.std.list._
+import cats.instances.list._
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary

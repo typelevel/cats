@@ -86,12 +86,6 @@ import java.util.Date
 import cats._
 import cats.implicits._
 
-// or only import what's actually required:
-// import cats.Semigroup
-// import cats.std.long._
-// import cats.syntax.semigroup._
-// import cats.syntax.invariant._
-
 def longToDate: Long => Date = new Date(_)
 def dateToLong: Date => Long = _.getTime
 

@@ -1,6 +1,6 @@
 package cats
 
-package object std {
+package object instances {
   object all      extends AllInstances
 
   object either extends EitherInstances

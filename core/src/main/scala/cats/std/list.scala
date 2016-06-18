@@ -1,5 +1,5 @@
 package cats
-package std
+package instances
 
 import cats.syntax.show._
 

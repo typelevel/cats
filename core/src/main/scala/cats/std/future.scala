@@ -1,5 +1,5 @@
 package cats
-package std
+package instances
 
 import cats.data.Xor
 
@@ -35,12 +35,12 @@ trait FutureInstances extends FutureInstances1 {
     }
 }
 
-private[std] sealed trait FutureInstances1 extends FutureInstances2 {
+private[instances] sealed trait FutureInstances1 extends FutureInstances2 {
   implicit def catsStdMonoidForFuture[A: Monoid](implicit ec: ExecutionContext): Monoid[Future[A]] =
     new FutureMonoid[A]
 }
 
-private[std] sealed trait FutureInstances2 {
+private[instances] sealed trait FutureInstances2 {
   implicit def catsStdSemigroupForFuture[A: Semigroup](implicit ec: ExecutionContext): Semigroup[Future[A]] =
     new FutureSemigroup[A]
 }

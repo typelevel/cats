@@ -1,5 +1,5 @@
 package cats
-package std
+package instances
 
 import scala.annotation.tailrec
 import cats.data.Xor
@@ -82,7 +82,7 @@ trait EitherInstances extends EitherInstances1 {
     }
 }
 
-private[std] sealed trait EitherInstances1 extends EitherInstances2 {
+private[instances] sealed trait EitherInstances1 extends EitherInstances2 {
   implicit def catsStdPartialOrderForEither[A, B](implicit A: PartialOrder[A], B: PartialOrder[B]): PartialOrder[Either[A, B]] =
     new PartialOrder[Either[A, B]] {
       def partialCompare(x: Either[A, B], y: Either[A, B]): Double = x.fold(
@@ -92,7 +92,7 @@ private[std] sealed trait EitherInstances1 extends EitherInstances2 {
     }
 }
 
-private[std] sealed trait EitherInstances2 {
+private[instances] sealed trait EitherInstances2 {
   implicit def catsStdEqForEither[A, B](implicit A: Eq[A], B: Eq[B]): Eq[Either[A, B]] = new Eq[Either[A, B]] {
     def eqv(x: Either[A, B], y: Either[A, B]): Boolean = x.fold(
       a => y.fold(A.eqv(a, _), _ => false),

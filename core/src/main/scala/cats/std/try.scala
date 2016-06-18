@@ -1,5 +1,5 @@
 package cats
-package std
+package instances
 
 import cats.data.Xor
 import TryInstances.castFailure
@@ -98,7 +98,7 @@ trait TryInstances extends TryInstances1 {
     }
 }
 
-private[std] object TryInstances {
+private[instances] object TryInstances {
   /**
    * A `Failure` can be statically typed as `Try[A]` for all `A`, because it
    * does not actually contain an `A` value (as `Success[A]` does).
@@ -106,12 +106,12 @@ private[std] object TryInstances {
   @inline final def castFailure[A](f: Failure[_]): Try[A] = f.asInstanceOf[Try[A]]
 }
 
-private[std] sealed trait TryInstances1 extends TryInstances2 {
+private[instances] sealed trait TryInstances1 extends TryInstances2 {
   implicit def catsStdMonoidForTry[A: Monoid]: Monoid[Try[A]] =
     new TryMonoid[A]
 }
 
-private[std] sealed trait TryInstances2 {
+private[instances] sealed trait TryInstances2 {
   implicit def catsStdSemigroupForTry[A: Semigroup]: Semigroup[Try[A]] =
     new TrySemigroup[A]
 }

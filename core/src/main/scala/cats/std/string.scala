@@ -1,5 +1,5 @@
 package cats
-package std
+package instances
 
 trait StringInstances extends cats.kernel.std.StringInstances {
   implicit val catsStdShowForString: Show[String] =

@@ -43,7 +43,7 @@ val o: Option[String] = None
 o.orEmpty
 ```
 
-**Note**: if you import `cats.implicits._` (the preferred method), you should _not_ also use imports like `cats.syntax.option._` or `cats.std.either._`. This can result in ambiguous implicit values that cause bewildering compile errors.
+**Note**: if you import `cats.implicits._` (the preferred method), you should _not_ also use imports like `cats.syntax.option._` or `cats.instances.either._`. This can result in ambiguous implicit values that cause bewildering compile errors.
 
 ## Why can't the compiler find implicit instances for Future?<a id="future-instances" href="#future-instances"></a>
 

@@ -1,5 +1,5 @@
 package cats
-package std
+package instances
 
 import scala.annotation.tailrec
 import cats.data.Xor

@@ -1,5 +1,5 @@
 package cats
-package std
+package instances
 
 trait TupleInstances extends Tuple2Instances with cats.kernel.std.TupleInstances
 

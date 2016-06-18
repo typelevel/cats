@@ -3,7 +3,7 @@ package data
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
-import cats.std.list._
+import cats.instances.list._
 
 /**
  * A data type which represents a single element (head) and some other
