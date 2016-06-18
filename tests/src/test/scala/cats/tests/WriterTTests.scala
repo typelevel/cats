@@ -2,9 +2,10 @@ package cats
 package tests
 
 import cats.data.{Writer, WriterT}
-import cats.functor.Bifunctor
+import cats.functor.{Bifunctor, Contravariant}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 
 import cats.kernel.laws.OrderLaws
 
@@ -19,6 +20,10 @@ class WriterTTests extends CatsSuite {
 
   checkAll("WriterT[List, Int, Int]", OrderLaws[WriterT[List, Int, Int]].eqv)
   checkAll("Eq[WriterT[List, Int, Int]]", SerializableTests.serializable(Eq[WriterT[List, Int, Int]]))
+
+  checkAll("WriterT[Show, Int, Int]", ContravariantTests[WriterT[Show, Int, ?]].contravariant[Int, Int, Int])
+  checkAll("Contravariant[WriterT[Show, Int, Int]]", SerializableTests.serializable(Contravariant[WriterT[Show, Int, ?]]))
+
   // check that this resolves
   Eq[Writer[Int, Int]]
 

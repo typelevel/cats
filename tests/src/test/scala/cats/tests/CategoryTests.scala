@@ -5,7 +5,7 @@ import cats.kernel.laws.GroupLaws
 
 import cats.arrow.Category
 import cats.laws.discipline.{MonoidKTests, SerializableTests}
-import cats.laws.discipline.eq.function1Eq
+import cats.laws.discipline.eq.catsLawsEqForFn1
 
 class CategoryTest extends CatsSuite {
   val functionCategory = Category[Function1]

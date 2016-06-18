@@ -10,6 +10,12 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
 
   def iterator[T](fa: F[T]): Iterator[T]
 
+  test("size") {
+    forAll { (fa: F[Int]) =>
+      fa.size should === (iterator(fa).size.toLong)
+    }
+  }
+
   test("summation") {
     forAll { (fa: F[Int]) =>
       val total = iterator(fa).sum
@@ -121,6 +127,10 @@ class FoldableListCheck extends FoldableCheck[List]("list") {
 
 class FoldableVectorCheck extends FoldableCheck[Vector]("vector") {
   def iterator[T](vector: Vector[T]): Iterator[T] = vector.iterator
+}
+
+class FoldableSetCheck extends FoldableCheck[Set]("set") {
+  def iterator[T](set: Set[T]): Iterator[T] = set.iterator
 }
 
 class FoldableStreamCheck extends FoldableCheck[Stream]("stream") {

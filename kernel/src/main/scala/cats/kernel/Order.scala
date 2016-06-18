@@ -164,7 +164,7 @@ object Order extends OrderFunctions[Order] {
    * Implicitly convert a `Order[A]` to a `scala.math.Ordering[A]`
    * instance.
    */
-  implicit def ordering[A](implicit ev: Order[A]): Ordering[A] =
+  implicit def catsKernelOrderingForOrder[A](implicit ev: Order[A]): Ordering[A] =
     ev.toOrdering
 
   /**

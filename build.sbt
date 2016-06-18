@@ -107,7 +107,7 @@ lazy val testingDependencies = Seq(
 def docsSourcesAndProjects(sv: String): (Boolean, Seq[ProjectReference]) =
   CrossVersion.partialVersion(sv) match {
     case Some((2, 10)) => (false, Nil)
-    case _ => (true, Seq(coreJVM, freeJVM))
+    case _ => (true, Seq(kernelJVM, coreJVM, freeJVM))
   }
 
 lazy val javadocSettings = Seq(

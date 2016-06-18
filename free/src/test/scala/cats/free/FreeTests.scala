@@ -5,7 +5,7 @@ import cats.tests.CatsSuite
 import cats.arrow.FunctionK
 import cats.data.Xor
 import cats.laws.discipline.{CartesianTests, MonadRecTests, SerializableTests}
-import cats.laws.discipline.arbitrary.function0Arbitrary
+import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 
 import org.scalacheck.{Arbitrary, Gen}
 import Arbitrary.arbFunction1
@@ -24,9 +24,9 @@ class FreeTests extends CatsSuite {
     rr.toString.length should be > 0
   }
 
-  test("mapSuspension id"){
+  test("compile id"){
     forAll { x: Free[List, Int] =>
-      x.mapSuspension(FunctionK.id[List]) should === (x)
+      x.compile(FunctionK.id[List]) should === (x)
     }
   }
 
@@ -42,9 +42,9 @@ class FreeTests extends CatsSuite {
     val _ = Free.suspend(yikes[Option, Int])
   }
 
-  test("mapSuspension consistent with foldMap"){
+  test("compile consistent with foldMap"){
     forAll { x: Free[List, Int] =>
-      val mapped = x.mapSuspension(headOptionU)
+      val mapped = x.compile(headOptionU)
       val folded = mapped.foldMap(FunctionK.id[Option])
       folded should === (x.foldMap(headOptionU))
     }
@@ -77,6 +77,33 @@ class FreeTests extends CatsSuite {
     }
 
     assert(10000 == a(0).foldMap(runner))
+  }
+
+  test(".runTailRec") {
+    val r = Free.pure[List, Int](12358)
+    def recurse(r: Free[List, Int], n: Int): Free[List, Int] =
+      if (n > 0) recurse(r.flatMap(x => Free.pure(x + 1)), n - 1) else r
+    val res = recurse(r, 100000).runTailRec
+    assert(res == List(112358))
+  }
+
+  test(".foldLeftM") {
+    // you can see .foldLeftM traversing the entire structure by
+    // changing the constant argument to .take and observing the time
+    // this test takes.
+    val ns = Stream.from(1).take(1000)
+    val res = Free.foldLeftM[Stream, Xor[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+      if (sum >= 2) Xor.left(sum) else Xor.right(sum + n)
+    }
+    assert(res == Xor.left(3))
+  }
+
+  test(".foldLeftM short-circuiting") {
+    val ns = Stream.continually(1)
+    val res = Free.foldLeftM[Stream, Xor[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+      if (sum >= 100000) Xor.left(sum) else Xor.right(sum + n)
+    }
+    assert(res == Xor.left(100000))
   }
 }
 
