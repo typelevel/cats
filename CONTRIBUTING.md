@@ -161,7 +161,8 @@ Write about checking laws
 
 ## Contributing documentation
 
-### source for the documentation
+### Source for the documentation
+
 The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/typelevel/cats/tree/master/docs).
 
 * The source for the static pages is in `docs/src/site`
@@ -188,6 +189,10 @@ run `sbt docs/makeSite`
 4. Navigate to http://localhost:4000/cats/ in your browser
 
 5. Make changes to your site, and run `sbt makeSite` to regenerate the site. The changes should be reflected as soon as you run `makeSite`.
+
+### Generating the book
+
+run `bash scripts/build-book.sh`
 
 ### Compiler verified documentation
 
