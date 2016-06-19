@@ -10,8 +10,8 @@ import cats.data.Xor
 
 trait ListInstances extends cats.kernel.std.ListInstances {
 
-  implicit val catsStdInstancesForList: Traverse[List] with MonadCombine[List] with MonadRec[List] with CoflatMap[List] =
-    new Traverse[List] with MonadCombine[List] with MonadRec[List] with CoflatMap[List] {
+  implicit val catsStdInstancesForList: Collect[List] with MonadCombine[List] with MonadRec[List] with CoflatMap[List] =
+    new Collect[List] with MonadCombine[List] with MonadRec[List] with CoflatMap[List] {
 
       def empty[A]: List[A] = Nil
 
@@ -63,7 +63,12 @@ trait ListInstances extends cats.kernel.std.ListInstances {
         Eval.defer(loop(fa))
       }
 
-      def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
+      def mapOptionA[G[_], A, B](fa: List[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
+        foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglob) =>
+          G.map2Eval(f(a), lglob)((ob, l) => ob.fold(l)(_ :: l))
+        }.value
+
+      override def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
         foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglb) =>
           G.map2Eval(f(a), lglb)(_ :: _)
         }.value

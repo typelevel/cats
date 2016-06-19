@@ -10,6 +10,7 @@ trait AllSyntax
     with BitraverseSyntax
     with CartesianSyntax
     with CoflatMapSyntax
+    with CollectSyntax
     with ComonadSyntax
     with ComposeSyntax
     with ContravariantSyntax
