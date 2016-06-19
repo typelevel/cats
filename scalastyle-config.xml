@@ -84,4 +84,10 @@
  <check enabled="true" class="org.scalastyle.scalariform.ProcedureDeclarationChecker" level="error"/>
  <check enabled="true" class="org.scalastyle.scalariform.RedundantIfChecker" level="error"/>
  <check enabled="true" class="org.scalastyle.scalariform.SpaceAfterCommentStartChecker" level="error"/>
+ <check level="error" class="org.scalastyle.file.RegexChecker" enabled="true" customId="type.class.spacing">
+  <parameters>
+   <parameter name="regex"><![CDATA[(?<!@|simulacrum\.)typeclass]]></parameter>
+  </parameters>
+  <customMessage><![CDATA[Use 'type class' instead of typeclass (See #441)]]></customMessage>
+ </check>
 </scalastyle>
