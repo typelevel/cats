@@ -66,6 +66,12 @@ import simulacrum.typeclass
   def flattenOption[A](fa: F[Option[A]]): F[A] = mapOption(fa)(identity)
 
   /**
+   *
+   * Filter values inside a `G` context.
+   *
+   * This is a generalized version of Haskell's [[http://hackage.haskell.org/package/base-4.9.0.0/docs/Control-Monad.html#v:filterM filterM]].
+   * [[http://stackoverflow.com/questions/28872396/haskells-filterm-with-filterm-x-true-false-1-2-3 This StackOverflow question]] about `filterM` may be helpful in understanding how it behaves.
+   *
    * Example:
    * {{{
    * scala> import cats.implicits._
@@ -74,6 +80,9 @@ import simulacrum.typeclass
    * scala> val res: Eval[List[Int]] = l.filterA(odd)
    * scala> res.value
    * res0: List[Int] = List(1, 3)
+   *
+   * scala> List(1, 2, 3).filterA(_ => List(true, false))
+   * res1: List[List[Int]] = List(List(1, 2, 3), List(1, 2), List(1, 3), List(1), List(2, 3), List(2), List(3), List())
    * }}}
    */
   def filterA[G[_], A](fa: F[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[F[A]] =
