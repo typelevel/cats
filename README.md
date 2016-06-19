@@ -91,7 +91,6 @@ Cats will be designed to use modern *best practices*:
  * [scalacheck](http://scalacheck.org) for property-based testing
  * [discipline](https://github.com/typelevel/discipline) for encoding and testing laws
  * [kind-projector](https://github.com/non/kind-projector) for type lambda syntax
- * [algebra](https://github.com/non/algebra) for shared algebraic structures
  * ...and of course a pure functional subset of the Scala language.
 
 (We also plan to support [Miniboxing](http://scala-miniboxing.org) in a branch.)

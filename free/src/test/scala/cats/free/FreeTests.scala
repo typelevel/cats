@@ -123,21 +123,21 @@ sealed trait FreeTestsInstances {
   }
 
   private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {
-    val noGosub = Gen.oneOf(
+    val noFlatMapped = Gen.oneOf(
       A.arbitrary.map(Free.pure[F, A]),
       F.arbitrary.map(Free.liftF[F, A]))
 
     val nextDepth = Gen.chooseNum(1, maxDepth - 1)
 
-    def withGosub = for {
+    def withFlatMapped = for {
       fDepth <- nextDepth
       freeDepth <- nextDepth
       f <- arbFunction1[A, Free[F, A]](Arbitrary(freeGen[F, A](fDepth))).arbitrary
       freeFA <- freeGen[F, A](freeDepth)
     } yield freeFA.flatMap(f)
 
-    if (maxDepth <= 1) noGosub
-    else Gen.oneOf(noGosub, withGosub)
+    if (maxDepth <= 1) noFlatMapped
+    else Gen.oneOf(noFlatMapped, withFlatMapped)
   }
 
   implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
