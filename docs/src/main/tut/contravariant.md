@@ -51,7 +51,7 @@ Salary(Money(1000)).show
 
 `Show` example is trivial and quite far-fetched, let's see how `Contravariant` can help with orderings.
 
-`scala.math.Ordering` typeclass defines comparison operations, e.g. `compare`: 
+`scala.math.Ordering` type class defines comparison operations, e.g. `compare`:
 
 ```tut:book
 Ordering.Int.compare(2, 1)

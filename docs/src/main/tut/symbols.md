@@ -8,7 +8,7 @@ All other symbols can be imported with `import cats.implicits._`
 
 A scaladoc generated list is also available on the [Scaladoc symbols page](http://typelevel.org/cats/api/#index.index-_).
 
-| Symbol     | Name                   | Typeclass                                                                                   | Definition                             |
+| Symbol     | Name                   | Type Class                                                                                  | Definition                             |
 | ---------- | ---------------------- | ----------------------------------------------------------------------------------------    |--------------------------------------- |
 | `fa |@| fb`| Cartesian builder      | [`Cartesian[F[_]]`]({{ site.sources }}/core/src/main/scala/cats/Cartesian.scala)            | `|@|(fa: F[A])(fb: F[B]): F[(A, B)]`   |
 | `fa *> fb` | right apply            | [`Cartesian[F[_]]`]({{ site.sources }}/core/src/main/scala/cats/Cartesian.scala)            | `*>(fa: F[A])(fb: F[B]): F[A]`         |
