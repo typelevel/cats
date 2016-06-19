@@ -88,6 +88,9 @@ import simulacrum.typeclass
   def filterA[G[_], A](fa: F[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[F[A]] =
     mapOptionA(fa)(a => G.map(f(a))(if (_) Some(a) else None))
 
+  def filter[A](fa: F[A])(f: A => Boolean): F[A] =
+    filterA[Id, A](fa)(f)
+
   override def traverse[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[F[B]] =
     mapOptionA(fa)(a => G.map(f(a))(Some(_)))
 }

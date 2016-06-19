@@ -80,6 +80,8 @@ trait ListInstances extends cats.kernel.std.ListInstances {
         fa.forall(p)
 
       override def isEmpty[A](fa: List[A]): Boolean = fa.isEmpty
+
+      override def filter[A](fa: List[A])(f: A => Boolean): List[A] = fa.filter(f)
     }
 
   implicit def catsStdShowForList[A:Show]: Show[List[A]] =
