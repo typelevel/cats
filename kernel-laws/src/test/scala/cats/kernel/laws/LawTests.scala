@@ -4,7 +4,7 @@ package laws
 import catalysts.Platform
 import catalysts.macros.TypeTagM
 
-import cats.kernel.std.all._
+import cats.kernel.instances.all._
 
 import org.typelevel.discipline.{ Laws }
 import org.typelevel.discipline.scalatest.Discipline
