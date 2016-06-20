@@ -2,12 +2,12 @@ package cats
 package syntax
 
 trait BitraverseSyntax extends BitraverseSyntax1 {
-  implicit def bitraverseSyntax[F[_, _]: Bitraverse, A, B](fab: F[A, B]): BitraverseOps[F, A, B] =
+  implicit def catsSyntaxBitraverse[F[_, _]: Bitraverse, A, B](fab: F[A, B]): BitraverseOps[F, A, B] =
     new BitraverseOps[F, A, B](fab)
 }
 
 private[syntax] trait BitraverseSyntax1 {
-  implicit def nestedBitraverseSyntax[F[_, _]: Bitraverse, G[_], A, B](fgagb: F[G[A], G[B]]): NestedBitraverseOps[F, G, A, B] =
+  implicit def catsSyntaxNestedBitraverse[F[_, _]: Bitraverse, G[_], A, B](fgagb: F[G[A], G[B]]): NestedBitraverseOps[F, G, A, B] =
     new NestedBitraverseOps[F, G, A, B](fgagb)
 }
 

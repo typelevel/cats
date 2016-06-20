@@ -44,14 +44,21 @@ object ListWrapper {
 
   def eqv[A : Eq]: Eq[ListWrapper[A]] = Eq[List[A]].on[ListWrapper[A]](_.list)
 
-  val foldable: Foldable[ListWrapper] =
-    new Foldable[ListWrapper] {
-      def foldLeft[A, B](fa: ListWrapper[A], b: B)(f: (B, A) => B): B =
-        Foldable[List].foldLeft(fa.list, b)(f)
+  val traverse: Traverse[ListWrapper] = {
+    val F = Traverse[List]
 
+    new Traverse[ListWrapper] {
+      def foldLeft[A, B](fa: ListWrapper[A], b: B)(f: (B, A) => B): B =
+        F.foldLeft(fa.list, b)(f)
       def foldRight[A, B](fa: ListWrapper[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Foldable[List].foldRight(fa.list, lb)(f)
+        F.foldRight(fa.list, lb)(f)
+      def traverse[G[_], A, B](fa: ListWrapper[A])(f: A => G[B])(implicit G0: Applicative[G]): G[ListWrapper[B]] = {
+        G0.map(F.traverse(fa.list)(f))(ListWrapper.apply)
+      }
     }
+  }
+
+  val foldable: Foldable[ListWrapper] = traverse
 
   val functor: Functor[ListWrapper] =
     new Functor[ListWrapper] {
@@ -84,6 +91,19 @@ object ListWrapper {
         ListWrapper(M.combineK(x.list, y.list))
     }
   }
+
+  val monadRec: MonadRec[ListWrapper] = {
+    val M = MonadRec[List]
+
+    new MonadRec[ListWrapper] {
+      def pure[A](x: A): ListWrapper[A] = ListWrapper(M.pure(x))
+      def flatMap[A, B](fa: ListWrapper[A])(f: A => ListWrapper[B]): ListWrapper[B] = ListWrapper(M.flatMap(fa.list)(a => f(a).list))
+      def tailRecM[A, B](a: A)(f: A => ListWrapper[cats.data.Xor[A,B]]): ListWrapper[B] =
+        ListWrapper(M.tailRecM(a)(a => f(a).list))
+    }
+  }
+
+  val flatMapRec: FlatMapRec[ListWrapper] = monadRec
 
   val monad: Monad[ListWrapper] = monadCombine
 

@@ -6,7 +6,7 @@ import cats.data.Coproduct
 import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import org.scalacheck.Arbitrary
+import cats.laws.discipline.eq._
 
 class CoproductTests extends CatsSuite {
 
@@ -30,16 +30,6 @@ class CoproductTests extends CatsSuite {
 
   checkAll("Coproduct[Option, Option, Int]", OrderLaws[Coproduct[Option, Option, Int]].eqv)
   checkAll("Eq[Coproduct[Option, Option, Int]]", SerializableTests.serializable(Eq[Coproduct[Option, Option, Int]]))
-
-  implicit def showEq[A](implicit arbA: Arbitrary[A], stringEq: Eq[String]): Eq[Show[A]] = new Eq[Show[A]] {
-    def eqv(f: Show[A], g: Show[A]): Boolean = {
-      val samples = List.fill(100)(arbA.arbitrary.sample).collect {
-        case Some(a) => a
-        case None => sys.error("Could not generate arbitrary values to compare two Show[A]")
-      }
-      samples.forall(s => stringEq.eqv(f.show(s), g.show(s)))
-    }
-  }
 
   checkAll("Coproduct[Show, Show, ?]", ContravariantTests[Coproduct[Show, Show, ?]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Coproduct[Show, Show, ?]]", SerializableTests.serializable(Contravariant[Coproduct[Show, Show, ?]]))

@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.Xor
-import cats.laws.discipline.arbitrary.xorArbitrary
+import cats.laws.discipline.arbitrary.catsLawsArbitraryForXor
 
 class MonadCombineTest extends CatsSuite {
   test("separate") {

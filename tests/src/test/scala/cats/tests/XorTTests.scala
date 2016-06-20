@@ -5,54 +5,107 @@ import cats.functor.Bifunctor
 import cats.data.{Xor, XorT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.OrderLaws
+import cats.kernel.laws.{OrderLaws, GroupLaws}
 
 class XorTTests extends CatsSuite {
-  implicit val eq0 = XorT.catsDataEqForXorT[List, String, String Xor Int]
-  implicit val eq1 = XorT.catsDataEqForXorT[XorT[List, String, ?], String, Int](eq0)
-  implicit val iso = CartesianTests.Isomorphisms.invariant[XorT[List, String, ?]]
-  checkAll("XorT[List, String, Int]", MonadErrorTests[XorT[List, String, ?], String].monadError[Int, Int, Int])
-  checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[List, String, ?], String]))
-  checkAll("XorT[List, String, Int]", MonadRecTests[XorT[List, String, ?]].monadRec[Int, Int, Int])
-  checkAll("MonadRec[XorT[List, String, ?]]", SerializableTests.serializable(MonadRec[XorT[List, String, ?]]))
-  checkAll("XorT[List, ?, ?]", BifunctorTests[XorT[List, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
-  checkAll("Bifunctor[XorT[List, ?, ?]]", SerializableTests.serializable(Bifunctor[XorT[List, ?, ?]]))
-  checkAll("XorT[List, ?, ?]", BitraverseTests[XorT[List, ?, ?]].bitraverse[Option, Int, Int, Int, String, String, String])
-  checkAll("Bitraverse[XorT[List, ?, ?]]", SerializableTests.serializable(Bitraverse[XorT[List, ?, ?]]))
-  checkAll("XorT[List, Int, ?]", TraverseTests[XorT[List, Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[XorT[List, Int, ?]]", SerializableTests.serializable(Traverse[XorT[List, Int, ?]]))
-  checkAll("XorT[List, String, Int]", OrderLaws[XorT[List, String, Int]].order)
-  checkAll("Order[XorT[List, String, Int]]", SerializableTests.serializable(Order[XorT[List, String, Int]]))
-  checkAll("XorT[Option, ListWrapper[String], ?]", SemigroupKTests[XorT[Option, ListWrapper[String], ?]].semigroupK[Int])
-  checkAll("SemigroupK[XorT[Option, ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[XorT[Option, ListWrapper[String], ?]]))
+  implicit val iso = CartesianTests.Isomorphisms.invariant[XorT[ListWrapper, String, ?]](XorT.catsDataFunctorForXorT(ListWrapper.functor))
 
   {
-    implicit val F = ListWrapper.foldable
-    checkAll("XorT[ListWrapper, Int, ?]", FoldableTests[XorT[ListWrapper, Int, ?]].foldable[Int, Int])
-    checkAll("Foldable[XorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Foldable[XorT[ListWrapper, Int, ?]]))
+    checkAll("XorT[Option, ListWrapper[String], ?]", SemigroupKTests[XorT[Option, ListWrapper[String], ?]].semigroupK[Int])
+    checkAll("SemigroupK[XorT[Option, ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[XorT[Option, ListWrapper[String], ?]]))
   }
 
   {
+    implicit val F = ListWrapper.order[String Xor Int]
+
+    checkAll("XorT[List, String, Int]", OrderLaws[XorT[ListWrapper, String, Int]].order)
+    checkAll("Order[XorT[List, String, Int]]", SerializableTests.serializable(Order[XorT[ListWrapper, String, Int]]))
+  }
+
+  {
+    //If a Functor for F is defined
     implicit val F = ListWrapper.functor
+
+    checkAll("XorT[ListWrapper, ?, ?]", BifunctorTests[XorT[ListWrapper, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
+    checkAll("Bifunctor[XorT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bifunctor[XorT[ListWrapper, ?, ?]]))
     checkAll("XorT[ListWrapper, Int, ?]", FunctorTests[XorT[ListWrapper, Int, ?]].functor[Int, Int, Int])
     checkAll("Functor[XorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Functor[XorT[ListWrapper, Int, ?]]))
   }
 
   {
+    //If a Traverse for F is defined
+    implicit val F = ListWrapper.traverse
+
+    checkAll("XorT[ListWrapper, Int, ?]", TraverseTests[XorT[ListWrapper, Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[XorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Traverse[XorT[ListWrapper, Int, ?]]))
+    checkAll("XorT[ListWrapper, ?, ?]", BitraverseTests[XorT[ListWrapper, ?, ?]].bitraverse[Option, Int, Int, Int, String, String, String])
+    checkAll("Bitraverse[XorT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bitraverse[XorT[ListWrapper, ?, ?]]))
+
+  }
+
+  {
+    //if a Monad is defined
+    implicit val F = ListWrapper.monad
+    implicit val eq0 = XorT.catsDataEqForXorT[ListWrapper, String, String Xor Int]
+    implicit val eq1 = XorT.catsDataEqForXorT[XorT[ListWrapper, String, ?], String, Int](eq0)
+
+    Functor[XorT[ListWrapper, String, ?]]
+    Applicative[XorT[ListWrapper, String, ?]]
+    Monad[XorT[ListWrapper, String, ?]]
+
+    checkAll("XorT[ListWrapper, String, Int]", MonadErrorTests[XorT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
+    checkAll("MonadError[XorT[List, ?, ?]]", SerializableTests.serializable(MonadError[XorT[ListWrapper, String, ?], String]))
+  }
+
+  {
+    //if a MonadRec is defined
+    implicit val F = ListWrapper.monadRec
+
+    Functor[XorT[ListWrapper, String, ?]]
+    Applicative[XorT[ListWrapper, String, ?]]
+    Monad[XorT[ListWrapper, String, ?]]
+
+    checkAll("XorT[ListWrapper, String, Int]", MonadRecTests[XorT[ListWrapper, String, ?]].monadRec[Int, Int, Int])
+    checkAll("MonadRec[XorT[ListWrapper, String, ?]]", SerializableTests.serializable(MonadRec[XorT[ListWrapper, String, ?]]))
+  }
+
+  {
+    //If a foldable is defined
+    implicit val F = ListWrapper.foldable
+
+    checkAll("XorT[ListWrapper, Int, ?]", FoldableTests[XorT[ListWrapper, Int, ?]].foldable[Int, Int])
+    checkAll("Foldable[XorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Foldable[XorT[ListWrapper, Int, ?]]))
+  }
+
+  {
     implicit val F = ListWrapper.partialOrder[String Xor Int]
+
     checkAll("XorT[ListWrapper, String, Int]", OrderLaws[XorT[ListWrapper, String, Int]].partialOrder)
     checkAll("PartialOrder[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(PartialOrder[XorT[ListWrapper, String, Int]]))
   }
 
   {
+    implicit val F = ListWrapper.semigroup[String Xor Int]
+
+    checkAll("XorT[ListWrapper, String, Int]", GroupLaws[XorT[ListWrapper, String, Int]].semigroup)
+    checkAll("Semigroup[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(Semigroup[XorT[ListWrapper, String, Int]]))
+  }
+
+  {
+    implicit val F = ListWrapper.monoid[String Xor Int]
+
+    Semigroup[XorT[ListWrapper, String, Int]]
+
+    checkAll("XorT[ListWrapper, String, Int]", GroupLaws[XorT[ListWrapper, String, Int]].monoid)
+    checkAll("Monoid[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(Monoid[XorT[ListWrapper, String, Int]]))
+  }
+
+  {
     implicit val F = ListWrapper.eqv[String Xor Int]
+
     checkAll("XorT[ListWrapper, String, Int]", OrderLaws[XorT[ListWrapper, String, Int]].eqv)
     checkAll("Eq[XorT[ListWrapper, String, Int]]", SerializableTests.serializable(Eq[XorT[ListWrapper, String, Int]]))
   }
-
-  // make sure that the Monad and Traverse instances don't result in ambiguous
-  // Functor instances
-  Functor[XorT[List, Int, ?]]
 
   test("toValidated") {
     forAll { (xort: XorT[List, String, Int]) =>

@@ -91,7 +91,6 @@ Cats will be designed to use modern *best practices*:
  * [scalacheck](http://scalacheck.org) for property-based testing
  * [discipline](https://github.com/typelevel/discipline) for encoding and testing laws
  * [kind-projector](https://github.com/non/kind-projector) for type lambda syntax
- * [algebra](https://github.com/non/algebra) for shared algebraic structures
  * ...and of course a pure functional subset of the Scala language.
 
 (We also plan to support [Miniboxing](http://scala-miniboxing.org) in a branch.)
@@ -183,6 +182,7 @@ The current maintainers (people who can merge pull requests) are:
  * [milessabin](https://github.com/milessabin) Miles Sabin
  * [fthomas](https://github.com/fthomas) Frank Thomas
  * [julien-truffaut](https://github.com/julien-truffaut) Julien Truffaut
+ * [kailuowang](https://github.com/kailuowang) Kailuo Wang
 
 We are currently following a practice of requiring at least two
 sign-offs to merge PRs (and for large or contentious issues we may

@@ -1,7 +1,6 @@
 package cats
 package std
 
-import cats.syntax.all._
 import cats.data.Xor
 import TryInstances.castFailure
 
@@ -122,14 +121,6 @@ private[cats] abstract class TryCoflatMap extends CoflatMap[Try] {
   def coflatMap[A, B](ta: Try[A])(f: Try[A] => B): Try[B] = Try(f(ta))
 }
 
-private[cats] class TrySemigroup[A: Semigroup] extends Semigroup[Try[A]] {
-  def combine(fx: Try[A], fy: Try[A]): Try[A] =
-    for {
-      x <- fx
-      y <- fy
-    } yield x |+| y
-}
+private[cats] class TrySemigroup[A: Semigroup] extends ApplySemigroup[Try, A](try_.catsStdInstancesForTry, implicitly)
 
-private[cats] class TryMonoid[A](implicit A: Monoid[A]) extends TrySemigroup[A] with Monoid[Try[A]] {
-  def empty: Try[A] = Success(A.empty)
-}
+private[cats] class TryMonoid[A](implicit A: Monoid[A]) extends ApplicativeMonoid[Try, A](try_.catsStdInstancesForTry, implicitly)

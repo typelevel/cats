@@ -69,6 +69,8 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def toList: List[B] = fold(_ => Nil, _ :: Nil)
 
+  def toTry(implicit ev: A <:< Throwable): Try[B] = fold(a => Failure(ev(a)), Success(_))
+
   def toValidated: Validated[A,B] = fold(Validated.Invalid.apply, Validated.Valid.apply)
 
   /** Returns a [[ValidatedNel]] representation of this disjunction with the `Left` value
@@ -179,6 +181,8 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
     a => s"Xor.Left(${AA.show(a)})",
     b => s"Xor.Right(${BB.show(b)})"
   )
+
+  def ap[AA >: A, BB >: B, C](that: AA Xor (BB => C)): AA Xor C = that.flatMap(this.map)
 }
 
 object Xor extends XorInstances with XorFunctions {
@@ -240,6 +244,7 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       def foldLeft[B, C](fa: A Xor B, c: C)(f: (C, B) => C): C = fa.foldLeft(c)(f)
       def foldRight[B, C](fa: A Xor B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] = fa.foldRight(lc)(f)
       def flatMap[B, C](fa: A Xor B)(f: B => A Xor C): A Xor C = fa.flatMap(f)
+      override def ap[B, C](x: A Xor (B => C))(y: A Xor B): A Xor C = y.ap(x)
       def pure[B](b: B): A Xor B = Xor.right(b)
       @tailrec def tailRecM[B, C](b: B)(f: B => A Xor (B Xor C)): A Xor C =
         f(b) match {
