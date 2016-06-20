@@ -21,6 +21,9 @@ class TryTests extends CatsSuite {
   checkAll("Try[Int] with Option", TraverseTests[Try].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Try]", SerializableTests.serializable(Traverse[Try]))
 
+  checkAll("Try", MonadRecTests[Try].monadRec[Int, Int, Int])
+  checkAll("MonadRec[Try]", SerializableTests.serializable(MonadRec[Try]))
+
   test("show") {
     forAll { fs: Try[String] =>
       fs.show should === (fs.toString)

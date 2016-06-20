@@ -6,12 +6,13 @@ import TryInstances.castFailure
 
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
+import scala.annotation.tailrec
 
 trait TryInstances extends TryInstances1 {
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] =
-    new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] {
+  implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] with MonadRec[Try] =
+    new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] with MonadRec[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 
       override def pureEval[A](x: Eval[A]): Try[A] = x match {
@@ -55,6 +56,13 @@ trait TryInstances extends TryInstances1 {
         fa match {
           case Success(a) => G.map(f(a))(Success(_))
           case f: Failure[_] => G.pure(castFailure[B](f))
+        }
+
+      @tailrec final def tailRecM[B, C](b: B)(f: B => Try[(B Xor C)]): Try[C] =
+        f(b) match {
+          case f: Failure[_] => castFailure[C](f)
+          case Success(Xor.Left(b1)) => tailRecM(b1)(f)
+          case Success(Xor.Right(c)) => Success(c)
         }
 
       def handleErrorWith[A](ta: Try[A])(f: Throwable => Try[A]): Try[A] =
