@@ -21,11 +21,8 @@ trait CollectLaws[F[_]] extends TraverseLaws[F] {
   ): IsEq[Nested[M, N, F[C]]] = {
 
     val lhs: Nested[M, N, F[C]] = Nested(fa.mapOptionA(f).map(_.mapOptionA(g)))
-    // TODO is this right and/or meaningful? I can't seem to get the types to
-    // line up for the a straight port of `wither (Compose. fmap (wither f). g)`
-    // which is how the law is stated for Haskell's `Witherable`
     val rhs: Nested[M, N, F[C]] = fa.mapOptionA[Nested[M, N, ?], C](a =>
-      Nested(f(a).map(_.traverseM(g))))
+      Nested(f(a).map(_.mapOptionA(g))))
     lhs <-> rhs
   }
 }
