@@ -4,6 +4,7 @@ import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
+import scala.xml.transform.{RewriteRule, RuleTransformer}
 
 lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev environment")
 
@@ -11,7 +12,22 @@ lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageMinimum := 60,
   ScoverageKeys.coverageFailOnMinimum := false,
   ScoverageKeys.coverageHighlighting := scalaBinaryVersion.value != "2.10",
-  ScoverageKeys.coverageExcludedPackages := "cats\\.bench\\..*"
+  ScoverageKeys.coverageExcludedPackages := "cats\\.bench\\..*",
+  // don't include scoverage as a dependency in the pom
+  // see issue #980
+  // this code was copied from https://github.com/mongodb/mongo-spark
+  pomPostProcess := { (node: xml.Node) =>
+    new RuleTransformer(
+      new RewriteRule {
+        override def transform(node: xml.Node): Seq[xml.Node] = node match {
+          case e: xml.Elem
+              if e.label == "dependency" && e.child.exists(child => child.label == "groupId" && child.text == "org.scoverage") => Nil
+          case _ => Seq(node)
+
+        }
+
+      }).transform(node).head
+  }
 )
 
 lazy val buildSettings = Seq(
