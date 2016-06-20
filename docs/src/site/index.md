@@ -88,7 +88,7 @@ In an attempt to be more modular, Cats is broken up into a number of sub-project
 * *core* - contains type class definitions (e.g. Functor, Applicative, Monad), essential datatypes, and
   type class instances for those datatypes and standard library types
 * *laws* - laws for the type classes, used to validate type class instances
- * *cats-free* - free structures such as the free monad, and supporting type classes.
+* *cats-free* - free structures such as the free monad, and supporting type classes.
 * *tests* - tests that check type class instances with laws from *laws*
 * *docs* - The source for this website
 

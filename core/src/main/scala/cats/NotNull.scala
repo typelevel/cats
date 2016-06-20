@@ -20,7 +20,7 @@ object NotNull {
 
   implicit def `If you are seeing this, you probably need to add an explicit type parameter somewhere, because Null is being inferred.`: NotNull[Null] = throw ambiguousException
 
-  implicit def ambiguousNull2: NotNull[Null] = throw ambiguousException
+  implicit def catsAmbiguousNotNullNull2: NotNull[Null] = throw ambiguousException
 
-  implicit def notNull[A]: NotNull[A] = singleton.asInstanceOf[NotNull[A]]
+  implicit def catsNotNullForA[A]: NotNull[A] = singleton.asInstanceOf[NotNull[A]]
 }

@@ -114,6 +114,12 @@ class ValidatedTests extends CatsSuite {
     }
   }
 
+  test("valueOr consistent with swap then map then merge") {
+    forAll { (v: Validated[String, Int], f: String => Int) =>
+      v.valueOr(f) should === (v.swap.map(f).merge)
+    }
+  }
+
   test("toEither then fromEither is identity") {
     forAll { (v: Validated[String, Int]) =>
       Validated.fromEither(v.toEither) should === (v)

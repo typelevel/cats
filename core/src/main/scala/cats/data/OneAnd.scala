@@ -116,6 +116,8 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
   implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
     new NonEmptyReducible[OneAnd[F,?], F] {
       override def split[A](fa: OneAnd[F,A]): (A, F[A]) = (fa.head, fa.tail)
+
+      override def size[A](fa: OneAnd[F, A]): Long = 1 + F.size(fa.tail)
     }
 
   implicit def catsDataMonadForOneAnd[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[F, ?]] =
@@ -138,7 +140,7 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
 }
 
 trait OneAndLowPriority0 {
-  implicit val nelComonad: Comonad[OneAnd[List, ?]] =
+  implicit val catsDataComonadForOneAnd: Comonad[OneAnd[List, ?]] =
     new Comonad[OneAnd[List, ?]] {
       def coflatMap[A, B](fa: OneAnd[List, A])(f: OneAnd[List, A] => B): OneAnd[List, B] = {
         @tailrec def consume(as: List[A], buf: ListBuffer[B]): List[B] =

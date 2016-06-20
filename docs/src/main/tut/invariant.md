@@ -30,7 +30,7 @@ timestamp.  Let's say that we want to create a `Semigroup[Date]`, by
 ### Semigroup does not form a covariant functor
 
 If `Semigroup` had an instance for the standard covariant [`Functor`](functor.html)
-typeclass, we could use `map` to apply a function `longToDate`:
+type class, we could use `map` to apply a function `longToDate`:
 
 ```tut:silent
 import java.util.Date

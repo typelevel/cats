@@ -4,7 +4,7 @@ package syntax
 import cats.macros.Ops
 
 trait PartialOrderSyntax extends EqSyntax {
-  implicit def partialOrderSyntax[A: PartialOrder](a: A): PartialOrderOps[A] =
+  implicit def catsSyntaxPartialOrder[A: PartialOrder](a: A): PartialOrderOps[A] =
     new PartialOrderOps[A](a)
 }
 

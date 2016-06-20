@@ -4,7 +4,7 @@ package syntax
 import cats.data.Xor
 
 trait XorSyntax {
-  implicit def xorIdSyntax[A](a: A): XorIdOps[A] = new XorIdOps(a)
+  implicit def catsSyntaxXorId[A](a: A): XorIdOps[A] = new XorIdOps(a)
 }
 
 final class XorIdOps[A](val a: A) extends AnyVal {

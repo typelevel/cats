@@ -38,7 +38,7 @@ As you can see, the implementations of all of these variations are very similar.
 
 ```tut:silent
 import cats.data.OptionT
-import cats.std.future._
+import cats.implicits._
 
 val customGreetingT: OptionT[Future, String] = OptionT(customGreeting)
 
@@ -65,7 +65,7 @@ val lastnameO: Option[String] = Some("Doe")
 val ot: OptionT[Future, String] = for {
   g <- OptionT(greetingFO)
   f <- OptionT.liftF(firstnameF)
-  l <- OptionT.fromOption(lastnameO)
+  l <- OptionT.fromOption[Future](lastnameO)
 } yield s"$g $f $l"
 
 val result: Future[Option[String]] = ot.value // Future(Some("Hello Jane Doe"))
@@ -77,9 +77,6 @@ val result: Future[Option[String]] = ot.value // Future(Some("Hello Jane Doe"))
 If you have only an `A` and you wish to *lift* it into an `OptionT[F,A]` assuming you have an [`Applicative`]({{ site.baseurl }}/tut/applicative.html) instance for `F` you can use `some` which is an alias for `pure`. There also exists a `none` method which can be used to create an `OptionT[F,A]`, where the `Option` wrapped `A` type is actually a `None`:
 
 ```tut:silent
-
-import cats.std.future._
-
 val greet: OptionT[Future,String] = OptionT.pure("Hola!")
 
 val greetAlt: OptionT[Future,String] = OptionT.some("Hi!")

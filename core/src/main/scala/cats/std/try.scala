@@ -1,18 +1,18 @@
 package cats
 package std
 
-import cats.syntax.all._
 import cats.data.Xor
 import TryInstances.castFailure
 
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
+import scala.annotation.tailrec
 
 trait TryInstances extends TryInstances1 {
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] =
-    new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] {
+  implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] with MonadRec[Try] =
+    new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] with MonadRec[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 
       override def pureEval[A](x: Eval[A]): Try[A] = x match {
@@ -56,6 +56,13 @@ trait TryInstances extends TryInstances1 {
         fa match {
           case Success(a) => G.map(f(a))(Success(_))
           case f: Failure[_] => G.pure(castFailure[B](f))
+        }
+
+      @tailrec final def tailRecM[B, C](b: B)(f: B => Try[(B Xor C)]): Try[C] =
+        f(b) match {
+          case f: Failure[_] => castFailure[C](f)
+          case Success(Xor.Left(b1)) => tailRecM(b1)(f)
+          case Success(Xor.Right(c)) => Success(c)
         }
 
       def handleErrorWith[A](ta: Try[A])(f: Throwable => Try[A]): Try[A] =
@@ -122,14 +129,6 @@ private[cats] abstract class TryCoflatMap extends CoflatMap[Try] {
   def coflatMap[A, B](ta: Try[A])(f: Try[A] => B): Try[B] = Try(f(ta))
 }
 
-private[cats] class TrySemigroup[A: Semigroup] extends Semigroup[Try[A]] {
-  def combine(fx: Try[A], fy: Try[A]): Try[A] =
-    for {
-      x <- fx
-      y <- fy
-    } yield x |+| y
-}
+private[cats] class TrySemigroup[A: Semigroup] extends ApplySemigroup[Try, A](try_.catsStdInstancesForTry, implicitly)
 
-private[cats] class TryMonoid[A](implicit A: Monoid[A]) extends TrySemigroup[A] with Monoid[Try[A]] {
-  def empty: Try[A] = Success(A.empty)
-}
+private[cats] class TryMonoid[A](implicit A: Monoid[A]) extends ApplicativeMonoid[Try, A](try_.catsStdInstancesForTry, implicitly)

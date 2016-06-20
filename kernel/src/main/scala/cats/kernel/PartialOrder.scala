@@ -167,7 +167,7 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] {
    * Implicitly convert a `PartialOrder[A]` to a
    * `scala.math.PartialOrdering[A]` instance.
    */
-  implicit def partialOrdering[A](implicit ev: PartialOrder[A]): PartialOrdering[A] =
+  implicit def catsKernelPartialOrderingForPartialOrder[A](implicit ev: PartialOrder[A]): PartialOrdering[A] =
     new PartialOrdering[A] {
       def tryCompare(x: A, y: A): Option[Int] = ev.tryCompare(x, y)
       def lteq(x: A, y: A): Boolean = ev.lteqv(x, y)

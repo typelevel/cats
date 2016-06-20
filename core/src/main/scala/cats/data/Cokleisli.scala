@@ -2,7 +2,7 @@ package cats
 package data
 
 import cats.arrow.{Arrow, Split}
-import cats.functor.Profunctor
+import cats.functor.{Contravariant, Profunctor}
 import cats.{CoflatMap, Comonad, Functor, Monad}
 
 /**
@@ -71,6 +71,11 @@ private[data] sealed abstract class CokleisliInstances0 {
 
   implicit def catsDataSemigroupKForCokleisli[F[_]](implicit ev: CoflatMap[F]): SemigroupK[λ[α => Cokleisli[F, α, α]]] =
     new CokleisliSemigroupK[F] { def F: CoflatMap[F] = ev }
+
+  implicit def catsDataContravariantForCokleisli[F[_]: Functor, A]: Contravariant[Cokleisli[F, ?, A]] =
+    new Contravariant[Cokleisli[F, ?, A]] {
+      def contramap[B, C](fbc: Cokleisli[F, B, A])(f: C => B): Cokleisli[F, C, A] = fbc.lmap(f)
+    }
 }
 
 private trait CokleisliArrow[F[_]] extends Arrow[Cokleisli[F, ?, ?]] with CokleisliSplit[F] with CokleisliProfunctor[F] {

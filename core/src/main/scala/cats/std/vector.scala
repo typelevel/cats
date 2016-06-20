@@ -44,6 +44,8 @@ trait VectorInstances extends cats.kernel.std.VectorInstances {
         Eval.defer(loop(0))
       }
 
+      override def size[A](fa: Vector[A]): Long = fa.size.toLong
+
       def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
       foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
         G.map2Eval(f(a), lgvb)(_ +: _)

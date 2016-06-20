@@ -45,6 +45,8 @@ trait MapInstances extends cats.kernel.std.MapInstances {
       def foldRight[A, B](fa: Map[K, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         Foldable.iterateRight(fa.values.iterator, lb)(f)
 
+      override def size[A](fa: Map[K, A]): Long = fa.size.toLong
+
       override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
     }
 }
