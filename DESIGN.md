@@ -19,7 +19,7 @@ Cats will be designed to use modern *best practices*:
 
 Currently Cats is experimenting with providing laziness via a type
 constructor (`Eval[_]`), rather than via ad-hoc by-name
-parameters.This design may change if it ends up being impractical.
+parameters. This design may change if it ends up being impractical.
 
 The goal is to make Cats as efficient as possible for both strict and
 lazy evaluation. There are also issues around by-name parameters that
