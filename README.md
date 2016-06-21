@@ -16,10 +16,10 @@ The name is a playful shortening of the word *category*.
 
 #### Why?
 
-Scala provides many tools for functional programming such as algebraic data types, higher kinded types
-and implicits. However, common abstractions such as `Monoid`, `Monad`, and `Traverse` are currently missing from
-the standard library, leaving a bit to be desired. Among the goals of Cats is to fill this gap, and to provide a
-foundation for an [ecosystem of pure, typeful libraries](http://typelevel.org/projects/).
+Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
+standard library. Cats augments the standard library with tools that further enable functional programming such as
+`Validated`, `Monad`, and `Traverse`. A broader goal of Cats is to provide a foundation for an
+[ecosystem of pure, typeful libraries](http://typelevel.org/projects/).
 
 ### Getting Started
 
