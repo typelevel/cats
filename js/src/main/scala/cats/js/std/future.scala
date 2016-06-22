@@ -1,12 +1,12 @@
 package cats
 package js
-package std
+package instances
 
 import scala.concurrent.Future
 import scala.concurrent.{ExecutionContext => E}
 import scala.concurrent.duration.FiniteDuration
 
-import cats.std.FutureCoflatMap
+import cats.instances.FutureCoflatMap
 import cats.syntax.all._
 
 object future extends FutureInstances0
@@ -18,7 +18,7 @@ object Await {
     }
 }
 
-private[std] sealed trait FutureInstances0 extends FutureInstances1 {
+private[instances] sealed trait FutureInstances0 extends FutureInstances1 {
   def futureComonad(atMost: FiniteDuration)(implicit ec: E): Comonad[Future] =
     new FutureCoflatMap with Comonad[Future] {
       def extract[A](x: Future[A]): A =
@@ -32,7 +32,7 @@ private[std] sealed trait FutureInstances0 extends FutureInstances1 {
     }
 }
 
-private[std] sealed trait FutureInstances1 extends FutureInstances2 {
+private[instances] sealed trait FutureInstances1 extends FutureInstances2 {
   def futurePartialOrder[A: PartialOrder](atMost: FiniteDuration)(implicit ec: E): PartialOrder[Future[A]] =
     new PartialOrder[Future[A]] {
       def partialCompare(x: Future[A], y: Future[A]): Double =
@@ -41,7 +41,7 @@ private[std] sealed trait FutureInstances1 extends FutureInstances2 {
 
 }
 
-private[std] sealed trait FutureInstances2 {
+private[instances] sealed trait FutureInstances2 {
   def futureEq[A: Eq](atMost: FiniteDuration)(implicit ec: E): Eq[Future[A]] =
     new Eq[Future[A]] {
       def eqv(x: Future[A], y: Future[A]): Boolean =

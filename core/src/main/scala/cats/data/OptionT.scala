@@ -1,7 +1,7 @@
 package cats
 package data
 
-import std.option.{catsStdInstancesForOption => optionInstance}
+import instances.option.{catsStdInstancesForOption => optionInstance}
 
 /**
  * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some

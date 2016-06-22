@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.kernel.std.tuple._
+import cats.kernel.instances.tuple._
 import cats.functor.{Bifunctor, Contravariant}
 
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {

@@ -1,6 +1,6 @@
 package cats
 
-import cats.std.list._
+import cats.instances.list._
 import simulacrum.typeclass
 
 /**

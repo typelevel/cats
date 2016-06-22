@@ -80,7 +80,7 @@ object KernelBoiler {
   object GenTupleInstances extends Template {
     override def range: IndexedSeq[Int] = 1 to maxArity
 
-    def filename(root: File): File = root / "cats" / "kernel" / "std" / "TupleAlgebra.scala"
+    def filename(root: File): File = root / "cats" / "kernel" / "instances" / "TupleAlgebra.scala"
 
     def content(tv: TemplateVals): String = {
       import tv._
@@ -118,7 +118,7 @@ object KernelBoiler {
 
       block"""
         |package cats.kernel
-        |package std
+        |package instances
         |
         |trait TupleInstances {
         -  implicit def catsKernelStdBandForTuple${arity}[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =

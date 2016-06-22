@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{State, StateT}
-import cats.kernel.std.tuple._
+import cats.kernel.instances.tuple._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._

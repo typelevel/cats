@@ -108,7 +108,7 @@ class FreeTests extends CatsSuite {
 }
 
 object FreeTests extends FreeTestsInstances {
-  import cats.std.function._
+  import cats.instances.function._
 
   implicit def trampolineArbitrary[A:Arbitrary]: Arbitrary[Trampoline[A]] =
     freeArbitrary[Function0, A]
