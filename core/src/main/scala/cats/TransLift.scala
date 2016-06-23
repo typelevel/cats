@@ -1,6 +1,5 @@
 package cats
 
-
 /**
  * A type class which abstracts over the ability to lift an M[A] into a
  * MonadTransformer

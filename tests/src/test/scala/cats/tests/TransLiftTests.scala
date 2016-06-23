@@ -10,7 +10,7 @@ class TransLiftTests extends CatsSuite {
   case class JustFunctor[A](a: A)
 
   implicit val jfFunctor: Functor[JustFunctor] = new Functor[JustFunctor] {
-    override def map[A,B](fa: JustFunctor[A])(f: A => B): JustFunctor[B] = JustFunctor(f(fa.a))
+    override def map[A, B](fa: JustFunctor[A])(f: A => B): JustFunctor[B] = JustFunctor(f(fa.a))
   }
 
   case class JustAp[A](a: A)

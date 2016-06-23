@@ -28,26 +28,13 @@ import simulacrum.typeclass
     }
 }
 
-object Invariant extends AlgebraInvariantInstances
+object Invariant extends KernelInvariantInstances
 
 /**
- * Invariant instances for types that are housed in Algebra and therefore
- * can't have instances for Cats type classes in their companion objects.
+ * Invariant instances for types that are housed in cats.kernel and therefore
+ * can't have instances for this type class in their companion objects.
  */
-private[functor] sealed trait AlgebraInvariantInstances {
-
-  implicit val catsFunctorInvariantForSemigroup: Invariant[Semigroup] = new Invariant[Semigroup] {
-    def imap[A, B](fa: Semigroup[A])(f: A => B)(g: B => A): Semigroup[B] = new Semigroup[B] {
-
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-    }
-  }
-
-  implicit val catsFunctorInvariantForMonoid: Invariant[Monoid] = new Invariant[Monoid] {
-    def imap[A, B](fa: Monoid[A])(f: A => B)(g: B => A): Monoid[B] = new Monoid[B] {
-      val empty = f(fa.empty)
-
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-    }
-  }
+private[functor] sealed trait KernelInvariantInstances {
+  implicit val catsFunctorInvariantForSemigroup: Invariant[Semigroup] = InvariantMonoidal.catsInvariantMonoidalSemigroup
+  implicit val catsFunctorInvariantForMonoid: Invariant[Monoid] = InvariantMonoidal.catsInvariantMonoidalMonoid
 }
