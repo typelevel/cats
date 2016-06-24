@@ -85,4 +85,10 @@
   </parameters>
   <customMessage><![CDATA[Use 'type class' instead of typeclass (See #441)]]></customMessage>
  </check>
+ <check level="error" class="org.scalastyle.file.RegexChecker" enabled="true" customId="if.paren.spacing">
+  <parameters>
+   <parameter name="regex"><![CDATA[if\(|if\s\s+\(]]></parameter>
+  </parameters>
+  <customMessage><![CDATA[Put exactly a single space between 'if' and the following parenthesis.]]></customMessage>
+ </check>
 </scalastyle>

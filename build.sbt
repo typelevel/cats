@@ -76,7 +76,7 @@ lazy val tagName = Def.setting{
 lazy val commonJsSettings = Seq(
   scalacOptions += {
     val tagOrHash =
-      if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lines_!.head
+      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lines_!.head
       else tagName.value
     val a = (baseDirectory in LocalRootProject).value.toURI.toString
     val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
