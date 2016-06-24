@@ -59,7 +59,7 @@ implicit val fooSemigroup: Semigroup[Foo] = (
 
 Our new Semigroup in action:
 
-```tut
+```tut:book
 Foo("Hello", List(0.0)) |+| Foo("World", Nil) |+| Foo("!", List(1.1, 2.2))
 ```
 
@@ -177,7 +177,7 @@ val fooCodec: CsvCodec[Foo] = (
 
 Finally let's verify out CsvCodec law with an example:
 
-```tut
+```tut:book
 val foo = Foo("foo", BinDec(10, 10), BinDec(20, 20))
 
 val fooCsv = fooCodec.write(foo)
