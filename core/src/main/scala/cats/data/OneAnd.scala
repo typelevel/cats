@@ -27,7 +27,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
    */
   def filter(f: A => Boolean)(implicit F: MonadCombine[F]): F[A] = {
     val rest = F.filter(tail)(f)
-    if(f(head)) F.combineK(F.pure(head), rest) else rest
+    if (f(head)) F.combineK(F.pure(head), rest) else rest
   }
 
   /**
