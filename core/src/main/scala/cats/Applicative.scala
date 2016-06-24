@@ -33,8 +33,8 @@ import simulacrum.typeclass
     ap(pure(f))(fa)
 
   /**
-    * Given `fa` and `n`, apply `fa` `n` times to construct an `F[List[A]]` value.
-    */
+   * Given `fa` and `n`, apply `fa` `n` times to construct an `F[List[A]]` value.
+   */
   def replicateA[A](n: Int, fa: F[A]): F[List[A]] =
     sequence(List.fill(n)(fa))
 

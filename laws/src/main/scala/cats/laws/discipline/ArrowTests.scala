@@ -28,7 +28,7 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with Stron
     EqFADCG: Eq[F[(A, D), (C, G)]],
     EqFAEDE: Eq[F[(A, E), (D, E)]],
     EqFEAED: Eq[F[(E, A), (E, D)]],
-    EqFACDBCD: Eq[F[((A, C), D),(B, (C, D))]]
+    EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]]
   ): RuleSet =
     new RuleSet {
       def name: String = "arrow"

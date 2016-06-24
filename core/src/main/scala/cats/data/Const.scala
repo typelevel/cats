@@ -114,7 +114,7 @@ private[data] sealed abstract class ConstInstances1 {
     def imap[A, B](fa: Const[C, A])(f: A => B)(g: B => A): Const[C, B] =
       fa.retag[B]
 
-    def product[A, B](fa: Const[C, A],fb: Const[C, B]): Const[C, (A, B)] =
+    def product[A, B](fa: Const[C, A], fb: Const[C, B]): Const[C, (A, B)] =
       fa.retag[(A, B)] combine fb.retag[(A, B)]
   }
 

@@ -3,7 +3,7 @@ package tests
 
 import cats.laws.discipline.eq.catsLawsEqForFn1
 import cats.laws.discipline.{InvariantMonoidalTests, SerializableTests}
-import cats.std.all._
+import cats.instances.all._
 import cats.syntax.cartesian._
 import cats.Eq
 import org.scalacheck.{Arbitrary, Gen}

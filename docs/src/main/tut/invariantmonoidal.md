@@ -46,8 +46,7 @@ def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] =
 Given an instance of `InvariantMonoidal` for `Semigroup`, we are able to combine existing `Semigroup` instances to form a new `Semigroup` by using the `Cartesian` syntax:
 
 ```tut:silent
-import cats.std.all._
-import cats.syntax.all._
+import cats.implicits._
 
 // Let's build a Semigroup for this case class
 case class Foo(a: String, c: List[Double])

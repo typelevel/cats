@@ -57,6 +57,6 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =
     new Show[Stream[A]] {
-      def show(fa: Stream[A]): String = if(fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
+      def show(fa: Stream[A]): String = if (fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
     }
 }
