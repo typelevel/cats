@@ -13,6 +13,7 @@ trait AllSyntax
     with ComonadSyntax
     with ComposeSyntax
     with ContravariantSyntax
+    with CoproductSyntax
     with EitherSyntax
     with EqSyntax
     with FlatMapSyntax
@@ -37,7 +38,7 @@ trait AllSyntax
     with StrongSyntax
     with TransLiftSyntax
     with TraverseSyntax
-    with XorSyntax
     with ValidatedSyntax
-    with CoproductSyntax
     with WriterSyntax
+    with XorSyntax
+    with XorTSyntax
