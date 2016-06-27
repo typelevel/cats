@@ -1,7 +1,7 @@
 package cats
 
 import scala.collection.mutable
-import cats.std.long._
+import cats.instances.long._
 import simulacrum.typeclass
 
 /**

@@ -4,25 +4,25 @@ package data
 import cats.functor._
 
 /** Similar to [[cats.data.Prod]], but for nested composition.
-  *
-  * For instance, since both `List` and `Option` have a `Functor`, then so does
-  * `List[Option[_]]`. This is represented by this data type via the instantiation
-  * `Nested[List, Option, ?]`.
-  *
-  * {{{
-  * scala> import cats.Functor
-  * scala> import cats.data.Nested
-  * scala> import cats.implicits._
-  * scala> val listOption: List[Option[Int]] = List(Some(1), None)
-  * scala> val f: Int => String = i => (i * 2).toString
-  * scala> Functor[List].map(listOption)(opt => opt.map(f))
-  * res0: List[Option[String]] = List(Some(2), None)
-  * scala> val nested: Nested[List, Option, Int] = Nested(listOption)
-  * scala> val result: Nested[List, Option, String] = Functor[Nested[List, Option, ?]].map(nested)(f)
-  * scala> result.value
-  * res1: List[Option[String]] = List(Some(2), None)
-  * }}}
-  */
+ *
+ * For instance, since both `List` and `Option` have a `Functor`, then so does
+ * `List[Option[_]]`. This is represented by this data type via the instantiation
+ * `Nested[List, Option, ?]`.
+ *
+ * {{{
+ * scala> import cats.Functor
+ * scala> import cats.data.Nested
+ * scala> import cats.implicits._
+ * scala> val listOption: List[Option[Int]] = List(Some(1), None)
+ * scala> val f: Int => String = i => (i * 2).toString
+ * scala> Functor[List].map(listOption)(opt => opt.map(f))
+ * res0: List[Option[String]] = List(Some(2), None)
+ * scala> val nested: Nested[List, Option, Int] = Nested(listOption)
+ * scala> val result: Nested[List, Option, String] = Functor[Nested[List, Option, ?]].map(nested)(f)
+ * scala> result.value
+ * res1: List[Option[String]] = List(Some(2), None)
+ * }}}
+ */
 final case class Nested[F[_], G[_], A](value: F[G[A]])
 
 object Nested extends NestedInstances

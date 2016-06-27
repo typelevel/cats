@@ -16,7 +16,6 @@ trait InvariantTests[F[_]] extends Laws {
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]]
   ): RuleSet = {
-
     new DefaultRuleSet(
       name = "invariant",
       parent = None,

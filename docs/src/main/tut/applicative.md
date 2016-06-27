@@ -11,7 +11,7 @@ scaladoc: "#cats.Applicative"
 `pure`:
 
 ```scala
-    def pure[A](x: A): F[A]
+def pure[A](x: A): F[A]
 ````
 
 This method takes any value and returns the value in the context of

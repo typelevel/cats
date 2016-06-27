@@ -5,7 +5,6 @@ import cats.data.Xor
  * Symbolic aliases for various types are defined here.
  */
 package object cats {
-  // scalastyle:off number.of.types
 
   type ~>[F[_], G[_]] = arrow.FunctionK[F, G]
 
@@ -65,6 +64,4 @@ package object cats {
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group
-
-  // scalastyle:on number.of.types
 }

@@ -101,7 +101,7 @@ import simulacrum.typeclass
    * res1: cats.data.ValidatedNel[String,List[Int]] = Invalid(OneAnd(a,List(b)))
    * }}}
    */
-  def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative,GA]): U.M[F[U.A]] =
+  def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative, GA]): U.M[F[U.A]] =
     traverse(fga)(U.subst)(U.TC)
 
   def compose[G[_]: Traverse]: Traverse[λ[α => F[G[α]]]] =

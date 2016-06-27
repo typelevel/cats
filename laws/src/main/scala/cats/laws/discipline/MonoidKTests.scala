@@ -11,17 +11,12 @@ trait MonoidKTests[F[_]] extends SemigroupKTests[F] {
   def monoidK[A: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
     EqFA: Eq[F[A]]
-  ): RuleSet = {
-    new RuleSet {
-      val name = "monoidK"
-      val bases = Nil
-      val parents = Seq(semigroupK[A])
-      val props = Seq(
-        "monoidK left identity" -> forAll(laws.monoidKLeftIdentity[A] _),
-        "monoidK right identity" -> forAll(laws.monoidKRightIdentity[A] _)
-      )
-    }
-  }
+  ): RuleSet =
+    new DefaultRuleSet(
+      "monoidK",
+      Some(semigroupK[A]),
+      "monoidK left identity" -> forAll(laws.monoidKLeftIdentity[A] _),
+      "monoidK right identity" -> forAll(laws.monoidKRightIdentity[A] _))
 }
 
 object MonoidKTests {

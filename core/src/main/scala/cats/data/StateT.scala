@@ -118,8 +118,8 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
     transform((s, _) => (s, f(s)))
 
   /**
-    * Get the input state, without modifying the state.
-    */
+   * Get the input state, without modifying the state.
+   */
   def get(implicit F: Monad[F]): StateT[F, S, S] =
     inspect(identity)
 }
