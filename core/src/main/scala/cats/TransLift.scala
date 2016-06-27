@@ -1,14 +1,13 @@
 package cats
 
-
 /**
- * A typeclass which abstracts over the ability to lift an M[A] into a
+ * A type class which abstracts over the ability to lift an M[A] into a
  * MonadTransformer
  */
 trait TransLift[MT[_[_], _]] {
 
   /**
-   * The typeclass which constrains liftT as a function of the type
+   * The type class which constrains liftT as a function of the type
    * constructor it is given. A safe "identity" value for this type
    * if your transformer does not constrain its lifted effects would
    * be `type TC[M[_]] = Trivial`.  A more common constraint might be

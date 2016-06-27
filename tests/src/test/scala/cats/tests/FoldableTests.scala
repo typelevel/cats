@@ -4,7 +4,7 @@ package tests
 import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 
-import cats.std.all._
+import cats.instances.all._
 
 abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite with PropertyChecks {
 

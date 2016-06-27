@@ -4,8 +4,8 @@ package tests
 
 import cats.data.Xor
 import cats.laws.discipline._
-import cats.js.std.Await
-import cats.js.std.future.futureComonad
+import cats.js.instances.Await
+import cats.js.instances.future.futureComonad
 import cats.tests.CatsSuite
 
 import scala.concurrent.Future

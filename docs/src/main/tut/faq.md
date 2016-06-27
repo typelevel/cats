@@ -15,7 +15,7 @@ import cats.data._
 import cats.implicits._
 ```
 
-The `cats._` import brings in quite a few [typeclasses](http://typelevel.org/cats/typeclasses.html) (similar to interfaces) such as [Monad](http://typelevel.org/cats/tut/monad.html), [Semigroup](http://typelevel.org/cats/tut/semigroup.html), and [Foldable](http://typelevel.org/cats/tut/foldable.html). Instead of the entire `cats` package, you can import only the types that you need, for example:
+The `cats._` import brings in quite a few [type classes](http://typelevel.org/cats/typeclasses.html) (similar to interfaces) such as [Monad](http://typelevel.org/cats/tut/monad.html), [Semigroup](http://typelevel.org/cats/tut/semigroup.html), and [Foldable](http://typelevel.org/cats/tut/foldable.html). Instead of the entire `cats` package, you can import only the types that you need, for example:
 
 ```tut:silent
 import cats.Monad
@@ -43,7 +43,7 @@ val o: Option[String] = None
 o.orEmpty
 ```
 
-**Note**: if you import `cats.implicits._` (the preferred method), you should _not_ also use imports like `cats.syntax.option._` or `cats.std.either._`. This can result in ambiguous implicit values that cause bewildering compile errors.
+**Note**: if you import `cats.implicits._` (the preferred method), you should _not_ also use imports like `cats.syntax.option._` or `cats.instances.either._`. This can result in ambiguous implicit values that cause bewildering compile errors.
 
 ## Why can't the compiler find implicit instances for Future?<a id="future-instances" href="#future-instances"></a>
 

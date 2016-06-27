@@ -2,7 +2,7 @@ package cats
 package syntax
 
 trait TraverseSyntax1 {
-  implicit def catsSyntaxUTraverse[FA](fa: FA)(implicit U: Unapply[Traverse,FA]): TraverseOps[U.M, U.A] =
+  implicit def catsSyntaxUTraverse[FA](fa: FA)(implicit U: Unapply[Traverse, FA]): TraverseOps[U.M, U.A] =
     new TraverseOps(U.subst(fa))(U.TC)
 }
 
@@ -81,7 +81,7 @@ final class TraverseOps[F[_], A](fa: F[A])(implicit F: Traverse[F]) {
    * res1: Option[List[Int]] = None
    * }}}
    */
-   def sequence[G[_], B](implicit G: Applicative[G], ev: A =:= G[B]): G[F[B]] =
+  def sequence[G[_], B](implicit G: Applicative[G], ev: A =:= G[B]): G[F[B]] =
     F.sequence(fa.asInstanceOf[F[G[B]]])
 
   /**
@@ -98,7 +98,7 @@ final class TraverseOps[F[_], A](fa: F[A])(implicit F: Traverse[F]) {
    * res1: cats.data.ValidatedNel[String,List[Int]] = Invalid(OneAnd(a,List(b)))
    * }}}
    */
-  def sequenceU(implicit U: Unapply[Applicative,A]): U.M[F[U.A]] =
+  def sequenceU(implicit U: Unapply[Applicative, A]): U.M[F[U.A]] =
     F.sequenceU[A](fa)(U)
 }
 

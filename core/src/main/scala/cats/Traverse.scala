@@ -46,7 +46,7 @@ import simulacrum.typeclass
    * Behaves just like sequence, but uses [[Unapply]] to find the
    * Applicative instance for G.
    */
-  def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative,GA]): U.M[F[U.A]] =
+  def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative, GA]): U.M[F[U.A]] =
     traverse(fga)(U.subst)(U.TC)
 
   def compose[G[_]: Traverse]: Traverse[λ[α => F[G[α]]]] =

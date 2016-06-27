@@ -3,7 +3,7 @@ package data
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
-import cats.std.list._
+import cats.instances.list._
 
 /**
  * A data type which represents a single element (head) and some other
@@ -67,8 +67,8 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     Eval.defer(f(head, F.foldRight(tail, lb)(f)))
 
   /**
-    * Applies f to all the elements of the structure
-    */
+   * Applies f to all the elements of the structure
+   */
   def map[B](f: A => B)(implicit F: Functor[F]): OneAnd[F, B] =
     OneAnd(f(head), F.map(tail)(f))
 
@@ -114,8 +114,8 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
     catsDataSemigroupKForOneAnd[F].algebra
 
   implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
-    new NonEmptyReducible[OneAnd[F,?], F] {
-      override def split[A](fa: OneAnd[F,A]): (A, F[A]) = (fa.head, fa.tail)
+    new NonEmptyReducible[OneAnd[F, ?], F] {
+      override def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
 
       override def size[A](fa: OneAnd[F, A]): Long = 1 + F.size(fa.tail)
     }

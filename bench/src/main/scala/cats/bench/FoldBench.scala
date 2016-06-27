@@ -1,8 +1,8 @@
 package cats.bench
 
 import cats.data.Const
-import cats.std.string._
-import cats.std.list._
+import cats.instances.string._
+import cats.instances.list._
 import cats.{Foldable, Traverse}
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 

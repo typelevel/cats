@@ -7,7 +7,7 @@ import cats.functor.Contravariant
  * [[Prod]] is a product to two independent functor values.
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
-  */
+ */
 final case class Prod[F[_], G[_], A](first: F[A], second: G[A])
 
 object Prod extends ProdInstances

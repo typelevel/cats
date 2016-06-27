@@ -17,7 +17,7 @@ def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
 Every covariant (as well as [contravariant](contravariant.html)) functor gives rise to an invariant
 functor, by ignoring the `g` (or in case of contravariance, `f`) function.
 
-Examples for instances of `Invariant` are `Semigroup` and `Monoid`, in
+Examples for instances of `Invariant` are [`Semigroup`](semigroup.md) and [`Monoid`](monoid.md), in
 the following we will explain why this is the case using `Semigroup`, the
 reasoning for `Monoid` is analogous.
 
@@ -30,7 +30,7 @@ timestamp.  Let's say that we want to create a `Semigroup[Date]`, by
 ### Semigroup does not form a covariant functor
 
 If `Semigroup` had an instance for the standard covariant [`Functor`](functor.html)
-typeclass, we could use `map` to apply a function `longToDate`:
+type class, we could use `map` to apply a function `longToDate`:
 
 ```tut:silent
 import java.util.Date
@@ -85,12 +85,6 @@ import java.util.Date
 // import everything for simplicity:
 import cats._
 import cats.implicits._
-
-// or only import what's actually required:
-// import cats.Semigroup
-// import cats.std.long._
-// import cats.syntax.semigroup._
-// import cats.syntax.invariant._
 
 def longToDate: Long => Date = new Date(_)
 def dateToLong: Date => Long = _.getTime

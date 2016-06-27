@@ -1,7 +1,7 @@
 package cats
 package data
 
-import std.option.{catsStdInstancesForOption => optionInstance}
+import instances.option.{catsStdInstancesForOption => optionInstance}
 
 /**
  * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some
@@ -139,9 +139,9 @@ object OptionT extends OptionTInstances {
   }
 
   /**
-    * Lifts the `F[A]` Functor into an `OptionT[F, A]`.
-    *
-    */
+   * Lifts the `F[A]` Functor into an `OptionT[F, A]`.
+   *
+   */
   def liftF[F[_], A](fa: F[A])(implicit F: Functor[F]): OptionT[F, A] = OptionT(F.map(fa)(Some(_)))
 }
 

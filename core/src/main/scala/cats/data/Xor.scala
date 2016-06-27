@@ -71,13 +71,13 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def toTry(implicit ev: A <:< Throwable): Try[B] = fold(a => Failure(ev(a)), Success(_))
 
-  def toValidated: Validated[A,B] = fold(Validated.Invalid.apply, Validated.Valid.apply)
+  def toValidated: Validated[A, B] = fold(Validated.Invalid.apply, Validated.Valid.apply)
 
   /** Returns a [[ValidatedNel]] representation of this disjunction with the `Left` value
    * as a single element on the `Invalid` side of the [[NonEmptyList]]. */
-  def toValidatedNel[AA >: A]: ValidatedNel[AA,B] = fold(Validated.invalidNel, Validated.valid)
+  def toValidatedNel[AA >: A]: ValidatedNel[AA, B] = fold(Validated.invalidNel, Validated.valid)
 
-  def withValidated[AA,BB](f: Validated[A,B] => Validated[AA,BB]): AA Xor BB =
+  def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB]): AA Xor BB =
     f(toValidated).toXor
 
   def to[F[_], BB >: B](implicit F: Alternative[F]): F[BB] =
@@ -209,9 +209,9 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def catsDataSemigroupKForXor[L]: SemigroupK[Xor[L,?]] =
-    new SemigroupK[Xor[L,?]] {
-      def combineK[A](x: Xor[L,A], y: Xor[L,A]): Xor[L,A] = x match {
+  implicit def catsDataSemigroupKForXor[L]: SemigroupK[Xor[L, ?]] =
+    new SemigroupK[Xor[L, ?]] {
+      def combineK[A](x: Xor[L, A], y: Xor[L, A]): Xor[L, A] = x match {
         case Xor.Left(_) => y
         case Xor.Right(_) => x
       }

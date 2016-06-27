@@ -69,7 +69,7 @@ This release includes some API changes:
 
 And additions:
 
-* [#853](https://github.com/typelevel/cats/pull/853): Adds a new `LiftTrans` typeclass
+* [#853](https://github.com/typelevel/cats/pull/853): Adds a new `LiftTrans` type class
 * [#864](https://github.com/typelevel/cats/pull/864): Add `Bifoldable`
 * [#875](https://github.com/typelevel/cats/pull/875): Add `.get` method to `StateT`
 * [#884](https://github.com/typelevel/cats/pull/884): Add `Applicative` syntax
