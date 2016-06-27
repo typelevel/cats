@@ -3,48 +3,61 @@ package cats
 import simulacrum.typeclass
 
 /**
- * Collect, also known as Witherable.
+ * `TraverseFilter`, also known as `Witherable` represents list-like structures
+ * that can essentially have a [[traverse]] and a [[filter]] applied as a single
+ * combined operation ([[traverseFilter]]).
  *
  * TODO ceedumbs more info
  *
  * Based on Haskell's [[https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html Data.Witherable]]
  */
-@typeclass trait Collect[F[_]] extends Traverse[F] { self =>
+@typeclass trait TraverseFilter[F[_]] extends Traverse[F] { self =>
 
   /**
+   * A combined [[traverse]] and [[filter]]. Filtering is handled via `Option`
+   * instead of `Boolean` such that the output type `B` can be different than
+   * the input type `A`.
+   *
    * Example:
    * {{{
    * scala> import cats.implicits._
    * scala> val m: Map[Int, String] = Map(1 -> "one", 3 -> "three")
    * scala> val l: List[Int] = List(1, 2, 3, 4)
    * scala> def asString(i: Int): Eval[Option[String]] = Now(m.get(i))
-   * scala> val result: Eval[List[String]] = l.mapOptionA(asString)
+   * scala> val result: Eval[List[String]] = l.traverseFilter(asString)
    * scala> result.value
    * res0: List[String] = List(one, three)
    * }}}
    */
-  def mapOptionA[G[_]: Applicative, A, B](fa: F[A])(f: A => G[Option[B]]): G[F[B]]
+  def traverseFilter[G[_]: Applicative, A, B](fa: F[A])(f: A => G[Option[B]]): G[F[B]]
 
   /**
+   * A combined [[map]] and [[filter]]. Filtering is handled via `Option`
+   * instead of `Boolean` such that the output type `B` can be different than
+   * the input type `A`.
+   *
    * Example:
    * {{{
    * scala> import cats.implicits._
    * scala> val m: Map[Int, String] = Map(1 -> "one", 3 -> "three")
    * scala> val l: List[Int] = List(1, 2, 3, 4)
    * scala> def asString(i: Int): Option[String] = m.get(i)
-   * scala> l.mapOption(i => m.get(i))
+   * scala> l.mapFilter(i => m.get(i))
    * res0: List[String] = List(one, three)
    * }}}
    */
-  def mapOption[A, B](fa: F[A])(f: A => Option[B]): F[B] =
-    mapOptionA[Id, A, B](fa)(f)
+  def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
+    traverseFilter[Id, A, B](fa)(f)
 
   /**
+   * Similar to [[mapFilter]] but uses a partial function instead of a function
+   * that returns an `Option`.
+   *
    * Example:
    * {{{
    * scala> import cats.implicits._
    * scala> val l: List[Int] = List(1, 2, 3, 4)
-   * scala> Collect[List].collect(l){
+   * scala> TraverseFilter[List].collect(l){
    *      |   case 1 => "one"
    *      |   case 3 => "three"
    *      | }
@@ -52,9 +65,11 @@ import simulacrum.typeclass
    * }}}
    */
   def collect[A, B](fa: F[A])(f: PartialFunction[A, B]): F[B] =
-    mapOption(fa)(f.lift)
+    mapFilter(fa)(f.lift)
 
   /**
+   * "Flatten" out a structure by collapsing `Option`s.
+   *
    * Example:
    * {{{
    * scala> import cats.implicits._
@@ -63,7 +78,7 @@ import simulacrum.typeclass
    * res0: List[Int] = List(1, 3)
    * }}}
    */
-  def flattenOption[A](fa: F[Option[A]]): F[A] = mapOption(fa)(identity)
+  def flattenOption[A](fa: F[Option[A]]): F[A] = mapFilter(fa)(identity)
 
   /**
    *
@@ -86,11 +101,16 @@ import simulacrum.typeclass
    * }}}
    */
   def filterA[G[_], A](fa: F[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[F[A]] =
-    mapOptionA(fa)(a => G.map(f(a))(if (_) Some(a) else None))
+    traverseFilter(fa)(a => G.map(f(a))(if (_) Some(a) else None))
 
+  /**
+   * Apply a filter to a structure such that the output structure contains all
+   * `A` elements in the input structure that satisfy the predicate `f` but none
+   * that don't.
+   */
   def filter[A](fa: F[A])(f: A => Boolean): F[A] =
     filterA[Id, A](fa)(f)
 
   override def traverse[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[F[B]] =
-    mapOptionA(fa)(a => G.map(f(a))(Some(_)))
+    traverseFilter(fa)(a => G.map(f(a))(Some(_)))
 }

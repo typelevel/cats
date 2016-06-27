@@ -6,8 +6,8 @@ import cats.data.Xor
 
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
-  implicit val catsStdInstancesForOption: Collect[Option] with MonadError[Option, Unit] with MonadCombine[Option] with MonadRec[Option] with CoflatMap[Option] with Alternative[Option] =
-    new Collect[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with MonadRec[Option] with CoflatMap[Option] with Alternative[Option] {
+  implicit val catsStdInstancesForOption: TraverseFilter[Option] with MonadError[Option, Unit] with MonadCombine[Option] with MonadRec[Option] with CoflatMap[Option] with Alternative[Option] =
+    new TraverseFilter[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with MonadRec[Option] with CoflatMap[Option] with Alternative[Option] {
 
       def empty[A]: Option[A] = None
 
@@ -57,7 +57,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       def handleErrorWith[A](fa: Option[A])(f: (Unit) => Option[A]): Option[A] = fa orElse f(())
 
-      def mapOptionA[G[_], A, B](fa: Option[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Option[B]] =
+      def traverseFilter[G[_], A, B](fa: Option[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Option[B]] =
         fa match {
           case None => G.pure(None)
           case Some(a) => f(a)

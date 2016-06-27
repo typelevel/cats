@@ -5,11 +5,10 @@ package discipline
 import org.scalacheck.{Prop, Arbitrary}
 import Prop._
 
+trait TraverseFilterTests[F[_]] extends TraverseTests[F] {
+  def laws: TraverseFilterLaws[F]
 
-trait CollectTests[F[_]] extends TraverseTests[F] {
-  def laws: CollectLaws[F]
-
-  def collect[A: Arbitrary, B: Arbitrary, C: Arbitrary, M: Arbitrary, X[_]: Applicative, Y[_]: Applicative](implicit
+  def traverseFilter[A: Arbitrary, B: Arbitrary, C: Arbitrary, M: Arbitrary, X[_]: Applicative, Y[_]: Applicative](implicit
     ArbFA: Arbitrary[F[A]],
     ArbXB: Arbitrary[X[B]],
     ArbYB: Arbitrary[Y[B]],
@@ -34,14 +33,14 @@ trait CollectTests[F[_]] extends TraverseTests[F] {
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(traverse[A, B, C, M, X, Y])
       def props: Seq[(String, Prop)] = Seq(
-        "mapOptionA identity" -> forAll(laws.mapOptionAIdentity[X, A] _),
-        "mapOptionA composition" -> forAll(laws.mapOptionAComposition[A, B, C, X, Y] _)
+        "traverseFilter identity" -> forAll(laws.traverseFilterIdentity[X, A] _),
+        "traverseFilter composition" -> forAll(laws.traverseFilterComposition[A, B, C, X, Y] _)
       )
     }
   }
 }
 
-object CollectTests {
-  def apply[F[_]: Collect]: CollectTests[F] =
-    new CollectTests[F] { def laws: CollectLaws[F] = CollectLaws[F] }
+object TraverseFilterTests {
+  def apply[F[_]: TraverseFilter]: TraverseFilterTests[F] =
+    new TraverseFilterTests[F] { def laws: TraverseFilterLaws[F] = TraverseFilterLaws[F] }
 }

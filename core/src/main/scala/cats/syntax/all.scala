@@ -10,7 +10,6 @@ trait AllSyntax
     with BitraverseSyntax
     with CartesianSyntax
     with CoflatMapSyntax
-    with CollectSyntax
     with ComonadSyntax
     with ComposeSyntax
     with ContravariantSyntax
@@ -37,6 +36,7 @@ trait AllSyntax
     with SplitSyntax
     with StrongSyntax
     with TransLiftSyntax
+    with TraverseFilterSyntax
     with TraverseSyntax
     with XorSyntax
     with ValidatedSyntax
