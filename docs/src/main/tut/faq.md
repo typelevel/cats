@@ -3,7 +3,18 @@ layout: default
 title:  "FAQ"
 section: "faq"
 ---
+
 # Frequently Asked Questions
+
+## Questions
+
+ * [What imports do I need?](#what-imports)
+ * [Why can't the compiler find implicit instances for Future?](#future-instances)
+ * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
+ * [What does `@typeclass` mean?](#simulacrum)
+ * [What do types like `?` and `λ` mean?](#kind-projector)
+ * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
+ * [How can I help?](#contributing)
 
 ## What imports do I need?<a id="what-imports" href="#what-imports"></a>
 
