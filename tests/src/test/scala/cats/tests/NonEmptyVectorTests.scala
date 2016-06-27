@@ -20,7 +20,7 @@ class NonEmptyVectorTests extends CatsSuite {
   checkAll("NonEmptyVector[Int]", ReducibleTests[NonEmptyVector].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyVector]", SerializableTests.serializable(Reducible[NonEmptyVector]))
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[NonEmptyVector](NonEmptyVector.catsDataFunctorForNonEmptyVector)
+  implicit val iso = CartesianTests.Isomorphisms.invariant[NonEmptyVector]
 
   // Test instances that have more general constraints
   {
@@ -84,46 +84,46 @@ class NonEmptyVectorTests extends CatsSuite {
     nonEmptyVector.show should === ("NonEmptyVector(Vector(Test))")
   }
 
-  test("Creating NonEmptyVector + unwrap is identity") {
+  test("Creating NonEmptyVector + toVector is identity") {
     forAll { (i: Int, tail: Vector[Int]) =>
       val vector = i +: tail
       val nonEmptyVector = NonEmptyVector(i, tail)
-      vector should === (nonEmptyVector.unwrap)
+      vector should === (nonEmptyVector.toVector)
     }
   }
 
   test("NonEmptyVector#filter is consistent with NonEmptyVector#filter") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
-      val vector = nonEmptyVector.unwrap
+      val vector = nonEmptyVector.toVector
       nonEmptyVector.filter(p) should === (vector.filter(p))
     }
   }
 
   test("NonEmptyVector#find is consistent with NonEmptyVector#find") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
-      val vector = nonEmptyVector.unwrap
+      val vector = nonEmptyVector.toVector
       nonEmptyVector.find(p) should === (vector.find(p))
     }
   }
 
   test("NonEmptyVector#exists is consistent with NonEmptyVector#exists") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
-      val vector = nonEmptyVector.unwrap
+      val vector = nonEmptyVector.toVector
       nonEmptyVector.exists(p) should === (vector.exists(p))
     }
   }
 
   test("NonEmptyVector#forall is consistent with NonEmptyVector#forall") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
-      val vector = nonEmptyVector.unwrap
+      val vector = nonEmptyVector.toVector
       nonEmptyVector.forall(p) should === (vector.forall(p))
     }
   }
 
   test("NonEmptyVector#map is consistent with NonEmptyVector#map") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => String) =>
-      val vector = nonEmptyVector.unwrap
-      nonEmptyVector.map(p).unwrap should === (vector.map(p))
+      val vector = nonEmptyVector.toVector
+      nonEmptyVector.map(p).toVector should === (vector.map(p))
     }
   }
 
@@ -166,6 +166,16 @@ class NonEmptyVectorTests extends CatsSuite {
         opt.map(s => g(i, Now(s)).value)
       }
       nonEmptyVector.reduceRightToOption(f)(g).value should === (expected)
+    }
+  }
+
+  test("fromVector returns None when the input vector is empty") {
+    NonEmptyVector.fromVector(Vector.empty[Int]) should === (Option.empty[NonEmptyVector[Int]])
+  }
+
+  test("fromVectorUnsafe throws an exception when the input vector is empty") {
+    val _ = intercept[IllegalArgumentException] {
+      NonEmptyVector.fromVectorUnsafe(Vector.empty[Int])
     }
   }
 }
