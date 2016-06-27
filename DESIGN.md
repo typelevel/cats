@@ -32,13 +32,16 @@ Cats will be split into modules, both to keep the size of the
 artifacts down and also to avoid unnecessarily tight coupling between
 type classes and data types.
 
-Initially Cats will support the following modules:
+Cats provides the following modules:
 
- * `macros`: Macro definitions needed for `core` and other projects.
  * `core`: Definitions for widely-used type classes and data types.
- * `laws`: The encoded laws for type classes, exported to assist third-party testing.
- * `cats-free`: Free structures such as the free monad, and supporting type classes.
+ * `laws`: The encoded laws for type classes defined in `core`, exported to assist third-party testing.
+ * `kernel`: Definitions for the basic algebraic type classes 
+ * `kernel-laws`: The encoded laws for type classes defined in `kernel`, exported to assist third-party testing.
+ * `free`: Free structures such as the free monad, and supporting type classes.
+ * `macros`: Macro definitions needed for `core` and other projects.
  * `tests`: Verifies the laws, and runs any other tests. Not published.
+ * `bench`: Benchmarking suites. Not published. 
 
 As the type class families grow, it's possible that additional modules
 will be added as well. Modules which depend on other libraries
