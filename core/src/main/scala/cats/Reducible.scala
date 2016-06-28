@@ -112,6 +112,12 @@ import simulacrum.typeclass
       val F = self
       val G = Reducible[G]
     }
+
+  def minimum[A](fa: F[A])(implicit A: Order[A]): A =
+    reduceLeft(fa)(A.min)
+
+  def maximum[A](fa: F[A])(implicit A: Order[A]): A =
+    reduceLeft(fa)(A.max)
 }
 
 /**

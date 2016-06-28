@@ -58,6 +58,90 @@ import simulacrum.typeclass
     }
 
   /**
+   * Reduce the elements of this structure down to a single value by applying
+   * the provided aggregation function in a left-associative manner.
+   *
+   * @return `None` if the structure is empty, otherwise the result of combining
+   * the cumulative left-associative result of the `f` operation over all of the
+   * elements.
+   *
+   * @see [[reduceRightOption]] for a right-associative alternative.
+   *
+   * @see [[Reducible#reduceLeft]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val l = List(6, 3, 2)
+   * This is equivalent to (6 - 3) - 2
+   * scala> Foldable[List].reduceLeftOption(l)(_ - _)
+   * res0: Option[Int] = Some(1)
+   *
+   * scala> Foldable[List].reduceLeftOption(List.empty[Int])(_ - _)
+   * res1: Option[Int] = None
+   * }}}
+   */
+  def reduceLeftOption[A](fa: F[A])(f: (A, A) => A): Option[A] =
+    reduceLeftToOption(fa)(identity)(f)
+
+  /**
+   * Reduce the elements of this structure down to a single value by applying
+   * the provided aggregation function in a right-associative manner.
+   *
+   * @return `None` if the structure is empty, otherwise the result of combining
+   * the cumulative right-associative result of the `f` operation over the
+   * `A` elements.
+   *
+   * @see [[reduceLeftOption]] for a left-associative alternative
+   *
+   * @see [[Reducible#reduceRight]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val l = List(6, 3, 2)
+   * This is eqivalent to 6 - (3 - 2)
+   * scala> Foldable[List].reduceRightOption(l)((current, rest) => rest.map(current - _)).value
+   * res0: Option[Int] = Some(5)
+   *
+   * scala> Foldable[List].reduceRightOption(List.empty[Int])((current, rest) => rest.map(current - _)).value
+   * res1: Option[Int] = None
+   * }}}
+   */
+  def reduceRightOption[A](fa: F[A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] =
+    reduceRightToOption(fa)(identity)(f)
+
+  /**
+   * Find the minimum `A` item in this structure according to the `Order[A]`.
+   *
+   * @return `None` if the structure is empty, otherwise the minimum element
+   * wrapped in a `Some`.
+   *
+   * @see [[Reducible#minimum]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[maximumOption]] for maximum instead of minimum.
+   */
+  def minimumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+    reduceLeftOption(fa)(A.min)
+
+  /**
+   * Find the maximum `A` item in this structure according to the `Order[A]`.
+   *
+   * @return `None` if the structure is empty, otherwise the maximum element
+   * wrapped in a `Some`.
+   *
+   * @see [[Reducible#maximum]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[minimumOption]] for minimum instead of maximum.
+   */
+  def maximumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+    reduceLeftOption(fa)(A.max)
+
+  /**
    * The size of this Foldable.
    *
    * This is overriden in structures that have more efficient size implementations
