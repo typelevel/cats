@@ -5,6 +5,7 @@
 [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
 [![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/org.typelevel/cats_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/org.typelevel/cats_2.11)
+[![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.8.svg)](http://scala-js.org)
 
 ### Overview
 
@@ -16,7 +17,7 @@ The name is a playful shortening of the word *category*.
 
 ### Getting Started
 
-Cats is currently available for Scala 2.10 and 2.11.
+Cats is currently available for Scala 2.10 and 2.11, and [Scala.js](http://www.scala-js.org/).
 
 To get started with SBT, simply add the following to your `build.sbt`
 file:
