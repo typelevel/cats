@@ -15,6 +15,13 @@ The name is a playful shortening of the word *category*.
 
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
+#### Why?
+
+Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
+standard library. Cats augments the standard library with tools that further enable functional programming such as
+`Validated`, `Monad`, and `Traverse`. A broader goal of Cats is to provide a foundation for an
+[ecosystem of pure, typeful libraries](http://typelevel.org/projects/).
+
 ### Getting Started
 
 Cats is currently available for Scala 2.10 and 2.11, and [Scala.js](http://www.scala-js.org/).
