@@ -4,7 +4,7 @@ package data
 import scala.annotation.tailrec
 import scala.collection.immutable.VectorBuilder
 import scala.util.Try
-import cats.std.vector._
+import cats.instances.vector._
 
 /**
  * A data type which represents a non empty Vector.
@@ -41,9 +41,19 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
   def concat(other: NonEmptyVector[A]): NonEmptyVector[A] = NonEmptyVector(toVector ++ other.toVector)
 
   /**
+    * Alias for concat
+    */
+  def ++(other: NonEmptyVector[A]): NonEmptyVector[A] = concat(other)
+
+  /**
    * Append another Vector to this
    */
   def concat(other: Vector[A]): NonEmptyVector[A] = NonEmptyVector(toVector ++ other)
+
+  /**
+    * Alias for concat
+    */
+  def ++(other: Vector[A]): NonEmptyVector[A] = concat(other)
 
   /**
    * find the first element matching the predicate, if one exists
@@ -201,8 +211,12 @@ object NonEmptyVector extends NonEmptyVectorInstances {
   def apply[A](head: A, tail: Vector[A]): NonEmptyVector[A] =
     NonEmptyVector(head +: tail)
 
-  def apply[A](head: A, tail: A*): NonEmptyVector[A] =
-    NonEmptyVector(head +: tail.toVector)
+  def apply[A](head: A, tail: A*): NonEmptyVector[A] = {
+    val buf = Vector.newBuilder[A]
+    buf += head
+    tail.foreach(buf += _)
+    NonEmptyVector(buf.result)
+  }
 
   def fromVector[A](vector: Vector[A]): Option[NonEmptyVector[A]] =
     vector.headOption.map(apply(_, vector.tail))
