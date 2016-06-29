@@ -4,7 +4,7 @@ package tests
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests}
+import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests, MonadRecTests}
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyVectorTests extends CatsSuite {
@@ -61,7 +61,11 @@ class NonEmptyVectorTests extends CatsSuite {
     checkAll("NonEmptyVector[Int]", ComonadTests[NonEmptyVector].comonad[Int, Int, Int])
     checkAll("Comonad[NonEmptyVector]", SerializableTests.serializable(Comonad[NonEmptyVector]))
   }
- 
+
+  {
+    checkAll("NonEmptyVector[Int]", MonadRecTests[NonEmptyVector].monadRec[Int, Int, Int])
+    checkAll("MonadRec[NonEmptyVector]", SerializableTests.serializable(MonadRec[NonEmptyVector]))
+  }
 
   test("size is consistent with toList.size") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>

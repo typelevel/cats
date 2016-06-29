@@ -94,8 +94,7 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
     * Left-associative reduce using the Semigroup of A
     */
   def reduce(implicit S: Semigroup[A]): A =
-    reduceLeft(S.combine)
-
+    S.combineAllOption(tail).foldLeft(head)(S.combine)
 
   /**
    * Typesafe equality operator.
@@ -121,9 +120,9 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
 private[data] sealed trait NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector] with Reducible[NonEmptyVector]
-      with Monad[NonEmptyVector] with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] =
+      with Monad[NonEmptyVector] with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with MonadRec[NonEmptyVector] =
     new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector] with Monad[NonEmptyVector]
-        with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] {
+        with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with MonadRec[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
         a concat b
@@ -167,6 +166,21 @@ private[data] sealed trait NonEmptyVectorInstances {
 
       override def foldRight[A, B](fa: NonEmptyVector[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         fa.foldRight(lb)(f)
+
+      def tailRecM[A, B](a: A)(f: A => NonEmptyVector[A Xor B]): NonEmptyVector[B] = {
+        val buf = new VectorBuilder[B]
+        @tailrec def go(v: NonEmptyVector[A Xor B]): Unit = v.head match {
+            case Xor.Right(b) =>
+            buf += b
+            NonEmptyVector.fromVector(v.tail) match {
+              case Some(t) => go(t)
+              case None => ()
+            }
+          case Xor.Left(a) => go(f(a).concat(v.tail))
+          }
+        go(f(a))
+        NonEmptyVector(buf.result())
+      }
     }
 
   implicit def catsDataEqForNonEmptyVector[A](implicit A: Eq[A]): Eq[NonEmptyVector[A]] =
