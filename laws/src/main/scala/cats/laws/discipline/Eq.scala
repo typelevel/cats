@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import catalysts.Platform
-import cats.std.string._
+import cats.instances.string._
 import org.scalacheck.Arbitrary
 
 object eq {

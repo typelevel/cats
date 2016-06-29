@@ -66,6 +66,11 @@ the new version's tags.
 (In the future we may want to create branches for major versions,
 e.g. `v1.x`. For now we don't have these.)
 
+The release will take a few hours to sync to
+[Maven Central](http://search.maven.org/). It's usually better to hold
+off announcing the release until this sync has happened. (Before the
+sync, users may not be able to resolve the new version.)
+
 ### Post-release
 
 After the release occurs, you will need to update the

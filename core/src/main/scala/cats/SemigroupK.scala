@@ -25,7 +25,7 @@ import simulacrum.typeclass
   /**
    * Combine two F[A] values.
    */
-  @simulacrum.op("<+>", alias=true)
+  @simulacrum.op("<+>", alias = true)
   def combineK[A](x: F[A], y: F[A]): F[A]
 
   /**

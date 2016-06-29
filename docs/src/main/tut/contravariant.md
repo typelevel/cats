@@ -20,7 +20,7 @@ but with the `f` transformation reversed.
 Generally speaking, if you have some context `F[A]` for type `A`,
 and you can get an `A` value out of a `B` value — `Contravariant` allows you to get the `F[B]` context for `B`.
 
-Examples of `Contravariant` instances are [`Show`](show.html) and `scala.math.Ordering` (along with `algebra.Order`).
+Examples of `Contravariant` instances are [`Show`](show.html) and `scala.math.Ordering` (along with `cats.kernel.Order`).
 
 ## Contravariant instance for Show.
 
@@ -51,7 +51,7 @@ Salary(Money(1000)).show
 
 `Show` example is trivial and quite far-fetched, let's see how `Contravariant` can help with orderings.
 
-`scala.math.Ordering` typeclass defines comparison operations, e.g. `compare`: 
+`scala.math.Ordering` type class defines comparison operations, e.g. `compare`:
 
 ```tut:book
 Ordering.Int.compare(2, 1)

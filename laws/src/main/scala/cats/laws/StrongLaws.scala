@@ -4,7 +4,7 @@ package laws
 import cats.functor.Strong
 import cats.syntax.profunctor._
 import cats.syntax.strong._
-import cats.std.function._
+import cats.instances.function._
 
 /**
  * Laws that must be obeyed by any `cats.functor.Strong`.

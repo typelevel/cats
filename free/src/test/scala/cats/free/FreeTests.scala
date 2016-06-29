@@ -53,7 +53,7 @@ class FreeTests extends CatsSuite {
   test("tailRecM is stack safe") {
     val n = 50000
     val fa = MonadRec[Free[Option, ?]].tailRecM(0)(i =>
-      Free.pure[Option, Int Xor Int](if(i < n) Xor.Left(i+1) else Xor.Right(i)))
+      Free.pure[Option, Int Xor Int](if (i < n) Xor.Left(i+1) else Xor.Right(i)))
     fa should === (Free.pure[Option, Int](n))
   }
 
@@ -108,7 +108,7 @@ class FreeTests extends CatsSuite {
 }
 
 object FreeTests extends FreeTestsInstances {
-  import cats.std.function._
+  import cats.instances.function._
 
   implicit def trampolineArbitrary[A:Arbitrary]: Arbitrary[Trampoline[A]] =
     freeArbitrary[Function0, A]
@@ -123,21 +123,21 @@ sealed trait FreeTestsInstances {
   }
 
   private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {
-    val noGosub = Gen.oneOf(
+    val noFlatMapped = Gen.oneOf(
       A.arbitrary.map(Free.pure[F, A]),
       F.arbitrary.map(Free.liftF[F, A]))
 
     val nextDepth = Gen.chooseNum(1, maxDepth - 1)
 
-    def withGosub = for {
+    def withFlatMapped = for {
       fDepth <- nextDepth
       freeDepth <- nextDepth
       f <- arbFunction1[A, Free[F, A]](Arbitrary(freeGen[F, A](fDepth))).arbitrary
       freeFA <- freeGen[F, A](freeDepth)
     } yield freeFA.flatMap(f)
 
-    if (maxDepth <= 1) noGosub
-    else Gen.oneOf(noGosub, withGosub)
+    if (maxDepth <= 1) noFlatMapped
+    else Gen.oneOf(noFlatMapped, withFlatMapped)
   }
 
   implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =

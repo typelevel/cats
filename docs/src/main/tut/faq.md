@@ -3,7 +3,18 @@ layout: default
 title:  "FAQ"
 section: "faq"
 ---
+
 # Frequently Asked Questions
+
+## Questions
+
+ * [What imports do I need?](#what-imports)
+ * [Why can't the compiler find implicit instances for Future?](#future-instances)
+ * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
+ * [What does `@typeclass` mean?](#simulacrum)
+ * [What do types like `?` and `λ` mean?](#kind-projector)
+ * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
+ * [How can I help?](#contributing)
 
 ## What imports do I need?<a id="what-imports" href="#what-imports"></a>
 
@@ -15,7 +26,7 @@ import cats.data._
 import cats.implicits._
 ```
 
-The `cats._` import brings in quite a few [typeclasses](http://typelevel.org/cats/typeclasses.html) (similar to interfaces) such as [Monad](http://typelevel.org/cats/tut/monad.html), [Semigroup](http://typelevel.org/cats/tut/semigroup.html), and [Foldable](http://typelevel.org/cats/tut/foldable.html). Instead of the entire `cats` package, you can import only the types that you need, for example:
+The `cats._` import brings in quite a few [type classes](http://typelevel.org/cats/typeclasses.html) (similar to interfaces) such as [Monad](http://typelevel.org/cats/tut/monad.html), [Semigroup](http://typelevel.org/cats/tut/semigroup.html), and [Foldable](http://typelevel.org/cats/tut/foldable.html). Instead of the entire `cats` package, you can import only the types that you need, for example:
 
 ```tut:silent
 import cats.Monad
@@ -43,7 +54,7 @@ val o: Option[String] = None
 o.orEmpty
 ```
 
-**Note**: if you import `cats.implicits._` (the preferred method), you should _not_ also use imports like `cats.syntax.option._` or `cats.std.either._`. This can result in ambiguous implicit values that cause bewildering compile errors.
+**Note**: if you import `cats.implicits._` (the preferred method), you should _not_ also use imports like `cats.syntax.option._` or `cats.instances.either._`. This can result in ambiguous implicit values that cause bewildering compile errors.
 
 ## Why can't the compiler find implicit instances for Future?<a id="future-instances" href="#future-instances"></a>
 

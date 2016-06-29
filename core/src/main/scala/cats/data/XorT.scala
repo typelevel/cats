@@ -208,7 +208,7 @@ trait XorTFunctions {
   final def fromEither[F[_]]: FromEitherPartiallyApplied[F] = new FromEitherPartiallyApplied
 
   final class FromEitherPartiallyApplied[F[_]] private[XorTFunctions] {
-    def apply[E, A](eit: Either[E,A])(implicit F: Applicative[F]): XorT[F, E, A] =
+    def apply[E, A](eit: Either[E, A])(implicit F: Applicative[F]): XorT[F, E, A] =
       XorT(F.pure(Xor.fromEither(eit)))
   }
 }
@@ -245,9 +245,12 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
     new TransLift[XorT[?[_], E, ?]] {
       type TC[M[_]] = Functor[M]
 
-      def liftT[M[_]: Functor, A](ma: M[A]): XorT[M,E,A] =
+      def liftT[M[_]: Functor, A](ma: M[A]): XorT[M, E, A] =
         XorT(Functor[M].map(ma)(Xor.right))
     }
+
+  implicit def catsMonoidForXorT[F[_], L, A](implicit F: Monoid[F[L Xor A]]): Monoid[XorT[F, L, A]] =
+    new XorTMonoid[F, L, A] { implicit val F0 = F }
 
 }
 
@@ -258,7 +261,10 @@ private[data] abstract class XorTInstances1 extends XorTInstances2 {
     implicit val L0 = L
     new XorTMonadFilter[F, L] { implicit val F = F0; implicit val L = L0 }
   }
-  */
+   */
+
+  implicit def catsSemigroupForXorT[F[_], L, A](implicit F: Semigroup[F[L Xor A]]): Semigroup[XorT[F, L, A]] =
+    new XorTSemigroup[F, L, A] { implicit val F0 = F }
 
   implicit def catsDataFoldableForXorT[F[_], L](implicit F: Foldable[F]): Foldable[XorT[F, L, ?]] =
     new XorTFoldable[F, L] {
@@ -282,19 +288,11 @@ private[data] abstract class XorTInstances2 extends XorTInstances3 {
 }
 
 private[data] abstract class XorTInstances3 extends XorTInstances4 {
-  implicit def catsDataMonadErrorForXorT[F[_], L](implicit F: Monad[F]): MonadError[XorT[F, L, ?], L] = {
-    implicit val F0 = F
+  implicit def catsDataMonadErrorForXorT[F[_], L](implicit F0: Monad[F]): MonadError[XorT[F, L, ?], L] =
     new XorTMonadError[F, L] { implicit val F = F0 }
-  }
 
-  implicit def catsDataSemigroupKForXorT[F[_], L](implicit F: Monad[F]): SemigroupK[XorT[F, L, ?]] =
-    new SemigroupK[XorT[F,L,?]] {
-      def combineK[A](x: XorT[F,L,A], y: XorT[F, L, A]): XorT[F, L, A] =
-        XorT(F.flatMap(x.value) {
-          case l @ Xor.Left(_) => y.value
-          case r @ Xor.Right(_) => F.pure(r)
-        })
-  }
+  implicit def catsDataSemigroupKForXorT[F[_], L](implicit F0: Monad[F]): SemigroupK[XorT[F, L, ?]] =
+    new XorTSemigroupK[F, L] { implicit val F = F0 }
 
   implicit def catsDataEqForXorT[F[_], L, R](implicit F: Eq[F[L Xor R]]): Eq[XorT[F, L, R]] =
     new XorTEq[F, L, R] {
@@ -303,10 +301,28 @@ private[data] abstract class XorTInstances3 extends XorTInstances4 {
 }
 
 private[data] abstract class XorTInstances4 {
-  implicit def catsDataFunctorForXorT[F[_], L](implicit F: Functor[F]): Functor[XorT[F, L, ?]] = {
-    implicit val F0 = F
+  implicit def catsDataFunctorForXorT[F[_], L](implicit F0: Functor[F]): Functor[XorT[F, L, ?]] =
     new XorTFunctor[F, L] { implicit val F = F0 }
-  }
+}
+
+private[data] trait XorTSemigroup[F[_], L, A] extends Semigroup[XorT[F, L, A]] {
+  implicit val F0: Semigroup[F[L Xor A]]
+  def combine(x: XorT[F, L , A], y: XorT[F, L , A]): XorT[F, L , A] =
+    XorT(F0.combine(x.value, y.value))
+}
+
+private[data] trait XorTMonoid[F[_], L, A] extends Monoid[XorT[F, L, A]] with XorTSemigroup[F, L, A] {
+  implicit val F0: Monoid[F[L Xor A]]
+  def empty: XorT[F, L, A] = XorT(F0.empty)
+}
+
+private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
+  implicit val F: Monad[F]
+  def combineK[A](x: XorT[F, L, A], y: XorT[F, L, A]): XorT[F, L, A] =
+    XorT(F.flatMap(x.value) {
+      case l @ Xor.Left(_) => y.value
+      case r @ Xor.Right(_) => F.pure(r)
+    })
 }
 
 private[data] trait XorTFunctor[F[_], L] extends Functor[XorT[F, L, ?]] {
@@ -316,7 +332,7 @@ private[data] trait XorTFunctor[F[_], L] extends Functor[XorT[F, L, ?]] {
 
 private[data] trait XorTMonad[F[_], L] extends Monad[XorT[F, L, ?]] with XorTFunctor[F, L] {
   implicit val F: Monad[F]
-  def pure[A](a: A): XorT[F, L, A] = XorT.pure[F, L, A](a)
+  def pure[A](a: A): XorT[F, L, A] = XorT(F.pure(Xor.right(a)))
   def flatMap[A, B](fa: XorT[F, L, A])(f: A => XorT[F, L, B]): XorT[F, L, B] = fa flatMap f
 }
 

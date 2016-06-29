@@ -3,7 +3,7 @@ package tests
 
 import catalysts.Platform
 
-import cats.std.AllInstances
+import cats.instances.AllInstances
 import cats.syntax.{AllSyntax, EqOps}
 
 import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}

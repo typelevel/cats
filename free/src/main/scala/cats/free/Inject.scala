@@ -5,10 +5,10 @@ import cats.data.Coproduct
 
 
 /**
-  * Inject type class as described in "Data types a la carte" (Swierstra 2008).
-  *
-  * @see [[http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf]]
-  */
+ * Inject type class as described in "Data types a la carte" (Swierstra 2008).
+ *
+ * @see [[http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf]]
+ */
 sealed abstract class Inject[F[_], G[_]] {
   def inj[A](fa: F[A]): G[A]
 
