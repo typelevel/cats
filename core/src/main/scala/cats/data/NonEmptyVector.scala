@@ -189,7 +189,7 @@ private[data] sealed trait NonEmptyVectorInstances {
           case Xor.Left(a) => go(f(a).concat(v.tail))
           }
         go(f(a))
-        NonEmptyVector(buf.result())
+        NonEmptyVector.fromVectorUnsafe(buf.result())
       }
     }
 
