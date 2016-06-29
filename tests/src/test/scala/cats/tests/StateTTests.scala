@@ -29,6 +29,22 @@ class StateTTests extends CatsSuite {
     }
   }
 
+  test("State.inspect and StateT.inspect are consistent") {
+    forAll { (s: String, f: String => Int) =>
+      val state: State[String, Int] = State.inspect(f)
+      val stateT: State[String, Int] = StateT.inspect(f.andThen(Eval.now))
+      state.run(s) should === (stateT.run(s))
+    }
+  }
+
+  test("State.pure and StateT.lift are consistent") {
+    forAll { (s: String, i: Int) =>
+      val state: State[String, Int] = State.pure(i)
+      val stateT: State[String, Int] = StateT.lift(Eval.now(i))
+      state.run(s) should === (stateT.run(s))
+    }
+  }
+
   test("Cartesian syntax is usable on State") {
     val x = add1 *> add1
     x.runS(0).value should === (2)
