@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-trait TraverseSyntax1 {
+private[syntax] trait TraverseSyntax1 {
   implicit def catsSyntaxUTraverse[FA](fa: FA)(implicit U: Unapply[Traverse, FA]): TraverseOps[U.M, U.A] =
     new TraverseOps(U.subst(fa))(U.TC)
 }
