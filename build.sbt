@@ -73,11 +73,13 @@ lazy val commonJsSettings = Seq(
   // Only used for scala.js for now
   botBuild := sys.props.getOrElse("CATS_BOT_BUILD", default="false") == "true",
   // batch mode decreases the amount of memory needed to compile scala.js code
-  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value)
+  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value),
+  mimaReportBinaryIssues := {}
 )
 
 lazy val commonJvmSettings = Seq(
-  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
+  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF"),
+  mimaPreviousArtifacts := Set("org.typelevel" %% moduleName.value % "0.6.0")
 // currently sbt-doctest doesn't work in JS builds, so this has to go in the
 // JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
 ) ++ catsDoctestSettings
@@ -127,7 +129,6 @@ lazy val docSettings = Seq(
 lazy val docs = project
   .settings(moduleName := "cats-docs")
   .settings(catsSettings)
-  .settings(noPublishSettings)
   .settings(unidocSettings)
   .settings(site.settings)
   .settings(ghpages.settings)
@@ -135,6 +136,7 @@ lazy val docs = project
   .settings(tutSettings)
   .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
+  .settings(noPublishSettings)
   .dependsOn(coreJVM, freeJVM)
 
 lazy val cats = project.in(file("."))
@@ -239,10 +241,10 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
-  .settings(noPublishSettings:_*)
   .settings(testingDependencies: _*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
+  .settings(noPublishSettings:_*)
 
 lazy val testsJVM = tests.jvm
 lazy val testsJS = tests.js
@@ -251,8 +253,8 @@ lazy val testsJS = tests.js
 lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
-  .settings(noPublishSettings)
   .settings(commonJvmSettings)
+  .settings(noPublishSettings)
   .enablePlugins(JmhPlugin)
 
 // cats-js is JS-only
@@ -333,7 +335,7 @@ lazy val publishSettings = Seq(
 // These aliases serialise the build for the benefit of Travis-CI.
 addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;kernelLawsJVM/compile;lawsJVM/compile;freeJVM/compile;kernelLawsJVM/test;coreJVM/test;testsJVM/test;freeJVM/test;bench/test")
 
-addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
+addCommandAlias("validateJVM", ";scalastyle;buildJVM;mimaReportBinaryIssues;makeSite")
 
 addCommandAlias("validateJS", ";macrosJS/compile;kernelJS/compile;coreJS/compile;kernelLawsJS/compile;lawsJS/compile;kernelLawsJS/test;testsJS/test;js/test")
 
@@ -350,7 +352,8 @@ addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVe
 lazy val noPublishSettings = Seq(
   publish := (),
   publishLocal := (),
-  publishArtifact := false
+  publishArtifact := false,
+  mimaReportBinaryIssues := {}
 )
 
 lazy val crossVersionSharedSources: Seq[Setting[_]] =
