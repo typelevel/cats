@@ -139,7 +139,7 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
     }
 }
 
-trait OneAndLowPriority0 {
+private[data] trait OneAndLowPriority0 {
   implicit val catsDataComonadForOneAnd: Comonad[OneAnd[List, ?]] =
     new Comonad[OneAnd[List, ?]] {
       def coflatMap[A, B](fa: OneAnd[List, A])(f: OneAnd[List, A] => B): OneAnd[List, B] = {
@@ -159,7 +159,7 @@ trait OneAndLowPriority0 {
     }
 }
 
-trait OneAndLowPriority1 extends OneAndLowPriority0 {
+private[data] trait OneAndLowPriority1 extends OneAndLowPriority0 {
   implicit def catsDataFunctorForOneAnd[F[_]](implicit F: Functor[F]): Functor[OneAnd[F, ?]] =
     new Functor[OneAnd[F, ?]] {
       def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
@@ -168,7 +168,7 @@ trait OneAndLowPriority1 extends OneAndLowPriority0 {
 
 }
 
-trait OneAndLowPriority2 extends OneAndLowPriority1 {
+private[data] trait OneAndLowPriority2 extends OneAndLowPriority1 {
   implicit def catsDataTraverseForOneAnd[F[_]](implicit F: Traverse[F]): Traverse[OneAnd[F, ?]] =
     new Traverse[OneAnd[F, ?]] {
       def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {

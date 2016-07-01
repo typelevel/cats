@@ -3,8 +3,7 @@ package syntax
 
 import cats.functor.Contravariant
 
-
-trait ContravariantSyntax1 {
+private[syntax] trait ContravariantSyntax1 {
   implicit def catsSyntaxUContravariant[FA](fa: FA)(implicit U: Unapply[Contravariant, FA]): Contravariant.Ops[U.M, U.A] =
     new Contravariant.Ops[U.M, U.A] {
       val self = U.subst(fa)
