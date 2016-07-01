@@ -3,7 +3,18 @@ layout: default
 title:  "FAQ"
 section: "faq"
 ---
+
 # Frequently Asked Questions
+
+## Questions
+
+ * [What imports do I need?](#what-imports)
+ * [Why can't the compiler find implicit instances for Future?](#future-instances)
+ * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
+ * [What does `@typeclass` mean?](#simulacrum)
+ * [What do types like `?` and `λ` mean?](#kind-projector)
+ * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
+ * [How can I help?](#contributing)
 
 ## What imports do I need?<a id="what-imports" href="#what-imports"></a>
 
@@ -15,35 +26,7 @@ import cats.data._
 import cats.implicits._
 ```
 
-The `cats._` import brings in quite a few [type classes](http://typelevel.org/cats/typeclasses.html) (similar to interfaces) such as [Monad](http://typelevel.org/cats/tut/monad.html), [Semigroup](http://typelevel.org/cats/tut/semigroup.html), and [Foldable](http://typelevel.org/cats/tut/foldable.html). Instead of the entire `cats` package, you can import only the types that you need, for example:
-
-```tut:silent
-import cats.Monad
-import cats.Semigroup
-import cats.Foldable
-```
-
-The `cats.data._`, import brings in data structures such as [Xor](http://typelevel.org/cats/tut/xor.html), [Validated](http://typelevel.org/cats/tut/validated.html), and [State](http://typelevel.org/cats/tut/state.html). Instead of the entire `cats.data` package, you can import only the types that you need, for example:
-
-```tut:silent
-import cats.data.Xor
-import cats.data.Validated
-import cats.data.State
-```
-
-The `cats.implicits._` import does a couple of things. Firstly, it brings in implicit type class instances for standard library types - so after this import you will have `Monad[List]` and `Semigroup[Int]` instances in implicit scope. Secondly, it adds syntax enrichment onto certain types to provide some handy methods, for example:
-
-```tut:book
-// cats adds a toXor method to the standard library's Either
-val e: Either[String, Int] = Right(3)
-e.toXor
-
-// cats adds an orEmpty method to the standard library's Option
-val o: Option[String] = None
-o.orEmpty
-```
-
-**Note**: if you import `cats.implicits._` (the preferred method), you should _not_ also use imports like `cats.syntax.option._` or `cats.instances.either._`. This can result in ambiguous implicit values that cause bewildering compile errors.
+This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](imports.html).
 
 ## Why can't the compiler find implicit instances for Future?<a id="future-instances" href="#future-instances"></a>
 

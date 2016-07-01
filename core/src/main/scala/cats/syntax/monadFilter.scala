@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-trait MonadFilterSyntax1 {
+private[syntax] trait MonadFilterSyntax1 {
   implicit def catsSyntaxUMonadFilter[FA](fa: FA)(implicit U: Unapply[MonadFilter, FA]): MonadFilter.Ops[U.M, U.A] =
     new MonadFilter.Ops[U.M, U.A] {
       val self = U.subst(fa)

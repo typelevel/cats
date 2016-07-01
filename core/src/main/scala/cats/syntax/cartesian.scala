@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-trait CartesianSyntax1 {
+private[syntax] trait CartesianSyntax1 {
   implicit def catsSyntaxUCartesian[FA](fa: FA)(implicit U: Unapply[Cartesian, FA]): CartesianOps[U.M, U.A] =
     new CartesianOps[U.M, U.A] {
       val self = U.subst(fa)
