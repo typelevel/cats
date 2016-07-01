@@ -104,6 +104,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
     F.compose(optionInstance).foldRight(value, lb)(f)
+
+  def toNested: Nested[F, Option, A] = Nested(value)
 }
 
 object OptionT extends OptionTInstances {

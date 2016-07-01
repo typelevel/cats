@@ -174,6 +174,8 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
     XorT(F.map(value)(xor => f(xor.toValidated).toXor))
 
   def show(implicit show: Show[F[A Xor B]]): String = show.show(value)
+
+  def toNested: Nested[F, A Xor ?, B] = Nested[F, A Xor ?, B](value)
 }
 
 object XorT extends XorTInstances with XorTFunctions
