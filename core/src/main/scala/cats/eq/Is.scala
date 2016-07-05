@@ -1,5 +1,7 @@
 package cats.eq
 
+import cats.Id
+
 /**
   * A value of `A Is B` witnesses that the types `A` and `B` are the same.
   * You can use this value to coerce `A` into `B` and therefore `A Is B` is
@@ -30,6 +32,13 @@ abstract class Is[A, B] {
 
   final def lift[F[_]]: F[A] Is F[B] =
     subst[λ[α => F[A] Is F[α]]](Is.refl)
+
+  /**
+    * Substitution on identity brings about a direct coercion function of the
+    * same form that `=:=` provides.
+    */
+  def coerce: A => B =
+    subst[Id]
 }
 
 object Is {
@@ -43,13 +52,6 @@ object Is {
   implicit def refl[A]: A Is A = new Is[A, A] {
     def subst[F[_]](fa: F[A]): F[A] = fa
   }
-
-  /**
-    * In order to furnish `A Is B` values as their coercions we provide an
-    * implicit conversion to the coercion function.
-    */
-  implicit def witness[A, B](t: A Is B): A => B =
-    t.subst[A => ?](identity)
 
   /**
     * A value `A Is B` is always sufficient to produce a similar `Predef.=:=`
