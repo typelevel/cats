@@ -61,3 +61,4 @@ object Is {
     t.subst[A =:= ?](implicitly[A =:= A])
 
 }
+
