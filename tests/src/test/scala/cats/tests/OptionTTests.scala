@@ -289,6 +289,15 @@ class OptionTTests extends CatsSuite {
     }
   }
 
+  test("semiflatMap consistent with value.flatMap+f+pure") {
+    forAll { (o: OptionT[List, Int], f: Int => List[String]) =>
+      o.semiflatMap(f) should === (OptionT(o.value.flatMap {
+        case None => List(None)
+        case Some(a) => f(a).map(Some(_))
+      }))
+    }
+  }
+
   test("subflatMap consistent with value.map+flatMap") {
     forAll { (o: OptionT[List, Int], f: Int => Option[String]) =>
       o.subflatMap(f) should === (OptionT(o.value.map(_.flatMap(f))))

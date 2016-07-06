@@ -88,6 +88,9 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def map[D](f: B => D)(implicit F: Functor[F]): XorT[F, A, D] = bimap(identity, f)
 
+  def semiflatMap[D](f: B => F[D])(implicit F: Monad[F]): XorT[F, A, D] =
+    flatMap(b => XorT.right[F, A, D](f(b)))
+
   def leftMap[C](f: A => C)(implicit F: Functor[F]): XorT[F, C, B] = bimap(f, identity)
 
   def compare(that: XorT[F, A, B])(implicit o: Order[F[A Xor B]]): Int =

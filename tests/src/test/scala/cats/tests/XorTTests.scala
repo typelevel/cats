@@ -197,6 +197,15 @@ class XorTTests extends CatsSuite {
     }
   }
 
+  test("semiflatMap consistent with value.flatMap+f+pure") {
+    forAll { (xort: XorT[List, String, Int], f: Int => List[String]) =>
+      xort.semiflatMap(f) should === (XorT(xort.value.flatMap {
+        case l @ Xor.Left(_) => List(l)
+        case Xor.Right(b) => f(b).map(Xor.right)
+      }))
+    }
+  }
+
   test("subflatMap consistent with value.map+flatMap") {
     forAll { (xort: XorT[List, String, Int], f: Int => String Xor Double) =>
       xort.subflatMap(f) should === (XorT(xort.value.map(_.flatMap(f))))
