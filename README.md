@@ -100,6 +100,7 @@ The current maintainers (people who can merge pull requests) are:
 
  * [ceedubs](https://github.com/ceedubs) Cody Allen
  * [rossabaker](https://github.com/rossabaker) Ross Baker
+ * [johnynek](https://github.com/johnynek) P. Oscar Boykin
  * [travisbrown](https://github.com/travisbrown) Travis Brown
  * [adelbertc](https://github.com/adelbertc) Adelbert Chang
  * [tpolecat](https://github.com/tpolecat) Rob Norris
