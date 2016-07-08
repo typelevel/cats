@@ -32,7 +32,31 @@ class StateTTests extends CatsSuite {
   test("State.inspect and StateT.inspect are consistent") {
     forAll { (s: String, f: String => Int) =>
       val state: State[String, Int] = State.inspect(f)
-      val stateT: State[String, Int] = StateT.inspect(f.andThen(Eval.now))
+      val stateT: State[String, Int] = StateT.inspect(f)
+      state.run(s) should === (stateT.run(s))
+    }
+  }
+
+  test("State.inspect and StateT.inspectF are consistent") {
+    forAll { (s: String, f: String => Int) =>
+      val state: State[String, Int] = State.inspect(f)
+      val stateT: State[String, Int] = StateT.inspectF(f.andThen(Eval.now))
+      state.run(s) should === (stateT.run(s))
+    }
+  }
+
+  test("State.modify and StateT.modify are consistent") {
+    forAll { (s: String, f: String => String) =>
+      val state: State[String, Unit] = State.modify(f)
+      val stateT: State[String, Unit] = StateT.modify(f)
+      state.run(s) should === (stateT.run(s))
+    }
+  }
+
+  test("State.modify and StateT.modifyF are consistent") {
+    forAll { (s: String, f: String => String) =>
+      val state: State[String, Unit] = State.modify(f)
+      val stateT: State[String, Unit] = StateT.modifyF(f.andThen(Eval.now))
       state.run(s) should === (stateT.run(s))
     }
   }
