@@ -4,7 +4,7 @@ package tests
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests, MonadRecTests}
+import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, TraverseTests, ReducibleTests, MonadRecTests}
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyVectorTests extends CatsSuite {
@@ -20,52 +20,35 @@ class NonEmptyVectorTests extends CatsSuite {
   checkAll("NonEmptyVector[Int]", ReducibleTests[NonEmptyVector].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyVector]", SerializableTests.serializable(Reducible[NonEmptyVector]))
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[NonEmptyVector]
 
   // Test instances that have more general constraints
-  {
-    checkAll("NonEmptyVector[Int]", CartesianTests[NonEmptyVector].cartesian[Int, Int, Int])
-    checkAll("Cartesian[NonEmptyVector]", SerializableTests.serializable(Cartesian[NonEmptyVector]))
-  }
 
-  {
-    checkAll("NonEmptyVector[Int]", FunctorTests[NonEmptyVector].functor[Int, Int, Int])
-    checkAll("Functor[NonEmptyVector]", SerializableTests.serializable(Functor[NonEmptyVector]))
-  }
+  checkAll("NonEmptyVector[Int]", SemigroupKTests[NonEmptyVector].semigroupK[Int])
+  checkAll("NonEmptyVector[Int]", GroupLaws[NonEmptyVector[Int]].semigroup)
+  checkAll("SemigroupK[NonEmptyVector]", SerializableTests.serializable(SemigroupK[NonEmptyVector]))
+  checkAll("Semigroup[NonEmptyVector[Int]]", SerializableTests.serializable(Semigroup[NonEmptyVector[Int]]))
 
-  {
-    checkAll("NonEmptyVector[Int]", SemigroupKTests[NonEmptyVector].semigroupK[Int])
-    checkAll("NonEmptyVector[Int]", GroupLaws[NonEmptyVector[Int]].semigroup)
-    checkAll("SemigroupK[NonEmptyVector]", SerializableTests.serializable(SemigroupK[NonEmptyVector]))
-    checkAll("Semigroup[NonEmptyVector[Int]]", SerializableTests.serializable(Semigroup[NonEmptyVector[Int]]))
-  }
 
-  {
-    checkAll("NonEmptyVector[Int]", FoldableTests[NonEmptyVector].foldable[Int, Int])
-    checkAll("Foldable[NonEmptyVector]", SerializableTests.serializable(Foldable[NonEmptyVector]))
-  }
 
-  {
-    // Test functor and subclasses don't have implicit conflicts
-    implicitly[Functor[NonEmptyVector]]
-    implicitly[Monad[NonEmptyVector]]
-    implicitly[Comonad[NonEmptyVector]]
-  }
+  checkAll("NonEmptyVector[Int]", FoldableTests[NonEmptyVector].foldable[Int, Int])
+  checkAll("Foldable[NonEmptyVector]", SerializableTests.serializable(Foldable[NonEmptyVector]))
 
-  {
-    checkAll("NonEmptyVector[Int]", MonadTests[NonEmptyVector].monad[Int, Int, Int])
-    checkAll("Monad[NonEmptyVector]", SerializableTests.serializable(Monad[NonEmptyVector]))
-  }
 
-  {
-    checkAll("NonEmptyVector[Int]", ComonadTests[NonEmptyVector].comonad[Int, Int, Int])
-    checkAll("Comonad[NonEmptyVector]", SerializableTests.serializable(Comonad[NonEmptyVector]))
-  }
 
-  {
-    checkAll("NonEmptyVector[Int]", MonadRecTests[NonEmptyVector].monadRec[Int, Int, Int])
-    checkAll("MonadRec[NonEmptyVector]", SerializableTests.serializable(MonadRec[NonEmptyVector]))
-  }
+  // Test functor and subclasses don't have implicit conflicts
+  implicitly[Functor[NonEmptyVector]]
+  implicitly[Monad[NonEmptyVector]]
+  implicitly[Comonad[NonEmptyVector]]
+
+
+
+  checkAll("NonEmptyVector[Int]", ComonadTests[NonEmptyVector].comonad[Int, Int, Int])
+  checkAll("Comonad[NonEmptyVector]", SerializableTests.serializable(Comonad[NonEmptyVector]))
+
+
+  checkAll("NonEmptyVector[Int]", MonadRecTests[NonEmptyVector].monadRec[Int, Int, Int])
+  checkAll("MonadRec[NonEmptyVector]", SerializableTests.serializable(MonadRec[NonEmptyVector]))
+
 
   test("size is consistent with toList.size") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
@@ -96,35 +79,35 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
-  test("NonEmptyVector#filter is consistent with NonEmptyVector#filter") {
+  test("NonEmptyVector#filter is consistent with Vector#filter") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
       val vector = nonEmptyVector.toVector
       nonEmptyVector.filter(p) should === (vector.filter(p))
     }
   }
 
-  test("NonEmptyVector#find is consistent with NonEmptyVector#find") {
+  test("NonEmptyVector#find is consistent with Vector#find") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
       val vector = nonEmptyVector.toVector
       nonEmptyVector.find(p) should === (vector.find(p))
     }
   }
 
-  test("NonEmptyVector#exists is consistent with NonEmptyVector#exists") {
+  test("NonEmptyVector#exists is consistent with Vector#exists") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
       val vector = nonEmptyVector.toVector
       nonEmptyVector.exists(p) should === (vector.exists(p))
     }
   }
 
-  test("NonEmptyVector#forall is consistent with NonEmptyVector#forall") {
+  test("NonEmptyVector#forall is consistent with Vector#forall") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
       val vector = nonEmptyVector.toVector
       nonEmptyVector.forall(p) should === (vector.forall(p))
     }
   }
 
-  test("NonEmptyVector#map is consistent with NonEmptyVector#map") {
+  test("NonEmptyVector#map is consistent with Vector#map") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => String) =>
       val vector = nonEmptyVector.toVector
       nonEmptyVector.map(p).toVector should === (vector.map(p))
@@ -180,6 +163,56 @@ class NonEmptyVectorTests extends CatsSuite {
   test("fromVectorUnsafe throws an exception when the input vector is empty") {
     val _ = intercept[IllegalArgumentException] {
       NonEmptyVector.fromVectorUnsafe(Vector.empty[Int])
+    }
+  }
+
+  test("++ NonEmptyVector is consistent with concat") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], other: NonEmptyVector[Int]) =>
+      nonEmptyVector ++ other should === (nonEmptyVector.concat(other))
+    }
+  }
+
+  test("++ Vector is consistent with concat") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], vector: Vector[Int]) =>
+      nonEmptyVector ++ vector should === (nonEmptyVector.concat(vector))
+    }
+  }
+
+  test("NonEmptyVector#apply on varargs is consistent with NonEmptyVector#apply on Vector") {
+    forAll { (head: Int, tail: Vector[Int]) =>
+      NonEmptyVector(head, tail:_*) should === (NonEmptyVector(head, tail))
+    }
+  }
+
+  test("NonEmptyVector#get returns a None when the element does not exist") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
+      val size = nonEmptyVector.toVector.size
+      nonEmptyVector.get(size) should === (None)
+    }
+  }
+
+  test("NonEmptyVector#getUnsafe throws an exception when the element does not exist") {
+    forAll{ (nonEmptyVector: NonEmptyVector[Int]) =>
+      val size = nonEmptyVector.toVector.size
+      val _ = intercept[IndexOutOfBoundsException] {
+        nonEmptyVector.getUnsafe(size)
+      }
+    }
+  }
+
+  test("NonEmptyVector#updated returns a None when the element does not exist") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], element: Int) =>
+      val size = nonEmptyVector.toVector.size
+      nonEmptyVector.updated(size, element) should === (None)
+    }
+  }
+
+  test("NonEmptyVector#updatedUnsafe throws an exception when the element does not exist") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], element: Int) =>
+      val size = nonEmptyVector.toVector.size
+      val _ = intercept[IndexOutOfBoundsException] {
+        nonEmptyVector.updatedUnsafe(size, element)
+      }
     }
   }
 }

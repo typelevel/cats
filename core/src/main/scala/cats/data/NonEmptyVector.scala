@@ -3,7 +3,6 @@ package data
 
 import scala.annotation.tailrec
 import scala.collection.immutable.VectorBuilder
-import scala.util.Try
 import cats.instances.vector._
 
 /**
@@ -13,14 +12,14 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
 
   /** Gets the element at the index, if it exists */
   def get(i: Int): Option[A] =
-    Try(getUnsafe(i)).toOption
+    toVector.lift(i)
 
   /** Gets the element at the index, or throws an exception if none exists */
   def getUnsafe(i: Int): A = toVector(i)
 
   /** Updates the element at the index, if it exists */
   def updated(i: Int, a: A): Option[NonEmptyVector[A]] =
-    Try(updatedUnsafe(i, a)).toOption
+    if (toVector.isDefinedAt(i)) Some(NonEmptyVector(toVector.updated(i, a))) else None
 
   /** Updates the element at the index, or throws an exeption if none exists */
   def updatedUnsafe(i: Int, a: A):
@@ -101,10 +100,10 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
     tail.foldLeft(head)(f)
 
   /**
-    * Left-associative reduce using the Semigroup of A
+    * Reduce using the Semigroup of A
     */
   def reduce(implicit S: Semigroup[A]): A =
-    S.combineAllOption(tail).foldLeft(head)(S.combine)
+    S.combineAllOption(toVector).get
 
   /**
    * Typesafe equality operator.
@@ -130,8 +129,8 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
 private[data] sealed trait NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector] with Reducible[NonEmptyVector]
-      with Monad[NonEmptyVector] with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with MonadRec[NonEmptyVector] =
-    new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector] with Monad[NonEmptyVector]
+      with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with MonadRec[NonEmptyVector] =
+    new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector]
         with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with MonadRec[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
@@ -219,12 +218,9 @@ object NonEmptyVector extends NonEmptyVectorInstances {
   }
 
   def fromVector[A](vector: Vector[A]): Option[NonEmptyVector[A]] =
-    vector.headOption.map(apply(_, vector.tail))
+    if (vector.isEmpty) None else Some(new NonEmptyVector(vector))
 
   def fromVectorUnsafe[A](vector: Vector[A]): NonEmptyVector[A] =
-    fromVector(vector) match {
-      case Some(v) => v
-      case None =>
-        throw new IllegalArgumentException("Cannot create NonEmptyVector from empty vector")
-    }
+    if (vector.nonEmpty) NonEmptyVector(vector)
+    else throw new IllegalArgumentException("Cannot create NonEmptyVector from empty vector")
 }
