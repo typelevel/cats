@@ -42,7 +42,7 @@ Given just `User => Future[Profile]`, what should we do if we want to fetch prof
 We could try familiar combinators like `map`.
 
 ```tut:book
-def profilesFor(users: List[User]) = users.map(userInfo)
+def profilesFor(users: List[User]): List[Future[Profile]] = users.map(userInfo)
 ```
 
 Note the return type `List[Future[Profile]]`. This makes sense given the type signatures, but seems unwieldy.
