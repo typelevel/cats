@@ -105,6 +105,25 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
     F.compose(optionInstance).foldRight(value, lb)(f)
 
+  /**
+   * Transform this `OptionT[F, A]` into a `[[Nested]][F, Option, A]`.
+   *
+   * An example where `toNested` can be used, is to get the `Apply.ap` function with the
+   * behavior from the composed `Apply` instances from `F` and `Option`, which is
+   * inconsistent with the behavior of the `ap` from `Monad` of `OptionT`.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.OptionT
+   * scala> val ff: OptionT[List, Int => String] =
+   *      |   OptionT(List(Option(_.toString), None))
+   * scala> val fa: OptionT[List, Int] = OptionT(List(Option(1), Option(2)))
+   * scala> ff.ap(fa)
+   * res0: OptionT[List,String] = OptionT(List(Some(1), Some(2), None))
+   * scala> OptionT(ff.toNested.ap(fa.toNested).value)
+   * res1: OptionT[List,String] = OptionT(List(Some(1), Some(2), None, None))
+   * }}}
+   */
   def toNested: Nested[F, Option, A] = Nested(value)
 }
 
@@ -122,8 +141,8 @@ object OptionT extends OptionTInstances {
   /**
    * Transforms an `Option` into an `OptionT`, lifted into the specified `Applicative`.
    *
-   * Note: The return type is a FromOptionPartiallyApplied[F], which has an apply method
-   * on it, allowing you to call fromOption like this:
+   * Note: The return type is a `FromOptionPartiallyApplied[F]`, which has an apply method
+   * on it, allowing you to call `fromOption` like this:
    * {{{
    * scala> import cats.implicits._
    * scala> val o: Option[Int] = Some(2)
@@ -142,7 +161,6 @@ object OptionT extends OptionTInstances {
 
   /**
    * Lifts the `F[A]` Functor into an `OptionT[F, A]`.
-   *
    */
   def liftF[F[_], A](fa: F[A])(implicit F: Functor[F]): OptionT[F, A] = OptionT(F.map(fa)(Some(_)))
 }
