@@ -67,7 +67,7 @@ object Is {
    * Implementation note: all values of `refl` return the same (private)
    * instance at whatever type is appropriate to save on allocations.
    */
-  implicit def refl[A]: A Is A =
+  @inline implicit def refl[A]: A Is A =
     reflAny.asInstanceOf[A Is A]
 
   /**
@@ -76,7 +76,7 @@ object Is {
    * =:= B` implies `A Is B` it is not the case that you can create evidence
    * of `A Is B` except via a coercion. Use responsibly.
    */
-  def unsafeFromPredef[A, B](eq: A =:= B): A Is B =
+  @inline def unsafeFromPredef[A, B](eq: A =:= B): A Is B =
     reflAny.asInstanceOf[A Is B]
 
 }
