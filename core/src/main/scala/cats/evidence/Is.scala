@@ -32,6 +32,13 @@ abstract class Is[A, B] extends Serializable {
    */
   @inline final def coerce(a: A): B =
     subst[Id](a)
+
+  /**
+    * A value `A Is B` is always sufficient to produce a similar `Predef.=:=`
+    * value.
+    */
+  @inline final def predefEq: A =:= B =
+    subst[A =:= ?](implicitly[A =:= A])
 }
 
 object Is {
@@ -55,13 +62,6 @@ object Is {
    */
   implicit def refl[A]: A Is A =
     reflAny.asInstanceOf[A Is A]
-
-  /**
-   * A value `A Is B` is always sufficient to produce a similar `Predef.=:=`
-   * value.
-   */
-  implicit def predefEq[A, B](t: A Is B): A =:= B =
-    t.subst[A =:= ?](implicitly[A =:= A])
 
 }
 
