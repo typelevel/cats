@@ -41,7 +41,7 @@ hold true in this case?
 Given just `User => Future[Profile]`, what should we do if we want to fetch profiles for a `List[User]`?
 We could try familiar combinators like `map`.
 
-```tut:book
+```tut:silent
 def profilesFor(users: List[User]): List[Future[Profile]] = users.map(userInfo)
 ```
 
