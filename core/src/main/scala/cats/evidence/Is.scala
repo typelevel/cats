@@ -54,7 +54,7 @@ object Is {
    * instance at whatever type is appropriate to save on allocations.
    */
   implicit def refl[A]: A Is A =
-    reflAny.asInstanceOf
+    reflAny.asInstanceOf[A Is A]
 
   /**
    * A value `A Is B` is always sufficient to produce a similar `Predef.=:=`
