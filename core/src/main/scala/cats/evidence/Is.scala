@@ -11,7 +11,7 @@ import cats.Id
  *
  * `A Is B` is also known as Leibniz equality.
  */
-abstract class Is[A, B] {
+abstract class Is[A, B] extends Serializable {
   def subst[F[_]](fa: F[A]): F[B]
 
   @inline final def andThen[C](next: B Is C): A Is C =
