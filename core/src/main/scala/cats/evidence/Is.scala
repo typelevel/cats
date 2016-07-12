@@ -12,33 +12,40 @@ import cats.Id
  * `A Is B` is also known as Leibniz equality.
  */
 abstract class Is[A, B] extends Serializable {
-  def subst[F[_]](fa: F[A]): F[B]
+
+  /**
+   * To create an instance of `A Is B` you must show that for every choice
+   * of `F[_]` you can convert `F[A]` to `F[B]`. Loosely, this reads as
+   * saying that `B` must have the same effect as `A` in all contexts
+   * therefore allowing type substitution.
+   */
+  def substitute[F[_]](fa: F[A]): F[B]
 
   @inline final def andThen[C](next: B Is C): A Is C =
-    next.subst[A Is ?](this)
+    next.substitute[A Is ?](this)
 
   @inline final def compose[C](prev: C Is A): C Is B =
     prev andThen this
 
   @inline final def from: B Is A =
-    this.subst[? Is A](Is.refl)
+    this.substitute[? Is A](Is.refl)
 
   @inline final def lift[F[_]]: F[A] Is F[B] =
-    subst[λ[α => F[A] Is F[α]]](Is.refl)
+    substitute[λ[α => F[A] Is F[α]]](Is.refl)
 
   /**
    * Substitution on identity brings about a direct coercion function of the
    * same form that `=:=` provides.
    */
   @inline final def coerce(a: A): B =
-    subst[Id](a)
+    substitute[Id](a)
 
   /**
     * A value `A Is B` is always sufficient to produce a similar `Predef.=:=`
     * value.
     */
   @inline final def predefEq: A =:= B =
-    subst[A =:= ?](implicitly[A =:= A])
+    substitute[A =:= ?](implicitly[A =:= A])
 }
 
 object Is {
@@ -48,7 +55,7 @@ object Is {
    * single value.
    */
   private[this] val reflAny = new Is[Any, Any] {
-    def subst[F[_]](fa: F[Any]) = fa
+    def substitute[F[_]](fa: F[Any]) = fa
   }
 
   /**
