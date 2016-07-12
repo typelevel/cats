@@ -1,4 +1,4 @@
-package cats.eq
+package cats.evidence
 
 import cats.Id
 
