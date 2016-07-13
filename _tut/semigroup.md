@@ -31,7 +31,6 @@ First some imports.
 
 ```scala
 import cats._
-import cats.std.all._
 import cats.implicits._
 ```
 
