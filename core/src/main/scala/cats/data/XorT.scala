@@ -157,6 +157,9 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
   def toValidated(implicit F: Functor[F]): F[Validated[A, B]] =
     F.map(value)(_.toValidated)
 
+  def toValidatedNel(implicit F: Functor[F]): F[ValidatedNel[A, B]] =
+    F.map(value)(_.toValidatedNel)
+
   /** Run this value as a `[[Validated]]` against the function and convert it back to an `[[XorT]]`.
    *
    * The [[Applicative]] instance for `XorT` "fails fast" - it is often useful to "momentarily" have
