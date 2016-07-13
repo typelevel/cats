@@ -133,6 +133,21 @@ object StateT extends StateTInstances {
 
   def pure[F[_], S, A](a: A)(implicit F: Applicative[F]): StateT[F, S, A] =
     StateT(s => F.pure((s, a)))
+
+  def lift[F[_], S, A](fa: F[A])(implicit F: Applicative[F]): StateT[F, S, A] =
+    StateT(s => F.map(fa)(a => (s, a)))
+
+  def inspect[F[_], S, A](f: S => A)(implicit F: Applicative[F]): StateT[F, S, A] =
+    StateT(s => F.pure((s, f(s))))
+
+  def inspectF[F[_], S, A](f: S => F[A])(implicit F: Applicative[F]): StateT[F, S, A] =
+    StateT(s => F.map(f(s))(a => (s, a)))
+
+  def modify[F[_], S](f: S => S)(implicit F: Applicative[F]): StateT[F, S, Unit] =
+    StateT(s => F.pure((f(s), ())))
+
+  def modifyF[F[_], S](f: S => F[S])(implicit F: Applicative[F]): StateT[F, S, Unit] =
+    StateT(s => F.map(f(s))(s => (s, ())))
 }
 
 private[data] sealed trait StateTInstances extends StateTInstances1 {
