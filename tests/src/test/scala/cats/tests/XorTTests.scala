@@ -113,6 +113,12 @@ class XorTTests extends CatsSuite {
     }
   }
 
+  test("toValidatedNel") {
+    forAll { (xort: XorT[List, String, Int]) =>
+      xort.toValidatedNel.map(_.toXor.leftMap(_.head)) should === (xort.value)
+    }
+  }
+
   test("withValidated") {
     forAll { (xort: XorT[List, String, Int], f: String => Char, g: Int => Double) =>
       xort.withValidated(_.bimap(f, g)) should === (xort.bimap(f, g))
