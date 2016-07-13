@@ -155,7 +155,7 @@ Corresponding to our bunches of data are bunches of topics, a `List[Topic]` if y
 Since `Reader` has an `Applicative` instance, we can `traverse` over this list with `processTopic`.
 
 ```tut:silent
-def processTopics(topics: List[Topic]) = 
+def processTopics(topics: List[Topic]): Job[List[Result]] = 
   topics.traverse(processTopic)
 ```
 
