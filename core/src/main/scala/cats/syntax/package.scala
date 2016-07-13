@@ -24,6 +24,7 @@ package object syntax {
   object list extends ListSyntax
   object monadCombine extends MonadCombineSyntax
   object monadFilter extends MonadFilterSyntax
+  object monoid extends MonoidSyntax
   object option extends OptionSyntax
   object order extends OrderSyntax
   object partialOrder extends PartialOrderSyntax
