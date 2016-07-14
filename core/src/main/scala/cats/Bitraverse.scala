@@ -1,6 +1,6 @@
 package cats
 
-import cats.functor.{Bifunctor, ComposedBifunctor, DefaultBifunctor}
+import cats.functor.{Bifunctor, ComposedBifunctor}
 
 /**
  *  A type class abstracting over types that give rise to two independent [[cats.Traverse]]s.
@@ -16,27 +16,27 @@ trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] {
   def compose[G[_, _]](implicit ev: Bitraverse[G]): Bitraverse[λ[(α, β) => F[G[α, β], G[α, β]]]]
 }
 
-trait DefaultBitraverse[F[_, _]] extends Bitraverse[F] with DefaultBifoldable[F] with DefaultBifunctor[F] { self =>
-
-  def bisequence[G[_]: Applicative, A, B](fab: F[G[A], G[B]]): G[F[A, B]] =
-    bitraverse(fab)(identity, identity)
-
-  def compose[G[_, _]](implicit ev: Bitraverse[G]): Bitraverse[λ[(α, β) => F[G[α, β], G[α, β]]]] =
-    new ComposedBitraverse[F, G] {
-      val F = self
-      val G = ev
-    }
-
-  override def bimap[A, B, C, D](fab: F[A, B])(f: A => C, g: B => D): F[C, D] =
-    bitraverse[Id, A, B, C, D](fab)(f, g)
-}
-
 object Bitraverse {
   def apply[F[_, _]](implicit F: Bitraverse[F]): Bitraverse[F] = F
+
+  trait Default[F[_, _]] extends Bitraverse[F] with Bifoldable.Default[F] with Bifunctor.Default[F] { self =>
+
+    def bisequence[G[_]: Applicative, A, B](fab: F[G[A], G[B]]): G[F[A, B]] =
+      bitraverse(fab)(identity, identity)
+
+    def compose[G[_, _]](implicit ev: Bitraverse[G]): Bitraverse[λ[(α, β) => F[G[α, β], G[α, β]]]] =
+      new ComposedBitraverse[F, G] {
+        val F = self
+        val G = ev
+      }
+
+    override def bimap[A, B, C, D](fab: F[A, B])(f: A => C, g: B => D): F[C, D] =
+      bitraverse[Id, A, B, C, D](fab)(f, g)
+  }
 }
 
 private[cats] trait ComposedBitraverse[F[_, _], G[_, _]]
-    extends DefaultBitraverse[λ[(α, β) => F[G[α, β], G[α, β]]]]
+    extends Bitraverse.Default[λ[(α, β) => F[G[α, β], G[α, β]]]]
     with    ComposedBifoldable[F, G]
     with    ComposedBifunctor[F, G] {
   def F: Bitraverse[F]

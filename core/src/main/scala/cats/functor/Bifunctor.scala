@@ -27,25 +27,25 @@ trait Bifunctor[F[_, _]] extends Any with Serializable {
   def compose[G[_, _]](implicit G0: Bifunctor[G]): Bifunctor[λ[(α, β) => F[G[α, β], G[α, β]]]]
 }
 
-trait DefaultBifunctor[F[_, _]] extends Bifunctor[F] { self =>
-
-  def leftMap[A, B, C](fab: F[A, B])(f: A => C): F[C, B] = bimap(fab)(f, identity)
-
-  def rightMap[A, B, C](fab: F[A, B])(f: B => C): F[A, C] = bimap(fab)(identity, f)
-
-  def compose[G[_, _]](implicit G0: Bifunctor[G]): Bifunctor[λ[(α, β) => F[G[α, β], G[α, β]]]] =
-    new ComposedBifunctor[F, G] {
-      val F = self
-      val G = G0
-    }
-}
-
 object Bifunctor {
   def apply[F[_, _]](implicit ev: Bifunctor[F]): Bifunctor[F] = ev
+
+  trait Default[F[_, _]] extends Bifunctor[F] { self =>
+
+    def leftMap[A, B, C](fab: F[A, B])(f: A => C): F[C, B] = bimap(fab)(f, identity)
+
+    def rightMap[A, B, C](fab: F[A, B])(f: B => C): F[A, C] = bimap(fab)(identity, f)
+
+    def compose[G[_, _]](implicit G0: Bifunctor[G]): Bifunctor[λ[(α, β) => F[G[α, β], G[α, β]]]] =
+      new ComposedBifunctor[F, G] {
+        val F = self
+        val G = G0
+      }
+  }
 }
 
 private[cats] trait ComposedBifunctor[F[_, _], G[_, _]]
-    extends DefaultBifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {
+    extends Bifunctor.Default[λ[(A, B) => F[G[A, B], G[A, B]]]] {
   def F: Bifunctor[F]
   def G: Bifunctor[G]
 

@@ -259,7 +259,7 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
   }
 
   implicit val catsDataBitraverseForValidated: Bitraverse[Validated] =
-    new DefaultBitraverse[Validated] {
+    new Bitraverse.Default[Validated] {
       def bitraverse[G[_], A, B, C, D](fab: Validated[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Validated[C, D]] =
         fab match {
           case Invalid(a) => G.map(f(a))(Validated.invalid)

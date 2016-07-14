@@ -2,7 +2,7 @@ package cats
 package data
 
 import cats.kernel.instances.tuple._
-import cats.functor.{Bifunctor, Contravariant, DefaultBifunctor}
+import cats.functor.{Bifunctor, Contravariant}
 
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {
   def written(implicit functorF: Functor[F]): F[L] =
@@ -64,7 +64,7 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
     catsDataEqForWriterT[Id, L, V]
 
   implicit def catsDataBifunctorForWriterT[F[_]:Functor]: Bifunctor[WriterT[F, ?, ?]] =
-    new DefaultBifunctor[WriterT[F, ?, ?]] {
+    new Bifunctor.Default[WriterT[F, ?, ?]] {
       def bimap[A, B, C, D](fab: WriterT[F, A, B])(f: A => C, g: B => D): WriterT[F, C, D] =
         fab.bimap(f, g)
     }

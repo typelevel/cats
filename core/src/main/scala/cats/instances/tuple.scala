@@ -5,7 +5,7 @@ trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleIns
 
 sealed trait Tuple2Instances {
   implicit val catsStdBitraverseForTuple2: Bitraverse[Tuple2] =
-    new DefaultBitraverse[Tuple2] {
+    new Bitraverse.Default[Tuple2] {
       def bitraverse[G[_]: Applicative, A, B, C, D](fab: (A, B))(f: A => G[C], g: B => G[D]): G[(C, D)] =
         Applicative[G].tuple2(f(fab._1), g(fab._2))
 
