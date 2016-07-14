@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Bifunctor
+import cats.functor.{Bifunctor, DefaultBifunctor}
 
 /** Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
  *
@@ -146,7 +146,7 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
   }
 
   implicit def catsDataBifunctorForIor: Bifunctor[Ior] =
-    new Bifunctor[Ior] {
+    new DefaultBifunctor[Ior] {
       override def bimap[A, B, C, D](fab: A Ior B)(f: A => C, g: B => D): C Ior D = fab.bimap(f, g)
     }
 }

@@ -5,7 +5,7 @@ package functor
  * A type class of types which give rise to two independent, covariant
  * functors.
  */
-trait Bifunctor[F[_, _]] extends Any with Serializable { self =>
+trait Bifunctor[F[_, _]] extends Any with Serializable {
 
   /**
    * The quintessential method of the Bifunctor trait, it applies a
@@ -13,18 +13,26 @@ trait Bifunctor[F[_, _]] extends Any with Serializable { self =>
    */
   def bimap[A, B, C, D](fab: F[A, B])(f: A => C, g: B => D): F[C, D]
 
-  // derived methods
   /**
    * apply a function to the "left" functor
    */
-  def leftMap[A, B, C](fab: F[A, B])(f: A => C): F[C, B] = bimap(fab)(f, identity)
+  def leftMap[A, B, C](fab: F[A, B])(f: A => C): F[C, B]
 
   /**
    * apply a function ro the "right" functor
    */
-  def rightMap[A, B, C](fab: F[A, B])(f: B => C): F[A, C] = bimap(fab)(identity, f)
+  def rightMap[A, B, C](fab: F[A, B])(f: B => C): F[A, C]
 
   /** The composition of two Bifunctors is itself a Bifunctor */
+  def compose[G[_, _]](implicit G0: Bifunctor[G]): Bifunctor[λ[(α, β) => F[G[α, β], G[α, β]]]]
+}
+
+trait DefaultBifunctor[F[_, _]] extends Bifunctor[F] { self =>
+
+  def leftMap[A, B, C](fab: F[A, B])(f: A => C): F[C, B] = bimap(fab)(f, identity)
+
+  def rightMap[A, B, C](fab: F[A, B])(f: B => C): F[A, C] = bimap(fab)(identity, f)
+
   def compose[G[_, _]](implicit G0: Bifunctor[G]): Bifunctor[λ[(α, β) => F[G[α, β], G[α, β]]]] =
     new ComposedBifunctor[F, G] {
       val F = self
@@ -37,7 +45,7 @@ object Bifunctor {
 }
 
 private[cats] trait ComposedBifunctor[F[_, _], G[_, _]]
-    extends Bifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {
+    extends DefaultBifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {
   def F: Bifunctor[F]
   def G: Bifunctor[G]
 

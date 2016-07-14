@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Bifunctor
+import cats.functor.{Bifunctor, DefaultBifunctor}
 
 /**
  * Transformer for `Xor`, allowing the effect of an arbitrary type constructor `F` to be combined with the
@@ -238,7 +238,7 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
     functor.Contravariant[Show].contramap(sh)(_.value)
 
   implicit def catsDataBifunctorForXorT[F[_]](implicit F: Functor[F]): Bifunctor[XorT[F, ?, ?]] =
-    new Bifunctor[XorT[F, ?, ?]] {
+    new DefaultBifunctor[XorT[F, ?, ?]] {
       override def bimap[A, B, C, D](fab: XorT[F, A, B])(f: A => C, g: B => D): XorT[F, C, D] = fab.bimap(f, g)
     }
 
@@ -401,7 +401,7 @@ private[data] sealed trait XorTTraverse[F[_], L] extends Traverse[XorT[F, L, ?]]
     fa traverse f
 }
 
-private[data] sealed trait XorTBifoldable[F[_]] extends Bifoldable[XorT[F, ?, ?]] {
+private[data] sealed trait XorTBifoldable[F[_]] extends DefaultBifoldable[XorT[F, ?, ?]] {
   implicit def F0: Foldable[F]
 
   def bifoldLeft[A, B, C](fab: XorT[F, A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
@@ -411,7 +411,7 @@ private[data] sealed trait XorTBifoldable[F[_]] extends Bifoldable[XorT[F, ?, ?]
     F0.foldRight(fab.value, c)( (axb, acc) => Bifoldable[Xor].bifoldRight(axb, acc)(f, g))
 }
 
-private[data] sealed trait XorTBitraverse[F[_]] extends Bitraverse[XorT[F, ?, ?]] with XorTBifoldable[F] {
+private[data] sealed trait XorTBitraverse[F[_]] extends DefaultBitraverse[XorT[F, ?, ?]] with XorTBifoldable[F] {
   override implicit def F0: Traverse[F]
 
   override def bitraverse[G[_], A, B, C, D](fab: XorT[F, A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[XorT[F, C, D]] =

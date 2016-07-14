@@ -6,7 +6,7 @@ import cats.data.Xor
 
 trait EitherInstances extends EitherInstances1 {
   implicit val catsStdBitraverseForEither: Bitraverse[Either] =
-    new Bitraverse[Either] {
+    new DefaultBitraverse[Either] {
       def bitraverse[G[_], A, B, C, D](fab: Either[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Either[C, D]] =
         fab match {
           case Left(a) => G.map(f(a))(Left(_))

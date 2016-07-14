@@ -71,7 +71,7 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
   }
 
   implicit val catsDataBifoldableForConst: Bifoldable[Const] =
-    new Bifoldable[Const] {
+    new DefaultBifoldable[Const] {
       def bifoldLeft[A, B, C](fab: Const[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
         f(c, fab.getConst)
 
