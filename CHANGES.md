@@ -1,6 +1,6 @@
 ## Version 0.6.1
 
-> 2016 July 16
+> 2016 July 14
 
 Version 0.6.1 is a patch release compatible with 0.6.0.
 
