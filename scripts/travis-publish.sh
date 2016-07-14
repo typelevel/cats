@@ -29,5 +29,5 @@ sbt_cmd="sbt ++$TRAVIS_SCALA_VERSION"
 
 coverage="$sbt_cmd coverage validateJVM coverageReport && codecov"
 
-run_cmd="$coverage && $sbt_cmd validate"
+run_cmd="$coverage && $sbt_cmd validate $publish_cmd"
 eval $run_cmd
