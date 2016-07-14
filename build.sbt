@@ -63,6 +63,7 @@ lazy val commonSettings = Seq(
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
+  fork in test := true,
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
   // workaround for https://github.com/scalastyle/scalastyle-sbt-plugin/issues/47
@@ -137,6 +138,8 @@ lazy val docSettings = Seq(
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
+  fork in tut := true,
+  fork in (ScalaUnidoc, unidoc) := true,
   siteMappings += file("CONTRIBUTING.md") -> "contributing.md",
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
     "-Xfatal-warnings",
@@ -361,7 +364,7 @@ addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
 addCommandAlias("validateJS", ";macrosJS/compile;kernelJS/compile;coreJS/compile;kernelLawsJS/compile;lawsJS/compile;kernelLawsJS/test;testsJS/test;js/test")
 
-addCommandAlias("validate", ";validateJS;validateJVM")
+addCommandAlias("validate", ";clean;validateJS;validateJVM")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line.
