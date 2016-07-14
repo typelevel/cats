@@ -150,6 +150,9 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJvmSettings)
+  // mima complains about the .catsJVM directory not existing for this module.
+  // It should be fine to not run it on this module since it's just an aggregate.
+  .settings(mimaReportBinaryIssues := {})
   .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM, docs, bench)
   .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM % "test-internal -> test", bench % "compile-internal;test-internal -> test")
 
