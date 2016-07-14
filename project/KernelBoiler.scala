@@ -147,13 +147,13 @@ object KernelBoiler {
         -  implicit def tuple${arity}Order[${`A..N`}](implicit ${constraints("Order")}): Order[${`(A..N)`}] =
         -    new Order[${`(A..N)`}] {
         -      def compare(x: ${`(A..N)`}, y: ${`(A..N)`}): Int =
-        -        ${binMethod("compare").find(_ != 0).getOrElse(0)}
+        -        ${binMethod("compare").mkString("Array(", ", ", ")")}.find(_ != 0).getOrElse(0)
         -    }
         -
         -  implicit def tuple${arity}PartialOrder[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
         -    new PartialOrder[${`(A..N)`}] {
         -      def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
-        -        ${binMethod("partialCompare").find(_ != 0.0).getOrElse(0.0)}
+        -        ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
         -    }
         -
         -  implicit def tuple${arity}Semigroup[${`A..N`}](implicit ${constraints("Semigroup")}): Semigroup[${`(A..N)`}] =
