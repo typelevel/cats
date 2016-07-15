@@ -22,9 +22,8 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
     if (toVector.isDefinedAt(i)) Some(NonEmptyVector(toVector.updated(i, a))) else None
 
   /**
-   * Updates the element at the index, or throws an exception if none exists
-   *
-   * @throws IndexOutOfBoundsException if `i` does not satisfy `0 <= i < length`.
+   * Updates the element at the index, or throws an `IndexOutOfBoundsException`
+   * if none exists (if `i` does not satisfy `0 <= i < length`).
    */
   def updatedUnsafe(i: Int, a: A):
       NonEmptyVector[A] = NonEmptyVector(toVector.updated(i, a))
