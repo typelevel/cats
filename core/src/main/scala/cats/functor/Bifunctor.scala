@@ -54,7 +54,7 @@ object Bifunctor {
 }
 
 private[cats] trait ComposedBifunctor[F[_, _], G[_, _]]
-    extends Bifunctor.Default[λ[(A, B) => F[G[A, B], G[A, B]]]] {
+    extends Bifunctor.Default[λ[(α, β) => F[G[α, β], G[α, β]]]] {
   def F: Bifunctor[F]
   def G: Bifunctor[G]
 
