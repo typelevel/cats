@@ -77,6 +77,14 @@ class WriterTTests extends CatsSuite {
     w2.write("bar") should === (Writer("foobar", 3))
   }
 
+  test("MonadWriter's write is consistent with write") {
+    type Logged[A] = Writer[String, A]
+    val w = MonadWriter[Logged, String]
+    val x = w.write("foo")
+    x should === (Writer.write("foo"))
+    x should === (Writer("foo", ()))
+  }
+
   test("write instantiates a Writer") {
     Writer.write("foo").written should === ("foo")
   }
