@@ -7,14 +7,14 @@ trait MonadWriterLaws[F[_], W] extends MonadLaws[F] {
   def monadWriterWriterPure[A](a: A)(implicit W: Monoid[W]): IsEq[F[A]] =
     F.writer((W.empty, a)) <-> F.pure(a)
 
-  def monadWriterTellFusion(x: W, y: W)(implicit W: Monoid[W]): IsEq[F[Unit]] =
-    F.flatMap(F.tell(x))(_ => F.tell(y)) <-> F.tell(W.combine(x, y))
+  def monadWriterWriteFusion(x: W, y: W)(implicit W: Monoid[W]): IsEq[F[Unit]] =
+    F.flatMap(F.write(x))(_ => F.write(y)) <-> F.write(W.combine(x, y))
 
   def monadWriterListenPure[A](a: A)(implicit W: Monoid[W]): IsEq[F[(W, A)]] =
     F.listen(F.pure(a)) <-> F.pure((W.empty, a))
 
   def monadWriterListenWriter[A](aw: (W, A)): IsEq[F[(W, A)]] =
-    F.listen(F.writer(aw)) <-> F.map(F.tell(aw._1))(_ => aw)
+    F.listen(F.writer(aw)) <-> F.map(F.write(aw._1))(_ => aw)
 }
 
 object MonadWriterLaws {

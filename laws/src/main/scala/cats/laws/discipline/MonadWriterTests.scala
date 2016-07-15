@@ -31,7 +31,7 @@ trait MonadWriterTests[F[_], W] extends MonadTests[F] {
       def parents = Seq(monad[A, B, C])
       def props = Seq(
         "monadWriter writer pure" -> forAll(laws.monadWriterWriterPure[A] _),
-        "monadWriter tell fusion" -> forAll(laws.monadWriterTellFusion _),
+        "monadWriter write fusion" -> forAll(laws.monadWriterWriteFusion _),
         "monadWriter listen pure" -> forAll(laws.monadWriterListenPure[A] _),
         "monadWriter listen writer" -> forAll(laws.monadWriterListenWriter[A] _)
       )
