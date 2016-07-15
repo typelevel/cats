@@ -28,8 +28,6 @@ fi
 sbt_cmd="sbt ++$TRAVIS_SCALA_VERSION"
 
 coverage="$sbt_cmd coverage validateJVM coverageReport && codecov"
-scala_js="$sbt_cmd macrosJS/compile coreJS/compile lawsJS/compile && $sbt_cmd kernelLawsJS/test && $sbt_cmd testsJS/test && $sbt_cmd js/test"
-scala_jvm="$sbt_cmd validateJVM"
 
-run_cmd="$coverage && $scala_js && $scala_jvm $publish_cmd"
+run_cmd="$coverage && $sbt_cmd validate && $sbt_cmd $publish_cmd"
 eval $run_cmd
