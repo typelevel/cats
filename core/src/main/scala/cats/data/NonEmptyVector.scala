@@ -15,14 +15,14 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
     toVector.lift(i)
 
   /** Gets the element at the index, or throws an exception if none exists */
-  def getUnsafe(i: Int): A = toVector(i)
+  def unsafeGet(i: Int): A = toVector(i)
 
   /** Updates the element at the index, if it exists */
   def updated(i: Int, a: A): Option[NonEmptyVector[A]] =
     if (toVector.isDefinedAt(i)) Some(NonEmptyVector(toVector.updated(i, a))) else None
 
   /** Updates the element at the index, or throws an exeption if none exists */
-  def updatedUnsafe(i: Int, a: A):
+  def unsafeUpdated(i: Int, a: A):
       NonEmptyVector[A] = NonEmptyVector(toVector.updated(i, a))
 
   def head: A = toVector.head
@@ -188,7 +188,7 @@ private[data] sealed trait NonEmptyVectorInstances {
           case Xor.Left(a) => go(f(a).concat(v.tail))
           }
         go(f(a))
-        NonEmptyVector.fromVectorUnsafe(buf.result())
+        NonEmptyVector.unsafeFromVector(buf.result())
       }
     }
 
@@ -220,7 +220,7 @@ object NonEmptyVector extends NonEmptyVectorInstances {
   def fromVector[A](vector: Vector[A]): Option[NonEmptyVector[A]] =
     if (vector.isEmpty) None else Some(new NonEmptyVector(vector))
 
-  def fromVectorUnsafe[A](vector: Vector[A]): NonEmptyVector[A] =
+  def unsafeFromVector[A](vector: Vector[A]): NonEmptyVector[A] =
     if (vector.nonEmpty) NonEmptyVector(vector)
     else throw new IllegalArgumentException("Cannot create NonEmptyVector from empty vector")
 }
