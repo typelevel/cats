@@ -160,9 +160,9 @@ class NonEmptyVectorTests extends CatsSuite {
     NonEmptyVector.fromVector(Vector.empty[Int]) should === (Option.empty[NonEmptyVector[Int]])
   }
 
-  test("fromVectorUnsafe throws an exception when the input vector is empty") {
+  test("unsafeFromVector throws an exception when the input vector is empty") {
     val _ = intercept[IllegalArgumentException] {
-      NonEmptyVector.fromVectorUnsafe(Vector.empty[Int])
+      NonEmptyVector.unsafeFromVector(Vector.empty[Int])
     }
   }
 
@@ -191,11 +191,11 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
-  test("NonEmptyVector#getUnsafe throws an exception when the element does not exist") {
+  test("NonEmptyVector#unsafeGet throws an exception when the element does not exist") {
     forAll{ (nonEmptyVector: NonEmptyVector[Int]) =>
       val size = nonEmptyVector.toVector.size
       val _ = intercept[IndexOutOfBoundsException] {
-        nonEmptyVector.getUnsafe(size)
+        nonEmptyVector.unsafeGet(size)
       }
     }
   }
@@ -207,11 +207,11 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
-  test("NonEmptyVector#updatedUnsafe throws an exception when the element does not exist") {
+  test("NonEmptyVector#unsafeUpdated throws an exception when the element does not exist") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], element: Int) =>
       val size = nonEmptyVector.toVector.size
       val _ = intercept[IndexOutOfBoundsException] {
-        nonEmptyVector.updatedUnsafe(size, element)
+        nonEmptyVector.unsafeUpdated(size, element)
       }
     }
   }
