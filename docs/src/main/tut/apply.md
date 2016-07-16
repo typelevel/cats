@@ -11,7 +11,7 @@ scaladoc: "#cats.Apply"
 function) with a new function `ap`. The `ap` function is similar to `map`
 in that we are transforming a value in a context (a context being the `F` in `F[A]`;
 a context can be `Option`, `List` or `Future` for example).
-However, the difference between `ap` and `map` is that for `ap` the function that 
+However, the difference between `ap` and `map` is that for `ap` the function that
 takes care of the transformation is of type `F[A => B]`, whereas for `map` it is `A => B`:
 
 ```tut:silent
@@ -48,12 +48,14 @@ Apply[Option].map(None)(double)
 
 ### compose
 
-And like functors, `Apply` instances also compose:
+And like functors, `Apply` instances also compose (via the `Nested` data type):
 
 ```tut:book
-val listOpt = Apply[List] compose Apply[Option]
+import cats.data.Nested
+val listOpt = Nested[List, Option, Int](List(Some(1), None, Some(3)))
 val plusOne = (x:Int) => x + 1
-listOpt.ap(List(Some(plusOne)))(List(Some(1), None, Some(3)))
+val f = Nested[List, Option, Int => Int](List(Some(plusOne)))
+Apply[Nested[List, Option, ?]].ap(f)(listOpt)
 ```
 
 ### ap
@@ -69,7 +71,7 @@ Apply[Option].ap(None)(None)
 
 ### ap2, ap3, etc
 
-`Apply` also offers variants of `ap`. The functions `apN` (for `N` between `2` and `22`) 
+`Apply` also offers variants of `ap`. The functions `apN` (for `N` between `2` and `22`)
 accept `N` arguments where `ap` accepts `1`:
 
 For example:
@@ -119,7 +121,7 @@ In order to use it, first import `cats.syntax.all._` or `cats.syntax.cartesian._
 Here we see that the following two functions, `f1` and `f2`, are equivalent:
 
 ```tut:book
-import cats.syntax.cartesian._
+import cats.implicits._
 
 def f1(a: Option[Int], b: Option[Int], c: Option[Int]) =
   (a |@| b |@| c) map { _ * _ * _ }

@@ -3,7 +3,7 @@ package data
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
-import cats.std.list._
+import cats.instances.list._
 
 /**
  * A data type which represents a single element (head) and some other
@@ -67,8 +67,8 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     Eval.defer(f(head, F.foldRight(tail, lb)(f)))
 
   /**
-    * Applies f to all the elements of the structure
-    */
+   * Applies f to all the elements of the structure
+   */
   def map[B](f: A => B)(implicit F: Functor[F]): OneAnd[F, B] =
     OneAnd(f(head), F.map(tail)(f))
 
@@ -114,8 +114,10 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
     catsDataSemigroupKForOneAnd[F].algebra
 
   implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
-    new NonEmptyReducible[OneAnd[F,?], F] {
-      override def split[A](fa: OneAnd[F,A]): (A, F[A]) = (fa.head, fa.tail)
+    new NonEmptyReducible[OneAnd[F, ?], F] {
+      override def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
+
+      override def size[A](fa: OneAnd[F, A]): Long = 1 + F.size(fa.tail)
     }
 
   implicit def catsDataMonadForOneAnd[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[F, ?]] =
@@ -137,8 +139,8 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
     }
 }
 
-trait OneAndLowPriority0 {
-  implicit val nelComonad: Comonad[OneAnd[List, ?]] =
+private[data] trait OneAndLowPriority0 {
+  implicit val catsDataComonadForOneAnd: Comonad[OneAnd[List, ?]] =
     new Comonad[OneAnd[List, ?]] {
       def coflatMap[A, B](fa: OneAnd[List, A])(f: OneAnd[List, A] => B): OneAnd[List, B] = {
         @tailrec def consume(as: List[A], buf: ListBuffer[B]): List[B] =
@@ -157,7 +159,7 @@ trait OneAndLowPriority0 {
     }
 }
 
-trait OneAndLowPriority1 extends OneAndLowPriority0 {
+private[data] trait OneAndLowPriority1 extends OneAndLowPriority0 {
   implicit def catsDataFunctorForOneAnd[F[_]](implicit F: Functor[F]): Functor[OneAnd[F, ?]] =
     new Functor[OneAnd[F, ?]] {
       def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
@@ -166,7 +168,7 @@ trait OneAndLowPriority1 extends OneAndLowPriority0 {
 
 }
 
-trait OneAndLowPriority2 extends OneAndLowPriority1 {
+private[data] trait OneAndLowPriority2 extends OneAndLowPriority1 {
   implicit def catsDataTraverseForOneAnd[F[_]](implicit F: Traverse[F]): Traverse[OneAnd[F, ?]] =
     new Traverse[OneAnd[F, ?]] {
       def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {

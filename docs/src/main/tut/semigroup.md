@@ -2,8 +2,8 @@
 layout: default
 title:  "Semigroup"
 section: "typeclasses"
-source: "https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala"
-
+source: "kernel/src/main/scala/cats/kernel/Semigroup.scala"
+scaladoc: "#cats.kernel.Semigroup"
 ---
 # Semigroup
 
@@ -31,7 +31,6 @@ First some imports.
 
 ```tut:silent
 import cats._
-import cats.std.all._
 import cats.implicits._
 ```
 
@@ -67,9 +66,7 @@ following the convention from scalaz, that `|+|` is the
 operator from `Semigroup`.
 
 ```tut:silent
-import cats.syntax.all._
 import cats.implicits._
-import cats.std._
 
 val one = Option(1)
 val two = Option(2)
@@ -96,9 +93,6 @@ None |+| Some(1)
 ```
 
 N.B.
-Cats does not define a `Semigroup` type class itself, it uses the [`Semigroup`
-trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala)
-which is defined in the [algebra project](https://github.com/non/algebra) on 
-which it depends. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
-defines type aliases to the `Semigroup` from algebra, so that you can
+Cats defines the `Semigroup` type class in cats-kernel. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
+defines type aliases to the `Semigroup` from cats-kernel, so that you can
 `import cats.Semigroup`.

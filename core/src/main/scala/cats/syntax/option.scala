@@ -4,9 +4,9 @@ package syntax
 import cats.data.{ Xor, Validated, ValidatedNel }
 
 trait OptionSyntax {
-  final def none[A] = Option.empty[A]
-  implicit final def optionIdSyntax[A](a: A): OptionIdOps[A] = new OptionIdOps(a)
-  implicit final def optionSyntax[A](oa: Option[A]): OptionOps[A] = new OptionOps(oa)
+  final def none[A]: Option[A] = Option.empty[A]
+  implicit final def catsSyntaxOptionId[A](a: A): OptionIdOps[A] = new OptionIdOps(a)
+  implicit final def catsSyntaxOption[A](oa: Option[A]): OptionOps[A] = new OptionOps(oa)
 }
 
 final class OptionIdOps[A](val a: A) extends AnyVal {
@@ -18,7 +18,7 @@ final class OptionIdOps[A](val a: A) extends AnyVal {
    *
    * Example:
    * {{{
-   * scala> import cats.syntax.option._
+   * scala> import cats.implicits._
    * scala> 3.some
    * res0: Option[Int] = Some(3)
    * }}}
@@ -35,7 +35,7 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.syntax.option._
+   * scala> import cats.implicits._
    *
    * scala> val error1: Option[String] = Some("error!")
    * scala> error1.toLeftXor(3)
@@ -56,7 +56,7 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.syntax.option._
+   * scala> import cats.implicits._
    *
    * scala> val result1: Option[Int] = Some(3)
    * scala> result1.toRightXor("error!")
@@ -77,7 +77,7 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.Validated
-   * scala> import cats.syntax.option._
+   * scala> import cats.implicits._
    *
    * scala> val error1: Option[String] = Some("error!")
    * scala> error1.toInvalid(3)
@@ -99,7 +99,7 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.ValidatedNel
-   * scala> import cats.syntax.option._
+   * scala> import cats.implicits._
    *
    * scala> val error1: Option[String] = Some("error!")
    * scala> error1.toInvalidNel(3)
@@ -120,7 +120,7 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.Validated
-   * scala> import cats.syntax.option._
+   * scala> import cats.implicits._
    *
    * scala> val result1: Option[Int] = Some(3)
    * scala> result1.toValid("error!")
@@ -141,7 +141,7 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.ValidatedNel
-   * scala> import cats.syntax.option._
+   * scala> import cats.implicits._
    *
    * scala> val result1: Option[Int] = Some(3)
    * scala> result1.toValidNel("error!")
@@ -160,8 +160,7 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    *
    * Example:
    * {{{
-   * scala> import cats.syntax.option._
-   * scala> import cats.std.string._
+   * scala> import cats.implicits._
    *
    * scala> val someString: Option[String] = Some("hello")
    * scala> someString.orEmpty

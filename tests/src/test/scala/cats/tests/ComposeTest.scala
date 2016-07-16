@@ -5,7 +5,7 @@ import cats.kernel.laws.GroupLaws
 
 import cats.arrow.Compose
 import cats.laws.discipline.{SemigroupKTests, SerializableTests}
-import cats.laws.discipline.eq.function1Eq
+import cats.laws.discipline.eq.catsLawsEqForFn1
 
 class ComposeTest extends CatsSuite {
   val functionCompose = Compose[Function1]

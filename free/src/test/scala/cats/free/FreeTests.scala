@@ -5,7 +5,7 @@ import cats.tests.CatsSuite
 import cats.arrow.FunctionK
 import cats.data.Xor
 import cats.laws.discipline.{CartesianTests, MonadRecTests, SerializableTests}
-import cats.laws.discipline.arbitrary.function0Arbitrary
+import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 
 import org.scalacheck.{Arbitrary, Gen}
 import Arbitrary.arbFunction1
@@ -18,9 +18,15 @@ class FreeTests extends CatsSuite {
   checkAll("Free[Option, ?]", MonadRecTests[Free[Option, ?]].monadRec[Int, Int, Int])
   checkAll("MonadRec[Free[Option, ?]]", SerializableTests.serializable(MonadRec[Free[Option, ?]]))
 
-  test("mapSuspension id"){
+  test("toString is stack-safe") {
+    val r = Free.pure[List, Int](333)
+    val rr = (1 to 1000000).foldLeft(r)((r, _) => r.map(_ + 1))
+    rr.toString.length should be > 0
+  }
+
+  test("compile id"){
     forAll { x: Free[List, Int] =>
-      x.mapSuspension(FunctionK.id[List]) should === (x)
+      x.compile(FunctionK.id[List]) should === (x)
     }
   }
 
@@ -36,9 +42,9 @@ class FreeTests extends CatsSuite {
     val _ = Free.suspend(yikes[Option, Int])
   }
 
-  test("mapSuspension consistent with foldMap"){
+  test("compile consistent with foldMap"){
     forAll { x: Free[List, Int] =>
-      val mapped = x.mapSuspension(headOptionU)
+      val mapped = x.compile(headOptionU)
       val folded = mapped.foldMap(FunctionK.id[Option])
       folded should === (x.foldMap(headOptionU))
     }
@@ -47,7 +53,7 @@ class FreeTests extends CatsSuite {
   test("tailRecM is stack safe") {
     val n = 50000
     val fa = MonadRec[Free[Option, ?]].tailRecM(0)(i =>
-      Free.pure[Option, Int Xor Int](if(i < n) Xor.Left(i+1) else Xor.Right(i)))
+      Free.pure[Option, Int Xor Int](if (i < n) Xor.Left(i+1) else Xor.Right(i)))
     fa should === (Free.pure[Option, Int](n))
   }
 
@@ -72,10 +78,37 @@ class FreeTests extends CatsSuite {
 
     assert(10000 == a(0).foldMap(runner))
   }
+
+  test(".runTailRec") {
+    val r = Free.pure[List, Int](12358)
+    def recurse(r: Free[List, Int], n: Int): Free[List, Int] =
+      if (n > 0) recurse(r.flatMap(x => Free.pure(x + 1)), n - 1) else r
+    val res = recurse(r, 100000).runTailRec
+    assert(res == List(112358))
+  }
+
+  test(".foldLeftM") {
+    // you can see .foldLeftM traversing the entire structure by
+    // changing the constant argument to .take and observing the time
+    // this test takes.
+    val ns = Stream.from(1).take(1000)
+    val res = Free.foldLeftM[Stream, Xor[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+      if (sum >= 2) Xor.left(sum) else Xor.right(sum + n)
+    }
+    assert(res == Xor.left(3))
+  }
+
+  test(".foldLeftM short-circuiting") {
+    val ns = Stream.continually(1)
+    val res = Free.foldLeftM[Stream, Xor[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+      if (sum >= 100000) Xor.left(sum) else Xor.right(sum + n)
+    }
+    assert(res == Xor.left(100000))
+  }
 }
 
 object FreeTests extends FreeTestsInstances {
-  import cats.std.function._
+  import cats.instances.function._
 
   implicit def trampolineArbitrary[A:Arbitrary]: Arbitrary[Trampoline[A]] =
     freeArbitrary[Function0, A]
@@ -90,21 +123,21 @@ sealed trait FreeTestsInstances {
   }
 
   private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {
-    val noGosub = Gen.oneOf(
+    val noFlatMapped = Gen.oneOf(
       A.arbitrary.map(Free.pure[F, A]),
       F.arbitrary.map(Free.liftF[F, A]))
 
     val nextDepth = Gen.chooseNum(1, maxDepth - 1)
 
-    def withGosub = for {
+    def withFlatMapped = for {
       fDepth <- nextDepth
       freeDepth <- nextDepth
       f <- arbFunction1[A, Free[F, A]](Arbitrary(freeGen[F, A](fDepth))).arbitrary
       freeFA <- freeGen[F, A](freeDepth)
     } yield freeFA.flatMap(f)
 
-    if (maxDepth <= 1) noGosub
-    else Gen.oneOf(noGosub, withGosub)
+    if (maxDepth <= 1) noFlatMapped
+    else Gen.oneOf(noFlatMapped, withFlatMapped)
   }
 
   implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =

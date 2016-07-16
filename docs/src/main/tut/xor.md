@@ -365,7 +365,7 @@ val xor: Xor[Throwable, Int] =
 ## Additional syntax
 
 ```tut:book
-import cats.syntax.xor._
+import cats.implicits._
 
 val xor3: Xor[String, Int] = 7.right[String]
 

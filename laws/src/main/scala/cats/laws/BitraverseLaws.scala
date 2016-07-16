@@ -1,6 +1,8 @@
 package cats
 package laws
 
+import cats.data.Nested
+
 trait BitraverseLaws[F[_, _]] extends BifoldableLaws[F] with BifunctorLaws[F] {
   implicit override def F: Bitraverse[F]
 
@@ -19,16 +21,13 @@ trait BitraverseLaws[F[_, _]] extends BifoldableLaws[F] with BifunctorLaws[F] {
     val fg = F.bitraverse(fab)(f, g)
     val hi = G.map(fg)(f => F.bitraverse(f)(h, i))
 
-    type GCompose[X] = G[G[X]]
-    val GCompose = G.compose[G]
-
     val c =
-      F.bitraverse[GCompose, A, B, E, H](fab)(
-        a => G.map(f(a))(h),
-        b => G.map(g(b))(i)
-      )(GCompose)
+      F.bitraverse[Nested[G, G, ?], A, B, E, H](fab)(
+        a => Nested(G.map(f(a))(h)),
+        b => Nested(G.map(g(b))(i))
+      )
 
-    hi <-> c
+    hi <-> c.value
   }
 }
 

@@ -75,5 +75,5 @@ object Semigroup extends SemigroupFunctions[Semigroup] {
   /**
    * Access an implicit `Semigroup[A]`.
    */
-  @inline final def apply[A](implicit ev: Semigroup[A]) = ev
+  @inline final def apply[A](implicit ev: Semigroup[A]): Semigroup[A] = ev
 }

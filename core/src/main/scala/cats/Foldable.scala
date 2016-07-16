@@ -1,6 +1,7 @@
 package cats
 
 import scala.collection.mutable
+import cats.instances.long._
 import simulacrum.typeclass
 
 /**
@@ -57,6 +58,16 @@ import simulacrum.typeclass
     }
 
   /**
+   * The size of this Foldable.
+   *
+   * This is overriden in structures that have more efficient size implementations
+   * (e.g. Vector, Set, Map).
+   *
+   * Note: will not terminate for infinite-sized collections.
+   */
+  def size[A](fa: F[A]): Long = foldMap(fa)(_ => 1)
+
+  /**
    * Fold implemented using the given Monoid[A] instance.
    */
   def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
@@ -92,8 +103,7 @@ import simulacrum.typeclass
    *
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.list._
-   * scala> import cats.std.option._
+   * scala> import cats.implicits._
    * scala> def parseInt(s: String): Option[Int] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
    * scala> val F = Foldable[List]
    * scala> F.traverse_(List("333", "444"))(parseInt)
@@ -118,7 +128,7 @@ import simulacrum.typeclass
    *
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.list._
+   * scala> import cats.implicits._
    * scala> def parseInt(s: String): Xor[String, Int] =
    *      |   try { Xor.Right(s.toInt) }
    *      |   catch { case _: NumberFormatException => Xor.Left("boo") }
@@ -145,8 +155,7 @@ import simulacrum.typeclass
    * For example:
    *
    * {{{
-   * scala> import cats.std.list._
-   * scala> import cats.std.option._
+   * scala> import cats.implicits._
    * scala> val F = Foldable[List]
    * scala> F.sequence_(List(Option(1), Option(2), Option(3)))
    * res0: Option[Unit] = Some(())
@@ -164,7 +173,7 @@ import simulacrum.typeclass
    *
    * {{{
    * scala> import cats.data.Xor
-   * scala> import cats.std.list._
+   * scala> import cats.implicits._
    * scala> val F = Foldable[List]
    * scala> F.sequenceU_(List(Xor.right[String, Int](333), Xor.Right(444)))
    * res0: Xor[String, Unit] = Right(())
@@ -188,7 +197,7 @@ import simulacrum.typeclass
    * For example:
    *
    * {{{
-   * scala> import cats.std.list._
+   * scala> import cats.implicits._
    * scala> val F = Foldable[List]
    * scala> F.foldK(List(1 :: 2 :: Nil, 3 :: 4 :: 5 :: Nil))
    * res0: List[Int] = List(1, 2, 3, 4, 5)
@@ -269,35 +278,11 @@ import simulacrum.typeclass
   def nonEmpty[A](fa: F[A]): Boolean =
     !isEmpty(fa)
 
-  /**
-   * Compose this `Foldable[F]` with a `Foldable[G]` to create
-   * a `Foldable[F[G]]` instance.
-   */
-  def compose[G[_]](implicit ev: Foldable[G]): Foldable[λ[α => F[G[α]]]] =
-    new CompositeFoldable[F, G] {
+  def compose[G[_]: Foldable]: Foldable[λ[α => F[G[α]]]] =
+    new ComposedFoldable[F, G] {
       val F = self
-      val G = ev
+      val G = Foldable[G]
     }
-}
-
-/**
- *  Methods that apply to 2 nested Foldable instances
- */
-trait CompositeFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] {
-  implicit def F: Foldable[F]
-  implicit def G: Foldable[G]
-
-  /**
-   *  Left associative fold on F[G[A]] using 'f'
-   */
-  def foldLeft[A, B](fga: F[G[A]], b: B)(f: (B, A) => B): B =
-    F.foldLeft(fga, b)((b, a) => G.foldLeft(a, b)(f))
-
-  /**
-   *  Right associative lazy fold on `F` using the folding function 'f'.
-   */
-  def foldRight[A, B](fga: F[G[A]], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    F.foldRight(fga, lb)((ga, lb) => G.foldRight(ga, lb)(f))
 }
 
 object Foldable {

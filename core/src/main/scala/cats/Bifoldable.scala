@@ -17,8 +17,8 @@ trait Bifoldable[F[_, _]] extends Any with Serializable { self =>
       (c: C, b: B) => C.combine(c, g(b))
     )
 
-  def compose[G[_, _]](implicit ev: Bifoldable[G]): Bifoldable[Lambda[(A, B) => F[G[A, B], G[A, B]]]] =
-    new CompositeBifoldable[F, G] {
+  def compose[G[_, _]](implicit ev: Bifoldable[G]): Bifoldable[λ[(α, β) => F[G[α, β], G[α, β]]]] =
+    new ComposedBifoldable[F, G] {
       val F = self
       val G = ev
     }
@@ -28,17 +28,17 @@ object Bifoldable {
   def apply[F[_, _]](implicit F: Bifoldable[F]): Bifoldable[F] = F
 }
 
-trait CompositeBifoldable[F[_, _], G[_, _]] extends Bifoldable[Lambda[(A, B) => F[G[A, B], G[A, B]]]] {
+private[cats] trait ComposedBifoldable[F[_, _], G[_, _]] extends Bifoldable[λ[(α, β) => F[G[α, β], G[α, β]]]] {
   implicit def F: Bifoldable[F]
   implicit def G: Bifoldable[G]
 
-  def bifoldLeft[A, B, C](fab: F[G[A, B], G[A, B]], c: C)(f: (C, A) => C, g: (C, B) => C): C =
+  override def bifoldLeft[A, B, C](fab: F[G[A, B], G[A, B]], c: C)(f: (C, A) => C, g: (C, B) => C): C =
     F.bifoldLeft(fab, c)(
       (c: C, gab: G[A, B]) => G.bifoldLeft(gab, c)(f, g),
       (c: C, gab: G[A, B]) => G.bifoldLeft(gab, c)(f, g)
     )
 
-  def bifoldRight[A, B, C](fab: F[G[A, B], G[A, B]], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+  override def bifoldRight[A, B, C](fab: F[G[A, B], G[A, B]], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
     F.bifoldRight(fab, c)(
       (gab: G[A, B], c: Eval[C]) => G.bifoldRight(gab, c)(f, g),
       (gab: G[A, B], c: Eval[C]) => G.bifoldRight(gab, c)(f, g)

@@ -3,7 +3,7 @@ package tests
 
 import catalysts.Platform
 
-import cats.std.AllInstances
+import cats.instances.AllInstances
 import cats.syntax.{AllSyntax, EqOps}
 
 import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}
@@ -39,9 +39,9 @@ trait CatsSuite extends FunSuite with Matchers with GeneratorDrivenPropertyCheck
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration
 
-  // disable Eq syntax (by making `eqSyntax` not implicit), since it collides
+  // disable Eq syntax (by making `catsSyntaxEq` not implicit), since it collides
   // with scalactic's equality
-  override def eqSyntax[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
+  override def catsSyntaxEq[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
 }
 
 trait SlowCatsSuite extends CatsSuite {

@@ -14,7 +14,7 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
   def andThen[H[_]](f: FunctionK[G, H]): FunctionK[F, H] =
     f.compose(self)
 
-  def or[H[_]](h: FunctionK[H,G]): FunctionK[Coproduct[F, H, ?], G] =
+  def or[H[_]](h: FunctionK[H, G]): FunctionK[Coproduct[F, H, ?], G] =
     new FunctionK[Coproduct[F, H, ?], G] {
       def apply[A](fa: Coproduct[F, H, A]): G[A] = fa.run match {
         case Xor.Left(ff) => self(ff)

@@ -4,11 +4,11 @@ package laws
 import catalysts.Platform
 import catalysts.macros.TypeTagM
 
-import cats.kernel.std.all._
+import cats.kernel.instances.all._
 
 import org.typelevel.discipline.{ Laws }
 import org.typelevel.discipline.scalatest.Discipline
-import org.scalacheck.{ Arbitrary }
+import org.scalacheck.{ Arbitrary, Gen }
 import Arbitrary.arbitrary
 import org.scalatest.FunSuite
 import scala.util.Random
@@ -79,6 +79,58 @@ class LawTests extends FunSuite with Discipline {
   laws[GroupLaws, (Int, Int)].check(_.band)
 
   laws[GroupLaws, Unit].check(_.boundedSemilattice)
+
+  // Comparison related
+
+  // Something that can give NaN for test
+  def subsetPartialOrder[A]: PartialOrder[Set[A]] = new PartialOrder[Set[A]] {
+    def partialCompare(x: Set[A], y: Set[A]): Double =
+      if (x == y) 0.0
+      else if (x subsetOf y) -1.0
+      else if (y subsetOf x) 1.0
+      else Double.NaN
+  }
+
+  laws[OrderLaws, Set[Int]]("subset").check(_.partialOrder(subsetPartialOrder[Int]))
+
+  implicit val arbitraryComparison: Arbitrary[Comparison] =
+    Arbitrary(Gen.oneOf(Comparison.GreaterThan, Comparison.EqualTo, Comparison.LessThan))
+
+  laws[OrderLaws, Comparison].check(_.eqv)
+
+  test("comparison") {
+    val order = Order[Int]
+    val eqv = Eq[Comparison]
+    eqv.eqv(order.comparison(1, 0),  Comparison.GreaterThan) &&
+    eqv.eqv(order.comparison(0, 0),  Comparison.EqualTo)     &&
+    eqv.eqv(order.comparison(-1, 0), Comparison.LessThan)
+  }
+
+  test("partialComparison") {
+    val po = subsetPartialOrder[Int]
+    val eqv = Eq[Option[Comparison]]
+    eqv.eqv(po.partialComparison(Set(1), Set()),        Some(Comparison.GreaterThan)) &&
+    eqv.eqv(po.partialComparison(Set(), Set()),         Some(Comparison.EqualTo))     &&
+    eqv.eqv(po.partialComparison(Set(), Set(1)),        Some(Comparison.LessThan))    &&
+    eqv.eqv(po.partialComparison(Set(1, 2), Set(2, 3)), None)
+  }
+
+  test("signum . toInt . comparison = signum . compare") {
+    check { (i: Int, j: Int) =>
+      val found = Order[Int].comparison(i, j)
+      val expected = Order[Int].compare(i, j)
+      Eq[Int].eqv(found.toInt.signum, expected.signum)
+    }
+  }
+
+  test("signum . toDouble . partialComparison = signum . partialCompare") {
+    check { (x: Set[Int], y: Set[Int]) =>
+      val found = subsetPartialOrder[Int].partialComparison(x, y).map(_.toDouble.signum)
+      val expected = Some(subsetPartialOrder[Int].partialCompare(x, y)).filter(d => !d.isNaN).map(_.signum)
+      Eq[Option[Int]].eqv(found, expected)
+    }
+  }
+
   // esoteric machinery follows...
 
   implicit lazy val band: Band[(Int, Int)] =

@@ -1,6 +1,10 @@
 name: Cats Documentation
-markdown: redcarpet
+markdown: kramdown
 highlighter: rouge
+# this kramdown config is for local use and I think GitHub's Jekyll ignores it
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 baseurl: /cats
 apidocs: /cats/api/
 sources: https://github.com/typelevel/cats/blob/master/

@@ -4,7 +4,7 @@ package laws
 import org.scalacheck.Prop
 import org.scalacheck.Prop._
 import org.scalacheck.{Arbitrary, Prop}
-import cats.kernel.std.boolean._
+import cats.kernel.instances.boolean._
 
 object Rules {
 

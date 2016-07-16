@@ -1,7 +1,7 @@
 package cats
 
+import cats.instances.list._
 import simulacrum.typeclass
-import cats.std.list._
 
 /**
  * Applicative functor.
@@ -33,38 +33,29 @@ import cats.std.list._
     ap(pure(f))(fa)
 
   /**
-    * Given `fa` and `n`, apply `fa` `n` times to construct an `F[List[A]]` value.
-    */
+   * Given `fa` and `n`, apply `fa` `n` times to construct an `F[List[A]]` value.
+   */
   def replicateA[A](n: Int, fa: F[A]): F[List[A]] =
     sequence(List.fill(n)(fa))
-
-  /**
-   * Two sequentially dependent Applicatives can be composed.
-   *
-   * The composition of Applicatives `F` and `G`, `F[G[x]]`, is also an Applicative
-   *
-   * Applicative[Option].compose[List].pure(10) = Some(List(10))
-   */
-  def compose[G[_]](implicit GG : Applicative[G]): Applicative[λ[α => F[G[α]]]] =
-    new CompositeApplicative[F,G] {
-      implicit def F: Applicative[F] = self
-      implicit def G: Applicative[G] = GG
-
-    }
 
   def traverse[A, G[_], B](value: G[A])(f: A => F[B])(implicit G: Traverse[G]): F[G[B]] =
     G.traverse(value)(f)(this)
 
   def sequence[G[_], A](as: G[F[A]])(implicit G: Traverse[G]): F[G[A]] =
     G.sequence(as)(this)
-  
+
+  def compose[G[_]: Applicative]: Applicative[λ[α => F[G[α]]]] =
+    new ComposedApplicative[F, G] {
+      val F = self
+      val G = Applicative[G]
+    }
 }
 
-trait CompositeApplicative[F[_],G[_]]
-    extends Applicative[λ[α => F[G[α]]]] with CompositeApply[F,G] {
+object Applicative {
+  def monoid[F[_], A](implicit f: Applicative[F], monoid: Monoid[A]): Monoid[F[A]] =
+    new ApplicativeMonoid[F, A](f, monoid)
+}
 
-  implicit def F: Applicative[F]
-  implicit def G: Applicative[G]
-
-  def pure[A](a: A): F[G[A]] = F.pure(G.pure(a))
+private[cats] class ApplicativeMonoid[F[_], A](f: Applicative[F], monoid: Monoid[A]) extends ApplySemigroup(f, monoid) with Monoid[F[A]] {
+  def empty: F[A] = f.pure(monoid.empty)
 }

@@ -2,13 +2,13 @@ package cats
 package syntax
 
 trait TransLiftSyntax {
-  implicit def transLiftSyntax[E](ma: E)(implicit U: Unapply[Trivial.PH1, E]): TransLiftOps[U.M, U.A] = new TransLiftOps(U.subst(ma))
+  implicit def catsSyntaxTransLift[E](ma: E)(implicit U: Unapply[Trivial.PH1, E]): TransLiftOps[U.M, U.A] = new TransLiftOps(U.subst(ma))
 }
 
 final class TransLiftOps[M0[_], A](val ma: M0[A]) extends AnyVal {
   import TLExtract._
 
-  def liftT[MT0[_[_],_]](implicit extract: TLExtract[SingletonMT { type MT[F[_], B] = MT0[F, B] }, SingletonM { type M[B] = M0[B] }]): MT0[M0, A] = extract.TL.liftT(ma)(extract.TC)
+  def liftT[MT0[_[_], _]](implicit extract: TLExtract[SingletonMT { type MT[F[_], B] = MT0[F, B] }, SingletonM { type M[B] = M0[B] }]): MT0[M0, A] = extract.TL.liftT(ma)(extract.TC)
 }
 
 trait TLExtract[MTS <: TLExtract.SingletonMT, MS <: TLExtract.SingletonM] {

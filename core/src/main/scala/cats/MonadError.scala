@@ -8,8 +8,8 @@ package cats
 trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
 
   /**
-    * Turns a successful value into an error if it does not satisfy a given predicate.
-    */
+   * Turns a successful value into an error if it does not satisfy a given predicate.
+   */
   def ensure[A](fa: F[A])(error: => E)(predicate: A => Boolean): F[A] =
     flatMap(fa)(a => if (predicate(a)) pure(a) else raiseError(error))
 

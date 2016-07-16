@@ -26,7 +26,13 @@ class FreeApplicativeTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[FreeApplicative[Option, ?]]
 
   checkAll("FreeApplicative[Option, ?]", ApplicativeTests[FreeApplicative[Option, ?]].applicative[Int, Int, Int])
-  checkAll("Monad[FreeApplicative[Option, ?]]", SerializableTests.serializable(Applicative[FreeApplicative[Option, ?]]))
+  checkAll("Applicative[FreeApplicative[Option, ?]]", SerializableTests.serializable(Applicative[FreeApplicative[Option, ?]]))
+
+  test("toString is stack-safe") {
+    val r = FreeApplicative.pure[List, Int](333)
+    val rr = (1 to 1000000).foldLeft(r)((r, _) => r.map(_ + 1))
+    rr.toString.length should be > 0
+  }
 
   test("FreeApplicative#fold") {
     val n = 2
@@ -83,7 +89,7 @@ class FreeApplicativeTests extends CatsSuite {
     fli1.analyze[G[Int]](countingNT) should === (List(4))
 
     val fli2 = FreeApplicative.lift[List, Int](List.empty)
-    fli2.analyze[G[Int]](countingNT) should ===(List(0))
+    fli2.analyze[G[Int]](countingNT) should === (List(0))
   }
 
   test("foldMap order of effects - regression check for #799") {
@@ -120,7 +126,7 @@ class FreeApplicativeTests extends CatsSuite {
 
     val z = Apply[Dsl].map2(x, y)((_, _) => ())
 
-    val asString: FunctionK[Id,λ[α => String]] = new FunctionK[Id,λ[α => String]] {
+    val asString: FunctionK[Id, λ[α => String]] = new FunctionK[Id, λ[α => String]] {
       def apply[A](a: A): String = a.toString
     }
 

@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.std.AllInstances
+import cats.instances.AllInstances
 import cats.syntax.AllSyntax
 import cats.functor.{Invariant, Contravariant}
 
@@ -38,6 +38,12 @@ class SyntaxTests extends AllInstances with AllSyntax {
     val x = mock[A]
     val y = mock[A]
     val z: A = x |-| y
+  }
+
+  def testMonoid[A: Monoid]: Unit = {
+    val x = mock[A]
+    implicit val y = mock[Eq[A]]
+    val z: Boolean = x.isEmpty
   }
 
   def testEq[A: Eq]: Unit = {

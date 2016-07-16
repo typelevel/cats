@@ -11,7 +11,7 @@ The `Contravariant` type class is for functors that define a `contramap`
 function with the following type:
 
 ```scala
-def contramap[A, B](f: B => A): F[A] => F[B]
+def contramap[A, B](fa: F[A])(f: B => A): F[B]
 ```
 
 It looks like regular (also called `Covariant`) [`Functor`](functor.html)'s `map`,
@@ -20,7 +20,7 @@ but with the `f` transformation reversed.
 Generally speaking, if you have some context `F[A]` for type `A`,
 and you can get an `A` value out of a `B` value — `Contravariant` allows you to get the `F[B]` context for `B`.
 
-Examples of `Contravariant` instances are [`Show`](show.html) and `scala.math.Ordering` (along with `algebra.Order`).
+Examples of `Contravariant` instances are [`Show`](show.html) and `scala.math.Ordering` (along with `cats.kernel.Order`).
 
 ## Contravariant instance for Show.
 
@@ -28,6 +28,7 @@ Say we have class `Money` with a `Show` instance, and `Salary` class.
 
 ```tut:silent
 import cats._
+import cats.functor._
 import cats.implicits._
 
 case class Money(amount: Int)
@@ -50,7 +51,7 @@ Salary(Money(1000)).show
 
 `Show` example is trivial and quite far-fetched, let's see how `Contravariant` can help with orderings.
 
-`scala.math.Ordering` typeclass defines comparison operations, e.g. `compare`: 
+`scala.math.Ordering` type class defines comparison operations, e.g. `compare`:
 
 ```tut:book
 Ordering.Int.compare(2, 1)
@@ -76,3 +77,20 @@ implicit val moneyOrdering: Ordering[Money] = Ordering.by(_.amount)
 Money(100) < Money(200)
 ```
 
+## Subtyping
+
+Contravariant functors have a natural relationship with subtyping, dual to that of covariant functors:
+
+```tut:book
+class A
+class B extends A
+val b: B = new B
+val a: A = b
+val showA: Show[A] = Show.show(a => "a!")
+val showB1: Show[B] = showA.contramap(b => b: A)
+val showB2: Show[B] = showA.contramap(identity[A])
+val showB3: Show[B] = Contravariant[Show].narrow[A, B](showA)
+```
+
+Subtyping relationships are "lifted backwards" by contravariant functors, such that if `F` is a
+lawful contravariant functor and `A <: B` then `F[B] <: F[A]`, which is expressed by `Contravariant.narrow`.

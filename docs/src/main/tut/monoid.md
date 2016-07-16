@@ -2,8 +2,8 @@
 layout: default
 title:  "Monoid"
 section: "typeclasses"
-source: "https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Monoid.scala"
-
+source: "kernel/src/main/scala/cats/kernel/Monoid.scala"
+scaladoc: "#cats.kernel.Monoid"
 ---
 # Monoid
 
@@ -28,7 +28,6 @@ First some imports.
 
 ```tut:silent
 import cats._
-import cats.std.all._
 import cats.implicits._
 ```
 
@@ -71,10 +70,7 @@ l.foldMap(i => (i, i.toString)) // do both of the above in one pass, hurrah!
 -------------------------------------------------------------------------------
  
 N.B.
-Cats does not define a `Monoid` type class itself, it uses the [`Monoid`
-trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Monoid.scala)
-which is defined in the [algebra project](https://github.com/non/algebra) on 
-which it depends. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
-defines type aliases to the `Monoid` from algebra, so that you can
-`import cats.Monoid`. Also the `Monoid` instance for tuple is also [implemented in algebra](https://github.com/non/algebra/blob/v0.4.2/project/Boilerplate.scala#L80-L217), 
-cats merely provides it through [inheritance](https://github.com/typelevel/cats/blob/v0.5.0/core/src/main/scala/cats/std/tuple.scala). 
+Cats defines  the `Monoid` type class in cats-kernel. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
+defines type aliases to the `Monoid` from cats-kernel, so that you can
+`import cats.Monoid`. Also the `Monoid` instance for tuple is also [implemented in cats-kernel](https://github.com/typelevel/cats/blob/master/project/KernelBoiler.scala), 
+cats merely provides it through [inheritance](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/std/tuple.scala).

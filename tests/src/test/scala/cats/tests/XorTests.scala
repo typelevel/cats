@@ -204,6 +204,14 @@ class XorTests extends CatsSuite {
     }
   }
 
+  test("toTry then fromTry is identity") {
+    implicit def eqTh: Eq[Throwable] = Eq.allEqual
+
+    forAll { (x: Throwable Xor String) =>
+      Xor.fromTry(x.toTry) should === (x)
+    }
+  }
+
   test("isLeft consistency") {
     forAll { (x: Int Xor String) =>
       x.isLeft should === (x.toEither.isLeft)
@@ -211,6 +219,7 @@ class XorTests extends CatsSuite {
       x.isLeft should === (x.toList.isEmpty)
       x.isLeft should === (x.toValidated.isInvalid)
       x.isLeft should === (x.toValidatedNel.isInvalid)
+      Option(x.isLeft) should === (x.toXorT[Option].isLeft)
     }
   }
 

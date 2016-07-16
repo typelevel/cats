@@ -1,18 +1,18 @@
 package cats
 package tests
 
-import cats.data.{NonEmptyList, NonEmptyVector}
-import cats.laws.discipline.{ReducibleTests, SerializableTests}
-import cats.laws.discipline.arbitrary.oneAndArbitrary
+class ReducibleTestsAdditional extends CatsSuite {
 
-class ReducibleTest extends CatsSuite {
-  // Lots of collections here.. telling ScalaCheck to calm down a bit
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfig(maxSize = 5, minSuccessful = 20)
+  test("Reducible[NonEmptyList].reduceLeftM stack safety") {
+    def nonzero(acc: Long, x: Long): Option[Long] =
+      if (x == 0) None else Some(acc + x)
 
-  type NEVL[A] = NonEmptyList[NonEmptyVector[A]]
-  val nevlReducible: Reducible[NEVL] =
-    Reducible[NonEmptyList].compose[NonEmptyVector]
-  checkAll("NonEmptyList compose NonEmptyVector", ReducibleTests(nevlReducible).reducible[Option, Int, String])
-  checkAll("Reducible[NonEmptyList compose NonEmptyVector]", SerializableTests.serializable(nevlReducible))
+    val n = 100000L
+    val expected = n*(n+1)/2
+    val actual = (1L to n).toList.toNel.flatMap(_.reduceLeftM(Option.apply)(nonzero))
+    actual should === (Some(expected))
+  }
+
 }
+
+

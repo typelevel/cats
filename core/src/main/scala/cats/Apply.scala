@@ -7,7 +7,7 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.ApplyLaws.
  */
-@typeclass(excludeParents=List("ApplyArityFunctions"))
+@typeclass(excludeParents = List("ApplyArityFunctions"))
 trait Apply[F[_]] extends Functor[F] with Cartesian[F] with ApplyArityFunctions[F] { self =>
 
   /**
@@ -58,38 +58,19 @@ trait Apply[F[_]] extends Functor[F] with Cartesian[F] with ApplyArityFunctions[
   def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
     fb.map(fb => map2(fa, fb)(f))
 
-  /**
-   * Two sequentially dependent Applys can be composed.
-   *
-   * The composition of Applys `F` and `G`, `F[G[x]]`, is also an Apply.
-   *
-   * Example:
-   * {{{
-   * scala> import cats.Apply
-   * scala> import cats.implicits._
-   * scala> val ap = Apply[Option].compose[List]
-   * scala> val x: Option[List[Int]] = Some(List(1, 2))
-   * scala> val y: Option[List[Int]] = Some(List(10, 20))
-   * scala> ap.map2(x, y)(_ + _)
-   * res0: Option[List[Int]] = Some(List(11, 21, 12, 22))
-   * }}}
-   */
-  def compose[G[_]](implicit GG: Apply[G]): Apply[Lambda[X => F[G[X]]]] =
-    new CompositeApply[F, G] {
-      def F: Apply[F] = self
-      def G: Apply[G] = GG
+  def compose[G[_]: Apply]: Apply[λ[α => F[G[α]]]] =
+    new ComposedApply[F, G] {
+      val F = self
+      val G = Apply[G]
     }
-
 }
 
-trait CompositeApply[F[_], G[_]]
-  extends Apply[Lambda[X => F[G[X]]]] with Functor.Composite[F, G] {
-  def F: Apply[F]
-  def G: Apply[G]
+object Apply {
+  def semigroup[F[_], A](implicit f: Apply[F], sg: Semigroup[A]): Semigroup[F[A]] =
+    new ApplySemigroup[F, A](f, sg)
+}
 
-  def ap[A, B](f: F[G[A => B]])(fa: F[G[A]]): F[G[B]] =
-    F.ap(F.map(f)(gab => G.ap(gab)(_)))(fa)
-
-  override def product[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[(A, B)]] =
-    F.map2(fa, fb)(G.product)
+private[cats] class ApplySemigroup[F[_], A](f: Apply[F], sg: Semigroup[A]) extends Semigroup[F[A]] {
+  def combine(a: F[A], b: F[A]): F[A] =
+    f.map2(a, b)(sg.combine)
 }

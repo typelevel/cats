@@ -4,6 +4,7 @@ import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
+import scala.xml.transform.{RewriteRule, RuleTransformer}
 
 lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev environment")
 
@@ -11,7 +12,22 @@ lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageMinimum := 60,
   ScoverageKeys.coverageFailOnMinimum := false,
   ScoverageKeys.coverageHighlighting := scalaBinaryVersion.value != "2.10",
-  ScoverageKeys.coverageExcludedPackages := "cats\\.bench\\..*"
+  ScoverageKeys.coverageExcludedPackages := "cats\\.bench\\..*",
+  // don't include scoverage as a dependency in the pom
+  // see issue #980
+  // this code was copied from https://github.com/mongodb/mongo-spark
+  pomPostProcess := { (node: xml.Node) =>
+    new RuleTransformer(
+      new RewriteRule {
+        override def transform(node: xml.Node): Seq[xml.Node] = node match {
+          case e: xml.Elem
+              if e.label == "dependency" && e.child.exists(child => child.label == "groupId" && child.text == "org.scoverage") => Nil
+          case _ => Seq(node)
+
+        }
+
+      }).transform(node).head
+  }
 )
 
 lazy val buildSettings = Seq(
@@ -47,8 +63,11 @@ lazy val commonSettings = Seq(
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")
   ),
+  fork in test := true,
   parallelExecution in Test := false,
-  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
+  // workaround for https://github.com/scalastyle/scalastyle-sbt-plugin/issues/47
+  (scalastyleSources in Compile) <++= unmanagedSourceDirectories in Compile
 ) ++ warnUnusedImport
 
 lazy val tagName = Def.setting{
@@ -58,7 +77,7 @@ lazy val tagName = Def.setting{
 lazy val commonJsSettings = Seq(
   scalacOptions += {
     val tagOrHash =
-      if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lines_!.head
+      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lines_!.head
       else tagName.value
     val a = (baseDirectory in LocalRootProject).value.toURI.toString
     val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
@@ -105,7 +124,7 @@ lazy val testingDependencies = Seq(
 def docsSourcesAndProjects(sv: String): (Boolean, Seq[ProjectReference]) =
   CrossVersion.partialVersion(sv) match {
     case Some((2, 10)) => (false, Nil)
-    case _ => (true, Seq(coreJVM, freeJVM))
+    case _ => (true, Seq(kernelJVM, coreJVM, freeJVM))
   }
 
 lazy val javadocSettings = Seq(
@@ -119,6 +138,8 @@ lazy val docSettings = Seq(
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
   ghpagesNoJekyll := false,
+  fork in tut := true,
+  fork in (ScalaUnidoc, unidoc) := true,
   siteMappings += file("CONTRIBUTING.md") -> "contributing.md",
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
     "-Xfatal-warnings",
@@ -185,9 +206,9 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(scoverageSettings: _*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(KernelBoiler.gen))
   .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .jvmSettings((commonJvmSettings ++ (mimaPreviousArtifacts := Set("org.typelevel" %% "cats-kernel" % "0.6.0"))):_*)
 
-lazy val kernelJVM = kernel.jvm
+lazy val kernelJVM = kernel.jvm 
 lazy val kernelJS = kernel.js
 
 lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
@@ -343,7 +364,7 @@ addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
 addCommandAlias("validateJS", ";macrosJS/compile;kernelJS/compile;coreJS/compile;kernelLawsJS/compile;lawsJS/compile;kernelLawsJS/test;testsJS/test;js/test")
 
-addCommandAlias("validate", ";validateJS;validateJVM")
+addCommandAlias("validate", ";clean;validateJS;validateJVM")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line.

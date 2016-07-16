@@ -420,14 +420,14 @@ _very simple_ Monad from any _functor_**.
 The above forgetful functor takes a `Monad` and:
 
  - forgets its *monadic* part (e.g. the `flatMap` function)
- - forgets its *applicative* part (e.g. the `pure` function)
+ - forgets its *pointed* part (e.g. the `pure` function)
  - finally keeps the *functor* part (e.g. the `map` function)
 
 By reversing all arrows to build the left-adjoint, we deduce that the
-forgetful functor is basically a construction that:
+free monad is basically a construction that:
 
  - takes a *functor*
- - adds the *applicative* part (e.g. `pure`)
+ - adds the *pointed* part (e.g. `pure`)
  - adds the *monadic* behavior (e.g. `flatMap`)
 
 In terms of implementation, to build a *monad* from a *functor* we use
@@ -461,10 +461,10 @@ From a computational point of view, `Free` recursive structure can be
 seen as a sequence of operations.
 
  - `Pure` returns an `A` value and ends the entire computation.
-- `Suspend` is a continuation; it suspends the current computation
-  with the suspension functor `F` (which can represent a command for
-  example) and hands control to the caller. `A` represents a value
-  bound to this computation.
+ - `Suspend` is a continuation; it suspends the current computation
+   with the suspension functor `F` (which can represent a command for
+   example) and hands control to the caller. `A` represents a value
+   bound to this computation.
 
 Please note this `Free` construction has the interesting quality of
 _encoding_ the recursion on the heap instead of the stack as classic
@@ -477,16 +477,12 @@ If you look at implementation in cats, you will see another member of
 the `Free[_]` ADT:
 
 ```scala
-sealed abstract case class Gosub[S[_], B]() extends Free[S, B] {
-  type C
-  val a: () => Free[S, C]
-  val f: C => Free[S, B]
-}
+case class FlatMapped[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 ```
 
-`Gosub` represents a call to a subroutine `a` and when `a` is
+`FlatMapped` represents a call to a subroutine `c` and when `c` is
 finished, it continues the computation by calling the function `f`
-with the result of `a`.
+with the result of `c`.
 
 It is actually an optimization of `Free` structure allowing to solve a
 problem of quadratic complexity implied by very deep recursive `Free`
@@ -494,7 +490,7 @@ computations.
 
 It is exactly the same problem as repeatedly appending to a `List[_]`.
 As the sequence of operations becomes longer, the slower a `flatMap`
-"through" the structure will be. With `Gosub`, `Free` becomes a
+"through" the structure will be. With `FlatMapped`, `Free` becomes a
 right-associated structure not subject to quadratic complexity.
 
 ## Future Work (TODO)

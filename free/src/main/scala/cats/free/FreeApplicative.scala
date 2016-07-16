@@ -25,22 +25,22 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
     }
 
   /** Interprets/Runs the sequence of operations using the semantics of Applicative G
-    * Tail recursive only if G provides tail recursive interpretation (ie G is FreeMonad)
-    */
-  final def foldMap[G[_]](f: FunctionK[F,G])(implicit G: Applicative[G]): G[A] =
+   * Tail recursive only if G provides tail recursive interpretation (ie G is FreeMonad)
+   */
+  final def foldMap[G[_]](f: FunctionK[F, G])(implicit G: Applicative[G]): G[A] =
     this match {
       case Pure(a) => G.pure(a)
       case Ap(pivot, fn) => G.map2(f(pivot), fn.foldMap(f))((a, g) => g(a))
     }
 
   /** Interpret/run the operations using the semantics of `Applicative[F]`.
-    * Tail recursive only if `F` provides tail recursive interpretation.
-    */
+   * Tail recursive only if `F` provides tail recursive interpretation.
+   */
   final def fold(implicit F: Applicative[F]): F[A] =
     foldMap(FunctionK.id[F])
 
   /** Interpret this algebra into another FreeApplicative */
-  final def compile[G[_]](f: FunctionK[F,G]): FA[G, A] =
+  final def compile[G[_]](f: FunctionK[F, G]): FA[G, A] =
     foldMap[FA[G, ?]] {
       new FunctionK[F, FA[G, ?]] {
         def apply[B](fa: F[B]): FA[G, B] = lift(f(fa))
@@ -48,9 +48,9 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
     }
 
   /** Interpret this algebra into a Monoid */
-  final def analyze[M:Monoid](f: FunctionK[F,λ[α => M]]): M =
-    foldMap[Const[M, ?]](new (FunctionK[F,Const[M, ?]]) {
-      def apply[X](x: F[X]): Const[M,X] = Const(f(x))
+  final def analyze[M:Monoid](f: FunctionK[F, λ[α => M]]): M =
+    foldMap[Const[M, ?]](new (FunctionK[F, Const[M, ?]]) {
+      def apply[X](x: F[X]): Const[M, X] = Const(f(x))
     }).getConst
 
   /** Compile this FreeApplicative algebra into a Free algebra. */
@@ -60,6 +60,8 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
         def apply[B](fa: F[B]): Free[F, B] = Free.liftF(fa)
       }
     }
+
+  override def toString(): String = "FreeApplicative(...)"
 }
 
 object FreeApplicative {

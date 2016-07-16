@@ -40,11 +40,6 @@
    <parameter name="regex"><![CDATA[println]]></parameter>
   </parameters>
  </check>
- <check level="error" class="org.scalastyle.scalariform.NumberOfTypesChecker" enabled="true">
-  <parameters>
-   <parameter name="maxTypes"><![CDATA[30]]></parameter>
-  </parameters>
- </check>
  <check level="error" class="org.scalastyle.scalariform.CyclomaticComplexityChecker" enabled="true">
   <parameters>
    <parameter name="maximum"><![CDATA[10]]></parameter>
@@ -63,5 +58,37 @@
   <parameters>
    <parameter name="ignoreOverride">false</parameter>
   </parameters>
+ </check>
+ <check level="error" class="org.scalastyle.file.RegexChecker" enabled="true" customId="kind.projector.lambda">
+  <parameters>
+   <parameter name="regex">Lambda\[</parameter>
+  </parameters>
+  <customMessage><![CDATA[Use Greek characters in a kind projection (λ[α => ...]).]]></customMessage>
+ </check>
+ <check enabled="true" class="org.scalastyle.scalariform.EnsureSingleSpaceAfterTokenChecker" level="error">
+  <parameters>
+   <parameter name="tokens">PACKAGE, WHILE, CASE, NEW, DO, EQUALS, SUBTYPE, SEALED, TYPE, FINAL, IMPORT, RETURN, VAL, VAR, ELSE, MATCH, TRY, SUPERTYPE, OP, CATCH, THROW, CLASS, DEF, FOR, LARROW, ABSTRACT, IF, OBJECT, COMMA, YIELD, PIPE, IMPLICIT, LAZY, TRAIT, FORSOME, FINALLY, OVERRIDE, ARROW, EXTENDS</parameter>
+  </parameters>
+ </check>
+ <check enabled="true" class="org.scalastyle.scalariform.EnsureSingleSpaceBeforeTokenChecker" level="error">
+   <parameters>
+     <parameter name="tokens">OP, PIPE, FORSOME</parameter>
+   </parameters>
+ </check>
+ <check enabled="true" class="org.scalastyle.scalariform.ForBraceChecker" level="error"/>
+ <check enabled="true" class="org.scalastyle.scalariform.ProcedureDeclarationChecker" level="error"/>
+ <check enabled="true" class="org.scalastyle.scalariform.RedundantIfChecker" level="error"/>
+ <check enabled="true" class="org.scalastyle.scalariform.SpaceAfterCommentStartChecker" level="error"/>
+ <check level="error" class="org.scalastyle.file.RegexChecker" enabled="true" customId="type.class.spacing">
+  <parameters>
+   <parameter name="regex"><![CDATA[(?<!@|simulacrum\.)typeclass]]></parameter>
+  </parameters>
+  <customMessage><![CDATA[Use 'type class' instead of typeclass (See #441)]]></customMessage>
+ </check>
+ <check level="error" class="org.scalastyle.file.RegexChecker" enabled="true" customId="if.paren.spacing">
+  <parameters>
+   <parameter name="regex"><![CDATA[if\(|if\s\s+\(]]></parameter>
+  </parameters>
+  <customMessage><![CDATA[Put exactly a single space between 'if' and the following parenthesis.]]></customMessage>
  </check>
 </scalastyle>

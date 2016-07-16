@@ -2,7 +2,7 @@ package cats
 package laws
 
 import cats.Id
-import cats.data.Const
+import cats.data.{Const, Nested}
 import cats.syntax.traverse._
 import cats.syntax.foldable._
 
@@ -20,11 +20,10 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
   )(implicit
     N: Applicative[N],
     M: Applicative[M]
-  ): IsEq[M[N[F[C]]]] = {
-    implicit val MN = M.compose(N)
-    type MN[Z] = M[N[Z]]
-    val lhs: MN[F[C]] = M.map(fa.traverse(f))(fb => fb.traverse(g))
-    val rhs: MN[F[C]] = fa.traverse[MN, C](a => M.map(f(a))(g))
+  ): IsEq[Nested[M, N, F[C]]] = {
+
+    val lhs = Nested(M.map(fa.traverse(f))(fb => fb.traverse(g)))
+    val rhs = fa.traverse[Nested[M, N, ?], C](a => Nested(M.map(f(a))(g)))
     lhs <-> rhs
   }
 

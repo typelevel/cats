@@ -36,9 +36,9 @@ class FunctionTests extends CatsSuite {
 
   checkAll("Function1[String, Int]", GroupLaws[Function1[String, Int]].monoid)
 
-  checkAll("Function1[Int, Int]", MonoidKTests[Lambda[A => A => A]].semigroupK[Int])
-  checkAll("SemigroupK[Lambda[A => A => A]", SerializableTests.serializable(catsStdSemigroupKForFunction1))
+  checkAll("Function1[Int, Int]", MonoidKTests[λ[α => α => α]].semigroupK[Int])
+  checkAll("SemigroupK[λ[α => α => α]", SerializableTests.serializable(catsStdSemigroupKForFunction1))
 
-  checkAll("Function1[Int, Int]", MonoidKTests[Lambda[A => A => A]].monoidK[Int])
-  checkAll("MonoidK[Lambda[A => A => A]", SerializableTests.serializable(catsStdMonoidKForFunction1))
+  checkAll("Function1[Int, Int]", MonoidKTests[λ[α => α => α]].monoidK[Int])
+  checkAll("MonoidK[λ[α => α => α]", SerializableTests.serializable(catsStdMonoidKForFunction1))
 }

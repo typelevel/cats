@@ -5,7 +5,7 @@ import cats.macros.Ops
 
 trait SemigroupSyntax {
   // TODO: use simulacrum instances eventually
-  implicit def semigroupSyntax[A: Semigroup](a: A): SemigroupOps[A] =
+  implicit def catsSyntaxSemigroup[A: Semigroup](a: A): SemigroupOps[A] =
     new SemigroupOps[A](a)
 }
 

@@ -109,13 +109,34 @@ Functor[List].fproduct(source)(len).toMap
 ### compose
 
 Functors compose! Given any functor `F[_]` and any functor `G[_]` we can
-create a new functor `F[G[_]]` by composing them:
+create a new functor `F[G[_]]` by composing them via the `Nested` data type:
 
 ```tut:book
-val listOpt = Functor[List] compose Functor[Option]
-listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
-val optList = Functor[Option] compose Functor[List]
-optList.map(Some(List(1, 2, 3)))(_ + 1)
-val listOptList = listOpt compose Functor[List]
-listOptList.map(List(Some(List(1,2)), None, Some(List(3,4))))(_ + 1)
+import cats.data.Nested
+val listOpt = Nested[List, Option, Int](List(Some(1), None, Some(3)))
+Functor[Nested[List, Option, ?]].map(listOpt)(_ + 1)
+
+val optList = Nested[Option, List, Int](Some(List(1, 2, 3)))
+Functor[Nested[Option, List, ?]].map(optList)(_ + 1)
 ```
+
+## Subtyping
+
+Functors have a natural relationship with subtyping:
+
+```tut:book
+class A
+class B extends A
+val b: B = new B
+val a: A = b
+val listB: List[B] = List(new B)
+val listA1: List[A] = listB.map(b => b: A)
+val listA2: List[A] = listB.map(identity[A])
+val listA3: List[A] = Functor[List].widen[B, A](listB)
+```
+
+Subtyping relationships are "lifted" by functors, such that if `F` is a
+lawful functor and `A <: B` then `F[A] <: F[B]` - almost. Almost, because to
+convert an `F[B]` to an `F[A]` a call to `map(identity[A])` is needed
+(provided as `widen` for convenience). The functor laws guarantee that
+`fa map identity == fa`, however.

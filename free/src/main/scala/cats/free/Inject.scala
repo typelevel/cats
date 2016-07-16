@@ -5,10 +5,10 @@ import cats.data.Coproduct
 
 
 /**
-  * Inject type class as described in "Data types a la carte" (Swierstra 2008).
-  *
-  * @see [[http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf]]
-  */
+ * Inject type class as described in "Data types a la carte" (Swierstra 2008).
+ *
+ * @see [[http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf]]
+ */
 sealed abstract class Inject[F[_], G[_]] {
   def inj[A](fa: F[A]): G[A]
 
@@ -16,21 +16,21 @@ sealed abstract class Inject[F[_], G[_]] {
 }
 
 private[free] sealed abstract class InjectInstances {
-  implicit def reflexiveInjectInstance[F[_]] =
+  implicit def catsFreeReflexiveInjectInstance[F[_]]: Inject[F, F] =
     new Inject[F, F] {
       def inj[A](fa: F[A]): F[A] = fa
 
-      def prj[A](ga: F[A]): Option[F[A]] = Option(ga)
+      def prj[A](ga: F[A]): Option[F[A]] = Some(ga)
     }
 
-  implicit def leftInjectInstance[F[_], G[_]] =
+  implicit def catsFreeLeftInjectInstance[F[_], G[_]]: Inject[F, Coproduct[F, G, ?]] =
     new Inject[F, Coproduct[F, G, ?]] {
       def inj[A](fa: F[A]): Coproduct[F, G, A] = Coproduct.leftc(fa)
 
-      def prj[A](ga: Coproduct[F, G, A]): Option[F[A]] = ga.run.fold(Option(_), _ => None)
+      def prj[A](ga: Coproduct[F, G, A]): Option[F[A]] = ga.run.fold(Some(_), _ => None)
     }
 
-  implicit def rightInjectInstance[F[_], G[_], H[_]](implicit I: Inject[F, G]) =
+  implicit def catsFreeRightInjectInstance[F[_], G[_], H[_]](implicit I: Inject[F, G]): Inject[F, Coproduct[H, G, ?]] =
     new Inject[F, Coproduct[H, G, ?]] {
       def inj[A](fa: F[A]): Coproduct[H, G, A] = Coproduct.rightc(I.inj(fa))
 

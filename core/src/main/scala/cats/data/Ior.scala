@@ -45,8 +45,8 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def toOption: Option[B] = right
   final def toList: List[B] = right.toList
 
-  final def to[F[_], BB >: B](implicit monoidKF: MonoidK[F], applicativeF: Applicative[F]): F[BB] =
-    fold(_ => monoidKF.empty, applicativeF.pure, (_, b) => applicativeF.pure(b))
+  final def to[F[_], BB >: B](implicit F: Alternative[F]): F[BB] =
+    fold(_ => F.empty, F.pure, (_, b) => F.pure(b))
 
   final def swap: B Ior A = fold(Ior.right, Ior.left, (a, b) => Ior.both(b, a))
 

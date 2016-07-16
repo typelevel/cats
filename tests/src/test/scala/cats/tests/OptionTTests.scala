@@ -1,11 +1,151 @@
-package cats.tests
+package cats
+package tests
 
-import cats.{Id, MonadRec, Cartesian, Show}
-import cats.data.{OptionT, Xor}
-import cats.laws.discipline.{FunctorTests, SerializableTests, CartesianTests, MonadRecTests}
+import cats.data.{OptionT, Xor, XorT}
+import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
 class OptionTTests extends CatsSuite {
+  implicit val iso = CartesianTests.Isomorphisms.invariant[OptionT[ListWrapper, ?]](OptionT.catsDataFunctorForOptionT(ListWrapper.functor))
+
+  {
+    implicit val F = ListWrapper.eqv[Option[Int]]
+
+    checkAll("OptionT[ListWrapper, Int]", OrderLaws[OptionT[ListWrapper, Int]].eqv)
+    checkAll("Eq[OptionT[ListWrapper, Int]]", SerializableTests.serializable(Eq[OptionT[ListWrapper, Int]]))
+  }
+
+  {
+    implicit val F = ListWrapper.partialOrder[Option[Int]]
+
+    checkAll("OptionT[ListWrapper, Int]", OrderLaws[OptionT[ListWrapper, Int]].partialOrder)
+    checkAll("PartialOrder[OptionT[ListWrapper, Int]]", SerializableTests.serializable(PartialOrder[OptionT[ListWrapper, Int]]))
+
+    Eq[OptionT[ListWrapper, Int]]
+  }
+
+  {
+    implicit val F = ListWrapper.order[Option[Int]]
+
+    checkAll("OptionT[ListWrapper, Int]", OrderLaws[OptionT[ListWrapper, Int]].order)
+    checkAll("Order[OptionT[ListWrapper, Int]]", SerializableTests.serializable(Order[OptionT[ListWrapper, Int]]))
+
+    PartialOrder[OptionT[ListWrapper, Int]]
+    Eq[OptionT[ListWrapper, Int]]
+  }
+
+  {
+    // F has a Functor
+    implicit val F = ListWrapper.functor
+
+    checkAll("OptionT[ListWrapper, Int]", FunctorTests[OptionT[ListWrapper, ?]].functor[Int, Int, Int])
+    checkAll("Functor[OptionT[ListWrapper, ?]]", SerializableTests.serializable(Functor[OptionT[ListWrapper, ?]]))
+  }
+
+  {
+    // F has a Monad
+    implicit val F = ListWrapper.monad
+    implicit val eq0 = OptionT.catsDataEqForOptionT[ListWrapper, Option[Int]]
+    implicit val eq1 = OptionT.catsDataEqForOptionT[OptionT[ListWrapper, ?], Int](eq0)
+
+    checkAll("OptionT[ListWrapper, Int]", MonadTests[OptionT[ListWrapper, ?]].monad[Int, Int, Int])
+    checkAll("Monad[OptionT[ListWrapper, ?]]", SerializableTests.serializable(Monad[OptionT[ListWrapper, ?]]))
+
+    checkAll("OptionT[ListWrapper, Int]", SemigroupKTests[OptionT[ListWrapper, ?]].semigroupK[Int])
+    checkAll("SemigroupK[OptionT[ListWrapper, ?]]", SerializableTests.serializable(SemigroupK[OptionT[ListWrapper, ?]]))
+
+    checkAll("OptionT[ListWrapper, Int]", MonoidKTests[OptionT[ListWrapper, ?]].monoidK[Int])
+    checkAll("MonoidK[OptionT[ListWrapper, ?]]", SerializableTests.serializable(MonoidK[OptionT[ListWrapper, ?]]))
+
+    FlatMap[OptionT[ListWrapper, ?]]
+    Applicative[OptionT[ListWrapper, ?]]
+    Apply[OptionT[ListWrapper, ?]]
+    Functor[OptionT[ListWrapper, ?]]
+    MonoidK[OptionT[ListWrapper, ?]]
+    SemigroupK[OptionT[ListWrapper, ?]]
+  }
+
+  {
+    // F has a MonadRec
+    implicit val F = ListWrapper.monadRec
+
+    checkAll("OptionT[ListWrapper, Int]", MonadRecTests[OptionT[ListWrapper, ?]].monadRec[Int, Int, Int])
+    checkAll("MonadRec[OptionT[ListWrapper, ?]]", SerializableTests.serializable(MonadRec[OptionT[ListWrapper, ?]]))
+
+    Monad[OptionT[ListWrapper, ?]]
+    FlatMap[OptionT[ListWrapper, ?]]
+    Applicative[OptionT[ListWrapper, ?]]
+    Apply[OptionT[ListWrapper, ?]]
+    Functor[OptionT[ListWrapper, ?]]
+  }
+
+  {
+    // F has a MonadError
+    type SXor[A] = String Xor A
+
+    implicit val monadError = OptionT.catsDataMonadErrorForOptionT[SXor, String]
+
+    import org.scalacheck.Arbitrary
+    implicit val arb1 = implicitly[Arbitrary[OptionT[SXor, Int]]]
+    implicit val arb2 = implicitly[Arbitrary[OptionT[SXor, Int => Int]]]
+
+    implicit val eq0 = OptionT.catsDataEqForOptionT[SXor, Option[Int]]
+    implicit val eq1 = OptionT.catsDataEqForOptionT[SXor, Int]
+    implicit val eq2 = OptionT.catsDataEqForOptionT[SXor, Unit]
+    implicit val eq3 = OptionT.catsDataEqForOptionT[SXor, SXor[Unit]]
+    implicit val eq4 = OptionT.catsDataEqForOptionT[SXor, SXor[Int]]
+    implicit val eq5 = XorT.catsDataEqForXorT[OptionT[SXor, ?], String, Int]
+    implicit val eq6 = OptionT.catsDataEqForOptionT[SXor, (Int, Int, Int)]
+
+    implicit val iso = CartesianTests.Isomorphisms.invariant[OptionT[SXor, ?]]
+
+    checkAll("OptionT[String Xor ?, Int]", MonadErrorTests[OptionT[SXor, ?], String].monadError[Int, Int, Int])
+    checkAll("MonadError[OptionT[String Xor ?, ?]]", SerializableTests.serializable(monadError))
+
+    Monad[OptionT[SXor, ?]]
+    FlatMap[OptionT[SXor, ?]]
+    Applicative[OptionT[SXor, ?]]
+    Apply[OptionT[SXor, ?]]
+    Functor[OptionT[SXor, ?]]
+  }
+
+  {
+    // F has a Foldable
+    implicit val F = ListWrapper.foldable
+
+    checkAll("OptionT[ListWrapper, Int]", FoldableTests[OptionT[ListWrapper, ?]].foldable[Int, Int])
+    checkAll("Foldable[OptionT[ListWrapper, ?]]", SerializableTests.serializable(Foldable[OptionT[ListWrapper, ?]]))
+  }
+
+  {
+    // F has a Traverse
+    implicit val F = ListWrapper.traverse
+
+    checkAll("OptionT[ListWrapper, Int] with Option", TraverseTests[OptionT[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[OptionT[ListWrapper, ?]]", SerializableTests.serializable(Traverse[OptionT[ListWrapper, ?]]))
+
+    Foldable[OptionT[ListWrapper, ?]]
+    Functor[OptionT[ListWrapper, ?]]
+  }
+
+  {
+     // F[Option[A]] has a monoid
+    implicit val FA: Monoid[ListWrapper[Option[Int]]] = ListWrapper.monoid[Option[Int]]
+
+    checkAll("OptionT[ListWrapper, Int]", GroupLaws[OptionT[ListWrapper, Int]].monoid)
+    checkAll("Monoid[OptionT[ListWrapper, Int]]", SerializableTests.serializable(Monoid[OptionT[ListWrapper, Int]]))
+
+    Semigroup[OptionT[ListWrapper, Int]]
+  }
+
+  {
+    // F[Option[A]] has a semigroup
+    implicit val FA: Semigroup[ListWrapper[Option[Int]]] = ListWrapper.semigroup[Option[Int]]
+
+    checkAll("OptionT[ListWrapper, Int]", GroupLaws[OptionT[ListWrapper, Int]].semigroup)
+    checkAll("Semigroup[OptionT[ListWrapper, Int]]", SerializableTests.serializable(Semigroup[OptionT[ListWrapper, Int]]))
+  }
 
   test("fold and cata consistent") {
     forAll { (o: OptionT[List, Int], s: String, f: Int => String) =>
@@ -122,11 +262,6 @@ class OptionTTests extends CatsSuite {
     }
   }
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[OptionT[List, ?]]
-
-  checkAll("OptionT[List, Int]", CartesianTests[OptionT[List, ?]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[OptionT[List, ?]]", SerializableTests.serializable(Cartesian[OptionT[List, ?]]))
-
   test("liftF") {
     forAll { (xs: List[Int]) =>
       xs.map(Option(_)) should ===(OptionT.liftF(xs).value)
@@ -139,7 +274,7 @@ class OptionTTests extends CatsSuite {
   }
 
   test("none") {
-    OptionT.none[List,Int] should === (OptionT[List,Int](List(None)))
+    OptionT.none[List, Int] should === (OptionT[List, Int](List(None)))
   }
 
   test("implicit Show[OptionT] instance and explicit show method are consistent") {
@@ -154,17 +289,51 @@ class OptionTTests extends CatsSuite {
     }
   }
 
+  test("semiflatMap consistent with value.flatMap+f+pure") {
+    forAll { (o: OptionT[List, Int], f: Int => List[String]) =>
+      o.semiflatMap(f) should === (OptionT(o.value.flatMap {
+        case None => List(None)
+        case Some(a) => f(a).map(Some(_))
+      }))
+    }
+  }
+
   test("subflatMap consistent with value.map+flatMap") {
     forAll { (o: OptionT[List, Int], f: Int => Option[String]) =>
       o.subflatMap(f) should === (OptionT(o.value.map(_.flatMap(f))))
     }
   }
 
-  checkAll("OptionT[List, Int]", MonadRecTests[OptionT[List, ?]].monadRec[Int, Int, Int])
-  checkAll("MonadRec[OptionT[List, ?]]", SerializableTests.serializable(MonadRec[OptionT[List, ?]]))
 
-  {
-    implicit val F = ListWrapper.functor
-    checkAll("Functor[OptionT[ListWrapper, ?]]", FunctorTests[OptionT[ListWrapper, ?]].functor[Int, Int, Int])
+  /**
+   * Testing that implicit resolution works. If it compiles, the "test" passes.
+   */
+  object ImplicitResolution{
+    Eq[OptionT[List, Int]]
+    PartialOrder[OptionT[List, Int]]
+    Order[OptionT[List, Int]]
+
+    Semigroup[OptionT[List, Int]]
+    Monoid[OptionT[List, Int]]
+
+    SemigroupK[OptionT[List, ?]]
+    MonoidK[OptionT[List, ?]]
+
+    Functor[OptionT[List, ?]]
+    Monad[OptionT[List, ?]]
+    MonadRec[OptionT[List, ?]]
+
+    import scala.util.Try
+    Functor[OptionT[Try, ?]]
+    Monad[OptionT[Try, ?]]
+    MonadError[OptionT[Try, ?], Throwable]
+
+    Foldable[OptionT[List, ?]]
+    Traverse[OptionT[List, ?]]
+
+    implicit val T = ListWrapper.traverse
+    implicit val M = ListWrapper.monad
+    Functor[OptionT[ListWrapper, ?]]
   }
+
 }

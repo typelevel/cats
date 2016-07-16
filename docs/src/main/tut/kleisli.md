@@ -63,7 +63,7 @@ compose two `Kleisli`s much like we can two functions.
 
 ```tut:silent
 import cats.FlatMap
-import cats.syntax.flatMap._
+import cats.implicits._
 
 final case class Kleisli[F[_], A, B](run: A => F[B]) {
   def compose[Z](k: Kleisli[F, Z, A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
@@ -75,7 +75,7 @@ Returning to our earlier example:
 
 ```tut:silent
 // Bring in cats.FlatMap[Option] instance
-import cats.std.option._
+import cats.implicits._
 
 val parse = Kleisli((s: String) => try { Some(s.toInt) } catch { case _: NumberFormatException => None })
 
@@ -125,10 +125,7 @@ An example of a `Monad` instance for `Kleisli` is shown below.
 *Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
 
 ```tut:silent
-import cats.syntax.flatMap._
-import cats.syntax.functor._
-// Alternatively we can import cats.implicits._ to bring in all the
-// syntax at once (as well as all type class instances)
+import cats.implicits._
 
 // We can define a FlatMap instance for Kleisli if the F[_] we chose has a FlatMap instance
 // Note the input type and F are fixed, with the output type left free

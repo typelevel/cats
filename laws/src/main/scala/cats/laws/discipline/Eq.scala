@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import catalysts.Platform
-import cats.std.string._
+import cats.instances.string._
 import org.scalacheck.Arbitrary
 
 object eq {
@@ -12,7 +12,7 @@ object eq {
    * Create an approximation of Eq[A => B] by generating 100 values for A
    * and comparing the application of the two functions.
    */
-  implicit def function1Eq[A, B](implicit A: Arbitrary[A], B: Eq[B]): Eq[A => B] = new Eq[A => B] {
+  implicit def catsLawsEqForFn1[A, B](implicit A: Arbitrary[A], B: Eq[B]): Eq[A => B] = new Eq[A => B] {
     val sampleCnt: Int = if (Platform.isJvm) 50 else 5
 
     def eqv(f: A => B, g: A => B): Boolean = {
@@ -24,11 +24,42 @@ object eq {
     }
   }
 
-  /** Create an approximation of Eq[Show[A]] by using function1Eq[A, String] */
-  implicit def showEq[A: Arbitrary]: Eq[Show[A]] = {
-    val xyz = function1Eq[A, String]
+  /** Create an approximation of Eq[Show[A]] by using catsLawsEqForFn1[A, String] */
+  implicit def catsLawsEqForShow[A: Arbitrary]: Eq[Show[A]] = {
     Eq.by[Show[A], A => String] { showInstance =>
       (a: A) => showInstance.show(a)
+    }
+  }
+
+  /**
+   * Create an approximation of Eq[PartialOrder[A]] by generating 100 values for A
+   * and comparing the application of the two compare functions
+   */
+  implicit def catsLawsEqForPartialOrder[A](implicit arbA: Arbitrary[(A, A)], optIntEq: Eq[Option[Int]]): Eq[PartialOrder[A]] = new Eq[PartialOrder[A]] {
+    def eqv(f: PartialOrder[A], g: PartialOrder[A]): Boolean = {
+      val samples = List.fill(100)(arbA.arbitrary.sample).collect {
+        case Some(a) => a
+        case None => sys.error("Could not generate arbitrary values to compare two PartialOrder[A]")
+      }
+      samples.forall {
+        case (l, r) => optIntEq.eqv(f.tryCompare(l, r), g.tryCompare(l, r))
+      }
+    }
+  }
+
+  /**
+   * Create an approximation of Eq[Order[A]] by generating 100 values for A
+   * and comparing the application of the two compare functions
+   */
+  implicit def catsLawsEqForOrder[A](implicit arbA: Arbitrary[(A, A)], intEq: Eq[Int]): Eq[Order[A]] = new Eq[Order[A]] {
+    def eqv(f: Order[A], g: Order[A]): Boolean = {
+      val samples = List.fill(100)(arbA.arbitrary.sample).collect {
+        case Some(a) => a
+        case None => sys.error("Could not generate arbitrary values to compare two Order[A]")
+      }
+      samples.forall {
+        case (l, r) => intEq.eqv(f.compare(l, r), g.compare(l, r))
+      }
     }
   }
 
@@ -36,18 +67,14 @@ object eq {
    * Create an approximation of Eq[Semigroup[A]] by generating values for A
    * and comparing the application of the two combine functions.
    */
-  implicit def semigroupEq[A](implicit arbAA: Arbitrary[(A, A)], eqA: Eq[A]): Eq[Semigroup[A]] =
-    function1Eq[(A, A), A].on(f =>
+  implicit def catsLawsEqForSemigroup[A](implicit arbAA: Arbitrary[(A, A)], eqA: Eq[A]): Eq[Semigroup[A]] =
+    catsLawsEqForFn1[(A, A), A].on(f =>
       Function.tupled((x, y) => f.combine(x, y))
     )
 
-  implicit def monoidEq[A](implicit eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Monoid[A]] = new Eq[Monoid[A]] {
+  implicit def catsLawsEqForMonoid[A](implicit eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Monoid[A]] = new Eq[Monoid[A]] {
     def eqv(f: Monoid[A], g: Monoid[A]): Boolean = {
       eqSA.eqv(f, g) && eqA.eqv(f.empty, g.empty)
     }
-  }
-
-  implicit val unitEq: Eq[Unit] = new Eq[Unit] {
-    def eqv(a: Unit, b: Unit): Boolean = true
   }
 }

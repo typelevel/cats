@@ -20,7 +20,7 @@ trait SplitTests[F[_, _]] extends ComposeTests[F] {
     EqFADCG: Eq[F[(A, D), (C, G)]]
   ): RuleSet =
     new DefaultRuleSet(
-      name =  "split",
+      name = "split",
       parent = Some(compose[A, B, C, D]),
       "split interchange" -> forAll(laws.splitInterchange[A, B, C, D, E, G] _))
 }
