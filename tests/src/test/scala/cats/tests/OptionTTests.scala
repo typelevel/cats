@@ -122,11 +122,12 @@ class OptionTTests extends CatsSuite {
     // F has a Traverse
     implicit val F = ListWrapper.traverse
 
-    checkAll("OptionT[ListWrapper, Int] with Option", TraverseTests[OptionT[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
-    checkAll("Traverse[OptionT[ListWrapper, ?]]", SerializableTests.serializable(Traverse[OptionT[ListWrapper, ?]]))
+    checkAll("OptionT[ListWrapper, Int] with Option", TraverseFilterTests[OptionT[ListWrapper, ?]].traverseFilter[Int, Int, Int, Int, Option, Option])
+    checkAll("TraverseFilter[OptionT[ListWrapper, ?]]", SerializableTests.serializable(TraverseFilter[OptionT[ListWrapper, ?]]))
 
     Foldable[OptionT[ListWrapper, ?]]
     Functor[OptionT[ListWrapper, ?]]
+    Traverse[OptionT[ListWrapper, ?]]
   }
 
   {

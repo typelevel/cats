@@ -64,8 +64,8 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       }
 
       def traverseFilter[G[_], A, B](fa: List[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
-        foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglob) =>
-          G.map2Eval(f(a), lglob)((ob, l) => ob.fold(l)(_ :: l))
+        foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglb) =>
+          G.map2Eval(f(a), lglb)((ob, l) => ob.fold(l)(_ :: l))
         }.value
 
       override def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =

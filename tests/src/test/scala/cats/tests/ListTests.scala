@@ -17,7 +17,7 @@ class ListTests extends CatsSuite {
   checkAll("MonadCombine[List]", SerializableTests.serializable(MonadCombine[List]))
 
   checkAll("List[Int] with Option", TraverseFilterTests[List].traverseFilter[Int, Int, Int, List[Int], Option, Option])
-  checkAll("Collect[List]", SerializableTests.serializable(TraverseFilter[List]))
+  checkAll("TraverseFilter[List]", SerializableTests.serializable(TraverseFilter[List]))
 
   test("nel => list => nel returns original nel")(
     forAll { fa: NonEmptyList[Int] =>

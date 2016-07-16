@@ -7,7 +7,7 @@ import simulacrum.typeclass
  * that can essentially have a [[traverse]] and a [[filter]] applied as a single
  * combined operation ([[traverseFilter]]).
  *
- * TODO ceedumbs more info
+ * Must obey the laws defined in cats.laws.TraverseFilterLaws.
  *
  * Based on Haskell's [[https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html Data.Witherable]]
  */
