@@ -3,7 +3,7 @@ package cats
 import simulacrum.typeclass
 
 /**
- * `TraverseFilter`, also known as `Witherable` represents list-like structures
+ * `TraverseFilter`, also known as `Witherable`, represents list-like structures
  * that can essentially have a [[traverse]] and a [[filter]] applied as a single
  * combined operation ([[traverseFilter]]).
  *
