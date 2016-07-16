@@ -77,7 +77,7 @@ class WriterTTests extends CatsSuite {
     w2.tell("bar") should === (Writer("foobar", 3))
   }
 
-  test("MonadWriter's tell is consistent with write") {
+  test("MonadWriter's tell is consistent with WriterT's tell") {
     type Logged[A] = Writer[String, A]
     val w = MonadWriter[Logged, String]
     val x = w.tell("foo")
