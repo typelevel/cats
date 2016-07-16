@@ -67,8 +67,11 @@ class NonEmptyVectorTests extends CatsSuite {
   }
 
   test("Show is formatted correctly") {
-    val nonEmptyVector = NonEmptyVector("Test", Vector.empty)
-    nonEmptyVector.show should === ("NonEmptyVector(Vector(Test))")
+    val v1 = NonEmptyVector("Test", Vector.empty)
+    v1.show should === ("NonEmptyVector(Test)")
+
+    val v2 = NonEmptyVector("foo", "bar", "baz")
+    v2.show should === ("NonEmptyVector(foo, bar, baz)")
   }
 
   test("Creating NonEmptyVector + toVector is identity") {

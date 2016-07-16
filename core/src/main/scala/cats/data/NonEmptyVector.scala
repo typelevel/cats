@@ -21,7 +21,10 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
   def updated(i: Int, a: A): Option[NonEmptyVector[A]] =
     if (toVector.isDefinedAt(i)) Some(NonEmptyVector(toVector.updated(i, a))) else None
 
-  /** Updates the element at the index, or throws an exeption if none exists */
+  /**
+   * Updates the element at the index, or throws an `IndexOutOfBoundsException`
+   * if none exists (if `i` does not satisfy `0 <= i < length`).
+   */
   def updatedUnsafe(i: Int, a: A):
       NonEmptyVector[A] = NonEmptyVector(toVector.updated(i, a))
 
@@ -40,8 +43,8 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
   def concat(other: NonEmptyVector[A]): NonEmptyVector[A] = NonEmptyVector(toVector ++ other.toVector)
 
   /**
-    * Alias for concat
-    */
+   * Alias for concat
+   */
   def ++(other: NonEmptyVector[A]): NonEmptyVector[A] = concat(other)
 
   /**
@@ -50,8 +53,8 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
   def concat(other: Vector[A]): NonEmptyVector[A] = NonEmptyVector(toVector ++ other)
 
   /**
-    * Alias for concat
-    */
+   * Alias for concat
+   */
   def ++(other: Vector[A]): NonEmptyVector[A] = concat(other)
 
   /**
@@ -123,7 +126,9 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
    * universal .toString method.
    */
   def show(implicit A: Show[A]): String =
-    s"NonEmptyVector(${Show[Vector[A]].show(toVector)})"
+    s"NonEmpty${Show[Vector[A]].show(toVector)}"
+
+  def length: Int = toVector.length
 }
 
 private[data] sealed trait NonEmptyVectorInstances {
@@ -138,7 +143,7 @@ private[data] sealed trait NonEmptyVectorInstances {
 
       override def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
 
-      override def size[A](fa: NonEmptyVector[A]): Long = 1 + fa.tail.size.toLong
+      override def size[A](fa: NonEmptyVector[A]): Long = fa.length.toLong
 
       override def reduceLeft[A](fa: NonEmptyVector[A])(f: (A, A) => A): A =
         fa.reduceLeft(f)
@@ -167,7 +172,7 @@ private[data] sealed trait NonEmptyVectorInstances {
       def extract[A](fa: NonEmptyVector[A]): A = fa.head
 
       def traverse[G[_], A, B](fa: NonEmptyVector[A])(f: (A) => G[B])(implicit G: Applicative[G]): G[NonEmptyVector[B]] =
-      G.map2Eval(f(fa.head), Always(Traverse[Vector].traverse(fa.tail)(f)))(NonEmptyVector(_, _)).value
+        G.map2Eval(f(fa.head), Always(Traverse[Vector].traverse(fa.tail)(f)))(NonEmptyVector(_, _)).value
 
 
       override def foldLeft[A, B](fa: NonEmptyVector[A], b: B)(f: (B, A) => B): B =
