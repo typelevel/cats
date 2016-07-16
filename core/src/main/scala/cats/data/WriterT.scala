@@ -3,8 +3,12 @@ package data
 
 import cats.kernel.instances.tuple._
 import cats.functor.{Bifunctor, Contravariant}
+import cats.syntax.semigroup._
 
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {
+  def write(l: L)(implicit functorF: Functor[F], semigroupL: Semigroup[L]): WriterT[F, L, V] =
+    mapWritten(_ |+| l)
+
   def written(implicit functorF: Functor[F]): F[L] =
     functorF.map(run)(_._1)
 
@@ -244,6 +248,8 @@ private[data] sealed trait WriterTMonadWriter[F[_], L] extends MonadWriter[Write
 
   def pass[A](fa: WriterT[F, L, (L => L, A)]): WriterT[F, L, A] =
     WriterT(F0.flatMap(fa.value) { case (f, a) => F0.map(fa.written)(l => (f(l), a)) })
+
+  override def write(l: L): WriterT[F, L, Unit] = WriterT.write(l)
 }
 
 private[data] sealed trait WriterTSemigroupK[F[_], L] extends SemigroupK[WriterT[F, L, ?]] {
@@ -299,7 +305,7 @@ trait WriterTFunctions {
   def put[F[_], L, V](v: V)(l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, V] =
     WriterT.putT[F, L, V](applicativeF.pure(v))(l)
 
-  def tell[F[_], L](l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, Unit] =
+  def write[F[_], L](l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, Unit] =
     WriterT.put[F, L, Unit](())(l)
 
   def value[F[_], L, V](v: V)(implicit applicativeF: Applicative[F], monoidL: Monoid[L]): WriterT[F, L, V] =

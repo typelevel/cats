@@ -38,7 +38,11 @@ package object data {
 
   type Writer[L, V] = WriterT[Id, L, V]
   object Writer {
-    def apply[L, V](l: L, v: V): WriterT[Id, L, V] = WriterT[Id, L, V]((l, v))
+    def apply[L, V](l: L, v: V): Writer[L, V] = WriterT[Id, L, V]((l, v))
+
+    def value[L:Monoid, V](v: V): Writer[L, V] = WriterT.value(v)
+
+    def write[L](l: L): Writer[L, Unit] = WriterT.write(l)
   }
 
   type State[S, A] = StateT[Eval, S, A]

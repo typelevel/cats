@@ -47,9 +47,9 @@ class WriterTTests extends CatsSuite {
     }
   }
 
-  test("tell + written is identity") {
+  test("write + written is identity") {
     forAll { (i: Int) =>
-      WriterT.tell[Id, Int](i).written should === (i)
+      WriterT.write[Id, Int](i).written should === (i)
     }
   }
 
@@ -68,6 +68,25 @@ class WriterTTests extends CatsSuite {
   test("show") {
     val writerT: WriterT[Id, List[String], String] = WriterT.put("foo")(List("Some log message"))
     writerT.show should === ("(List(Some log message),foo)")
+  }
+
+  test("write appends to log") {
+    val w1: Writer[String, Int] = Writer.value(3)
+    val w2 = w1.write("foo")
+    w2 should === (Writer("foo", 3))
+    w2.write("bar") should === (Writer("foobar", 3))
+  }
+
+  test("MonadWriter's write is consistent with write") {
+    type Logged[A] = Writer[String, A]
+    val w = MonadWriter[Logged, String]
+    val x = w.write("foo")
+    x should === (Writer.write("foo"))
+    x should === (Writer("foo", ()))
+  }
+
+  test("write instantiates a Writer") {
+    Writer.write("foo").written should === ("foo")
   }
 
   {

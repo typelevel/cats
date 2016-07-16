@@ -12,7 +12,7 @@ trait MonadWriter[F[_], W] extends Monad[F] {
   def pass[A](fa: F[(W => W, A)]): F[A]
 
   /** Lift the log into the effect */
-  def tell(w: W): F[Unit] = writer((w, ()))
+  def write(w: W): F[Unit] = writer((w, ()))
 
   /** Pair the value with an inspection of the accumulator */
   def listens[A, B](fa: F[A])(f: W => B): F[(B, A)] =
