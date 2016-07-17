@@ -32,6 +32,22 @@ object eq {
   }
 
   /**
+   * Create an approximation of Eq[Eq[A]] by generating 100 values for A
+   * and comparing the application of the two eqv functions
+   */
+  implicit def catsLawsEqForEq[A](implicit arbA: Arbitrary[(A, A)], booleanEq: Eq[Boolean]): Eq[Eq[A]] = new Eq[Eq[A]] {
+    def eqv(f: Eq[A], g: Eq[A]): Boolean = {
+      val samples = List.fill(100)(arbA.arbitrary.sample).collect {
+        case Some(a) => a
+        case None => sys.error("Could not generate arbitrary values to compare two Eq[A]")
+      }
+      samples.forall {
+        case (l, r) => booleanEq.eqv(f.eqv(l, r), g.eqv(l, r))
+      }
+    }
+  }
+
+  /**
    * Create an approximation of Eq[PartialOrder[A]] by generating 100 values for A
    * and comparing the application of the two compare functions
    */
