@@ -20,7 +20,14 @@ import simulacrum.typeclass
 
   /**
    * Lifts natural subtyping covariance of covariant Functors.
-   * could be implemented as map(identity), but the Functor laws say this is equivalent
+   *
+   * NOTE: In certain (perhaps contrived) situations that rely on universal
+   * equality this can result in a `ClassCastException`, because it is
+   * implemented as a type cast. It could be implemented as `map(identity)`, but
+   * according to the functor laws, that should be equal to `fa`, and a type
+   * cast is often much more performant.
+   * See [[https://github.com/typelevel/cats/issues/1080#issuecomment-225892635 this example]]
+   * of `widen` creating a `ClassCastException`.
    */
   def widen[A, B >: A](fa: F[A]): F[B] = fa.asInstanceOf[F[B]]
 
