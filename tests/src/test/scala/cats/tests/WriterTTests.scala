@@ -70,6 +70,25 @@ class WriterTTests extends CatsSuite {
     writerT.show should === ("(List(Some log message),foo)")
   }
 
+  test("tell appends to log") {
+    val w1: Writer[String, Int] = Writer.value(3)
+    val w2 = w1.tell("foo")
+    w2 should === (Writer("foo", 3))
+    w2.tell("bar") should === (Writer("foobar", 3))
+  }
+
+  test("MonadWriter's tell is consistent with WriterT's tell") {
+    type Logged[A] = Writer[String, A]
+    val w = MonadWriter[Logged, String]
+    val x = w.tell("foo")
+    x should === (Writer.tell("foo"))
+    x should === (Writer("foo", ()))
+  }
+
+  test("tell instantiates a Writer") {
+    Writer.tell("foo").written should === ("foo")
+  }
+
   {
     // F has a SemigroupK
     implicit val F: SemigroupK[ListWrapper] = ListWrapper.semigroupK
