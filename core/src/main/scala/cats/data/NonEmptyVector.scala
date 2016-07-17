@@ -6,9 +6,9 @@ import scala.collection.immutable.VectorBuilder
 import cats.instances.vector._
 
 /**
- * A data type which represents a non empty Vector.
+ * A data type which represents a `Vector` guaranteed to contain at least one element.
  */
-final case class NonEmptyVector[A] private (toVector: Vector[A]) {
+final case class NonEmptyVector[A](val toVector: Vector[A]) extends AnyVal {
 
   /** Gets the element at the index, if it exists */
   def get(i: Int): Option[A] =
@@ -38,27 +38,27 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
   def filter(f: A => Boolean): Vector[A] = toVector.filter(f)
 
   /**
-   * Append another NonEmptyVector to this
+   * Append another `NonEmptyVector` to this, producing a new `NonEmptyVector`.
    */
   def concat(other: NonEmptyVector[A]): NonEmptyVector[A] = NonEmptyVector(toVector ++ other.toVector)
 
   /**
-   * Alias for concat
+   * Alias for [[concat]]
    */
   def ++(other: NonEmptyVector[A]): NonEmptyVector[A] = concat(other)
 
   /**
-   * Append another Vector to this
+   * Append another `Vector` to this, producing a new `NonEmptyVector`.
    */
-  def concat(other: Vector[A]): NonEmptyVector[A] = NonEmptyVector(toVector ++ other)
+  def concatVector(other: Vector[A]): NonEmptyVector[A] = NonEmptyVector(toVector ++ other)
 
   /**
-   * Alias for concat
+   * Alias for [[concatVector]]
    */
-  def ++(other: Vector[A]): NonEmptyVector[A] = concat(other)
+  def +++(other: Vector[A]): NonEmptyVector[A] = concatVector(other)
 
   /**
-   * find the first element matching the predicate, if one exists
+   * Find the first element matching the predicate, if one exists
    */
   def find(f: A => Boolean): Option[A] = toVector.find(f)
 
@@ -190,7 +190,7 @@ private[data] sealed trait NonEmptyVectorInstances {
               case Some(t) => go(t)
               case None => ()
             }
-          case Xor.Left(a) => go(f(a).concat(v.tail))
+          case Xor.Left(a) => go(f(a).concatVector(v.tail))
           }
         go(f(a))
         NonEmptyVector.fromVectorUnsafe(buf.result())

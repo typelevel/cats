@@ -55,7 +55,7 @@ class NonEmptyVectorTests extends CatsSuite {
       nonEmptyVector.size should === (nonEmptyVector.toList.size.toLong)
     }
   }
- 
+
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
@@ -175,9 +175,15 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
-  test("++ Vector is consistent with concat") {
+  test("+++ Vector is consistent with concatVector") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], vector: Vector[Int]) =>
-      nonEmptyVector ++ vector should === (nonEmptyVector.concat(vector))
+      nonEmptyVector +++ vector should === (nonEmptyVector.concatVector(vector))
+    }
+  }
+
+  test("+++ Vector is consistent with ++ NonEmptyVector") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], other: NonEmptyVector[Int]) =>
+      nonEmptyVector +++ other.toVector should === (nonEmptyVector ++ other)
     }
   }
 
