@@ -210,11 +210,7 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
   def toNested: Nested[F, A Xor ?, B] = Nested[F, A Xor ?, B](value)
 }
 
-object XorT extends XorTInstances with XorTFunctions {
-
-  def liftT[M[_]: Functor, E, A](ma: M[A]): XorT[M, E, A] = XorT(Functor[M].map(ma)(Xor.right))
-
-}
+object XorT extends XorTInstances with XorTFunctions
 
 trait XorTFunctions {
   final def left[F[_], A, B](fa: F[A])(implicit F: Functor[F]): XorT[F, A, B] = XorT(F.map(fa)(Xor.left))
@@ -222,6 +218,11 @@ trait XorTFunctions {
   final def right[F[_], A, B](fb: F[B])(implicit F: Functor[F]): XorT[F, A, B] = XorT(F.map(fb)(Xor.right))
 
   final def pure[F[_], A, B](b: B)(implicit F: Applicative[F]): XorT[F, A, B] = right(F.pure(b))
+
+  /**
+   * Alias for XorT.right
+   */
+  final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): XorT[F, A, B] = right(fb)
 
   /** Transforms an `Xor` into an `XorT`, lifted into the specified `Applicative`.
    *
