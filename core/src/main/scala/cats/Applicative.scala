@@ -41,9 +41,9 @@ import simulacrum.typeclass
   /** Returns the given argument if `cond` is `false`, otherwise, unit lifted into F. */
   def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] =
     if (cond) pure(()) else void(f)
-  
+
   /** Returns the given argument if `cond` is `true`, otherwise, unit lifted into F. */
-  def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] = 
+  def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
     if (cond) void(f) else pure(())
 
   def traverse[A, G[_], B](value: G[A])(f: A => F[B])(implicit G: Traverse[G]): F[G[B]] =
