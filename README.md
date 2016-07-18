@@ -125,8 +125,8 @@ There are many projects that integrate with Cats:
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
  * [Kittens](https://github.com/milessabin/kittens): automatically derived type class instances.
  * [Circe](https://github.com/travisbrown/circe): pure functional JSON library.
- * [Fetch](https://github.com/47deg/fetch)
- * [Monix](https://github.com/monixio/monix)
+ * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources. 
+ * [Monix](https://github.com/monixio/monix): high-performance library for composing asynchronous and event-based programs.
 
 ### Copyright and License
 
