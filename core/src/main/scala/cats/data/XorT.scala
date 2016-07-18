@@ -210,7 +210,11 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
   def toNested: Nested[F, A Xor ?, B] = Nested[F, A Xor ?, B](value)
 }
 
-object XorT extends XorTInstances with XorTFunctions
+object XorT extends XorTInstances with XorTFunctions {
+
+  def liftT[M[_]: Functor, E, A](ma: M[A]): XorT[M, E, A] = XorT(Functor[M].map(ma)(Xor.right))
+
+}
 
 trait XorTFunctions {
   final def left[F[_], A, B](fa: F[A])(implicit F: Functor[F]): XorT[F, A, B] = XorT(F.map(fa)(Xor.left))
@@ -280,7 +284,7 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
       type TC[M[_]] = Functor[M]
 
       def liftT[M[_]: Functor, A](ma: M[A]): XorT[M, E, A] =
-        XorT(Functor[M].map(ma)(Xor.right))
+        XorT.liftT(ma)
     }
 
   implicit def catsMonoidForXorT[F[_], L, A](implicit F: Monoid[F[L Xor A]]): Monoid[XorT[F, L, A]] =
