@@ -32,6 +32,22 @@ object eq {
   }
 
   /**
+   * Create an approximation of Eq[Eq[A]] by generating 100 values for A
+   * and comparing the application of the two eqv functions
+   */
+  implicit def catsLawsEqForEq[A](implicit arbA: Arbitrary[(A, A)]): Eq[Eq[A]] = new Eq[Eq[A]] {
+    def eqv(f: Eq[A], g: Eq[A]): Boolean = {
+      val samples = List.fill(100)(arbA.arbitrary.sample).collect {
+        case Some(a) => a
+        case None => sys.error("Could not generate arbitrary values to compare two Eq[A]")
+      }
+      samples.forall {
+        case (l, r) => f.eqv(l, r) == g.eqv(l, r)
+      }
+    }
+  }
+
+  /**
    * Create an approximation of Eq[PartialOrder[A]] by generating 100 values for A
    * and comparing the application of the two compare functions
    */
@@ -51,14 +67,14 @@ object eq {
    * Create an approximation of Eq[Order[A]] by generating 100 values for A
    * and comparing the application of the two compare functions
    */
-  implicit def catsLawsEqForOrder[A](implicit arbA: Arbitrary[(A, A)], intEq: Eq[Int]): Eq[Order[A]] = new Eq[Order[A]] {
+  implicit def catsLawsEqForOrder[A](implicit arbA: Arbitrary[(A, A)]): Eq[Order[A]] = new Eq[Order[A]] {
     def eqv(f: Order[A], g: Order[A]): Boolean = {
       val samples = List.fill(100)(arbA.arbitrary.sample).collect {
         case Some(a) => a
         case None => sys.error("Could not generate arbitrary values to compare two Order[A]")
       }
       samples.forall {
-        case (l, r) => intEq.eqv(f.compare(l, r), g.compare(l, r))
+        case (l, r) => f.compare(l, r) == g.compare(l, r)
       }
     }
   }

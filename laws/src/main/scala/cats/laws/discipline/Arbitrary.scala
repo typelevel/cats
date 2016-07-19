@@ -83,6 +83,9 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForFn0[A: Arbitrary]: Arbitrary[() => A] =
     Arbitrary(getArbitrary[A].map(() => _))
 
+  implicit def catsLawsArbitraryForEq[A: Arbitrary]: Arbitrary[Eq[A]] =
+    Arbitrary(new Eq[A] { def eqv(x: A, y: A) = x.hashCode == y.hashCode })
+
   implicit def catsLawsArbitraryForPartialOrder[A: Arbitrary]: Arbitrary[PartialOrder[A]] =
     Arbitrary(Gen.oneOf(
       PartialOrder.from[A]((_: A, _: A) => Double.NaN),
