@@ -220,9 +220,9 @@ trait XorTFunctions {
   final def pure[F[_], A, B](b: B)(implicit F: Applicative[F]): XorT[F, A, B] = right(F.pure(b))
 
   /**
-   * Alias for XorT.right
+   * Alias for [[XorT.right]]
    */
-  final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): XorT[F, A, B] = right(fb)
+  final def liftT[F[_], A, B](fb: F[B]): XorT[F, A, B] = right(fb)
 
   /** Transforms an `Xor` into an `XorT`, lifted into the specified `Applicative`.
    *
