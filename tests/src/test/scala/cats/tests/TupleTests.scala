@@ -1,11 +1,17 @@
 package cats
 package tests
 
-import cats.laws.discipline.{BitraverseTests, SerializableTests}
+import cats.laws.discipline.{BitraverseTests, ComonadTests, SerializableTests, TraverseTests}
 
 class TupleTests extends CatsSuite {
   checkAll("Tuple2", BitraverseTests[Tuple2].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Tuple2]", SerializableTests.serializable(Bitraverse[Tuple2]))
+
+  checkAll("Tuple2[String, Int] with Option", TraverseTests[(String, ?)].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[(String, ?)]", SerializableTests.serializable(Traverse[(String, ?)]))
+
+  checkAll("Tuple2[String, Int]", ComonadTests[(String, ?)].comonad[Int, Int, Int])
+  checkAll("Comonad[(String, ?)]", SerializableTests.serializable(Comonad[(String, ?)]))
 
   test("eqv") {
     val eq = Eq[(Int, Long)]
