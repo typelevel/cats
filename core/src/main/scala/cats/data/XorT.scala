@@ -223,7 +223,7 @@ trait XorTFunctions {
    * Alias for [[XorT.right]]
    * {{{
    * scala> import cats.data.XorT
-   * scala> import cats.instances.option._
+   * scala> import cats.implicits._
    * scala> val o: Option[Int] = Some(3)
    * scala> val n: Option[Int] = None
    * scala> XorT.liftT(o)
