@@ -221,8 +221,18 @@ trait XorTFunctions {
 
   /**
    * Alias for [[XorT.right]]
+   * {{{
+   * scala> import cats.data.XorT
+   * scala> import cats.instances.option._
+   * scala> val o: Option[Int] = Some(3)
+   * scala> val n: Option[Int] = None
+   * scala> XorT.liftT(o)
+   * res0: cats.data.XorT[Option,Nothing,Int] = XorT(Some(Right(3)))
+   * scala> XorT.liftT(n)
+   * res1: cats.data.XorT[Option,Nothing,Int] = XorT(None)
+   * }}}
    */
-  final def liftT[F[_], A, B](fb: F[B]): XorT[F, A, B] = right(fb)
+  final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): XorT[F, A, B] = right(fb)
 
   /** Transforms an `Xor` into an `XorT`, lifted into the specified `Applicative`.
    *
