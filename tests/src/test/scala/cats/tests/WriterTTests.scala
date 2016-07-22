@@ -1,11 +1,12 @@
 package cats
 package tests
 
-import cats.data.{Writer, WriterT, XorT}
+import cats.data.{Validated, Writer, WriterT, XorT}
 import cats.functor.{Bifunctor, Contravariant}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import org.scalacheck.Arbitrary
 
 import cats.kernel.laws.OrderLaws
 
@@ -293,6 +294,26 @@ class WriterTTests extends CatsSuite {
     checkAll("WriterT[ListWrapper, Int, Int]", kernel.laws.GroupLaws[WriterT[ListWrapper, Int, Int]].semigroup)
 
     Semigroup[WriterT[Id, Int, Int]]
+  }
+
+  {
+    // F has an ApplicativeError and L has a Monoid
+    implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
+    implicit val appErr = WriterT.catsDataApplicativeErrorForWriterT[Validated[String, ?], ListWrapper[Int], String]
+    implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[Validated[String, ?], ListWrapper[Int], ?]]
+    implicit def eq1[A:Eq]: Eq[WriterT[Validated[String, ?], ListWrapper[Int], A]] =
+      WriterT.catsDataEqForWriterT[Validated[String, ?], ListWrapper[Int], A]
+    implicit val eq2: Eq[XorT[WriterT[Validated[String, ?], ListWrapper[Int], ?], String, Int]] =
+      XorT.catsDataEqForXorT[WriterT[Validated[String, ?], ListWrapper[Int], ?], String, Int]
+    implicit def arb0[A:Arbitrary]: Arbitrary[WriterT[Validated[String, ?], ListWrapper[Int], A]] =
+      arbitrary.catsLawsArbitraryForWriterT[Validated[String, ?], ListWrapper[Int], A]
+
+    Functor[WriterT[Validated[String, ?], ListWrapper[Int], ?]]
+    Apply[WriterT[Validated[String, ?], ListWrapper[Int], ?]]
+    Applicative[WriterT[Validated[String, ?], ListWrapper[Int], ?]]
+
+    checkAll("WriterT[Validated[String, ?], ListWrapper[Int], ?]", ApplicativeErrorTests[WriterT[Validated[String, ?], ListWrapper[Int], ?], String].applicativeError[Int, Int, Int])
+    checkAll("ApplicativeError[WriterT[Validated[String, ?], ListWrapper[Int], ?], Unit]", SerializableTests.serializable(ApplicativeError[WriterT[Validated[String, ?], ListWrapper[Int], ?], String]))
   }
 
   {
