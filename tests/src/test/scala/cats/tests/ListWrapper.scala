@@ -44,19 +44,21 @@ object ListWrapper {
 
   def eqv[A : Eq]: Eq[ListWrapper[A]] = Eq[List[A]].on[ListWrapper[A]](_.list)
 
-  val traverse: Traverse[ListWrapper] = {
-    val F = Traverse[List]
+  val traverseFilter: TraverseFilter[ListWrapper] = {
+    val F = TraverseFilter[List]
 
-    new Traverse[ListWrapper] {
+    new TraverseFilter[ListWrapper] {
       def foldLeft[A, B](fa: ListWrapper[A], b: B)(f: (B, A) => B): B =
         F.foldLeft(fa.list, b)(f)
       def foldRight[A, B](fa: ListWrapper[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         F.foldRight(fa.list, lb)(f)
-      def traverse[G[_], A, B](fa: ListWrapper[A])(f: A => G[B])(implicit G0: Applicative[G]): G[ListWrapper[B]] = {
-        G0.map(F.traverse(fa.list)(f))(ListWrapper.apply)
+      def traverseFilter[G[_], A, B](fa: ListWrapper[A])(f: A => G[Option[B]])(implicit G0: Applicative[G]): G[ListWrapper[B]] = {
+        G0.map(F.traverseFilter(fa.list)(f))(ListWrapper.apply)
       }
     }
   }
+
+  val traverse: Traverse[ListWrapper] = traverseFilter
 
   val foldable: Foldable[ListWrapper] = traverse
 

@@ -27,9 +27,35 @@ final case class Nested[F[_], G[_], A](value: F[G[A]])
 
 object Nested extends NestedInstances
 
-private[data] sealed abstract class NestedInstances extends NestedInstances1 {
+private[data] sealed abstract class NestedInstances extends NestedInstances0 {
   implicit def catsDataEqForNested[F[_], G[_], A](implicit FGA: Eq[F[G[A]]]): Eq[Nested[F, G, A]] =
     FGA.on(_.value)
+
+  implicit def catsDataTraverseFilterForNested[F[_]: Traverse, G[_]: TraverseFilter]: TraverseFilter[Nested[F, G, ?]] =
+    new TraverseFilter[Nested[F, G, ?]] {
+      val instance = Traverse[F].composeFilter[G]
+
+      def traverseFilter[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[Option[B]]): H[Nested[F, G, B]] =
+        Applicative[H].map(instance.traverseFilter(fga.value)(f))(Nested(_))
+
+      def foldLeft[A, B](fga: Nested[F, G, A], b: B)(f: (B, A) => B): B =
+        instance.foldLeft(fga.value, b)(f)
+
+      def foldRight[A, B](fga: Nested[F, G, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        instance.foldRight(fga.value, lb)(f)
+
+      override def traverse[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
+        Applicative[H].map(instance.traverse(fga.value)(f))(Nested(_))
+
+      override def map[A, B](fga: Nested[F, G, A])(f: A => B): Nested[F, G, B] =
+        Nested(instance.map(fga.value)(f))
+
+      override def imap[A, B](fga: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
+        Nested(instance.imap(fga.value)(f)(g))
+    }
+}
+
+private[data] sealed abstract class NestedInstances0 extends NestedInstances1 {
 
   implicit def catsDataTraverseForNested[F[_]: Traverse, G[_]: Traverse]: Traverse[Nested[F, G, ?]] =
     new NestedTraverse[F, G] {

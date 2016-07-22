@@ -99,6 +99,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def ===(that: OptionT[F, A])(implicit eq: Eq[F[Option[A]]]): Boolean =
     eq.eqv(value, that.value)
 
+  def traverseFilter[G[_], B](f: A => G[Option[B]])(implicit F: Traverse[F], G: Applicative[G]): G[OptionT[F, B]] =
+    G.map(F.composeFilter(optionInstance).traverseFilter(value)(f))(OptionT.apply)
+
   def traverse[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Applicative[G]): G[OptionT[F, B]] =
     G.map(F.compose(optionInstance).traverse(value)(f))(OptionT.apply)
 
@@ -219,8 +222,8 @@ private[data] sealed trait OptionTInstances1 extends OptionTInstances2 {
 }
 
 private[data] sealed trait OptionTInstances2 extends OptionTInstances3 {
-  implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
-    new OptionTTraverse[F] { implicit val F = F0 }
+  implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): TraverseFilter[OptionT[F, ?]] =
+    new OptionTTraverseFilter[F] { implicit val F = F0 }
 }
 
 private[data] sealed trait OptionTInstances3 {
@@ -273,8 +276,11 @@ private[data] trait OptionTFoldable[F[_]] extends Foldable[OptionT[F, ?]] {
     fa.foldRight(lb)(f)
 }
 
-private[data] sealed trait OptionTTraverse[F[_]] extends Traverse[OptionT[F, ?]] with OptionTFoldable[F] {
+private[data] sealed trait OptionTTraverseFilter[F[_]] extends TraverseFilter[OptionT[F, ?]] with OptionTFoldable[F] {
   implicit def F: Traverse[F]
+
+  def traverseFilter[G[_]: Applicative, A, B](fa: OptionT[F, A])(f: A => G[Option[B]]): G[OptionT[F, B]] =
+    fa traverseFilter f
 
   override def traverse[G[_]: Applicative, A, B](fa: OptionT[F, A])(f: A => G[B]): G[OptionT[F, B]] =
     fa traverse f

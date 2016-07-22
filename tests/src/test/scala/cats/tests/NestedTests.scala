@@ -93,6 +93,20 @@ class NestedTests extends CatsSuite {
   }
 
   {
+    // Traverse composition
+    implicit val instance = ListWrapper.traverse
+    checkAll("Nested[List, ListWrapper, ?]", TraverseTests[Nested[List, ListWrapper, ?]].traverse[Int, Int, Int, List[Int], Option, Option])
+    checkAll("Traverse[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(Traverse[Nested[List, ListWrapper, ?]]))
+  }
+
+  {
+    // TraverseFilter composition
+    implicit val instance = ListWrapper.traverseFilter
+    checkAll("Nested[List, ListWrapper, ?]", TraverseFilterTests[Nested[List, ListWrapper, ?]].traverseFilter[Int, Int, Int, List[Int], Option, Option])
+    checkAll("TraverseFilter[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(TraverseFilter[Nested[List, ListWrapper, ?]]))
+  }
+
+  {
     // SI-2712? It can resolve Reducible[NonEmptyList] and Reducible[NonEmptyVector] but not
     // Reducible[Nested[NonEmptyList, NonEmptyVector, ?]]
     // Similarly for Arbitrary.

@@ -37,6 +37,7 @@ trait AllSyntax
     with SplitSyntax
     with StrongSyntax
     with TransLiftSyntax
+    with TraverseFilterSyntax
     with TraverseSyntax
     with ValidatedSyntax
     with WriterSyntax
