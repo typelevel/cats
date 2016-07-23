@@ -11,6 +11,7 @@ section: "faq"
  * [What imports do I need?](#what-imports)
  * [Why can't the compiler find implicit instances for Future?](#future-instances)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
+ * [Where is `ListT`?](#listt)
  * [What does `@typeclass` mean?](#simulacrum)
  * [What do types like `?` and `λ` mean?](#kind-projector)
  * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
@@ -35,6 +36,47 @@ If you have already followed the [imports advice](#what-imports) but are still g
 ## <a id="traverse" href="#traverse"></a>How can I turn my List of `<something>` into a `<something>` of a list?
 
 It's really common to have a `List` of values with types like `Option`, `Xor`, or `Validated` that you would like to turn "inside out" into an `Option` (or `Xor` or `Validated`) of a `List`. The `sequence`, `sequenceU`, `traverse`, and `traverseU` methods are _really_ handy for this. You can read more about them in the [Traverse documentation]({{ site.baseurl }}/tut/traverse.html).
+
+## <a id="listt" href="#listt"></a>Where is ListT?
+
+There are monad transformers for various types, such as [OptionT]({{ site.baseurl }}/tut/optiont.html), so people often wonder why there isn't a `ListT`. For example, in the following example, people might reach for `ListT` to simplify making nested `map` and `exists` calls:
+
+```tut:reset:silent
+val l: Option[List[Int]] = Some(List(1, 2, 3, 4, 5))
+
+def isEven(i: Int): Boolean = i % 2 == 0
+```
+
+```tut:book
+l.map(_.map(_ + 1))
+l.exists(_.exists(isEven))
+```
+
+A naive implementation of `ListT` suffers from associativity issues; see [this gist](https://gist.github.com/tpolecat/1227e22e3161b5816e014c00650f3b57) for an example. It's possible to create a `ListT` that doesn't have these issues, but it tends to be pretty inefficient. For many use-cases, [Nested](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/Nested.scala) can be used to achieve the desired results.
+
+Here is how we could achieve the effect ofthe previous example using `Nested`:
+
+```tut:silent
+import cats.data.Nested
+import cats.implicits._
+```
+
+```tut:book
+val nl = Nested(l)
+nl.map(_ + 1)
+nl.exists(isEven)
+```
+
+We can even perform more complicated operations, such as a `traverse` of the nested structure:
+
+```tut:silent
+import cats.data.ValidatedNel
+type ErrorsOr[A] = ValidatedNel[String, A]
+def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".invalidNel
+
+```tut:book
+nl.traverse(even)
+```
 
 ## <a id="simulacrum" href="#simulacrum"></a>What does `@typeclass` mean?
 
