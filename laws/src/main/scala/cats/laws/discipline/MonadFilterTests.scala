@@ -7,7 +7,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import Prop._
 
-trait MonadFilterTests[F[_]] extends MonadTests[F] {
+trait MonadFilterTests[F[_]] extends MonadTests[F] with FunctorFilterTests[F] {
   def laws: MonadFilterLaws[F]
 
   def monadFilter[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
@@ -22,12 +22,16 @@ trait MonadFilterTests[F[_]] extends MonadTests[F] {
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
   ): RuleSet = {
-    new DefaultRuleSet(
-      name = "monadFilter",
-      parent = Some(monad[A, B, C]),
-      "monadFilter left empty" -> forAll(laws.monadFilterLeftEmpty[A, B] _),
-      "monadFilter right empty" -> forAll(laws.monadFilterRightEmpty[A, B] _),
-      "monadFilter consistency" -> forAll(laws.monadFilterConsistency[A, B] _))
+    new RuleSet {
+      def name: String = "monadFilter"
+      def bases: Seq[(String, RuleSet)] = Nil
+      def parents: Seq[RuleSet] = Seq(monad[A, B, C], functorFilter[A, B, C])
+      def props: Seq[(String, Prop)] = Seq(
+        "monadFilter left empty" -> forAll(laws.monadFilterLeftEmpty[A, B] _),
+        "monadFilter right empty" -> forAll(laws.monadFilterRightEmpty[A, B] _),
+        "monadFilter consistency" -> forAll(laws.monadFilterConsistency[A, B] _)
+      )
+    }
   }
 }
 

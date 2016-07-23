@@ -58,6 +58,12 @@ import simulacrum.typeclass
       val G = Functor[G]
     }
 
+  def composeFilter[G[_]: FunctorFilter]: FunctorFilter[λ[α => F[G[α]]]] =
+    new ComposedFunctorFilter[F, G] {
+      val F = self
+      val G = FunctorFilter[G]
+    }
+
   override def composeContravariant[G[_]: Contravariant]: Contravariant[λ[α => F[G[α]]]] =
     new ComposedCovariantContravariant[F, G] {
       val F = self
