@@ -10,7 +10,7 @@ import cats.laws.discipline.arbitrary.{catsLawsArbitraryForConst, catsLawsArbitr
 
 class ConstTests extends CatsSuite {
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Const[String, ?]](Const.catsDataTraverseForConst)
+  implicit val iso = CartesianTests.Isomorphisms.invariant[Const[String, ?]](Const.catsDataTraverseFilterForConst)
 
   checkAll("Const[String, Int]", CartesianTests[Const[String, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Const[String, ?]]", SerializableTests.serializable(Cartesian[Const[String, ?]]))
