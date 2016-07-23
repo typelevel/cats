@@ -230,7 +230,7 @@ private[data] sealed trait OptionTInstances2 extends OptionTInstances3 {
 }
 
 private[data] sealed trait OptionTInstances3 {
-  implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): FunctorFilter[OptionT[F, ?]] =
+  implicit def catsDataFunctorFilterForOptionT[F[_]](implicit F0: Functor[F]): FunctorFilter[OptionT[F, ?]] =
     new OptionTFunctor[F] { implicit val F = F0 }
 }
 

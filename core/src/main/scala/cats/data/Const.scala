@@ -56,7 +56,7 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
       fa.retag[B]
   }
 
-  implicit def catsDataTraverseForConst[C]: TraverseFilter[Const[C, ?]] = new TraverseFilter[Const[C, ?]] {
+  implicit def catsDataTraverseFilterForConst[C]: TraverseFilter[Const[C, ?]] = new TraverseFilter[Const[C, ?]] {
     def traverseFilter[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[Option[B]]): G[Const[C, B]] =
       fa.traverseFilter(f)
 
