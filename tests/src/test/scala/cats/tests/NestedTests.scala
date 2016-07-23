@@ -56,14 +56,12 @@ class NestedTests extends CatsSuite {
 
     test("collect consistency") {
       forAll { l: Nested[List, ListWrapper, Int] =>
-        val even: PartialFunction[Int, Int] = { case i if i % 2 == 0 => i }
-        l.collect(even).value should === (l.value.map(_.collect(even)))
+        l.collect(evenPf).value should === (l.value.map(_.collect(evenPf)))
       }
     }
 
     test("filter consistency") {
       forAll { l: Nested[List, ListWrapper, Int] =>
-        def even(i: Int): Boolean = i % 2 == 0
         l.filter(even).value should === (l.value.map(_.filter(even)))
       }
     }

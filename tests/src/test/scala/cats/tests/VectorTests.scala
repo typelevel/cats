@@ -26,4 +26,9 @@ class VectorTests extends CatsSuite {
     }
   }
 
+  test("collect consistency") {
+    forAll { vec: Vector[Int] =>
+      FunctorFilter[Vector].collect(vec)(evenPf) should === (vec.collect(evenPf))
+    }
+  }
 }

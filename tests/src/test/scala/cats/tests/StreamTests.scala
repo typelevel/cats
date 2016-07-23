@@ -37,4 +37,10 @@ class StreamTests extends CatsSuite {
       }
     }
   }
+
+  test("collect consistency") {
+    forAll { s: Stream[Int] =>
+      FunctorFilter[Stream].collect(s)(evenPf) should === (s.collect(evenPf))
+    }
+  }
 }

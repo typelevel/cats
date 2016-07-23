@@ -42,6 +42,10 @@ trait CatsSuite extends FunSuite with Matchers with GeneratorDrivenPropertyCheck
   // disable Eq syntax (by making `catsSyntaxEq` not implicit), since it collides
   // with scalactic's equality
   override def catsSyntaxEq[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
+
+  def even(i: Int): Boolean = i % 2 == 0
+
+  val evenPf: PartialFunction[Int, Int] = { case i if even(i) => i }
 }
 
 trait SlowCatsSuite extends CatsSuite {
