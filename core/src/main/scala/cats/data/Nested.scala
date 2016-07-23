@@ -172,12 +172,6 @@ private[data] trait NestedTraverseFilter[F[_], G[_]] extends TraverseFilter[Nest
 
   override def traverseFilter[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[Option[B]]): H[Nested[F, G, B]] =
     Applicative[H].map(FG.traverseFilter(fga.value)(f))(Nested(_))
-
-  override def collect[A, B](fga: Nested[F, G, A])(f: PartialFunction[A, B]): Nested[F, G, B] =
-    Nested(FG.collect(fga.value)(f))
-
-  override def filter[A](fga: Nested[F, G, A])(f: A => Boolean): Nested[F, G, A] =
-    Nested(FG.filter(fga.value)(f))
 }
 
 private[data] trait NestedApply[F[_], G[_]] extends Apply[Nested[F, G, ?]] with NestedFunctor[F, G] {

@@ -53,6 +53,20 @@ class NestedTests extends CatsSuite {
     implicit val instance = ListWrapper.functorFilter
     checkAll("Nested[List, ListWrapper, ?]", FunctorFilterTests[Nested[List, ListWrapper, ?]].functorFilter[Int, Int, Int])
     checkAll("FunctorFilter[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(FunctorFilter[Nested[List, ListWrapper, ?]]))
+
+    test("collect consistency") {
+      forAll { l: Nested[List, ListWrapper, Int] =>
+        val even: PartialFunction[Int, Int] = { case i if i % 2 == 0 => i }
+        l.collect(even).value should === (l.value.map(_.collect(even)))
+      }
+    }
+
+    test("filter consistency") {
+      forAll { l: Nested[List, ListWrapper, Int] =>
+        def even(i: Int): Boolean = i % 2 == 0
+        l.filter(even).value should === (l.value.map(_.filter(even)))
+      }
+    }
   }
 
   {
