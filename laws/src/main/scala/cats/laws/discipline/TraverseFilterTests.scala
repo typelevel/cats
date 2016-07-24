@@ -25,7 +25,7 @@ trait TraverseFilterTests[F[_]] extends TraverseTests[F] with FunctorFilterTests
     EqYFB: Eq[Y[F[B]]]
   ): RuleSet = {
     new RuleSet {
-      def name: String = "collect"
+      def name: String = "traverseFilter"
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(traverse[A, B, C, M, X, Y], functorFilter[A, B, C])
       def props: Seq[(String, Prop)] = Seq(

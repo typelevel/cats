@@ -29,7 +29,7 @@ import simulacrum.typeclass
    * {{{
    * scala> import cats.implicits._
    * scala> val l: List[Int] = List(1, 2, 3, 4)
-   * scala> TraverseFilter[List].collect(l){
+   * scala> FunctorFilter[List].collect(l){
    *      |   case 1 => "one"
    *      |   case 3 => "three"
    *      | }
