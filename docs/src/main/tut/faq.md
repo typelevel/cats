@@ -54,7 +54,7 @@ l.exists(_.exists(isEven))
 
 A naive implementation of `ListT` suffers from associativity issues; see [this gist](https://gist.github.com/tpolecat/1227e22e3161b5816e014c00650f3b57) for an example. It's possible to create a `ListT` that doesn't have these issues, but it tends to be pretty inefficient. For many use-cases, [Nested](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/Nested.scala) can be used to achieve the desired results.
 
-Here is how we could achieve the effect ofthe previous example using `Nested`:
+Here is how we could achieve the effect of the previous example using `Nested`:
 
 ```tut:silent
 import cats.data.Nested
