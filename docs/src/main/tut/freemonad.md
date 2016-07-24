@@ -445,7 +445,7 @@ In this representation:
 
  - `Pure` builds a `Free` instance from an `A` value (it _reifies_ the
    `pure` function)
- - `Suspend` build a new `Free` by applying `F` to a previous `Free`
+ - `Suspend` builds a new `Free` by applying `F` to a previous `Free`
    (it _reifies_ the `flatMap` function)
 
 So a typical `Free` structure might look like:
