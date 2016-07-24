@@ -12,6 +12,7 @@ section: "faq"
  * [Why can't the compiler find implicit instances for Future?](#future-instances)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
  * [Where is `ListT`?](#listt)
+ * [Where is `IO`/`Task`?](#task)
  * [What does `@typeclass` mean?](#simulacrum)
  * [What do types like `?` and `λ` mean?](#kind-projector)
  * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
@@ -77,6 +78,24 @@ def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".i
 ```tut:book
 nl.traverse(even)
 ```
+
+## <a id="task" href="#task"></a>Where is IO/Task?
+
+In purely functional programming, a monadic `IO` or `Task` type is often used to handle side effects such as file/network IO. There [have](https://github.com/typelevel/cats/pull/894) [been](https://github.com/typelevel/cats/pull/907) [several](https://github.com/typelevel/cats/issues/1224) GitHub issues/PRs about this and many more Gitter/IRL conversations, but they all seem to arrive at the conclusion that there isn't a clear canonical `IO` or `Task` that serves everyones' needs. Some of the questions that come up are:
+
+- Should tasks be interruptible?
+- Should there be a single `Task` that subsumes `IO` and adds support for asynchrony and concurrency, or should there be separate `IO` and `Task` types?
+- How should concurrency be managed/configured?
+- Is [scala.js](https://www.scala-js.org/) supported?
+- Should you be able to block a thread waiting for the result of a task? This is really convenient for tests, but it isn't really compatible with a JavaScript runtime and therefore is an issue for [scala.js](https://www.scala-js.org/).
+
+For some use-cases, a very simple `IO` is the best answer, as it avoids a lot of the overhead and complexity of other solutions. However, other use-cases require low-level concurrency control with asynchrony, resource management, and stack-safety. Considering all of the competing concerns, Cats has opted to not implement its own `IO`/`Task` types and instead encourage users to use a separate library that best serves their use-case.
+
+Here are a couple libraries with `Task` implementations that you may find useful (in no particular order):
+- [Monix](https://monix.io/) - Asynchronous Programming for Scala and [Scala.js](https://www.scala-js.org/).
+  - The `monix-eval` module provides a full-featured [Task](https://monix.io/docs/2x/eval/task.html) that is both cancellable and Scala.js-compatible.
+- [fs2](https://github.com/functional-streams-for-scala/fs2) - Compositional, streaming I/O library for Scala
+  - fs2 provides a [Task](https://github.com/functional-streams-for-scala/fs2/blob/series/0.9/core/src/main/scala/fs2/task.scala) that is a convenient option if you are already using fs2. At the time of this writing, Scala.js support is [in progress](https://github.com/functional-streams-for-scala/fs2/issues/500).
 
 ## <a id="simulacrum" href="#simulacrum"></a>What does `@typeclass` mean?
 
