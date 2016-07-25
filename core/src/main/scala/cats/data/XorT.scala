@@ -93,6 +93,8 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): XorT[F, C, B] = bimap(f, identity)
 
+  def leftWiden[AA >: A](implicit F: Functor[F]): XorT[F, AA, B] = leftMap(a => a)
+
   def compare(that: XorT[F, A, B])(implicit o: Order[F[A Xor B]]): Int =
     o.compare(value, that.value)
 
