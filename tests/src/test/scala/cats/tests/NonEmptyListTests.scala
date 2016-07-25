@@ -20,8 +20,6 @@ class NonEmptyListTests extends CatsSuite {
   checkAll("NonEmptyList[Int]", ReducibleTests[NonEmptyList].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyList]", SerializableTests.serializable(Reducible[NonEmptyList]))
 
-  //implicit val iso = CartesianTests.Isomorphisms.invariant[NonEmptyList](NonEmptyList.catsDataFunctorForNonEmptyList(ListWrapper.functor))
-
   // Test instances that have more general constraints
   {
     implicit val monadCombine = ListWrapper.monadCombine
@@ -55,8 +53,6 @@ class NonEmptyListTests extends CatsSuite {
     implicitly[Monad[NonEmptyList]]
     implicitly[Comonad[NonEmptyList]]
   }
-
-  //implicit val iso2 = CartesianTests.Isomorphisms.invariant[NonEmptyList]
 
   checkAll("NonEmptyList[Int]", MonadTests[NonEmptyList].monad[Int, Int, Int])
   checkAll("Monad[NonEmptyList[A]]", SerializableTests.serializable(Monad[NonEmptyList]))
