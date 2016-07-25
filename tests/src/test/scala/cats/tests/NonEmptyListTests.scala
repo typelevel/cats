@@ -3,7 +3,7 @@ package tests
 
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
-import cats.data.{NonEmptyList, NonEmptyList}
+import cats.data.NonEmptyList
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
 
@@ -12,41 +12,41 @@ class NonEmptyListTests extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfig(maxSize = 5, minSuccessful = 20)
 
-  checkAll("NonEmptyList[List, Int]", OrderLaws[NonEmptyList[List, Int]].eqv)
+  checkAll("NonEmptyList[Int]", OrderLaws[NonEmptyList[Int]].order)
 
-  checkAll("NonEmptyList[List, Int] with Option", TraverseTests[NonEmptyList[List, ?]].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[NonEmptyList[List, A]]", SerializableTests.serializable(Traverse[NonEmptyList[List, ?]]))
+  checkAll("NonEmptyList[Int] with Option", TraverseTests[NonEmptyList].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[NonEmptyList[A]]", SerializableTests.serializable(Traverse[NonEmptyList]))
 
-  checkAll("NonEmptyList[List, Int]", ReducibleTests[NonEmptyList[List, ?]].reducible[Option, Int, Int])
-  checkAll("Reducible[NonEmptyList[List, ?]]", SerializableTests.serializable(Reducible[NonEmptyList[List, ?]]))
+  checkAll("NonEmptyList[Int]", ReducibleTests[NonEmptyList].reducible[Option, Int, Int])
+  checkAll("Reducible[NonEmptyList]", SerializableTests.serializable(Reducible[NonEmptyList]))
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[NonEmptyList[ListWrapper, ?]](NonEmptyList.catsDataFunctorForNonEmptyList(ListWrapper.functor))
+  //implicit val iso = CartesianTests.Isomorphisms.invariant[NonEmptyList](NonEmptyList.catsDataFunctorForNonEmptyList(ListWrapper.functor))
 
   // Test instances that have more general constraints
   {
     implicit val monadCombine = ListWrapper.monadCombine
-    checkAll("NonEmptyList[ListWrapper, Int]", CartesianTests[NonEmptyList[ListWrapper, ?]].cartesian[Int, Int, Int])
-    checkAll("Cartesian[NonEmptyList[ListWrapper, A]]", SerializableTests.serializable(Cartesian[NonEmptyList[ListWrapper, ?]]))
+    checkAll("NonEmptyList[Int]", CartesianTests[NonEmptyList].cartesian[Int, Int, Int])
+    checkAll("Cartesian[NonEmptyList[A]]", SerializableTests.serializable(Cartesian[NonEmptyList]))
   }
 
   {
     implicit val functor = ListWrapper.functor
-    checkAll("NonEmptyList[ListWrapper, Int]", FunctorTests[NonEmptyList[ListWrapper, ?]].functor[Int, Int, Int])
-    checkAll("Functor[NonEmptyList[ListWrapper, A]]", SerializableTests.serializable(Functor[NonEmptyList[ListWrapper, ?]]))
+    checkAll("NonEmptyList[Int]", FunctorTests[NonEmptyList].functor[Int, Int, Int])
+    checkAll("Functor[NonEmptyList[A]]", SerializableTests.serializable(Functor[NonEmptyList]))
   }
 
   {
     implicit val monadCombine = ListWrapper.monadCombine
-    checkAll("NonEmptyList[ListWrapper, Int]", SemigroupKTests[NonEmptyList[ListWrapper, ?]].semigroupK[Int])
-    checkAll("NonEmptyList[List, Int]", GroupLaws[NonEmptyList[List, Int]].semigroup)
-    checkAll("SemigroupK[NonEmptyList[ListWrapper, A]]", SerializableTests.serializable(SemigroupK[NonEmptyList[ListWrapper, ?]]))
-    checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[NonEmptyList[List, Int]]))
+    checkAll("NonEmptyList[Int]", SemigroupKTests[NonEmptyList].semigroupK[Int])
+    checkAll("NonEmptyList[Int]", GroupLaws[NonEmptyList[Int]].semigroup)
+    checkAll("SemigroupK[NonEmptyList[A]]", SerializableTests.serializable(SemigroupK[NonEmptyList]))
+    checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[NonEmptyList[Int]]))
   }
 
   {
     implicit val foldable = ListWrapper.foldable
-    checkAll("NonEmptyList[ListWrapper, Int]", FoldableTests[NonEmptyList[ListWrapper, ?]].foldable[Int, Int])
-    checkAll("Foldable[NonEmptyList[ListWrapper, A]]", SerializableTests.serializable(Foldable[NonEmptyList[ListWrapper, ?]]))
+    checkAll("NonEmptyList[Int]", FoldableTests[NonEmptyList].foldable[Int, Int])
+    checkAll("Foldable[NonEmptyList[A]]", SerializableTests.serializable(Foldable[NonEmptyList]))
   }
 
   {
@@ -56,7 +56,7 @@ class NonEmptyListTests extends CatsSuite {
     implicitly[Comonad[NonEmptyList]]
   }
 
-  implicit val iso2 = CartesianTests.Isomorphisms.invariant[NonEmptyList[List, ?]]
+  //implicit val iso2 = CartesianTests.Isomorphisms.invariant[NonEmptyList]
 
   checkAll("NonEmptyList[Int]", MonadTests[NonEmptyList].monad[Int, Int, Int])
   checkAll("Monad[NonEmptyList[A]]", SerializableTests.serializable(Monad[NonEmptyList]))
@@ -75,49 +75,49 @@ class NonEmptyListTests extends CatsSuite {
 
   test("Show is formatted correctly") {
     val nonEmptyList = NonEmptyList("Test", Nil)
-    nonEmptyList.show should === ("NonEmptyList(Test, List())")
+    nonEmptyList.show should === ("NonEmptyList(Test)")
   }
 
-  test("Creating NonEmptyList + unwrap is identity") {
+  test("Creating NonEmptyList + toList is identity") {
     forAll { (i: Int, tail: List[Int]) =>
       val list = i :: tail
       val nonEmptyList = NonEmptyList(i, tail: _*)
-      list should === (nonEmptyList.unwrap)
+      list should === (nonEmptyList.toList)
     }
   }
 
   test("NonEmptyList#filter is consistent with List#filter") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
-      val list = nel.unwrap
+      val list = nel.toList
       nel.filter(p) should === (list.filter(p))
     }
   }
 
   test("NonEmptyList#find is consistent with List#find") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
-      val list = nel.unwrap
+      val list = nel.toList
       nel.find(p) should === (list.find(p))
     }
   }
 
   test("NonEmptyList#exists is consistent with List#exists") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
-      val list = nel.unwrap
+      val list = nel.toList
       nel.exists(p) should === (list.exists(p))
     }
   }
 
   test("NonEmptyList#forall is consistent with List#forall") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
-      val list = nel.unwrap
+      val list = nel.toList
       nel.forall(p) should === (list.forall(p))
     }
   }
 
   test("NonEmptyList#map is consistent with List#map") {
     forAll { (nel: NonEmptyList[Int], p: Int => String) =>
-      val list = nel.unwrap
-      nel.map(p).unwrap should === (list.map(p))
+      val list = nel.toList
+      nel.map(p).toList should === (list.map(p))
     }
   }
 

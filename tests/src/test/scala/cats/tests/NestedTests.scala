@@ -92,17 +92,8 @@ class NestedTests extends CatsSuite {
     checkAll("Foldable[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(Foldable[Nested[List, ListWrapper, ?]]))
   }
 
-  {
-    // SI-2712? It can resolve Reducible[NonEmptyList] and Reducible[NonEmptyVector] but not
-    // Reducible[Nested[NonEmptyList, NonEmptyVector, ?]]
-    // Similarly for Arbitrary.
-    implicit val reducible = Nested.catsDataReducibleForNested[NonEmptyList, NonEmptyVector]
-    implicit val arbitrary0 = catsLawsArbitraryForNested[NonEmptyList, NonEmptyVector, Int]
-    implicit val arbitrary1 = catsLawsArbitraryForNested[NonEmptyList, NonEmptyVector, Option[Int]]
-
-    checkAll("Nested[NonEmptyList, NonEmptyVector, ?]", ReducibleTests[Nested[NonEmptyList, NonEmptyVector, ?]].reducible[Option, Int, Int])
-    checkAll("Reducible[Nested[NonEmptyList, NonEmptyVector, ?]]", SerializableTests.serializable(reducible))
-  }
+  checkAll("Nested[NonEmptyList, NonEmptyVector, ?]", ReducibleTests[Nested[NonEmptyList, NonEmptyVector, ?]].reducible[Option, Int, Int])
+  checkAll("Reducible[Nested[NonEmptyList, NonEmptyVector, ?]]", SerializableTests.serializable(Reducible[Nested[NonEmptyList, NonEmptyVector, ?]]))
 
   {
     // SemigroupK composition
