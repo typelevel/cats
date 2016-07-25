@@ -31,7 +31,7 @@ object Bitraverse {
 private[cats] trait ComposedBitraverse[F[_, _], G[_, _]]
     extends Bitraverse[λ[(α, β) => F[G[α, β], G[α, β]]]]
     with    ComposedBifoldable[F, G]
-    with    ComposedBifunctor[F,G] {
+    with    ComposedBifunctor[F, G] {
   def F: Bitraverse[F]
   def G: Bitraverse[G]
 

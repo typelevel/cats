@@ -3,31 +3,16 @@ layout: default
 title:  "Contributing"
 section: "contributing"
 ---
+
 # Contributor guide
 
-Discussion around Cats is currently happening in the
-[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
-issue and PR pages. You can get an overview of who is working on what
-via [Waffle.io](https://waffle.io/typelevel/cats).
+## About this document
 
-Feel free to open an issue if you notice a bug, have an idea for a
-feature, or have a question about the code. Pull requests are also
-gladly accepted.
+This guide is for people who would like to be involved in building Cats.
 
-People are expected to follow the
-[Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
-discussing Cats on the Github page, Gitter channel, or other
-venues.
-
-We hope that our community will be respectful, helpful, and kind. If
-you find yourself embroiled in a situation that becomes heated, or
-that fails to live up to our expectations, you should disengage and
-contact one of the [project maintainers](README.md#maintainers) in private. We
-hope to avoid letting minor aggressions and misunderstandings escalate
-into larger problems.
-
-If you are being harassed, please contact one of [us](README.md#maintainers)
-immediately so that we can support you.
+This guide assumes that you have some experience doing Scala
+development. If you get stuck on any of these steps, please feel free
+to [ask for help](#getting-in-touch).
 
 ## How can I help?
 
@@ -45,11 +30,12 @@ skip these steps and jump straight to submitting a pull request.
 
  1. [Find something that belongs in cats](#find-something-that-belongs-in-cats)
  2. [Let us know you are working on it](#let-us-know-you-are-working-on-it)
- 3. [Implement your contribution](#write-code)
- 4. [Write tests](#write-tests)
- 5. [Write documentation](#write-documentation)
- 6. [Write examples](#write-examples)
- 7. [Submit pull request](#submit-a-pull-request)
+ 3. [Build the project](#build-project)
+ 4. [Implement your contribution](#write-code)
+ 5. [Write tests](#write-tests)
+ 6. [Write documentation](#write-documentation)
+ 7. [Write examples](#write-examples)
+ 8. [Submit pull request](#submit-a-pull-request)
 
 ### Find something that belongs in cats
 
@@ -100,6 +86,39 @@ there isn't already an issue and it is a non-trivial task, it's a good
 idea to create one (and note that you're working on it). This prevents
 contributors from duplicating effort.
 
+### Build the project
+
+First you'll need to checkout a local copy of the code base:
+
+```sh
+git clone git@github.com:typelevel/cats.git
+```
+
+To build Cats you should have
+[sbt](http://www.scala-sbt.org/0.13/tutorial/Setup.html) and [Node.js](https://nodejs.org/)
+ installed. Run `sbt`, and then use any of the following commands:
+
+ * `compile`: compile the code
+ * `console`: launch a REPL
+ * `test`: run the tests
+ * `unidoc`: generate the documentation
+ * `scalastyle`: run the style-checker on the code
+ * `validate`: run tests, style-checker, and doc generation
+
+#### Scala and Scala-js
+
+Cats cross-compiles to both JVM and Javascript(JS). If you are not used to
+working with cross-compiling builds, the first things that you will notice is that
+builds:
+
+ * Will take longer: To build JVM only, just use the `catsJVM`, or `catsJS` for
+
+ JS only. And if you want the default project to be `catsJVM`, just copy the
+   file `scripts/sbtrc-JVM` to `.sbtrc` in the root directory.
+
+ * May run out of memory: We suggest you use
+   [Paul Philips's sbt script](https://github.com/paulp/sbt-extras) that will use the settings from Cats.
+
 ### Write code
 
 TODO
@@ -126,7 +145,7 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
  that the `Validated` data type supports.
  - An exception to this is serializability tests, where the type class name is also included in the name.
  For example, in the case of `Validated`, the serializability test would take the form,
- *"Applicative[Validated[String, Int]"*, to indicate that this test is verifying that the `Applicative` 
+ *"Applicative[Validated[String, Int]"*, to indicate that this test is verifying that the `Applicative`
  type class instance for the `Validated` data type is serializable.
  - This convention helps to ensure clear and easy to understand output, with minimal duplication in the output.
 - It is also a goal that, for every combination of data type and supported type class instance:
@@ -199,7 +218,11 @@ issue number in the body of your pull request or commit message. For
 example, if your pull request addresses issue number 52, please
 include "fixes #52".
 
-If you make changes after you have opened your pull request, please add them as separate commits and avoid squashing or rebasing. Squashing and rebasing can lead to a tidier git history, but they can also be a hassle if somebody else has done work based on your branch.
+If you make changes after you have opened your pull request, please
+add them as separate commits and avoid squashing or
+rebasing. Squashing and rebasing can lead to a tidier git history, but
+they can also be a hassle if somebody else has done work based on your
+branch.
 
 ## How did we do?
 
@@ -215,3 +238,29 @@ over the project source code or lurking the
 contributing. In fact, if you encounter any confusion or frustration
 during the contribution process, please create a GitHub issue and
 we'll do our best to improve the process.
+
+## Getting in touch
+
+Discussion around Cats is currently happening in the
+[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
+issue and PR pages. You can get an overview of who is working on what
+via [Waffle.io](https://waffle.io/typelevel/cats).
+
+Feel free to open an issue if you notice a bug, have an idea for a
+feature, or have a question about the code. Pull requests are also
+gladly accepted.
+
+People are expected to follow the
+[Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
+discussing Cats on the Github page, Gitter channel, or other
+venues.
+
+We hope that our community will be respectful, helpful, and kind. If
+you find yourself embroiled in a situation that becomes heated, or
+that fails to live up to our expectations, you should disengage and
+contact one of the [project maintainers](README.md#maintainers) in private. We
+hope to avoid letting minor aggressions and misunderstandings escalate
+into larger problems.
+
+If you are being harassed, please contact one of [us](README.md#maintainers)
+immediately so that we can support you.

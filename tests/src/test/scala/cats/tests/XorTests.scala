@@ -219,6 +219,7 @@ class XorTests extends CatsSuite {
       x.isLeft should === (x.toList.isEmpty)
       x.isLeft should === (x.toValidated.isInvalid)
       x.isLeft should === (x.toValidatedNel.isInvalid)
+      Option(x.isLeft) should === (x.toXorT[Option].isLeft)
     }
   }
 

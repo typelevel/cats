@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{State, StateT}
-import cats.kernel.std.tuple._
+import cats.kernel.instances.tuple._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
@@ -25,6 +25,46 @@ class StateTTests extends CatsSuite {
     forAll { (s: String, i: Int) =>
       val state: State[String, Int] = State.pure(i)
       val stateT: State[String, Int] = StateT.pure(i)
+      state.run(s) should === (stateT.run(s))
+    }
+  }
+
+  test("State.inspect and StateT.inspect are consistent") {
+    forAll { (s: String, f: String => Int) =>
+      val state: State[String, Int] = State.inspect(f)
+      val stateT: State[String, Int] = StateT.inspect(f)
+      state.run(s) should === (stateT.run(s))
+    }
+  }
+
+  test("State.inspect and StateT.inspectF are consistent") {
+    forAll { (s: String, f: String => Int) =>
+      val state: State[String, Int] = State.inspect(f)
+      val stateT: State[String, Int] = StateT.inspectF(f.andThen(Eval.now))
+      state.run(s) should === (stateT.run(s))
+    }
+  }
+
+  test("State.modify and StateT.modify are consistent") {
+    forAll { (s: String, f: String => String) =>
+      val state: State[String, Unit] = State.modify(f)
+      val stateT: State[String, Unit] = StateT.modify(f)
+      state.run(s) should === (stateT.run(s))
+    }
+  }
+
+  test("State.modify and StateT.modifyF are consistent") {
+    forAll { (s: String, f: String => String) =>
+      val state: State[String, Unit] = State.modify(f)
+      val stateT: State[String, Unit] = StateT.modifyF(f.andThen(Eval.now))
+      state.run(s) should === (stateT.run(s))
+    }
+  }
+
+  test("State.pure and StateT.lift are consistent") {
+    forAll { (s: String, i: Int) =>
+      val state: State[String, Int] = State.pure(i)
+      val stateT: State[String, Int] = StateT.lift(Eval.now(i))
       state.run(s) should === (stateT.run(s))
     }
   }

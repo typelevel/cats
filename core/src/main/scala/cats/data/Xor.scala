@@ -19,6 +19,9 @@ import scala.util.{Failure, Success, Try}
  * `flatMap` apply only in the context of the "right" case. This right bias makes [[Xor]] more convenient to use
  * than `scala.Either` in a monadic context. Methods such as `swap`, and `leftMap` provide functionality
  * that `scala.Either` exposes through left projections.
+ *
+ * Some additional [[Xor]] methods can be found in [[Xor.XorOps XorOps]]. These methods are not defined on [[Xor]] itself because
+ * [[Xor]] is covariant in its types `A` and `B`.
  */
 sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
@@ -71,13 +74,13 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 
   def toTry(implicit ev: A <:< Throwable): Try[B] = fold(a => Failure(ev(a)), Success(_))
 
-  def toValidated: Validated[A,B] = fold(Validated.Invalid.apply, Validated.Valid.apply)
+  def toValidated: Validated[A, B] = fold(Validated.Invalid.apply, Validated.Valid.apply)
 
   /** Returns a [[ValidatedNel]] representation of this disjunction with the `Left` value
    * as a single element on the `Invalid` side of the [[NonEmptyList]]. */
-  def toValidatedNel[AA >: A]: ValidatedNel[AA,B] = fold(Validated.invalidNel, Validated.valid)
+  def toValidatedNel[AA >: A]: ValidatedNel[AA, B] = fold(Validated.invalidNel, Validated.valid)
 
-  def withValidated[AA,BB](f: Validated[A,B] => Validated[AA,BB]): AA Xor BB =
+  def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB]): AA Xor BB =
     f(toValidated).toXor
 
   def to[F[_], BB >: B](implicit F: Alternative[F]): F[BB] =
@@ -188,6 +191,20 @@ sealed abstract class Xor[+A, +B] extends Product with Serializable {
 object Xor extends XorInstances with XorFunctions {
   final case class Left[+A](a: A) extends (A Xor Nothing)
   final case class Right[+B](b: B) extends (Nothing Xor B)
+
+  final implicit class XorOps[A, B](val value: A Xor B) extends AnyVal {
+    /**
+     * Transform the `Xor` into a [[XorT]] while lifting it into the specified Applicative.
+     *
+     * {{{
+     * scala> import cats.implicits._
+     * scala> val x: Xor[String, Int] = Xor.right(3)
+     * scala> x.toXorT[Option]
+     * res0: cats.data.XorT[Option, String, Int] = XorT(Some(Right(3)))
+     * }}}
+     */
+    def toXorT[F[_]: Applicative]: XorT[F, A, B] = XorT.fromXor(value)
+  }
 }
 
 private[data] sealed abstract class XorInstances extends XorInstances1 {
@@ -209,9 +226,9 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       def combine(x: A Xor B, y: A Xor B): A Xor B = x combine y
     }
 
-  implicit def catsDataSemigroupKForXor[L]: SemigroupK[Xor[L,?]] =
-    new SemigroupK[Xor[L,?]] {
-      def combineK[A](x: Xor[L,A], y: Xor[L,A]): Xor[L,A] = x match {
+  implicit def catsDataSemigroupKForXor[L]: SemigroupK[Xor[L, ?]] =
+    new SemigroupK[Xor[L, ?]] {
+      def combineK[A](x: Xor[L, A], y: Xor[L, A]): Xor[L, A] = x match {
         case Xor.Left(_) => y
         case Xor.Right(_) => x
       }

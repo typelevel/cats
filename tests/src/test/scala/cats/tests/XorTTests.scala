@@ -113,6 +113,12 @@ class XorTTests extends CatsSuite {
     }
   }
 
+  test("toValidatedNel") {
+    forAll { (xort: XorT[List, String, Int]) =>
+      xort.toValidatedNel.map(_.toXor.leftMap(_.head)) should === (xort.value)
+    }
+  }
+
   test("withValidated") {
     forAll { (xort: XorT[List, String, Int], f: String => Char, g: Int => Double) =>
       xort.withValidated(_.bimap(f, g)) should === (xort.bimap(f, g))
@@ -194,6 +200,15 @@ class XorTTests extends CatsSuite {
   test("transform consistent with value.map") {
     forAll { (xort: XorT[List, String, Int], f: String Xor Int => Long Xor Double) =>
       xort.transform(f) should === (XorT(xort.value.map(f)))
+    }
+  }
+
+  test("semiflatMap consistent with value.flatMap+f+pure") {
+    forAll { (xort: XorT[List, String, Int], f: Int => List[String]) =>
+      xort.semiflatMap(f) should === (XorT(xort.value.flatMap {
+        case l @ Xor.Left(_) => List(l)
+        case Xor.Right(b) => f(b).map(Xor.right)
+      }))
     }
   }
 

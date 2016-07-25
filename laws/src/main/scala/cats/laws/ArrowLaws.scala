@@ -2,7 +2,7 @@ package cats
 package laws
 
 import cats.arrow.Arrow
-import cats.std.function._
+import cats.instances.function._
 import cats.syntax.compose._
 import cats.syntax.split._
 import cats.syntax.strong._

@@ -41,8 +41,8 @@ hold true in this case?
 Given just `User => Future[Profile]`, what should we do if we want to fetch profiles for a `List[User]`?
 We could try familiar combinators like `map`.
 
-```tut:book
-def profilesFor(users: List[User]) = users.map(userInfo)
+```tut:silent
+def profilesFor(users: List[User]): List[Future[Profile]] = users.map(userInfo)
 ```
 
 Note the return type `List[Future[Profile]]`. This makes sense given the type signatures, but seems unwieldy.
@@ -155,7 +155,7 @@ Corresponding to our bunches of data are bunches of topics, a `List[Topic]` if y
 Since `Reader` has an `Applicative` instance, we can `traverse` over this list with `processTopic`.
 
 ```tut:silent
-def processTopics(topics: List[Topic]) = 
+def processTopics(topics: List[Topic]): Job[List[Result]] = 
   topics.traverse(processTopic)
 ```
 

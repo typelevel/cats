@@ -267,7 +267,7 @@ data-intensive tasks, as well as infinite processes such as streams.
 
 #### 7. Use a pure compiler (optional)
 
-The previous examples used a effectful natural transformation. This
+The previous examples used an effectful natural transformation. This
 works, but you might prefer folding your `Free` in a "purer" way. The
 [State](state.html) data structure can be used to keep track of the program
 state in an immutable map, avoiding mutation altogether.
@@ -445,7 +445,7 @@ In this representation:
 
  - `Pure` builds a `Free` instance from an `A` value (it _reifies_ the
    `pure` function)
- - `Suspend` build a new `Free` by applying `F` to a previous `Free`
+ - `Suspend` builds a new `Free` by applying `F` to a previous `Free`
    (it _reifies_ the `flatMap` function)
 
 So a typical `Free` structure might look like:

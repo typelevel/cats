@@ -3,9 +3,21 @@ layout: default
 title:  "FAQ"
 section: "faq"
 ---
+
 # Frequently Asked Questions
 
-## What imports do I need?<a id="what-imports" href="#what-imports"></a>
+## Questions
+
+ * [What imports do I need?](#what-imports)
+ * [Why can't the compiler find implicit instances for Future?](#future-instances)
+ * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
+ * [Where is `ListT`?](#listt)
+ * [What does `@typeclass` mean?](#simulacrum)
+ * [What do types like `?` and `λ` mean?](#kind-projector)
+ * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
+ * [How can I help?](#contributing)
+
+## <a id="what-imports" href="#what-imports"></a>What imports do I need?
 
 The easiest approach to cats imports is to import everything that's commonly needed:
 
@@ -15,45 +27,78 @@ import cats.data._
 import cats.implicits._
 ```
 
-The `cats._` import brings in quite a few [type classes](http://typelevel.org/cats/typeclasses.html) (similar to interfaces) such as [Monad](http://typelevel.org/cats/tut/monad.html), [Semigroup](http://typelevel.org/cats/tut/semigroup.html), and [Foldable](http://typelevel.org/cats/tut/foldable.html). Instead of the entire `cats` package, you can import only the types that you need, for example:
+This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](imports.html).
 
-```tut:silent
-import cats.Monad
-import cats.Semigroup
-import cats.Foldable
-```
-
-The `cats.data._`, import brings in data structures such as [Xor](http://typelevel.org/cats/tut/xor.html), [Validated](http://typelevel.org/cats/tut/validated.html), and [State](http://typelevel.org/cats/tut/state.html). Instead of the entire `cats.data` package, you can import only the types that you need, for example:
-
-```tut:silent
-import cats.data.Xor
-import cats.data.Validated
-import cats.data.State
-```
-
-The `cats.implicits._` import does a couple of things. Firstly, it brings in implicit type class instances for standard library types - so after this import you will have `Monad[List]` and `Semigroup[Int]` instances in implicit scope. Secondly, it adds syntax enrichment onto certain types to provide some handy methods, for example:
-
-```tut:book
-// cats adds a toXor method to the standard library's Either
-val e: Either[String, Int] = Right(3)
-e.toXor
-
-// cats adds an orEmpty method to the standard library's Option
-val o: Option[String] = None
-o.orEmpty
-```
-
-**Note**: if you import `cats.implicits._` (the preferred method), you should _not_ also use imports like `cats.syntax.option._` or `cats.std.either._`. This can result in ambiguous implicit values that cause bewildering compile errors.
-
-## Why can't the compiler find implicit instances for Future?<a id="future-instances" href="#future-instances"></a>
+## <a id="future-instances" href="#future-instances"></a>Why can't the compiler find implicit instances for Future?
 
 If you have already followed the [imports advice](#what-imports) but are still getting error messages like `could not find implicit value for parameter e: cats.Monad[scala.concurrent.Future]` or `value |+| is not a member of scala.concurrent.Future[Int]`, then make sure that you have an implicit `scala.concurrent.ExecutionContext` in scope. The easiest way to do this is to `import scala.concurrent.ExecutionContext.Implicits.global`, but note that you may want to use a different execution context for your production application.
 
-## How can I turn my List of `<something>` into a `<something>` of a list?<a id="traverse" href="#traverse"></a>
+## <a id="traverse" href="#traverse"></a>How can I turn my List of `<something>` into a `<something>` of a list?
 
 It's really common to have a `List` of values with types like `Option`, `Xor`, or `Validated` that you would like to turn "inside out" into an `Option` (or `Xor` or `Validated`) of a `List`. The `sequence`, `sequenceU`, `traverse`, and `traverseU` methods are _really_ handy for this. You can read more about them in the [Traverse documentation]({{ site.baseurl }}/tut/traverse.html).
 
-## How can I help?<a id="contributing" href="#contributing"></a>
+## <a id="listt" href="#listt"></a>Where is ListT?
+
+There are monad transformers for various types, such as [OptionT]({{ site.baseurl }}/tut/optiont.html), so people often wonder why there isn't a `ListT`. For example, in the following example, people might reach for `ListT` to simplify making nested `map` and `exists` calls:
+
+```tut:reset:silent
+val l: Option[List[Int]] = Some(List(1, 2, 3, 4, 5))
+
+def isEven(i: Int): Boolean = i % 2 == 0
+```
+
+```tut:book
+l.map(_.map(_ + 1))
+l.exists(_.exists(isEven))
+```
+
+A naive implementation of `ListT` suffers from associativity issues; see [this gist](https://gist.github.com/tpolecat/1227e22e3161b5816e014c00650f3b57) for an example. It's possible to create a `ListT` that doesn't have these issues, but it tends to be pretty inefficient. For many use-cases, [Nested](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/Nested.scala) can be used to achieve the desired results.
+
+Here is how we could achieve the effect of the previous example using `Nested`:
+
+```tut:silent
+import cats.data.Nested
+import cats.implicits._
+```
+
+```tut:book
+val nl = Nested(l)
+nl.map(_ + 1)
+nl.exists(isEven)
+```
+
+We can even perform more complicated operations, such as a `traverse` of the nested structure:
+
+```tut:silent
+import cats.data.ValidatedNel
+type ErrorsOr[A] = ValidatedNel[String, A]
+def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".invalidNel
+
+```tut:book
+nl.traverse(even)
+```
+
+## <a id="simulacrum" href="#simulacrum"></a>What does `@typeclass` mean?
+
+Cats defines and implements numerous type classes. Unfortunately, encoding these type classes in Scala can incur a large amount of boilerplate. To address this, [Simulacrum](https://github.com/mpilquist/simulacrum) introduces `@typeclass`, a macro annotation which generates a lot of this boilerplate. This elevates type classes to a first class construct and increases the legibility and maintainability of the code. Use of simulacrum also ensures consistency in how the type classes are encoded across a project. Cats uses simulacrum wherever possible to encode type classes, and you can read more about it at the [project page](https://github.com/mpilquist/simulacrum).
+
+Note that the one area where simulacrum is intentionally not used is in the `cats-kernel` module. The `cats-kernel` module is intended to be a shared dependency for a number of projects, and as such, it is important that it is both lightweight and very stable from a binary compatibility perspective. At some point there may be a transition from simulacrum to [typeclassic](https://github.com/typelevel/typeclassic), and the binary compatibility of moving between simulacrum and typeclassic is unclear at this point. Avoiding the dependency on simulacrum in `cats-kernel`, provides insulation against any potential binary compatibility problems in such a transition.
+
+## <a id="kind-projector" href="#kind-projector"></a>What do types like `?` and `λ` mean?
+
+Cats defines a wealth of type classes and type class instances. For a number of the type class and instance combinations, there is a mismatch between the type parameter requirements of the type class and the type parameter requirements of the data type for which the instance is being defined. For example, the [Xor]({{ site.baseurl }}/tut/xor.html) data type is a type constructor with two type parameters. We would like to be able to define a [Monad]({{ site.baseurl }}/tut/monad.html) for `Xor`, but the `Monad` type class operates on type constructors having only one type parameter.
+
+**Enter type lambdas!** Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of `Xor` then, when defining a `Monad` for `Xor`, we want to fix one of the type parameters at the point where a `Monad` instance is summoned, so that the type parameters line up. As `Xor` is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when `Xor` is treated as a `Monad`. The right biased nature of `Xor` is discussed further in the [`Xor` documentation]({{ site.baseurl }}/tut/xor.html).
+
+**Enter [kind-projector](https://github.com/non/kind-projector)!** kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols `?` and `λ` are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the [project page](https://github.com/non/kind-projector).
+
+## <a id="machinist" href="#machinist"></a>What does `macro Ops` do? What is `cats.macros.Ops`?
+
+`macro Ops` invokes the [Machinist](https://github.com/typelevel/machinist) Ops macro, and is used in cats in a number of places to enrich types with operations with the minimal possible cost when those operations are called in code. Machinist supports an extension mechanism where users of the macro can provide a mapping between symbolic operator names and method names. The `cats.macros.Ops` class uses this extension mechanism to supply the set of mappings that the cats project is interested in.
+
+More about the history of machinist and how it works can be discovered at the [project page](https://github.com/typelevel/machinist), or [this article on the typelevel blog](http://typelevel.org/blog/2013/10/13/spires-ops-macros.html).
+
+## <a id="contributing" href="#contributing"></a>How can I help?
 
 The cats community welcomes and encourages contributions, even if you are completely new to cats and functional programming. Here are a few ways to help out:
 

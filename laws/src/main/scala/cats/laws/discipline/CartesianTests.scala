@@ -2,6 +2,7 @@ package cats
 package laws
 package discipline
 
+import cats.laws.discipline.CartesianTests.Isomorphisms
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import Prop._
@@ -11,7 +12,7 @@ trait CartesianTests[F[_]] extends Laws {
   def laws: CartesianLaws[F]
 
   def cartesian[A : Arbitrary, B : Arbitrary, C : Arbitrary](implicit
-    iso: CartesianTests.Isomorphisms[F],
+    iso: Isomorphisms[F],
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],

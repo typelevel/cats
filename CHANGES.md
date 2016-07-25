@@ -1,3 +1,17 @@
+## Version 0.6.1
+
+> 2016 July 14
+
+Version 0.6.1 is a patch release compatible with 0.6.0.
+
+It contains one bug fix:
+
+* [#1062](https://github.com/typelevel/cats/pull/1173/commits/8dd682771557274a61f1e773df0f999b44a9819d): Fixed a bug in the Order and PartialOrder instances for Tuple2+ where only the first element was used in comparisons
+
+It also contains a change to the build:
+
+* [#1173](https://github.com/typelevel/cats/pull/1173/commits/5531d1ac7a6807c1842cd4b5b599173b14b652a9): Add binary compatibility check to all published modules
+
 ## Version 0.6.0
 
 > 2016 May 19

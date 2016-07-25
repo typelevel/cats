@@ -21,10 +21,10 @@ type NonEmptyList[A] = OneAnd[List, A]
 
 which is the actual implementation of non-empty lists in cats.  By
 having the higher kinded type parameter `F[_]`, `OneAnd` is also able
-to represent other "non-empty" data structures, e.g.
+to represent other "non-empty" data structures e.g.
 
 ```tut:silent
 import cats.data.OneAnd
 
-type NonEmptyVector[A] = OneAnd[Vector, A]
+type NonEmptyStream[A] = OneAnd[Stream, A]
 ```

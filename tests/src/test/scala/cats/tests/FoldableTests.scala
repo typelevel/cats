@@ -4,7 +4,7 @@ package tests
 import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 
-import cats.std.all._
+import cats.instances.all._
 
 abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite with PropertyChecks {
 
@@ -42,6 +42,29 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
       fa.toList should === (iterator(fa).toList)
       fa.isEmpty should === (iterator(fa).isEmpty)
       fa.nonEmpty should === (iterator(fa).nonEmpty)
+    }
+  }
+
+  test("maximum/minimum") {
+    forAll { (fa: F[Int]) =>
+      val maxOpt = fa.maximumOption
+      val minOpt = fa.minimumOption
+      val list = fa.toList
+      val nelOpt = list.toNel
+      maxOpt should === (nelOpt.map(_.maximum))
+      maxOpt should === (nelOpt.map(_.unwrap.max))
+      minOpt should === (nelOpt.map(_.minimum))
+      minOpt should === (nelOpt.map(_.unwrap.min))
+      maxOpt.forall(i => fa.forall(_ <= i)) should === (true)
+      minOpt.forall(i => fa.forall(_ >= i)) should === (true)
+    }
+  }
+
+  test("reduceLeftOption/reduceRightOption") {
+    forAll { (fa: F[Int]) =>
+      val list = fa.toList
+      fa.reduceLeftOption(_ - _) should === (list.reduceLeftOption(_ - _))
+      fa.reduceRightOption((x, ly) => ly.map(x - _)).value should === (list.reduceRightOption(_ - _))
     }
   }
 }

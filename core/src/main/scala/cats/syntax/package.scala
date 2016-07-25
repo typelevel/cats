@@ -1,7 +1,6 @@
 package cats
 
 package object syntax {
-  // scalastyle:off number.of.types
   object all extends AllSyntax
   object applicative extends ApplicativeSyntax
   object applicativeError extends ApplicativeErrorSyntax
@@ -25,6 +24,7 @@ package object syntax {
   object list extends ListSyntax
   object monadCombine extends MonadCombineSyntax
   object monadFilter extends MonadFilterSyntax
+  object monoid extends MonoidSyntax
   object option extends OptionSyntax
   object order extends OrderSyntax
   object partialOrder extends PartialOrderSyntax
@@ -37,8 +37,8 @@ package object syntax {
   object strong extends StrongSyntax
   object transLift extends TransLiftSyntax
   object traverse extends TraverseSyntax
-  object xor extends XorSyntax
   object validated extends ValidatedSyntax
   object writer extends WriterSyntax
-  // scalastyle:on number.of.types
+  object xor extends XorSyntax
+  object xort extends XorTSyntax
 }

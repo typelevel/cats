@@ -60,6 +60,12 @@ import simulacrum.typeclass
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B
 
   /**
+   *  Monadic variant of [[reduceLeftTo]]
+   */
+  def reduceLeftM[G[_], A, B](fa: F[A])(f: A => G[B])(g: (B, A) => G[B])(implicit G: FlatMap[G]): G[B] =
+    reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
+
+  /**
    * Overriden from Foldable[_] for efficiency.
    */
   override def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
@@ -112,6 +118,12 @@ import simulacrum.typeclass
       val F = self
       val G = Reducible[G]
     }
+
+  def minimum[A](fa: F[A])(implicit A: Order[A]): A =
+    reduceLeft(fa)(A.min)
+
+  def maximum[A](fa: F[A])(implicit A: Order[A]): A =
+    reduceLeft(fa)(A.max)
 }
 
 /**

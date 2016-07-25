@@ -1,14 +1,8 @@
 package cats
 
 package object data {
-  type NonEmptyVector[A] = OneAnd[Vector, A]
   type NonEmptyStream[A] = OneAnd[Stream, A]
   type ValidatedNel[E, A] = Validated[NonEmptyList[E], A]
-
-  def NonEmptyVector[A](head: A, tail: Vector[A] = Vector.empty): NonEmptyVector[A] =
-    OneAnd(head, tail)
-  def NonEmptyVector[A](head: A, tail: A*): NonEmptyVector[A] =
-    OneAnd(head, tail.toVector)
 
   def NonEmptyStream[A](head: A, tail: Stream[A] = Stream.empty): NonEmptyStream[A] =
     OneAnd(head, tail)
@@ -26,6 +20,10 @@ package object data {
   type Writer[L, V] = WriterT[Id, L, V]
   object Writer {
     def apply[L, V](l: L, v: V): WriterT[Id, L, V] = WriterT[Id, L, V]((l, v))
+
+    def value[L:Monoid, V](v: V): Writer[L, V] = WriterT.value(v)
+
+    def tell[L](l: L): Writer[L, Unit] = WriterT.tell(l)
   }
 
   type State[S, A] = StateT[Eval, S, A]

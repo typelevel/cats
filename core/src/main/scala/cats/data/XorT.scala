@@ -88,6 +88,9 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def map[D](f: B => D)(implicit F: Functor[F]): XorT[F, A, D] = bimap(identity, f)
 
+  def semiflatMap[D](f: B => F[D])(implicit F: Monad[F]): XorT[F, A, D] =
+    flatMap(b => XorT.right[F, A, D](f(b)))
+
   def leftMap[C](f: A => C)(implicit F: Functor[F]): XorT[F, C, B] = bimap(f, identity)
 
   def compare(that: XorT[F, A, B])(implicit o: Order[F[A Xor B]]): Int =
@@ -154,6 +157,9 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
   def toValidated(implicit F: Functor[F]): F[Validated[A, B]] =
     F.map(value)(_.toValidated)
 
+  def toValidatedNel(implicit F: Functor[F]): F[ValidatedNel[A, B]] =
+    F.map(value)(_.toValidatedNel)
+
   /** Run this value as a `[[Validated]]` against the function and convert it back to an `[[XorT]]`.
    *
    * The [[Applicative]] instance for `XorT` "fails fast" - it is often useful to "momentarily" have
@@ -174,6 +180,34 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
     XorT(F.map(value)(xor => f(xor.toValidated).toXor))
 
   def show(implicit show: Show[F[A Xor B]]): String = show.show(value)
+
+  /**
+   * Transform this `XorT[F, A, B]` into a `[[Nested]][F, A Xor ?, B]`.
+   *
+   * An example where `toNested` can be used, is to get the `Apply.ap` function with the
+   * behavior from the composed `Apply` instances from `F` and `Xor[A, ?]`, which is
+   * inconsistent with the behavior of the `ap` from `Monad` of `XorT`.
+   *
+   * {{{
+   * scala> import cats.data.{Nested, Xor, XorT}
+   * scala> import cats.implicits._
+   * scala> val ff: XorT[List, String, Int => String] =
+   *      |   XorT(List(Xor.right(_.toString), Xor.left("error")))
+   * scala> val fa: XorT[List, String, Int] =
+   *      |   XorT(List(Xor.right(1), Xor.right(2)))
+   * scala> type ErrorOr[A] = String Xor A
+   * scala> type ListErrorOr[A] = Nested[List, ErrorOr, A]
+   * scala> ff.ap(fa)
+   * res0: XorT[List,String,String] = XorT(List(Right(1), Right(2), Left(error)))
+   * scala> XorT((ff.toNested: ListErrorOr[Int => String]).ap(fa.toNested: ListErrorOr[Int]).value)
+   * res1: XorT[List,String,String] = XorT(List(Right(1), Right(2), Left(error), Left(error)))
+   * }}}
+   *
+   * Note that we need the `ErrorOr` type alias above because otherwise we can't use the
+   * syntax function `ap` on `Nested[List, A Xor ?, B]`. This won't be needed after cats has
+   * decided [[https://github.com/typelevel/cats/issues/1073 how to handle the SI-2712 fix]].
+   */
+  def toNested: Nested[F, A Xor ?, B] = Nested[F, A Xor ?, B](value)
 }
 
 object XorT extends XorTInstances with XorTFunctions
@@ -208,7 +242,7 @@ trait XorTFunctions {
   final def fromEither[F[_]]: FromEitherPartiallyApplied[F] = new FromEitherPartiallyApplied
 
   final class FromEitherPartiallyApplied[F[_]] private[XorTFunctions] {
-    def apply[E, A](eit: Either[E,A])(implicit F: Applicative[F]): XorT[F, E, A] =
+    def apply[E, A](eit: Either[E, A])(implicit F: Applicative[F]): XorT[F, E, A] =
       XorT(F.pure(Xor.fromEither(eit)))
   }
 }
@@ -245,7 +279,7 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
     new TransLift[XorT[?[_], E, ?]] {
       type TC[M[_]] = Functor[M]
 
-      def liftT[M[_]: Functor, A](ma: M[A]): XorT[M,E,A] =
+      def liftT[M[_]: Functor, A](ma: M[A]): XorT[M, E, A] =
         XorT(Functor[M].map(ma)(Xor.right))
     }
 
@@ -307,7 +341,7 @@ private[data] abstract class XorTInstances4 {
 
 private[data] trait XorTSemigroup[F[_], L, A] extends Semigroup[XorT[F, L, A]] {
   implicit val F0: Semigroup[F[L Xor A]]
-  def combine(x: XorT[F, L ,A], y: XorT[F, L , A]): XorT[F, L , A] =
+  def combine(x: XorT[F, L , A], y: XorT[F, L , A]): XorT[F, L , A] =
     XorT(F0.combine(x.value, y.value))
 }
 
@@ -318,7 +352,7 @@ private[data] trait XorTMonoid[F[_], L, A] extends Monoid[XorT[F, L, A]] with Xo
 
 private[data] trait XorTSemigroupK[F[_], L] extends SemigroupK[XorT[F, L, ?]] {
   implicit val F: Monad[F]
-  def combineK[A](x: XorT[F,L,A], y: XorT[F, L, A]): XorT[F, L, A] =
+  def combineK[A](x: XorT[F, L, A], y: XorT[F, L, A]): XorT[F, L, A] =
     XorT(F.flatMap(x.value) {
       case l @ Xor.Left(_) => y.value
       case r @ Xor.Right(_) => F.pure(r)

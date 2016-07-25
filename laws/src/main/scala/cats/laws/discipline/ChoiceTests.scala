@@ -20,7 +20,7 @@ trait ChoiceTests[F[_, _]] extends CategoryTests[F] {
     EqFXorABD: Eq[F[Xor[A, B], D]]
   ): RuleSet =
     new DefaultRuleSet(
-      name =  "choice",
+      name = "choice",
       parent = Some(category[A, B, C, D]),
       "choice composition distributivity" -> forAll(laws.choiceCompositionDistributivity[A, B, C, D] _))
 }

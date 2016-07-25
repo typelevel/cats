@@ -29,7 +29,22 @@ import simulacrum.typeclass
     }
 }
 
-object Contravariant {
+object Contravariant extends KernelContravariantInstances
+
+/**
+ * Convariant instances for types that are housed in cats.kernel and therefore
+ * can't have instances for this type class in their companion objects.
+ */
+private[functor] sealed trait KernelContravariantInstances {
+  implicit val catsFunctorContravariantForEq: Contravariant[Eq] =
+    new Contravariant[Eq] {
+      /** Derive a `Eq` for `B` given a `Eq[A]` and a function `B => A`.
+       *
+       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
+       */
+      def contramap[A, B](fa: Eq[A])(f: B => A): Eq[B] = fa.on(f)
+    }
+
   implicit val catsFunctorContravariantForPartialOrder: Contravariant[PartialOrder] =
     new Contravariant[PartialOrder] {
       /** Derive a `PartialOrder` for `B` given a `PartialOrder[A]` and a function `B => A`.
