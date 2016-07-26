@@ -177,6 +177,11 @@ class NonEmptyListTests extends CatsSuite {
 class ReducibleNonEmptyListCheck extends ReducibleCheck[NonEmptyList]("NonEmptyList") {
   def iterator[T](nel: NonEmptyList[T]): Iterator[T] = nel.toList.iterator
 
-  def range(start: Long, endInclusive: Long): NonEmptyList[Long] =
-    NonEmptyList(start, (start + 1L).to(endInclusive).toList)
+  def range(start: Long, endInclusive: Long): NonEmptyList[Long] = {
+    // if we inline this we get a bewildering implicit numeric widening
+    // error message in Scala 2.10
+    val tailStart: Long = start + 1L
+    NonEmptyList(start, (tailStart).to(endInclusive).toList)
+  }
+
 }
