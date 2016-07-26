@@ -4,7 +4,7 @@ package tests
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.NonEmptyList
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests}
+import cats.laws.discipline.{ComonadTests, SemigroupKTests, MonadRecTests, SerializableTests, TraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyListTests extends CatsSuite {
@@ -20,45 +20,37 @@ class NonEmptyListTests extends CatsSuite {
   checkAll("NonEmptyList[Int]", ReducibleTests[NonEmptyList].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyList]", SerializableTests.serializable(Reducible[NonEmptyList]))
 
-  // Test instances that have more general constraints
-  {
-    implicit val monadCombine = ListWrapper.monadCombine
-    checkAll("NonEmptyList[Int]", CartesianTests[NonEmptyList].cartesian[Int, Int, Int])
-    checkAll("Cartesian[NonEmptyList[A]]", SerializableTests.serializable(Cartesian[NonEmptyList]))
-  }
-
-  {
-    implicit val functor = ListWrapper.functor
-    checkAll("NonEmptyList[Int]", FunctorTests[NonEmptyList].functor[Int, Int, Int])
-    checkAll("Functor[NonEmptyList[A]]", SerializableTests.serializable(Functor[NonEmptyList]))
-  }
-
-  {
-    implicit val monadCombine = ListWrapper.monadCombine
-    checkAll("NonEmptyList[Int]", SemigroupKTests[NonEmptyList].semigroupK[Int])
-    checkAll("NonEmptyList[Int]", GroupLaws[NonEmptyList[Int]].semigroup)
-    checkAll("SemigroupK[NonEmptyList[A]]", SerializableTests.serializable(SemigroupK[NonEmptyList]))
-    checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[NonEmptyList[Int]]))
-  }
-
-  {
-    implicit val foldable = ListWrapper.foldable
-    checkAll("NonEmptyList[Int]", FoldableTests[NonEmptyList].foldable[Int, Int])
-    checkAll("Foldable[NonEmptyList[A]]", SerializableTests.serializable(Foldable[NonEmptyList]))
-  }
-
-  {
-    // Test functor and subclasses don't have implicit conflicts
-    implicitly[Functor[NonEmptyList]]
-    implicitly[Monad[NonEmptyList]]
-    implicitly[Comonad[NonEmptyList]]
-  }
-
-  checkAll("NonEmptyList[Int]", MonadTests[NonEmptyList].monad[Int, Int, Int])
+  checkAll("NonEmptyList[Int]", MonadRecTests[NonEmptyList].monadRec[Int, Int, Int])
   checkAll("Monad[NonEmptyList[A]]", SerializableTests.serializable(Monad[NonEmptyList]))
 
+  checkAll("NonEmptyList[Int]", SemigroupKTests[NonEmptyList].semigroupK[Int])
+  checkAll("SemigroupK[NonEmptyList[A]]", SerializableTests.serializable(SemigroupK[NonEmptyList]))
+
+  checkAll("NonEmptyList[Int]", GroupLaws[NonEmptyList[Int]].semigroup)
+  checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[NonEmptyList[Int]]))
+
   checkAll("NonEmptyList[Int]", ComonadTests[NonEmptyList].comonad[Int, Int, Int])
-  checkAll("Comonad[NonEmptyList[A]]", SerializableTests.serializable(Comonad[NonEmptyList]))
+  checkAll("Comonad[NonEmptyList]", SerializableTests.serializable(Comonad[NonEmptyList]))
+
+  checkAll("NonEmptyList[ListWrapper[Int]]", OrderLaws[NonEmptyList[ListWrapper[Int]]].eqv)
+  checkAll("Eq[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptyList[ListWrapper[Int]]]))
+
+  {
+    implicit val A = ListWrapper.partialOrder[Int]
+    checkAll("NonEmptyList[ListWrapper[Int]]", OrderLaws[NonEmptyList[ListWrapper[Int]]].partialOrder)
+    checkAll("PartialOrder[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(PartialOrder[NonEmptyList[ListWrapper[Int]]]))
+
+    Eq[NonEmptyList[ListWrapper[Int]]]
+  }
+
+  {
+    implicit val A = ListWrapper.order[Int]
+    checkAll("NonEmptyList[ListWrapper[Int]]", OrderLaws[NonEmptyList[ListWrapper[Int]]].order)
+    checkAll("Order[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Order[NonEmptyList[ListWrapper[Int]]]))
+
+    Eq[NonEmptyList[ListWrapper[Int]]]
+    PartialOrder[NonEmptyList[ListWrapper[Int]]]
+  }
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nel: NonEmptyList[Int]) =>
@@ -158,4 +150,33 @@ class NonEmptyListTests extends CatsSuite {
       nel.reduceRightToOption(f)(g).value should === (expected)
     }
   }
+
+  test("fromList round trip") {
+    forAll { l: List[Int] =>
+      NonEmptyList.fromList(l).map(_.toList).getOrElse(List.empty) should === (l)
+    }
+
+    forAll { nel: NonEmptyList[Int] =>
+      NonEmptyList.fromList(nel.toList) should === (Some(nel))
+    }
+  }
+
+  test("fromListUnsafe/fromList consistency") {
+    forAll { nel: NonEmptyList[Int] =>
+      NonEmptyList.fromList(nel.toList) should === (Some(NonEmptyList.fromListUnsafe(nel.toList)))
+    }
+  }
+
+  test("fromListUnsafe empty list") {
+    val _ = intercept[IllegalArgumentException] {
+      NonEmptyList.fromListUnsafe(List.empty[Int])
+    }
+  }
+}
+
+class ReducibleNonEmptyListCheck extends ReducibleCheck[NonEmptyList]("NonEmptyList") {
+  def iterator[T](nel: NonEmptyList[T]): Iterator[T] = nel.toList.iterator
+
+  def range(start: Long, endInclusive: Long): NonEmptyList[Long] =
+    NonEmptyList(start, (start + 1L).to(endInclusive).toList)
 }

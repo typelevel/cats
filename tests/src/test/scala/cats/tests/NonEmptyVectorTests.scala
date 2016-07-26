@@ -219,3 +219,10 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 }
+
+class ReducibleNonEmptyVectorCheck extends ReducibleCheck[NonEmptyVector]("NonEmptyVector") {
+  def iterator[T](nel: NonEmptyVector[T]): Iterator[T] = nel.toVector.iterator
+
+  def range(start: Long, endInclusive: Long): NonEmptyVector[Long] =
+    NonEmptyVector(start, (start + 1L).to(endInclusive).toVector)
+}

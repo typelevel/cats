@@ -2,7 +2,7 @@ package cats
 package data
 
 import cats.instances.list._
-import cats.syntax.eq._
+import cats.syntax.order._
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
@@ -33,8 +33,11 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
   /**
    * remove elements not matching the predicate
    */
-  def filter(p: A => Boolean): List[A] =
-    toList.filter(p)
+  def filter(p: A => Boolean): List[A] = {
+    val ftail = tail.filter(p)
+    if (p(head)) head :: ftail
+    else ftail
+  }
 
   /**
    * Append another NonEmptyList
@@ -46,7 +49,8 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
    * Find the first element matching the predicate, if one exists
    */
   def find(p: A => Boolean): Option[A] =
-    toList.find(p)
+    if (p(head)) Some(head)
+    else tail.find(p)
 
   /**
    * Check whether at least one element satisfies the predicate
@@ -78,13 +82,19 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
   def reduceLeft(f: (A, A) => A): A =
     tail.foldLeft(head)(f)
 
+  def traverse[G[_], B](f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
+    G.map2Eval(f(head), Always(Traverse[List].traverse(tail)(f)))(NonEmptyList(_, _)).value
+
   def coflatMap[B](f: NonEmptyList[A] => B): NonEmptyList[B] = {
-    @tailrec def consume(as: List[A], buf: ListBuffer[B]): List[B] =
+    val buf = ListBuffer.empty[B]
+    @tailrec def consume(as: List[A]): List[B] =
       as match {
         case Nil => buf.toList
-        case a :: as => consume(as, buf += f(NonEmptyList(a, as)))
+        case a :: as =>
+          buf += f(NonEmptyList(a, as))
+          consume(as)
       }
-    NonEmptyList(f(this), consume(this.tail, ListBuffer.empty))
+    NonEmptyList(f(this), consume(tail))
   }
 
   def ===(o: NonEmptyList[A])(implicit A: Eq[A]): Boolean =
@@ -99,12 +109,36 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
 object NonEmptyList extends NonEmptyListInstances {
   def apply[A](head: A, tail: A*): NonEmptyList[A] = NonEmptyList(head, tail.toList)
 
+  /**
+   * Create a `NonEmptyList` from a `List`.
+   *
+   * The result will be `None` if the input list is empty and `Some` wrapping a
+   * `NonEmptyList` otherwise.
+   *
+   * @see [[fromListUnsafe]] for an unsafe version that throws an exception if
+   * the input list is empty.
+   */
   def fromList[A](l: List[A]): Option[NonEmptyList[A]] =
-    if (l.isEmpty) None else Some(NonEmptyList(l.head, l.tail))
+    l match {
+      case Nil => None
+      case h :: t => Some(NonEmptyList(h, t))
+    }
 
+  /**
+   * Create a `NonEmptyList` from a `List`, or throw an
+   * `IllegalArgumentException` if the input list is empty.
+   *
+   * @see [[fromList]] for a safe version that returns `None` if the input list
+   * is empty.
+   */
   def fromListUnsafe[A](l: List[A]): NonEmptyList[A] =
-    if (l.nonEmpty) NonEmptyList(l.head, l.tail)
-    else throw new IllegalArgumentException("Cannot create NonEmptyList from empty list")
+    l match {
+      case Nil => throw new IllegalArgumentException("Cannot create NonEmptyList from empty list")
+      case h :: t => NonEmptyList(h, t)
+    }
+
+  def fromReducible[F[_], A](fa: F[A])(implicit F: Reducible[F]): NonEmptyList[A] =
+    F.toNonEmptyList(fa)
 }
 
 private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 {
@@ -136,8 +170,8 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
 
       def extract[A](fa: NonEmptyList[A]): A = fa.head
 
-      def traverse[G[_], A, B](fa: NonEmptyList[A])(f: (A) => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
-        G.map2Eval(f(fa.head), Always(Traverse[List].traverse(fa.tail)(f)))(NonEmptyList(_, _)).value
+      def traverse[G[_], A, B](fa: NonEmptyList[A])(f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
+        fa traverse f
 
       override def foldLeft[A, B](fa: NonEmptyList[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
@@ -167,6 +201,8 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
         fa exists p
 
       override def toList[A](fa: NonEmptyList[A]): List[A] = fa.toList
+
+      override def toNonEmptyList[A](fa: NonEmptyList[A]): NonEmptyList[A] = fa
     }
 
   implicit def catsDataShowForNonEmptyList[A](implicit A: Show[A]): Show[NonEmptyList[A]] =
@@ -175,19 +211,43 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
   implicit def catsDataSemigroupForNonEmptyList[A]: Semigroup[NonEmptyList[A]] =
     SemigroupK[NonEmptyList].algebra[A]
 
-  implicit def catsDataOrderForNonEmptyList[A:Order]: Order[NonEmptyList[A]] =
-    Order.by(_.toList)
+  implicit def catsDataOrderForNonEmptyList[A](implicit A: Order[A]): Order[NonEmptyList[A]] =
+    new NonEmptyListOrder[A] {
+      val A0 = A
+    }
 }
 
 private[data] sealed trait NonEmptyListInstances0 extends NonEmptyListInstances1 {
-  implicit def catsDataPartialOrderForNonEmptyList[A:PartialOrder]: PartialOrder[NonEmptyList[A]] =
-    PartialOrder.by(_.toList)
+  implicit def catsDataPartialOrderForNonEmptyList[A](implicit A: PartialOrder[A]): PartialOrder[NonEmptyList[A]] =
+    new NonEmptyListPartialOrder[A] {
+      val A0 = A
+    }
 }
 
 private[data] sealed trait NonEmptyListInstances1 {
 
   implicit def catsDataEqForNonEmptyList[A](implicit A: Eq[A]): Eq[NonEmptyList[A]] =
-    new Eq[NonEmptyList[A]] {
-      def eqv(x: NonEmptyList[A], y: NonEmptyList[A]): Boolean = x === y
+    new NonEmptyListEq[A] {
+      val A0 = A
     }
+}
+
+private[data] sealed trait NonEmptyListEq[A] extends Eq[NonEmptyList[A]] {
+  implicit def A0: Eq[A]
+
+  override def eqv(x: NonEmptyList[A], y: NonEmptyList[A]): Boolean = x === y
+}
+
+private[data] sealed trait NonEmptyListPartialOrder[A] extends PartialOrder[NonEmptyList[A]] with NonEmptyListEq[A] {
+  override implicit def A0: PartialOrder[A]
+
+  override def partialCompare(x: NonEmptyList[A], y: NonEmptyList[A]): Double =
+    x.toList partialCompare y.toList
+}
+
+private[data] sealed abstract class NonEmptyListOrder[A] extends Order[NonEmptyList[A]] with NonEmptyListPartialOrder[A] {
+  override implicit def A0: Order[A]
+
+  override def compare(x: NonEmptyList[A], y: NonEmptyList[A]): Int =
+    x.toList compare y.toList
 }

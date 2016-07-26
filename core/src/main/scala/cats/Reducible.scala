@@ -1,5 +1,7 @@
 package cats
 
+import cats.data.NonEmptyList
+
 import simulacrum.typeclass
 
 /**
@@ -112,6 +114,11 @@ import simulacrum.typeclass
    */
   def sequence1_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
     G.map(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))(_ => ())
+
+  def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] =
+    reduceRightTo(fa)(a => NonEmptyList(a, Nil)) { (a, lnel) =>
+      lnel.map { case NonEmptyList(h, t) => NonEmptyList(a, h :: t) }
+    }.value
 
   def compose[G[_]: Reducible]: Reducible[λ[α => F[G[α]]]] =
     new ComposedReducible[F, G] {
