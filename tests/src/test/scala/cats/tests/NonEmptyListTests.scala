@@ -172,6 +172,12 @@ class NonEmptyListTests extends CatsSuite {
       NonEmptyList.fromListUnsafe(List.empty[Int])
     }
   }
+
+  test(":: consistent with List") {
+    forAll { (nel: NonEmptyList[Int], i: Int) =>
+      (i :: nel).toList should === (i :: nel.toList)
+    }
+  }
 }
 
 class ReducibleNonEmptyListCheck extends ReducibleCheck[NonEmptyList]("NonEmptyList") {

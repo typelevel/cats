@@ -30,6 +30,8 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
   def flatMap[B](f: A => NonEmptyList[B]): NonEmptyList[B] =
     f(head) ++ tail.flatMap(f andThen (_.toList))
 
+  def ::(a: A): NonEmptyList[A] = NonEmptyList(a, head :: tail)
+
   /**
    * remove elements not matching the predicate
    */
