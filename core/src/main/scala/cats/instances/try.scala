@@ -15,11 +15,6 @@ trait TryInstances extends TryInstances1 {
     new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] with MonadRec[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 
-      override def pureEval[A](x: Eval[A]): Try[A] = x match {
-        case Now(x) => Success(x)
-        case _ => Try(x.value)
-      }
-
       override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] = (ta, tb) match {
         case (Success(a), Success(b)) => Success((a, b))
         case (f: Failure[_], _) => castFailure[(A, B)](f)
