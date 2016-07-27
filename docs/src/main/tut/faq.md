@@ -11,6 +11,8 @@ section: "faq"
  * [What imports do I need?](#what-imports)
  * [Why can't the compiler find implicit instances for Future?](#future-instances)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
+ * [Where is `ListT`?](#listt)
+ * [Where is `IO`/`Task`?](#task)
  * [What does `@typeclass` mean?](#simulacrum)
  * [What do types like `?` and `λ` mean?](#kind-projector)
  * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
@@ -35,6 +37,67 @@ If you have already followed the [imports advice](#what-imports) but are still g
 ## <a id="traverse" href="#traverse"></a>How can I turn my List of `<something>` into a `<something>` of a list?
 
 It's really common to have a `List` of values with types like `Option`, `Xor`, or `Validated` that you would like to turn "inside out" into an `Option` (or `Xor` or `Validated`) of a `List`. The `sequence`, `sequenceU`, `traverse`, and `traverseU` methods are _really_ handy for this. You can read more about them in the [Traverse documentation]({{ site.baseurl }}/tut/traverse.html).
+
+## <a id="listt" href="#listt"></a>Where is ListT?
+
+There are monad transformers for various types, such as [OptionT]({{ site.baseurl }}/tut/optiont.html), so people often wonder why there isn't a `ListT`. For example, in the following example, people might reach for `ListT` to simplify making nested `map` and `exists` calls:
+
+```tut:reset:silent
+val l: Option[List[Int]] = Some(List(1, 2, 3, 4, 5))
+
+def isEven(i: Int): Boolean = i % 2 == 0
+```
+
+```tut:book
+l.map(_.map(_ + 1))
+l.exists(_.exists(isEven))
+```
+
+A naive implementation of `ListT` suffers from associativity issues; see [this gist](https://gist.github.com/tpolecat/1227e22e3161b5816e014c00650f3b57) for an example. It's possible to create a `ListT` that doesn't have these issues, but it tends to be pretty inefficient. For many use-cases, [Nested](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/Nested.scala) can be used to achieve the desired results.
+
+Here is how we could achieve the effect of the previous example using `Nested`:
+
+```tut:silent
+import cats.data.Nested
+import cats.implicits._
+```
+
+```tut:book
+val nl = Nested(l)
+nl.map(_ + 1)
+nl.exists(isEven)
+```
+
+We can even perform more complicated operations, such as a `traverse` of the nested structure:
+
+```tut:silent
+import cats.data.ValidatedNel
+type ErrorsOr[A] = ValidatedNel[String, A]
+def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".invalidNel
+
+```tut:book
+nl.traverse(even)
+```
+
+## <a id="task" href="#task"></a>Where is IO/Task?
+
+In purely functional programming, a monadic `IO` or `Task` type is often used to handle side effects such as file/network IO. There [have](https://github.com/typelevel/cats/pull/894) [been](https://github.com/typelevel/cats/pull/907) [several](https://github.com/typelevel/cats/issues/1224) GitHub issues/PRs about this and many more Gitter/IRL conversations, but they all seem to arrive at the conclusion that there isn't a clear canonical `IO` or `Task` that serves everyones' needs. Some of the questions that come up are:
+
+- Should tasks be interruptible?
+- Should there be a single `Task` that subsumes `IO` and adds support for asynchrony and concurrency, or should there be separate `IO` and `Task` types?
+- How should concurrency be managed/configured?
+- Is [scala.js](https://www.scala-js.org/) supported?
+- Should you be able to block a thread waiting for the result of a task? This is really convenient for tests, but it isn't really compatible with a JavaScript runtime and therefore is an issue for [scala.js](https://www.scala-js.org/).
+
+For some use-cases, a very simple `IO` is the best answer, as it avoids a lot of the overhead and complexity of other solutions. However, other use-cases require low-level concurrency control with asynchrony, resource management, and stack-safety. Considering all of the competing concerns, Cats has opted to not implement its own `IO`/`Task` types and instead encourage users to use a separate library that best serves their use-case.
+
+Here are a couple libraries with `Task` implementations that you may find useful (in no particular order):
+- [Monix](https://monix.io/) - Asynchronous Programming for Scala and [Scala.js](https://www.scala-js.org/).
+  - The `monix-eval` module provides a full-featured [Task](https://monix.io/docs/2x/eval/task.html) that is both cancellable and Scala.js-compatible.
+- [fs2](https://github.com/functional-streams-for-scala/fs2) - Compositional, streaming I/O library for Scala
+  - fs2 provides a [Task](https://github.com/functional-streams-for-scala/fs2/blob/series/0.9/core/src/main/scala/fs2/task.scala) that is a convenient option if you are already using fs2. At the time of this writing, Scala.js support is [in progress](https://github.com/functional-streams-for-scala/fs2/issues/500).
+
+It may be worth keeping in mind that `IO` and `Task` are pretty blunt instruments (they are essentially the `Any` of side effect management), and you may want to narrow the scope of your effects throughout most of your application. The [free monad]({{ site.baseurl }}/tut/freemonad.html) documentation describes a way to abstractly define controlled effects and interpret them into a type such as `IO` or `Task` (or even simply `Try`, `Future`, or [`Id`]({{ site.baseurl }}/tut/id.html)) as late as possible. As more of your code becomes pure through these controlled effects the less it matters which type you end up choosing to represent your side effects.
 
 ## <a id="simulacrum" href="#simulacrum"></a>What does `@typeclass` mean?
 

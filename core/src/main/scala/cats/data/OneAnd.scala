@@ -2,8 +2,8 @@ package cats
 package data
 
 import scala.annotation.tailrec
-import scala.collection.mutable.ListBuffer
-import cats.instances.list._
+import scala.collection.mutable.Builder
+import cats.instances.stream._
 
 /**
  * A data type which represents a single element (head) and some other
@@ -140,21 +140,22 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
 }
 
 private[data] trait OneAndLowPriority0 {
-  implicit val catsDataComonadForOneAnd: Comonad[OneAnd[List, ?]] =
-    new Comonad[OneAnd[List, ?]] {
-      def coflatMap[A, B](fa: OneAnd[List, A])(f: OneAnd[List, A] => B): OneAnd[List, B] = {
-        @tailrec def consume(as: List[A], buf: ListBuffer[B]): List[B] =
-          as match {
-            case Nil => buf.toList
-            case a :: as => consume(as, buf += f(OneAnd(a, as)))
+  implicit val catsDataComonadForNonEmptyStream: Comonad[OneAnd[Stream, ?]] =
+    new Comonad[OneAnd[Stream, ?]] {
+      def coflatMap[A, B](fa: OneAnd[Stream, A])(f: OneAnd[Stream, A] => B): OneAnd[Stream, B] = {
+        @tailrec def consume(as: Stream[A], buf: Builder[B, Stream[B]]): Stream[B] =
+          if (as.isEmpty) buf.result
+          else {
+            val tail = as.tail
+            consume(tail, buf += f(OneAnd(as.head, tail)))
           }
-        OneAnd(f(fa), consume(fa.tail, ListBuffer.empty))
+        OneAnd(f(fa), consume(fa.tail, Stream.newBuilder))
       }
 
-      def extract[A](fa: OneAnd[List, A]): A =
+      def extract[A](fa: OneAnd[Stream, A]): A =
         fa.head
 
-      def map[A, B](fa: OneAnd[List, A])(f: A => B): OneAnd[List, B] =
+      def map[A, B](fa: OneAnd[Stream, A])(f: A => B): OneAnd[Stream, B] =
         fa map f
     }
 }

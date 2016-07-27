@@ -219,3 +219,14 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 }
+
+class ReducibleNonEmptyVectorCheck extends ReducibleCheck[NonEmptyVector]("NonEmptyVector") {
+  def iterator[T](nel: NonEmptyVector[T]): Iterator[T] = nel.toVector.iterator
+
+  def range(start: Long, endInclusive: Long): NonEmptyVector[Long] = {
+    // if we inline this we get a bewildering implicit numeric widening
+    // error message in Scala 2.10
+    val tailStart: Long = start + 1L
+    NonEmptyVector(start, (tailStart).to(endInclusive).toVector)
+  }
+}
