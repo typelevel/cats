@@ -15,7 +15,13 @@ object arbitrary extends ArbitraryInstances0 {
   // in the context of Int => Boolean. Once scalacheck supports better Function1 arbitrary
   // instances this can be removed.
   implicit def catsLawsArbitraryForIntToBool: Arbitrary[(Int) => Boolean] =
-    Arbitrary(getArbitrary[Int].map(x => (input) => input < x))
+    Arbitrary(
+      getArbitrary[Int].map(x =>
+       new Function1[Int, Boolean] {
+         def apply(i: Int): Boolean = i < x
+
+         override def toString = s"<function testing whether input is less than $x>"
+       }))
 
   implicit def catsLawsArbitraryForConst[A, B](implicit A: Arbitrary[A]): Arbitrary[Const[A, B]] =
     Arbitrary(A.arbitrary.map(Const[A, B]))
@@ -25,6 +31,9 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit def catsLawsArbitraryForNonEmptyVector[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptyVector[A]] =
     Arbitrary(implicitly[Arbitrary[Vector[A]]].arbitrary.flatMap(fa => A.arbitrary.map(a => NonEmptyVector(a, fa))))
+
+  implicit def catsLawsArbitraryForNonEmptyList[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptyList[A]] =
+    Arbitrary(implicitly[Arbitrary[List[A]]].arbitrary.flatMap(fa => A.arbitrary.map(a => NonEmptyList(a, fa))))
 
   implicit def catsLawsArbitraryForXor[A, B](implicit A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[A Xor B] =
     Arbitrary(Gen.oneOf(A.arbitrary.map(Xor.left), B.arbitrary.map(Xor.right)))

@@ -52,9 +52,9 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
       val list = fa.toList
       val nelOpt = list.toNel
       maxOpt should === (nelOpt.map(_.maximum))
-      maxOpt should === (nelOpt.map(_.unwrap.max))
+      maxOpt should === (nelOpt.map(_.toList.max))
       minOpt should === (nelOpt.map(_.minimum))
-      minOpt should === (nelOpt.map(_.unwrap.min))
+      minOpt should === (nelOpt.map(_.toList.min))
       maxOpt.forall(i => fa.forall(_ <= i)) should === (true)
       minOpt.forall(i => fa.forall(_ >= i)) should === (true)
     }

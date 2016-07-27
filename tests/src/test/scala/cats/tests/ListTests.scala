@@ -21,7 +21,7 @@ class ListTests extends CatsSuite {
 
   test("nel => list => nel returns original nel")(
     forAll { fa: NonEmptyList[Int] =>
-      fa.unwrap.toNel should === (Some(fa))
+      fa.toList.toNel should === (Some(fa))
     }
   )
 
