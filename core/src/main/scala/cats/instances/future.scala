@@ -12,11 +12,6 @@ trait FutureInstances extends FutureInstances1 {
     new FutureCoflatMap with MonadError[Future, Throwable]{
       def pure[A](x: A): Future[A] = Future.successful(x)
 
-      override def pureEval[A](x: Eval[A]): Future[A] = x match {
-        case Now(x) => Future.successful(x)
-        case _ => Future(x.value)
-      }
-
       def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
 
       def handleErrorWith[A](fea: Future[A])(f: Throwable => Future[A]): Future[A] = fea.recoverWith { case t => f(t) }

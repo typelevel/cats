@@ -22,13 +22,6 @@ import simulacrum.typeclass
    */
   def pure[A](x: A): F[A]
 
-  /**
-   * `pureEval` lifts any value into the Applicative Functor.
-   *
-   * This variant supports optional laziness.
-   */
-  def pureEval[A](x: Eval[A]): F[A] = pure(x.value)
-
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     ap(pure(f))(fa)
 

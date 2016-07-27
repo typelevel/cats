@@ -231,9 +231,6 @@ class SyntaxTests extends AllInstances with AllSyntax {
   def testApplicative[F[_]: Applicative, A]: Unit = {
     val a = mock[A]
     val fa = a.pure[F]
-
-    val la = mock[Eval[A]]
-    val lfa = la.pureEval[F]
   }
 
   def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, ?], E]): Unit = {
