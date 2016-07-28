@@ -218,6 +218,12 @@ class NonEmptyVectorTests extends CatsSuite {
       }
     }
   }
+
+  test("NonEmptyVector#distinct is consistent with Vector#distinct") {
+    forAll { nonEmptyVector: NonEmptyVector[Int] =>
+      nonEmptyVector.distinct.toVector should === (nonEmptyVector.toVector.distinct)
+    }
+  }
 }
 
 class ReducibleNonEmptyVectorCheck extends ReducibleCheck[NonEmptyVector]("NonEmptyVector") {
