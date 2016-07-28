@@ -112,7 +112,7 @@ lazy val disciplineDependencies = Seq(
 lazy val testingDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.2",
   libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.2" % "test",
-  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test")
+  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M8" % "test")
 
 
 /**
@@ -208,7 +208,7 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings((commonJvmSettings ++ (mimaPreviousArtifacts := Set("org.typelevel" %% "cats-kernel" % "0.6.0"))):_*)
 
-lazy val kernelJVM = kernel.jvm 
+lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js
 
 lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
