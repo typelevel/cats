@@ -2,7 +2,6 @@ package cats
 package data
 
 import scala.annotation.tailrec
-import scala.collection.GenSeqLike
 import scala.collection.mutable.Builder
 import cats.instances.stream._
 
@@ -93,14 +92,6 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
    */
   def show(implicit A: Show[A], FA: Show[F[A]]): String =
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
-
-  /**
-   * Remove duplicates. Duplicates are checked using universal equality provided by .equals.
-   */
-  def distinct(implicit ev: F[A] <:< GenSeqLike[A, F[A]]): OneAnd[F, A] = {
-    val newTail = ev(tail).filter(_ != head).distinct
-    OneAnd(head, newTail)
-  }
 }
 
 private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {

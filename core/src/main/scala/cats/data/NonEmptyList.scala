@@ -5,6 +5,7 @@ import cats.instances.list._
 import cats.syntax.order._
 
 import scala.annotation.tailrec
+import scala.collection.immutable.TreeSet
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -104,6 +105,20 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
 
   def show(implicit A: Show[A]): String =
     toList.iterator.map(A.show).mkString("NonEmptyList(", ", ", ")")
+
+  /**
+   * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+   */
+  def distinct(implicit O: Order[A]): NonEmptyList[A] = {
+    implicit val ord = O.toOrdering
+
+    val buf = ListBuffer.empty[A]
+    tail.foldLeft(TreeSet(head)) { (elementsSoFar, a) =>
+      if (elementsSoFar(a)) elementsSoFar else { buf += a; elementsSoFar + a }
+    }
+
+    NonEmptyList(head, buf.toList)
+  }
 
   override def toString: String = s"NonEmpty$toList"
 }

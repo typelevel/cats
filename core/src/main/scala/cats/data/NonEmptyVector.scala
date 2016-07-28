@@ -2,7 +2,7 @@ package cats
 package data
 
 import scala.annotation.tailrec
-import scala.collection.immutable.VectorBuilder
+import scala.collection.immutable.{TreeSet, VectorBuilder}
 import cats.instances.vector._
 
 /**
@@ -129,6 +129,20 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
     s"NonEmpty${Show[Vector[A]].show(toVector)}"
 
   def length: Int = toVector.length
+
+  /**
+   * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+   */
+  def distinct(implicit O: Order[A]): NonEmptyVector[A] = {
+    implicit val ord = O.toOrdering
+
+    val buf = Vector.newBuilder[A]
+    tail.foldLeft(TreeSet(head)) { (elementsSoFar, a) =>
+      if (elementsSoFar(a)) elementsSoFar else { buf += a; elementsSoFar + a }
+    }
+
+    NonEmptyVector(head, buf.result())
+  }
 }
 
 private[data] sealed trait NonEmptyVectorInstances {
