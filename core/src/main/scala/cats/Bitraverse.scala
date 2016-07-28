@@ -24,15 +24,15 @@ trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
    *
    * scala> val rightNone: Option[String] Xor Option[Int] = Xor.right(None)
    * scala> rightNone.bisequence
-   * res0: Option[String Xor Int] = None
+   * res1: Option[String Xor Int] = None
    *
    * scala> val leftSome: Option[String] Xor Option[Int] = Xor.left(Some("foo"))
    * scala> leftSome.bisequence
-   * res0: Option[String Xor Int] = Some(Left(foo))
+   * res2: Option[String Xor Int] = Some(Left(foo))
    *
    * scala> val leftNone: Option[String] Xor Option[Int] = Xor.left(None)
    * scala> leftNone.bisequence
-   * res0: Option[String Xor Int] = None
+   * res3: Option[String Xor Int] = None
    * }}}
    */
   def bisequence[G[_]: Applicative, A, B](fab: F[G[A], G[B]]): G[F[A, B]] =
