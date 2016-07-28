@@ -128,6 +128,7 @@ There are many projects that integrate with Cats:
  * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
  * [Kittens](https://github.com/milessabin/kittens): automatically derived type class instances.
  * [Monix](https://github.com/monixio/monix): high-performance library for composing asynchronous and event-based programs.
+ * [eff-cats](https://github.com/atnos-org/eff-cats): functional effects and effect handlers (alternative to monad transformers).
 
 ### Copyright and License
 
