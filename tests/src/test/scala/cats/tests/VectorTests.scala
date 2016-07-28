@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.discipline.{MonadCombineTests, CoflatMapTests, SerializableTests, TraverseTests, CartesianTests}
+import cats.laws.discipline.{MonadCombineTests, CoflatMapTests, SerializableTests, TraverseFilterTests, CartesianTests}
 
 class VectorTests extends CatsSuite {
   checkAll("Vector[Int]", CartesianTests[Vector].cartesian[Int, Int, Int])
@@ -13,8 +13,8 @@ class VectorTests extends CatsSuite {
   checkAll("Vector[Int]", MonadCombineTests[Vector].monadCombine[Int, Int, Int])
   checkAll("MonadCombine[Vector]", SerializableTests.serializable(MonadCombine[Vector]))
 
-  checkAll("Vector[Int] with Option", TraverseTests[Vector].traverse[Int, Int, Int, List[Int], Option, Option])
-  checkAll("Traverse[Vector]", SerializableTests.serializable(Traverse[Vector]))
+  checkAll("Vector[Int] with Option", TraverseFilterTests[Vector].traverseFilter[Int, Int, Int, List[Int], Option, Option])
+  checkAll("TraverseFilter[Vector]", SerializableTests.serializable(TraverseFilter[Vector]))
 
   test("show") {
     Vector(1, 2, 3).show should === ("Vector(1, 2, 3)")
@@ -26,4 +26,9 @@ class VectorTests extends CatsSuite {
     }
   }
 
+  test("collect consistency") {
+    forAll { vec: Vector[Int] =>
+      FunctorFilter[Vector].collect(vec)(evenPf) should === (vec.collect(evenPf))
+    }
+  }
 }

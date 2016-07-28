@@ -49,6 +49,25 @@ class NestedTests extends CatsSuite {
   }
 
   {
+    // FunctorFilter composition
+    implicit val instance = ListWrapper.functorFilter
+    checkAll("Nested[List, ListWrapper, ?]", FunctorFilterTests[Nested[List, ListWrapper, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(FunctorFilter[Nested[List, ListWrapper, ?]]))
+
+    test("collect consistency") {
+      forAll { l: Nested[List, ListWrapper, Int] =>
+        l.collect(evenPf).value should === (l.value.map(_.collect(evenPf)))
+      }
+    }
+
+    test("filter consistency") {
+      forAll { l: Nested[List, ListWrapper, Int] =>
+        l.filter(even).value should === (l.value.map(_.filter(even)))
+      }
+    }
+  }
+
+  {
     // Covariant + contravariant functor composition
     checkAll("Nested[Option, Show, ?]", ContravariantTests[Nested[Option, Show, ?]].contravariant[Int, Int, Int])
     checkAll("Contravariant[Nested[Option, Show, ?]]", SerializableTests.serializable(Contravariant[Nested[Option, Show, ?]]))
@@ -90,6 +109,20 @@ class NestedTests extends CatsSuite {
     implicit val instance = ListWrapper.foldable
     checkAll("Nested[List, ListWrapper, ?]", FoldableTests[Nested[List, ListWrapper, ?]].foldable[Int, Int])
     checkAll("Foldable[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(Foldable[Nested[List, ListWrapper, ?]]))
+  }
+
+  {
+    // Traverse composition
+    implicit val instance = ListWrapper.traverse
+    checkAll("Nested[List, ListWrapper, ?]", TraverseTests[Nested[List, ListWrapper, ?]].traverse[Int, Int, Int, List[Int], Option, Option])
+    checkAll("Traverse[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(Traverse[Nested[List, ListWrapper, ?]]))
+  }
+
+  {
+    // TraverseFilter composition
+    implicit val instance = ListWrapper.traverseFilter
+    checkAll("Nested[List, ListWrapper, ?]", TraverseFilterTests[Nested[List, ListWrapper, ?]].traverseFilter[Int, Int, Int, List[Int], Option, Option])
+    checkAll("TraverseFilter[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(TraverseFilter[Nested[List, ListWrapper, ?]]))
   }
 
   checkAll("Nested[NonEmptyList, NonEmptyVector, ?]", ReducibleTests[Nested[NonEmptyList, NonEmptyVector, ?]].reducible[Option, Int, Int])

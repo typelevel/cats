@@ -17,6 +17,9 @@ final case class Const[A, B](getConst: A) {
   def combine(that: Const[A, B])(implicit A: Semigroup[A]): Const[A, B] =
     Const(A.combine(getConst, that.getConst))
 
+  def traverseFilter[F[_], C](f: B => F[Option[C]])(implicit F: Applicative[F]): F[Const[A, C]] =
+    F.pure(retag[C])
+
   def traverse[F[_], C](f: B => F[C])(implicit F: Applicative[F]): F[Const[A, C]] =
     F.pure(retag[C])
 
@@ -53,13 +56,16 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
       fa.retag[B]
   }
 
-  implicit def catsDataTraverseForConst[C]: Traverse[Const[C, ?]] = new Traverse[Const[C, ?]] {
-    def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
-      fa.traverse(f)
+  implicit def catsDataTraverseFilterForConst[C]: TraverseFilter[Const[C, ?]] = new TraverseFilter[Const[C, ?]] {
+    def traverseFilter[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[Option[B]]): G[Const[C, B]] =
+      fa.traverseFilter(f)
 
     def foldLeft[A, B](fa: Const[C, A], b: B)(f: (B, A) => B): B = b
 
     def foldRight[A, B](fa: Const[C, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = lb
+
+    override def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
+      fa.traverse(f)
   }
 
   implicit def catsDataMonoidForConst[A: Monoid, B]: Monoid[Const[A, B]] = new Monoid[Const[A, B]]{

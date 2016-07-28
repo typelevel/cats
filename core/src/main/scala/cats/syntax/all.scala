@@ -19,6 +19,7 @@ trait AllSyntax
     with FlatMapSyntax
     with FoldableSyntax
     with FunctorSyntax
+    with FunctorFilterSyntax
     with GroupSyntax
     with InvariantSyntax
     with ListSyntax
@@ -37,6 +38,7 @@ trait AllSyntax
     with SplitSyntax
     with StrongSyntax
     with TransLiftSyntax
+    with TraverseFilterSyntax
     with TraverseSyntax
     with ValidatedSyntax
     with WriterSyntax
