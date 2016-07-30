@@ -10,39 +10,39 @@ class MonadRecInstancesTests extends CatsSuite {
     res should === (M.pure(n))
   }
 
-  test("tailRecM stack-safety for Id") {
+  slowTest("tailRecM stack-safety for Id") {
     tailRecMStackSafety[Id]
   }
 
-  test("tailRecM stack-safety for Option") {
+  slowTest("tailRecM stack-safety for Option") {
     tailRecMStackSafety[Option]
   }
 
-  test("tailRecM stack-safety for OptionT") {
+  slowTest("tailRecM stack-safety for OptionT") {
     tailRecMStackSafety[OptionT[Option, ?]]
   }
 
-  test("tailRecM stack-safety for Either") {
+  slowTest("tailRecM stack-safety for Either") {
     tailRecMStackSafety[Either[String, ?]]
   }
 
-  test("tailRecM stack-safety for Xor") {
+  slowTest("tailRecM stack-safety for Xor") {
     tailRecMStackSafety[String Xor ?]
   }
 
-  test("tailRecM stack-safety for XorT") {
+  slowTest("tailRecM stack-safety for XorT") {
     tailRecMStackSafety[XorT[Option, String, ?]]
   }
 
-  test("tailRecM stack-safety for List") {
+  slowTest("tailRecM stack-safety for List") {
     tailRecMStackSafety[List]
   }
 
-  test("tailRecM stack-safety for Eval") {
+  slowTest("tailRecM stack-safety for Eval") {
     tailRecMStackSafety[Eval]
   }
 
-  test("tailRecM stack-safety for StateT") {
+  slowTest("tailRecM stack-safety for StateT") {
     import StateTTests._ // import implicit Eq[StateT[...]]
     tailRecMStackSafety[StateT[Option, Int, ?]]
   }
