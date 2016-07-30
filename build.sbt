@@ -58,7 +58,7 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.7.0",
+    "com.github.mpilquist" %%% "simulacrum" % "0.8.0-SNAPSHOT",
     "org.typelevel" %%% "machinist" % "0.4.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.6.3")

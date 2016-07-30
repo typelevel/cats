@@ -2,10 +2,12 @@ package cats
 
 import cats.functor.{Bifunctor, ComposedBifunctor}
 
+import simulacrum.typeclass
+
 /**
  *  A type class abstracting over types that give rise to two independent [[cats.Traverse]]s.
  */
-trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
+@typeclass trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
   /** Traverse each side of the structure with the given functions */
   def bitraverse[G[_]: Applicative, A, B, C, D](fab: F[A, B])(f: A => G[C], g: B => G[D]): G[F[C, D]]
 
@@ -22,10 +24,6 @@ trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
 
   override def bimap[A, B, C, D](fab: F[A, B])(f: A => C, g: B => D): F[C, D] =
     bitraverse[Id, A, B, C, D](fab)(f, g)
-}
-
-object Bitraverse {
-  def apply[F[_, _]](implicit F: Bitraverse[F]): Bitraverse[F] = F
 }
 
 private[cats] trait ComposedBitraverse[F[_, _], G[_, _]]
