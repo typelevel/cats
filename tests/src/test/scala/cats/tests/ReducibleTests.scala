@@ -5,7 +5,7 @@ import org.scalacheck.Arbitrary
 
 class ReducibleTestsAdditional extends CatsSuite {
 
-  test("Reducible[NonEmptyList].reduceLeftM stack safety") {
+  slowTest("Reducible[NonEmptyList].reduceLeftM stack safety") {
     def nonzero(acc: Long, x: Long): Option[Long] =
       if (x == 0) None else Some(acc + x)
 
@@ -20,7 +20,7 @@ class ReducibleTestsAdditional extends CatsSuite {
 abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends FoldableCheck[F](name) {
   def range(start: Long, endInclusive: Long): F[Long]
 
-  test(s"Reducible[$name].reduceLeftM stack safety") {
+  slowTest(s"Reducible[$name].reduceLeftM stack safety") {
     def nonzero(acc: Long, x: Long): Option[Long] =
       if (x == 0) None else Some(acc + x)
 
