@@ -107,7 +107,7 @@ class FoldableTestsAdditional extends CatsSuite {
     larger.value should === (large.map(_ + 1))
   }
 
-  test("Foldable[List].foldM stack safety") {
+  slowTest("Foldable[List].foldM stack safety") {
     def nonzero(acc: Long, x: Long): Option[Long] =
       if (x == 0) None else Some(acc + x)
 

@@ -43,6 +43,19 @@ trait CatsSuite extends FunSuite with Matchers with GeneratorDrivenPropertyCheck
   // with scalactic's equality
   override def catsSyntaxEq[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
 
+  /**
+   * Declare a test that will not run in scala.js tests.
+   *
+   * In general, we want our tests to run in all target environments, but
+   * certain tests (especially those with heavy trampolining) seem to be leading
+   * to resource issues in the JS builds, causing them to sporadically fail.
+   *
+   * See https://github.com/typelevel/cats/issues/1242
+   */
+  def slowTest(testName: String)(testFun: => Unit): Unit =
+    if (Platform.isJs) ()
+    else test(testName)(testFun)
+
   def even(i: Int): Boolean = i % 2 == 0
 
   val evenPf: PartialFunction[Int, Int] = { case i if even(i) => i }
