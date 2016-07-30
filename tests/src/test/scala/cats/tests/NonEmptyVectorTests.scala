@@ -259,7 +259,7 @@ class NonEmptyVectorTests extends CatsSuite {
   }
 
   test("Cannot create a new NonEmptyVector[Int] from apply with a an empty Vector") {
-    "val bad: NonEmptyVector[Int] = NonEmptyVector(Vector())" shouldNot compile
+    "val bad: NonEmptyVector[Int] = NonEmptyVector(Vector.empty[Int])" shouldNot compile
   }
 }
 
