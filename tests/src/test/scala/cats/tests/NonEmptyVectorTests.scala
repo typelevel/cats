@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import catalysts.Platform
+//import catalysts.Platform
 
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
@@ -9,7 +9,7 @@ import cats.data.NonEmptyVector
 import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, TraverseTests, ReducibleTests, MonadRecTests}
 import cats.laws.discipline.arbitrary._
 
-import scala.util.Properties
+//import scala.util.Properties
 
 class NonEmptyVectorTests extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
@@ -243,16 +243,16 @@ class NonEmptyVectorTests extends CatsSuite {
     NonEmptyVector(1, Vector.empty).toVector.toString should === ("Vector(1)")
   }
 
-  test("Cannot create a new NonEmptyVector from constructor") {
-    if(Platform.isJvm) {
-      if (!Properties.versionNumberString.startsWith("2.10")) {
-        // A bug in scala 2.10 allows private constructors to be accessed.
-        // We should still ensure that on scala 2.11 and up we cannot construct the
-        // object directly. see: https://issues.scala-lang.org/browse/SI-6601
-        "val bad: NonEmptyVector[Int] = new NonEmptyVector(Vector(1))" shouldNot compile
-      }
-    }
-  }
+  //test("Cannot create a new NonEmptyVector from constructor") {
+  //  if(Platform.isJvm) {
+  //    if (!Properties.versionNumberString.startsWith("2.10")) {
+  //      // A bug in scala 2.10 allows private constructors to be accessed.
+  //      // We should still ensure that on scala 2.11 and up we cannot construct the
+  //      // object directly. see: https://issues.scala-lang.org/browse/SI-6601
+  //      "val bad: NonEmptyVector[Int] = new NonEmptyVector(Vector(1))" shouldNot compile
+  //    }
+  //  }
+  //}
 
   test("Cannot create a new NonEmptyVector from apply with an empty vector") {
     "val bad: NonEmptyVector[Int] = NonEmptyVector(Vector(1))" shouldNot compile

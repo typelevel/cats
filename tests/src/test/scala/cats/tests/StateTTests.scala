@@ -15,7 +15,7 @@ class StateTTests extends CatsSuite {
     add1.run(1).value should === (2 -> 1)
   }
 
-  test("traversing state is stack-safe"){
+  slowTest("traversing state is stack-safe"){
     val ns = (0 to 100000).toList
     val x = ns.traverseU(_ => add1)
     x.runS(0).value should === (100001)
