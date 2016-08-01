@@ -206,6 +206,7 @@ import simulacrum.typeclass
   def foldK[G[_], A](fga: F[G[A]])(implicit G: MonoidK[G]): G[A] =
     fold(fga)(G.algebra)
 
+
   /**
    * Find the first element matching the predicate, if one exists.
    */
@@ -290,24 +291,4 @@ object Foldable {
       Eval.defer(if (it.hasNext) f(it.next, loop()) else lb)
     loop()
   }
-
-  /** Do we want syntax for FunctionN on cats.syntax ?
-      */
-  private[cats] def flip[A, B, R](f: (A, B) => R) : (B, A) => R =
-    (b: B, a: A) => f(a, b)
-
-  trait FromFoldMap[F[_]] extends Foldable[F] {
-
-    implicit def endoMonoidFunction1[A] : Monoid[A => A] = implicitly
-
-    implicit def endoMonoidFunction2[A, B] : Monoid[(A, B) => A] = implicitly
-
-    override def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B =
-      foldMap(fa)((a: A) => flip(f).curried(a)) apply (b)
-
-    override def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]) : Eval[B] =
-      foldMap(fa)((a: A) => f(a, _: Eval[B])) apply lb
-
-  }
-
 }
