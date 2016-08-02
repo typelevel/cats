@@ -18,7 +18,7 @@ class FreeTests extends CatsSuite {
   checkAll("Free[Option, ?]", MonadRecTests[Free[Option, ?]].monadRec[Int, Int, Int])
   checkAll("MonadRec[Free[Option, ?]]", SerializableTests.serializable(MonadRec[Free[Option, ?]]))
 
-  test("toString is stack-safe") {
+  slowTest("toString is stack-safe") {
     val r = Free.pure[List, Int](333)
     val rr = (1 to 1000000).foldLeft(r)((r, _) => r.map(_ + 1))
     rr.toString.length should be > 0
@@ -50,14 +50,14 @@ class FreeTests extends CatsSuite {
     }
   }
 
-  test("tailRecM is stack safe") {
+  slowTest("tailRecM is stack safe") {
     val n = 50000
     val fa = MonadRec[Free[Option, ?]].tailRecM(0)(i =>
       Free.pure[Option, Int Xor Int](if (i < n) Xor.Left(i+1) else Xor.Right(i)))
     fa should === (Free.pure[Option, Int](n))
   }
 
-  test("foldMap is stack safe") {
+  slowTest("foldMap is stack safe") {
     trait FTestApi[A]
     case class TB(i: Int) extends FTestApi[Int]
 
