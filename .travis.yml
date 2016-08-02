@@ -3,9 +3,6 @@ language: scala
 git:
   depth: 9999
 
-jdk:
-   - oraclejdk8
-
 scala:
 - 2.10.6
 - 2.11.8
