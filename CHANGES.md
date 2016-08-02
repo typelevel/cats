@@ -1,3 +1,111 @@
+## Version 0.7.0
+
+> 2016 August 2
+
+Version 0.7.0 is the seventh Cats release, and includes several major rearrangements and changes to names.
+
+This release includes a fix for a bug in 0.6.0 (also fixed in 0.6.1):
+
+* [#1062](https://github.com/typelevel/cats/pull/1062): `Order` instances for tuples are now lexicographic (instead of only comparing first elements)
+
+And other bug fixes:
+
+* [#1096](https://github.com/typelevel/cats/pull/1096): `inj` and `prj` on `Inject` now work consistently with respect to `null`
+
+And some additions:
+
+* [#1225](https://github.com/typelevel/cats/pull/1225): `FunctorFilter` and `TraverseFilter`
+* [#1121](https://github.com/typelevel/cats/pull/1121): `valueOr` and `merge` for `Validated`
+* [#1188](https://github.com/typelevel/cats/pull/1188): `toValidatedNel` for `XorT`
+* [#1127](https://github.com/typelevel/cats/pull/1127): `toTry` for `Xor`
+* [#1130](https://github.com/typelevel/cats/pull/1130): `isEmpty` syntax method for `Monoid`
+* [#1167](https://github.com/typelevel/cats/pull/1167): `minimum`, `maximum`, and related helper methods for `Foldable` and `Reducible`
+* [#1041](https://github.com/typelevel/cats/pull/1041): `FlatMapRec` and `MonadRec`
+* [#1134](https://github.com/typelevel/cats/pull/1134): `cats.syntax.list` for à la carte list syntax imports
+* [#1191](https://github.com/typelevel/cats/pull/1191): `cats.syntax.monoid` for à la carte `Monoid` syntax imports
+* [#558](https://github.com/typelevel/cats/pull/588) and [#1063](https://github.com/typelevel/cats/pull/1063): `IdT`, the identity monad transformer
+* [#1021](https://github.com/typelevel/cats/pull/1021) and [#1221](https://github.com/typelevel/cats/pull/1221): `Nested` (represents nested composition of type constructors)
+* [#1172](https://github.com/typelevel/cats/pull/1172): `toNested` for `OptionT` and `XorT`
+* [#1102](https://github.com/typelevel/cats/pull/1102) and [#1170](https://github.com/typelevel/cats/pull/1170): `Comparison` (represents the result of an `Order` comparison)
+* [#1090](https://github.com/typelevel/cats/pull/1090): `Kleisli.lift`
+* [#1169](https://github.com/typelevel/cats/pull/1169): `lift`, `inspect`, and related methods for `StateT`
+* [#1114](https://github.com/typelevel/cats/pull/1114): `size` for `Foldable`
+* [#1193](https://github.com/typelevel/cats/pull/1193): `reduceLeftM` for `Reducible`
+* [#1097](https://github.com/typelevel/cats/pull/1097): Functor variance helpers (`widen` for `Functor` and `narrow` for `Contravariant`)
+* [#1207](https://github.com/typelevel/cats/pull/1207): `tell` for `Writer` and `WriterT`, `value` for `Writer`
+* [#1155](https://github.com/typelevel/cats/pull/1155): Convenience methods for constructing `XorT` values
+* [#1085](https://github.com/typelevel/cats/pull/1085): `runTailRec` and `foldLeftM` for `Free`
+
+And some name changes:
+
+* [#1140](https://github.com/typelevel/cats/pull/1140): `cats.std` is now `cats.instances`
+* [#1066](https://github.com/typelevel/cats/pull/1066), [#1068](https://github.com/typelevel/cats/pull/1068), [#1110](https://github.com/typelevel/cats/pull/1110), and [#1122](https://github.com/typelevel/cats/pull/1122): More unique type class instance names
+* [#1072](https://github.com/typelevel/cats/pull/1072): `NaturalTransformation` is now `FunctionK`
+* [#1085](https://github.com/typelevel/cats/pull/1085): `mapSuspension` on `Free` is now `compile`
+* [#1111](https://github.com/typelevel/cats/pull/1111): `Free.Gosub` is now `Free.FlatMapped`
+* [#1133](https://github.com/typelevel/cats/pull/1133): `Composite*` traits for binary type classes are renamed to `Composed*` for consistency (and are now private)
+
+And other API changes:
+
+* [#1231](https://github.com/typelevel/cats/pull/1231): `NonEmptyList` is now a case class instead of a type alias for a `OneAnd`
+* [#1137](https://github.com/typelevel/cats/pull/1137): `NonEmptyVector` is now a value class instead of a type alias for a `OneAnd`
+* [#1234](https://github.com/typelevel/cats/pull/1234): `Applicative#pureEval` has been removed
+* [#1202](https://github.com/typelevel/cats/pull/1202): `MonadFilter` no longer has a `filterM` method (see [#1225](https://github.com/typelevel/cats/pull/1225))
+* [#1075](https://github.com/typelevel/cats/pull/1075): `foldMap` on `Free` now requires a `MonadRec` instance (instead of simply `Monad`)
+* [#1085](https://github.com/typelevel/cats/pull/1085): `Free.suspend` no longer requires an `Applicative` instance
+* [#1084](https://github.com/typelevel/cats/pull/1084): Safer `toString` for `Free` and `FreeApplicative`
+* [#1100](https://github.com/typelevel/cats/pull/1100): Simplified constraints for methods on `Xor` and related types
+* [#1171](https://github.com/typelevel/cats/pull/1171): Prioritization traits are now private
+
+And many new instances:
+
+* [#1059](https://github.com/typelevel/cats/pull/1059) and [#1147](https://github.com/typelevel/cats/pull/1147): `Monoid`, `MonadError`, and other instances for `scala.util.Try`
+* [#1211](https://github.com/typelevel/cats/pull/1211): `Contravariant` for `Eq`
+* [#1220](https://github.com/typelevel/cats/pull/1220): `Traverse` and `Comonad` for `Tuple2`
+* [#1103](https://github.com/typelevel/cats/pull/1103): `Order`, `MonadError`, and other instances for `OptionT`
+* [#1106](https://github.com/typelevel/cats/pull/1106): `Semigroup` and `Monoid` for `XorT`
+* [#1138](https://github.com/typelevel/cats/pull/1138): `SemigroupK` and `MonadCombine` for `StateT`
+* [#1128](https://github.com/typelevel/cats/pull/1128) `Semigroup` and `Monoid` for `Applicative`
+* [#1049](https://github.com/typelevel/cats/pull/1049): `CoflatMap` for `WriterT`
+* [#1076](https://github.com/typelevel/cats/pull/1076): `MonadRec` instances for `Eval` and `StateT`
+* [#1105](https://github.com/typelevel/cats/pull/1105): `Unapply` instances for `Nested` shapes
+
+And stylistic improvements:
+
+* [#1079](https://github.com/typelevel/cats/pull/1079): More consistent type lambdas
+
+And improvements to the documentation:
+
+* [#1145](https://github.com/typelevel/cats/pull/1145): Major rearrangements and additions
+* [#1136](https://github.com/typelevel/cats/pull/1136): New chart for symbols
+* [#1052](https://github.com/typelevel/cats/pull/1052): New "Why?" section
+* [#1095](https://github.com/typelevel/cats/pull/1095), [#1226](https://github.com/typelevel/cats/pull/1226), and [#1227](https://github.com/typelevel/cats/pull/1227): New FAQ section
+* [#1163](https://github.com/typelevel/cats/pull/1163): New import guide section
+* [#1217](https://github.com/typelevel/cats/pull/1217), [#1223](https://github.com/typelevel/cats/pull/1223), and [#1239](https://github.com/typelevel/cats/pull/1239): New related projects
+* [#1057](https://github.com/typelevel/cats/pull/1057) and [#1157](https://github.com/typelevel/cats/pull/1157): Copy-paste-friendly code blocks
+* [#1104](https://github.com/typelevel/cats/pull/1104) and [#1115](https://github.com/typelevel/cats/pull/1115): Kitchen-sink imports in example code
+* [#1050](https://github.com/typelevel/cats/pull/1050): Switch to [rouge](https://github.com/jneen/rouge) for syntax highlighting in the GitHub Pages site
+* [#1119](https://github.com/typelevel/cats/pull/1119): Fix for `contramap` signature
+* [#1141](https://github.com/typelevel/cats/pull/1141) and [#1162](https://github.com/typelevel/cats/pull/1162): Fixes for cats-kernel documentation
+* [#1149](https://github.com/typelevel/cats/pull/1149): Spelling consistency for "type class"
+* [#1183](https://github.com/typelevel/cats/pull/1183): More documentation about use of Machinist, Simulacrum, and kind-projector
+* [#1056](https://github.com/typelevel/cats/pull/1056): Clarification about forgetful functors and the free monad
+* [#1131](https://github.com/typelevel/cats/pull/1131) and [#1241](https://github.com/typelevel/cats/pull/1241): Simplified project structure listings
+* [#1185](https://github.com/typelevel/cats/pull/1185), [#1186](https://github.com/typelevel/cats/pull/1186), and [#1189](https://github.com/typelevel/cats/pull/1189): Miscellaneous improvements for `Traverse` documentation
+
+And the build:
+
+* [#1159](https://github.com/typelevel/cats/pull/1159): Binary compatibility checking for cats-kernel via MiMa 
+* [#1123](https://github.com/typelevel/cats/pull/1123): cats-kernel is now included in the API documentation
+* [#1051](https://github.com/typelevel/cats/pull/1051): Empty Scaladocs for 2.10 to avoid issues macros cause for API documentation generation on 2.10
+* [#1154](https://github.com/typelevel/cats/pull/1154): Better POM hygiene: no Scoverage dependency
+* [#1153](https://github.com/typelevel/cats/pull/1153) and [#1218](https://github.com/typelevel/cats/pull/1218): More consistent use of Simulacrum for syntax
+* [#1093](https://github.com/typelevel/cats/pull/1093): Scalastyle is now aware of shared and Scala.js-specific source files
+* [#1142](https://github.com/typelevel/cats/pull/1142): Additional formatting rules for Scalastyle
+* [#1099](https://github.com/typelevel/cats/pull/1099): Type lambda style is now enforced by Scalastyle
+
+We also welcome [Kailuo Wang](https://github.com/typelevel/cats/pull/1129), [Peter Neyens](https://github.com/typelevel/cats/pull/1179), and [Oscar Boykin](https://github.com/typelevel/cats/pull/1180) as new Cats maintainers!
+
 ## Version 0.6.1
 
 > 2016 July 14
