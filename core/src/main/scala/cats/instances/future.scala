@@ -8,11 +8,17 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait FutureInstances extends FutureInstances1 {
 
-  implicit def catsStdInstancesForFuture(implicit ec: ExecutionContext): MonadError[Future, Throwable] with CoflatMap[Future] =
-    new FutureCoflatMap with MonadError[Future, Throwable]{
+  implicit def catsStdInstancesForFuture(implicit ec: ExecutionContext): MonadError[Future, Throwable] with CoflatMap[Future] with MonadRec[Future] =
+    new FutureCoflatMap with MonadError[Future, Throwable] with MonadRec[Future] {
       def pure[A](x: A): Future[A] = Future.successful(x)
 
       def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
+
+      final def tailRecM[B, C](b: B)(f: B => Future[(B Xor C)]): Future[C] =
+        f(b).flatMap {
+          case Xor.Left(b1) => tailRecM(b1)(f)
+          case Xor.Right(c) => Future.successful(c)
+        }
 
       def handleErrorWith[A](fea: Future[A])(f: Throwable => Future[A]): Future[A] = fea.recoverWith { case t => f(t) }
 
