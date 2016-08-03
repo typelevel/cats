@@ -19,11 +19,6 @@ trait Bifunctor[F[_, _]] extends Any with Serializable { self =>
    */
   def leftMap[A, B, C](fab: F[A, B])(f: A => C): F[C, B] = bimap(fab)(f, identity)
 
-  /**
-   * apply a function ro the "right" functor
-   */
-  def rightMap[A, B, C](fab: F[A, B])(f: B => C): F[A, C] = bimap(fab)(identity, f)
-
   /** The composition of two Bifunctors is itself a Bifunctor */
   def compose[G[_, _]](implicit G0: Bifunctor[G]): Bifunctor[λ[(α, β) => F[G[α, β], G[α, β]]]] =
     new ComposedBifunctor[F, G] {
