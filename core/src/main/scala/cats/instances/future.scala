@@ -14,6 +14,10 @@ trait FutureInstances extends FutureInstances1 {
 
       def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
 
+      /**
+       * Note that while this implementation will not compile with `@tailrec`,
+       * it is in fact stack-safe.
+       */
       final def tailRecM[B, C](b: B)(f: B => Future[(B Xor C)]): Future[C] =
         f(b).flatMap {
           case Xor.Left(b1) => tailRecM(b1)(f)
