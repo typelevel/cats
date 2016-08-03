@@ -38,7 +38,7 @@ lazy val buildSettings = Seq(
 
 lazy val catsDoctestSettings = Seq(
   doctestWithDependencies := false
-) ++ doctestSettings
+)
 
 lazy val kernelSettings = Seq(
   // don't warn on value discarding because it's broken on 2.10 with @sp(Unit)
