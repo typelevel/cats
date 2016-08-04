@@ -69,7 +69,7 @@ class NonEmptyListTests extends CatsSuite {
   test("Creating NonEmptyList + toList is identity") {
     forAll { (i: Int, tail: List[Int]) =>
       val list = i :: tail
-      val nonEmptyList = NonEmptyList(i, tail: _*)
+      val nonEmptyList = NonEmptyList.of(i, tail: _*)
       list should === (nonEmptyList.toList)
     }
   }

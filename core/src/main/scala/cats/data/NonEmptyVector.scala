@@ -216,7 +216,7 @@ object NonEmptyVector extends NonEmptyVectorInstances {
   def apply[A](head: A, tail: Vector[A]): NonEmptyVector[A] =
     new NonEmptyVector(head +: tail)
 
-  def apply[A](head: A, tail: A*): NonEmptyVector[A] = {
+  def of[A](head: A, tail: A*): NonEmptyVector[A] = {
     val buf = Vector.newBuilder[A]
     buf += head
     tail.foreach(buf += _)
