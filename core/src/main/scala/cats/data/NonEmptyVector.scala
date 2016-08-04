@@ -54,7 +54,7 @@ final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
   /**
    * Append another `NonEmptyVector` to this, producing a new `NonEmptyVector`.
    */
-  def concatNEV(other: NonEmptyVector[A]): NonEmptyVector[A] = new NonEmptyVector(toVector ++ other.toVector)
+  def concatNev(other: NonEmptyVector[A]): NonEmptyVector[A] = new NonEmptyVector(toVector ++ other.toVector)
 
   /**
    * Find the first element matching the predicate, if one exists
@@ -140,7 +140,7 @@ private[data] sealed trait NonEmptyVectorInstances {
         with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with MonadRec[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
-        a concatNEV b
+        a concatNev b
 
       override def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
 
