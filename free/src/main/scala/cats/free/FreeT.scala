@@ -43,52 +43,52 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
     * Runs to completion, mapping the suspension with the given transformation
     * at each step and accumulating into the monad `M`.
     */
-  def foldMap(f: S ~> M)(implicit M0: FlatMapRec[M], M1: Applicative[M]): M[A] = {
+  def foldMap(f: S ~> M)(implicit MR: MonadRec[M]): M[A] = {
     def go(ft: FreeT[S, M, A]): M[FreeT[S, M, A] Xor A] =
       ft match {
-        case Suspend(ma) => M0.flatMap(ma) {
-          case Xor.Left(a) => M1.pure(Xor.Right(a))
-          case Xor.Right(sa) => M0.map(f(sa))(Xor.right)
+        case Suspend(ma) => MR.flatMap(ma) {
+          case Xor.Left(a) => MR.pure(Xor.Right(a))
+          case Xor.Right(sa) => MR.map(f(sa))(Xor.right)
         }
         case g @ Gosub(_, _) => g.a match {
-          case Suspend(mx) => M0.flatMap(mx) {
-            case Xor.Left(x) => M1.pure(Xor.left(g.f(x)))
-            case Xor.Right(sx) => M0.map(f(sx))(g.f andThen Xor.left)
+          case Suspend(mx) => MR.flatMap(mx) {
+            case Xor.Left(x) => MR.pure(Xor.left(g.f(x)))
+            case Xor.Right(sx) => MR.map(f(sx))(g.f andThen Xor.left)
           }
-          case g0 @ Gosub(_, _) => M1.pure(Xor.left(g0.a.flatMap(g0.f(_).flatMap(g.f))))
+          case g0 @ Gosub(_, _) => MR.pure(Xor.left(g0.a.flatMap(g0.f(_).flatMap(g.f))))
         }
       }
 
-    M0.tailRecM(this)(go)
+    MR.tailRecM(this)(go)
   }
 
   /** Evaluates a single layer of the free monad */
-  def resume(implicit S: Functor[S], M0: FlatMapRec[M], M1: Applicative[M]): M[A Xor S[FreeT[S, M, A]]] = {
+  def resume(implicit S: Functor[S], MR: MonadRec[M]): M[A Xor S[FreeT[S, M, A]]] = {
     def go(ft: FreeT[S, M, A]): M[FreeT[S, M, A] Xor (A Xor S[FreeT[S, M, A]])] =
       ft match {
-        case Suspend(f) => M0.map(f)(as => Xor.right(as.map(S.map(_)(pure(_)))))
+        case Suspend(f) => MR.map(f)(as => Xor.right(as.map(S.map(_)(pure(_)))))
         case g1 @ Gosub(_, _) => g1.a match {
-          case Suspend(m1) => M0.map(m1) {
+          case Suspend(m1) => MR.map(m1) {
             case Xor.Left(a) => Xor.left(g1.f(a))
             case Xor.Right(fc) => Xor.right(Xor.right(S.map(fc)(g1.f(_))))
           }
-          case g2 @ Gosub(_, _) => M1.pure(Xor.left(g2.a.flatMap(g2.f(_).flatMap(g1.f))))
+          case g2 @ Gosub(_, _) => MR.pure(Xor.left(g2.a.flatMap(g2.f(_).flatMap(g1.f))))
         }
       }
 
-    M0.tailRecM(this)(go)
+    MR.tailRecM(this)(go)
   }
 
   /**
     * Runs to completion, using a function that maps the resumption from `S` to a monad `M`.
     */
-  def runM(interp: S[FreeT[S, M, A]] => M[FreeT[S, M, A]])(implicit S: Functor[S], M0: FlatMapRec[M], M1: Applicative[M]): M[A] = {
+  def runM(interp: S[FreeT[S, M, A]] => M[FreeT[S, M, A]])(implicit S: Functor[S], MR: MonadRec[M]): M[A] = {
     def runM2(ft: FreeT[S, M, A]): M[FreeT[S, M, A] Xor A] =
-      M0.flatMap(ft.resume) {
-        case Xor.Left(a) => M1.pure(Xor.right(a))
-        case Xor.Right(fc) => M0.map(interp(fc))(Xor.left)
+      MR.flatMap(ft.resume) {
+        case Xor.Left(a) => MR.pure(Xor.right(a))
+        case Xor.Right(fc) => MR.map(interp(fc))(Xor.left)
       }
-    M0.tailRecM(this)(runM2)
+    MR.tailRecM(this)(runM2)
   }
 
   /**
