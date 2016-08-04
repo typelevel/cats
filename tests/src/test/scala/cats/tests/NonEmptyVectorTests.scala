@@ -173,9 +173,9 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
-  test("++ Vector is consistent with concatNEV") {
+  test("++ Vector is consistent with concatNev") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], other: NonEmptyVector[Int]) =>
-      nonEmptyVector ++ other.toVector should === (nonEmptyVector.concatNEV(other))
+      nonEmptyVector ++ other.toVector should === (nonEmptyVector.concatNev(other))
     }
   }
 
