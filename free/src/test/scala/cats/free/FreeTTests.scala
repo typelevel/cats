@@ -122,6 +122,11 @@ class FreeTTests extends CatsSuite {
     val b = a.hoist(FunctionK.id)
   }
 
+  test("transLift for FreeT requires only Functor") {
+    implicit val transLiftInstance = FreeT.catsFreeTransLiftForFreeT[JustFunctor]
+    val d: FreeT[JustFunctor, JustFunctor, Int] = transLiftInstance.liftT[JustFunctor, Int](JustFunctor(1))
+  }
+
   test("interpret to universal id equivalent to original instance") {
     forAll { a: FreeTListOption[Int] =>
       val b = a.interpret(FunctionK.id)
@@ -171,6 +176,12 @@ sealed trait FreeTTestsInstances {
   type FreeTListWrapper[A] = FreeTListW[ListWrapper, A]
   type FreeTListOption[A] = FreeTListW[Option, A]
   type FreeTListState[A] = FreeT[IntState, IntState, A]
+
+  case class JustFunctor[A](a: A)
+
+  implicit val jfFunctor: Functor[JustFunctor] = new Functor[JustFunctor] {
+    override def map[A, B](fa: JustFunctor[A])(f: A => B): JustFunctor[B] = JustFunctor(f(fa.a))
+  }
 
   object headOption extends (ListWrapper ~> Option) {
     def apply[A](l: ListWrapper[A]): Option[A] = l.list.headOption

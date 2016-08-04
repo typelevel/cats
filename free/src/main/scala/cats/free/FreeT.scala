@@ -194,7 +194,7 @@ private[free] sealed trait FreeTInstances1 extends FreeTInstances2 {
       implicit def M: Applicative[M] = M0
     }
 
-  implicit def catsFreeTransLiftForFreeT[S[_]]: TransLift[FreeT[S, ?[_], ?]] =
+  implicit def catsFreeTransLiftForFreeT[S[_]]: TransLift.Aux[FreeT[S, ?[_], ?], Functor] =
     new TransLift[FreeT[S, ?[_], ?]] {
 
       type TC[M[_]] = Functor[M]
