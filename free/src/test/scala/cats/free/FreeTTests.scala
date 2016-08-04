@@ -2,6 +2,7 @@ package cats
 package free
 
 import cats._
+import cats.arrow.FunctionK
 import cats.data._
 import cats.laws.discipline._
 import cats.tests.{CatsSuite, ListWrapper}
@@ -67,7 +68,7 @@ class FreeTTests extends CatsSuite {
     checkAll("FreeT[ListWrapper, Option, Int]", MonadErrorTests[FreeTListOption, Unit].monadError[Int, Int, Int])
     checkAll("MonadError[FreeT[ListWrapper, Option, ?]]", SerializableTests.serializable(MonadError[FreeTListOption, Unit]))
   }
-  
+
   {
     implicit val iso = CartesianTests.Isomorphisms.invariant[FreeTListState]
     implicit val catsMonadStateForFreeT = FreeT.catsFreeMonadStateForFreeT[IntState, IntState, Int]
@@ -75,6 +76,85 @@ class FreeTTests extends CatsSuite {
     checkAll("MonadState[FreeT[ListWrapper,State[Int, ?], ?], Int]", SerializableTests.serializable(MonadState[FreeTListState, Int]))
   }
 
+  test("FlatMap stack safety tested with 50k flatMaps") {
+    val expected = Applicative[FreeTListOption].pure(())
+    val result =
+      FlatMapRec[FreeTListOption].tailRecM(0)((i: Int) =>
+        if (i < 50000)
+          Applicative[FreeTListOption].pure(Xor.left[Int, Unit](i + 1))
+        else
+          Applicative[FreeTListOption].pure(Xor.right[Int, Unit](())))
+
+    Eq[FreeTListOption[Unit]].eqv(expected, result) should ===(true)
+  }
+
+  test("Stack safe with 50k left-associated flatMaps") {
+    val expected = Applicative[FreeTListOption].pure(())
+    val result =
+      (0 until 50000).foldLeft(Applicative[FreeTListOption].pure(()))(
+        (fu, i) => fu.flatMap(u => Applicative[FreeTListOption].pure(u))
+      )
+
+    Eq[FreeTListOption[Unit]].eqv(expected, result) should ===(true)
+  }
+
+  test("Stack safe with flatMap followed by 50k maps") {
+    val expected = Applicative[FreeTListOption].pure(())
+    val result =
+      (0 until 50000).foldLeft(().pure[FreeTListOption].flatMap(_.pure[FreeTListOption]))(
+        (fu, i) => fu.map(identity)
+      )
+
+    Eq[FreeTListOption[Unit]].eqv(expected, result) should ===(true)
+  }
+
+  test("hoist to universal id equivalent to original instance") {
+    forAll { a: FreeTListOption[Int] =>
+      val b = a.hoist(FunctionK.id)
+      Eq[FreeTListOption[Int]].eqv(a, b) should ===(true)
+    }
+  }
+
+  test("hoist stack-safety") {
+    val a = (0 until 50000).foldLeft(Applicative[FreeTListOption].pure(()))(
+      (fu, i) => fu.flatMap(u => Applicative[FreeTListOption].pure(u))
+    )
+    val b = a.hoist(FunctionK.id)
+  }
+
+  test("interpret to universal id equivalent to original instance") {
+    forAll { a: FreeTListOption[Int] =>
+      val b = a.interpret(FunctionK.id)
+      Eq[FreeTListOption[Int]].eqv(a, b) should ===(true)
+    }
+  }
+
+  test("interpret stack-safety") {
+    val a = (0 until 50000).foldLeft(Applicative[FreeTListOption].pure(()))(
+      (fu, i) => fu.flatMap(u => Applicative[FreeTListOption].pure(u))
+    )
+    val b = a.interpret(FunctionK.id) // used to overflow
+  }
+
+  test("foldMap consistent with runM") {
+    implicit val listWrapperFunctor = ListWrapper.monad
+    forAll { a: FreeTListOption[Int] =>
+      val x = a.runM(_.list.headOption)
+      val y = a.foldMap(headOption)
+      Eq[Option[Int]].eqv(x, y) should ===(true)
+    }
+  }
+
+  test("== should not return true for unequal instances") {
+    val a = FreeT.pure[List, Option, Int](1).flatMap(x => FreeT.pure(2))
+    val b = FreeT.pure[List, Option, Int](3).flatMap(x => FreeT.pure(4))
+    a == b should be(false)
+  }
+
+  private[free] def liftTUCompilationTests() = {
+    val a: String Xor Int = Xor.right(42)
+    val b: FreeT[Option, String Xor ?, Int] = FreeT.liftTU(a)
+  }
 }
 
 object FreeTTests extends FreeTTestsInstances
@@ -92,21 +172,24 @@ sealed trait FreeTTestsInstances {
   type FreeTListOption[A] = FreeTListW[Option, A]
   type FreeTListState[A] = FreeT[IntState, IntState, A]
 
-  implicit val intEq : Eq[Int] = new Eq[Int] {
-    def eqv(a : Int, b : Int) = a == b
+  object headOption extends (ListWrapper ~> Option) {
+    def apply[A](l: ListWrapper[A]): Option[A] = l.list.headOption
   }
 
-  implicit def intStateEq[A : Eq] : Eq[IntState[A]] = stateEq[Int, A]
+  implicit val intEq: Eq[Int] = new Eq[Int] {
+    def eqv(a: Int, b: Int) = a == b
+  }
 
-  implicit def evalEq[A : Eq] : Eq[Eval[A]] = Eval.catsEqForEval[A]
+  implicit def intStateEq[A: Eq]: Eq[IntState[A]] = stateEq[Int, A]
+
+  implicit def evalEq[A: Eq]: Eq[Eval[A]] = Eval.catsEqForEval[A]
 
   implicit def listWrapperArbitrary[A: Arbitrary]: Arbitrary[ListWrapper[A]] = ListWrapper.listWrapperArbitrary[A]
-    
-  implicit def freeTStateArb[A : Arbitrary](implicit LA : Arbitrary[ListWrapper[A]]) : Arbitrary[FreeTListState[A]] = freeTArb[IntState, IntState, A]
-    
+
+  implicit def freeTStateArb[A: Arbitrary](implicit LA: Arbitrary[ListWrapper[A]]): Arbitrary[FreeTListState[A]] = freeTArb[IntState, IntState, A]
+
   implicit def freeTArb[F[_], G[_]: Applicative, A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Arbitrary[FreeT[F, G, A]] =
     Arbitrary(freeTGen[F, G, A](4))
-
 
   implicit def freeTListWrapperEq[A](implicit A: Eq[A]): Eq[FreeTListWrapper[A]] = new Eq[FreeTListWrapper[A]] {
     implicit val listWrapperMonad: MonadRec[ListWrapper] = ListWrapper.monadRec
@@ -118,7 +201,7 @@ sealed trait FreeTTestsInstances {
     def eqv(a: FreeTListOption[A], b: FreeTListOption[A]) = Eq[Option[A]].eqv(a.runM(_.list.headOption), b.runM(_.list.headOption))
   }
 
-  implicit def freeTListStateEq[A](implicit A : Eq[A], SM: MonadRec[IntState]): Eq[FreeTListState[A]] = new Eq[FreeTListState[A]] {
+  implicit def freeTListStateEq[A](implicit A: Eq[A], SM: MonadRec[IntState]): Eq[FreeTListState[A]] = new Eq[FreeTListState[A]] {
     def eqv(a: FreeTListState[A], b: FreeTListState[A]) = Eq[State[Int, A]].eqv(a.runM(identity), b.runM(identity))
   }
 

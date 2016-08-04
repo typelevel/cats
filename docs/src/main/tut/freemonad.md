@@ -493,6 +493,74 @@ As the sequence of operations becomes longer, the slower a `flatMap`
 "through" the structure will be. With `FlatMapped`, `Free` becomes a
 right-associated structure not subject to quadratic complexity.
 
+## FreeT
+
+Often times we want to interleave the syntax tree when building a Free monad 
+with some other effect not declared as part of the ADT. 
+FreeT solves this problem by allowing us to mix building steps of the AST 
+with calling action in other base monad.
+
+In the following example a basic console application is shown.
+When the user inputs some text we use a separate `State` monad to track what the user
+typed.
+
+As we can observe in this case `FreeT` offers us a the alternative to delegate denotations to `State`
+monad with stronger equational guarantees than if we were emulating the `State` ops in our own ADT.
+
+```tut:book
+/* A base ADT for the user interaction without state semantics */
+sealed abstract class Teletype[A] extends Product with Serializable
+final case class WriteLine(line : String) extends Teletype[Unit]
+final case class ReadLine(prompt : String) extends Teletype[String]
+
+type TeletypeT[M[_], A] = FreeT[Teletype, M, A]
+type Log = List[String]
+
+/** Smart constructors, notice we are abstracting over any MonadState instance
+ *  to potentially support other types beside State 
+ */
+class TeletypeOps[M[_]](implicit MS : MonadState[M, Log]) {
+  def writeLine(line : String) : TeletypeT[M, Unit] =
+	FreeT.liftF[Teletype, M, Unit](WriteLine(line))
+  def readLine(prompt : String) : TeletypeT[M, String] =
+	FreeT.liftF[Teletype, M, String](ReadLine(prompt))
+  def log(s : String) : TeletypeT[M, Unit] =
+	FreeT.liftT[Teletype, M, Unit](MS.modify(s :: _))
+}
+
+object TeletypeOps {
+  implicit def teleTypeOpsInstance[M[_]](implicit MS : MonadState[M, Log]) : TeletypeOps[M] = new TeletypeOps
+}
+
+type TeletypeState[A] = State[List[String], A]
+
+def program(implicit TO : TeletypeOps[TeletypeState]) : TeletypeT[TeletypeState, Unit] = {
+  import TO._
+  for {
+	userSaid <- readLine("say something")
+	_ <- log(s"user said : $userSaid")
+	_ <- writeLine("thanks!")
+  } yield () 
+}
+
+def interpreter = new (Teletype ~> TeletypeState) {
+  def apply[A](fa : Teletype[A]) : TeletypeState[A] = {  
+	fa match {
+	  case ReadLine(prompt) =>
+		println(prompt)
+		val userInput = scala.io.StdIn.readLine()
+		StateT.pure[Eval, List[String], A](userInput)
+	  case WriteLine(line) =>
+		StateT.pure[Eval, List[String], A](println(line))
+	}
+  }
+}
+
+val state = program.foldMap(interpreter)
+val initialState = Nil
+val (stored, _) = state.run(initialState).value
+```
+
 ## Future Work (TODO)
 
 There are many remarkable uses of `Free[_]`. In the future, we will

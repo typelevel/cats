@@ -5,6 +5,8 @@ import scala.annotation.tailrec
 
 import cats.data.Xor
 
+/** FreeT is a monad transformer for Free monads over a Functor S
+  */
 sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
 
   import FreeT._
