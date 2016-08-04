@@ -508,6 +508,10 @@ As we can observe in this case `FreeT` offers us a the alternative to delegate d
 monad with stronger equational guarantees than if we were emulating the `State` ops in our own ADT.
 
 ```tut:book
+import cats.free._
+import cats._
+import cats.data._
+
 /* A base ADT for the user interaction without state semantics */
 sealed abstract class Teletype[A] extends Product with Serializable
 final case class WriteLine(line : String) extends Teletype[Unit]
@@ -535,11 +539,10 @@ object TeletypeOps {
 type TeletypeState[A] = State[List[String], A]
 
 def program(implicit TO : TeletypeOps[TeletypeState]) : TeletypeT[TeletypeState, Unit] = {
-  import TO._
   for {
-	userSaid <- readLine("say something")
-	_ <- log(s"user said : $userSaid")
-	_ <- writeLine("thanks!")
+	userSaid <- TO.readLine("what's up?!")
+	_ <- TO.log(s"user said : $userSaid")
+	_ <- TO.writeLine("thanks, see you soon!")
   } yield () 
 }
 
@@ -548,13 +551,15 @@ def interpreter = new (Teletype ~> TeletypeState) {
 	fa match {
 	  case ReadLine(prompt) =>
 		println(prompt)
-		val userInput = scala.io.StdIn.readLine()
+		val userInput = "hanging in here" //scala.io.StdIn.readLine()
 		StateT.pure[Eval, List[String], A](userInput)
 	  case WriteLine(line) =>
 		StateT.pure[Eval, List[String], A](println(line))
 	}
   }
 }
+
+import TeletypeOps._
 
 val state = program.foldMap(interpreter)
 val initialState = Nil

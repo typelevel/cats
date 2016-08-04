@@ -62,7 +62,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
     M0.tailRecM(this)(go)
   }
 
-  /** Evaluates a single layer of the free monad **/
+  /** Evaluates a single layer of the free monad */
   def resume(implicit S: Functor[S], M0: FlatMapRec[M], M1: Applicative[M]): M[A Xor S[FreeT[S, M, A]]] = {
     def go(ft: FreeT[S, M, A]): M[FreeT[S, M, A] Xor (A Xor S[FreeT[S, M, A]])] =
       ft match {
@@ -217,7 +217,7 @@ private[free] sealed trait FreeTInstances0 extends FreeTInstances1 {
       override def M2 = implicitly
     }
 }
- 
+
 private[free] sealed trait FreeTInstances extends FreeTInstances0 {
   implicit def catsFreeMonadCombineForFreeT[S[_], M[_]: Alternative: FlatMapRec]: MonadCombine[FreeT[S, M, ?]] =
     new MonadCombine[FreeT[S, M, ?]] with FreeTCombine[S, M] with FreeTMonad[S, M] {
@@ -228,30 +228,27 @@ private[free] sealed trait FreeTInstances extends FreeTInstances0 {
       override def empty[A] = FreeT.liftT[S, M, A](MonoidK[M].empty[A])(M)
     }
 }
- 
+
 private[free] sealed trait FreeTFlatMap[S[_], M[_]] extends FlatMap[FreeT[S, M, ?]] {
   implicit def M: Applicative[M]
 
   override final def map[A, B](fa: FreeT[S, M, A])(f: A => B): FreeT[S, M, B] = fa.map(f)
   def flatMap[A, B](fa: FreeT[S, M, A])(f: A => FreeT[S, M, B]): FreeT[S, M, B] = fa.flatMap(f)
 }
- 
+
 private[free] sealed trait FreeTMonad[S[_], M[_]] extends Monad[FreeT[S, M, ?]] with FlatMapRec[FreeT[S, M, ?]] with FreeTFlatMap[S, M] {
   implicit def M: Applicative[M]
 
-  override final def pure[A](a: A) =
+  override final def pure[A](a: A): FreeT[S, M, A]  =
     FreeT.pure[S, M, A](a)
-  override final def tailRecM[A, B](a: A)(f: A => FreeT[S, M, A Xor B]) =
+  override final def tailRecM[A, B](a: A)(f: A => FreeT[S, M, A Xor B]): FreeT[S, M, B] =
     FreeT.tailRecM(a)(f)
 }
- 
+
 private[free] sealed trait FreeTCombine[S[_], M[_]] extends SemigroupK[FreeT[S, M, ?]] {
   implicit def M: Applicative[M]
   implicit def M1: FlatMapRec[M]
   def M2: SemigroupK[M]
-  override final def combineK[A](a: FreeT[S, M, A], b: FreeT[S, M, A]) =
+  override final def combineK[A](a: FreeT[S, M, A], b: FreeT[S, M, A]): FreeT[S, M, A] =
     FreeT.liftT(M2.combineK(a.toM, b.toM))(M).flatMap(identity)
 }
-
-
-
