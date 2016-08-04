@@ -23,7 +23,7 @@ And some additions:
 * [#1041](https://github.com/typelevel/cats/pull/1041): `FlatMapRec` and `MonadRec`
 * [#1134](https://github.com/typelevel/cats/pull/1134): `cats.syntax.list` for à la carte list syntax imports
 * [#1191](https://github.com/typelevel/cats/pull/1191): `cats.syntax.monoid` for à la carte `Monoid` syntax imports
-* [#558](https://github.com/typelevel/cats/pull/588) and [#1063](https://github.com/typelevel/cats/pull/1063): `IdT`, the identity monad transformer
+* [#588](https://github.com/typelevel/cats/pull/588) and [#1063](https://github.com/typelevel/cats/pull/1063): `IdT`, the identity monad transformer
 * [#1021](https://github.com/typelevel/cats/pull/1021) and [#1221](https://github.com/typelevel/cats/pull/1221): `Nested` (represents nested composition of type constructors)
 * [#1172](https://github.com/typelevel/cats/pull/1172): `toNested` for `OptionT` and `XorT`
 * [#1102](https://github.com/typelevel/cats/pull/1102) and [#1170](https://github.com/typelevel/cats/pull/1170): `Comparison` (represents the result of an `Order` comparison)
@@ -67,7 +67,7 @@ And many new instances:
 * [#1138](https://github.com/typelevel/cats/pull/1138): `SemigroupK` and `MonadCombine` for `StateT`
 * [#1128](https://github.com/typelevel/cats/pull/1128) `Semigroup` and `Monoid` for `Applicative`
 * [#1049](https://github.com/typelevel/cats/pull/1049): `CoflatMap` for `WriterT`
-* [#1076](https://github.com/typelevel/cats/pull/1076): `MonadRec` instances for `Eval` and `StateT`
+* [#1076](https://github.com/typelevel/cats/pull/1076) and [#1261](https://github.com/typelevel/cats/pull/1261): `MonadRec` instances for `Eval`, `StateT`, and `Future`
 * [#1105](https://github.com/typelevel/cats/pull/1105): `Unapply` instances for `Nested` shapes
 
 And stylistic improvements:
@@ -95,7 +95,8 @@ And improvements to the documentation:
 
 And the build:
 
-* [#1159](https://github.com/typelevel/cats/pull/1159): Binary compatibility checking for cats-kernel via MiMa 
+* [#1159](https://github.com/typelevel/cats/pull/1159): Binary compatibility checking for cats-kernel via MiMa
+* [#1256](https://github.com/typelevel/cats/pull/1256): More reliable Scala.js testing in Travis CI
 * [#1123](https://github.com/typelevel/cats/pull/1123): cats-kernel is now included in the API documentation
 * [#1051](https://github.com/typelevel/cats/pull/1051): Empty Scaladocs for 2.10 to avoid issues macros cause for API documentation generation on 2.10
 * [#1154](https://github.com/typelevel/cats/pull/1154): Better POM hygiene: no Scoverage dependency
@@ -103,6 +104,7 @@ And the build:
 * [#1093](https://github.com/typelevel/cats/pull/1093): Scalastyle is now aware of shared and Scala.js-specific source files
 * [#1142](https://github.com/typelevel/cats/pull/1142): Additional formatting rules for Scalastyle
 * [#1099](https://github.com/typelevel/cats/pull/1099): Type lambda style is now enforced by Scalastyle
+* [#1258](https://github.com/typelevel/cats/pull/1258): Version updates for SBT and SBT plugins
 
 We also welcome [Kailuo Wang](https://github.com/typelevel/cats/pull/1129), [Peter Neyens](https://github.com/typelevel/cats/pull/1179), and [Oscar Boykin](https://github.com/typelevel/cats/pull/1180) as new Cats maintainers!
 
