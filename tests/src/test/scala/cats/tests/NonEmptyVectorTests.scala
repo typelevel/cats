@@ -243,6 +243,16 @@ class NonEmptyVectorTests extends CatsSuite {
     NonEmptyVector(1, Vector.empty).toVector.toString should === ("Vector(1)")
   }
 
+  test("NonEmptyVector.unapply supports pattern matching") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
+      nonEmptyVector match {
+        case NonEmptyVector(head, tail) =>
+          head should === (nonEmptyVector.head)
+          tail should === (nonEmptyVector.tail)
+      }
+    }
+  }
+
   test("Cannot create a new NonEmptyVector from constructor") {
     if(Platform.isJvm) {
       if (!Properties.versionNumberString.startsWith("2.10")) {

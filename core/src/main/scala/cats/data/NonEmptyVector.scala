@@ -223,6 +223,8 @@ object NonEmptyVector extends NonEmptyVectorInstances {
     new NonEmptyVector(buf.result)
   }
 
+  def unapply[A](nev: NonEmptyVector[A]): Some[(A, Vector[A])] = Some((nev.head, nev.tail))
+
   def fromVector[A](vector: Vector[A]): Option[NonEmptyVector[A]] =
     if (vector.isEmpty) None else Some(new NonEmptyVector(vector))
 
