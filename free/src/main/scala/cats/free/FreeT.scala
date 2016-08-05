@@ -16,7 +16,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
 
   /** Binds the given continuation to the result of this computation. */
   final def flatMap[B](f: A => FreeT[S, M, B]): FreeT[S, M, B] =
-    Gosub(this, f)
+    FlatMapped(this, f)
 
   /**
    * Changes the underlying `Monad` for this `FreeT`, ie.
@@ -24,8 +24,8 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
    */
   def hoist[N[_]](mn: M ~> N): FreeT[S, N, A] =
     step match {
-      case e @ Gosub(_, _) =>
-        Gosub(e.a.hoist(mn), e.f.andThen(_.hoist(mn)))
+      case e @ FlatMapped(_, _) =>
+        FlatMapped(e.a.hoist(mn), e.f.andThen(_.hoist(mn)))
       case Suspend(m) =>
         Suspend(mn(m))
     }
@@ -33,8 +33,8 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
   /** Change the base functor `S` for a `FreeT` action. */
   def interpret[T[_]](st: S ~> T)(implicit M: Functor[M]): FreeT[T, M, A] =
     step match {
-      case e @ Gosub(_, _) =>
-        Gosub(e.a.interpret(st), e.f.andThen(_.interpret(st)))
+      case e @ FlatMapped(_, _) =>
+        FlatMapped(e.a.interpret(st), e.f.andThen(_.interpret(st)))
       case Suspend(m) =>
         Suspend(M.map(m)(_.map(s => st(s))))
     }
@@ -50,12 +50,12 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
           case Xor.Left(a) => MR.pure(Xor.Right(a))
           case Xor.Right(sa) => MR.map(f(sa))(Xor.right)
         }
-        case g @ Gosub(_, _) => g.a match {
+        case g @ FlatMapped(_, _) => g.a match {
           case Suspend(mx) => MR.flatMap(mx) {
             case Xor.Left(x) => MR.pure(Xor.left(g.f(x)))
             case Xor.Right(sx) => MR.map(f(sx))(g.f andThen Xor.left)
           }
-          case g0 @ Gosub(_, _) => MR.pure(Xor.left(g0.a.flatMap(g0.f(_).flatMap(g.f))))
+          case g0 @ FlatMapped(_, _) => MR.pure(Xor.left(g0.a.flatMap(g0.f(_).flatMap(g.f))))
         }
       }
 
@@ -67,12 +67,12 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
     def go(ft: FreeT[S, M, A]): M[FreeT[S, M, A] Xor (A Xor S[FreeT[S, M, A]])] =
       ft match {
         case Suspend(f) => MR.map(f)(as => Xor.right(as.map(S.map(_)(pure(_)))))
-        case g1 @ Gosub(_, _) => g1.a match {
+        case g1 @ FlatMapped(_, _) => g1.a match {
           case Suspend(m1) => MR.map(m1) {
             case Xor.Left(a) => Xor.left(g1.f(a))
             case Xor.Right(fc) => Xor.right(Xor.right(S.map(fc)(g1.f(_))))
           }
-          case g2 @ Gosub(_, _) => MR.pure(Xor.left(g2.a.flatMap(g2.f(_).flatMap(g1.f))))
+          case g2 @ FlatMapped(_, _) => MR.pure(Xor.left(g2.a.flatMap(g2.f(_).flatMap(g1.f))))
         }
       }
 
@@ -103,20 +103,20 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
         case Xor.Left(a) => pure(a)
         case Xor.Right(s) => liftF(s)
       }
-      case g1 @ Gosub(_, _) => g1.a match {
+      case g1 @ FlatMapped(_, _) => g1.a match {
         case Suspend(m) => M.map(m) {
           case Xor.Left(a) => g1.f(a)
           case Xor.Right(s) => liftF[S, M, g1.A](s).flatMap(g1.f)
         }
-        case g0 @ Gosub(_, _) => g0.a.flatMap(g0.f(_).flatMap(g1.f)).toM
+        case g0 @ FlatMapped(_, _) => g0.a.flatMap(g0.f(_).flatMap(g1.f)).toM
       }
     }
 
   @tailrec
   private def step: FreeT[S, M, A] =
     this match {
-      case g @ Gosub(_, _) => g.a match {
-        case g0 @ Gosub(_, _) => g0.a.flatMap(a => g0.f(a).flatMap(g.f)).step
+      case g @ FlatMapped(_, _) => g.a match {
+        case g0 @ FlatMapped(_, _) => g0.a.flatMap(a => g0.f(a).flatMap(g.f)).step
         case _ => g
       }
       case x => x
@@ -129,7 +129,7 @@ object FreeT extends FreeTInstances {
   private[free] case class Suspend[S[_], M[_], A](a: M[A Xor S[A]]) extends FreeT[S, M, A]
 
   /** Call a subroutine and continue with the given function. */
-  private[free] case class Gosub[S[_], M[_], A0, B](a0: FreeT[S, M, A0], f0: A0 => FreeT[S, M, B]) extends FreeT[S, M, B] {
+  private[free] case class FlatMapped[S[_], M[_], A0, B](a0: FreeT[S, M, A0], f0: A0 => FreeT[S, M, B]) extends FreeT[S, M, B] {
     type A = A0
     def a: FreeT[S, M, A] = a0
     def f: A => FreeT[S, M, B] = f0
