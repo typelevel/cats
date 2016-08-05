@@ -1,6 +1,7 @@
 package cats
 
 import cats.data.{Xor, XorT}
+import scala.util.control.NonFatal
 
 /**
  * An applicative that also allows you to raise and or handle an error value.
@@ -74,6 +75,25 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def recoverWith[A](fa: F[A])(pf: PartialFunction[E, F[A]]): F[A] =
     handleErrorWith(fa)(e =>
       pf applyOrElse(e, raiseError))
+  /**
+   * Often E is Throwable. Here we try to call pure or catch
+   * and raise.
+   */
+  def tryCatch[A](a: => A)(implicit ev: Throwable =:= E): F[A] =
+    try pure(a)
+    catch {
+      case NonFatal(e) => raiseError(e)
+    }
+
+  /**
+   * Often E is Throwable. Here we try to call pure or catch
+   * and raise
+   */
+  def tryCatchEval[A](a: Eval[A])(implicit ev: Throwable =:= E): F[A] =
+    try pure(a.value)
+    catch {
+      case NonFatal(e) => raiseError(e)
+    }
 }
 
 object ApplicativeError {

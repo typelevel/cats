@@ -30,6 +30,26 @@ class TryTests extends CatsSuite {
     }
   }
 
+  test("tryCatch works") {
+    forAll { e: Either[String, Int] =>
+      val str = e.fold(identity, _.toString)
+      val res = MonadError[Try, Throwable].tryCatch(str.toInt)
+      // the above shuold just never cause an uncaught exception
+      // this is a somewhat bogus test:
+      res should not be (null)
+    }
+  }
+
+  test("tryCatchEval works") {
+    forAll { e: Either[String, Int] =>
+      val str = e.fold(identity, _.toString)
+      val res = MonadError[Try, Throwable].tryCatchEval(Eval.later(str.toInt))
+      // the above shuold just never cause an uncaught exception
+      // this is a somewhat bogus test:
+      res should not be (null)
+    }
+  }
+
   // The following tests check laws which are a different formulation of
   // laws that are checked. Since these laws are more or less duplicates of
   // existing laws, we don't check them for all types that have the relevant
