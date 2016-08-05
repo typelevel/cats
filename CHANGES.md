@@ -9,7 +9,7 @@ Version 0.7.0 is the seventh Cats release, and includes several major rearrangem
 If you're updating from Cats 0.6.0, it's likely that you'll need to make extensive (but mostly mechanical) changes. The following list includes some of the changes that are likely to be necessary for most projects; see the complete list of changes below for more detail.
 
 * All references to `cats.std` will need to be changed to `cats.instances` ([#1140](https://github.com/typelevel/cats/pull/1140)). If you're using `cats.std.all` or the other `cats.std` objects with wildcard imports, this is likely to be the only change you need to make. If you are importing or referring to instance definitions by name, you'll need to be aware that the naming convention has changed (see [#1066](https://github.com/typelevel/cats/pull/1066), [#1068](https://github.com/typelevel/cats/pull/1068), [#1110](https://github.com/typelevel/cats/pull/1110), and [#1122](https://github.com/typelevel/cats/pull/1122)).
-* `NonEmptyList` and `NonEmptyVector` are no longer type aliases for `OneAnd`, so any code using `OneAnd` to construct or pattern match on these types will need to be changed to use `NonEmptyList` or `NonEmptyVector` directly. There are also some API changes; for example, `unwrap` calls will need to be replaced by `toList` or `toVector`.
+* `NonEmptyList` and `NonEmptyVector` are no longer type aliases for `OneAnd`, so any code using `OneAnd` to construct or pattern match on these types will need to be changed to use `NonEmptyList` or `NonEmptyVector` directly. There are also some API changes; for example, `unwrap` calls will need to be replaced by `toList` or `toVector`, and `NonEmptyList(1, 2, 3)` is now `NonEmptyList.of(1, 2, 3)`.
 * `pureEval` has been removed from `Applicative` ([#1234](https://github.com/typelevel/cats/pull/1234)), and has not been replaced, so if you are relying on it for laziness or effect capturing (which wasn't enforced or guaranteed), you'll need to find another approach.
 * All references to `NaturalTransformation` will need to be replaced by either `FunctionK` or `~>`.
 * If you are interpreting a free algebra into a context `F` with `foldMap`, you'll now need `F` to have a `MonadRec` instance, not just a `Monad` ([#1075](https://github.com/typelevel/cats/pull/1075)).
@@ -63,6 +63,7 @@ And other API changes:
 
 * [#1231](https://github.com/typelevel/cats/pull/1231): `NonEmptyList` is now a case class instead of a type alias for a `OneAnd`
 * [#1137](https://github.com/typelevel/cats/pull/1137): `NonEmptyVector` is now a value class instead of a type alias for a `OneAnd`
+* [#1267](https://github.com/typelevel/cats/pull/1267): Overloaded variadic `apply` on `NonEmptyList` and `NonEmptyVector` is now `of`
 * [#1234](https://github.com/typelevel/cats/pull/1234): `Applicative#pureEval` has been removed
 * [#1202](https://github.com/typelevel/cats/pull/1202): `MonadFilter` no longer has a `filterM` method (see [#1225](https://github.com/typelevel/cats/pull/1225))
 * [#1075](https://github.com/typelevel/cats/pull/1075): `foldMap` on `Free` now requires a `MonadRec` instance (instead of simply `Monad`)
