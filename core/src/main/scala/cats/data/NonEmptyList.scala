@@ -109,7 +109,7 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
 }
 
 object NonEmptyList extends NonEmptyListInstances {
-  def apply[A](head: A, tail: A*): NonEmptyList[A] = NonEmptyList(head, tail.toList)
+  def of[A](head: A, tail: A*): NonEmptyList[A] = NonEmptyList(head, tail.toList)
 
   /**
    * Create a `NonEmptyList` from a `List`.

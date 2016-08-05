@@ -341,7 +341,7 @@ private[data] sealed abstract class ValidatedInstances2 {
 trait ValidatedFunctions {
   def invalid[A, B](a: A): Validated[A, B] = Validated.Invalid(a)
 
-  def invalidNel[A, B](a: A): ValidatedNel[A, B] = Validated.Invalid(NonEmptyList(a))
+  def invalidNel[A, B](a: A): ValidatedNel[A, B] = Validated.Invalid(NonEmptyList(a, Nil))
 
   def valid[A, B](b: B): Validated[A, B] = Validated.Valid(b)
 

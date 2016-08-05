@@ -74,7 +74,7 @@ class NonEmptyVectorTests extends CatsSuite {
     val v1 = NonEmptyVector("Test", Vector.empty)
     v1.show should === ("NonEmptyVector(Test)")
 
-    val v2 = NonEmptyVector("foo", "bar", "baz")
+    val v2 = NonEmptyVector.of("foo", "bar", "baz")
     v2.show should === ("NonEmptyVector(foo, bar, baz)")
   }
 
@@ -185,9 +185,9 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
-  test("NonEmptyVector#apply on varargs is consistent with NonEmptyVector#apply on Vector") {
+  test("NonEmptyVector#of on varargs is consistent with NonEmptyVector#apply on Vector") {
     forAll { (head: Int, tail: Vector[Int]) =>
-      NonEmptyVector(head, tail:_*) should === (NonEmptyVector(head, tail))
+      NonEmptyVector.of(head, tail:_*) should === (NonEmptyVector(head, tail))
     }
   }
 
