@@ -316,6 +316,11 @@ lazy val publishSettings = Seq(
         <url>https://github.com/rossabaker/</url>
       </developer>
       <developer>
+        <id>johnynek</id>
+        <name>P. Oscar Boykin</name>
+        <url>https://github.com/johnynek/</url>
+      </developer>
+      <developer>
         <id>travisbrown</id>
         <name>Travis Brown</name>
         <url>https://github.com/travisbrown/</url>
@@ -324,6 +329,11 @@ lazy val publishSettings = Seq(
         <id>adelbertc</id>
         <name>Adelbert Chang</name>
         <url>https://github.com/adelbertc/</url>
+      </developer>
+      <developer>
+        <id>peterneyens</id>
+        <name>Peter Neyens</name>
+        <url>https://github.com/peterneyens/</url>
       </developer>
       <developer>
         <id>tpolecat</id>
@@ -359,6 +369,11 @@ lazy val publishSettings = Seq(
         <id>julien-truffaut</id>
         <name>Julien Truffaut</name>
         <url>https://github.com/julien-truffaut/</url>
+      </developer>
+      <developer>
+        <id>kailuowang</id>
+        <name>Kailuo Wang</name>
+        <url>https://github.com/kailuowang/</url>
       </developer>
     </developers>
   )
