@@ -51,7 +51,7 @@ class TryTests extends CatsSuite {
   }
   test("fromTry works") {
     forAll { t: Try[Int] =>
-      (MonadError[Try, Throwable].fromTry(t)) should === t
+      (MonadError[Try, Throwable].fromTry(t)) should === (t)
     }
   }
 
