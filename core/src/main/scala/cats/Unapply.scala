@@ -30,7 +30,7 @@ trait Unapply[TC[_[_]], MA] extends Serializable {
 
 object Unapply extends Unapply2Instances {
   // a convenience method for summoning Unapply instances
-  def apply[TC[_[_]], MA](implicit ev: Unapply[TC, MA]): Unapply[TC, MA] = implicitly
+  def apply[TC[_[_]], MA](implicit ev: Unapply[TC, MA]): Unapply[TC, MA] = ev
 
   // the type we will instantiate when we find a type class instance
   // which is already the expected shape: F[_]
