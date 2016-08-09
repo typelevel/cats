@@ -34,7 +34,7 @@ class TryTests extends CatsSuite {
     forAll { e: Either[String, Int] =>
       val str = e.fold(identity, _.toString)
       val res = MonadError[Try, Throwable].catchNonFatal(str.toInt)
-      // the above shuold just never cause an uncaught exception
+      // the above should just never cause an uncaught exception
       // this is a somewhat bogus test:
       res should not be (null)
     }
@@ -44,7 +44,7 @@ class TryTests extends CatsSuite {
     forAll { e: Either[String, Int] =>
       val str = e.fold(identity, _.toString)
       val res = MonadError[Try, Throwable].catchNonFatalEval(Eval.later(str.toInt))
-      // the above shuold just never cause an uncaught exception
+      // the above should just never cause an uncaught exception
       // this is a somewhat bogus test:
       res should not be (null)
     }
