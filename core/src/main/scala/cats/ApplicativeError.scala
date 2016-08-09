@@ -80,7 +80,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * Often E is Throwable. Here we try to call pure or catch
    * and raise.
    */
-  def catchNonFatal[A](a: => A)(implicit ev: Throwable =:= E): F[A] =
+  def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< E): F[A] =
     try pure(a)
     catch {
       case NonFatal(e) => raiseError(e)
@@ -90,7 +90,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * Often E is Throwable. Here we try to call pure or catch
    * and raise
    */
-  def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable =:= E): F[A] =
+  def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< E): F[A] =
     try pure(a.value)
     catch {
       case NonFatal(e) => raiseError(e)
@@ -99,7 +99,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   /**
    * If the error type is Throwable, we can convert from a scala.util.Try
    */
-  def fromTry[A](t: Try[A])(implicit ev: Throwable =:= E): F[A] =
+  def fromTry[A](t: Try[A])(implicit ev: Throwable <:< E): F[A] =
     t match {
       case Success(a) => pure(a)
       case Failure(e) => raiseError(e)
