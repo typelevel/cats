@@ -8,7 +8,7 @@ package cats
  * parameter is omitted.
  *
  * `NotNull`, its implementation, and its usages are derived from
- * [[https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/NotNothing.scala scalaz's NotNothing]],
+ * [[https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/NotNothing.scala Scalaz's NotNothing]],
  * originally written by Brian McKenna.
  */
 sealed trait NotNull[A]

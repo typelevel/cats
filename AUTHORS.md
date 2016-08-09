@@ -99,10 +99,10 @@ possible:
  * yilinwei
  * Zach Abbott
 
-Cats has been heavily inspired by [scalaz](https://github.com/scalaz/scalaz),
+Cats has been heavily inspired by [Scalaz](https://github.com/scalaz/scalaz),
 and some Cats code is only a slightly modified version of code originating in
-scalaz. Therefore, we'd also like to credit and thank all of the
-[scalaz contributors](https://github.com/scalaz/scalaz/graphs/contributors) for
+Scalaz. Therefore, we'd also like to credit and thank all of the
+[Scalaz contributors](https://github.com/scalaz/scalaz/graphs/contributors) for
 their work.
 
 We've tried to include everyone, but if you've made a contribution to

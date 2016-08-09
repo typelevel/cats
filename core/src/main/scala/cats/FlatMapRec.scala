@@ -11,7 +11,7 @@ import cats.data.Xor
  * [[http://functorial.com/stack-safety-for-free/index.pdf Stack Safety for Free]].
  *
  * This Scala implementation of `FlatMapRec` and its usages are derived from
- * [[https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/BindRec.scala scalaz's BindRec]],
+ * [[https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/BindRec.scala Scalaz's BindRec]],
  * originally written by Brian McKenna.
  */
 @typeclass trait FlatMapRec[F[_]] extends FlatMap[F] {
