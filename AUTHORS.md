@@ -99,8 +99,9 @@ possible:
  * yilinwei
  * Zach Abbott
 
-Cats has been heavily inspired by [Scalaz](https://github.com/scalaz/scalaz),
-and some Cats code is only a slightly modified version of code originating in
+Cats has been heavily inspired by many libraries, including [Scalaz](https://github.com/scalaz/scalaz),
+Haskell's [Prelude](https://hackage.haskell.org/package/base-4.9.0.0/docs/Prelude.html), and others.
+In particular, some Cats code is only a slightly modified version of code originating in
 Scalaz. Therefore, we'd also like to credit and thank all of the
 [Scalaz contributors](https://github.com/scalaz/scalaz/graphs/contributors) for
 their work.
