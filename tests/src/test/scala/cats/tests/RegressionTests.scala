@@ -108,19 +108,19 @@ class RegressionTests extends CatsSuite {
     intMap.traverseU(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList(1,2,6,8).traverseU(validate) should === (Xor.left("6 is greater than 5"))
+    NonEmptyList.of(1,2,6,8).traverseU(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList(6,8).traverseU(validate) should === (Xor.left("6 is greater than 5"))
+    NonEmptyList.of(6,8).traverseU(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(1)
 
     List(1,2,6,8).traverseU_(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList(1,2,6,7,8).traverseU_(validate) should === (Xor.left("6 is greater than 5"))
+    NonEmptyList.of(1,2,6,7,8).traverseU_(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList(6,7,8).traverseU_(validate) should === (Xor.left("6 is greater than 5"))
+    NonEmptyList.of(6,7,8).traverseU_(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(1)
   }
 }

@@ -23,7 +23,7 @@ import cats.functor.{Invariant, Contravariant}
  *
  * None of these tests should ever run, or do any runtime checks.
  */
-class SyntaxTests extends AllInstances with AllSyntax {
+object SyntaxTests extends AllInstances with AllSyntax {
 
   // pretend we have a value of type A
   def mock[A]: A = ???
@@ -256,5 +256,28 @@ class SyntaxTests extends AllInstances with AllSyntax {
 
     val pfegea = mock[PartialFunction[E, G[A]]]
     val gea4 = ga.recoverWith(pfegea)
+  }
+}
+
+/**
+ * Similar to [[SyntaxTests]] but doesn't automatically include all
+ * instances/syntax, so that piecemeal imports can be tested.
+ */
+object AdHocSyntaxTests {
+  import SyntaxTests.mock
+
+  def testFunctorFilterSyntax[F[_]:FunctorFilter, A]: Unit = {
+    import cats.syntax.functorFilter._
+
+    val fa = mock[F[A]]
+    val filtered = fa.mapFilter(_ => None)
+  }
+
+  def testTraverseFilterSyntax[F[_]:TraverseFilter, G[_]: Applicative, A, B]: Unit = {
+    import cats.syntax.traverseFilter._
+
+    val fa = mock[F[A]]
+    val f = mock[A => G[Option[B]]]
+    val filtered = fa.traverseFilter(f)
   }
 }

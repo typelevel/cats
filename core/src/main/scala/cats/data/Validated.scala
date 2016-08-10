@@ -341,7 +341,7 @@ private[data] sealed abstract class ValidatedInstances2 {
 trait ValidatedFunctions {
   def invalid[A, B](a: A): Validated[A, B] = Validated.Invalid(a)
 
-  def invalidNel[A, B](a: A): ValidatedNel[A, B] = Validated.Invalid(NonEmptyList(a))
+  def invalidNel[A, B](a: A): ValidatedNel[A, B] = Validated.Invalid(NonEmptyList(a, Nil))
 
   def valid[A, B](b: B): Validated[A, B] = Validated.Valid(b)
 
@@ -354,6 +354,10 @@ trait ValidatedFunctions {
    * scala> Validated.catchOnly[NumberFormatException] { "foo".toInt }
    * res0: Validated[NumberFormatException, Int] = Invalid(java.lang.NumberFormatException: For input string: "foo")
    * }}}
+   *
+   * This method and its usage of [[NotNull]] are inspired by and derived from
+   * the `fromTryCatchThrowable` method [[https://github.com/scalaz/scalaz/pull/746/files contributed]]
+   * to Scalaz by Brian McKenna.
    */
   def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
 

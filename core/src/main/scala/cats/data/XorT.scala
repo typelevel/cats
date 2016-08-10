@@ -169,10 +169,10 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
    * {{{
    * scala> import cats.implicits._
    * scala> type Error = String
-   * scala> val v1: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList("error 1"))
-   * scala> val v2: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList("error 2"))
+   * scala> val v1: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList.of("error 1"))
+   * scala> val v2: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList.of("error 2"))
    * scala> val xort: XorT[Option, Error, Int] = XorT(Some(Xor.left("error 3")))
-   * scala> xort.withValidated { v3 => (v1 |@| v2 |@| v3.leftMap(NonEmptyList(_))).map{ case (i, j, k) => i + j + k } }
+   * scala> xort.withValidated { v3 => (v1 |@| v2 |@| v3.leftMap(NonEmptyList.of(_))).map{ case (i, j, k) => i + j + k } }
    * res0: XorT[Option, NonEmptyList[Error], Int] = XorT(Some(Left(NonEmptyList(error 1, error 2, error 3))))
    * }}}
    */

@@ -6,6 +6,12 @@ package cats
  *
  * This can be useful in preventing `Null` from being inferred when a type
  * parameter is omitted.
+ *
+ * This trait is used along with ambiguous implicits to achieve the goal of
+ * preventing inference of `Null`. This ambiguous implicit trick has been used
+ * in the Scala community for some time. [[https://gist.github.com/milessabin/de58f3ba7024d51dcc1a Here]]
+ * is an early example of such a trick being used in a similar way to prevent a
+ * `Nothing` type.
  */
 sealed trait NotNull[A]
 

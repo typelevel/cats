@@ -131,6 +131,12 @@ Write about type class methods on data structures as described in https://github
 
 Write about https://github.com/typelevel/cats/pull/36#issuecomment-72892359
 
+### Attributions
+
+If your contribution has been derived from or inspired by other work, please
+state this in its ScalaDoc comment and provide proper attribution. When
+possible, include the original authors' names and a link to the original work.
+
 ### Write tests
 
 - Tests for cats-core go into the tests module, under the `cats.tests` package.

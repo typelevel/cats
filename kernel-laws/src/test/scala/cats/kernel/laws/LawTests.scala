@@ -49,6 +49,7 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Char].check(_.order)
   laws[OrderLaws, Int].check(_.order)
   laws[OrderLaws, Long].check(_.order)
+  laws[OrderLaws, BigInt].check(_.order)
   laws[OrderLaws, List[Int]].check(_.order)
   laws[OrderLaws, Option[String]].check(_.order)
   laws[OrderLaws, List[String]].check(_.order)
