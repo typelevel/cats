@@ -136,6 +136,11 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
         val fst = f(fa.head)
         OneAnd(fst.head, monad.combineK(fst.tail, end))
       }
+
+      /**
+       * TODO
+       */
+      def tailRecM[A, B](a: A)(fn: A => OneAnd[F, A Xor B]): OneAnd[F, B] = ???
     }
 }
 

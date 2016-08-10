@@ -1,5 +1,6 @@
 package cats
 
+import cats.data.Xor
 import simulacrum.typeclass
 
 /**
@@ -90,4 +91,17 @@ import simulacrum.typeclass
    */
   def ifM[B](fa: F[Boolean])(ifTrue: => F[B], ifFalse: => F[B]): F[B] =
     flatMap(fa)(if (_) ifTrue else ifFalse)
+
+  /**
+   * Keeps calling `f` until a `[[cats.data.Xor.Right Right]][B]` is returned.
+   *
+   * Based on Phil Freeman's
+   * [[http://functorial.com/stack-safety-for-free/index.pdf Stack Safety for Free]].
+   *
+   * Implementations of this method must use constant stack space.
+   *
+   * `f` must use constant stack space. (It is OK to use a constant number of
+   * `map`s and `flatMap`s inside `f`.)
+   */
+  def tailRecM[A, B](a: A)(f: A => F[A Xor B]): F[B]
 }

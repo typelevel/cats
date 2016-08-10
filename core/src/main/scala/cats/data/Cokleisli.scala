@@ -4,6 +4,7 @@ package data
 import cats.arrow.{Arrow, Split}
 import cats.functor.{Contravariant, Profunctor}
 import cats.{CoflatMap, Comonad, Functor, Monad}
+import scala.annotation.tailrec
 
 /**
  * Represents a function `F[A] => B`.
@@ -56,6 +57,16 @@ private[data] sealed abstract class CokleisliInstances extends CokleisliInstance
 
     override def map[B, C](fa: Cokleisli[F, A, B])(f: B => C): Cokleisli[F, A, C] =
       fa.map(f)
+
+    def tailRecM[B, C](b: B)(fn: B => Cokleisli[F, A, B Xor C]): Cokleisli[F, A, C] =
+      Cokleisli({ (fa: F[A]) =>
+        @tailrec
+        def loop(c: Cokleisli[F, A, B Xor C]): C = c.run(fa) match {
+          case Xor.Right(c) => c
+          case Xor.Left(bb) => loop(fn(bb))
+        }
+        loop(fn(b))
+      })
   }
 
   implicit def catsDataMonoidKForCokleisli[F[_]](implicit ev: Comonad[F]): MonoidK[λ[α => Cokleisli[F, α, α]]] =

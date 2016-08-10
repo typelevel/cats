@@ -235,7 +235,26 @@ private[data] sealed trait WriterTFlatMap[F[_], L] extends WriterTApply[F, L] wi
   implicit def L0: Semigroup[L]
 
   def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
-    fa flatMap f
+    fa.flatMap(f)
+
+  def tailRecM[A, B](a: A)(fn: A => WriterT[F, L, A Xor B]): WriterT[F, L, B] = {
+    val init = fn(a).run
+    var l: F[L] = F0.map(init)(_._1)
+
+    def step(a: A): F[A Xor B] = {
+      val flv = fn(a).run
+      l = F0.map2(l, flv) { case (a, (b, _)) => L0.combine(a, b) }
+      F0.map(flv)(_._2)
+    }
+    val res: F[(L, B)] = F0.flatMap(init) {
+      case (_, Xor.Right(b)) => F0.map(l)((_, b))
+      case (_, Xor.Left(a)) => F0.flatMap(F0.tailRecM(a)(step)) { b =>
+        // By now, F0.tailRec has run, so the mutable l is completed
+        F0.map(l)((_, b))
+      }
+    }
+    WriterT(res)
+  }
 }
 
 private[data] sealed trait WriterTApplicative[F[_], L] extends WriterTApply[F, L] with Applicative[WriterT[F, L, ?]] {
@@ -252,6 +271,25 @@ private[data] sealed trait WriterTMonad[F[_], L] extends WriterTApplicative[F, L
 
   def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
     fa.flatMap(f)
+
+  def tailRecM[A, B](a: A)(fn: A => WriterT[F, L, A Xor B]): WriterT[F, L, B] = {
+    val init = fn(a).run
+    var l: F[L] = F0.map(init)(_._1)
+
+    def step(a: A): F[A Xor B] = {
+      val flv = fn(a).run
+      l = F0.map2(l, flv) { case (a, (b, _)) => L0.combine(a, b) }
+      F0.map(flv)(_._2)
+    }
+    val res: F[(L, B)] = F0.flatMap(init) {
+      case (_, Xor.Right(b)) => F0.map(l)((_, b))
+      case (_, Xor.Left(a)) => F0.flatMap(F0.tailRecM(a)(step)) { b =>
+        // By now, F0.tailRec has run, so the mutable l is completed
+        F0.map(l)((_, b))
+      }
+    }
+    WriterT(res)
+  }
 }
 
 private[data] sealed trait WriterTApplicativeError[F[_], L, E] extends ApplicativeError[WriterT[F, L, ?], E] with WriterTApplicative[F, L] {

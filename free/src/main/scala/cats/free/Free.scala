@@ -91,7 +91,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Run to completion, using monadic recursion to evaluate the
    * resumption in the context of `S`.
    */
-  final def runTailRec(implicit S: MonadRec[S]): S[A] = {
+  final def runTailRec(implicit S: Monad[S]): S[A] = {
     def step(rma: Free[S, A]): S[Xor[Free[S, A], A]] =
       rma match {
         case Pure(a) =>
@@ -117,9 +117,9 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Run to completion, mapping the suspension with the given
    * transformation at each step and accumulating into the monad `M`.
    *
-   * This method uses `MonadRec[M]` to provide stack-safety.
+   * This method uses `tailRecM` to provide stack-safety.
    */
-  final def foldMap[M[_]](f: FunctionK[S, M])(implicit M: MonadRec[M]): M[A] =
+  final def foldMap[M[_]](f: FunctionK[S, M])(implicit M: Monad[M]): M[A] =
     M.tailRecM(this)(_.step match {
       case Pure(a) => M.pure(Xor.right(a))
       case Suspend(sa) => M.map(f(sa))(Xor.right)
@@ -138,7 +138,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
       new FunctionK[S, Free[T, ?]] {
         def apply[B](fa: S[B]): Free[T, B] = Suspend(f(fa))
       }
-    }(Free.catsFreeMonadRecForFree)
+    }(Free.catsFreeMonadForFree)
 
   override def toString(): String =
     "Free(...)"
@@ -195,8 +195,8 @@ object Free {
   /**
    * `Free[S, ?]` has a monad for any type constructor `S[_]`.
    */
-  implicit def catsFreeMonadRecForFree[S[_]]: MonadRec[Free[S, ?]] =
-    new MonadRec[Free[S, ?]] {
+  implicit def catsFreeMonadForFree[S[_]]: Monad[Free[S, ?]] =
+    new Monad[Free[S, ?]] {
       def pure[A](a: A): Free[S, A] = Free.pure(a)
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
@@ -216,7 +216,7 @@ object Free {
    * terminate if the `foldRight` implementation for `F` and the
    * `tailRecM` implementation for `G` are sufficiently lazy.
    */
-  def foldLeftM[F[_]: Foldable, G[_]: MonadRec, A, B](fa: F[A], z: B)(f: (B, A) => G[B]): G[B] =
+  def foldLeftM[F[_]: Foldable, G[_]: Monad, A, B](fa: F[A], z: B)(f: (B, A) => G[B]): G[B] =
     unsafeFoldLeftM[F, Free[G, ?], A, B](fa, z) { (b, a) =>
       Free.liftF(f(b, a))
     }.runTailRec

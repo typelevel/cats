@@ -4,6 +4,7 @@ package instances
 import cats.arrow.{Arrow, Choice}
 import cats.data.Xor
 import cats.functor.Contravariant
+import annotation.tailrec
 
 private[instances] sealed trait Function0Instances {
 
@@ -18,6 +19,16 @@ private[instances] sealed trait Function0Instances {
 
       def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
         () => f(fa())()
+
+      def tailRecM[A, B](a: A)(fn: A => () => Xor[A, B]): () => B =
+        () => {
+          @tailrec
+          def step(thisA: A): B = fn(thisA)() match {
+            case Xor.Right(b) => b
+            case Xor.Left(nextA) => step(nextA)
+          }
+          step(a)
+        }
     }
 
   implicit def catsStdEqForFunction0[A](implicit A: Eq[A]): Eq[() => A] =
@@ -46,6 +57,16 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
 
       override def map[R1, R2](fa: T1 => R1)(f: R1 => R2): T1 => R2 =
         f.compose(fa)
+
+      def tailRecM[A, B](a: A)(fn: A => T1 => Xor[A, B]): T1 => B =
+        (t: T1) => {
+          @tailrec
+          def step(thisA: A): B = fn(thisA)(t) match {
+            case Xor.Right(b) => b
+            case Xor.Left(nextA) => step(nextA)
+          }
+          step(a)
+        }
     }
 
   implicit val catsStdInstancesForFunction1: Choice[Function1] with Arrow[Function1] =

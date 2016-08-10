@@ -50,6 +50,9 @@ private[data] sealed trait IdTMonad[F[_]] extends Monad[IdT[F, ?]] {
 
   def flatMap[A, B](fa: IdT[F, A])(f: A => IdT[F, B]): IdT[F, B] =
     fa.flatMap(f)
+
+  def tailRecM[A, B](a: A)(f: A => IdT[F, A Xor B]): IdT[F, B] =
+    IdT(F0.tailRecM(a)(f(_).value))
 }
 
 private[data] sealed trait IdTFoldable[F[_]] extends Foldable[IdT[F, ?]] {
