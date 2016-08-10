@@ -180,20 +180,20 @@ private[data] sealed abstract class KleisliInstances3 extends KleisliInstances4 
   }
 }
 
-private[data] sealed abstract class KleisliInstances4 {
+private[data] sealed abstract class KleisliInstances4 extends KleisliInstances5 {
 
-  implicit def catsDataMonadReaderForKleisli[F[_]: Monad, A]: MonadReader[Kleisli[F, A, ?], A] =
-    new MonadReader[Kleisli[F, A, ?], A] {
-      def pure[B](x: B): Kleisli[F, A, B] =
-        Kleisli.pure[F, A, B](x)
+  implicit def catsDataMonadReaderForKleisli[F[_], A](implicit M: Monad[F]): MonadReader[Kleisli[F, A, ?], A] =
+    new KleisliMonadReader[F, A] {
+      implicit def F: Monad[F] = M
+    }
+}
 
-      def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
-        fa.flatMap(f)
+private[data] sealed abstract class KleisliInstances5 {
 
-      val ask: Kleisli[F, A, A] = Kleisli(Monad[F].pure)
-
-      def local[B](f: A => A)(fa: Kleisli[F, A, B]): Kleisli[F, A, B] =
-        Kleisli(f.andThen(fa.run))
+  implicit def catsDataMonadRecForKleisli[F[_], A](implicit M: MonadRec[F]): MonadRec[Kleisli[F, A, ?]] =
+    new KleisliMonadRec[F, A] {
+      implicit def F: Monad[F] = M
+      implicit def RF: MonadRec[F] = M
     }
 }
 
@@ -283,7 +283,6 @@ private trait KleisliApplicativeError[F[_], A, E] extends KleisliApplicative[F, 
 
 }
 
-
 private trait KleisliApplicative[F[_], A] extends Applicative[Kleisli[F, A, ?]] {
   implicit def F: Applicative[F]
 
@@ -298,4 +297,28 @@ private trait KleisliApplicative[F[_], A] extends Applicative[Kleisli[F, A, ?]] 
 
   override def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
     Kleisli(a => Applicative[F].product(fb.run(a), fc.run(a)))
+}
+
+private trait KleisliMonad[F[_], A] extends Monad[Kleisli[F, A, ?]] {
+  implicit def F: Monad[F]
+
+  def pure[B](x: B): Kleisli[F, A, B] =
+    Kleisli.pure[F, A, B](x)
+
+  def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
+    fa.flatMap(f)
+}
+
+private trait KleisliMonadReader[F[_], A] extends MonadReader[Kleisli[F, A, ?], A] with KleisliMonad[F, A] {
+  val ask: Kleisli[F, A, A] = Kleisli(F.pure)
+
+  def local[B](f: A => A)(fa: Kleisli[F, A, B]): Kleisli[F, A, B] =
+    Kleisli(f.andThen(fa.run))
+}
+
+private trait KleisliMonadRec[F[_], A] extends MonadRec[Kleisli[F, A, ?]] with KleisliMonad[F, A] {
+  implicit def RF: MonadRec[F]
+
+  def tailRecM[B, C](b: B)(f: B => Kleisli[F, A, B Xor C]): Kleisli[F, A, C] =
+    Kleisli[F, A, C](a => RF.tailRecM[B, C](b)(bb => f(bb).run(a)))
 }
