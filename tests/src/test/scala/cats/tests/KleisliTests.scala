@@ -103,6 +103,21 @@ class KleisliTests extends CatsSuite {
     checkAll("SemigroupK[λ[α => Kleisli[Option, α, α]]]", SerializableTests.serializable(catsDataSemigroupKForKleisli))
   }
 
+
+  {
+    // F has a MonadRec
+    implicit val F = MonadRec[Option]
+
+    checkAll("Kleisli[Option, Int, Int]", MonadRecTests[Kleisli[Option, Int, ?]].monadRec[Int, Int, Int])
+    checkAll("MonadRec[Kleisli[Option, Int, ?]]", SerializableTests.serializable(MonadRec[Kleisli[Option, Int, ?]]))
+
+    Monad[Kleisli[Option, Int, ?]]
+    FlatMap[Kleisli[Option, Int, ?]]
+    Applicative[Kleisli[Option, Int, ?]]
+    Apply[Kleisli[Option, Int, ?]]
+    Functor[Kleisli[Option, Int, ?]]
+  }
+
   checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Kleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Kleisli[Option, ?, Int]]))
 
