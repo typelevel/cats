@@ -182,18 +182,18 @@ private[data] sealed abstract class KleisliInstances3 extends KleisliInstances4 
 
 private[data] sealed abstract class KleisliInstances4 extends KleisliInstances5 {
 
-  implicit def catsDataMonadReaderForKleisli[F[_], A](implicit ev: Monad[F]): MonadReader[Kleisli[F, A, ?], A] =
+  implicit def catsDataMonadReaderForKleisli[F[_], A](implicit M: Monad[F]): MonadReader[Kleisli[F, A, ?], A] =
     new KleisliMonadReader[F, A] {
-      def F0: Monad[F] = ev
+      implicit def F: Monad[F] = M
     }
 }
 
 private[data] sealed abstract class KleisliInstances5 {
 
-  implicit def catsDataMonadRecForKleisli[F[_], A](implicit ev0: Monad[F], ev1: MonadRec[F]): MonadRec[Kleisli[F, A, ?]] =
+  implicit def catsDataMonadRecForKleisli[F[_], A](implicit M: MonadRec[F]): MonadRec[Kleisli[F, A, ?]] =
     new KleisliMonadRec[F, A] {
-      def F0: Monad[F] = ev0
-      def F1: MonadRec[F] = ev1
+      implicit def F: Monad[F] = M
+      implicit def RF: MonadRec[F] = M
     }
 }
 
@@ -300,7 +300,7 @@ private trait KleisliApplicative[F[_], A] extends Applicative[Kleisli[F, A, ?]] 
 }
 
 private trait KleisliMonad[F[_], A] extends Monad[Kleisli[F, A, ?]] {
-  implicit def F0: Monad[F]
+  implicit def F: Monad[F]
 
   def pure[B](x: B): Kleisli[F, A, B] =
     Kleisli.pure[F, A, B](x)
@@ -310,15 +310,15 @@ private trait KleisliMonad[F[_], A] extends Monad[Kleisli[F, A, ?]] {
 }
 
 private trait KleisliMonadReader[F[_], A] extends MonadReader[Kleisli[F, A, ?], A] with KleisliMonad[F, A] {
-  val ask: Kleisli[F, A, A] = Kleisli(Monad[F].pure)
+  val ask: Kleisli[F, A, A] = Kleisli(F.pure)
 
   def local[B](f: A => A)(fa: Kleisli[F, A, B]): Kleisli[F, A, B] =
     Kleisli(f.andThen(fa.run))
 }
 
 private trait KleisliMonadRec[F[_], A] extends MonadRec[Kleisli[F, A, ?]] with KleisliMonad[F, A] {
-  implicit def F1: MonadRec[F]
+  implicit def RF: MonadRec[F]
 
   def tailRecM[B, C](b: B)(f: B => Kleisli[F, A, B Xor C]): Kleisli[F, A, C] =
-    Kleisli[F, A, C](a => F1.tailRecM[B, C](b)(bb => f(bb).run(a)))
+    Kleisli[F, A, C](a => RF.tailRecM[B, C](b)(bb => f(bb).run(a)))
 }

@@ -116,6 +116,7 @@ class KleisliTests extends CatsSuite {
     Applicative[Kleisli[Option, Int, ?]]
     Apply[Kleisli[Option, Int, ?]]
     Functor[Kleisli[Option, Int, ?]]
+    MonadReader[Kleisli[Option, Int, ?], Int]
   }
 
   checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[Int, Int, Int])
@@ -178,6 +179,7 @@ class KleisliTests extends CatsSuite {
     FlatMap[Kleisli[List, Int, ?]]
     Semigroup[Kleisli[List, Int, String]]
     SemigroupK[λ[α => Kleisli[List, α, α]]]
+    MonadRec[Kleisli[List, Int, ?]]
 
     // F is Id
     Functor[Kleisli[Id, Int, ?]]
@@ -194,6 +196,7 @@ class KleisliTests extends CatsSuite {
     FlatMap[Kleisli[Id, Int, ?]]
     Semigroup[Kleisli[Id, Int, String]]
     SemigroupK[λ[α => Kleisli[Id, α, α]]]
+    MonadRec[Kleisli[Id, Int, ?]] //FIXME - fails to compile
 
     // using Reader alias instead of Kleisli with Id as F
     Functor[Reader[Int, ?]]
@@ -210,6 +213,7 @@ class KleisliTests extends CatsSuite {
     FlatMap[Reader[Int, ?]]
     Semigroup[Reader[Int, String]]
     SemigroupK[λ[α => Reader[α, α]]]
+    MonadRec[Reader[Int, ?]] //FIXME - fails to compile
 
     // using IntReader alias instead of Kleisli with Id as F and A as Int
     type IntReader[A] = Reader[Int, A]
@@ -221,5 +225,6 @@ class KleisliTests extends CatsSuite {
     Monoid[IntReader[String]]
     FlatMap[IntReader]
     Semigroup[IntReader[String]]
+    MonadRec[IntReader]
   }
 }
