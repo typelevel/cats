@@ -196,7 +196,6 @@ class KleisliTests extends CatsSuite {
     FlatMap[Kleisli[Id, Int, ?]]
     Semigroup[Kleisli[Id, Int, String]]
     SemigroupK[λ[α => Kleisli[Id, α, α]]]
-    MonadRec[Kleisli[Id, Int, ?]] //FIXME - fails to compile
 
     // using Reader alias instead of Kleisli with Id as F
     Functor[Reader[Int, ?]]
@@ -213,7 +212,6 @@ class KleisliTests extends CatsSuite {
     FlatMap[Reader[Int, ?]]
     Semigroup[Reader[Int, String]]
     SemigroupK[λ[α => Reader[α, α]]]
-    MonadRec[Reader[Int, ?]] //FIXME - fails to compile
 
     // using IntReader alias instead of Kleisli with Id as F and A as Int
     type IntReader[A] = Reader[Int, A]
