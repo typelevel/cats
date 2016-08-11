@@ -11,7 +11,7 @@ trait RecursiveTailRecM[F[_]] extends Serializable {
    * to have a static check that the types agree
    * for safer usage of tailRecM
    */
-  def sameType[M[_[_]]](m: M[F]): M[F] = m
+  final def sameType[M[_[_]]](m: M[F]): M[F] = m
 }
 
 object RecursiveTailRecM {
