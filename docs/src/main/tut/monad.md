@@ -35,6 +35,7 @@ the identity function `x => x` (i.e. `flatMap(_)(x => x)`).
 
 ```tut:silent
 import cats._
+import cats.data.Xor
 
 implicit def optionMonad(implicit app: Applicative[Option]) =
   new Monad[Option] {
@@ -43,6 +44,14 @@ implicit def optionMonad(implicit app: Applicative[Option]) =
       app.map(fa)(f).flatten
     // Reuse this definition from Applicative.
     override def pure[A](a: A): Option[A] = app.pure(a)
+
+    @annotation.tailrec
+    def tailRecM[A, B](init: A)(fn: A => Option[A Xor B]): Option[B] =
+      fn(init) match {
+        case None => None
+        case Some(Xor.Right(b)) => Some(b)
+        case Some(Xor.Left(a)) => tailRecM(a)(fn)
+      }
   }
 ```
 
@@ -56,6 +65,8 @@ derived from `flatMap` and `pure`.
 implicit val listMonad = new Monad[List] {
   def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] = fa.flatMap(f)
   def pure[A](a: A): List[A] = List(a)
+  def tailRecM[A, B](a: A)(f: A => List[A Xor B]): List[B] =
+    defaultTailRecM(a)(f)
 }
 ```
 
@@ -109,6 +120,8 @@ implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
           case Some(a) => f(a).value
         }
       }
+    def tailRecM[A, B](a: A)(f: A => OptionT[F, A Xor B]): OptionT[F, B] =
+      defaultTailRecM(a)(f)
   }
 }
 ```

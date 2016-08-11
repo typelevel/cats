@@ -320,6 +320,9 @@ private[data] abstract class XorTInstances2 extends XorTInstances3 {
   implicit def catsDataMonadErrorForXorT[F[_], L](implicit F0: Monad[F]): MonadError[XorT[F, L, ?], L] =
     new XorTMonadError[F, L] { implicit val F = F0 }
 
+  implicit def catsDataRecursiveTailRecMForXorT[F[_]: RecursiveTailRecM, L]: RecursiveTailRecM[XorT[F, L, ?]] =
+    RecursiveTailRecM.create[XorT[F, L, ?]]
+
   implicit def catsDataSemigroupKForXorT[F[_], L](implicit F0: Monad[F]): SemigroupK[XorT[F, L, ?]] =
     new XorTSemigroupK[F, L] { implicit val F = F0 }
 

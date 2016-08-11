@@ -167,6 +167,8 @@ private[data] sealed trait StateTInstances2 {
   implicit def catsDataMonadForStateT[F[_], S](implicit F0: Monad[F]): Monad[StateT[F, S, ?]] =
     new StateTMonad[F, S] { implicit def F = F0 }
 
+  implicit def catsDataRecursiveTailRecMForStateT[F[_]: RecursiveTailRecM, S]: RecursiveTailRecM[StateT[F, S, ?]] = RecursiveTailRecM.create[StateT[F, S, ?]]
+
   implicit def catsDataSemigroupKForStateT[F[_], S](implicit F0: Monad[F], G0: SemigroupK[F]): SemigroupK[StateT[F, S, ?]] =
     new StateTSemigroupK[F, S] { implicit def F = F0; implicit def G = G0 }
 }

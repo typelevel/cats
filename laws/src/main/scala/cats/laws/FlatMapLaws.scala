@@ -27,7 +27,7 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
     ((kf andThen kg) andThen kh).run(a) <-> (kf andThen (kg andThen kh)).run(a)
   }
 
-  def tailRecMConsistentFlatMap[A](a: A, f: A => F[A]): IsEq[F[A]] = {
+  def tailRecMConsistentFlatMap[A](count: Int, a: A, f: A => F[A]): IsEq[F[A]] = {
     def bounce(n: Int) = F.tailRecM[(A, Int), A]((a, n)) { case (a0, i) =>
       if (i > 0) f(a0).map(a1 => Xor.left((a1, i-1)))
       else f(a0).map(Xor.right)
@@ -36,7 +36,8 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
      * The law is for n >= 1
      * bounce(n) == bounce(n - 1).flatMap(f)
      */
-    bounce(3) <-> bounce(2).flatMap(f)
+    val smallN = (count % 5) + 5 // a number 1 to 9
+    bounce(smallN) <-> bounce(smallN - 1).flatMap(f)
   }
 }
 

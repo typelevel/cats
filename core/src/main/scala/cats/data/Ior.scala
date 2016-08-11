@@ -141,7 +141,7 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
     def show(f: A Ior B): String = f.show
   }
 
-  implicit def catsDataMonadForIor[A: Semigroup]: Monad[A Ior ?] = new Monad[A Ior ?] {
+  implicit def catsDataMonadForIor[A: Semigroup]: Monad[A Ior ?] with RecursiveTailRecM[A Ior ?] = new Monad[A Ior ?] with RecursiveTailRecM[A Ior ?] {
     def pure[B](b: B): A Ior B = Ior.right(b)
     def flatMap[B, C](fa: A Ior B)(f: B => A Ior C): A Ior C = fa.flatMap(f)
     def tailRecM[B, C](b: B)(fn: B => Ior[A, Xor[B, C]]): A Ior C = {

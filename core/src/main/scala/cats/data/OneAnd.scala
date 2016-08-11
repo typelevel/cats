@@ -169,6 +169,9 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
         go(a, Nil)
       }
     }
+
+    implicit def catsDataOneAnd[F[_]: RecursiveTailRecM]: RecursiveTailRecM[OneAnd[F, ?]] =
+      RecursiveTailRecM.create[OneAnd[F, ?]]
 }
 
 private[data] trait OneAndLowPriority0 {
