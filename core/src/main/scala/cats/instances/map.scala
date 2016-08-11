@@ -14,6 +14,7 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       s"Map($body)"
     }
 
+  // scalastyle:off method.length
   implicit def catsStdInstancesForMap[K]: TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] =
     new TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] {
 
@@ -84,4 +85,5 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
 
       override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
     }
+  // scalastyle:on method.length
 }
