@@ -35,8 +35,11 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
     /*
      * The law is for n >= 1
      * bounce(n) == bounce(n - 1).flatMap(f)
+     * many monads blow up if n gets too large here
+     * (for instance List, becomes multiplicative, so
+     * the memory is exponential in n).
      */
-    val smallN = (count % 5) + 5 // a number 1 to 9
+    val smallN = (count % 2) + 2 // a number 1 to 3
     bounce(smallN) <-> bounce(smallN - 1).flatMap(f)
   }
 }
