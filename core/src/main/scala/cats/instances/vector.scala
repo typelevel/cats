@@ -54,8 +54,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         var state = List(fn(a).iterator)
         @tailrec
         def loop(): Unit = state match {
+          case Nil => ()
           case h :: tail if h.isEmpty =>
             state = tail
+            loop()
           case h :: tail =>
             h.next match {
               case Xor.Right(b) =>

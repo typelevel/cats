@@ -47,5 +47,5 @@ class FutureTests extends CatsSuite {
 
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
-  checkAll("Future", MonadRecTests[Future].monadRec[Int, Int, Int])
+  checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
 }

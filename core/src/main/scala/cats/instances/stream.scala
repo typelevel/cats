@@ -74,14 +74,22 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
           @tailrec
           def hasNext: Boolean = state match {
-            case Xor.Left(()) => advance(); hasNext
-            case Xor.Right(o) => o.isDefined
+            case Xor.Left(()) =>
+              advance()
+              hasNext
+            case Xor.Right(o) =>
+              o.isDefined
           }
 
           @tailrec
           def next(): B = state match {
-            case Xor.Left(()) => advance(); next
-            case Xor.Right(o) => o.get
+            case Xor.Left(()) =>
+              advance()
+              next
+            case Xor.Right(o) =>
+              val b = o.get
+              advance()
+              b
           }
         }
 

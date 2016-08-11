@@ -97,7 +97,7 @@ private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 
     }
 
   implicit def catsDataFlatMapForWriterTId[L:Semigroup]: FlatMap[WriterT[Id, L, ?]] =
-    catsDataFlatMapForWriterT[Id, L]
+    catsDataFlatMapForWriterT2[Id, L]
 
   implicit def catsDataEqForWriterT[F[_], L, V](implicit F: Eq[F[(L, V)]]): Eq[WriterT[F, L, V]] =
     F.on(_.run)
@@ -159,10 +159,10 @@ private[data] sealed abstract class WriterTInstances4 extends WriterTInstances5 
 }
 
 private[data] sealed abstract class WriterTInstances5 extends WriterTInstances6 {
-  implicit def catsDataFlatMapForWriterT[F[_], L](implicit F: FlatMap[F], L: Semigroup[L]): FlatMap[WriterT[F, L, ?]] =
-    new WriterTFlatMap[F, L] {
+  implicit def catsDataFlatMapForWriterT1[F[_], L](implicit F: FlatMap[F], L: Monoid[L]): FlatMap[WriterT[F, L, ?]] =
+    new WriterTFlatMap1[F, L] {
       implicit val F0: FlatMap[F] = F
-      implicit val L0: Semigroup[L] = L
+      implicit val L0: Monoid[L] = L
     }
 
   implicit def catsDataSemigroupKForWriterT[F[_], L](implicit F: SemigroupK[F]): SemigroupK[WriterT[F, L, ?]] =
@@ -172,6 +172,15 @@ private[data] sealed abstract class WriterTInstances5 extends WriterTInstances6 
 }
 
 private[data] sealed abstract class WriterTInstances6 extends WriterTInstances7 {
+  implicit def catsDataFlatMapForWriterT2[F[_], L](implicit F: Monad[F], L: Semigroup[L]): FlatMap[WriterT[F, L, ?]] =
+    new WriterTFlatMap2[F, L] {
+      implicit val F0: Monad[F] = F
+      implicit val L0: Semigroup[L] = L
+    }
+}
+
+private[data] sealed abstract class WriterTInstances7 extends WriterTInstances8 {
+
   implicit def catsDataApplyForWriterT[F[_], L](implicit F: Apply[F], L: Semigroup[L]): Apply[WriterT[F, L, ?]] =
     new WriterTApply[F, L] {
       implicit val F0: Apply[F] = F
@@ -179,7 +188,7 @@ private[data] sealed abstract class WriterTInstances6 extends WriterTInstances7 
     }
 }
 
-private[data] sealed abstract class WriterTInstances7 extends WriterTInstances8 {
+private[data] sealed abstract class WriterTInstances8 extends WriterTInstances9 {
   implicit def catsDataCoflatMapForWriterT[F[_], L](implicit F: Functor[F]): CoflatMap[WriterT[F, L, ?]] =
     new WriterTCoflatMap[F, L] {
       implicit val F0: Functor[F] = F
@@ -190,7 +199,7 @@ private[data] sealed abstract class WriterTInstances7 extends WriterTInstances8 
   }
 }
 
-private[data] sealed abstract class WriterTInstances8 extends WriterTInstances9 {
+private[data] sealed abstract class WriterTInstances9 extends WriterTInstances10 {
   implicit def catsDataMonadErrorForWriterT[F[_], L, E](implicit F: MonadError[F, E], L: Monoid[L]): MonadError[WriterT[F, L, ?], E] =
     new WriterTMonadError[F, L, E] {
       implicit val F0: MonadError[F, E] = F
@@ -198,7 +207,7 @@ private[data] sealed abstract class WriterTInstances8 extends WriterTInstances9 
     }
 }
 
-private[data] sealed abstract class WriterTInstances9 {
+private[data] sealed abstract class WriterTInstances10 {
   implicit def catsDataApplicativeErrorForWriterT[F[_], L, E](implicit F: ApplicativeError[F, E], L: Monoid[L]): ApplicativeError[WriterT[F, L, ?], E] =
     new WriterTApplicativeError[F, L, E] {
       implicit val F0: ApplicativeError[F, E] = F
@@ -230,28 +239,56 @@ private[data] sealed trait WriterTApply[F[_], L] extends WriterTFunctor[F, L] wi
     WriterT(F0.map(F0.product(fa.run, fb.run)) { case ((l1, a), (l2, b)) => (L0.combine(l1, l2), (a, b)) })
 }
 
-private[data] sealed trait WriterTFlatMap[F[_], L] extends WriterTApply[F, L] with FlatMap[WriterT[F, L, ?]] {
+private[data] sealed trait WriterTFlatMap1[F[_], L] extends WriterTApply[F, L] with FlatMap[WriterT[F, L, ?]] {
   override implicit def F0: FlatMap[F]
+  implicit def L0: Monoid[L]
+
+  def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
+    fa.flatMap(f)
+
+  def tailRecM[A, B](a: A)(fn: A => WriterT[F, L, A Xor B]): WriterT[F, L, B] = {
+
+    def step(la: (L, A)): F[(L, A) Xor (L, B)] = {
+      val flv: F[(L, A Xor B)] = fn(la._2).run
+      F0.map(flv) {
+        case (l, Xor.Left(a)) =>
+          val combineL = L0.combine(la._1, l)
+          Xor.left((combineL, a))
+        case (l, Xor.Right(b)) =>
+          val combineL = L0.combine(la._1, l)
+          Xor.right((combineL, b))
+      }
+    }
+
+    WriterT(F0.tailRecM((L0.empty, a))(step))
+  }
+}
+
+private[data] sealed trait WriterTFlatMap2[F[_], L] extends WriterTApply[F, L] with FlatMap[WriterT[F, L, ?]] {
+  override implicit def F0: Monad[F]
   implicit def L0: Semigroup[L]
 
   def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
     fa.flatMap(f)
 
   def tailRecM[A, B](a: A)(fn: A => WriterT[F, L, A Xor B]): WriterT[F, L, B] = {
-    val init = fn(a).run
-    var l: F[L] = F0.map(init)(_._1)
 
-    def step(a: A): F[A Xor B] = {
-      val flv = fn(a).run
-      l = F0.map2(l, flv) { case (a, (b, _)) => L0.combine(a, b) }
-      F0.map(flv)(_._2)
-    }
-    val res: F[(L, B)] = F0.flatMap(init) {
-      case (_, Xor.Right(b)) => F0.map(l)((_, b))
-      case (_, Xor.Left(a)) => F0.flatMap(F0.tailRecM(a)(step)) { b =>
-        // By now, F0.tailRec has run, so the mutable l is completed
-        F0.map(l)((_, b))
+    def step(la: (L, A)): F[(L, A) Xor (L, B)] = {
+      val flv: F[(L, A Xor B)] = fn(la._2).run
+      F0.map(flv) {
+        case (l, Xor.Left(a)) =>
+          val combineL = L0.combine(la._1, l)
+          Xor.left((combineL, a))
+        case (l, Xor.Right(b)) =>
+          val combineL = L0.combine(la._1, l)
+          Xor.right((combineL, b))
       }
+    }
+
+    val init = fn(a).run
+    val res: F[(L, B)] = F0.flatMap(init) {
+      case (l, Xor.Right(b)) => F0.pure((l, b))
+      case (l, Xor.Left(a)) => F0.tailRecM((l, a))(step)
     }
     WriterT(res)
   }
@@ -265,31 +302,10 @@ private[data] sealed trait WriterTApplicative[F[_], L] extends WriterTApply[F, L
     WriterT.value[F, L, A](a)
 }
 
-private[data] sealed trait WriterTMonad[F[_], L] extends WriterTApplicative[F, L] with Monad[WriterT[F, L, ?]] {
+private[data] sealed trait WriterTMonad[F[_], L] extends WriterTApplicative[F, L] with WriterTFlatMap1[F, L] with Monad[WriterT[F, L, ?]] {
   override implicit def F0: Monad[F]
   override implicit def L0: Monoid[L]
 
-  def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
-    fa.flatMap(f)
-
-  def tailRecM[A, B](a: A)(fn: A => WriterT[F, L, A Xor B]): WriterT[F, L, B] = {
-    val init = fn(a).run
-    var l: F[L] = F0.map(init)(_._1)
-
-    def step(a: A): F[A Xor B] = {
-      val flv = fn(a).run
-      l = F0.map2(l, flv) { case (a, (b, _)) => L0.combine(a, b) }
-      F0.map(flv)(_._2)
-    }
-    val res: F[(L, B)] = F0.flatMap(init) {
-      case (_, Xor.Right(b)) => F0.map(l)((_, b))
-      case (_, Xor.Left(a)) => F0.flatMap(F0.tailRecM(a)(step)) { b =>
-        // By now, F0.tailRec has run, so the mutable l is completed
-        F0.map(l)((_, b))
-      }
-    }
-    WriterT(res)
-  }
 }
 
 private[data] sealed trait WriterTApplicativeError[F[_], L, E] extends ApplicativeError[WriterT[F, L, ?], E] with WriterTApplicative[F, L] {

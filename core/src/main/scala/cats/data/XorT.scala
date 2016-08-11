@@ -288,7 +288,7 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
 
 }
 
-private[data] abstract class XorTInstances1 {
+private[data] abstract class XorTInstances1 extends XorTInstances2 {
   /* TODO violates monadFilter right empty law -- re-enable when MonadFilter laws are split in to weak/strong
   implicit def catsDataMonadFilterForXorT[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadFilter[XorT[F, L, ?]] = {
     implicit val F0 = F
@@ -316,7 +316,7 @@ private[data] abstract class XorTInstances1 {
     }
 }
 
-private[data] abstract class XorTInstances3 extends XorTInstances4 {
+private[data] abstract class XorTInstances2 extends XorTInstances3 {
   implicit def catsDataMonadErrorForXorT[F[_], L](implicit F0: Monad[F]): MonadError[XorT[F, L, ?], L] =
     new XorTMonadError[F, L] { implicit val F = F0 }
 
@@ -329,7 +329,7 @@ private[data] abstract class XorTInstances3 extends XorTInstances4 {
     }
 }
 
-private[data] abstract class XorTInstances4 {
+private[data] abstract class XorTInstances3 {
   implicit def catsDataFunctorForXorT[F[_], L](implicit F0: Functor[F]): Functor[XorT[F, L, ?]] =
     new XorTFunctor[F, L] { implicit val F = F0 }
 }

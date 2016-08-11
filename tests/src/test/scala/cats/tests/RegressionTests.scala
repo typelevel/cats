@@ -20,7 +20,12 @@ class RegressionTests extends CatsSuite {
     implicit def instance[S]: Monad[State[S, ?]] = new Monad[State[S, ?]] {
       def pure[A](a: A): State[S, A] = State(s => (a, s))
       def flatMap[A, B](sa: State[S, A])(f: A => State[S, B]): State[S, B] = sa.flatMap(f)
-    }
+      def tailRecM[A, B](a: A)(fn: A => State[S, A Xor B]): State[S, B] =
+        flatMap(fn(a)) {
+          case Xor.Left(a) => tailRecM(a)(fn)
+          case Xor.Right(b) => pure(b)
+        }
+      }
   }
 
   // used to test side-effects

@@ -4,7 +4,7 @@ package tests
 import cats.data.{OptionT, StateT, Xor, XorT}
 
 class MonadRecInstancesTests extends CatsSuite {
-  def tailRecMStackSafety[M[_]](implicit M: MonadRec[M], Eq: Eq[M[Int]]): Unit = {
+  def tailRecMStackSafety[M[_]](implicit M: Monad[M], Eq: Eq[M[Int]]): Unit = {
     val n = 50000
     val res = M.tailRecM(0)(i => M.pure(if (i < n) Xor.Left(i + 1) else Xor.Right(i)))
     res should === (M.pure(n))

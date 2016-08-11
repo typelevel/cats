@@ -67,20 +67,6 @@ class OptionTTests extends CatsSuite {
   }
 
   {
-    // F has a MonadRec
-    implicit val F = ListWrapper.monadRec
-
-    checkAll("OptionT[ListWrapper, Int]", MonadRecTests[OptionT[ListWrapper, ?]].monadRec[Int, Int, Int])
-    checkAll("MonadRec[OptionT[ListWrapper, ?]]", SerializableTests.serializable(MonadRec[OptionT[ListWrapper, ?]]))
-
-    Monad[OptionT[ListWrapper, ?]]
-    FlatMap[OptionT[ListWrapper, ?]]
-    Applicative[OptionT[ListWrapper, ?]]
-    Apply[OptionT[ListWrapper, ?]]
-    Functor[OptionT[ListWrapper, ?]]
-  }
-
-  {
     // F has a MonadError
     type SXor[A] = String Xor A
 
@@ -322,7 +308,6 @@ class OptionTTests extends CatsSuite {
 
     Functor[OptionT[List, ?]]
     Monad[OptionT[List, ?]]
-    MonadRec[OptionT[List, ?]]
 
     import scala.util.Try
     Functor[OptionT[Try, ?]]

@@ -35,5 +35,5 @@ class FutureTests extends CatsSuite {
     Arbitrary(arbitrary[Exception].map(identity))
 
   checkAll("Future with Throwable", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
-  checkAll("Future", MonadRecTests[Future].monadRec[Int, Int, Int])
+  checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
 }
