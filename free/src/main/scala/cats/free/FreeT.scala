@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 import cats.data.Xor
 
 /** FreeT is a monad transformer for Free monads over a Functor S
-  * 
+  *
   * This Scala implementation of `FreeT` and its usages are derived from
   * [[https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/FreeT.scala Scalaz's FreeT]],
   * originally written by Brian McKenna.
