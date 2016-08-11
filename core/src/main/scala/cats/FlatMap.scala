@@ -98,10 +98,9 @@ import simulacrum.typeclass
    * Based on Phil Freeman's
    * [[http://functorial.com/stack-safety-for-free/index.pdf Stack Safety for Free]].
    *
-   * Implementations of this method must use constant stack space.
-   *
-   * `f` must use constant stack space. (It is OK to use a constant number of
-   * `map`s and `flatMap`s inside `f`.)
+   * Implementations of this method should ideally use constant stack space. If
+   * it is constant stack space, an instance of `RecursiveTailRecM[F]` should
+   * be made available.
    */
   def tailRecM[A, B](a: A)(f: A => F[A Xor B]): F[B]
 }
