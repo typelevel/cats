@@ -2,7 +2,7 @@ package cats
 
 import java.io.Serializable
 /**
- * This is a marker typeclass that promises that the method
+ * This is a marker type that promises that the method
  * .tailRecM for this type is stack-safe for arbitrary recursion.
  */
 trait RecursiveTailRecM[F[_]] extends Serializable {
