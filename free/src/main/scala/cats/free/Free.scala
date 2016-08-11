@@ -110,6 +110,12 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
       }
     r.sameType(S).tailRecM(this)(step)
   }
+  /**
+   * Run to completion, using monadic recursion to evaluate the
+   * resumption in the context of `S` without a guarantee of stack-safety
+   */
+  final def runTailRecUnsafe(implicit S: Monad[S]): S[A] =
+    runTailRec(S, RecursiveTailRecM.create)
 
   /**
    * Catamorphism for `Free`.
@@ -127,6 +133,14 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     })
 
   /**
+   * Same as foldMap but without a guarantee of stack safety. If the recursion is shallow
+   * enough, this will work
+   */
+  final def foldMapUnsafe[M[_]](f: FunctionK[S, M])(implicit M: Monad[M]): M[A] =
+    foldMap[M](f)(M, RecursiveTailRecM.create)
+
+
+  /**
    * Compile your free monad into another language by changing the
    * suspension functor using the given natural transformation `f`.
    *
@@ -134,11 +148,11 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * effects will be applied by `compile`.
    */
   final def compile[T[_]](f: FunctionK[S, T]): Free[T, A] =
-    foldMap[Free[T, ?]] {
+    foldMapUnsafe[Free[T, ?]] { // this is safe because Free is stack safe
       new FunctionK[S, Free[T, ?]] {
         def apply[B](fa: S[B]): Free[T, B] = Suspend(f(fa))
       }
-    }(Free.catsFreeMonadForFree, Free.catsFreeMonadForFree)
+    }(Free.catsFreeMonadForFree)
 
   override def toString(): String =
     "Free(...)"
