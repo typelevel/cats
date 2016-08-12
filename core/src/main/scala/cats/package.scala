@@ -7,6 +7,7 @@ import cats.data.Xor
 package object cats {
 
   type ~>[F[_], G[_]] = arrow.FunctionK[F, G]
+  val ~> = arrow.FunctionK
 
   type ⊥ = Nothing
   type ⊤ = Any
