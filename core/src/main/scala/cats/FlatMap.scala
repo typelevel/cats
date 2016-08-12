@@ -101,6 +101,10 @@ import simulacrum.typeclass
    * Implementations of this method should ideally use constant stack space. If
    * it is constant stack space, an instance of `RecursiveTailRecM[F]` should
    * be made available.
+   *
+   * Note, Monad subclasses can call `defaultTailRecM(a)(f)` to get an implementation
+   * using recursive flatMap. Such an implementation will only be stack safe if
+   * the Monad is trampolined.
    */
   def tailRecM[A, B](a: A)(f: A => F[A Xor B]): F[B]
 }
