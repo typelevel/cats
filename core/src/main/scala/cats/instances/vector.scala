@@ -1,15 +1,15 @@
 package cats
 package instances
 
+import cats.data.Xor
 import cats.syntax.show._
-
 import scala.annotation.tailrec
 import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
-  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
-    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] {
+  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] =
+    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 
@@ -48,6 +48,29 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
           G.map2Eval(f(a), lgvb)((ob, v) => ob.fold(v)(_ +: v))
         }.value
+
+      def tailRecM[A, B](a: A)(fn: A => Vector[A Xor B]): Vector[B] = {
+        val buf = Vector.newBuilder[B]
+        var state = List(fn(a).iterator)
+        @tailrec
+        def loop(): Unit = state match {
+          case Nil => ()
+          case h :: tail if h.isEmpty =>
+            state = tail
+            loop()
+          case h :: tail =>
+            h.next match {
+              case Xor.Right(b) =>
+                buf += b
+                loop()
+              case Xor.Left(a) =>
+                state = (fn(a).iterator) :: h :: tail
+                loop()
+            }
+        }
+        loop()
+        buf.result
+      }
 
       override def size[A](fa: Vector[A]): Long = fa.size.toLong
 

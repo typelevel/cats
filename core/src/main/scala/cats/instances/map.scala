@@ -1,6 +1,9 @@
 package cats
 package instances
 
+import cats.data.Xor
+import scala.annotation.tailrec
+
 trait MapInstances extends cats.kernel.instances.MapInstances {
 
   implicit def catsStdShowForMap[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =
@@ -11,8 +14,9 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       s"Map($body)"
     }
 
-  implicit def catsStdInstancesForMap[K]: TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] =
-    new TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] {
+  // scalastyle:off method.length
+  implicit def catsStdInstancesForMap[K]: TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] with RecursiveTailRecM[Map[K, ?]] =
+    new TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] with RecursiveTailRecM[Map[K, ?]] {
 
       override def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
@@ -53,8 +57,28 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       def foldRight[A, B](fa: Map[K, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         Foldable.iterateRight(fa.values.iterator, lb)(f)
 
+      def tailRecM[A, B](a: A)(f: A => Map[K, A Xor B]): Map[K, B] = {
+        val bldr = Map.newBuilder[K, B]
+
+        @tailrec def descend(k: K, xor: Xor[A, B]): Unit =
+          xor match {
+            case Xor.Left(a) =>
+              f(a).get(k) match {
+                case Some(x) => descend(k, x)
+                case None => ()
+              }
+            case Xor.Right(b) =>
+              bldr += ((k, b))
+              ()
+          }
+
+        f(a).foreach { case (k, a) => descend(k, a) }
+        bldr.result
+      }
+
       override def size[A](fa: Map[K, A]): Long = fa.size.toLong
 
       override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
     }
+  // scalastyle:on method.length
 }
