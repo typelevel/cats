@@ -271,6 +271,12 @@ class NonEmptyVectorTests extends CatsSuite {
   test("Cannot create a new NonEmptyVector[Int] from apply with a an empty Vector") {
     "val bad: NonEmptyVector[Int] = NonEmptyVector(Vector.empty[Int])" shouldNot compile
   }
+
+  test("NonEmptyVector#distinct is consistent with Vector#distinct") {
+    forAll { nonEmptyVector: NonEmptyVector[Int] =>
+      nonEmptyVector.distinct.toVector should === (nonEmptyVector.toVector.distinct)
+    }
+  }
 }
 
 class ReducibleNonEmptyVectorCheck extends ReducibleCheck[NonEmptyVector]("NonEmptyVector") {
