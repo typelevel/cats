@@ -28,17 +28,26 @@ trait Bifunctor[F[_, _]] extends Any with Serializable { self =>
    */
   def leftMap[A, B, C](fab: F[A, B])(f: A => C): F[C, B] = bimap(fab)(f, identity)
 
-  /**
-   * apply a function ro the "right" functor
-   */
-  def rightMap[A, B, C](fab: F[A, B])(f: B => C): F[A, C] = bimap(fab)(identity, f)
-
   /** The composition of two Bifunctors is itself a Bifunctor */
   def compose[G[_, _]](implicit G0: Bifunctor[G]): Bifunctor[λ[(α, β) => F[G[α, β], G[α, β]]]] =
     new ComposedBifunctor[F, G] {
       val F = self
       val G = G0
     }
+
+  /**
+   * Widens A into a supertype AA.
+   * Example:
+   * {{{
+   * scala> import cats.data.Xor
+   * scala> import cats.implicits._
+   * scala> sealed trait Foo
+   * scala> case object Bar extends Foo
+   * scala> val x1: Xor[Bar.type, Int] = Xor.left(Bar)
+   * scala> val x2: Xor[Foo, Int] = x1.leftWiden
+   * }}}
+   */
+  def leftWiden[A, B, AA >: A](fab: F[A, B]): F[AA, B] = fab.asInstanceOf[F[AA, B]]
 }
 
 object Bifunctor {

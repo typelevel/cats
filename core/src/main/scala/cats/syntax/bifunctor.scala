@@ -14,5 +14,5 @@ final class BifunctorOps[F[_, _], A, B](fab: F[A, B])(implicit F: Bifunctor[F]) 
 
   def leftMap[C](f: A => C): F[C, B] = F.leftMap(fab)(f)
 
-  def rightMap[D](f: B => D): F[A, D] = F.rightMap(fab)(f)
+  def leftWiden[AA >: A]: F[AA, B] = F.leftWiden(fab)
 }
