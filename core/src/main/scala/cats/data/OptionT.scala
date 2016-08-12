@@ -9,7 +9,7 @@ import instances.option.{catsStdInstancesForOption => optionInstance}
  *
  * It may also be said that `OptionT` is a monad transformer for `Option`.
  *
- * For more information, see the [[http://non.github.io/cats/tut/optiont.html documentation]].
+ * For more information, see the [[http://typelevel.org/cats/tut/optiont.html documentation]].
  */
 final case class OptionT[F[_], A](value: F[Option[A]]) {
 

@@ -31,6 +31,7 @@ possible:
  * Binh Nguyen
  * Bobby Rauchenberg
  * Brendan McAdams
+ * Brian McKenna
  * Cody Allen
  * Colt Frederickson
  * Dale Wijnand
@@ -97,6 +98,13 @@ possible:
  * Yosef Fertel
  * yilinwei
  * Zach Abbott
+
+Cats has been heavily inspired by many libraries, including [Scalaz](https://github.com/scalaz/scalaz),
+Haskell's [Prelude](https://hackage.haskell.org/package/base-4.9.0.0/docs/Prelude.html), and others.
+In particular, some Cats code is only a slightly modified version of code originating in
+Scalaz. Therefore, we'd also like to credit and thank all of the
+[Scalaz contributors](https://github.com/scalaz/scalaz/graphs/contributors) for
+their work.
 
 We've tried to include everyone, but if you've made a contribution to
 Cats and are not listed, please feel free to open an issue or pull

@@ -4,19 +4,19 @@ package instances
 package object option extends OptionInstances
 
 trait OptionInstances extends OptionInstances1 {
-  implicit def catsKernelStdOrderForOptioin[A: Order]: Order[Option[A]] =
+  implicit def catsKernelStdOrderForOption[A: Order]: Order[Option[A]] =
     new OptionOrder[A]
-  implicit def catsKernelStdMonoidForOptioin[A: Semigroup]: Monoid[Option[A]] =
+  implicit def catsKernelStdMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
     new OptionMonoid[A]
 }
 
 trait OptionInstances1 extends OptionInstances0 {
-  implicit def catsKernelStdPartialOrderForOptioin[A: PartialOrder]: PartialOrder[Option[A]] =
+  implicit def catsKernelStdPartialOrderForOption[A: PartialOrder]: PartialOrder[Option[A]] =
     new OptionPartialOrder[A]
 }
 
 trait OptionInstances0 {
-  implicit def catsKernelStdEqForOptioin[A: Eq]: Eq[Option[A]] =
+  implicit def catsKernelStdEqForOption[A: Eq]: Eq[Option[A]] =
     new OptionEq[A]
 }
 

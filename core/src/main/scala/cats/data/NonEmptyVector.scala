@@ -54,7 +54,7 @@ final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
   /**
    * Append another `NonEmptyVector` to this, producing a new `NonEmptyVector`.
    */
-  def concatNEV(other: NonEmptyVector[A]): NonEmptyVector[A] = new NonEmptyVector(toVector ++ other.toVector)
+  def concatNev(other: NonEmptyVector[A]): NonEmptyVector[A] = new NonEmptyVector(toVector ++ other.toVector)
 
   /**
    * Find the first element matching the predicate, if one exists
@@ -154,7 +154,7 @@ private[data] sealed trait NonEmptyVectorInstances {
         with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with MonadRec[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
-        a concatNEV b
+        a concatNev b
 
       override def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
 
@@ -230,12 +230,14 @@ object NonEmptyVector extends NonEmptyVectorInstances {
   def apply[A](head: A, tail: Vector[A]): NonEmptyVector[A] =
     new NonEmptyVector(head +: tail)
 
-  def apply[A](head: A, tail: A*): NonEmptyVector[A] = {
+  def of[A](head: A, tail: A*): NonEmptyVector[A] = {
     val buf = Vector.newBuilder[A]
     buf += head
     tail.foreach(buf += _)
     new NonEmptyVector(buf.result)
   }
+
+  def unapply[A](nev: NonEmptyVector[A]): Some[(A, Vector[A])] = Some((nev.head, nev.tail))
 
   def fromVector[A](vector: Vector[A]): Option[NonEmptyVector[A]] =
     if (vector.isEmpty) None else Some(new NonEmptyVector(vector))

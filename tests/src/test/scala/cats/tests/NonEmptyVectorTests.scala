@@ -74,7 +74,7 @@ class NonEmptyVectorTests extends CatsSuite {
     val v1 = NonEmptyVector("Test", Vector.empty)
     v1.show should === ("NonEmptyVector(Test)")
 
-    val v2 = NonEmptyVector("foo", "bar", "baz")
+    val v2 = NonEmptyVector.of("foo", "bar", "baz")
     v2.show should === ("NonEmptyVector(foo, bar, baz)")
   }
 
@@ -173,9 +173,9 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
-  test("++ Vector is consistent with concatNEV") {
+  test("++ Vector is consistent with concatNev") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], other: NonEmptyVector[Int]) =>
-      nonEmptyVector ++ other.toVector should === (nonEmptyVector.concatNEV(other))
+      nonEmptyVector ++ other.toVector should === (nonEmptyVector.concatNev(other))
     }
   }
 
@@ -185,9 +185,9 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
-  test("NonEmptyVector#apply on varargs is consistent with NonEmptyVector#apply on Vector") {
+  test("NonEmptyVector#of on varargs is consistent with NonEmptyVector#apply on Vector") {
     forAll { (head: Int, tail: Vector[Int]) =>
-      NonEmptyVector(head, tail:_*) should === (NonEmptyVector(head, tail))
+      NonEmptyVector.of(head, tail:_*) should === (NonEmptyVector(head, tail))
     }
   }
 
@@ -243,6 +243,16 @@ class NonEmptyVectorTests extends CatsSuite {
     NonEmptyVector(1, Vector.empty).toVector.toString should === ("Vector(1)")
   }
 
+  test("NonEmptyVector.unapply supports pattern matching") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
+      nonEmptyVector match {
+        case NonEmptyVector(head, tail) =>
+          head should === (nonEmptyVector.head)
+          tail should === (nonEmptyVector.tail)
+      }
+    }
+  }
+
   test("Cannot create a new NonEmptyVector from constructor") {
     if(Platform.isJvm) {
       if (!Properties.versionNumberString.startsWith("2.10")) {
@@ -254,8 +264,12 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
-  test("Cannot create a new NonEmptyVector from apply with an empty vector") {
+  test("Cannot create a new NonEmptyVector[Int] from apply with a Vector[Int]") {
     "val bad: NonEmptyVector[Int] = NonEmptyVector(Vector(1))" shouldNot compile
+  }
+
+  test("Cannot create a new NonEmptyVector[Int] from apply with a an empty Vector") {
+    "val bad: NonEmptyVector[Int] = NonEmptyVector(Vector.empty[Int])" shouldNot compile
   }
 
   test("NonEmptyVector#distinct is consistent with Vector#distinct") {
