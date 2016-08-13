@@ -9,7 +9,7 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.ProfunctorLaws.
  */
-@typeclass trait Profunctor[F[_, _]] extends Serializable { self =>
+@typeclass trait Profunctor[F[_, _]] { self =>
 
   /**
    * Contramap on the first type parameter and map on the second type parameter
