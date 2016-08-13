@@ -4,11 +4,12 @@ package instances
 import cats.arrow.{Arrow, Choice}
 import cats.data.Xor
 import cats.functor.Contravariant
+import annotation.tailrec
 
 private[instances] sealed trait Function0Instances {
 
-  implicit val catsStdBimonadForFunction0: Bimonad[Function0] =
-    new Bimonad[Function0] {
+  implicit val catsStdBimonadForFunction0: Bimonad[Function0] with RecursiveTailRecM[Function0] =
+    new Bimonad[Function0] with RecursiveTailRecM[Function0] {
       def extract[A](x: () => A): A = x()
 
       def coflatMap[A, B](fa: () => A)(f: (() => A) => B): () => B =
@@ -18,6 +19,16 @@ private[instances] sealed trait Function0Instances {
 
       def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
         () => f(fa())()
+
+      def tailRecM[A, B](a: A)(fn: A => () => Xor[A, B]): () => B =
+        () => {
+          @tailrec
+          def loop(thisA: A): B = fn(thisA)() match {
+            case Xor.Right(b) => b
+            case Xor.Left(nextA) => loop(nextA)
+          }
+          loop(a)
+        }
     }
 
   implicit def catsStdEqForFunction0[A](implicit A: Eq[A]): Eq[() => A] =
@@ -33,8 +44,8 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
         fa.compose(f)
     }
 
-  implicit def catsStdMonadReaderForFunction1[T1]: MonadReader[T1 => ?, T1] =
-    new MonadReader[T1 => ?, T1] {
+  implicit def catsStdMonadReaderForFunction1[T1]: MonadReader[T1 => ?, T1] with RecursiveTailRecM[T1 => ?] =
+    new MonadReader[T1 => ?, T1] with RecursiveTailRecM[T1 => ?] {
       def pure[R](r: R): T1 => R = _ => r
 
       def flatMap[R1, R2](fa: T1 => R1)(f: R1 => T1 => R2): T1 => R2 =
@@ -46,6 +57,16 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
 
       override def map[R1, R2](fa: T1 => R1)(f: R1 => R2): T1 => R2 =
         f.compose(fa)
+
+      def tailRecM[A, B](a: A)(fn: A => T1 => Xor[A, B]): T1 => B =
+        (t: T1) => {
+          @tailrec
+          def step(thisA: A): B = fn(thisA)(t) match {
+            case Xor.Right(b) => b
+            case Xor.Left(nextA) => step(nextA)
+          }
+          step(a)
+        }
     }
 
   implicit val catsStdInstancesForFunction1: Choice[Function1] with Arrow[Function1] =

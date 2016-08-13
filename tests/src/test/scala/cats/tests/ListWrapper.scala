@@ -89,21 +89,11 @@ object ListWrapper {
 
       def combineK[A](x: ListWrapper[A], y: ListWrapper[A]): ListWrapper[A] =
         ListWrapper(M.combineK(x.list, y.list))
-    }
-  }
 
-  val monadRec: MonadRec[ListWrapper] = {
-    val M = MonadRec[List]
-
-    new MonadRec[ListWrapper] {
-      def pure[A](x: A): ListWrapper[A] = ListWrapper(M.pure(x))
-      def flatMap[A, B](fa: ListWrapper[A])(f: A => ListWrapper[B]): ListWrapper[B] = ListWrapper(M.flatMap(fa.list)(a => f(a).list))
       def tailRecM[A, B](a: A)(f: A => ListWrapper[cats.data.Xor[A,B]]): ListWrapper[B] =
         ListWrapper(M.tailRecM(a)(a => f(a).list))
     }
   }
-
-  val flatMapRec: FlatMapRec[ListWrapper] = monadRec
 
   val monad: Monad[ListWrapper] = monadCombine
 

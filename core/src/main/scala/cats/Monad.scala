@@ -1,5 +1,6 @@
 package cats
 
+import cats.data.Xor
 import simulacrum.typeclass
 
 /**
@@ -14,4 +15,16 @@ import simulacrum.typeclass
 @typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
+
+  /**
+   * This is not stack safe if the monad is not trampolined, but it
+   * is always lawful. It it better if you can find a stack safe way
+   * to write this method (all cats types have a stack safe version
+   * of this). When this method is safe you can find an `implicit r: RecursiveTailRecM`.
+   */
+  protected def defaultTailRecM[A, B](a: A)(fn: A => F[A Xor B]): F[B] =
+    flatMap(fn(a)) {
+      case Xor.Right(b) => pure(b)
+      case Xor.Left(nextA) => defaultTailRecM(nextA)(fn)
+    }
 }

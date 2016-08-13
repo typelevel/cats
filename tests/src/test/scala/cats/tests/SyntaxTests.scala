@@ -257,6 +257,39 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val pfegea = mock[PartialFunction[E, G[A]]]
     val gea4 = ga.recoverWith(pfegea)
   }
+
+  def testTupleArity[F[_]: Apply : Cartesian, G[_]: Contravariant : Cartesian, H[_]: Invariant : Cartesian, A, B, C, D, E, Z] = {
+    val tfabc = mock[(F[A], F[B], F[C])]
+    val fa = mock[F[A]]
+    val fb = mock[F[B]]
+    val fc = mock[F[C]]
+    val f = mock[(A, B, C) => Z]
+    val ff = mock[F[(A, B, C) => Z]]
+
+    tfabc map3 f
+    (fa, fb, fc) map3 f
+    (fa, fb, fc) apWith ff
+
+    val tgabc = mock[(G[A], G[B])]
+    val ga = mock[G[A]]
+    val gb = mock[G[B]]
+    val g = mock[Z => (A, B)]
+
+    tgabc contramap2 g
+    (ga, gb) contramap2 g
+
+    val thabcde = mock[(H[A], H[B], H[C], H[D], H[E])]
+    val ha = mock[H[A]]
+    val hb = mock[H[B]]
+    val hc = mock[H[C]]
+    val hd = mock[H[D]]
+    val he = mock[H[E]]
+    val f5 = mock[(A, B, C, D, E) => Z]
+    val g5 = mock[Z => (A, B, C, D, E)]
+
+    thabcde.imap5(f5)(g5)
+    (ha, hb, hc, hd, he).imap5(f5)(g5)
+  }
 }
 
 /**

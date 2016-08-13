@@ -111,6 +111,14 @@ implicit def xorMonad[Err]: Monad[Xor[Err, ?]] =
       fa.flatMap(f)
 
     def pure[A](x: A): Xor[Err, A] = Xor.right(x)
+
+    @annotation.tailrec
+    def tailRecM[A, B](a: A)(f: A => Xor[Err, A Xor B]): Xor[Err, B] =
+      f(a) match {
+        case Xor.Right(r@Xor.Right(_)) => r
+        case Xor.Right(Xor.Left(a)) => tailRecM(a)(f)
+        case l@Xor.Left(_) => l
+      }
   }
 ```
 

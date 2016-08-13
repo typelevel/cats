@@ -2,6 +2,7 @@ package cats
 package data
 
 import cats.functor.Bifunctor
+import scala.annotation.tailrec
 
 /** Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
  *
@@ -140,9 +141,25 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
     def show(f: A Ior B): String = f.show
   }
 
-  implicit def catsDataMonadForIor[A: Semigroup]: Monad[A Ior ?] = new Monad[A Ior ?] {
+  implicit def catsDataMonadForIor[A: Semigroup]: Monad[A Ior ?] with RecursiveTailRecM[A Ior ?] = new Monad[A Ior ?] with RecursiveTailRecM[A Ior ?] {
     def pure[B](b: B): A Ior B = Ior.right(b)
     def flatMap[B, C](fa: A Ior B)(f: B => A Ior C): A Ior C = fa.flatMap(f)
+    def tailRecM[B, C](b: B)(fn: B => Ior[A, Xor[B, C]]): A Ior C = {
+      @tailrec
+      def loop(v: Ior[A, Xor[B, C]]): A Ior C = v match {
+        case Ior.Left(a) => Ior.left(a)
+        case Ior.Right(Xor.Right(c)) => Ior.right(c)
+        case Ior.Both(a, Xor.Right(c)) => Ior.both(a, c)
+        case Ior.Right(Xor.Left(b)) => loop(fn(b))
+        case Ior.Both(a, Xor.Left(b)) =>
+          fn(b) match {
+            case Ior.Left(aa) => Ior.left(Semigroup[A].combine(a, aa))
+            case Ior.Both(aa, x) => loop(Ior.both(Semigroup[A].combine(a, aa), x))
+            case Ior.Right(x) => loop(Ior.both(a, x))
+          }
+      }
+      loop(fn(b))
+    }
   }
 
   implicit def catsDataBifunctorForIor: Bifunctor[Ior] =

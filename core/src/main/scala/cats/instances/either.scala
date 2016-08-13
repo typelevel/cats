@@ -26,8 +26,8 @@ trait EitherInstances extends EitherInstances1 {
         }
     }
 
-  implicit def catsStdInstancesForEither[A]: MonadRec[Either[A, ?]] with Traverse[Either[A, ?]] =
-    new MonadRec[Either[A, ?]] with Traverse[Either[A, ?]] {
+  implicit def catsStdInstancesForEither[A]: Monad[Either[A, ?]] with Traverse[Either[A, ?]] with RecursiveTailRecM[Either[A, ?]] =
+    new Monad[Either[A, ?]] with Traverse[Either[A, ?]] with RecursiveTailRecM[Either[A, ?]] {
       def pure[B](b: B): Either[A, B] = Right(b)
 
       def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =

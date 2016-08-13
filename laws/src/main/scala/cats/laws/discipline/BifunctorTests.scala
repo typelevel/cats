@@ -27,9 +27,7 @@ trait BifunctorTests[F[_, _]] extends Laws {
       "Bifunctor Identity" -> forAll(laws.bifunctorIdentity[A, B] _),
       "Bifunctor associativity" -> forAll(laws.bifunctorComposition[A, A2, A3, B, B2, B3] _),
       "Bifunctor leftMap Identity" -> forAll(laws.bifunctorLeftMapIdentity[A, B] _),
-      "Bifunctor rightMap Identity" -> forAll(laws.bifunctorRightMapIdentity[A, B] _),
-      "Bifunctor leftMap associativity" -> forAll(laws.bifunctorLeftMapComposition[A, B, A2, A3] _),
-      "Bifunctor rightMap associativity" -> forAll(laws.bifunctorRightMapComposition[A, B, B2, B3] _)
+      "Bifunctor leftMap associativity" -> forAll(laws.bifunctorLeftMapComposition[A, B, A2, A3] _)
     )
   }
 }

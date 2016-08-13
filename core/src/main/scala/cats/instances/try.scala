@@ -11,8 +11,8 @@ import scala.annotation.tailrec
 trait TryInstances extends TryInstances1 {
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] with MonadRec[Try] =
-    new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] with MonadRec[Try] {
+  implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] with Monad[Try] with RecursiveTailRecM[Try] =
+    new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] with Monad[Try] with RecursiveTailRecM[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 
       override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] = (ta, tb) match {
