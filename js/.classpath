@@ -1,0 +1,28 @@
+<classpath>
+  <classpathentry kind="src" path="/macros" exported="true" combineaccessrules="false"/>
+  <classpathentry kind="src" path="/core" exported="true" combineaccessrules="false"/>
+  <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scala-js/scalajs-library_2.11/jars/scalajs-library_2.11-0.6.5.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/com.github.mpilquist/simulacrum_sjs0.6_2.11/jars/simulacrum_sjs0.6_2.11-0.4.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra_sjs0.6_2.11/jars/algebra_sjs0.6_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra-std_sjs0.6_2.11/jars/algebra-std_sjs0.6_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.typelevel/machinist_sjs0.6_2.11/jars/machinist_sjs0.6_2.11-0.4.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/com.github.mpilquist/simulacrum_2.11/jars/simulacrum_2.11-0.4.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra_2.11/jars/algebra_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra-std_2.11/jars/algebra-std_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.typelevel/machinist_2.11/jars/machinist_2.11-0.4.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scoverage/scalac-scoverage-runtime_2.11/jars/scalac-scoverage-runtime_2.11-1.1.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scoverage/scalac-scoverage-plugin_2.11/jars/scalac-scoverage-plugin_2.11-1.1.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scalacheck/scalacheck_sjs0.6_2.11/jars/scalacheck_sjs0.6_2.11-1.12.4.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.typelevel/discipline_sjs0.6_2.11/jars/discipline_sjs0.6_2.11-0.4.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra-laws_sjs0.6_2.11/jars/algebra-laws_sjs0.6_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra-macros_sjs0.6_2.11/jars/algebra-macros_sjs0.6_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/com.github.inthenow/bricks-platform_sjs0.6_2.11/jars/bricks-platform_sjs0.6_2.11-0.0.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/com.github.inthenow/bricks-macros_sjs0.6_2.11/jars/bricks-macros_sjs0.6_2.11-0.0.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.typelevel/macro-compat_sjs0.6_2.11/jars/macro-compat_sjs0.6_2.11-1.0.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scalatest/scalatest_sjs0.6_2.11/bundles/scalatest_sjs0.6_2.11-3.0.0-M7.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scalactic/scalactic_sjs0.6_2.11/bundles/scalactic_sjs0.6_2.11-3.0.0-M7.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scala-js/scalajs-test-interface_2.11/jars/scalajs-test-interface_2.11-0.6.4.jar"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="output" path="bin"/>
+</classpath>

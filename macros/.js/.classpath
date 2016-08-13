@@ -1,0 +1,13 @@
+<classpath>
+  <classpathentry output="-opt-home-data-scala-git-cats-macros-src-main-scala" kind="src" path="-opt-home-data-scala-git-cats-macros-src-main-scala"/>
+  <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scala-js/scalajs-library_2.11/jars/scalajs-library_2.11-0.6.5.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/com.github.mpilquist/simulacrum_sjs0.6_2.11/jars/simulacrum_sjs0.6_2.11-0.4.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra_sjs0.6_2.11/jars/algebra_sjs0.6_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra-std_sjs0.6_2.11/jars/algebra-std_sjs0.6_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.typelevel/machinist_sjs0.6_2.11/jars/machinist_sjs0.6_2.11-0.4.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scoverage/scalac-scoverage-runtime_2.11/jars/scalac-scoverage-runtime_2.11-1.1.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scoverage/scalac-scoverage-plugin_2.11/jars/scalac-scoverage-plugin_2.11-1.1.0.jar"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="output" path="bin"/>
+</classpath>

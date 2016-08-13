@@ -1,0 +1,31 @@
+<classpath>
+  <classpathentry kind="src" path="src/main/scala"/>
+  <classpathentry kind="src" path="/macros" exported="true" combineaccessrules="false"/>
+  <classpathentry kind="src" path="/core" exported="true" combineaccessrules="false"/>
+  <classpathentry kind="src" path="/free" exported="true" combineaccessrules="false"/>
+  <classpathentry kind="src" path="/laws" exported="true" combineaccessrules="false"/>
+  <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/com.github.mpilquist/simulacrum_2.11/jars/simulacrum_2.11-0.4.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra_2.11/jars/algebra_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra-std_2.11/jars/algebra-std_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.typelevel/machinist_2.11/jars/machinist_2.11-0.4.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scalacheck/scalacheck_2.11/jars/scalacheck_2.11-1.12.4.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scala-sbt/test-interface/jars/test-interface-1.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.typelevel/discipline_2.11/jars/discipline_2.11-0.4.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra-laws_2.11/jars/algebra-laws_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.spire-math/algebra-macros_2.11/jars/algebra-macros_2.11-0.3.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/com.github.inthenow/bricks-platform_2.11/jars/bricks-platform_2.11-0.0.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/com.github.inthenow/bricks-macros_2.11/jars/bricks-macros_2.11-0.0.1.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.typelevel/macro-compat_2.11/jars/macro-compat_2.11-1.0.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.openjdk.jmh/jmh-core/jars/jmh-core-1.10.3.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/net.sf.jopt-simple/jopt-simple/jars/jopt-simple-4.6.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.apache.commons/commons-math3/jars/commons-math3-3.2.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.openjdk.jmh/jmh-generator-bytecode/jars/jmh-generator-bytecode-1.10.3.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.openjdk.jmh/jmh-generator-reflection/jars/jmh-generator-reflection-1.10.3.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.openjdk.jmh/jmh-generator-asm/jars/jmh-generator-asm-1.10.3.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.ow2.asm/asm/jars/asm-5.0.3.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scoverage/scalac-scoverage-runtime_2.11/jars/scalac-scoverage-runtime_2.11-1.1.0.jar"/>
+  <classpathentry kind="lib" path="/home/lucd/.ivy2/cache/org.scoverage/scalac-scoverage-plugin_2.11/jars/scalac-scoverage-plugin_2.11-1.1.0.jar"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="output" path="bin"/>
+</classpath>
