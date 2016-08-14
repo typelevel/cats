@@ -128,6 +128,8 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
       }
       case x => x
     }
+
+  override def toString(): String = "FreeT(...)"
 }
 
 
