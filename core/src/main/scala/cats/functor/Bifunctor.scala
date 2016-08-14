@@ -1,11 +1,13 @@
 package cats
 package functor
 
+import simulacrum.typeclass
+
 /**
  * A type class of types which give rise to two independent, covariant
  * functors.
  */
-trait Bifunctor[F[_, _]] extends Any with Serializable { self =>
+@typeclass trait Bifunctor[F[_, _]] { self =>
 
   /**
    * The quintessential method of the Bifunctor trait, it applies a
@@ -48,10 +50,6 @@ trait Bifunctor[F[_, _]] extends Any with Serializable { self =>
    * }}}
    */
   def leftWiden[A, B, AA >: A](fab: F[A, B]): F[AA, B] = fab.asInstanceOf[F[AA, B]]
-}
-
-object Bifunctor {
-  def apply[F[_, _]](implicit ev: Bifunctor[F]): Bifunctor[F] = ev
 }
 
 private[cats] trait ComposedBifunctor[F[_, _], G[_, _]]

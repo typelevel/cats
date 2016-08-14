@@ -3,7 +3,9 @@ package arrow
 
 import cats.data.Xor
 
-trait Choice[F[_, _]] extends Category[F] {
+import simulacrum.typeclass
+
+@typeclass trait Choice[F[_, _]] extends Category[F] {
 
   /**
    * Given two `F`s (`f` and `g`) with a common target type, create a new `F`
@@ -45,8 +47,4 @@ trait Choice[F[_, _]] extends Category[F] {
    * }}}
    */
   def codiagonal[A]: F[Xor[A, A], A] = choice(id, id)
-}
-
-object Choice {
-  def apply[F[_, _]](implicit F: Choice[F]): Choice[F] = F
 }
