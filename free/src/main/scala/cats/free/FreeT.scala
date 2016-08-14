@@ -7,6 +7,9 @@ import cats.data.Xor
 
 /** FreeT is a monad transformer for Free monads over a Functor S
   *
+  * Stack safety for `Free` and `FreeT` is based on the paper 
+  * [[http://functorial.com/stack-safety-for-free/index.pdf Stack Safety for Free]] by `Phil Freeman`
+  * 
   * This Scala implementation of `FreeT` and its usages are derived from
   * [[https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/FreeT.scala Scalaz's FreeT]],
   * originally written by Brian McKenna.
@@ -119,7 +122,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
   @tailrec
   private def step: FreeT[S, M, A] =
     this match {
-      case g @ FlatMapped(_, _) => g.a match {
+      case FlatMapped(_, a) => g.a match {
         case g0 @ FlatMapped(_, _) => g0.a.flatMap(a => g0.f(a).flatMap(g.f)).step
         case _ => g
       }
