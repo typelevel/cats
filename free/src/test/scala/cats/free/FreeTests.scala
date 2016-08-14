@@ -4,7 +4,7 @@ package free
 import cats.tests.CatsSuite
 import cats.arrow.FunctionK
 import cats.data.Xor
-import cats.laws.discipline.{CartesianTests, MonadRecTests, SerializableTests}
+import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 
 import org.scalacheck.{Arbitrary, Gen}
@@ -15,8 +15,8 @@ class FreeTests extends CatsSuite {
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[Free[Option, ?]]
 
-  checkAll("Free[Option, ?]", MonadRecTests[Free[Option, ?]].monadRec[Int, Int, Int])
-  checkAll("MonadRec[Free[Option, ?]]", SerializableTests.serializable(MonadRec[Free[Option, ?]]))
+  checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
+  checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
 
   test("toString is stack-safe") {
     val r = Free.pure[List, Int](333)
@@ -52,7 +52,7 @@ class FreeTests extends CatsSuite {
 
   test("tailRecM is stack safe") {
     val n = 50000
-    val fa = MonadRec[Free[Option, ?]].tailRecM(0)(i =>
+    val fa = Monad[Free[Option, ?]].tailRecM(0)(i =>
       Free.pure[Option, Int Xor Int](if (i < n) Xor.Left(i+1) else Xor.Right(i)))
     fa should === (Free.pure[Option, Int](n))
   }

@@ -295,11 +295,10 @@ object Eval extends EvalInstances {
 
 private[cats] trait EvalInstances extends EvalInstances0 {
 
-  implicit val catsBimonadForEval: Bimonad[Eval] with MonadRec[Eval] =
-    new Bimonad[Eval] with MonadRec[Eval] {
+  implicit val catsBimonadForEval: Bimonad[Eval] with Monad[Eval] with RecursiveTailRecM[Eval] =
+    new Bimonad[Eval] with Monad[Eval] with RecursiveTailRecM[Eval] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
       def pure[A](a: A): Eval[A] = Now(a)
-      override def pureEval[A](la: Eval[A]): Eval[A] = la
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
       def extract[A](la: Eval[A]): A = la.value
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))

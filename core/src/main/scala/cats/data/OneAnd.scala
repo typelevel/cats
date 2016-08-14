@@ -2,8 +2,8 @@ package cats
 package data
 
 import scala.annotation.tailrec
-import scala.collection.mutable.ListBuffer
-import cats.instances.list._
+import scala.collection.mutable.Builder
+import cats.instances.stream._
 
 /**
  * A data type which represents a single element (head) and some other
@@ -136,25 +136,61 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
         val fst = f(fa.head)
         OneAnd(fst.head, monad.combineK(fst.tail, end))
       }
+
+      def tailRecM[A, B](a: A)(fn: A => OneAnd[F, A Xor B]): OneAnd[F, B] = {
+        def stepF(a: A): F[A Xor B] = {
+          val oneAnd = fn(a)
+          monad.combineK(monad.pure(oneAnd.head), oneAnd.tail)
+        }
+        def toFB(in: A Xor B): F[B] = in match {
+          case Xor.Right(b) => monad.pure(b)
+          case Xor.Left(a) => monad.tailRecM(a)(stepF)
+        }
+
+        // This could probably be in SemigroupK to perform well
+        @tailrec
+        def combineAll(items: List[F[B]]): F[B] = items match {
+          case Nil => monad.empty
+          case h :: Nil => h
+          case h1 :: h2 :: tail => combineAll(monad.combineK(h1, h2) :: tail)
+        }
+
+        @tailrec
+        def go(in: A, rest: List[F[B]]): OneAnd[F, B] =
+          fn(in) match {
+            case OneAnd(Xor.Right(b), tail) =>
+              val fbs = monad.flatMap(tail)(toFB)
+              OneAnd(b, combineAll(fbs :: rest))
+            case OneAnd(Xor.Left(a), tail) =>
+              val fbs = monad.flatMap(tail)(toFB)
+              go(a, fbs :: rest)
+          }
+
+        go(a, Nil)
+      }
     }
+
+    implicit def catsDataOneAnd[F[_]: RecursiveTailRecM]: RecursiveTailRecM[OneAnd[F, ?]] =
+      RecursiveTailRecM.create[OneAnd[F, ?]]
 }
 
 private[data] trait OneAndLowPriority0 {
-  implicit val catsDataComonadForOneAnd: Comonad[OneAnd[List, ?]] =
-    new Comonad[OneAnd[List, ?]] {
-      def coflatMap[A, B](fa: OneAnd[List, A])(f: OneAnd[List, A] => B): OneAnd[List, B] = {
-        @tailrec def consume(as: List[A], buf: ListBuffer[B]): List[B] =
-          as match {
-            case Nil => buf.toList
-            case a :: as => consume(as, buf += f(OneAnd(a, as)))
+  implicit val catsDataComonadForNonEmptyStream: Comonad[OneAnd[Stream, ?]] =
+    new Comonad[OneAnd[Stream, ?]] {
+      def coflatMap[A, B](fa: OneAnd[Stream, A])(f: OneAnd[Stream, A] => B): OneAnd[Stream, B] = {
+        @tailrec def consume(as: Stream[A], buf: Builder[B, Stream[B]]): Stream[B] =
+          if (as.isEmpty) buf.result
+          else {
+            val tail = as.tail
+            consume(tail, buf += f(OneAnd(as.head, tail)))
           }
-        OneAnd(f(fa), consume(fa.tail, ListBuffer.empty))
+        OneAnd(f(fa), consume(fa.tail, Stream.newBuilder))
       }
 
-      def extract[A](fa: OneAnd[List, A]): A =
+      def extract[A](fa: OneAnd[Stream, A]): A =
         fa.head
 
-      def map[A, B](fa: OneAnd[List, A])(f: A => B): OneAnd[List, B] =
+      def map[A, B](fa: OneAnd[Stream, A])(f: A => B): OneAnd[Stream, B] =
         fa map f
     }
 }

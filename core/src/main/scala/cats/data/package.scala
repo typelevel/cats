@@ -1,32 +1,13 @@
 package cats
 
 package object data {
-  type NonEmptyList[A] = OneAnd[List, A]
   type NonEmptyStream[A] = OneAnd[Stream, A]
   type ValidatedNel[E, A] = Validated[NonEmptyList[E], A]
-
-  def NonEmptyList[A](head: A, tail: List[A] = Nil): NonEmptyList[A] =
-    OneAnd(head, tail)
-  def NonEmptyList[A](head: A, tail: A*): NonEmptyList[A] =
-    OneAnd[List, A](head, tail.toList)
 
   def NonEmptyStream[A](head: A, tail: Stream[A] = Stream.empty): NonEmptyStream[A] =
     OneAnd(head, tail)
   def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
     OneAnd(head, tail.toStream)
-
-  object NonEmptyList {
-    def fromReducible[F[_], A](fa: F[A])(implicit F: Reducible[F]): Eval[NonEmptyList[A]] =
-      F.reduceRightTo(fa)(a => NonEmptyList(a, Nil)) { (a, lnel) =>
-        lnel.map { case OneAnd(h, t) => OneAnd(a, h :: t) }
-      }
-
-    def fromList[A](la: List[A]): Option[NonEmptyList[A]] =
-      la match {
-        case (h :: t) => Some(OneAnd(h, t))
-        case Nil => None
-      }
-  }
 
   type ReaderT[F[_], A, B] = Kleisli[F, A, B]
   val ReaderT = Kleisli

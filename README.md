@@ -122,11 +122,13 @@ relax this to a single sign-off.
 
 There are many projects that integrate with Cats:
 
- * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
- * [Kittens](https://github.com/milessabin/kittens): automatically derived type class instances.
  * [Circe](https://github.com/travisbrown/circe): pure functional JSON library.
- * [Fetch](https://github.com/47deg/fetch)
- * [Monix](https://github.com/monixio/monix)
+ * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
+ * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources.
+ * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
+ * [Kittens](https://github.com/milessabin/kittens): automatically derived type class instances.
+ * [Monix](https://github.com/monixio/monix): high-performance library for composing asynchronous and event-based programs.
+ * [eff-cats](https://github.com/atnos-org/eff-cats): functional effects and effect handlers (alternative to monad transformers).
 
 ### Copyright and License
 

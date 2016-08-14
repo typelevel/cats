@@ -27,7 +27,8 @@ object Boilerplate {
   val templates: Seq[Template] = Seq(
     GenCartesianBuilders,
     GenCartesianArityFunctions,
-    GenApplyArityFunctions
+    GenApplyArityFunctions,
+    GenTupleCartesianSyntax
   )
 
   val header = "// auto-generated boilerplate" // TODO: put something meaningful here?
@@ -60,12 +61,21 @@ object Boilerplate {
     def content(tv: TemplateVals): String
     def range = 1 to maxArity
     def body: String = {
-      val headerLines = header split '\n'
+      def expandInstances(contents: IndexedSeq[Array[String]], acc: Array[String] = Array.empty): Array[String] =
+        if (!contents.exists(_ exists(_ startsWith "-")))
+          acc map (_.tail)
+        else {
+          val pre = contents.head takeWhile (_ startsWith "|")
+          val instances = contents flatMap {_  dropWhile (_ startsWith "|") takeWhile (_ startsWith "-") }
+          val next = contents map {_ dropWhile (_ startsWith "|") dropWhile (_ startsWith "-") }
+          expandInstances(next, acc ++ pre ++ instances)
+        }
+
       val rawContents = range map { n => content(new TemplateVals(n)) split '\n' filterNot (_.isEmpty) }
-      val preBody = rawContents.head takeWhile (_ startsWith "|") map (_.tail)
-      val instances = rawContents flatMap {_ filter (_ startsWith "-") map (_.tail) }
-      val postBody = rawContents.head dropWhile (_ startsWith "|") dropWhile (_ startsWith "-") map (_.tail)
-      (headerLines ++ preBody ++ instances ++ postBody) mkString "\n"
+      val headerLines = header split '\n'
+      val instances = expandInstances(rawContents)
+      val footerLines = rawContents.head.reverse.takeWhile(_ startsWith "|").map(_.tail).reverse
+      (headerLines ++ instances ++ footerLines) mkString "\n"
     }
   }
 
@@ -207,6 +217,54 @@ object Boilerplate {
         -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[(${`A..N`})] =
         -    imap$arity($fargsS)((${`_.._`}))(identity)
          |}
+      """
+    }
+  }
+
+  object GenTupleCartesianSyntax extends Template {
+    def filename(root: File) = root /  "cats" / "syntax" / "TupleCartesianSyntax.scala"
+
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tpes = synTypes map { tpe => s"F[$tpe]" }
+      val tpesString = tpes mkString ", "
+
+      val tuple = s"Tuple$arity[$tpesString]"
+      val tupleTpe = s"t$arity: $tuple"
+      val tupleArgs = (1 to arity) map { case n => s"t$arity._$n" } mkString ", "
+
+      val n = if (arity == 1) { "" } else { arity.toString }
+
+      val map =
+        if (arity == 1) s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F]): F[Z] = functor.map($tupleArgs)(f)"
+        else s"def map$arity[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], cartesian: Cartesian[F]): F[Z] = Cartesian.map$arity($tupleArgs)(f)"
+
+      val contramap =
+        if (arity == 1) s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F]): F[Z] = contravariant.contramap($tupleArgs)(f)"
+        else s"def contramap$arity[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.contramap$arity($tupleArgs)(f)"
+
+      val imap =
+        if (arity == 1) s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F]): F[Z] = invariant.imap($tupleArgs)(f)(g)"
+        else s"def imap$arity[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.imap$arity($tupleArgs)(f)(g)"
+
+      block"""
+        |package cats
+        |package syntax
+        |
+        |import cats.functor.{Contravariant, Invariant}
+        |
+        |trait TupleCartesianSyntax {
+        -  implicit def catsSyntaxTuple${arity}Cartesian[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}CartesianOps[F, ${`A..N`}] = new Tuple${arity}CartesianOps(t$arity)
+        |}
+        |
+        -private[syntax] final class Tuple${arity}CartesianOps[F[_], ${`A..N`}]($tupleTpe) {
+        -  $map
+        -  $contramap
+        -  $imap
+        -  def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)($tupleArgs)
+        -}
+        |
       """
     }
   }

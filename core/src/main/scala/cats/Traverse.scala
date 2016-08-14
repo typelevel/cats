@@ -96,9 +96,9 @@ import simulacrum.typeclass
    * scala> import cats.implicits._
    * scala> val x: List[ValidatedNel[String, Int]] = List(Validated.valid(1), Validated.invalid("a"), Validated.invalid("b")).map(_.toValidatedNel)
    * scala> x.sequenceU
-   * res0: cats.data.ValidatedNel[String,List[Int]] = Invalid(OneAnd(a,List(b)))
+   * res0: cats.data.ValidatedNel[String,List[Int]] = Invalid(NonEmptyList(a, b))
    * scala> x.sequence[ValidatedNel[String, ?], Int]
-   * res1: cats.data.ValidatedNel[String,List[Int]] = Invalid(OneAnd(a,List(b)))
+   * res1: cats.data.ValidatedNel[String,List[Int]] = Invalid(NonEmptyList(a, b))
    * }}}
    */
   def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative, GA]): U.M[F[U.A]] =
@@ -108,6 +108,12 @@ import simulacrum.typeclass
     new ComposedTraverse[F, G] {
       val F = self
       val G = Traverse[G]
+    }
+
+  def composeFilter[G[_]: TraverseFilter]: TraverseFilter[λ[α => F[G[α]]]] =
+    new ComposedTraverseFilter[F, G] {
+      val F = self
+      val G = TraverseFilter[G]
     }
 
   override def map[A, B](fa: F[A])(f: A => B): F[B] =

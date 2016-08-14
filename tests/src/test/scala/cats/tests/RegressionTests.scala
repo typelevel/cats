@@ -20,7 +20,12 @@ class RegressionTests extends CatsSuite {
     implicit def instance[S]: Monad[State[S, ?]] = new Monad[State[S, ?]] {
       def pure[A](a: A): State[S, A] = State(s => (a, s))
       def flatMap[A, B](sa: State[S, A])(f: A => State[S, B]): State[S, B] = sa.flatMap(f)
-    }
+      def tailRecM[A, B](a: A)(fn: A => State[S, A Xor B]): State[S, B] =
+        flatMap(fn(a)) {
+          case Xor.Left(a) => tailRecM(a)(fn)
+          case Xor.Right(b) => pure(b)
+        }
+      }
   }
 
   // used to test side-effects
@@ -108,19 +113,19 @@ class RegressionTests extends CatsSuite {
     intMap.traverseU(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList(1,2,6,8).traverseU(validate) should === (Xor.left("6 is greater than 5"))
+    NonEmptyList.of(1,2,6,8).traverseU(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList(6,8).traverseU(validate) should === (Xor.left("6 is greater than 5"))
+    NonEmptyList.of(6,8).traverseU(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(1)
 
     List(1,2,6,8).traverseU_(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList(1,2,6,7,8).traverseU_(validate) should === (Xor.left("6 is greater than 5"))
+    NonEmptyList.of(1,2,6,7,8).traverseU_(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList(6,7,8).traverseU_(validate) should === (Xor.left("6 is greater than 5"))
+    NonEmptyList.of(6,7,8).traverseU_(validate) should === (Xor.left("6 is greater than 5"))
     checkAndResetCount(1)
   }
 }

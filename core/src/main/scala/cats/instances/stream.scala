@@ -1,11 +1,13 @@
 package cats
 package instances
 
+import cats.data.Xor
 import cats.syntax.show._
+import scala.annotation.tailrec
 
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
-  implicit val catsStdInstancesForStream: Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] =
-    new Traverse[Stream] with MonadCombine[Stream] with CoflatMap[Stream] {
+  implicit val catsStdInstancesForStream: TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] =
+    new TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
 
@@ -35,15 +37,63 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
           if (s.isEmpty) lb else f(s.head, Eval.defer(foldRight(s.tail, lb)(f)))
         }
 
-      def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] = {
-        def init: G[Stream[B]] = G.pure(Stream.empty[B])
-
+      def traverseFilter[G[_], A, B](fa: Stream[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] = {
         // We use foldRight to avoid possible stack overflows. Since
         // we don't want to return a Eval[_] instance, we call .value
         // at the end.
-        foldRight(fa, Later(init)) { (a, lgsb) =>
+        foldRight(fa, Always(G.pure(Stream.empty[B]))){ (a, lgsb) =>
+          G.map2Eval(f(a), lgsb)((ob, s) => ob.fold(s)(_ #:: s))
+        }.value
+      }
+
+      override def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] = {
+        // We use foldRight to avoid possible stack overflows. Since
+        // we don't want to return a Eval[_] instance, we call .value
+        // at the end.
+        foldRight(fa, Always(G.pure(Stream.empty[B]))){ (a, lgsb) =>
           G.map2Eval(f(a), lgsb)(_ #:: _)
         }.value
+      }
+
+      def tailRecM[A, B](a: A)(fn: A => Stream[A Xor B]): Stream[B] = {
+        val it: Iterator[B] = new Iterator[B] {
+          var stack: Stream[A Xor B] = fn(a)
+          var state: Xor[Unit, Option[B]] = Xor.left(())
+
+          @tailrec
+          def advance(): Unit = stack match {
+            case Xor.Right(b) #:: tail =>
+              stack = tail
+              state = Xor.Right(Some(b))
+            case Xor.Left(a) #:: tail =>
+              stack = fn(a) #::: tail
+              advance
+            case empty =>
+              state = Xor.Right(None)
+          }
+
+          @tailrec
+          def hasNext: Boolean = state match {
+            case Xor.Left(()) =>
+              advance()
+              hasNext
+            case Xor.Right(o) =>
+              o.isDefined
+          }
+
+          @tailrec
+          def next(): B = state match {
+            case Xor.Left(()) =>
+              advance()
+              next
+            case Xor.Right(o) =>
+              val b = o.get
+              advance()
+              b
+          }
+        }
+
+        it.toStream
       }
 
       override def exists[A](fa: Stream[A])(p: A => Boolean): Boolean =
@@ -53,6 +103,10 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
         fa.forall(p)
 
       override def isEmpty[A](fa: Stream[A]): Boolean = fa.isEmpty
+
+      override def filter[A](fa: Stream[A])(f: A => Boolean): Stream[A] = fa.filter(f)
+
+      override def collect[A, B](fa: Stream[A])(f: PartialFunction[A, B]): Stream[B] = fa.collect(f)
     }
 
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =

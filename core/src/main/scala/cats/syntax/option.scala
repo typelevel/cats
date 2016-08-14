@@ -103,7 +103,7 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    *
    * scala> val error1: Option[String] = Some("error!")
    * scala> error1.toInvalidNel(3)
-   * res0: ValidatedNel[String, Int] = Invalid(OneAnd(error!,List()))
+   * res0: ValidatedNel[String, Int] = Invalid(NonEmptyList(error!))
    *
    * scala> val error2: Option[String] = None
    * scala> error2.toInvalidNel(3)
@@ -149,7 +149,7 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    *
    * scala> val result2: Option[Int] = None
    * scala> result2.toValidNel("error!")
-   * res1: ValidatedNel[String, Int] = Invalid(OneAnd(error!,List()))
+   * res1: ValidatedNel[String, Int] = Invalid(NonEmptyList(error!))
    * }}}
    */
   def toValidNel[B](b: => B): ValidatedNel[B, A] = oa.fold[ValidatedNel[B, A]](Validated.invalidNel(b))(Validated.Valid(_))

@@ -239,6 +239,7 @@ val personFromConfig: ValidatedNel[ConfigError, Person] =
 let's implement the `Monad` type class.
 
 ```tut:silent
+import cats.data.Xor
 import cats.Monad
 
 implicit def validatedMonad[E]: Monad[Validated[E, ?]] =
@@ -250,6 +251,14 @@ implicit def validatedMonad[E]: Monad[Validated[E, ?]] =
       }
 
     def pure[A](x: A): Validated[E, A] = Valid(x)
+
+    @annotation.tailrec
+    def tailRecM[A, B](a: A)(f: A => Validated[E, A Xor B]): Validated[E, B] =
+      f(a) match {
+        case Valid(Xor.Right(b)) => Valid(b)
+        case Valid(Xor.Left(a)) => tailRecM(a)(f)
+        case i@Invalid(_) => i
+      }
   }
 ```
 

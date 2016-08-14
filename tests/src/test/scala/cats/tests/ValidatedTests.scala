@@ -82,7 +82,7 @@ class ValidatedTests extends CatsSuite {
 
   test("ValidatedNel") {
     forAll { (e: String) =>
-      val manual = Validated.invalid[NonEmptyList[String], Int](NonEmptyList(e))
+      val manual = Validated.invalid[NonEmptyList[String], Int](NonEmptyList.of(e))
       Validated.invalidNel[String, Int](e) should === (manual)
       Validated.invalid[String, Int](e).toValidatedNel should === (manual)
     }
@@ -199,7 +199,7 @@ class ValidatedTests extends CatsSuite {
     val y: ValidatedNel[String, Boolean] = Validated.invalidNel("error 2")
 
     val z = x.map2(y)((i, b) => if (b) i + 1 else i)
-    z should === (NonEmptyList("error 1", "error 2").invalid[Int])
+    z should === (NonEmptyList.of("error 1", "error 2").invalid[Int])
   }
 
   test("ensure on Invalid is identity") {

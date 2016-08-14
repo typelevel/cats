@@ -1,10 +1,12 @@
 package cats
 package arrow
 
+import simulacrum.typeclass
+
 /**
  * Must obey the laws defined in cats.laws.ComposeLaws.
  */
-trait Compose[F[_, _]] extends Serializable { self =>
+@typeclass trait Compose[F[_, _]] { self =>
   def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]
 
   def andThen[A, B, C](f: F[A, B], g: F[B, C]): F[A, C] =
@@ -19,8 +21,4 @@ trait Compose[F[_, _]] extends Serializable { self =>
     new Semigroup[F[A, A]] {
       def combine(f1: F[A, A], f2: F[A, A]): F[A, A] = self.compose(f1, f2)
     }
-}
-
-object Compose {
-  def apply[F[_, _]](implicit ev: Compose[F]): Compose[F] = ev
 }

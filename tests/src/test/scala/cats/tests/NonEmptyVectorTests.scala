@@ -1,11 +1,15 @@
 package cats
 package tests
 
+import catalysts.Platform
+
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, TraverseTests, ReducibleTests, MonadRecTests}
+import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, TraverseTests, ReducibleTests, MonadTests}
 import cats.laws.discipline.arbitrary._
+
+import scala.util.Properties
 
 class NonEmptyVectorTests extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
@@ -46,8 +50,8 @@ class NonEmptyVectorTests extends CatsSuite {
   checkAll("Comonad[NonEmptyVector]", SerializableTests.serializable(Comonad[NonEmptyVector]))
 
 
-  checkAll("NonEmptyVector[Int]", MonadRecTests[NonEmptyVector].monadRec[Int, Int, Int])
-  checkAll("MonadRec[NonEmptyVector]", SerializableTests.serializable(MonadRec[NonEmptyVector]))
+  checkAll("NonEmptyVector[Int]", MonadTests[NonEmptyVector].monad[Int, Int, Int])
+  checkAll("Monad[NonEmptyVector]", SerializableTests.serializable(Monad[NonEmptyVector]))
 
 
   test("size is consistent with toList.size") {
@@ -55,7 +59,7 @@ class NonEmptyVectorTests extends CatsSuite {
       nonEmptyVector.size should === (nonEmptyVector.toList.size.toLong)
     }
   }
- 
+
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
@@ -70,7 +74,7 @@ class NonEmptyVectorTests extends CatsSuite {
     val v1 = NonEmptyVector("Test", Vector.empty)
     v1.show should === ("NonEmptyVector(Test)")
 
-    val v2 = NonEmptyVector("foo", "bar", "baz")
+    val v2 = NonEmptyVector.of("foo", "bar", "baz")
     v2.show should === ("NonEmptyVector(foo, bar, baz)")
   }
 
@@ -169,9 +173,9 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
-  test("++ NonEmptyVector is consistent with concat") {
+  test("++ Vector is consistent with concatNev") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], other: NonEmptyVector[Int]) =>
-      nonEmptyVector ++ other should === (nonEmptyVector.concat(other))
+      nonEmptyVector ++ other.toVector should === (nonEmptyVector.concatNev(other))
     }
   }
 
@@ -181,9 +185,9 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
-  test("NonEmptyVector#apply on varargs is consistent with NonEmptyVector#apply on Vector") {
+  test("NonEmptyVector#of on varargs is consistent with NonEmptyVector#apply on Vector") {
     forAll { (head: Int, tail: Vector[Int]) =>
-      NonEmptyVector(head, tail:_*) should === (NonEmptyVector(head, tail))
+      NonEmptyVector.of(head, tail:_*) should === (NonEmptyVector(head, tail))
     }
   }
 
@@ -217,5 +221,71 @@ class NonEmptyVectorTests extends CatsSuite {
         nonEmptyVector.updatedUnsafe(size, element)
       }
     }
+  }
+
+  test("NonEmptyVector#hashCode consistent with Vector#hashCode") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
+      nonEmptyVector.hashCode should === (nonEmptyVector.toVector.hashCode)
+    }
+  }
+
+  test("NonEmptyVector#equals consistent with Vector#equals") {
+    forAll { (lhs: NonEmptyVector[Int], rhs: NonEmptyVector[Int]) =>
+      lhs.equals(rhs) should === (lhs.toVector.equals(rhs.toVector))
+    }
+  }
+
+  test("NonEmptyVector#toString produces correct output") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
+      nonEmptyVector.toString should === (s"NonEmpty${nonEmptyVector.toVector.toString}")
+    }
+    NonEmptyVector(1, Vector.empty).toString should === ("NonEmptyVector(1)")
+    NonEmptyVector(1, Vector.empty).toVector.toString should === ("Vector(1)")
+  }
+
+  test("NonEmptyVector.unapply supports pattern matching") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
+      nonEmptyVector match {
+        case NonEmptyVector(head, tail) =>
+          head should === (nonEmptyVector.head)
+          tail should === (nonEmptyVector.tail)
+      }
+    }
+  }
+
+  test("Cannot create a new NonEmptyVector from constructor") {
+    if(Platform.isJvm) {
+      if (!Properties.versionNumberString.startsWith("2.10")) {
+        // A bug in scala 2.10 allows private constructors to be accessed.
+        // We should still ensure that on scala 2.11 and up we cannot construct the
+        // object directly. see: https://issues.scala-lang.org/browse/SI-6601
+        "val bad: NonEmptyVector[Int] = new NonEmptyVector(Vector(1))" shouldNot compile
+      }
+    }
+  }
+
+  test("Cannot create a new NonEmptyVector[Int] from apply with a Vector[Int]") {
+    "val bad: NonEmptyVector[Int] = NonEmptyVector(Vector(1))" shouldNot compile
+  }
+
+  test("Cannot create a new NonEmptyVector[Int] from apply with a an empty Vector") {
+    "val bad: NonEmptyVector[Int] = NonEmptyVector(Vector.empty[Int])" shouldNot compile
+  }
+
+  test("NonEmptyVector#distinct is consistent with Vector#distinct") {
+    forAll { nonEmptyVector: NonEmptyVector[Int] =>
+      nonEmptyVector.distinct.toVector should === (nonEmptyVector.toVector.distinct)
+    }
+  }
+}
+
+class ReducibleNonEmptyVectorCheck extends ReducibleCheck[NonEmptyVector]("NonEmptyVector") {
+  def iterator[T](nel: NonEmptyVector[T]): Iterator[T] = nel.toVector.iterator
+
+  def range(start: Long, endInclusive: Long): NonEmptyVector[Long] = {
+    // if we inline this we get a bewildering implicit numeric widening
+    // error message in Scala 2.10
+    val tailStart: Long = start + 1L
+    NonEmptyVector(start, (tailStart).to(endInclusive).toVector)
   }
 }

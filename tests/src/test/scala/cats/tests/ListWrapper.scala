@@ -44,27 +44,27 @@ object ListWrapper {
 
   def eqv[A : Eq]: Eq[ListWrapper[A]] = Eq[List[A]].on[ListWrapper[A]](_.list)
 
-  val traverse: Traverse[ListWrapper] = {
-    val F = Traverse[List]
+  val traverseFilter: TraverseFilter[ListWrapper] = {
+    val F = TraverseFilter[List]
 
-    new Traverse[ListWrapper] {
+    new TraverseFilter[ListWrapper] {
       def foldLeft[A, B](fa: ListWrapper[A], b: B)(f: (B, A) => B): B =
         F.foldLeft(fa.list, b)(f)
       def foldRight[A, B](fa: ListWrapper[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         F.foldRight(fa.list, lb)(f)
-      def traverse[G[_], A, B](fa: ListWrapper[A])(f: A => G[B])(implicit G0: Applicative[G]): G[ListWrapper[B]] = {
-        G0.map(F.traverse(fa.list)(f))(ListWrapper.apply)
+      def traverseFilter[G[_], A, B](fa: ListWrapper[A])(f: A => G[Option[B]])(implicit G0: Applicative[G]): G[ListWrapper[B]] = {
+        G0.map(F.traverseFilter(fa.list)(f))(ListWrapper.apply)
       }
     }
   }
 
+  val traverse: Traverse[ListWrapper] = traverseFilter
+
   val foldable: Foldable[ListWrapper] = traverse
 
-  val functor: Functor[ListWrapper] =
-    new Functor[ListWrapper] {
-      def map[A, B](fa: ListWrapper[A])(f: A => B): ListWrapper[B] =
-        ListWrapper(Functor[List].map(fa.list)(f))
-    }
+  val functor: Functor[ListWrapper] = traverse
+
+  val functorFilter: FunctorFilter[ListWrapper] = traverseFilter
 
   val invariant: Invariant[ListWrapper] = functor
 
@@ -89,21 +89,11 @@ object ListWrapper {
 
       def combineK[A](x: ListWrapper[A], y: ListWrapper[A]): ListWrapper[A] =
         ListWrapper(M.combineK(x.list, y.list))
-    }
-  }
 
-  val monadRec: MonadRec[ListWrapper] = {
-    val M = MonadRec[List]
-
-    new MonadRec[ListWrapper] {
-      def pure[A](x: A): ListWrapper[A] = ListWrapper(M.pure(x))
-      def flatMap[A, B](fa: ListWrapper[A])(f: A => ListWrapper[B]): ListWrapper[B] = ListWrapper(M.flatMap(fa.list)(a => f(a).list))
       def tailRecM[A, B](a: A)(f: A => ListWrapper[cats.data.Xor[A,B]]): ListWrapper[B] =
         ListWrapper(M.tailRecM(a)(a => f(a).list))
     }
   }
-
-  val flatMapRec: FlatMapRec[ListWrapper] = monadRec
 
   val monad: Monad[ListWrapper] = monadCombine
 

@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.discipline.{CoflatMapTests, MonadCombineTests, SerializableTests, TraverseTests, CartesianTests}
+import cats.laws.discipline.{CoflatMapTests, MonadCombineTests, SerializableTests, TraverseFilterTests, CartesianTests}
 
 class StreamTests extends CatsSuite {
   checkAll("Stream[Int]", CartesianTests[Stream].cartesian[Int, Int, Int])
@@ -13,8 +13,8 @@ class StreamTests extends CatsSuite {
   checkAll("Stream[Int]", MonadCombineTests[Stream].monadCombine[Int, Int, Int])
   checkAll("MonadCombine[Stream]", SerializableTests.serializable(MonadCombine[Stream]))
 
-  checkAll("Stream[Int] with Option", TraverseTests[Stream].traverse[Int, Int, Int, List[Int], Option, Option])
-  checkAll("Traverse[Stream]", SerializableTests.serializable(Traverse[Stream]))
+  checkAll("Stream[Int] with Option", TraverseFilterTests[Stream].traverseFilter[Int, Int, Int, List[Int], Option, Option])
+  checkAll("TraverseFilter[Stream]", SerializableTests.serializable(TraverseFilter[Stream]))
 
   test("show") {
     Stream(1, 2, 3).show should === ("Stream(1, ?)")
@@ -35,6 +35,12 @@ class StreamTests extends CatsSuite {
       } else {
         stream.show should === (stream.toString)
       }
+    }
+  }
+
+  test("collect consistency") {
+    forAll { s: Stream[Int] =>
+      FunctorFilter[Stream].collect(s)(evenPf) should === (s.collect(evenPf))
     }
   }
 }

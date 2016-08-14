@@ -6,11 +6,11 @@ import cats.kernel.laws.{GroupLaws, OrderLaws}
 import cats.data.{Const, NonEmptyList}
 import cats.functor.Contravariant
 import cats.laws.discipline._
-import cats.laws.discipline.arbitrary.{catsLawsArbitraryForConst, catsLawsArbitraryForOneAnd}
+import cats.laws.discipline.arbitrary.{catsLawsArbitraryForConst, catsLawsArbitraryForNonEmptyList}
 
 class ConstTests extends CatsSuite {
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Const[String, ?]](Const.catsDataTraverseForConst)
+  implicit val iso = CartesianTests.Isomorphisms.invariant[Const[String, ?]](Const.catsDataTraverseFilterForConst)
 
   checkAll("Const[String, Int]", CartesianTests[Const[String, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Const[String, ?]]", SerializableTests.serializable(Cartesian[Const[String, ?]]))
@@ -18,8 +18,8 @@ class ConstTests extends CatsSuite {
   checkAll("Const[String, Int]", ApplicativeTests[Const[String, ?]].applicative[Int, Int, Int])
   checkAll("Applicative[Const[String, ?]]", SerializableTests.serializable(Applicative[Const[String, ?]]))
 
-  checkAll("Const[String, Int] with Option", TraverseTests[Const[String, ?]].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[Const[String, ?]]", SerializableTests.serializable(Traverse[Const[String, ?]]))
+  checkAll("Const[String, Int] with Option", TraverseFilterTests[Const[String, ?]].traverseFilter[Int, Int, Int, Int, Option, Option])
+  checkAll("TraverseFilter[Const[String, ?]]", SerializableTests.serializable(TraverseFilter[Const[String, ?]]))
 
   // Get Apply[Const[C : Semigroup, ?]], not Applicative[Const[C : Monoid, ?]]
   {

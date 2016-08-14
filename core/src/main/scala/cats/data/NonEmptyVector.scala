@@ -2,13 +2,17 @@ package cats
 package data
 
 import scala.annotation.tailrec
-import scala.collection.immutable.VectorBuilder
+import scala.collection.immutable.{TreeSet, VectorBuilder}
 import cats.instances.vector._
 
 /**
- * A data type which represents a non empty Vector.
+ * A data type which represents a `Vector` guaranteed to contain at least one element.
+ * <br/>
+ * Note that the constructor is `private` to prevent accidental construction of an empty
+ * `NonEmptyVector`. However, due to https://issues.scala-lang.org/browse/SI-6601, on
+ * Scala 2.10, this may be bypassed due to a compiler bug.
  */
-final case class NonEmptyVector[A] private (toVector: Vector[A]) {
+final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
 
   /** Gets the element at the index, if it exists */
   def get(i: Int): Option[A] =
@@ -19,14 +23,14 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
 
   /** Updates the element at the index, if it exists */
   def updated(i: Int, a: A): Option[NonEmptyVector[A]] =
-    if (toVector.isDefinedAt(i)) Some(NonEmptyVector(toVector.updated(i, a))) else None
+    if (toVector.isDefinedAt(i)) Some(new NonEmptyVector(toVector.updated(i, a))) else None
 
   /**
    * Updates the element at the index, or throws an `IndexOutOfBoundsException`
    * if none exists (if `i` does not satisfy `0 <= i < length`).
    */
   def updatedUnsafe(i: Int, a: A):
-      NonEmptyVector[A] = NonEmptyVector(toVector.updated(i, a))
+      NonEmptyVector[A] = new NonEmptyVector(toVector.updated(i, a))
 
   def head: A = toVector.head
 
@@ -38,27 +42,22 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
   def filter(f: A => Boolean): Vector[A] = toVector.filter(f)
 
   /**
-   * Append another NonEmptyVector to this
-   */
-  def concat(other: NonEmptyVector[A]): NonEmptyVector[A] = NonEmptyVector(toVector ++ other.toVector)
-
-  /**
-   * Alias for concat
-   */
-  def ++(other: NonEmptyVector[A]): NonEmptyVector[A] = concat(other)
-
-  /**
-   * Append another Vector to this
-   */
-  def concat(other: Vector[A]): NonEmptyVector[A] = NonEmptyVector(toVector ++ other)
-
-  /**
-   * Alias for concat
+   * Alias for [[concat]]
    */
   def ++(other: Vector[A]): NonEmptyVector[A] = concat(other)
 
   /**
-   * find the first element matching the predicate, if one exists
+   * Append another `Vector` to this, producing a new `NonEmptyVector`.
+   */
+  def concat(other: Vector[A]): NonEmptyVector[A] = new NonEmptyVector(toVector ++ other)
+
+  /**
+   * Append another `NonEmptyVector` to this, producing a new `NonEmptyVector`.
+   */
+  def concatNev(other: NonEmptyVector[A]): NonEmptyVector[A] = new NonEmptyVector(toVector ++ other.toVector)
+
+  /**
+   * Find the first element matching the predicate, if one exists
    */
   def find(f: A => Boolean): Option[A] = toVector.find(f)
 
@@ -88,13 +87,13 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
     * Applies f to all the elements
     */
   def map[B](f: A => B): NonEmptyVector[B] =
-    NonEmptyVector(toVector.map(f))
+    new NonEmptyVector(toVector.map(f))
 
   /**
     *  Applies f to all elements and combines the result
     */
   def flatMap[B](f: A => NonEmptyVector[B]): NonEmptyVector[B] =
-    NonEmptyVector(toVector.flatMap(a => f(a).toVector))
+    new NonEmptyVector(toVector.flatMap(a => f(a).toVector))
 
   /**
     * Left-associative reduce using f.
@@ -129,17 +128,33 @@ final case class NonEmptyVector[A] private (toVector: Vector[A]) {
     s"NonEmpty${Show[Vector[A]].show(toVector)}"
 
   def length: Int = toVector.length
+
+  override def toString: String = s"NonEmpty${toVector.toString}"
+
+  /**
+   * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+   */
+  def distinct(implicit O: Order[A]): NonEmptyVector[A] = {
+    implicit val ord = O.toOrdering
+
+    val buf = Vector.newBuilder[A]
+    tail.foldLeft(TreeSet(head)) { (elementsSoFar, a) =>
+      if (elementsSoFar(a)) elementsSoFar else { buf += a; elementsSoFar + a }
+    }
+
+    NonEmptyVector(head, buf.result())
+  }
 }
 
 private[data] sealed trait NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector] with Reducible[NonEmptyVector]
-      with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with MonadRec[NonEmptyVector] =
-    new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector]
-        with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with MonadRec[NonEmptyVector] {
+    with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with Monad[NonEmptyVector] with RecursiveTailRecM[NonEmptyVector] =
+    new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector] with Comonad[NonEmptyVector]
+      with Traverse[NonEmptyVector] with Monad[NonEmptyVector] with RecursiveTailRecM[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
-        a concat b
+        a concatNev b
 
       override def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
 
@@ -213,19 +228,21 @@ private[data] sealed trait NonEmptyVectorInstances {
 object NonEmptyVector extends NonEmptyVectorInstances {
 
   def apply[A](head: A, tail: Vector[A]): NonEmptyVector[A] =
-    NonEmptyVector(head +: tail)
+    new NonEmptyVector(head +: tail)
 
-  def apply[A](head: A, tail: A*): NonEmptyVector[A] = {
+  def of[A](head: A, tail: A*): NonEmptyVector[A] = {
     val buf = Vector.newBuilder[A]
     buf += head
     tail.foreach(buf += _)
-    NonEmptyVector(buf.result)
+    new NonEmptyVector(buf.result)
   }
+
+  def unapply[A](nev: NonEmptyVector[A]): Some[(A, Vector[A])] = Some((nev.head, nev.tail))
 
   def fromVector[A](vector: Vector[A]): Option[NonEmptyVector[A]] =
     if (vector.isEmpty) None else Some(new NonEmptyVector(vector))
 
   def fromVectorUnsafe[A](vector: Vector[A]): NonEmptyVector[A] =
-    if (vector.nonEmpty) NonEmptyVector(vector)
+    if (vector.nonEmpty) new NonEmptyVector(vector)
     else throw new IllegalArgumentException("Cannot create NonEmptyVector from empty vector")
 }
