@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-import cats.data.{Ior, Validated, ValidatedNel, Xor}
+import cats.data.{EitherT, Ior, Validated, ValidatedNel, Xor}
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
@@ -178,8 +178,17 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
    */
   def toXor: A Xor B = Xor.fromEither(eab)
 
-  // TODO
-  def toEitherT: Int = ???
+  /**
+   * Transform the `Either` into a [[EitherT]] while lifting it into the specified Applicative.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val e: Either[String, Int] = Right(3)
+   * scala> e.toEitherT[Option]
+   * res0: cats.data.EitherT[Option, String, Int] = EitherT(Some(Right(3)))
+   * }}}
+   */
+  def toEitherT[F[_]: Applicative]: EitherT[F, A, B] = EitherT.fromEither(eab)
 }
 
 final class EitherObjectOps(val either: Either.type) extends AnyVal {

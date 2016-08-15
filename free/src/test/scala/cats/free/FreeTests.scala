@@ -3,7 +3,6 @@ package free
 
 import cats.tests.CatsSuite
 import cats.arrow.FunctionK
-import cats.data.Xor
 import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 
@@ -92,18 +91,18 @@ class FreeTests extends CatsSuite {
     // changing the constant argument to .take and observing the time
     // this test takes.
     val ns = Stream.from(1).take(1000)
-    val res = Free.foldLeftM[Stream, Xor[Int, ?], Int, Int](ns, 0) { (sum, n) =>
-      if (sum >= 2) Xor.left(sum) else Xor.right(sum + n)
+    val res = Free.foldLeftM[Stream, Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+      if (sum >= 2) Either.left(sum) else Either.right(sum + n)
     }
-    assert(res == Xor.left(3))
+    assert(res == Either.left(3))
   }
 
   test(".foldLeftM short-circuiting") {
     val ns = Stream.continually(1)
-    val res = Free.foldLeftM[Stream, Xor[Int, ?], Int, Int](ns, 0) { (sum, n) =>
-      if (sum >= 100000) Xor.left(sum) else Xor.right(sum + n)
+    val res = Free.foldLeftM[Stream, Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+      if (sum >= 100000) Either.left(sum) else Either.right(sum + n)
     }
-    assert(res == Xor.left(100000))
+    assert(res == Either.left(100000))
   }
 }
 

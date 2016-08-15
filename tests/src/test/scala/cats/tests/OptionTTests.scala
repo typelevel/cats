@@ -256,8 +256,8 @@ class OptionTTests extends CatsSuite {
   }
 
   test("show") {
-    val xor: Either[String, Option[Int]] = Either.right(Some(1))
-    OptionT[Either[String, ?], Int](xor).show should === ("Right(Some(1))")
+    val either: Either[String, Option[Int]] = Either.right(Some(1))
+    OptionT[Either[String, ?], Int](either).show should === ("Right(Some(1))")
   }
 
   test("none") {

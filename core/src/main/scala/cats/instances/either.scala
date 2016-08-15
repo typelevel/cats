@@ -95,6 +95,20 @@ trait EitherInstances extends EitherInstances1 {
         b => s"Right(${B.show(b)})"
       )
     }
+
+  implicit def catsDataMonoidForEither[A, B](implicit B: Monoid[B]): Monoid[Either[A, B]] =
+    new Monoid[Either[A, B]] {
+      def empty: Either[A, B] = Right(B.empty)
+      def combine(x: Either[A, B], y: Either[A, B]): Either[A, B] = x combine y
+    }
+
+  implicit def catsDataSemigroupKForEither[L]: SemigroupK[Either[L, ?]] =
+    new SemigroupK[Either[L, ?]] {
+      def combineK[A](x: Either[L, A], y: Either[L, A]): Either[L, A] = x match {
+        case Left(_) => y
+        case Right(_) => x
+      }
+    }
 }
 
 private[instances] sealed trait EitherInstances1 extends EitherInstances2 {

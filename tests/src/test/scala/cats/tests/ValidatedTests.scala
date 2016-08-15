@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{EitherT, NonEmptyList, Validated, ValidatedNel, Xor}
+import cats.data.{EitherT, NonEmptyList, Validated, ValidatedNel}
 import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{BitraverseTests, TraverseTests, ApplicativeErrorTests, SerializableTests, CartesianTests}
 import org.scalacheck.Arbitrary._
@@ -156,9 +156,9 @@ class ValidatedTests extends CatsSuite {
     (Validated.invalid("foo") andThen even) should === (Validated.invalid("foo"))
   }
 
-  test("fromOption consistent with Xor.fromOption"){
+  test("fromOption consistent with Either.fromOption"){
     forAll { (o: Option[Int], s: String) =>
-      Validated.fromOption(o, s) should === (Xor.fromOption(o, s).toValidated)
+      Validated.fromOption(o, s) should === (Either.fromOption(o, s).toValidated)
     }
   }
 
