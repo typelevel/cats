@@ -98,7 +98,7 @@ object ListWrapper {
     new MonadRec[ListWrapper] {
       def pure[A](x: A): ListWrapper[A] = ListWrapper(M.pure(x))
       def flatMap[A, B](fa: ListWrapper[A])(f: A => ListWrapper[B]): ListWrapper[B] = ListWrapper(M.flatMap(fa.list)(a => f(a).list))
-      def tailRecM[A, B](a: A)(f: A => ListWrapper[cats.data.Xor[A,B]]): ListWrapper[B] =
+      def tailRecM[A, B](a: A)(f: A => ListWrapper[Either[A,B]]): ListWrapper[B] =
         ListWrapper(M.tailRecM(a)(a => f(a).list))
     }
   }

@@ -1,8 +1,8 @@
 package cats
 package instances
 
+import cats.syntax.either._
 import scala.annotation.tailrec
-import cats.data.Xor
 
 trait EitherInstances extends EitherInstances1 {
   implicit val catsStdBitraverseForEither: Bitraverse[Either] =
@@ -26,22 +26,29 @@ trait EitherInstances extends EitherInstances1 {
         }
     }
 
-  implicit def catsStdInstancesForEither[A]: MonadRec[Either[A, ?]] with Traverse[Either[A, ?]] =
-    new MonadRec[Either[A, ?]] with Traverse[Either[A, ?]] {
+  implicit def catsStdInstancesForEither[A]: MonadRec[Either[A, ?]] with MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] =
+    new MonadRec[Either[A, ?]] with MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] {
       def pure[B](b: B): Either[A, B] = Right(b)
 
       def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =
         fa.right.flatMap(f)
 
+      def handleErrorWith[B](fea: Either[A, B])(f: A => Either[A, B]): Either[A, B] =
+        fea match {
+          case Left(e) => f(e)
+          case r @ Right(_) => r
+        }
+      def raiseError[B](e: A): Either[A, B] = Left(e)
+
       override def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
         fa.right.map(f)
 
       @tailrec
-      def tailRecM[B, C](b: B)(f: B => Either[A, B Xor C]): Either[A, C] =
+      def tailRecM[B, C](b: B)(f: B => Either[A, Either[B, C]]): Either[A, C] =
         f(b) match {
-          case Left(a) => Left(a)
-          case Right(Xor.Left(b1)) => tailRecM(b1)(f)
-          case Right(Xor.Right(c)) => Right(c)
+          case Left(a)         => Left(a)
+          case Right(Left(b1)) => tailRecM(b1)(f)
+          case Right(Right(c)) => Right(c)
         }
 
       override def map2Eval[B, C, Z](fb: Either[A, B], fc: Eval[Either[A, C]])(f: (B, C) => Z): Eval[Either[A, Z]] =
@@ -64,6 +71,14 @@ trait EitherInstances extends EitherInstances1 {
 
       def foldRight[B, C](fa: Either[A, B], lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
         fa.fold(_ => lc, b => f(b, lc))
+
+      override def attempt[B](fab: Either[A, B]): Either[A, Either[A, B]] = Right(fab)
+      override def recover[B](fab: Either[A, B])(pf: PartialFunction[A, B]): Either[A, B] =
+        fab recover pf
+      override def recoverWith[B](fab: Either[A, B])(pf: PartialFunction[A, Either[A, B]]): Either[A, B] =
+        fab recoverWith pf
+      override def ensure[B](fab: Either[A, B])(error: => A)(predicate: B => Boolean): Either[A, B] =
+        fab.ensure(error)(predicate)
     }
 
   implicit def catsStdOrderForEither[A, B](implicit A: Order[A], B: Order[B]): Order[Either[A, B]] = new Order[Either[A, B]] {

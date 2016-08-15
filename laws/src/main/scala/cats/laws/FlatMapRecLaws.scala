@@ -1,7 +1,6 @@
 package cats
 package laws
 
-import cats.data.Xor
 import cats.syntax.flatMap._
 import cats.syntax.functor._
 
@@ -13,8 +12,8 @@ trait FlatMapRecLaws[F[_]] extends FlatMapLaws[F] {
 
   def tailRecMConsistentFlatMap[A](a: A, f: A => F[A]): IsEq[F[A]] = {
     val bounce = F.tailRecM[(A, Int), A]((a, 1)) { case (a0, i) =>
-      if (i > 0) f(a0).map(a1 => Xor.left((a1, i-1)))
-      else f(a0).map(Xor.right)
+      if (i > 0) f(a0).map(a1 => Left((a1, i-1)))
+      else f(a0).map(Right(_))
     }
     bounce <-> f(a).flatMap(f)
   }

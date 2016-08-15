@@ -10,14 +10,14 @@ import cats.functor.Bifunctor
  *  - `[[Ior.Right Right]][B]`
  *  - `[[Ior.Both Both]][A, B]`
  *
- * `A [[Ior]] B` is similar to `A [[Xor]] B`, except that it can represent the simultaneous presence of
- * an `A` and a `B`. It is right-biased like [[Xor]], so methods such as `map` and `flatMap` operate on the
+ * `A [[Ior]] B` is similar to `Either[A, B]`, except that it can represent the simultaneous presence of
+ * an `A` and a `B`. It is right-biased so methods such as `map` and `flatMap` operate on the
  * `B` value. Some methods, like `flatMap`, handle the presence of two [[Ior.Both Both]] values using a
- * `[[Semigroup]][A]`, while other methods, like [[toXor]], ignore the `A` value in a [[Ior.Both Both]].
+ * `[[Semigroup]][A]`, while other methods, like [[toEither]], ignore the `A` value in a [[Ior.Both Both]].
  *
- * `A [[Ior]] B` is isomorphic to `(A [[Xor]] B) [[Xor]] (A, B)`, but provides methods biased toward `B`
+ * `A [[Ior]] B` is isomorphic to `Either[Either[A, B], (A, B)]`, but provides methods biased toward `B`
  * values, regardless of whether the `B` values appear in a [[Ior.Right Right]] or a [[Ior.Both Both]].
- * The isomorphic [[Xor]] form can be accessed via the [[unwrap]] method.
+ * The isomorphic [[Either]] form can be accessed via the [[unwrap]] method.
  */
 sealed abstract class Ior[+A, +B] extends Product with Serializable {
 
@@ -35,10 +35,10 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def right: Option[B] = fold(_ => None, b => Some(b), (_, b) => Some(b))
   final def onlyLeft: Option[A] = fold(a => Some(a), _ => None, (_, _) => None)
   final def onlyRight: Option[B] = fold(_ => None, b => Some(b), (_, _) => None)
-  final def onlyLeftOrRight: Option[A Xor B] = fold(a => Some(Xor.left(a)), b => Some(Xor.right(b)), (_, _) => None)
+  final def onlyLeftOrRight: Option[Either[A, B]] = fold(a => Some(Left(a)), b => Some(Right(b)), (_, _) => None)
   final def onlyBoth: Option[(A, B)] = fold(_ => None, _ => None, (a, b) => Some((a, b)))
   final def pad: (Option[A], Option[B]) = fold(a => (Some(a), None), b => (None, Some(b)), (a, b) => (Some(a), Some(b)))
-  final def unwrap: (A Xor B) Xor (A, B) = fold(a => Xor.left(Xor.left(a)), b => Xor.left(Xor.right(b)), (a, b) => Xor.right((a, b)))
+  final def unwrap: Either[Either[A, B], (A, B)] = fold(a => Left(Left(a)), b => Left(Right(b)), (a, b) => Right((a, b)))
 
   final def toXor: A Xor B = fold(Xor.left, Xor.right, (_, b) => Xor.right(b))
   final def toEither: Either[A, B] = fold(Left(_), Right(_), (_, b) => Right(b))

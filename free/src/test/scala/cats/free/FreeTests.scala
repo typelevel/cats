@@ -53,7 +53,7 @@ class FreeTests extends CatsSuite {
   test("tailRecM is stack safe") {
     val n = 50000
     val fa = MonadRec[Free[Option, ?]].tailRecM(0)(i =>
-      Free.pure[Option, Int Xor Int](if (i < n) Xor.Left(i+1) else Xor.Right(i)))
+      Free.pure[Option, Either[Int, Int]](if (i < n) Left(i+1) else Right(i)))
     fa should === (Free.pure[Option, Int](n))
   }
 

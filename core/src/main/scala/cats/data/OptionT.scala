@@ -1,7 +1,8 @@
 package cats
 package data
 
-import instances.option.{catsStdInstancesForOption => optionInstance}
+import cats.instances.option.{catsStdInstancesForOption => optionInstance}
+import cats.syntax.either._
 
 /**
  * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some
@@ -85,11 +86,11 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
         case None => default
       })
 
-  def toRight[L](left: => L)(implicit F: Functor[F]): XorT[F, L, A] =
-    XorT(cata(Xor.Left(left), Xor.Right.apply))
+  def toRight[L](left: => L)(implicit F: Functor[F]): EitherT[F, L, A] =
+    EitherT(cata(Left(left), Right.apply))
 
-  def toLeft[R](right: => R)(implicit F: Functor[F]): XorT[F, A, R] =
-    XorT(cata(Xor.Right(right), Xor.Left.apply))
+  def toLeft[R](right: => R)(implicit F: Functor[F]): EitherT[F, A, R] =
+    EitherT(cata(Right(right), Left.apply))
 
   def show(implicit F: Show[F[Option[A]]]): String = F.show(value)
 
@@ -256,9 +257,9 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
 private[data] trait OptionTMonadRec[F[_]] extends MonadRec[OptionT[F, ?]] with OptionTMonad[F] {
   implicit def F: MonadRec[F]
 
-  def tailRecM[A, B](a: A)(f: A => OptionT[F, A Xor B]): OptionT[F, B] =
+  def tailRecM[A, B](a: A)(f: A => OptionT[F, Either[A, B]]): OptionT[F, B] =
     OptionT(F.tailRecM(a)(a0 => F.map(f(a0).value)(
-      _.fold(Xor.right[A, Option[B]](None))(_.map(Some(_)))
+      _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
     )))
 }
 

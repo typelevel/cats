@@ -1,6 +1,8 @@
 package cats
 package data
 
+import cats.syntax.either._
+
 /**
  * `StateT[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S`
  * argument and produces an `A` value wrapped in `F`. However, it also produces
@@ -230,7 +232,7 @@ private[data] sealed trait StateTMonadState[F[_], S] extends MonadState[StateT[F
 private[data] sealed trait StateTMonadRec[F[_], S] extends MonadRec[StateT[F, S, ?]] with StateTMonad[F, S] {
   override implicit def F: MonadRec[F]
 
-  def tailRecM[A, B](a: A)(f: A => StateT[F, S, A Xor B]): StateT[F, S, B] =
+  def tailRecM[A, B](a: A)(f: A => StateT[F, S, Either[A, B]]): StateT[F, S, B] =
     StateT[F, S, B](s => F.tailRecM[(S, A), (S, B)]((s, a)) {
       case (s, a) => F.map(f(a).run(s)) { case (s, ab) => ab.bimap((s, _), (s, _)) }
     })
