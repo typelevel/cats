@@ -81,6 +81,7 @@ trait EitherInstances extends EitherInstances1 {
       override def ensure[B](fab: Either[A, B])(error: => A)(predicate: B => Boolean): Either[A, B] =
         fab.ensure(error)(predicate)
     }
+  // scalastyle:on method.length
 
   implicit def catsStdOrderForEither[A, B](implicit A: Order[A], B: Order[B]): Order[Either[A, B]] = new Order[Either[A, B]] {
     def compare(x: Either[A, B], y: Either[A, B]): Int = x.fold(

@@ -21,19 +21,19 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def swap(implicit F: Functor[F]): EitherT[F, B, A] = EitherT(F.map(value)(_.swap))
 
-  def getOrElse[BB >: B](default: => BB)(implicit F: Functor[F]): F[BB] = F.map(value)(_.getOrElse(default))
+  def getOrElse(default: => B)(implicit F: Functor[F]): F[B] = F.map(value)(_.getOrElse(default))
 
-  def getOrElseF[BB >: B](default: => F[BB])(implicit F: Monad[F]): F[BB] = {
+  def getOrElseF(default: => F[B])(implicit F: Monad[F]): F[B] = {
     F.flatMap(value) {
       case Left(_) => default
       case Right(b) => F.pure(b)
     }
   }
 
-  def orElse[AA, BB >: B](default: => EitherT[F, AA, BB])(implicit F: Monad[F]): EitherT[F, AA, BB] = {
+  def orElse(default: => EitherT[F, A, B])(implicit F: Monad[F]): EitherT[F, A, B] = {
     EitherT(F.flatMap(value) {
       case Left(_) => default.value
-      case r @ Right(_) => F.pure(r.asInstanceOf[Either[AA, BB]])
+      case r @ Right(_) => F.pure(r)
     })
   }
 
@@ -46,21 +46,21 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case other => F.pure(other)
     })
 
-  def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F]): F[BB] = fold(f, identity)
+  def valueOr(f: A => B)(implicit F: Functor[F]): F[B] = fold(f, identity)
 
   def forall(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.forall(f))
 
   def exists(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.exists(f))
 
-  def ensure[AA >: A](onFailure: => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] = EitherT(F.map(value)(_.ensure(onFailure)(f)))
+  def ensure(onFailure: => A)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(value)(_.ensure(onFailure)(f)))
 
   def toOption(implicit F: Functor[F]): OptionT[F, B] = OptionT(F.map(value)(_.toOption))
 
   def to[G[_]](implicit F: Functor[F], G: Alternative[G]): F[G[B]] =
-    F.map(value)(_.to[G, B])
+    F.map(value)(_.to[G])
 
   def collectRight(implicit F: MonadCombine[F]): F[B] =
-    F.flatMap(value)(_.to[F, B])
+    F.flatMap(value)(_.to[F])
 
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): EitherT[F, C, D] = EitherT(F.map(value)(_.bimap(fa, fb)))
 
@@ -70,19 +70,19 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def applyAlt[D](ff: EitherT[F, A, B => D])(implicit F: Apply[F]): EitherT[F, A, D] =
     EitherT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[Either[A, ?]].ap(xbd)(xb)))
 
-  def flatMap[AA >: A, D](f: B => EitherT[F, AA, D])(implicit F: Monad[F]): EitherT[F, AA, D] =
+  def flatMap[D](f: B => EitherT[F, A, D])(implicit F: Monad[F]): EitherT[F, A, D] =
     EitherT(F.flatMap(value) {
-      case l @ Left(_) => F.pure(l.asInstanceOf[Either[AA, D]])
+      case l @ Left(_) => F.pure((l: Either[A, B]).rightCast[D])
       case Right(b) => f(b).value
     })
 
-  def flatMapF[AA >: A, D](f: B => F[Either[AA, D]])(implicit F: Monad[F]): EitherT[F, AA, D] =
+  def flatMapF[D](f: B => F[Either[A, D]])(implicit F: Monad[F]): EitherT[F, A, D] =
     flatMap(f andThen EitherT.apply)
 
   def transform[C, D](f: Either[A, B] => Either[C, D])(implicit F: Functor[F]): EitherT[F, C, D] =
     EitherT(F.map(value)(f))
 
-  def subflatMap[AA >: A, D](f: B => Either[AA, D])(implicit F: Functor[F]): EitherT[F, AA, D] =
+  def subflatMap[D](f: B => Either[A, D])(implicit F: Functor[F]): EitherT[F, A, D] =
     transform(_.flatMap(f))
 
   def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = bimap(identity, f)
@@ -110,10 +110,10 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def foldRight[C](lc: Eval[C])(f: (B, Eval[C]) => Eval[C])(implicit F: Foldable[F]): Eval[C] =
     F.foldRight(value, lc)((axb, lc) => axb.foldRight(lc)(f))
 
-  def merge[AA >: A](implicit ev: B <:< AA, F: Functor[F]): F[AA] = F.map(value)(_.fold(identity, ev.apply))
+  def merge(implicit ev: B <:< A, F: Functor[F]): F[A] = F.map(value)(_.fold(identity, ev.apply))
 
   /**
-   * Similar to [[Either.combine]] but mapped over an `F` context.
+   * Similar to `Either#combine` but mapped over an `F` context.
    *
    * Examples:
    * {{{

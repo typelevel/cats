@@ -92,7 +92,7 @@ import simulacrum.typeclass
     flatMap(fa)(if (_) ifTrue else ifFalse)
 
   /**
-   * Keeps calling `f` until a `[[Right]][B]` is returned.
+   * Keeps calling `f` until a `scala.util.Right[B]` is returned.
    *
    * Based on Phil Freeman's
    * [[http://functorial.com/stack-safety-for-free/index.pdf Stack Safety for Free]].

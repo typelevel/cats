@@ -39,7 +39,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   /**
    * Handle errors by turning them into [[scala.util.Either]] values.
    *
-   * If there is no error, then an [[scala.util.Right]] value will be returned instead.
+   * If there is no error, then an `scala.util.Right` value will be returned instead.
    *
    * All non-fatal errors should be handled by this method.
    */

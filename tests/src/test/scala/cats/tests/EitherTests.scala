@@ -227,13 +227,13 @@ class EitherTests extends CatsSuite {
 
   test("to consistent with toList") {
     forAll { (x: Either[Int, String]) =>
-      x.to[List, String] should === (x.toList)
+      x.to[List] should === (x.toList)
     }
   }
 
   test("to consistent with toOption") {
     forAll { (x: Either[Int, String]) =>
-      x.to[Option, String] should === (x.toOption)
+      x.to[Option] should === (x.toOption)
     }
   }
 }

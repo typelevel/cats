@@ -18,7 +18,7 @@ import scala.annotation.tailrec
  *
  * `A [[Ior]] B` is isomorphic to `Either[Either[A, B], (A, B)]`, but provides methods biased toward `B`
  * values, regardless of whether the `B` values appear in a [[Ior.Right Right]] or a [[Ior.Both Both]].
- * The isomorphic [[Either]] form can be accessed via the [[unwrap]] method.
+ * The isomorphic [[scala.util.Either]] form can be accessed via the [[unwrap]] method.
  */
 sealed abstract class Ior[+A, +B] extends Product with Serializable {
 
