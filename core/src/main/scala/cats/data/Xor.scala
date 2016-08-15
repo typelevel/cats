@@ -255,8 +255,8 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
         }
     }
 
-  implicit def catsDataInstancesForXor[A]: Traverse[A Xor ?] with MonadRec[A Xor ?] with MonadError[Xor[A, ?], A] =
-    new Traverse[A Xor ?] with MonadRec[A Xor ?] with MonadError[Xor[A, ?], A] {
+  implicit def catsDataInstancesForXor[A]: Traverse[A Xor ?] with Monad[A Xor ?] with MonadError[Xor[A, ?], A] with RecursiveTailRecM[A Xor ?] =
+    new Traverse[A Xor ?] with Monad[A Xor ?] with MonadError[Xor[A, ?], A] with RecursiveTailRecM[A Xor ?] {
       def traverse[F[_]: Applicative, B, C](fa: A Xor B)(f: B => F[C]): F[A Xor C] = fa.traverse(f)
       def foldLeft[B, C](fa: A Xor B, c: C)(f: (C, B) => C): C = fa.foldLeft(c)(f)
       def foldRight[B, C](fa: A Xor B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] = fa.foldRight(lc)(f)
@@ -322,6 +322,10 @@ trait XorFunctions {
    * scala> Xor.catchOnly[NumberFormatException] { "foo".toInt }
    * res0: Xor[NumberFormatException, Int] = Left(java.lang.NumberFormatException: For input string: "foo")
    * }}}
+   *
+   * This method and its usage of [[NotNull]] are inspired by and derived from
+   * the `fromTryCatchThrowable` method [[https://github.com/scalaz/scalaz/pull/746/files contributed]]
+   * to Scalaz by Brian McKenna.
    */
   def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] =
     new CatchOnlyPartiallyApplied[T]

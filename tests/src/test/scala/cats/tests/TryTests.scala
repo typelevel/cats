@@ -21,12 +21,37 @@ class TryTests extends CatsSuite {
   checkAll("Try[Int] with Option", TraverseTests[Try].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Try]", SerializableTests.serializable(Traverse[Try]))
 
-  checkAll("Try", MonadRecTests[Try].monadRec[Int, Int, Int])
-  checkAll("MonadRec[Try]", SerializableTests.serializable(MonadRec[Try]))
+  checkAll("Try", MonadTests[Try].monad[Int, Int, Int])
+  checkAll("Monad[Try]", SerializableTests.serializable(Monad[Try]))
 
   test("show") {
     forAll { fs: Try[String] =>
       fs.show should === (fs.toString)
+    }
+  }
+
+  test("catchNonFatal works") {
+    forAll { e: Either[String, Int] =>
+      val str = e.fold(identity, _.toString)
+      val res = MonadError[Try, Throwable].catchNonFatal(str.toInt)
+      // the above should just never cause an uncaught exception
+      // this is a somewhat bogus test:
+      res should not be (null)
+    }
+  }
+
+  test("catchNonFatalEval works") {
+    forAll { e: Either[String, Int] =>
+      val str = e.fold(identity, _.toString)
+      val res = MonadError[Try, Throwable].catchNonFatalEval(Eval.later(str.toInt))
+      // the above should just never cause an uncaught exception
+      // this is a somewhat bogus test:
+      res should not be (null)
+    }
+  }
+  test("fromTry works") {
+    forAll { t: Try[Int] =>
+      (MonadError[Try, Throwable].fromTry(t)) should === (t)
     }
   }
 

@@ -43,6 +43,14 @@ implicit def optionMonad(implicit app: Applicative[Option]) =
       app.map(fa)(f).flatten
     // Reuse this definition from Applicative.
     override def pure[A](a: A): Option[A] = app.pure(a)
+
+    @annotation.tailrec
+    def tailRecM[A, B](init: A)(fn: A => Option[Either[A, B]]): Option[B] =
+      fn(init) match {
+        case None => None
+        case Some(Right(b)) => Some(b)
+        case Some(Left(a)) => tailRecM(a)(fn)
+      }
   }
 ```
 
@@ -56,6 +64,8 @@ derived from `flatMap` and `pure`.
 implicit val listMonad = new Monad[List] {
   def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] = fa.flatMap(f)
   def pure[A](a: A): List[A] = List(a)
+  def tailRecM[A, B](a: A)(f: A => List[Either[A, B]]): List[B] =
+    defaultTailRecM(a)(f)
 }
 ```
 
@@ -109,6 +119,8 @@ implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
           case Some(a) => f(a).value
         }
       }
+    def tailRecM[A, B](a: A)(f: A => OptionT[F, Either[A, B]]): OptionT[F, B] =
+      defaultTailRecM(a)(f)
   }
 }
 ```

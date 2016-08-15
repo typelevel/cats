@@ -4,6 +4,7 @@ package data
 import cats.arrow.{Arrow, Split}
 import cats.functor.{Contravariant, Profunctor}
 import cats.{CoflatMap, Comonad, Functor, Monad}
+import scala.annotation.tailrec
 
 /**
  * Represents a function `F[A] => B`.
@@ -47,7 +48,7 @@ private[data] sealed abstract class CokleisliInstances extends CokleisliInstance
   implicit def catsDataArrowForCokleisli[F[_]](implicit ev: Comonad[F]): Arrow[Cokleisli[F, ?, ?]] =
     new CokleisliArrow[F] { def F: Comonad[F] = ev }
 
-  implicit def catsDataMonadForCokleisli[F[_], A]: Monad[Cokleisli[F, A, ?]] = new Monad[Cokleisli[F, A, ?]] {
+  implicit def catsDataMonadForCokleisli[F[_], A]: Monad[Cokleisli[F, A, ?]] with RecursiveTailRecM[Cokleisli[F, A, ?]] = new Monad[Cokleisli[F, A, ?]] with RecursiveTailRecM[Cokleisli[F, A, ?]] {
     def pure[B](x: B): Cokleisli[F, A, B] =
       Cokleisli.pure(x)
 
@@ -56,6 +57,16 @@ private[data] sealed abstract class CokleisliInstances extends CokleisliInstance
 
     override def map[B, C](fa: Cokleisli[F, A, B])(f: B => C): Cokleisli[F, A, C] =
       fa.map(f)
+
+    def tailRecM[B, C](b: B)(fn: B => Cokleisli[F, A, Either[B, C]]): Cokleisli[F, A, C] =
+      Cokleisli({ (fa: F[A]) =>
+        @tailrec
+        def loop(c: Cokleisli[F, A, Either[B, C]]): C = c.run(fa) match {
+          case Right(c) => c
+          case Left(bb) => loop(fn(bb))
+        }
+        loop(fn(b))
+      })
   }
 
   implicit def catsDataMonoidKForCokleisli[F[_]](implicit ev: Comonad[F]): MonoidK[λ[α => Cokleisli[F, α, α]]] =

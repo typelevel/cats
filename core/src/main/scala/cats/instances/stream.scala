@@ -2,10 +2,11 @@ package cats
 package instances
 
 import cats.syntax.show._
+import scala.annotation.tailrec
 
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
-  implicit val catsStdInstancesForStream: TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] =
-    new TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] {
+  implicit val catsStdInstancesForStream: TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] =
+    new TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
 
@@ -51,6 +52,47 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
         foldRight(fa, Always(G.pure(Stream.empty[B]))){ (a, lgsb) =>
           G.map2Eval(f(a), lgsb)(_ #:: _)
         }.value
+      }
+
+      def tailRecM[A, B](a: A)(fn: A => Stream[Either[A, B]]): Stream[B] = {
+        val it: Iterator[B] = new Iterator[B] {
+          var stack: Stream[Either[A, B]] = fn(a)
+          var state: Either[Unit, Option[B]] = Left(())
+
+          @tailrec
+          def advance(): Unit = stack match {
+            case Right(b) #:: tail =>
+              stack = tail
+              state = Right(Some(b))
+            case Left(a) #:: tail =>
+              stack = fn(a) #::: tail
+              advance
+            case empty =>
+              state = Right(None)
+          }
+
+          @tailrec
+          def hasNext: Boolean = state match {
+            case Left(()) =>
+              advance()
+              hasNext
+            case Right(o) =>
+              o.isDefined
+          }
+
+          @tailrec
+          def next(): B = state match {
+            case Left(()) =>
+              advance()
+              next
+            case Right(o) =>
+              val b = o.get
+              advance()
+              b
+          }
+        }
+
+        it.toStream
       }
 
       override def exists[A](fa: Stream[A])(p: A => Boolean): Boolean =

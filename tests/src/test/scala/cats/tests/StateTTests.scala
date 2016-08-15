@@ -172,11 +172,11 @@ class StateTTests extends CatsSuite {
   }
 
   {
-    // F has a MonadRec
-    implicit val F = ListWrapper.monadRec
+    // F has a Monad
+    implicit val F = ListWrapper.monad
 
-    checkAll("StateT[ListWrapper, Int, Int]", MonadRecTests[StateT[ListWrapper, Int, ?]].monadRec[Int, Int, Int])
-    checkAll("MonadRec[StateT[ListWrapper, Int, ?]]", SerializableTests.serializable(MonadRec[StateT[ListWrapper, Int, ?]]))
+    checkAll("StateT[ListWrapper, Int, Int]", MonadTests[StateT[ListWrapper, Int, ?]].monad[Int, Int, Int])
+    checkAll("Monad[StateT[ListWrapper, Int, ?]]", SerializableTests.serializable(Monad[StateT[ListWrapper, Int, ?]]))
 
     Monad[StateT[ListWrapper, Int, ?]]
     FlatMap[StateT[ListWrapper, Int, ?]]
@@ -217,8 +217,8 @@ class StateTTests extends CatsSuite {
     checkAll("State[Long, ?]", MonadStateTests[State[Long, ?], Long].monadState[Int, Int, Int])
     checkAll("MonadState[State[Long, ?], Long]", SerializableTests.serializable(MonadState[State[Long, ?], Long]))
 
-    checkAll("State[Long, ?]", MonadRecTests[State[Long, ?]].monadRec[Int, Int, Int])
-    checkAll("MonadRec[State[Long, ?]]", SerializableTests.serializable(MonadRec[State[Long, ?]]))
+    checkAll("State[Long, ?]", MonadTests[State[Long, ?]].monad[Int, Int, Int])
+    checkAll("Monad[State[Long, ?]]", SerializableTests.serializable(Monad[State[Long, ?]]))
   }
 }
 

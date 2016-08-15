@@ -158,15 +158,41 @@ class WriterTTests extends CatsSuite {
   }
 
   {
-    // F has a FlatMap and L has a Semigroup
-    implicit val F: FlatMap[ListWrapper] = ListWrapper.monadCombine
+    // F has a Monad and L has a Semigroup
+    implicit val F: Monad[ListWrapper] = ListWrapper.monadCombine
     implicit val L: Semigroup[ListWrapper[Int]] = ListWrapper.semigroup[Int]
 
     Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
     Apply[WriterT[ListWrapper, ListWrapper[Int], ?]]
     CoflatMap[WriterT[ListWrapper, ListWrapper[Int], ?]]
-    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", FlatMapTests[WriterT[ListWrapper, ListWrapper[Int], ?]].flatMap[Int, Int, Int])
-    checkAll("FlatMap[WriterT[ListWrapper, ListWrapper[Int], ?]]", SerializableTests.serializable(FlatMap[WriterT[ListWrapper, ListWrapper[Int], ?]]))
+    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?] 1", FlatMapTests[WriterT[ListWrapper, ListWrapper[Int], ?]].flatMap[Int, Int, Int])
+    checkAll("FlatMap[WriterT[ListWrapper, ListWrapper[Int], ?]] 1", SerializableTests.serializable(FlatMap[WriterT[ListWrapper, ListWrapper[Int], ?]]))
+
+    Functor[WriterT[Id, ListWrapper[Int], ?]]
+    Apply[WriterT[Id, ListWrapper[Int], ?]]
+    FlatMap[WriterT[Id, ListWrapper[Int], ?]]
+    CoflatMap[WriterT[Id, ListWrapper[Int], ?]]
+
+    Functor[Writer[ListWrapper[Int], ?]]
+    Apply[Writer[ListWrapper[Int], ?]]
+    FlatMap[Writer[ListWrapper[Int], ?]]
+    CoflatMap[Writer[ListWrapper[Int], ?]]
+
+    Functor[Logged]
+    Apply[Logged]
+    FlatMap[Logged]
+    CoflatMap[Logged]
+  }
+  {
+    // F has a FlatMap and L has a Monoid
+    implicit val F: FlatMap[ListWrapper] = ListWrapper.monadCombine
+    implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
+
+    Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    Apply[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    CoflatMap[WriterT[ListWrapper, ListWrapper[Int], ?]]
+    checkAll("WriterT[ListWrapper, ListWrapper[Int], ?] 2", FlatMapTests[WriterT[ListWrapper, ListWrapper[Int], ?]].flatMap[Int, Int, Int])
+    checkAll("FlatMap[WriterT[ListWrapper, ListWrapper[Int], ?]] 2", SerializableTests.serializable(FlatMap[WriterT[ListWrapper, ListWrapper[Int], ?]]))
 
     Functor[WriterT[Id, ListWrapper[Int], ?]]
     Apply[WriterT[Id, ListWrapper[Int], ?]]

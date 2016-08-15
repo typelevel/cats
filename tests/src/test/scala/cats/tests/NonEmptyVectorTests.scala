@@ -6,7 +6,7 @@ import catalysts.Platform
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, TraverseTests, ReducibleTests, MonadRecTests}
+import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, TraverseTests, ReducibleTests, MonadTests}
 import cats.laws.discipline.arbitrary._
 
 import scala.util.Properties
@@ -50,8 +50,8 @@ class NonEmptyVectorTests extends CatsSuite {
   checkAll("Comonad[NonEmptyVector]", SerializableTests.serializable(Comonad[NonEmptyVector]))
 
 
-  checkAll("NonEmptyVector[Int]", MonadRecTests[NonEmptyVector].monadRec[Int, Int, Int])
-  checkAll("MonadRec[NonEmptyVector]", SerializableTests.serializable(MonadRec[NonEmptyVector]))
+  checkAll("NonEmptyVector[Int]", MonadTests[NonEmptyVector].monad[Int, Int, Int])
+  checkAll("Monad[NonEmptyVector]", SerializableTests.serializable(Monad[NonEmptyVector]))
 
 
   test("size is consistent with toList.size") {
@@ -270,6 +270,12 @@ class NonEmptyVectorTests extends CatsSuite {
 
   test("Cannot create a new NonEmptyVector[Int] from apply with a an empty Vector") {
     "val bad: NonEmptyVector[Int] = NonEmptyVector(Vector.empty[Int])" shouldNot compile
+  }
+
+  test("NonEmptyVector#distinct is consistent with Vector#distinct") {
+    forAll { nonEmptyVector: NonEmptyVector[Int] =>
+      nonEmptyVector.distinct.toVector should === (nonEmptyVector.toVector.distinct)
+    }
   }
 }
 

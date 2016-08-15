@@ -171,13 +171,13 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * scala> type Error = String
    * scala> val v1: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList.of("error 1"))
    * scala> val v2: Validated[NonEmptyList[Error], Int] = Validated.Invalid(NonEmptyList.of("error 2"))
-   * scala> val xort: EitherT[Option, Error, Int] = EitherT(Some(Either.left("error 3")))
-   * scala> xort.withValidated { v3 => (v1 |@| v2 |@| v3.leftMap(NonEmptyList.of(_))).map{ case (i, j, k) => i + j + k } }
+   * scala> val eithert: EitherT[Option, Error, Int] = EitherT(Some(Either.left("error 3")))
+   * scala> eithert.withValidated { v3 => (v1 |@| v2 |@| v3.leftMap(NonEmptyList.of(_))).map{ case (i, j, k) => i + j + k } }
    * res0: EitherT[Option, NonEmptyList[Error], Int] = EitherT(Some(Left(NonEmptyList(error 1, error 2, error 3))))
    * }}}
    */
   def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB])(implicit F: Functor[F]): EitherT[F, AA, BB] =
-    EitherT(F.map(value)(xor => f(xor.toValidated).toEither))
+    EitherT(F.map(value)(either => f(either.toValidated).toEither))
 
   def show(implicit show: Show[F[Either[A, B]]]): String = show.show(value)
 
@@ -235,8 +235,8 @@ trait EitherTFunctions {
   final def fromEither[F[_]]: FromEitherPartiallyApplied[F] = new FromEitherPartiallyApplied
 
   final class FromEitherPartiallyApplied[F[_]] private[EitherTFunctions] {
-    def apply[E, A](xor: Either[E, A])(implicit F: Applicative[F]): EitherT[F, E, A] =
-      EitherT(F.pure(xor))
+    def apply[E, A](either: Either[E, A])(implicit F: Applicative[F]): EitherT[F, E, A] =
+      EitherT(F.pure(either))
   }
 }
 
@@ -310,13 +310,11 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
 }
 
 private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
-  implicit def catsDataMonadRecForEitherT[F[_], L](implicit F0: MonadRec[F]): MonadRec[EitherT[F, L, ?]] =
-    new EitherTMonadRec[F, L] { implicit val F = F0 }
-}
-
-private[data] abstract class EitherTInstances3 extends EitherTInstances4 {
   implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
     new EitherTMonadError[F, L] { implicit val F = F0 }
+
+  implicit def catsDataRecursiveTailRecMForEitherT[F[_]: RecursiveTailRecM, L]: RecursiveTailRecM[EitherT[F, L, ?]] =
+    RecursiveTailRecM.create[EitherT[F, L, ?]]
 
   implicit def catsDataSemigroupKForEitherT[F[_], L](implicit F0: Monad[F]): SemigroupK[EitherT[F, L, ?]] =
     new EitherTSemigroupK[F, L] { implicit val F = F0 }
@@ -327,7 +325,7 @@ private[data] abstract class EitherTInstances3 extends EitherTInstances4 {
     }
 }
 
-private[data] abstract class EitherTInstances4 {
+private[data] abstract class EitherTInstances3 {
   implicit def catsDataFunctorForEitherT[F[_], L](implicit F0: Functor[F]): Functor[EitherT[F, L, ?]] =
     new EitherTFunctor[F, L] { implicit val F = F0 }
 }
@@ -361,6 +359,12 @@ private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, ?]] with E
   implicit val F: Monad[F]
   def pure[A](a: A): EitherT[F, L, A] = EitherT(F.pure(Either.right(a)))
   def flatMap[A, B](fa: EitherT[F, L, A])(f: A => EitherT[F, L, B]): EitherT[F, L, B] = fa flatMap f
+  def tailRecM[A, B](a: A)(f: A => EitherT[F, L, Either[A, B]]): EitherT[F, L, B] =
+    EitherT(F.tailRecM(a)(a0 => F.map(f(a0).value) {
+      case Left(l)         => Right(Left(l))
+      case Right(Left(a1)) => Left(a1)
+      case Right(Right(b)) => Right(Right(b))
+    }))
 }
 
 private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, ?], L] with EitherTMonad[F, L] {
@@ -380,16 +384,6 @@ private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, 
     fla.recover(pf)
   override def recoverWith[A](fla: EitherT[F, L, A])(pf: PartialFunction[L, EitherT[F, L, A]]): EitherT[F, L, A] =
     fla.recoverWith(pf)
-}
-
-private[data] trait EitherTMonadRec[F[_], L] extends MonadRec[EitherT[F, L, ?]] with EitherTMonad[F, L] {
-  implicit val F: MonadRec[F]
-  def tailRecM[A, B](a: A)(f: A => EitherT[F, L, Either[A, B]]): EitherT[F, L, B] =
-    EitherT(F.tailRecM(a)(a0 => F.map(f(a0).value){
-      case Left(l)         => Right(Left(l))
-      case Right(Left(a1)) => Left(a1)
-      case Right(Right(b)) => Right(Right(b))
-    }))
 }
 
 private[data] trait EitherTMonadFilter[F[_], L] extends MonadFilter[EitherT[F, L, ?]] with EitherTMonadError[F, L] {

@@ -58,15 +58,15 @@ class XorTTests extends CatsSuite {
   }
 
   {
-    //if a MonadRec is defined
-    implicit val F = ListWrapper.monadRec
+    //if a Monad is defined
+    implicit val F = ListWrapper.monad
 
     Functor[XorT[ListWrapper, String, ?]]
     Applicative[XorT[ListWrapper, String, ?]]
     Monad[XorT[ListWrapper, String, ?]]
 
-    checkAll("XorT[ListWrapper, String, Int]", MonadRecTests[XorT[ListWrapper, String, ?]].monadRec[Int, Int, Int])
-    checkAll("MonadRec[XorT[ListWrapper, String, ?]]", SerializableTests.serializable(MonadRec[XorT[ListWrapper, String, ?]]))
+    checkAll("XorT[ListWrapper, String, Int]", MonadTests[XorT[ListWrapper, String, ?]].monad[Int, Int, Int])
+    checkAll("Monad[XorT[ListWrapper, String, ?]]", SerializableTests.serializable(Monad[XorT[ListWrapper, String, ?]]))
   }
 
   {

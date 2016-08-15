@@ -126,6 +126,7 @@ An example of a `Monad` instance for `Kleisli` is shown below.
 
 ```tut:silent
 import cats.implicits._
+import cats.data.Xor
 
 // We can define a FlatMap instance for Kleisli if the F[_] we chose has a FlatMap instance
 // Note the input type and F are fixed, with the output type left free
@@ -136,6 +137,9 @@ implicit def kleisliFlatMap[F[_], Z](implicit F: FlatMap[F]): FlatMap[Kleisli[F,
 
     def map[A, B](fa: Kleisli[F, Z, A])(f: A => B): Kleisli[F, Z, B] =
       Kleisli(z => fa.run(z).map(f))
+
+    def tailRecM[A, B](a: A)(f: A => Kleisli[F, Z, Either[A, B]]) =
+      Kleisli[F, Z, B]({ z => FlatMap[F].tailRecM(a) { f(_).run(z) } })
   }
 ```
 

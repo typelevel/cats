@@ -4,7 +4,7 @@ package tests
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.NonEmptyList
-import cats.laws.discipline.{ComonadTests, SemigroupKTests, MonadRecTests, SerializableTests, TraverseTests, ReducibleTests}
+import cats.laws.discipline.{ComonadTests, SemigroupKTests, MonadTests, SerializableTests, TraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyListTests extends CatsSuite {
@@ -20,7 +20,7 @@ class NonEmptyListTests extends CatsSuite {
   checkAll("NonEmptyList[Int]", ReducibleTests[NonEmptyList].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyList]", SerializableTests.serializable(Reducible[NonEmptyList]))
 
-  checkAll("NonEmptyList[Int]", MonadRecTests[NonEmptyList].monadRec[Int, Int, Int])
+  checkAll("NonEmptyList[Int]", MonadTests[NonEmptyList].monad[Int, Int, Int])
   checkAll("Monad[NonEmptyList[A]]", SerializableTests.serializable(Monad[NonEmptyList]))
 
   checkAll("NonEmptyList[Int]", SemigroupKTests[NonEmptyList].semigroupK[Int])
@@ -176,6 +176,12 @@ class NonEmptyListTests extends CatsSuite {
   test(":: consistent with List") {
     forAll { (nel: NonEmptyList[Int], i: Int) =>
       (i :: nel).toList should === (i :: nel.toList)
+    }
+  }
+
+  test("NonEmptyList#distinct is consistent with List#distinct") {
+    forAll { nel: NonEmptyList[Int] =>
+      nel.distinct.toList should === (nel.toList.distinct)
     }
   }
 }

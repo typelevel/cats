@@ -1,9 +1,11 @@
 package cats
 
+import simulacrum.typeclass
+
 /**
  * A type class abstracting over types that give rise to two independent [[cats.Foldable]]s.
  */
-trait Bifoldable[F[_, _]] extends Any with Serializable { self =>
+@typeclass trait Bifoldable[F[_, _]] { self =>
   /** Collapse the structure with a left-associative function */
   def bifoldLeft[A, B, C](fab: F[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C
 
@@ -22,10 +24,6 @@ trait Bifoldable[F[_, _]] extends Any with Serializable { self =>
       val F = self
       val G = ev
     }
-}
-
-object Bifoldable {
-  def apply[F[_, _]](implicit F: Bifoldable[F]): Bifoldable[F] = F
 }
 
 private[cats] trait ComposedBifoldable[F[_, _], G[_, _]] extends Bifoldable[λ[(α, β) => F[G[α, β], G[α, β]]]] {

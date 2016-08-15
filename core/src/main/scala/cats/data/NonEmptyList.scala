@@ -5,6 +5,7 @@ import cats.instances.list._
 import cats.syntax.order._
 
 import scala.annotation.tailrec
+import scala.collection.immutable.TreeSet
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -106,6 +107,20 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
     toList.iterator.map(A.show).mkString("NonEmptyList(", ", ", ")")
 
   override def toString: String = s"NonEmpty$toList"
+
+  /**
+   * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+   */
+  def distinct(implicit O: Order[A]): NonEmptyList[A] = {
+    implicit val ord = O.toOrdering
+
+    val buf = ListBuffer.empty[A]
+    tail.foldLeft(TreeSet(head)) { (elementsSoFar, a) =>
+      if (elementsSoFar(a)) elementsSoFar else { buf += a; elementsSoFar + a }
+    }
+
+    NonEmptyList(head, buf.toList)
+  }
 }
 
 object NonEmptyList extends NonEmptyListInstances {
@@ -146,9 +161,9 @@ object NonEmptyList extends NonEmptyListInstances {
 private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 {
 
   implicit val catsDataInstancesForNonEmptyList: SemigroupK[NonEmptyList] with Reducible[NonEmptyList]
-      with Comonad[NonEmptyList] with Traverse[NonEmptyList] with MonadRec[NonEmptyList] =
-    new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList]
-        with Comonad[NonEmptyList] with Traverse[NonEmptyList] with MonadRec[NonEmptyList] {
+      with Comonad[NonEmptyList] with Traverse[NonEmptyList] with Monad[NonEmptyList] with RecursiveTailRecM[NonEmptyList] =
+    new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList] with Comonad[NonEmptyList]
+      with Traverse[NonEmptyList] with Monad[NonEmptyList] with RecursiveTailRecM[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a concat b

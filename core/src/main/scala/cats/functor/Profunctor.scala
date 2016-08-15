@@ -1,15 +1,30 @@
 package cats
 package functor
 
+import simulacrum.typeclass
+
 /**
  * A [[Profunctor]] is a [[Contravariant]] functor on its first type parameter
  * and a [[Functor]] on its second type parameter.
  *
  * Must obey the laws defined in cats.laws.ProfunctorLaws.
  */
-trait Profunctor[F[_, _]] extends Serializable { self =>
+@typeclass trait Profunctor[F[_, _]] { self =>
+
   /**
-   * contramap on the first type parameter and map on the second type parameter
+   * Contramap on the first type parameter and map on the second type parameter
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.functor.Profunctor
+   * scala> val fab: Double => Double = x => x + 0.3
+   * scala> val f: Int => Double = x => x.toDouble / 2
+   * scala> val g: Double => Double = x => x * 3
+   * scala> val h = Profunctor[Function1].dimap(fab)(f)(g)
+   * scala> h(3)
+   * res0: Double = 5.4
+   * }}}
    */
   def dimap[A, B, C, D](fab: F[A, B])(f: C => A)(g: B => D): F[C, D]
 
@@ -24,9 +39,4 @@ trait Profunctor[F[_, _]] extends Serializable { self =>
    */
   def rmap[A, B, C](fab: F[A, B])(f: B => C): F[A, C] =
     dimap[A, B, A, C](fab)(identity)(f)
-}
-
-
-object Profunctor {
-  def apply[F[_, _]](implicit ev: Profunctor[F]): Profunctor[F] = ev
 }

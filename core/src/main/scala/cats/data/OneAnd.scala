@@ -136,7 +136,42 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
         val fst = f(fa.head)
         OneAnd(fst.head, monad.combineK(fst.tail, end))
       }
+
+      def tailRecM[A, B](a: A)(fn: A => OneAnd[F, Either[A, B]]): OneAnd[F, B] = {
+        def stepF(a: A): F[Either[A, B]] = {
+          val oneAnd = fn(a)
+          monad.combineK(monad.pure(oneAnd.head), oneAnd.tail)
+        }
+        def toFB(in: Either[A, B]): F[B] = in match {
+          case Right(b) => monad.pure(b)
+          case Left(a)  => monad.tailRecM(a)(stepF)
+        }
+
+        // This could probably be in SemigroupK to perform well
+        @tailrec
+        def combineAll(items: List[F[B]]): F[B] = items match {
+          case Nil => monad.empty
+          case h :: Nil => h
+          case h1 :: h2 :: tail => combineAll(monad.combineK(h1, h2) :: tail)
+        }
+
+        @tailrec
+        def go(in: A, rest: List[F[B]]): OneAnd[F, B] =
+          fn(in) match {
+            case OneAnd(Right(b), tail) =>
+              val fbs = monad.flatMap(tail)(toFB)
+              OneAnd(b, combineAll(fbs :: rest))
+            case OneAnd(Left(a), tail) =>
+              val fbs = monad.flatMap(tail)(toFB)
+              go(a, fbs :: rest)
+          }
+
+        go(a, Nil)
+      }
     }
+
+    implicit def catsDataOneAnd[F[_]: RecursiveTailRecM]: RecursiveTailRecM[OneAnd[F, ?]] =
+      RecursiveTailRecM.create[OneAnd[F, ?]]
 }
 
 private[data] trait OneAndLowPriority0 {

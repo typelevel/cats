@@ -90,4 +90,20 @@ import simulacrum.typeclass
    */
   def ifM[B](fa: F[Boolean])(ifTrue: => F[B], ifFalse: => F[B]): F[B] =
     flatMap(fa)(if (_) ifTrue else ifFalse)
+
+  /**
+   * Keeps calling `f` until a `[[Right]][B]` is returned.
+   *
+   * Based on Phil Freeman's
+   * [[http://functorial.com/stack-safety-for-free/index.pdf Stack Safety for Free]].
+   *
+   * Implementations of this method should ideally use constant stack space. If
+   * it is constant stack space, an instance of `RecursiveTailRecM[F]` should
+   * be made available.
+   *
+   * Note, Monad subclasses can call `defaultTailRecM(a)(f)` to get an implementation
+   * using recursive flatMap. Such an implementation will only be stack safe if
+   * the Monad is trampolined.
+   */
+  def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B]
 }
