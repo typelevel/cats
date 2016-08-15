@@ -26,6 +26,7 @@ trait EitherInstances extends EitherInstances1 {
         }
     }
 
+  // scalastyle:off method.length
   implicit def catsStdInstancesForEither[A]: MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] with RecursiveTailRecM[Either[A, ?]] =
     new MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] with RecursiveTailRecM[Either[A, ?]] {
       def pure[B](b: B): Either[A, B] = Right(b)

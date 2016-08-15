@@ -8,7 +8,7 @@ import scala.util.{Failure, Success, Try}
 trait EitherSyntax {
   implicit def catsSyntaxEither[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)
 
-  implicit def catsSyntaxEitherObject(either: Either.type): EitherObjectOps = new EitherObjectOps(either)
+  implicit def catsSyntaxEitherObject(either: Either.type ): EitherObjectOps = new EitherObjectOps(either)
 }
 
 final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
@@ -191,7 +191,7 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
   def toEitherT[F[_]: Applicative]: EitherT[F, A, B] = EitherT.fromEither(eab)
 }
 
-final class EitherObjectOps(val either: Either.type) extends AnyVal {
+final class EitherObjectOps(val either: Either.type ) extends AnyVal {
   def left[A, B](a: A): Either[A, B] = Left(a)
 
   def right[A, B](b: B): Either[A, B] = Right(b)
