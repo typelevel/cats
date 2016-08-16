@@ -51,6 +51,7 @@ lazy val kernelSettings = Seq(
 ) ++ warnUnusedImport
 
 lazy val commonSettings = Seq(
+  incOptions := incOptions.value.withLogRecompileOnMacro(false),
   scalacOptions ++= commonScalacOptions,
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
