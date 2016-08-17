@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.syntax.EitherUtil
 import cats.syntax.either._
 import scala.annotation.tailrec
 
@@ -54,10 +55,7 @@ trait EitherInstances extends EitherInstances1 {
 
       override def map2Eval[B, C, Z](fb: Either[A, B], fc: Eval[Either[A, C]])(f: (B, C) => Z): Eval[Either[A, Z]] =
         fb match {
-          // This should be safe, but we are forced to use `asInstanceOf`,
-          // because `Left[+A, +B]` extends Either[A, B] instead of
-          // `Either[A, Nothing]`
-          case l @ Left(_) => Now(l.asInstanceOf[Either[A, Z]])
+          case l @ Left(_) => Now(EitherUtil.leftCast(l))
           case Right(b) => fc.map(_.right.map(f(b, _)))
         }
 
