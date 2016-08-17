@@ -9,6 +9,10 @@ trait EitherSyntax {
   implicit def catsSyntaxEither[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)
 
   implicit def catsSyntaxEitherObject(either: Either.type): EitherObjectOps = new EitherObjectOps(either) // scalastyle:off ensure.single.space.after.token
+
+  implicit def catsSyntaxLeft[A, B](left: Left[A, B]): LeftOps[A, B] = new LeftOps(left)
+
+  implicit def catsSyntaxRight[A, B](right: Right[A, B]): RightOps[A, B] = new RightOps(right)
 }
 
 final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
@@ -24,7 +28,7 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
 
   def orElse[C](fallback: => Either[C, B]): Either[C, B] = eab match {
     case Left(_)      => fallback
-    case r @ Right(_) => EitherUtil.rightCast(r)
+    case r @ Right(_) => EitherUtil.leftCast(r)
   }
 
   def recover(pf: PartialFunction[A, B]): Either[A, B] = eab match {
@@ -103,23 +107,23 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
   }
 
   def map[C](f: B => C): Either[A, C] = eab match {
-    case l @ Left(_) => EitherUtil.leftCast(l)
+    case l @ Left(_) => EitherUtil.rightCast(l)
     case Right(b)    => Right(f(b))
   }
 
   def map2Eval[C, Z](fc: Eval[Either[A, C]])(f: (B, C) => Z): Eval[Either[A, Z]] =
     eab match {
-      case l @ Left(_) => Now(EitherUtil.leftCast(l))
+      case l @ Left(_) => Now(EitherUtil.rightCast(l))
       case Right(b)    => fc.map(either => new EitherOps(either).map(f(b, _)))
     }
 
   def leftMap[C](f: A => C): Either[C, B] = eab match {
     case Left(a)      => Left(f(a))
-    case r @ Right(_) => EitherUtil.rightCast(r)
+    case r @ Right(_) => EitherUtil.leftCast(r)
   }
 
   def flatMap[D](f: B => Either[A, D]): Either[A, D] = eab match {
-    case l @ Left(_) => EitherUtil.leftCast(l)
+    case l @ Left(_) => EitherUtil.rightCast(l)
     case Right(b)    => f(b)
   }
 
@@ -163,7 +167,7 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
   }
 
   def traverse[F[_], D](f: B => F[D])(implicit F: Applicative[F]): F[Either[A, D]] = eab match {
-    case l @ Left(_) => F.pure(EitherUtil.leftCast(l))
+    case l @ Left(_) => F.pure(EitherUtil.rightCast(l))
     case Right(b)    => F.map(f(b))(Right(_))
   }
 
@@ -311,10 +315,19 @@ final class CatchOnlyPartiallyApplied[T] private[syntax] {
     }
 }
 
-private[cats] object EitherUtil {
-  /** Cast the *right* type parameter of a `Left`. */
-  def leftCast[A, B, C](l: Left[A, B]): Either[A, C] = l.asInstanceOf[Left[A, C]]
+final class LeftOps[A, B](val left: Left[A, B]) extends AnyVal {
+  /** Cast the right type parameter of the `Left`. */
+  def rightCast[C]: Either[A, C] = left.asInstanceOf[Either[A, C]]
+}
 
-  /** Cast the *left* type parameter of a `Right` */
-  def rightCast[A, B, C](r: Right[A, B]): Either[C, B] = r.asInstanceOf[Right[C, B]]
+final class RightOps[A, B](val right: Right[A, B]) extends AnyVal {
+  /** Cast the left type parameter of the `Right`. */
+  def leftCast[C]: Either[C, B] = right.asInstanceOf[Either[C, B]]
+}
+
+/** Convenience methods to use `Either` syntax inside `Either` syntax definitions. */
+private[cats] object EitherUtil {
+  def leftCast[A, B, C](r: Right[A, B]): Either[C, B] = new RightOps(r).leftCast[C]
+
+  def rightCast[A, B, C](l: Left[A, B]): Either[A, C] = new LeftOps(l).rightCast[C]
 }

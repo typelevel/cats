@@ -44,6 +44,18 @@ class EitherTests extends CatsSuite {
   checkAll("Either[Int, String]", orderLaws.partialOrder(partialOrder))
   checkAll("Either[Int, String]", orderLaws.order(order))
 
+  test("Left/Right cast syntax") {
+    forAll { (e: Either[Int, String]) =>
+      e match {
+        case l @ Left(_)  =>
+          l.rightCast[Double]: Either[Int, Double]
+          assert(true)
+        case r @ Right(_) =>
+          r.leftCast[List[Byte]]: Either[List[Byte], String]
+          assert(true)
+      }
+    }
+  }
 
   test("implicit instances resolve specifically") {
     val eq = catsStdEqForEither[Int, String]

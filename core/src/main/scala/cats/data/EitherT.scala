@@ -3,7 +3,6 @@ package data
 
 import cats.functor.Bifunctor
 import cats.instances.either._
-import cats.syntax.EitherUtil
 import cats.syntax.either._
 
 /**
@@ -73,7 +72,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def flatMap[D](f: B => EitherT[F, A, D])(implicit F: Monad[F]): EitherT[F, A, D] =
     EitherT(F.flatMap(value) {
-      case l @ Left(_) => F.pure(EitherUtil.leftCast(l))
+      case l @ Left(_) => F.pure(l.rightCast)
       case Right(b) => f(b).value
     })
 
