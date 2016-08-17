@@ -37,7 +37,7 @@ trait Apply[F[_]] extends Functor[F] with Cartesian[F] with ApplyArityFunctions[
    * Similar to [[map2]] but uses [[Eval]] to allow for laziness in the `F[B]`
    * argument. This can allow for "short-circuiting" of computations.
    *
-   * NOTE: the default implementation of `map2Eval` does does not short-circuit
+   * NOTE: the default implementation of `map2Eval` does not short-circuit
    * computations. For data structures that can benefit from laziness, [[Apply]]
    * instances should override this method.
    *
