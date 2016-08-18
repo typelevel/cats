@@ -35,8 +35,8 @@ class FreeTTests extends CatsSuite {
 
   {
     import StateT._
-    checkAll("FreeT[ListWrapper, State[Int, ?], Int]", MonadStateTests[FreeTListState, Int].monadState[Int, Int, Int])
-    checkAll("MonadState[FreeT[ListWrapper,State[Int, ?], ?], Int]", SerializableTests.serializable(MonadState[FreeTListState, Int]))
+    checkAll("FreeT[State[Int, ?], State[Int, ?], Int]", MonadStateTests[FreeTListState, Int].monadState[Int, Int, Int])
+    checkAll("MonadState[FreeT[State[Int, ?],State[Int, ?], ?], Int]", SerializableTests.serializable(MonadState[FreeTListState, Int]))
   }
 
   test("FlatMap stack safety tested with 50k flatMaps") {
@@ -142,13 +142,12 @@ sealed trait FreeTTestsInstances {
   type FreeTListWrapper[A] = FreeTListW[ListWrapper, A]
   type FreeTListOption[A] = FreeTListW[Option, A]
   type FreeTListState[A] = FreeT[IntState, IntState, A]
-  type MonadRec[F[_]] = Monad[F] with RecursiveTailRecM[F]
-
+  
   case class JustFunctor[A](a: A)
 
   implicit val listSemigroupK: SemigroupK[ListWrapper] = ListWrapper.semigroupK
 
-  implicit val listWrapperMonad: MonadRec[ListWrapper] with Alternative[ListWrapper] = ListWrapper.monadCombine
+  implicit val listWrapperMonad: Monad[ListWrapper] with RecursiveTailRecM[ListWrapper] with Alternative[ListWrapper] = ListWrapper.monadCombine
 
   implicit val ftlWIso: Isomorphisms[FreeTListWrapper] = CartesianTests.Isomorphisms.invariant[FreeTListWrapper]
 
@@ -185,7 +184,7 @@ sealed trait FreeTTestsInstances {
     def eqv(a: FreeTListWrapper[A], b: FreeTListWrapper[A]) = Eq[ListWrapper[A]].eqv(a.runM(identity), b.runM(identity))
   }
 
-  implicit def freeTListOptionEq[A](implicit A: Eq[A], OM: MonadRec[Option]): Eq[FreeTListOption[A]] = new Eq[FreeTListOption[A]] {
+  implicit def freeTListOptionEq[A](implicit A: Eq[A], OM: Monad[Option], RT: RecursiveTailRecM[Option]): Eq[FreeTListOption[A]] = new Eq[FreeTListOption[A]] {
     def eqv(a: FreeTListOption[A], b: FreeTListOption[A]) = Eq[Option[A]].eqv(a.runM(_.list.headOption), b.runM(_.list.headOption))
   }
 
