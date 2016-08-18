@@ -76,10 +76,10 @@ object ListWrapper {
 
   def semigroup[A]: Semigroup[ListWrapper[A]] = semigroupK.algebra[A]
 
-  val monadCombine: MonadCombine[ListWrapper] = {
+  val monadCombine: MonadCombine[ListWrapper] with RecursiveTailRecM[ListWrapper] = {
     val M = MonadCombine[List]
 
-    new MonadCombine[ListWrapper] {
+    new MonadCombine[ListWrapper] with RecursiveTailRecM[ListWrapper] {
       def pure[A](x: A): ListWrapper[A] = ListWrapper(M.pure(x))
 
       def flatMap[A, B](fa: ListWrapper[A])(f: A => ListWrapper[B]): ListWrapper[B] =
