@@ -14,19 +14,19 @@ class FreeTTests extends CatsSuite {
 
   import ListWrapper._
   import FreeTTests._
-/*    
-    checkAll("FreeT[ListWrapper, ListWrapper, Int]", FlatMapTests[FreeTListWrapper].flatMap[Int, Int, Int])
-    checkAll("FlatMap[FreeT[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(FlatMap[FreeTListWrapper]))
 
-    checkAll("FreeT[ListWrapper, ListWrapper, Int]", MonadTests[FreeTListWrapper].monad[Int, Int, Int])
-    checkAll("Monad[FreeT[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Monad[FreeTListWrapper]))
- 
-    checkAll("FreeT[ListWrapper, ListWrapper, Int]", SemigroupKTests[FreeTListWrapper].semigroupK[Int])
-    checkAll("SemigroupK[FreeT[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(SemigroupK[FreeTListWrapper]))
-  
-    checkAll("FreeT[ListWrapper, ListWrapper, Int]", MonadCombineTests[FreeTListWrapper].monadCombine[Int, Int, Int])
-    checkAll("MonadCombine[FreeT[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(MonadCombine[FreeTListWrapper]))
- */
+  checkAll("FreeT[ListWrapper, ListWrapper, Int]", FlatMapTests[FreeTListWrapper].flatMap[Int, Int, Int])
+  checkAll("FlatMap[FreeT[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(FlatMap[FreeTListWrapper]))
+
+  checkAll("FreeT[ListWrapper, ListWrapper, Int]", MonadTests[FreeTListWrapper].monad[Int, Int, Int])
+  checkAll("Monad[FreeT[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Monad[FreeTListWrapper]))
+
+  checkAll("FreeT[ListWrapper, ListWrapper, Int]", SemigroupKTests[FreeTListWrapper].semigroupK[Int])
+  checkAll("SemigroupK[FreeT[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(SemigroupK[FreeTListWrapper]))
+
+  checkAll("FreeT[ListWrapper, ListWrapper, Int]", MonadCombineTests[FreeTListWrapper].monadCombine[Int, Int, Int])
+  checkAll("MonadCombine[FreeT[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(MonadCombine[FreeTListWrapper]))
+
   {
     implicit val eqXortTFA: Eq[XorT[FreeTListOption, Unit, Int]] = XorT.catsDataEqForXorT[FreeTListOption, Unit, Int]
     checkAll("FreeT[ListWrapper, Option, Int]", MonadErrorTests[FreeTListOption, Unit].monadError[Int, Int, Int])
@@ -37,10 +37,8 @@ class FreeTTests extends CatsSuite {
     import StateT._
     checkAll("FreeT[ListWrapper, State[Int, ?], Int]", MonadStateTests[FreeTListState, Int].monadState[Int, Int, Int])
     checkAll("MonadState[FreeT[ListWrapper,State[Int, ?], ?], Int]", SerializableTests.serializable(MonadState[FreeTListState, Int]))
-    }
-  
-   
-  
+  }
+
   test("FlatMap stack safety tested with 50k flatMaps") {
     val expected = Applicative[FreeTListOption].pure(())
     val result =
@@ -132,6 +130,7 @@ object FreeTTests extends FreeTTestsInstances
 sealed trait FreeTTestsInstances {
 
   import FreeT._
+  import StateT._
   import Arbitrary._
   import org.scalacheck.Arbitrary
   import cats.kernel.instances.option._
@@ -148,17 +147,15 @@ sealed trait FreeTTestsInstances {
   case class JustFunctor[A](a: A)
 
   implicit val listSemigroupK: SemigroupK[ListWrapper] = ListWrapper.semigroupK
-  
-  implicit val listWrapperMonad: MonadRec[ListWrapper] with Alternative[ListWrapper] = ListWrapper.monadCombine
 
-  implicit val intStateMonad: MonadRec[IntState] = throw("can't summon this instance!")
+  implicit val listWrapperMonad: MonadRec[ListWrapper] with Alternative[ListWrapper] = ListWrapper.monadCombine
 
   implicit val ftlWIso: Isomorphisms[FreeTListWrapper] = CartesianTests.Isomorphisms.invariant[FreeTListWrapper]
 
   implicit val ftlOIso: Isomorphisms[FreeTListOption] = CartesianTests.Isomorphisms.invariant[FreeTListOption]
 
   implicit val ftlSIso: Isomorphisms[FreeTListState] = CartesianTests.Isomorphisms.invariant[FreeTListState]
-    
+
   implicit val jfFunctor: Functor[JustFunctor] = new Functor[JustFunctor] {
     override def map[A, B](fa: JustFunctor[A])(f: A => B): JustFunctor[B] = JustFunctor(f(fa.a))
   }
@@ -179,7 +176,7 @@ sealed trait FreeTTestsInstances {
 
   implicit def listWrapperArbitrary[A: Arbitrary]: Arbitrary[ListWrapper[A]] = ListWrapper.listWrapperArbitrary[A]
 
-  implicit def freeTListStateArb[A : Arbitrary]: Arbitrary[FreeTListState[A]] = freeTArb[IntState, IntState, A]
+  implicit def freeTListStateArb[A: Arbitrary]: Arbitrary[FreeTListState[A]] = freeTArb[IntState, IntState, A]
 
   implicit def freeTArb[F[_], G[_]: Applicative, A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Arbitrary[FreeT[F, G, A]] =
     Arbitrary(freeTGen[F, G, A](4))
@@ -188,12 +185,12 @@ sealed trait FreeTTestsInstances {
     def eqv(a: FreeTListWrapper[A], b: FreeTListWrapper[A]) = Eq[ListWrapper[A]].eqv(a.runM(identity), b.runM(identity))
   }
 
-  implicit def freeTListOptionEq[A](implicit A: Eq[A], OF: MonadRec[Option]): Eq[FreeTListOption[A]] = new Eq[FreeTListOption[A]] {
+  implicit def freeTListOptionEq[A](implicit A: Eq[A], OM: MonadRec[Option]): Eq[FreeTListOption[A]] = new Eq[FreeTListOption[A]] {
     def eqv(a: FreeTListOption[A], b: FreeTListOption[A]) = Eq[Option[A]].eqv(a.runM(_.list.headOption), b.runM(_.list.headOption))
   }
 
-  implicit def freeTListStateEq[A](implicit A: Eq[A]): Eq[FreeTListState[A]] = new Eq[FreeTListState[A]] {
-    def eqv(a: FreeTListState[A], b: FreeTListState[A]) = Eq[IntState[A]].eqv(a.runM(identity), b.runM(identity))
+  implicit def freeTListStateEq[A](implicit A: Eq[A], SM: Monad[IntState], RT: RecursiveTailRecM[IntState]): Eq[FreeTListState[A]] = new Eq[FreeTListState[A]] {
+    def eqv(a: FreeTListState[A], b: FreeTListState[A]) = Eq[IntState[A]].eqv(a.runM(identity)(SM, SM, RT), b.runM(identity)(SM, SM, RT))
   }
 
   private def freeTGen[F[_], G[_]: Applicative, A](maxDepth: Int)(implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Gen[FreeT[F, G, A]] = {
@@ -214,5 +211,5 @@ sealed trait FreeTTestsInstances {
     if (maxDepth <= 1) noFlatMapped
     else Gen.oneOf(noFlatMapped, withFlatMapped)
   }
-  
+
 }
