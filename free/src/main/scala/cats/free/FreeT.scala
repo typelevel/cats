@@ -67,7 +67,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
         }
       }
 
-    MR.tailRecM(this)(go)
+    RT.sameType(MR).tailRecM(this)(go)
   }
 
   /** Evaluates a single layer of the free monad */
@@ -84,7 +84,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
         }
       }
 
-    MR.tailRecM(this)(go)
+    RT.sameType(MR).tailRecM(this)(go)
   }
 
   /**
@@ -96,7 +96,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
         case Xor.Left(a) => MR.pure(Xor.right(a))
         case Xor.Right(fc) => MR.map(interp(fc))(Xor.left)
       }
-    MR.tailRecM(this)(runM2)
+    RT.sameType(MR).tailRecM(this)(runM2)
   }
 
   /**
@@ -219,20 +219,18 @@ private[free] sealed trait FreeTInstances0 extends FreeTInstances1 {
       def M = M0
     }
 
-  implicit def catsFreeCombineForFreeT[S[_], M[_]: Applicative: RecursiveTailRecM: SemigroupK]: SemigroupK[FreeT[S, M, ?]] =
+  implicit def catsFreeCombineForFreeT[S[_], M[_]: Applicative: SemigroupK]: SemigroupK[FreeT[S, M, ?]] =
     new FreeTCombine[S, M] {
       override def M = implicitly
       override def M1 = implicitly
-      override def M2 = implicitly
     }
 }
 
 private[free] sealed trait FreeTInstances extends FreeTInstances0 {
-  implicit def catsFreeMonadCombineForFreeT[S[_], M[_]: Alternative: RecursiveTailRecM]: MonadCombine[FreeT[S, M, ?]] =
+  implicit def catsFreeMonadCombineForFreeT[S[_], M[_]: Alternative]: MonadCombine[FreeT[S, M, ?]] =
     new MonadCombine[FreeT[S, M, ?]] with FreeTCombine[S, M] with FreeTMonad[S, M] {
       override def M = implicitly
       override def M1 = implicitly
-      override def M2 = implicitly
 
       override def empty[A] = FreeT.liftT[S, M, A](MonoidK[M].empty[A])(M)
     }
@@ -256,8 +254,7 @@ private[free] sealed trait FreeTMonad[S[_], M[_]] extends Monad[FreeT[S, M, ?]] 
 
 private[free] sealed trait FreeTCombine[S[_], M[_]] extends SemigroupK[FreeT[S, M, ?]] {
   implicit def M: Applicative[M]
-  implicit def M1: RecursiveTailRecM[M]
-  def M2: SemigroupK[M]
+  def M1: SemigroupK[M]
   override final def combineK[A](a: FreeT[S, M, A], b: FreeT[S, M, A]): FreeT[S, M, A] =
-    FreeT.liftT(M2.combineK(a.toM, b.toM))(M).flatMap(identity)
+    FreeT.liftT(M1.combineK(a.toM, b.toM))(M).flatMap(identity)
 }
