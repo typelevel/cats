@@ -125,10 +125,7 @@ class FreeTTests extends CatsSuite {
   }
 }
 
-object FreeTTests
-    extends FreeTTestsInstances
-
-trait FreeTTestsInstances extends FreeTTestsInstances0 {
+object FreeTTests extends FreeTTestsInstances {
 
   import Arbitrary._
   import org.scalacheck.Arbitrary
@@ -161,7 +158,7 @@ trait FreeTTestsInstances extends FreeTTestsInstances0 {
 
 }
 
-trait FreeTTestsInstances0 {
+trait FreeTTestsInstances {
 
   import FreeT._
   import StateT._
