@@ -1,11 +1,11 @@
 package cats.bench
 
-//import cats.instances.list._
+import cats.instances.list._
 import cats.instances.int._
 import cats.instances.map._
 
 import scalaz.std.anyVal._
-//import scalaz.std.list._
+import scalaz.std.list._
 import scalaz.std.map._
 
 import org.openjdk.jmh.annotations.{ Benchmark, Scope, State }
