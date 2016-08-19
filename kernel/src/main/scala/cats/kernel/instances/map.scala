@@ -47,6 +47,6 @@ class MapMonoid[K, V](implicit V: Semigroup[V]) extends Monoid[Map[K, V]]  {
         m.updated(k, Semigroup.maybeCombine(m.get(k), v))
       }
     }
-    new StaticMethods.WrappedMutableMap(acc)
+    StaticMethods.wrapMutableMap(acc)
   }
 }

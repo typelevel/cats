@@ -5,6 +5,9 @@ import scala.collection.mutable
 
 object StaticMethods {
 
+  def wrapMutableMap[K, V](m: mutable.Map[K, V]): Map[K, V] =
+    new WrappedMutableMap(m)
+
   private[kernel] class WrappedMutableMap[K, V](m: mutable.Map[K, V]) extends Map[K, V] {
     override def size: Int = m.size
     def get(k: K): Option[V] = m.get(k)
