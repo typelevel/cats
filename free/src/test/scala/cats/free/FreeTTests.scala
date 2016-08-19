@@ -14,17 +14,29 @@ class FreeTTests extends CatsSuite {
 
   import FreeTTests._
 
-  checkAll("FreeT[Option, Option, Int]", FlatMapTests[FreeTOption].flatMap[Int, Int, Int])
-  checkAll("FlatMap[FreeT[Option, Option, ?]]", SerializableTests.serializable(FlatMap[FreeTOption]))
+  {
+    implicit val freeTFlatMap: FlatMap[FreeTOption] = FreeT.catsFreeFlatMapForFreeT[Option, Option]
+    checkAll("FreeT[Option, Option, Int]", FlatMapTests[FreeTOption].flatMap[Int, Int, Int])
+    checkAll("FlatMap[FreeT[Option, Option, ?]]", SerializableTests.serializable(FlatMap[FreeTOption]))
+  }
 
-  checkAll("FreeT[Option, Option, Int]", MonadTests[FreeTOption].monad[Int, Int, Int])
-  checkAll("Monad[FreeT[Option, Option, ?]]", SerializableTests.serializable(Monad[FreeTOption]))
+  {
+    implicit val freeTMonad: Monad[FreeTOption] = FreeT.catsFreeMonadForFreeT[Option, Option]
+    checkAll("FreeT[Option, Option, Int]", MonadTests[FreeTOption].monad[Int, Int, Int])
+    checkAll("Monad[FreeT[Option, Option, ?]]", SerializableTests.serializable(Monad[FreeTOption]))
+  }
 
-  checkAll("FreeT[Option, Option, Int]", SemigroupKTests[FreeTOption].semigroupK[Int])
-  checkAll("SemigroupK[FreeT[Option, Option, ?]]", SerializableTests.serializable(SemigroupK[FreeTOption]))
+  {
+    implicit val freeTSemigroupK: SemigroupK[FreeTOption] = FreeT.catsFreeCombineForFreeT[Option, Option]
+    checkAll("FreeT[Option, Option, Int]", SemigroupKTests[FreeTOption].semigroupK[Int])
+    checkAll("SemigroupK[FreeT[Option, Option, ?]]", SerializableTests.serializable(SemigroupK[FreeTOption]))
+  }
 
-  checkAll("FreeT[Option, Option, Int]", MonadCombineTests[FreeTOption].monadCombine[Int, Int, Int])
-  checkAll("MonadCombine[FreeT[Option, Option, ?]]", SerializableTests.serializable(MonadCombine[FreeTOption]))
+  {
+    implicit val freeTCombine: MonadCombine[FreeTOption] = FreeT.catsFreeMonadCombineForFreeT[Option, Option]
+    checkAll("FreeT[Option, Option, Int]", MonadCombineTests[FreeTOption].monadCombine[Int, Int, Int])
+    checkAll("MonadCombine[FreeT[Option, Option, ?]]", SerializableTests.serializable(MonadCombine[FreeTOption]))
+  }
 
   {
     implicit val eqXortTFA: Eq[XorT[FreeTOption, Unit, Int]] = XorT.catsDataEqForXorT[FreeTOption, Unit, Int]
@@ -115,6 +127,14 @@ class FreeTTests extends CatsSuite {
     val a = FreeT.pure[List, Option, Int](1).flatMap(x => FreeT.pure(2))
     val b = FreeT.pure[List, Option, Int](3).flatMap(x => FreeT.pure(4))
     a == b should be(false)
+  }
+
+  test("toString is stack-safe") {
+    val result =
+      (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))(
+        (fu, i) => fu.map(identity)
+      )
+    result.toString.length should be > 0
   }
 
   private[free] def liftTUCompilationTests() = {
