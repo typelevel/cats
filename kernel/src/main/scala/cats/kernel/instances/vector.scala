@@ -1,8 +1,6 @@
 package cats.kernel
 package instances
 
-import cats.kernel.instances.util.StaticMethods
-
 package object vector extends VectorInstances
 
 trait VectorInstances extends VectorInstances1 {

@@ -281,6 +281,8 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(catsSettings)
   .settings(noPublishSettings)
   .settings(commonJvmSettings)
+  .settings(libraryDependencies ++= Seq(
+    "org.scalaz" %% "scalaz-core" % "7.2.5"))
   .enablePlugins(JmhPlugin)
 
 // cats-js is JS-only
