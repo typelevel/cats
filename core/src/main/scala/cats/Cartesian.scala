@@ -1,5 +1,6 @@
 package cats
 
+import functor.Contravariant
 import simulacrum.typeclass
 
 /**
@@ -29,4 +30,13 @@ private[cats] sealed trait KernelCartesianInstances {
     def product[A, B](fa: Eq[A], fb: Eq[B]): Eq[(A, B)] =
       Eq.instance { (left, right) => fa.eqv(left._1, right._1) && fb.eqv(left._2, right._2) }
   }
+
+  implicit def catsCartesianComposeContravariantFunctor[F[_], G[_]](
+    implicit C: Cartesian[F], F: Contravariant[F], G: Functor[G]): Cartesian[λ[α => F[G[α]]]] =
+      new Cartesian[λ[α => F[G[α]]]] {
+        def product[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[(A, B)]] =
+          F.contramap(C.product(fa, fb)) { g: G[(A, B)] =>
+            (G.map(g)(_._1), G.map(g)(_._2))
+          }
+      }
 }

@@ -22,9 +22,9 @@ trait FlatMapTests[F[_]] extends ApplyTests[F] {
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
   ): RuleSet = {
+    implicit def functorF: Functor[F] = laws.F
     implicit val EqFAB: Eq[F[(A, B)]] =
-      Cartesian[Eq].product(EqFA, EqFB)
-        .on { f: F[(A, B)] => (laws.F.map(f)(_._1), laws.F.map(f)(_._2)) }
+      Cartesian.catsCartesianComposeContravariantFunctor[Eq, F].product(EqFA, EqFB)
 
     new DefaultRuleSet(
       name = "flatMap",

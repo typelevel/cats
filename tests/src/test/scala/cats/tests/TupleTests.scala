@@ -29,6 +29,14 @@ class TupleTests extends CatsSuite {
   checkAll("Monad[(String, ?)]", MonadTests[(String, ?)].monad[Int, Int, String])
   checkAll("Monad[(String, ?)] serializable", SerializableTests.serializable(Monad[(String, ?)]))
 
+  test("Cartesian composition") {
+    val cart = Cartesian.catsCartesianComposeContravariantFunctor[Eq, (Int, ?)]
+    val eq = cart.product(Eq[(Int, String)], Eq[(Int, Int)])
+    forAll { (a: (Int, (String, Int)), b: (Int, (String, Int))) =>
+      (a == b) should === (eq.eqv(a, b))
+    }
+  }
+
   test("eqv") {
     val eq = Eq[(Int, Long)]
     forAll { t: (Int, Long) => eq.eqv(t, t) should === (true) }
