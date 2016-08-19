@@ -27,7 +27,7 @@ env:
   - secure: Kf44XQFpq2QGe3rn98Dsf5Uz3WXzPDralS54co7sqT5oQGs1mYLYZRYz+I75ZSo5ffZ86H7M+AI9YFofqGwAjBixBbqf1tGkUh3oZp2fN3QfqzazGV3HzC+o41zALG5FL+UBaURev9ChQ5fYeTtFB7YAzejHz4y5E97awk934Rg=
   - secure: QbNAu0jCaKrwjJi7KZtYEBA/pYbTJ91Y1x/eLAJpsamswVOvwnThA/TLYuux+oiZQCiDUpBzP3oxksIrEEUAhl0lMtqRFY3MrcUr+si9NIjX8hmoFwkvZ5o1b7pmLF6Vz3rQeP/EWMLcljLzEwsrRXeK0Ei2E4vFpsg8yz1YXJg=
   - TRAVIS_NODE_VERSION="4"
-  - CATS_BOT_BUILD=true
+
 cache:
   directories:
   - $HOME/.sbt/0.13/dependency
