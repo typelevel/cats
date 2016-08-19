@@ -22,11 +22,17 @@ trait FlatMapTests[F[_]] extends ApplyTests[F] {
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
   ): RuleSet = {
+    implicit val EqFAB: Eq[F[(A, B)]] =
+      Cartesian[Eq].product(EqFA, EqFB)
+        .on { f: F[(A, B)] => (laws.F.map(f)(_._1), laws.F.map(f)(_._2)) }
+
     new DefaultRuleSet(
       name = "flatMap",
       parent = Some(apply[A, B, C]),
       "flatMap associativity" -> forAll(laws.flatMapAssociativity[A, B, C] _),
       "flatMap consistent apply" -> forAll(laws.flatMapConsistentApply[A, B] _),
+      "followedBy consistent flatMap" -> forAll(laws.followedByConsistency[A, B] _),
+      "mproduct consistent flatMap" -> forAll(laws.mproductConsistency[A, B] _),
       "tailRecM consistent flatMap" -> forAll(laws.tailRecMConsistentFlatMap[A] _))
   }
 }
