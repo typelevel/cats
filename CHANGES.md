@@ -12,7 +12,8 @@ If you're updating from Cats 0.6.0, it's likely that you'll need to make extensi
 * `NonEmptyList` and `NonEmptyVector` are no longer type aliases for `OneAnd`, so any code using `OneAnd` to construct or pattern match on these types will need to be changed to use `NonEmptyList` or `NonEmptyVector` directly. There are also some API changes; for example, `unwrap` calls will need to be replaced by `toList` or `toVector`, and `NonEmptyList(1, 2, 3)` is now `NonEmptyList.of(1, 2, 3)`.
 * `pureEval` has been removed from `Applicative` ([#1234](https://github.com/typelevel/cats/pull/1234)), and has not been replaced, so if you are relying on it for laziness or effect capturing (which wasn't enforced or guaranteed), you'll need to find another approach.
 * All references to `NaturalTransformation` will need to be replaced by either `FunctionK` or `~>`.
-* If you are interpreting a free algebra into a context `F` with `foldMap`, you'll now need `F` to have a `MonadRec` instance, not just a `Monad` ([#1075](https://github.com/typelevel/cats/pull/1075)).
+* The `FlatMap` type class now has a `tailRecM` method that is designed to support stack-safe recursive monadic binding. If your monad's `flatMap` is stack safe, you can implement a stack-safe `tailRecM` by calling `Monad#defaultTailRecM`. The stack safety of `tailRecM` is not enforced, but if your implementation is stack safe, you should also provide an instance of the `RecursiveTailRecM` marker type class.
+* If you are interpreting a free algebra into a context `F` with `foldMap`, you'll now need `F` to have an instance of the `RecursiveTailRecM` marker type class (in addition to the `Monad` instance).
 
 If you run into any issues while updating, please get in touch on [Gitter](https://gitter.im/typelevel/cats).
 
@@ -28,13 +29,16 @@ And other bug fixes:
 
 And some additions:
 
+* [#1280](https://github.com/typelevel/cats/pull/1280): `FlatMap` now has a `tailRecM` method
+* [#1280](https://github.com/typelevel/cats/pull/1280): `RecursiveTailRecM` marker type class indicating that `tailRecM` is stack safe
 * [#1225](https://github.com/typelevel/cats/pull/1225): `FunctorFilter` and `TraverseFilter`
 * [#1121](https://github.com/typelevel/cats/pull/1121): `valueOr` and `merge` for `Validated`
 * [#1188](https://github.com/typelevel/cats/pull/1188): `toValidatedNel` for `XorT`
 * [#1127](https://github.com/typelevel/cats/pull/1127): `toTry` for `Xor`
+* [#1269](https://github.com/typelevel/cats/pull/1269): `catchNonFatal` for `ApplicativeError`
 * [#1130](https://github.com/typelevel/cats/pull/1130): `isEmpty` syntax method for `Monoid`
 * [#1167](https://github.com/typelevel/cats/pull/1167): `minimum`, `maximum`, and related helper methods for `Foldable` and `Reducible`
-* [#1041](https://github.com/typelevel/cats/pull/1041): `FlatMapRec` and `MonadRec`
+* [#1243](https://github.com/typelevel/cats/pull/1243): `distinct` on `NonEmptyList` and `NonEmptyVector`
 * [#1134](https://github.com/typelevel/cats/pull/1134): `cats.syntax.list` for à la carte list syntax imports
 * [#1191](https://github.com/typelevel/cats/pull/1191): `cats.syntax.monoid` for à la carte `Monoid` syntax imports
 * [#588](https://github.com/typelevel/cats/pull/588) and [#1063](https://github.com/typelevel/cats/pull/1063): `IdT`, the identity monad transformer
