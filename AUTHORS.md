@@ -18,6 +18,7 @@ possible:
  * Aldo Stracquadanio
  * Alejandro Gómez
  * Alessandro Lacava
+ * Alexander Semenov
  * Alexey Levan
  * Alissa Pajer
  * Alistair Johnson
@@ -70,6 +71,7 @@ possible:
  * Madder
  * Marc Siegel
  * Markus Hauck
+ * mathhun
  * Matt Martin
  * Matthias Lüneberg
  * Max Worgan
