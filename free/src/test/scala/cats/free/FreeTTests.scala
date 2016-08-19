@@ -125,14 +125,46 @@ class FreeTTests extends CatsSuite {
   }
 }
 
-object FreeTTests extends FreeTTestsInstances
+object FreeTTests
+    extends FreeTTestsInstances
 
-sealed trait FreeTTestsInstances {
+trait FreeTTestsInstances extends FreeTTestsInstances0 {
+
+  import Arbitrary._
+  import org.scalacheck.Arbitrary
+
+  implicit def listWrapperArbitrary[A: Arbitrary]: Arbitrary[ListWrapper[A]] = ListWrapper.listWrapperArbitrary[A]
+
+  implicit def freeTListStateArb[A: Arbitrary]: Arbitrary[FreeTListState[A]] = freeTArb[IntState, IntState, A]
+
+  implicit def freeTArb[F[_], G[_]: Applicative, A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Arbitrary[FreeT[F, G, A]] =
+    Arbitrary(freeTGen[F, G, A](4))
+
+  private def freeTGen[F[_], G[_]: Applicative, A](maxDepth: Int)(implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Gen[FreeT[F, G, A]] = {
+    val noFlatMapped = Gen.oneOf(
+      A.arbitrary.map(FreeT.pure[F, G, A]),
+      F.arbitrary.map(FreeT.liftF[F, G, A])
+    )
+
+    val nextDepth = Gen.chooseNum(1, maxDepth - 1)
+
+    def withFlatMapped = for {
+      fDepth <- nextDepth
+      freeDepth <- nextDepth
+      f <- arbFunction1[A, FreeT[F, G, A]](Arbitrary(freeTGen[F, G, A](fDepth))).arbitrary
+      freeFGA <- freeTGen[F, G, A](freeDepth)
+    } yield freeFGA.flatMap(f)
+
+    if (maxDepth <= 1) noFlatMapped
+    else Gen.oneOf(noFlatMapped, withFlatMapped)
+  }
+
+}
+
+trait FreeTTestsInstances0 {
 
   import FreeT._
   import StateT._
-  import Arbitrary._
-  import org.scalacheck.Arbitrary
   import cats.kernel.instances.option._
   import cats.tests.StateTTests._
   import CartesianTests._
@@ -142,7 +174,7 @@ sealed trait FreeTTestsInstances {
   type FreeTListWrapper[A] = FreeTListW[ListWrapper, A]
   type FreeTListOption[A] = FreeTListW[Option, A]
   type FreeTListState[A] = FreeT[IntState, IntState, A]
-  
+
   case class JustFunctor[A](a: A)
 
   implicit val listSemigroupK: SemigroupK[ListWrapper] = ListWrapper.semigroupK
@@ -173,13 +205,6 @@ sealed trait FreeTTestsInstances {
 
   implicit def intStateArb[A: Arbitrary]: Arbitrary[IntState[A]] = stateArbitrary[Int, A]
 
-  implicit def listWrapperArbitrary[A: Arbitrary]: Arbitrary[ListWrapper[A]] = ListWrapper.listWrapperArbitrary[A]
-
-  implicit def freeTListStateArb[A: Arbitrary]: Arbitrary[FreeTListState[A]] = freeTArb[IntState, IntState, A]
-
-  implicit def freeTArb[F[_], G[_]: Applicative, A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Arbitrary[FreeT[F, G, A]] =
-    Arbitrary(freeTGen[F, G, A](4))
-
   implicit def freeTListWrapperEq[A](implicit A: Eq[A]): Eq[FreeTListWrapper[A]] = new Eq[FreeTListWrapper[A]] {
     def eqv(a: FreeTListWrapper[A], b: FreeTListWrapper[A]) = Eq[ListWrapper[A]].eqv(a.runM(identity), b.runM(identity))
   }
@@ -191,24 +216,4 @@ sealed trait FreeTTestsInstances {
   implicit def freeTListStateEq[A](implicit A: Eq[A], SM: Monad[IntState], RT: RecursiveTailRecM[IntState]): Eq[FreeTListState[A]] = new Eq[FreeTListState[A]] {
     def eqv(a: FreeTListState[A], b: FreeTListState[A]) = Eq[IntState[A]].eqv(a.runM(identity)(SM, SM, RT), b.runM(identity)(SM, SM, RT))
   }
-
-  private def freeTGen[F[_], G[_]: Applicative, A](maxDepth: Int)(implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Gen[FreeT[F, G, A]] = {
-    val noFlatMapped = Gen.oneOf(
-      A.arbitrary.map(FreeT.pure[F, G, A]),
-      F.arbitrary.map(FreeT.liftF[F, G, A])
-    )
-
-    val nextDepth = Gen.chooseNum(1, maxDepth - 1)
-
-    def withFlatMapped = for {
-      fDepth <- nextDepth
-      freeDepth <- nextDepth
-      f <- arbFunction1[A, FreeT[F, G, A]](Arbitrary(freeTGen[F, G, A](fDepth))).arbitrary
-      freeFGA <- freeTGen[F, G, A](freeDepth)
-    } yield freeFGA.flatMap(f)
-
-    if (maxDepth <= 1) noFlatMapped
-    else Gen.oneOf(noFlatMapped, withFlatMapped)
-  }
-
 }
