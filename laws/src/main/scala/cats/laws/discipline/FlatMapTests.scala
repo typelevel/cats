@@ -24,7 +24,7 @@ trait FlatMapTests[F[_]] extends ApplyTests[F] {
   ): RuleSet = {
     implicit def functorF: Functor[F] = laws.F
     implicit val EqFAB: Eq[F[(A, B)]] =
-      Cartesian.catsCartesianComposeContravariantFunctor[Eq, F].product(EqFA, EqFB)
+      ContravariantCartesian[Eq].composeCartesian[F].product(EqFA, EqFB)
 
     new DefaultRuleSet(
       name = "flatMap",
