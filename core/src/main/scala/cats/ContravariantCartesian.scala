@@ -8,8 +8,7 @@ import simulacrum.typeclass
  * and Cartesian. It comes up enough to be useful, and composes well
  */
 @typeclass trait ContravariantCartesian[F[_]] extends Cartesian[F] with Contravariant[F] { self =>
-  override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)]
-  def composeCartesian[G[_]: Functor]: ContravariantCartesian[λ[α => F[G[α]]]] =
+  override def composeFunctor[G[_]: Functor]: ContravariantCartesian[λ[α => F[G[α]]]] =
     new ComposedCartesian[F, G] {
       def F = self
       def G = Functor[G]

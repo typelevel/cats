@@ -30,7 +30,7 @@ class TupleTests extends CatsSuite {
   checkAll("Monad[(String, ?)] serializable", SerializableTests.serializable(Monad[(String, ?)]))
 
   test("Cartesian composition") {
-    val cart = ContravariantCartesian[Eq].composeCartesian[(Int, ?)]
+    val cart = ContravariantCartesian[Eq].composeFunctor[(Int, ?)]
     val eq = cart.product(Eq[(Int, String)], Eq[(Int, Int)])
     forAll { (a: (Int, (String, Int)), b: (Int, (String, Int))) =>
       (a == b) should === (eq.eqv(a, b))

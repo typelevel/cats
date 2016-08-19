@@ -12,7 +12,7 @@ import simulacrum.typeclass
  * That same idea is also manifested in the form of [[Apply]], and indeed [[Apply]] extends both
  * [[Cartesian]] and [[Functor]] to illustrate this.
  */
-@typeclass trait Cartesian[F[_]] { self =>
+@typeclass trait Cartesian[F[_]] {
   def product[A, B](fa: F[A], fb: F[B]): F[(A, B)]
 }
 
