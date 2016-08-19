@@ -78,6 +78,7 @@ object ListWrapper {
 
   val monadCombine: MonadCombine[ListWrapper] with RecursiveTailRecM[ListWrapper] = {
     val M = MonadCombine[List]
+    val RT = RecursiveTailRecM[List]
 
     new MonadCombine[ListWrapper] with RecursiveTailRecM[ListWrapper] {
       def pure[A](x: A): ListWrapper[A] = ListWrapper(M.pure(x))
@@ -91,7 +92,7 @@ object ListWrapper {
         ListWrapper(M.combineK(x.list, y.list))
 
       def tailRecM[A, B](a: A)(f: A => ListWrapper[cats.data.Xor[A,B]]): ListWrapper[B] =
-        ListWrapper(M.tailRecM(a)(a => f(a).list))
+        ListWrapper(RT.sameType(M).tailRecM(a)(a => f(a).list))
     }
   }
 
