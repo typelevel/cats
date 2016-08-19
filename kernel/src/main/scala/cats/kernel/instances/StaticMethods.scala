@@ -1,5 +1,5 @@
 package cats.kernel
-package instances.util
+package instances
 
 import scala.collection.mutable
 
