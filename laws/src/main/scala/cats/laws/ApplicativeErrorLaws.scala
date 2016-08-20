@@ -1,7 +1,7 @@
 package cats
 package laws
 
-import cats.data.{Xor, XorT}
+import cats.data.EitherT
 
 // Taken from http://functorial.com/psc-pages/docs/Control/Monad/Error/Class/index.html
 trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
@@ -19,11 +19,11 @@ trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
   def handleErrorPure[A](a: A, f: E => A): IsEq[F[A]] =
     F.handleError(F.pure(a))(f) <-> F.pure(a)
 
-  def raiseErrorAttempt(e: E): IsEq[F[E Xor Unit]] =
-    F.attempt(F.raiseError[Unit](e)) <-> F.pure(Xor.left(e))
+  def raiseErrorAttempt(e: E): IsEq[F[Either[E, Unit]]] =
+    F.attempt(F.raiseError[Unit](e)) <-> F.pure(Left(e))
 
-  def pureAttempt[A](a: A): IsEq[F[E Xor A]] =
-    F.attempt(F.pure(a)) <-> F.pure(Xor.right(a))
+  def pureAttempt[A](a: A): IsEq[F[Either[E, A]]] =
+    F.attempt(F.pure(a)) <-> F.pure(Right(a))
 
   def handleErrorWithConsistentWithRecoverWith[A](fa: F[A], f: E => F[A]): IsEq[F[A]] =
     F.handleErrorWith(fa)(f) <-> F.recoverWith(fa)(PartialFunction(f))
@@ -34,8 +34,8 @@ trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
   def recoverConsistentWithRecoverWith[A](fa: F[A], pf: PartialFunction[E, A]): IsEq[F[A]] =
     F.recover(fa)(pf) <-> F.recoverWith(fa)(pf andThen F.pure)
 
-  def attemptConsistentWithAttemptT[A](fa: F[A]): IsEq[XorT[F, E, A]] =
-    XorT(F.attempt(fa)) <-> F.attemptT(fa)
+  def attemptConsistentWithAttemptT[A](fa: F[A]): IsEq[EitherT[F, E, A]] =
+    EitherT(F.attempt(fa)) <-> F.attemptT(fa)
 }
 
 object ApplicativeErrorLaws {

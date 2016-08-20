@@ -1,6 +1,6 @@
 package cats
 
-import cats.data.{Xor, XorT}
+import cats.data.EitherT
 import scala.util.{ Failure, Success, Try }
 import scala.util.control.NonFatal
 
@@ -37,21 +37,21 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def handleError[A](fa: F[A])(f: E => A): F[A] = handleErrorWith(fa)(f andThen pure)
 
   /**
-   * Handle errors by turning them into [[cats.data.Xor.Left]] values.
+   * Handle errors by turning them into [[scala.util.Either]] values.
    *
-   * If there is no error, then an [[cats.data.Xor.Right]] value will be returned instead.
+   * If there is no error, then an `scala.util.Right` value will be returned instead.
    *
    * All non-fatal errors should be handled by this method.
    */
-  def attempt[A](fa: F[A]): F[E Xor A] = handleErrorWith(
-    map(fa)(Xor.right[E, A])
-  )(e => pure(Xor.left(e)))
+  def attempt[A](fa: F[A]): F[Either[E, A]] = handleErrorWith(
+    map(fa)(Right(_): Either[E, A])
+  )(e => pure(Left(e)))
 
   /**
-   * Similar to [[attempt]], but wraps the result in a [[cats.data.XorT]] for
+   * Similar to [[attempt]], but wraps the result in a [[cats.data.EitherT]] for
    * convenience.
    */
-  def attemptT[A](fa: F[A]): XorT[F, E, A] = XorT(attempt(fa))
+  def attemptT[A](fa: F[A]): EitherT[F, E, A] = EitherT(attempt(fa))
 
   /**
    * Recover from certain errors by mapping them to an `A` value.

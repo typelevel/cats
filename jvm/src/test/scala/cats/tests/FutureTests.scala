@@ -2,7 +2,6 @@ package cats
 package jvm
 package tests
 
-import cats.data.Xor
 import cats.laws.discipline._
 import cats.tests.CatsSuite
 
@@ -16,13 +15,13 @@ import org.scalacheck.Arbitrary.arbitrary
 class FutureTests extends CatsSuite {
   val timeout = 3.seconds
 
-  def futureXor[A](f: Future[A]): Future[Xor[Throwable, A]] =
-    f.map(Xor.right[Throwable, A]).recover { case t => Xor.left(t) }
+  def futureEither[A](f: Future[A]): Future[Either[Throwable, A]] =
+    f.map(Either.right[Throwable, A]).recover { case t => Either.left(t) }
 
   implicit def eqfa[A: Eq]: Eq[Future[A]] =
     new Eq[Future[A]] {
       def eqv(fx: Future[A], fy: Future[A]): Boolean = {
-        val fz = futureXor(fx) zip futureXor(fy)
+        val fz = futureEither(fx) zip futureEither(fy)
         Await.result(fz.map { case (tx, ty) => tx === ty }, timeout)
       }
     }

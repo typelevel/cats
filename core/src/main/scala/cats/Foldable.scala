@@ -186,9 +186,8 @@ import simulacrum.typeclass
    * For example:
    *
    * {{{
-   * scala> import cats.data.Xor
    * scala> import cats.implicits._
-   * scala> def parseInt(s: String): Option[Int] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
+   * scala> def parseInt(s: String): Option[Int] = Either.catchOnly[NumberFormatException](s.toInt).toOption
    * scala> val F = Foldable[List]
    * scala> F.traverse_(List("333", "444"))(parseInt)
    * res0: Option[Unit] = Some(())
@@ -208,19 +207,18 @@ import simulacrum.typeclass
   /**
    * Behaves like traverse_, but uses [[Unapply]] to find the
    * [[Applicative]] instance for `G` - used when `G` is a
-   * type constructor with two or more parameters such as [[cats.data.Xor]]
+   * type constructor with two or more parameters such as [[scala.util.Either]]
    *
    * {{{
-   * scala> import cats.data.Xor
    * scala> import cats.implicits._
-   * scala> def parseInt(s: String): Xor[String, Int] =
-   *      |   try { Xor.Right(s.toInt) }
-   *      |   catch { case _: NumberFormatException => Xor.Left("boo") }
+   * scala> def parseInt(s: String): Either[String, Int] =
+   *      |   try { Right(s.toInt) }
+   *      |   catch { case _: NumberFormatException => Left("boo") }
    * scala> val F = Foldable[List]
    * scala> F.traverseU_(List("333", "444"))(parseInt)
-   * res0: Xor[String, Unit] = Right(())
+   * res0: Either[String, Unit] = Right(())
    * scala> F.traverseU_(List("333", "zzz"))(parseInt)
-   * res1: Xor[String, Unit] = Left(boo)
+   * res1: Either[String, Unit] = Left(boo)
    * }}}
    *
    * Note that using `traverse_` instead of `traverseU_` would not compile without
@@ -253,16 +251,15 @@ import simulacrum.typeclass
   /**
    * Behaves like sequence_, but uses [[Unapply]] to find the
    * [[Applicative]] instance for `G` - used when `G` is a
-   * type constructor with two or more parameters such as [[cats.data.Xor]]
+   * type constructor with two or more parameters such as [[scala.util.Either]]
    *
    * {{{
-   * scala> import cats.data.Xor
    * scala> import cats.implicits._
    * scala> val F = Foldable[List]
-   * scala> F.sequenceU_(List(Xor.right[String, Int](333), Xor.Right(444)))
-   * res0: Xor[String, Unit] = Right(())
-   * scala> F.sequenceU_(List(Xor.right[String, Int](333), Xor.Left("boo")))
-   * res1: Xor[String, Unit] = Left(boo)
+   * scala> F.sequenceU_(List(Either.right[String, Int](333), Right(444)))
+   * res0: Either[String, Unit] = Right(())
+   * scala> F.sequenceU_(List(Either.right[String, Int](333), Left("boo")))
+   * res1: Either[String, Unit] = Left(boo)
    * }}}
    *
    * Note that using `sequence_` instead of `sequenceU_` would not compile without

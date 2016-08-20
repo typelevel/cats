@@ -25,10 +25,9 @@ final class FlattenOps[F[_], A](ffa: F[F[A]])(implicit F: FlatMap[F]) {
    *
    * Example:
    * {{{
-   * scala> import cats.data.Xor
    * scala> import cats.implicits._
-   * scala> type ErrorOr[A] = String Xor A
-   * scala> val x: ErrorOr[ErrorOr[Int]] = Xor.right(Xor.right(3))
+   * scala> type ErrorOr[A] = Either[String, A]
+   * scala> val x: ErrorOr[ErrorOr[Int]] = Right(Right(3))
    * scala> x.flatten
    * res0: ErrorOr[Int] = Right(3)
    * }}}
