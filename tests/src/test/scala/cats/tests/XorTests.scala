@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{EitherT, NonEmptyList, Xor}
+import cats.data.{NonEmptyList, Xor, XorT}
 import cats.data.Xor._
 import cats.laws.discipline.{SemigroupKTests}
 import cats.laws.discipline.arbitrary._
@@ -22,7 +22,7 @@ class XorTests extends CatsSuite {
 
   checkAll("Xor[String, NonEmptyList[Int]]", GroupLaws[Xor[String, NonEmptyList[Int]]].semigroup)
 
-  implicit val eq0 = EitherT.catsDataEqForEitherT[Xor[String, ?], String, Int]
+  implicit val eq0 = XorT.catsDataEqForXorT[Xor[String, ?], String, Int]
 
   checkAll("Xor[String, Int]", MonadErrorTests[Xor[String, ?], String].monadError[Int, Int, Int])
   checkAll("MonadError[Xor, String]", SerializableTests.serializable(MonadError[Xor[String, ?], String]))

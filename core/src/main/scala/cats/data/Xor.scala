@@ -278,7 +278,7 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       override def map[B, C](fa: A Xor B)(f: B => C): A Xor C = fa.map(f)
       override def map2Eval[B, C, Z](fb: A Xor B, fc: Eval[A Xor C])(f: (B, C) => Z): Eval[A Xor Z] =
         fb.map2Eval(fc)(f)
-      override def attempt[B](fab: A Xor B): A Xor (Either[A, B]) = Xor.right(fab.toEither)
+      override def attempt[B](fab: A Xor B): A Xor (Xor[A, B]) = Xor.right(fab)
       override def recover[B](fab: A Xor B)(pf: PartialFunction[A, B]): A Xor B =
         fab recover pf
       override def recoverWith[B](fab: A Xor B)(pf: PartialFunction[A, A Xor B]): A Xor B =

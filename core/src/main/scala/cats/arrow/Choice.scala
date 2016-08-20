@@ -1,6 +1,7 @@
 package cats
 package arrow
 
+import cats.data.Xor
 import simulacrum.typeclass
 
 @typeclass trait Choice[F[_, _]] extends Category[F] {
@@ -11,19 +12,20 @@ import simulacrum.typeclass
    *
    * Example:
    * {{{
+   * scala> import cats.data.Xor
    * scala> import cats.implicits._
    * scala> val b: Boolean => String = _ + " is a boolean"
    * scala> val i: Int => String =  _ + " is an integer"
-   * scala> val f: (Either[Boolean, Int]) => String = Choice[Function1].choice(b, i)
+   * scala> val f: Xor[Boolean, Int] => String = Choice[Function1].choice(b, i)
    *
-   * scala> f(Right(3))
+   * scala> f(Xor.Right(3))
    * res0: String = 3 is an integer
    *
-   * scala> f(Left(false))
+   * scala> f(Xor.Left(false))
    * res0: String = false is a boolean
    * }}}
    */
-  def choice[A, B, C](f: F[A, C], g: F[B, C]): F[Either[A, B], C]
+  def choice[A, B, C](f: F[A, C], g: F[B, C]): F[Xor[A, B], C]
 
   /**
    * An `F` that, given a source `A` on either the right or left side, will
@@ -31,15 +33,16 @@ import simulacrum.typeclass
    *
    * Example:
    * {{{
+   * scala> import cats.data.Xor
    * scala> import cats.implicits._
-   * scala> val f: (Either[Int, Int]) => Int = Choice[Function1].codiagonal[Int]
+   * scala> val f: (Xor[Int, Int]) => Int = Choice[Function1].codiagonal[Int]
    *
-   * scala> f(Right(3))
+   * scala> f(Xor.Right(3))
    * res0: Int = 3
    *
-   * scala> f(Left(3))
+   * scala> f(Xor.Left(3))
    * res1: Int = 3
    * }}}
    */
-  def codiagonal[A]: F[Either[A, A], A] = choice(id, id)
+  def codiagonal[A]: F[Xor[A, A], A] = choice(id, id)
 }
