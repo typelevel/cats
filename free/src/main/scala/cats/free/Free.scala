@@ -80,8 +80,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * from `S` to a monad `M`.
    */
   final def runM[M[_]](f: S[Free[S, A]] => M[Free[S, A]])(implicit S: Functor[S], M: Monad[M], R: RecursiveTailRecM[M]): M[A] = {
-    def step(t: S[Free[S, A]]): M[Xor[S[Free[S, A]], A]] =
-      M.map(f(t))(_.resume)
+    def step(t: S[Free[S, A]]): M[Either[S[Free[S, A]], A]] =
+      M.map(f(t))(_.resume.toEither)
 
     resume match {
       case Xor.Left(s) => R.sameType(M).tailRecM(s)(step)
