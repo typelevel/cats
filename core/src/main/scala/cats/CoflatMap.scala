@@ -11,15 +11,14 @@ import simulacrum.typeclass
 
   /**
    * `coflatMap` is the dual of `flatMap` on `FlatMap`. It applies
-   * a value in a Monadic context to a function that takes a value
+   * a value in a context to a function that takes a value
    * in a context and returns a normal value.
    *
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> import cats.Monad
    * scala> import cats.CoflatMap
-   * scala> val fa = Monad[Option].pure(3)
+   * scala> val fa = Some(3)
    * scala> def f(a: Option[Int]): Int = a match {
    *      | case Some(x) => 2 * x
    *      | case None => 0 }
@@ -36,9 +35,8 @@ import simulacrum.typeclass
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> import cats.Monad
    * scala> import cats.CoflatMap
-   * scala> val fa = Monad[Option].pure(3)
+   * scala> val fa = Some(3)
    * fa: Option[Int] = Some(3)
    * scala> CoflatMap[Option].coflatten(fa)
    * res0: Option[Option[Int]] = Some(Some(3))
