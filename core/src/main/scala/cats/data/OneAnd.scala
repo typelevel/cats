@@ -137,14 +137,14 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
         OneAnd(fst.head, monad.combineK(fst.tail, end))
       }
 
-      def tailRecM[A, B](a: A)(fn: A => OneAnd[F, A Xor B]): OneAnd[F, B] = {
-        def stepF(a: A): F[A Xor B] = {
+      def tailRecM[A, B](a: A)(fn: A => OneAnd[F, Either[A, B]]): OneAnd[F, B] = {
+        def stepF(a: A): F[Either[A, B]] = {
           val oneAnd = fn(a)
           monad.combineK(monad.pure(oneAnd.head), oneAnd.tail)
         }
-        def toFB(in: A Xor B): F[B] = in match {
-          case Xor.Right(b) => monad.pure(b)
-          case Xor.Left(a) => monad.tailRecM(a)(stepF)
+        def toFB(in: Either[A, B]): F[B] = in match {
+          case Right(b) => monad.pure(b)
+          case Left(a)  => monad.tailRecM(a)(stepF)
         }
 
         // This could probably be in SemigroupK to perform well
@@ -158,10 +158,10 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
         @tailrec
         def go(in: A, rest: List[F[B]]): OneAnd[F, B] =
           fn(in) match {
-            case OneAnd(Xor.Right(b), tail) =>
+            case OneAnd(Right(b), tail) =>
               val fbs = monad.flatMap(tail)(toFB)
               OneAnd(b, combineAll(fbs :: rest))
-            case OneAnd(Xor.Left(a), tail) =>
+            case OneAnd(Left(a), tail) =>
               val fbs = monad.flatMap(tail)(toFB)
               go(a, fbs :: rest)
           }

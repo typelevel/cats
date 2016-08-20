@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{NonEmptyList, Validated, ValidatedNel, Xor, XorT}
+import cats.data.{EitherT, NonEmptyList, Validated, ValidatedNel}
 import cats.data.Validated.{Valid, Invalid}
 import cats.laws.discipline.{BitraverseTests, TraverseTests, ApplicativeErrorTests, SerializableTests, CartesianTests}
 import org.scalacheck.Arbitrary._
@@ -19,10 +19,10 @@ class ValidatedTests extends CatsSuite {
   checkAll("Validated[?, ?]", BitraverseTests[Validated].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Validated]", SerializableTests.serializable(Bitraverse[Validated]))
 
-  implicit val eq0 = XorT.catsDataEqForXorT[Validated[String, ?], String, Int]
+  implicit val eq0 = EitherT.catsDataEqForEitherT[Validated[String, ?], String, Int]
 
   checkAll("Validated[String, Int]", ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
-  checkAll("ApplicativeError[Xor, String]", SerializableTests.serializable(ApplicativeError[Validated[String, ?], String]))
+  checkAll("ApplicativeError[Validated, String]", SerializableTests.serializable(ApplicativeError[Validated[String, ?], String]))
 
   checkAll("Validated[String, Int] with Option", TraverseTests[Validated[String,?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Validated[String, ?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
@@ -140,9 +140,9 @@ class ValidatedTests extends CatsSuite {
     }
   }
 
-  test("andThen consistent with Xor's flatMap"){
+  test("andThen consistent with Either's flatMap"){
     forAll { (v: Validated[String, Int], f: Int => Validated[String, Int]) =>
-      v.andThen(f) should === (v.withXor(_.flatMap(f(_).toXor)))
+      v.andThen(f) should === (v.withEither(_.flatMap(f(_).toEither)))
     }
   }
 
@@ -156,9 +156,9 @@ class ValidatedTests extends CatsSuite {
     (Validated.invalid("foo") andThen even) should === (Validated.invalid("foo"))
   }
 
-  test("fromOption consistent with Xor.fromOption"){
+  test("fromOption consistent with Either.fromOption"){
     forAll { (o: Option[Int], s: String) =>
-      Validated.fromOption(o, s) should === (Xor.fromOption(o, s).toValidated)
+      Validated.fromOption(o, s) should === (Either.fromOption(o, s).toValidated)
     }
   }
 

@@ -22,9 +22,8 @@ import simulacrum.typeclass
    *
    * Example:
    * {{{
-   * scala> import cats.data.Xor
    * scala> import cats.implicits._
-   * scala> def parseInt(s: String): Option[Int] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
+   * scala> def parseInt(s: String): Option[Int] = Either.catchOnly[NumberFormatException](s.toInt).toOption
    * scala> List("1", "2", "3").traverse(parseInt)
    * res0: Option[List[Int]] = Some(List(1, 2, 3))
    * scala> List("1", "two", "3").traverse(parseInt)
@@ -39,14 +38,13 @@ import simulacrum.typeclass
    *
    * Example:
    * {{{
-   * scala> import cats.data.Xor
    * scala> import cats.implicits._
-   * scala> def parseInt(s: String): Xor[String, Int] = Xor.catchOnly[NumberFormatException](s.toInt).leftMap(_ => "no number")
+   * scala> def parseInt(s: String): Either[String, Int] = Either.catchOnly[NumberFormatException](s.toInt).leftMap(_ => "no number")
    * scala> val ns = List("1", "2", "3")
    * scala> ns.traverseU(parseInt)
-   * res0: Xor[String, List[Int]] = Right(List(1, 2, 3))
-   * scala> ns.traverse[Xor[String, ?], Int](parseInt)
-   * res1: Xor[String, List[Int]] = Right(List(1, 2, 3))
+   * res0: Either[String, List[Int]] = Right(List(1, 2, 3))
+   * scala> ns.traverse[Either[String, ?], Int](parseInt)
+   * res1: Either[String, List[Int]] = Right(List(1, 2, 3))
    * }}}
    */
   def traverseU[A, GB](fa: F[A])(f: A => GB)(implicit U: Unapply[Applicative, GB]): U.M[F[U.A]] =
@@ -57,9 +55,8 @@ import simulacrum.typeclass
    *
    * Example:
    * {{{
-   * scala> import cats.data.Xor
    * scala> import cats.implicits._
-   * scala> def parseInt(s: String): Option[Int] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
+   * scala> def parseInt(s: String): Option[Int] = Either.catchOnly[NumberFormatException](s.toInt).toOption
    * scala> val x = Option(List("1", "two", "3"))
    * scala> x.traverseM(_.map(parseInt))
    * res0: List[Option[Int]] = List(Some(1), None, Some(3))

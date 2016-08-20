@@ -3,7 +3,6 @@ package laws
 package discipline
 
 import cats.arrow.Choice
-import cats.data.Xor
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 
@@ -17,7 +16,7 @@ trait ChoiceTests[F[_, _]] extends CategoryTests[F] {
     ArbFCD: Arbitrary[F[C, D]],
     EqFAB: Eq[F[A, B]],
     EqFAD: Eq[F[A, D]],
-    EqFXorABD: Eq[F[Xor[A, B], D]]
+    EqFEitherABD: Eq[F[Either[A, B], D]]
   ): RuleSet =
     new DefaultRuleSet(
       name = "choice",
