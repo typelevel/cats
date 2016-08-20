@@ -1,6 +1,8 @@
 package cats
 package instances
 
+import cats.data.Xor
+
 import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.+:
@@ -48,7 +50,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
           G.map2Eval(f(a), lgvb)((ob, v) => ob.fold(v)(_ +: v))
         }.value
 
-      def tailRecM[A, B](a: A)(fn: A => Vector[Either[A, B]]): Vector[B] = {
+      def tailRecM[A, B](a: A)(fn: A => Vector[Xor[A, B]]): Vector[B] = {
         val buf = Vector.newBuilder[B]
         var state = List(fn(a).iterator)
         @tailrec
@@ -59,10 +61,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
             loop()
           case h :: tail =>
             h.next match {
-              case Right(b) =>
+              case Xor.Right(b) =>
                 buf += b
                 loop()
-              case Left(a) =>
+              case Xor.Left(a) =>
                 state = (fn(a).iterator) :: h :: tail
                 loop()
             }

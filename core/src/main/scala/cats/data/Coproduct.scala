@@ -3,13 +3,12 @@ package data
 
 import cats.arrow.FunctionK
 import cats.functor.Contravariant
-import cats.syntax.either._
 
-/** `F` on the left and `G` on the right of [[scala.util.Either]].
+/** `F` on the left and `G` on the right of [[Xor]].
  *
- * @param run The underlying [[scala.util.Either]].
+ * @param run The underlying [[Xor]].
  */
-final case class Coproduct[F[_], G[_], A](run: Either[F[A], G[A]]) {
+final case class Coproduct[F[_], G[_], A](run: F[A] Xor G[A]) {
 
   import Coproduct._
 
@@ -87,17 +86,17 @@ final case class Coproduct[F[_], G[_], A](run: Either[F[A], G[A]]) {
 object Coproduct extends CoproductInstances {
 
   def leftc[F[_], G[_], A](x: F[A]): Coproduct[F, G, A] =
-    Coproduct(Left(x))
+    Coproduct(Xor.left(x))
 
   def rightc[F[_], G[_], A](x: G[A]): Coproduct[F, G, A] =
-    Coproduct(Right(x))
+    Coproduct(Xor.right(x))
 
   final class CoproductLeft[G[_]] private[Coproduct] {
-    def apply[F[_], A](fa: F[A]): Coproduct[F, G, A] = Coproduct(Left(fa))
+    def apply[F[_], A](fa: F[A]): Coproduct[F, G, A] = Coproduct(Xor.left(fa))
   }
 
   final class CoproductRight[F[_]] private[Coproduct] {
-    def apply[G[_], A](ga: G[A]): Coproduct[F, G, A] = Coproduct(Right(ga))
+    def apply[G[_], A](ga: G[A]): Coproduct[F, G, A] = Coproduct(Xor.right(ga))
   }
 
   def left[G[_]]: CoproductLeft[G] = new CoproductLeft[G]
@@ -107,7 +106,7 @@ object Coproduct extends CoproductInstances {
 
 private[data] sealed abstract class CoproductInstances3 {
 
-  implicit def catsDataEqForCoproduct[F[_], G[_], A](implicit E: Eq[Either[F[A], G[A]]]): Eq[Coproduct[F, G, A]] =
+  implicit def catsDataEqForCoproduct[F[_], G[_], A](implicit E: Eq[F[A] Xor G[A]]): Eq[Coproduct[F, G, A]] =
     Eq.by(_.run)
 
   implicit def catsDataFunctorForCoproduct[F[_], G[_]](implicit F0: Functor[F], G0: Functor[G]): Functor[Coproduct[F, G, ?]] =

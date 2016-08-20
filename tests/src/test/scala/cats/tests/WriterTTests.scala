@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{EitherT, Validated, Writer, WriterT}
+import cats.data.{Validated, Writer, WriterT, XorT}
 import cats.functor.{Bifunctor, Contravariant}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -348,8 +348,8 @@ class WriterTTests extends CatsSuite {
     implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[Validated[String, ?], ListWrapper[Int], ?]]
     implicit def eq1[A:Eq]: Eq[WriterT[Validated[String, ?], ListWrapper[Int], A]] =
       WriterT.catsDataEqForWriterT[Validated[String, ?], ListWrapper[Int], A]
-    implicit val eq2: Eq[EitherT[WriterT[Validated[String, ?], ListWrapper[Int], ?], String, Int]] =
-      EitherT.catsDataEqForEitherT[WriterT[Validated[String, ?], ListWrapper[Int], ?], String, Int]
+    implicit val eq2: Eq[XorT[WriterT[Validated[String, ?], ListWrapper[Int], ?], String, Int]] =
+      XorT.catsDataEqForXorT[WriterT[Validated[String, ?], ListWrapper[Int], ?], String, Int]
     implicit def arb0[A:Arbitrary]: Arbitrary[WriterT[Validated[String, ?], ListWrapper[Int], A]] =
       arbitrary.catsLawsArbitraryForWriterT[Validated[String, ?], ListWrapper[Int], A]
 
@@ -365,7 +365,7 @@ class WriterTTests extends CatsSuite {
     // F has a MonadError and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
     implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[Option, ListWrapper[Int], ?]]
-    implicit val eq0: Eq[EitherT[WriterT[Option, ListWrapper[Int], ?], Unit, Int]] = EitherT.catsDataEqForEitherT[WriterT[Option, ListWrapper[Int], ?], Unit, Int]
+    implicit val eq0: Eq[XorT[WriterT[Option, ListWrapper[Int], ?], Unit, Int]] = XorT.catsDataEqForXorT[WriterT[Option, ListWrapper[Int], ?], Unit, Int]
 
 
     Functor[WriterT[Option, ListWrapper[Int], ?]]

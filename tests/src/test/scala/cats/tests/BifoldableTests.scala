@@ -1,13 +1,15 @@
 package cats
 package tests
 
+import cats.data.Xor
 import cats.laws.discipline.{BifoldableTests, SerializableTests}
+import cats.laws.discipline.arbitrary._
 
 class BifoldableTest extends CatsSuite {
-  type EitherEither[A, B] = Either[Either[A, B], Either[A, B]]
-  val eitherComposeEither: Bifoldable[EitherEither] =
-    Bifoldable[Either].compose[Either]
+  type EitherXor[A, B] = Either[Xor[A, B], Xor[A, B]]
+  val eitherComposeXor: Bifoldable[EitherXor] =
+    Bifoldable[Either].compose[Xor]
 
-  checkAll("Either compose Either", BifoldableTests(eitherComposeEither).bifoldable[Int, Int, Int])
-  checkAll("Bifoldable[Either compose Either]", SerializableTests.serializable(eitherComposeEither))
+  checkAll("Either compose Xor", BifoldableTests(eitherComposeXor).bifoldable[Int, Int, Int])
+  checkAll("Bifoldable[Either compose Xor]", SerializableTests.serializable(eitherComposeXor))
 }

@@ -41,9 +41,6 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForXorT[F[_], A, B](implicit F: Arbitrary[F[A Xor B]]): Arbitrary[XorT[F, A, B]] =
     Arbitrary(F.arbitrary.map(XorT(_)))
 
-  implicit def catsLawsArbitraryForEitherT[F[_], A, B](implicit F: Arbitrary[F[Either[A, B]]]): Arbitrary[EitherT[F, A, B]] =
-    Arbitrary(F.arbitrary.map(EitherT(_)))
-
   implicit def catsLawsArbitraryForValidated[A, B](implicit A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[Validated[A, B]] =
     Arbitrary(Gen.oneOf(A.arbitrary.map(Validated.invalid), B.arbitrary.map(Validated.valid)))
 

@@ -53,9 +53,9 @@ class CoproductTests extends CatsSuite {
     }
   }
 
-  test("toValidated + toEither is identity") {
+  test("toValidated + toXor is identity") {
     forAll { (x: Coproduct[Option, List, Int]) =>
-      x.toValidated.toEither should === (x.run)
+      x.toValidated.toXor should === (x.run)
     }
   }
 }

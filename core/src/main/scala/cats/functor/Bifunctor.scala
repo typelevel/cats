@@ -41,11 +41,12 @@ import simulacrum.typeclass
    * Widens A into a supertype AA.
    * Example:
    * {{{
+   * scala> import cats.data.Xor
    * scala> import cats.implicits._
    * scala> sealed trait Foo
    * scala> case object Bar extends Foo
-   * scala> val x1: Either[Bar.type, Int] = Either.left(Bar)
-   * scala> val x2: Either[Foo, Int] = x1.leftWiden
+   * scala> val x1: Xor[Bar.type, Int] = Xor.left(Bar)
+   * scala> val x2: Xor[Foo, Int] = x1.leftWiden
    * }}}
    */
   def leftWiden[A, B, AA >: A](fab: F[A, B]): F[AA, B] = fab.asInstanceOf[F[AA, B]]

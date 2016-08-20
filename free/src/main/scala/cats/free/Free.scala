@@ -3,6 +3,7 @@ package free
 
 import scala.annotation.tailrec
 
+import cats.data.Xor, Xor.{Left, Right}
 import cats.arrow.FunctionK
 
 /**
@@ -43,7 +44,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Evaluate a single layer of the free monad.
    */
   @tailrec
-  final def resume(implicit S: Functor[S]): Either[S[Free[S, A]], A] = this match {
+  final def resume(implicit S: Functor[S]): S[Free[S, A]] Xor A = this match {
     case Pure(a) => Right(a)
     case Suspend(t) => Left(S.map(t)(Pure(_)))
     case FlatMapped(c, f) =>
@@ -91,7 +92,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * resumption in the context of `S`.
    */
   final def runTailRec(implicit S: Monad[S], r: RecursiveTailRecM[S]): S[A] = {
-    def step(rma: Free[S, A]): S[Either[Free[S, A], A]] =
+    def step(rma: Free[S, A]): S[Xor[Free[S, A], A]] =
       rma match {
         case Pure(a) =>
           S.pure(Right(a))
@@ -213,7 +214,7 @@ object Free {
       def pure[A](a: A): Free[S, A] = Free.pure(a)
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
-      def tailRecM[A, B](a: A)(f: A => Free[S, Either[A, B]]): Free[S, B] =
+      def tailRecM[A, B](a: A)(f: A => Free[S, A Xor B]): Free[S, B] =
         f(a).flatMap(_ match {
           case Left(a1) => tailRecM(a1)(f) // recursion OK here, since Free is lazy
           case Right(b) => pure(b)

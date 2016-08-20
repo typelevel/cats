@@ -1,6 +1,8 @@
 package cats
 package instances
 
+import cats.data.Xor
+
 import cats.syntax.show._
 import scala.annotation.tailrec
 
@@ -54,38 +56,38 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
         }.value
       }
 
-      def tailRecM[A, B](a: A)(fn: A => Stream[Either[A, B]]): Stream[B] = {
+      def tailRecM[A, B](a: A)(fn: A => Stream[Xor[A, B]]): Stream[B] = {
         val it: Iterator[B] = new Iterator[B] {
-          var stack: Stream[Either[A, B]] = fn(a)
-          var state: Either[Unit, Option[B]] = Left(())
+          var stack: Stream[Xor[A, B]] = fn(a)
+          var state: Xor[Unit, Option[B]] = Xor.Left(())
 
           @tailrec
           def advance(): Unit = stack match {
-            case Right(b) #:: tail =>
+            case Xor.Right(b) #:: tail =>
               stack = tail
-              state = Right(Some(b))
-            case Left(a) #:: tail =>
+              state = Xor.Right(Some(b))
+            case Xor.Left(a) #:: tail =>
               stack = fn(a) #::: tail
               advance
             case empty =>
-              state = Right(None)
+              state = Xor.Right(None)
           }
 
           @tailrec
           def hasNext: Boolean = state match {
-            case Left(()) =>
+            case Xor.Left(()) =>
               advance()
               hasNext
-            case Right(o) =>
+            case Xor.Right(o) =>
               o.isDefined
           }
 
           @tailrec
           def next(): B = state match {
-            case Left(()) =>
+            case Xor.Left(()) =>
               advance()
               next
-            case Right(o) =>
+            case Xor.Right(o) =>
               val b = o.get
               advance()
               b

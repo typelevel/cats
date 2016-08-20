@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{EitherT, OptionT}
+import cats.data.{OptionT, Xor, XorT}
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -68,32 +68,32 @@ class OptionTTests extends CatsSuite {
 
   {
     // F has a MonadError
-    type SEither[A] = Either[String, A]
+    type SXor[A] = String Xor A
 
-    implicit val monadError = OptionT.catsDataMonadErrorForOptionT[SEither, String]
+    implicit val monadError = OptionT.catsDataMonadErrorForOptionT[SXor, String]
 
     import org.scalacheck.Arbitrary
-    implicit val arb1 = implicitly[Arbitrary[OptionT[SEither, Int]]]
-    implicit val arb2 = implicitly[Arbitrary[OptionT[SEither, Int => Int]]]
+    implicit val arb1 = implicitly[Arbitrary[OptionT[SXor, Int]]]
+    implicit val arb2 = implicitly[Arbitrary[OptionT[SXor, Int => Int]]]
 
-    implicit val eq0 = OptionT.catsDataEqForOptionT[SEither, Option[Int]]
-    implicit val eq1 = OptionT.catsDataEqForOptionT[SEither, Int]
-    implicit val eq2 = OptionT.catsDataEqForOptionT[SEither, Unit]
-    implicit val eq3 = OptionT.catsDataEqForOptionT[SEither, SEither[Unit]]
-    implicit val eq4 = OptionT.catsDataEqForOptionT[SEither, SEither[Int]]
-    implicit val eq5 = EitherT.catsDataEqForEitherT[OptionT[SEither, ?], String, Int]
-    implicit val eq6 = OptionT.catsDataEqForOptionT[SEither, (Int, Int, Int)]
+    implicit val eq0 = OptionT.catsDataEqForOptionT[SXor, Option[Int]]
+    implicit val eq1 = OptionT.catsDataEqForOptionT[SXor, Int]
+    implicit val eq2 = OptionT.catsDataEqForOptionT[SXor, Unit]
+    implicit val eq3 = OptionT.catsDataEqForOptionT[SXor, SXor[Unit]]
+    implicit val eq4 = OptionT.catsDataEqForOptionT[SXor, SXor[Int]]
+    implicit val eq5 = XorT.catsDataEqForXorT[OptionT[SXor, ?], String, Int]
+    implicit val eq6 = OptionT.catsDataEqForOptionT[SXor, (Int, Int, Int)]
 
-    implicit val iso = CartesianTests.Isomorphisms.invariant[OptionT[SEither, ?]]
+    implicit val iso = CartesianTests.Isomorphisms.invariant[OptionT[SXor, ?]]
 
-    checkAll("OptionT[Either[String, ?], Int]", MonadErrorTests[OptionT[SEither, ?], String].monadError[Int, Int, Int])
-    checkAll("MonadError[OptionT[Either[String, ?], ?]]", SerializableTests.serializable(monadError))
+    checkAll("OptionT[String Xor ?, Int]", MonadErrorTests[OptionT[SXor, ?], String].monadError[Int, Int, Int])
+    checkAll("MonadError[OptionT[String Xor ?, ?]]", SerializableTests.serializable(monadError))
 
-    Monad[OptionT[SEither, ?]]
-    FlatMap[OptionT[SEither, ?]]
-    Applicative[OptionT[SEither, ?]]
-    Apply[OptionT[SEither, ?]]
-    Functor[OptionT[SEither, ?]]
+    Monad[OptionT[SXor, ?]]
+    FlatMap[OptionT[SXor, ?]]
+    Applicative[OptionT[SXor, ?]]
+    Apply[OptionT[SXor, ?]]
+    Functor[OptionT[SXor, ?]]
   }
 
   {
@@ -219,9 +219,9 @@ class OptionTTests extends CatsSuite {
     }
   }
 
-  test("OptionT[Id, A].toRight consistent with Either.fromOption") {
+  test("OptionT[Id, A].toRight consistent with Xor.fromOption") {
     forAll { (o: OptionT[Id, Int], s: String) =>
-      o.toRight(s).value should === (Either.fromOption(o.value, s))
+      o.toRight(s).value should === (Xor.fromOption(o.value, s))
     }
   }
 
@@ -256,8 +256,8 @@ class OptionTTests extends CatsSuite {
   }
 
   test("show") {
-    val either: Either[String, Option[Int]] = Either.right(Some(1))
-    OptionT[Either[String, ?], Int](either).show should === ("Right(Some(1))")
+    val xor: Xor[String, Option[Int]] = Xor.right(Some(1))
+    OptionT[Xor[String, ?], Int](xor).show should === ("Xor.Right(Some(1))")
   }
 
   test("none") {

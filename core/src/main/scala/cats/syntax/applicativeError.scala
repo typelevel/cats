@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-import cats.data.EitherT
+import cats.data.{Xor, XorT}
 
 trait ApplicativeErrorSyntax {
   implicit def catsSyntaxApplicativeErrorId[E](e: E): ApplicativeErrorIdOps[E] =
@@ -24,10 +24,10 @@ final class ApplicativeErrorOps[F[_], E, A](fa: F[A])(implicit F: ApplicativeErr
   def handleErrorWith(f: E => F[A]): F[A] =
     F.handleErrorWith(fa)(f)
 
-  def attempt: F[Either[E, A]] =
+  def attempt: F[E Xor A] =
     F.attempt(fa)
 
-  def attemptT: EitherT[F, E, A] =
+  def attemptT: XorT[F, E, A] =
     F.attemptT(fa)
 
   def recover(pf: PartialFunction[E, A]): F[A] =

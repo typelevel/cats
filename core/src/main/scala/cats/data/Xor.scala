@@ -263,11 +263,11 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       def flatMap[B, C](fa: A Xor B)(f: B => A Xor C): A Xor C = fa.flatMap(f)
       override def ap[B, C](x: A Xor (B => C))(y: A Xor B): A Xor C = y.ap(x)
       def pure[B](b: B): A Xor B = Xor.right(b)
-      @tailrec def tailRecM[B, C](b: B)(f: B => A Xor Either[B, C]): A Xor C =
+      @tailrec def tailRecM[B, C](b: B)(f: B => A Xor (B Xor C)): A Xor C =
         f(b) match {
           case Xor.Left(a) => Xor.Left(a)
-          case Xor.Right(Left(b1)) => tailRecM(b1)(f)
-          case Xor.Right(Right(c)) => Xor.Right(c)
+          case Xor.Right(Xor.Left(b1)) => tailRecM(b1)(f)
+          case Xor.Right(Xor.Right(c)) => Xor.Right(c)
         }
       def handleErrorWith[B](fea: Xor[A, B])(f: A => Xor[A, B]): Xor[A, B] =
         fea match {
@@ -278,7 +278,7 @@ private[data] sealed abstract class XorInstances extends XorInstances1 {
       override def map[B, C](fa: A Xor B)(f: B => C): A Xor C = fa.map(f)
       override def map2Eval[B, C, Z](fb: A Xor B, fc: Eval[A Xor C])(f: (B, C) => Z): Eval[A Xor Z] =
         fb.map2Eval(fc)(f)
-      override def attempt[B](fab: A Xor B): A Xor (Either[A, B]) = Xor.right(fab.toEither)
+      override def attempt[B](fab: A Xor B): A Xor (A Xor B) = Xor.right(fab)
       override def recover[B](fab: A Xor B)(pf: PartialFunction[A, B]): A Xor B =
         fab recover pf
       override def recoverWith[B](fab: A Xor B)(pf: PartialFunction[A, A Xor B]): A Xor B =
