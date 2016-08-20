@@ -207,7 +207,7 @@ import simulacrum.typeclass
   /**
    * Behaves like traverse_, but uses [[Unapply]] to find the
    * [[Applicative]] instance for `G` - used when `G` is a
-   * type constructor with two or more parameters such as [[scala.util.Either]]
+   * type constructor with two or more parameters such as `scala.util.Either`
    *
    * {{{
    * scala> import cats.implicits._
@@ -251,7 +251,7 @@ import simulacrum.typeclass
   /**
    * Behaves like sequence_, but uses [[Unapply]] to find the
    * [[Applicative]] instance for `G` - used when `G` is a
-   * type constructor with two or more parameters such as [[scala.util.Either]]
+   * type constructor with two or more parameters such as `scala.util.Either`
    *
    * {{{
    * scala> import cats.implicits._

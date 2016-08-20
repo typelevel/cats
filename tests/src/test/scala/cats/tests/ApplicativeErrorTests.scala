@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.EitherT
+import cats.data.{Xor, XorT}
 
 class ApplicativeErrorCheck extends CatsSuite {
   val failed: Option[Int] =
@@ -19,12 +19,12 @@ class ApplicativeErrorCheck extends CatsSuite {
     failed.handleErrorWith(_ => Some(7)) should === (Some(7))
   }
 
-  test("attempt syntax creates a wrapped Either") {
-    failed.attempt should === (Option(Left(())))
+  test("attempt syntax creates a wrapped Xor") {
+    failed.attempt should === (Option(Xor.Left(())))
   }
 
-  test("attemptT syntax creates an EitherT") {
-    failed.attemptT should === (EitherT[Option, Unit, Int](Option(Left(()))))
+  test("attemptT syntax creates an XorT") {
+    failed.attemptT should === (XorT[Option, Unit, Int](Option(Xor.Left(()))))
   }
 
   test("recover syntax transforms an error to a success") {

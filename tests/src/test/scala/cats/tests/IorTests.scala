@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.Ior
+import cats.data.{Ior, Xor}
 import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadTests, SerializableTests, CartesianTests}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
@@ -34,7 +34,7 @@ class IorTests extends CatsSuite {
 
   test("onlyLeftOrRight") {
     forAll { (i: Int Ior String) =>
-      i.onlyLeft.map(Left(_)).orElse(i.onlyRight.map(Right(_))) should === (i.onlyLeftOrRight)
+      i.onlyLeft.map(Xor.Left(_)).orElse(i.onlyRight.map(Xor.Right(_))) should === (i.onlyLeftOrRight)
     }
   }
 
