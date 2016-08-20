@@ -35,6 +35,7 @@ the identity function `x => x` (i.e. `flatMap(_)(x => x)`).
 
 ```tut:silent
 import cats._
+import cats.data.Xor
 
 implicit def optionMonad(implicit app: Applicative[Option]) =
   new Monad[Option] {
@@ -45,11 +46,11 @@ implicit def optionMonad(implicit app: Applicative[Option]) =
     override def pure[A](a: A): Option[A] = app.pure(a)
 
     @annotation.tailrec
-    def tailRecM[A, B](init: A)(fn: A => Option[Either[A, B]]): Option[B] =
+    def tailRecM[A, B](init: A)(fn: A => Option[Xor[A, B]]): Option[B] =
       fn(init) match {
         case None => None
-        case Some(Right(b)) => Some(b)
-        case Some(Left(a)) => tailRecM(a)(fn)
+        case Some(Xor.Right(b)) => Some(b)
+        case Some(Xor.Left(a)) => tailRecM(a)(fn)
       }
   }
 ```
@@ -64,7 +65,7 @@ derived from `flatMap` and `pure`.
 implicit val listMonad = new Monad[List] {
   def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] = fa.flatMap(f)
   def pure[A](a: A): List[A] = List(a)
-  def tailRecM[A, B](a: A)(f: A => List[Either[A, B]]): List[B] =
+  def tailRecM[A, B](a: A)(f: A => List[Xor[A, B]]): List[B] =
     defaultTailRecM(a)(f)
 }
 ```
@@ -119,7 +120,7 @@ implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
           case Some(a) => f(a).value
         }
       }
-    def tailRecM[A, B](a: A)(f: A => OptionT[F, Either[A, B]]): OptionT[F, B] =
+    def tailRecM[A, B](a: A)(f: A => OptionT[F, Xor[A, B]]): OptionT[F, B] =
       defaultTailRecM(a)(f)
   }
 }

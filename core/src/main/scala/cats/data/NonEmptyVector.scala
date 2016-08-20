@@ -196,16 +196,16 @@ private[data] sealed trait NonEmptyVectorInstances {
       override def foldRight[A, B](fa: NonEmptyVector[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         fa.foldRight(lb)(f)
 
-      def tailRecM[A, B](a: A)(f: A => NonEmptyVector[Either[A, B]]): NonEmptyVector[B] = {
+      def tailRecM[A, B](a: A)(f: A => NonEmptyVector[A Xor B]): NonEmptyVector[B] = {
         val buf = new VectorBuilder[B]
-        @tailrec def go(v: NonEmptyVector[Either[A, B]]): Unit = v.head match {
-            case Right(b) =>
+        @tailrec def go(v: NonEmptyVector[A Xor B]): Unit = v.head match {
+            case Xor.Right(b) =>
             buf += b
             NonEmptyVector.fromVector(v.tail) match {
               case Some(t) => go(t)
               case None => ()
             }
-          case Left(a) => go(f(a).concat(v.tail))
+          case Xor.Left(a) => go(f(a).concat(v.tail))
           }
         go(f(a))
         NonEmptyVector.fromVectorUnsafe(buf.result())

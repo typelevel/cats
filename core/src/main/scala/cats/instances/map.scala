@@ -1,6 +1,8 @@
 package cats
 package instances
 
+import cats.data.Xor
+
 import scala.annotation.tailrec
 
 trait MapInstances extends cats.kernel.instances.MapInstances {
@@ -56,17 +58,17 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       def foldRight[A, B](fa: Map[K, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         Foldable.iterateRight(fa.values.iterator, lb)(f)
 
-      def tailRecM[A, B](a: A)(f: A => Map[K, Either[A, B]]): Map[K, B] = {
+      def tailRecM[A, B](a: A)(f: A => Map[K, Xor[A, B]]): Map[K, B] = {
         val bldr = Map.newBuilder[K, B]
 
-        @tailrec def descend(k: K, either: Either[A, B]): Unit =
+        @tailrec def descend(k: K, either: Xor[A, B]): Unit =
           either match {
-            case Left(a) =>
+            case Xor.Left(a) =>
               f(a).get(k) match {
                 case Some(x) => descend(k, x)
                 case None => ()
               }
-            case Right(b) =>
+            case Xor.Right(b) =>
               bldr += ((k, b))
               ()
           }

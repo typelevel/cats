@@ -196,16 +196,16 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
       override def foldRight[A, B](fa: NonEmptyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         fa.foldRight(lb)(f)
 
-      def tailRecM[A, B](a: A)(f: A => NonEmptyList[Either[A, B]]): NonEmptyList[B] = {
+      def tailRecM[A, B](a: A)(f: A => NonEmptyList[A Xor B]): NonEmptyList[B] = {
         val buf = new ListBuffer[B]
-        @tailrec def go(v: NonEmptyList[Either[A, B]]): Unit = v.head match {
-            case Right(b) =>
+        @tailrec def go(v: NonEmptyList[A Xor B]): Unit = v.head match {
+            case Xor.Right(b) =>
             buf += b
             NonEmptyList.fromList(v.tail) match {
               case Some(t) => go(t)
               case None => ()
             }
-          case Left(a) => go(f(a) ++ v.tail)
+          case Xor.Left(a) => go(f(a) ++ v.tail)
           }
         go(f(a))
         NonEmptyList.fromListUnsafe(buf.result())

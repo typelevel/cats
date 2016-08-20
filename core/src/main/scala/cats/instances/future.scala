@@ -1,6 +1,8 @@
 package cats
 package instances
 
+import cats.data.Xor
+
 import scala.util.control.NonFatal
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -16,10 +18,10 @@ trait FutureInstances extends FutureInstances1 {
        * Note that while this implementation will not compile with `@tailrec`,
        * it is in fact stack-safe.
        */
-      final def tailRecM[B, C](b: B)(f: B => Future[Either[B, C]]): Future[C] =
+      final def tailRecM[B, C](b: B)(f: B => Future[(B Xor C)]): Future[C] =
         f(b).flatMap {
-          case Left(b1) => tailRecM(b1)(f)
-          case Right(c) => Future.successful(c)
+          case Xor.Left(b1) => tailRecM(b1)(f)
+          case Xor.Right(c) => Future.successful(c)
         }
 
       def handleErrorWith[A](fea: Future[A])(f: Throwable => Future[A]): Future[A] = fea.recoverWith { case t => f(t) }
@@ -27,8 +29,8 @@ trait FutureInstances extends FutureInstances1 {
       def raiseError[A](e: Throwable): Future[A] = Future.failed(e)
       override def handleError[A](fea: Future[A])(f: Throwable => A): Future[A] = fea.recover { case t => f(t) }
 
-      override def attempt[A](fa: Future[A]): Future[Either[Throwable, A]] =
-        (fa.map(a => Right[Throwable, A](a))) recover { case NonFatal(t) => Left(t) }
+      override def attempt[A](fa: Future[A]): Future[Throwable Xor A] =
+        (fa map Xor.right) recover { case NonFatal(t) => Xor.left(t) }
 
       override def recover[A](fa: Future[A])(pf: PartialFunction[Throwable, A]): Future[A] = fa.recover(pf)
 

@@ -2,6 +2,7 @@ package cats
 package instances
 
 import scala.annotation.tailrec
+import cats.data.Xor
 
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
@@ -21,11 +22,11 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
         fa.flatMap(f)
 
       @tailrec
-      def tailRecM[A, B](a: A)(f: A => Option[Either[A, B]]): Option[B] =
+      def tailRecM[A, B](a: A)(f: A => Option[A Xor B]): Option[B] =
         f(a) match {
           case None => None
-          case Some(Left(a1)) => tailRecM(a1)(f)
-          case Some(Right(b)) => Some(b)
+          case Some(Xor.Left(a1)) => tailRecM(a1)(f)
+          case Some(Xor.Right(b)) => Some(b)
         }
 
       override def map2[A, B, Z](fa: Option[A], fb: Option[B])(f: (A, B) => Z): Option[Z] =

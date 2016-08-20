@@ -2,6 +2,8 @@ package cats
 
 import simulacrum.typeclass
 
+import cats.data.Xor
+
 /**
  * FlatMap type class gives us flatMap, which allows us to have a value
  * in a context (F[A]) and then feed that into a function that takes
@@ -92,7 +94,7 @@ import simulacrum.typeclass
     flatMap(fa)(if (_) ifTrue else ifFalse)
 
   /**
-   * Keeps calling `f` until a `scala.util.Right[B]` is returned.
+   * Keeps calling `f` until a `Right[B]` is returned.
    *
    * Based on Phil Freeman's
    * [[http://functorial.com/stack-safety-for-free/index.pdf Stack Safety for Free]].
@@ -105,5 +107,5 @@ import simulacrum.typeclass
    * using recursive flatMap. Such an implementation will only be stack safe if
    * the Monad is trampolined.
    */
-  def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B]
+  def tailRecM[A, B](a: A)(f: A => F[Xor[A, B]]): F[B]
 }

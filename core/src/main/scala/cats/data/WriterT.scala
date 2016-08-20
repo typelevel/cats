@@ -248,17 +248,17 @@ private[data] sealed trait WriterTFlatMap1[F[_], L] extends WriterTApply[F, L] w
   def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
     fa.flatMap(f)
 
-  def tailRecM[A, B](a: A)(fn: A => WriterT[F, L, Either[A, B]]): WriterT[F, L, B] = {
+  def tailRecM[A, B](a: A)(fn: A => WriterT[F, L, Xor[A, B]]): WriterT[F, L, B] = {
 
-    def step(la: (L, A)): F[Either[(L, A), (L, B)]] = {
-      val flv: F[(L, Either[A, B])] = fn(la._2).run
+    def step(la: (L, A)): F[Xor[(L, A), (L, B)]] = {
+      val flv: F[(L, Xor[A, B])] = fn(la._2).run
       F0.map(flv) {
-        case (l, Left(a)) =>
+        case (l, Xor.Left(a)) =>
           val combineL = L0.combine(la._1, l)
-          Left((combineL, a))
-        case (l, Right(b)) =>
+          Xor.Left((combineL, a))
+        case (l, Xor.Right(b)) =>
           val combineL = L0.combine(la._1, l)
-          Right((combineL, b))
+          Xor.Right((combineL, b))
       }
     }
 
@@ -273,24 +273,24 @@ private[data] sealed trait WriterTFlatMap2[F[_], L] extends WriterTApply[F, L] w
   def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
     fa.flatMap(f)
 
-  def tailRecM[A, B](a: A)(fn: A => WriterT[F, L, Either[A, B]]): WriterT[F, L, B] = {
+  def tailRecM[A, B](a: A)(fn: A => WriterT[F, L, Xor[A, B]]): WriterT[F, L, B] = {
 
-    def step(la: (L, A)): F[Either[(L, A), (L, B)]] = {
-      val flv: F[(L, Either[A, B])] = fn(la._2).run
+    def step(la: (L, A)): F[Xor[(L, A), (L, B)]] = {
+      val flv: F[(L, Xor[A, B])] = fn(la._2).run
       F0.map(flv) {
-        case (l, Left(a)) =>
+        case (l, Xor.Left(a)) =>
           val combineL = L0.combine(la._1, l)
-          Left((combineL, a))
-        case (l, Right(b)) =>
+          Xor.Left((combineL, a))
+        case (l, Xor.Right(b)) =>
           val combineL = L0.combine(la._1, l)
-          Right((combineL, b))
+          Xor.Right((combineL, b))
       }
     }
 
     val init = fn(a).run
     val res: F[(L, B)] = F0.flatMap(init) {
-      case (l, Right(b)) => F0.pure((l, b))
-      case (l, Left(a))  => F0.tailRecM((l, a))(step)
+      case (l, Xor.Right(b)) => F0.pure((l, b))
+      case (l, Xor.Left(a))  => F0.tailRecM((l, a))(step)
     }
     WriterT(res)
   }

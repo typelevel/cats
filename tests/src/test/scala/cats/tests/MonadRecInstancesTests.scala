@@ -3,7 +3,6 @@ package tests
 
 import cats.data.{
   Cokleisli,
-  EitherT,
   IdT,
   Ior,
   Kleisli,
@@ -20,7 +19,7 @@ import cats.data.{
 class MonadRecInstancesTests extends CatsSuite {
   def tailRecMStackSafety[M[_]: RecursiveTailRecM](implicit M: Monad[M], Eq: Eq[M[Int]]): Unit = {
     val n = 50000
-    val res = M.tailRecM(0)(i => M.pure(if (i < n) Either.left(i + 1) else Either.right(i)))
+    val res = M.tailRecM(0)(i => M.pure(if (i < n) Xor.left(i + 1) else Xor.right(i)))
     res should === (M.pure(n))
   }
 
@@ -78,10 +77,6 @@ class MonadRecInstancesTests extends CatsSuite {
 
   test("tailRecM stack-safety for XorT") {
     tailRecMStackSafety[XorT[Option, String, ?]]
-  }
-
-  test("tailRecM stack-safety for EitherT") {
-    tailRecMStackSafety[EitherT[Option, String, ?]]
   }
 
   test("tailRecM stack-safety for Ior") {

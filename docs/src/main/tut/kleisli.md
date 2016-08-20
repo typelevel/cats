@@ -138,7 +138,7 @@ implicit def kleisliFlatMap[F[_], Z](implicit F: FlatMap[F]): FlatMap[Kleisli[F,
     def map[A, B](fa: Kleisli[F, Z, A])(f: A => B): Kleisli[F, Z, B] =
       Kleisli(z => fa.run(z).map(f))
 
-    def tailRecM[A, B](a: A)(f: A => Kleisli[F, Z, Either[A, B]]) =
+    def tailRecM[A, B](a: A)(f: A => Kleisli[F, Z, Xor[A, B]]) =
       Kleisli[F, Z, B]({ z => FlatMap[F].tailRecM(a) { f(_).run(z) } })
   }
 ```

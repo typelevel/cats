@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.functor.Bifunctor
-import cats.data.{EitherT, Xor, XorT}
+import cats.data.{Xor, XorT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.{OrderLaws, GroupLaws}
@@ -46,8 +46,8 @@ class XorTTests extends CatsSuite {
   {
     //if a Monad is defined
     implicit val F = ListWrapper.monad
-    implicit val eq0 = XorT.catsDataEqForXorT[ListWrapper, String, Either[String, Int]]
-    implicit val eq1 = EitherT.catsDataEqForEitherT[XorT[ListWrapper, String, ?], String, Int](eq0)
+    implicit val eq0 = XorT.catsDataEqForXorT[ListWrapper, String, String Xor Int]
+    implicit val eq1 = XorT.catsDataEqForXorT[XorT[ListWrapper, String, ?], String, Int](eq0)
 
     Functor[XorT[ListWrapper, String, ?]]
     Applicative[XorT[ListWrapper, String, ?]]

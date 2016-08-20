@@ -1,8 +1,8 @@
 package cats
 package instances
 
-import cats.syntax.EitherUtil
-import cats.syntax.either._
+import cats.data.Xor
+
 import scala.annotation.tailrec
 
 trait EitherInstances extends EitherInstances1 {
@@ -27,7 +27,6 @@ trait EitherInstances extends EitherInstances1 {
         }
     }
 
-  // scalastyle:off method.length
   implicit def catsStdInstancesForEither[A]: MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] with RecursiveTailRecM[Either[A, ?]] =
     new MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] with RecursiveTailRecM[Either[A, ?]] {
       def pure[B](b: B): Either[A, B] = Right(b)
@@ -46,16 +45,16 @@ trait EitherInstances extends EitherInstances1 {
         fa.right.map(f)
 
       @tailrec
-      def tailRecM[B, C](b: B)(f: B => Either[A, Either[B, C]]): Either[A, C] =
+      def tailRecM[B, C](b: B)(f: B => Either[A, Xor[B, C]]): Either[A, C] =
         f(b) match {
-          case Left(a)         => Left(a)
-          case Right(Left(b1)) => tailRecM(b1)(f)
-          case Right(Right(c)) => Right(c)
+          case Left(a)             => Left(a)
+          case Right(Xor.Left(b1)) => tailRecM(b1)(f)
+          case Right(Xor.Right(c)) => Right(c)
         }
 
       override def map2Eval[B, C, Z](fb: Either[A, B], fc: Eval[Either[A, C]])(f: (B, C) => Z): Eval[Either[A, Z]] =
         fb match {
-          case l @ Left(_) => Now(EitherUtil.rightCast(l))
+          case l @ Left(_) => Now(l.asInstanceOf[Either[A, Z]])
           case Right(b) => fc.map(_.right.map(f(b, _)))
         }
 
@@ -70,16 +69,7 @@ trait EitherInstances extends EitherInstances1 {
 
       def foldRight[B, C](fa: Either[A, B], lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
         fa.fold(_ => lc, b => f(b, lc))
-
-      override def attempt[B](fab: Either[A, B]): Either[A, Either[A, B]] = Right(fab)
-      override def recover[B](fab: Either[A, B])(pf: PartialFunction[A, B]): Either[A, B] =
-        fab recover pf
-      override def recoverWith[B](fab: Either[A, B])(pf: PartialFunction[A, Either[A, B]]): Either[A, B] =
-        fab recoverWith pf
-      override def ensure[B](fab: Either[A, B])(error: => A)(predicate: B => Boolean): Either[A, B] =
-        fab.ensure(error)(predicate)
     }
-  // scalastyle:on method.length
 
   implicit def catsStdOrderForEither[A, B](implicit A: Order[A], B: Order[B]): Order[Either[A, B]] = new Order[Either[A, B]] {
     def compare(x: Either[A, B], y: Either[A, B]): Int = x.fold(
@@ -94,20 +84,6 @@ trait EitherInstances extends EitherInstances1 {
         a => s"Left(${A.show(a)})",
         b => s"Right(${B.show(b)})"
       )
-    }
-
-  implicit def catsDataMonoidForEither[A, B](implicit B: Monoid[B]): Monoid[Either[A, B]] =
-    new Monoid[Either[A, B]] {
-      def empty: Either[A, B] = Right(B.empty)
-      def combine(x: Either[A, B], y: Either[A, B]): Either[A, B] = x combine y
-    }
-
-  implicit def catsDataSemigroupKForEither[L]: SemigroupK[Either[L, ?]] =
-    new SemigroupK[Either[L, ?]] {
-      def combineK[A](x: Either[L, A], y: Either[L, A]): Either[L, A] = x match {
-        case Left(_) => y
-        case Right(_) => x
-      }
     }
 }
 

@@ -2,6 +2,8 @@ package cats
 
 import simulacrum.typeclass
 
+import cats.data.Xor
+
 /**
  * Monad.
  *
@@ -21,9 +23,9 @@ import simulacrum.typeclass
    * to write this method (all cats types have a stack safe version
    * of this). When this method is safe you can find an `implicit r: RecursiveTailRecM`.
    */
-  protected def defaultTailRecM[A, B](a: A)(fn: A => F[Either[A, B]]): F[B] =
+  protected def defaultTailRecM[A, B](a: A)(fn: A => F[Xor[A, B]]): F[B] =
     flatMap(fn(a)) {
-      case Right(b) => pure(b)
-      case Left(nextA) => defaultTailRecM(nextA)(fn)
+      case Xor.Right(b) => pure(b)
+      case Xor.Left(nextA) => defaultTailRecM(nextA)(fn)
     }
 }

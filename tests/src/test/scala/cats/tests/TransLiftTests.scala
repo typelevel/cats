@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{EitherT,OptionT,XorT,WriterT,Kleisli, StateT}
+import data.{OptionT,XorT,WriterT,Kleisli, StateT}
 
 class TransLiftTests extends CatsSuite {
 
@@ -22,8 +22,7 @@ class TransLiftTests extends CatsSuite {
     override def map[A, B](fa: JustAp[A])(f: A => B): JustAp[B] = JustAp(f(fa.a))
   }
 
-  test("transLift for EitherT, XorT, OptionT, WriterT requires only Functor") {
-    val e: EitherT[JustFunctor, Int, Int]    = JustFunctor(1).liftT[λ[(α[_], β) => EitherT[α, Int, β]]]
+  test("transLift for XorT, OptionT, WriterT requires only Functor") {
     val d: XorT[JustFunctor, Int, Int]    = JustFunctor(1).liftT[λ[(α[_], β) => XorT[α, Int, β]]]
     val c: OptionT[JustFunctor, Int]      = JustFunctor(1).liftT[OptionT]
     val a: WriterT[JustFunctor, Int, Int] = JustFunctor(1).liftT[λ[(α[_], β) => WriterT[α, Int, β]]]
