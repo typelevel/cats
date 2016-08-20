@@ -14,8 +14,8 @@ class UnapplyTests extends CatsSuite {
   }
 
   test("Unapply works for F[_,_] with the left fixed") {
-    val x = Traverse[List].traverseU(List(1,2,3))(Xor.right(_))
-    (x: String Xor List[Int]) should === (Xor.right(List(1,2,3)))
+    val x = Traverse[List].traverseU(List(1,2,3))(Either.right(_))
+    (x: Either[String, List[Int]]) should === (Either.right(List(1,2,3)))
   }
 
   test("Unapply works for F[_[_],_] with the left fixed") {

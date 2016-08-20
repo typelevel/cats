@@ -2,7 +2,6 @@ package cats
 package laws
 
 import cats.arrow.Choice
-import cats.data.Xor
 import cats.syntax.compose._
 
 /**
@@ -11,7 +10,7 @@ import cats.syntax.compose._
 trait ChoiceLaws[F[_, _]] extends CategoryLaws[F] {
   implicit override def F: Choice[F]
 
-  def choiceCompositionDistributivity[A, B, C, D](fac: F[A, C], fbc: F[B, C], fcd: F[C, D]): IsEq[F[Xor[A, B], D]] =
+  def choiceCompositionDistributivity[A, B, C, D](fac: F[A, C], fbc: F[B, C], fcd: F[C, D]): IsEq[F[Either[A, B], D]] =
     (F.choice(fac, fbc) andThen fcd) <-> F.choice(fac andThen fcd, fbc andThen fcd)
 }
 

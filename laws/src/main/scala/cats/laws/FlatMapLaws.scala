@@ -1,7 +1,7 @@
 package cats
 package laws
 
-import cats.data.{ Kleisli, Xor }
+import cats.data.Kleisli
 import cats.syntax.apply._
 import cats.syntax.flatMap._
 import cats.syntax.functor._
@@ -29,8 +29,8 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
 
   def tailRecMConsistentFlatMap[A](count: Int, a: A, f: A => F[A]): IsEq[F[A]] = {
     def bounce(n: Int) = F.tailRecM[(A, Int), A]((a, n)) { case (a0, i) =>
-      if (i > 0) f(a0).map(a1 => Xor.left((a1, i-1)))
-      else f(a0).map(Xor.right)
+      if (i > 0) f(a0).map(a1 => Left((a1, i-1)))
+      else f(a0).map(Right(_))
     }
     /*
      * The law is for n >= 1

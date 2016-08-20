@@ -2,7 +2,6 @@ package cats
 package instances
 
 import cats.arrow.{Arrow, Choice}
-import cats.data.Xor
 import cats.functor.Contravariant
 import annotation.tailrec
 
@@ -20,12 +19,12 @@ private[instances] sealed trait Function0Instances {
       def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
         () => f(fa())()
 
-      def tailRecM[A, B](a: A)(fn: A => () => Xor[A, B]): () => B =
+      def tailRecM[A, B](a: A)(fn: A => () => Either[A, B]): () => B =
         () => {
           @tailrec
           def loop(thisA: A): B = fn(thisA)() match {
-            case Xor.Right(b) => b
-            case Xor.Left(nextA) => loop(nextA)
+            case Right(b) => b
+            case Left(nextA) => loop(nextA)
           }
           loop(a)
         }
@@ -58,12 +57,12 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
       override def map[R1, R2](fa: T1 => R1)(f: R1 => R2): T1 => R2 =
         f.compose(fa)
 
-      def tailRecM[A, B](a: A)(fn: A => T1 => Xor[A, B]): T1 => B =
+      def tailRecM[A, B](a: A)(fn: A => T1 => Either[A, B]): T1 => B =
         (t: T1) => {
           @tailrec
           def step(thisA: A): B = fn(thisA)(t) match {
-            case Xor.Right(b) => b
-            case Xor.Left(nextA) => step(nextA)
+            case Right(b) => b
+            case Left(nextA) => step(nextA)
           }
           step(a)
         }
@@ -71,10 +70,10 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
 
   implicit val catsStdInstancesForFunction1: Choice[Function1] with Arrow[Function1] =
     new Choice[Function1] with Arrow[Function1] {
-      def choice[A, B, C](f: A => C, g: B => C): Xor[A, B] => C =
+      def choice[A, B, C](f: A => C, g: B => C): Either[A, B] => C =
         _ match {
-          case Xor.Left(a) => f(a)
-          case Xor.Right(b) => g(b)
+          case Left(a)  => f(a)
+          case Right(b) => g(b)
         }
 
       def lift[A, B](f: A => B): A => B = f
