@@ -219,6 +219,21 @@ trait XorTFunctions {
 
   final def pure[F[_], A, B](b: B)(implicit F: Applicative[F]): XorT[F, A, B] = right(F.pure(b))
 
+  /**
+   * Alias for [[XorT.right]]
+   * {{{
+   * scala> import cats.data.XorT
+   * scala> import cats.implicits._
+   * scala> val o: Option[Int] = Some(3)
+   * scala> val n: Option[Int] = None
+   * scala> XorT.liftT(o)
+   * res0: cats.data.XorT[Option,Nothing,Int] = XorT(Some(Right(3)))
+   * scala> XorT.liftT(n)
+   * res1: cats.data.XorT[Option,Nothing,Int] = XorT(None)
+   * }}}
+   */
+  final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): XorT[F, A, B] = right(fb)
+
   /** Transforms an `Xor` into an `XorT`, lifted into the specified `Applicative`.
    *
    * Note: The return type is a FromXorPartiallyApplied[F], which has an apply method
@@ -280,7 +295,7 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
       type TC[M[_]] = Functor[M]
 
       def liftT[M[_]: Functor, A](ma: M[A]): XorT[M, E, A] =
-        XorT(Functor[M].map(ma)(Xor.right))
+        XorT.liftT(ma)
     }
 
   implicit def catsMonoidForXorT[F[_], L, A](implicit F: Monoid[F[L Xor A]]): Monoid[XorT[F, L, A]] =
