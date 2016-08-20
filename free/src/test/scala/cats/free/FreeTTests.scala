@@ -39,7 +39,7 @@ class FreeTTests extends CatsSuite {
   }
 
   {
-    implicit val eqEithertTFA: Eq[EitherT[FreeTOption, Unit, Int]] = EitherT.catsDataEqForEitherT[FreeTOption, Unit, Int]
+    implicit val eqXortTFA: Eq[XorT[FreeTOption, Unit, Int]] = XorT.catsDataEqForXorT[FreeTOption, Unit, Int]
     checkAll("FreeT[Option, Option, Int]", MonadErrorTests[FreeTOption, Unit].monadError[Int, Int, Int])
     checkAll("MonadError[FreeT[Option, Option, ?], Unit]", SerializableTests.serializable(MonadError[FreeTOption, Unit]))
   }
@@ -55,9 +55,9 @@ class FreeTTests extends CatsSuite {
     val result =
       Monad[FreeTOption].tailRecM(0)((i: Int) =>
         if (i < 50000)
-          Applicative[FreeTOption].pure(Either.left[Int, Unit](i + 1))
+          Applicative[FreeTOption].pure(Xor.left[Int, Unit](i + 1))
         else
-          Applicative[FreeTOption].pure(Either.right[Int, Unit](())))
+          Applicative[FreeTOption].pure(Xor.right[Int, Unit](())))
 
     Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
   }
@@ -138,8 +138,8 @@ class FreeTTests extends CatsSuite {
   }
 
   private[free] def liftTUCompilationTests() = {
-    val a: Either[String, Int]= Right(42)
-    val b: FreeT[Option, Either[String, ?], Int] = FreeT.liftTU(a)
+    val a: String Xor Int = Xor.right(42)
+    val b: FreeT[Option, String Xor ?, Int] = FreeT.liftTU(a)
   }
 
 }
