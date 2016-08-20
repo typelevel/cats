@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.data.Xor
 import cats.syntax.EitherUtil
 import cats.syntax.either._
 import scala.annotation.tailrec
@@ -71,7 +72,7 @@ trait EitherInstances extends EitherInstances1 {
       def foldRight[B, C](fa: Either[A, B], lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
         fa.fold(_ => lc, b => f(b, lc))
 
-      override def attempt[B](fab: Either[A, B]): Either[A, Either[A, B]] = Right(fab)
+      override def attempt[B](fab: Either[A, B]): Either[A, Xor[A, B]] = Right(fab.toXor)
       override def recover[B](fab: Either[A, B])(pf: PartialFunction[A, B]): Either[A, B] =
         fab recover pf
       override def recoverWith[B](fab: Either[A, B])(pf: PartialFunction[A, Either[A, B]]): Either[A, B] =

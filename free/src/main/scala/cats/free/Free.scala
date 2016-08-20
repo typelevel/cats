@@ -4,6 +4,7 @@ package free
 import scala.annotation.tailrec
 
 import cats.arrow.FunctionK
+import cats.data.Xor
 
 /**
  * A free operational monad for some functor `S`. Binding is done
@@ -43,13 +44,13 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Evaluate a single layer of the free monad.
    */
   @tailrec
-  final def resume(implicit S: Functor[S]): Either[S[Free[S, A]], A] = this match {
-    case Pure(a) => Right(a)
-    case Suspend(t) => Left(S.map(t)(Pure(_)))
+  final def resume(implicit S: Functor[S]): Xor[S[Free[S, A]], A] = this match {
+    case Pure(a) => Xor.Right(a)
+    case Suspend(t) => Xor.Left(S.map(t)(Pure(_)))
     case FlatMapped(c, f) =>
       c match {
         case Pure(a) => f(a).resume
-        case Suspend(t) => Left(S.map(t)(f))
+        case Suspend(t) => Xor.Left(S.map(t)(f))
         case FlatMapped(d, g) => d.flatMap(dd => g(dd).flatMap(f)).resume
       }
   }
@@ -61,8 +62,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def go(f: S[Free[S, A]] => Free[S, A])(implicit S: Functor[S]): A = {
     @tailrec def loop(t: Free[S, A]): A =
       t.resume match {
-        case Left(s) => loop(f(s))
-        case Right(r) => r
+        case Xor.Left(s) => loop(f(s))
+        case Xor.Right(r) => r
       }
     loop(this)
   }
@@ -80,8 +81,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    */
   final def runM[M[_]](f: S[Free[S, A]] => M[Free[S, A]])(implicit S: Functor[S], M: Monad[M]): M[A] = {
     def runM2(t: Free[S, A]): M[A] = t.resume match {
-      case Left(s) => Monad[M].flatMap(f(s))(runM2)
-      case Right(r) => Monad[M].pure(r)
+      case Xor.Left(s) => Monad[M].flatMap(f(s))(runM2)
+      case Xor.Right(r) => Monad[M].pure(r)
     }
     runM2(this)
   }

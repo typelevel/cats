@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.data.Xor
 import scala.util.control.NonFatal
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -27,8 +28,8 @@ trait FutureInstances extends FutureInstances1 {
       def raiseError[A](e: Throwable): Future[A] = Future.failed(e)
       override def handleError[A](fea: Future[A])(f: Throwable => A): Future[A] = fea.recover { case t => f(t) }
 
-      override def attempt[A](fa: Future[A]): Future[Either[Throwable, A]] =
-        (fa.map(a => Right[Throwable, A](a))) recover { case NonFatal(t) => Left(t) }
+      override def attempt[A](fa: Future[A]): Future[Xor[Throwable, A]] =
+        (fa.map(a => Xor.Right(a))) recover { case NonFatal(t) => Xor.Left(t) }
 
       override def recover[A](fa: Future[A])(pf: PartialFunction[Throwable, A]): Future[A] = fa.recover(pf)
 

@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.EitherT
+import cats.data.{EitherT, Xor, XorT}
 import cats.functor.Bifunctor
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -46,8 +46,8 @@ class EitherTTests extends CatsSuite {
   {
     //if a Monad is defined
     implicit val F = ListWrapper.monad
-    implicit val eq0 = EitherT.catsDataEqForEitherT[ListWrapper, String, Either[String, Int]]
-    implicit val eq1 = EitherT.catsDataEqForEitherT[EitherT[ListWrapper, String, ?], String, Int](eq0)
+    implicit val eq0 = EitherT.catsDataEqForEitherT[ListWrapper, String, Xor[String, Int]]
+    implicit val eq1 = XorT.catsDataEqForXorT[EitherT[ListWrapper, String, ?], String, Int](eq0)
 
     Functor[EitherT[ListWrapper, String, ?]]
     Applicative[EitherT[ListWrapper, String, ?]]
