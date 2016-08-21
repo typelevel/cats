@@ -2,7 +2,6 @@ package cats
 package free
 
 import cats.arrow.FunctionK
-import cats.data.Xor
 import cats.tests.CatsSuite
 import cats.data.Coproduct
 import org.scalacheck._
@@ -92,13 +91,13 @@ class InjectTests extends CatsSuite {
 
   test("apply in left") {
     forAll { (y: Test1[Int]) =>
-      Inject[Test1Algebra, T].inj(y) == Coproduct(Xor.Left(y)) should ===(true)
+      Inject[Test1Algebra, T].inj(y) == Coproduct(Left(y)) should ===(true)
     }
   }
 
   test("apply in right") {
     forAll { (y: Test2[Int]) =>
-      Inject[Test2Algebra, T].inj(y) == Coproduct(Xor.Right(y)) should ===(true)
+      Inject[Test2Algebra, T].inj(y) == Coproduct(Right(y)) should ===(true)
     }
   }
 

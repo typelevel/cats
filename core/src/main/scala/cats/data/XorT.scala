@@ -403,7 +403,7 @@ private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L]
       case r @ Xor.Right(_) => F.pure(r)
     })
   def raiseError[A](e: L): XorT[F, L, A] = XorT.left(F.pure(e))
-  override def attempt[A](fla: XorT[F, L, A]): XorT[F, L, Xor[L, A]] = XorT.right(fla.value)
+  override def attempt[A](fla: XorT[F, L, A]): XorT[F, L, Either[L, A]] = XorT.right(fla.toEither)
   override def recover[A](fla: XorT[F, L, A])(pf: PartialFunction[L, A]): XorT[F, L, A] =
     fla.recover(pf)
   override def recoverWith[A](fla: XorT[F, L, A])(pf: PartialFunction[L, XorT[F, L, A]]): XorT[F, L, A] =

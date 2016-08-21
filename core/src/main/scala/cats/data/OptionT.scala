@@ -86,11 +86,11 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
         case None => default
       })
 
-  def toRight[L](left: => L)(implicit F: Functor[F]): XorT[F, L, A] =
-    XorT(cata(Xor.Left(left), Xor.Right.apply))
+  def toRight[L](left: => L)(implicit F: Functor[F]): EitherT[F, L, A] =
+    EitherT(cata(Left(left), Right.apply))
 
-  def toLeft[R](right: => R)(implicit F: Functor[F]): XorT[F, A, R] =
-    XorT(cata(Xor.Right(right), Xor.Left.apply))
+  def toLeft[R](right: => R)(implicit F: Functor[F]): EitherT[F, A, R] =
+    EitherT(cata(Right(right), Left.apply))
 
   def show(implicit F: Show[F[Option[A]]]): String = F.show(value)
 

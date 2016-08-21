@@ -80,11 +80,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def toXor: Xor[E, A] = fold(Xor.Left.apply, Xor.Right.apply)
 
   /**
-   * Convert to an Xor, apply a function, convert back.  This is handy
-   * when you want to use the Monadic properties of the Xor type.
+   * Convert to an Either, apply a function, convert back.  This is handy
+   * when you want to use the Monadic properties of the Either type.
    */
-  def withXor[EE, B](f: Xor[E, A] => Xor[EE, B]): Validated[EE, B] =
-    Validated.fromXor(f(toXor))
+  def withEither[EE, B](f: Either[E, A] => Either[EE, B]): Validated[EE, B] =
+    Validated.fromEither(f(toEither))
 
   /**
    * Validated is a [[functor.Bifunctor]], this method applies one of the
@@ -390,11 +390,6 @@ trait ValidatedFunctions {
    * Converts an `Either[A, B]` to an `Validated[A, B]`.
    */
   def fromEither[A, B](e: Either[A, B]): Validated[A, B] = e.fold(invalid, valid)
-
-  /**
-   * Converts an `Xor[A, B]` to an `Validated[A, B]`.
-   */
-  def fromXor[A, B](e: Xor[A, B]): Validated[A, B] = e.fold(invalid, valid)
 
   /**
    * Converts an `Option[B]` to an `Validated[A, B]`, where the provided `ifNone` values is returned on

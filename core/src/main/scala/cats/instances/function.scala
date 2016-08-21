@@ -2,7 +2,6 @@ package cats
 package instances
 
 import cats.arrow.{Arrow, Choice}
-import cats.data.Xor
 import cats.functor.Contravariant
 import annotation.tailrec
 
@@ -71,10 +70,10 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
 
   implicit val catsStdInstancesForFunction1: Choice[Function1] with Arrow[Function1] =
     new Choice[Function1] with Arrow[Function1] {
-      def choice[A, B, C](f: A => C, g: B => C): Xor[A, B] => C =
+      def choice[A, B, C](f: A => C, g: B => C): Either[A, B] => C =
         _ match {
-          case Xor.Left(a)  => f(a)
-          case Xor.Right(b) => g(b)
+          case Left(a)  => f(a)
+          case Right(b) => g(b)
         }
 
       def lift[A, B](f: A => B): A => B = f

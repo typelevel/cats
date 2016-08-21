@@ -3,7 +3,6 @@ package instances
 
 import TryInstances.castFailure
 
-import cats.data.Xor
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 import scala.annotation.tailrec
@@ -67,8 +66,8 @@ trait TryInstances extends TryInstances1 {
       override def handleError[A](ta: Try[A])(f: Throwable => A): Try[A] =
         ta.recover { case t => f(t) }
 
-      override def attempt[A](ta: Try[A]): Try[Xor[Throwable, A]] =
-        (ta.map(a => Xor.Right(a))) recover { case NonFatal(t) => Xor.Left(t) }
+      override def attempt[A](ta: Try[A]): Try[Either[Throwable, A]] =
+        (ta.map(a => Right[Throwable, A](a))) recover { case NonFatal(t) => Left(t) }
 
       override def recover[A](ta: Try[A])(pf: PartialFunction[Throwable, A]): Try[A] =
         ta.recover(pf)

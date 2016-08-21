@@ -314,17 +314,19 @@ val houseNumber = config.parse[Int]("house_number").andThen{ n =>
 The `withXor` method allows you to temporarily turn a `Validated` instance into an `Xor` instance and apply it to a function.
 
 ```tut:silent
-def positive(field: String, i: Int): Xor[ConfigError, Int] = {
-  if (i >= 0) Xor.Right(i)
-  else Xor.Left(ParseError(field))
+import cats.syntax.either._ // get Either#flatMap
+
+def positive(field: String, i: Int): Either[ConfigError, Int] = {
+  if (i >= 0) Right(i)
+  else Left(ParseError(field))
 }
 ```
 
 Thus.
 
 ```tut:book
-val houseNumber = config.parse[Int]("house_number").withXor { xor: Xor[ConfigError, Int] =>
-  xor.flatMap{ i =>
+val houseNumber = config.parse[Int]("house_number").withEither{ either: Either[ConfigError, Int] =>
+  either.flatMap{ i =>
     positive("house_number", i)
   }
 }
