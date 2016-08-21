@@ -218,7 +218,7 @@ behavior, such as:
  - `Future[_]` for asynchronous computation
  - `List[_]` for gathering multiple results
  - `Option[_]` to support optional results
- - `Xor[E, ?]` to support failure
+ - `Either[E, ?]` to support failure
  - a pseudo-random monad to support non-determinism
  - and so on...
 
@@ -304,7 +304,7 @@ lets us compose different algebras in the context of `Free`.
 Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.
 
 ```tut:silent
-import cats.data.{Xor, Coproduct}
+import cats.data.Coproduct
 import cats.free.{Inject, Free}
 import cats.{Id, ~>}
 import scala.collection.mutable.ListBuffer

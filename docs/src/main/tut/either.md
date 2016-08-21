@@ -1,11 +1,11 @@
 ---
 layout: default
-title:  "Xor"
+title:  "Either"
 section: "data"
-source: "core/src/main/scala/cats/data/Xor.scala"
-scaladoc: "#cats.data.Xor"
+source: "core/src/main/scala/cats/syntax/either.scala"
+scaladoc: "#cats.syntax.EitherOps"
 ---
-# Xor
+# Either
 
 In day-to-day programming, it is fairly common to find ourselves writing functions that
 can fail. For instance, querying a service may result in a connection issue, or some
@@ -35,34 +35,18 @@ exception came from.
 
 How then do we communicate an error? By making it explicit in the data type we return.
 
-## Xor
+## Either
 
-### `Xor` vs `Validated`
+### `Either` vs `Validated`
 
-In general, `Validated` is used to accumulate errors, while `Xor` is used to short-circuit a computation upon the first error. For more information, see the `Validated` vs `Xor` section of the [`Validated` documentation]({{ site.baseurl }}/tut/validated.html).
+In general, `Validated` is used to accumulate errors, while `Either` is used to short-circuit a computation upon the first error. For more information, see the `Validated` vs `Either` section of the [`Validated` documentation]({{ site.baseurl }}/tut/validated.html).
 
-### Why not `Either`
-`Xor` is very similar to `scala.util.Either` - in fact, they are *isomorphic* (that is,
-any `Either` value can be rewritten as an `Xor` value, and vice versa).
+### Syntax
 
-```scala
-sealed abstract class Xor[+A, +B]
-
-object Xor {
-  final case class Left[+A](a: A) extends Xor[A, Nothing]
-  final case class Right[+B](b: B) extends Xor[Nothing, B]
-}
-```
-
-Just like `Either`, it has two type parameters. Instances of `Xor` either hold a value
-of one type parameter, or the other. Why then does it exist at all?
-
-Taking a look at `Either`, we notice it lacks `flatMap` and `map` methods. In order to map
-over an `Either[A, B]` value, we have to state which side we want to map over. For example,
-if we want to map `Either[A, B]` to `Either[A, C]` we would need to map over the right side.
-This can be accomplished by using the `Either#right` method, which returns a `RightProjection`
-instance. `RightProjection` does have `flatMap` and `map` on it, which acts on the right side
-and ignores the left - this property is referred to as "right-bias."
+In Scala 2.10.x and 2.11.x, `Either` is unbiased. That is, usual combinators like `flatMap` and `map`
+are missing from it. Instead, you call `.right` or `.left` to get a `RightProjection` or
+`LeftProjection` (respectively) which does have the combinators. The direction of the projection indicates the direction
+of bias. For instance, calling `map` on a `RightProjection` acts on the `Right` of an `Either`.
 
 ```tut:book
 val e1: Either[String, Int] = Right(5)
@@ -75,49 +59,50 @@ e2.right.map(_ + 1)
 Note the return types are themselves back to `Either`, so if we want to make more calls to
 `flatMap` or `map` then we again must call `right` or `left`.
 
+However, the convention is almost always to right-bias `Either`. Indeed in Scala 2.12.x `Either` will be
+[right-biased](https://github.com/scala/scala/pull/5135) by default.
+
 More often than not we want to just bias towards one side and call it a day - by convention,
-the right side is most often chosen. This is the primary difference between `Xor` and `Either` -
-`Xor` is right-biased. `Xor` also has some more convenient methods on it, but the most
-crucial one is the right-biased being built-in.
+the right side is most often chosen. In Scala 2.12.x this convention
+[is implemented](https://github.com/scala/scala/pull/5135)
+in the standard library. Since Cats builds on 2.10.x and 2.11.x, the gaps have been filled via syntax
+enrichments available under `cats.syntax.either._` or `cats.implicits._`.
 
 ```tut:book
-import cats.data.Xor
+import cats.syntax.either._
 
-val xor1: Xor[String, Int] = Xor.right(5)
-xor1.map(_ + 1)
+val right: Either[String, Int] = Right(5)
+right.map(_ + 1)
 
-val xor2: Xor[String, Int] = Xor.left("hello")
-xor2.map(_ + 1)
+val left: Either[String, Int] = Left("hello")
+left.map(_ + 1)
 ```
 
-Because `Xor` is right-biased, it is possible to define a `Monad` instance for it. You
-could also define one for `Either` but due to how it's encoded it may seem strange to fix a
-bias direction despite it intending to be flexible in that regard. The `Monad` instance for
-`Xor` is consistent with the behavior of the data type itself, whereas the one for `Either`
-would only introduce bias when `Either` is used in a generic context (a function abstracted
-over `M[_] : Monad`).
+For the rest of this tutorial we will assume the syntax enrichment is in scope giving us right-biased `Either`
+and a bunch of other useful combinators (both on `Either` and the companion object).
 
-Since we only ever want the computation to continue in the case of `Xor.Right` (as captured
-by the right-bias nature), we fix the left type parameter and leave the right one free.
+Because `Either` is right-biased, it is possible to define a `Monad` instance for it.
+Since we only ever want the computation to continue in the case of `Right`, we fix the left type parameter
+and leave the right one free.
 
 *Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
 
 ```tut:silent
 import cats.Monad
 
-implicit def xorMonad[Err]: Monad[Xor[Err, ?]] =
-  new Monad[Xor[Err, ?]] {
-    def flatMap[A, B](fa: Xor[Err, A])(f: A => Xor[Err, B]): Xor[Err, B] =
+implicit def eitherMonad[Err]: Monad[Either[Err, ?]] =
+  new Monad[Either[Err, ?]] {
+    def flatMap[A, B](fa: Either[Err, A])(f: A => Either[Err, B]): Either[Err, B] =
       fa.flatMap(f)
 
-    def pure[A](x: A): Xor[Err, A] = Xor.right(x)
+    def pure[A](x: A): Either[Err, A] = Either.right(x)
 
     @annotation.tailrec
-    def tailRecM[A, B](a: A)(f: A => Xor[Err, Either[A, B]]): Xor[Err, B] =
+    def tailRecM[A, B](a: A)(f: A => Either[Err, Either[A, B]]): Either[Err, B] =
       f(a) match {
-        case Xor.Right(Right(b)) => Xor.right(b)
-        case Xor.Right(Left(a)) => tailRecM(a)(f)
-        case l@Xor.Left(_) => l
+        case Right(Right(b)) => Either.right(b)
+        case Right(Left(a)) => tailRecM(a)(f)
+        case l@Left(_) => l.rightCast[B] // Cast the right type parameter to avoid allocation
       }
   }
 ```
@@ -145,14 +130,14 @@ object ExceptionStyle {
 Instead, let's make the fact that some of our functions can fail explicit in the return type.
 
 ```tut:silent
-object XorStyle {
-  def parse(s: String): Xor[NumberFormatException, Int] =
-    if (s.matches("-?[0-9]+")) Xor.right(s.toInt)
-    else Xor.left(new NumberFormatException(s"${s} is not a valid integer."))
+object EitherStyle {
+  def parse(s: String): Either[Exception, Int] =
+    if (s.matches("-?[0-9]+")) Either.right(s.toInt)
+    else Either.left(new NumberFormatException(s"${s} is not a valid integer."))
 
-  def reciprocal(i: Int): Xor[IllegalArgumentException, Double] =
-    if (i == 0) Xor.left(new IllegalArgumentException("Cannot take reciprocal of 0."))
-    else Xor.right(1.0 / i)
+  def reciprocal(i: Int): Either[Exception, Double] =
+    if (i == 0) Either.left(new IllegalArgumentException("Cannot take reciprocal of 0."))
+    else Either.right(1.0 / i)
 
   def stringify(d: Double): String = d.toString
 }
@@ -161,28 +146,28 @@ object XorStyle {
 Now, using combinators like `flatMap` and `map`, we can compose our functions together.
 
 ```tut:silent
-import XorStyle._
+import EitherStyle._
 
-def magic(s: String): Xor[Exception, String] =
+def magic(s: String): Either[Exception, String] =
   parse(s).flatMap(reciprocal).map(stringify)
 ```
 
 With the composite function that we actually care about, we can pass in strings and then pattern
-match on the exception. Because `Xor` is a sealed type (often referred to as an algebraic data type,
+match on the exception. Because `Either` is a sealed type (often referred to as an algebraic data type,
 or ADT), the compiler will complain if we do not check both the `Left` and `Right` case.
 
 ```tut:book
 magic("123") match {
-  case Xor.Left(_: NumberFormatException) => println("not a number!")
-  case Xor.Left(_: IllegalArgumentException) => println("can't take reciprocal of 0!")
-  case Xor.Left(_) => println("got unknown exception")
-  case Xor.Right(s) => println(s"Got reciprocal: ${s}")
+  case Left(_: NumberFormatException) => println("not a number!")
+  case Left(_: IllegalArgumentException) => println("can't take reciprocal of 0!")
+  case Left(_) => println("got unknown exception")
+  case Right(s) => println(s"Got reciprocal: ${s}")
 }
 ```
 
 Not bad - if we leave out any of those clauses the compiler will yell at us, as it should. However,
-note the `Xor.Left(_)` clause - the compiler will complain if we leave that out because it knows
-that given the type `Xor[Exception, String]`, there can be inhabitants of `Xor.Left` that are not
+note the `Left(_)` clause - the compiler will complain if we leave that out because it knows
+that given the type `Either[Exception, String]`, there can be inhabitants of `Left` that are not
 `NumberFormatException` or `IllegalArgumentException`. However, we "know" by inspection of the source
 that those will be the only exceptions thrown, so it seems strange to have to account for other exceptions.
 This implies that there is still room to improve.
@@ -192,22 +177,22 @@ Instead of using exceptions as our error value, let's instead enumerate explicit
 can go wrong in our program.
 
 ```tut:silent
-object XorStyle {
+object EitherStyle {
   sealed abstract class Error
   final case class NotANumber(string: String) extends Error
   final case object NoZeroReciprocal extends Error
 
-  def parse(s: String): Xor[Error, Int] =
-    if (s.matches("-?[0-9]+")) Xor.right(s.toInt)
-    else Xor.left(NotANumber(s))
+  def parse(s: String): Either[Error, Int] =
+    if (s.matches("-?[0-9]+")) Either.right(s.toInt)
+    else Either.left(NotANumber(s))
 
-  def reciprocal(i: Int): Xor[Error, Double] =
-    if (i == 0) Xor.left(NoZeroReciprocal)
-    else Xor.right(1.0 / i)
+  def reciprocal(i: Int): Either[Error, Double] =
+    if (i == 0) Either.left(NoZeroReciprocal)
+    else Either.right(1.0 / i)
 
   def stringify(d: Double): String = d.toString
 
-  def magic(s: String): Xor[Error, String] =
+  def magic(s: String): Either[Error, String] =
     parse(s).flatMap(reciprocal).map(stringify)
 }
 ```
@@ -218,17 +203,17 @@ match, we get much nicer matching. Moreover, since `Error` is `sealed`, no outsi
 add additional subtypes which we might fail to handle.
 
 ```tut:book
-import XorStyle._
+import EitherStyle._
 
 magic("123") match {
-  case Xor.Left(NotANumber(_)) => println("not a number!")
-  case Xor.Left(NoZeroReciprocal) => println("can't take reciprocal of 0!")
-  case Xor.Right(s) => println(s"Got reciprocal: ${s}")
+  case Left(NotANumber(_)) => println("not a number!")
+  case Left(NoZeroReciprocal) => println("can't take reciprocal of 0!")
+  case Right(s) => println(s"Got reciprocal: ${s}")
 }
 ```
 
-## Xor in the small, Xor in the large
-Once you start using `Xor` for all your error-handling, you may quickly run into an issue where
+## Either in the small, Either in the large
+Once you start using `Either` for all your error-handling, you may quickly run into an issue where
 you need to call into two separate modules which give back separate kinds of errors.
 
 ```tut:silent
@@ -236,35 +221,33 @@ sealed abstract class DatabaseError
 trait DatabaseValue
 
 object Database {
-  def databaseThings(): Xor[DatabaseError, DatabaseValue] = ???
+  def databaseThings(): Either[DatabaseError, DatabaseValue] = ???
 }
 
 sealed abstract class ServiceError
 trait ServiceValue
 
 object Service {
-  def serviceThings(v: DatabaseValue): Xor[ServiceError, ServiceValue] = ???
+  def serviceThings(v: DatabaseValue): Either[ServiceError, ServiceValue] = ???
 }
 ```
 
 Let's say we have an application that wants to do database things, and then take database
 values and do service things. Glancing at the types, it looks like `flatMap` will do it.
 
-```tut:silent
+```tut:fail:silent
 def doApp = Database.databaseThings().flatMap(Service.serviceThings)
 ```
 
-This doesn't work! Well, it does, but it gives us `Xor[Object, ServiceValue]` which isn't
-particularly useful for us. Now if we inspect the `Left`s, we have no clue what it could be.
-The reason this occurs is because the first type parameter in the two `Xor`s are different -
+This doesn't work! The reason this occurs is because the first type parameter in the two `Either`s are different -
 `databaseThings()` can give us a `DatabaseError` whereas `serviceThings()` can give us a
-`ServiceError`: two completely unrelated types. Recall that the type parameters of `Xor`
-are covariant, so when it sees an `Xor[E1, A1]` and an `Xor[E2, A2]`, it will happily try
-to unify the `E1` and `E2` in a `flatMap` call - in our case, the closest common supertype is
-`Object`, leaving us with practically no type information to use in our pattern match.
+`ServiceError`: two completely unrelated types. While `Either`'s type parameters are covariant,
+the aforementioned syntax enrichment is invariant to avoid nasty variance issues like inferring
+`Object`. Therefore, when the compiler sees `Either[E1, A1]` and an `Either[E2, A2]`, it
+will simply reject the `flatMap` call.
 
 ### Solution 1: Application-wide errors
-So clearly in order for us to easily compose `Xor` values, the left type parameter must be the same.
+So clearly in order for us to easily compose `Either` values, the left type parameter must be the same.
 We may then be tempted to make our entire application share an error data type.
 
 ```tut:silent
@@ -277,18 +260,18 @@ final case object ServiceError2 extends AppError
 trait DatabaseValue
 
 object Database {
-  def databaseThings(): Xor[AppError, DatabaseValue] = ???
+  def databaseThings(): Either[AppError, DatabaseValue] = ???
 }
 
 object Service {
-  def serviceThings(v: DatabaseValue): Xor[AppError, ServiceValue] = ???
+  def serviceThings(v: DatabaseValue): Either[AppError, ServiceValue] = ???
 }
 
 def doApp = Database.databaseThings().flatMap(Service.serviceThings)
 ```
 
 This certainly works, or at least it compiles. But consider the case where another module wants to just use
-`Database`, and gets an `Xor[AppError, DatabaseValue]` back. Should it want to inspect the errors, it
+`Database`, and gets an `Either[AppError, DatabaseValue]` back. Should it want to inspect the errors, it
 must inspect **all** the `AppError` cases, even though it was only intended for `Database` to use
 `DatabaseError1` or `DatabaseError2`.
 
@@ -301,14 +284,14 @@ sealed abstract class DatabaseError
 trait DatabaseValue
 
 object Database {
-  def databaseThings(): Xor[DatabaseError, DatabaseValue] = ???
+  def databaseThings(): Either[DatabaseError, DatabaseValue] = ???
 }
 
 sealed abstract class ServiceError
 trait ServiceValue
 
 object Service {
-  def serviceThings(v: DatabaseValue): Xor[ServiceError, ServiceValue] = ???
+  def serviceThings(v: DatabaseValue): Either[ServiceError, ServiceValue] = ???
 }
 
 sealed abstract class AppError
@@ -319,12 +302,12 @@ object AppError {
 ```
 
 Now in our outer application, we can wrap/lift each module-specific error into `AppError` and then
-call our combinators as usual. `Xor` provides a convenient method to assist with this, called `Xor.leftMap` -
+call our combinators as usual. `Either` provides a convenient method to assist with this, called `Either.leftMap` -
 it can be thought of as the same as `map`, but for the `Left` side.
 
 ```tut:silent
-def doApp: Xor[AppError, ServiceValue] =
-  Database.databaseThings().leftMap(AppError.Database).
+def doApp: Either[AppError, ServiceValue] =
+  Database.databaseThings().leftMap[AppError](AppError.Database).
   flatMap(dv => Service.serviceThings(dv).leftMap(AppError.Service))
 ```
 
@@ -335,47 +318,36 @@ on entire classes of errors instead of having to pattern match on each individua
 ```tut:silent
 def awesome =
   doApp match {
-    case Xor.Left(AppError.Database(_)) => "something in the database went wrong"
-    case Xor.Left(AppError.Service(_))  => "something in the service went wrong"
-    case Xor.Right(_)                   => "everything is alright!"
+    case Left(AppError.Database(_)) => "something in the database went wrong"
+    case Left(AppError.Service(_))  => "something in the service went wrong"
+    case Right(_)                   => "everything is alright!"
   }
 ```
 
 ## Working with exception-y code
-There will inevitably come a time when your nice `Xor` code will have to interact with exception-throwing
+There will inevitably come a time when your nice `Either` code will have to interact with exception-throwing
 code. Handling such situations is easy enough.
 
 ```tut:book
-val xor: Xor[NumberFormatException, Int] =
+val either: Either[NumberFormatException, Int] =
   try {
-    Xor.right("abc".toInt)
+    Either.right("abc".toInt)
   } catch {
-    case nfe: NumberFormatException => Xor.left(nfe)
+    case nfe: NumberFormatException => Either.left(nfe)
   }
 ```
 
-However, this can get tedious quickly. `Xor` provides a `catchOnly` method on its companion object
-that allows you to pass it a function, along with the type of exception you want to catch, and does the
+However, this can get tedious quickly. `Either` has a `catchOnly` method on its companion object
+(via syntax enrichment) that allows you to pass it a function, along with the type of exception you want to catch, and does the
 above for you.
 
 ```tut:book
-val xor: Xor[NumberFormatException, Int] =
-  Xor.catchOnly[NumberFormatException]("abc".toInt)
+val either: Either[NumberFormatException, Int] =
+  Either.catchOnly[NumberFormatException]("abc".toInt)
 ```
 
 If you want to catch all (non-fatal) throwables, you can use `catchNonFatal`.
 
 ```tut:book
-val xor: Xor[Throwable, Int] =
-  Xor.catchNonFatal("abc".toInt)
-```
-
-## Additional syntax
-
-```tut:book
-import cats.implicits._
-
-val xor3: Xor[String, Int] = 7.right[String]
-
-val xor4: Xor[String, Int] = "hello 🐈s".left[Int]
+val either: Either[Throwable, Int] = Either.catchNonFatal("abc".toInt)
 ```

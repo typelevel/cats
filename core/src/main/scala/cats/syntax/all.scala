@@ -43,5 +43,3 @@ trait AllSyntax
     with TupleSyntax
     with ValidatedSyntax
     with WriterSyntax
-    with XorSyntax
-    with XorTSyntax

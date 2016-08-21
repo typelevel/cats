@@ -41,7 +41,6 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def pad: (Option[A], Option[B]) = fold(a => (Some(a), None), b => (None, Some(b)), (a, b) => (Some(a), Some(b)))
   final def unwrap: Either[Either[A, B], (A, B)] = fold(a => Left(Left(a)), b => Left(Right(b)), (a, b) => Right((a, b)))
 
-  final def toXor: A Xor B = fold(Xor.left, Xor.right, (_, b) => Xor.right(b))
   final def toEither: Either[A, B] = fold(Left(_), Right(_), (_, b) => Right(b))
   final def toOption: Option[B] = right
   final def toList: List[B] = right.toList

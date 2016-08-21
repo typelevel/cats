@@ -21,20 +21,19 @@ import cats.Semigroup
 import cats.Foldable
 ```
 
-The `cats.data._`, import brings in data structures such as [Xor](http://typelevel.org/cats/tut/xor.html), [Validated](http://typelevel.org/cats/tut/validated.html), and [State](http://typelevel.org/cats/tut/state.html). Instead of the entire `cats.data` package, you can import only the types that you need, for example:
+The `cats.data._`, import brings in data structures such as [Validated](http://typelevel.org/cats/tut/validated.html) and [State](http://typelevel.org/cats/tut/state.html). Instead of the entire `cats.data` package, you can import only the types that you need, for example:
 
 ```tut:silent
-import cats.data.Xor
 import cats.data.Validated
 import cats.data.State
 ```
 
-The `cats.implicits._` import does a couple of things. Firstly, it brings in implicit type class instances for standard library types - so after this import you will have `Monad[List]` and `Semigroup[Int]` instances in implicit scope. Secondly, it adds syntax enrichment onto certain types to provide some handy methods, for example:
+The `cats.implicits._` import does a couple of things. Firstly, it brings in implicit type class instances for standard library types - so after this import you will have `Monad[List]` and `Semigroup[Int]` instances in implicit scope. Secondly, it adds syntax enrichment onto certain types to provide some handy methods such as right-biased `Either` combinators:
 
 ```tut:book
-// cats adds a toXor method to the standard library's Either
+// cats adds right-biased combinators to the standard library's Either
 val e: Either[String, Int] = Right(3)
-e.toXor
+e.map(_ + 1)
 
 // cats adds an orEmpty method to the standard library's Option
 val o: Option[String] = None

@@ -153,12 +153,6 @@ class IorTests extends CatsSuite {
     }
   }
 
-  test("toXor consistent with toEither") {
-    forAll { (x: Int Ior String) =>
-      x.toEither should === (x.toXor.toEither)
-    }
-  }
-
   test("getOrElse consistent with Option getOrElse") {
     forAll { (x: Int Ior String, default: String) =>
       x.getOrElse(default) should === (x.toOption.getOrElse(default))

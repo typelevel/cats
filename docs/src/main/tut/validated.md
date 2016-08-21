@@ -13,7 +13,7 @@ have special characters either. Change, resubmit. Passwords need to have at leas
 resubmit. Password needs to have at least one number.
 
 Or perhaps you're reading from a configuration file. One could imagine the configuration library you're using returns
-a `scala.util.Try`, or maybe a `scala.util.Either` (or `cats.data.Xor`). Your parsing may look something like:
+a `scala.util.Try`, or maybe a `scala.util.Either`. Your parsing may look something like:
 
 ```scala
 for {
@@ -234,12 +234,11 @@ val personFromConfig: ValidatedNel[ConfigError, Person] =
   }
 ```
 
-## Of `flatMap`s and `Xor`s
-`Option` has `flatMap`, `Xor` has `flatMap`, where's `Validated`'s? Let's try to implement it - better yet,
+## Of `flatMap`s and `Either`s
+`Option` has `flatMap`, `Either` has `flatMap`, where's `Validated`'s? Let's try to implement it - better yet,
 let's implement the `Monad` type class.
 
 ```tut:silent
-import cats.data.Xor
 import cats.Monad
 
 implicit def validatedMonad[E]: Monad[Validated[E, ?]] =
@@ -288,20 +287,20 @@ This one short circuits! Therefore, if we were to define a `Monad` (or `FlatMap`
 have to override `ap` to get the behavior we want. But then the behavior of `flatMap` would be inconsistent with
 that of `ap`, not good. Therefore, `Validated` has only an `Applicative` instance.
 
-## `Validated` vs `Xor`
+## `Validated` vs `Either`
 
 We've established that an error-accumulating data type such as `Validated` can't have a valid `Monad` instance. Sometimes the task at hand requires error-accumulation. However, sometimes we want a monadic structure that we can use for sequential validation (such as in a for-comprehension). This leaves us in a bit of a conundrum.
 
-Cats has decided to solve this problem by using separate data structures for error-accumulation (`Validated`) and short-circuiting monadic behavior (`Xor`).
+Cats has decided to solve this problem by using separate data structures for error-accumulation (`Validated`) and short-circuiting monadic behavior (`Either`).
 
-If you are trying to decide whether you want to use `Validated` or `Xor`, a simple heuristic is to use `Validated` if you want error-accumulation and to otherwise use `Xor`.
+If you are trying to decide whether you want to use `Validated` or `Either`, a simple heuristic is to use `Validated` if you want error-accumulation and to otherwise use `Either`.
 
 ## Sequential Validation
 
 If you do want error accumulation but occasionally run into places where you sequential validation is needed, then `Validated` provides a couple methods that may be helpful.
 
 ### `andThen`
-The `andThen` method is similar to `flatMap` (such as `Xor.flatMap`). In the cause of success, it passes the valid value into a function that returns a new `Validated` instance.
+The `andThen` method is similar to `flatMap` (such as `Either.flatMap`). In the cause of success, it passes the valid value into a function that returns a new `Validated` instance.
 
 ```tut:book
 val houseNumber = config.parse[Int]("house_number").andThen{ n =>
@@ -310,8 +309,8 @@ val houseNumber = config.parse[Int]("house_number").andThen{ n =>
 }
 ```
 
-### `withXor`
-The `withXor` method allows you to temporarily turn a `Validated` instance into an `Xor` instance and apply it to a function.
+### `withEither`
+The `withEither` method allows you to temporarily turn a `Validated` instance into an `Either` instance and apply it to a function.
 
 ```tut:silent
 import cats.syntax.either._ // get Either#flatMap

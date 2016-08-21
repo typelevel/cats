@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-import cats.data.{EitherT, Ior, Validated, ValidatedNel, Xor}
+import cats.data.{EitherT, Ior, Validated, ValidatedNel}
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
@@ -229,25 +229,6 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
   def ap[C](that: Either[A, B => C]): Either[A, C] = (new EitherOps(that)).flatMap(this.map)
 
   /**
-   * Convert a `scala.util.Either` into a [[cats.data.Xor]].
-   *
-   * Example:
-   * {{{
-   * scala> import cats.data.Xor
-   * scala> import cats.implicits._
-   *
-   * scala> val i: Either[String, Int] = Right(3)
-   * scala> i.toXor
-   * res0: Xor[String, Int] = Right(3)
-   *
-   * scala> val s: Either[String, Int] = Left("error!")
-   * scala> s.toXor
-   * res0: Xor[String, Int] = Left(error!)
-   * }}}
-   */
-  def toXor: A Xor B = Xor.fromEither(eab)
-
-  /**
    * Transform the `Either` into a [[cats.data.EitherT]] while lifting it into the specified Applicative.
    *
    * {{{
@@ -287,7 +268,7 @@ final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalast
     }
 
   /**
-   * Converts a `Try[A]` to a `Throwable Xor A`.
+   * Converts a `Try[A]` to a `Either[Throwable, A]`.
    */
   def fromTry[A](t: Try[A]): Either[Throwable, A] =
     t match {
@@ -296,8 +277,8 @@ final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalast
     }
 
   /**
-   * Converts an `Option[B]` to an `A Xor B`, where the provided `ifNone` values is returned on
-   * the left of the `Xor` when the specified `Option` is `None`.
+   * Converts an `Option[B]` to an `Either[A, B]`, where the provided `ifNone` values is returned on
+   * the left of the `Either` when the specified `Option` is `None`.
    */
   def fromOption[A, B](o: Option[B], ifNone: => A): Either[A, B] = o match {
     case None    => left[A, B](ifNone)

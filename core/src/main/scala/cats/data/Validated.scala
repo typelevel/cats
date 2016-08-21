@@ -75,11 +75,6 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Convert this value to RightOr if Valid or LeftOr if Invalid
-   */
-  def toXor: Xor[E, A] = fold(Xor.Left.apply, Xor.Right.apply)
-
-  /**
    * Convert to an Either, apply a function, convert back.  This is handy
    * when you want to use the Monadic properties of the Either type.
    */

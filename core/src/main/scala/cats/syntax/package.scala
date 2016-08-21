@@ -42,6 +42,4 @@ package object syntax {
   object tuple extends TupleSyntax
   object validated extends ValidatedSyntax
   object writer extends WriterSyntax
-  object xor extends XorSyntax
-  object xort extends XorTSyntax
 }

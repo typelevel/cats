@@ -12,8 +12,6 @@ import cats.data.{
   OneAnd,
   OptionT,
   StateT,
-  Xor,
-  XorT,
   WriterT
 }
 
@@ -70,14 +68,6 @@ class MonadRecInstancesTests extends CatsSuite {
 
   test("tailRecM stack-safety for NonEmptyVector") {
     tailRecMStackSafety[NonEmptyVector]
-  }
-
-  test("tailRecM stack-safety for Xor") {
-    tailRecMStackSafety[String Xor ?]
-  }
-
-  test("tailRecM stack-safety for XorT") {
-    tailRecMStackSafety[XorT[Option, String, ?]]
   }
 
   test("tailRecM stack-safety for EitherT") {
