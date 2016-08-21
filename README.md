@@ -30,7 +30,7 @@ To get started with SBT, simply add the following to your `build.sbt`
 file:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats" % "0.6.1"
+libraryDependencies += "org.typelevel" %% "cats" % "0.7.0"
 ```
 
 This will pull in all of Cats' modules. If you only require some
@@ -47,7 +47,7 @@ Release notes for Cats are available in [CHANGES.md](CHANGES.md).
 
 *Cats is still under active development. While we don't anticipate any
  major redesigns, changes that are neither source nor binary
- compatibility are to be expected in upcoming cats releases. We will
+ compatible are to be expected in upcoming cats releases. We will
  update the minor version of cats accordingly for such changes. Once
  cats 1.0 is released (ETA: Q3 2016), there will be an increased focus
  on making changes in compatible ways.*
