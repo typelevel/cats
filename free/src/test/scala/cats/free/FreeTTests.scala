@@ -39,7 +39,7 @@ class FreeTTests extends CatsSuite {
   }
 
   {
-    implicit val eqEithertTFA: Eq[EitherT[FreeTOption, Unit, Int]] = EitherT.catsDataEqForEitherT[FreeTOption, Unit, Int]
+    implicit val eqXorTFA: Eq[XorT[FreeTOption, Unit, Int]] = XorT.catsDataEqForXorT[FreeTOption, Unit, Int]
     checkAll("FreeT[Option, Option, Int]", MonadErrorTests[FreeTOption, Unit].monadError[Int, Int, Int])
     checkAll("MonadError[FreeT[Option, Option, ?], Unit]", SerializableTests.serializable(MonadError[FreeTOption, Unit]))
   }

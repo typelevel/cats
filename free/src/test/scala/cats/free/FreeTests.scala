@@ -142,7 +142,7 @@ sealed trait FreeTestsInstances {
   implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
     Arbitrary(freeGen[F, A](4))
 
-  implicit def freeEq[S[_]: Monad, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
+  implicit def freeEq[S[_]: Monad: RecursiveTailRecM, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
     new Eq[Free[S, A]] {
       def eqv(a: Free[S, A], b: Free[S, A]): Boolean =
         SA.eqv(a.runM(identity),  b.runM(identity))
