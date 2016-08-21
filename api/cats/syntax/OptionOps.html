@@ -250,8 +250,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value. If the <code>Option</code> is <code>None</code>,
-return the <code>empty</code> value for <code>Monoid[A]</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.syntax.option._
-scala&gt; <span class="kw">import</span> cats.std.string._
+return the <code>empty</code> value for <code>Monoid[A]</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 
 scala&gt; <span class="kw">val</span> someString: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">Some</span>(<span class="lit">"hello"</span>)
 scala&gt; someString.orEmpty
@@ -279,7 +278,7 @@ res1: <span class="std">String</span> = <span class="lit">""</span></pre></div><
       <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.
 If the <code>Option</code> is <code>None</code>, return the provided <code>B</code> value in a
 <a href="../data/Validated$$Valid.html" class="extype" name="cats.data.Validated.Valid">cats.data.Validated.Valid</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Validated
-scala&gt; <span class="kw">import</span> cats.syntax.option._
+scala&gt; <span class="kw">import</span> cats.implicits._
 
 scala&gt; <span class="kw">val</span> error1: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">Some</span>(<span class="lit">"error!"</span>)
 scala&gt; error1.toInvalid(<span class="num">3</span>)
@@ -297,23 +296,23 @@ res1: Validated[<span class="std">String</span>, <span class="std">Int</span>] =
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toInvalidNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toInvalidNel.B">B</span></span>)</span><span class="result">: <a href="../data/package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.package.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>, <span class="extype" name="cats.syntax.OptionOps.toInvalidNel.B">B</span>]</span>
+        <span class="name">toInvalidNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toInvalidNel.B">B</span></span>)</span><span class="result">: <a href="../data/package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>, <span class="extype" name="cats.syntax.OptionOps.toInvalidNel.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.syntax.OptionOps@toInvalidNel[B](b:=&gt;B):cats.data.ValidatedNel[A,B]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, wrap its value in a <a href="../data/package.html#NonEmptyList[A]=cats.data.OneAnd[List,A]" class="extmbr" name="cats.data.NonEmptyList">cats.data.NonEmptyList</a>
-and return it in a <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, wrap its value in a <a href="../data/package.html#NonEmptyList[A]=cats.data.OneAnd[List,A]" class="extmbr" name="cats.data.NonEmptyList">cats.data.NonEmptyList</a>
+      <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, wrap its value in a <a href="../data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">cats.data.NonEmptyList</a>
+and return it in a <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, wrap its value in a <a href="../data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">cats.data.NonEmptyList</a>
 and return it in a <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.
 If the <code>Option</code> is <code>None</code>, return the provided <code>B</code> value in a
 <a href="../data/Validated$$Valid.html" class="extype" name="cats.data.Validated.Valid">cats.data.Validated.Valid</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.ValidatedNel
-scala&gt; <span class="kw">import</span> cats.syntax.option._
+scala&gt; <span class="kw">import</span> cats.implicits._
 
 scala&gt; <span class="kw">val</span> error1: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">Some</span>(<span class="lit">"error!"</span>)
 scala&gt; error1.toInvalidNel(<span class="num">3</span>)
-res0: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>] = Invalid(OneAnd(error!,<span class="std">List</span>()))
+res0: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>] = Invalid(NonEmptyList(error!))
 
 scala&gt; <span class="kw">val</span> error2: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">None</span>
 scala&gt; error2.toInvalidNel(<span class="num">3</span>)
@@ -337,7 +336,7 @@ res1: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>
       <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Xor$$Left.html" class="extype" name="cats.data.Xor.Left">cats.data.Xor.Left</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Xor$$Left.html" class="extype" name="cats.data.Xor.Left">cats.data.Xor.Left</a>.
 If the <code>Option</code> is <code>None</code>, return the provided <code>B</code> value in a
 <a href="../data/Xor$$Right.html" class="extype" name="cats.data.Xor.Right">cats.data.Xor.Right</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.syntax.option._
+scala&gt; <span class="kw">import</span> cats.implicits._
 
 scala&gt; <span class="kw">val</span> error1: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">Some</span>(<span class="lit">"error!"</span>)
 scala&gt; error1.toLeftXor(<span class="num">3</span>)
@@ -365,7 +364,7 @@ res1: <span class="std">String</span> Xor <span class="std">Int</span> = Right(<
       <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Xor$$Right.html" class="extype" name="cats.data.Xor.Right">cats.data.Xor.Right</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Xor$$Right.html" class="extype" name="cats.data.Xor.Right">cats.data.Xor.Right</a>.
 If the <code>Option</code> is <code>None</code>, return the provided <code>B</code> value in a
 <a href="../data/Xor$$Left.html" class="extype" name="cats.data.Xor.Left">cats.data.Xor.Left</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.syntax.option._
+scala&gt; <span class="kw">import</span> cats.implicits._
 
 scala&gt; <span class="kw">val</span> result1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)
 scala&gt; result1.toRightXor(<span class="lit">"error!"</span>)
@@ -410,7 +409,7 @@ res1: <span class="std">String</span> Xor <span class="std">Int</span> = Left(er
       <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Valid.html" class="extype" name="cats.data.Validated.Valid">cats.data.Validated.Valid</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Valid.html" class="extype" name="cats.data.Validated.Valid">cats.data.Validated.Valid</a>.
 If the <code>Option</code> is <code>None</code>, return the provided <code>B</code> value in a
 <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Validated
-scala&gt; <span class="kw">import</span> cats.syntax.option._
+scala&gt; <span class="kw">import</span> cats.implicits._
 
 scala&gt; <span class="kw">val</span> result1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)
 scala&gt; result1.toValid(<span class="lit">"error!"</span>)
@@ -428,7 +427,7 @@ res1: Validated[<span class="std">String</span>, <span class="std">Int</span>] =
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toValidNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toValidNel.B">B</span></span>)</span><span class="result">: <a href="../data/package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.package.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.syntax.OptionOps.toValidNel.B">B</span>, <span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>
+        <span class="name">toValidNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toValidNel.B">B</span></span>)</span><span class="result">: <a href="../data/package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.syntax.OptionOps.toValidNel.B">B</span>, <span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.syntax.OptionOps@toValidNel[B](b:=&gt;B):cats.data.ValidatedNel[B,A]" title="Permalink" target="_top">
@@ -436,9 +435,9 @@ res1: Validated[<span class="std">String</span>, <span class="std">Int</span>] =
       </a>
     </span>
       <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Valid.html" class="extype" name="cats.data.Validated.Valid">cats.data.Validated.Valid</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Valid.html" class="extype" name="cats.data.Validated.Valid">cats.data.Validated.Valid</a>.
-If the <code>Option</code> is <code>None</code>, wrap the provided <code>B</code> value in a <a href="../data/package.html#NonEmptyList[A]=cats.data.OneAnd[List,A]" class="extmbr" name="cats.data.NonEmptyList">cats.data.NonEmptyList</a>
+If the <code>Option</code> is <code>None</code>, wrap the provided <code>B</code> value in a <a href="../data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">cats.data.NonEmptyList</a>
 and return the result in a <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.ValidatedNel
-scala&gt; <span class="kw">import</span> cats.syntax.option._
+scala&gt; <span class="kw">import</span> cats.implicits._
 
 scala&gt; <span class="kw">val</span> result1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)
 scala&gt; result1.toValidNel(<span class="lit">"error!"</span>)
@@ -446,7 +445,7 @@ res0: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>
 
 scala&gt; <span class="kw">val</span> result2: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
 scala&gt; result2.toValidNel(<span class="lit">"error!"</span>)
-res1: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>] = Invalid(OneAnd(error!,<span class="std">List</span>()))</pre></div></div>
+res1: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>] = Invalid(NonEmptyList(error!))</pre></div></div>
     </li></ol>
             </div>
 

@@ -239,7 +239,7 @@
     </span>
       <p class="shortcomment cmt">Apply a function (that returns a <code>Validated</code>) in the valid case.</p><div class="fullcomment"><div class="comment cmt"><p>Apply a function (that returns a <code>Validated</code>) in the valid case.
 Otherwise return the original <code>Validated</code>.</p><p>This allows &quot;chained&quot; validation: the output of one validation can be fed
-into another validation function.</p><p>This function is similar to <code>Xor.flatMap</code>. It's not called <code>flatMap</code>,
+into another validation function.</p><p>This function is similar to <code>flatMap</code> on <code>Either</code>. It's not called <code>flatMap</code>,
 because by Cats convention, <code>flatMap</code> is a monadic bind that is consistent
 with <code>ap</code>. This method is not consistent with <a href="#ap[EE&gt;:E,B](f:cats.data.Validated[EE,A=&gt;B])(implicitEE:cats.Semigroup[EE]):cats.data.Validated[EE,B]" class="extmbr" name="cats.data.Validated#ap">ap</a> (or other
 <code>Apply</code>-based methods), because it has &quot;fail-fast&quot; behavior as opposed to
@@ -382,7 +382,7 @@ falling back to an Invalid of <code>onFailure</code> if the predicate
 returns false.</p><div class="fullcomment"><div class="comment cmt"><p>Ensure that a successful result passes the given predicate,
 falling back to an Invalid of <code>onFailure</code> if the predicate
 returns false.</p><p>For example:</p><pre>scala&gt; Validated.valid(<span class="lit">""</span>).ensure(<span class="kw">new</span> IllegalArgumentException(<span class="lit">"Must not be empty"</span>))(_.nonEmpty)
-res0: Validated[IllegalArgumentException,<span class="std">String</span>] = Invalid(java.lang.IllegalArgumentException: Must not be empty)</pre></div></div>
+res0: Validated[IllegalArgumentException, <span class="std">String</span>] = Invalid(java.lang.IllegalArgumentException: Must not be empty)</pre></div></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -688,6 +688,23 @@ Or, if the original valid was Valid, return it.
     </span>
       <p class="shortcomment cmt">Apply a function to a Valid value, returning a new Valid value
 </p>
+    </li><li name="cats.data.Validated#merge" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="merge[EE&gt;:E](implicitev:&lt;:&lt;[A,EE]):EE"></a>
+      <a id="merge[EE&gt;:E](&lt;:&lt;[A,EE]):EE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">merge</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.data.Validated.A">A</span>, <span class="extype" name="cats.data.Validated.merge.EE">EE</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.Validated.merge.EE">EE</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Validated@merge[EE&gt;:E](implicitev:&lt;:&lt;[A,EE]):EE" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -892,7 +909,7 @@ Or, if the original valid was Valid, return it.
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Converts the value to an Either[E,A]
+      <p class="shortcomment cmt">Converts the value to an Either[E, A]
 </p>
     </li><li name="cats.data.Validated#toList" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="toList:List[A]"></a>
@@ -957,7 +974,7 @@ otherwise return an empty List
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toValidatedNel</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>, <span name="AA">AA &gt;: <span class="extype" name="cats.data.Validated.A">A</span></span>]</span><span class="result">: <a href="package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.package.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.Validated.toValidatedNel.EE">EE</span>, <span class="extype" name="cats.data.Validated.toValidatedNel.AA">AA</span>]</span>
+        <span class="name">toValidatedNel</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>, <span name="AA">AA &gt;: <span class="extype" name="cats.data.Validated.A">A</span></span>]</span><span class="result">: <a href="package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.Validated.toValidatedNel.EE">EE</span>, <span class="extype" name="cats.data.Validated.toValidatedNel.AA">AA</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Validated@toValidatedNel[EE&gt;:E,AA&gt;:A]:cats.data.ValidatedNel[EE,AA]" title="Permalink" target="_top">
@@ -1002,6 +1019,24 @@ otherwise return an empty List
       <p class="shortcomment cmt">When Valid, apply the function, marking the result as valid
 inside the Applicative's context,
 when Invalid, lift the Error into the Applicative's context
+</p>
+    </li><li name="cats.data.Validated#valueOr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="valueOr[B&gt;:A](f:E=&gt;B):B"></a>
+      <a id="valueOr[B&gt;:A]((E)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">valueOr</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="cats.data.Validated.A">A</span></span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.E">E</span>) ⇒ <span class="extype" name="cats.data.Validated.valueOr.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.data.Validated.valueOr.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Validated@valueOr[B&gt;:A](f:E=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return the Valid value, or the result of f if Invalid
 </p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>

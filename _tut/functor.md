@@ -24,14 +24,14 @@ method that exists on many classes in the Scala standard library, for
 example:
 
 ```scala
-scala> Option(1).map(_ + 1)
-res0: Option[Int] = Some(2)
+Option(1).map(_ + 1)
+// res0: Option[Int] = Some(2)
 
-scala> List(1,2,3).map(_ + 1)
-res1: List[Int] = List(2, 3, 4)
+List(1,2,3).map(_ + 1)
+// res1: List[Int] = List(2, 3, 4)
 
-scala> Vector(1,2,3).map(_.toString)
-res2: scala.collection.immutable.Vector[String] = Vector(1, 2, 3)
+Vector(1,2,3).map(_.toString)
+// res2: scala.collection.immutable.Vector[String] = Vector(1, 2, 3)
 ```
 
 ## Creating Functor instances
@@ -78,22 +78,22 @@ Without kind-projector, we'd have to write this as something like
 `List` is a functor which applies the function to each element of the list:
 
 ```scala
-scala> val len: String => Int = _.length
-len: String => Int = <function1>
+val len: String => Int = _.length
+// len: String => Int = <function1>
 
-scala> Functor[List].map(List("qwer", "adsfg"))(len)
-res5: List[Int] = List(4, 5)
+Functor[List].map(List("qwer", "adsfg"))(len)
+// res5: List[Int] = List(4, 5)
 ```
 
 `Option` is a functor which only applies the function when the `Option` value 
 is a `Some`:
 
 ```scala
-scala> Functor[Option].map(Some("adsf"))(len) // Some(x) case: function is applied to x; result is wrapped in Some
-res6: Option[Int] = Some(4)
+Functor[Option].map(Some("adsf"))(len) // Some(x) case: function is applied to x; result is wrapped in Some
+// res6: Option[Int] = Some(4)
 
-scala> Functor[Option].map(None)(len) // None case: simply returns None (function is not applied)
-res7: Option[Int] = None
+Functor[Option].map(None)(len) // None case: simply returns None (function is not applied)
+// res7: Option[Int] = None
 ```
 
 ## Derived methods
@@ -103,11 +103,11 @@ res7: Option[Int] = None
 We can use `Functor` to "lift" a function from `A => B` to `F[A] => F[B]`:
 
 ```scala
-scala> val lenOption: Option[String] => Option[Int] = Functor[Option].lift(len)
-lenOption: Option[String] => Option[Int] = <function1>
+val lenOption: Option[String] => Option[Int] = Functor[Option].lift(len)
+// lenOption: Option[String] => Option[Int] = <function1>
 
-scala> lenOption(Some("abcd"))
-res8: Option[Int] = Some(4)
+lenOption(Some("abcd"))
+// res8: Option[Int] = Some(4)
 ```
 
 ### fproduct
@@ -116,34 +116,67 @@ res8: Option[Int] = Some(4)
 result of applying a function to that value.
 
 ```scala
-scala> val source = List("a", "aa", "b", "ccccc")
-source: List[String] = List(a, aa, b, ccccc)
+val source = List("a", "aa", "b", "ccccc")
+// source: List[String] = List(a, aa, b, ccccc)
 
-scala> Functor[List].fproduct(source)(len).toMap
-res9: scala.collection.immutable.Map[String,Int] = Map(a -> 1, aa -> 2, b -> 1, ccccc -> 5)
+Functor[List].fproduct(source)(len).toMap
+// res9: scala.collection.immutable.Map[String,Int] = Map(a -> 1, aa -> 2, b -> 1, ccccc -> 5)
 ```
 
 ### compose
 
 Functors compose! Given any functor `F[_]` and any functor `G[_]` we can
-create a new functor `F[G[_]]` by composing them:
+create a new functor `F[G[_]]` by composing them via the `Nested` data type:
 
 ```scala
-scala> val listOpt = Functor[List] compose Functor[Option]
-listOpt: cats.Functor[[X]List[Option[X]]] = cats.Functor$$anon$1@6e76d769
+import cats.data.Nested
+// import cats.data.Nested
 
-scala> listOpt.map(List(Some(1), None, Some(3)))(_ + 1)
-res10: List[Option[Int]] = List(Some(2), None, Some(4))
+val listOpt = Nested[List, Option, Int](List(Some(1), None, Some(3)))
+// listOpt: cats.data.Nested[List,Option,Int] = Nested(List(Some(1), None, Some(3)))
 
-scala> val optList = Functor[Option] compose Functor[List]
-optList: cats.Functor[[X]Option[List[X]]] = cats.Functor$$anon$1@11bb8c20
+Functor[Nested[List, Option, ?]].map(listOpt)(_ + 1)
+// res10: cats.data.Nested[[+A]List[A],Option,Int] = Nested(List(Some(2), None, Some(4)))
 
-scala> optList.map(Some(List(1, 2, 3)))(_ + 1)
-res11: Option[List[Int]] = Some(List(2, 3, 4))
+val optList = Nested[Option, List, Int](Some(List(1, 2, 3)))
+// optList: cats.data.Nested[Option,List,Int] = Nested(Some(List(1, 2, 3)))
 
-scala> val listOptList = listOpt compose Functor[List]
-listOptList: cats.Functor[[X]List[Option[List[X]]]] = cats.Functor$$anon$1@4bcd0593
-
-scala> listOptList.map(List(Some(List(1,2)), None, Some(List(3,4))))(_ + 1)
-res12: List[Option[List[Int]]] = List(Some(List(2, 3)), None, Some(List(4, 5)))
+Functor[Nested[Option, List, ?]].map(optList)(_ + 1)
+// res11: cats.data.Nested[Option,[+A]List[A],Int] = Nested(Some(List(2, 3, 4)))
 ```
+
+## Subtyping
+
+Functors have a natural relationship with subtyping:
+
+```scala
+class A
+// defined class A
+
+class B extends A
+// defined class B
+
+val b: B = new B
+// b: B = B@622da89e
+
+val a: A = b
+// a: A = B@622da89e
+
+val listB: List[B] = List(new B)
+// listB: List[B] = List(B@5a416c56)
+
+val listA1: List[A] = listB.map(b => b: A)
+// listA1: List[A] = List(B@5a416c56)
+
+val listA2: List[A] = listB.map(identity[A])
+// listA2: List[A] = List(B@5a416c56)
+
+val listA3: List[A] = Functor[List].widen[B, A](listB)
+// listA3: List[A] = List(B@5a416c56)
+```
+
+Subtyping relationships are "lifted" by functors, such that if `F` is a
+lawful functor and `A <: B` then `F[A] <: F[B]` - almost. Almost, because to
+convert an `F[B]` to an `F[A]` a call to `map(identity[A])` is needed
+(provided as `widen` for convenience). The functor laws guarantee that
+`fa map identity == fa`, however.

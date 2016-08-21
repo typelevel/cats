@@ -37,8 +37,8 @@ val twiceAsManyCats: Int => String =
 Thus.
 
 ```scala
-scala> twiceAsManyCats(1) // "2 cats"
-res2: String = 2 cats
+twiceAsManyCats(1) // "2 cats"
+// res2: String = 2 cats
 ```
 
 Sometimes, our functions will need to return monadic values. For instance, consider the following set of functions.
@@ -64,7 +64,7 @@ compose two `Kleisli`s much like we can two functions.
 
 ```scala
 import cats.FlatMap
-import cats.syntax.flatMap._
+import cats.implicits._
 
 final case class Kleisli[F[_], A, B](run: A => F[B]) {
   def compose[Z](k: Kleisli[F, Z, A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
@@ -76,7 +76,7 @@ Returning to our earlier example:
 
 ```scala
 // Bring in cats.FlatMap[Option] instance
-import cats.std.option._
+import cats.implicits._
 
 val parse = Kleisli((s: String) => try { Some(s.toInt) } catch { case _: NumberFormatException => None })
 
@@ -126,10 +126,8 @@ An example of a `Monad` instance for `Kleisli` is shown below.
 *Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
 
 ```scala
-import cats.syntax.flatMap._
-import cats.syntax.functor._
-// Alternatively we can import cats.implicits._ to bring in all the
-// syntax at once (as well as all type class instances)
+import cats.implicits._
+import cats.data.Xor
 
 // We can define a FlatMap instance for Kleisli if the F[_] we chose has a FlatMap instance
 // Note the input type and F are fixed, with the output type left free
@@ -140,6 +138,9 @@ implicit def kleisliFlatMap[F[_], Z](implicit F: FlatMap[F]): FlatMap[Kleisli[F,
 
     def map[A, B](fa: Kleisli[F, Z, A])(f: A => B): Kleisli[F, Z, B] =
       Kleisli(z => fa.run(z).map(f))
+
+    def tailRecM[A, B](a: A)(f: A => Kleisli[F, Z, Either[A, B]]) =
+      Kleisli[F, Z, B]({ z => FlatMap[F].tailRecM(a) { f(_).run(z) } })
   }
 ```
 

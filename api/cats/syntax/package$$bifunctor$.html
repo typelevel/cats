@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/syntax/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="BifunctorSyntax.html" class="extype" name="cats.syntax.BifunctorSyntax">BifunctorSyntax</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="BifunctorSyntax.html" class="extype" name="cats.syntax.BifunctorSyntax">BifunctorSyntax</a>, <a href="../functor/Bifunctor$$ToBifunctorOps.html" class="extype" name="cats.functor.Bifunctor.ToBifunctorOps">ToBifunctorOps</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.bifunctor"><span>bifunctor</span></li><li class="in" name="cats.syntax.BifunctorSyntax"><span>BifunctorSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.bifunctor"><span>bifunctor</span></li><li class="in" name="cats.syntax.BifunctorSyntax"><span>BifunctorSyntax</span></li><li class="in" name="cats.functor.Bifunctor.ToBifunctorOps"><span>ToBifunctorOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -162,23 +162,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.syntax.BifunctorSyntax#bifunctorSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bifunctorSyntax[F[_,_],A,B](fab:F[A,B])(implicitevidence$1:cats.functor.Bifunctor[F]):cats.syntax.BifunctorOps[F,A,B]"></a>
-      <a id="bifunctorSyntax[F[_,_],A,B](F[A,B])(Bifunctor[F]):BifunctorOps[F,A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">bifunctorSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.syntax.BifunctorSyntax.bifunctorSyntax.F">F</span>[<span class="extype" name="cats.syntax.BifunctorSyntax.bifunctorSyntax.A">A</span>, <span class="extype" name="cats.syntax.BifunctorSyntax.bifunctorSyntax.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.syntax.BifunctorSyntax.bifunctorSyntax.F">F</span>]</span>)</span><span class="result">: <a href="BifunctorOps.html" class="extype" name="cats.syntax.BifunctorOps">BifunctorOps</a>[<span class="extype" name="cats.syntax.BifunctorSyntax.bifunctorSyntax.F">F</span>, <span class="extype" name="cats.syntax.BifunctorSyntax.bifunctorSyntax.A">A</span>, <span class="extype" name="cats.syntax.BifunctorSyntax.bifunctorSyntax.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.package$$bifunctor$@bifunctorSyntax[F[_,_],A,B](fab:F[A,B])(implicitevidence$1:cats.functor.Bifunctor[F]):cats.syntax.BifunctorOps[F,A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BifunctorSyntax.html" class="extype" name="cats.syntax.BifunctorSyntax">BifunctorSyntax</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -378,6 +361,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.functor.Bifunctor.ToBifunctorOps#toBifunctorOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toBifunctorOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.functor.Bifunctor[F]):cats.functor.Bifunctor.Ops[F,A,B]"></a>
+      <a id="toBifunctorOps[F[_,_],A,B](F[A,B])(Bifunctor[F]):Ops[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toBifunctorOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.functor.Bifunctor.ToBifunctorOps.toBifunctorOps.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.ToBifunctorOps.toBifunctorOps.A">A</span>, <span class="extype" name="cats.functor.Bifunctor.ToBifunctorOps.toBifunctorOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.functor.Bifunctor.ToBifunctorOps.toBifunctorOps.F">F</span>]</span>)</span><span class="result">: <a href="../functor/Bifunctor$$Ops.html" class="extype" name="cats.functor.Bifunctor.Ops">Ops</a>[<span class="extype" name="cats.functor.Bifunctor.ToBifunctorOps.toBifunctorOps.F">F</span>, <span class="extype" name="cats.functor.Bifunctor.ToBifunctorOps.toBifunctorOps.A">A</span>, <span class="extype" name="cats.functor.Bifunctor.ToBifunctorOps.toBifunctorOps.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.package$$bifunctor$@toBifunctorOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.functor.Bifunctor[F]):cats.functor.Bifunctor.Ops[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../functor/Bifunctor$$ToBifunctorOps.html" class="extype" name="cats.functor.Bifunctor.ToBifunctorOps">ToBifunctorOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -475,6 +475,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.syntax.BifunctorSyntax">
               <h3>Inherited from <a href="BifunctorSyntax.html" class="extype" name="cats.syntax.BifunctorSyntax">BifunctorSyntax</a></h3>
+            </div><div class="parent" name="cats.functor.Bifunctor.ToBifunctorOps">
+              <h3>Inherited from <a href="../functor/Bifunctor$$ToBifunctorOps.html" class="extype" name="cats.functor.Bifunctor.ToBifunctorOps">ToBifunctorOps</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

@@ -1,0 +1,715 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>kernel - cats.kernel</title>
+          <meta name="description" content="kernel - cats.kernel" />
+          <meta name="keywords" content="kernel cats.kernel" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'cats.kernel.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a></p>
+        <h1>kernel</h1><span class="permalink">
+      <a href="../../index.html#cats.kernel.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kernel</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="cats.kernel.Band" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Band[A]extendsAnywithSemigroup[A]"></a>
+      <a id="Band[A]:Band[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Band.html"><span class="name">Band</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.Band.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Band[A]extendsAnywithSemigroup[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bands are semigroups whose operation
+(i.e.</p><div class="fullcomment"><div class="comment cmt"><p>Bands are semigroups whose operation
+(i.e. combine) is also idempotent.
+</p></div></div>
+    </li><li name="cats.kernel.BoundedSemilattice" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="BoundedSemilattice[A]extendsAnywithSemilattice[A]withCommutativeMonoid[A]"></a>
+      <a id="BoundedSemilattice[A]:BoundedSemilattice[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="BoundedSemilattice.html"><span class="name">BoundedSemilattice</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>] with <a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@BoundedSemilattice[A]extendsAnywithSemilattice[A]withCommutativeMonoid[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.CommutativeGroup" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CommutativeGroup[A]extendsAnywithGroup[A]withCommutativeMonoid[A]"></a>
+      <a id="CommutativeGroup[A]:CommutativeGroup[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CommutativeGroup.html"><span class="name">CommutativeGroup</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Group.html" class="extype" name="cats.kernel.Group">Group</a>[<span class="extype" name="cats.kernel.CommutativeGroup.A">A</span>] with <a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.kernel.CommutativeGroup.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@CommutativeGroup[A]extendsAnywithGroup[A]withCommutativeMonoid[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An commutative group (also known as an abelian group) is a group
+whose combine operation is commutative.</p>
+    </li><li name="cats.kernel.CommutativeMonoid" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="CommutativeMonoid[A]extendsAnywithMonoid[A]withCommutativeSemigroup[A]"></a>
+      <a id="CommutativeMonoid[A]:CommutativeMonoid[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CommutativeMonoid.html"><span class="name">CommutativeMonoid</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>[<span class="extype" name="cats.kernel.CommutativeMonoid.A">A</span>] with <a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[<span class="extype" name="cats.kernel.CommutativeMonoid.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@CommutativeMonoid[A]extendsAnywithMonoid[A]withCommutativeSemigroup[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">CommutativeMonoid represents a commutative monoid.</p><div class="fullcomment"><div class="comment cmt"><p>CommutativeMonoid represents a commutative monoid.</p><p>A monoid is commutative if for all x and y, x |+| y === y |+| x.
+</p></div></div>
+    </li><li name="cats.kernel.CommutativeSemigroup" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="CommutativeSemigroup[A]extendsAnywithSemigroup[A]"></a>
+      <a id="CommutativeSemigroup[A]:CommutativeSemigroup[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CommutativeSemigroup.html"><span class="name">CommutativeSemigroup</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.CommutativeSemigroup.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@CommutativeSemigroup[A]extendsAnywithSemigroup[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">CommutativeSemigroup represents a commutative semigroup.</p><div class="fullcomment"><div class="comment cmt"><p>CommutativeSemigroup represents a commutative semigroup.</p><p>A semigroup is commutative if for all x and y, x |+| y === y |+| x.
+</p></div></div>
+    </li><li name="cats.kernel.Comparison" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ComparisonextendsProductwithSerializable"></a>
+      <a id="Comparison:Comparison"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Comparison.html"><span class="name">Comparison</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@ComparisonextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">ADT encoding the possible results of a comparison</p>
+    </li><li name="cats.kernel.Eq" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Eq[A]extendsAnywithSerializable"></a>
+      <a id="Eq[A]:Eq[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Eq.html"><span class="name">Eq</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Eq[A]extendsAnywithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A type class used to determine equality between 2 instances of the same
+type.</p><div class="fullcomment"><div class="comment cmt"><p>A type class used to determine equality between 2 instances of the same
+type. Any 2 instances <code>x</code> and <code>y</code> are equal if <code>eqv(x, y)</code> is <code>true</code>.
+Moreover, <code>eqv</code> should form an equivalence relation.
+</p></div></div>
+    </li><li name="cats.kernel.EqFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="EqFunctions[E[T]&lt;:cats.kernel.Eq[T]]extendsAnyRef"></a>
+      <a id="EqFunctions[E[T]&lt;:Eq[T]]:EqFunctions[E]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="EqFunctions.html"><span class="name">EqFunctions</span></a><span class="tparams">[<span name="E">E<span class="tparams">[<span name="T">T</span>]</span> &lt;: <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.EqFunctions.E.T">T</span>]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@EqFunctions[E[T]&lt;:cats.kernel.Eq[T]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Group" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Group[A]extendsAnywithMonoid[A]"></a>
+      <a id="Group[A]:Group[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Group.html"><span class="name">Group</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>[<span class="extype" name="cats.kernel.Group.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Group[A]extendsAnywithMonoid[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A group is a monoid where each element has an inverse.</p>
+    </li><li name="cats.kernel.GroupFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="GroupFunctions[G[T]&lt;:cats.kernel.Group[T]]extendsMonoidFunctions[cats.kernel.Group]"></a>
+      <a id="GroupFunctions[G[T]&lt;:Group[T]]:GroupFunctions[G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupFunctions.html"><span class="name">GroupFunctions</span></a><span class="tparams">[<span name="G">G<span class="tparams">[<span name="T">T</span>]</span> &lt;: <a href="Group.html" class="extype" name="cats.kernel.Group">Group</a>[<span class="extype" name="cats.kernel.GroupFunctions.G.T">T</span>]</span>]</span><span class="result"> extends <a href="MonoidFunctions.html" class="extype" name="cats.kernel.MonoidFunctions">MonoidFunctions</a>[<a href="Group.html" class="extype" name="cats.kernel.Group">Group</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@GroupFunctions[G[T]&lt;:cats.kernel.Group[T]]extendsMonoidFunctions[cats.kernel.Group]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Monoid" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Monoid[A]extendsAnywithSemigroup[A]"></a>
+      <a id="Monoid[A]:Monoid[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Monoid.html"><span class="name">Monoid</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.Monoid.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Monoid[A]extendsAnywithSemigroup[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A monoid is a semigroup with an identity.</p><div class="fullcomment"><div class="comment cmt"><p>A monoid is a semigroup with an identity. A monoid is a specialization of a
+semigroup, so its operation must be associative. Additionally,
+<code>combine(x, empty) == combine(empty, x) == x</code>. For example, if we have <code>Monoid[String]</code>,
+with <code>combine</code> as string concatenation, then <code>empty = &quot;&quot;</code>.
+</p></div></div>
+    </li><li name="cats.kernel.MonoidFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MonoidFunctions[M[T]&lt;:cats.kernel.Monoid[T]]extendsSemigroupFunctions[M]"></a>
+      <a id="MonoidFunctions[M[T]&lt;:Monoid[T]]:MonoidFunctions[M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MonoidFunctions.html"><span class="name">MonoidFunctions</span></a><span class="tparams">[<span name="M">M<span class="tparams">[<span name="T">T</span>]</span> &lt;: <a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>[<span class="extype" name="cats.kernel.MonoidFunctions.M.T">T</span>]</span>]</span><span class="result"> extends <a href="SemigroupFunctions.html" class="extype" name="cats.kernel.SemigroupFunctions">SemigroupFunctions</a>[<span class="extype" name="cats.kernel.MonoidFunctions.M">M</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@MonoidFunctions[M[T]&lt;:cats.kernel.Monoid[T]]extendsSemigroupFunctions[M]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Order" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Order[A]extendsAnywithPartialOrder[A]"></a>
+      <a id="Order[A]:Order[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Order.html"><span class="name">Order</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.kernel.Order.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Order[A]extendsAnywithPartialOrder[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Order</code> type class is used to define a total ordering on some type <code>A</code>.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>Order</code> type class is used to define a total ordering on some type <code>A</code>.
+An order is defined by a relation &lt;=, which obeys the following laws:</p><p>- either x &lt;= y or y &lt;= x (totality)
+- if x &lt;= y and y &lt;= x, then x == y (antisymmetry)
+- if x &lt;= y and y &lt;= z, then x &lt;= z (transitivity)</p><p>The truth table for compare is defined as follows:</p><p>x &lt;= y    x &gt;= y      Int
+true      true        = 0     (corresponds to x == y)
+true      false       &lt; 0     (corresponds to x &lt; y)
+false     true        &gt; 0     (corresponds to x &gt; y)</p><p>By the totality law, x &lt;= y and y &lt;= x cannot be both false.
+</p></div></div>
+    </li><li name="cats.kernel.OrderFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="OrderFunctions[O[T]&lt;:cats.kernel.Order[T]]extendsPartialOrderFunctions[O]"></a>
+      <a id="OrderFunctions[O[T]&lt;:Order[T]]:OrderFunctions[O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="OrderFunctions.html"><span class="name">OrderFunctions</span></a><span class="tparams">[<span name="O">O<span class="tparams">[<span name="T">T</span>]</span> &lt;: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.OrderFunctions.O.T">T</span>]</span>]</span><span class="result"> extends <a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a>[<span class="extype" name="cats.kernel.OrderFunctions.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@OrderFunctions[O[T]&lt;:cats.kernel.Order[T]]extendsPartialOrderFunctions[O]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.PartialOrder" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="PartialOrder[A]extendsAnywithEq[A]"></a>
+      <a id="PartialOrder[A]:PartialOrder[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="PartialOrder.html"><span class="name">PartialOrder</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.PartialOrder.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@PartialOrder[A]extendsAnywithEq[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>PartialOrder</code> type class is used to define a partial ordering on some type <code>A</code>.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>PartialOrder</code> type class is used to define a partial ordering on some type <code>A</code>.</p><p>A partial order is defined by a relation &lt;=, which obeys the following laws:</p><p>- x &lt;= x (reflexivity)
+- if x &lt;= y and y &lt;= x, then x = y (anti-symmetry)
+- if x &lt;= y and y &lt;= z, then x &lt;= z (transitivity)</p><p>To compute both &lt;= and &gt;= at the same time, we use a Double number
+to encode the result of the comparisons x &lt;= y and x &gt;= y.
+The truth table is defined as follows:</p><p>x &lt;= y    x &gt;= y      Double
+true      true        = 0.0     (corresponds to x = y)
+false     false       = NaN     (x and y cannot be compared)
+true      false       = -1.0    (corresponds to x &lt; y)
+false     true        = 1.0     (corresponds to x &gt; y)
+</p></div></div>
+    </li><li name="cats.kernel.PartialOrderFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="PartialOrderFunctions[P[T]&lt;:cats.kernel.PartialOrder[T]]extendsEqFunctions[P]"></a>
+      <a id="PartialOrderFunctions[P[T]&lt;:PartialOrder[T]]:PartialOrderFunctions[P]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PartialOrderFunctions.html"><span class="name">PartialOrderFunctions</span></a><span class="tparams">[<span name="P">P<span class="tparams">[<span name="T">T</span>]</span> &lt;: <a href="PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.P.T">T</span>]</span>]</span><span class="result"> extends <a href="EqFunctions.html" class="extype" name="cats.kernel.EqFunctions">EqFunctions</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.P">P</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@PartialOrderFunctions[P[T]&lt;:cats.kernel.PartialOrder[T]]extendsEqFunctions[P]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Semigroup" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Semigroup[A]extendsAnywithSerializable"></a>
+      <a id="Semigroup[A]:Semigroup[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Semigroup.html"><span class="name">Semigroup</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Semigroup[A]extendsAnywithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A semigroup is any set <code>A</code> with an associative operation (<code>combine</code>).</p>
+    </li><li name="cats.kernel.SemigroupFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SemigroupFunctions[S[T]&lt;:cats.kernel.Semigroup[T]]extendsAnyRef"></a>
+      <a id="SemigroupFunctions[S[T]&lt;:Semigroup[T]]:SemigroupFunctions[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SemigroupFunctions.html"><span class="name">SemigroupFunctions</span></a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="T">T</span>]</span> &lt;: <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.SemigroupFunctions.S.T">T</span>]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@SemigroupFunctions[S[T]&lt;:cats.kernel.Semigroup[T]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Semilattice" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Semilattice[A]extendsAnywithBand[A]withCommutativeSemigroup[A]"></a>
+      <a id="Semilattice[A]:Semilattice[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Semilattice.html"><span class="name">Semilattice</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Band.html" class="extype" name="cats.kernel.Band">Band</a>[<span class="extype" name="cats.kernel.Semilattice.A">A</span>] with <a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[<span class="extype" name="cats.kernel.Semilattice.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Semilattice[A]extendsAnywithBand[A]withCommutativeSemigroup[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Semilattices are commutative semigroups whose operation
+(i.e.</p><div class="fullcomment"><div class="comment cmt"><p>Semilattices are commutative semigroups whose operation
+(i.e. combine) is also idempotent.
+</p></div></div>
+    </li><li name="cats.kernel.SemilatticeFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SemilatticeFunctions[S[T]&lt;:cats.kernel.Semilattice[T]]extendsSemigroupFunctions[S]"></a>
+      <a id="SemilatticeFunctions[S[T]&lt;:Semilattice[T]]:SemilatticeFunctions[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SemilatticeFunctions.html"><span class="name">SemilatticeFunctions</span></a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="T">T</span>]</span> &lt;: <a href="Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>[<span class="extype" name="cats.kernel.SemilatticeFunctions.S.T">T</span>]</span>]</span><span class="result"> extends <a href="SemigroupFunctions.html" class="extype" name="cats.kernel.SemigroupFunctions">SemigroupFunctions</a>[<span class="extype" name="cats.kernel.SemilatticeFunctions.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@SemilatticeFunctions[S[T]&lt;:cats.kernel.Semilattice[T]]extendsSemigroupFunctions[S]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="cats.kernel.Band" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Band"></a>
+      <a id="Band:Band"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Band$.html"><span class="name">Band</span></a><span class="result"> extends <a href="SemigroupFunctions.html" class="extype" name="cats.kernel.SemigroupFunctions">SemigroupFunctions</a>[<a href="Band.html" class="extype" name="cats.kernel.Band">Band</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Band" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.BoundedSemilattice" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BoundedSemilattice"></a>
+      <a id="BoundedSemilattice:BoundedSemilattice"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BoundedSemilattice$.html"><span class="name">BoundedSemilattice</span></a><span class="result"> extends <a href="SemilatticeFunctions.html" class="extype" name="cats.kernel.SemilatticeFunctions">SemilatticeFunctions</a>[<a href="BoundedSemilattice.html" class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@BoundedSemilattice" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.CommutativeGroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CommutativeGroup"></a>
+      <a id="CommutativeGroup:CommutativeGroup"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CommutativeGroup$.html"><span class="name">CommutativeGroup</span></a><span class="result"> extends <a href="GroupFunctions.html" class="extype" name="cats.kernel.GroupFunctions">GroupFunctions</a>[<a href="CommutativeGroup.html" class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@CommutativeGroup" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.CommutativeMonoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CommutativeMonoid"></a>
+      <a id="CommutativeMonoid:CommutativeMonoid"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CommutativeMonoid$.html"><span class="name">CommutativeMonoid</span></a><span class="result"> extends <a href="MonoidFunctions.html" class="extype" name="cats.kernel.MonoidFunctions">MonoidFunctions</a>[<a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@CommutativeMonoid" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.CommutativeSemigroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CommutativeSemigroup"></a>
+      <a id="CommutativeSemigroup:CommutativeSemigroup"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CommutativeSemigroup$.html"><span class="name">CommutativeSemigroup</span></a><span class="result"> extends <a href="SemigroupFunctions.html" class="extype" name="cats.kernel.SemigroupFunctions">SemigroupFunctions</a>[<a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@CommutativeSemigroup" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Comparison" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Comparison"></a>
+      <a id="Comparison:Comparison"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Comparison$.html"><span class="name">Comparison</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Comparison" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Eq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Eq"></a>
+      <a id="Eq:Eq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Eq$.html"><span class="name">Eq</span></a><span class="result"> extends <a href="EqFunctions.html" class="extype" name="cats.kernel.EqFunctions">EqFunctions</a>[<a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Eq" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Group" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Group"></a>
+      <a id="Group:Group"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Group$.html"><span class="name">Group</span></a><span class="result"> extends <a href="GroupFunctions.html" class="extype" name="cats.kernel.GroupFunctions">GroupFunctions</a>[<a href="Group.html" class="extype" name="cats.kernel.Group">Group</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Group" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Monoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Monoid"></a>
+      <a id="Monoid:Monoid"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Monoid$.html"><span class="name">Monoid</span></a><span class="result"> extends <a href="MonoidFunctions.html" class="extype" name="cats.kernel.MonoidFunctions">MonoidFunctions</a>[<a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Monoid" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Order" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Order"></a>
+      <a id="Order:Order"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Order$.html"><span class="name">Order</span></a><span class="result"> extends <a href="OrderFunctions.html" class="extype" name="cats.kernel.OrderFunctions">OrderFunctions</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Order" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.PartialOrder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PartialOrder"></a>
+      <a id="PartialOrder:PartialOrder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PartialOrder$.html"><span class="name">PartialOrder</span></a><span class="result"> extends <a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a>[<a href="PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@PartialOrder" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Semigroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Semigroup"></a>
+      <a id="Semigroup:Semigroup"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Semigroup$.html"><span class="name">Semigroup</span></a><span class="result"> extends <a href="SemigroupFunctions.html" class="extype" name="cats.kernel.SemigroupFunctions">SemigroupFunctions</a>[<a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Semigroup" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.Semilattice" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Semilattice"></a>
+      <a id="Semilattice:Semilattice"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Semilattice$.html"><span class="name">Semilattice</span></a><span class="result"> extends <a href="SemilatticeFunctions.html" class="extype" name="cats.kernel.SemilatticeFunctions">SemilatticeFunctions</a>[<a href="Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@Semilattice" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel.instances" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="instances"></a>
+      <a id="instances:instances"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="instances/package.html"><span class="name">instances</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.package@instances" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

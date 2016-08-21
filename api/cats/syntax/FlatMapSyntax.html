@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">FlatMapSyntax</span><span class="result"> extends <a href="FlatMapSyntax1.html" class="extype" name="cats.syntax.FlatMapSyntax1">FlatMapSyntax1</a></span>
+        <span class="name">FlatMapSyntax</span><span class="result"> extends <a href="../FlatMap$$ToFlatMapOps.html" class="extype" name="cats.FlatMap.ToFlatMapOps">ToFlatMapOps</a> with <span class="extype" name="cats.syntax.FlatMapSyntax1">FlatMapSyntax1</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/syntax/flatMap.scala" target="_blank">flatMap.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="FlatMapSyntax1.html" class="extype" name="cats.syntax.FlatMapSyntax1">FlatMapSyntax1</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.syntax.FlatMapSyntax1">FlatMapSyntax1</span>, <a href="../FlatMap$$ToFlatMapOps.html" class="extype" name="cats.FlatMap.ToFlatMapOps">ToFlatMapOps</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a>, <a href="package$$all$.html" class="extype" name="cats.syntax.all">all</a>, <a href="package$$flatMap$.html" class="extype" name="cats.syntax.flatMap">flatMap</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.FlatMapSyntax"><span>FlatMapSyntax</span></li><li class="in" name="cats.syntax.FlatMapSyntax1"><span>FlatMapSyntax1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.FlatMapSyntax"><span>FlatMapSyntax</span></li><li class="in" name="cats.syntax.FlatMapSyntax1"><span>FlatMapSyntax1</span></li><li class="in" name="cats.FlatMap.ToFlatMapOps"><span>ToFlatMapOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -165,6 +165,57 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.syntax.FlatMapSyntax#catsSyntaxFlatten" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSyntaxFlatten[F[_],A](ffa:F[F[A]])(implicitevidence$1:cats.FlatMap[F]):cats.syntax.FlattenOps[F,A]"></a>
+      <a id="catsSyntaxFlatten[F[_],A](F[F[A]])(FlatMap[F]):FlattenOps[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSyntaxFlatten</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="ffa">ffa: <span class="extype" name="cats.syntax.FlatMapSyntax.catsSyntaxFlatten.F">F</span>[<span class="extype" name="cats.syntax.FlatMapSyntax.catsSyntaxFlatten.F">F</span>[<span class="extype" name="cats.syntax.FlatMapSyntax.catsSyntaxFlatten.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.syntax.FlatMapSyntax.catsSyntaxFlatten.F">F</span>]</span>)</span><span class="result">: <a href="FlattenOps.html" class="extype" name="cats.syntax.FlattenOps">FlattenOps</a>[<span class="extype" name="cats.syntax.FlatMapSyntax.catsSyntaxFlatten.F">F</span>, <span class="extype" name="cats.syntax.FlatMapSyntax.catsSyntaxFlatten.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.FlatMapSyntax@catsSyntaxFlatten[F[_],A](ffa:F[F[A]])(implicitevidence$1:cats.FlatMap[F]):cats.syntax.FlattenOps[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.syntax.FlatMapSyntax#catsSyntaxIfM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSyntaxIfM[F[_]](fa:F[Boolean])(implicitevidence$2:cats.FlatMap[F]):cats.syntax.IfMOps[F]"></a>
+      <a id="catsSyntaxIfM[F[_]](F[Boolean])(FlatMap[F]):IfMOps[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSyntaxIfM</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.FlatMapSyntax.catsSyntaxIfM.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.syntax.FlatMapSyntax.catsSyntaxIfM.F">F</span>]</span>)</span><span class="result">: <a href="IfMOps.html" class="extype" name="cats.syntax.IfMOps">IfMOps</a>[<span class="extype" name="cats.syntax.FlatMapSyntax.catsSyntaxIfM.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.FlatMapSyntax@catsSyntaxIfM[F[_]](fa:F[Boolean])(implicitevidence$2:cats.FlatMap[F]):cats.syntax.IfMOps[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.syntax.FlatMapSyntax1#catsSyntaxUFlatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsSyntaxUFlatMap[FA](fa:FA)(implicitU:cats.Unapply[cats.FlatMap,FA]):cats.FlatMap.Ops[U.M,U.A]"></a>
+      <a id="catsSyntaxUFlatMap[FA](FA)(Unapply[FlatMap,FA]):Ops[M,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSyntaxUFlatMap</span><span class="tparams">[<span name="FA">FA</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.FlatMapSyntax1.catsSyntaxUFlatMap.FA">FA</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="../Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>, <span class="extype" name="cats.syntax.FlatMapSyntax1.catsSyntaxUFlatMap.FA">FA</span>]</span>)</span><span class="result">: <a href="../FlatMap$$Ops.html" class="extype" name="cats.FlatMap.Ops">Ops</a>[<a href="../Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>, <a href="../Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.FlatMapSyntax@catsSyntaxUFlatMap[FA](fa:FA)(implicitU:cats.Unapply[cats.FlatMap,FA]):cats.FlatMap.Ops[U.M,U.A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FlatMapSyntax1</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -245,57 +296,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.syntax.FlatMapSyntax#flatMapSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="flatMapSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.FlatMap[F]):cats.syntax.FlatMapOps[F,A]"></a>
-      <a id="flatMapSyntax[F[_],A](F[A])(FlatMap[F]):FlatMapOps[F,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">flatMapSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.FlatMapSyntax.flatMapSyntax.F">F</span>[<span class="extype" name="cats.syntax.FlatMapSyntax.flatMapSyntax.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.syntax.FlatMapSyntax.flatMapSyntax.F">F</span>]</span>)</span><span class="result">: <a href="FlatMapOps.html" class="extype" name="cats.syntax.FlatMapOps">FlatMapOps</a>[<span class="extype" name="cats.syntax.FlatMapSyntax.flatMapSyntax.F">F</span>, <span class="extype" name="cats.syntax.FlatMapSyntax.flatMapSyntax.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.FlatMapSyntax@flatMapSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.FlatMap[F]):cats.syntax.FlatMapOps[F,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.syntax.FlatMapSyntax1#flatMapSyntaxU" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="flatMapSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.FlatMap,FA]):cats.syntax.FlatMapOps[U.M,U.A]"></a>
-      <a id="flatMapSyntaxU[FA](FA)(Unapply[FlatMap,FA]):FlatMapOps[M,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">flatMapSyntaxU</span><span class="tparams">[<span name="FA">FA</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.FlatMapSyntax1.flatMapSyntaxU.FA">FA</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="../Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>, <span class="extype" name="cats.syntax.FlatMapSyntax1.flatMapSyntaxU.FA">FA</span>]</span>)</span><span class="result">: <a href="FlatMapOps.html" class="extype" name="cats.syntax.FlatMapOps">FlatMapOps</a>[<a href="../Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>, <a href="../Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.FlatMapSyntax@flatMapSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.FlatMap,FA]):cats.syntax.FlatMapOps[U.M,U.A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FlatMapSyntax1.html" class="extype" name="cats.syntax.FlatMapSyntax1">FlatMapSyntax1</a></dd></dl></div>
-    </li><li name="cats.syntax.FlatMapSyntax#flattenSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="flattenSyntax[F[_],A](ffa:F[F[A]])(implicitevidence$2:cats.FlatMap[F]):cats.syntax.FlattenOps[F,A]"></a>
-      <a id="flattenSyntax[F[_],A](F[F[A]])(FlatMap[F]):FlattenOps[F,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">flattenSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="ffa">ffa: <span class="extype" name="cats.syntax.FlatMapSyntax.flattenSyntax.F">F</span>[<span class="extype" name="cats.syntax.FlatMapSyntax.flattenSyntax.F">F</span>[<span class="extype" name="cats.syntax.FlatMapSyntax.flattenSyntax.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.syntax.FlatMapSyntax.flattenSyntax.F">F</span>]</span>)</span><span class="result">: <a href="FlattenOps.html" class="extype" name="cats.syntax.FlattenOps">FlattenOps</a>[<span class="extype" name="cats.syntax.FlatMapSyntax.flattenSyntax.F">F</span>, <span class="extype" name="cats.syntax.FlatMapSyntax.flattenSyntax.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.FlatMapSyntax@flattenSyntax[F[_],A](ffa:F[F[A]])(implicitevidence$2:cats.FlatMap[F]):cats.syntax.FlattenOps[F,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -330,23 +330,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.syntax.FlatMapSyntax#ifMSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ifMSyntax[F[_]](fa:F[Boolean])(implicitevidence$3:cats.FlatMap[F]):cats.syntax.IfMOps[F]"></a>
-      <a id="ifMSyntax[F[_]](F[Boolean])(FlatMap[F]):IfMOps[F]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ifMSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.FlatMapSyntax.ifMSyntax.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.syntax.FlatMapSyntax.ifMSyntax.F">F</span>]</span>)</span><span class="result">: <a href="IfMOps.html" class="extype" name="cats.syntax.IfMOps">IfMOps</a>[<span class="extype" name="cats.syntax.FlatMapSyntax.ifMSyntax.F">F</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.FlatMapSyntax@ifMSyntax[F[_]](fa:F[Boolean])(implicitevidence$3:cats.FlatMap[F]):cats.syntax.IfMOps[F]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -432,6 +415,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.FlatMap.ToFlatMapOps#toFlatMapOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toFlatMapOps[F[_],A](target:F[A])(implicittc:cats.FlatMap[F]):cats.FlatMap.Ops[F,A]"></a>
+      <a id="toFlatMapOps[F[_],A](F[A])(FlatMap[F]):Ops[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFlatMapOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.F">F</span>[<span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.F">F</span>]</span>)</span><span class="result">: <a href="../FlatMap$$Ops.html" class="extype" name="cats.FlatMap.Ops">Ops</a>[<span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.F">F</span>, <span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.FlatMapSyntax@toFlatMapOps[F[_],A](target:F[A])(implicittc:cats.FlatMap[F]):cats.FlatMap.Ops[F,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FlatMap$$ToFlatMapOps.html" class="extype" name="cats.FlatMap.ToFlatMapOps">ToFlatMapOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -528,7 +528,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="cats.syntax.FlatMapSyntax1">
-              <h3>Inherited from <a href="FlatMapSyntax1.html" class="extype" name="cats.syntax.FlatMapSyntax1">FlatMapSyntax1</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.syntax.FlatMapSyntax1">FlatMapSyntax1</span></h3>
+            </div><div class="parent" name="cats.FlatMap.ToFlatMapOps">
+              <h3>Inherited from <a href="../FlatMap$$ToFlatMapOps.html" class="extype" name="cats.FlatMap.ToFlatMapOps">ToFlatMapOps</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

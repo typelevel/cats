@@ -279,9 +279,7 @@
       </a>
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Foldable.html#foldK[G[_],A](fga:F[G[A]])(implicitG:cats.MonoidK[G]):G[A]" class="extmbr" name="cats.Foldable#foldK">Foldable.foldK</a>.
-Example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.list._
-scala&gt; <span class="kw">import</span> cats.std.set._
-scala&gt; <span class="kw">import</span> cats.syntax.foldable._
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> l: <span class="std">List</span>[<span class="std">Set</span>[<span class="std">Int</span>]] = <span class="std">List</span>(<span class="std">Set</span>(<span class="num">1</span>, <span class="num">2</span>), <span class="std">Set</span>(<span class="num">2</span>, <span class="num">3</span>), <span class="std">Set</span>(<span class="num">3</span>, <span class="num">4</span>))
 scala&gt; l.foldK
 res0: <span class="std">Set</span>[<span class="std">Int</span>] = <span class="std">Set</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)</pre></span></dd></dl></div>

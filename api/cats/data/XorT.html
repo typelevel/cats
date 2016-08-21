@@ -807,6 +807,23 @@ res7: XorT[<span class="std">Option</span>, <span class="std">String</span>, <sp
       </a>
     </span>
       
+    </li><li name="cats.data.XorT#semiflatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="semiflatMap[D](f:B=&gt;F[D])(implicitF:cats.Monad[F]):cats.data.XorT[F,A,D]"></a>
+      <a id="semiflatMap[D]((B)⇒F[D])(Monad[F]):XorT[F,A,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">semiflatMap</span><span class="tparams">[<span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.XorT.B">B</span>) ⇒ <span class="extype" name="cats.data.XorT.F">F</span>[<span class="extype" name="cats.data.XorT.semiflatMap.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.semiflatMap.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT@semiflatMap[D](f:B=&gt;F[D])(implicitF:cats.Monad[F]):cats.data.XorT[F,A,D]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.XorT#show" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="show(implicitshow:cats.Show[F[cats.data.Xor[A,B]]]):String"></a>
       <a id="show(Show[F[Xor[A,B]]]):String"></a>
@@ -876,18 +893,18 @@ res7: XorT[<span class="std">Option</span>, <span class="std">String</span>, <sp
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.data.XorT#to" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="to[G[_]](implicitfunctorF:cats.Functor[F],implicitmonoidKG:cats.MonoidK[G],implicitapplicativeG:cats.Applicative[G]):F[G[B]]"></a>
-      <a id="to[G[_]](Functor[F],MonoidK[G],Applicative[G]):F[G[B]]"></a>
+      <a id="to[G[_]](implicitF:cats.Functor[F],implicitG:cats.Alternative[G]):F[G[B]]"></a>
+      <a id="to[G[_]](Functor[F],Alternative[G]):F[G[B]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">to</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="functorF">functorF: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>, <span name="monoidKG">monoidKG: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.data.XorT.to.G">G</span>]</span>, <span name="applicativeG">applicativeG: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.XorT.to.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.XorT.F">F</span>[<span class="extype" name="cats.data.XorT.to.G">G</span>[<span class="extype" name="cats.data.XorT.B">B</span>]]</span>
+        <span class="name">to</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>, <span name="G">G: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.XorT.to.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.XorT.F">F</span>[<span class="extype" name="cats.data.XorT.to.G">G</span>[<span class="extype" name="cats.data.XorT.B">B</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.XorT@to[G[_]](implicitfunctorF:cats.Functor[F],implicitmonoidKG:cats.MonoidK[G],implicitapplicativeG:cats.Applicative[G]):F[G[B]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.XorT@to[G[_]](implicitF:cats.Functor[F],implicitG:cats.Alternative[G]):F[G[B]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -909,6 +926,56 @@ res7: XorT[<span class="std">Option</span>, <span class="std">String</span>, <sp
       </a>
     </span>
       
+    </li><li name="cats.data.XorT#toEitherT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toEitherT(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]"></a>
+      <a id="toEitherT(Functor[F]):EitherT[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toEitherT</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.XorT.F">F</span>, <span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT@toEitherT(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.XorT#toNested" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toNested:cats.data.Nested[F,[β]cats.data.Xor[A,β],B]"></a>
+      <a id="toNested:Nested[F,[β]Xor[A,β],B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNested</span><span class="result">: <a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<span class="extype" name="cats.data.XorT.F">F</span>, [β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.&lt;refinement&gt;.Λ$.β">β</span>], <span class="extype" name="cats.data.XorT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT@toNested:cats.data.Nested[F,[β]cats.data.Xor[A,β],B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Transform this <code>XorT[F, A, B]</code> into a <code><a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[F, A Xor ?, B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transform this <code>XorT[F, A, B]</code> into a <code><a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[F, A Xor ?, B]</code>.</p><p>An example where <code>toNested</code> can be used, is to get the <code>Apply.ap</code> function with the
+behavior from the composed <code>Apply</code> instances from <code>F</code> and <code>Xor[A, ?]</code>, which is
+inconsistent with the behavior of the <code>ap</code> from <code>Monad</code> of <code>XorT</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.data.{Nested, Xor, XorT}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> ff: XorT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span>] =
+     |   XorT(<span class="std">List</span>(Xor.right(_.toString), Xor.left(<span class="lit">"error"</span>)))
+scala&gt; <span class="kw">val</span> fa: XorT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span>] =
+     |   XorT(<span class="std">List</span>(Xor.right(<span class="num">1</span>), Xor.right(<span class="num">2</span>)))
+scala&gt; <span class="kw">type</span> ErrorOr[A] = <span class="std">String</span> Xor A
+scala&gt; <span class="kw">type</span> ListErrorOr[A] = Nested[<span class="std">List</span>, ErrorOr, A]
+scala&gt; ff.ap(fa)
+res0: XorT[<span class="std">List</span>,<span class="std">String</span>,<span class="std">String</span>] = XorT(<span class="std">List</span>(Right(<span class="num">1</span>), Right(<span class="num">2</span>), Left(error)))
+scala&gt; XorT((ff.toNested: ListErrorOr[<span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span>]).ap(fa.toNested: ListErrorOr[<span class="std">Int</span>]).value)
+res1: XorT[<span class="std">List</span>,<span class="std">String</span>,<span class="std">String</span>] = XorT(<span class="std">List</span>(Right(<span class="num">1</span>), Right(<span class="num">2</span>), Left(error), Left(error)))</pre><p>Note that we need the <code>ErrorOr</code> type alias above because otherwise we can't use the
+syntax function <code>ap</code> on <code>Nested[List, A Xor ?, B]</code>. This won't be needed after cats has
+decided <a href="https://github.com/typelevel/cats/issues/1073" target="_blank">how to handle the SI-2712 fix</a>.
+</p></div></div>
     </li><li name="cats.data.XorT#toOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="toOption(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]"></a>
       <a id="toOption(Functor[F]):OptionT[F,B]"></a>
@@ -939,6 +1006,23 @@ res7: XorT[<span class="std">Option</span>, <span class="std">String</span>, <sp
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.XorT@toValidated(implicitF:cats.Functor[F]):F[cats.data.Validated[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.XorT#toValidatedNel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toValidatedNel(implicitF:cats.Functor[F]):F[cats.data.ValidatedNel[A,B]]"></a>
+      <a id="toValidatedNel(Functor[F]):F[ValidatedNel[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toValidatedNel</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.XorT.F">F</span>[<a href="package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.XorT.A">A</span>, <span class="extype" name="cats.data.XorT.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorT@toValidatedNel(implicitF:cats.Functor[F]):F[cats.data.ValidatedNel[A,B]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1097,15 +1181,13 @@ res7: XorT[<span class="std">Option</span>, <span class="std">String</span>, <sp
       </a>
     </span>
       <p class="shortcomment cmt">Run this value as a <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> against the function and convert it back to an <code><a href="" class="extype" name="cats.data.XorT">XorT</a></code>.</p><div class="fullcomment"><div class="comment cmt"><p>Run this value as a <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> against the function and convert it back to an <code><a href="" class="extype" name="cats.data.XorT">XorT</a></code>.</p><p>The <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>XorT</code> &quot;fails fast&quot; - it is often useful to &quot;momentarily&quot; have
-it accumulate errors instead, which is what the <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> data type gives us.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.option._
-scala&gt; <span class="kw">import</span> cats.std.list._
-scala&gt; <span class="kw">import</span> cats.syntax.cartesian._
+it accumulate errors instead, which is what the <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> data type gives us.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">type</span> Error = <span class="std">String</span>
-scala&gt; <span class="kw">val</span> v1: Validated[NonEmptyList[Error], <span class="std">Int</span>] = Validated.Invalid(NonEmptyList(<span class="lit">"error 1"</span>))
-scala&gt; <span class="kw">val</span> v2: Validated[NonEmptyList[Error], <span class="std">Int</span>] = Validated.Invalid(NonEmptyList(<span class="lit">"error 2"</span>))
+scala&gt; <span class="kw">val</span> v1: Validated[NonEmptyList[Error], <span class="std">Int</span>] = Validated.Invalid(NonEmptyList.of(<span class="lit">"error 1"</span>))
+scala&gt; <span class="kw">val</span> v2: Validated[NonEmptyList[Error], <span class="std">Int</span>] = Validated.Invalid(NonEmptyList.of(<span class="lit">"error 2"</span>))
 scala&gt; <span class="kw">val</span> xort: XorT[<span class="std">Option</span>, Error, <span class="std">Int</span>] = XorT(<span class="std">Some</span>(Xor.left(<span class="lit">"error 3"</span>)))
-scala&gt; xort.withValidated { v3 <span class="kw">=&gt;</span> (v1 |@| v2 |@| v3.leftMap(NonEmptyList(_))).map{ <span class="kw">case</span> (i, j, k) <span class="kw">=&gt;</span> i + j + k } }
-res0: XorT[<span class="std">Option</span>, NonEmptyList[Error], <span class="std">Int</span>] = XorT(<span class="std">Some</span>(Left(OneAnd(error <span class="num">1</span>,<span class="std">List</span>(error <span class="num">2</span>, error <span class="num">3</span>)))))</pre></div></div>
+scala&gt; xort.withValidated { v3 <span class="kw">=&gt;</span> (v1 |@| v2 |@| v3.leftMap(NonEmptyList.of(_))).map{ <span class="kw">case</span> (i, j, k) <span class="kw">=&gt;</span> i + j + k } }
+res0: XorT[<span class="std">Option</span>, NonEmptyList[Error], <span class="std">Int</span>] = XorT(<span class="std">Some</span>(Left(NonEmptyList(error <span class="num">1</span>, error <span class="num">2</span>, error <span class="num">3</span>))))</pre></div></div>
     </li></ol>
             </div>
 

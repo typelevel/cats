@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/syntax/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="SplitSyntax.html" class="extype" name="cats.syntax.SplitSyntax">SplitSyntax</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="SplitSyntax.html" class="extype" name="cats.syntax.SplitSyntax">SplitSyntax</a>, <a href="../arrow/Split$$ToSplitOps.html" class="extype" name="cats.arrow.Split.ToSplitOps">ToSplitOps</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.split"><span>split</span></li><li class="in" name="cats.syntax.SplitSyntax"><span>SplitSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.split"><span>split</span></li><li class="in" name="cats.syntax.SplitSyntax"><span>SplitSyntax</span></li><li class="in" name="cats.arrow.Split.ToSplitOps"><span>ToSplitOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -344,23 +344,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.syntax.SplitSyntax#splitSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="splitSyntax[F[_,_],A,B](fab:F[A,B])(implicitevidence$1:cats.arrow.Split[F]):cats.syntax.SplitOps[F,A,B]"></a>
-      <a id="splitSyntax[F[_,_],A,B](F[A,B])(Split[F]):SplitOps[F,A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">splitSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.syntax.SplitSyntax.splitSyntax.F">F</span>[<span class="extype" name="cats.syntax.SplitSyntax.splitSyntax.A">A</span>, <span class="extype" name="cats.syntax.SplitSyntax.splitSyntax.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../arrow/Split.html" class="extype" name="cats.arrow.Split">Split</a>[<span class="extype" name="cats.syntax.SplitSyntax.splitSyntax.F">F</span>]</span>)</span><span class="result">: <a href="SplitOps.html" class="extype" name="cats.syntax.SplitOps">SplitOps</a>[<span class="extype" name="cats.syntax.SplitSyntax.splitSyntax.F">F</span>, <span class="extype" name="cats.syntax.SplitSyntax.splitSyntax.A">A</span>, <span class="extype" name="cats.syntax.SplitSyntax.splitSyntax.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.package$$split$@splitSyntax[F[_,_],A,B](fab:F[A,B])(implicitevidence$1:cats.arrow.Split[F]):cats.syntax.SplitOps[F,A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SplitSyntax.html" class="extype" name="cats.syntax.SplitSyntax">SplitSyntax</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -378,6 +361,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.arrow.Split.ToSplitOps#toSplitOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toSplitOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.Split[F]):cats.arrow.Split.Ops[F,A,B]"></a>
+      <a id="toSplitOps[F[_,_],A,B](F[A,B])(Split[F]):Ops[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toSplitOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.Split.ToSplitOps.toSplitOps.F">F</span>[<span class="extype" name="cats.arrow.Split.ToSplitOps.toSplitOps.A">A</span>, <span class="extype" name="cats.arrow.Split.ToSplitOps.toSplitOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/Split.html" class="extype" name="cats.arrow.Split">Split</a>[<span class="extype" name="cats.arrow.Split.ToSplitOps.toSplitOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Split$$Ops.html" class="extype" name="cats.arrow.Split.Ops">Ops</a>[<span class="extype" name="cats.arrow.Split.ToSplitOps.toSplitOps.F">F</span>, <span class="extype" name="cats.arrow.Split.ToSplitOps.toSplitOps.A">A</span>, <span class="extype" name="cats.arrow.Split.ToSplitOps.toSplitOps.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.package$$split$@toSplitOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.Split[F]):cats.arrow.Split.Ops[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Split$$ToSplitOps.html" class="extype" name="cats.arrow.Split.ToSplitOps">ToSplitOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -475,6 +475,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.syntax.SplitSyntax">
               <h3>Inherited from <a href="SplitSyntax.html" class="extype" name="cats.syntax.SplitSyntax">SplitSyntax</a></h3>
+            </div><div class="parent" name="cats.arrow.Split.ToSplitOps">
+              <h3>Inherited from <a href="../arrow/Split$$ToSplitOps.html" class="extype" name="cats.arrow.Split.ToSplitOps">ToSplitOps</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

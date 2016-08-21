@@ -157,8 +157,8 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"><code>F</code> on the left and <code>G</code> on the right of <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>.</p><div class="fullcomment"><div class="comment cmt"><p><code>F</code> on the left and <code>G</code> on the right of <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>.
-</p></div><dl class="paramcmts block"><dt class="param">run</dt><dd class="cmt"><p>The underlying <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>.</p></dd></dl></div>
+      <p class="shortcomment cmt"><code>F</code> on the left and <code>G</code> on the right of <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a>.</p><div class="fullcomment"><div class="comment cmt"><p><code>F</code> on the left and <code>G</code> on the right of <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a>.
+</p></div><dl class="paramcmts block"><dt class="param">run</dt><dd class="cmt"><p>The underlying <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a>.</p></dd></dl></div>
     </li><li name="cats.data.CoproductInstances" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="CoproductInstancesextendsCoproductInstances0"></a>
       <a id="CoproductInstances:CoproductInstances"></a>
@@ -172,6 +172,44 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.package@CoproductInstancesextendsCoproductInstances0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="EitherT[F[_],A,B]extendsProductwithSerializable"></a>
+      <a id="EitherT[F[_],A,B]:EitherT[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="EitherT.html"><span class="name">EitherT</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@EitherT[F[_],A,B]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Transformer for <code>Either</code>, allowing the effect of an arbitrary type constructor <code>F</code> to be combined with the
+fail-fast effect of <code>Either</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transformer for <code>Either</code>, allowing the effect of an arbitrary type constructor <code>F</code> to be combined with the
+fail-fast effect of <code>Either</code>.</p><p><code>EitherT[F, A, B]</code> wraps a value of type <code>F[Either[A, B]]</code>. An <code>F[C]</code> can be lifted in to <code>EitherT[F, A, C]</code> via <code>EitherT.right</code>,
+and lifted in to a <code>EitherT[F, C, B]</code> via <code>EitherT.left</code>.
+</p></div></div>
+    </li><li name="cats.data.EitherTFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="EitherTFunctionsextendsAnyRef"></a>
+      <a id="EitherTFunctions:EitherTFunctions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="EitherTFunctions.html"><span class="name">EitherTFunctions</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@EitherTFunctionsextendsAnyRef" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -195,7 +233,7 @@
       <p class="shortcomment cmt"><a href="Func.html" class="extype" name="cats.data.Func">Func</a> is a function <code>A =&gt; F[B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p><a href="Func.html" class="extype" name="cats.data.Func">Func</a> is a function <code>A =&gt; F[B]</code>.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
 </p></div></div>
     </li><li name="cats.data.FuncApplicative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="FuncApplicative[F[_],C]extendsApplicative[[X]cats.data.Func[F,C,X]]withFuncApply[F,C]"></a>
+      <a id="FuncApplicative[F[_],C]extendsApplicative[[α]cats.data.Func[F,C,α]]withFuncApply[F,C]"></a>
       <a id="FuncApplicative[F[_],C]:FuncApplicative[F,C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -203,16 +241,16 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="FuncApplicative.html"><span class="name">FuncApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[X]<a href="Func.html" class="extype" name="cats.data.Func">Func</a>[<span class="extype" name="cats.data.FuncApplicative.F">F</span>, <span class="extype" name="cats.data.FuncApplicative.C">C</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="FuncApply.html" class="extype" name="cats.data.FuncApply">FuncApply</a>[<span class="extype" name="cats.data.FuncApplicative.F">F</span>, <span class="extype" name="cats.data.FuncApplicative.C">C</span>]</span>
+        <a href="FuncApplicative.html"><span class="name">FuncApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[α]<a href="Func.html" class="extype" name="cats.data.Func">Func</a>[<span class="extype" name="cats.data.FuncApplicative.F">F</span>, <span class="extype" name="cats.data.FuncApplicative.C">C</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]] with <a href="FuncApply.html" class="extype" name="cats.data.FuncApply">FuncApply</a>[<span class="extype" name="cats.data.FuncApplicative.F">F</span>, <span class="extype" name="cats.data.FuncApplicative.C">C</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@FuncApplicative[F[_],C]extendsApplicative[[X]cats.data.Func[F,C,X]]withFuncApply[F,C]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@FuncApplicative[F[_],C]extendsApplicative[[α]cats.data.Func[F,C,α]]withFuncApply[F,C]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="cats.data.FuncApply" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="FuncApply[F[_],C]extendsApply[[X]cats.data.Func[F,C,X]]withFuncFunctor[F,C]"></a>
+      <a id="FuncApply[F[_],C]extendsApply[[α]cats.data.Func[F,C,α]]withFuncFunctor[F,C]"></a>
       <a id="FuncApply[F[_],C]:FuncApply[F,C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -220,16 +258,33 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="FuncApply.html"><span class="name">FuncApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[X]<a href="Func.html" class="extype" name="cats.data.Func">Func</a>[<span class="extype" name="cats.data.FuncApply.F">F</span>, <span class="extype" name="cats.data.FuncApply.C">C</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="FuncFunctor.html" class="extype" name="cats.data.FuncFunctor">FuncFunctor</a>[<span class="extype" name="cats.data.FuncApply.F">F</span>, <span class="extype" name="cats.data.FuncApply.C">C</span>]</span>
+        <a href="FuncApply.html"><span class="name">FuncApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[α]<a href="Func.html" class="extype" name="cats.data.Func">Func</a>[<span class="extype" name="cats.data.FuncApply.F">F</span>, <span class="extype" name="cats.data.FuncApply.C">C</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]] with <a href="FuncFunctor.html" class="extype" name="cats.data.FuncFunctor">FuncFunctor</a>[<span class="extype" name="cats.data.FuncApply.F">F</span>, <span class="extype" name="cats.data.FuncApply.C">C</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@FuncApply[F[_],C]extendsApply[[X]cats.data.Func[F,C,X]]withFuncFunctor[F,C]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@FuncApply[F[_],C]extendsApply[[α]cats.data.Func[F,C,α]]withFuncFunctor[F,C]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.FuncContravariant" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FuncContravariant[F[_],C]extendsContravariant[[α]cats.data.Func[F,α,C]]"></a>
+      <a id="FuncContravariant[F[_],C]:FuncContravariant[F,C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FuncContravariant.html"><span class="name">FuncContravariant</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[α]<a href="Func.html" class="extype" name="cats.data.Func">Func</a>[<span class="extype" name="cats.data.FuncContravariant.F">F</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.data.FuncContravariant.C">C</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@FuncContravariant[F[_],C]extendsContravariant[[α]cats.data.Func[F,α,C]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="cats.data.FuncFunctor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="FuncFunctor[F[_],C]extendsFunctor[[X]cats.data.Func[F,C,X]]"></a>
+      <a id="FuncFunctor[F[_],C]extendsFunctor[[α]cats.data.Func[F,C,α]]"></a>
       <a id="FuncFunctor[F[_],C]:FuncFunctor[F,C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -237,14 +292,31 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="FuncFunctor.html"><span class="name">FuncFunctor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[X]<a href="Func.html" class="extype" name="cats.data.Func">Func</a>[<span class="extype" name="cats.data.FuncFunctor.F">F</span>, <span class="extype" name="cats.data.FuncFunctor.C">C</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]]</span>
+        <a href="FuncFunctor.html"><span class="name">FuncFunctor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[α]<a href="Func.html" class="extype" name="cats.data.Func">Func</a>[<span class="extype" name="cats.data.FuncFunctor.F">F</span>, <span class="extype" name="cats.data.FuncFunctor.C">C</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@FuncFunctor[F[_],C]extendsFunctor[[X]cats.data.Func[F,C,X]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@FuncFunctor[F[_],C]extendsFunctor[[α]cats.data.Func[F,C,α]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
+    </li><li name="cats.data.IdT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IdT[F[_],A]extendsProductwithSerializable"></a>
+      <a id="IdT[F[_],A]:IdT[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IdT.html"><span class="name">IdT</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.data.IdT.F">F</span>[<span class="extype" name="cats.data.IdT.A">A</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@IdT[F[_],A]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>IdT[F[_], A]</code> is the identity monad transformer.</p>
     </li><li name="cats.data.Ior" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Ior[+A,+B]extendsProductwithSerializable"></a>
       <a id="Ior[+A,+B]:Ior[A,B]"></a>
@@ -261,12 +333,12 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Represents a right-biased disjunction that is either an <code>A</code>, or a <code>B</code>, or both an <code>A</code> and a <code>B</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a right-biased disjunction that is either an <code>A</code>, or a <code>B</code>, or both an <code>A</code> and a <code>B</code>.</p><p>An instance of <code>A <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a> B</code> is one of:</p><ul><li><code><a href="Ior$$Left.html" class="extype" name="cats.data.Ior.Left">Left</a>[A]</code></li><li><code><a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a>[B]</code></li><li><code><a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>[A, B]</code></li></ul><p><code>A <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a> B</code> is similar to <code>A <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> B</code>, except that it can represent the simultaneous presence of
-an <code>A</code> and a <code>B</code>. It is right-biased like <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>, so methods such as <code>map</code> and <code>flatMap</code> operate on the
+      <p class="shortcomment cmt">Represents a right-biased disjunction that is either an <code>A</code>, or a <code>B</code>, or both an <code>A</code> and a <code>B</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a right-biased disjunction that is either an <code>A</code>, or a <code>B</code>, or both an <code>A</code> and a <code>B</code>.</p><p>An instance of <code>A <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a> B</code> is one of:</p><ul><li><code><a href="Ior$$Left.html" class="extype" name="cats.data.Ior.Left">Left</a>[A]</code></li><li><code><a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a>[B]</code></li><li><code><a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>[A, B]</code></li></ul><p><code>A <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a> B</code> is similar to <code>Xor[A, B]</code>, except that it can represent the simultaneous presence of
+an <code>A</code> and a <code>B</code>. It is right-biased so methods such as <code>map</code> and <code>flatMap</code> operate on the
 <code>B</code> value. Some methods, like <code>flatMap</code>, handle the presence of two <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a> values using a
-<code><a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[A]</code>, while other methods, like <a href="Ior.html#toXor:cats.data.Xor[A,B]" class="extmbr" name="cats.data.Ior#toXor">toXor</a>, ignore the <code>A</code> value in a <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>.</p><p><code>A <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a> B</code> is isomorphic to <code>(A <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> B) <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> (A, B)</code>, but provides methods biased toward <code>B</code>
+<code><a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[A]</code>, while other methods, like <a href="Ior.html#toXor:cats.data.Xor[A,B]" class="extmbr" name="cats.data.Ior#toXor">toXor</a>, ignore the <code>A</code> value in a <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>.</p><p><code>A <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a> B</code> is isomorphic to <code>Xor[Xor[A, B], (A, B)]</code>, but provides methods biased toward <code>B</code>
 values, regardless of whether the <code>B</code> values appear in a <a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a> or a <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>.
-The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> form can be accessed via the <a href="Ior.html#unwrap:cats.data.Xor[cats.data.Xor[A,B],(A,B)]" class="extmbr" name="cats.data.Ior#unwrap">unwrap</a> method.
+The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a> form can be accessed via the <a href="Ior.html#unwrap:cats.data.Xor[cats.data.Xor[A,B],(A,B)]" class="extmbr" name="cats.data.Ior#unwrap">unwrap</a> method.
 </p></div></div>
     </li><li name="cats.data.IorFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="IorFunctionsextendsAnyRef"></a>
@@ -302,23 +374,53 @@ The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> fo
       </a>
     </span>
       <p class="shortcomment cmt">Represents a function <code>A =&gt; F[B]</code>.</p>
-    </li><li name="cats.data.NonEmptyList" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NonEmptyList[A]=cats.data.OneAnd[List,A]"></a>
-      <a id="NonEmptyList[A]:NonEmptyList[A]"></a>
+    </li><li name="cats.data.Nested" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Nested[F[_],G[_],A]extendsProductwithSerializable"></a>
+      <a id="Nested[F[_],G[_],A]:Nested[F,G,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">NonEmptyList</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="scala.List">List</span>, <span class="extype" name="cats.data.NonEmptyList.A">A</span>]</span>
+        <a href="Nested.html"><span class="name">Nested</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.data.Nested.F">F</span>[<span class="extype" name="cats.data.Nested.G">G</span>[<span class="extype" name="cats.data.Nested.A">A</span>]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@NonEmptyList[A]=cats.data.OneAnd[List,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@Nested[F[_],G[_],A]extendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Similar to <a href="Prod.html" class="extype" name="cats.data.Prod">cats.data.Prod</a>, but for nested composition.</p><div class="fullcomment"><div class="comment cmt"><p>Similar to <a href="Prod.html" class="extype" name="cats.data.Prod">cats.data.Prod</a>, but for nested composition.</p><p>For instance, since both <code>List</code> and <code>Option</code> have a <code>Functor</code>, then so does
+<code>List[Option[_]]</code>. This is represented by this data type via the instantiation
+<code>Nested[List, Option, ?]</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.Functor
+scala&gt; <span class="kw">import</span> cats.data.Nested
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> listOption: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">Int</span>]] = <span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">None</span>)
+scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span> = i <span class="kw">=&gt;</span> (i * <span class="num">2</span>).toString
+scala&gt; Functor[<span class="std">List</span>].map(listOption)(opt <span class="kw">=&gt;</span> opt.map(f))
+res0: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">String</span>]] = <span class="std">List</span>(<span class="std">Some</span>(<span class="num">2</span>), <span class="std">None</span>)
+scala&gt; <span class="kw">val</span> nested: Nested[<span class="std">List</span>, <span class="std">Option</span>, <span class="std">Int</span>] = Nested(listOption)
+scala&gt; <span class="kw">val</span> result: Nested[<span class="std">List</span>, <span class="std">Option</span>, <span class="std">String</span>] = Functor[Nested[<span class="std">List</span>, <span class="std">Option</span>, ?]].map(nested)(f)
+scala&gt; result.value
+res1: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">String</span>]] = <span class="std">List</span>(<span class="std">Some</span>(<span class="num">2</span>), <span class="std">None</span>)</pre></div></div>
+    </li><li name="cats.data.NonEmptyList" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptyList[A]extendsProductwithSerializable"></a>
+      <a id="NonEmptyList[A]:NonEmptyList[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonEmptyList.html"><span class="name">NonEmptyList</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="head">head: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>, <span name="tail">tail: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.data.NonEmptyList.A">A</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@NonEmptyList[A]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A data type which represents a non empty list of A, with
+single element (head) and optional structure (tail).</p>
     </li><li name="cats.data.NonEmptyStream" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NonEmptyStream[A]=cats.data.OneAnd[Stream,A]"></a>
       <a id="NonEmptyStream[A]:NonEmptyStream[A]"></a>
@@ -336,23 +438,28 @@ The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> fo
       </a>
     </span>
       
-    </li><li name="cats.data.NonEmptyVector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NonEmptyVector[A]=cats.data.OneAnd[Vector,A]"></a>
+    </li><li name="cats.data.NonEmptyVector" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NonEmptyVector[A]extendsAnyVal"></a>
       <a id="NonEmptyVector[A]:NonEmptyVector[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">NonEmptyVector</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="scala.Vector">Vector</span>, <span class="extype" name="cats.data.NonEmptyVector.A">A</span>]</span>
+        <a href="NonEmptyVector.html"><span class="name">NonEmptyVector</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@NonEmptyVector[A]=cats.data.OneAnd[Vector,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@NonEmptyVector[A]extendsAnyVal" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">A data type which represents a <code>Vector</code> guaranteed to contain at least one element.</p><div class="fullcomment"><div class="comment cmt"><p>A data type which represents a <code>Vector</code> guaranteed to contain at least one element.
+<br/>
+Note that the constructor is <code>private</code> to prevent accidental construction of an empty
+<code>NonEmptyVector</code>. However, due to https://issues.scala-lang.org/browse/SI-6601, on
+Scala 2.10, this may be bypassed due to a compiler bug.
+</p></div></div>
     </li><li name="cats.data.OneAnd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="OneAnd[F[_],A]extendsProductwithSerializable"></a>
       <a id="OneAnd[F[_],A]:OneAnd[F,A]"></a>
@@ -373,57 +480,6 @@ The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> fo
 structure (tail).</p><div class="fullcomment"><div class="comment cmt"><p>A data type which represents a single element (head) and some other
 structure (tail). As we have done in package.scala, this can be
 used to represent a List which is guaranteed to not be empty:</p><pre><span class="kw">type</span> NonEmptyList[A] = OneAnd[<span class="std">List</span>, A]</pre></div></div>
-    </li><li name="cats.data.OneAndLowPriority0" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OneAndLowPriority0extendsAnyRef"></a>
-      <a id="OneAndLowPriority0:OneAndLowPriority0"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="OneAndLowPriority0.html"><span class="name">OneAndLowPriority0</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@OneAndLowPriority0extendsAnyRef" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.data.OneAndLowPriority1" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OneAndLowPriority1extendsOneAndLowPriority0"></a>
-      <a id="OneAndLowPriority1:OneAndLowPriority1"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="OneAndLowPriority1.html"><span class="name">OneAndLowPriority1</span></a><span class="result"> extends <a href="OneAndLowPriority0.html" class="extype" name="cats.data.OneAndLowPriority0">OneAndLowPriority0</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@OneAndLowPriority1extendsOneAndLowPriority0" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.data.OneAndLowPriority2" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OneAndLowPriority2extendsOneAndLowPriority1"></a>
-      <a id="OneAndLowPriority2:OneAndLowPriority2"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="OneAndLowPriority2.html"><span class="name">OneAndLowPriority2</span></a><span class="result"> extends <a href="OneAndLowPriority1.html" class="extype" name="cats.data.OneAndLowPriority1">OneAndLowPriority1</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@OneAndLowPriority2extendsOneAndLowPriority1" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="cats.data.OptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="OptionT[F[_],A]extendsProductwithSerializable"></a>
       <a id="OptionT[F[_],A]:OptionT[F,A]"></a>
@@ -442,7 +498,7 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
     </span>
       <p class="shortcomment cmt"><code>OptionT[F[_], A]</code> is a light wrapper on an <code>F[Option[A]]</code> with some
 convenient methods for working with this nested structure.</p><div class="fullcomment"><div class="comment cmt"><p><code>OptionT[F[_], A]</code> is a light wrapper on an <code>F[Option[A]]</code> with some
-convenient methods for working with this nested structure.</p><p>It may also be said that <code>OptionT</code> is a monad transformer for <code>Option</code>.</p><p>For more information, see the <a href="http://non.github.io/cats/tut/optiont.html" target="_blank">documentation</a>.
+convenient methods for working with this nested structure.</p><p>It may also be said that <code>OptionT</code> is a monad transformer for <code>Option</code>.</p><p>For more information, see the <a href="http://typelevel.org/cats/tut/optiont.html" target="_blank">documentation</a>.
 </p></div></div>
     </li><li name="cats.data.Prod" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Prod[F[_],G[_],A]extendsProductwithSerializable"></a>
@@ -463,7 +519,7 @@ convenient methods for working with this nested structure.</p><p>It may also be 
       <p class="shortcomment cmt"><a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a> is a product to two independent functor values.</p><div class="fullcomment"><div class="comment cmt"><p><a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a> is a product to two independent functor values.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
 </p></div></div>
     </li><li name="cats.data.ProdAlternative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ProdAlternative[F[_],G[_]]extendsAlternative[[X]cats.data.Prod[F,G,X]]withProdApplicative[F,G]withProdMonoidK[F,G]"></a>
+      <a id="ProdAlternative[F[_],G[_]]extendsAlternative[[α]cats.data.Prod[F,G,α]]withProdApplicative[F,G]withProdMonoidK[F,G]"></a>
       <a id="ProdAlternative[F[_],G[_]]:ProdAlternative[F,G]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -471,16 +527,16 @@ convenient methods for working with this nested structure.</p><p>It may also be 
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ProdAlternative.html"><span class="name">ProdAlternative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdAlternative.F">F</span>, <span class="extype" name="cats.data.ProdAlternative.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="ProdApplicative.html" class="extype" name="cats.data.ProdApplicative">ProdApplicative</a>[<span class="extype" name="cats.data.ProdAlternative.F">F</span>, <span class="extype" name="cats.data.ProdAlternative.G">G</span>] with <a href="ProdMonoidK.html" class="extype" name="cats.data.ProdMonoidK">ProdMonoidK</a>[<span class="extype" name="cats.data.ProdAlternative.F">F</span>, <span class="extype" name="cats.data.ProdAlternative.G">G</span>]</span>
+        <a href="ProdAlternative.html"><span class="name">ProdAlternative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdAlternative.F">F</span>, <span class="extype" name="cats.data.ProdAlternative.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]] with <a href="ProdApplicative.html" class="extype" name="cats.data.ProdApplicative">ProdApplicative</a>[<span class="extype" name="cats.data.ProdAlternative.F">F</span>, <span class="extype" name="cats.data.ProdAlternative.G">G</span>] with <a href="ProdMonoidK.html" class="extype" name="cats.data.ProdMonoidK">ProdMonoidK</a>[<span class="extype" name="cats.data.ProdAlternative.F">F</span>, <span class="extype" name="cats.data.ProdAlternative.G">G</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@ProdAlternative[F[_],G[_]]extendsAlternative[[X]cats.data.Prod[F,G,X]]withProdApplicative[F,G]withProdMonoidK[F,G]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@ProdAlternative[F[_],G[_]]extendsAlternative[[α]cats.data.Prod[F,G,α]]withProdApplicative[F,G]withProdMonoidK[F,G]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="cats.data.ProdApplicative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ProdApplicative[F[_],G[_]]extendsApplicative[[X]cats.data.Prod[F,G,X]]withProdApply[F,G]"></a>
+      <a id="ProdApplicative[F[_],G[_]]extendsApplicative[[α]cats.data.Prod[F,G,α]]withProdApply[F,G]"></a>
       <a id="ProdApplicative[F[_],G[_]]:ProdApplicative[F,G]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -488,16 +544,16 @@ convenient methods for working with this nested structure.</p><p>It may also be 
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ProdApplicative.html"><span class="name">ProdApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdApplicative.F">F</span>, <span class="extype" name="cats.data.ProdApplicative.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="ProdApply.html" class="extype" name="cats.data.ProdApply">ProdApply</a>[<span class="extype" name="cats.data.ProdApplicative.F">F</span>, <span class="extype" name="cats.data.ProdApplicative.G">G</span>]</span>
+        <a href="ProdApplicative.html"><span class="name">ProdApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdApplicative.F">F</span>, <span class="extype" name="cats.data.ProdApplicative.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]] with <a href="ProdApply.html" class="extype" name="cats.data.ProdApply">ProdApply</a>[<span class="extype" name="cats.data.ProdApplicative.F">F</span>, <span class="extype" name="cats.data.ProdApplicative.G">G</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@ProdApplicative[F[_],G[_]]extendsApplicative[[X]cats.data.Prod[F,G,X]]withProdApply[F,G]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@ProdApplicative[F[_],G[_]]extendsApplicative[[α]cats.data.Prod[F,G,α]]withProdApply[F,G]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="cats.data.ProdApply" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ProdApply[F[_],G[_]]extendsApply[[X]cats.data.Prod[F,G,X]]withProdFunctor[F,G]"></a>
+      <a id="ProdApply[F[_],G[_]]extendsApply[[α]cats.data.Prod[F,G,α]]withProdFunctor[F,G]"></a>
       <a id="ProdApply[F[_],G[_]]:ProdApply[F,G]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -505,16 +561,33 @@ convenient methods for working with this nested structure.</p><p>It may also be 
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ProdApply.html"><span class="name">ProdApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdApply.F">F</span>, <span class="extype" name="cats.data.ProdApply.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="ProdFunctor.html" class="extype" name="cats.data.ProdFunctor">ProdFunctor</a>[<span class="extype" name="cats.data.ProdApply.F">F</span>, <span class="extype" name="cats.data.ProdApply.G">G</span>]</span>
+        <a href="ProdApply.html"><span class="name">ProdApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdApply.F">F</span>, <span class="extype" name="cats.data.ProdApply.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]] with <a href="ProdFunctor.html" class="extype" name="cats.data.ProdFunctor">ProdFunctor</a>[<span class="extype" name="cats.data.ProdApply.F">F</span>, <span class="extype" name="cats.data.ProdApply.G">G</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@ProdApply[F[_],G[_]]extendsApply[[X]cats.data.Prod[F,G,X]]withProdFunctor[F,G]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@ProdApply[F[_],G[_]]extendsApply[[α]cats.data.Prod[F,G,α]]withProdFunctor[F,G]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdContravariant" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdContravariant[F[_],G[_]]extendsContravariant[[α]cats.data.Prod[F,G,α]]"></a>
+      <a id="ProdContravariant[F[_],G[_]]:ProdContravariant[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdContravariant.html"><span class="name">ProdContravariant</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdContravariant.F">F</span>, <span class="extype" name="cats.data.ProdContravariant.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdContravariant[F[_],G[_]]extendsContravariant[[α]cats.data.Prod[F,G,α]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="cats.data.ProdFunctor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ProdFunctor[F[_],G[_]]extendsFunctor[[X]cats.data.Prod[F,G,X]]"></a>
+      <a id="ProdFunctor[F[_],G[_]]extendsFunctor[[α]cats.data.Prod[F,G,α]]"></a>
       <a id="ProdFunctor[F[_],G[_]]:ProdFunctor[F,G]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -522,16 +595,16 @@ convenient methods for working with this nested structure.</p><p>It may also be 
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ProdFunctor.html"><span class="name">ProdFunctor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdFunctor.F">F</span>, <span class="extype" name="cats.data.ProdFunctor.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]]</span>
+        <a href="ProdFunctor.html"><span class="name">ProdFunctor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdFunctor.F">F</span>, <span class="extype" name="cats.data.ProdFunctor.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@ProdFunctor[F[_],G[_]]extendsFunctor[[X]cats.data.Prod[F,G,X]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@ProdFunctor[F[_],G[_]]extendsFunctor[[α]cats.data.Prod[F,G,α]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="cats.data.ProdMonoidK" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ProdMonoidK[F[_],G[_]]extendsMonoidK[[X]cats.data.Prod[F,G,X]]withProdSemigroupK[F,G]"></a>
+      <a id="ProdMonoidK[F[_],G[_]]extendsMonoidK[[α]cats.data.Prod[F,G,α]]withProdSemigroupK[F,G]"></a>
       <a id="ProdMonoidK[F[_],G[_]]:ProdMonoidK[F,G]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -539,16 +612,16 @@ convenient methods for working with this nested structure.</p><p>It may also be 
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ProdMonoidK.html"><span class="name">ProdMonoidK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="ProdSemigroupK.html" class="extype" name="cats.data.ProdSemigroupK">ProdSemigroupK</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>]</span>
+        <a href="ProdMonoidK.html"><span class="name">ProdMonoidK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]] with <a href="ProdSemigroupK.html" class="extype" name="cats.data.ProdSemigroupK">ProdSemigroupK</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@ProdMonoidK[F[_],G[_]]extendsMonoidK[[X]cats.data.Prod[F,G,X]]withProdSemigroupK[F,G]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@ProdMonoidK[F[_],G[_]]extendsMonoidK[[α]cats.data.Prod[F,G,α]]withProdSemigroupK[F,G]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="cats.data.ProdSemigroupK" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ProdSemigroupK[F[_],G[_]]extendsSemigroupK[[X]cats.data.Prod[F,G,X]]"></a>
+      <a id="ProdSemigroupK[F[_],G[_]]extendsSemigroupK[[α]cats.data.Prod[F,G,α]]"></a>
       <a id="ProdSemigroupK[F[_],G[_]]:ProdSemigroupK[F,G]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -556,10 +629,10 @@ convenient methods for working with this nested structure.</p><p>It may also be 
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ProdSemigroupK.html"><span class="name">ProdSemigroupK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdSemigroupK.F">F</span>, <span class="extype" name="cats.data.ProdSemigroupK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]]</span>
+        <a href="ProdSemigroupK.html"><span class="name">ProdSemigroupK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdSemigroupK.F">F</span>, <span class="extype" name="cats.data.ProdSemigroupK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@ProdSemigroupK[F[_],G[_]]extendsSemigroupK[[X]cats.data.Prod[F,G,X]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@ProdSemigroupK[F[_],G[_]]extendsSemigroupK[[α]cats.data.Prod[F,G,α]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -672,7 +745,7 @@ context along with the <code>A</code> value.
     </span>
       
     </li><li name="cats.data.ValidatedNel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ValidatedNel[E,A]=cats.data.Validated[cats.data.package.NonEmptyList[E],A]"></a>
+      <a id="ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]"></a>
       <a id="ValidatedNel[E,A]:ValidatedNel[E,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -680,10 +753,10 @@ context along with the <code>A</code> value.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">ValidatedNel</span><span class="tparams">[<span name="E">E</span>, <span name="A">A</span>]</span><span class="result"> = <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<a href="#NonEmptyList[A]=cats.data.OneAnd[List,A]" class="extmbr" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.ValidatedNel.E">E</span>], <span class="extype" name="cats.data.ValidatedNel.A">A</span>]</span>
+        <span class="name">ValidatedNel</span><span class="tparams">[<span name="E">E</span>, <span name="A">A</span>]</span><span class="result"> = <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<a href="NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.ValidatedNel.E">E</span>], <span class="extype" name="cats.data.ValidatedNel.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@ValidatedNel[E,A]=cats.data.Validated[cats.data.package.NonEmptyList[E],A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -762,7 +835,8 @@ For example, a function that attempts to parse an integer from a string may have
 chosen for the &quot;left&quot; could be any type representing an error and has no need to actually extend <code>Exception</code>.</p><p><code>A <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> B</code> is isomorphic to <code>scala.Either[A, B]</code>, but <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> is right-biased, so methods such as <code>map</code> and
 <code>flatMap</code> apply only in the context of the &quot;right&quot; case. This right bias makes <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> more convenient to use
 than <code>scala.Either</code> in a monadic context. Methods such as <code>swap</code>, and <code>leftMap</code> provide functionality
-that <code>scala.Either</code> exposes through left projections.
+that <code>scala.Either</code> exposes through left projections.</p><p>Some additional <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> methods can be found in <a href="Xor$$XorOps.html" class="extype" name="cats.data.Xor.XorOps">XorOps</a>. These methods are not defined on <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> itself because
+<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> is covariant in its types <code>A</code> and <code>B</code>.
 </p></div></div>
     </li><li name="cats.data.XorFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="XorFunctionsextendsAnyRef"></a>
@@ -894,6 +968,23 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </a>
     </span>
       
+    </li><li name="cats.data.EitherT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EitherT"></a>
+      <a id="EitherT:EitherT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EitherT$.html"><span class="name">EitherT</span></a><span class="result"> extends <span class="extype" name="cats.data.EitherTInstances">EitherTInstances</span> with <a href="EitherTFunctions.html" class="extype" name="cats.data.EitherTFunctions">EitherTFunctions</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@EitherT" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.Func" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Func"></a>
       <a id="Func:Func"></a>
@@ -907,6 +998,23 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.package@Func" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.IdT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IdT"></a>
+      <a id="IdT:IdT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IdT$.html"><span class="name">IdT</span></a><span class="result"> extends <span class="extype" name="cats.data.IdTInstances">IdTInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@IdT" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -945,50 +1053,33 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </a>
     </span>
       
-    </li><li name="cats.data#NonEmptyList" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NonEmptyList[A](head:A,tail:A*):cats.data.package.NonEmptyList[A]"></a>
-      <a id="NonEmptyList[A](A,A*):NonEmptyList[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">NonEmptyList</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="head">head: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>, <span name="tail">tail: <span class="extype" name="cats.data.NonEmptyList.A">A</span>*</span>)</span><span class="result">: <a href="#NonEmptyList[A]=cats.data.OneAnd[List,A]" class="extmbr" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@NonEmptyList[A](head:A,tail:A*):cats.data.package.NonEmptyList[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.data#NonEmptyList" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NonEmptyList[A](head:A,tail:List[A]):cats.data.package.NonEmptyList[A]"></a>
-      <a id="NonEmptyList[A](A,List[A]):NonEmptyList[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">NonEmptyList</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="head">head: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>, <span name="tail">tail: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.data.NonEmptyList.A">A</span>] = <span class="symbol">Nil</span></span>)</span><span class="result">: <a href="#NonEmptyList[A]=cats.data.OneAnd[List,A]" class="extmbr" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@NonEmptyList[A](head:A,tail:List[A]):cats.data.package.NonEmptyList[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.data.NonEmptyList" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NonEmptyList"></a>
-      <a id="NonEmptyList:data.NonEmptyList"></a>
+    </li><li name="cats.data.Nested" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Nested"></a>
+      <a id="Nested:Nested"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="package$$NonEmptyList$.html"><span class="name">NonEmptyList</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Nested$.html"><span class="name">Nested</span></a><span class="result"> extends <span class="extype" name="cats.data.NestedInstances">NestedInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@Nested" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.NonEmptyList" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptyList"></a>
+      <a id="NonEmptyList:NonEmptyList"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NonEmptyList$.html"><span class="name">NonEmptyList</span></a><span class="result"> extends <span class="extype" name="cats.data.NonEmptyListInstances">NonEmptyListInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.package@NonEmptyList" title="Permalink" target="_top">
@@ -1030,36 +1121,19 @@ and lifted in to a <code>XorT[F, C, B]</code> via <code>XorT.left</code>.
       </a>
     </span>
       
-    </li><li name="cats.data#NonEmptyVector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NonEmptyVector[A](head:A,tail:A*):cats.data.package.NonEmptyVector[A]"></a>
-      <a id="NonEmptyVector[A](A,A*):NonEmptyVector[A]"></a>
+    </li><li name="cats.data.NonEmptyVector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptyVector"></a>
+      <a id="NonEmptyVector:NonEmptyVector"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">def</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">NonEmptyVector</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="head">head: <span class="extype" name="cats.data.NonEmptyVector.A">A</span></span>, <span name="tail">tail: <span class="extype" name="cats.data.NonEmptyVector.A">A</span>*</span>)</span><span class="result">: <a href="#NonEmptyVector[A]=cats.data.OneAnd[Vector,A]" class="extmbr" name="cats.data.NonEmptyVector">NonEmptyVector</a>[<span class="extype" name="cats.data.NonEmptyVector.A">A</span>]</span>
+        <a href="NonEmptyVector$.html"><span class="name">NonEmptyVector</span></a><span class="result"> extends <span class="extype" name="cats.data.NonEmptyVectorInstances">NonEmptyVectorInstances</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@NonEmptyVector[A](head:A,tail:A*):cats.data.package.NonEmptyVector[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.data#NonEmptyVector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NonEmptyVector[A](head:A,tail:Vector[A]):cats.data.package.NonEmptyVector[A]"></a>
-      <a id="NonEmptyVector[A](A,Vector[A]):NonEmptyVector[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">NonEmptyVector</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="head">head: <span class="extype" name="cats.data.NonEmptyVector.A">A</span></span>, <span name="tail">tail: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="cats.data.NonEmptyVector.A">A</span>] = <span class="symbol">Vector.empty</span></span>)</span><span class="result">: <a href="#NonEmptyVector[A]=cats.data.OneAnd[Vector,A]" class="extmbr" name="cats.data.NonEmptyVector">NonEmptyVector</a>[<span class="extype" name="cats.data.NonEmptyVector.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.package@NonEmptyVector[A](head:A,tail:Vector[A]):cats.data.package.NonEmptyVector[A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.package@NonEmptyVector" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

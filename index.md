@@ -21,7 +21,7 @@ Cats is currently available for Scala 2.10 and 2.11.
 
 To get started with SBT, simply add the following to your build.sbt file:
 
-    libraryDependencies += "org.typelevel" %% "cats" % "0.6.1"
+    libraryDependencies += "org.typelevel" %% "cats" % "0.7.0"
 
 This will pull in all of Cats' modules. If you only require some
 functionality, you can pick-and-choose from amongst these modules
@@ -88,7 +88,7 @@ In an attempt to be more modular, Cats is broken up into a number of sub-project
 * *core* - contains type class definitions (e.g. Functor, Applicative, Monad), essential datatypes, and
   type class instances for those datatypes and standard library types
 * *laws* - laws for the type classes, used to validate type class instances
- * *cats-free* - free structures such as the free monad, and supporting type classes.
+* *cats-free* - free structures such as the free monad, and supporting type classes.
 * *tests* - tests that check type class instances with laws from *laws*
 * *docs* - The source for this website
 

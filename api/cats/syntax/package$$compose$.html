@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/syntax/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="ComposeSyntax.html" class="extype" name="cats.syntax.ComposeSyntax">ComposeSyntax</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ComposeSyntax.html" class="extype" name="cats.syntax.ComposeSyntax">ComposeSyntax</a>, <a href="../arrow/Compose$$ToComposeOps.html" class="extype" name="cats.arrow.Compose.ToComposeOps">ToComposeOps</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.compose"><span>compose</span></li><li class="in" name="cats.syntax.ComposeSyntax"><span>ComposeSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.compose"><span>compose</span></li><li class="in" name="cats.syntax.ComposeSyntax"><span>ComposeSyntax</span></li><li class="in" name="cats.arrow.Compose.ToComposeOps"><span>ToComposeOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -185,23 +185,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.syntax.ComposeSyntax#composeSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="composeSyntax[F[_,_],A,B](fab:F[A,B])(implicitevidence$1:cats.arrow.Compose[F]):cats.syntax.ComposeOps[F,A,B]"></a>
-      <a id="composeSyntax[F[_,_],A,B](F[A,B])(Compose[F]):ComposeOps[F,A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">composeSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.syntax.ComposeSyntax.composeSyntax.F">F</span>[<span class="extype" name="cats.syntax.ComposeSyntax.composeSyntax.A">A</span>, <span class="extype" name="cats.syntax.ComposeSyntax.composeSyntax.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../arrow/Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.syntax.ComposeSyntax.composeSyntax.F">F</span>]</span>)</span><span class="result">: <a href="ComposeOps.html" class="extype" name="cats.syntax.ComposeOps">ComposeOps</a>[<span class="extype" name="cats.syntax.ComposeSyntax.composeSyntax.F">F</span>, <span class="extype" name="cats.syntax.ComposeSyntax.composeSyntax.A">A</span>, <span class="extype" name="cats.syntax.ComposeSyntax.composeSyntax.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.package$$compose$@composeSyntax[F[_,_],A,B](fab:F[A,B])(implicitevidence$1:cats.arrow.Compose[F]):cats.syntax.ComposeOps[F,A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ComposeSyntax.html" class="extype" name="cats.syntax.ComposeSyntax">ComposeSyntax</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -378,6 +361,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.arrow.Compose.ToComposeOps#toComposeOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toComposeOps[F[_,_],B,D](target:F[B,D])(implicittc:cats.arrow.Compose[F]):cats.arrow.Compose.Ops[F,B,D]"></a>
+      <a id="toComposeOps[F[_,_],B,D](F[B,D])(Compose[F]):Ops[F,B,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toComposeOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="B">B</span>, <span name="D">D</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.F">F</span>[<span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.B">B</span>, <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Ops</a>[<span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.F">F</span>, <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.B">B</span>, <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.package$$compose$@toComposeOps[F[_,_],B,D](target:F[B,D])(implicittc:cats.arrow.Compose[F]):cats.arrow.Compose.Ops[F,B,D]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Compose$$ToComposeOps.html" class="extype" name="cats.arrow.Compose.ToComposeOps">ToComposeOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -475,6 +475,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.syntax.ComposeSyntax">
               <h3>Inherited from <a href="ComposeSyntax.html" class="extype" name="cats.syntax.ComposeSyntax">ComposeSyntax</a></h3>
+            </div><div class="parent" name="cats.arrow.Compose.ToComposeOps">
+              <h3>Inherited from <a href="../arrow/Compose$$ToComposeOps.html" class="extype" name="cats.arrow.Compose.ToComposeOps">ToComposeOps</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

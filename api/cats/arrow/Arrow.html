@@ -47,7 +47,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Arrow</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Split.html" class="extype" name="cats.arrow.Split">Split</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>]</span>
+        <span class="name">Arrow</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Split.html" class="extype" name="cats.arrow.Split">Split</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -111,7 +111,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a></dd></dl></div>
-    </li><li name="cats.arrow.Arrow#first" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+    </li><li name="cats.functor.Strong#first" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="first[A,B,C](fa:F[A,B]):F[(A,C),(B,C)]"></a>
       <a id="first[A,B,C](F[A,B]):F[(A,C),(B,C)]"></a>
       <h4 class="signature">
@@ -120,19 +120,19 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">first</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.arrow.Arrow.F">F</span>[<span class="extype" name="cats.arrow.Arrow.first.A">A</span>, <span class="extype" name="cats.arrow.Arrow.first.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Arrow.F">F</span>[(<span class="extype" name="cats.arrow.Arrow.first.A">A</span>, <span class="extype" name="cats.arrow.Arrow.first.C">C</span>), (<span class="extype" name="cats.arrow.Arrow.first.B">B</span>, <span class="extype" name="cats.arrow.Arrow.first.C">C</span>)]</span>
+        <span class="name">first</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.arrow.Arrow.F">F</span>[<span class="extype" name="cats.functor.Strong.first.A">A</span>, <span class="extype" name="cats.functor.Strong.first.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Arrow.F">F</span>[(<span class="extype" name="cats.functor.Strong.first.A">A</span>, <span class="extype" name="cats.functor.Strong.first.C">C</span>), (<span class="extype" name="cats.functor.Strong.first.B">B</span>, <span class="extype" name="cats.functor.Strong.first.C">C</span>)]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.arrow.Arrow@first[A,B,C](fa:F[A,B]):F[(A,C),(B,C)]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Create a new arrow that takes two inputs, but only modifies the first input</p><div class="fullcomment"><div class="comment cmt"><p>Create a new arrow that takes two inputs, but only modifies the first input</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.function._
-scala&gt; <span class="kw">import</span> cats.arrow.Arrow
+      <p class="shortcomment cmt">Create a new <code>F</code> that takes two inputs, but only modifies the first input</p><div class="fullcomment"><div class="comment cmt"><p>Create a new <code>F</code> that takes two inputs, but only modifies the first input</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.functor.Strong
 scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = _ * <span class="num">2</span>
-scala&gt; <span class="kw">val</span> fab = Arrow[Function1].first[<span class="std">Int</span>,<span class="std">Int</span>,<span class="std">Int</span>](f)
+scala&gt; <span class="kw">val</span> fab = Strong[Function1].first[<span class="std">Int</span>,<span class="std">Int</span>,<span class="std">Int</span>](f)
 scala&gt; fab((<span class="num">2</span>,<span class="num">3</span>))
-res0: (<span class="std">Int</span>, <span class="std">Int</span>) = (<span class="num">4</span>,<span class="num">3</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.arrow.Arrow">Arrow</a> → <a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a></dd></dl></div>
+res0: (<span class="std">Int</span>, <span class="std">Int</span>) = (<span class="num">4</span>,<span class="num">3</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a></dd></dl></div>
     </li><li name="cats.arrow.Category#id" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="id[A]:F[A,A]"></a>
       <a id="id[A]:F[A,A]"></a>
@@ -331,15 +331,13 @@ res0: (<span class="std">Int</span>, <span class="std">Int</span>) = (<span clas
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Create a new arrow from an existing arrow that applies <code>f</code> to the input
-of the original arrow and then applies <code>g</code> to the output.</p><div class="fullcomment"><div class="comment cmt"><p>Create a new arrow from an existing arrow that applies <code>f</code> to the input
-of the original arrow and then applies <code>g</code> to the output.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.function._
-scala&gt; <span class="kw">import</span> cats.arrow.Arrow
+      <p class="shortcomment cmt">Contramap on the first type parameter and map on the second type parameter</p><div class="fullcomment"><div class="comment cmt"><p>Contramap on the first type parameter and map on the second type parameter</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.functor.Profunctor
 scala&gt; <span class="kw">val</span> fab: <span class="std">Double</span> <span class="kw">=&gt;</span> <span class="std">Double</span> = x <span class="kw">=&gt;</span> x + <span class="num">0.3</span>
 scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Double</span> = x <span class="kw">=&gt;</span> x.toDouble / <span class="num">2</span>
 scala&gt; <span class="kw">val</span> g: <span class="std">Double</span> <span class="kw">=&gt;</span> <span class="std">Double</span> = x <span class="kw">=&gt;</span> x * <span class="num">3</span>
-scala&gt; <span class="kw">val</span> dimapArrow = Arrow[Function1].dimap(fab)(f)(g)
-scala&gt; dimapArrow(<span class="num">3</span>)
+scala&gt; <span class="kw">val</span> h = Profunctor[Function1].dimap(fab)(f)(g)
+scala&gt; h(<span class="num">3</span>)
 res0: <span class="std">Double</span> = <span class="num">5.4</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.arrow.Arrow">Arrow</a> → <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
@@ -554,10 +552,10 @@ res0: <span class="std">Double</span> = <span class="num">5.4</span></pre></div>
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Create a new arrow that takes two inputs, but only modifies the second input</p><div class="fullcomment"><div class="comment cmt"><p>Create a new arrow that takes two inputs, but only modifies the second input</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.function._
-scala&gt; <span class="kw">import</span> cats.arrow.Arrow
+      <p class="shortcomment cmt">Create a new <code>F</code> that takes two inputs, but only modifies the second input</p><div class="fullcomment"><div class="comment cmt"><p>Create a new <code>F</code> that takes two inputs, but only modifies the second input</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.functor.Strong
 scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = _ * <span class="num">2</span>
-scala&gt; <span class="kw">val</span> fab = Arrow[Function1].second[<span class="std">Int</span>,<span class="std">Int</span>,<span class="std">Int</span>](f)
+scala&gt; <span class="kw">val</span> fab = Strong[Function1].second[<span class="std">Int</span>,<span class="std">Int</span>,<span class="std">Int</span>](f)
 scala&gt; fab((<span class="num">2</span>,<span class="num">3</span>))
 res0: (<span class="std">Int</span>, <span class="std">Int</span>) = (<span class="num">2</span>,<span class="num">6</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.arrow.Arrow">Arrow</a> → <a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a></dd></dl></div>
     </li><li name="cats.arrow.Arrow#split" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -576,13 +574,13 @@ res0: (<span class="std">Int</span>, <span class="std">Int</span>) = (<span clas
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Create a new arrow that splits its input between the <code>f</code> and <code>g</code> arrows
-and combines the output of each.</p><div class="fullcomment"><div class="comment cmt"><p>Create a new arrow that splits its input between the <code>f</code> and <code>g</code> arrows
-and combines the output of each.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.function._
-scala&gt; <span class="kw">import</span> cats.arrow.Arrow
+      <p class="shortcomment cmt">Create a new <code>F</code> that splits its input between <code>f</code> and <code>g</code>
+and combines the output of each.</p><div class="fullcomment"><div class="comment cmt"><p>Create a new <code>F</code> that splits its input between <code>f</code> and <code>g</code>
+and combines the output of each.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.arrow.Split
 scala&gt; <span class="kw">val</span> toLong: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Long</span> = _.toLong
 scala&gt; <span class="kw">val</span> toDouble: <span class="std">Float</span> <span class="kw">=&gt;</span> <span class="std">Double</span> = _.toDouble
-scala&gt; <span class="kw">val</span> f: ((<span class="std">Int</span>, <span class="std">Float</span>)) <span class="kw">=&gt;</span> (<span class="std">Long</span>, <span class="std">Double</span>) = Arrow[Function1].split(toLong, toDouble)
+scala&gt; <span class="kw">val</span> f: ((<span class="std">Int</span>, <span class="std">Float</span>)) <span class="kw">=&gt;</span> (<span class="std">Long</span>, <span class="std">Double</span>) = Split[Function1].split(toLong, toDouble)
 scala&gt; f((<span class="num">3</span>, <span class="num">4.0</span>f))
 res0: (<span class="std">Long</span>, <span class="std">Double</span>) = (<span class="num">3</span>,<span class="num">4.0</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.arrow.Arrow">Arrow</a> → <a href="Split.html" class="extype" name="cats.arrow.Split">Split</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

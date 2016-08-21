@@ -47,7 +47,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Bitraverse</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bitraverse.F">F</span>]</span>
+        <span class="name">Bitraverse</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -55,10 +55,7 @@
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.Bitraverse">Bitraverse</a>[<span class="extype" name="cats.Bitraverse.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Bitraverse.scala" target="_blank">Bitraverse.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bitraverse.F">F</span>], <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bitraverse.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="CompositeBitraverse.html" class="extype" name="cats.CompositeBitraverse">CompositeBitraverse</a></div>
-          </div></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -257,9 +254,12 @@
     </span>
       <p class="shortcomment cmt">The quintessential method of the Bifunctor trait, it applies a
 function to each &quot;side&quot; of the bifunctor.</p><div class="fullcomment"><div class="comment cmt"><p>The quintessential method of the Bifunctor trait, it applies a
-function to each &quot;side&quot; of the bifunctor.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.Bitraverse">Bitraverse</a> → <a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a></dd></dl></div>
-    </li><li name="cats.Bitraverse#bisequence" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+function to each &quot;side&quot; of the bifunctor.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> x: (<span class="std">List</span>[<span class="std">String</span>], <span class="std">Int</span>) = (<span class="std">List</span>(<span class="lit">"foo"</span>, <span class="lit">"bar"</span>), <span class="num">3</span>)
+scala&gt; x.bimap(_.headOption, _.toLong + <span class="num">1</span>)
+res0: (<span class="std">Option</span>[<span class="std">String</span>], <span class="std">Long</span>) = (<span class="std">Some</span>(foo),<span class="num">4</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.Bitraverse">Bitraverse</a> → <a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a></dd></dl></div>
+    </li><li name="cats.Bitraverse#bisequence" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bisequence[G[_],A,B](fab:F[G[A],G[B]])(implicitevidence$2:cats.Applicative[G]):G[F[A,B]]"></a>
       <a id="bisequence[G[_],A,B](F[G[A],G[B]])(Applicative[G]):G[F[A,B]]"></a>
       <h4 class="signature">
@@ -275,7 +275,23 @@ function to each &quot;side&quot; of the bifunctor.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Sequence each side of the structure with the given functions</p>
+      <p class="shortcomment cmt">Sequence each side of the structure with the given functions.</p><div class="fullcomment"><div class="comment cmt"><p>Sequence each side of the structure with the given functions.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> rightSome: Either[<span class="std">Option</span>[<span class="std">String</span>], <span class="std">Option</span>[<span class="std">Int</span>]] = Either.right(<span class="std">Some</span>(<span class="num">3</span>))
+scala&gt; rightSome.bisequence
+res0: <span class="std">Option</span>[Either[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">Some</span>(Right(<span class="num">3</span>))
+
+scala&gt; <span class="kw">val</span> rightNone: Either[<span class="std">Option</span>[<span class="std">String</span>], <span class="std">Option</span>[<span class="std">Int</span>]] = Either.right(<span class="std">None</span>)
+scala&gt; rightNone.bisequence
+res1: <span class="std">Option</span>[Either[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">None</span>
+
+scala&gt; <span class="kw">val</span> leftSome: Either[<span class="std">Option</span>[<span class="std">String</span>], <span class="std">Option</span>[<span class="std">Int</span>]] = Either.left(<span class="std">Some</span>(<span class="lit">"foo"</span>))
+scala&gt; leftSome.bisequence
+res2: <span class="std">Option</span>[Either[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">Some</span>(Left(foo))
+
+scala&gt; <span class="kw">val</span> leftNone: Either[<span class="std">Option</span>[<span class="std">String</span>], <span class="std">Option</span>[<span class="std">Int</span>]] = Either.left(<span class="std">None</span>)
+scala&gt; leftNone.bisequence
+res3: <span class="std">Option</span>[Either[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">None</span></pre></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -300,35 +316,52 @@ function to each &quot;side&quot; of the bifunctor.
               
         </dd></dl></div>
     </li><li name="cats.Bitraverse#compose" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="compose[G[_,_]](implicitev:cats.Bitraverse[G]):cats.Bitraverse[[A,B]F[G[A,B],G[A,B]]]"></a>
-      <a id="compose[G[_,_]](Bitraverse[G]):Bitraverse[[A,B]F[G[A,B],G[A,B]]]"></a>
+      <a id="compose[G[_,_]](implicitev:cats.Bitraverse[G]):cats.Bitraverse[[α,β]F[G[α,β],G[α,β]]]"></a>
+      <a id="compose[G[_,_]](Bitraverse[G]):Bitraverse[[α,β]F[G[α,β],G[α,β]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="" class="extype" name="cats.Bitraverse">Bitraverse</a>[<span class="extype" name="cats.Bitraverse.compose.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.Bitraverse">Bitraverse</a>[[A, B]<span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.Bitraverse.compose.G">G</span>[<span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.A">A</span>, <span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.B">B</span>], <span class="extype" name="cats.Bitraverse.compose.G">G</span>[<span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.A">A</span>, <span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.B">B</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="" class="extype" name="cats.Bitraverse">Bitraverse</a>[<span class="extype" name="cats.Bitraverse.compose.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.Bitraverse">Bitraverse</a>[[α, β]<span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.Bitraverse.compose.G">G</span>[<span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.β">β</span>], <span class="extype" name="cats.Bitraverse.compose.G">G</span>[<span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.β">β</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Bitraverse@compose[G[_,_]](implicitev:cats.Bitraverse[G]):cats.Bitraverse[[A,B]F[G[A,B],G[A,B]]]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Bitraverse@compose[G[_,_]](implicitev:cats.Bitraverse[G]):cats.Bitraverse[[α,β]F[G[α,β],G[α,β]]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">If F and G are both <a href="" class="extype" name="cats.Bitraverse">cats.Bitraverse</a> then so is their composition F[G[_, _], G[_, _]]</p>
-    </li><li name="cats.Bifoldable#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compose[G[_,_]](implicitev:cats.Bifoldable[G]):cats.Bifoldable[[A,B]F[G[A,B],G[A,B]]]"></a>
-      <a id="compose[G[_,_]](Bifoldable[G]):Bifoldable[[A,B]F[G[A,B],G[A,B]]]"></a>
+    </li><li name="cats.functor.Bifunctor#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[G[_,_]](implicitG0:cats.functor.Bifunctor[G]):cats.functor.Bifunctor[[α,β]F[G[α,β],G[α,β]]]"></a>
+      <a id="compose[G[_,_]](Bifunctor[G]):Bifunctor[[α,β]F[G[α,β],G[α,β]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bifoldable.compose.G">G</span>]</span>)</span><span class="result">: <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[[A, B]<span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.Bifoldable.compose.G">G</span>[<span class="extype" name="cats.Bifoldable.&lt;refinement&gt;.Λ$.A">A</span>, <span class="extype" name="cats.Bifoldable.&lt;refinement&gt;.Λ$.B">B</span>], <span class="extype" name="cats.Bifoldable.compose.G">G</span>[<span class="extype" name="cats.Bifoldable.&lt;refinement&gt;.Λ$.A">A</span>, <span class="extype" name="cats.Bifoldable.&lt;refinement&gt;.Λ$.B">B</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G0">G0: <a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.functor.Bifunctor.compose.G">G</span>]</span>)</span><span class="result">: <a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[[α, β]<span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.compose.G">G</span>[<span class="extype" name="cats.functor.Bifunctor.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.functor.Bifunctor.&lt;refinement&gt;.Λ$.β">β</span>], <span class="extype" name="cats.functor.Bifunctor.compose.G">G</span>[<span class="extype" name="cats.functor.Bifunctor.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.functor.Bifunctor.&lt;refinement&gt;.Λ$.β">β</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Bitraverse@compose[G[_,_]](implicitev:cats.Bifoldable[G]):cats.Bifoldable[[A,B]F[G[A,B],G[A,B]]]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Bitraverse@compose[G[_,_]](implicitG0:cats.functor.Bifunctor[G]):cats.functor.Bifunctor[[α,β]F[G[α,β],G[α,β]]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The composition of two Bifunctors is itself a Bifunctor</p><div class="fullcomment"><div class="comment cmt"><p>The composition of two Bifunctors is itself a Bifunctor</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a></dd></dl></div>
+    </li><li name="cats.Bifoldable#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[G[_,_]](implicitev:cats.Bifoldable[G]):cats.Bifoldable[[α,β]F[G[α,β],G[α,β]]]"></a>
+      <a id="compose[G[_,_]](Bifoldable[G]):Bifoldable[[α,β]F[G[α,β],G[α,β]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bifoldable.compose.G">G</span>]</span>)</span><span class="result">: <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[[α, β]<span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.Bifoldable.compose.G">G</span>[<span class="extype" name="cats.Bifoldable.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.Bifoldable.&lt;refinement&gt;.Λ$.β">β</span>], <span class="extype" name="cats.Bifoldable.compose.G">G</span>[<span class="extype" name="cats.Bifoldable.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.Bifoldable.&lt;refinement&gt;.Λ$.β">β</span>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Bitraverse@compose[G[_,_]](implicitev:cats.Bifoldable[G]):cats.Bifoldable[[α,β]F[G[α,β],G[α,β]]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -460,6 +493,28 @@ function to each &quot;side&quot; of the bifunctor.
       <p class="shortcomment cmt">apply a function to the &quot;left&quot; functor
 </p><div class="fullcomment"><div class="comment cmt"><p>apply a function to the &quot;left&quot; functor
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a></dd></dl></div>
+    </li><li name="cats.functor.Bifunctor#leftWiden" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="leftWiden[A,B,AA&gt;:A](fab:F[A,B]):F[AA,B]"></a>
+      <a id="leftWiden[A,B,AA&gt;:A](F[A,B]):F[AA,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftWiden</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="AA">AA &gt;: <span class="extype" name="cats.functor.Bifunctor.leftWiden.A">A</span></span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.leftWiden.A">A</span>, <span class="extype" name="cats.functor.Bifunctor.leftWiden.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.leftWiden.AA">AA</span>, <span class="extype" name="cats.functor.Bifunctor.leftWiden.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Bitraverse@leftWiden[A,B,AA&gt;:A](fab:F[A,B]):F[AA,B]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Widens A into a supertype AA.</p><div class="fullcomment"><div class="comment cmt"><p>Widens A into a supertype AA.
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">sealed</span> <span class="kw">trait</span> Foo
+scala&gt; <span class="kw">case</span> <span class="kw">object</span> Bar <span class="kw">extends</span> Foo
+scala&gt; <span class="kw">val</span> x1: Either[Bar.<span class="kw">type</span>, <span class="std">Int</span>] = Either.left(Bar)
+scala&gt; <span class="kw">val</span> x2: Either[Foo, <span class="std">Int</span>] = x1.leftWiden</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -511,25 +566,6 @@ function to each &quot;side&quot; of the bifunctor.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.functor.Bifunctor#rightMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="rightMap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]"></a>
-      <a id="rightMap[A,B,C](F[A,B])((B)⇒C):F[A,C]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">rightMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.rightMap.A">A</span>, <span class="extype" name="cats.functor.Bifunctor.rightMap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Bifunctor.rightMap.B">B</span>) ⇒ <span class="extype" name="cats.functor.Bifunctor.rightMap.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.rightMap.A">A</span>, <span class="extype" name="cats.functor.Bifunctor.rightMap.C">C</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.Bitraverse@rightMap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">apply a function ro the &quot;right&quot; functor
-</p><div class="fullcomment"><div class="comment cmt"><p>apply a function ro the &quot;right&quot; functor
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

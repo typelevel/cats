@@ -60,7 +60,7 @@ implemented in terms of two methods:</p><ul><li><code>reduceLeftTo(fa)(f)(g)</co
           <div class="superTypes hiddenContent"><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Reducible.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="CompositeReducible.html" class="extype" name="cats.CompositeReducible">CompositeReducible</a>, <a href="NonEmptyReducible.html" class="extype" name="cats.NonEmptyReducible">NonEmptyReducible</a></div>
+            <div class="subClasses hiddenContent"><a href="NonEmptyReducible.html" class="extype" name="cats.NonEmptyReducible">NonEmptyReducible</a></div>
           </div></div>
         
 
@@ -292,7 +292,7 @@ with every other value using the given function <code>g</code>.</p>
       <p class="shortcomment cmt">Alias for <a href="Foldable.html#fold[A](fa:F[A])(implicitA:cats.Monoid[A]):A" class="extmbr" name="cats.Foldable#fold">fold</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Foldable.html#fold[A](fa:F[A])(implicitA:cats.Monoid[A]):A" class="extmbr" name="cats.Foldable#fold">fold</a>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Reducible#compose" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="compose[G[_]](implicitGG:cats.Reducible[G]):cats.Reducible[[α]F[G[α]]]"></a>
+      <a id="compose[G[_]](implicitevidence$1:cats.Reducible[G]):cats.Reducible[[α]F[G[α]]]"></a>
       <a id="compose[G[_]](Reducible[G]):Reducible[[α]F[G[α]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -300,16 +300,16 @@ with every other value using the given function <code>g</code>.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="" class="extype" name="cats.Reducible">Reducible</a>[<span class="extype" name="cats.Reducible.compose.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Reducible.compose.G">G</span>[<span class="extype" name="cats.Reducible.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="" class="extype" name="cats.Reducible">Reducible</a>[<span class="extype" name="cats.Reducible.compose.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Reducible.compose.G">G</span>[<span class="extype" name="cats.Reducible.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Reducible@compose[G[_]](implicitGG:cats.Reducible[G]):cats.Reducible[[α]F[G[α]]]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Reducible@compose[G[_]](implicitevidence$1:cats.Reducible[G]):cats.Reducible[[α]F[G[α]]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Compose two <code>Reducible</code> instances into a new one.</p>
+      
     </li><li name="cats.Foldable#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compose[G[_]](implicitev:cats.Foldable[G]):cats.Foldable[[α]F[G[α]]]"></a>
+      <a id="compose[G[_]](implicitevidence$3:cats.Foldable[G]):cats.Foldable[[α]F[G[α]]]"></a>
       <a id="compose[G[_]](Foldable[G]):Foldable[[α]F[G[α]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -317,17 +317,14 @@ with every other value using the given function <code>g</code>.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.compose.G">G</span>]</span>)</span><span class="result">: <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Foldable.compose.G">G</span>[<span class="extype" name="cats.Foldable.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.compose.G">G</span>]</span>)</span><span class="result">: <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Foldable.compose.G">G</span>[<span class="extype" name="cats.Foldable.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.Reducible@compose[G[_]](implicitev:cats.Foldable[G]):cats.Foldable[[α]F[G[α]]]" title="Permalink" target="_top">
+      <a href="../index.html#cats.Reducible@compose[G[_]](implicitevidence$3:cats.Foldable[G]):cats.Foldable[[α]F[G[α]]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Compose this <code>Foldable[F]</code> with a <code>Foldable[G]</code> to create
-a <code>Foldable[F[G]]</code> instance.</p><div class="fullcomment"><div class="comment cmt"><p>Compose this <code>Foldable[F]</code> with a <code>Foldable[G]</code> to create
-a <code>Foldable[F[G]]</code> instance.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#dropWhile_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dropWhile_[A](fa:F[A])(p:A=&gt;Boolean):List[A]"></a>
       <a id="dropWhile_[A](F[A])((A)⇒Boolean):List[A]"></a>
@@ -494,7 +491,7 @@ match <code>p</code>.
       </a>
     </span>
       <p class="shortcomment cmt">Fold implemented using the given <code>MonoidK[G]</code> instance.</p><div class="fullcomment"><div class="comment cmt"><p>Fold implemented using the given <code>MonoidK[G]</code> instance.</p><p>This method is identical to fold, except that we use the universal monoid (<code>MonoidK[G]</code>)
-to get a <code>Monoid[G[A]]</code> instance.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.list._
+to get a <code>Monoid[G[A]]</code> instance.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
 scala&gt; F.foldK(<span class="std">List</span>(<span class="num">1</span> :: <span class="num">2</span> :: Nil, <span class="num">3</span> :: <span class="num">4</span> :: <span class="num">5</span> :: Nil))
 res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
@@ -623,6 +620,80 @@ combining them using the given <code>Monoid[B]</code> instance.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.Reducible#maximum" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maximum[A](fa:F[A])(implicitA:cats.Order[A]):A"></a>
+      <a id="maximum[A](F[A])(Order[A]):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maximum</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Reducible.maximum.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Reducible.maximum.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.maximum.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Reducible@maximum[A](fa:F[A])(implicitA:cats.Order[A]):A" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.Foldable#maximumOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="maximumOption[A](fa:F[A])(implicitA:cats.Order[A]):Option[A]"></a>
+      <a id="maximumOption[A](F[A])(Order[A]):Option[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maximumOption</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Foldable.maximumOption.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Foldable.maximumOption.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.Foldable.maximumOption.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Reducible@maximumOption[A](fa:F[A])(implicitA:cats.Order[A]):Option[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Find the maximum <code>A</code> item in this structure according to the <code>Order[A]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Find the maximum <code>A</code> item in this structure according to the <code>Order[A]</code>.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p><code>None</code> if the structure is empty, otherwise the maximum element
+wrapped in a <code>Some</code>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="Foldable.html#minimumOption[A](fa:F[A])(implicitA:cats.Order[A]):Option[A]" class="extmbr" name="cats.Foldable#minimumOption">minimumOption</a> for minimum instead of maximum.</p></span><span class="cmt"><p><a href="#maximum[A](fa:F[A])(implicitA:cats.Order[A]):A" class="extmbr" name="cats.Reducible#maximum">Reducible#maximum</a> for a version that doesn't need to return an
+<code>Option</code> for structures that are guaranteed to be non-empty.</p></span></dd></dl></div>
+    </li><li name="cats.Reducible#minimum" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="minimum[A](fa:F[A])(implicitA:cats.Order[A]):A"></a>
+      <a id="minimum[A](F[A])(Order[A]):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">minimum</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Reducible.minimum.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Reducible.minimum.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.minimum.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Reducible@minimum[A](fa:F[A])(implicitA:cats.Order[A]):A" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.Foldable#minimumOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="minimumOption[A](fa:F[A])(implicitA:cats.Order[A]):Option[A]"></a>
+      <a id="minimumOption[A](F[A])(Order[A]):Option[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">minimumOption</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Foldable.minimumOption.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Foldable.minimumOption.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.Foldable.minimumOption.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Reducible@minimumOption[A](fa:F[A])(implicitA:cats.Order[A]):Option[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Find the minimum <code>A</code> item in this structure according to the <code>Order[A]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Find the minimum <code>A</code> item in this structure according to the <code>Order[A]</code>.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p><code>None</code> if the structure is empty, otherwise the minimum element
+wrapped in a <code>Some</code>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="Foldable.html#maximumOption[A](fa:F[A])(implicitA:cats.Order[A]):Option[A]" class="extmbr" name="cats.Foldable#maximumOption">maximumOption</a> for maximum instead of minimum.</p></span><span class="cmt"><p><a href="#minimum[A](fa:F[A])(implicitA:cats.Order[A]):A" class="extmbr" name="cats.Reducible#minimum">Reducible#minimum</a> for a version that doesn't need to return an
+<code>Option</code> for structures that are guaranteed to be non-empty.</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -746,6 +817,54 @@ semigroup for <code>G[_]</code>.</p><p>This method is a generalization of <code>
     </span>
       <p class="shortcomment cmt">Left-associative reduction on <code>F</code> using the function <code>f</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Left-associative reduction on <code>F</code> using the function <code>f</code>.</p><p>Implementations should override this method when possible.
 </p></div></div>
+    </li><li name="cats.Reducible#reduceLeftM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceLeftM[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(g:(B,A)=&gt;G[B])(implicitG:cats.FlatMap[G]):G[B]"></a>
+      <a id="reduceLeftM[G[_],A,B](F[A])((A)⇒G[B])((B,A)⇒G[B])(FlatMap[G]):G[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceLeftM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Reducible.reduceLeftM.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.reduceLeftM.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.reduceLeftM.G">G</span>[<span class="extype" name="cats.Reducible.reduceLeftM.B">B</span>]</span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Reducible.reduceLeftM.B">B</span>, <span class="extype" name="cats.Reducible.reduceLeftM.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.reduceLeftM.G">G</span>[<span class="extype" name="cats.Reducible.reduceLeftM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Reducible.reduceLeftM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.reduceLeftM.G">G</span>[<span class="extype" name="cats.Reducible.reduceLeftM.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Reducible@reduceLeftM[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(g:(B,A)=&gt;G[B])(implicitG:cats.FlatMap[G]):G[B]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"> Monadic variant of <a href="#reduceLeftTo[A,B](fa:F[A])(f:A=&gt;B)(g:(B,A)=&gt;B):B" class="extmbr" name="cats.Reducible#reduceLeftTo">reduceLeftTo</a>
+</p>
+    </li><li name="cats.Foldable#reduceLeftOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reduceLeftOption[A](fa:F[A])(f:(A,A)=&gt;A):Option[A]"></a>
+      <a id="reduceLeftOption[A](F[A])((A,A)⇒A):Option[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceLeftOption</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Foldable.reduceLeftOption.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.reduceLeftOption.A">A</span>, <span class="extype" name="cats.Foldable.reduceLeftOption.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.reduceLeftOption.A">A</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.Foldable.reduceLeftOption.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Reducible@reduceLeftOption[A](fa:F[A])(f:(A,A)=&gt;A):Option[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Reduce the elements of this structure down to a single value by applying
+the provided aggregation function in a left-associative manner.</p><div class="fullcomment"><div class="comment cmt"><p>Reduce the elements of this structure down to a single value by applying
+the provided aggregation function in a left-associative manner.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p><code>None</code> if the structure is empty, otherwise the result of combining
+the cumulative left-associative result of the <code>f</code> operation over all of the
+elements.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="#reduceLeft[A](fa:F[A])(f:(A,A)=&gt;A):A" class="extmbr" name="cats.Reducible#reduceLeft">Reducible#reduceLeft</a> for a version that doesn't need to return an
+<code>Option</code> for structures that are guaranteed to be non-empty.
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> l = <span class="std">List</span>(<span class="num">6</span>, <span class="num">3</span>, <span class="num">2</span>)
+This is equivalent to (<span class="num">6</span> - <span class="num">3</span>) - <span class="num">2</span>
+scala&gt; Foldable[<span class="std">List</span>].reduceLeftOption(l)(_ - _)
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)
+scala&gt; Foldable[<span class="std">List</span>].reduceLeftOption(<span class="std">List</span>.empty[<span class="std">Int</span>])(_ - _)
+res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span></pre></span><span class="cmt"><p><a href="Foldable.html#reduceRightOption[A](fa:F[A])(f:(A,cats.Eval[A])=&gt;cats.Eval[A]):cats.Eval[Option[A]]" class="extmbr" name="cats.Foldable#reduceRightOption">reduceRightOption</a> for a right-associative alternative.</p></span></dd></dl></div>
     </li><li name="cats.Reducible#reduceLeftToOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reduceLeftToOption[A,B](fa:F[A])(f:A=&gt;B)(g:(B,A)=&gt;B):Option[B]"></a>
       <a id="reduceLeftToOption[A,B](F[A])((A)⇒B)((B,A)⇒B):Option[B]"></a>
@@ -799,6 +918,36 @@ given <code>Semigroup[B]</code>.</p>
       </a>
     </span>
       <p class="shortcomment cmt">Right-associative reduction on <code>F</code> using the function <code>f</code>.</p>
+    </li><li name="cats.Foldable#reduceRightOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reduceRightOption[A](fa:F[A])(f:(A,cats.Eval[A])=&gt;cats.Eval[A]):cats.Eval[Option[A]]"></a>
+      <a id="reduceRightOption[A](F[A])((A,Eval[A])⇒Eval[A]):Eval[Option[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceRightOption</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Foldable.reduceRightOption.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.reduceRightOption.A">A</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.reduceRightOption.A">A</span>]) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.reduceRightOption.A">A</span>]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.Foldable.reduceRightOption.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Reducible@reduceRightOption[A](fa:F[A])(f:(A,cats.Eval[A])=&gt;cats.Eval[A]):cats.Eval[Option[A]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Reduce the elements of this structure down to a single value by applying
+the provided aggregation function in a right-associative manner.</p><div class="fullcomment"><div class="comment cmt"><p>Reduce the elements of this structure down to a single value by applying
+the provided aggregation function in a right-associative manner.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p><code>None</code> if the structure is empty, otherwise the result of combining
+the cumulative right-associative result of the <code>f</code> operation over the
+<code>A</code> elements.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="#reduceRight[A](fa:F[A])(f:(A,cats.Eval[A])=&gt;cats.Eval[A]):cats.Eval[A]" class="extmbr" name="cats.Reducible#reduceRight">Reducible#reduceRight</a> for a version that doesn't need to return an
+<code>Option</code> for structures that are guaranteed to be non-empty.
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> l = <span class="std">List</span>(<span class="num">6</span>, <span class="num">3</span>, <span class="num">2</span>)
+This is eqivalent to <span class="num">6</span> - (<span class="num">3</span> - <span class="num">2</span>)
+scala&gt; Foldable[<span class="std">List</span>].reduceRightOption(l)((current, rest) <span class="kw">=&gt;</span> rest.map(current - _)).value
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">5</span>)
+scala&gt; Foldable[<span class="std">List</span>].reduceRightOption(<span class="std">List</span>.empty[<span class="std">Int</span>])((current, rest) <span class="kw">=&gt;</span> rest.map(current - _)).value
+res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span></pre></span><span class="cmt"><p><a href="Foldable.html#reduceLeftOption[A](fa:F[A])(f:(A,A)=&gt;A):Option[A]" class="extmbr" name="cats.Foldable#reduceLeftOption">reduceLeftOption</a> for a left-associative alternative</p></span></dd></dl></div>
     </li><li name="cats.Reducible#reduceRightToOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reduceRightToOption[A,B](fa:F[A])(f:A=&gt;B)(g:(A,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[Option[B]]"></a>
       <a id="reduceRightToOption[A,B](F[A])((A)⇒B)((A,Eval[B])⇒Eval[B]):Eval[Option[B]]"></a>
@@ -855,15 +1004,14 @@ an <a href="Apply.html" class="extype" name="cats.Apply">Apply</a> instance for 
     </span>
       <p class="shortcomment cmt">Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
 <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+type constructor with two or more parameters such as <code>scala.util.Either</code></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
 <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.std.list._
+type constructor with two or more parameters such as <code>scala.util.Either</code></p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
-scala&gt; F.sequenceU_(<span class="std">List</span>(Xor.right[<span class="std">String</span>, <span class="std">Int</span>](<span class="num">333</span>), Xor.Right(<span class="num">444</span>)))
-res0: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Right(())
-scala&gt; F.sequenceU_(<span class="std">List</span>(Xor.right[<span class="std">String</span>, <span class="std">Int</span>](<span class="num">333</span>), Xor.Left(<span class="lit">"boo"</span>)))
-res1: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Left(boo)</pre><p>Note that using <code>sequence_</code> instead of <code>sequenceU_</code> would not compile without
+scala&gt; F.sequenceU_(<span class="std">List</span>(Either.right[<span class="std">String</span>, <span class="std">Int</span>](<span class="num">333</span>), Right(<span class="num">444</span>)))
+res0: Either[<span class="std">String</span>, <span class="std">Unit</span>] = Right(())
+scala&gt; F.sequenceU_(<span class="std">List</span>(Either.right[<span class="std">String</span>, <span class="std">Int</span>](<span class="num">333</span>), Left(<span class="lit">"boo"</span>)))
+res1: Either[<span class="std">String</span>, <span class="std">Unit</span>] = Left(boo)</pre><p>Note that using <code>sequence_</code> instead of <code>sequenceU_</code> would not compile without
 explicitly passing in the type parameters - the type checker has trouble
 inferring the appropriate instance.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
@@ -884,13 +1032,31 @@ inferring the appropriate instance.
       </a>
     </span>
       <p class="shortcomment cmt">Sequence <code>F[G[A]]</code> using <code>Applicative[G]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Sequence <code>F[G[A]]</code> using <code>Applicative[G]</code>.</p><p>This is similar to <code>traverse_</code> except it operates on <code>F[G[A]]</code>
-values, so no additional functions are needed.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.list._
-scala&gt; <span class="kw">import</span> cats.std.option._
+values, so no additional functions are needed.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
 scala&gt; F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">1</span>), <span class="std">Option</span>(<span class="num">2</span>), <span class="std">Option</span>(<span class="num">3</span>)))
 res0: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">Some</span>(())
 scala&gt; F.sequence_(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">1</span>), <span class="std">None</span>, <span class="std">Option</span>(<span class="num">3</span>)))
 res1: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+    </li><li name="cats.Foldable#size" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="size[A](fa:F[A]):Long"></a>
+      <a id="size[A](F[A]):Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">size</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Foldable.size.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Reducible@size[A](fa:F[A]):Long" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The size of this Foldable.</p><div class="fullcomment"><div class="comment cmt"><p>The size of this Foldable.</p><p>This is overriden in structures that have more efficient size implementations
+(e.g. Vector, Set, Map).</p><p>Note: will not terminate for infinite-sized collections.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -946,6 +1112,23 @@ match <code>p</code>.
     </span>
       <p class="shortcomment cmt">Convert F[A] to a List[A].</p><div class="fullcomment"><div class="comment cmt"><p>Convert F[A] to a List[A].
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+    </li><li name="cats.Reducible#toNonEmptyList" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toNonEmptyList[A](fa:F[A]):cats.data.NonEmptyList[A]"></a>
+      <a id="toNonEmptyList[A](F[A]):NonEmptyList[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNonEmptyList</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Reducible.F">F</span>[<span class="extype" name="cats.Reducible.toNonEmptyList.A">A</span>]</span>)</span><span class="result">: <a href="data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.Reducible.toNonEmptyList.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Reducible@toNonEmptyList[A](fa:F[A]):cats.data.NonEmptyList[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -1007,18 +1190,17 @@ the traversal.
     </span>
       <p class="shortcomment cmt">Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
 <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+type constructor with two or more parameters such as <code>scala.util.Either</code></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
 <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <a href="data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a></p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.std.list._
-scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): Xor[<span class="std">String</span>, <span class="std">Int</span>] =
-     |   <span class="kw">try</span> { Xor.Right(s.toInt) }
-     |   <span class="kw">catch</span> { <span class="kw">case</span> _: NumberFormatException <span class="kw">=&gt;</span> Xor.Left(<span class="lit">"boo"</span>) }
+type constructor with two or more parameters such as <code>scala.util.Either</code></p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): Either[<span class="std">String</span>, <span class="std">Int</span>] =
+     |   <span class="kw">try</span> { Right(s.toInt) }
+     |   <span class="kw">catch</span> { <span class="kw">case</span> _: NumberFormatException <span class="kw">=&gt;</span> Left(<span class="lit">"boo"</span>) }
 scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
 scala&gt; F.traverseU_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"444"</span>))(parseInt)
-res0: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Right(())
+res0: Either[<span class="std">String</span>, <span class="std">Unit</span>] = Right(())
 scala&gt; F.traverseU_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"zzz"</span>))(parseInt)
-res1: Xor[<span class="std">String</span>, <span class="std">Unit</span>] = Left(boo)</pre><p>Note that using <code>traverse_</code> instead of <code>traverseU_</code> would not compile without
+res1: Either[<span class="std">String</span>, <span class="std">Unit</span>] = Left(boo)</pre><p>Note that using <code>traverse_</code> instead of <code>traverseU_</code> would not compile without
 explicitly passing in the type parameters - the type checker has trouble
 inferring the appropriate instance.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
@@ -1039,10 +1221,8 @@ inferring the appropriate instance.
       </a>
     </span>
       <p class="shortcomment cmt">Traverse <code>F[A]</code> using <code>Applicative[G]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse <code>F[A]</code> using <code>Applicative[G]</code>.</p><p><code>A</code> values will be mapped into <code>G[B]</code> and combined using
-<code>Applicative#map2</code>.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.std.list._
-scala&gt; <span class="kw">import</span> cats.std.option._
-scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): <span class="std">Option</span>[<span class="std">Int</span>] = Xor.catchOnly[NumberFormatException](s.toInt).toOption
+<code>Applicative#map2</code>.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): <span class="std">Option</span>[<span class="std">Int</span>] = Either.catchOnly[NumberFormatException](s.toInt).toOption
 scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
 scala&gt; F.traverse_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"444"</span>))(parseInt)
 res0: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">Some</span>(())

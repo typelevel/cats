@@ -1,0 +1,846 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Order - cats.kernel.Order</title>
+          <meta name="description" content="Order - cats.kernel.Order" />
+          <meta name="keywords" content="Order cats.kernel.Order" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'cats.kernel.Order$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <a href="Order.html" title="See companion trait"><img alt="Object/Trait" src="../../lib/object_to_trait_big.png" /></a>
+        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.kernel">kernel</a></p>
+        <h1><a href="Order.html" title="See companion trait">Order</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Order.html" title="See companion trait">trait Order</a>
+            | <a href="package.html" class="extype" name="cats.kernel">package kernel</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Order</span><span class="result"> extends <a href="OrderFunctions.html" class="extype" name="cats.kernel.OrderFunctions">OrderFunctions</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/kernel/src/main/scala/cats/kernel/Order.scala" target="_blank">Order.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="OrderFunctions.html" class="extype" name="cats.kernel.OrderFunctions">OrderFunctions</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>], <a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>], <a href="EqFunctions.html" class="extype" name="cats.kernel.EqFunctions">EqFunctions</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="cats.kernel.Order"><span>Order</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.kernel.OrderFunctions"><span>OrderFunctions</span></li><li class="in" name="cats.kernel.PartialOrderFunctions"><span>PartialOrderFunctions</span></li><li class="in" name="cats.kernel.EqFunctions"><span>EqFunctions</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.kernel.Order#allEqual" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="allEqual[A]:cats.kernel.Order[A]"></a>
+      <a id="allEqual[A]:Order[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">allEqual</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.allEqual.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@allEqual[A]:cats.kernel.Order[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An <code>Order</code> instance that considers all <code>A</code> instances to be equal.</p>
+    </li><li name="cats.kernel.Order#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[A](implicitev:cats.kernel.Order[A]):cats.kernel.Order[A]"></a>
+      <a id="apply[A](Order[A]):Order[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.apply.A">A</span>]</span>)</span><span class="result">: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.apply.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@apply[A](implicitev:cats.kernel.Order[A]):cats.kernel.Order[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Access an implicit <code>Order[A]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Access an implicit <code>Order[A]</code>.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@inline</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.kernel.Order#by" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="by[A,B](f:A=&gt;B)(implicitev:cats.kernel.Order[B]):cats.kernel.Order[A]"></a>
+      <a id="by[A,B]((A)⇒B)(Order[B]):Order[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">by</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.kernel.Order.by.A">A</span>) ⇒ <span class="extype" name="cats.kernel.Order.by.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.by.B">B</span>]</span>)</span><span class="result">: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.by.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@by[A,B](f:A=&gt;B)(implicitev:cats.kernel.Order[B]):cats.kernel.Order[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Convert an implicit <code>Order[B]</code> to an <code>Order[A]</code> using the given
+function <code>f</code>.</p>
+    </li><li name="cats.kernel.Order#catsKernelOrderingForOrder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsKernelOrderingForOrder[A](implicitev:cats.kernel.Order[A]):Ordering[A]"></a>
+      <a id="catsKernelOrderingForOrder[A](Order[A]):Ordering[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelOrderingForOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.catsKernelOrderingForOrder.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Ordering">Ordering</span>[<span class="extype" name="cats.kernel.Order.catsKernelOrderingForOrder.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@catsKernelOrderingForOrder[A](implicitev:cats.kernel.Order[A]):Ordering[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implicitly convert a <code>Order[A]</code> to a <code>scala.math.Ordering[A]</code>
+instance.</p>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.kernel.OrderFunctions#compare" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compare[A](x:A,y:A)(implicitev:O[A]):Int"></a>
+      <a id="compare[A](A,A)(Order[A]):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compare</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.OrderFunctions.compare.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.OrderFunctions.compare.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.OrderFunctions.compare.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@compare[A](x:A,y:A)(implicitev:O[A]):Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrderFunctions.html" class="extype" name="cats.kernel.OrderFunctions">OrderFunctions</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.kernel.EqFunctions#eqv" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eqv[A](x:A,y:A)(implicitev:E[A]):Boolean"></a>
+      <a id="eqv[A](A,A)(Order[A]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eqv</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.EqFunctions.eqv.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.EqFunctions.eqv.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.EqFunctions.eqv.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@eqv[A](x:A,y:A)(implicitev:E[A]):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EqFunctions.html" class="extype" name="cats.kernel.EqFunctions">EqFunctions</a></dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.kernel.Order#from" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="from[A](f:(A,A)=&gt;Int):cats.kernel.Order[A]"></a>
+      <a id="from[A]((A,A)⇒Int):Order[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">from</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.kernel.Order.from.A">A</span>, <span class="extype" name="cats.kernel.Order.from.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.from.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@from[A](f:(A,A)=&gt;Int):cats.kernel.Order[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Define an <code>Order[A]</code> using the given function <code>f</code>.</p>
+    </li><li name="cats.kernel.Order#fromOrdering" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fromOrdering[A](implicitev:Ordering[A]):cats.kernel.Order[A]"></a>
+      <a id="fromOrdering[A](Ordering[A]):Order[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromOrdering</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Ordering">Ordering</span>[<span class="extype" name="cats.kernel.Order.fromOrdering.A">A</span>]</span>)</span><span class="result">: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.fromOrdering.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@fromOrdering[A](implicitev:Ordering[A]):cats.kernel.Order[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.kernel.PartialOrderFunctions#gt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="gt[A](x:A,y:A)(implicitev:P[A]):Boolean"></a>
+      <a id="gt[A](A,A)(Order[A]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">gt</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrderFunctions.gt.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrderFunctions.gt.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.gt.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@gt[A](x:A,y:A)(implicitev:P[A]):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a></dd></dl></div>
+    </li><li name="cats.kernel.PartialOrderFunctions#gteqv" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="gteqv[A](x:A,y:A)(implicitev:P[A]):Boolean"></a>
+      <a id="gteqv[A](A,A)(Order[A]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">gteqv</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrderFunctions.gteqv.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrderFunctions.gteqv.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.gteqv.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@gteqv[A](x:A,y:A)(implicitev:P[A]):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a></dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.kernel.PartialOrderFunctions#lt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lt[A](x:A,y:A)(implicitev:P[A]):Boolean"></a>
+      <a id="lt[A](A,A)(Order[A]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lt</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrderFunctions.lt.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrderFunctions.lt.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.lt.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@lt[A](x:A,y:A)(implicitev:P[A]):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a></dd></dl></div>
+    </li><li name="cats.kernel.PartialOrderFunctions#lteqv" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lteqv[A](x:A,y:A)(implicitev:P[A]):Boolean"></a>
+      <a id="lteqv[A](A,A)(Order[A]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lteqv</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrderFunctions.lteqv.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrderFunctions.lteqv.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.lteqv.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@lteqv[A](x:A,y:A)(implicitev:P[A]):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a></dd></dl></div>
+    </li><li name="cats.kernel.OrderFunctions#max" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="max[A](x:A,y:A)(implicitev:O[A]):A"></a>
+      <a id="max[A](A,A)(Order[A]):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">max</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.OrderFunctions.max.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.OrderFunctions.max.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.OrderFunctions.max.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.kernel.OrderFunctions.max.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@max[A](x:A,y:A)(implicitev:O[A]):A" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrderFunctions.html" class="extype" name="cats.kernel.OrderFunctions">OrderFunctions</a></dd></dl></div>
+    </li><li name="cats.kernel.OrderFunctions#min" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="min[A](x:A,y:A)(implicitev:O[A]):A"></a>
+      <a id="min[A](A,A)(Order[A]):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">min</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.OrderFunctions.min.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.OrderFunctions.min.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.OrderFunctions.min.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.kernel.OrderFunctions.min.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@min[A](x:A,y:A)(implicitev:O[A]):A" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrderFunctions.html" class="extype" name="cats.kernel.OrderFunctions">OrderFunctions</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.kernel.EqFunctions#neqv" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="neqv[A](x:A,y:A)(implicitev:E[A]):Boolean"></a>
+      <a id="neqv[A](A,A)(Order[A]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">neqv</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.EqFunctions.neqv.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.EqFunctions.neqv.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.EqFunctions.neqv.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@neqv[A](x:A,y:A)(implicitev:E[A]):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EqFunctions.html" class="extype" name="cats.kernel.EqFunctions">EqFunctions</a></dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.kernel.PartialOrderFunctions#partialCompare" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="partialCompare[A](x:A,y:A)(implicitev:P[A]):Double"></a>
+      <a id="partialCompare[A](A,A)(Order[A]):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partialCompare</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrderFunctions.partialCompare.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrderFunctions.partialCompare.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.partialCompare.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Double" class="extype" target="_top">Double</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@partialCompare[A](x:A,y:A)(implicitev:P[A]):Double" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a></dd></dl></div>
+    </li><li name="cats.kernel.PartialOrderFunctions#pmax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="pmax[A](x:A,y:A)(implicitev:P[A]):Option[A]"></a>
+      <a id="pmax[A](A,A)(Order[A]):Option[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pmax</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrderFunctions.pmax.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrderFunctions.pmax.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.pmax.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.pmax.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@pmax[A](x:A,y:A)(implicitev:P[A]):Option[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a></dd></dl></div>
+    </li><li name="cats.kernel.PartialOrderFunctions#pmin" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="pmin[A](x:A,y:A)(implicitev:P[A]):Option[A]"></a>
+      <a id="pmin[A](A,A)(Order[A]):Option[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pmin</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrderFunctions.pmin.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrderFunctions.pmin.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.pmin.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.pmin.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@pmin[A](x:A,y:A)(implicitev:P[A]):Option[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.kernel.PartialOrderFunctions#tryCompare" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tryCompare[A](x:A,y:A)(implicitev:P[A]):Option[Int]"></a>
+      <a id="tryCompare[A](A,A)(Order[A]):Option[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tryCompare</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrderFunctions.tryCompare.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrderFunctions.tryCompare.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.PartialOrderFunctions.tryCompare.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@tryCompare[A](x:A,y:A)(implicitev:P[A]):Option[Int]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.kernel.Order#whenEqualMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="whenEqualMonoid[A]:cats.kernel.Monoid[cats.kernel.Order[A]]withcats.kernel.Band[cats.kernel.Order[A]]"></a>
+      <a id="whenEqualMonoid[A]:Monoid[Order[A]]withBand[Order[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">whenEqualMonoid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.whenEqualMonoid.A">A</span>]] with <a href="Band.html" class="extype" name="cats.kernel.Band">Band</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.whenEqualMonoid.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.kernel.Order$@whenEqualMonoid[A]:cats.kernel.Monoid[cats.kernel.Order[A]]withcats.kernel.Band[cats.kernel.Order[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Monoid[Order[A]]</code> can be generated for all <code>A</code> with the following
+properties:</p><div class="fullcomment"><div class="comment cmt"><p>A <code>Monoid[Order[A]]</code> can be generated for all <code>A</code> with the following
+properties:</p><p><code>empty</code> returns a trivial <code>Order[A]</code> which considers all <code>A</code> instances to
+be equal.</p><p><code>combine(x: Order[A], y: Order[A])</code> creates an <code>Order[A]</code> that first
+orders by <code>x</code> and then (if two elements are equal) falls back to <code>y</code>.</p><p>This monoid is also a <code>Band[Order[A]]</code> since its combine
+operations is idempotent.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Order.html#whenEqual(o:cats.kernel.Order[A]):cats.kernel.Order[A]" class="extmbr" name="cats.kernel.Order#whenEqual">Order.whenEqual</a></p></span></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="cats.kernel.OrderFunctions">
+              <h3>Inherited from <a href="OrderFunctions.html" class="extype" name="cats.kernel.OrderFunctions">OrderFunctions</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>]</h3>
+            </div><div class="parent" name="cats.kernel.PartialOrderFunctions">
+              <h3>Inherited from <a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>]</h3>
+            </div><div class="parent" name="cats.kernel.EqFunctions">
+              <h3>Inherited from <a href="EqFunctions.html" class="extype" name="cats.kernel.EqFunctions">EqFunctions</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

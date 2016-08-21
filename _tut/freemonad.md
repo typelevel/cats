@@ -166,14 +166,14 @@ DSL. By itself, this DSL only represents a sequence of operations
 To do this, we will use a *natural transformation* between type
 containers.  Natural transformations go between types like `F[_]` and
 `G[_]` (this particular transformation would be written as
-`NaturalTransformation[F,G]` or as done here using the symbolic
+`FunctionK[F,G]` or as done here using the symbolic
 alternative as `F ~> G`).
 
 In our case, we will use a simple mutable map to represent our key
 value store:
 
 ```scala
-import cats.arrow.NaturalTransformation
+import cats.arrow.FunctionK
 import cats.{Id, ~>}
 import scala.collection.mutable
 
@@ -244,7 +244,7 @@ recursive structure by:
 This operation is called `Free.foldMap`:
 
 ```scala
-final def foldMap[M[_]](f: NaturalTransformation[S,M])(M: Monad[M]): M[A] = ...
+final def foldMap[M[_]](f: FunctionK[S,M])(M: Monad[M]): M[A] = ...
 ```
 
 `M` must be a `Monad` to be flattenable (the famous monoid aspect
@@ -253,14 +253,14 @@ under `Monad`). As `Id` is a `Monad`, we can use `foldMap`.
 To run your `Free` with previous `impureCompiler`:
 
 ```scala
-scala> val result: Option[Int] = program.foldMap(impureCompiler)
-put(wild-cats, 2)
-get(wild-cats)
-put(wild-cats, 14)
-put(tame-cats, 5)
-get(wild-cats)
-delete(tame-cats)
-result: Option[Int] = Some(14)
+val result: Option[Int] = program.foldMap(impureCompiler)
+// put(wild-cats, 2)
+// get(wild-cats)
+// put(wild-cats, 14)
+// put(tame-cats, 5)
+// get(wild-cats)
+// delete(tame-cats)
+// result: Option[Int] = Some(14)
 ```
 
 An important aspect of `foldMap` is its **stack-safety**. It evaluates
@@ -274,7 +274,7 @@ data-intensive tasks, as well as infinite processes such as streams.
 
 #### 7. Use a pure compiler (optional)
 
-The previous examples used a effectful natural transformation. This
+The previous examples used an effectful natural transformation. This
 works, but you might prefer folding your `Free` in a "purer" way. The
 [State](state.html) data structure can be used to keep track of the program
 state in an immutable map, avoiding mutation altogether.
@@ -299,8 +299,8 @@ support for pattern matching is limited by the JVM's type erasure, but
 it's not too hard to get around.)
 
 ```scala
-scala> val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(Map.empty).value
-result: (Map[String,Any], Option[Int]) = (Map(wild-cats -> 14),Some(14))
+val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(Map.empty).value
+// result: (Map[String,Any], Option[Int]) = (Map(wild-cats -> 14),Some(14))
 ```
 
 ## Composing Free monads ADTs.
@@ -374,7 +374,7 @@ def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]): Free[Cats
 }
 ```
 
-Finally we write one interpreter per ADT and combine them with a `NaturalTransformation` to `Coproduct` so they can be
+Finally we write one interpreter per ADT and combine them with a `FunctionK` to `Coproduct` so they can be
 compiled and applied to our `Free` program.
 
 
@@ -411,10 +411,10 @@ import DataSource._, Interacts._
 ```
 
 ```scala
-scala> val evaled: Unit = program.foldMap(interpreter)
-What's the kitty's name?
-List(snuggles)
-evaled: Unit = ()
+val evaled: Unit = program.foldMap(interpreter)
+// What's the kitty's name?
+// List(snuggles)
+// evaled: Unit = ()
 ```
 
 ## <a name="what-is-free-in-theory"></a>For the curious ones: what is Free in theory?
@@ -430,14 +430,14 @@ _very simple_ Monad from any _functor_**.
 The above forgetful functor takes a `Monad` and:
 
  - forgets its *monadic* part (e.g. the `flatMap` function)
- - forgets its *applicative* part (e.g. the `pure` function)
+ - forgets its *pointed* part (e.g. the `pure` function)
  - finally keeps the *functor* part (e.g. the `map` function)
 
 By reversing all arrows to build the left-adjoint, we deduce that the
-forgetful functor is basically a construction that:
+free monad is basically a construction that:
 
  - takes a *functor*
- - adds the *applicative* part (e.g. `pure`)
+ - adds the *pointed* part (e.g. `pure`)
  - adds the *monadic* behavior (e.g. `flatMap`)
 
 In terms of implementation, to build a *monad* from a *functor* we use
@@ -455,7 +455,7 @@ In this representation:
 
  - `Pure` builds a `Free` instance from an `A` value (it _reifies_ the
    `pure` function)
- - `Suspend` build a new `Free` by applying `F` to a previous `Free`
+ - `Suspend` builds a new `Free` by applying `F` to a previous `Free`
    (it _reifies_ the `flatMap` function)
 
 So a typical `Free` structure might look like:
@@ -471,10 +471,10 @@ From a computational point of view, `Free` recursive structure can be
 seen as a sequence of operations.
 
  - `Pure` returns an `A` value and ends the entire computation.
-- `Suspend` is a continuation; it suspends the current computation
-  with the suspension functor `F` (which can represent a command for
-  example) and hands control to the caller. `A` represents a value
-  bound to this computation.
+ - `Suspend` is a continuation; it suspends the current computation
+   with the suspension functor `F` (which can represent a command for
+   example) and hands control to the caller. `A` represents a value
+   bound to this computation.
 
 Please note this `Free` construction has the interesting quality of
 _encoding_ the recursion on the heap instead of the stack as classic
@@ -487,16 +487,12 @@ If you look at implementation in cats, you will see another member of
 the `Free[_]` ADT:
 
 ```scala
-sealed abstract case class Gosub[S[_], B]() extends Free[S, B] {
-  type C
-  val a: () => Free[S, C]
-  val f: C => Free[S, B]
-}
+case class FlatMapped[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 ```
 
-`Gosub` represents a call to a subroutine `a` and when `a` is
+`FlatMapped` represents a call to a subroutine `c` and when `c` is
 finished, it continues the computation by calling the function `f`
-with the result of `a`.
+with the result of `c`.
 
 It is actually an optimization of `Free` structure allowing to solve a
 problem of quadratic complexity implied by very deep recursive `Free`
@@ -504,8 +500,109 @@ computations.
 
 It is exactly the same problem as repeatedly appending to a `List[_]`.
 As the sequence of operations becomes longer, the slower a `flatMap`
-"through" the structure will be. With `Gosub`, `Free` becomes a
+"through" the structure will be. With `FlatMapped`, `Free` becomes a
 right-associated structure not subject to quadratic complexity.
+
+## FreeT
+
+Often times we want to interleave the syntax tree when building a Free monad 
+with some other effect not declared as part of the ADT. 
+FreeT solves this problem by allowing us to mix building steps of the AST 
+with calling action in other base monad.
+
+In the following example a basic console application is shown.
+When the user inputs some text we use a separate `State` monad to track what the user
+typed.
+
+As we can observe in this case `FreeT` offers us a the alternative to delegate denotations to `State`
+monad with stronger equational guarantees than if we were emulating the `State` ops in our own ADT.
+
+```scala
+import cats.free._
+// import cats.free._
+
+import cats._
+// import cats._
+
+import cats.data._
+// import cats.data._
+
+/* A base ADT for the user interaction without state semantics */
+sealed abstract class Teletype[A] extends Product with Serializable
+// defined class Teletype
+
+final case class WriteLine(line : String) extends Teletype[Unit]
+// defined class WriteLine
+
+final case class ReadLine(prompt : String) extends Teletype[String]
+// defined class ReadLine
+
+type TeletypeT[M[_], A] = FreeT[Teletype, M, A]
+// defined type alias TeletypeT
+
+type Log = List[String]
+// defined type alias Log
+
+/** Smart constructors, notice we are abstracting over any MonadState instance
+ *  to potentially support other types beside State 
+ */
+class TeletypeOps[M[_]](implicit MS : MonadState[M, Log]) {
+  def writeLine(line : String) : TeletypeT[M, Unit] =
+	FreeT.liftF[Teletype, M, Unit](WriteLine(line))
+  def readLine(prompt : String) : TeletypeT[M, String] =
+	FreeT.liftF[Teletype, M, String](ReadLine(prompt))
+  def log(s : String) : TeletypeT[M, Unit] =
+	FreeT.liftT[Teletype, M, Unit](MS.modify(s :: _))
+}
+// defined class TeletypeOps
+
+object TeletypeOps {
+  implicit def teleTypeOpsInstance[M[_]](implicit MS : MonadState[M, Log]) : TeletypeOps[M] = new TeletypeOps
+}
+// defined object TeletypeOps
+// warning: previously defined class TeletypeOps is not a companion to object TeletypeOps.
+// Companions must be defined together; you may wish to use :paste mode for this.
+
+type TeletypeState[A] = State[List[String], A]
+// defined type alias TeletypeState
+
+def program(implicit TO : TeletypeOps[TeletypeState]) : TeletypeT[TeletypeState, Unit] = {
+  for {
+	userSaid <- TO.readLine("what's up?!")
+	_ <- TO.log(s"user said : $userSaid")
+	_ <- TO.writeLine("thanks, see you soon!")
+  } yield () 
+}
+// program: (implicit TO: TeletypeOps[TeletypeState])TeletypeT[TeletypeState,Unit]
+
+def interpreter = new (Teletype ~> TeletypeState) {
+  def apply[A](fa : Teletype[A]) : TeletypeState[A] = {  
+	fa match {
+	  case ReadLine(prompt) =>
+		println(prompt)
+		val userInput = "hanging in here" //scala.io.StdIn.readLine()
+		StateT.pure[Eval, List[String], A](userInput)
+	  case WriteLine(line) =>
+		StateT.pure[Eval, List[String], A](println(line))
+	}
+  }
+}
+// interpreter: cats.~>[Teletype,TeletypeState]
+
+import TeletypeOps._
+// import TeletypeOps._
+
+val state = program.foldMap(interpreter)
+// state: TeletypeState[Unit] = cats.data.StateT@53827cde
+
+val initialState = Nil
+// initialState: scala.collection.immutable.Nil.type = List()
+
+val (stored, _) = state.run(initialState).value
+// what's up?!
+// thanks, see you soon!
+// stored: List[String] = List(user said : hanging in here)
+```
 
 ## Future Work (TODO)
 

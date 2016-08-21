@@ -313,7 +313,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">A conditional lifted into the <code>F</code> context.</p><div class="fullcomment"><div class="comment cmt"><p>A conditional lifted into the <code>F</code> context.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.{Eval, Now}
-scala&gt; <span class="kw">import</span> cats.syntax.flatMap._
+scala&gt; <span class="kw">import</span> cats.implicits._
 
 scala&gt; <span class="kw">val</span> b1: Eval[<span class="std">Boolean</span>] = Now(<span class="kw">true</span>)
 scala&gt; <span class="kw">val</span> asInt1: Eval[<span class="std">Int</span>] = b1.ifM(Now(<span class="num">1</span>), Now(<span class="num">0</span>))

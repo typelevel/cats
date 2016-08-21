@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Cartesian</span><span class="result"> extends <a href="CartesianArityFunctions.html" class="extype" name="cats.CartesianArityFunctions">CartesianArityFunctions</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Cartesian</span><span class="result"> extends <a href="CartesianArityFunctions.html" class="extype" name="cats.CartesianArityFunctions">CartesianArityFunctions</a> with <span class="extype" name="cats.KernelCartesianInstances">KernelCartesianInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Cartesian.scala" target="_blank">Cartesian.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="CartesianArityFunctions.html" class="extype" name="cats.CartesianArityFunctions">CartesianArityFunctions</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.KernelCartesianInstances">KernelCartesianInstances</span>, <a href="CartesianArityFunctions.html" class="extype" name="cats.CartesianArityFunctions">CartesianArityFunctions</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.Cartesian"><span>Cartesian</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.CartesianArityFunctions"><span>CartesianArityFunctions</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.Cartesian"><span>Cartesian</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.KernelCartesianInstances"><span>KernelCartesianInstances</span></li><li class="in" name="cats.CartesianArityFunctions"><span>CartesianArityFunctions</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -238,6 +238,57 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.KernelCartesianInstances#catsCartesianEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsCartesianEq:cats.Cartesian[cats.Eq]"></a>
+      <a id="catsCartesianEq:Cartesian[Eq]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsCartesianEq</span><span class="result">: <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a>[<a href="package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Cartesian$@catsCartesianEq:cats.Cartesian[cats.Eq]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KernelCartesianInstances</dd></dl></div>
+    </li><li name="cats.KernelCartesianInstances#catsInvariantMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsInvariantMonoid:cats.Cartesian[cats.Monoid]"></a>
+      <a id="catsInvariantMonoid:Cartesian[Monoid]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsInvariantMonoid</span><span class="result">: <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a>[<a href="package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Cartesian$@catsInvariantMonoid:cats.Cartesian[cats.Monoid]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KernelCartesianInstances</dd></dl></div>
+    </li><li name="cats.KernelCartesianInstances#catsInvariantSemigroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsInvariantSemigroup:cats.Cartesian[cats.Semigroup]"></a>
+      <a id="catsInvariantSemigroup:Cartesian[Semigroup]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsInvariantSemigroup</span><span class="result">: <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a>[<a href="package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Cartesian$@catsInvariantSemigroup:cats.Cartesian[cats.Semigroup]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KernelCartesianInstances</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -1998,6 +2049,8 @@
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="cats.KernelCartesianInstances">
+              <h3>Inherited from <span class="extype" name="cats.KernelCartesianInstances">KernelCartesianInstances</span></h3>
             </div><div class="parent" name="cats.CartesianArityFunctions">
               <h3>Inherited from <a href="CartesianArityFunctions.html" class="extype" name="cats.CartesianArityFunctions">CartesianArityFunctions</a></h3>
             </div><div class="parent" name="scala.AnyRef">

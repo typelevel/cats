@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">TraverseSyntax</span><span class="result"> extends <a href="TraverseSyntax1.html" class="extype" name="cats.syntax.TraverseSyntax1">TraverseSyntax1</a></span>
+        <span class="name">TraverseSyntax</span><span class="result"> extends <a href="../Traverse$$ToTraverseOps.html" class="extype" name="cats.Traverse.ToTraverseOps">ToTraverseOps</a> with <span class="extype" name="cats.syntax.TraverseSyntax1">TraverseSyntax1</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/syntax/traverse.scala" target="_blank">traverse.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="TraverseSyntax1.html" class="extype" name="cats.syntax.TraverseSyntax1">TraverseSyntax1</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.syntax.TraverseSyntax1">TraverseSyntax1</span>, <a href="../Traverse$$ToTraverseOps.html" class="extype" name="cats.Traverse.ToTraverseOps">ToTraverseOps</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a>, <a href="package$$all$.html" class="extype" name="cats.syntax.all">all</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a>, <a href="package$$traverse$.html" class="extype" name="cats.syntax.traverse">traverse</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.TraverseSyntax"><span>TraverseSyntax</span></li><li class="in" name="cats.syntax.TraverseSyntax1"><span>TraverseSyntax1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.TraverseSyntax"><span>TraverseSyntax</span></li><li class="in" name="cats.syntax.TraverseSyntax1"><span>TraverseSyntax1</span></li><li class="in" name="cats.Traverse.ToTraverseOps"><span>ToTraverseOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -165,6 +165,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.syntax.TraverseSyntax1#catsSyntaxUTraverse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsSyntaxUTraverse[FA](fa:FA)(implicitU:cats.Unapply[cats.Traverse,FA]):cats.Traverse.Ops[U.M,U.A]"></a>
+      <a id="catsSyntaxUTraverse[FA](FA)(Unapply[Traverse,FA]):Ops[M,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSyntaxUTraverse</span><span class="tparams">[<span name="FA">FA</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.TraverseSyntax1.catsSyntaxUTraverse.FA">FA</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="../Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>, <span class="extype" name="cats.syntax.TraverseSyntax1.catsSyntaxUTraverse.FA">FA</span>]</span>)</span><span class="result">: <a href="../Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a>[<a href="../Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>, <a href="../Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.TraverseSyntax@catsSyntaxUTraverse[FA](fa:FA)(implicitU:cats.Unapply[cats.Traverse,FA]):cats.Traverse.Ops[U.M,U.A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraverseSyntax1</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -313,23 +330,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.syntax.TraverseSyntax#nestedTraverseSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="nestedTraverseSyntax[F[_],G[_],A](fga:F[G[A]])(implicitevidence$2:cats.Traverse[F]):cats.syntax.NestedTraverseOps[F,G,A]"></a>
-      <a id="nestedTraverseSyntax[F[_],G[_],A](F[G[A]])(Traverse[F]):NestedTraverseOps[F,G,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">nestedTraverseSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.syntax.TraverseSyntax.nestedTraverseSyntax.F">F</span>[<span class="extype" name="cats.syntax.TraverseSyntax.nestedTraverseSyntax.G">G</span>[<span class="extype" name="cats.syntax.TraverseSyntax.nestedTraverseSyntax.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.syntax.TraverseSyntax.nestedTraverseSyntax.F">F</span>]</span>)</span><span class="result">: <a href="NestedTraverseOps.html" class="extype" name="cats.syntax.NestedTraverseOps">NestedTraverseOps</a>[<span class="extype" name="cats.syntax.TraverseSyntax.nestedTraverseSyntax.F">F</span>, <span class="extype" name="cats.syntax.TraverseSyntax.nestedTraverseSyntax.G">G</span>, <span class="extype" name="cats.syntax.TraverseSyntax.nestedTraverseSyntax.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.TraverseSyntax@nestedTraverseSyntax[F[_],G[_],A](fga:F[G[A]])(implicitevidence$2:cats.Traverse[F]):cats.syntax.NestedTraverseOps[F,G,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
@@ -398,40 +398,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.syntax.TraverseSyntax#traverseSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="traverseSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.Traverse[F]):cats.syntax.TraverseOps[F,A]"></a>
-      <a id="traverseSyntax[F[_],A](F[A])(Traverse[F]):TraverseOps[F,A]"></a>
+    </li><li name="cats.Traverse.ToTraverseOps#toTraverseOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toTraverseOps[F[_],A](target:F[A])(implicittc:cats.Traverse[F]):cats.Traverse.Ops[F,A]"></a>
+      <a id="toTraverseOps[F[_],A](F[A])(Traverse[F]):Ops[F,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">traverseSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.TraverseSyntax.traverseSyntax.F">F</span>[<span class="extype" name="cats.syntax.TraverseSyntax.traverseSyntax.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.syntax.TraverseSyntax.traverseSyntax.F">F</span>]</span>)</span><span class="result">: <a href="TraverseOps.html" class="extype" name="cats.syntax.TraverseOps">TraverseOps</a>[<span class="extype" name="cats.syntax.TraverseSyntax.traverseSyntax.F">F</span>, <span class="extype" name="cats.syntax.TraverseSyntax.traverseSyntax.A">A</span>]</span>
+        <span class="name">toTraverseOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.F">F</span>[<span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a>[<span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.F">F</span>, <span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.TraverseSyntax@traverseSyntax[F[_],A](fa:F[A])(implicitevidence$1:cats.Traverse[F]):cats.syntax.TraverseOps[F,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.syntax.TraverseSyntax@toTraverseOps[F[_],A](target:F[A])(implicittc:cats.Traverse[F]):cats.Traverse.Ops[F,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="cats.syntax.TraverseSyntax1#traverseSyntaxU" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="traverseSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.Traverse,FA]):cats.syntax.TraverseOps[U.M,U.A]"></a>
-      <a id="traverseSyntaxU[FA](FA)(Unapply[Traverse,FA]):TraverseOps[M,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">traverseSyntaxU</span><span class="tparams">[<span name="FA">FA</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.syntax.TraverseSyntax1.traverseSyntaxU.FA">FA</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="../Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>, <span class="extype" name="cats.syntax.TraverseSyntax1.traverseSyntaxU.FA">FA</span>]</span>)</span><span class="result">: <a href="TraverseOps.html" class="extype" name="cats.syntax.TraverseOps">TraverseOps</a>[<a href="../Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>, <a href="../Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.TraverseSyntax@traverseSyntaxU[FA](fa:FA)(implicitU:cats.Unapply[cats.Traverse,FA]):cats.syntax.TraverseOps[U.M,U.A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TraverseSyntax1.html" class="extype" name="cats.syntax.TraverseSyntax1">TraverseSyntax1</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Traverse$$ToTraverseOps.html" class="extype" name="cats.Traverse.ToTraverseOps">ToTraverseOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -511,7 +494,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="cats.syntax.TraverseSyntax1">
-              <h3>Inherited from <a href="TraverseSyntax1.html" class="extype" name="cats.syntax.TraverseSyntax1">TraverseSyntax1</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.syntax.TraverseSyntax1">TraverseSyntax1</span></h3>
+            </div><div class="parent" name="cats.Traverse.ToTraverseOps">
+              <h3>Inherited from <a href="../Traverse$$ToTraverseOps.html" class="extype" name="cats.Traverse.ToTraverseOps">ToTraverseOps</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

@@ -51,12 +51,12 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents a right-biased disjunction that is either an <code>A</code>, or a <code>B</code>, or both an <code>A</code> and a <code>B</code>.</p><p>An instance of <code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is one of:</p><ul><li><code><a href="Ior$$Left.html" class="extype" name="cats.data.Ior.Left">Left</a>[A]</code></li><li><code><a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a>[B]</code></li><li><code><a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>[A, B]</code></li></ul><p><code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is similar to <code>A <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> B</code>, except that it can represent the simultaneous presence of
-an <code>A</code> and a <code>B</code>. It is right-biased like <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>, so methods such as <code>map</code> and <code>flatMap</code> operate on the
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents a right-biased disjunction that is either an <code>A</code>, or a <code>B</code>, or both an <code>A</code> and a <code>B</code>.</p><p>An instance of <code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is one of:</p><ul><li><code><a href="Ior$$Left.html" class="extype" name="cats.data.Ior.Left">Left</a>[A]</code></li><li><code><a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a>[B]</code></li><li><code><a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>[A, B]</code></li></ul><p><code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is similar to <code>Xor[A, B]</code>, except that it can represent the simultaneous presence of
+an <code>A</code> and a <code>B</code>. It is right-biased so methods such as <code>map</code> and <code>flatMap</code> operate on the
 <code>B</code> value. Some methods, like <code>flatMap</code>, handle the presence of two <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a> values using a
-<code><a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[A]</code>, while other methods, like <a href="#toXor:cats.data.Xor[A,B]" class="extmbr" name="cats.data.Ior#toXor">toXor</a>, ignore the <code>A</code> value in a <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>.</p><p><code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is isomorphic to <code>(A <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> B) <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> (A, B)</code>, but provides methods biased toward <code>B</code>
+<code><a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[A]</code>, while other methods, like <a href="#toXor:cats.data.Xor[A,B]" class="extmbr" name="cats.data.Ior#toXor">toXor</a>, ignore the <code>A</code> value in a <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>.</p><p><code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is isomorphic to <code>Xor[Xor[A, B], (A, B)]</code>, but provides methods biased toward <code>B</code>
 values, regardless of whether the <code>B</code> values appear in a <a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a> or a <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>.
-The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> form can be accessed via the <a href="#unwrap:cats.data.Xor[cats.data.Xor[A,B],(A,B)]" class="extmbr" name="cats.data.Ior#unwrap">unwrap</a> method.
+The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a> form can be accessed via the <a href="#unwrap:cats.data.Xor[cats.data.Xor[A,B],(A,B)]" class="extmbr" name="cats.data.Ior#unwrap">unwrap</a> method.
 </p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Ior.scala" target="_blank">Ior.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -903,18 +903,18 @@ The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a> fo
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.data.Ior#to" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="to[F[_],BB&gt;:B](implicitmonoidKF:cats.MonoidK[F],implicitapplicativeF:cats.Applicative[F]):F[BB]"></a>
-      <a id="to[F[_],BB&gt;:B](MonoidK[F],Applicative[F]):F[BB]"></a>
+      <a id="to[F[_],BB&gt;:B](implicitF:cats.Alternative[F]):F[BB]"></a>
+      <a id="to[F[_],BB&gt;:B](Alternative[F]):F[BB]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">to</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Ior.B">B</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="monoidKF">monoidKF: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.data.Ior.to.F">F</span>]</span>, <span name="applicativeF">applicativeF: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.Ior.to.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.Ior.to.F">F</span>[<span class="extype" name="cats.data.Ior.to.BB">BB</span>]</span>
+        <span class="name">to</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Ior.B">B</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.Ior.to.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.Ior.to.F">F</span>[<span class="extype" name="cats.data.Ior.to.BB">BB</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Ior@to[F[_],BB&gt;:B](implicitmonoidKF:cats.MonoidK[F],implicitapplicativeF:cats.Applicative[F]):F[BB]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Ior@to[F[_],BB&gt;:B](implicitF:cats.Alternative[F]):F[BB]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

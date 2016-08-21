@@ -53,7 +53,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/StateT.scala" target="_blank">StateT.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.StateTInstances">StateTInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.StateTInstances">StateTInstances</span>, <span class="extype" name="cats.data.StateTInstances1">StateTInstances1</span>, <span class="extype" name="cats.data.StateTInstances2">StateTInstances2</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.data.StateT"><span>StateT</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.StateTInstances"><span>StateTInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.data.StateT"><span>StateT</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.StateTInstances"><span>StateTInstances</span></li><li class="in" name="cats.data.StateTInstances1"><span>StateTInstances1</span></li><li class="in" name="cats.data.StateTInstances2"><span>StateTInstances2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -198,6 +198,108 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.StateTInstances#catsDataLiftForStateT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataLiftForStateT[S]:cats.TransLift.Aux[[α[_$1],γ]cats.data.StateT[α,S,γ],cats.Applicative]"></a>
+      <a id="catsDataLiftForStateT[S]:Aux[[α[_$1],γ]StateT[α,S,γ],Applicative]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataLiftForStateT</span><span class="tparams">[<span name="S">S</span>]</span><span class="result">: <a href="../TransLift$.html#Aux[MT[_[_],_],TC0[_[_]]]=cats.TransLift[MT]{typeTC[M[_]]=TC0[M]}" class="extmbr" name="cats.TransLift.Aux">Aux</a>[[α[_$1], γ]<a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateTInstances.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.data.StateTInstances.catsDataLiftForStateT.S">S</span>, <span class="extype" name="cats.data.StateTInstances.&lt;refinement&gt;.Λ$.γ">γ</span>], <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@catsDataLiftForStateT[S]:cats.TransLift.Aux[[α[_$1],γ]cats.data.StateT[α,S,γ],cats.Applicative]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateTInstances</dd></dl></div>
+    </li><li name="cats.data.StateTInstances1#catsDataMonadCombineForStateT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadCombineForStateT[F[_],S](implicitF0:cats.MonadCombine[F]):cats.MonadCombine[[γ]cats.data.StateT[F,S,γ]]"></a>
+      <a id="catsDataMonadCombineForStateT[F[_],S](MonadCombine[F]):MonadCombine[[γ]StateT[F,S,γ]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataMonadCombineForStateT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.StateTInstances1.catsDataMonadCombineForStateT.F">F</span>]</span>)</span><span class="result">: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[[γ]<a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateTInstances1.catsDataMonadCombineForStateT.F">F</span>, <span class="extype" name="cats.data.StateTInstances1.catsDataMonadCombineForStateT.S">S</span>, <span class="extype" name="cats.data.StateTInstances1.&lt;refinement&gt;.Λ$.γ">γ</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@catsDataMonadCombineForStateT[F[_],S](implicitF0:cats.MonadCombine[F]):cats.MonadCombine[[γ]cats.data.StateT[F,S,γ]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateTInstances1</dd></dl></div>
+    </li><li name="cats.data.StateTInstances2#catsDataMonadForStateT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadForStateT[F[_],S](implicitF0:cats.Monad[F]):cats.Monad[[γ]cats.data.StateT[F,S,γ]]"></a>
+      <a id="catsDataMonadForStateT[F[_],S](Monad[F]):Monad[[γ]StateT[F,S,γ]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataMonadForStateT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StateTInstances2.catsDataMonadForStateT.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[γ]<a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateTInstances2.catsDataMonadForStateT.F">F</span>, <span class="extype" name="cats.data.StateTInstances2.catsDataMonadForStateT.S">S</span>, <span class="extype" name="cats.data.StateTInstances2.&lt;refinement&gt;.Λ$.γ">γ</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@catsDataMonadForStateT[F[_],S](implicitF0:cats.Monad[F]):cats.Monad[[γ]cats.data.StateT[F,S,γ]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateTInstances2</dd></dl></div>
+    </li><li name="cats.data.StateTInstances#catsDataMonadStateForStateT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadStateForStateT[F[_],S](implicitF0:cats.Monad[F]):cats.MonadState[[γ]cats.data.StateT[F,S,γ],S]"></a>
+      <a id="catsDataMonadStateForStateT[F[_],S](Monad[F]):MonadState[[γ]StateT[F,S,γ],S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataMonadStateForStateT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StateTInstances.catsDataMonadStateForStateT.F">F</span>]</span>)</span><span class="result">: <a href="../MonadState.html" class="extype" name="cats.MonadState">MonadState</a>[[γ]<a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateTInstances.catsDataMonadStateForStateT.F">F</span>, <span class="extype" name="cats.data.StateTInstances.catsDataMonadStateForStateT.S">S</span>, <span class="extype" name="cats.data.StateTInstances.&lt;refinement&gt;.Λ$.γ">γ</span>], <span class="extype" name="cats.data.StateTInstances.catsDataMonadStateForStateT.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@catsDataMonadStateForStateT[F[_],S](implicitF0:cats.Monad[F]):cats.MonadState[[γ]cats.data.StateT[F,S,γ],S]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateTInstances</dd></dl></div>
+    </li><li name="cats.data.StateTInstances2#catsDataRecursiveTailRecMForStateT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataRecursiveTailRecMForStateT[F[_],S](implicitevidence$1:cats.RecursiveTailRecM[F]):cats.RecursiveTailRecM[[γ]cats.data.StateT[F,S,γ]]"></a>
+      <a id="catsDataRecursiveTailRecMForStateT[F[_],S](RecursiveTailRecM[F]):RecursiveTailRecM[[γ]StateT[F,S,γ]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataRecursiveTailRecMForStateT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../RecursiveTailRecM.html" class="extype" name="cats.RecursiveTailRecM">RecursiveTailRecM</a>[<span class="extype" name="cats.data.StateTInstances2.catsDataRecursiveTailRecMForStateT.F">F</span>]</span>)</span><span class="result">: <a href="../RecursiveTailRecM.html" class="extype" name="cats.RecursiveTailRecM">RecursiveTailRecM</a>[[γ]<a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateTInstances2.catsDataRecursiveTailRecMForStateT.F">F</span>, <span class="extype" name="cats.data.StateTInstances2.catsDataRecursiveTailRecMForStateT.S">S</span>, <span class="extype" name="cats.data.StateTInstances2.&lt;refinement&gt;.Λ$.γ">γ</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@catsDataRecursiveTailRecMForStateT[F[_],S](implicitevidence$1:cats.RecursiveTailRecM[F]):cats.RecursiveTailRecM[[γ]cats.data.StateT[F,S,γ]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateTInstances2</dd></dl></div>
+    </li><li name="cats.data.StateTInstances2#catsDataSemigroupKForStateT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataSemigroupKForStateT[F[_],S](implicitF0:cats.Monad[F],implicitG0:cats.SemigroupK[F]):cats.SemigroupK[[γ]cats.data.StateT[F,S,γ]]"></a>
+      <a id="catsDataSemigroupKForStateT[F[_],S](Monad[F],SemigroupK[F]):SemigroupK[[γ]StateT[F,S,γ]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataSemigroupKForStateT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StateTInstances2.catsDataSemigroupKForStateT.F">F</span>]</span>, <span name="G0">G0: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.data.StateTInstances2.catsDataSemigroupKForStateT.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[γ]<a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateTInstances2.catsDataSemigroupKForStateT.F">F</span>, <span class="extype" name="cats.data.StateTInstances2.catsDataSemigroupKForStateT.S">S</span>, <span class="extype" name="cats.data.StateTInstances2.&lt;refinement&gt;.Λ$.γ">γ</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@catsDataSemigroupKForStateT[F[_],S](implicitF0:cats.Monad[F],implicitG0:cats.SemigroupK[F]):cats.SemigroupK[[γ]cats.data.StateT[F,S,γ]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateTInstances2</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -312,6 +414,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.StateT#inspect" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="inspect[F[_],S,A](f:S=&gt;A)(implicitF:cats.Applicative[F]):cats.data.StateT[F,S,A]"></a>
+      <a id="inspect[F[_],S,A]((S)⇒A)(Applicative[F]):StateT[F,S,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inspect</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StateT.inspect.S">S</span>) ⇒ <span class="extype" name="cats.data.StateT.inspect.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.StateT.inspect.F">F</span>]</span>)</span><span class="result">: <a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateT.inspect.F">F</span>, <span class="extype" name="cats.data.StateT.inspect.S">S</span>, <span class="extype" name="cats.data.StateT.inspect.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@inspect[F[_],S,A](f:S=&gt;A)(implicitF:cats.Applicative[F]):cats.data.StateT[F,S,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.StateT#inspectF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="inspectF[F[_],S,A](f:S=&gt;F[A])(implicitF:cats.Applicative[F]):cats.data.StateT[F,S,A]"></a>
+      <a id="inspectF[F[_],S,A]((S)⇒F[A])(Applicative[F]):StateT[F,S,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inspectF</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StateT.inspectF.S">S</span>) ⇒ <span class="extype" name="cats.data.StateT.inspectF.F">F</span>[<span class="extype" name="cats.data.StateT.inspectF.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.StateT.inspectF.F">F</span>]</span>)</span><span class="result">: <a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateT.inspectF.F">F</span>, <span class="extype" name="cats.data.StateT.inspectF.S">S</span>, <span class="extype" name="cats.data.StateT.inspectF.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@inspectF[F[_],S,A](f:S=&gt;F[A])(implicitF:cats.Applicative[F]):cats.data.StateT[F,S,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -329,6 +465,57 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.StateT#lift" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lift[F[_],S,A](fa:F[A])(implicitF:cats.Applicative[F]):cats.data.StateT[F,S,A]"></a>
+      <a id="lift[F[_],S,A](F[A])(Applicative[F]):StateT[F,S,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lift</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.data.StateT.lift.F">F</span>[<span class="extype" name="cats.data.StateT.lift.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.StateT.lift.F">F</span>]</span>)</span><span class="result">: <a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateT.lift.F">F</span>, <span class="extype" name="cats.data.StateT.lift.S">S</span>, <span class="extype" name="cats.data.StateT.lift.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@lift[F[_],S,A](fa:F[A])(implicitF:cats.Applicative[F]):cats.data.StateT[F,S,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.StateT#modify" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="modify[F[_],S](f:S=&gt;S)(implicitF:cats.Applicative[F]):cats.data.StateT[F,S,Unit]"></a>
+      <a id="modify[F[_],S]((S)⇒S)(Applicative[F]):StateT[F,S,Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">modify</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StateT.modify.S">S</span>) ⇒ <span class="extype" name="cats.data.StateT.modify.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.StateT.modify.F">F</span>]</span>)</span><span class="result">: <a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateT.modify.F">F</span>, <span class="extype" name="cats.data.StateT.modify.S">S</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@modify[F[_],S](f:S=&gt;S)(implicitF:cats.Applicative[F]):cats.data.StateT[F,S,Unit]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.StateT#modifyF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="modifyF[F[_],S](f:S=&gt;F[S])(implicitF:cats.Applicative[F]):cats.data.StateT[F,S,Unit]"></a>
+      <a id="modifyF[F[_],S]((S)⇒F[S])(Applicative[F]):StateT[F,S,Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">modifyF</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StateT.modifyF.S">S</span>) ⇒ <span class="extype" name="cats.data.StateT.modifyF.F">F</span>[<span class="extype" name="cats.data.StateT.modifyF.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.StateT.modifyF.F">F</span>]</span>)</span><span class="result">: <a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateT.modifyF.F">F</span>, <span class="extype" name="cats.data.StateT.modifyF.S">S</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@modifyF[F[_],S](f:S=&gt;F[S])(implicitF:cats.Applicative[F]):cats.data.StateT[F,S,Unit]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -397,40 +584,6 @@
       </a>
     </span>
       
-    </li><li name="cats.data.StateTInstances#stateTLift" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="stateTLift[S]:cats.TransLift.Aux[[α[_$1],γ]cats.data.StateT[α,S,γ],cats.Applicative]"></a>
-      <a id="stateTLift[S]:Aux[[α[_$1],γ]StateT[α,S,γ],Applicative]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">stateTLift</span><span class="tparams">[<span name="S">S</span>]</span><span class="result">: <a href="../TransLift$.html#Aux[MT[_[_],_],TC0[_[_]]]=cats.TransLift[MT]{typeTC[M[_]]=TC0[M]}" class="extmbr" name="cats.TransLift.Aux">Aux</a>[[α[_$1], γ]<a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateTInstances.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.data.StateTInstances.stateTLift.S">S</span>, <span class="extype" name="cats.data.StateTInstances.&lt;refinement&gt;.Λ$.γ">γ</span>], <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.StateT$@stateTLift[S]:cats.TransLift.Aux[[α[_$1],γ]cats.data.StateT[α,S,γ],cats.Applicative]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateTInstances</dd></dl></div>
-    </li><li name="cats.data.StateTInstances#stateTMonadState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="stateTMonadState[F[_],S](implicitF:cats.Monad[F]):cats.MonadState[[γ]cats.data.StateT[F,S,γ],S]"></a>
-      <a id="stateTMonadState[F[_],S](Monad[F]):MonadState[[γ]StateT[F,S,γ],S]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">stateTMonadState</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StateTInstances.stateTMonadState.F">F</span>]</span>)</span><span class="result">: <a href="../MonadState.html" class="extype" name="cats.MonadState">MonadState</a>[[γ]<a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateTInstances.stateTMonadState.F">F</span>, <span class="extype" name="cats.data.StateTInstances.stateTMonadState.S">S</span>, <span class="extype" name="cats.data.StateTInstances.&lt;refinement&gt;.Λ$.γ">γ</span>], <span class="extype" name="cats.data.StateTInstances.stateTMonadState.S">S</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.StateT$@stateTMonadState[F[_],S](implicitF:cats.Monad[F]):cats.MonadState[[γ]cats.data.StateT[F,S,γ],S]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateTInstances</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -549,6 +702,10 @@
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="cats.data.StateTInstances">
               <h3>Inherited from <span class="extype" name="cats.data.StateTInstances">StateTInstances</span></h3>
+            </div><div class="parent" name="cats.data.StateTInstances1">
+              <h3>Inherited from <span class="extype" name="cats.data.StateTInstances1">StateTInstances1</span></h3>
+            </div><div class="parent" name="cats.data.StateTInstances2">
+              <h3>Inherited from <span class="extype" name="cats.data.StateTInstances2">StateTInstances2</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

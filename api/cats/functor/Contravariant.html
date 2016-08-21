@@ -57,7 +57,7 @@
           <div class="superTypes hiddenContent"><a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.functor.Contravariant.F">F</span>], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="../Functor$$ContravariantComposite.html" class="extype" name="cats.Functor.ContravariantComposite">ContravariantComposite</a>, <a href="Contravariant$$CovariantComposite.html" class="extype" name="cats.functor.Contravariant.CovariantComposite">CovariantComposite</a></div>
+            <div class="subClasses hiddenContent"><a href="../ContravariantCartesian.html" class="extype" name="cats.ContravariantCartesian">ContravariantCartesian</a>, <a href="../data/FuncContravariant.html" class="extype" name="cats.data.FuncContravariant">FuncContravariant</a>, <a href="../data/ProdContravariant.html" class="extype" name="cats.data.ProdContravariant">ProdContravariant</a></div>
           </div></div>
         
 
@@ -212,76 +212,73 @@
               
         </dd></dl></div>
     </li><li name="cats.functor.Contravariant#compose" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="compose[G[_]](implicitG:cats.functor.Contravariant[G]):cats.Functor[[X]F[G[X]]]"></a>
-      <a id="compose[G[_]](Contravariant[G]):Functor[[X]F[G[X]]]"></a>
+      <a id="compose[G[_]](implicitevidence$1:cats.functor.Contravariant[G]):cats.Functor[[α]F[G[α]]]"></a>
+      <a id="compose[G[_]](Contravariant[G]):Functor[[α]F[G[α]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.functor.Contravariant.compose.G">G</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[X]<span class="extype" name="cats.functor.Contravariant.F">F</span>[<span class="extype" name="cats.functor.Contravariant.compose.G">G</span>[<span class="extype" name="cats.functor.Contravariant.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.functor.Contravariant.compose.G">G</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[α]<span class="extype" name="cats.functor.Contravariant.F">F</span>[<span class="extype" name="cats.functor.Contravariant.compose.G">G</span>[<span class="extype" name="cats.functor.Contravariant.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Contravariant@compose[G[_]](implicitG:cats.functor.Contravariant[G]):cats.Functor[[X]F[G[X]]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.Contravariant@compose[G[_]](implicitevidence$1:cats.functor.Contravariant[G]):cats.Functor[[α]F[G[α]]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="cats.functor.Invariant#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compose[G[_]](implicitevidence$1:cats.functor.Invariant[G],implicitGG:cats.functor.Invariant[G]):cats.functor.Invariant[[X]F[G[X]]]"></a>
-      <a id="compose[G[_]](Invariant[G],Invariant[G]):Invariant[[X]F[G[X]]]"></a>
+      <a id="compose[G[_]](implicitevidence$1:cats.functor.Invariant[G]):cats.functor.Invariant[[α]F[G[α]]]"></a>
+      <a id="compose[G[_]](Invariant[G]):Invariant[[α]F[G[α]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.functor.Invariant.compose.G">G</span>]</span>, <span name="GG">GG: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.functor.Invariant.compose.G">G</span>]</span>)</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[[X]<span class="extype" name="cats.functor.Contravariant.F">F</span>[<span class="extype" name="cats.functor.Invariant.compose.G">G</span>[<span class="extype" name="cats.functor.Invariant.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.functor.Invariant.compose.G">G</span>]</span>)</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[[α]<span class="extype" name="cats.functor.Contravariant.F">F</span>[<span class="extype" name="cats.functor.Invariant.compose.G">G</span>[<span class="extype" name="cats.functor.Invariant.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Contravariant@compose[G[_]](implicitevidence$1:cats.functor.Invariant[G],implicitGG:cats.functor.Invariant[G]):cats.functor.Invariant[[X]F[G[X]]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.Contravariant@compose[G[_]](implicitevidence$1:cats.functor.Invariant[G]):cats.functor.Invariant[[α]F[G[α]]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Compose 2 invariant Functors F and G to get a new Invariant Functor for F[G[_]].</p><div class="fullcomment"><div class="comment cmt"><p>Compose 2 invariant Functors F and G to get a new Invariant Functor for F[G[_]].
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a></dd></dl></div>
-    </li><li name="cats.functor.Invariant#composeWithContravariant" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="composeWithContravariant[G[_]](implicitGG:cats.functor.Contravariant[G]):cats.functor.Invariant[[X]F[G[X]]]"></a>
-      <a id="composeWithContravariant[G[_]](Contravariant[G]):Invariant[[X]F[G[X]]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a></dd></dl></div>
+    </li><li name="cats.functor.Invariant#composeContravariant" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="composeContravariant[G[_]](implicitevidence$3:cats.functor.Contravariant[G]):cats.functor.Invariant[[α]F[G[α]]]"></a>
+      <a id="composeContravariant[G[_]](Contravariant[G]):Invariant[[α]F[G[α]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">composeWithContravariant</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="GG">GG: <a href="" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.functor.Invariant.composeWithContravariant.G">G</span>]</span>)</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[[X]<span class="extype" name="cats.functor.Contravariant.F">F</span>[<span class="extype" name="cats.functor.Invariant.composeWithContravariant.G">G</span>[<span class="extype" name="cats.functor.Invariant.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
+        <span class="name">composeContravariant</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.functor.Invariant.composeContravariant.G">G</span>]</span>)</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[[α]<span class="extype" name="cats.functor.Contravariant.F">F</span>[<span class="extype" name="cats.functor.Invariant.composeContravariant.G">G</span>[<span class="extype" name="cats.functor.Invariant.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Contravariant@composeWithContravariant[G[_]](implicitGG:cats.functor.Contravariant[G]):cats.functor.Invariant[[X]F[G[X]]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.Contravariant@composeContravariant[G[_]](implicitevidence$3:cats.functor.Contravariant[G]):cats.functor.Invariant[[α]F[G[α]]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Compose the Invariant Functor F with a Contravariant Functor to get a new Invariant Functor for [F[G[_]]].</p><div class="fullcomment"><div class="comment cmt"><p>Compose the Invariant Functor F with a Contravariant Functor to get a new Invariant Functor for [F[G[_]]].
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a></dd></dl></div>
-    </li><li name="cats.functor.Contravariant#composeWithFunctor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="composeWithFunctor[G[_]](implicitG:cats.Functor[G]):cats.functor.Contravariant[[X]F[G[X]]]"></a>
-      <a id="composeWithFunctor[G[_]](Functor[G]):Contravariant[[X]F[G[X]]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a></dd></dl></div>
+    </li><li name="cats.functor.Contravariant#composeFunctor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="composeFunctor[G[_]](implicitevidence$2:cats.Functor[G]):cats.functor.Contravariant[[α]F[G[α]]]"></a>
+      <a id="composeFunctor[G[_]](Functor[G]):Contravariant[[α]F[G[α]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">composeWithFunctor</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.functor.Contravariant.composeWithFunctor.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[X]<span class="extype" name="cats.functor.Contravariant.F">F</span>[<span class="extype" name="cats.functor.Contravariant.composeWithFunctor.G">G</span>[<span class="extype" name="cats.functor.Contravariant.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
+        <span class="name">composeFunctor</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.functor.Contravariant.composeFunctor.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[α]<span class="extype" name="cats.functor.Contravariant.F">F</span>[<span class="extype" name="cats.functor.Contravariant.composeFunctor.G">G</span>[<span class="extype" name="cats.functor.Contravariant.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Contravariant@composeWithFunctor[G[_]](implicitG:cats.Functor[G]):cats.functor.Contravariant[[X]F[G[X]]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.Contravariant@composeFunctor[G[_]](implicitevidence$2:cats.Functor[G]):cats.functor.Contravariant[[α]F[G[α]]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Compose the Invariant Functor F with a normal (Covariant) Functor to get a new Invariant Functor for [F[G[_]].</p><div class="fullcomment"><div class="comment cmt"><p>Compose the Invariant Functor F with a normal (Covariant) Functor to get a new Invariant Functor for [F[G[_]].
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.functor.Contravariant">Contravariant</a> → <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.functor.Contravariant">Contravariant</a> → <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -407,6 +404,25 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.functor.Contravariant#narrow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="narrow[A,B&lt;:A](fa:F[A]):F[B]"></a>
+      <a id="narrow[A,B&lt;:A](F[A]):F[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">narrow</span><span class="tparams">[<span name="A">A</span>, <span name="B">B &lt;: <span class="extype" name="cats.functor.Contravariant.narrow.A">A</span></span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.functor.Contravariant.F">F</span>[<span class="extype" name="cats.functor.Contravariant.narrow.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.functor.Contravariant.F">F</span>[<span class="extype" name="cats.functor.Contravariant.narrow.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.Contravariant@narrow[A,B&lt;:A](fa:F[A]):F[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lifts natural subtyping contravariance of contravariant Functors.</p><div class="fullcomment"><div class="comment cmt"><p>Lifts natural subtyping contravariance of contravariant Functors.
+could be implemented as contramap(identity), but the Functor laws say this is equivalent
+</p></div></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

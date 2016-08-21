@@ -180,6 +180,45 @@ elimination.
       </a>
     </span>
       <p class="shortcomment cmt">Applicative Functor for Free</p>
+    </li><li name="cats.free.FreeInvariantMonoidal" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FreeInvariantMonoidal[F[_],A]extendsProductwithSerializable"></a>
+      <a id="FreeInvariantMonoidal[F[_],A]:FreeInvariantMonoidal[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FreeInvariantMonoidal.html"><span class="name">FreeInvariantMonoidal</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.package@FreeInvariantMonoidal[F[_],A]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Invariant Monoidal for Free
+</p>
+    </li><li name="cats.free.FreeT" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="FreeT[S[_],M[_],A]extendsProductwithSerializable"></a>
+      <a id="FreeT[S[_],M[_],A]:FreeT[S,M,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FreeT.html"><span class="name">FreeT</span></a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.package@FreeT[S[_],M[_],A]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">FreeT is a monad transformer for Free monads over a Functor S</p><div class="fullcomment"><div class="comment cmt"><p>FreeT is a monad transformer for Free monads over a Functor S</p><p>Stack safety for <code>Free</code> and <code>FreeT</code> is based on the paper
+<a href="http://functorial.com/stack-safety-for-free/index.pdf" target="_blank">Stack Safety for Free</a> by Phil Freeman</p><p>This Scala implementation of <code>FreeT</code> and its usages are derived from
+<a href="https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/FreeT.scala" target="_blank">Scalaz's FreeT</a>,
+originally written by Brian McKenna.
+</p></div></div>
     </li><li name="cats.free.Inject" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Inject[F[_],G[_]]extendsAnyRef"></a>
       <a id="Inject[F[_],G[_]]:Inject[F,G]"></a>
@@ -291,6 +330,40 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.free.package@FreeApplicative" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.free.FreeInvariantMonoidal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FreeInvariantMonoidal"></a>
+      <a id="FreeInvariantMonoidal:FreeInvariantMonoidal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FreeInvariantMonoidal$.html"><span class="name">FreeInvariantMonoidal</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.package@FreeInvariantMonoidal" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.free.FreeT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FreeT"></a>
+      <a id="FreeT:FreeT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FreeT$.html"><span class="name">FreeT</span></a><span class="result"> extends <span class="extype" name="cats.free.FreeTInstances">FreeTInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.package@FreeT" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

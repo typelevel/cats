@@ -381,10 +381,8 @@
       </a>
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../MonadCombine.html#separate[G[_,_],A,B](fgab:F[G[A,B]])(implicitG:cats.Bifoldable[G]):(F[A],F[B])" class="extmbr" name="cats.MonadCombine#separate">MonadCombine.separate</a>
-Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.std.list._
-scala&gt; <span class="kw">import</span> cats.syntax.monadCombine._
-scala&gt; <span class="kw">val</span> l: <span class="std">List</span>[Xor[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">List</span>(Xor.right(<span class="num">1</span>), Xor.left(<span class="lit">"error"</span>))
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> l: <span class="std">List</span>[Either[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">List</span>(Right(<span class="num">1</span>), Left(<span class="lit">"error"</span>))
 scala&gt; l.separate
 res0: (<span class="std">List</span>[<span class="std">String</span>], <span class="std">List</span>[<span class="std">Int</span>]) = (<span class="std">List</span>(error),<span class="std">List</span>(<span class="num">1</span>))</pre></span></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

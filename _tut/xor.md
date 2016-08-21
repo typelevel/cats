@@ -65,17 +65,17 @@ instance. `RightProjection` does have `flatMap` and `map` on it, which acts on t
 and ignores the left - this property is referred to as "right-bias."
 
 ```scala
-scala> val e1: Either[String, Int] = Right(5)
-e1: Either[String,Int] = Right(5)
+val e1: Either[String, Int] = Right(5)
+// e1: Either[String,Int] = Right(5)
 
-scala> e1.right.map(_ + 1)
-res0: Product with Serializable with scala.util.Either[String,Int] = Right(6)
+e1.right.map(_ + 1)
+// res0: Product with Serializable with scala.util.Either[String,Int] = Right(6)
 
-scala> val e2: Either[String, Int] = Left("hello")
-e2: Either[String,Int] = Left(hello)
+val e2: Either[String, Int] = Left("hello")
+// e2: Either[String,Int] = Left(hello)
 
-scala> e2.right.map(_ + 1)
-res1: Product with Serializable with scala.util.Either[String,Int] = Left(hello)
+e2.right.map(_ + 1)
+// res1: Product with Serializable with scala.util.Either[String,Int] = Left(hello)
 ```
 
 Note the return types are themselves back to `Either`, so if we want to make more calls to
@@ -87,20 +87,20 @@ the right side is most often chosen. This is the primary difference between `Xor
 crucial one is the right-biased being built-in.
 
 ```scala
-scala> import cats.data.Xor
 import cats.data.Xor
+// import cats.data.Xor
 
-scala> val xor1: Xor[String, Int] = Xor.right(5)
-xor1: cats.data.Xor[String,Int] = Right(5)
+val xor1: Xor[String, Int] = Xor.right(5)
+// xor1: cats.data.Xor[String,Int] = Right(5)
 
-scala> xor1.map(_ + 1)
-res2: cats.data.Xor[String,Int] = Right(6)
+xor1.map(_ + 1)
+// res2: cats.data.Xor[String,Int] = Right(6)
 
-scala> val xor2: Xor[String, Int] = Xor.left("hello")
-xor2: cats.data.Xor[String,Int] = Left(hello)
+val xor2: Xor[String, Int] = Xor.left("hello")
+// xor2: cats.data.Xor[String,Int] = Left(hello)
 
-scala> xor2.map(_ + 1)
-res3: cats.data.Xor[String,Int] = Left(hello)
+xor2.map(_ + 1)
+// res3: cats.data.Xor[String,Int] = Left(hello)
 ```
 
 Because `Xor` is right-biased, it is possible to define a `Monad` instance for it. You
@@ -124,6 +124,14 @@ implicit def xorMonad[Err]: Monad[Xor[Err, ?]] =
       fa.flatMap(f)
 
     def pure[A](x: A): Xor[Err, A] = Xor.right(x)
+
+    @annotation.tailrec
+    def tailRecM[A, B](a: A)(f: A => Xor[Err, Either[A, B]]): Xor[Err, B] =
+      f(a) match {
+        case Xor.Right(Right(b)) => Xor.right(b)
+        case Xor.Right(Left(a)) => tailRecM(a)(f)
+        case l@Xor.Left(_) => l
+      }
   }
 ```
 
@@ -177,13 +185,13 @@ match on the exception. Because `Xor` is a sealed type (often referred to as an 
 or ADT), the compiler will complain if we do not check both the `Left` and `Right` case.
 
 ```scala
-scala> magic("123") match {
-     |   case Xor.Left(_: NumberFormatException) => println("not a number!")
-     |   case Xor.Left(_: IllegalArgumentException) => println("can't take reciprocal of 0!")
-     |   case Xor.Left(_) => println("got unknown exception")
-     |   case Xor.Right(s) => println(s"Got reciprocal: ${s}")
-     | }
-Got reciprocal: 0.008130081300813009
+magic("123") match {
+  case Xor.Left(_: NumberFormatException) => println("not a number!")
+  case Xor.Left(_: IllegalArgumentException) => println("can't take reciprocal of 0!")
+  case Xor.Left(_) => println("got unknown exception")
+  case Xor.Right(s) => println(s"Got reciprocal: ${s}")
+}
+// Got reciprocal: 0.008130081300813009
 ```
 
 Not bad - if we leave out any of those clauses the compiler will yell at us, as it should. However,
@@ -224,15 +232,15 @@ match, we get much nicer matching. Moreover, since `Error` is `sealed`, no outsi
 add additional subtypes which we might fail to handle.
 
 ```scala
-scala> import XorStyle._
 import XorStyle._
+// import XorStyle._
 
-scala> magic("123") match {
-     |   case Xor.Left(NotANumber(_)) => println("not a number!")
-     |   case Xor.Left(NoZeroReciprocal) => println("can't take reciprocal of 0!")
-     |   case Xor.Right(s) => println(s"Got reciprocal: ${s}")
-     | }
-Got reciprocal: 0.008130081300813009
+magic("123") match {
+  case Xor.Left(NotANumber(_)) => println("not a number!")
+  case Xor.Left(NoZeroReciprocal) => println("can't take reciprocal of 0!")
+  case Xor.Right(s) => println(s"Got reciprocal: ${s}")
+}
+// Got reciprocal: 0.008130081300813009
 ```
 
 ## Xor in the small, Xor in the large
@@ -354,13 +362,13 @@ There will inevitably come a time when your nice `Xor` code will have to interac
 code. Handling such situations is easy enough.
 
 ```scala
-scala> val xor: Xor[NumberFormatException, Int] =
-     |   try {
-     |     Xor.right("abc".toInt)
-     |   } catch {
-     |     case nfe: NumberFormatException => Xor.left(nfe)
-     |   }
-xor: cats.data.Xor[NumberFormatException,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
+val xor: Xor[NumberFormatException, Int] =
+  try {
+    Xor.right("abc".toInt)
+  } catch {
+    case nfe: NumberFormatException => Xor.left(nfe)
+  }
+// xor: cats.data.Xor[NumberFormatException,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
 ```
 
 However, this can get tedious quickly. `Xor` provides a `catchOnly` method on its companion object
@@ -368,28 +376,28 @@ that allows you to pass it a function, along with the type of exception you want
 above for you.
 
 ```scala
-scala> val xor: Xor[NumberFormatException, Int] =
-     |   Xor.catchOnly[NumberFormatException]("abc".toInt)
-xor: cats.data.Xor[NumberFormatException,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
+val xor: Xor[NumberFormatException, Int] =
+  Xor.catchOnly[NumberFormatException]("abc".toInt)
+// xor: cats.data.Xor[NumberFormatException,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
 ```
 
 If you want to catch all (non-fatal) throwables, you can use `catchNonFatal`.
 
 ```scala
-scala> val xor: Xor[Throwable, Int] =
-     |   Xor.catchNonFatal("abc".toInt)
-xor: cats.data.Xor[Throwable,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
+val xor: Xor[Throwable, Int] =
+  Xor.catchNonFatal("abc".toInt)
+// xor: cats.data.Xor[Throwable,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
 ```
 
 ## Additional syntax
 
 ```scala
-scala> import cats.syntax.xor._
-import cats.syntax.xor._
+import cats.implicits._
+// import cats.implicits._
 
-scala> val xor3: Xor[String, Int] = 7.right[String]
-xor3: cats.data.Xor[String,Int] = Right(7)
+val xor3: Xor[String, Int] = 7.right[String]
+// xor3: cats.data.Xor[String,Int] = Right(7)
 
-scala> val xor4: Xor[String, Int] = "hello 🐈s".left[Int]
-xor4: cats.data.Xor[String,Int] = Left(hello 🐈s)
+val xor4: Xor[String, Int] = "hello 🐈s".left[Int]
+// xor4: cats.data.Xor[String,Int] = Left(hello 🐈s)
 ```

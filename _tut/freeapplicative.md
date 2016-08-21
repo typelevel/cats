@@ -44,7 +44,7 @@ Because a `FreeApplicative` only supports the operations of `Applicative`, we do
 of a for-comprehension. We can however still use `Applicative` syntax provided by Cats.
 
 ```scala
-import cats.syntax.cartesian._
+import cats.implicits._
 
 val prog: Validation[Boolean] = (size(5) |@| hasNumber).map { case (l, r) => l && r}
 ```
@@ -54,14 +54,14 @@ at this point. To make our program useful we need to interpret it.
 
 ```scala
 import cats.Id
-import cats.arrow.NaturalTransformation
-import cats.std.function._
+import cats.arrow.FunctionK
+import cats.implicits._
 
 // a function that takes a string as input
 type FromString[A] = String => A
 
 val compiler =
-  new NaturalTransformation[ValidationOp, FromString] {
+  new FunctionK[ValidationOp, FromString] {
     def apply[A](fa: ValidationOp[A]): String => A =
       str =>
         fa match {
@@ -72,14 +72,14 @@ val compiler =
 ```
 
 ```scala
-scala> val validator = prog.foldMap[FromString](compiler)
-validator: FromString[Boolean] = <function1>
+val validator = prog.foldMap[FromString](compiler)
+// validator: FromString[Boolean] = <function1>
 
-scala> validator("1234")
-res7: Boolean = false
+validator("1234")
+// res7: Boolean = false
 
-scala> validator("12345")
-res8: Boolean = true
+validator("12345")
+// res8: Boolean = true
 ```
 
 ## Differences from `Free`
@@ -100,7 +100,7 @@ write a validator that validates in parallel.
 
 ```scala
 import cats.data.Kleisli
-import cats.std.future._
+import cats.implicits._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -108,7 +108,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 type ParValidator[A] = Kleisli[Future, String, A]
 
 val parCompiler =
-  new NaturalTransformation[ValidationOp, ParValidator] {
+  new FunctionK[ValidationOp, ParValidator] {
     def apply[A](fa: ValidationOp[A]): ParValidator[A] =
       Kleisli { str =>
         fa match {
@@ -130,12 +130,12 @@ we can completely ignore the return type of the operation and return just a `Lis
 
 ```scala
 import cats.data.Const
-import cats.std.list._
+import cats.implicits._
 
 type Log[A] = Const[List[String], A]
 
 val logCompiler =
-  new NaturalTransformation[ValidationOp, Log] {
+  new FunctionK[ValidationOp, Log] {
     def apply[A](fa: ValidationOp[A]): Log[A] =
       fa match {
         case Size(size) => Const(List(s"size >= $size"))
@@ -148,14 +148,14 @@ def logValidation[A](validation: Validation[A]): List[String] =
 ```
 
 ```scala
-scala> logValidation(prog)
-res16: List[String] = List(size >= 5, has number)
+logValidation(prog)
+// res16: List[String] = List(size >= 5, has number)
 
-scala> logValidation(size(5) *> hasNumber *> size(10))
-res17: List[String] = List(size >= 5, has number, size >= 10)
+logValidation(size(5) *> hasNumber *> size(10))
+// res17: List[String] = List(size >= 5, has number, size >= 10)
 
-scala> logValidation((hasNumber |@| size(3)).map(_ || _))
-res18: List[String] = List(has number, size >= 3)
+logValidation((hasNumber |@| size(3)).map(_ || _))
+// res18: List[String] = List(has number, size >= 3)
 ```
 
 ### Why not both?
@@ -176,7 +176,7 @@ import cats.data.Prod
 type ValidateAndLog[A] = Prod[ParValidator, Log, A]
 
 val prodCompiler =
-  new NaturalTransformation[ValidationOp, ValidateAndLog] {
+  new FunctionK[ValidationOp, ValidateAndLog] {
     def apply[A](fa: ValidationOp[A]): ValidateAndLog[A] = {
       fa match {
         case Size(size) =>

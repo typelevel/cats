@@ -53,7 +53,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/OneAnd.scala" target="_blank">OneAnd.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.OneAndInstances">OneAndInstances</span>, <a href="OneAndLowPriority2.html" class="extype" name="cats.data.OneAndLowPriority2">OneAndLowPriority2</a>, <a href="OneAndLowPriority1.html" class="extype" name="cats.data.OneAndLowPriority1">OneAndLowPriority1</a>, <a href="OneAndLowPriority0.html" class="extype" name="cats.data.OneAndLowPriority0">OneAndLowPriority0</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.OneAndInstances">OneAndInstances</span>, <span class="extype" name="cats.data.OneAndLowPriority2">OneAndLowPriority2</span>, <span class="extype" name="cats.data.OneAndLowPriority1">OneAndLowPriority1</span>, <span class="extype" name="cats.data.OneAndLowPriority0">OneAndLowPriority0</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -164,6 +164,176 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.OneAndLowPriority0#catsDataComonadForNonEmptyStream" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataComonadForNonEmptyStream:cats.Comonad[[β]cats.data.OneAnd[[+A]scala.collection.immutable.Stream[A],β]]"></a>
+      <a id="catsDataComonadForNonEmptyStream:Comonad[[β]OneAnd[[+A]Stream[A],β]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataComonadForNonEmptyStream</span><span class="result">: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[[+A]<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.collection.immutable.Stream" class="extype" target="_top">Stream</a>[<span class="extype" name="scala.Stream.A">A</span>], <span class="extype" name="cats.data.OneAndLowPriority0.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd$@catsDataComonadForNonEmptyStream:cats.Comonad[[β]cats.data.OneAnd[[+A]scala.collection.immutable.Stream[A],β]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndLowPriority0</dd></dl></div>
+    </li><li name="cats.data.OneAndInstances#catsDataEqForOneAnd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataEqForOneAnd[A,F[_]](implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):cats.Eq[cats.data.OneAnd[F,A]]"></a>
+      <a id="catsDataEqForOneAnd[A,F[_]](Eq[A],Eq[F[A]]):Eq[OneAnd[F,A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataEqForOneAnd</span><span class="tparams">[<span name="A">A</span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataEqForOneAnd.A">A</span>]</span>, <span name="FA">FA: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataEqForOneAnd.F">F</span>[<span class="extype" name="cats.data.OneAndInstances.catsDataEqForOneAnd.A">A</span>]]</span>)</span><span class="result">: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataEqForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.catsDataEqForOneAnd.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd$@catsDataEqForOneAnd[A,F[_]](implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):cats.Eq[cats.data.OneAnd[F,A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
+    </li><li name="cats.data.OneAndLowPriority1#catsDataFunctorForOneAnd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataFunctorForOneAnd[F[_]](implicitF:cats.Functor[F]):cats.Functor[[β]cats.data.OneAnd[F,β]]"></a>
+      <a id="catsDataFunctorForOneAnd[F[_]](Functor[F]):Functor[[β]OneAnd[F,β]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataFunctorForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OneAndLowPriority1.catsDataFunctorForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority1.catsDataFunctorForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority1.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd$@catsDataFunctorForOneAnd[F[_]](implicitF:cats.Functor[F]):cats.Functor[[β]cats.data.OneAnd[F,β]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndLowPriority1</dd></dl></div>
+    </li><li name="cats.data.OneAndInstances#catsDataMonadForOneAnd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadForOneAnd[F[_]](implicitmonad:cats.MonadCombine[F]):cats.Monad[[β]cats.data.OneAnd[F,β]]"></a>
+      <a id="catsDataMonadForOneAnd[F[_]](MonadCombine[F]):Monad[[β]OneAnd[F,β]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataMonadForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="monad">monad: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataMonadForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataMonadForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd$@catsDataMonadForOneAnd[F[_]](implicitmonad:cats.MonadCombine[F]):cats.Monad[[β]cats.data.OneAnd[F,β]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
+    </li><li name="cats.data.OneAndInstances#catsDataOneAnd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataOneAnd[F[_]](implicitevidence$3:cats.RecursiveTailRecM[F]):cats.RecursiveTailRecM[[β]cats.data.OneAnd[F,β]]"></a>
+      <a id="catsDataOneAnd[F[_]](RecursiveTailRecM[F]):RecursiveTailRecM[[β]OneAnd[F,β]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../RecursiveTailRecM.html" class="extype" name="cats.RecursiveTailRecM">RecursiveTailRecM</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../RecursiveTailRecM.html" class="extype" name="cats.RecursiveTailRecM">RecursiveTailRecM</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd$@catsDataOneAnd[F[_]](implicitevidence$3:cats.RecursiveTailRecM[F]):cats.RecursiveTailRecM[[β]cats.data.OneAnd[F,β]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
+    </li><li name="cats.data.OneAndInstances#catsDataReducibleForOneAnd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataReducibleForOneAnd[F[_]](implicitF:cats.Foldable[F]):cats.Reducible[[β]cats.data.OneAnd[F,β]]"></a>
+      <a id="catsDataReducibleForOneAnd[F[_]](Foldable[F]):Reducible[[β]OneAnd[F,β]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataReducibleForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataReducibleForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataReducibleForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd$@catsDataReducibleForOneAnd[F[_]](implicitF:cats.Foldable[F]):cats.Reducible[[β]cats.data.OneAnd[F,β]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
+    </li><li name="cats.data.OneAndInstances#catsDataSemigroupForOneAnd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataSemigroupForOneAnd[F[_],A](implicitevidence$2:cats.MonadCombine[F]):cats.Semigroup[cats.data.OneAnd[F,A]]"></a>
+      <a id="catsDataSemigroupForOneAnd[F[_],A](MonadCombine[F]):Semigroup[OneAnd[F,A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataSemigroupForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupForOneAnd.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd$@catsDataSemigroupForOneAnd[F[_],A](implicitevidence$2:cats.MonadCombine[F]):cats.Semigroup[cats.data.OneAnd[F,A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
+    </li><li name="cats.data.OneAndInstances#catsDataSemigroupKForOneAnd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataSemigroupKForOneAnd[F[_]](implicitevidence$1:cats.MonadCombine[F]):cats.SemigroupK[[β]cats.data.OneAnd[F,β]]"></a>
+      <a id="catsDataSemigroupKForOneAnd[F[_]](MonadCombine[F]):SemigroupK[[β]OneAnd[F,β]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataSemigroupKForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupKForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupKForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd$@catsDataSemigroupKForOneAnd[F[_]](implicitevidence$1:cats.MonadCombine[F]):cats.SemigroupK[[β]cats.data.OneAnd[F,β]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
+    </li><li name="cats.data.OneAndInstances#catsDataShowForOneAnd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataShowForOneAnd[A,F[_]](implicitA:cats.Show[A],implicitFA:cats.Show[F[A]]):cats.Show[cats.data.OneAnd[F,A]]"></a>
+      <a id="catsDataShowForOneAnd[A,F[_]](Show[A],Show[F[A]]):Show[OneAnd[F,A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataShowForOneAnd</span><span class="tparams">[<span name="A">A</span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataShowForOneAnd.A">A</span>]</span>, <span name="FA">FA: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataShowForOneAnd.F">F</span>[<span class="extype" name="cats.data.OneAndInstances.catsDataShowForOneAnd.A">A</span>]]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataShowForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.catsDataShowForOneAnd.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd$@catsDataShowForOneAnd[A,F[_]](implicitA:cats.Show[A],implicitFA:cats.Show[F[A]]):cats.Show[cats.data.OneAnd[F,A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
+    </li><li name="cats.data.OneAndLowPriority2#catsDataTraverseForOneAnd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataTraverseForOneAnd[F[_]](implicitF:cats.Traverse[F]):cats.Traverse[[β]cats.data.OneAnd[F,β]]"></a>
+      <a id="catsDataTraverseForOneAnd[F[_]](Traverse[F]):Traverse[[β]OneAnd[F,β]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataTraverseForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.OneAndLowPriority2.catsDataTraverseForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority2.catsDataTraverseForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority2.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OneAnd$@catsDataTraverseForOneAnd[F[_]](implicitF:cats.Traverse[F]):cats.Traverse[[β]cats.data.OneAnd[F,β]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndLowPriority2</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -312,23 +482,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.data.OneAndLowPriority0#nelComonad" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="nelComonad:cats.Comonad[[β]cats.data.OneAnd[[+A]List[A],β]]"></a>
-      <a id="nelComonad:Comonad[[β]OneAnd[[+A]List[A],β]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">nelComonad</span><span class="result">: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[[+A]<span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.List.A">A</span>], <span class="extype" name="cats.data.OneAndLowPriority0.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd$@nelComonad:cats.Comonad[[β]cats.data.OneAnd[[+A]List[A],β]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OneAndLowPriority0.html" class="extype" name="cats.data.OneAndLowPriority0">OneAndLowPriority0</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
@@ -363,142 +516,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.data.OneAndInstances#oneAndEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="oneAndEq[A,F[_]](implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):cats.Eq[cats.data.OneAnd[F,A]]"></a>
-      <a id="oneAndEq[A,F[_]](Eq[A],Eq[F[A]]):Eq[OneAnd[F,A]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">oneAndEq</span><span class="tparams">[<span name="A">A</span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndEq.A">A</span>]</span>, <span name="FA">FA: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndEq.F">F</span>[<span class="extype" name="cats.data.OneAndInstances.oneAndEq.A">A</span>]]</span>)</span><span class="result">: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndEq.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.oneAndEq.A">A</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd$@oneAndEq[A,F[_]](implicitA:cats.Eq[A],implicitFA:cats.Eq[F[A]]):cats.Eq[cats.data.OneAnd[F,A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
-    </li><li name="cats.data.OneAndLowPriority1#oneAndFunctor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="oneAndFunctor[F[_]](implicitF:cats.Functor[F]):cats.Functor[[β]cats.data.OneAnd[F,β]]"></a>
-      <a id="oneAndFunctor[F[_]](Functor[F]):Functor[[β]OneAnd[F,β]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">oneAndFunctor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OneAndLowPriority1.oneAndFunctor.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority1.oneAndFunctor.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority1.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd$@oneAndFunctor[F[_]](implicitF:cats.Functor[F]):cats.Functor[[β]cats.data.OneAnd[F,β]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OneAndLowPriority1.html" class="extype" name="cats.data.OneAndLowPriority1">OneAndLowPriority1</a></dd></dl></div>
-    </li><li name="cats.data.OneAndInstances#oneAndMonad" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="oneAndMonad[F[_]](implicitmonad:cats.MonadCombine[F]):cats.Monad[[β]cats.data.OneAnd[F,β]]"></a>
-      <a id="oneAndMonad[F[_]](MonadCombine[F]):Monad[[β]OneAnd[F,β]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">oneAndMonad</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="monad">monad: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndMonad.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndMonad.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd$@oneAndMonad[F[_]](implicitmonad:cats.MonadCombine[F]):cats.Monad[[β]cats.data.OneAnd[F,β]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
-    </li><li name="cats.data.OneAndInstances#oneAndReducible" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="oneAndReducible[F[_]](implicitF:cats.Foldable[F]):cats.Reducible[[β]cats.data.OneAnd[F,β]]"></a>
-      <a id="oneAndReducible[F[_]](Foldable[F]):Reducible[[β]OneAnd[F,β]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">oneAndReducible</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndReducible.F">F</span>]</span>)</span><span class="result">: <a href="../Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndReducible.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd$@oneAndReducible[F[_]](implicitF:cats.Foldable[F]):cats.Reducible[[β]cats.data.OneAnd[F,β]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
-    </li><li name="cats.data.OneAndInstances#oneAndSemigroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="oneAndSemigroup[F[_],A](implicitevidence$2:cats.MonadCombine[F]):cats.Semigroup[cats.data.OneAnd[F,A]]"></a>
-      <a id="oneAndSemigroup[F[_],A](MonadCombine[F]):Semigroup[OneAnd[F,A]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">oneAndSemigroup</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndSemigroup.F">F</span>]</span>)</span><span class="result">: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndSemigroup.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.oneAndSemigroup.A">A</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd$@oneAndSemigroup[F[_],A](implicitevidence$2:cats.MonadCombine[F]):cats.Semigroup[cats.data.OneAnd[F,A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
-    </li><li name="cats.data.OneAndInstances#oneAndSemigroupK" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="oneAndSemigroupK[F[_]](implicitevidence$1:cats.MonadCombine[F]):cats.SemigroupK[[β]cats.data.OneAnd[F,β]]"></a>
-      <a id="oneAndSemigroupK[F[_]](MonadCombine[F]):SemigroupK[[β]OneAnd[F,β]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">oneAndSemigroupK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndSemigroupK.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndSemigroupK.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd$@oneAndSemigroupK[F[_]](implicitevidence$1:cats.MonadCombine[F]):cats.SemigroupK[[β]cats.data.OneAnd[F,β]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
-    </li><li name="cats.data.OneAndInstances#oneAndShow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="oneAndShow[A,F[_]](implicitA:cats.Show[A],implicitFA:cats.Show[F[A]]):cats.Show[cats.data.OneAnd[F,A]]"></a>
-      <a id="oneAndShow[A,F[_]](Show[A],Show[F[A]]):Show[OneAnd[F,A]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">oneAndShow</span><span class="tparams">[<span name="A">A</span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.A">A</span>]</span>, <span name="FA">FA: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.F">F</span>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.A">A</span>]]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.oneAndShow.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.oneAndShow.A">A</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd$@oneAndShow[A,F[_]](implicitA:cats.Show[A],implicitFA:cats.Show[F[A]]):cats.Show[cats.data.OneAnd[F,A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
-    </li><li name="cats.data.OneAndLowPriority2#oneAndTraverse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="oneAndTraverse[F[_]](implicitF:cats.Traverse[F]):cats.Traverse[[β]cats.data.OneAnd[F,β]]"></a>
-      <a id="oneAndTraverse[F[_]](Traverse[F]):Traverse[[β]OneAnd[F,β]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">oneAndTraverse</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.OneAndLowPriority2.oneAndTraverse.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority2.oneAndTraverse.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority2.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OneAnd$@oneAndTraverse[F[_]](implicitF:cats.Traverse[F]):cats.Traverse[[β]cats.data.OneAnd[F,β]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OneAndLowPriority2.html" class="extype" name="cats.data.OneAndLowPriority2">OneAndLowPriority2</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -618,11 +635,11 @@
             </div><div class="parent" name="cats.data.OneAndInstances">
               <h3>Inherited from <span class="extype" name="cats.data.OneAndInstances">OneAndInstances</span></h3>
             </div><div class="parent" name="cats.data.OneAndLowPriority2">
-              <h3>Inherited from <a href="OneAndLowPriority2.html" class="extype" name="cats.data.OneAndLowPriority2">OneAndLowPriority2</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.data.OneAndLowPriority2">OneAndLowPriority2</span></h3>
             </div><div class="parent" name="cats.data.OneAndLowPriority1">
-              <h3>Inherited from <a href="OneAndLowPriority1.html" class="extype" name="cats.data.OneAndLowPriority1">OneAndLowPriority1</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.data.OneAndLowPriority1">OneAndLowPriority1</span></h3>
             </div><div class="parent" name="cats.data.OneAndLowPriority0">
-              <h3>Inherited from <a href="OneAndLowPriority0.html" class="extype" name="cats.data.OneAndLowPriority0">OneAndLowPriority0</a></h3>
+              <h3>Inherited from <span class="extype" name="cats.data.OneAndLowPriority0">OneAndLowPriority0</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

@@ -250,7 +250,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">Wrap a value in <code>Some</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Wrap a value in <code>Some</code>.</p><p><code>3.some</code> is equivalent to <code>Some(3)</code>, but the former will have an inferred
-return type of <code>Option[Int]</code> while the latter will have <code>Some[Int]</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.syntax.option._
+return type of <code>Option[Int]</code> while the latter will have <code>Some[Int]</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="num">3.</span>some
 res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)</pre></div></div>
     </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

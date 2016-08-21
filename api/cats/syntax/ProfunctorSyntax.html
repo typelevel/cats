@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ProfunctorSyntax</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">ProfunctorSyntax</span><span class="result"> extends <a href="../functor/Profunctor$$ToProfunctorOps.html" class="extype" name="cats.functor.Profunctor.ToProfunctorOps">ToProfunctorOps</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/syntax/profunctor.scala" target="_blank">profunctor.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../functor/Profunctor$$ToProfunctorOps.html" class="extype" name="cats.functor.Profunctor.ToProfunctorOps">ToProfunctorOps</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a>, <a href="package$$all$.html" class="extype" name="cats.syntax.all">all</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a>, <a href="package$$profunctor$.html" class="extype" name="cats.syntax.profunctor">profunctor</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.ProfunctorSyntax"><span>ProfunctorSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.ProfunctorSyntax"><span>ProfunctorSyntax</span></li><li class="in" name="cats.functor.Profunctor.ToProfunctorOps"><span>ToProfunctorOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -347,23 +347,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.syntax.ProfunctorSyntax#profunctorSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="profunctorSyntax[F[_,_],A,B](fab:F[A,B])(implicitevidence$1:cats.functor.Profunctor[F]):cats.syntax.ProfunctorOps[F,A,B]"></a>
-      <a id="profunctorSyntax[F[_,_],A,B](F[A,B])(Profunctor[F]):ProfunctorOps[F,A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">profunctorSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.syntax.ProfunctorSyntax.profunctorSyntax.F">F</span>[<span class="extype" name="cats.syntax.ProfunctorSyntax.profunctorSyntax.A">A</span>, <span class="extype" name="cats.syntax.ProfunctorSyntax.profunctorSyntax.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.syntax.ProfunctorSyntax.profunctorSyntax.F">F</span>]</span>)</span><span class="result">: <a href="ProfunctorOps.html" class="extype" name="cats.syntax.ProfunctorOps">ProfunctorOps</a>[<span class="extype" name="cats.syntax.ProfunctorSyntax.profunctorSyntax.F">F</span>, <span class="extype" name="cats.syntax.ProfunctorSyntax.profunctorSyntax.A">A</span>, <span class="extype" name="cats.syntax.ProfunctorSyntax.profunctorSyntax.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.ProfunctorSyntax@profunctorSyntax[F[_,_],A,B](fab:F[A,B])(implicitevidence$1:cats.functor.Profunctor[F]):cats.syntax.ProfunctorOps[F,A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -381,6 +364,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.functor.Profunctor.ToProfunctorOps#toProfunctorOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toProfunctorOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.functor.Profunctor[F]):cats.functor.Profunctor.Ops[F,A,B]"></a>
+      <a id="toProfunctorOps[F[_,_],A,B](F[A,B])(Profunctor[F]):Ops[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toProfunctorOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.functor.Profunctor.ToProfunctorOps.toProfunctorOps.F">F</span>[<span class="extype" name="cats.functor.Profunctor.ToProfunctorOps.toProfunctorOps.A">A</span>, <span class="extype" name="cats.functor.Profunctor.ToProfunctorOps.toProfunctorOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.functor.Profunctor.ToProfunctorOps.toProfunctorOps.F">F</span>]</span>)</span><span class="result">: <a href="../functor/Profunctor$$Ops.html" class="extype" name="cats.functor.Profunctor.Ops">Ops</a>[<span class="extype" name="cats.functor.Profunctor.ToProfunctorOps.toProfunctorOps.F">F</span>, <span class="extype" name="cats.functor.Profunctor.ToProfunctorOps.toProfunctorOps.A">A</span>, <span class="extype" name="cats.functor.Profunctor.ToProfunctorOps.toProfunctorOps.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.ProfunctorSyntax@toProfunctorOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.functor.Profunctor[F]):cats.functor.Profunctor.Ops[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../functor/Profunctor$$ToProfunctorOps.html" class="extype" name="cats.functor.Profunctor.ToProfunctorOps">ToProfunctorOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -476,7 +476,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="cats.functor.Profunctor.ToProfunctorOps">
+              <h3>Inherited from <a href="../functor/Profunctor$$ToProfunctorOps.html" class="extype" name="cats.functor.Profunctor.ToProfunctorOps">ToProfunctorOps</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

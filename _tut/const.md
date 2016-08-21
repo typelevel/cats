@@ -80,7 +80,7 @@ only thing we need is a `map` operation on the data type. Being good functional 
 
 ```scala
 import cats.Functor
-import cats.syntax.functor._
+import cats.implicits._
 
 trait Lens[S, A] {
   def get(s: S): A

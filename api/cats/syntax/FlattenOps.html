@@ -278,10 +278,9 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Flatten nested <code>F</code> values.</p><div class="fullcomment"><div class="comment cmt"><p>Flatten nested <code>F</code> values.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.syntax.flatMap._
-scala&gt; <span class="kw">type</span> ErrorOr[A] = <span class="std">String</span> Xor A
-scala&gt; <span class="kw">val</span> x: ErrorOr[ErrorOr[<span class="std">Int</span>]] = Xor.right(Xor.right(<span class="num">3</span>))
+      <p class="shortcomment cmt">Flatten nested <code>F</code> values.</p><div class="fullcomment"><div class="comment cmt"><p>Flatten nested <code>F</code> values.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">type</span> ErrorOr[A] = Either[<span class="std">String</span>, A]
+scala&gt; <span class="kw">val</span> x: ErrorOr[ErrorOr[<span class="std">Int</span>]] = Right(Right(<span class="num">3</span>))
 scala&gt; x.flatten
 res0: ErrorOr[<span class="std">Int</span>] = Right(<span class="num">3</span>)</pre></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/syntax/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="BifoldableSyntax.html" class="extype" name="cats.syntax.BifoldableSyntax">BifoldableSyntax</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="BifoldableSyntax.html" class="extype" name="cats.syntax.BifoldableSyntax">BifoldableSyntax</a>, <a href="../Bifoldable$$ToBifoldableOps.html" class="extype" name="cats.Bifoldable.ToBifoldableOps">ToBifoldableOps</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.syntax.bifoldable"><span>bifoldable</span></li><li class="in" name="cats.syntax.BifoldableSyntax"><span>BifoldableSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.syntax.bifoldable"><span>bifoldable</span></li><li class="in" name="cats.syntax.BifoldableSyntax"><span>BifoldableSyntax</span></li><li class="in" name="cats.Bifoldable.ToBifoldableOps"><span>ToBifoldableOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -162,23 +162,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.syntax.BifoldableSyntax#bifoldableSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bifoldableSyntax[F[_,_],A,B](fab:F[A,B])(implicitevidence$1:cats.Bifoldable[F]):cats.syntax.BifoldableOps[F,A,B]"></a>
-      <a id="bifoldableSyntax[F[_,_],A,B](F[A,B])(Bifoldable[F]):BifoldableOps[F,A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">bifoldableSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.syntax.BifoldableSyntax.bifoldableSyntax.F">F</span>[<span class="extype" name="cats.syntax.BifoldableSyntax.bifoldableSyntax.A">A</span>, <span class="extype" name="cats.syntax.BifoldableSyntax.bifoldableSyntax.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.syntax.BifoldableSyntax.bifoldableSyntax.F">F</span>]</span>)</span><span class="result">: <a href="BifoldableOps.html" class="extype" name="cats.syntax.BifoldableOps">BifoldableOps</a>[<span class="extype" name="cats.syntax.BifoldableSyntax.bifoldableSyntax.F">F</span>, <span class="extype" name="cats.syntax.BifoldableSyntax.bifoldableSyntax.A">A</span>, <span class="extype" name="cats.syntax.BifoldableSyntax.bifoldableSyntax.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.package$$bifoldable$@bifoldableSyntax[F[_,_],A,B](fab:F[A,B])(implicitevidence$1:cats.Bifoldable[F]):cats.syntax.BifoldableOps[F,A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BifoldableSyntax.html" class="extype" name="cats.syntax.BifoldableSyntax">BifoldableSyntax</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -378,6 +361,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Bifoldable.ToBifoldableOps#toBifoldableOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toBifoldableOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.Bifoldable[F]):cats.Bifoldable.Ops[F,A,B]"></a>
+      <a id="toBifoldableOps[F[_,_],A,B](F[A,B])(Bifoldable[F]):Ops[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toBifoldableOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.F">F</span>[<span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.A">A</span>, <span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.F">F</span>]</span>)</span><span class="result">: <a href="../Bifoldable$$Ops.html" class="extype" name="cats.Bifoldable.Ops">Ops</a>[<span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.F">F</span>, <span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.A">A</span>, <span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.syntax.package$$bifoldable$@toBifoldableOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.Bifoldable[F]):cats.Bifoldable.Ops[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Bifoldable$$ToBifoldableOps.html" class="extype" name="cats.Bifoldable.ToBifoldableOps">ToBifoldableOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -475,6 +475,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.syntax.BifoldableSyntax">
               <h3>Inherited from <a href="BifoldableSyntax.html" class="extype" name="cats.syntax.BifoldableSyntax">BifoldableSyntax</a></h3>
+            </div><div class="parent" name="cats.Bifoldable.ToBifoldableOps">
+              <h3>Inherited from <a href="../Bifoldable$$ToBifoldableOps.html" class="extype" name="cats.Bifoldable.ToBifoldableOps">ToBifoldableOps</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

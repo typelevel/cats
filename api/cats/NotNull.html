@@ -53,7 +53,11 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An instance of <code>NotNull[A]</code> indicates that <code>A</code> does not have a static type
 of <code>Null</code>.</p><p>This can be useful in preventing <code>Null</code> from being inferred when a type
-parameter is omitted.
+parameter is omitted.</p><p>This trait is used along with ambiguous implicits to achieve the goal of
+preventing inference of <code>Null</code>. This ambiguous implicit trick has been used
+in the Scala community for some time. <a href="https://gist.github.com/milessabin/de58f3ba7024d51dcc1a" target="_blank">Here</a>
+is an early example of such a trick being used in a similar way to prevent a
+<code>Nothing</code> type.
 </p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/NotNull.scala" target="_blank">NotNull.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>

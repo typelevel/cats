@@ -22,14 +22,14 @@ freely treat values of type `A` as values of type `Id[A]`, and
 vice-versa.
 
 ```scala
-scala> import cats._
 import cats._
+// import cats._
 
-scala> val x: Id[Int] = 1
-x: cats.Id[Int] = 1
+val x: Id[Int] = 1
+// x: cats.Id[Int] = 1
 
-scala> val y: Int = x
-y: Int = 1
+val y: Int = x
+// y: Int = 1
 ```
 
 Using this type declaration, we can treat our Id type constructor as a
@@ -39,14 +39,14 @@ function.  The `map` method from `Functor` just becomes function
 application:
 
 ```scala
-scala> import cats.Functor
 import cats.Functor
+// import cats.Functor
 
-scala> val one: Int = 1
-one: Int = 1
+val one: Int = 1
+// one: Int = 1
 
-scala> Functor[Id].map(one)(_ + 1)
-res0: cats.Id[Int] = 2
+Functor[Id].map(one)(_ + 1)
+// res0: cats.Id[Int] = 2
 ```
 
 Compare the signatures of `map` and `flatMap` and `coflatMap`:
@@ -65,25 +65,25 @@ implementation, meaning that for `Id`, `flatMap` is also just function
 application:
 
 ```scala
-scala> import cats.Monad
 import cats.Monad
+// import cats.Monad
 
-scala> val one: Int = 1
-one: Int = 1
+val one: Int = 1
+// one: Int = 1
 
-scala> Monad[Id].map(one)(_ + 1)
-res1: cats.Id[Int] = 2
+Monad[Id].map(one)(_ + 1)
+// res1: cats.Id[Int] = 2
 
-scala> Monad[Id].flatMap(one)(_ + 1)
-res2: cats.Id[Int] = 2
+Monad[Id].flatMap(one)(_ + 1)
+// res2: cats.Id[Int] = 2
 ```
 
 And that similarly, coflatMap is just function application:
 
 ```scala
-scala> import cats.Comonad
 import cats.Comonad
+// import cats.Comonad
 
-scala> Comonad[Id].coflatMap(one)(_ + 1)
-res3: cats.Id[Int] = 2
+Comonad[Id].coflatMap(one)(_ + 1)
+// res3: cats.Id[Int] = 2
 ```

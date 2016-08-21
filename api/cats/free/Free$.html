@@ -108,7 +108,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Pre-application of an injection to a <code>F[A]</code> value.</p>
     </li></ol>
             </div>
 
@@ -184,6 +184,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.free.Free#catsFreeMonadForFree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsFreeMonadForFree[S[_]]:cats.Monad[[β]cats.free.Free[S,β]]withcats.RecursiveTailRecM[[β]cats.free.Free[S,β]]"></a>
+      <a id="catsFreeMonadForFree[S[_]]:Monad[[β]Free[S,β]]withRecursiveTailRecM[[β]Free[S,β]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFreeMonadForFree</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.catsFreeMonadForFree.S">S</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β">β</span>]] with <a href="../RecursiveTailRecM.html" class="extype" name="cats.RecursiveTailRecM">RecursiveTailRecM</a>[[β]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.catsFreeMonadForFree.S">S</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.free.Free$@catsFreeMonadForFree[S[_]]:cats.Monad[[β]cats.free.Free[S,β]]withcats.RecursiveTailRecM[[β]cats.free.Free[S,β]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>Free[S, ?]</code> has a monad for any type constructor <code>S[_]</code>.</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -264,23 +281,29 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.free.Free#freeMonad" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="freeMonad[S[_]]:cats.Monad[[β]cats.free.Free[S,β]]"></a>
-      <a id="freeMonad[S[_]]:Monad[[β]Free[S,β]]"></a>
+    </li><li name="cats.free.Free#foldLeftM" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldLeftM[F[_],G[_],A,B](fa:F[A],z:B)(f:(B,A)=&gt;G[B])(implicitevidence$1:cats.Foldable[F],implicitevidence$2:cats.Monad[G],implicitevidence$3:cats.RecursiveTailRecM[G]):G[B]"></a>
+      <a id="foldLeftM[F[_],G[_],A,B](F[A],B)((B,A)⇒G[B])(Foldable[F],Monad[G],RecursiveTailRecM[G]):G[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">freeMonad</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.freeMonad.S">S</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
+        <span class="name">foldLeftM</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.free.Free.foldLeftM.F">F</span>[<span class="extype" name="cats.free.Free.foldLeftM.A">A</span>]</span>, <span name="z">z: <span class="extype" name="cats.free.Free.foldLeftM.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.free.Free.foldLeftM.B">B</span>, <span class="extype" name="cats.free.Free.foldLeftM.A">A</span>) ⇒ <span class="extype" name="cats.free.Free.foldLeftM.G">G</span>[<span class="extype" name="cats.free.Free.foldLeftM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.free.Free.foldLeftM.F">F</span>]</span>, <span name="arg1">arg1: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.free.Free.foldLeftM.G">G</span>]</span>, <span name="arg2">arg2: <a href="../RecursiveTailRecM.html" class="extype" name="cats.RecursiveTailRecM">RecursiveTailRecM</a>[<span class="extype" name="cats.free.Free.foldLeftM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.Free.foldLeftM.G">G</span>[<span class="extype" name="cats.free.Free.foldLeftM.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.Free$@freeMonad[S[_]]:cats.Monad[[β]cats.free.Free[S,β]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.Free$@foldLeftM[F[_],G[_],A,B](fa:F[A],z:B)(f:(B,A)=&gt;G[B])(implicitevidence$1:cats.Foldable[F],implicitevidence$2:cats.Monad[G],implicitevidence$3:cats.RecursiveTailRecM[G]):G[B]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"><code>Free[S, ?]</code> has a monad for any type constructor <code>S[_]</code>.</p>
+      <p class="shortcomment cmt">Perform a stack-safe monadic fold from the source context <code>F</code>
+into the target monad <code>G</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Perform a stack-safe monadic fold from the source context <code>F</code>
+into the target monad <code>G</code>.</p><p>This method can express short-circuiting semantics. Even when
+<code>fa</code> is an infinite structure, this method can potentially
+terminate if the <code>foldRight</code> implementation for <code>F</code> and the
+<code>tailRecM</code> implementation for <code>G</code> are sufficiently lazy.
+</p></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -315,7 +338,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.free.Free#inject" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.free.Free#inject" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="inject[F[_],G[_]]:cats.free.Free.FreeInjectPartiallyApplied[F,G]"></a>
       <a id="inject[F[_],G[_]]:FreeInjectPartiallyApplied[F,G]"></a>
       <h4 class="signature">
@@ -331,7 +354,12 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">This method is used to defer the application of an Inject[F, G]
+instance.</p><div class="fullcomment"><div class="comment cmt"><p>This method is used to defer the application of an Inject[F, G]
+instance. The actual work happens in
+<code>FreeInjectPartiallyApplied#apply</code>.</p><p>This method exists to allow the <code>F</code> and <code>G</code> parameters to be
+bound independently of the <code>A</code> parameter below.
+</p></div></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -365,7 +393,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Suspend a value within a functor lifting it to a Free.</p>
+      <p class="shortcomment cmt">Lift an <code>F[A]</code> value into the free monad.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -433,24 +461,24 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Lift a pure value into Free</p>
+      <p class="shortcomment cmt">Lift a pure <code>A</code> value into the free monad.</p>
     </li><li name="cats.free.Free#suspend" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="suspend[F[_],A](value:=&gt;cats.free.Free[F,A])(implicitF:cats.Applicative[F]):cats.free.Free[F,A]"></a>
-      <a id="suspend[F[_],A](⇒Free[F,A])(Applicative[F]):Free[F,A]"></a>
+      <a id="suspend[F[_],A](value:=&gt;cats.free.Free[F,A]):cats.free.Free[F,A]"></a>
+      <a id="suspend[F[_],A](⇒Free[F,A]):Free[F,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">suspend</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="value">value: ⇒ <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.suspend.F">F</span>, <span class="extype" name="cats.free.Free.suspend.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.Free.suspend.F">F</span>]</span>)</span><span class="result">: <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.suspend.F">F</span>, <span class="extype" name="cats.free.Free.suspend.A">A</span>]</span>
+        <span class="name">suspend</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="value">value: ⇒ <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.suspend.F">F</span>, <span class="extype" name="cats.free.Free.suspend.A">A</span>]</span>)</span><span class="result">: <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.suspend.F">F</span>, <span class="extype" name="cats.free.Free.suspend.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.free.Free$@suspend[F[_],A](value:=&gt;cats.free.Free[F,A])(implicitF:cats.Applicative[F]):cats.free.Free[F,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.free.Free$@suspend[F[_],A](value:=&gt;cats.free.Free[F,A]):cats.free.Free[F,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Suspend the Free with the Applicative</p>
+      <p class="shortcomment cmt">Suspend the creation of a <code>Free[F, A]</code> value.</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

@@ -2,8 +2,8 @@
 layout: default
 title:  "Semigroup"
 section: "typeclasses"
-source: "https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala"
-
+source: "kernel/src/main/scala/cats/kernel/Semigroup.scala"
+scaladoc: "#cats.kernel.Semigroup"
 ---
 # Semigroup
 
@@ -37,20 +37,20 @@ import cats.implicits._
 Examples.
 
 ```scala
-scala> Semigroup[Int].combine(1, 2)
-res0: Int = 3
+Semigroup[Int].combine(1, 2)
+// res0: Int = 3
 
-scala> Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
-res1: List[Int] = List(1, 2, 3, 4, 5, 6)
+Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
+// res1: List[Int] = List(1, 2, 3, 4, 5, 6)
 
-scala> Semigroup[Option[Int]].combine(Option(1), Option(2))
-res2: Option[Int] = Some(3)
+Semigroup[Option[Int]].combine(Option(1), Option(2))
+// res2: Option[Int] = Some(3)
 
-scala> Semigroup[Option[Int]].combine(Option(1), None)
-res3: Option[Int] = Some(1)
+Semigroup[Option[Int]].combine(Option(1), None)
+// res3: Option[Int] = Some(1)
 
-scala> Semigroup[Int => Int].combine({(x: Int) => x + 1},{(x: Int) => x * 10}).apply(6)
-res4: Int = 67
+Semigroup[Int => Int].combine({(x: Int) => x + 1},{(x: Int) => x * 10}).apply(6)
+// res4: Int = 67
 ```
 
 Many of these types have methods defined directly on them,
@@ -59,21 +59,21 @@ value of having a `Semigroup` type class available is that these
 compose, so for instance, we can say
 
 ```scala
-scala> Map("foo" -> Map("bar" -> 5)).combine(Map("foo" -> Map("bar" -> 6), "baz" -> Map()))
-res5: Map[String,scala.collection.immutable.Map[String,Int]] = Map(baz -> Map(), foo -> Map(bar -> 11))
+Map("foo" -> Map("bar" -> 5)).combine(Map("foo" -> Map("bar" -> 6), "baz" -> Map()))
+// res5: Map[String,scala.collection.immutable.Map[String,Int]] = Map(foo -> Map(bar -> 11), baz -> Map())
 
-scala> Map("foo" -> List(1, 2)).combine(Map("foo" -> List(3,4), "bar" -> List(42)))
-res6: Map[String,List[Int]] = Map(foo -> List(1, 2, 3, 4), bar -> List(42))
+Map("foo" -> List(1, 2)).combine(Map("foo" -> List(3,4), "bar" -> List(42)))
+// res6: Map[String,List[Int]] = Map(foo -> List(1, 2, 3, 4), bar -> List(42))
 ```
 
 which is far more likely to be useful than
 
 ```scala
-scala> Map("foo" -> Map("bar" -> 5)) ++  Map("foo" -> Map("bar" -> 6), "baz" -> Map())
-res7: scala.collection.immutable.Map[String,scala.collection.immutable.Map[_ <: String, Int]] = Map(foo -> Map(bar -> 6), baz -> Map())
+Map("foo" -> Map("bar" -> 5)) ++  Map("foo" -> Map("bar" -> 6), "baz" -> Map())
+// res7: scala.collection.immutable.Map[String,scala.collection.immutable.Map[_ <: String, Int]] = Map(foo -> Map(bar -> 6), baz -> Map())
 
-scala> Map("foo" -> List(1, 2)) ++ Map("foo" -> List(3,4), "bar" -> List(42))
-res8: scala.collection.immutable.Map[String,List[Int]] = Map(foo -> List(3, 4), bar -> List(42))
+Map("foo" -> List(1, 2)) ++ Map("foo" -> List(3,4), "bar" -> List(42))
+// res8: scala.collection.immutable.Map[String,List[Int]] = Map(foo -> List(3, 4), bar -> List(42))
 ```
 
 There is inline syntax available for `Semigroup`. Here we are 
@@ -81,9 +81,7 @@ following the convention from scalaz, that `|+|` is the
 operator from `Semigroup`.
 
 ```scala
-import cats.syntax.all._
 import cats.implicits._
-import cats.std._
 
 val one = Option(1)
 val two = Option(2)
@@ -93,17 +91,17 @@ val n: Option[Int] = None
 Thus.
 
 ```scala
-scala> one |+| two
-res10: Option[Int] = Some(3)
+one |+| two
+// res10: Option[Int] = Some(3)
 
-scala> n |+| two
-res11: Option[Int] = Some(2)
+n |+| two
+// res11: Option[Int] = Some(2)
 
-scala> n |+| n
-res12: Option[Int] = None
+n |+| n
+// res12: Option[Int] = None
 
-scala> two |+| n
-res13: Option[Int] = Some(2)
+two |+| n
+// res13: Option[Int] = Some(2)
 ```
 
 You'll notice that instead of declaring `one` as `Some(1)`, I chose
@@ -113,20 +111,17 @@ Option. If we try to use Some and None, we'll get errors:
 
 ```scala
 scala> Some(1) |+| None
-<console>:31: error: value |+| is not a member of Some[Int]
+<console>:22: error: value |+| is not a member of Some[Int]
        Some(1) |+| None
                ^
 
 scala> None |+| Some(1)
-<console>:31: error: value |+| is not a member of object None
+<console>:22: error: value |+| is not a member of object None
        None |+| Some(1)
             ^
 ```
 
 N.B.
-Cats does not define a `Semigroup` type class itself, it uses the [`Semigroup`
-trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Semigroup.scala)
-which is defined in the [algebra project](https://github.com/non/algebra) on 
-which it depends. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
-defines type aliases to the `Semigroup` from algebra, so that you can
+Cats defines the `Semigroup` type class in cats-kernel. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
+defines type aliases to the `Semigroup` from cats-kernel, so that you can
 `import cats.Semigroup`.

@@ -42,8 +42,8 @@ def createRobot(): Robot = {
 ```
 
 ```scala
-scala> val robot = createRobot()
-robot: Robot = Robot(-4962768465676381896,false,Catherine,replicant)
+val robot = createRobot()
+// robot: Robot = Robot(-4962768465676381896,false,Catherine,replicant)
 ```
 
 We create a single `Random` instance, which is mutated as a side-effect each time that we call `nextLong` or `nextBoolean` on it. This mutation makes it more difficult to reason about our code. Someone might come along and see that we have `rng.nextBoolean` repeated three times within a single method. They might cleverly avoid repeated code and method invocations by extracting the common code into a variable:
@@ -64,8 +64,8 @@ def createRobot(): Robot = {
 ```
 
 ```scala
-scala> val robot = createRobot()
-robot: Robot = Robot(-4962768465676381896,false,Carlos,borg)
+val robot = createRobot()
+// robot: Robot = Robot(-4962768465676381896,false,Carlos,borg)
 ```
 
 But now the output of our program has changed! We used to have a replicant robot named Catherine, but now we have a borg robot named Carlos. It might not have been obvious, but the `nextBoolean` calls we were making had the side effect of mutating internal RNG state, and we were depending on that behavior.
@@ -117,8 +117,8 @@ val initialSeed = Seed(13L)
 ```
 
 ```scala
-scala> val robot = createRobot(initialSeed)
-robot: Robot = Robot(13,false,Catherine,replicant)
+val robot = createRobot(initialSeed)
+// robot: Robot = Robot(13,false,Catherine,replicant)
 ```
 
 Now it is a bit more obvious that we can't extract the three `nextBoolean` calls into a single variable, because we are passing each one a different seed value.
@@ -164,16 +164,16 @@ val createRobot: State[Seed, Robot] =
 At this point, we have not yet created a robot; we have written instructions for creating a robot. We need to pass in an initial seed value, and then we can call `value` to actually create the robot:
 
 ```scala
-scala> val (finalState, robot) = createRobot.run(initialSeed).value
-finalState: Seed = Seed(2999987205171331217)
-robot: Robot = Robot(13,false,Catherine,replicant)
+val (finalState, robot) = createRobot.run(initialSeed).value
+// finalState: Seed = Seed(2999987205171331217)
+// robot: Robot = Robot(13,false,Catherine,replicant)
 ```
 
 If we only care about the robot and not the final state, then we can use `runA`:
 
 ```scala
-scala> val robot = createRobot.runA(initialSeed).value
-robot: Robot = Robot(13,false,Catherine,replicant)
+val robot = createRobot.runA(initialSeed).value
+// robot: Robot = Robot(13,false,Catherine,replicant)
 ```
 
 The `createRobot` implementation reads much like the imperative code we initially wrote for the mutable RNG. However, this implementation is free of mutation and side-effects. Since this code is referentially transparent, we can perform the refactoring that we tried earlier without affecting the result:
@@ -194,8 +194,8 @@ val createRobot: State[Seed, Robot] = {
 ```
 
 ```scala
-scala> val robot = createRobot.runA(initialSeed).value
-robot: Robot = Robot(13,false,Catherine,replicant)
+val robot = createRobot.runA(initialSeed).value
+// robot: Robot = Robot(13,false,Catherine,replicant)
 ```
 
 This may seem surprising, but keep in mind that `b` isn't simply a `Boolean`. It is a function that takes a seed and _returns_ a `Boolean`, threading state along the way. Since the seed that is being passed into `b` changes from line to line, so do the returned `Boolean` values.

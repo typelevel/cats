@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Contravariant</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Contravariant</span><span class="result"> extends <span class="extype" name="cats.functor.KernelContravariantInstances">KernelContravariantInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/functor/Contravariant.scala" target="_blank">Contravariant.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.functor.KernelContravariantInstances">KernelContravariantInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.functor.Contravariant"><span>Contravariant</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.functor.Contravariant"><span>Contravariant</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.functor.KernelContravariantInstances"><span>KernelContravariantInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -105,40 +105,6 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.functor.Contravariant$@AllOps[F[_],A]extendsContravariant.Ops[F,A]withInvariant.AllOps[F,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.functor.Contravariant.Composite" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Composite[F[_],G[_]]extendsFunctor[[X]F[G[X]]]"></a>
-      <a id="Composite[F[_],G[_]]:Composite[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Contravariant$$Composite.html"><span class="name">Composite</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[X]<span class="extype" name="cats.functor.Contravariant.Composite.F">F</span>[<span class="extype" name="cats.functor.Contravariant.Composite.G">G</span>[<span class="extype" name="cats.functor.Contravariant.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Contravariant$@Composite[F[_],G[_]]extendsFunctor[[X]F[G[X]]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.functor.Contravariant.CovariantComposite" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CovariantComposite[F[_],G[_]]extendsContravariant[[X]F[G[X]]]"></a>
-      <a id="CovariantComposite[F[_],G[_]]:CovariantComposite[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Contravariant$$CovariantComposite.html"><span class="name">CovariantComposite</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[X]<span class="extype" name="cats.functor.Contravariant.CovariantComposite.F">F</span>[<span class="extype" name="cats.functor.Contravariant.CovariantComposite.G">G</span>[<span class="extype" name="cats.functor.Contravariant.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Contravariant$@CovariantComposite[F[_],G[_]]extendsContravariant[[X]F[G[X]]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -272,6 +238,57 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.functor.KernelContravariantInstances#catsFunctorContravariantForEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFunctorContravariantForEq:cats.functor.Contravariant[cats.Eq]"></a>
+      <a id="catsFunctorContravariantForEq:Contravariant[Eq]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFunctorContravariantForEq</span><span class="result">: <a href="Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.Contravariant$@catsFunctorContravariantForEq:cats.functor.Contravariant[cats.Eq]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KernelContravariantInstances</dd></dl></div>
+    </li><li name="cats.functor.KernelContravariantInstances#catsFunctorContravariantForOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFunctorContravariantForOrder:cats.functor.Contravariant[cats.Order]"></a>
+      <a id="catsFunctorContravariantForOrder:Contravariant[Order]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFunctorContravariantForOrder</span><span class="result">: <a href="Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.Contravariant$@catsFunctorContravariantForOrder:cats.functor.Contravariant[cats.Order]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KernelContravariantInstances</dd></dl></div>
+    </li><li name="cats.functor.KernelContravariantInstances#catsFunctorContravariantForPartialOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFunctorContravariantForPartialOrder:cats.functor.Contravariant[cats.PartialOrder]"></a>
+      <a id="catsFunctorContravariantForPartialOrder:Contravariant[PartialOrder]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFunctorContravariantForPartialOrder</span><span class="result">: <a href="Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<a href="../package.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.Contravariant$@catsFunctorContravariantForPartialOrder:cats.functor.Contravariant[cats.PartialOrder]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KernelContravariantInstances</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -604,6 +621,8 @@
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="cats.functor.KernelContravariantInstances">
+              <h3>Inherited from <span class="extype" name="cats.functor.KernelContravariantInstances">KernelContravariantInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

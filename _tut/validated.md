@@ -147,7 +147,7 @@ Time to parse.
 ```scala
 import cats.SemigroupK
 import cats.data.NonEmptyList
-import cats.std.list._
+import cats.implicits._
 
 case class ConnectionParams(url: String, port: Int)
 
@@ -163,20 +163,20 @@ implicit val readInt: Read[Int] = Read.intRead
 Any and all errors are reported!
 
 ```scala
-scala> val v1 = parallelValidate(config.parse[String]("url").toValidatedNel,
-     |                           config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
-v1: cats.data.Validated[cats.data.NonEmptyList[ConfigError],ConnectionParams] = Invalid(OneAnd(MissingConfig(url),List(ParseError(port))))
+val v1 = parallelValidate(config.parse[String]("url").toValidatedNel,
+                          config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
+// v1: cats.data.Validated[cats.data.NonEmptyList[ConfigError],ConnectionParams] = Invalid(NonEmptyList(MissingConfig(url), ParseError(port)))
 
-scala> val v2 = parallelValidate(config.parse[String]("endpoint").toValidatedNel,
-     |                           config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
-v2: cats.data.Validated[cats.data.NonEmptyList[ConfigError],ConnectionParams] = Invalid(OneAnd(ParseError(port),List()))
+val v2 = parallelValidate(config.parse[String]("endpoint").toValidatedNel,
+                          config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
+// v2: cats.data.Validated[cats.data.NonEmptyList[ConfigError],ConnectionParams] = Invalid(NonEmptyList(ParseError(port)))
 
-scala> val config = Config(Map(("endpoint", "127.0.0.1"), ("port", "1234")))
-config: Config = Config(Map(endpoint -> 127.0.0.1, port -> 1234))
+val config = Config(Map(("endpoint", "127.0.0.1"), ("port", "1234")))
+// config: Config = Config(Map(endpoint -> 127.0.0.1, port -> 1234))
 
-scala> val v3 = parallelValidate(config.parse[String]("endpoint").toValidatedNel,
-     |                           config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
-v3: cats.data.Validated[cats.data.NonEmptyList[ConfigError],ConnectionParams] = Valid(ConnectionParams(127.0.0.1,1234))
+val v3 = parallelValidate(config.parse[String]("endpoint").toValidatedNel,
+                          config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
+// v3: cats.data.Validated[cats.data.NonEmptyList[ConfigError],ConnectionParams] = Valid(ConnectionParams(127.0.0.1,1234))
 ```
 
 ## Apply
@@ -230,14 +230,14 @@ case class Person(name: String, age: Int, address: Address)
 Thus.
 
 ```scala
-scala> val personFromConfig: ValidatedNel[ConfigError, Person] =
-     |   Apply[ValidatedNel[ConfigError, ?]].map4(config.parse[String]("name").toValidatedNel,
-     |                                            config.parse[Int]("age").toValidatedNel,
-     |                                            config.parse[Int]("house_number").toValidatedNel,
-     |                                            config.parse[String]("street").toValidatedNel) {
-     |     case (name, age, houseNumber, street) => Person(name, age, Address(houseNumber, street))
-     |   }
-personFromConfig: cats.data.ValidatedNel[ConfigError,Person] = Invalid(OneAnd(MissingConfig(street),List(MissingConfig(house_number), ParseError(age))))
+val personFromConfig: ValidatedNel[ConfigError, Person] =
+  Apply[ValidatedNel[ConfigError, ?]].map4(config.parse[String]("name").toValidatedNel,
+                                           config.parse[Int]("age").toValidatedNel,
+                                           config.parse[Int]("house_number").toValidatedNel,
+                                           config.parse[String]("street").toValidatedNel) {
+    case (name, age, houseNumber, street) => Person(name, age, Address(houseNumber, street))
+  }
+// personFromConfig: cats.data.ValidatedNel[ConfigError,Person] = Invalid(NonEmptyList(MissingConfig(street), MissingConfig(house_number), ParseError(age)))
 ```
 
 ## Of `flatMap`s and `Xor`s
@@ -245,6 +245,7 @@ personFromConfig: cats.data.ValidatedNel[ConfigError,Person] = Invalid(OneAnd(Mi
 let's implement the `Monad` type class.
 
 ```scala
+import cats.data.Xor
 import cats.Monad
 
 implicit def validatedMonad[E]: Monad[Validated[E, ?]] =
@@ -256,6 +257,14 @@ implicit def validatedMonad[E]: Monad[Validated[E, ?]] =
       }
 
     def pure[A](x: A): Validated[E, A] = Valid(x)
+
+    @annotation.tailrec
+    def tailRecM[A, B](a: A)(f: A => Validated[E, Either[A, B]]): Validated[E, B] =
+      f(a) match {
+        case Valid(Right(b)) => Valid(b)
+        case Valid(Left(a)) => tailRecM(a)(f)
+        case i@Invalid(_) => i
+      }
   }
 ```
 
@@ -278,8 +287,8 @@ However, the `ap` behavior defined in terms of `flatMap` does not behave the sam
 our `ap` defined above. Observe:
 
 ```scala
-scala> val v = validatedMonad.tuple2(Validated.invalidNel[String, Int]("oops"), Validated.invalidNel[String, Double]("uh oh"))
-v: cats.data.Validated[cats.data.NonEmptyList[String],(Int, Double)] = Invalid(OneAnd(oops,List()))
+val v = validatedMonad.tuple2(Validated.invalidNel[String, Int]("oops"), Validated.invalidNel[String, Double]("uh oh"))
+// v: cats.data.Validated[cats.data.NonEmptyList[String],(Int, Double)] = Invalid(NonEmptyList(oops))
 ```
 
 This one short circuits! Therefore, if we were to define a `Monad` (or `FlatMap`) instance for `Validated` we would
@@ -302,32 +311,30 @@ If you do want error accumulation but occasionally run into places where you seq
 The `andThen` method is similar to `flatMap` (such as `Xor.flatMap`). In the cause of success, it passes the valid value into a function that returns a new `Validated` instance.
 
 ```scala
-scala> val houseNumber = config.parse[Int]("house_number").andThen{ n =>
-     |    if (n >= 0) Validated.valid(n)
-     |    else Validated.invalid(ParseError("house_number"))
-     | }
-houseNumber: cats.data.Validated[ConfigError,Int] = Invalid(MissingConfig(house_number))
+val houseNumber = config.parse[Int]("house_number").andThen{ n =>
+   if (n >= 0) Validated.valid(n)
+   else Validated.invalid(ParseError("house_number"))
+}
+// houseNumber: cats.data.Validated[ConfigError,Int] = Invalid(MissingConfig(house_number))
 ```
 
 ### `withXor`
 The `withXor` method allows you to temporarily turn a `Validated` instance into an `Xor` instance and apply it to a function.
 
 ```scala
-import cats.data.Xor
-
-def positive(field: String, i: Int): ConfigError Xor Int = {
-  if (i >= 0) Xor.right(i)
-  else Xor.left(ParseError(field))
+def positive(field: String, i: Int): Xor[ConfigError, Int] = {
+  if (i >= 0) Xor.Right(i)
+  else Xor.Left(ParseError(field))
 }
 ```
 
 Thus.
 
 ```scala
-scala> val houseNumber = config.parse[Int]("house_number").withXor{ xor: ConfigError Xor Int =>
-     |   xor.flatMap{ i =>
-     |     positive("house_number", i)
-     |   }
-     | }
-houseNumber: cats.data.Validated[ConfigError,Int] = Invalid(MissingConfig(house_number))
+val houseNumber = config.parse[Int]("house_number").withXor { xor: Xor[ConfigError, Int] =>
+  xor.flatMap{ i =>
+    positive("house_number", i)
+  }
+}
+// houseNumber: cats.data.Validated[ConfigError,Int] = Invalid(MissingConfig(house_number))
 ```

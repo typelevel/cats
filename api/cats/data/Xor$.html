@@ -143,6 +143,23 @@
       </a>
     </span>
       
+    </li><li name="cats.data.Xor.XorOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="XorOps[A,B]extendsAnyVal"></a>
+      <a id="XorOps[A,B]:XorOps[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Xor$$XorOps.html"><span class="name">XorOps</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@XorOps[A,B]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
 
@@ -254,7 +271,163 @@
       <p class="shortcomment cmt">Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
 the resulting <code>Xor</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
 the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For example:</p><pre>scala&gt; Xor.catchOnly[NumberFormatException] { <span class="lit">"foo"</span>.toInt }
-res0: Xor[NumberFormatException, <span class="std">Int</span>] = Left(java.lang.NumberFormatException: For input string: <span class="lit">"foo"</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a></dd></dl></div>
+res0: Xor[NumberFormatException, <span class="std">Int</span>] = Left(java.lang.NumberFormatException: For input string: <span class="lit">"foo"</span>)</pre><p>This method and its usage of <a href="../NotNull.html" class="extype" name="cats.NotNull">NotNull</a> are inspired by and derived from
+the <code>fromTryCatchThrowable</code> method <a href="https://github.com/scalaz/scalaz/pull/746/files" target="_blank">contributed</a>
+to Scalaz by Brian McKenna.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XorFunctions.html" class="extype" name="cats.data.XorFunctions">XorFunctions</a></dd></dl></div>
+    </li><li name="cats.data.XorInstances#catsDataBitraverseForXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataBitraverseForXor:cats.Bitraverse[cats.data.Xor]"></a>
+      <a id="catsDataBitraverseForXor:Bitraverse[Xor]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataBitraverseForXor</span><span class="result">: <a href="../Bitraverse.html" class="extype" name="cats.Bitraverse">Bitraverse</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@catsDataBitraverseForXor:cats.Bitraverse[cats.data.Xor]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
+    </li><li name="cats.data.XorInstances2#catsDataEqForXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataEqForXor[A,B](implicitevidence$7:cats.Eq[A],implicitevidence$8:cats.Eq[B]):cats.Eq[cats.data.Xor[A,B]]"></a>
+      <a id="catsDataEqForXor[A,B](Eq[A],Eq[B]):Eq[Xor[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataEqForXor</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.XorInstances2.catsDataEqForXor.A">A</span>]</span>, <span name="arg1">arg1: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.XorInstances2.catsDataEqForXor.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances2.catsDataEqForXor.A">A</span>, <span class="extype" name="cats.data.XorInstances2.catsDataEqForXor.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@catsDataEqForXor[A,B](implicitevidence$7:cats.Eq[A],implicitevidence$8:cats.Eq[B]):cats.Eq[cats.data.Xor[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances2</dd></dl></div>
+    </li><li name="cats.data.XorInstances#catsDataInstancesForXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataInstancesForXor[A]:cats.Traverse[[β]cats.data.Xor[A,β]]withcats.Monad[[β]cats.data.Xor[A,β]]withcats.MonadError[[β]cats.data.Xor[A,β],A]withcats.RecursiveTailRecM[[β]cats.data.Xor[A,β]]"></a>
+      <a id="catsDataInstancesForXor[A]:Traverse[[β]Xor[A,β]]withMonad[[β]Xor[A,β]]withMonadError[[β]Xor[A,β],A]withRecursiveTailRecM[[β]Xor[A,β]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataInstancesForXor</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.catsDataInstancesForXor.A">A</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>]] with <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.catsDataInstancesForXor.A">A</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>]] with <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.catsDataInstancesForXor.A">A</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>], <span class="extype" name="cats.data.XorInstances.catsDataInstancesForXor.A">A</span>] with <a href="../RecursiveTailRecM.html" class="extype" name="cats.RecursiveTailRecM">RecursiveTailRecM</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.catsDataInstancesForXor.A">A</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@catsDataInstancesForXor[A]:cats.Traverse[[β]cats.data.Xor[A,β]]withcats.Monad[[β]cats.data.Xor[A,β]]withcats.MonadError[[β]cats.data.Xor[A,β],A]withcats.RecursiveTailRecM[[β]cats.data.Xor[A,β]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
+    </li><li name="cats.data.XorInstances#catsDataMonoidForXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonoidForXor[A,B](implicitB:cats.Monoid[B]):cats.Monoid[cats.data.Xor[A,B]]"></a>
+      <a id="catsDataMonoidForXor[A,B](Monoid[B]):Monoid[Xor[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataMonoidForXor</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.XorInstances.catsDataMonoidForXor.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.catsDataMonoidForXor.A">A</span>, <span class="extype" name="cats.data.XorInstances.catsDataMonoidForXor.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@catsDataMonoidForXor[A,B](implicitB:cats.Monoid[B]):cats.Monoid[cats.data.Xor[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
+    </li><li name="cats.data.XorInstances#catsDataOrderForXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataOrderForXor[A,B](implicitevidence$2:cats.Order[A],implicitevidence$3:cats.Order[B]):cats.Order[cats.data.Xor[A,B]]"></a>
+      <a id="catsDataOrderForXor[A,B](Order[A],Order[B]):Order[Xor[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataOrderForXor</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.XorInstances.catsDataOrderForXor.A">A</span>]</span>, <span name="arg1">arg1: <a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.XorInstances.catsDataOrderForXor.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.catsDataOrderForXor.A">A</span>, <span class="extype" name="cats.data.XorInstances.catsDataOrderForXor.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@catsDataOrderForXor[A,B](implicitevidence$2:cats.Order[A],implicitevidence$3:cats.Order[B]):cats.Order[cats.data.Xor[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
+    </li><li name="cats.data.XorInstances1#catsDataPartialOrderForXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataPartialOrderForXor[A,B](implicitevidence$5:cats.PartialOrder[A],implicitevidence$6:cats.PartialOrder[B]):cats.PartialOrder[cats.data.Xor[A,B]]"></a>
+      <a id="catsDataPartialOrderForXor[A,B](PartialOrder[A],PartialOrder[B]):PartialOrder[Xor[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataPartialOrderForXor</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.XorInstances1.catsDataPartialOrderForXor.A">A</span>]</span>, <span name="arg1">arg1: <a href="../package.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.XorInstances1.catsDataPartialOrderForXor.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances1.catsDataPartialOrderForXor.A">A</span>, <span class="extype" name="cats.data.XorInstances1.catsDataPartialOrderForXor.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@catsDataPartialOrderForXor[A,B](implicitevidence$5:cats.PartialOrder[A],implicitevidence$6:cats.PartialOrder[B]):cats.PartialOrder[cats.data.Xor[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances1</dd></dl></div>
+    </li><li name="cats.data.XorInstances1#catsDataSemigroupForXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataSemigroupForXor[A,B](implicitB:cats.Semigroup[B]):cats.Semigroup[cats.data.Xor[A,B]]"></a>
+      <a id="catsDataSemigroupForXor[A,B](Semigroup[B]):Semigroup[Xor[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataSemigroupForXor</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.XorInstances1.catsDataSemigroupForXor.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances1.catsDataSemigroupForXor.A">A</span>, <span class="extype" name="cats.data.XorInstances1.catsDataSemigroupForXor.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@catsDataSemigroupForXor[A,B](implicitB:cats.Semigroup[B]):cats.Semigroup[cats.data.Xor[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances1</dd></dl></div>
+    </li><li name="cats.data.XorInstances#catsDataSemigroupKForXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataSemigroupKForXor[L]:cats.SemigroupK[[β]cats.data.Xor[L,β]]"></a>
+      <a id="catsDataSemigroupKForXor[L]:SemigroupK[[β]Xor[L,β]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataSemigroupKForXor</span><span class="tparams">[<span name="L">L</span>]</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.catsDataSemigroupKForXor.L">L</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@catsDataSemigroupKForXor[L]:cats.SemigroupK[[β]cats.data.Xor[L,β]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
+    </li><li name="cats.data.XorInstances#catsDataShowForXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataShowForXor[A,B](implicitA:cats.Show[A],implicitB:cats.Show[B]):cats.Show[cats.data.Xor[A,B]]"></a>
+      <a id="catsDataShowForXor[A,B](Show[A],Show[B]):Show[Xor[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataShowForXor</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.XorInstances.catsDataShowForXor.A">A</span>]</span>, <span name="B">B: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.XorInstances.catsDataShowForXor.B">B</span>]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.catsDataShowForXor.A">A</span>, <span class="extype" name="cats.data.XorInstances.catsDataShowForXor.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$@catsDataShowForXor[A,B](implicitA:cats.Show[A],implicitB:cats.Show[B]):cats.Show[cats.data.Xor[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -630,159 +803,6 @@ the left of the <code>Xor</code> when the specified <code>Option</code> is <code
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.data.XorInstances#xorBitraverse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorBitraverse:cats.Bitraverse[cats.data.Xor]"></a>
-      <a id="xorBitraverse:Bitraverse[Xor]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">xorBitraverse</span><span class="result">: <a href="../Bitraverse.html" class="extype" name="cats.Bitraverse">Bitraverse</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@xorBitraverse:cats.Bitraverse[cats.data.Xor]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
-    </li><li name="cats.data.XorInstances2#xorEq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorEq[A,B](implicitevidence$6:cats.Eq[A],implicitevidence$7:cats.Eq[B]):cats.Eq[cats.data.Xor[A,B]]"></a>
-      <a id="xorEq[A,B](Eq[A],Eq[B]):Eq[Xor[A,B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">xorEq</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.XorInstances2.xorEq.A">A</span>]</span>, <span name="arg1">arg1: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.XorInstances2.xorEq.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances2.xorEq.A">A</span>, <span class="extype" name="cats.data.XorInstances2.xorEq.B">B</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@xorEq[A,B](implicitevidence$6:cats.Eq[A],implicitevidence$7:cats.Eq[B]):cats.Eq[cats.data.Xor[A,B]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances2</dd></dl></div>
-    </li><li name="cats.data.XorInstances#xorInstances" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorInstances[A]:cats.Traverse[[β]cats.data.Xor[A,β]]withcats.MonadError[[β]cats.data.Xor[A,β],A]"></a>
-      <a id="xorInstances[A]:Traverse[[β]Xor[A,β]]withMonadError[[β]Xor[A,β],A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">xorInstances</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>]] with <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>], <span class="extype" name="cats.data.XorInstances.xorInstances.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@xorInstances[A]:cats.Traverse[[β]cats.data.Xor[A,β]]withcats.MonadError[[β]cats.data.Xor[A,β],A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
-    </li><li name="cats.data.XorInstances#xorMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorMonoid[A,B](implicitB:cats.Monoid[B]):cats.Monoid[cats.data.Xor[A,B]]"></a>
-      <a id="xorMonoid[A,B](Monoid[B]):Monoid[Xor[A,B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">xorMonoid</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.XorInstances.xorMonoid.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorMonoid.A">A</span>, <span class="extype" name="cats.data.XorInstances.xorMonoid.B">B</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@xorMonoid[A,B](implicitB:cats.Monoid[B]):cats.Monoid[cats.data.Xor[A,B]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
-    </li><li name="cats.data.XorInstances#xorOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorOrder[A,B](implicitevidence$1:cats.Order[A],implicitevidence$2:cats.Order[B]):cats.Order[cats.data.Xor[A,B]]"></a>
-      <a id="xorOrder[A,B](Order[A],Order[B]):Order[Xor[A,B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">xorOrder</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.XorInstances.xorOrder.A">A</span>]</span>, <span name="arg1">arg1: <a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.XorInstances.xorOrder.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorOrder.A">A</span>, <span class="extype" name="cats.data.XorInstances.xorOrder.B">B</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@xorOrder[A,B](implicitevidence$1:cats.Order[A],implicitevidence$2:cats.Order[B]):cats.Order[cats.data.Xor[A,B]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
-    </li><li name="cats.data.XorInstances1#xorPartialOrder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorPartialOrder[A,B](implicitevidence$4:cats.PartialOrder[A],implicitevidence$5:cats.PartialOrder[B]):cats.PartialOrder[cats.data.Xor[A,B]]"></a>
-      <a id="xorPartialOrder[A,B](PartialOrder[A],PartialOrder[B]):PartialOrder[Xor[A,B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">xorPartialOrder</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../package.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.XorInstances1.xorPartialOrder.A">A</span>]</span>, <span name="arg1">arg1: <a href="../package.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.XorInstances1.xorPartialOrder.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances1.xorPartialOrder.A">A</span>, <span class="extype" name="cats.data.XorInstances1.xorPartialOrder.B">B</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@xorPartialOrder[A,B](implicitevidence$4:cats.PartialOrder[A],implicitevidence$5:cats.PartialOrder[B]):cats.PartialOrder[cats.data.Xor[A,B]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances1</dd></dl></div>
-    </li><li name="cats.data.XorInstances1#xorSemigroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorSemigroup[A,B](implicitB:cats.Semigroup[B]):cats.Semigroup[cats.data.Xor[A,B]]"></a>
-      <a id="xorSemigroup[A,B](Semigroup[B]):Semigroup[Xor[A,B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">xorSemigroup</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.XorInstances1.xorSemigroup.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances1.xorSemigroup.A">A</span>, <span class="extype" name="cats.data.XorInstances1.xorSemigroup.B">B</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@xorSemigroup[A,B](implicitB:cats.Semigroup[B]):cats.Semigroup[cats.data.Xor[A,B]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances1</dd></dl></div>
-    </li><li name="cats.data.XorInstances#xorSemigroupK" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorSemigroupK[L]:cats.SemigroupK[[β]cats.data.Xor[L,β]]"></a>
-      <a id="xorSemigroupK[L]:SemigroupK[[β]Xor[L,β]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">xorSemigroupK</span><span class="tparams">[<span name="L">L</span>]</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[β]<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorSemigroupK.L">L</span>, <span class="extype" name="cats.data.XorInstances.&lt;refinement&gt;.Λ$.β">β</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@xorSemigroupK[L]:cats.SemigroupK[[β]cats.data.Xor[L,β]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
-    </li><li name="cats.data.XorInstances#xorShow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xorShow[A,B](implicitA:cats.Show[A],implicitB:cats.Show[B]):cats.Show[cats.data.Xor[A,B]]"></a>
-      <a id="xorShow[A,B](Show[A],Show[B]):Show[Xor[A,B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">xorShow</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.XorInstances.xorShow.A">A</span>]</span>, <span name="B">B: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.XorInstances.xorShow.B">B</span>]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.XorInstances.xorShow.A">A</span>, <span class="extype" name="cats.data.XorInstances.xorShow.B">B</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$@xorShow[A,B](implicitA:cats.Show[A],implicitB:cats.Show[B]):cats.Show[cats.data.Xor[A,B]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>XorInstances</dd></dl></div>
     </li></ol>
             </div>
 

@@ -56,9 +56,9 @@ find type class instances for types which have shapes which differ
 from what their type classes are looking for.</p><p>For example, <a href="Functor.html" class="extype" name="cats.Functor">Functor</a> is defined for types in the shape
 F[_]. Scala has no problem finding instance of Functor which match
 this shape, such as Functor[Option], Functor[List], etc. There is
-also a functor defined for some types which have the Shape F[_,_]
+also a functor defined for some types which have the Shape F[_, _]
 when one of the two 'holes' is fixed. For example. there is a
-Functor for Map[A,?] for any A, and for Either[A,?] for any A,
+Functor for Map[A, ?] for any A, and for Either[A, ?] for any A,
 however the Scala compiler will not find them without some coercing.
 </p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Unapply.scala" target="_blank">Unapply.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>

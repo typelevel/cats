@@ -415,9 +415,7 @@
       </a>
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../MonadCombine.html#unite[G[_],A](fga:F[G[A]])(implicitG:cats.Foldable[G]):F[A]" class="extmbr" name="cats.MonadCombine#unite">MonadCombine.unite</a>
-Example:</p><pre>scala&gt; <span class="kw">import</span> cats.std.list._
-scala&gt; <span class="kw">import</span> cats.std.vector._
-scala&gt; <span class="kw">import</span> cats.syntax.monadCombine._
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> x: <span class="std">List</span>[Vector[<span class="std">Int</span>]] = <span class="std">List</span>(Vector(<span class="num">1</span>, <span class="num">2</span>), Vector(<span class="num">3</span>, <span class="num">4</span>))
 scala&gt; x.unite
 res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)</pre></span></dd></dl></div>

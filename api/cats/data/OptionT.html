@@ -52,7 +52,7 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><code>OptionT[F[_], A]</code> is a light wrapper on an <code>F[Option[A]]</code> with some
-convenient methods for working with this nested structure.</p><p>It may also be said that <code>OptionT</code> is a monad transformer for <code>Option</code>.</p><p>For more information, see the <a href="http://non.github.io/cats/tut/optiont.html" target="_blank">documentation</a>.
+convenient methods for working with this nested structure.</p><p>It may also be said that <code>OptionT</code> is a monad transformer for <code>Option</code>.</p><p>For more information, see the <a href="http://typelevel.org/cats/tut/optiont.html" target="_blank">documentation</a>.
 </p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/OptionT.scala" target="_blank">OptionT.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -169,6 +169,23 @@ convenient methods for working with this nested structure.</p><p>It may also be 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.OptionT#===" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="===(that:cats.data.OptionT[F,A])(impliciteq:cats.Eq[F[Option[A]]]):Boolean"></a>
+      <a id="===(OptionT[F,A])(Eq[F[Option[A]]]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="eq">eq: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@===(that:cats.data.OptionT[F,A])(impliciteq:cats.Eq[F[Option[A]]]):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -242,6 +259,23 @@ contexts.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.OptionT@collect[B](f:PartialFunction[A,B])(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.OptionT#compare" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="compare(that:cats.data.OptionT[F,A])(implicito:cats.Order[F[Option[A]]]):Int"></a>
+      <a id="compare(OptionT[F,A])(Order[F[Option[A]]]):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compare</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="o">o: <a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.OptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@compare(that:cats.data.OptionT[F,A])(implicito:cats.Order[F[Option[A]]]):Int" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -388,6 +422,40 @@ contexts.
       </a>
     </span>
       
+    </li><li name="cats.data.OptionT#foldLeft" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foldLeft[B](b:B)(f:(B,A)=&gt;B)(implicitF:cats.Foldable[F]):B"></a>
+      <a id="foldLeft[B](B)((B,A)⇒B)(Foldable[F]):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.OptionT.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OptionT.foldLeft.B">B</span>, <span class="extype" name="cats.data.OptionT.A">A</span>) ⇒ <span class="extype" name="cats.data.OptionT.foldLeft.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OptionT.foldLeft.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@foldLeft[B](b:B)(f:(B,A)=&gt;B)(implicitF:cats.Foldable[F]):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.OptionT#foldRight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foldRight[B](lb:cats.Eval[B])(f:(A,cats.Eval[B])=&gt;cats.Eval[B])(implicitF:cats.Foldable[F]):cats.Eval[B]"></a>
+      <a id="foldRight[B](Eval[B])((A,Eval[B])⇒Eval[B])(Foldable[F]):Eval[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldRight</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="lb">lb: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.OptionT.foldRight.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OptionT.A">A</span>, <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.OptionT.foldRight.B">B</span>]) ⇒ <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.OptionT.foldRight.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.OptionT.foldRight.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@foldRight[B](lb:cats.Eval[B])(f:(A,cats.Eval[B])=&gt;cats.Eval[B])(implicitF:cats.Foldable[F]):cats.Eval[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.OptionT#forall" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="forall(f:A=&gt;Boolean)(implicitF:cats.Functor[F]):F[Boolean]"></a>
       <a id="forall((A)⇒Boolean)(Functor[F]):F[Boolean]"></a>
@@ -524,6 +592,23 @@ contexts.
       </a>
     </span>
       
+    </li><li name="cats.data.OptionT#mapFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="mapFilter[B](f:A=&gt;Option[B])(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]"></a>
+      <a id="mapFilter[B]((A)⇒Option[B])(Functor[F]):OptionT[F,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapFilter</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OptionT.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionT.mapFilter.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.mapFilter.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@mapFilter[B](f:A=&gt;Option[B])(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -609,6 +694,40 @@ contexts.
       </a>
     </span>
       
+    </li><li name="cats.data.OptionT#partialCompare" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="partialCompare(that:cats.data.OptionT[F,A])(implicitp:cats.PartialOrder[F[Option[A]]]):Double"></a>
+      <a id="partialCompare(OptionT[F,A])(PartialOrder[F[Option[A]]]):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partialCompare</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="p">p: <a href="../package.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.OptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Double" class="extype" target="_top">Double</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@partialCompare(that:cats.data.OptionT[F,A])(implicitp:cats.PartialOrder[F[Option[A]]]):Double" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.OptionT#semiflatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="semiflatMap[B](f:A=&gt;F[B])(implicitF:cats.Monad[F]):cats.data.OptionT[F,B]"></a>
+      <a id="semiflatMap[B]((A)⇒F[B])(Monad[F]):OptionT[F,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">semiflatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OptionT.A">A</span>) ⇒ <span class="extype" name="cats.data.OptionT.F">F</span>[<span class="extype" name="cats.data.OptionT.semiflatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.semiflatMap.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@semiflatMap[B](f:A=&gt;F[B])(implicitF:cats.Monad[F]):cats.data.OptionT[F,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.OptionT#show" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="show(implicitF:cats.Show[F[Option[A]]]):String"></a>
       <a id="show(Show[F[Option[A]]]):String"></a>
@@ -677,6 +796,33 @@ contexts.
       </a>
     </span>
       
+    </li><li name="cats.data.OptionT#toNested" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toNested:cats.data.Nested[F,Option,A]"></a>
+      <a id="toNested:Nested[F,Option,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNested</span><span class="result">: <a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>, <span class="extype" name="cats.data.OptionT.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@toNested:cats.data.Nested[F,Option,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Transform this <code>OptionT[F, A]</code> into a <code><a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[F, Option, A]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transform this <code>OptionT[F, A]</code> into a <code><a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[F, Option, A]</code>.</p><p>An example where <code>toNested</code> can be used, is to get the <code>Apply.ap</code> function with the
+behavior from the composed <code>Apply</code> instances from <code>F</code> and <code>Option</code>, which is
+inconsistent with the behavior of the <code>ap</code> from <code>Monad</code> of <code>OptionT</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.data.OptionT
+scala&gt; <span class="kw">val</span> ff: OptionT[<span class="std">List</span>, <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span>] =
+     |   OptionT(<span class="std">List</span>(<span class="std">Option</span>(_.toString), <span class="std">None</span>))
+scala&gt; <span class="kw">val</span> fa: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = OptionT(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">1</span>), <span class="std">Option</span>(<span class="num">2</span>)))
+scala&gt; ff.ap(fa)
+res0: OptionT[<span class="std">List</span>,<span class="std">String</span>] = OptionT(<span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">Some</span>(<span class="num">2</span>), <span class="std">None</span>))
+scala&gt; OptionT(ff.toNested.ap(fa.toNested).value)
+res1: OptionT[<span class="std">List</span>,<span class="std">String</span>] = OptionT(<span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">Some</span>(<span class="num">2</span>), <span class="std">None</span>, <span class="std">None</span>))</pre></div></div>
     </li><li name="cats.data.OptionT#toRight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="toRight[L](left:=&gt;L)(implicitF:cats.Functor[F]):cats.data.XorT[F,L,A]"></a>
       <a id="toRight[L](⇒L)(Functor[F]):XorT[F,L,A]"></a>
@@ -707,6 +853,40 @@ contexts.
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.OptionT@transform[B](f:Option[A]=&gt;Option[B])(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.OptionT#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="traverse[G[_],B](f:A=&gt;G[B])(implicitF:cats.Traverse[F],implicitG:cats.Applicative[G]):G[cats.data.OptionT[F,B]]"></a>
+      <a id="traverse[G[_],B]((A)⇒G[B])(Traverse[F],Applicative[G]):G[OptionT[F,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OptionT.A">A</span>) ⇒ <span class="extype" name="cats.data.OptionT.traverse.G">G</span>[<span class="extype" name="cats.data.OptionT.traverse.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>, <span name="G">G: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.traverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OptionT.traverse.G">G</span>[<a href="" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.traverse.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@traverse[G[_],B](f:A=&gt;G[B])(implicitF:cats.Traverse[F],implicitG:cats.Applicative[G]):G[cats.data.OptionT[F,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.OptionT#traverseFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="traverseFilter[G[_],B](f:A=&gt;G[Option[B]])(implicitF:cats.Traverse[F],implicitG:cats.Applicative[G]):G[cats.data.OptionT[F,B]]"></a>
+      <a id="traverseFilter[G[_],B]((A)⇒G[Option[B]])(Traverse[F],Applicative[G]):G[OptionT[F,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverseFilter</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.OptionT.A">A</span>) ⇒ <span class="extype" name="cats.data.OptionT.traverseFilter.G">G</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionT.traverseFilter.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>, <span name="G">G: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.traverseFilter.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OptionT.traverseFilter.G">G</span>[<a href="" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.traverseFilter.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.OptionT@traverseFilter[G[_],B](f:A=&gt;G[Option[B]])(implicitF:cats.Traverse[F],implicitG:cats.Applicative[G]):G[cats.data.OptionT[F,B]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -119,7 +119,7 @@ functors.</p>
     </span>
       <p class="shortcomment cmt">Must obey the laws defined in cats.laws.InvariantLaws.</p>
     </li><li name="cats.functor.Profunctor" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Profunctor[F[_,_]]extendsSerializable"></a>
+      <a id="Profunctor[F[_,_]]extendsAnywithSerializable"></a>
       <a id="Profunctor[F[_,_]]:Profunctor[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -130,7 +130,7 @@ functors.</p>
         <a href="Profunctor.html"><span class="name">Profunctor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.package@Profunctor[F[_,_]]extendsSerializable" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.package@Profunctor[F[_,_]]extendsAnywithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -139,7 +139,7 @@ and a <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a> o
 and a <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a> on its second type parameter.</p><p>Must obey the laws defined in cats.laws.ProfunctorLaws.
 </p></div></div>
     </li><li name="cats.functor.Strong" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Strong[F[_,_]]extendsProfunctor[F]"></a>
+      <a id="Strong[F[_,_]]extendsProfunctor[F]withSerializable"></a>
       <a id="Strong[F[_,_]]:Strong[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -147,10 +147,10 @@ and a <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a> o
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Strong.html"><span class="name">Strong</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.functor.Strong.F">F</span>]</span>
+        <a href="Strong.html"><span class="name">Strong</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.functor.Strong.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.package@Strong[F[_,_]]extendsProfunctor[F]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.package@Strong[F[_,_]]extendsProfunctor[F]withSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -188,7 +188,7 @@ and a <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a> o
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Contravariant$.html"><span class="name">Contravariant</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Contravariant$.html"><span class="name">Contravariant</span></a><span class="result"> extends <span class="extype" name="cats.functor.KernelContravariantInstances">KernelContravariantInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.functor.package@Contravariant" title="Permalink" target="_top">
@@ -205,7 +205,7 @@ and a <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a> o
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Invariant$.html"><span class="name">Invariant</span></a><span class="result"> extends <span class="extype" name="cats.functor.AlgebraInvariantInstances">AlgebraInvariantInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Invariant$.html"><span class="name">Invariant</span></a><span class="result"> extends <span class="extype" name="cats.functor.KernelInvariantInstances">KernelInvariantInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.functor.package@Invariant" title="Permalink" target="_top">

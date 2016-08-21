@@ -16,14 +16,14 @@ The name `flatten` should remind you of the functions of the same name on many
 classes in the standard library.
 
 ```scala
-scala> Option(Option(1)).flatten
-res0: Option[Int] = Some(1)
+Option(Option(1)).flatten
+// res0: Option[Int] = Some(1)
 
-scala> Option(None).flatten
-res1: Option[Nothing] = None
+Option(None).flatten
+// res1: Option[Nothing] = None
 
-scala> List(List(1),List(2,3)).flatten
-res2: List[Int] = List(1, 2, 3)
+List(List(1),List(2,3)).flatten
+// res2: List[Int] = List(1, 2, 3)
 ```
 
 ### Monad instances
@@ -48,6 +48,14 @@ implicit def optionMonad(implicit app: Applicative[Option]) =
       app.map(fa)(f).flatten
     // Reuse this definition from Applicative.
     override def pure[A](a: A): Option[A] = app.pure(a)
+
+    @annotation.tailrec
+    def tailRecM[A, B](init: A)(fn: A => Option[Either[A, B]]): Option[B] =
+      fn(init) match {
+        case None => None
+        case Some(Right(b)) => Some(b)
+        case Some(Left(a)) => tailRecM(a)(fn)
+      }
   }
 ```
 
@@ -61,6 +69,8 @@ derived from `flatMap` and `pure`.
 implicit val listMonad = new Monad[List] {
   def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] = fa.flatMap(f)
   def pure[A](a: A): List[A] = List(a)
+  def tailRecM[A, B](a: A)(f: A => List[Either[A, B]]): List[B] =
+    defaultTailRecM(a)(f)
 }
 ```
 
@@ -69,16 +79,16 @@ scala, as for-comprehensions rely on this method to chain together operations
 in a monadic context.
 
 ```scala
-scala> import scala.reflect.runtime.universe
 import scala.reflect.runtime.universe
+// import scala.reflect.runtime.universe
 
-scala> universe.reify(
-     |   for {
-     |     x <- Some(1)
-     |     y <- Some(2)
-     |   } yield x + y
-     | ).tree
-res4: reflect.runtime.universe.Tree = Some.apply(1).flatMap(((x) => Some.apply(2).map(((y) => x.$plus(y)))))
+universe.reify(
+  for {
+    x <- Some(1)
+    y <- Some(2)
+  } yield x + y
+).tree
+// res4: reflect.runtime.universe.Tree = Some.apply(1).flatMap(((x) => Some.apply(2).map(((y) => x.$plus(y)))))
 ```
 
 ### ifM
@@ -88,8 +98,8 @@ the results of earlier ones. This is embodied in `ifM`, which lifts an `if`
 statement into the monadic context.
 
 ```scala
-scala> Monad[List].ifM(List(true, false, true))(List(1, 2), List(3, 4))
-res5: List[Int] = List(1, 2, 3, 4, 1, 2)
+Monad[List].ifM(List(true, false, true))(List(1, 2), List(3, 4))
+// res5: List[Int] = List(1, 2, 3, 4, 1, 2)
 ```
 
 ### Composition
@@ -117,6 +127,8 @@ implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
           case Some(a) => f(a).value
         }
       }
+    def tailRecM[A, B](a: A)(f: A => OptionT[F, Either[A, B]]): OptionT[F, B] =
+      defaultTailRecM(a)(f)
   }
 }
 ```

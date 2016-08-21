@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Invariant</span><span class="result"> extends <span class="extype" name="cats.functor.AlgebraInvariantInstances">AlgebraInvariantInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Invariant</span><span class="result"> extends <span class="extype" name="cats.functor.KernelInvariantInstances">KernelInvariantInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/functor/Invariant.scala" target="_blank">Invariant.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.functor.AlgebraInvariantInstances">AlgebraInvariantInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.functor.KernelInvariantInstances">KernelInvariantInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.functor.Invariant"><span>Invariant</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.functor.AlgebraInvariantInstances"><span>AlgebraInvariantInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.functor.Invariant"><span>Invariant</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.functor.KernelInvariantInstances"><span>KernelInvariantInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -105,57 +105,6 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.functor.Invariant$@AllOps[F[_],A]extendsInvariant.Ops[F,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.functor.Invariant.Composite" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Composite[F[_],G[_]]extendsInvariant[[X]F[G[X]]]"></a>
-      <a id="Composite[F[_],G[_]]:Composite[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Invariant$$Composite.html"><span class="name">Composite</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[[X]<span class="extype" name="cats.functor.Invariant.Composite.F">F</span>[<span class="extype" name="cats.functor.Invariant.Composite.G">G</span>[<span class="extype" name="cats.functor.Invariant.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Invariant$@Composite[F[_],G[_]]extendsInvariant[[X]F[G[X]]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.functor.Invariant.ContravariantComposite" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ContravariantComposite[F[_],G[_]]extendsInvariant[[X]F[G[X]]]"></a>
-      <a id="ContravariantComposite[F[_],G[_]]:ContravariantComposite[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Invariant$$ContravariantComposite.html"><span class="name">ContravariantComposite</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[[X]<span class="extype" name="cats.functor.Invariant.ContravariantComposite.F">F</span>[<span class="extype" name="cats.functor.Invariant.ContravariantComposite.G">G</span>[<span class="extype" name="cats.functor.Invariant.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Invariant$@ContravariantComposite[F[_],G[_]]extendsInvariant[[X]F[G[X]]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.functor.Invariant.CovariantComposite" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CovariantComposite[F[_],G[_]]extendsInvariant[[X]F[G[X]]]"></a>
-      <a id="CovariantComposite[F[_],G[_]]:CovariantComposite[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Invariant$$CovariantComposite.html"><span class="name">CovariantComposite</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[[X]<span class="extype" name="cats.functor.Invariant.CovariantComposite.F">F</span>[<span class="extype" name="cats.functor.Invariant.CovariantComposite.G">G</span>[<span class="extype" name="cats.functor.Invariant.&lt;refinement&gt;.Λ$.X">X</span>]]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Invariant$@CovariantComposite[F[_],G[_]]extendsInvariant[[X]F[G[X]]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -289,6 +238,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.functor.KernelInvariantInstances#catsFunctorInvariantForMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFunctorInvariantForMonoid:cats.functor.Invariant[cats.Monoid]"></a>
+      <a id="catsFunctorInvariantForMonoid:Invariant[Monoid]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFunctorInvariantForMonoid</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<a href="../package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.Invariant$@catsFunctorInvariantForMonoid:cats.functor.Invariant[cats.Monoid]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KernelInvariantInstances</dd></dl></div>
+    </li><li name="cats.functor.KernelInvariantInstances#catsFunctorInvariantForSemigroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFunctorInvariantForSemigroup:cats.functor.Invariant[cats.Semigroup]"></a>
+      <a id="catsFunctorInvariantForSemigroup:Invariant[Semigroup]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFunctorInvariantForSemigroup</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.Invariant$@catsFunctorInvariantForSemigroup:cats.functor.Invariant[cats.Semigroup]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KernelInvariantInstances</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -403,40 +386,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.functor.AlgebraInvariantInstances#invariantMonoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="invariantMonoid:cats.functor.Invariant[cats.Monoid]"></a>
-      <a id="invariantMonoid:Invariant[Monoid]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">invariantMonoid</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<a href="../package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Invariant$@invariantMonoid:cats.functor.Invariant[cats.Monoid]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AlgebraInvariantInstances</dd></dl></div>
-    </li><li name="cats.functor.AlgebraInvariantInstances#invariantSemigroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="invariantSemigroup:cats.functor.Invariant[cats.Semigroup]"></a>
-      <a id="invariantSemigroup:Invariant[Semigroup]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">invariantSemigroup</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Invariant$@invariantSemigroup:cats.functor.Invariant[cats.Semigroup]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AlgebraInvariantInstances</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -655,8 +604,8 @@
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="cats.functor.AlgebraInvariantInstances">
-              <h3>Inherited from <span class="extype" name="cats.functor.AlgebraInvariantInstances">AlgebraInvariantInstances</span></h3>
+            </div><div class="parent" name="cats.functor.KernelInvariantInstances">
+              <h3>Inherited from <span class="extype" name="cats.functor.KernelInvariantInstances">KernelInvariantInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

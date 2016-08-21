@@ -89,24 +89,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.&lt;~" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;~[F[_],G[_]]=cats.arrow.NaturalTransformation[G,F]"></a>
-      <a id="&lt;~[F[_],G[_]]:&lt;~[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $less$tilde" class="name">&lt;~</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> = <a href="arrow/NaturalTransformation.html" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.&lt;~.G">G</span>, <span class="extype" name="cats.&lt;~.F">F</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@&lt;~[F[_],G[_]]=cats.arrow.NaturalTransformation[G,F]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.Alternative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="cats.Alternative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Alternative[F[_]]extendsApplicative[F]withMonoidK[F]withSerializable"></a>
       <a id="Alternative[F[_]]:Alternative[F]"></a>
       <h4 class="signature">
@@ -251,7 +234,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
     </span>
       
     </li><li name="cats.Bitraverse" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Bitraverse[F[_,_]]extendsBifoldable[F]withBifunctor[F]"></a>
+      <a id="Bitraverse[F[_,_]]extendsBifoldable[F]withBifunctor[F]withSerializable"></a>
       <a id="Bitraverse[F[_,_]]:Bitraverse[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -259,10 +242,10 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Bitraverse.html"><span class="name">Bitraverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bitraverse.F">F</span>]</span>
+        <a href="Bitraverse.html"><span class="name">Bitraverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Bitraverse[F[_,_]]extendsBifoldable[F]withBifunctor[F]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Bitraverse[F[_,_]]extendsBifoldable[F]withBifunctor[F]withSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -307,7 +290,7 @@ independent effectful values.</p><p>That same idea is also manifested in the for
       </a>
     </span>
       
-    </li><li name="cats.CoflatMap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="cats.CoflatMap" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="CoflatMap[F[_]]extendsFunctor[F]withSerializable"></a>
       <a id="CoflatMap[F[_]]:CoflatMap[F]"></a>
       <h4 class="signature">
@@ -323,8 +306,9 @@ independent effectful values.</p><p>That same idea is also manifested in the for
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Must obey the laws defined in cats.laws.CoflatMapLaws.</p>
-    </li><li name="cats.Comonad" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt"><code>CoflatMap</code> is the dual of <code>FlatMap</code>.</p><div class="fullcomment"><div class="comment cmt"><p><code>CoflatMap</code> is the dual of <code>FlatMap</code>.</p><p>Must obey the laws in cats.laws.CoflatMapLaws
+</p></div></div>
+    </li><li name="cats.Comonad" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Comonad[F[_]]extendsCoflatMap[F]withSerializable"></a>
       <a id="Comonad[F[_]]:Comonad[F]"></a>
       <h4 class="signature">
@@ -340,166 +324,29 @@ independent effectful values.</p><p>That same idea is also manifested in the for
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Must obey the laws defined in cats.laws.ComonadLaws.</p>
-    </li><li name="cats.CompositeAlternative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CompositeAlternative[F[_],G[_]]extendsAlternative[[α]F[G[α]]]withCompositeApplicative[F,G]withCompositeMonoidK[F,G]"></a>
-      <a id="CompositeAlternative[F[_],G[_]]:CompositeAlternative[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="CompositeAlternative.html"><span class="name">CompositeAlternative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[[α]<span class="extype" name="cats.CompositeAlternative.F">F</span>[<span class="extype" name="cats.CompositeAlternative.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]] with <a href="CompositeApplicative.html" class="extype" name="cats.CompositeApplicative">CompositeApplicative</a>[<span class="extype" name="cats.CompositeAlternative.F">F</span>, <span class="extype" name="cats.CompositeAlternative.G">G</span>] with <a href="CompositeMonoidK.html" class="extype" name="cats.CompositeMonoidK">CompositeMonoidK</a>[<span class="extype" name="cats.CompositeAlternative.F">F</span>, <span class="extype" name="cats.CompositeAlternative.G">G</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@CompositeAlternative[F[_],G[_]]extendsAlternative[[α]F[G[α]]]withCompositeApplicative[F,G]withCompositeMonoidK[F,G]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.CompositeApplicative" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CompositeApplicative[F[_],G[_]]extendsApplicative[[α]F[G[α]]]withCompositeApply[F,G]"></a>
-      <a id="CompositeApplicative[F[_],G[_]]:CompositeApplicative[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="CompositeApplicative.html"><span class="name">CompositeApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[α]<span class="extype" name="cats.CompositeApplicative.F">F</span>[<span class="extype" name="cats.CompositeApplicative.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]] with <a href="CompositeApply.html" class="extype" name="cats.CompositeApply">CompositeApply</a>[<span class="extype" name="cats.CompositeApplicative.F">F</span>, <span class="extype" name="cats.CompositeApplicative.G">G</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@CompositeApplicative[F[_],G[_]]extendsApplicative[[α]F[G[α]]]withCompositeApply[F,G]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.CompositeApply" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CompositeApply[F[_],G[_]]extendsApply[[X]F[G[X]]]withFunctor.Composite[F,G]"></a>
-      <a id="CompositeApply[F[_],G[_]]:CompositeApply[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="CompositeApply.html"><span class="name">CompositeApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[[X]<span class="extype" name="cats.CompositeApply.F">F</span>[<span class="extype" name="cats.CompositeApply.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.X">X</span>]]] with <a href="Functor$$Composite.html" class="extype" name="cats.Functor.Composite">Composite</a>[<span class="extype" name="cats.CompositeApply.F">F</span>, <span class="extype" name="cats.CompositeApply.G">G</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@CompositeApply[F[_],G[_]]extendsApply[[X]F[G[X]]]withFunctor.Composite[F,G]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.CompositeBifoldable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CompositeBifoldable[F[_,_],G[_,_]]extendsBifoldable[[A,B]F[G[A,B],G[A,B]]]"></a>
-      <a id="CompositeBifoldable[F[_,_],G[_,_]]:CompositeBifoldable[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="CompositeBifoldable.html"><span class="name">CompositeBifoldable</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[[A, B]<span class="extype" name="cats.CompositeBifoldable.F">F</span>[<span class="extype" name="cats.CompositeBifoldable.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.A">A</span>, <span class="extype" name="cats.&lt;refinement&gt;.Λ$.B">B</span>], <span class="extype" name="cats.CompositeBifoldable.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.A">A</span>, <span class="extype" name="cats.&lt;refinement&gt;.Λ$.B">B</span>]]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@CompositeBifoldable[F[_,_],G[_,_]]extendsBifoldable[[A,B]F[G[A,B],G[A,B]]]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.CompositeBitraverse" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CompositeBitraverse[F[_,_],G[_,_]]extendsBitraverse[[A,B]F[G[A,B],G[A,B]]]withCompositeBifoldable[F,G]"></a>
-      <a id="CompositeBitraverse[F[_,_],G[_,_]]:CompositeBitraverse[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="CompositeBitraverse.html"><span class="name">CompositeBitraverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bitraverse.html" class="extype" name="cats.Bitraverse">Bitraverse</a>[[A, B]<span class="extype" name="cats.CompositeBitraverse.F">F</span>[<span class="extype" name="cats.CompositeBitraverse.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.A">A</span>, <span class="extype" name="cats.&lt;refinement&gt;.Λ$.B">B</span>], <span class="extype" name="cats.CompositeBitraverse.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.A">A</span>, <span class="extype" name="cats.&lt;refinement&gt;.Λ$.B">B</span>]]] with <a href="CompositeBifoldable.html" class="extype" name="cats.CompositeBifoldable">CompositeBifoldable</a>[<span class="extype" name="cats.CompositeBitraverse.F">F</span>, <span class="extype" name="cats.CompositeBitraverse.G">G</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@CompositeBitraverse[F[_,_],G[_,_]]extendsBitraverse[[A,B]F[G[A,B],G[A,B]]]withCompositeBifoldable[F,G]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.CompositeFoldable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CompositeFoldable[F[_],G[_]]extendsFoldable[[α]F[G[α]]]"></a>
-      <a id="CompositeFoldable[F[_],G[_]]:CompositeFoldable[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="CompositeFoldable.html"><span class="name">CompositeFoldable</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<span class="extype" name="cats.CompositeFoldable.F">F</span>[<span class="extype" name="cats.CompositeFoldable.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@CompositeFoldable[F[_],G[_]]extendsFoldable[[α]F[G[α]]]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt"> Methods that apply to 2 nested Foldable instances
-</p>
-    </li><li name="cats.CompositeMonoidK" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CompositeMonoidK[F[_],G[_]]extendsMonoidK[[α]F[G[α]]]withCompositeSemigroupK[F,G]"></a>
-      <a id="CompositeMonoidK[F[_],G[_]]:CompositeMonoidK[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="CompositeMonoidK.html"><span class="name">CompositeMonoidK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[α]<span class="extype" name="cats.CompositeMonoidK.F">F</span>[<span class="extype" name="cats.CompositeMonoidK.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]] with <a href="CompositeSemigroupK.html" class="extype" name="cats.CompositeSemigroupK">CompositeSemigroupK</a>[<span class="extype" name="cats.CompositeMonoidK.F">F</span>, <span class="extype" name="cats.CompositeMonoidK.G">G</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@CompositeMonoidK[F[_],G[_]]extendsMonoidK[[α]F[G[α]]]withCompositeSemigroupK[F,G]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="cats.CompositeReducible" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="CompositeReducible[F[_],G[_]]extendsReducible[[α]F[G[α]]]withCompositeFoldable[F,G]"></a>
-      <a id="CompositeReducible[F[_],G[_]]:CompositeReducible[F,G]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="CompositeReducible.html"><span class="name">CompositeReducible</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[α]<span class="extype" name="cats.CompositeReducible.F">F</span>[<span class="extype" name="cats.CompositeReducible.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]] with <a href="CompositeFoldable.html" class="extype" name="cats.CompositeFoldable">CompositeFoldable</a>[<span class="extype" name="cats.CompositeReducible.F">F</span>, <span class="extype" name="cats.CompositeReducible.G">G</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@CompositeReducible[F[_],G[_]]extendsReducible[[α]F[G[α]]]withCompositeFoldable[F,G]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">This class composes two <code>Reducible</code> instances to provide an
-instance for the nested types.</p><div class="fullcomment"><div class="comment cmt"><p>This class composes two <code>Reducible</code> instances to provide an
-instance for the nested types.</p><p>In other words, given a <code>Reducible[F]</code> instance (which can reduce
-<code>F[A]</code>) and a <code>Reducible[G]</code> instance (which can reduce <code>G[A]</code>
-values), this class is able to reduce <code>F[G[A]]</code> values.
+      <p class="shortcomment cmt">Comonad</p><div class="fullcomment"><div class="comment cmt"><p>Comonad</p><p>Comonad is the dual of Monad. Whereas Monads allow for the composition of effectful functions,
+Comonads allow for composition of functions that extract the value from their context.</p><p>Must obey the laws defined in cats.laws.ComonadLaws.
 </p></div></div>
-    </li><li name="cats.CompositeSemigroupK" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CompositeSemigroupK[F[_],G[_]]extendsSemigroupK[[α]F[G[α]]]"></a>
-      <a id="CompositeSemigroupK[F[_],G[_]]:CompositeSemigroupK[F,G]"></a>
+    </li><li name="cats.ContravariantCartesian" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ContravariantCartesian[F[_]]extendsCartesian[F]withContravariant[F]withSerializable"></a>
+      <a id="ContravariantCartesian[F[_]]:ContravariantCartesian[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="CompositeSemigroupK.html"><span class="name">CompositeSemigroupK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[α]<span class="extype" name="cats.CompositeSemigroupK.F">F</span>[<span class="extype" name="cats.CompositeSemigroupK.G">G</span>[<span class="extype" name="cats.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
+        <a href="ContravariantCartesian.html"><span class="name">ContravariantCartesian</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a>[<span class="extype" name="cats.ContravariantCartesian.F">F</span>] with <a href="functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.ContravariantCartesian.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@CompositeSemigroupK[F[_],G[_]]extendsSemigroupK[[α]F[G[α]]]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@ContravariantCartesian[F[_]]extendsCartesian[F]withContravariant[F]withSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"><a href="ContravariantCartesian.html" class="extype" name="cats.ContravariantCartesian">ContravariantCartesian</a> is nothing more than something both contravariant
+and Cartesian.</p><div class="fullcomment"><div class="comment cmt"><p><a href="ContravariantCartesian.html" class="extype" name="cats.ContravariantCartesian">ContravariantCartesian</a> is nothing more than something both contravariant
+and Cartesian. It comes up enough to be useful, and composes well
+</p></div></div>
     </li><li name="cats.Eq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Eq[A]=cats.kernel.Eq[A]"></a>
       <a id="Eq[A]:Eq[A]"></a>
@@ -509,7 +356,7 @@ values), this class is able to reduce <code>F[G[A]]</code> values.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Eq</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.Eq">cats.kernel.Eq</span>[<span class="extype" name="cats.Eq.A">A</span>]</span>
+        <span class="name">Eq</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="kernel/Eq.html" class="extype" name="cats.kernel.Eq">cats.kernel.Eq</a>[<span class="extype" name="cats.Eq.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Eq[A]=cats.kernel.Eq[A]" title="Permalink" target="_top">
@@ -518,18 +365,18 @@ values), this class is able to reduce <code>F[G[A]]</code> values.
     </span>
       
     </li><li name="cats.Eval" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Eval[A]extendsSerializable"></a>
-      <a id="Eval[A]:Eval[A]"></a>
+      <a id="Eval[+A]extendsSerializable"></a>
+      <a id="Eval[+A]:Eval[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">sealed abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Eval.html"><span class="name">Eval</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Eval.html"><span class="name">Eval</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@Eval[A]extendsSerializable" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@Eval[+A]extendsSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -615,15 +462,15 @@ overflows.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"> FlatMap type class gives us flatMap, which allows us to have a value
- in a context (F[A]) and then feed that into a function that takes
- a normal value and returns a value in a context (A =&gt; F[B]).</p><div class="fullcomment"><div class="comment cmt"><p> FlatMap type class gives us flatMap, which allows us to have a value
- in a context (F[A]) and then feed that into a function that takes
- a normal value and returns a value in a context (A =&gt; F[B]).</p><p> One motivation for separating this out from Monad is that there are
- situations where we can implement flatMap but not pure.  For example,
- we can implement map or flatMap that transforms the values of Map[K, ?],
- but we can't implement pure (because we wouldn't know what key to use
- when instantiating the new Map).
+      <p class="shortcomment cmt">FlatMap type class gives us flatMap, which allows us to have a value
+in a context (F[A]) and then feed that into a function that takes
+a normal value and returns a value in a context (A =&gt; F[B]).</p><div class="fullcomment"><div class="comment cmt"><p>FlatMap type class gives us flatMap, which allows us to have a value
+in a context (F[A]) and then feed that into a function that takes
+a normal value and returns a value in a context (A =&gt; F[B]).</p><p>One motivation for separating this out from Monad is that there are
+situations where we can implement flatMap but not pure.  For example,
+we can implement map or flatMap that transforms the values of Map[K, ?],
+but we can't implement pure (because we wouldn't know what key to use
+when instantiating the new Map).
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>See <a href="https://github.com/typelevel/cats/issues/3" target="_blank">https://github.com/typelevel/cats/issues/3</a> for some discussion.
 Must obey the laws defined in cats.laws.FlatMapLaws.</p></span></dd></dl></div>
     </li><li name="cats.Foldable" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
@@ -667,6 +514,23 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
     </span>
       <p class="shortcomment cmt">Functor.</p><div class="fullcomment"><div class="comment cmt"><p>Functor.</p><p>The name is short for &quot;covariant functor&quot;.</p><p>Must obey the laws defined in cats.laws.FunctorLaws.
 </p></div></div>
+    </li><li name="cats.FunctorFilter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FunctorFilter[F[_]]extendsFunctor[F]withSerializable"></a>
+      <a id="FunctorFilter[F[_]]:FunctorFilter[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FunctorFilter.html"><span class="name">FunctorFilter</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.FunctorFilter.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@FunctorFilter[F[_]]extendsFunctor[F]withSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.Group" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Group[A]=cats.kernel.Group[A]"></a>
       <a id="Group[A]:Group[A]"></a>
@@ -676,7 +540,7 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Group</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.Group">cats.kernel.Group</span>[<span class="extype" name="cats.Group.A">A</span>]</span>
+        <span class="name">Group</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="kernel/Group.html" class="extype" name="cats.kernel.Group">cats.kernel.Group</a>[<span class="extype" name="cats.Group.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Group[A]=cats.kernel.Group[A]" title="Permalink" target="_top">
@@ -710,6 +574,24 @@ allows us to apply a function <code>A =&gt; B</code> to an <code>Id[A]</code> an
 is applying a pure function of type <code>A =&gt; B</code> to a pure value  of
 type <code>A</code> to get a pure value of type <code>B</code>. That is, the instance
 encodes pure unary function application.
+</p></div></div>
+    </li><li name="cats.InvariantMonoidal" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="InvariantMonoidal[F[_]]extendsInvariant[F]withCartesian[F]withSerializable"></a>
+      <a id="InvariantMonoidal[F[_]]:InvariantMonoidal[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="InvariantMonoidal.html"><span class="name">InvariantMonoidal</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.InvariantMonoidal.F">F</span>] with <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a>[<span class="extype" name="cats.InvariantMonoidal.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@InvariantMonoidal[F[_]]extendsInvariant[F]withCartesian[F]withSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Invariant version of a Monoidal.</p><div class="fullcomment"><div class="comment cmt"><p>Invariant version of a Monoidal.</p><p>Must obey the laws defined in cats.laws.InvariantMonoidalLaws.
 </p></div></div>
     </li><li name="cats.Later" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Later[A]extendsEval[A]"></a>
@@ -789,7 +671,7 @@ garbage collection.
       <p class="shortcomment cmt">A monad that also allows you to raise and or handle an error value.</p><div class="fullcomment"><div class="comment cmt"><p>A monad that also allows you to raise and or handle an error value.</p><p>This type class allows one to abstract over error-handling monads.
 </p></div></div>
     </li><li name="cats.MonadFilter" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="MonadFilter[F[_]]extendsMonad[F]withSerializable"></a>
+      <a id="MonadFilter[F[_]]extendsMonad[F]withFunctorFilter[F]withSerializable"></a>
       <a id="MonadFilter[F[_]]:MonadFilter[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -797,17 +679,17 @@ garbage collection.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="MonadFilter.html"><span class="name">MonadFilter</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.MonadFilter.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="MonadFilter.html"><span class="name">MonadFilter</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.MonadFilter.F">F</span>] with <a href="FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.MonadFilter.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@MonadFilter[F[_]]extendsMonad[F]withSerializable" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@MonadFilter[F[_]]extendsMonad[F]withFunctorFilter[F]withSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">a Monad equipped with an additional method which allows us to
-create an &quot;Empty&quot; value for the Monad (for whatever &quot;empty&quot; makes
+create an &quot;empty&quot; value for the Monad (for whatever &quot;empty&quot; makes
 sense for that particular monad).</p><div class="fullcomment"><div class="comment cmt"><p>a Monad equipped with an additional method which allows us to
-create an &quot;Empty&quot; value for the Monad (for whatever &quot;empty&quot; makes
+create an &quot;empty&quot; value for the Monad (for whatever &quot;empty&quot; makes
 sense for that particular monad). This is of particular interest to
 us since it allows us to add a <code>filter</code> method to a Monad, which is
 used when pattern matching or using guards in for comprehensions.
@@ -880,7 +762,7 @@ dealing with large monad transformer stacks. For instance:</p><pre><span class="
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Monoid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.Monoid">cats.kernel.Monoid</span>[<span class="extype" name="cats.Monoid.A">A</span>]</span>
+        <span class="name">Monoid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">cats.kernel.Monoid</a>[<span class="extype" name="cats.Monoid.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Monoid[A]=cats.kernel.Monoid[A]" title="Permalink" target="_top">
@@ -953,7 +835,11 @@ the &quot;rest&quot; of the values (<code>G[A]</code>) can be easily found.
       <p class="shortcomment cmt">An instance of <code>NotNull[A]</code> indicates that <code>A</code> does not have a static type
 of <code>Null</code>.</p><div class="fullcomment"><div class="comment cmt"><p>An instance of <code>NotNull[A]</code> indicates that <code>A</code> does not have a static type
 of <code>Null</code>.</p><p>This can be useful in preventing <code>Null</code> from being inferred when a type
-parameter is omitted.
+parameter is omitted.</p><p>This trait is used along with ambiguous implicits to achieve the goal of
+preventing inference of <code>Null</code>. This ambiguous implicit trick has been used
+in the Scala community for some time. <a href="https://gist.github.com/milessabin/de58f3ba7024d51dcc1a" target="_blank">Here</a>
+is an early example of such a trick being used in a similar way to prevent a
+<code>Nothing</code> type.
 </p></div></div>
     </li><li name="cats.Now" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Now[A]extendsEval[A]withProductwithSerializable"></a>
@@ -983,7 +869,7 @@ when the computation to produce an A value is pure and very fast.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Order</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.Order">cats.kernel.Order</span>[<span class="extype" name="cats.Order.A">A</span>]</span>
+        <span class="name">Order</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="kernel/Order.html" class="extype" name="cats.kernel.Order">cats.kernel.Order</a>[<span class="extype" name="cats.Order.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Order[A]=cats.kernel.Order[A]" title="Permalink" target="_top">
@@ -1000,7 +886,7 @@ when the computation to produce an A value is pure and very fast.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">PartialOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.PartialOrder">cats.kernel.PartialOrder</span>[<span class="extype" name="cats.PartialOrder.A">A</span>]</span>
+        <span class="name">PartialOrder</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="kernel/PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">cats.kernel.PartialOrder</a>[<span class="extype" name="cats.PartialOrder.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@PartialOrder[A]=cats.kernel.PartialOrder[A]" title="Permalink" target="_top">
@@ -1008,6 +894,24 @@ when the computation to produce an A value is pure and very fast.
       </a>
     </span>
       
+    </li><li name="cats.RecursiveTailRecM" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="RecursiveTailRecM[F[_]]extendsSerializable"></a>
+      <a id="RecursiveTailRecM[F[_]]:RecursiveTailRecM[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="RecursiveTailRecM.html"><span class="name">RecursiveTailRecM</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@RecursiveTailRecM[F[_]]extendsSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This is a marker type that promises that the method
+.tailRecM for this type is stack-safe for arbitrary recursion.</p>
     </li><li name="cats.Reducible" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Reducible[F[_]]extendsFoldable[F]withSerializable"></a>
       <a id="Reducible[F[_]]:Reducible[F]"></a>
@@ -1038,7 +942,7 @@ implemented in terms of two methods:</p><ul><li><code>reduceLeftTo(fa)(f)(g)</co
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Semigroup</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.kernel.Semigroup">cats.kernel.Semigroup</span>[<span class="extype" name="cats.Semigroup.A">A</span>]</span>
+        <span class="name">Semigroup</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">cats.kernel.Semigroup</a>[<span class="extype" name="cats.Semigroup.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Semigroup[A]=cats.kernel.Semigroup[A]" title="Permalink" target="_top">
@@ -1107,7 +1011,7 @@ explicitly provided one.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A typeclass which abstracts over the ability to lift an M[A] into a
+      <p class="shortcomment cmt">A type class which abstracts over the ability to lift an M[A] into a
 MonadTransformer
 </p>
     </li><li name="cats.Traverse" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
@@ -1130,6 +1034,28 @@ MonadTransformer
 Traversing with the <a href="data/Const.html" class="extype" name="cats.data.Const">cats.data.Const</a> effect where the first type parameter has
 a <a href="#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a> instance is equivalent to <a href="Foldable.html" class="extype" name="cats.Foldable">cats.Foldable</a>#fold.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
 </p></div></div>
+    </li><li name="cats.TraverseFilter" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="TraverseFilter[F[_]]extendsTraverse[F]withFunctorFilter[F]withSerializable"></a>
+      <a id="TraverseFilter[F[_]]:TraverseFilter[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TraverseFilter.html"><span class="name">TraverseFilter</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>] with <a href="FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@TraverseFilter[F[_]]extendsTraverse[F]withFunctorFilter[F]withSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>TraverseFilter</code>, also known as <code>Witherable</code>, represents list-like structures
+that can essentially have a <a href="TraverseFilter.html#traverse[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitG:cats.Applicative[G]):G[F[B]]" class="extmbr" name="cats.TraverseFilter#traverse">traverse</a> and a <a href="TraverseFilter.html#filter[A](fa:F[A])(f:A=&gt;Boolean):F[A]" class="extmbr" name="cats.TraverseFilter#filter">filter</a> applied as a single
+combined operation (<a href="TraverseFilter.html#traverseFilter[G[_],A,B](fa:F[A])(f:A=&gt;G[Option[B]])(implicitevidence$1:cats.Applicative[G]):G[F[B]]" class="extmbr" name="cats.TraverseFilter#traverseFilter">traverseFilter</a>).</p><div class="fullcomment"><div class="comment cmt"><p><code>TraverseFilter</code>, also known as <code>Witherable</code>, represents list-like structures
+that can essentially have a <a href="TraverseFilter.html#traverse[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitG:cats.Applicative[G]):G[F[B]]" class="extmbr" name="cats.TraverseFilter#traverse">traverse</a> and a <a href="TraverseFilter.html#filter[A](fa:F[A])(f:A=&gt;Boolean):F[A]" class="extmbr" name="cats.TraverseFilter#filter">filter</a> applied as a single
+combined operation (<a href="TraverseFilter.html#traverseFilter[G[_],A,B](fa:F[A])(f:A=&gt;G[Option[B]])(implicitevidence$1:cats.Applicative[G]):G[F[B]]" class="extmbr" name="cats.TraverseFilter#traverseFilter">traverseFilter</a>).</p><p>Must obey the laws defined in cats.laws.TraverseFilterLaws.</p><p>Based on Haskell's <a href="https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html" target="_blank">Data.Witherable</a>
+</p></div></div>
     </li><li name="cats.Trivial" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="TrivialextendsAnyRef"></a>
       <a id="Trivial:Trivial"></a>
@@ -1146,11 +1072,11 @@ a <a href="#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">c
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">The &quot;Unit typeclass&quot;.</p><div class="fullcomment"><div class="comment cmt"><p>The &quot;Unit typeclass&quot;.  The only instance of <code>Trivial</code> is given by
+      <p class="shortcomment cmt">The &quot;Unit type class&quot;.</p><div class="fullcomment"><div class="comment cmt"><p>The &quot;Unit type class&quot;.  The only instance of <code>Trivial</code> is given by
 <code>Trivial.manifest</code>, and this instance is guaranteed to be in the
 implicit scope.  Several convenience type aliases are provided in
 companion object, covering a few common use cases and avoiding the
-need for unnecessary lambdas (e.g. if you want a trivial typeclass
+need for unnecessary lambdas (e.g. if you want a trivial type class
 instance for a type constructor, you should use <code>Trivial.PH1</code>).
 </p></div></div>
     </li><li name="cats.Unapply" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
@@ -1176,13 +1102,13 @@ find type class instances for types which have shapes which differ
 from what their type classes are looking for.</p><p>For example, <a href="Functor.html" class="extype" name="cats.Functor">Functor</a> is defined for types in the shape
 F[_]. Scala has no problem finding instance of Functor which match
 this shape, such as Functor[Option], Functor[List], etc. There is
-also a functor defined for some types which have the Shape F[_,_]
+also a functor defined for some types which have the Shape F[_, _]
 when one of the two 'holes' is fixed. For example. there is a
-Functor for Map[A,?] for any A, and for Either[A,?] for any A,
+Functor for Map[A, ?] for any A, and for Either[A, ?] for any A,
 however the Scala compiler will not find them without some coercing.
 </p></div></div>
     </li><li name="cats.~&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="~&gt;[F[_],G[_]]=cats.arrow.NaturalTransformation[F,G]"></a>
+      <a id="~&gt;[F[_],G[_]]=cats.arrow.FunctionK[F,G]"></a>
       <a id="~&gt;[F[_],G[_]]:~&gt;[F,G]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1190,10 +1116,10 @@ however the Scala compiler will not find them without some coercing.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $tilde$greater" class="name">~&gt;</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> = <a href="arrow/NaturalTransformation.html" class="extype" name="cats.arrow.NaturalTransformation">NaturalTransformation</a>[<span class="extype" name="cats.~&gt;.F">F</span>, <span class="extype" name="cats.~&gt;.G">G</span>]</span>
+        <span title="gt4s: $tilde$greater" class="name">~&gt;</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> = <a href="arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.~&gt;.F">F</span>, <span class="extype" name="cats.~&gt;.G">G</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@~&gt;[F[_],G[_]]=cats.arrow.NaturalTransformation[F,G]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@~&gt;[F[_],G[_]]=cats.arrow.FunctionK[F,G]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1384,7 +1310,7 @@ however the Scala compiler will not find them without some coercing.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Cartesian$.html"><span class="name">Cartesian</span></a><span class="result"> extends <a href="CartesianArityFunctions.html" class="extype" name="cats.CartesianArityFunctions">CartesianArityFunctions</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Cartesian$.html"><span class="name">Cartesian</span></a><span class="result"> extends <a href="CartesianArityFunctions.html" class="extype" name="cats.CartesianArityFunctions">CartesianArityFunctions</a> with <span class="extype" name="cats.KernelCartesianInstances">KernelCartesianInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Cartesian" title="Permalink" target="_top">
@@ -1426,6 +1352,23 @@ however the Scala compiler will not find them without some coercing.
       </a>
     </span>
       
+    </li><li name="cats.ContravariantCartesian" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ContravariantCartesian"></a>
+      <a id="ContravariantCartesian:ContravariantCartesian"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ContravariantCartesian$.html"><span class="name">ContravariantCartesian</span></a><span class="result"> extends <span class="extype" name="cats.KernelContravariantCartesianInstances">KernelContravariantCartesianInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@ContravariantCartesian" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats#Eq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Eq:cats.kernel.Eq.type"></a>
       <a id="Eq:cats.kernel.Eq.type"></a>
@@ -1435,7 +1378,7 @@ however the Scala compiler will not find them without some coercing.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Eq</span><span class="result">: <span class="extype" name="cats.kernel.Eq">cats.kernel.Eq</span>.type</span>
+        <span class="name">Eq</span><span class="result">: <a href="kernel/Eq$.html" class="extype" name="cats.kernel.Eq">cats.kernel.Eq</a>.type</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Eq:cats.kernel.Eq.type" title="Permalink" target="_top">
@@ -1511,6 +1454,23 @@ however the Scala compiler will not find them without some coercing.
       </a>
     </span>
       
+    </li><li name="cats.FunctorFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FunctorFilter"></a>
+      <a id="FunctorFilter:FunctorFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FunctorFilter$.html"><span class="name">FunctorFilter</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@FunctorFilter" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats#Group" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Group:cats.kernel.Group.type"></a>
       <a id="Group:cats.kernel.Group.type"></a>
@@ -1520,10 +1480,27 @@ however the Scala compiler will not find them without some coercing.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Group</span><span class="result">: <span class="extype" name="cats.kernel.Group">cats.kernel.Group</span>.type</span>
+        <span class="name">Group</span><span class="result">: <a href="kernel/Group$.html" class="extype" name="cats.kernel.Group">cats.kernel.Group</a>.type</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Group:cats.kernel.Group.type" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.InvariantMonoidal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InvariantMonoidal"></a>
+      <a id="InvariantMonoidal:InvariantMonoidal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="InvariantMonoidal$.html"><span class="name">InvariantMonoidal</span></a><span class="result"> extends <span class="extype" name="cats.KernelInvariantMonoidalInstances">KernelInvariantMonoidalInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@InvariantMonoidal" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1673,7 +1650,7 @@ however the Scala compiler will not find them without some coercing.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Monoid</span><span class="result">: <span class="extype" name="cats.kernel.Monoid">cats.kernel.Monoid</span>.type</span>
+        <span class="name">Monoid</span><span class="result">: <a href="kernel/Monoid$.html" class="extype" name="cats.kernel.Monoid">cats.kernel.Monoid</a>.type</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Monoid:cats.kernel.Monoid.type" title="Permalink" target="_top">
@@ -1724,7 +1701,7 @@ however the Scala compiler will not find them without some coercing.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Order</span><span class="result">: <span class="extype" name="cats.kernel.Order">cats.kernel.Order</span>.type</span>
+        <span class="name">Order</span><span class="result">: <a href="kernel/Order$.html" class="extype" name="cats.kernel.Order">cats.kernel.Order</a>.type</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Order:cats.kernel.Order.type" title="Permalink" target="_top">
@@ -1741,10 +1718,27 @@ however the Scala compiler will not find them without some coercing.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">PartialOrder</span><span class="result">: <span class="extype" name="cats.kernel.PartialOrder">cats.kernel.PartialOrder</span>.type</span>
+        <span class="name">PartialOrder</span><span class="result">: <a href="kernel/PartialOrder$.html" class="extype" name="cats.kernel.PartialOrder">cats.kernel.PartialOrder</a>.type</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@PartialOrder:cats.kernel.PartialOrder.type" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.RecursiveTailRecM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RecursiveTailRecM"></a>
+      <a id="RecursiveTailRecM:RecursiveTailRecM"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RecursiveTailRecM$.html"><span class="name">RecursiveTailRecM</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@RecursiveTailRecM" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1775,7 +1769,7 @@ however the Scala compiler will not find them without some coercing.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Semigroup</span><span class="result">: <span class="extype" name="cats.kernel.Semigroup">cats.kernel.Semigroup</span>.type</span>
+        <span class="name">Semigroup</span><span class="result">: <a href="kernel/Semigroup$.html" class="extype" name="cats.kernel.Semigroup">cats.kernel.Semigroup</a>.type</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@Semigroup:cats.kernel.Semigroup.type" title="Permalink" target="_top">
@@ -1851,6 +1845,23 @@ however the Scala compiler will not find them without some coercing.
       </a>
     </span>
       
+    </li><li name="cats.TraverseFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TraverseFilter"></a>
+      <a id="TraverseFilter:TraverseFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TraverseFilter$.html"><span class="name">TraverseFilter</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@TraverseFilter" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.Trivial" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Trivial"></a>
       <a id="Trivial:Trivial"></a>
@@ -1898,6 +1909,23 @@ however the Scala compiler will not find them without some coercing.
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@arrow" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats#catsInstancesForId" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsInstancesForId:cats.Bimonad[cats.package.Id]withcats.Monad[cats.package.Id]withcats.Traverse[cats.package.Id]withcats.RecursiveTailRecM[cats.package.Id]"></a>
+      <a id="catsInstancesForId:Bimonad[Id]withMonad[Id]withTraverse[Id]withRecursiveTailRecM[Id]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsInstancesForId</span><span class="result">: <a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="RecursiveTailRecM.html" class="extype" name="cats.RecursiveTailRecM">RecursiveTailRecM</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@catsInstancesForId:cats.Bimonad[cats.package.Id]withcats.Monad[cats.package.Id]withcats.Traverse[cats.package.Id]withcats.RecursiveTailRecM[cats.package.Id]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1953,23 +1981,6 @@ however the Scala compiler will not find them without some coercing.
       </a>
     </span>
       
-    </li><li name="cats#idInstances" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="idInstances:cats.Bimonad[cats.package.Id]withcats.Traverse[cats.package.Id]"></a>
-      <a id="idInstances:Bimonad[Id]withTraverse[Id]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">idInstances</span><span class="result">: <a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@idInstances:cats.Bimonad[cats.package.Id]withcats.Traverse[cats.package.Id]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="cats.implicits" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="implicits"></a>
       <a id="implicits:implicits"></a>
@@ -1979,7 +1990,7 @@ however the Scala compiler will not find them without some coercing.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="implicits$.html"><span class="name">implicits</span></a><span class="result"> extends <a href="syntax/AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a> with <a href="std/AllInstances.html" class="extype" name="cats.std.AllInstances">AllInstances</a></span>
+        <a href="implicits$.html"><span class="name">implicits</span></a><span class="result"> extends <a href="syntax/AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a> with <a href="instances/AllInstances.html" class="extype" name="cats.instances.AllInstances">AllInstances</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.package@implicits" title="Permalink" target="_top">
@@ -1987,19 +1998,36 @@ however the Scala compiler will not find them without some coercing.
       </a>
     </span>
       
-    </li><li name="cats.std" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="std"></a>
-      <a id="std:std"></a>
+    </li><li name="cats.instances" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="instances"></a>
+      <a id="instances:instances"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a href="std/package.html"><span class="name">std</span></a>
+        <a href="instances/package.html"><span class="name">instances</span></a>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@std" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@instances" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.kernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="kernel"></a>
+      <a id="kernel:kernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="kernel/package.html"><span class="name">kernel</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.package@kernel" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -40,17 +40,20 @@
 	    <li {%if page.section =="home" %} class="active" {% else %} class="inactive" {% endif %}>
 	      <a href="{{ site.baseurl }}/index.html">About</a>
 	    </li>
-	    <li {%if page.section =="contributing" %} class="active" {% else %} class="inactive"{% endif %}>
-	      <a href="{{ site.baseurl }}/contributing.html">Contributing</a>
-	    </li>
 	    <li {%if page.section =="typeclasses" %} class="active" {% else %} class="inactive" {% endif%}>
-	      <a href="{{ site.baseurl }}/typeclasses.html">Typeclasses</a>
+	      <a href="{{ site.baseurl }}/typeclasses.html">Type Classes</a>
 	    </li>
 	    <li {%if page.section =="data" %} class="active" {% else %} class="inactive" {% endif %}>
 	      <a href="{{ site.baseurl }}/datatypes.html">Data Types</a>
 	    </li>
 	    <li {%if page.section == "resources_for_learners" %} class="active" {% else %} class="inactive" {% endif %}>
 	      <a href="{{ site.baseurl }}/resources_for_learners.html">Resources For Learners</a>
+	    </li>
+	    <li {%if page.title == "FAQ" %} class="active" {% else %} class="inactive" {% endif %}>
+	      <a href="{{ site.baseurl }}/tut/faq.html">FAQ</a>
+	    </li>
+	    <li {%if page.section =="contributing" %} class="active" {% else %} class="inactive"{% endif %}>
+	      <a href="{{ site.baseurl }}/contributing.html">Contributing</a>
 	    </li>
 	    <li {%if page.section =="colophon" %} class="active" {% else %} class="inactive" {% endif %}>
 	      <a href="{{ site.baseurl }}/colophon.html">Colophon</a>

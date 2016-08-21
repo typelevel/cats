@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ProdMonoidK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]] with <a href="ProdSemigroupK.html" class="extype" name="cats.data.ProdSemigroupK">ProdSemigroupK</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>]</span>
+        <span class="name">ProdMonoidK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]] with <a href="ProdSemigroupK.html" class="extype" name="cats.data.ProdSemigroupK">ProdSemigroupK</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Prod.scala" target="_blank">Prod.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="ProdSemigroupK.html" class="extype" name="cats.data.ProdSemigroupK">ProdSemigroupK</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>], <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]], <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ProdSemigroupK.html" class="extype" name="cats.data.ProdSemigroupK">ProdSemigroupK</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>], <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]], <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="ProdAlternative.html" class="extype" name="cats.data.ProdAlternative">ProdAlternative</a></div>
@@ -261,25 +261,23 @@
     </span>
       <p class="shortcomment cmt">Combine two F[A] values.</p><div class="fullcomment"><div class="comment cmt"><p>Combine two F[A] values.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ProdSemigroupK.html" class="extype" name="cats.data.ProdSemigroupK">ProdSemigroupK</a> → <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a></dd></dl></div>
-    </li><li name="cats.MonoidK#composeK" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="composeK[G[_]]:cats.MonoidK[[α]F[G[α]]]"></a>
-      <a id="composeK[G[_]]:MonoidK[[α]Prod[F,G,G[α]]]"></a>
+    </li><li name="cats.MonoidK#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[G[_]]:cats.MonoidK[[α]F[G[α]]]"></a>
+      <a id="compose[G[_]]:MonoidK[[α]Prod[F,G,G[α]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">composeK</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.MonoidK.composeK.G">G</span>[<span class="extype" name="cats.MonoidK.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.MonoidK.compose.G">G</span>[<span class="extype" name="cats.MonoidK.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.ProdMonoidK@composeK[G[_]]:cats.MonoidK[[α]F[G[α]]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.ProdMonoidK@compose[G[_]]:cats.MonoidK[[α]F[G[α]]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Compose this MonoidK with an arbitrary type constructor
-</p><div class="fullcomment"><div class="comment cmt"><p>Compose this MonoidK with an arbitrary type constructor
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a> → <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a> → <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a></dd></dl></div>
     </li><li name="cats.data.ProdMonoidK#empty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="empty[A]:cats.data.Prod[F,G,A]"></a>
       <a id="empty[A]:Prod[F,G,A]"></a>
@@ -572,9 +570,9 @@
         <div class="parent" name="cats.data.ProdSemigroupK">
               <h3>Inherited from <a href="ProdSemigroupK.html" class="extype" name="cats.data.ProdSemigroupK">ProdSemigroupK</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>]</h3>
             </div><div class="parent" name="cats.MonoidK">
-              <h3>Inherited from <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]]</h3>
+              <h3>Inherited from <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]]</h3>
             </div><div class="parent" name="cats.SemigroupK">
-              <h3>Inherited from <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[X]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.X">X</span>]]</h3>
+              <h3>Inherited from <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonoidK.F">F</span>, <span class="extype" name="cats.data.ProdMonoidK.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">

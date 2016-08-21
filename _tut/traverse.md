@@ -42,8 +42,7 @@ Given just `User => Future[Profile]`, what should we do if we want to fetch prof
 We could try familiar combinators like `map`.
 
 ```scala
-scala> def profilesFor(users: List[User]) = users.map(userInfo)
-profilesFor: (users: List[User])List[scala.concurrent.Future[Profile]]
+def profilesFor(users: List[User]): List[Future[Profile]] = users.map(userInfo)
 ```
 
 Note the return type `List[Future[Profile]]`. This makes sense given the type signatures, but seems unwieldy.
@@ -93,8 +92,7 @@ trivially satisfy the `F[_]` shape required by `Applicative`.
 ```scala
 import cats.Semigroup
 import cats.data.{NonEmptyList, OneAnd, Validated, ValidatedNel, Xor}
-import cats.std.list._
-import cats.syntax.traverse._
+import cats.implicits._
 
 def parseIntXor(s: String): Xor[NumberFormatException, Int] =
   Xor.catchOnly[NumberFormatException](s.toInt)
@@ -106,23 +104,23 @@ def parseIntValidated(s: String): ValidatedNel[NumberFormatException, Int] =
 Examples.
 
 ```scala
-scala> val x1 = List("1", "2", "3").traverseU(parseIntXor)
-x1: cats.data.Xor[NumberFormatException,List[Int]] = Right(List(1, 2, 3))
+val x1 = List("1", "2", "3").traverseU(parseIntXor)
+// x1: cats.data.Xor[NumberFormatException,List[Int]] = Right(List(1, 2, 3))
 
-scala> val x2 = List("1", "abc", "3").traverseU(parseIntXor)
-x2: cats.data.Xor[NumberFormatException,List[Int]] = Left(java.lang.NumberFormatException: For input string: "abc")
+val x2 = List("1", "abc", "3").traverseU(parseIntXor)
+// x2: cats.data.Xor[NumberFormatException,List[Int]] = Left(java.lang.NumberFormatException: For input string: "abc")
 
-scala> val x3 = List("1", "abc", "def").traverseU(parseIntXor)
-x3: cats.data.Xor[NumberFormatException,List[Int]] = Left(java.lang.NumberFormatException: For input string: "abc")
+val x3 = List("1", "abc", "def").traverseU(parseIntXor)
+// x3: cats.data.Xor[NumberFormatException,List[Int]] = Left(java.lang.NumberFormatException: For input string: "abc")
 
-scala> val v1 = List("1", "2", "3").traverseU(parseIntValidated)
-v1: cats.data.Validated[cats.data.OneAnd[[+A]List[A],NumberFormatException],List[Int]] = Valid(List(1, 2, 3))
+val v1 = List("1", "2", "3").traverseU(parseIntValidated)
+// v1: cats.data.Validated[cats.data.NonEmptyList[NumberFormatException],List[Int]] = Valid(List(1, 2, 3))
 
-scala> val v2 = List("1", "abc", "3").traverseU(parseIntValidated)
-v2: cats.data.Validated[cats.data.OneAnd[[+A]List[A],NumberFormatException],List[Int]] = Invalid(OneAnd(java.lang.NumberFormatException: For input string: "abc",List()))
+val v2 = List("1", "abc", "3").traverseU(parseIntValidated)
+// v2: cats.data.Validated[cats.data.NonEmptyList[NumberFormatException],List[Int]] = Invalid(NonEmptyList(java.lang.NumberFormatException: For input string: "abc"))
 
-scala> val v3 = List("1", "abc", "def").traverseU(parseIntValidated)
-v3: cats.data.Validated[cats.data.OneAnd[[+A]List[A],NumberFormatException],List[Int]] = Invalid(OneAnd(java.lang.NumberFormatException: For input string: "abc",List(java.lang.NumberFormatException: For input string: "def")))
+val v3 = List("1", "abc", "def").traverseU(parseIntValidated)
+// v3: cats.data.Validated[cats.data.NonEmptyList[NumberFormatException],List[Int]] = Invalid(NonEmptyList(java.lang.NumberFormatException: For input string: "abc", java.lang.NumberFormatException: For input string: "def"))
 ```
 
 Notice that in the `Xor` case, should any string fail to parse the entire traversal
@@ -167,7 +165,7 @@ Corresponding to our bunches of data are bunches of topics, a `List[Topic]` if y
 Since `Reader` has an `Applicative` instance, we can `traverse` over this list with `processTopic`.
 
 ```scala
-def processTopics(topics: List[Topic]) = 
+def processTopics(topics: List[Topic]): Job[List[Result]] = 
   topics.traverse(processTopic)
 ```
 
@@ -199,24 +197,24 @@ for instance a `List[Option[A]]`. To make this easier to work with, you want a `
 Given `Option` has an `Applicative` instance, we can traverse over the list with the identity function.
 
 ```scala
-scala> import cats.std.option._
-import cats.std.option._
+import cats.implicits._
+// import cats.implicits._
 
-scala> val l1 = List(Option(1), Option(2), Option(3)).traverse(identity)
-l1: Option[List[Int]] = Some(List(1, 2, 3))
+val l1 = List(Option(1), Option(2), Option(3)).traverse(identity)
+// l1: Option[List[Int]] = Some(List(1, 2, 3))
 
-scala> val l2 = List(Option(1), None, Option(3)).traverse(identity)
-l2: Option[List[Int]] = None
+val l2 = List(Option(1), None, Option(3)).traverse(identity)
+// l2: Option[List[Int]] = None
 ```
 
 `Traverse` provides a convenience method `sequence` that does exactly this.
 
 ```scala
-scala> val l1 = List(Option(1), Option(2), Option(3)).sequence
-l1: Option[List[Int]] = Some(List(1, 2, 3))
+val l1 = List(Option(1), Option(2), Option(3)).sequence
+// l1: Option[List[Int]] = Some(List(1, 2, 3))
 
-scala> val l2 = List(Option(1), None, Option(3)).sequence
-l2: Option[List[Int]] = None
+val l2 = List(Option(1), None, Option(3)).sequence
+// l2: Option[List[Int]] = None
 ```
 
 ## Traversing for effect
@@ -231,7 +229,7 @@ def writeToStore(data: Data): Future[Unit] = ???
 If we traverse using this, we end up with a funny type.
 
 ```scala
-import cats.std.future._
+import cats.implicits._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 def writeManyToStore(data: List[Data]) =
@@ -246,7 +244,7 @@ is common, so `Foldable` (superclass of `Traverse`) provides `traverse_` and `se
 same thing as `traverse` and `sequence` but ignores any value produced along the way, returning `Unit` at the end.
 
 ```scala
-import cats.syntax.foldable._
+import cats.implicits._
 
 def writeManyToStore(data: List[Data]) = 
   data.traverse_(writeToStore)

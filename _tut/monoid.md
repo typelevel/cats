@@ -2,8 +2,8 @@
 layout: default
 title:  "Monoid"
 section: "typeclasses"
-source: "https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Monoid.scala"
-
+source: "kernel/src/main/scala/cats/kernel/Monoid.scala"
+scaladoc: "#cats.kernel.Monoid"
 ---
 # Monoid
 
@@ -28,21 +28,20 @@ First some imports.
 
 ```scala
 import cats._
-import cats.std.all._
 import cats.implicits._
 ```
 
 Examples.
 
 ```scala
-scala> Monoid[String].empty
-res0: String = ""
+Monoid[String].empty
+// res0: String = ""
 
-scala> Monoid[String].combineAll(List("a", "b", "c"))
-res1: String = abc
+Monoid[String].combineAll(List("a", "b", "c"))
+// res1: String = abc
 
-scala> Monoid[String].combineAll(List())
-res2: String = ""
+Monoid[String].combineAll(List())
+// res2: String = ""
 ```
 
 The advantage of using these type class provided methods, rather than the 
@@ -50,11 +49,11 @@ specific ones for each type, is that we can compose monoids to allow us to
 operate on more complex types, e.g.
  
 ```scala
-scala> Monoid[Map[String,Int]].combineAll(List(Map("a" -> 1, "b" -> 2), Map("a" -> 3)))
-res3: Map[String,Int] = Map(b -> 2, a -> 4)
+Monoid[Map[String,Int]].combineAll(List(Map("a" -> 1, "b" -> 2), Map("a" -> 3)))
+// res3: Map[String,Int] = Map()
 
-scala> Monoid[Map[String,Int]].combineAll(List())
-res4: Map[String,Int] = Map()
+Monoid[Map[String,Int]].combineAll(List())
+// res4: Map[String,Int] = Map()
 ```
 
 This is also true if we define our own instances. As an example, let's use 
@@ -62,14 +61,14 @@ This is also true if we define our own instances. As an example, let's use
 the results, using the available `Monoid` for the type mapped onto. 
 
 ```scala
-scala> val l = List(1, 2, 3, 4, 5)
-l: List[Int] = List(1, 2, 3, 4, 5)
+val l = List(1, 2, 3, 4, 5)
+// l: List[Int] = List(1, 2, 3, 4, 5)
 
-scala> l.foldMap(identity)
-res5: Int = 15
+l.foldMap(identity)
+// res5: Int = 15
 
-scala> l.foldMap(i => i.toString)
-res6: String = 12345
+l.foldMap(i => i.toString)
+// res6: String = 12345
 ```
 
 To use this
@@ -78,17 +77,14 @@ that will be valid for any tuple where the types it contains also have a
 `Monoid` available, thus.
 
 ```scala
-scala> l.foldMap(i => (i, i.toString)) // do both of the above in one pass, hurrah!
-res7: (Int, String) = (15,12345)
+l.foldMap(i => (i, i.toString)) // do both of the above in one pass, hurrah!
+// res7: (Int, String) = (15,12345)
 ```
 
 -------------------------------------------------------------------------------
  
 N.B.
-Cats does not define a `Monoid` type class itself, it uses the [`Monoid`
-trait](https://github.com/non/algebra/blob/master/core/src/main/scala/algebra/Monoid.scala)
-which is defined in the [algebra project](https://github.com/non/algebra) on 
-which it depends. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
-defines type aliases to the `Monoid` from algebra, so that you can
-`import cats.Monoid`. Also the `Monoid` instance for tuple is also [implemented in algebra](https://github.com/non/algebra/blob/v0.4.2/project/Boilerplate.scala#L80-L217), 
-cats merely provides it through [inheritance](https://github.com/typelevel/cats/blob/v0.5.0/core/src/main/scala/cats/std/tuple.scala). 
+Cats defines  the `Monoid` type class in cats-kernel. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
+defines type aliases to the `Monoid` from cats-kernel, so that you can
+`import cats.Monoid`. Also the `Monoid` instance for tuple is also [implemented in cats-kernel](https://github.com/typelevel/cats/blob/master/project/KernelBoiler.scala), 
+cats merely provides it through [inheritance](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/std/tuple.scala).

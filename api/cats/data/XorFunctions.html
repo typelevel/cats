@@ -221,7 +221,10 @@
       <p class="shortcomment cmt">Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
 the resulting <code>Xor</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
 the resulting <code>Xor</code>. Uncaught exceptions are propagated.</p><p>For example:</p><pre>scala&gt; Xor.catchOnly[NumberFormatException] { <span class="lit">"foo"</span>.toInt }
-res0: Xor[NumberFormatException, <span class="std">Int</span>] = Left(java.lang.NumberFormatException: For input string: <span class="lit">"foo"</span>)</pre></div></div>
+res0: Xor[NumberFormatException, <span class="std">Int</span>] = Left(java.lang.NumberFormatException: For input string: <span class="lit">"foo"</span>)</pre><p>This method and its usage of <a href="../NotNull.html" class="extype" name="cats.NotNull">NotNull</a> are inspired by and derived from
+the <code>fromTryCatchThrowable</code> method <a href="https://github.com/scalaz/scalaz/pull/746/files" target="_blank">contributed</a>
+to Scalaz by Brian McKenna.
+</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>

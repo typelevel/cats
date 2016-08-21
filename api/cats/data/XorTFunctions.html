@@ -316,7 +316,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">Transforms an <code>Xor</code> into an <code>XorT</code>, lifted into the specified <code>Applicative</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transforms an <code>Xor</code> into an <code>XorT</code>, lifted into the specified <code>Applicative</code>.</p><p>Note: The return type is a FromXorPartiallyApplied[F], which has an apply method
-on it, allowing you to call fromXor like this:</p><pre>scala&gt; <span class="kw">import</span> cats.std.option._
+on it, allowing you to call fromXor like this:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> t: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Xor.right(<span class="num">3</span>)
 scala&gt; XorT.fromXor[<span class="std">Option</span>](t)
 res0: XorT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = XorT(<span class="std">Some</span>(Right(<span class="num">3</span>)))</pre><p>The reason for the indirection is to emulate currying type parameters.
@@ -389,6 +389,30 @@ res0: XorT[<span class="std">Option</span>, <span class="std">String</span>, <sp
       </a>
     </span>
       
+    </li><li name="cats.data.XorTFunctions#liftT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="liftT[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.XorT[F,A,B]"></a>
+      <a id="liftT[F[_],A,B](F[B])(Functor[F]):XorT[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">liftT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.data.XorTFunctions.liftT.F">F</span>[<span class="extype" name="cats.data.XorTFunctions.liftT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.XorTFunctions.liftT.F">F</span>]</span>)</span><span class="result">: <a href="XorT.html" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.XorTFunctions.liftT.F">F</span>, <span class="extype" name="cats.data.XorTFunctions.liftT.A">A</span>, <span class="extype" name="cats.data.XorTFunctions.liftT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.XorTFunctions@liftT[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.XorT[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Alias for <a href="XorT$.html#right[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.XorT[F,A,B]" class="extmbr" name="cats.data.XorT#right">XorT.right</a></p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="XorT$.html#right[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.XorT[F,A,B]" class="extmbr" name="cats.data.XorT#right">XorT.right</a></p><pre>scala&gt; <span class="kw">import</span> cats.data.XorT
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> o: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)
+scala&gt; <span class="kw">val</span> n: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
+scala&gt; XorT.liftT(o)
+res0: cats.data.XorT[<span class="std">Option</span>,<span class="std">Nothing</span>,<span class="std">Int</span>] = XorT(<span class="std">Some</span>(Right(<span class="num">3</span>)))
+scala&gt; XorT.liftT(n)
+res1: cats.data.XorT[<span class="std">Option</span>,<span class="std">Nothing</span>,<span class="std">Int</span>] = XorT(<span class="std">None</span>)</pre></div></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

@@ -1,0 +1,1197 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>EitherT - cats.data.EitherT</title>
+          <meta name="description" content="EitherT - cats.data.EitherT" />
+          <meta name="keywords" content="EitherT cats.data.EitherT" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'cats.data.EitherT';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="EitherT$.html" title="See companion object"><img alt="Class/Object" src="../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.data">data</a></p>
+        <h1><a href="EitherT$.html" title="See companion object">EitherT</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="EitherT$.html" title="See companion object">object EitherT</a>
+            | <a href="package.html" class="extype" name="cats.data">package data</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">EitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Transformer for <code>Either</code>, allowing the effect of an arbitrary type constructor <code>F</code> to be combined with the
+fail-fast effect of <code>Either</code>.</p><p><code>EitherT[F, A, B]</code> wraps a value of type <code>F[Either[A, B]]</code>. An <code>F[C]</code> can be lifted in to <code>EitherT[F, A, C]</code> via <code>EitherT.right</code>,
+and lifted in to a <code>EitherT[F, C, B]</code> via <code>EitherT.left</code>.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/EitherT.scala" target="_blank">EitherT.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="cats.data.EitherT"><span>EitherT</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="cats.data.EitherT#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(value:F[Either[A,B]]):cats.data.EitherT[F,A,B]"></a>
+      <a id="&lt;init&gt;:EitherT[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">EitherT</span><span class="params">(<span name="value">value: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@&lt;init&gt;(value:F[Either[A,B]]):cats.data.EitherT[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.EitherT#===" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="===(that:cats.data.EitherT[F,A,B])(impliciteq:cats.Eq[F[Either[A,B]]]):Boolean"></a>
+      <a id="===(EitherT[F,A,B])(Eq[F[Either[A,B]]]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="eq">eq: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@===(that:cats.data.EitherT[F,A,B])(impliciteq:cats.Eq[F[Either[A,B]]]):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#applyAlt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="applyAlt[D](ff:cats.data.EitherT[F,A,B=&gt;D])(implicitF:cats.Apply[F]):cats.data.EitherT[F,A,D]"></a>
+      <a id="applyAlt[D](EitherT[F,A,(B)⇒D])(Apply[F]):EitherT[F,A,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applyAlt</span><span class="tparams">[<span name="D">D</span>]</span><span class="params">(<span name="ff">ff: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <span class="extype" name="cats.data.EitherT.applyAlt.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.applyAlt.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@applyAlt[D](ff:cats.data.EitherT[F,A,B=&gt;D])(implicitF:cats.Apply[F]):cats.data.EitherT[F,A,D]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.EitherT#bimap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="bimap[C,D](fa:A=&gt;C,fb:B=&gt;D)(implicitF:cats.Functor[F]):cats.data.EitherT[F,C,D]"></a>
+      <a id="bimap[C,D]((A)⇒C,(B)⇒D)(Functor[F]):EitherT[F,C,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bimap</span><span class="tparams">[<span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="fa">fa: (<span class="extype" name="cats.data.EitherT.A">A</span>) ⇒ <span class="extype" name="cats.data.EitherT.bimap.C">C</span></span>, <span name="fb">fb: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <span class="extype" name="cats.data.EitherT.bimap.D">D</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.bimap.C">C</span>, <span class="extype" name="cats.data.EitherT.bimap.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@bimap[C,D](fa:A=&gt;C,fb:B=&gt;D)(implicitF:cats.Functor[F]):cats.data.EitherT[F,C,D]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#bitraverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="bitraverse[G[_],C,D](f:A=&gt;G[C],g:B=&gt;G[D])(implicittraverseF:cats.Traverse[F],implicitapplicativeG:cats.Applicative[G]):G[cats.data.EitherT[F,C,D]]"></a>
+      <a id="bitraverse[G[_],C,D]((A)⇒G[C],(B)⇒G[D])(Traverse[F],Applicative[G]):G[EitherT[F,C,D]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bitraverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.A">A</span>) ⇒ <span class="extype" name="cats.data.EitherT.bitraverse.G">G</span>[<span class="extype" name="cats.data.EitherT.bitraverse.C">C</span>]</span>, <span name="g">g: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <span class="extype" name="cats.data.EitherT.bitraverse.G">G</span>[<span class="extype" name="cats.data.EitherT.bitraverse.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="traverseF">traverseF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>, <span name="applicativeG">applicativeG: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.EitherT.bitraverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.bitraverse.G">G</span>[<a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.bitraverse.C">C</span>, <span class="extype" name="cats.data.EitherT.bitraverse.D">D</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@bitraverse[G[_],C,D](f:A=&gt;G[C],g:B=&gt;G[D])(implicittraverseF:cats.Traverse[F],implicitapplicativeG:cats.Applicative[G]):G[cats.data.EitherT[F,C,D]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.EitherT#collectRight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="collectRight(implicitF:cats.MonadCombine[F]):F[B]"></a>
+      <a id="collectRight(MonadCombine[F]):F[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">collectRight</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@collectRight(implicitF:cats.MonadCombine[F]):F[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#combine" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="combine(that:cats.data.EitherT[F,A,B])(implicitF:cats.Apply[F],implicitB:cats.Semigroup[B]):cats.data.EitherT[F,A,B]"></a>
+      <a id="combine(EitherT[F,A,B])(Apply[F],Semigroup[B]):EitherT[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">combine</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>, <span name="B">B: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.EitherT.B">B</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@combine(that:cats.data.EitherT[F,A,B])(implicitF:cats.Apply[F],implicitB:cats.Semigroup[B]):cats.data.EitherT[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Similar to <code>Either#combine</code> but mapped over an <code>F</code> context.</p><div class="fullcomment"><div class="comment cmt"><p>Similar to <code>Either#combine</code> but mapped over an <code>F</code> context.</p><p>Examples:</p><pre>scala&gt; <span class="kw">import</span> cats.data.EitherT
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> l1: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT.left(<span class="std">Some</span>(<span class="lit">"error 1"</span>))
+scala&gt; <span class="kw">val</span> l2: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT.left(<span class="std">Some</span>(<span class="lit">"error 2"</span>))
+scala&gt; <span class="kw">val</span> r3: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT.right(<span class="std">Some</span>(<span class="num">3</span>))
+scala&gt; <span class="kw">val</span> r4: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT.right(<span class="std">Some</span>(<span class="num">4</span>))
+scala&gt; <span class="kw">val</span> noneEitherT: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT.left(<span class="std">None</span>)
+
+scala&gt; l1 combine l2
+res0: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Left(error <span class="num">1</span>)))
+
+scala&gt; l1 combine r3
+res1: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Left(error <span class="num">1</span>)))
+
+scala&gt; r3 combine l1
+res2: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Left(error <span class="num">1</span>)))
+
+scala&gt; r3 combine r4
+res3: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Right(<span class="num">7</span>)))
+
+scala&gt; l1 combine noneEitherT
+res4: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">None</span>)
+
+scala&gt; noneEitherT combine l1
+res5: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">None</span>)
+
+scala&gt; r3 combine noneEitherT
+res6: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">None</span>)
+
+scala&gt; noneEitherT combine r4
+res7: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">None</span>)</pre></div></div>
+    </li><li name="cats.data.EitherT#compare" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="compare(that:cats.data.EitherT[F,A,B])(implicito:cats.Order[F[Either[A,B]]]):Int"></a>
+      <a id="compare(EitherT[F,A,B])(Order[F[Either[A,B]]]):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compare</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="o">o: <a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@compare(that:cats.data.EitherT[F,A,B])(implicito:cats.Order[F[Either[A,B]]]):Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#ensure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ensure(onFailure:=&gt;A)(f:B=&gt;Boolean)(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]"></a>
+      <a id="ensure(⇒A)((B)⇒Boolean)(Functor[F]):EitherT[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ensure</span><span class="params">(<span name="onFailure">onFailure: ⇒ <span class="extype" name="cats.data.EitherT.A">A</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@ensure(onFailure:=&gt;A)(f:B=&gt;Boolean)(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.EitherT#exists" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="exists(f:B=&gt;Boolean)(implicitF:cats.Functor[F]):F[Boolean]"></a>
+      <a id="exists((B)⇒Boolean)(Functor[F]):F[Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exists</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@exists(f:B=&gt;Boolean)(implicitF:cats.Functor[F]):F[Boolean]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.EitherT#flatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="flatMap[D](f:B=&gt;cats.data.EitherT[F,A,D])(implicitF:cats.Monad[F]):cats.data.EitherT[F,A,D]"></a>
+      <a id="flatMap[D]((B)⇒EitherT[F,A,D])(Monad[F]):EitherT[F,A,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatMap</span><span class="tparams">[<span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.flatMap.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.flatMap.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@flatMap[D](f:B=&gt;cats.data.EitherT[F,A,D])(implicitF:cats.Monad[F]):cats.data.EitherT[F,A,D]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#flatMapF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="flatMapF[D](f:B=&gt;F[Either[A,D]])(implicitF:cats.Monad[F]):cats.data.EitherT[F,A,D]"></a>
+      <a id="flatMapF[D]((B)⇒F[Either[A,D]])(Monad[F]):EitherT[F,A,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatMapF</span><span class="tparams">[<span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.flatMapF.D">D</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.flatMapF.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@flatMapF[D](f:B=&gt;F[Either[A,D]])(implicitF:cats.Monad[F]):cats.data.EitherT[F,A,D]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#fold" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fold[C](fa:A=&gt;C,fb:B=&gt;C)(implicitF:cats.Functor[F]):F[C]"></a>
+      <a id="fold[C]((A)⇒C,(B)⇒C)(Functor[F]):F[C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fold</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="fa">fa: (<span class="extype" name="cats.data.EitherT.A">A</span>) ⇒ <span class="extype" name="cats.data.EitherT.fold.C">C</span></span>, <span name="fb">fb: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <span class="extype" name="cats.data.EitherT.fold.C">C</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="cats.data.EitherT.fold.C">C</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@fold[C](fa:A=&gt;C,fb:B=&gt;C)(implicitF:cats.Functor[F]):F[C]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#foldLeft" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foldLeft[C](c:C)(f:(C,B)=&gt;C)(implicitF:cats.Foldable[F]):C"></a>
+      <a id="foldLeft[C](C)((C,B)⇒C)(Foldable[F]):C"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldLeft</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="c">c: <span class="extype" name="cats.data.EitherT.foldLeft.C">C</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.foldLeft.C">C</span>, <span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <span class="extype" name="cats.data.EitherT.foldLeft.C">C</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.foldLeft.C">C</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@foldLeft[C](c:C)(f:(C,B)=&gt;C)(implicitF:cats.Foldable[F]):C" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#foldRight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foldRight[C](lc:cats.Eval[C])(f:(B,cats.Eval[C])=&gt;cats.Eval[C])(implicitF:cats.Foldable[F]):cats.Eval[C]"></a>
+      <a id="foldRight[C](Eval[C])((B,Eval[C])⇒Eval[C])(Foldable[F]):Eval[C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldRight</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="lc">lc: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.EitherT.foldRight.C">C</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.B">B</span>, <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.EitherT.foldRight.C">C</span>]) ⇒ <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.EitherT.foldRight.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.EitherT.foldRight.C">C</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@foldRight[C](lc:cats.Eval[C])(f:(B,cats.Eval[C])=&gt;cats.Eval[C])(implicitF:cats.Foldable[F]):cats.Eval[C]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#forall" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="forall(f:B=&gt;Boolean)(implicitF:cats.Functor[F]):F[Boolean]"></a>
+      <a id="forall((B)⇒Boolean)(Functor[F]):F[Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">forall</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@forall(f:B=&gt;Boolean)(implicitF:cats.Functor[F]):F[Boolean]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.EitherT#getOrElse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getOrElse(default:=&gt;B)(implicitF:cats.Functor[F]):F[B]"></a>
+      <a id="getOrElse(⇒B)(Functor[F]):F[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOrElse</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="cats.data.EitherT.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@getOrElse(default:=&gt;B)(implicitF:cats.Functor[F]):F[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#getOrElseF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getOrElseF(default:=&gt;F[B])(implicitF:cats.Monad[F]):F[B]"></a>
+      <a id="getOrElseF(⇒F[B])(Monad[F]):F[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOrElseF</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="cats.data.EitherT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@getOrElseF(default:=&gt;F[B])(implicitF:cats.Monad[F]):F[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.EitherT#isLeft" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isLeft(implicitF:cats.Functor[F]):F[Boolean]"></a>
+      <a id="isLeft(Functor[F]):F[Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isLeft</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@isLeft(implicitF:cats.Functor[F]):F[Boolean]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#isRight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isRight(implicitF:cats.Functor[F]):F[Boolean]"></a>
+      <a id="isRight(Functor[F]):F[Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isRight</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@isRight(implicitF:cats.Functor[F]):F[Boolean]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#leftMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="leftMap[C](f:A=&gt;C)(implicitF:cats.Functor[F]):cats.data.EitherT[F,C,B]"></a>
+      <a id="leftMap[C]((A)⇒C)(Functor[F]):EitherT[F,C,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftMap</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.A">A</span>) ⇒ <span class="extype" name="cats.data.EitherT.leftMap.C">C</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.leftMap.C">C</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@leftMap[C](f:A=&gt;C)(implicitF:cats.Functor[F]):cats.data.EitherT[F,C,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#map" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="map[D](f:B=&gt;D)(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,D]"></a>
+      <a id="map[D]((B)⇒D)(Functor[F]):EitherT[F,A,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map</span><span class="tparams">[<span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <span class="extype" name="cats.data.EitherT.map.D">D</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.map.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@map[D](f:B=&gt;D)(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,D]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#merge" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="merge(implicitev:&lt;:&lt;[B,A],implicitF:cats.Functor[F]):F[A]"></a>
+      <a id="merge(&lt;:&lt;[B,A],Functor[F]):F[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">merge</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.data.EitherT.B">B</span>, <span class="extype" name="cats.data.EitherT.A">A</span>]</span>, <span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="cats.data.EitherT.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@merge(implicitev:&lt;:&lt;[B,A],implicitF:cats.Functor[F]):F[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.EitherT#orElse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="orElse(default:=&gt;cats.data.EitherT[F,A,B])(implicitF:cats.Monad[F]):cats.data.EitherT[F,A,B]"></a>
+      <a id="orElse(⇒EitherT[F,A,B])(Monad[F]):EitherT[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orElse</span><span class="params">(<span name="default">default: ⇒ <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@orElse(default:=&gt;cats.data.EitherT[F,A,B])(implicitF:cats.Monad[F]):cats.data.EitherT[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#partialCompare" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="partialCompare(that:cats.data.EitherT[F,A,B])(implicitp:cats.PartialOrder[F[Either[A,B]]]):Double"></a>
+      <a id="partialCompare(EitherT[F,A,B])(PartialOrder[F[Either[A,B]]]):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partialCompare</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="p">p: <a href="../package.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Double" class="extype" target="_top">Double</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@partialCompare(that:cats.data.EitherT[F,A,B])(implicitp:cats.PartialOrder[F[Either[A,B]]]):Double" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#recover" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="recover(pf:PartialFunction[A,B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]"></a>
+      <a id="recover(PartialFunction[A,B])(Functor[F]):EitherT[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recover</span><span class="params">(<span name="pf">pf: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@recover(pf:PartialFunction[A,B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#recoverWith" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="recoverWith(pf:PartialFunction[A,cats.data.EitherT[F,A,B]])(implicitF:cats.Monad[F]):cats.data.EitherT[F,A,B]"></a>
+      <a id="recoverWith(PartialFunction[A,EitherT[F,A,B]])(Monad[F]):EitherT[F,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recoverWith</span><span class="params">(<span name="pf">pf: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="cats.data.EitherT.A">A</span>, <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@recoverWith(pf:PartialFunction[A,cats.data.EitherT[F,A,B]])(implicitF:cats.Monad[F]):cats.data.EitherT[F,A,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#semiflatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="semiflatMap[D](f:B=&gt;F[D])(implicitF:cats.Monad[F]):cats.data.EitherT[F,A,D]"></a>
+      <a id="semiflatMap[D]((B)⇒F[D])(Monad[F]):EitherT[F,A,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">semiflatMap</span><span class="tparams">[<span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="cats.data.EitherT.semiflatMap.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.semiflatMap.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@semiflatMap[D](f:B=&gt;F[D])(implicitF:cats.Monad[F]):cats.data.EitherT[F,A,D]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#show" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="show(implicitshow:cats.Show[F[Either[A,B]]]):String"></a>
+      <a id="show(Show[F[Either[A,B]]]):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">show</span><span class="params">(<span class="implicit">implicit </span><span name="show">show: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@show(implicitshow:cats.Show[F[Either[A,B]]]):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#subflatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="subflatMap[D](f:B=&gt;Either[A,D])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,D]"></a>
+      <a id="subflatMap[D]((B)⇒Either[A,D])(Functor[F]):EitherT[F,A,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">subflatMap</span><span class="tparams">[<span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.subflatMap.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.subflatMap.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@subflatMap[D](f:B=&gt;Either[A,D])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,D]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#swap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="swap(implicitF:cats.Functor[F]):cats.data.EitherT[F,B,A]"></a>
+      <a id="swap(Functor[F]):EitherT[F,B,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">swap</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.B">B</span>, <span class="extype" name="cats.data.EitherT.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@swap(implicitF:cats.Functor[F]):cats.data.EitherT[F,B,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.EitherT#to" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="to[G[_]](implicitF:cats.Functor[F],implicitG:cats.Alternative[G]):F[G[B]]"></a>
+      <a id="to[G[_]](Functor[F],Alternative[G]):F[G[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">to</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>, <span name="G">G: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.EitherT.to.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="cats.data.EitherT.to.G">G</span>[<span class="extype" name="cats.data.EitherT.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@to[G[_]](implicitF:cats.Functor[F],implicitG:cats.Alternative[G]):F[G[B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#toNested" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toNested:cats.data.Nested[F,[β]scala.util.Either[A,β],B]"></a>
+      <a id="toNested:Nested[F,[β]Either[A,β],B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNested</span><span class="result">: <a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, [β]<span class="extype" name="scala.util.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.&lt;refinement&gt;.Λ$.β">β</span>], <span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@toNested:cats.data.Nested[F,[β]scala.util.Either[A,β],B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Transform this <code>EitherT[F, A, B]</code> into a <code><a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[F, Either[A, ?], B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transform this <code>EitherT[F, A, B]</code> into a <code><a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[F, Either[A, ?], B]</code>.</p><p>An example where <code>toNested</code> can be used, is to get the <code>Apply.ap</code> function with the
+behavior from the composed <code>Apply</code> instances from <code>F</code> and <code>Either[A, ?]</code>, which is
+inconsistent with the behavior of the <code>ap</code> from <code>Monad</code> of <code>EitherT</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.data.{Nested, EitherT}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> ff: EitherT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span>] =
+     |   EitherT(<span class="std">List</span>(Either.right(_.toString), Either.left(<span class="lit">"error"</span>)))
+scala&gt; <span class="kw">val</span> fa: EitherT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span>] =
+     |   EitherT(<span class="std">List</span>(Either.right(<span class="num">1</span>), Either.right(<span class="num">2</span>)))
+scala&gt; <span class="kw">type</span> ErrorOr[A] = Either[<span class="std">String</span>, A]
+scala&gt; <span class="kw">type</span> ListErrorOr[A] = Nested[<span class="std">List</span>, ErrorOr, A]
+scala&gt; ff.ap(fa)
+res0: EitherT[<span class="std">List</span>,<span class="std">String</span>,<span class="std">String</span>] = EitherT(<span class="std">List</span>(Right(<span class="num">1</span>), Right(<span class="num">2</span>), Left(error)))
+scala&gt; EitherT((ff.toNested: ListErrorOr[<span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span>]).ap(fa.toNested: ListErrorOr[<span class="std">Int</span>]).value)
+res1: EitherT[<span class="std">List</span>,<span class="std">String</span>,<span class="std">String</span>] = EitherT(<span class="std">List</span>(Right(<span class="num">1</span>), Right(<span class="num">2</span>), Left(error), Left(error)))</pre><p>Note that we need the <code>ErrorOr</code> type alias above because otherwise we can't use the
+syntax function <code>ap</code> on <code>Nested[List, Either[A, ?], B]</code>. This won't be needed after cats has
+decided <a href="https://github.com/typelevel/cats/issues/1073" target="_blank">how to handle the SI-2712 fix</a>.
+</p></div></div>
+    </li><li name="cats.data.EitherT#toOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toOption(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]"></a>
+      <a id="toOption(Functor[F]):OptionT[F,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toOption</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@toOption(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#toValidated" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toValidated(implicitF:cats.Functor[F]):F[cats.data.Validated[A,B]]"></a>
+      <a id="toValidated(Functor[F]):F[Validated[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toValidated</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@toValidated(implicitF:cats.Functor[F]):F[cats.data.Validated[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#toValidatedNel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toValidatedNel(implicitF:cats.Functor[F]):F[cats.data.ValidatedNel[A,B]]"></a>
+      <a id="toValidatedNel(Functor[F]):F[ValidatedNel[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toValidatedNel</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<a href="package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@toValidatedNel(implicitF:cats.Functor[F]):F[cats.data.ValidatedNel[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#transform" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="transform[C,D](f:Either[A,B]=&gt;Either[C,D])(implicitF:cats.Functor[F]):cats.data.EitherT[F,C,D]"></a>
+      <a id="transform[C,D]((Either[A,B])⇒Either[C,D])(Functor[F]):EitherT[F,C,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">transform</span><span class="tparams">[<span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]) ⇒ <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.transform.C">C</span>, <span class="extype" name="cats.data.EitherT.transform.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.transform.C">C</span>, <span class="extype" name="cats.data.EitherT.transform.D">D</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@transform[C,D](f:Either[A,B]=&gt;Either[C,D])(implicitF:cats.Functor[F]):cats.data.EitherT[F,C,D]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="traverse[G[_],D](f:B=&gt;G[D])(implicittraverseF:cats.Traverse[F],implicitapplicativeG:cats.Applicative[G]):G[cats.data.EitherT[F,A,D]]"></a>
+      <a id="traverse[G[_],D]((B)⇒G[D])(Traverse[F],Applicative[G]):G[EitherT[F,A,D]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <span class="extype" name="cats.data.EitherT.traverse.G">G</span>[<span class="extype" name="cats.data.EitherT.traverse.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="traverseF">traverseF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>, <span name="applicativeG">applicativeG: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.EitherT.traverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.traverse.G">G</span>[<a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.traverse.D">D</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@traverse[G[_],D](f:B=&gt;G[D])(implicittraverseF:cats.Traverse[F],implicitapplicativeG:cats.Applicative[G]):G[cats.data.EitherT[F,A,D]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#value" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="value:F[Either[A,B]]"></a>
+      <a id="value:F[Either[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">value</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@value:F[Either[A,B]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.EitherT#valueOr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="valueOr(f:A=&gt;B)(implicitF:cats.Functor[F]):F[B]"></a>
+      <a id="valueOr((A)⇒B)(Functor[F]):F[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">valueOr</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.A">A</span>) ⇒ <span class="extype" name="cats.data.EitherT.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@valueOr(f:A=&gt;B)(implicitF:cats.Functor[F]):F[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.EitherT#withValidated" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withValidated[AA,BB](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[AA,BB])(implicitF:cats.Functor[F]):cats.data.EitherT[F,AA,BB]"></a>
+      <a id="withValidated[AA,BB]((Validated[A,B])⇒Validated[AA,BB])(Functor[F]):EitherT[F,AA,BB]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withValidated</span><span class="tparams">[<span name="AA">AA</span>, <span name="BB">BB</span>]</span><span class="params">(<span name="f">f: (<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]) ⇒ <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherT.withValidated.AA">AA</span>, <span class="extype" name="cats.data.EitherT.withValidated.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.withValidated.AA">AA</span>, <span class="extype" name="cats.data.EitherT.withValidated.BB">BB</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@withValidated[AA,BB](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[AA,BB])(implicitF:cats.Functor[F]):cats.data.EitherT[F,AA,BB]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Run this value as a <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> against the function and convert it back to an <code><a href="" class="extype" name="cats.data.EitherT">EitherT</a></code>.</p><div class="fullcomment"><div class="comment cmt"><p>Run this value as a <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> against the function and convert it back to an <code><a href="" class="extype" name="cats.data.EitherT">EitherT</a></code>.</p><p>The <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>EitherT</code> &quot;fails fast&quot; - it is often useful to &quot;momentarily&quot; have
+it accumulate errors instead, which is what the <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> data type gives us.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">type</span> Error = <span class="std">String</span>
+scala&gt; <span class="kw">val</span> v1: Validated[NonEmptyList[Error], <span class="std">Int</span>] = Validated.Invalid(NonEmptyList.of(<span class="lit">"error 1"</span>))
+scala&gt; <span class="kw">val</span> v2: Validated[NonEmptyList[Error], <span class="std">Int</span>] = Validated.Invalid(NonEmptyList.of(<span class="lit">"error 2"</span>))
+scala&gt; <span class="kw">val</span> eithert: EitherT[<span class="std">Option</span>, Error, <span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Either.left(<span class="lit">"error 3"</span>)))
+scala&gt; eithert.withValidated { v3 <span class="kw">=&gt;</span> (v1 |@| v2 |@| v3.leftMap(NonEmptyList.of(_))).map{ <span class="kw">case</span> (i, j, k) <span class="kw">=&gt;</span> i + j + k } }
+res0: EitherT[<span class="std">Option</span>, NonEmptyList[Error], <span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Left(NonEmptyList(error <span class="num">1</span>, error <span class="num">2</span>, error <span class="num">3</span>))))</pre></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

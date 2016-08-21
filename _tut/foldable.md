@@ -33,96 +33,99 @@ import cats.implicits._
 And examples.
 
 ```scala
-scala> Foldable[List].fold(List("a", "b", "c"))
-res0: String = abc
+Foldable[List].fold(List("a", "b", "c"))
+// res0: String = abc
 
-scala> Foldable[List].foldMap(List(1, 2, 4))(_.toString)
-res1: String = 124
+Foldable[List].foldMap(List(1, 2, 4))(_.toString)
+// res1: String = 124
 
-scala> Foldable[List].foldK(List(List(1,2,3), List(2,3,4)))
-res2: List[Int] = List(1, 2, 3, 2, 3, 4)
+Foldable[List].foldK(List(List(1,2,3), List(2,3,4)))
+// res2: List[Int] = List(1, 2, 3, 2, 3, 4)
 
-scala> Foldable[List].reduceLeftToOption(List[Int]())(_.toString)((s,i) => s + i)
-res3: Option[String] = None
+Foldable[List].reduceLeftToOption(List[Int]())(_.toString)((s,i) => s + i)
+// res3: Option[String] = None
 
-scala> Foldable[List].reduceLeftToOption(List(1,2,3,4))(_.toString)((s,i) => s + i)
-res4: Option[String] = Some(1234)
+Foldable[List].reduceLeftToOption(List(1,2,3,4))(_.toString)((s,i) => s + i)
+// res4: Option[String] = Some(1234)
 
-scala> Foldable[List].reduceRightToOption(List(1,2,3,4))(_.toString)((i,s) => Later(s.value + i)).value
-res5: Option[String] = Some(4321)
+Foldable[List].reduceRightToOption(List(1,2,3,4))(_.toString)((i,s) => Later(s.value + i)).value
+// res5: Option[String] = Some(4321)
 
-scala> Foldable[List].reduceRightToOption(List[Int]())(_.toString)((i,s) => Later(s.value + i)).value
-res6: Option[String] = None
+Foldable[List].reduceRightToOption(List[Int]())(_.toString)((i,s) => Later(s.value + i)).value
+// res6: Option[String] = None
 
-scala> Foldable[Set].find(Set(1,2,3))(_ > 2)
-res7: Option[Int] = Some(3)
+Foldable[Set].find(Set(1,2,3))(_ > 2)
+// res7: Option[Int] = Some(3)
 
-scala> Foldable[Set].exists(Set(1,2,3))(_ > 2)
-res8: Boolean = true
+Foldable[Set].exists(Set(1,2,3))(_ > 2)
+// res8: Boolean = true
 
-scala> Foldable[Set].forall(Set(1,2,3))(_ > 2)
-res9: Boolean = false
+Foldable[Set].forall(Set(1,2,3))(_ > 2)
+// res9: Boolean = false
 
-scala> Foldable[Set].forall(Set(1,2,3))(_ < 4)
-res10: Boolean = true
+Foldable[Set].forall(Set(1,2,3))(_ < 4)
+// res10: Boolean = true
 
-scala> Foldable[Vector].filter_(Vector(1,2,3))(_ < 3)
-res11: List[Int] = List(1, 2)
+Foldable[Vector].filter_(Vector(1,2,3))(_ < 3)
+// res11: List[Int] = List(1, 2)
 
-scala> Foldable[List].isEmpty(List(1,2))
-res12: Boolean = false
+Foldable[List].isEmpty(List(1,2))
+// res12: Boolean = false
 
-scala> Foldable[Option].isEmpty(None)
-res13: Boolean = true
+Foldable[Option].isEmpty(None)
+// res13: Boolean = true
 
-scala> Foldable[List].nonEmpty(List(1,2))
-res14: Boolean = true
+Foldable[List].nonEmpty(List(1,2))
+// res14: Boolean = true
 
-scala> Foldable[Option].toList(Option(1))
-res15: List[Int] = List(1)
+Foldable[Option].toList(Option(1))
+// res15: List[Int] = List(1)
 
-scala> Foldable[Option].toList(None)
-res16: List[Nothing] = List()
+Foldable[Option].toList(None)
+// res16: List[Nothing] = List()
 
-scala> def parseInt(s: String): Option[Int] = scala.util.Try(Integer.parseInt(s)).toOption
-parseInt: (s: String)Option[Int]
+def parseInt(s: String): Option[Int] = scala.util.Try(Integer.parseInt(s)).toOption
+// parseInt: (s: String)Option[Int]
 
-scala> Foldable[List].traverse_(List("1", "2"))(parseInt)
-res17: Option[Unit] = Some(())
+Foldable[List].traverse_(List("1", "2"))(parseInt)
+// res17: Option[Unit] = Some(())
 
-scala> Foldable[List].traverse_(List("1", "A"))(parseInt)
-res18: Option[Unit] = None
+Foldable[List].traverse_(List("1", "A"))(parseInt)
+// res18: Option[Unit] = None
 
-scala> Foldable[List].sequence_(List(Option(1), Option(2)))
-res19: Option[Unit] = Some(())
+Foldable[List].sequence_(List(Option(1), Option(2)))
+// res19: Option[Unit] = Some(())
 
-scala> Foldable[List].sequence_(List(Option(1), None))
-res20: Option[Unit] = None
+Foldable[List].sequence_(List(Option(1), None))
+// res20: Option[Unit] = None
 
-scala> val prints: Eval[Unit] = List(Eval.always(println(1)), Eval.always(println(2))).sequence_
-prints: cats.Eval[Unit] = cats.Eval$$anon$5@2f471b89
+val prints: Eval[Unit] = List(Eval.always(println(1)), Eval.always(println(2))).sequence_
+// prints: cats.Eval[Unit] = cats.Eval$$anon$5@19d21f84
 
-scala> prints.value
-1
-2
+prints.value
+// 1
+// 2
 
-scala> Foldable[List].dropWhile_(List[Int](2,4,5,6,7))(_ % 2 == 0)
-res22: List[Int] = List(5, 6, 7)
+Foldable[List].dropWhile_(List[Int](2,4,5,6,7))(_ % 2 == 0)
+// res22: List[Int] = List(5, 6, 7)
 
-scala> Foldable[List].dropWhile_(List[Int](1,2,4,5,6,7))(_ % 2 == 0)
-res23: List[Int] = List(1, 2, 4, 5, 6, 7)
+Foldable[List].dropWhile_(List[Int](1,2,4,5,6,7))(_ % 2 == 0)
+// res23: List[Int] = List(1, 2, 4, 5, 6, 7)
 
-scala> val FoldableListOption = Foldable[List].compose[Option]
-FoldableListOption: cats.Foldable[[α]List[Option[α]]] = cats.Foldable$$anon$1@3dc63940
+import cats.data.Nested
+// import cats.data.Nested
 
-scala> FoldableListOption.fold(List(Option(1), Option(2), Option(3), Option(4)))
-res24: Int = 10
+val listOption0 = Nested(List(Option(1), Option(2), Option(3)))
+// listOption0: cats.data.Nested[List,Option,Int] = Nested(List(Some(1), Some(2), Some(3)))
 
-scala> FoldableListOption.fold(List(Option(1), Option(2), Option(3), None))
-res25: Int = 6
+val listOption1 = Nested(List(Option(1), Option(2), None))
+// listOption1: cats.data.Nested[List,Option,Int] = Nested(List(Some(1), Some(2), None))
 
-scala> FoldableListOption.fold(List(Option("1"), Option("2"), Option("3"), None))
-res26: String = 123
+Foldable[Nested[List, Option, ?]].fold(listOption0)
+// res24: Int = 6
+
+Foldable[Nested[List, Option, ?]].fold(listOption1)
+// res25: Int = 3
 ```
 
 Hence when defining some new data structure, if we can define a `foldLeft` and
@@ -151,8 +154,8 @@ which are lazy in their right hand argument to traverse the entire
 structure unnecessarily. For example, if you have:
 
 ```scala
-scala> val allFalse = Stream.continually(false)
-allFalse: scala.collection.immutable.Stream[Boolean] = Stream(false, ?)
+val allFalse = Stream.continually(false)
+// allFalse: scala.collection.immutable.Stream[Boolean] = Stream(false, ?)
 ```
 
 which is an infinite stream of `false` values, and if you wanted to
@@ -165,19 +168,19 @@ consider the entire stream, and thus will eventually cause a stack
 overflow:
 
 ```scala
-scala> try {
-     |   allFalse.foldRight(true)(_ && _)
-     | } catch {
-     |   case e:StackOverflowError => println(e)
-     | }
-java.lang.StackOverflowError
-res27: AnyVal = ()
+try {
+  allFalse.foldRight(true)(_ && _)
+} catch {
+  case e:StackOverflowError => println(e)
+}
+// java.lang.StackOverflowError
+// res26: AnyVal = ()
 ```
 
 With the lazy `foldRight` on `Foldable`, the calculation terminates
 after looking at only one value:
 
 ```scala
-scala> Foldable[Stream].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.now(false)).value
-res28: Boolean = false
+Foldable[Stream].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.now(false)).value
+// res27: Boolean = false
 ```

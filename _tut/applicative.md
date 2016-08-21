@@ -11,7 +11,7 @@ scaladoc: "#cats.Applicative"
 `pure`:
 
 ```scala
-    def pure[A](x: A): F[A]
+def pure[A](x: A): F[A]
 ````
 
 This method takes any value and returns the value in the context of
@@ -21,17 +21,17 @@ obvious. For `Option`, the `pure` operation wraps the value in
 `List`:
 
 ```scala
-scala> import cats._
 import cats._
+// import cats._
 
-scala> import cats.std.all._
-import cats.std.all._
+import cats.implicits._
+// import cats.implicits._
 
-scala> Applicative[Option].pure(1)
-res0: Option[Int] = Some(1)
+Applicative[Option].pure(1)
+// res0: Option[Int] = Some(1)
 
-scala> Applicative[List].pure(1)
-res1: List[Int] = List(1)
+Applicative[List].pure(1)
+// res1: List[Int] = List(1)
 ```
 
 Like [`Functor`](functor.html) and [`Apply`](apply.html), `Applicative`
@@ -41,8 +41,14 @@ operation will lift the passed value into one context, and the result
 into the other context:
 
 ```scala
-scala> (Applicative[List] compose Applicative[Option]).pure(1)
-res2: List[Option[Int]] = List(Some(1))
+import cats.data.Nested
+// import cats.data.Nested
+
+val nested = Applicative[Nested[List, Option, ?]].pure(1)
+// nested: cats.data.Nested[[+A]List[A],Option,Int] = Nested(List(Some(1)))
+
+val unwrapped = nested.value
+// unwrapped: List[Option[Int]] = List(Some(1))
 ```
 
 ## Applicative Functors & Monads

@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Eval.scala" target="_blank">Eval.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="EvalMonoid.html" class="extype" name="cats.EvalMonoid">EvalMonoid</a>[<span class="extype" name="cats.EvalGroup.A">A</span>], <a href="EvalSemigroup.html" class="extype" name="cats.EvalSemigroup">EvalSemigroup</a>[<span class="extype" name="cats.EvalGroup.A">A</span>], <span class="extype" name="cats.kernel.Group">kernel.Group</span>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]], <span class="extype" name="cats.kernel.Monoid">kernel.Monoid</span>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]], <span class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</span>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="EvalMonoid.html" class="extype" name="cats.EvalMonoid">EvalMonoid</a>[<span class="extype" name="cats.EvalGroup.A">A</span>], <a href="EvalSemigroup.html" class="extype" name="cats.EvalSemigroup">EvalSemigroup</a>[<span class="extype" name="cats.EvalGroup.A">A</span>], <a href="kernel/Group.html" class="extype" name="cats.kernel.Group">kernel.Group</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]], <a href="kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">kernel.Monoid</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]], <a href="kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -221,7 +221,8 @@
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalSemigroup.html" class="extype" name="cats.EvalSemigroup">EvalSemigroup</a> → Semigroup</dd></dl></div>
+      <p class="shortcomment cmt">Associative operation taking which combines two values.</p><div class="fullcomment"><div class="comment cmt"><p>Associative operation taking which combines two values.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalSemigroup.html" class="extype" name="cats.EvalSemigroup">EvalSemigroup</a> → <a href="kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="cats.kernel.Monoid#combineAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="combineAll(as:TraversableOnce[A]):A"></a>
       <a id="combineAll(TraversableOnce[Eval[A]]):Eval[A]"></a>
@@ -238,8 +239,9 @@
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Monoid</dd></dl></div>
-    </li><li name="cats.kernel.Semigroup#combineAllOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Given a sequence of <code>as</code>, sum them using the monoid and return the total.</p><div class="fullcomment"><div class="comment cmt"><p>Given a sequence of <code>as</code>, sum them using the monoid and return the total.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a></dd></dl></div>
+    </li><li name="cats.kernel.Monoid#combineAllOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="combineAllOption(as:TraversableOnce[A]):Option[A]"></a>
       <a id="combineAllOption(TraversableOnce[Eval[A]]):Option[Eval[A]]"></a>
       <h4 class="signature">
@@ -255,7 +257,8 @@
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Semigroup</dd></dl></div>
+      <p class="shortcomment cmt">Given a sequence of <code>as</code>, combine them and return the total.</p><div class="fullcomment"><div class="comment cmt"><p>Given a sequence of <code>as</code>, combine them and return the total.</p><p>If the sequence is empty, returns None. Otherwise, returns Some(total).
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a> → <a href="kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="cats.kernel.Group#combineN" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="combineN(a:A,n:Int):A"></a>
       <a id="combineN(Eval[A],Int):Eval[A]"></a>
@@ -272,7 +275,9 @@
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Group → Monoid → Semigroup</dd></dl></div>
+      <p class="shortcomment cmt">Return <code>a</code> appended to itself <code>n</code> times.</p><div class="fullcomment"><div class="comment cmt"><p>Return <code>a</code> appended to itself <code>n</code> times. If <code>n</code> is negative, then
+this returns <code>inverse(a)</code> appended to itself <code>n</code> times.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="kernel/Group.html" class="extype" name="cats.kernel.Group">Group</a> → <a href="kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a> → <a href="kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="cats.EvalMonoid#empty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="empty:cats.Eval[A]"></a>
       <a id="empty:Eval[A]"></a>
@@ -289,7 +294,8 @@
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalMonoid.html" class="extype" name="cats.EvalMonoid">EvalMonoid</a> → Monoid</dd></dl></div>
+      <p class="shortcomment cmt">Return the identity element for this monoid.</p><div class="fullcomment"><div class="comment cmt"><p>Return the identity element for this monoid.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvalMonoid.html" class="extype" name="cats.EvalMonoid">EvalMonoid</a> → <a href="kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -397,7 +403,8 @@
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.EvalGroup">EvalGroup</a> → Group</dd></dl></div>
+      <p class="shortcomment cmt">Find the inverse of <code>a</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Find the inverse of <code>a</code>.</p><p><code>combine(a, inverse(a))</code> = <code>combine(inverse(a), a)</code> = <code>empty</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.EvalGroup">EvalGroup</a> → <a href="kernel/Group.html" class="extype" name="cats.kernel.Group">Group</a></dd></dl></div>
     </li><li name="cats.kernel.Monoid#isEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isEmpty(a:A)(implicitev:cats.kernel.Eq[A]):Boolean"></a>
       <a id="isEmpty(Eval[A])(kernel.Eq[Eval[A]]):Boolean"></a>
@@ -407,14 +414,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isEmpty</span><span class="params">(<span name="a">a: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="cats.kernel.Eq">kernel.Eq</span>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isEmpty</span><span class="params">(<span name="a">a: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="kernel/Eq.html" class="extype" name="cats.kernel.Eq">kernel.Eq</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#cats.EvalGroup@isEmpty(a:A)(implicitev:cats.kernel.Eq[A]):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Monoid</dd></dl></div>
+      <p class="shortcomment cmt">Tests if <code>a</code> is the identity.</p><div class="fullcomment"><div class="comment cmt"><p>Tests if <code>a</code> is the identity.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -499,7 +507,8 @@
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.EvalGroup">EvalGroup</a> → Group</dd></dl></div>
+      <p class="shortcomment cmt">Remove the element <code>b</code> from <code>a</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Remove the element <code>b</code> from <code>a</code>.</p><p>Equivalent to <code>combine(a, inverse(a))</code>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.EvalGroup">EvalGroup</a> → <a href="kernel/Group.html" class="extype" name="cats.kernel.Group">Group</a></dd></dl></div>
     </li><li name="cats.kernel.Semigroup#repeatedCombineN" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="repeatedCombineN(a:A,n:Int):A"></a>
       <a id="repeatedCombineN(Eval[A],Int):Eval[A]"></a>
@@ -516,7 +525,8 @@
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Semigroup</dd></dl></div>
+      <p class="shortcomment cmt">Return <code>a</code> combined with itself more than once.</p><div class="fullcomment"><div class="comment cmt"><p>Return <code>a</code> combined with itself more than once.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -634,11 +644,11 @@
             </div><div class="parent" name="cats.EvalSemigroup">
               <h3>Inherited from <a href="EvalSemigroup.html" class="extype" name="cats.EvalSemigroup">EvalSemigroup</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]</h3>
             </div><div class="parent" name="cats.kernel.Group">
-              <h3>Inherited from <span class="extype" name="cats.kernel.Group">kernel.Group</span>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]]</h3>
+              <h3>Inherited from <a href="kernel/Group.html" class="extype" name="cats.kernel.Group">kernel.Group</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]]</h3>
             </div><div class="parent" name="cats.kernel.Monoid">
-              <h3>Inherited from <span class="extype" name="cats.kernel.Monoid">kernel.Monoid</span>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]]</h3>
+              <h3>Inherited from <a href="kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">kernel.Monoid</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]]</h3>
             </div><div class="parent" name="cats.kernel.Semigroup">
-              <h3>Inherited from <span class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</span>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]]</h3>
+              <h3>Inherited from <a href="kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</a>[<a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.EvalGroup.A">A</span>]]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">

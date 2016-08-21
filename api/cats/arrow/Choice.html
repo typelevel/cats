@@ -47,7 +47,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Choice</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Choice.F">F</span>]</span>
+        <span class="name">Choice</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Choice.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -115,15 +115,15 @@ with the same target type, but with a source type of either <code>f</code>'s sou
 type OR <code>g</code>'s source type.</p><div class="fullcomment"><div class="comment cmt"><p>Given two <code>F</code>s (<code>f</code> and <code>g</code>) with a common target type, create a new <code>F</code>
 with the same target type, but with a source type of either <code>f</code>'s source
 type OR <code>g</code>'s source type.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.std.function._
+scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> b: <span class="std">Boolean</span> <span class="kw">=&gt;</span> <span class="std">String</span> = _ + <span class="lit">" is a boolean"</span>
 scala&gt; <span class="kw">val</span> i: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span> =  _ + <span class="lit">" is an integer"</span>
-scala&gt; <span class="kw">val</span> f: (<span class="std">Boolean</span> Xor <span class="std">Int</span>) <span class="kw">=&gt;</span> <span class="std">String</span> = Choice[Function1].choice(b, i)
+scala&gt; <span class="kw">val</span> f: Xor[<span class="std">Boolean</span>, <span class="std">Int</span>] <span class="kw">=&gt;</span> <span class="std">String</span> = Choice[Function1].choice(b, i)
 
-scala&gt; f(Xor.right(<span class="num">3</span>))
+scala&gt; f(Xor.Right(<span class="num">3</span>))
 res0: <span class="std">String</span> = <span class="num">3</span> is an integer
 
-scala&gt; f(Xor.left(<span class="kw">false</span>))
+scala&gt; f(Xor.Left(<span class="kw">false</span>))
 res0: <span class="std">String</span> = <span class="kw">false</span> is a boolean</pre></div></div>
     </li><li name="cats.arrow.Compose#compose" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="compose[A,B,C](f:F[B,C],g:F[A,B]):F[A,C]"></a>
@@ -325,13 +325,13 @@ res0: <span class="std">String</span> = <span class="kw">false</span> is a boole
       <p class="shortcomment cmt">An <code>F</code> that, given a source <code>A</code> on either the right or left side, will
 return that same <code>A</code> object.</p><div class="fullcomment"><div class="comment cmt"><p>An <code>F</code> that, given a source <code>A</code> on either the right or left side, will
 return that same <code>A</code> object.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.std.function._
-scala&gt; <span class="kw">val</span> f: (<span class="std">Int</span> Xor <span class="std">Int</span>) <span class="kw">=&gt;</span> <span class="std">Int</span> = Choice[Function1].codiagonal[<span class="std">Int</span>]
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> f: (Xor[<span class="std">Int</span>, <span class="std">Int</span>]) <span class="kw">=&gt;</span> <span class="std">Int</span> = Choice[Function1].codiagonal[<span class="std">Int</span>]
 
-scala&gt; f(Xor.right(<span class="num">3</span>))
+scala&gt; f(Xor.Right(<span class="num">3</span>))
 res0: <span class="std">Int</span> = <span class="num">3</span>
 
-scala&gt; f(Xor.left(<span class="num">3</span>))
+scala&gt; f(Xor.Left(<span class="num">3</span>))
 res1: <span class="std">Int</span> = <span class="num">3</span></pre></div></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>

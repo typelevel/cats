@@ -47,7 +47,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Strong</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.functor.Strong.F">F</span>]</span>
+        <span class="name">Strong</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.functor.Strong.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -114,10 +114,15 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">contramap on the first type parameter and map on the second type parameter
-</p><div class="fullcomment"><div class="comment cmt"><p>contramap on the first type parameter and map on the second type parameter
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a></dd></dl></div>
-    </li><li name="cats.functor.Strong#first" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Contramap on the first type parameter and map on the second type parameter</p><div class="fullcomment"><div class="comment cmt"><p>Contramap on the first type parameter and map on the second type parameter</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.functor.Profunctor
+scala&gt; <span class="kw">val</span> fab: <span class="std">Double</span> <span class="kw">=&gt;</span> <span class="std">Double</span> = x <span class="kw">=&gt;</span> x + <span class="num">0.3</span>
+scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Double</span> = x <span class="kw">=&gt;</span> x.toDouble / <span class="num">2</span>
+scala&gt; <span class="kw">val</span> g: <span class="std">Double</span> <span class="kw">=&gt;</span> <span class="std">Double</span> = x <span class="kw">=&gt;</span> x * <span class="num">3</span>
+scala&gt; <span class="kw">val</span> h = Profunctor[Function1].dimap(fab)(f)(g)
+scala&gt; h(<span class="num">3</span>)
+res0: <span class="std">Double</span> = <span class="num">5.4</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a></dd></dl></div>
+    </li><li name="cats.functor.Strong#first" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="first[A,B,C](fa:F[A,B]):F[(A,C),(B,C)]"></a>
       <a id="first[A,B,C](F[A,B]):F[(A,C),(B,C)]"></a>
       <h4 class="signature">
@@ -133,8 +138,13 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="cats.functor.Strong#second" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Create a new <code>F</code> that takes two inputs, but only modifies the first input</p><div class="fullcomment"><div class="comment cmt"><p>Create a new <code>F</code> that takes two inputs, but only modifies the first input</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.functor.Strong
+scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = _ * <span class="num">2</span>
+scala&gt; <span class="kw">val</span> fab = Strong[Function1].first[<span class="std">Int</span>,<span class="std">Int</span>,<span class="std">Int</span>](f)
+scala&gt; fab((<span class="num">2</span>,<span class="num">3</span>))
+res0: (<span class="std">Int</span>, <span class="std">Int</span>) = (<span class="num">4</span>,<span class="num">3</span>)</pre></div></div>
+    </li><li name="cats.functor.Strong#second" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="second[A,B,C](fa:F[A,B]):F[(C,A),(C,B)]"></a>
       <a id="second[A,B,C](F[A,B]):F[(C,A),(C,B)]"></a>
       <h4 class="signature">
@@ -150,7 +160,12 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Create a new <code>F</code> that takes two inputs, but only modifies the second input</p><div class="fullcomment"><div class="comment cmt"><p>Create a new <code>F</code> that takes two inputs, but only modifies the second input</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.functor.Strong
+scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = _ * <span class="num">2</span>
+scala&gt; <span class="kw">val</span> fab = Strong[Function1].second[<span class="std">Int</span>,<span class="std">Int</span>,<span class="std">Int</span>](f)
+scala&gt; fab((<span class="num">2</span>,<span class="num">3</span>))
+res0: (<span class="std">Int</span>, <span class="std">Int</span>) = (<span class="num">2</span>,<span class="num">6</span>)</pre></div></div>
     </li></ol>
             </div>
 

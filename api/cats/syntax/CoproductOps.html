@@ -253,7 +253,7 @@
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="#rightc[G[_]]:cats.data.Coproduct[G,F,A]" class="extmbr" name="cats.syntax.CoproductOps#rightc">rightc</a> to swap the order of <code>F</code> and <code>G</code> in the result type.
 Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Coproduct
 scala&gt; <span class="kw">import</span> cats.Eval
-scala&gt; <span class="kw">import</span> cats.syntax.coproduct._
+scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>).leftc[Eval]
 res0: Coproduct[<span class="std">List</span>, Eval, <span class="std">Int</span>] = Coproduct(Left(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)))</pre></span></dd></dl></div>
     </li><li name="cats.syntax.CoproductOps#rightc" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -276,7 +276,7 @@ res0: Coproduct[<span class="std">List</span>, Eval, <span class="std">Int</span
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="#leftc[G[_]]:cats.data.Coproduct[F,G,A]" class="extmbr" name="cats.syntax.CoproductOps#leftc">leftc</a> to swap the order of <code>F</code> and <code>G</code> in the result type.
 Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Coproduct
 scala&gt; <span class="kw">import</span> cats.Eval
-scala&gt; <span class="kw">import</span> cats.syntax.coproduct._
+scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>).rightc[Eval]
 res0: Coproduct[Eval, <span class="std">List</span>, <span class="std">Int</span>] = Coproduct(Right(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)))</pre></span></dd></dl></div>
     </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

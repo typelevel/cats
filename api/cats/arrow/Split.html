@@ -47,7 +47,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Split</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Split.F">F</span>]</span>
+        <span class="name">Split</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Split.F">F</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -114,7 +114,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a></dd></dl></div>
-    </li><li name="cats.arrow.Split#split" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="cats.arrow.Split#split" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="split[A,B,C,D](f:F[A,B],g:F[C,D]):F[(A,C),(B,D)]"></a>
       <a id="split[A,B,C,D](F[A,B],F[C,D]):F[(A,C),(B,D)]"></a>
       <h4 class="signature">
@@ -130,7 +130,15 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Create a new <code>F</code> that splits its input between <code>f</code> and <code>g</code>
+and combines the output of each.</p><div class="fullcomment"><div class="comment cmt"><p>Create a new <code>F</code> that splits its input between <code>f</code> and <code>g</code>
+and combines the output of each.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.arrow.Split
+scala&gt; <span class="kw">val</span> toLong: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Long</span> = _.toLong
+scala&gt; <span class="kw">val</span> toDouble: <span class="std">Float</span> <span class="kw">=&gt;</span> <span class="std">Double</span> = _.toDouble
+scala&gt; <span class="kw">val</span> f: ((<span class="std">Int</span>, <span class="std">Float</span>)) <span class="kw">=&gt;</span> (<span class="std">Long</span>, <span class="std">Double</span>) = Split[Function1].split(toLong, toDouble)
+scala&gt; f((<span class="num">3</span>, <span class="num">4.0</span>f))
+res0: (<span class="std">Long</span>, <span class="std">Double</span>) = (<span class="num">3</span>,<span class="num">4.0</span>)</pre></div></div>
     </li></ol>
             </div>
 

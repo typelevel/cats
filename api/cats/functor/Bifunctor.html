@@ -58,7 +58,7 @@ functors.
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="../Bitraverse.html" class="extype" name="cats.Bitraverse">Bitraverse</a>, <a href="../CompositeBitraverse.html" class="extype" name="cats.CompositeBitraverse">CompositeBitraverse</a></div>
+            <div class="subClasses hiddenContent"><a href="../Bitraverse.html" class="extype" name="cats.Bitraverse">Bitraverse</a></div>
           </div></div>
         
 
@@ -99,7 +99,7 @@ functors.
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="cats.functor.Bifunctor#bimap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="cats.functor.Bifunctor#bimap" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="bimap[A,B,C,D](fab:F[A,B])(f:A=&gt;C,g:B=&gt;D):F[C,D]"></a>
       <a id="bimap[A,B,C,D](F[A,B])((A)⇒C,(B)⇒D):F[C,D]"></a>
       <h4 class="signature">
@@ -116,7 +116,12 @@ functors.
       </a>
     </span>
       <p class="shortcomment cmt">The quintessential method of the Bifunctor trait, it applies a
-function to each &quot;side&quot; of the bifunctor.</p>
+function to each &quot;side&quot; of the bifunctor.</p><div class="fullcomment"><div class="comment cmt"><p>The quintessential method of the Bifunctor trait, it applies a
+function to each &quot;side&quot; of the bifunctor.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> x: (<span class="std">List</span>[<span class="std">String</span>], <span class="std">Int</span>) = (<span class="std">List</span>(<span class="lit">"foo"</span>, <span class="lit">"bar"</span>), <span class="num">3</span>)
+scala&gt; x.bimap(_.headOption, _.toLong + <span class="num">1</span>)
+res0: (<span class="std">Option</span>[<span class="std">String</span>], <span class="std">Long</span>) = (<span class="std">Some</span>(foo),<span class="num">4</span>)</pre></div></div>
     </li><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -207,6 +212,23 @@ function to each &quot;side&quot; of the bifunctor.</p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.functor.Bifunctor#compose" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="compose[G[_,_]](implicitG0:cats.functor.Bifunctor[G]):cats.functor.Bifunctor[[α,β]F[G[α,β],G[α,β]]]"></a>
+      <a id="compose[G[_,_]](Bifunctor[G]):Bifunctor[[α,β]F[G[α,β],G[α,β]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G0">G0: <a href="" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.functor.Bifunctor.compose.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[[α, β]<span class="extype" name="cats.functor.Bifunctor.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.compose.G">G</span>[<span class="extype" name="cats.functor.Bifunctor.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.functor.Bifunctor.&lt;refinement&gt;.Λ$.β">β</span>], <span class="extype" name="cats.functor.Bifunctor.compose.G">G</span>[<span class="extype" name="cats.functor.Bifunctor.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.functor.Bifunctor.&lt;refinement&gt;.Λ$.β">β</span>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.functor.Bifunctor@compose[G[_,_]](implicitG0:cats.functor.Bifunctor[G]):cats.functor.Bifunctor[[α,β]F[G[α,β],G[α,β]]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The composition of two Bifunctors is itself a Bifunctor</p>
     </li><li name="scala.Any#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
       <a id="equals(Any):Boolean"></a>
@@ -276,24 +298,28 @@ function to each &quot;side&quot; of the bifunctor.</p>
     </span>
       <p class="shortcomment cmt">apply a function to the &quot;left&quot; functor
 </p>
-    </li><li name="cats.functor.Bifunctor#rightMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="rightMap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]"></a>
-      <a id="rightMap[A,B,C](F[A,B])((B)⇒C):F[A,C]"></a>
+    </li><li name="cats.functor.Bifunctor#leftWiden" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="leftWiden[A,B,AA&gt;:A](fab:F[A,B]):F[AA,B]"></a>
+      <a id="leftWiden[A,B,AA&gt;:A](F[A,B]):F[AA,B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">rightMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.functor.Bifunctor.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.rightMap.A">A</span>, <span class="extype" name="cats.functor.Bifunctor.rightMap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Bifunctor.rightMap.B">B</span>) ⇒ <span class="extype" name="cats.functor.Bifunctor.rightMap.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.functor.Bifunctor.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.rightMap.A">A</span>, <span class="extype" name="cats.functor.Bifunctor.rightMap.C">C</span>]</span>
+        <span class="name">leftWiden</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="AA">AA &gt;: <span class="extype" name="cats.functor.Bifunctor.leftWiden.A">A</span></span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.functor.Bifunctor.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.leftWiden.A">A</span>, <span class="extype" name="cats.functor.Bifunctor.leftWiden.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.functor.Bifunctor.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.leftWiden.AA">AA</span>, <span class="extype" name="cats.functor.Bifunctor.leftWiden.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.functor.Bifunctor@rightMap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.functor.Bifunctor@leftWiden[A,B,AA&gt;:A](fab:F[A,B]):F[AA,B]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">apply a function ro the &quot;right&quot; functor
-</p>
+      <p class="shortcomment cmt">Widens A into a supertype AA.</p><div class="fullcomment"><div class="comment cmt"><p>Widens A into a supertype AA.
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">sealed</span> <span class="kw">trait</span> Foo
+scala&gt; <span class="kw">case</span> <span class="kw">object</span> Bar <span class="kw">extends</span> Foo
+scala&gt; <span class="kw">val</span> x1: Either[Bar.<span class="kw">type</span>, <span class="std">Int</span>] = Either.left(Bar)
+scala&gt; <span class="kw">val</span> x2: Either[Foo, <span class="std">Int</span>] = x1.leftWiden</pre></div></div>
     </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>

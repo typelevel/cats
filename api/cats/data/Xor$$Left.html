@@ -199,6 +199,23 @@
       </a>
     </span>
       
+    </li><li name="cats.data.Xor#ap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ap[AA&gt;:A,BB&gt;:B,C](that:cats.data.Xor[AA,BB=&gt;C]):cats.data.Xor[AA,C]"></a>
+      <a id="ap[AA&gt;:A,BB&gt;:Nothing,C](Xor[AA,(BB)⇒C]):Xor[AA,C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ap</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.Left.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="scala.Nothing">Nothing</span></span>, <span name="C">C</span>]</span><span class="params">(<span name="that">that: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.ap.AA">AA</span>, (<span class="extype" name="cats.data.Xor.ap.BB">BB</span>) ⇒ <span class="extype" name="cats.data.Xor.ap.C">C</span>]</span>)</span><span class="result">: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Xor.ap.AA">AA</span>, <span class="extype" name="cats.data.Xor.ap.C">C</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$$Left@ap[AA&gt;:A,BB&gt;:B,C](that:cats.data.Xor[AA,BB=&gt;C]):cats.data.Xor[AA,C]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -813,18 +830,18 @@ res3: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Right
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.data.Xor#to" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="to[F[_],BB&gt;:B](implicitmonoidKF:cats.MonoidK[F],implicitapplicativeF:cats.Applicative[F]):F[BB]"></a>
-      <a id="to[F[_],BB&gt;:Nothing](MonoidK[F],Applicative[F]):F[BB]"></a>
+      <a id="to[F[_],BB&gt;:B](implicitF:cats.Alternative[F]):F[BB]"></a>
+      <a id="to[F[_],BB&gt;:Nothing](Alternative[F]):F[BB]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">to</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="BB">BB &gt;: <span class="extype" name="scala.Nothing">Nothing</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="monoidKF">monoidKF: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.data.Xor.to.F">F</span>]</span>, <span name="applicativeF">applicativeF: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.Xor.to.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.Xor.to.F">F</span>[<span class="extype" name="cats.data.Xor.to.BB">BB</span>]</span>
+        <span class="name">to</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="BB">BB &gt;: <span class="extype" name="scala.Nothing">Nothing</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.Xor.to.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.Xor.to.F">F</span>[<span class="extype" name="cats.data.Xor.to.BB">BB</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Xor$$Left@to[F[_],BB&gt;:B](implicitmonoidKF:cats.MonoidK[F],implicitapplicativeF:cats.Applicative[F]):F[BB]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Xor$$Left@to[F[_],BB&gt;:B](implicitF:cats.Alternative[F]):F[BB]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -897,6 +914,23 @@ res3: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Right
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a></dd></dl></div>
+    </li><li name="cats.data.Xor#toTry" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toTry(implicitev:&lt;:&lt;[A,Throwable]):scala.util.Try[B]"></a>
+      <a id="toTry(&lt;:&lt;[A,Throwable]):Try[Nothing]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toTry</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.data.Xor.Left.A">A</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.Xor$$Left@toTry(implicitev:&lt;:&lt;[A,Throwable]):scala.util.Try[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a></dd></dl></div>
     </li><li name="cats.data.Xor#toValidated" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toValidated:cats.data.Validated[A,B]"></a>
       <a id="toValidated:Validated[A,Nothing]"></a>
@@ -923,16 +957,16 @@ res3: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Right
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toValidatedNel</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.Left.A">A</span></span>]</span><span class="result">: <a href="package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.package.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.Xor.toValidatedNel.AA">AA</span>, <span class="extype" name="scala.Nothing">Nothing</span>]</span>
+        <span class="name">toValidatedNel</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Xor.Left.A">A</span></span>]</span><span class="result">: <a href="package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.Xor.toValidatedNel.AA">AA</span>, <span class="extype" name="scala.Nothing">Nothing</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.Xor$$Left@toValidatedNel[AA&gt;:A]:cats.data.ValidatedNel[AA,B]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Returns a <a href="package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.package.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a> representation of this disjunction with the <code>Left</code> value
-as a single element on the <code>Invalid</code> side of the <a href="package.html#NonEmptyList[A]=cats.data.OneAnd[List,A]" class="extmbr" name="cats.data.NonEmptyList">NonEmptyList</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a <a href="package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.package.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a> representation of this disjunction with the <code>Left</code> value
-as a single element on the <code>Invalid</code> side of the <a href="package.html#NonEmptyList[A]=cats.data.OneAnd[List,A]" class="extmbr" name="cats.data.NonEmptyList">NonEmptyList</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a <a href="package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a> representation of this disjunction with the <code>Left</code> value
+as a single element on the <code>Invalid</code> side of the <a href="NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a <a href="package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a> representation of this disjunction with the <code>Left</code> value
+as a single element on the <code>Invalid</code> side of the <a href="NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a></dd></dl></div>
     </li><li name="cats.data.Xor#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverse[F[_],AA&gt;:A,D](f:B=&gt;F[D])(implicitF:cats.Applicative[F]):F[cats.data.Xor[AA,D]]"></a>
       <a id="traverse[F[_],AA&gt;:A,D]((Nothing)⇒F[D])(Applicative[F]):F[Xor[AA,D]]"></a>

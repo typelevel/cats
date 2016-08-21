@@ -42,8 +42,8 @@ implicit val stringShow = new Show[String] {
 and now our call to Log succeeds
 
 ```scala
-scala> log("a string")
-a string
+log("a string")
+// a string
 ```
 
 This example demonstrates a powerful property of the type class
@@ -72,8 +72,8 @@ Now we can call our log function with a `Option[String]` or a
 `Option[Option[String]]`:
 
 ```scala
-scala> log(Option(Option("hello")))
-Some(Some(hello))
+log(Option(Option("hello")))
+// Some(Some(hello))
 ```
 
 Scala has syntax just for this pattern that we use frequently:
