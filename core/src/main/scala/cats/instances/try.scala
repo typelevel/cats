@@ -1,9 +1,9 @@
 package cats
 package instances
 
-import cats.data.Xor
 import TryInstances.castFailure
 
+import cats.data.Xor
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 import scala.annotation.tailrec
@@ -53,11 +53,11 @@ trait TryInstances extends TryInstances1 {
           case f: Failure[_] => G.pure(castFailure[B](f))
         }
 
-      @tailrec final def tailRecM[B, C](b: B)(f: B => Try[(B Xor C)]): Try[C] =
+      @tailrec final def tailRecM[B, C](b: B)(f: B => Try[Either[B, C]]): Try[C] =
         f(b) match {
           case f: Failure[_] => castFailure[C](f)
-          case Success(Xor.Left(b1)) => tailRecM(b1)(f)
-          case Success(Xor.Right(c)) => Success(c)
+          case Success(Left(b1)) => tailRecM(b1)(f)
+          case Success(Right(c)) => Success(c)
         }
 
       def handleErrorWith[A](ta: Try[A])(f: Throwable => Try[A]): Try[A] =
@@ -67,8 +67,8 @@ trait TryInstances extends TryInstances1 {
       override def handleError[A](ta: Try[A])(f: Throwable => A): Try[A] =
         ta.recover { case t => f(t) }
 
-      override def attempt[A](ta: Try[A]): Try[Throwable Xor A] =
-        (ta map Xor.right) recover { case NonFatal(t) => Xor.left(t) }
+      override def attempt[A](ta: Try[A]): Try[Xor[Throwable, A]] =
+        (ta.map(a => Xor.Right(a))) recover { case NonFatal(t) => Xor.Left(t) }
 
       override def recover[A](ta: Try[A])(pf: PartialFunction[Throwable, A]): Try[A] =
         ta.recover(pf)

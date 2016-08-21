@@ -33,9 +33,8 @@ final class SeparateOps[F[_], G[_, _], A, B](fgab: F[G[A, B]])(implicit F: Monad
    *
    * Example:
    * {{{
-   * scala> import cats.data.Xor
    * scala> import cats.implicits._
-   * scala> val l: List[Xor[String, Int]] = List(Xor.right(1), Xor.left("error"))
+   * scala> val l: List[Either[String, Int]] = List(Right(1), Left("error"))
    * scala> l.separate
    * res0: (List[String], List[Int]) = (List(error),List(1))
    * }}}

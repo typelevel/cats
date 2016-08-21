@@ -17,7 +17,7 @@ trait ChoiceTests[F[_, _]] extends CategoryTests[F] {
     ArbFCD: Arbitrary[F[C, D]],
     EqFAB: Eq[F[A, B]],
     EqFAD: Eq[F[A, D]],
-    EqFXorABD: Eq[F[Xor[A, B], D]]
+    EqFEitherABD: Eq[F[Xor[A, B], D]]
   ): RuleSet =
     new DefaultRuleSet(
       name = "choice",

@@ -24,7 +24,7 @@ final class ApplicativeErrorOps[F[_], E, A](fa: F[A])(implicit F: ApplicativeErr
   def handleErrorWith(f: E => F[A]): F[A] =
     F.handleErrorWith(fa)(f)
 
-  def attempt: F[E Xor A] =
+  def attempt: F[Xor[E, A]] =
     F.attempt(fa)
 
   def attemptT: XorT[F, E, A] =

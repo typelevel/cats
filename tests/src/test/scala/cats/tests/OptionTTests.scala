@@ -68,7 +68,7 @@ class OptionTTests extends CatsSuite {
 
   {
     // F has a MonadError
-    type SXor[A] = String Xor A
+    type SXor[A] = Xor[String, A]
 
     implicit val monadError = OptionT.catsDataMonadErrorForOptionT[SXor, String]
 
@@ -86,8 +86,8 @@ class OptionTTests extends CatsSuite {
 
     implicit val iso = CartesianTests.Isomorphisms.invariant[OptionT[SXor, ?]]
 
-    checkAll("OptionT[String Xor ?, Int]", MonadErrorTests[OptionT[SXor, ?], String].monadError[Int, Int, Int])
-    checkAll("MonadError[OptionT[String Xor ?, ?]]", SerializableTests.serializable(monadError))
+    checkAll("OptionT[Either[String, ?], Int]", MonadErrorTests[OptionT[SXor, ?], String].monadError[Int, Int, Int])
+    checkAll("MonadError[OptionT[Either[String, ?], ?]]", SerializableTests.serializable(monadError))
 
     Monad[OptionT[SXor, ?]]
     FlatMap[OptionT[SXor, ?]]
@@ -256,8 +256,8 @@ class OptionTTests extends CatsSuite {
   }
 
   test("show") {
-    val xor: String Xor Option[Int] = Xor.right(Some(1))
-    OptionT[Xor[String, ?], Int](xor).show should === ("Xor.Right(Some(1))")
+    val either: Either[String, Option[Int]] = Either.right(Some(1))
+    OptionT[Either[String, ?], Int](either).show should === ("Right(Some(1))")
   }
 
   test("none") {

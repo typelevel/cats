@@ -19,11 +19,11 @@ trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
   def handleErrorPure[A](a: A, f: E => A): IsEq[F[A]] =
     F.handleError(F.pure(a))(f) <-> F.pure(a)
 
-  def raiseErrorAttempt(e: E): IsEq[F[E Xor Unit]] =
-    F.attempt(F.raiseError[Unit](e)) <-> F.pure(Xor.left(e))
+  def raiseErrorAttempt(e: E): IsEq[F[Xor[E, Unit]]] =
+    F.attempt(F.raiseError[Unit](e)) <-> F.pure(Xor.Left(e))
 
-  def pureAttempt[A](a: A): IsEq[F[E Xor A]] =
-    F.attempt(F.pure(a)) <-> F.pure(Xor.right(a))
+  def pureAttempt[A](a: A): IsEq[F[Xor[E, A]]] =
+    F.attempt(F.pure(a)) <-> F.pure(Xor.Right(a))
 
   def handleErrorWithConsistentWithRecoverWith[A](fa: F[A], f: E => F[A]): IsEq[F[A]] =
     F.handleErrorWith(fa)(f) <-> F.recoverWith(fa)(PartialFunction(f))

@@ -3,8 +3,8 @@ package free
 
 import scala.annotation.tailrec
 
-import cats.data.Xor, Xor.{Left, Right}
 import cats.arrow.FunctionK
+import cats.data.Xor
 
 /**
  * A free operational monad for some functor `S`. Binding is done
@@ -44,13 +44,13 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Evaluate a single layer of the free monad.
    */
   @tailrec
-  final def resume(implicit S: Functor[S]): S[Free[S, A]] Xor A = this match {
-    case Pure(a) => Right(a)
-    case Suspend(t) => Left(S.map(t)(Pure(_)))
+  final def resume(implicit S: Functor[S]): Xor[S[Free[S, A]], A] = this match {
+    case Pure(a) => Xor.Right(a)
+    case Suspend(t) => Xor.Left(S.map(t)(Pure(_)))
     case FlatMapped(c, f) =>
       c match {
         case Pure(a) => f(a).resume
-        case Suspend(t) => Left(S.map(t)(f))
+        case Suspend(t) => Xor.Left(S.map(t)(f))
         case FlatMapped(d, g) => d.flatMap(dd => g(dd).flatMap(f)).resume
       }
   }
@@ -62,8 +62,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def go(f: S[Free[S, A]] => Free[S, A])(implicit S: Functor[S]): A = {
     @tailrec def loop(t: Free[S, A]): A =
       t.resume match {
-        case Left(s) => loop(f(s))
-        case Right(r) => r
+        case Xor.Left(s) => loop(f(s))
+        case Xor.Right(r) => r
       }
     loop(this)
   }
@@ -81,8 +81,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    */
   final def runM[M[_]](f: S[Free[S, A]] => M[Free[S, A]])(implicit S: Functor[S], M: Monad[M]): M[A] = {
     def runM2(t: Free[S, A]): M[A] = t.resume match {
-      case Left(s) => Monad[M].flatMap(f(s))(runM2)
-      case Right(r) => Monad[M].pure(r)
+      case Xor.Left(s) => Monad[M].flatMap(f(s))(runM2)
+      case Xor.Right(r) => Monad[M].pure(r)
     }
     runM2(this)
   }
@@ -92,20 +92,20 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * resumption in the context of `S`.
    */
   final def runTailRec(implicit S: Monad[S], r: RecursiveTailRecM[S]): S[A] = {
-    def step(rma: Free[S, A]): S[Xor[Free[S, A], A]] =
+    def step(rma: Free[S, A]): S[Either[Free[S, A], A]] =
       rma match {
         case Pure(a) =>
-          S.pure(Xor.right(a))
+          S.pure(Right(a))
         case Suspend(ma) =>
-          S.map(ma)(Xor.right(_))
+          S.map(ma)(Right(_))
         case FlatMapped(curr, f) =>
           curr match {
             case Pure(x) =>
-              S.pure(Xor.left(f(x)))
+              S.pure(Left(f(x)))
             case Suspend(mx) =>
-              S.map(mx)(x => Xor.left(f(x)))
+              S.map(mx)(x => Left(f(x)))
             case FlatMapped(prev, g) =>
-              S.pure(Xor.left(prev.flatMap(w => g(w).flatMap(f))))
+              S.pure(Left(prev.flatMap(w => g(w).flatMap(f))))
           }
       }
     r.sameType(S).tailRecM(this)(step)
@@ -127,9 +127,9 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    */
   final def foldMap[M[_]](f: FunctionK[S, M])(implicit M: Monad[M], r: RecursiveTailRecM[M]): M[A] =
     r.sameType(M).tailRecM(this)(_.step match {
-      case Pure(a) => M.pure(Xor.right(a))
-      case Suspend(sa) => M.map(f(sa))(Xor.right)
-      case FlatMapped(c, g) => M.map(c.foldMap(f))(cc => Xor.left(g(cc)))
+      case Pure(a) => M.pure(Right(a))
+      case Suspend(sa) => M.map(f(sa))(Right(_))
+      case FlatMapped(c, g) => M.map(c.foldMap(f))(cc => Left(g(cc)))
     })
 
   /**
@@ -214,7 +214,7 @@ object Free {
       def pure[A](a: A): Free[S, A] = Free.pure(a)
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
-      def tailRecM[A, B](a: A)(f: A => Free[S, A Xor B]): Free[S, B] =
+      def tailRecM[A, B](a: A)(f: A => Free[S, Either[A, B]]): Free[S, B] =
         f(a).flatMap(_ match {
           case Left(a1) => tailRecM(a1)(f) // recursion OK here, since Free is lazy
           case Right(b) => pure(b)

@@ -46,7 +46,7 @@ class XorTTests extends CatsSuite {
   {
     //if a Monad is defined
     implicit val F = ListWrapper.monad
-    implicit val eq0 = XorT.catsDataEqForXorT[ListWrapper, String, String Xor Int]
+    implicit val eq0 = XorT.catsDataEqForXorT[ListWrapper, String, Xor[String, Int]]
     implicit val eq1 = XorT.catsDataEqForXorT[XorT[ListWrapper, String, ?], String, Int](eq0)
 
     Functor[XorT[ListWrapper, String, ?]]

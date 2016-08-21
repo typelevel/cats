@@ -91,7 +91,7 @@ lazy val commonJsSettings = Seq(
   requiresDOM := false,
   jsEnv := NodeJSEnv().value,
   // Only used for scala.js for now
-  botBuild := sys.props.getOrElse("CATS_BOT_BUILD", default="false") == "true",
+  botBuild := scala.sys.env.get("TRAVIS").isDefined,
   // batch mode decreases the amount of memory needed to compile scala.js code
   scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value)
 )
@@ -281,6 +281,8 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(catsSettings)
   .settings(noPublishSettings)
   .settings(commonJvmSettings)
+  .settings(libraryDependencies ++= Seq(
+    "org.scalaz" %% "scalaz-core" % "7.2.5"))
   .enablePlugins(JmhPlugin)
 
 // cats-js is JS-only

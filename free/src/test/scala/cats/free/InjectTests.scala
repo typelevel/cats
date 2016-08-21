@@ -2,8 +2,9 @@ package cats
 package free
 
 import cats.arrow.FunctionK
+import cats.data.Xor
 import cats.tests.CatsSuite
-import cats.data.{Xor, Coproduct}
+import cats.data.Coproduct
 import org.scalacheck._
 
 class InjectTests extends CatsSuite {

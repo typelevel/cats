@@ -1,7 +1,7 @@
 package cats
 package arrow
 
-import cats.data.{Xor, Coproduct}
+import cats.data.{Coproduct, Xor}
 
 trait FunctionK[F[_], G[_]] extends Serializable { self =>
   def apply[A](fa: F[A]): G[A]

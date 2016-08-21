@@ -1,7 +1,8 @@
 package cats
 package data
 
-import instances.option.{catsStdInstancesForOption => optionInstance}
+import cats.instances.option.{catsStdInstancesForOption => optionInstance}
+import cats.syntax.either._
 
 /**
  * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some
@@ -251,9 +252,9 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
 
   override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] = fa.map(f)
 
-  def tailRecM[A, B](a: A)(f: A => OptionT[F, A Xor B]): OptionT[F, B] =
+  def tailRecM[A, B](a: A)(f: A => OptionT[F, Either[A, B]]): OptionT[F, B] =
     OptionT(F.tailRecM(a)(a0 => F.map(f(a0).value)(
-      _.fold(Xor.right[A, Option[B]](None))(_.map(Some(_)))
+      _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
     )))
 }
 

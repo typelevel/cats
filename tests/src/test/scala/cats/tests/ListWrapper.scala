@@ -90,7 +90,7 @@ object ListWrapper {
       def combineK[A](x: ListWrapper[A], y: ListWrapper[A]): ListWrapper[A] =
         ListWrapper(M.combineK(x.list, y.list))
 
-      def tailRecM[A, B](a: A)(f: A => ListWrapper[cats.data.Xor[A,B]]): ListWrapper[B] =
+      def tailRecM[A, B](a: A)(f: A => ListWrapper[Either[A,B]]): ListWrapper[B] =
         ListWrapper(M.tailRecM(a)(a => f(a).list))
     }
   }

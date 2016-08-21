@@ -55,6 +55,8 @@ final case class XorT[F[_], A, B](value: F[A Xor B]) {
 
   def toEither(implicit F: Functor[F]): F[Either[A, B]] = F.map(value)(_.toEither)
 
+  def toEitherT(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(toEither)
+
   def toOption(implicit F: Functor[F]): OptionT[F, B] = OptionT(F.map(value)(_.toOption))
 
   def to[G[_]](implicit F: Functor[F], G: Alternative[G]): F[G[B]] =
@@ -219,6 +221,21 @@ trait XorTFunctions {
 
   final def pure[F[_], A, B](b: B)(implicit F: Applicative[F]): XorT[F, A, B] = right(F.pure(b))
 
+  /**
+   * Alias for [[XorT.right]]
+   * {{{
+   * scala> import cats.data.XorT
+   * scala> import cats.implicits._
+   * scala> val o: Option[Int] = Some(3)
+   * scala> val n: Option[Int] = None
+   * scala> XorT.liftT(o)
+   * res0: cats.data.XorT[Option,Nothing,Int] = XorT(Some(Right(3)))
+   * scala> XorT.liftT(n)
+   * res1: cats.data.XorT[Option,Nothing,Int] = XorT(None)
+   * }}}
+   */
+  final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): XorT[F, A, B] = right(fb)
+
   /** Transforms an `Xor` into an `XorT`, lifted into the specified `Applicative`.
    *
    * Note: The return type is a FromXorPartiallyApplied[F], which has an apply method
@@ -280,7 +297,7 @@ private[data] abstract class XorTInstances extends XorTInstances1 {
       type TC[M[_]] = Functor[M]
 
       def liftT[M[_]: Functor, A](ma: M[A]): XorT[M, E, A] =
-        XorT(Functor[M].map(ma)(Xor.right))
+        XorT.liftT(ma)
     }
 
   implicit def catsMonoidForXorT[F[_], L, A](implicit F: Monoid[F[L Xor A]]): Monoid[XorT[F, L, A]] =
@@ -366,11 +383,11 @@ private[data] trait XorTMonad[F[_], L] extends Monad[XorT[F, L, ?]] with XorTFun
   implicit val F: Monad[F]
   def pure[A](a: A): XorT[F, L, A] = XorT(F.pure(Xor.right(a)))
   def flatMap[A, B](fa: XorT[F, L, A])(f: A => XorT[F, L, B]): XorT[F, L, B] = fa flatMap f
-  def tailRecM[A, B](a: A)(f: A => XorT[F, L, A Xor B]): XorT[F, L, B] =
-    XorT(F.tailRecM(a)(a0 => F.map(f(a0).value){
-      case Xor.Left(l) => Xor.Right(Xor.Left(l))
-      case Xor.Right(Xor.Left(a1)) => Xor.Left(a1)
-      case Xor.Right(Xor.Right(b)) => Xor.Right(Xor.Right(b))
+  def tailRecM[A, B](a: A)(f: A => XorT[F, L, Either[A, B]]): XorT[F, L, B] =
+    XorT(F.tailRecM(a)(a0 => F.map(f(a0).value) {
+      case Xor.Left(l)         => Right(Xor.Left(l))
+      case Xor.Right(Left(a1)) => Left(a1)
+      case Xor.Right(Right(b)) => Right(Xor.Right(b))
     }))
 }
 
@@ -386,7 +403,7 @@ private[data] trait XorTMonadError[F[_], L] extends MonadError[XorT[F, L, ?], L]
       case r @ Xor.Right(_) => F.pure(r)
     })
   def raiseError[A](e: L): XorT[F, L, A] = XorT.left(F.pure(e))
-  override def attempt[A](fla: XorT[F, L, A]): XorT[F, L, L Xor A] = XorT.right(fla.value)
+  override def attempt[A](fla: XorT[F, L, A]): XorT[F, L, Xor[L, A]] = XorT.right(fla.value)
   override def recover[A](fla: XorT[F, L, A])(pf: PartialFunction[L, A]): XorT[F, L, A] =
     fla.recover(pf)
   override def recoverWith[A](fla: XorT[F, L, A])(pf: PartialFunction[L, XorT[F, L, A]]): XorT[F, L, A] =

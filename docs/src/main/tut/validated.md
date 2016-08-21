@@ -253,10 +253,10 @@ implicit def validatedMonad[E]: Monad[Validated[E, ?]] =
     def pure[A](x: A): Validated[E, A] = Valid(x)
 
     @annotation.tailrec
-    def tailRecM[A, B](a: A)(f: A => Validated[E, A Xor B]): Validated[E, B] =
+    def tailRecM[A, B](a: A)(f: A => Validated[E, Either[A, B]]): Validated[E, B] =
       f(a) match {
-        case Valid(Xor.Right(b)) => Valid(b)
-        case Valid(Xor.Left(a)) => tailRecM(a)(f)
+        case Valid(Right(b)) => Valid(b)
+        case Valid(Left(a)) => tailRecM(a)(f)
         case i@Invalid(_) => i
       }
   }
@@ -314,18 +314,16 @@ val houseNumber = config.parse[Int]("house_number").andThen{ n =>
 The `withXor` method allows you to temporarily turn a `Validated` instance into an `Xor` instance and apply it to a function.
 
 ```tut:silent
-import cats.data.Xor
-
-def positive(field: String, i: Int): ConfigError Xor Int = {
-  if (i >= 0) Xor.right(i)
-  else Xor.left(ParseError(field))
+def positive(field: String, i: Int): Xor[ConfigError, Int] = {
+  if (i >= 0) Xor.Right(i)
+  else Xor.Left(ParseError(field))
 }
 ```
 
 Thus.
 
 ```tut:book
-val houseNumber = config.parse[Int]("house_number").withXor{ xor: ConfigError Xor Int =>
+val houseNumber = config.parse[Int]("house_number").withXor { xor: Xor[ConfigError, Int] =>
   xor.flatMap{ i =>
     positive("house_number", i)
   }

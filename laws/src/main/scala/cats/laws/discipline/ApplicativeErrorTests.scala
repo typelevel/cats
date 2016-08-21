@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import cats.data.{ Xor, XorT }
+import cats.data.{Xor, XorT}
 import cats.laws.discipline.CartesianTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Prop}
@@ -22,9 +22,9 @@ trait ApplicativeErrorTests[F[_], E] extends ApplicativeTests[F] {
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
     EqE: Eq[E],
-    EqFXorEU: Eq[F[E Xor Unit]],
-    EqFXorEA: Eq[F[E Xor A]],
-    EqXorTFEA: Eq[XorT[F, E, A]],
+    EqFEitherEU: Eq[F[Xor[E, Unit]]],
+    EqFEitherEA: Eq[F[Xor[E, A]]],
+    EqEitherTFEA: Eq[XorT[F, E, A]],
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
   ): RuleSet = {

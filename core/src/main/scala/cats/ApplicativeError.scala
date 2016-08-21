@@ -37,15 +37,15 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def handleError[A](fa: F[A])(f: E => A): F[A] = handleErrorWith(fa)(f andThen pure)
 
   /**
-   * Handle errors by turning them into [[cats.data.Xor.Left]] values.
+   * Handle errors by turning them into [[cats.data.Xor]] values.
    *
-   * If there is no error, then an [[cats.data.Xor.Right]] value will be returned instead.
+   * If there is no error, then an `scala.util.Right` value will be returned instead.
    *
    * All non-fatal errors should be handled by this method.
    */
-  def attempt[A](fa: F[A]): F[E Xor A] = handleErrorWith(
-    map(fa)(Xor.right[E, A])
-  )(e => pure(Xor.left(e)))
+  def attempt[A](fa: F[A]): F[Xor[E, A]] = handleErrorWith(
+    map(fa)(Xor.Right(_): Xor[E, A])
+  )(e => pure(Xor.Left(e)))
 
   /**
    * Similar to [[attempt]], but wraps the result in a [[cats.data.XorT]] for

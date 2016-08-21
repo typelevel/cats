@@ -4,11 +4,11 @@ package data
 import cats.arrow.FunctionK
 import cats.functor.Contravariant
 
-/** `F` on the left and `G` on the right of [[Xor]].
+/** `F` on the left and `G` on the right of [[cats.data.Xor]].
  *
- * @param run The underlying [[Xor]].
+ * @param run The underlying [[cats.data.Xor]].
  */
-final case class Coproduct[F[_], G[_], A](run: F[A] Xor G[A]) {
+final case class Coproduct[F[_], G[_], A](run: Xor[F[A], G[A]]) {
 
   import Coproduct._
 
@@ -86,17 +86,17 @@ final case class Coproduct[F[_], G[_], A](run: F[A] Xor G[A]) {
 object Coproduct extends CoproductInstances {
 
   def leftc[F[_], G[_], A](x: F[A]): Coproduct[F, G, A] =
-    Coproduct(Xor.left(x))
+    Coproduct(Xor.Left(x))
 
   def rightc[F[_], G[_], A](x: G[A]): Coproduct[F, G, A] =
-    Coproduct(Xor.right(x))
+    Coproduct(Xor.Right(x))
 
   final class CoproductLeft[G[_]] private[Coproduct] {
-    def apply[F[_], A](fa: F[A]): Coproduct[F, G, A] = Coproduct(Xor.left(fa))
+    def apply[F[_], A](fa: F[A]): Coproduct[F, G, A] = Coproduct(Xor.Left(fa))
   }
 
   final class CoproductRight[F[_]] private[Coproduct] {
-    def apply[G[_], A](ga: G[A]): Coproduct[F, G, A] = Coproduct(Xor.right(ga))
+    def apply[G[_], A](ga: G[A]): Coproduct[F, G, A] = Coproduct(Xor.Right(ga))
   }
 
   def left[G[_]]: CoproductLeft[G] = new CoproductLeft[G]
@@ -106,7 +106,7 @@ object Coproduct extends CoproductInstances {
 
 private[data] sealed abstract class CoproductInstances3 {
 
-  implicit def catsDataEqForCoproduct[F[_], G[_], A](implicit E: Eq[F[A] Xor G[A]]): Eq[Coproduct[F, G, A]] =
+  implicit def catsDataEqForCoproduct[F[_], G[_], A](implicit E: Eq[Xor[F[A], G[A]]]): Eq[Coproduct[F, G, A]] =
     Eq.by(_.run)
 
   implicit def catsDataFunctorForCoproduct[F[_], G[_]](implicit F0: Functor[F], G0: Functor[G]): Functor[Coproduct[F, G, ?]] =

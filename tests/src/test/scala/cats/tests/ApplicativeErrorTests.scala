@@ -1,13 +1,9 @@
 package cats
 package tests
 
-import cats.data.{XorT}
-
+import cats.data.{Xor, XorT}
 
 class ApplicativeErrorCheck extends CatsSuite {
-
-
-
   val failed: Option[Int] =
     (()).raiseError[Option, Int]
 
@@ -24,11 +20,11 @@ class ApplicativeErrorCheck extends CatsSuite {
   }
 
   test("attempt syntax creates a wrapped Xor") {
-    failed.attempt should === (Option(().left))
+    failed.attempt should === (Option(Xor.Left(())))
   }
 
   test("attemptT syntax creates an XorT") {
-    failed.attemptT should === (XorT[Option, Unit, Int](Option(().left)))
+    failed.attemptT should === (XorT[Option, Unit, Int](Option(Xor.Left(()))))
   }
 
   test("recover syntax transforms an error to a success") {

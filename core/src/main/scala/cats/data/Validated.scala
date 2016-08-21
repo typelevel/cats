@@ -83,8 +83,8 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * Convert to an Xor, apply a function, convert back.  This is handy
    * when you want to use the Monadic properties of the Xor type.
    */
-  def withXor[EE, B](f: (E Xor A) => (EE Xor B)): Validated[EE, B] =
-    f(toXor).toValidated
+  def withXor[EE, B](f: Xor[E, A] => Xor[EE, B]): Validated[EE, B] =
+    Validated.fromXor(f(toXor))
 
   /**
    * Validated is a [[functor.Bifunctor]], this method applies one of the
@@ -177,7 +177,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * This allows "chained" validation: the output of one validation can be fed
    * into another validation function.
    *
-   * This function is similar to `Xor.flatMap`. It's not called `flatMap`,
+   * This function is similar to `flatMap` on `Either`. It's not called `flatMap`,
    * because by Cats convention, `flatMap` is a monadic bind that is consistent
    * with `ap`. This method is not consistent with [[ap]] (or other
    * `Apply`-based methods), because it has "fail-fast" behavior as opposed to
@@ -390,6 +390,11 @@ trait ValidatedFunctions {
    * Converts an `Either[A, B]` to an `Validated[A, B]`.
    */
   def fromEither[A, B](e: Either[A, B]): Validated[A, B] = e.fold(invalid, valid)
+
+  /**
+   * Converts an `Xor[A, B]` to an `Validated[A, B]`.
+   */
+  def fromXor[A, B](e: Xor[A, B]): Validated[A, B] = e.fold(invalid, valid)
 
   /**
    * Converts an `Option[B]` to an `Validated[A, B]`, where the provided `ifNone` values is returned on

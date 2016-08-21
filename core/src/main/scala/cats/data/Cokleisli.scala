@@ -58,12 +58,12 @@ private[data] sealed abstract class CokleisliInstances extends CokleisliInstance
     override def map[B, C](fa: Cokleisli[F, A, B])(f: B => C): Cokleisli[F, A, C] =
       fa.map(f)
 
-    def tailRecM[B, C](b: B)(fn: B => Cokleisli[F, A, B Xor C]): Cokleisli[F, A, C] =
+    def tailRecM[B, C](b: B)(fn: B => Cokleisli[F, A, Either[B, C]]): Cokleisli[F, A, C] =
       Cokleisli({ (fa: F[A]) =>
         @tailrec
-        def loop(c: Cokleisli[F, A, B Xor C]): C = c.run(fa) match {
-          case Xor.Right(c) => c
-          case Xor.Left(bb) => loop(fn(bb))
+        def loop(c: Cokleisli[F, A, Either[B, C]]): C = c.run(fa) match {
+          case Right(c) => c
+          case Left(bb) => loop(fn(bb))
         }
         loop(fn(b))
       })

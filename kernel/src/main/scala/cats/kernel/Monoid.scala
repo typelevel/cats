@@ -34,6 +34,9 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
    */
   def combineAll(as: TraversableOnce[A]): A =
     as.foldLeft(empty)(combine)
+
+  override def combineAllOption(as: TraversableOnce[A]): Option[A] =
+    if (as.isEmpty) None else Some(combineAll(as))
 }
 
 abstract class MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] {
