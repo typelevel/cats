@@ -26,10 +26,14 @@ private[cats] trait KernelInvariantMonoidalInstances {
 
     def imap[A, B](fa: Semigroup[A])(f: A => B)(g: B => A): Semigroup[B] = new Semigroup[B] {
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+      override def combineAllOption(bs: TraversableOnce[B]): Option[B] =
+        fa.combineAllOption(bs.map(g)).map(f)
     }
 
     def pure[A](a: A): Semigroup[A] = new Semigroup[A] {
       def combine(x: A, y: A): A = a
+      override def combineAllOption(as: TraversableOnce[A]): Option[A] =
+        if (as.isEmpty) None else Some(a)
     }
   }
 
@@ -42,11 +46,14 @@ private[cats] trait KernelInvariantMonoidalInstances {
     def imap[A, B](fa: Monoid[A])(f: A => B)(g: B => A): Monoid[B] = new Monoid[B] {
       val empty = f(fa.empty)
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+      override def combineAll(bs: TraversableOnce[B]): B =
+        f(fa.combineAll(bs.map(g)))
     }
 
     def pure[A](a: A): Monoid[A] = new Monoid[A] {
       val empty = a
       def combine(x: A, y: A): A = a
+      override def combineAll(as: TraversableOnce[A]): A = a
     }
   }
 }

@@ -1,9 +1,18 @@
 package cats
 package tests
 
-import cats.laws.discipline.{BitraverseTests, ComonadTests, SerializableTests, TraverseTests}
+import data.NonEmptyList
+
+import cats.laws.discipline.{
+  BitraverseTests, ComonadTests, SerializableTests, TraverseTests, MonadTests, FlatMapTests, CartesianTests
+}
+import cats.laws.discipline.arbitrary._
 
 class TupleTests extends CatsSuite {
+
+  implicit val iso1 = CartesianTests.Isomorphisms.invariant[(NonEmptyList[Int], ?)]
+  implicit val iso2 = CartesianTests.Isomorphisms.invariant[(String, ?)]
+
   checkAll("Tuple2", BitraverseTests[Tuple2].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Tuple2]", SerializableTests.serializable(Bitraverse[Tuple2]))
 
@@ -12,6 +21,21 @@ class TupleTests extends CatsSuite {
 
   checkAll("Tuple2[String, Int]", ComonadTests[(String, ?)].comonad[Int, Int, Int])
   checkAll("Comonad[(String, ?)]", SerializableTests.serializable(Comonad[(String, ?)]))
+
+  // Note that NonEmptyList has no Monoid, so we can make a FlatMap, but not a Monad
+  checkAll("FlatMap[(NonEmptyList[Int], ?)]", FlatMapTests[(NonEmptyList[Int], ?)].flatMap[String, Long, String])
+  checkAll("FlatMap[(String, ?)] serializable", SerializableTests.serializable(FlatMap[(String, ?)]))
+
+  checkAll("Monad[(String, ?)]", MonadTests[(String, ?)].monad[Int, Int, String])
+  checkAll("Monad[(String, ?)] serializable", SerializableTests.serializable(Monad[(String, ?)]))
+
+  test("Cartesian composition") {
+    val cart = ContravariantCartesian[Eq].composeFunctor[(Int, ?)]
+    val eq = cart.product(Eq[(Int, String)], Eq[(Int, Int)])
+    forAll { (a: (Int, (String, Int)), b: (Int, (String, Int))) =>
+      (a == b) should === (eq.eqv(a, b))
+    }
+  }
 
   test("eqv") {
     val eq = Eq[(Int, Long)]

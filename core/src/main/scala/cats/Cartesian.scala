@@ -25,4 +25,5 @@ object Cartesian extends CartesianArityFunctions with KernelCartesianInstances
 private[cats] sealed trait KernelCartesianInstances {
   implicit val catsInvariantSemigroup: Cartesian[Semigroup] = InvariantMonoidal.catsInvariantMonoidalSemigroup
   implicit val catsInvariantMonoid: Cartesian[Monoid] = InvariantMonoidal.catsInvariantMonoidalMonoid
+  implicit val catsCartesianEq: Cartesian[Eq] = ContravariantCartesian.catsContravariantCartesianEq
 }

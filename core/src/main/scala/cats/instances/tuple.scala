@@ -1,9 +1,11 @@
 package cats
 package instances
 
+import scala.annotation.tailrec
+
 trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
 
-sealed trait Tuple2Instances {
+sealed trait Tuple2Instances extends Tuple2Instances1 {
   implicit val catsStdBitraverseForTuple2: Bitraverse[Tuple2] =
     new Bitraverse[Tuple2] {
       def bitraverse[G[_]: Applicative, A, B, C, D](fab: (A, B))(f: A => G[C], g: B => G[D]): G[(C, D)] =
@@ -39,4 +41,60 @@ sealed trait Tuple2Instances {
 
       override def coflatten[A](fa: (X, A)): (X, (X, A)) = (fa._1, fa)
     }
+}
+
+sealed trait Tuple2Instances1 extends Tuple2Instances2 {
+  implicit def catsStdMonadForTuple2[X](implicit MX: Monoid[X]): Monad[(X, ?)] with RecursiveTailRecM[(X, ?)] =
+    new FlatMapTuple2[X](MX) with Monad[(X, ?)] {
+      def pure[A](a: A): (X, A) = (MX.empty, a)
+    }
+}
+
+sealed trait Tuple2Instances2 {
+  implicit def catsStdFlatMapForTuple2[X](implicit SX: Semigroup[X]): FlatMap[(X, ?)] with RecursiveTailRecM[(X, ?)]=
+    new FlatMapTuple2[X](SX)
+}
+
+private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?)] with RecursiveTailRecM[(X, ?)] {
+  override def ap[A, B](ff: (X, A => B))(fa: (X, A)): (X, B) = {
+    val x = s.combine(ff._1, fa._1)
+    val b = ff._2(fa._2)
+    (x, b)
+  }
+
+  override def product[A, B](fa: (X, A), fb: (X, B)): (X, (A, B)) = {
+    val x = s.combine(fa._1, fb._1)
+    (x, (fa._2, fb._2))
+  }
+
+  override def map[A, B](fa: (X, A))(f: A => B): (X, B) =
+    (fa._1, f(fa._2))
+
+  def flatMap[A, B](fa: (X, A))(f: A => (X, B)): (X, B) = {
+    val xb = f(fa._2)
+    val x = s.combine(fa._1, xb._1)
+    (x, xb._2)
+  }
+
+  override def followedBy[A, B](a: (X, A))(b: (X, B)): (X, B) =
+    (s.combine(a._1, b._1), b._2)
+
+  override def mproduct[A, B](fa: (X, A))(f: A => (X, B)): (X, (A, B)) = {
+    val xb = f(fa._2)
+    val x = s.combine(fa._1, xb._1)
+    (x, (fa._2, xb._2))
+  }
+
+  def tailRecM[A, B](a: A)(f: A => (X, Either[A, B])): (X, B) = {
+    @tailrec
+    def loop(x: X, aa: A): (X, B) =
+      f(aa) match {
+        case (nextX, Left(nextA)) => loop(s.combine(x, nextX), nextA)
+        case (nextX, Right(b)) => (s.combine(x, nextX), b)
+      }
+    f(a) match {
+      case (x, Right(b)) => (x, b)
+      case (x, Left(nextA)) => loop(x, nextA)
+    }
+  }
 }
