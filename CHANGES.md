@@ -29,8 +29,10 @@ And other bug fixes:
 
 And some additions:
 
+* [#1289](https://github.com/typelevel/cats/pull/1289) and [#1306](https://github.com/typelevel/cats/pull/1306): `EitherT` and improved `Either` syntax
 * [#1280](https://github.com/typelevel/cats/pull/1280): `FlatMap` now has a `tailRecM` method
 * [#1280](https://github.com/typelevel/cats/pull/1280): `RecursiveTailRecM` marker type class indicating that `tailRecM` is stack safe
+* [#1266](https://github.com/typelevel/cats/pull/1266): `FreeT` monad transformer
 * [#1225](https://github.com/typelevel/cats/pull/1225): `FunctorFilter` and `TraverseFilter`
 * [#1121](https://github.com/typelevel/cats/pull/1121): `valueOr` and `merge` for `Validated`
 * [#1188](https://github.com/typelevel/cats/pull/1188): `toValidatedNel` for `XorT`
@@ -53,6 +55,7 @@ And some additions:
 * [#1207](https://github.com/typelevel/cats/pull/1207): `tell` for `Writer` and `WriterT`, `value` for `Writer`
 * [#1155](https://github.com/typelevel/cats/pull/1155): Convenience methods for constructing `XorT` values
 * [#1085](https://github.com/typelevel/cats/pull/1085): `runTailRec` and `foldLeftM` for `Free`
+* [#1299](https://github.com/typelevel/cats/pull/1299): `ContravariantCartesian` type class
 
 And some name changes:
 
@@ -79,6 +82,7 @@ And other API changes:
 And many new instances:
 
 * [#1059](https://github.com/typelevel/cats/pull/1059) and [#1147](https://github.com/typelevel/cats/pull/1147): `Monoid`, `MonadError`, and other instances for `scala.util.Try`
+* [#1299](https://github.com/typelevel/cats/pull/1299): `Monad` for `Tuple2`
 * [#1211](https://github.com/typelevel/cats/pull/1211): `Contravariant` for `Eq`
 * [#1220](https://github.com/typelevel/cats/pull/1220): `Traverse` and `Comonad` for `Tuple2`
 * [#1103](https://github.com/typelevel/cats/pull/1103): `Order`, `MonadError`, and other instances for `OptionT`
@@ -89,9 +93,10 @@ And many new instances:
 * [#1076](https://github.com/typelevel/cats/pull/1076) and [#1261](https://github.com/typelevel/cats/pull/1261): `MonadRec` instances for `Eval`, `StateT`, and `Future`
 * [#1105](https://github.com/typelevel/cats/pull/1105): `Unapply` instances for `Nested` shapes
 
-And stylistic improvements:
+And miscellaneous improvements to style and performance:
 
 * [#1079](https://github.com/typelevel/cats/pull/1079): More consistent type lambdas
+* [#1300](https://github.com/typelevel/cats/pull/1300): Much faster `Monoid` instances for `Map`
 
 And improvements to the documentation:
 
