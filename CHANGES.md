@@ -1,6 +1,6 @@
 ## Version 0.7.0
 
-> 2016 August 2
+> 2016 August 21
 
 Version 0.7.0 is the seventh Cats release, and includes several major rearrangements and changes to names.
 
