@@ -1,7 +1,6 @@
 package cats
 package instances
 
-import data.Xor
 import scala.annotation.tailrec
 
 trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
@@ -86,16 +85,16 @@ private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?
     (x, (fa._2, xb._2))
   }
 
-  def tailRecM[A, B](a: A)(f: A => (X, A Xor B)): (X, B) = {
+  def tailRecM[A, B](a: A)(f: A => (X, Either[A, B])): (X, B) = {
     @tailrec
     def loop(x: X, aa: A): (X, B) =
       f(aa) match {
-        case (nextX, Xor.Left(nextA)) => loop(s.combine(x, nextX), nextA)
-        case (nextX, Xor.Right(b)) => (s.combine(x, nextX), b)
+        case (nextX, Left(nextA)) => loop(s.combine(x, nextX), nextA)
+        case (nextX, Right(b)) => (s.combine(x, nextX), b)
       }
     f(a) match {
-      case (x, Xor.Right(b)) => (x, b)
-      case (x, Xor.Left(nextA)) => loop(x, nextA)
+      case (x, Right(b)) => (x, b)
+      case (x, Left(nextA)) => loop(x, nextA)
     }
   }
 }
