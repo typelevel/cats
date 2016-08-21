@@ -20,9 +20,13 @@ class TrampolineBench {
       y <- Eval.defer(evalFib(n - 2))
     } yield x + y
 
+  private def fun0natId =
+    new (Function0 ~> Id) {
+      def apply[A](fa: Function0[A]): A = fa.extract
+    }
 
   @Benchmark
-  def trampoline(): Int = trampolineFib(N).run
+  def trampoline(): Int = trampolineFib(N).run(fun0natId)
 
   def trampolineFib(n: Int): Trampoline[Int] =
     if (n < 2) Trampoline.done(n) else for {

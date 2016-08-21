@@ -69,11 +69,13 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   }
 
   /**
-   * Run to completion, using the given comonad to extract the
-   * resumption.
+   * Run to completion, using the given natural transformation to extract the
+   * resumption. We use a natural transformation from S to Id, because it
+   * is essentially a function `S[X] => X forall X`, and we want the `X`
+   * parameter to be existentially quantified here.
    */
-  final def run(implicit S: Comonad[S]): A =
-    go(S.extract)
+  final def run(f: S ~> Id)(implicit S: Functor[S]): A =
+    go(f.apply)
 
   /**
    * Run to completion, using a function that maps the resumption
