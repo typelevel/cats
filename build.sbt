@@ -470,7 +470,7 @@ lazy val sharedReleaseProcess = Seq(
     checkSnapshotDependencies,
     inquireVersions,
     //runClean, // disabled to reduce memory usage during release
-    runTest,
+    //runTest, // temporarily disabled for 0.7.0
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
