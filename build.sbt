@@ -207,7 +207,7 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(scoverageSettings: _*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(KernelBoiler.gen))
   .jsSettings(commonJsSettings:_*)
-  .jvmSettings((commonJvmSettings ++ (mimaPreviousArtifacts := Set("org.typelevel" %% "cats-kernel" % "0.6.0"))):_*)
+  .jvmSettings((commonJvmSettings ++ (mimaPreviousArtifacts := Set("org.typelevel" %% "cats-kernel" % "0.7.0"))):_*)
 
 lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js
