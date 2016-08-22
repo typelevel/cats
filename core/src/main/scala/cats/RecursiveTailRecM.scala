@@ -7,7 +7,7 @@ import java.io.Serializable
  */
 trait RecursiveTailRecM[F[_]] extends Serializable {
   /*
-   * you can call RecusiveTailRecM[F].sameType(Monad[F]).tailRec
+   * you can call RecursiveTailRecM[F].sameType(Monad[F]).tailRec
    * to have a static check that the types agree
    * for safer usage of tailRecM
    */
