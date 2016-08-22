@@ -77,6 +77,14 @@ class LawTests extends FunSuite with Discipline {
   //laws[GroupLaws, Double].check(_.commutativeGroup) // approximately associative
   laws[GroupLaws, BigInt].check(_.commutativeGroup)
 
+  {
+    // default Arbitrary[BigDecimal] is a bit too intense :/
+    implicit val arbBigDecimal: Arbitrary[BigDecimal] =
+      Arbitrary(arbitrary[Double].map(n => BigDecimal(n.toString)))
+    laws[OrderLaws, BigDecimal].check(_.order)
+    laws[GroupLaws, BigDecimal].check(_.commutativeGroup)
+  }
+
   laws[GroupLaws, (Int, Int)].check(_.band)
 
   laws[GroupLaws, Unit].check(_.boundedSemilattice)
