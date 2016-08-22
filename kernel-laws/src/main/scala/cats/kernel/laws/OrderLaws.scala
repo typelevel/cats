@@ -6,7 +6,7 @@ import org.typelevel.discipline.Laws
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 
-import cats.kernel.instances.boolean._
+import cats.kernel.instances.all._
 
 object OrderLaws {
   def apply[A: Eq: Arbitrary]: OrderLaws[A] = new OrderLaws[A] {
@@ -59,6 +59,26 @@ trait OrderLaws[A] extends Laws {
     },
     "gt" -> forAll { (x: A, y: A) =>
       A.lt(x, y) ?== A.gt(y, x)
+    },
+    "partialCompare" -> forAll { (x: A, y: A) =>
+      val c = A.partialCompare(x, y)
+      ((c < 0) ?== A.lt(x, y)) && ((c == 0) ?== A.eqv(x, y)) && ((c > 0) ?== A.gt(x, y))
+    },
+    "pmin" -> forAll { (x: A, y: A) =>
+      val c = A.partialCompare(x, y)
+      val m = A.pmin(x, y)
+      if (c < 0) m ?== Some(x)
+      else if (c == 0) (m ?== Some(x)) && (m ?== Some(y))
+      else if (c > 0) m ?== Some(y)
+      else m ?== None
+    },
+    "pmax" -> forAll { (x: A, y: A) =>
+      val c = A.partialCompare(x, y)
+      val m = A.pmax(x, y)
+      if (c < 0) m ?== Some(y)
+      else if (c == 0) (m ?== Some(x)) && (m ?== Some(y))
+      else if (c > 0) m ?== Some(x)
+      else m ?== None
     }
   )
 
@@ -67,6 +87,24 @@ trait OrderLaws[A] extends Laws {
     parent = Some(partialOrder),
     "totality" -> forAll { (x: A, y: A) =>
       A.lteqv(x, y) ?|| A.lteqv(y, x)
+    },
+    "compare" -> forAll { (x: A, y: A) =>
+      val c = A.compare(x, y)
+      ((c < 0) ?== A.lt(x, y)) && ((c == 0) ?== A.eqv(x, y)) && ((c > 0) ?== A.gt(x, y))
+    },
+    "min" -> forAll { (x: A, y: A) =>
+      val c = A.compare(x, y)
+      val m = A.min(x, y)
+      if (c < 0) m ?== x
+      else if (c == 0) (m ?== x) && (m ?== y)
+      else m ?== y
+    },
+    "max" -> forAll { (x: A, y: A) =>
+      val c = A.compare(x, y)
+      val m = A.max(x, y)
+      if (c < 0) m ?== y
+      else if (c == 0) (m ?== x) && (m ?== y)
+      else m ?== x
     }
   )
 
