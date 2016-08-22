@@ -101,7 +101,7 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
     new Choice[Kleisli[F, ?, ?]] {
       def id[A]: Kleisli[F, A, A] = Kleisli(ev.pure(_))
 
-      def choice[A, B, C](f: Kleisli[F, A, C], g: Kleisli[F, B, C]): Kleisli[F, Xor[A, B], C] =
+      def choice[A, B, C](f: Kleisli[F, A, C], g: Kleisli[F, B, C]): Kleisli[F, Either[A, B], C] =
         Kleisli(_.fold(f.run, g.run))
 
       def compose[A, B, C](f: Kleisli[F, B, C], g: Kleisli[F, A, B]): Kleisli[F, A, C] =

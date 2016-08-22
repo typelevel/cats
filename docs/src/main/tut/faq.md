@@ -9,6 +9,7 @@ section: "faq"
 ## Questions
 
  * [What imports do I need?](#what-imports)
+ * [Where is right-biased `Either`?](#either)
  * [Why can't the compiler find implicit instances for Future?](#future-instances)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
  * [Where is `ListT`?](#listt)
@@ -30,13 +31,25 @@ import cats.implicits._
 
 This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](imports.html).
 
+## <a id="either" href="#either"></a>Where is right-biased Either?
+Up to Cats 0.6.x we had `cats.data.Xor` which was effectively `scala.util.Either`, but right-biased by default and with
+a bunch of useful combinators around it. In Scala 2.12.x `Either`
+[became right-biased](https://github.com/scala/scala/pull/5135) so we revisited the use of `Xor` and
+[decided](https://github.com/typelevel/cats/issues/1192) that in the interest of interoperability we move to
+`scala.util.Either` and fill in the gaps via
+[syntax enrichment](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/syntax/either.scala).
+
+This syntax can be imported via `cats.syntax.either._` or through `cats.implicits._`.
+
+Similarly, `cats.data.XorT` has been replaced with `cats.data.EitherT`.
+
 ## <a id="future-instances" href="#future-instances"></a>Why can't the compiler find implicit instances for Future?
 
 If you have already followed the [imports advice](#what-imports) but are still getting error messages like `could not find implicit value for parameter e: cats.Monad[scala.concurrent.Future]` or `value |+| is not a member of scala.concurrent.Future[Int]`, then make sure that you have an implicit `scala.concurrent.ExecutionContext` in scope. The easiest way to do this is to `import scala.concurrent.ExecutionContext.Implicits.global`, but note that you may want to use a different execution context for your production application.
 
 ## <a id="traverse" href="#traverse"></a>How can I turn my List of `<something>` into a `<something>` of a list?
 
-It's really common to have a `List` of values with types like `Option`, `Xor`, or `Validated` that you would like to turn "inside out" into an `Option` (or `Xor` or `Validated`) of a `List`. The `sequence`, `sequenceU`, `traverse`, and `traverseU` methods are _really_ handy for this. You can read more about them in the [Traverse documentation]({{ site.baseurl }}/tut/traverse.html).
+It's really common to have a `List` of values with types like `Option`, `Either`, or `Validated` that you would like to turn "inside out" into an `Option` (or `Either` or `Validated`) of a `List`. The `sequence`, `sequenceU`, `traverse`, and `traverseU` methods are _really_ handy for this. You can read more about them in the [Traverse documentation]({{ site.baseurl }}/tut/traverse.html).
 
 ## <a id="listt" href="#listt"></a>Where is ListT?
 
@@ -107,9 +120,9 @@ Note that the one area where simulacrum is intentionally not used is in the `cat
 
 ## <a id="kind-projector" href="#kind-projector"></a>What do types like `?` and `λ` mean?
 
-Cats defines a wealth of type classes and type class instances. For a number of the type class and instance combinations, there is a mismatch between the type parameter requirements of the type class and the type parameter requirements of the data type for which the instance is being defined. For example, the [Xor]({{ site.baseurl }}/tut/xor.html) data type is a type constructor with two type parameters. We would like to be able to define a [Monad]({{ site.baseurl }}/tut/monad.html) for `Xor`, but the `Monad` type class operates on type constructors having only one type parameter.
+Cats defines a wealth of type classes and type class instances. For a number of the type class and instance combinations, there is a mismatch between the type parameter requirements of the type class and the type parameter requirements of the data type for which the instance is being defined. For example, the [Either]({{ site.baseurl }}/tut/either.html) data type is a type constructor with two type parameters. We would like to be able to define a [Monad]({{ site.baseurl }}/tut/monad.html) for `Either`, but the `Monad` type class operates on type constructors having only one type parameter.
 
-**Enter type lambdas!** Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of `Xor` then, when defining a `Monad` for `Xor`, we want to fix one of the type parameters at the point where a `Monad` instance is summoned, so that the type parameters line up. As `Xor` is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when `Xor` is treated as a `Monad`. The right biased nature of `Xor` is discussed further in the [`Xor` documentation]({{ site.baseurl }}/tut/xor.html).
+**Enter type lambdas!** Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of `Either` then, when defining a `Monad` for `Either`, we want to fix one of the type parameters at the point where a `Monad` instance is summoned, so that the type parameters line up. As `Either` is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when `Either` is treated as a `Monad`. The right biased nature of `Either` is discussed further in the [`Either` documentation]({{ site.baseurl }}/tut/either.html).
 
 **Enter [kind-projector](https://github.com/non/kind-projector)!** kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols `?` and `λ` are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the [project page](https://github.com/non/kind-projector).
 

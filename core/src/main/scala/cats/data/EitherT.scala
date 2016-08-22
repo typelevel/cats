@@ -393,7 +393,7 @@ private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, 
       case r @ Right(_) => F.pure(r)
     })
   def raiseError[A](e: L): EitherT[F, L, A] = EitherT.left(F.pure(e))
-  override def attempt[A](fla: EitherT[F, L, A]): EitherT[F, L, Xor[L, A]] = EitherT.right(F.map(fla.value)(_.toXor))
+  override def attempt[A](fla: EitherT[F, L, A]): EitherT[F, L, Either[L, A]] = EitherT.right(fla.value)
   override def recover[A](fla: EitherT[F, L, A])(pf: PartialFunction[L, A]): EitherT[F, L, A] =
     fla.recover(pf)
   override def recoverWith[A](fla: EitherT[F, L, A])(pf: PartialFunction[L, EitherT[F, L, A]]): EitherT[F, L, A] =

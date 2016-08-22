@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.XorT
+import cats.data.EitherT
 import cats.laws.discipline._
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import scala.util.Try
@@ -14,7 +14,7 @@ class EitherTests extends CatsSuite {
   checkAll("Either[Int, Int]", CartesianTests[Either[Int, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Either[Int, ?]]", SerializableTests.serializable(Cartesian[Either[Int, ?]]))
 
-  implicit val eq0 = XorT.catsDataEqForXorT[Either[Int, ?], Int, Int]
+  implicit val eq0 = EitherT.catsDataEqForEitherT[Either[Int, ?], Int, Int]
 
   checkAll("Either[Int, Int]", MonadErrorTests[Either[Int, ?], Int].monadError[Int, Int, Int])
   checkAll("MonadError[Either[Int, ?]]", SerializableTests.serializable(MonadError[Either[Int, ?], Int]))

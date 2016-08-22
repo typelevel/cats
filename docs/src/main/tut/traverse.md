@@ -7,7 +7,7 @@ scaladoc: "#cats.Traverse"
 ---
 # Traverse
 In functional programming it is very common to encode "effects" as data types - common effects
-include `Option` for possibly missing values, `Xor` and `Validated` for possible errors, and
+include `Option` for possibly missing values, `Either` and `Validated` for possible errors, and
 `Future` for asynchronous computations.
 
 These effects tend to show up in functions working on a single piece of data - for instance
@@ -15,7 +15,6 @@ parsing a single `String` into an `Int`, validating a login, or asynchronously f
 information for a user.
 
 ```tut:silent
-import cats.data.Xor
 import scala.concurrent.Future
 
 def parseInt(s: String): Option[Int] = ???
@@ -23,7 +22,7 @@ def parseInt(s: String): Option[Int] = ???
 trait SecurityError
 trait Credentials
 
-def validateLogin(cred: Credentials): Xor[SecurityError, Unit] = ???
+def validateLogin(cred: Credentials): Either[SecurityError, Unit] = ???
 
 trait Profile
 trait User
@@ -65,7 +64,7 @@ trait Traverse[F[_]] {
 }
 ```
 
-In our above example, `F` is `List`, and `G` is `Option`, `Xor`, or `Future`. For the profile example,
+In our above example, `F` is `List`, and `G` is `Option`, `Either`, or `Future`. For the profile example,
 `traverse` says given a `List[User]` and a function `User => Future[Profile]`, it can give you a
 `Future[List[Profile]]`.
 
@@ -75,7 +74,7 @@ applying the function and aggregating the effectful values (in a `List`) as it g
 
 In the most general form, `F[_]` is some sort of context which may contain a value (or several). While
 `List` tends to be among the most general cases, there also exist `Traverse` instances for `Option`,
-`Xor`, and `Validated` (among others).
+`Either`, and `Validated` (among others).
 
 ## Choose your effect
 The type signature of `Traverse` appears highly abstract, and indeed it is - what `traverse` does as it
@@ -85,17 +84,17 @@ walks the `F[A]` depends on the effect of the function. Let's see some examples 
 Note in the following code snippet we are using `traverseU` instead of `traverse`.
 `traverseU` is for all intents and purposes the same as `traverse`, but with some
 [type-level trickery](http://typelevel.org/blog/2013/09/11/using-scalaz-Unapply.html)
-to allow it to infer the `Applicative[Xor[A, ?]]` and `Applicative[Validated[A, ?]]`
+to allow it to infer the `Applicative[Either[A, ?]]` and `Applicative[Validated[A, ?]]`
 instances - `scalac` has issues inferring the instances for data types that do not
 trivially satisfy the `F[_]` shape required by `Applicative`.
 
 ```tut:silent
 import cats.Semigroup
-import cats.data.{NonEmptyList, OneAnd, Validated, ValidatedNel, Xor}
+import cats.data.{NonEmptyList, OneAnd, Validated, ValidatedNel}
 import cats.implicits._
 
-def parseIntXor(s: String): Xor[NumberFormatException, Int] =
-  Xor.catchOnly[NumberFormatException](s.toInt)
+def parseIntEither(s: String): Either[NumberFormatException, Int] =
+  Either.catchOnly[NumberFormatException](s.toInt)
 
 def parseIntValidated(s: String): ValidatedNel[NumberFormatException, Int] =
   Validated.catchOnly[NumberFormatException](s.toInt).toValidatedNel
@@ -104,16 +103,16 @@ def parseIntValidated(s: String): ValidatedNel[NumberFormatException, Int] =
 Examples.
 
 ```tut:book
-val x1 = List("1", "2", "3").traverseU(parseIntXor)
-val x2 = List("1", "abc", "3").traverseU(parseIntXor)
-val x3 = List("1", "abc", "def").traverseU(parseIntXor)
+val x1 = List("1", "2", "3").traverseU(parseIntEither)
+val x2 = List("1", "abc", "3").traverseU(parseIntEither)
+val x3 = List("1", "abc", "def").traverseU(parseIntEither)
 
 val v1 = List("1", "2", "3").traverseU(parseIntValidated)
 val v2 = List("1", "abc", "3").traverseU(parseIntValidated)
 val v3 = List("1", "abc", "def").traverseU(parseIntValidated)
 ```
 
-Notice that in the `Xor` case, should any string fail to parse the entire traversal
+Notice that in the `Either` case, should any string fail to parse the entire traversal
 is considered a failure. Moreover, once it hits its first bad parse, it will not
 attempt to parse any others down the line (similar behavior would be found with
 using `Option` as the effect). Contrast this with `Validated` where even

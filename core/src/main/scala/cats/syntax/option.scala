@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-import cats.data.{ Xor, Validated, ValidatedNel }
+import cats.data.{Validated, ValidatedNel}
 
 trait OptionSyntax {
   final def none[A]: Option[A] = Option.empty[A]
@@ -27,48 +27,6 @@ final class OptionIdOps[A](val a: A) extends AnyVal {
 }
 
 final class OptionOps[A](val oa: Option[A]) extends AnyVal {
-  /**
-   * If the `Option` is a `Some`, return its value in a [[cats.data.Xor.Left]].
-   * If the `Option` is `None`, return the provided `B` value in a
-   * [[cats.data.Xor.Right]].
-   *
-   * Example:
-   * {{{
-   * scala> import cats.data.Xor
-   * scala> import cats.implicits._
-   *
-   * scala> val error1: Option[String] = Some("error!")
-   * scala> error1.toLeftXor(3)
-   * res0: String Xor Int = Left(error!)
-   *
-   * scala> val error2: Option[String] = None
-   * scala> error2.toLeftXor(3)
-   * res1: String Xor Int = Right(3)
-   * }}}
-   */
-  def toLeftXor[B](b: => B): A Xor B = oa.fold[A Xor B](Xor.Right(b))(Xor.Left(_))
-
-  /**
-   * If the `Option` is a `Some`, return its value in a [[cats.data.Xor.Right]].
-   * If the `Option` is `None`, return the provided `B` value in a
-   * [[cats.data.Xor.Left]].
-   *
-   * Example:
-   * {{{
-   * scala> import cats.data.Xor
-   * scala> import cats.implicits._
-   *
-   * scala> val result1: Option[Int] = Some(3)
-   * scala> result1.toRightXor("error!")
-   * res0: String Xor Int = Right(3)
-   *
-   * scala> val result2: Option[Int] = None
-   * scala> result2.toRightXor("error!")
-   * res1: String Xor Int = Left(error!)
-   * }}}
-   */
-  def toRightXor[B](b: => B): B Xor A = oa.fold[B Xor A](Xor.Left(b))(Xor.Right(_))
-
   /**
    * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Invalid]].
    * If the `Option` is `None`, return the provided `B` value in a
