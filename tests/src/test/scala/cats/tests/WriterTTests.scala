@@ -68,9 +68,9 @@ class WriterTTests extends CatsSuite {
  
   test("Writer.pure and WriterT.lift are consistent") {
     forAll { (i: Int) =>
-      val writer: Writer[String, Int] = Writer.pure(i)
-      val writerT: Writer[String, Int] = WriterT.lift(Eval.now(i))
-      writer.run should === (writerT.run)
+      val writer: Writer[String, Int] = Writer.value(i)
+      val writerT: WriterT[Option, String, Int] = WriterT.lift(Some(i))
+      writer.run.some should === (writerT.run)
     }
   }
   
