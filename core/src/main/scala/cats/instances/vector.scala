@@ -90,6 +90,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
   implicit def catsStdShowForVector[A:Show]: Show[Vector[A]] =
     new Show[Vector[A]] {
-      def show(fa: Vector[A]): String = fa.map(_.show).mkString("Vector(", ", ", ")")
+      def show(fa: Vector[A]): String =
+        fa.iterator.map(_.show).mkString("Vector(", ", ", ")")
     }
 }

@@ -3,6 +3,8 @@ package instances
 
 import java.lang.Math
 
+package object double extends DoubleInstances
+
 trait DoubleInstances {
   implicit val catsKernelStdOrderForDouble: Order[Double] = new DoubleOrder
   implicit val catsKernelStdGroupForDouble: CommutativeGroup[Double] = new DoubleGroup

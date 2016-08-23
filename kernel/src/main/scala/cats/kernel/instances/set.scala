@@ -15,7 +15,7 @@ class SetPartialOrder[A] extends PartialOrder[Set[A]] {
   def partialCompare(x: Set[A], y: Set[A]): Double =
     if (x eq y) 0.0
     else if (x.size < y.size) if (x.subsetOf(y)) -1.0 else Double.NaN
-    else if (y.size < x.size) -partialCompare(y, x)
+    else if (y.size < x.size) if (y.subsetOf(x)) 1.0 else Double.NaN
     else if (x == y) 0.0
     else Double.NaN
 
