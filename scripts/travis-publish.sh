@@ -28,9 +28,10 @@ fi
 sbt_cmd="sbt ++$TRAVIS_SCALA_VERSION"
 
 js="$sbt_cmd validateJS"
+kernel_js="$sbt_cmd validateKernelJS"
 free_js="$sbt_cmd validateFreeJS"
 jvm="$sbt_cmd coverage validateJVM coverageReport && codecov"
   		  
-run_cmd="$js && $free_js && $jvm $publish_cmd"
+run_cmd="$js && $free_js && $kernel_js && $jvm && $sbt_cmd $publish_cmd"
 
 eval $run_cmd

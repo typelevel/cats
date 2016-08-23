@@ -390,7 +390,9 @@ addCommandAlias("buildJVM", "catsJVM/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
-addCommandAlias("validateJS", ";catsJS/compile;kernelLawsJS/test;testsJS/test;js/test")
+addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
+
+addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
 
@@ -476,6 +478,7 @@ lazy val sharedReleaseProcess = Seq(
     inquireVersions,
     runClean,
     releaseStepCommand("validateJS"),
+    releaseStepCommand("validateKernelJS"),
     releaseStepCommand("validateFreeJS"),
     ReleaseStep(action = Command.process("validateJVM", _), enableCrossBuild = true),
     setReleaseVersion,
