@@ -61,7 +61,7 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
 
       def traverse[F[_], B, C](fa: Either[A, B])(f: B => F[C])(implicit F: Applicative[F]): F[Either[A, C]] =
         fa match {
-          case left @ Left(_) => F.pure(left)
+          case Left(a) => F.pure(Left(a))
           case Right(b) => F.map(f(b))(Right(_))
         }
 
