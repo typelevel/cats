@@ -27,9 +27,10 @@ fi
 
 sbt_cmd="sbt ++$TRAVIS_SCALA_VERSION"
 
-scala_js="$sbt_cmd validateJS"
-scala_jvm="$sbt_cmd coverage validateJVM coverageReport && codecov"
+js="$sbt_cmd validateJS"
+free_js="$sbt_cmd validateFreeJS"
+jvm="$sbt_cmd coverage validateJVM coverageReport && codecov"
   		  
-run_cmd="$scala_js && $scala_jvm $publish_cmd"
+run_cmd="$js && $free_js && $jvm $publish_cmd"
 
 eval $run_cmd

@@ -390,9 +390,11 @@ addCommandAlias("buildJVM", "catsJVM/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
-addCommandAlias("validateJS", ";catsJS/compile;kernelLawsJS/test;testsJS/test;js/test;freeJS/test")
+addCommandAlias("validateJS", ";catsJS/compile;kernelLawsJS/test;testsJS/test;js/test")
 
-addCommandAlias("validate", ";clean;validateJS;validateJVM")
+addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
+
+addCommandAlias("validate", ";clean;validateJS;validateFreeJS;validateJVM")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line.
@@ -474,6 +476,7 @@ lazy val sharedReleaseProcess = Seq(
     inquireVersions,
     runClean,
     releaseStepCommand("validateJS"),
+    releaseStepCommand("validateFreeJS"),
     ReleaseStep(action = Command.process("validateJVM", _), enableCrossBuild = true),
     setReleaseVersion,
     commitReleaseVersion,
