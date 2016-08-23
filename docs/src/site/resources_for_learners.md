@@ -12,3 +12,7 @@ section: "resources_for_learners"
 
 # Tutorials
  * [herding cats](http://eed3si9n.com/herding-cats/) by Eugene Yokota
+ * [Scala Exercises](https://www.scala-exercises.org/cats) by 47 Degrees 
+   offers multiple online exercises to learn about the type classes and 
+   datatypes included in Cats.
+   
