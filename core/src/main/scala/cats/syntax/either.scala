@@ -308,7 +308,8 @@ final class RightOps[A, B](val right: Right[A, B]) extends AnyVal {
 
 /** Convenience methods to use `Either` syntax inside `Either` syntax definitions. */
 private[cats] object EitherUtil {
-  def leftCast[A, B, C](r: Right[A, B]): Either[C, B] = new RightOps(r).leftCast[C]
-
-  def rightCast[A, B, C](l: Left[A, B]): Either[A, C] = new LeftOps(l).rightCast[C]
+  def leftCast[A, B, C](right: Right[A, B]): Either[C, B] =
+    right.asInstanceOf[Either[C, B]]
+  def rightCast[A, B, C](left: Left[A, B]): Either[A, C] =
+    left.asInstanceOf[Either[A, C]]
 }

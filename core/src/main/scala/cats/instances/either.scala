@@ -48,9 +48,13 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       @tailrec
       def tailRecM[B, C](b: B)(f: B => Either[A, Either[B, C]]): Either[A, C] =
         f(b) match {
-          case left @ Left(_)  => left.rightCast[C]
-          case Right(Left(b1)) => tailRecM(b1)(f)
-          case Right(right) => right.leftCast[A]
+          case left @ Left(_) =>
+            left.rightCast[C]
+          case Right(e) =>
+            e match {
+              case Left(b1) => tailRecM(b1)(f)
+              case right @ Right(_) => right.leftCast[A]
+            }
         }
 
       override def map2Eval[B, C, Z](fb: Either[A, B], fc: Eval[Either[A, C]])(f: (B, C) => Z): Eval[Either[A, Z]] =
