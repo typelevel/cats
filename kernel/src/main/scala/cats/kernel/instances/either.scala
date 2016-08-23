@@ -37,6 +37,18 @@ trait EitherInstances extends EitherInstances0 {
 
 trait EitherInstances0 extends EitherInstances1 {
 
+  implicit def catsDataSemigroupForEither[A, B](implicit B: Semigroup[B]): Semigroup[Either[A, B]] =
+    new Semigroup[Either[A, B]] {
+      def combine(x: Either[A, B], y: Either[A, B]): Either[A, B] =
+        x match {
+          case left @ Left(_) => left
+          case Right(xx) => y match {
+            case left @ Left(_) => left
+            case Right(yy) => Right(B.combine(xx, yy))
+          }
+        }
+    }
+
   implicit def catsStdPartialOrderForEither[A, B](implicit A: PartialOrder[A], B: PartialOrder[B]): PartialOrder[Either[A, B]] =
     new PartialOrder[Either[A, B]] {
       def partialCompare(x: Either[A, B], y: Either[A, B]): Double =

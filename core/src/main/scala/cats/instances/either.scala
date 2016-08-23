@@ -48,7 +48,7 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       @tailrec
       def tailRecM[B, C](b: B)(f: B => Either[A, Either[B, C]]): Either[A, C] =
         f(b) match {
-          case Left(a)         => Left(a)
+          case left @ Left(_)  => left.rightCast[C]
           case Right(Left(b1)) => tailRecM(b1)(f)
           case Right(Right(c)) => Right(c)
         }
@@ -61,8 +61,8 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
 
       def traverse[F[_], B, C](fa: Either[A, B])(f: B => F[C])(implicit F: Applicative[F]): F[Either[A, C]] =
         fa match {
-          case Left(a) => F.pure(Left(a))
-          case Right(b) => F.map(f(b))(Right(_))
+          case left @ Left(_) => F.pure(left.rightCast[C])
+          case Right(b)       => F.map(f(b))(Right(_))
         }
 
       def foldLeft[B, C](fa: Either[A, B], c: C)(f: (C, B) => C): C =
