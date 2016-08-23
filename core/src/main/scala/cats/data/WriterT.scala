@@ -57,7 +57,13 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 
   def show(implicit F: Show[F[(L, V)]]): String = F.show(run)
 }
-object WriterT extends WriterTInstances with WriterTFunctions
+
+object WriterT extends WriterTInstances with WriterTFunctions {
+
+  def lift[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V] =
+    WriterT(F.map(fv)(v => (monoidL.empty, v)))
+
+}
 
 private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
 
