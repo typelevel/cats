@@ -65,7 +65,15 @@ class WriterTTests extends CatsSuite {
       WriterT.valueT[Id, Int, Int](i).value should === (i)
     }
   }
-
+ 
+  test("Writer.pure and WriterT.lift are consistent") {
+    forAll { (i: Int) =>
+      val writer: Writer[String, Int] = Writer.value(i)
+      val writerT: WriterT[Option, String, Int] = WriterT.lift(Some(i))
+      writer.run.some should === (writerT.run)
+    }
+  }
+  
   test("show") {
     val writerT: WriterT[Id, List[String], String] = WriterT.put("foo")(List("Some log message"))
     writerT.show should === ("(List(Some log message),foo)")
