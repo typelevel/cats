@@ -6,4 +6,3 @@ source: "core/src/main/scala/cats/Show.scala"
 scaladoc: "#cats.Show"
 ---
 # Show
-

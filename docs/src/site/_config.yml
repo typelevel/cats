@@ -12,3 +12,4 @@ sources: https://github.com/typelevel/cats/blob/master/
 collections:
   tut:
     output: true
+    permalink: /:path:output_ext

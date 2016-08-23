@@ -24,7 +24,7 @@ Examples of `Contravariant` instances are [`Show`](show.html) and `scala.math.Or
 
 ## Contravariant instance for Show.
 
-Say we have class `Money` with a `Show` instance, and `Salary` class. 
+Say we have class `Money` with a `Show` instance, and `Salary` class.
 
 ```tut:silent
 import cats._
@@ -40,7 +40,7 @@ implicit val showMoney: Show[Money] = Show.show(m => s"$$${m.amount}")
 If we want to show a `Salary` instance, we can just convert it to a `Money` instance and show it instead.
 
 Let's use `Show`'s `Contravariant`:
-  
+
 ```tut:book
 implicit val showSalary: Show[Salary] = showMoney.contramap(_.size)
 
@@ -66,7 +66,7 @@ def by[T, S](f: T => S)(implicit ord: Ordering[S]): Ordering[T]
 
 In fact, it is just `contramap`, defined in a slightly different way! We supply `T => S` to receive `F[S] => F[T]` back.
 
-So let's use it in our advantage and get `Ordering[Money]` for free: 
+So let's use it in our advantage and get `Ordering[Money]` for free:
 
 ```tut:book
 // we need this for `<` to work

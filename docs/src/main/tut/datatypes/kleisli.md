@@ -6,8 +6,8 @@ source: "core/src/main/scala/cats/data/Kleisli.scala"
 scaladoc: "#cats.data.Kleisli"
 ---
 # Kleisli
-Kleisli enables composition of functions that return a monadic value, for instance an `Option[Int]` 
-or a `Either[String, List[Double]]`, without having functions take an `Option` or `Either` as a parameter, 
+Kleisli enables composition of functions that return a monadic value, for instance an `Option[Int]`
+or a `Either[String, List[Double]]`, without having functions take an `Option` or `Either` as a parameter,
 which can be strange and unwieldy.
 
 We may also have several functions which depend on some environment and want a nice way to compose these functions
@@ -31,7 +31,7 @@ val countCats: Int => String =
   x => if (x == 1) "1 cat" else s"$x cats"
 
 val twiceAsManyCats: Int => String =
-  twice andThen countCats // equivalent to: countCats compose twice  
+  twice andThen countCats // equivalent to: countCats compose twice
 ```
 
 Thus.
@@ -159,13 +159,13 @@ SemigroupK*    | FlatMap
 MonoidK*       | Monad
 ```
 
-*These instances only exist for Kleisli arrows with identical input and output types; that is, 
+*These instances only exist for Kleisli arrows with identical input and output types; that is,
 `Kleisli[F, A, A]` for some type A. These instances use Kleisli composition as the `combine` operation,
 and `Monad.pure` as the `empty` value.
 
-Also, there is an instance of `Monoid[Kleisli[F, A, B]]` if there is an instance of `Monoid[F[B]]`. 
-`Monoid.combine` here creates a new Kleisli arrow which takes an `A` value and feeds it into each 
-of the combined Kleisli arrows, which together return two `F[B]` values. Then, they are combined into one 
+Also, there is an instance of `Monoid[Kleisli[F, A, B]]` if there is an instance of `Monoid[F[B]]`.
+`Monoid.combine` here creates a new Kleisli arrow which takes an `A` value and feeds it into each
+of the combined Kleisli arrows, which together return two `F[B]` values. Then, they are combined into one
 using the `Monoid[F[B]]` instance.
 
 ## Other uses

@@ -22,7 +22,7 @@ must be the same as
 (a combine (b combine c))
 ```
 
-for all possible values of a,b,c. 
+for all possible values of a,b,c.
 
 There are instances of `Semigroup` defined for many types found in the
 scala common library:
@@ -61,8 +61,8 @@ Map("foo" -> Map("bar" -> 5)) ++  Map("foo" -> Map("bar" -> 6), "baz" -> Map())
 Map("foo" -> List(1, 2)) ++ Map("foo" -> List(3,4), "bar" -> List(42))
 ```
 
-There is inline syntax available for `Semigroup`. Here we are 
-following the convention from scalaz, that `|+|` is the 
+There is inline syntax available for `Semigroup`. Here we are
+following the convention from scalaz, that `|+|` is the
 operator from `Semigroup`.
 
 ```tut:silent
