@@ -84,6 +84,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
   implicit def catsStdShowForList[A:Show]: Show[List[A]] =
     new Show[List[A]] {
-      def show(fa: List[A]): String = fa.map(_.show).mkString("List(", ", ", ")")
+      def show(fa: List[A]): String =
+        fa.iterator.map(_.show).mkString("List(", ", ", ")")
     }
 }

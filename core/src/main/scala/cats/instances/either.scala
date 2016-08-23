@@ -5,7 +5,7 @@ import cats.syntax.EitherUtil
 import cats.syntax.either._
 import scala.annotation.tailrec
 
-trait EitherInstances extends EitherInstances1 {
+trait EitherInstances extends cats.kernel.instances.EitherInstances {
   implicit val catsStdBitraverseForEither: Bitraverse[Either] =
     new Bitraverse[Either] {
       def bitraverse[G[_], A, B, C, D](fab: Either[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Either[C, D]] =
@@ -81,12 +81,13 @@ trait EitherInstances extends EitherInstances1 {
     }
   // scalastyle:on method.length
 
-  implicit def catsStdOrderForEither[A, B](implicit A: Order[A], B: Order[B]): Order[Either[A, B]] = new Order[Either[A, B]] {
-    def compare(x: Either[A, B], y: Either[A, B]): Int = x.fold(
-      a => y.fold(A.compare(a, _), _ => -1),
-      b => y.fold(_ => 1, B.compare(b, _))
-    )
-  }
+  implicit def catsDataSemigroupKForEither[L]: SemigroupK[Either[L, ?]] =
+    new SemigroupK[Either[L, ?]] {
+      def combineK[A](x: Either[L, A], y: Either[L, A]): Either[L, A] = x match {
+        case Left(_) => y
+        case Right(_) => x
+      }
+    }
 
   implicit def catsStdShowForEither[A, B](implicit A: Show[A], B: Show[B]): Show[Either[A, B]] =
     new Show[Either[A, B]] {
@@ -95,37 +96,4 @@ trait EitherInstances extends EitherInstances1 {
         b => s"Right(${B.show(b)})"
       )
     }
-
-  implicit def catsDataMonoidForEither[A, B](implicit B: Monoid[B]): Monoid[Either[A, B]] =
-    new Monoid[Either[A, B]] {
-      def empty: Either[A, B] = Right(B.empty)
-      def combine(x: Either[A, B], y: Either[A, B]): Either[A, B] = x combine y
-    }
-
-  implicit def catsDataSemigroupKForEither[L]: SemigroupK[Either[L, ?]] =
-    new SemigroupK[Either[L, ?]] {
-      def combineK[A](x: Either[L, A], y: Either[L, A]): Either[L, A] = x match {
-        case Left(_) => y
-        case Right(_) => x
-      }
-    }
-}
-
-private[instances] sealed trait EitherInstances1 extends EitherInstances2 {
-  implicit def catsStdPartialOrderForEither[A, B](implicit A: PartialOrder[A], B: PartialOrder[B]): PartialOrder[Either[A, B]] =
-    new PartialOrder[Either[A, B]] {
-      def partialCompare(x: Either[A, B], y: Either[A, B]): Double = x.fold(
-        a => y.fold(A.partialCompare(a, _), _ => -1),
-        b => y.fold(_ => 1, B.partialCompare(b, _))
-      )
-    }
-}
-
-private[instances] sealed trait EitherInstances2 {
-  implicit def catsStdEqForEither[A, B](implicit A: Eq[A], B: Eq[B]): Eq[Either[A, B]] = new Eq[Either[A, B]] {
-    def eqv(x: Either[A, B], y: Either[A, B]): Boolean = x.fold(
-      a => y.fold(A.eqv(a, _), _ => false),
-      b => y.fold(_ => false, B.eqv(b, _))
-    )
-  }
 }

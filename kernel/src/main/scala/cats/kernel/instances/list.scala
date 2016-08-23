@@ -2,7 +2,6 @@ package cats.kernel
 package instances
 
 import scala.annotation.tailrec
-import scala.collection.mutable
 
 package object list extends ListInstances
 
@@ -81,19 +80,9 @@ class ListMonoid[A] extends Monoid[List[A]] {
   def empty: List[A] = Nil
   def combine(x: List[A], y: List[A]): List[A] = x ::: y
 
-  override def combineN(x: List[A], n: Int): List[A] = {
-    val buf = mutable.ListBuffer.empty[A]
-    var i = n
-    while (i > 0) {
-      buf ++= x
-      i -= 1
-    }
-    buf.toList
-  }
+  override def combineN(x: List[A], n: Int): List[A] =
+    StaticMethods.combineNIterable(List.newBuilder[A], x, n)
 
-  override def combineAll(xs: TraversableOnce[List[A]]): List[A] = {
-    val buf = mutable.ListBuffer.empty[A]
-    xs.foreach(buf ++= _)
-    buf.toList
-  }
+  override def combineAll(xs: TraversableOnce[List[A]]): List[A] =
+    StaticMethods.combineAllIterable(List.newBuilder[A], xs)
 }

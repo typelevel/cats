@@ -5,6 +5,10 @@ import cats.arrow.{Arrow, Choice}
 import cats.functor.Contravariant
 import annotation.tailrec
 
+
+trait FunctionInstances extends cats.kernel.instances.FunctionInstances
+    with Function0Instances with Function1Instances
+
 private[instances] sealed trait Function0Instances {
 
   implicit val catsStdBimonadForFunction0: Bimonad[Function0] with RecursiveTailRecM[Function0] =
@@ -29,14 +33,9 @@ private[instances] sealed trait Function0Instances {
           loop(a)
         }
     }
-
-  implicit def catsStdEqForFunction0[A](implicit A: Eq[A]): Eq[() => A] =
-    new Eq[() => A] {
-      def eqv(x: () => A, y: () => A): Boolean = A.eqv(x(), y())
-    }
 }
 
-private[instances] sealed trait Function1Instances extends Function1Instances0 {
+private[instances] sealed trait Function1Instances {
   implicit def catsStdContravariantForFunction1[R]: Contravariant[? => R] =
     new Contravariant[? => R] {
       def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
@@ -91,43 +90,9 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
       def compose[A, B, C](f: B => C, g: A => B): A => C = f.compose(g)
     }
 
-  implicit def catsStdMonoidForFunction1[A, B](implicit M: Monoid[B]): Monoid[A => B] =
-    new Function1Monoid[A, B] { def B: Monoid[B] = M }
-
-  implicit val catsStdMonoidKForFunction1: MonoidK[λ[α => α => α]] =
-    new Function1MonoidK {}
+  implicit val catsStdMonoidKForFunction1: MonoidK[λ[α => Function1[α, α]]] =
+    new MonoidK[λ[α => Function1[α, α]]] {
+      def empty[A]: A => A = identity[A]
+      def combineK[A](x: A => A, y: A => A): A => A = x compose y
+    }
 }
-
-private[instances] sealed trait Function1Instances0 {
-  implicit def catsStdSemigroupForFunction1[A, B](implicit S: Semigroup[B]): Semigroup[A => B] =
-    new Function1Semigroup[A, B] { def B: Semigroup[B] = S }
-
-  implicit val catsStdSemigroupKForFunction1: SemigroupK[λ[α => α => α]] =
-    new Function1SemigroupK {}
-}
-
-private[instances] sealed trait Function1Semigroup[A, B] extends Semigroup[A => B] {
-  implicit def B: Semigroup[B]
-
-  override def combine(x: A => B, y: A => B): A => B = { a =>
-    B.combine(x(a), y(a))
-  }
-}
-
-private[instances] sealed trait Function1Monoid[A, B] extends Monoid[A => B] with Function1Semigroup[A, B] {
-  implicit def B: Monoid[B]
-
-  override def empty: A => B = _ => B.empty
-}
-
-private[instances] sealed trait Function1SemigroupK extends SemigroupK[λ[α => α => α]] {
-  override def combineK[A](x: A => A, y: A => A): A => A = x compose y
-}
-
-private[instances] sealed trait Function1MonoidK extends MonoidK[λ[α => α => α]] with Function1SemigroupK {
-  override def empty[A]: A => A = identity[A]
-}
-
-trait FunctionInstances
-  extends Function0Instances
-  with Function1Instances
