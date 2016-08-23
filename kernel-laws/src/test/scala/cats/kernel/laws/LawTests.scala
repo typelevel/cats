@@ -11,7 +11,9 @@ import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{ Arbitrary, Gen }
 import Arbitrary.arbitrary
 import org.scalatest.FunSuite
+
 import scala.util.Random
+import scala.collection.immutable.BitSet
 
 class LawTests extends FunSuite with Discipline {
 
@@ -24,6 +26,9 @@ class LawTests extends FunSuite with Discipline {
 
   implicit def orderLaws[A: Eq: Arbitrary] = OrderLaws[A]
   implicit def groupLaws[A: Eq: Arbitrary] = GroupLaws[A]
+
+  implicit val arbitraryBitSet: Arbitrary[BitSet] =
+    Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
 
   laws[OrderLaws, Map[String, HasEq[Int]]].check(_.eqv)
   laws[OrderLaws, List[HasEq[Int]]].check(_.eqv)
@@ -49,6 +54,7 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Char].check(_.order)
   laws[OrderLaws, Int].check(_.order)
   laws[OrderLaws, Long].check(_.order)
+  laws[OrderLaws, BitSet].check(_.partialOrder)
   laws[OrderLaws, BigInt].check(_.order)
   laws[OrderLaws, List[Int]].check(_.order)
   laws[OrderLaws, Option[String]].check(_.order)
@@ -67,6 +73,9 @@ class LawTests extends FunSuite with Discipline {
   laws[GroupLaws, Stream[Int]].check(_.monoid)
   laws[GroupLaws, List[String]].check(_.monoid)
   laws[GroupLaws, Map[String, Int]].check(_.monoid)
+
+  laws[GroupLaws, BitSet].check(_.boundedSemilattice)
+  laws[GroupLaws, Set[Int]].check(_.boundedSemilattice)
 
   laws[GroupLaws, Unit].check(_.commutativeGroup)
   laws[GroupLaws, Byte].check(_.commutativeGroup)
