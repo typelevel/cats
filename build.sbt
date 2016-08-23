@@ -5,6 +5,7 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
 import scala.xml.transform.{RewriteRule, RuleTransformer}
+import com.github.tkawachi.doctest.DoctestPlugin
 
 lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev environment")
 
@@ -186,6 +187,7 @@ lazy val catsJS = project.in(file(".catsJS"))
   .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS, js)
   .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
+  .disablePlugins(DoctestPlugin)
 
 
 lazy val macros = crossProject.crossType(CrossType.Pure)
@@ -196,7 +198,7 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
   .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
 
 lazy val macrosJVM = macros.jvm
-lazy val macrosJS = macros.js
+lazy val macrosJS = macros.js.disablePlugins(DoctestPlugin)
 
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
@@ -210,7 +212,7 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .jvmSettings((commonJvmSettings ++ (mimaPreviousArtifacts := Set("org.typelevel" %% "cats-kernel" % "0.7.0"))):_*)
 
 lazy val kernelJVM = kernel.jvm
-lazy val kernelJS = kernel.js
+lazy val kernelJS = kernel.js.disablePlugins(DoctestPlugin)
 
 lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
   .in(file("kernel-laws"))
@@ -226,7 +228,7 @@ lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
   .dependsOn(kernel)
 
 lazy val kernelLawsJVM = kernelLaws.jvm
-lazy val kernelLawsJS = kernelLaws.js
+lazy val kernelLawsJS = kernelLaws.js.disablePlugins(DoctestPlugin)
 
 lazy val core = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, kernel)
@@ -238,7 +240,7 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val coreJVM = core.jvm
-lazy val coreJS = core.js
+lazy val coreJS = core.js.disablePlugins(DoctestPlugin)
 
 lazy val laws = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, kernel, core, kernelLaws)
@@ -250,7 +252,7 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val lawsJVM = laws.jvm
-lazy val lawsJS = laws.js
+lazy val lawsJS = laws.js.disablePlugins(DoctestPlugin)
 
 lazy val free = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, tests % "test-internal -> test")
@@ -260,7 +262,7 @@ lazy val free = crossProject.crossType(CrossType.Pure)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val freeJVM = free.jvm
-lazy val freeJS = free.js
+lazy val freeJS = free.js.disablePlugins(DoctestPlugin)
 
 lazy val tests = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, laws)
@@ -273,7 +275,7 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val testsJVM = tests.jvm
-lazy val testsJS = tests.js
+lazy val testsJS = tests.js.disablePlugins(DoctestPlugin)
 
 // bench is currently JVM-only
 lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
@@ -292,6 +294,7 @@ lazy val js = project
   .settings(catsSettings:_*)
   .settings(commonJsSettings:_*)
   .enablePlugins(ScalaJSPlugin)
+  .disablePlugins(DoctestPlugin)
 
 // cats-jvm is JVM-only
 lazy val jvm = project
@@ -383,11 +386,11 @@ lazy val publishSettings = Seq(
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;kernelLawsJVM/compile;lawsJVM/compile;freeJVM/compile;kernelLawsJVM/test;coreJVM/test;testsJVM/test;freeJVM/test;jvm/test;bench/test")
+addCommandAlias("buildJVM", "catsJVM/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
-addCommandAlias("validateJS", ";macrosJS/compile;kernelJS/compile;coreJS/compile;kernelLawsJS/compile;lawsJS/compile;kernelLawsJS/test;testsJS/test;js/test")
+addCommandAlias("validateJS", ";catsJS/compile;kernelLawsJS/test;testsJS/test;js/test;freeJS/test")
 
 addCommandAlias("validate", ";clean;validateJS;validateJVM")
 
@@ -469,8 +472,9 @@ lazy val sharedReleaseProcess = Seq(
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
-    //runClean, // disabled to reduce memory usage during release
-    //runTest, // temporarily disabled for 0.7.0
+    runClean,
+    releaseStepCommand("validateJS"),
+    ReleaseStep(action = Command.process("validateJVM", _), enableCrossBuild = true),
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
