@@ -396,7 +396,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
 
-addCommandAlias("validate", ";clean;validateJS;validateFreeJS;validateJVM")
+addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line.
@@ -477,10 +477,7 @@ lazy val sharedReleaseProcess = Seq(
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
-    releaseStepCommand("validateJS"),
-    releaseStepCommand("validateKernelJS"),
-    releaseStepCommand("validateFreeJS"),
-    ReleaseStep(action = Command.process("validateJVM", _), enableCrossBuild = true),
+    releaseStepCommand("validate"),
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
