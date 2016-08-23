@@ -60,18 +60,25 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         }
 
       def traverse[F[_], B, C](fa: Either[A, B])(f: B => F[C])(implicit F: Applicative[F]): F[Either[A, C]] =
-        fa.fold(
-          a => F.pure(Left(a)),
-          b => F.map(f(b))(Right(_))
-        )
+        fa match {
+          case left @ Left(_) => F.pure(left)
+          case Right(b) => F.map(f(b))(Right(_))
+        }
 
       def foldLeft[B, C](fa: Either[A, B], c: C)(f: (C, B) => C): C =
-        fa.fold(_ => c, f(c, _))
+        fa match {
+          case Left(_) => c
+          case Right(b) => f(c, b)
+        }
 
       def foldRight[B, C](fa: Either[A, B], lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
-        fa.fold(_ => lc, b => f(b, lc))
+        fa match {
+          case Left(_) => lc
+          case Right(b) => f(b, lc)
+        }
 
-      override def attempt[B](fab: Either[A, B]): Either[A, Either[A, B]] = Right(fab)
+      override def attempt[B](fab: Either[A, B]): Either[A, Either[A, B]] =
+        Right(fab)
       override def recover[B](fab: Either[A, B])(pf: PartialFunction[A, B]): Either[A, B] =
         fab recover pf
       override def recoverWith[B](fab: Either[A, B])(pf: PartialFunction[A, Either[A, B]]): Either[A, B] =
@@ -91,9 +98,10 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
 
   implicit def catsStdShowForEither[A, B](implicit A: Show[A], B: Show[B]): Show[Either[A, B]] =
     new Show[Either[A, B]] {
-      def show(f: Either[A, B]): String = f.fold(
-        a => s"Left(${A.show(a)})",
-        b => s"Right(${B.show(b)})"
-      )
+      def show(x: Either[A, B]): String =
+        x match {
+          case Left(a) => "Left(" + A.show(a) + ")"
+          case Right(b) => "Right(" + B.show(b) + ")"
+        }
     }
 }
