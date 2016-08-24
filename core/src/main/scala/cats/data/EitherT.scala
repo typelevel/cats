@@ -252,6 +252,24 @@ trait EitherTFunctions {
     def apply[E, A](either: Either[E, A])(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(either))
   }
+
+  /** Transforms an `Option` into an `EitherT`, lifted into the specified `Applicative` and using
+   *  the second argument if the `Option` is a `None`.
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val o: Option[Int] = None
+   * scala> EitherT.fromOption[List](o, "Answer not known.")
+   * res0: EitherT[List, String, Int]  = EitherT(List(Left(Answer not known.)))
+   * scala> EitherT.fromOption[List](Some(42), "Answer not known.")
+   * res1: EitherT[List, String, Int] = EitherT(List(Right(42)))
+   * }}}
+   */
+  final def fromOption[F[_]]: FromOptionPartiallyApplied[F] = new FromOptionPartiallyApplied
+
+  final class FromOptionPartiallyApplied[F[_]] private[EitherTFunctions] {
+    def apply[E, A](opt: Option[A], ifNone: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
+      EitherT(F.pure(Either.fromOption(opt, ifNone)))
+  }
 }
 
 private[data] abstract class EitherTInstances extends EitherTInstances1 {
