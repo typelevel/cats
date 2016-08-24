@@ -216,10 +216,10 @@ object Free {
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
       def tailRecM[A, B](a: A)(f: A => Free[S, Either[A, B]]): Free[S, B] =
-        f(a).flatMap(_ match {
+        f(a).flatMap {
           case Left(a1) => tailRecM(a1)(f) // recursion OK here, since Free is lazy
           case Right(b) => pure(b)
-        })
+        }
     }
 
   /**

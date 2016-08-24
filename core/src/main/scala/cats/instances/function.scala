@@ -69,11 +69,10 @@ private[instances] sealed trait Function1Instances {
 
   implicit val catsStdInstancesForFunction1: Choice[Function1] with Arrow[Function1] =
     new Choice[Function1] with Arrow[Function1] {
-      def choice[A, B, C](f: A => C, g: B => C): Either[A, B] => C =
-        _ match {
-          case Left(a)  => f(a)
-          case Right(b) => g(b)
-        }
+      def choice[A, B, C](f: A => C, g: B => C): Either[A, B] => C = {
+        case Left(a)  => f(a)
+        case Right(b) => g(b)
+      }
 
       def lift[A, B](f: A => B): A => B = f
 
