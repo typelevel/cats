@@ -68,7 +68,7 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    * res1: ValidatedNel[String, Int] = Valid(3)
    * }}}
    */
-  def toInvalidNel[B](b: => B): ValidatedNel[A, B] = oa.fold[ValidatedNel[A, B]](Validated.Valid(b))(Validated.invalidNel(_))
+  def toInvalidNel[B](b: => B): ValidatedNel[A, B] = oa.fold[ValidatedNel[A, B]](Validated.Valid(b))(Validated.invalidNel)
 
   /**
    * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Valid]].
