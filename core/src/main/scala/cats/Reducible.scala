@@ -135,7 +135,7 @@ import simulacrum.typeclass
 
 /**
  * This class defines a `Reducible[F]` in terms of a `Foldable[G]`
- * together with a `split method, `F[A]` => `(A, G[A])`.
+ * together with a `split` method, `F[A]` => `(A, G[A])`.
  *
  * This class can be used on any type where the first value (`A`) and
  * the "rest" of the values (`G[A]`) can be easily found.

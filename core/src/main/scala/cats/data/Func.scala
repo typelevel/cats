@@ -15,7 +15,7 @@ sealed abstract class Func[F[_], A, B] { self =>
 }
 
 object Func extends FuncInstances {
-  /** function `A => F[B]. */
+  /** function `A => F[B]`. */
   def func[F[_], A, B](run0: A => F[B]): Func[F, A, B] =
     new Func[F, A, B] {
       def run: A => F[B] = run0
