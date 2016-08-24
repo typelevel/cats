@@ -1,6 +1,8 @@
 package cats.kernel
 package instances
 
+package object float extends FloatInstances
+
 trait FloatInstances {
   implicit val catsKernelStdOrderForFloat: Order[Float] = new FloatOrder
   implicit val catsKernelStdGroupForFloat: CommutativeGroup[Float] = new FloatGroup

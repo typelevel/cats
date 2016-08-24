@@ -42,19 +42,9 @@ class VectorMonoid[A] extends Monoid[Vector[A]] {
   def empty: Vector[A] = Vector.empty
   def combine(x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
 
-  override def combineN(x: Vector[A], n: Int): Vector[A] = {
-    val buf = Vector.newBuilder[A]
-    var i = n
-    while (i > 0) {
-      buf ++= x
-      i -= 1
-    }
-    buf.result
-  }
+  override def combineN(x: Vector[A], n: Int): Vector[A] =
+    StaticMethods.combineNIterable(Vector.newBuilder[A], x, n)
 
-  override def combineAll(xs: TraversableOnce[Vector[A]]): Vector[A] = {
-    val buf = Vector.newBuilder[A]
-    xs.foreach(buf ++= _)
-    buf.result
-  }
+  override def combineAll(xs: TraversableOnce[Vector[A]]): Vector[A] =
+    StaticMethods.combineAllIterable(Vector.newBuilder[A], xs)
 }

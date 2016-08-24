@@ -68,4 +68,15 @@ object StaticMethods {
     true
   }
   // scalastyle:on return
+
+  def combineNIterable[A, R](b: mutable.Builder[A, R], x: Iterable[A], n: Int): R = {
+    var i = n
+    while (i > 0) { b ++= x; i -= 1 }
+    b.result
+  }
+
+  def combineAllIterable[A, R](b: mutable.Builder[A, R], xs: TraversableOnce[Iterable[A]]): R = {
+    xs.foreach(b ++= _)
+    b.result
+  }
 }

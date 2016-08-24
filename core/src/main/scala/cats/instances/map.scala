@@ -6,11 +6,11 @@ import scala.annotation.tailrec
 trait MapInstances extends cats.kernel.instances.MapInstances {
 
   implicit def catsStdShowForMap[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =
-    Show.show[Map[A, B]] { m =>
-      val body = m.map { case (a, b) =>
-        s"${showA.show(a)} -> ${showB.show(b)})"
-      }.mkString(",")
-      s"Map($body)"
+    new Show[Map[A, B]] {
+      def show(m: Map[A, B]): String =
+        m.iterator
+          .map { case (a, b) => showA.show(a) + " -> " + showB.show(b) }
+          .mkString("Map(", ", ", ")")
     }
 
   // scalastyle:off method.length
