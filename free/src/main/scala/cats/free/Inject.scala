@@ -34,7 +34,7 @@ private[free] sealed abstract class InjectInstances {
     new Inject[F, Coproduct[H, G, ?]] {
       def inj[A](fa: F[A]): Coproduct[H, G, A] = Coproduct.rightc(I.inj(fa))
 
-      def prj[A](ga: Coproduct[H, G, A]): Option[F[A]] = ga.run.fold(_ => None, I.prj(_))
+      def prj[A](ga: Coproduct[H, G, A]): Option[F[A]] = ga.run.fold(_ => None, I.prj)
     }
 }
 

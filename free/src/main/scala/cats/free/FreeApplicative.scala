@@ -61,7 +61,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
       }
     }
 
-  override def toString(): String = "FreeApplicative(...)"
+  override def toString: String = "FreeApplicative(...)"
 }
 
 object FreeApplicative {

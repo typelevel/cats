@@ -99,7 +99,7 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
 
   implicit def catsDataChoiceForKleisli[F[_]](implicit ev: Monad[F]): Choice[Kleisli[F, ?, ?]] =
     new Choice[Kleisli[F, ?, ?]] {
-      def id[A]: Kleisli[F, A, A] = Kleisli(ev.pure(_))
+      def id[A]: Kleisli[F, A, A] = Kleisli(ev.pure)
 
       def choice[A, B, C](f: Kleisli[F, A, C], g: Kleisli[F, B, C]): Kleisli[F, Either[A, B], C] =
         Kleisli(_.fold(f.run, g.run))

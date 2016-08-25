@@ -66,7 +66,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
               state = Right(Some(b))
             case Left(a) #:: tail =>
               stack = fn(a) #::: tail
-              advance
+              advance()
             case empty =>
               state = Right(None)
           }
@@ -84,7 +84,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
           def next(): B = state match {
             case Left(()) =>
               advance()
-              next
+              next()
             case Right(o) =>
               val b = o.get
               advance()
