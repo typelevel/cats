@@ -33,7 +33,7 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
   def mproductConsistency[A, B](fa: F[A], fb: A => F[B]): IsEq[F[(A, B)]] =
     F.mproduct(fa)(fb) <-> F.flatMap(fa)(a => F.map(fb(a))((a, _)))
 
-  def tailRecMConsistentFlatMap[A](count: Int, a: A, f: A => F[A]): IsEq[F[A]] = {
+  def tailRecMConsistentFlatMap[A](a: A, f: A => F[A]): IsEq[F[A]] = {
     def bounce(n: Int) = F.tailRecM[(A, Int), A]((a, n)) { case (a0, i) =>
       if (i > 0) f(a0).map(a1 => Left((a1, i-1)))
       else f(a0).map(Right(_))
@@ -45,8 +45,7 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
      * (for instance List, becomes multiplicative, so
      * the memory is exponential in n).
      */
-    val smallN = (count % 2) + 2 // a number 1 to 3
-    bounce(smallN) <-> bounce(smallN - 1).flatMap(f)
+    bounce(1) <-> bounce(0).flatMap(f)
   }
 }
 
