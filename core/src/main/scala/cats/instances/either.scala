@@ -6,21 +6,21 @@ import cats.syntax.either._
 import scala.annotation.tailrec
 
 trait EitherInstances extends cats.kernel.instances.EitherInstances {
-  implicit val catsStdBitraverseForEither: Bitraverse[Either] =
-    new Bitraverse[Either] {
-      def bitraverse[G[_], A, B, C, D](fab: Either[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Either[C, D]] =
+  implicit val catsStdTraverse2ForEither: Traverse2[Either] =
+    new Traverse2[Either] {
+      def traverse2[G[_], A, B, C, D](fab: Either[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Either[C, D]] =
         fab match {
           case Left(a) => G.map(f(a))(Left(_))
           case Right(b) => G.map(g(b))(Right(_))
         }
 
-      def bifoldLeft[A, B, C](fab: Either[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
+      def fold2Left[A, B, C](fab: Either[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
         fab match {
           case Left(a) => f(c, a)
           case Right(b) => g(c, b)
         }
 
-      def bifoldRight[A, B, C](fab: Either[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      def fold2Right[A, B, C](fab: Either[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
         fab match {
           case Left(a) => f(a, c)
           case Right(b) => g(b, c)

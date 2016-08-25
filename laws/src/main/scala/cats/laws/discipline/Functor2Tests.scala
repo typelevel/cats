@@ -1,16 +1,16 @@
 package cats.laws.discipline
 
 import cats.Eq
-import cats.functor.Bifunctor
-import cats.laws.BifunctorLaws
+import cats.functor.Functor2
+import cats.laws.Functor2Laws
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws
 
-trait BifunctorTests[F[_, _]] extends Laws {
-  def laws: BifunctorLaws[F]
+trait Functor2Tests[F[_, _]] extends Laws {
+  def laws: Functor2Laws[F]
 
-  def bifunctor[A, A2, A3, B, B2, B3](implicit
+  def functor2[A, A2, A3, B, B2, B3](implicit
       ArbFAB: Arbitrary[F[A, B]],
       ArbA2: Arbitrary[A => A2],
       ArbA3: Arbitrary[A2 => A3],
@@ -22,19 +22,19 @@ trait BifunctorTests[F[_, _]] extends Laws {
       EqFAB3: Eq[F[A, B3]]
   ): RuleSet = {
     new DefaultRuleSet(
-      name = "Bifunctor",
+      name = "Functor2",
       parent = None,
-      "Bifunctor Identity" -> forAll(laws.bifunctorIdentity[A, B] _),
-      "Bifunctor associativity" -> forAll(laws.bifunctorComposition[A, A2, A3, B, B2, B3] _),
-      "Bifunctor leftMap Identity" -> forAll(laws.bifunctorLeftMapIdentity[A, B] _),
-      "Bifunctor leftMap associativity" -> forAll(laws.bifunctorLeftMapComposition[A, B, A2, A3] _)
+      "Functor2 Identity" -> forAll(laws.functor2Identity[A, B] _),
+      "Functor2 associativity" -> forAll(laws.functor2Composition[A, A2, A3, B, B2, B3] _),
+      "Functor2 leftMap Identity" -> forAll(laws.functor2LeftMapIdentity[A, B] _),
+      "Functor2 leftMap associativity" -> forAll(laws.functor2LeftMapComposition[A, B, A2, A3] _)
     )
   }
 }
 
-object BifunctorTests {
-  def apply[F[_, _] : Bifunctor]: BifunctorTests[F] =
-    new BifunctorTests[F] {
-      def laws: BifunctorLaws[F] = BifunctorLaws[F]
+object Functor2Tests {
+  def apply[F[_, _] : Functor2]: Functor2Tests[F] =
+    new Functor2Tests[F] {
+      def laws: Functor2Laws[F] = Functor2Laws[F]
     }
 }

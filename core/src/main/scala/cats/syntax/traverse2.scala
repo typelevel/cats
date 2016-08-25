@@ -1,22 +1,22 @@
 package cats
 package syntax
 
-trait BitraverseSyntax extends BitraverseSyntax1 {
-  implicit def catsSyntaxBitraverse[F[_, _]: Bitraverse, A, B](fab: F[A, B]): BitraverseOps[F, A, B] =
-    new BitraverseOps[F, A, B](fab)
+trait Traverse2Syntax extends Traverse2Syntax1 {
+  implicit def catsSyntaxTraverse2[F[_, _]: Traverse2, A, B](fab: F[A, B]): Traverse2Ops[F, A, B] =
+    new Traverse2Ops[F, A, B](fab)
 }
 
-private[syntax] trait BitraverseSyntax1 {
-  implicit def catsSyntaxNestedBitraverse[F[_, _]: Bitraverse, G[_], A, B](fgagb: F[G[A], G[B]]): NestedBitraverseOps[F, G, A, B] =
-    new NestedBitraverseOps[F, G, A, B](fgagb)
+private[syntax] trait Traverse2Syntax1 {
+  implicit def catsSyntaxNestedTraverse2[F[_, _]: Traverse2, G[_], A, B](fgagb: F[G[A], G[B]]): NestedTraverse2Ops[F, G, A, B] =
+    new NestedTraverse2Ops[F, G, A, B](fgagb)
 }
 
-final class BitraverseOps[F[_, _], A, B](fab: F[A, B])(implicit F: Bitraverse[F]) {
-  def bitraverse[G[_]: Applicative, C, D](f: A => G[C], g: B => G[D]): G[F[C, D]] =
-    F.bitraverse(fab)(f, g)
+final class Traverse2Ops[F[_, _], A, B](fab: F[A, B])(implicit F: Traverse2[F]) {
+  def traverse2[G[_]: Applicative, C, D](f: A => G[C], g: B => G[D]): G[F[C, D]] =
+    F.traverse2(fab)(f, g)
 }
 
-final class NestedBitraverseOps[F[_, _], G[_], A, B](fgagb: F[G[A], G[B]])(implicit F: Bitraverse[F]) {
-  def bisequence(implicit G: Applicative[G]): G[F[A, B]] =
-    F.bisequence(fgagb)
+final class NestedTraverse2Ops[F[_, _], G[_], A, B](fgagb: F[G[A], G[B]])(implicit F: Traverse2[F]) {
+  def sequence2(implicit G: Applicative[G]): G[F[A, B]] =
+    F.sequence2(fgagb)
 }

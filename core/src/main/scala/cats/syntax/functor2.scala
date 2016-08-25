@@ -1,6 +1,6 @@
 package cats
 package syntax
 
-import cats.functor.Bifunctor
+import cats.functor.Functor2
 
-trait BifunctorSyntax extends Bifunctor.ToBifunctorOps
+trait Functor2Syntax extends Functor2.ToFunctor2Ops

@@ -1,4 +1,4 @@
 package cats
 package syntax
 
-trait BifoldableSyntax extends Bifoldable.ToBifoldableOps
+trait Foldable2Syntax extends Foldable2.ToFoldable2Ops

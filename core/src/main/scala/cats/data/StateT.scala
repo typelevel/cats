@@ -221,7 +221,7 @@ private[data] sealed trait StateTMonad[F[_], S] extends Monad[StateT[F, S, ?]] {
 
   def tailRecM[A, B](a: A)(f: A => StateT[F, S, Either[A, B]]): StateT[F, S, B] =
     StateT[F, S, B](s => F.tailRecM[(S, A), (S, B)]((s, a)) {
-      case (s, a) => F.map(f(a).run(s)) { case (s, ab) => ab.bimap((s, _), (s, _)) }
+      case (s, a) => F.map(f(a).run(s)) { case (s, ab) => ab.map2((s, _), (s, _)) }
     })
 }
 

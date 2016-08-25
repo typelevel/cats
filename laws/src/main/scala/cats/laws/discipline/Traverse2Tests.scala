@@ -5,10 +5,10 @@ package discipline
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 
-trait BitraverseTests[F[_, _]] extends BifoldableTests[F] with BifunctorTests[F] {
-  def laws: BitraverseLaws[F]
+trait Traverse2Tests[F[_, _]] extends Foldable2Tests[F] with Functor2Tests[F] {
+  def laws: Traverse2Laws[F]
 
-  def bitraverse[G[_], A, B, C, D, E, H](implicit
+  def traverse2[G[_], A, B, C, D, E, H](implicit
     G: Applicative[G],
     C: Monoid[C],
     ArbFAB: Arbitrary[F[A, B]],
@@ -31,17 +31,17 @@ trait BitraverseTests[F[_, _]] extends BifoldableTests[F] with BifunctorTests[F]
     EqC: Eq[C]
   ): RuleSet =
     new RuleSet {
-      val name = "bitraverse"
-      val parents = Seq(bifoldable[A, B, C], bifunctor[A, B, C, D, E, H])
+      val name = "traverse2"
+      val parents = Seq(foldable2[A, B, C], functor2[A, B, C, D, E, H])
       val bases = Seq.empty
       val props = Seq(
-        "bitraverse identity" -> forAll(laws.bitraverseIdentity[A, B] _),
-        "bitraverse composition" -> forAll(laws.bitraverseCompose[G, A, B, C, D, E, H] _)
+        "traverse2 identity" -> forAll(laws.traverse2Identity[A, B] _),
+        "traverse2 composition" -> forAll(laws.traverse2Compose[G, A, B, C, D, E, H] _)
       )
     }
 }
 
-object BitraverseTests {
-  def apply[F[_, _]: Bitraverse]: BitraverseTests[F] =
-    new BitraverseTests[F] { def laws: BitraverseLaws[F] = BitraverseLaws[F] }
+object Traverse2Tests {
+  def apply[F[_, _]: Traverse2]: Traverse2Tests[F] =
+    new Traverse2Tests[F] { def laws: Traverse2Laws[F] = Traverse2Laws[F] }
 }

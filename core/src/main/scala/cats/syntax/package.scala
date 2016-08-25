@@ -5,9 +5,9 @@ package object syntax {
   object applicative extends ApplicativeSyntax
   object applicativeError extends ApplicativeErrorSyntax
   object apply extends ApplySyntax
-  object bifunctor extends BifunctorSyntax
-  object bifoldable extends BifoldableSyntax
-  object bitraverse extends BitraverseSyntax
+  object functor2 extends Functor2Syntax
+  object foldable2 extends Foldable2Syntax
+  object traverse2 extends Traverse2Syntax
   object cartesian extends CartesianSyntax
   object coflatMap extends CoflatMapSyntax
   object coproduct extends CoproductSyntax

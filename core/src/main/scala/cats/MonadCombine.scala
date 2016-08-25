@@ -20,9 +20,9 @@ import simulacrum.typeclass
     }
 
   /** Separate the inner foldable values into the "lefts" and "rights" */
-  def separate[G[_, _], A, B](fgab: F[G[A, B]])(implicit G: Bifoldable[G]): (F[A], F[B]) = {
-    val as = flatMap(fgab)(gab => G.bifoldMap(gab)(pure, _ => empty[A])(algebra[A]))
-    val bs = flatMap(fgab)(gab => G.bifoldMap(gab)(_ => empty[B], pure)(algebra[B]))
+  def separate[G[_, _], A, B](fgab: F[G[A, B]])(implicit G: Foldable2[G]): (F[A], F[B]) = {
+    val as = flatMap(fgab)(gab => G.fold2Map(gab)(pure, _ => empty[A])(algebra[A]))
+    val bs = flatMap(fgab)(gab => G.fold2Map(gab)(_ => empty[B], pure)(algebra[B]))
     (as, bs)
   }
 }

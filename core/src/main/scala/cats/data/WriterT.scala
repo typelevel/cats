@@ -2,7 +2,7 @@ package cats
 package data
 
 import cats.kernel.instances.tuple._
-import cats.functor.{Bifunctor, Contravariant}
+import cats.functor.{Functor2, Contravariant}
 import cats.syntax.semigroup._
 
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {
@@ -43,7 +43,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
   def mapBoth[M, U](f: (L, V) => (M, U))(implicit functorF: Functor[F]): WriterT[F, M, U] =
     WriterT { functorF.map(run)(f.tupled) }
 
-  def bimap[M, U](f: L => M, g: V => U)(implicit functorF: Functor[F]): WriterT[F, M, U] =
+  def map2[M, U](f: L => M, g: V => U)(implicit functorF: Functor[F]): WriterT[F, M, U] =
     mapBoth((l, v) => (f(l), g(v)))
 
   def mapWritten[M](f: L => M)(implicit functorF: Functor[F]): WriterT[F, M, V] =
@@ -73,10 +73,10 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
   implicit def catsDataEqForWriterTId[L: Eq, V: Eq]: Eq[WriterT[Id, L, V]] =
     catsDataEqForWriterT[Id, L, V]
 
-  implicit def catsDataBifunctorForWriterT[F[_]:Functor]: Bifunctor[WriterT[F, ?, ?]] =
-    new Bifunctor[WriterT[F, ?, ?]] {
-      def bimap[A, B, C, D](fab: WriterT[F, A, B])(f: A => C, g: B => D): WriterT[F, C, D] =
-        fab.bimap(f, g)
+  implicit def catsDataFunctor2ForWriterT[F[_]:Functor]: Functor2[WriterT[F, ?, ?]] =
+    new Functor2[WriterT[F, ?, ?]] {
+      def map2[A, B, C, D](fab: WriterT[F, A, B])(f: A => C, g: B => D): WriterT[F, C, D] =
+        fab.map2(f, g)
     }
 
   implicit def catsDataTransLiftForWriterT[W](implicit W: Monoid[W]): TransLift.Aux[WriterT[?[_], W, ?], Functor] =

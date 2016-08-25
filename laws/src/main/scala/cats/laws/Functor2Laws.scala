@@ -1,33 +1,33 @@
 package cats.laws
 
-import cats.functor.Bifunctor
-import cats.syntax.bifunctor._
+import cats.functor.Functor2
+import cats.syntax.functor2._
 
 /**
- * Laws that must be obeyed by any `Bifunctor`.
+ * Laws that must be obeyed by any `Functor2`.
  */
-trait BifunctorLaws[F[_, _]] {
-  implicit def F: Bifunctor[F]
+trait Functor2Laws[F[_, _]] {
+  implicit def F: Functor2[F]
 
-  def bifunctorIdentity[A, B](fa: F[A, B]): IsEq[F[A, B]] =
-    fa.bimap(identity, identity) <-> fa
+  def functor2Identity[A, B](fa: F[A, B]): IsEq[F[A, B]] =
+    fa.map2(identity, identity) <-> fa
 
-  def bifunctorComposition[A, B, C, X, Y, Z](fa: F[A, X], f: A => B, f2: B => C, g: X => Y, g2: Y => Z): IsEq[F[C, Z]] = {
-    fa.bimap(f, g).bimap(f2, g2) <-> fa.bimap(f andThen f2, g andThen g2)
+  def functor2Composition[A, B, C, X, Y, Z](fa: F[A, X], f: A => B, f2: B => C, g: X => Y, g2: Y => Z): IsEq[F[C, Z]] = {
+    fa.map2(f, g).map2(f2, g2) <-> fa.map2(f andThen f2, g andThen g2)
   }
 
-  def bifunctorLeftMapIdentity[A, B](fa: F[A, B]): IsEq[F[A, B]] =
+  def functor2LeftMapIdentity[A, B](fa: F[A, B]): IsEq[F[A, B]] =
     fa.leftMap(identity) <-> fa
 
-  def bifunctorLeftMapComposition[A, B, C, D](fa: F[A, B], f: A => C, g: C => D): IsEq[F[D, B]] = {
+  def functor2LeftMapComposition[A, B, C, D](fa: F[A, B], f: A => C, g: C => D): IsEq[F[D, B]] = {
     fa.leftMap(f).leftMap(g) <-> fa.leftMap(f andThen g)
   }
 
 }
 
-object BifunctorLaws {
-  def apply[F[_, _]](implicit ev: Bifunctor[F]): BifunctorLaws[F] =
-    new BifunctorLaws[F] {
-      def F: Bifunctor[F] = ev
+object Functor2Laws {
+  def apply[F[_, _]](implicit ev: Functor2[F]): Functor2Laws[F] =
+    new Functor2Laws[F] {
+      def F: Functor2[F] = ev
     }
 }
