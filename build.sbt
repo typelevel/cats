@@ -94,7 +94,8 @@ lazy val commonJsSettings = Seq(
   // Only used for scala.js for now
   botBuild := scala.sys.env.get("TRAVIS").isDefined,
   // batch mode decreases the amount of memory needed to compile scala.js code
-  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value)
+  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value),
+  doctestGenTests := Seq.empty
 )
 
 lazy val commonJvmSettings = Seq(
@@ -187,7 +188,7 @@ lazy val catsJS = project.in(file(".catsJS"))
   .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS, js)
   .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
-  .disablePlugins(DoctestPlugin)
+
 
 
 lazy val macros = crossProject.crossType(CrossType.Pure)
@@ -198,7 +199,7 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
   .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
 
 lazy val macrosJVM = macros.jvm
-lazy val macrosJS = macros.js.disablePlugins(DoctestPlugin)
+lazy val macrosJS = macros.js
 
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
@@ -212,7 +213,7 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .jvmSettings((commonJvmSettings ++ (mimaPreviousArtifacts := Set("org.typelevel" %% "cats-kernel" % "0.7.0"))):_*)
 
 lazy val kernelJVM = kernel.jvm
-lazy val kernelJS = kernel.js.disablePlugins(DoctestPlugin)
+lazy val kernelJS = kernel.js
 
 lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
   .in(file("kernel-laws"))
@@ -228,7 +229,7 @@ lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
   .dependsOn(kernel)
 
 lazy val kernelLawsJVM = kernelLaws.jvm
-lazy val kernelLawsJS = kernelLaws.js.disablePlugins(DoctestPlugin)
+lazy val kernelLawsJS = kernelLaws.js
 
 lazy val core = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, kernel)
@@ -240,7 +241,7 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val coreJVM = core.jvm
-lazy val coreJS = core.js.disablePlugins(DoctestPlugin)
+lazy val coreJS = core.js
 
 lazy val laws = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, kernel, core, kernelLaws)
@@ -252,7 +253,7 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val lawsJVM = laws.jvm
-lazy val lawsJS = laws.js.disablePlugins(DoctestPlugin)
+lazy val lawsJS = laws.js
 
 lazy val free = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, tests % "test-internal -> test")
@@ -262,7 +263,7 @@ lazy val free = crossProject.crossType(CrossType.Pure)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val freeJVM = free.jvm
-lazy val freeJS = free.js.disablePlugins(DoctestPlugin)
+lazy val freeJS = free.js
 
 lazy val tests = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, laws)
@@ -275,7 +276,7 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val testsJVM = tests.jvm
-lazy val testsJS = tests.js.disablePlugins(DoctestPlugin)
+lazy val testsJS = tests.js
 
 // bench is currently JVM-only
 lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
@@ -294,7 +295,7 @@ lazy val js = project
   .settings(catsSettings:_*)
   .settings(commonJsSettings:_*)
   .enablePlugins(ScalaJSPlugin)
-  .disablePlugins(DoctestPlugin)
+
 
 // cats-jvm is JVM-only
 lazy val jvm = project
