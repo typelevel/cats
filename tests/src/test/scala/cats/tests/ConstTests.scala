@@ -45,8 +45,8 @@ class ConstTests extends CatsSuite {
   checkAll("Const[String, Int]", ContravariantTests[Const[String, ?]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Const[String, ?]]", SerializableTests.serializable(Contravariant[Const[String, ?]]))
 
-  checkAll("Const[?, ?]", BifoldableTests[Const].bifoldable[Int, Int, Int])
-  checkAll("Bifoldable[Const]", SerializableTests.serializable(Bifoldable[Const]))
+  checkAll("Const[?, ?]", Foldable2Tests[Const].foldable2[Int, Int, Int])
+  checkAll("Foldable2[Const]", SerializableTests.serializable(Foldable2[Const]))
 
   test("show") {
 

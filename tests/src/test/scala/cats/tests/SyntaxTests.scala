@@ -193,34 +193,34 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val fz5: F[Z] = (fa |@| fb |@| fc).apWith(ff2)
   }
 
-  def testBifoldable[F[_, _]: Bifoldable, A, B, C, D: Monoid]: Unit = {
+  def testFoldable2[F[_, _]: Foldable2, A, B, C, D: Monoid]: Unit = {
     val fab = mock[F[A, B]]
 
     val f0 = mock[(C, A) => C]
     val g0 = mock[(C, B) => C]
-    val c0 = fab.bifoldLeft(mock[C])(f0, g0)
+    val c0 = fab.fold2Left(mock[C])(f0, g0)
 
     val f1 = mock[(A, Eval[C]) => Eval[C]]
     val g1 = mock[(B, Eval[C]) => Eval[C]]
-    val c1 = fab.bifoldRight(mock[Eval[C]])(f1, g1)
+    val c1 = fab.fold2Right(mock[Eval[C]])(f1, g1)
 
     val f2 = mock[A => D]
     val g2 = mock[B => D]
-    val d0 = fab.bifoldMap(f2, g2)
+    val d0 = fab.fold2Map(f2, g2)
   }
 
-  def testBitraverse[F[_, _]: Bitraverse, G[_]: Applicative, A, B, C, D]: Unit = {
+  def testTraverse2[F[_, _]: Traverse2, G[_]: Applicative, A, B, C, D]: Unit = {
     val f = mock[A => G[C]]
     val g = mock[B => G[D]]
 
     val fab = mock[F[A, B]]
-    val gfcd = fab.bitraverse(f, g)
+    val gfcd = fab.traverse2(f, g)
 
     val fgagb = mock[F[G[A], G[B]]]
-    val gfab = fgagb.bisequence
+    val gfab = fgagb.sequence2
   }
 
-  def testMonadCombine[F[_]: MonadCombine, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+  def testMonadCombine[F[_]: MonadCombine, G[_]: Foldable, H[_, _]: Foldable2, A, B]: Unit = {
     val fga = mock[F[G[A]]]
     val fa = fga.unite
 

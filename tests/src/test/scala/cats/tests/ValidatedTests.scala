@@ -3,7 +3,7 @@ package tests
 
 import cats.data.{EitherT, NonEmptyList, Validated, ValidatedNel}
 import cats.data.Validated.{Valid, Invalid}
-import cats.laws.discipline.{BitraverseTests, TraverseTests, ApplicativeErrorTests, SerializableTests, CartesianTests}
+import cats.laws.discipline.{Traverse2Tests, TraverseTests, ApplicativeErrorTests, SerializableTests, CartesianTests}
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.{SemigroupKTests}
 import cats.laws.discipline.arbitrary._
@@ -16,8 +16,8 @@ class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int]", CartesianTests[Validated[String,?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Validated[String,?]]", SerializableTests.serializable(Cartesian[Validated[String,?]]))
 
-  checkAll("Validated[?, ?]", BitraverseTests[Validated].bitraverse[Option, Int, Int, Int, String, String, String])
-  checkAll("Bitraverse[Validated]", SerializableTests.serializable(Bitraverse[Validated]))
+  checkAll("Validated[?, ?]", Traverse2Tests[Validated].traverse2[Option, Int, Int, Int, String, String, String])
+  checkAll("Traverse2[Validated]", SerializableTests.serializable(Traverse2[Validated]))
 
   implicit val eq0 = EitherT.catsDataEqForEitherT[Validated[String, ?], String, Int]
 

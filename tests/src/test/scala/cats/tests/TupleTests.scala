@@ -4,7 +4,7 @@ package tests
 import data.NonEmptyList
 
 import cats.laws.discipline.{
-  BitraverseTests, ComonadTests, SerializableTests, TraverseTests, MonadTests, FlatMapTests, CartesianTests
+  Traverse2Tests, ComonadTests, SerializableTests, TraverseTests, MonadTests, FlatMapTests, CartesianTests
 }
 import cats.laws.discipline.arbitrary._
 
@@ -13,8 +13,8 @@ class TupleTests extends CatsSuite {
   implicit val iso1 = CartesianTests.Isomorphisms.invariant[(NonEmptyList[Int], ?)]
   implicit val iso2 = CartesianTests.Isomorphisms.invariant[(String, ?)]
 
-  checkAll("Tuple2", BitraverseTests[Tuple2].bitraverse[Option, Int, Int, Int, String, String, String])
-  checkAll("Bitraverse[Tuple2]", SerializableTests.serializable(Bitraverse[Tuple2]))
+  checkAll("Tuple2", Traverse2Tests[Tuple2].traverse2[Option, Int, Int, Int, String, String, String])
+  checkAll("Traverse2[Tuple2]", SerializableTests.serializable(Traverse2[Tuple2]))
 
   checkAll("Tuple2[String, Int] with Option", TraverseTests[(String, ?)].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[(String, ?)]", SerializableTests.serializable(Traverse[(String, ?)]))
