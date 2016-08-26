@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Bifunctor
+import cats.functor.Functor2
 import cats.instances.either._
 import cats.syntax.either._
 
@@ -62,10 +62,10 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def collectRight(implicit F: MonadCombine[F]): F[B] =
     F.flatMap(value)(_.to[F])
 
-  def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): EitherT[F, C, D] = EitherT(F.map(value)(_.bimap(fa, fb)))
+  def map2[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): EitherT[F, C, D] = EitherT(F.map(value)(_.map2(fa, fb)))
 
-  def bitraverse[G[_], C, D](f: A => G[C], g: B => G[D])(implicit traverseF: Traverse[F], applicativeG: Applicative[G]): G[EitherT[F, C, D]] =
-    applicativeG.map(traverseF.traverse(value)(axb => Bitraverse[Either].bitraverse(axb)(f, g)))(EitherT.apply)
+  def traverse2[G[_], C, D](f: A => G[C], g: B => G[D])(implicit traverseF: Traverse[F], applicativeG: Applicative[G]): G[EitherT[F, C, D]] =
+    applicativeG.map(traverseF.traverse(value)(axb => Traverse2[Either].traverse2(axb)(f, g)))(EitherT.apply)
 
   def applyAlt[D](ff: EitherT[F, A, B => D])(implicit F: Apply[F]): EitherT[F, A, D] =
     EitherT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[Either[A, ?]].ap(xbd)(xb)))
@@ -85,12 +85,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def subflatMap[D](f: B => Either[A, D])(implicit F: Functor[F]): EitherT[F, A, D] =
     transform(_.flatMap(f))
 
-  def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = bimap(identity, f)
+  def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = map2(identity, f)
 
   def semiflatMap[D](f: B => F[D])(implicit F: Monad[F]): EitherT[F, A, D] =
     flatMap(b => EitherT.right[F, A, D](f(b)))
 
-  def leftMap[C](f: A => C)(implicit F: Functor[F]): EitherT[F, C, B] = bimap(f, identity)
+  def leftMap[C](f: A => C)(implicit F: Functor[F]): EitherT[F, C, B] = map2(f, identity)
 
   def compare(that: EitherT[F, A, B])(implicit o: Order[F[Either[A, B]]]): Int =
     o.compare(value, that.value)
@@ -290,9 +290,9 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
   implicit def catsDataShowForEitherT[F[_], L, R](implicit sh: Show[F[Either[L, R]]]): Show[EitherT[F, L, R]] =
     functor.Contravariant[Show].contramap(sh)(_.value)
 
-  implicit def catsDataBifunctorForEitherT[F[_]](implicit F: Functor[F]): Bifunctor[EitherT[F, ?, ?]] =
-    new Bifunctor[EitherT[F, ?, ?]] {
-      override def bimap[A, B, C, D](fab: EitherT[F, A, B])(f: A => C, g: B => D): EitherT[F, C, D] = fab.bimap(f, g)
+  implicit def catsDataFunctor2ForEitherT[F[_]](implicit F: Functor[F]): Functor2[EitherT[F, ?, ?]] =
+    new Functor2[EitherT[F, ?, ?]] {
+      override def map2[A, B, C, D](fab: EitherT[F, A, B])(f: A => C, g: B => D): EitherT[F, C, D] = fab.map2(f, g)
     }
 
   implicit def catsDataTraverseForEitherT[F[_], L](implicit F: Traverse[F]): Traverse[EitherT[F, L, ?]] =
@@ -335,8 +335,8 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
       val F0: PartialOrder[F[Either[L, R]]] = F
     }
 
-  implicit def catsDataBitraverseForEitherT[F[_]](implicit F: Traverse[F]): Bitraverse[EitherT[F, ?, ?]] =
-    new EitherTBitraverse[F] {
+  implicit def catsDataTraverse2ForEitherT[F[_]](implicit F: Traverse[F]): Traverse2[EitherT[F, ?, ?]] =
+    new EitherTTraverse2[F] {
       val F0: Traverse[F] = F
     }
 }
@@ -448,21 +448,21 @@ private[data] sealed trait EitherTTraverse[F[_], L] extends Traverse[EitherT[F, 
     fa traverse f
 }
 
-private[data] sealed trait EitherTBifoldable[F[_]] extends Bifoldable[EitherT[F, ?, ?]] {
+private[data] sealed trait EitherTFoldable2[F[_]] extends Foldable2[EitherT[F, ?, ?]] {
   implicit def F0: Foldable[F]
 
-  def bifoldLeft[A, B, C](fab: EitherT[F, A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
-    F0.foldLeft(fab.value, c)( (acc, axb) => Bifoldable[Either].bifoldLeft(axb, acc)(f, g))
+  def fold2Left[A, B, C](fab: EitherT[F, A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
+    F0.foldLeft(fab.value, c)( (acc, axb) => Foldable2[Either].fold2Left(axb, acc)(f, g))
 
-  def bifoldRight[A, B, C](fab: EitherT[F, A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
-    F0.foldRight(fab.value, c)( (axb, acc) => Bifoldable[Either].bifoldRight(axb, acc)(f, g))
+  def fold2Right[A, B, C](fab: EitherT[F, A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+    F0.foldRight(fab.value, c)( (axb, acc) => Foldable2[Either].fold2Right(axb, acc)(f, g))
 }
 
-private[data] sealed trait EitherTBitraverse[F[_]] extends Bitraverse[EitherT[F, ?, ?]] with EitherTBifoldable[F] {
+private[data] sealed trait EitherTTraverse2[F[_]] extends Traverse2[EitherT[F, ?, ?]] with EitherTFoldable2[F] {
   override implicit def F0: Traverse[F]
 
-  override def bitraverse[G[_], A, B, C, D](fab: EitherT[F, A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[EitherT[F, C, D]] =
-    fab.bitraverse(f, g)
+  override def traverse2[G[_], A, B, C, D](fab: EitherT[F, A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[EitherT[F, C, D]] =
+    fab.traverse2(f, g)
 }
 
 private[data] sealed trait EitherTEq[F[_], L, A] extends Eq[EitherT[F, L, A]] {

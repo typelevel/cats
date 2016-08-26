@@ -253,7 +253,7 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
     def show(f: Validated[A, B]): String = f.show
   }
 
-  implicit val catsDataBitraverseForValidated: Traverse2[Validated] =
+  implicit val catsDataTraverse2ForValidated: Traverse2[Validated] =
     new Traverse2[Validated] {
       def traverse2[G[_], A, B, C, D](fab: Validated[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Validated[C, D]] =
         fab match {

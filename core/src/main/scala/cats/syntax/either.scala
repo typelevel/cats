@@ -101,7 +101,7 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     case Right(b) => F.pure(b)
   }
 
-  def bimap[C, D](fa: A => C, fb: B => D): Either[C, D] = eab match {
+  def map2[C, D](fa: A => C, fb: B => D): Either[C, D] = eab match {
     case Left(a)  => Left(fa(a))
     case Right(b) => Right(fb(b))
   }

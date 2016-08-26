@@ -76,7 +76,7 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
       x combine y
   }
 
-  implicit val catsDataBifoldableForConst: Foldable2[Const] =
+  implicit val catsDataFoldable2ForConst: Foldable2[Const] =
     new Foldable2[Const] {
       def fold2Left[A, B, C](fab: Const[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
         f(c, fab.getConst)
