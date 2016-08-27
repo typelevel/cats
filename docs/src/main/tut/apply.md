@@ -69,19 +69,19 @@ Apply[Option].ap(None)(Some(1))
 Apply[Option].ap(None)(None)
 ```
 
-### ap2, ap3, etc
+### apA2, apA3, etc
 
-`Apply` also offers variants of `ap`. The functions `apN` (for `N` between `2` and `22`)
+`Apply` also offers variants of `ap`. The functions `apAN` (for `N` between `2` and `22`)
 accept `N` arguments where `ap` accepts `1`:
 
 For example:
 
 ```tut:book
 val addArity2 = (a: Int, b: Int) => a + b
-Apply[Option].ap2(Some(addArity2))(Some(1), Some(2))
+Apply[Option].apA2(Some(addArity2))(Some(1), Some(2))
 
 val addArity3 = (a: Int, b: Int, c: Int) => a + b + c
-Apply[Option].ap3(Some(addArity3))(Some(1), Some(2), Some(3))
+Apply[Option].apA3(Some(addArity3))(Some(1), Some(2), Some(3))
 ```
 
 Note that if any of the arguments of this example is `None`, the
@@ -89,34 +89,34 @@ final result is `None` as well.  The effects of the context we are operating on
 are carried through the entire computation:
 
 ```tut:book
-Apply[Option].ap2(Some(addArity2))(Some(1), None)
-Apply[Option].ap4(None)(Some(1), Some(2), Some(3), Some(4))
+Apply[Option].apA2(Some(addArity2))(Some(1), None)
+Apply[Option].apA4(None)(Some(1), Some(2), Some(3), Some(4))
 ```
 
-### map2, map3, etc
+### mapA2, mapA3, etc
 
-Similarly, `mapN` functions are available:
+Similarly, `mapAN` functions are available:
 
 ```tut:book
-Apply[Option].map2(Some(1), Some(2))(addArity2)
+Apply[Option].mapA2(Some(1), Some(2))(addArity2)
 
-Apply[Option].map3(Some(1), Some(2), Some(3))(addArity3)
+Apply[Option].mapA3(Some(1), Some(2), Some(3))(addArity3)
 ```
 
-### tuple2, tuple3, etc
+### tupleA2, tupleA3, etc
 
 And `tupleN`:
 
 ```tut:book
-Apply[Option].tuple2(Some(1), Some(2))
+Apply[Option].tupleA2(Some(1), Some(2))
 
-Apply[Option].tuple3(Some(1), Some(2), Some(3))
+Apply[Option].tupleA3(Some(1), Some(2), Some(3))
 ```
 
 ## apply builder syntax
 
 The `|@|` operator offers an alternative syntax for the higher-arity `Apply`
-functions (`apN`, `mapN` and `tupleN`).
+functions (`apAN`, `mapAN` and `tupleAN`).
 In order to use it, first import `cats.syntax.all._` or `cats.syntax.cartesian._`.
 Here we see that the following two functions, `f1` and `f2`, are equivalent:
 
@@ -126,7 +126,7 @@ import cats.implicits._
 def f1(a: Option[Int], b: Option[Int], c: Option[Int]) =
   (a |@| b |@| c) map { _ * _ * _ }
 def f2(a: Option[Int], b: Option[Int], c: Option[Int]) =
-  Apply[Option].map3(a, b, c)(_ * _ * _)
+  Apply[Option].mapA3(a, b, c)(_ * _ * _)
 
 f1(Some(1), Some(2), Some(3))
 

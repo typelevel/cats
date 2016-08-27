@@ -204,7 +204,7 @@ implicit def validatedApplicative[E : Semigroup]: Applicative[Validated[E, ?]] =
   }
 ```
 
-Awesome! And now we also get access to all the goodness of `Applicative`, which includes `map{2-22}`, as well as the
+Awesome! And now we also get access to all the goodness of `Applicative`, which includes `mapA{2-22}`, as well as the
 `Cartesian` syntax `|@|`.
 
 We can now easily ask for several bits of configuration and get any and all errors returned back.
@@ -226,7 +226,7 @@ Thus.
 
 ```tut:book
 val personFromConfig: ValidatedNel[ConfigError, Person] =
-  Apply[ValidatedNel[ConfigError, ?]].map4(config.parse[String]("name").toValidatedNel,
+  Apply[ValidatedNel[ConfigError, ?]].mapA4(config.parse[String]("name").toValidatedNel,
                                            config.parse[Int]("age").toValidatedNel,
                                            config.parse[Int]("house_number").toValidatedNel,
                                            config.parse[String]("street").toValidatedNel) {
@@ -280,7 +280,7 @@ However, the `ap` behavior defined in terms of `flatMap` does not behave the sam
 our `ap` defined above. Observe:
 
 ```tut:book
-val v = validatedMonad.tuple2(Validated.invalidNel[String, Int]("oops"), Validated.invalidNel[String, Double]("uh oh"))
+val v = validatedMonad.tupleA2(Validated.invalidNel[String, Int]("oops"), Validated.invalidNel[String, Double]("uh oh"))
 ```
 
 This one short circuits! Therefore, if we were to define a `Monad` (or `FlatMap`) instance for `Validated` we would
