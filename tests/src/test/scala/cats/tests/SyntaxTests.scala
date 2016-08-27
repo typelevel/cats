@@ -176,10 +176,10 @@ object SyntaxTests extends AllInstances with AllSyntax {
 
     val fb = mock[F[B]]
     val fabz = mock[F[(A, B) => Z]]
-    val fz0: F[Z] = fabz.ap2(fa, fb)
+    val fz0: F[Z] = fabz.apA2(fa, fb)
 
     val f = mock[(A, B) => Z]
-    val fz1: F[Z] = fa.map2(fb)(f)
+    val fz1: F[Z] = fa.mapA2(fb)(f)
 
     val f1 = mock[(A, B) => Z]
     val ff1 = mock[F[(A, B) => Z]]
@@ -266,8 +266,8 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val f = mock[(A, B, C) => Z]
     val ff = mock[F[(A, B, C) => Z]]
 
-    tfabc map3 f
-    (fa, fb, fc) map3 f
+    tfabc mapA3 f
+    (fa, fb, fc) mapA3 f
     (fa, fb, fc) apWith ff
 
     val tgabc = mock[(G[A], G[B])]
@@ -275,8 +275,8 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val gb = mock[G[B]]
     val g = mock[Z => (A, B)]
 
-    tgabc contramap2 g
-    (ga, gb) contramap2 g
+    tgabc contramapA2 g
+    (ga, gb) contramapA2 g
 
     val thabcde = mock[(H[A], H[B], H[C], H[D], H[E])]
     val ha = mock[H[A]]
@@ -287,8 +287,8 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val f5 = mock[(A, B, C, D, E) => Z]
     val g5 = mock[Z => (A, B, C, D, E)]
 
-    thabcde.imap5(f5)(g5)
-    (ha, hb, hc, hd, he).imap5(f5)(g5)
+    thabcde.imapA5(f5)(g5)
+    (ha, hb, hc, hd, he).imapA5(f5)(g5)
   }
 }
 

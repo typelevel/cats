@@ -17,7 +17,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 
   def ap[Z](f: WriterT[F, L, V => Z])(implicit F: Apply[F], L: Semigroup[L]): WriterT[F, L, Z] =
     WriterT(
-      F.map2(f.run, run){
+      F.mapA2(f.run, run){
         case ((l1, fvz), (l2, v)) => (L.combine(l1, l2), fvz(v))
       })
 

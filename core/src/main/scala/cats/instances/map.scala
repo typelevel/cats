@@ -20,7 +20,7 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       override def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
         val gbb = Foldable.iterateRight(fa.iterator, gba){ (kv, lbuf) =>
-          G.map2Eval(f(kv._2), lbuf)({ (b, buf) => buf + (kv._1 -> b)})
+          G.mapA2Eval(f(kv._2), lbuf)({ (b, buf) => buf + (kv._1 -> b)})
         }.value
         G.map(gbb)(_.toMap)
       }
@@ -28,7 +28,7 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       def traverseFilter[G[_], A, B](fa: Map[K, A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Map[K, B]] = {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
         val gbb = Foldable.iterateRight(fa.iterator, gba){ (kv, lbuf) =>
-          G.map2Eval(f(kv._2), lbuf)({ (ob, buf) => ob.fold(buf)(b => buf + (kv._1 -> b))})
+          G.mapA2Eval(f(kv._2), lbuf)({ (ob, buf) => ob.fold(buf)(b => buf + (kv._1 -> b))})
         }.value
         G.map(gbb)(_.toMap)
       }
@@ -36,13 +36,13 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =
         fa.map { case (k, a) => (k, f(a)) }
 
-      override def map2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: (A, B) => Z): Map[K, Z] =
+      override def mapA2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: (A, B) => Z): Map[K, Z] =
         fa.flatMap { case (k, a) => fb.get(k).map(b => (k, f(a, b))) }
 
       override def ap[A, B](ff: Map[K, A => B])(fa: Map[K, A]): Map[K, B] =
         fa.flatMap { case (k, a) => ff.get(k).map(f => (k, f(a))) }
 
-      override def ap2[A, B, Z](f: Map[K, (A, B) => Z])(fa: Map[K, A], fb: Map[K, B]): Map[K, Z] =
+      override def apA2[A, B, Z](f: Map[K, (A, B) => Z])(fa: Map[K, A], fb: Map[K, B]): Map[K, Z] =
         f.flatMap { case (k, f) =>
           for { a <- fa.get(k); b <- fb.get(k) } yield (k, f(a, b))
         }

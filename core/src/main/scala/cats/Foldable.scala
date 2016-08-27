@@ -201,7 +201,7 @@ import simulacrum.typeclass
    */
   def traverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
     foldRight(fa, Always(G.pure(()))) { (a, acc) =>
-      G.map2Eval(f(a), acc) { (_, _) => () }
+      G.mapA2Eval(f(a), acc) { (_, _) => () }
     }.value
 
   /**

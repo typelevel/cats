@@ -68,7 +68,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     applicativeG.map(traverseF.traverse(value)(axb => Traverse2[Either].traverse2(axb)(f, g)))(EitherT.apply)
 
   def applyAlt[D](ff: EitherT[F, A, B => D])(implicit F: Apply[F]): EitherT[F, A, D] =
-    EitherT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[Either[A, ?]].ap(xbd)(xb)))
+    EitherT[F, A, D](F.mapA2(this.value, ff.value)((xb, xbd) => Apply[Either[A, ?]].ap(xbd)(xb)))
 
   def flatMap[D](f: B => EitherT[F, A, D])(implicit F: Monad[F]): EitherT[F, A, D] =
     EitherT(F.flatMap(value) {
@@ -151,7 +151,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * }}}
    */
   def combine(that: EitherT[F, A, B])(implicit F: Apply[F], B: Semigroup[B]): EitherT[F, A, B] =
-    EitherT(F.map2(this.value, that.value)(_ combine _))
+    EitherT(F.mapA2(this.value, that.value)(_ combine _))
 
   def toValidated(implicit F: Functor[F]): F[Validated[A, B]] =
     F.map(value)(_.toValidated)

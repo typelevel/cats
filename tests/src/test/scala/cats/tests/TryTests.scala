@@ -105,10 +105,10 @@ class TryTests extends CatsSuite {
     }
   }
 
-  test("map2Eval is lazy") {
+  test("mapA2Eval is lazy") {
     var evals = 0
     val bomb: Eval[Try[Int]] = Later { evals += 1; Success(1) }
-    Try[Int](sys.error("boom0")).map2Eval(bomb)(_ + _).value
+    Try[Int](sys.error("boom0")).mapA2Eval(bomb)(_ + _).value
     evals should === (0)
   }
 }

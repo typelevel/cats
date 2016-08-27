@@ -57,7 +57,7 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
             }
         }
 
-      override def map2Eval[B, C, Z](fb: Either[A, B], fc: Eval[Either[A, C]])(f: (B, C) => Z): Eval[Either[A, Z]] =
+      override def mapA2Eval[B, C, Z](fb: Either[A, B], fc: Eval[Either[A, C]])(f: (B, C) => Z): Eval[Either[A, Z]] =
         fb match {
           case l @ Left(_) => Now(EitherUtil.rightCast(l))
           case Right(b) => fc.map(_.right.map(f(b, _)))

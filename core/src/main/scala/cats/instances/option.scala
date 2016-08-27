@@ -28,10 +28,10 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
           case Some(Right(b)) => Some(b)
         }
 
-      override def map2[A, B, Z](fa: Option[A], fb: Option[B])(f: (A, B) => Z): Option[Z] =
+      override def mapA2[A, B, Z](fa: Option[A], fb: Option[B])(f: (A, B) => Z): Option[Z] =
         fa.flatMap(a => fb.map(b => f(a, b)))
 
-      override def map2Eval[A, B, Z](fa: Option[A], fb: Eval[Option[B]])(f: (A, B) => Z): Eval[Option[Z]] =
+      override def mapA2Eval[A, B, Z](fa: Option[A], fb: Eval[Option[B]])(f: (A, B) => Z): Eval[Option[Z]] =
         fa match {
           case None => Now(None)
           case Some(a) => fb.map(_.map(f(a, _)))

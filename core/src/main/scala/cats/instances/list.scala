@@ -23,7 +23,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] =
         fa.flatMap(f)
 
-      override def map2[A, B, Z](fa: List[A], fb: List[B])(f: (A, B) => Z): List[Z] =
+      override def mapA2[A, B, Z](fa: List[A], fb: List[B])(f: (A, B) => Z): List[Z] =
         fa.flatMap(a => fb.map(b => f(a, b)))
 
       def tailRecM[A, B](a: A)(f: A => List[Either[A, B]]): List[B] = {
@@ -63,12 +63,12 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       def traverseFilter[G[_], A, B](fa: List[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
         foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglb) =>
-          G.map2Eval(f(a), lglb)((ob, l) => ob.fold(l)(_ :: l))
+          G.mapA2Eval(f(a), lglb)((ob, l) => ob.fold(l)(_ :: l))
         }.value
 
       override def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
         foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglb) =>
-          G.map2Eval(f(a), lglb)(_ :: _)
+          G.mapA2Eval(f(a), lglb)(_ :: _)
         }.value
 
       override def exists[A](fa: List[A])(p: A => Boolean): Boolean =

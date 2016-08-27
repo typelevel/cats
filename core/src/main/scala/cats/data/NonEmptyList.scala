@@ -86,7 +86,7 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
     tail.foldLeft(head)(f)
 
   def traverse[G[_], B](f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
-    G.map2Eval(f(head), Always(Traverse[List].traverse(tail)(f)))(NonEmptyList(_, _)).value
+    G.mapA2Eval(f(head), Always(Traverse[List].traverse(tail)(f)))(NonEmptyList(_, _)).value
 
   def coflatMap[B](f: NonEmptyList[A] => B): NonEmptyList[B] = {
     val buf = ListBuffer.empty[B]

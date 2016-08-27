@@ -9,7 +9,7 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
   implicit val catsStdTraverse2ForTuple2: Traverse2[Tuple2] =
     new Traverse2[Tuple2] {
       def traverse2[G[_]: Applicative, A, B, C, D](fab: (A, B))(f: A => G[C], g: B => G[D]): G[(C, D)] =
-        Applicative[G].tuple2(f(fab._1), g(fab._2))
+        Applicative[G].tupleA2(f(fab._1), g(fab._2))
 
       def fold2Left[A, B, C](fab: (A, B), c: C)(f: (C, A) => C, g: (C, B) => C): C =
         g(f(c, fab._1), fab._2)

@@ -20,43 +20,43 @@ trait Apply[F[_]] extends Functor[F] with Cartesian[F] with ApplyArityFunctions[
     ap(map(fa)(a => (b: B) => (a, b)))(fb)
 
   /**
-   * ap2 is a binary version of ap, defined in terms of ap.
+   * apA2 is a binary version of ap, defined in terms of ap.
    */
-  def ap2[A, B, Z](ff: F[(A, B) => Z])(fa: F[A], fb: F[B]): F[Z] =
+  def apA2[A, B, Z](ff: F[(A, B) => Z])(fa: F[A], fb: F[B]): F[Z] =
     map(product(fa, product(fb, ff))) { case (a, (b, f)) => f(a, b) }
 
   /**
    * Applies the pure (binary) function f to the effectful values fa and fb.
    *
-   * map2 can be seen as a binary version of [[cats.Functor]]#map.
+   * mapA2 can be seen as a binary version of [[cats.Functor]]#map.
    */
-  def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
+  def mapA2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
     map(product(fa, fb)) { case (a, b) => f(a, b) }
 
   /**
-   * Similar to [[map2]] but uses [[Eval]] to allow for laziness in the `F[B]`
+   * Similar to [[mapA2]] but uses [[Eval]] to allow for laziness in the `F[B]`
    * argument. This can allow for "short-circuiting" of computations.
    *
-   * NOTE: the default implementation of `map2Eval` does not short-circuit
+   * NOTE: the default implementation of `mapA2Eval` does not short-circuit
    * computations. For data structures that can benefit from laziness, [[Apply]]
    * instances should override this method.
    *
-   * In the following example, `x.map2(bomb)(_ + _)` would result in an error,
-   * but `map2Eval` "short-circuits" the computation. `x` is `None` and thus the
+   * In the following example, `x.mapA2(bomb)(_ + _)` would result in an error,
+   * but `mapA2Eval` "short-circuits" the computation. `x` is `None` and thus the
    * result of `bomb` doesn't even need to be evaluated in order to determine
-   * that the result of `map2Eval` should be `None`.
+   * that the result of `mapA2Eval` should be `None`.
    *
    * {{{
    * scala> import cats.{Eval, Later}
    * scala> import cats.implicits._
    * scala> val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
    * scala> val x: Option[Int] = None
-   * scala> x.map2Eval(bomb)(_ + _).value
+   * scala> x.mapA2Eval(bomb)(_ + _).value
    * res0: Option[Int] = None
    * }}}
    */
-  def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
-    fb.map(fb => map2(fa, fb)(f))
+  def mapA2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
+    fb.map(fb => mapA2(fa, fb)(f))
 
   def compose[G[_]: Apply]: Apply[λ[α => F[G[α]]]] =
     new ComposedApply[F, G] {
@@ -72,5 +72,5 @@ object Apply {
 
 private[cats] class ApplySemigroup[F[_], A](f: Apply[F], sg: Semigroup[A]) extends Semigroup[F[A]] {
   def combine(a: F[A], b: F[A]): F[A] =
-    f.map2(a, b)(sg.combine)
+    f.mapA2(a, b)(sg.combine)
 }

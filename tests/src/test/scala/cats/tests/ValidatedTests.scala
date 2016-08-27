@@ -56,7 +56,7 @@ class ValidatedTests extends CatsSuite {
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)
-    Applicative[Validated[String, ?]].ap2(Valid(plus))(Invalid("1"), Invalid("2")) should === (Invalid("12"))
+    Applicative[Validated[String, ?]].apA2(Valid(plus))(Invalid("1"), Invalid("2")) should === (Invalid("12"))
   }
 
   test("catchOnly catches matching exceptions") {
@@ -198,7 +198,7 @@ class ValidatedTests extends CatsSuite {
     val x: ValidatedNel[String, Int] = Validated.invalidNel("error 1")
     val y: ValidatedNel[String, Boolean] = Validated.invalidNel("error 2")
 
-    val z = x.map2(y)((i, b) => if (b) i + 1 else i)
+    val z = x.mapA2(y)((i, b) => if (b) i + 1 else i)
     z should === (NonEmptyList.of("error 1", "error 2").invalid[Int])
   }
 
