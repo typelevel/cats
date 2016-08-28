@@ -21,7 +21,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
         val gf = Foldable[G]
         def toStream(gb: G[B]): Eval[Stream[B]] =
           gf.foldRight(gb, Eval.now(Stream.empty[B])) { (b, estream) =>
-            estream.map { b #:: _ }
+            Eval.now(b #:: (estream.value))
           }
 
         fa.flatMap { a => toStream(f(a)).value }
