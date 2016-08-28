@@ -5,8 +5,8 @@ import cats.syntax.show._
 import scala.annotation.tailrec
 
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
-  implicit val catsStdInstancesForStream: TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] =
-    new TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] {
+  implicit val catsStdInstancesForStream: TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] with FunctorFlatten[Stream] =
+    new TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] with FunctorFlatten[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
 
@@ -16,6 +16,16 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
       override def map[A, B](fa: Stream[A])(f: A => B): Stream[B] =
         fa.map(f)
+
+      override def mapFlatten[G[_]: Foldable, A, B](fa: Stream[A])(f: A => G[B]): Stream[B] = {
+        val gf = Foldable[G]
+        def toStream(gb: G[B]): Eval[Stream[B]] =
+          gf.foldRight(gb, Eval.now(Stream.empty[B])) { (b, estream) =>
+            estream.map { b #:: _ }
+          }
+
+        fa.flatMap { a => toStream(f(a)).value }
+      }
 
       def flatMap[A, B](fa: Stream[A])(f: A => Stream[B]): Stream[B] =
         fa.flatMap(f)
