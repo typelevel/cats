@@ -4,7 +4,7 @@ import simulacrum.typeclass
 
 @typeclass trait FunctorFlatten[F[_]] extends FunctorFilter[F] {
   /**
-   * A generalized [[map]] and [[flatten]].
+   * A generalized [[map]] followed by flatten.
    *
    * Example:
    * {{{
