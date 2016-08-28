@@ -5,6 +5,7 @@ import cats.instances.long._
 import cats.instances.int._
 import simulacrum.typeclass
 import scala.collection.immutable.Iterable
+import scala.collection.generic.CanBuildFrom
 
 /**
  * Data structures that can be folded to a summary value.
@@ -400,6 +401,12 @@ object Foldable {
     def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
       iterateRight(fa.iterator, lb)(f)
   }
+
+  /**
+   * Create a scala collection from the given Foldable
+   */
+  def toCollection[F[_], A, C](fa: F[A])(implicit F: Foldable[F], CBF: CanBuildFrom[Nothing, A, C]): C =
+    F.foldLeft(fa, CBF()) { (bldr, a) => bldr += a }.result
 }
 
 private[cats] class FoldableIterable[F[_], T](ft: F[T])(implicit F: Foldable[F]) extends Iterable[T] {
