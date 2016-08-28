@@ -2,7 +2,9 @@ package cats
 
 import scala.collection.mutable
 import cats.instances.long._
+import cats.instances.int._
 import simulacrum.typeclass
+import scala.collection.immutable.Iterable
 
 /**
  * Data structures that can be folded to a summary value.
@@ -372,4 +374,77 @@ object Foldable {
       Eval.defer(if (it.hasNext) f(it.next, loop()) else lb)
     loop()
   }
+
+  /**
+   * Lazily convert fa with a Foldable into a Stream
+   */
+  def toStream[F[_], A](fa: F[A])(implicit F: Foldable[F]): Stream[A] =
+    F.foldRight(fa, Eval.now(Stream.empty[A])) { (a, estream) =>
+      Eval.now(a #:: (estream.value))
+    }.value
+
+  /**
+   * This returns an iterable that as much as possible implements methods
+   * using the Foldable instance
+   */
+  def toIterable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Iterable[A] =
+    new FoldableIterable(fa)
+
+  /**
+   * This is a generic foldable instance for any scala Iterable
+   */
+  def forIterable[F[T] <: Iterable[T]]: Foldable[F] = new Foldable[F] {
+    def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B =
+      fa.iterator.foldLeft(b)(f)
+
+    def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+      iterateRight(fa.iterator, lb)(f)
+  }
+}
+
+private[cats] class FoldableIterable[F[_], T](ft: F[T])(implicit F: Foldable[F]) extends Iterable[T] {
+
+  def iterator: Iterator[T] = Foldable.toStream(ft).iterator
+
+  override def exists(fn: T => Boolean): Boolean =
+    F.exists(ft)(fn)
+
+  override def find(fn: T => Boolean): Option[T] = F.find(ft)(fn)
+
+  override def foldLeft[U](u: U)(fn: (U, T) => U): U =
+    F.foldLeft(ft, u)(fn)
+
+  override def foldRight[U](u: U)(fn: (T, U) => U): U =
+    F.foldRight(ft, Eval.now(u)) { (t, eu) => eu.map(fn(t, _)) }.value
+
+  override def foreach[U](fn: T => U): Unit =
+    F.foldLeft(ft, ()) { (_, t) => fn(t); () }
+
+  override def forall(fn: T => Boolean): Boolean =
+    F.forall(ft)(fn)
+
+  override def headOption: Option[T] = F.find(ft)(_ => true)
+  override def lastOption: Option[T] =
+    F.foldRight(ft, Eval.now(Option.empty[T])) { (t, opt) =>
+      opt.map {
+        case None => Some(t)
+        case some => some
+      }
+    }.value
+
+  override def isEmpty: Boolean = F.isEmpty(ft)
+
+  override def max[B >: T](implicit O: Ordering[B]): T =
+    F.maximumOption(ft)(Order.fromOrdering(O).on { t: T => t }).get
+
+  override def min[B >: T](implicit O: Ordering[B]): T =
+    F.minimumOption(ft)(Order.fromOrdering(O).on { t: T => t }).get
+
+  override def nonEmpty: Boolean = F.nonEmpty(ft)
+  override def product[B >: T](implicit N: Numeric[B]): B =
+    F.foldLeft(ft, N.one)(N.times _)
+
+  override def size: Int = F.foldMap(ft)(_ => 1)
+  override def sum[B >: T](implicit N: Numeric[B]): B =
+    F.foldLeft(ft, N.zero)(N.plus _)
 }
