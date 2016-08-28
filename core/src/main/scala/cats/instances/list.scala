@@ -8,8 +8,8 @@ import scala.collection.mutable.ListBuffer
 
 trait ListInstances extends cats.kernel.instances.ListInstances {
 
-  implicit val catsStdInstancesForList: TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] with RecursiveTailRecM[List] =
-    new TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] with RecursiveTailRecM[List] {
+  implicit val catsStdInstancesForList: TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] with RecursiveTailRecM[List] with FunctorFlatten[List] =
+    new TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] with RecursiveTailRecM[List] with FunctorFlatten[List] {
 
       def empty[A]: List[A] = Nil
 
@@ -19,6 +19,19 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def map[A, B](fa: List[A])(f: A => B): List[B] =
         fa.map(f)
+
+      override def mapFlatten[G[_]: Foldable, A, B](fa: List[A])(f: A => G[B]): List[B] = {
+        val buf = List.newBuilder[B]
+        val fg = Foldable[G]
+        @tailrec def go(l: List[A]): Unit = l match {
+          case Nil => ()
+          case a :: tail =>
+            fg.foldLeft(f(a), ()) { (_, b) => buf += b; () }
+            go(tail)
+        }
+        go(fa)
+        buf.result
+      }
 
       def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] =
         fa.flatMap(f)

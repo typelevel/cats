@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.discipline.{MonadCombineTests, CoflatMapTests, SerializableTests, TraverseFilterTests, CartesianTests}
+import cats.laws.discipline.{MonadCombineTests, CoflatMapTests, SerializableTests, TraverseFilterTests, CartesianTests, FunctorFlattenTests}
 
 class VectorTests extends CatsSuite {
   checkAll("Vector[Int]", CartesianTests[Vector].cartesian[Int, Int, Int])
@@ -15,6 +15,9 @@ class VectorTests extends CatsSuite {
 
   checkAll("Vector[Int] with Option", TraverseFilterTests[Vector].traverseFilter[Int, Int, Int, List[Int], Option, Option])
   checkAll("TraverseFilter[Vector]", SerializableTests.serializable(TraverseFilter[Vector]))
+
+  checkAll("Vector[Int] with Option, Vector", FunctorFlattenTests[Vector].functorFlatten[Int, Int, Int, Option, Vector])
+  checkAll("FunctorFlatten[Vector]", SerializableTests.serializable(FunctorFlatten[Vector]))
 
   test("show") {
     Vector(1, 2, 3).show should === ("Vector(1, 2, 3)")

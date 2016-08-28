@@ -7,8 +7,8 @@ import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
-  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] =
-    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] {
+  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] with FunctorFlatten[Vector] =
+    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] with FunctorFlatten[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 
@@ -18,6 +18,21 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def map[A, B](fa: Vector[A])(f: A => B): Vector[B] =
         fa.map(f)
+
+      override def mapFlatten[G[_]: Foldable, A, B](fa: Vector[A])(f: A => G[B]): Vector[B] = {
+        val buf = Vector.newBuilder[B]
+        val fg = Foldable[G]
+        @tailrec def go(it: Iterator[A]): Unit =
+          if (it.isEmpty) ()
+          else {
+            val a = it.next()
+            fg.foldLeft(f(a), ()) { (_, b) => buf += b; () }
+            go(it)
+          }
+
+        go(fa.iterator)
+        buf.result
+      }
 
       def flatMap[A, B](fa: Vector[A])(f: A => Vector[B]): Vector[B] =
         fa.flatMap(f)

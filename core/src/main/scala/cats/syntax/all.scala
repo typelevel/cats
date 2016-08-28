@@ -20,6 +20,7 @@ trait AllSyntax
     with FoldableSyntax
     with FunctorSyntax
     with FunctorFilterSyntax
+    with FunctorFlattenSyntax
     with GroupSyntax
     with InvariantSyntax
     with ListSyntax
