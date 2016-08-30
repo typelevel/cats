@@ -5,7 +5,6 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
 import scala.xml.transform.{RewriteRule, RuleTransformer}
-import com.github.tkawachi.doctest.DoctestPlugin
 
 lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev environment")
 
