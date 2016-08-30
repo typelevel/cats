@@ -4,7 +4,7 @@
 [![Workflow](https://badge.waffle.io/typelevel/cats.svg?label=ready&title=Ready)](https://waffle.io/typelevel/cats)
 [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
 [![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
-[![Maven Central](https://img.shields.io/maven-central/v/org.typelevel/cats_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/org.typelevel/cats_2.11)
+[![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange)](https://index.scala-lang.org/typelevel/cats/cats-core)
 [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.8.svg)](http://scala-js.org)
 
 ### Overview
