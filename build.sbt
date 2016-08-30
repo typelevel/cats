@@ -93,7 +93,8 @@ lazy val commonJsSettings = Seq(
   // Only used for scala.js for now
   botBuild := scala.sys.env.get("TRAVIS").isDefined,
   // batch mode decreases the amount of memory needed to compile scala.js code
-  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value)
+  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value),
+  doctestGenTests := Seq.empty
 )
 
 lazy val commonJvmSettings = Seq(
@@ -186,6 +187,7 @@ lazy val catsJS = project.in(file(".catsJS"))
   .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS, js)
   .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
+
 
 
 lazy val macros = crossProject.crossType(CrossType.Pure)
@@ -293,6 +295,7 @@ lazy val js = project
   .settings(commonJsSettings:_*)
   .enablePlugins(ScalaJSPlugin)
 
+
 // cats-jvm is JVM-only
 lazy val jvm = project
   .dependsOn(macrosJVM, coreJVM, testsJVM % "test-internal -> test")
@@ -383,13 +386,17 @@ lazy val publishSettings = Seq(
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/compile;coreJVM/compile;kernelLawsJVM/compile;lawsJVM/compile;freeJVM/compile;kernelLawsJVM/test;coreJVM/test;testsJVM/test;freeJVM/test;jvm/test;bench/test")
+addCommandAlias("buildJVM", "catsJVM/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
 
-addCommandAlias("validateJS", ";macrosJS/compile;kernelJS/compile;coreJS/compile;kernelLawsJS/compile;lawsJS/compile;kernelLawsJS/test;testsJS/test;js/test")
+addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 
-addCommandAlias("validate", ";clean;validateJS;validateJVM")
+addCommandAlias("validateKernelJS", "kernelLawsJS/test")
+
+addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
+
+addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line.
@@ -469,8 +476,8 @@ lazy val sharedReleaseProcess = Seq(
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
-    //runClean, // disabled to reduce memory usage during release
-    //runTest, // temporarily disabled for 0.7.0
+    runClean,
+    releaseStepCommand("validate"),
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
