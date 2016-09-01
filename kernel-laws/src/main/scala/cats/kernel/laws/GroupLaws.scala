@@ -1,6 +1,8 @@
-package cats.kernel.laws
+package cats.kernel
+package laws
 
 import cats.kernel._
+import cats.kernel.instances.option._
 
 import org.typelevel.discipline.Laws
 
@@ -27,7 +29,10 @@ trait GroupLaws[A] extends Laws {
     Rules.serializable(A),
     Rules.associativity(A.combine),
     Rules.repeat1("combineN")(A.combineN),
-    Rules.repeat2("combineN", "|+|")(A.combineN)(A.combine)
+    Rules.repeat2("combineN", "|+|")(A.combineN)(A.combine),
+    "combineAllOption" -> forAll { (xs: Vector[A]) =>
+      A.combineAllOption(xs) ?== xs.reduceOption(A.combine)
+    }
   )
 
   def band(implicit A: Band[A]): GroupProperties = new GroupProperties(
@@ -55,7 +60,10 @@ trait GroupLaws[A] extends Laws {
     Rules.rightIdentity(A.empty)(A.combine),
     Rules.repeat0("combineN", "id", A.empty)(A.combineN),
     Rules.collect0("combineAll", "id", A.empty)(A.combineAll),
-    Rules.isId("isEmpty", A.empty)(A.isEmpty)
+    Rules.isId("isEmpty", A.empty)(A.isEmpty),
+    "combineAll" -> forAll { (xs: Vector[A]) =>
+      A.combineAll(xs) ?== (A.empty +: xs).reduce(A.combine)
+    }
   )
 
   def commutativeMonoid(implicit A: CommutativeMonoid[A]): GroupProperties = new GroupProperties(

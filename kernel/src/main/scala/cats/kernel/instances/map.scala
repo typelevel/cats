@@ -44,7 +44,7 @@ class MapMonoid[K, V](implicit V: Semigroup[V]) extends Monoid[Map[K, V]]  {
       val it = m.iterator
       while (it.hasNext) {
         val (k, v) = it.next
-        m.updated(k, Semigroup.maybeCombine(m.get(k), v))
+        acc(k) = Semigroup.maybeCombine(acc.get(k), v)
       }
     }
     StaticMethods.wrapMutableMap(acc)
