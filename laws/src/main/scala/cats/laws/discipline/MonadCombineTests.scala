@@ -7,7 +7,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import Prop._
 
-trait MonadCombineTests[F[_]] extends MonadFilterTests[F] with AlternativeTests[F] {
+trait MonadCombineTests[F[_]] extends MonadTests[F] with FunctorFilterTests[F] with AlternativeTests[F] {
   def laws: MonadCombineLaws[F]
 
   def monadCombine[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
@@ -25,8 +25,11 @@ trait MonadCombineTests[F[_]] extends MonadFilterTests[F] with AlternativeTests[
     new RuleSet {
       def name: String = "monadCombine"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(monadFilter[A, B, C], alternative[A, B, C])
+      def parents: Seq[RuleSet] = Seq(monad[A, B, C], functorFilter[A, B, C], alternative[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
+        "monadCombine left empty"          -> forAll(laws.monadCombineLeftEmpty[A, B] _),
+        "monadCombine right empty"         -> forAll(laws.monadCombineRightEmpty[A, B] _),
+        "monadCombine consistency"         -> forAll(laws.monadCombineConsistency[A, B] _),
         "monadCombine left distributivity" -> forAll(laws.monadCombineLeftDistributivity[A, B] _)
       )
     }
