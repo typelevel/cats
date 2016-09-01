@@ -2,20 +2,22 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait FunctorFilterTests[F[_]] extends FunctorTests[F] {
   def laws: FunctorFilterLaws[F]
 
   def functorFilter[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-                                                        ArbFA: Arbitrary[F[A]],
-                                                        ArbAOB: Arbitrary[A => Option[B]],
-                                                        ArbBOC: Arbitrary[B => Option[C]],
-                                                        ArbAB: Arbitrary[A => C],
-                                                        EqFA: Eq[F[A]],
-                                                        EqFC: Eq[F[C]]
+    ArbFA: Arbitrary[F[A]],
+    ArbAOB: Arbitrary[A => Option[B]],
+    ArbBOC: Arbitrary[B => Option[C]],
+    ArbAB: Arbitrary[A => C],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    EqFA: Eq[F[A]],
+    EqFC: Eq[F[C]]
   ): RuleSet = {
     new DefaultRuleSet(
       name = "functorFilter",

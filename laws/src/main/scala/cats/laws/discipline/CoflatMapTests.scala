@@ -2,8 +2,7 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 import org.typelevel.discipline.Laws
 
@@ -12,6 +11,11 @@ trait CoflatMapTests[F[_]] extends Laws with FunctorTests[F] {
 
   def coflatMap[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    CogenFA: Cogen[F[A]],
+    CogenFB: Cogen[F[B]],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]],
     EqFFA: Eq[F[F[A]]],

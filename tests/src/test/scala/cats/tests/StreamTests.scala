@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.laws.discipline.{CoflatMapTests, MonadCombineTests, SerializableTests, TraverseFilterTests, CartesianTests}
+import cats.laws.discipline.arbitrary._
 
 class StreamTests extends CatsSuite {
   checkAll("Stream[Int]", CartesianTests[Stream].cartesian[Int, Int, Int])

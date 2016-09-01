@@ -114,16 +114,18 @@ lazy val includeGeneratedSrc: Setting[_] = {
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
-lazy val scalacheckVersion = "1.12.5"
+lazy val scalaCheckVersion = "1.13.1"
+lazy val scalaTestVersion = "3.0.0"
+lazy val disciplineVersion = "0.6-SNAPSHOT"
 
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion,
-  libraryDependencies += "org.typelevel" %%% "discipline" % "0.4")
+  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
+  libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion)
 
 lazy val testingDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.2",
   libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.2" % "test",
-  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.0-M8" % "test")
+  libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
 
 
 /**
@@ -246,7 +248,7 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(catsSettings:_*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
   .settings(includeGeneratedSrc)
-  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion % "test")
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 

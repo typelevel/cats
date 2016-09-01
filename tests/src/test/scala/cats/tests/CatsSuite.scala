@@ -7,14 +7,14 @@ import cats.instances.AllInstances
 import cats.syntax.{AllSyntax, EqOps}
 
 import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.{FunSuite, FunSuiteLike, Matchers}
 import org.scalatest.prop.{Configuration, GeneratorDrivenPropertyChecks}
 import org.typelevel.discipline.scalatest.Discipline
 
-import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Arbitrary.arbitrary
+//import org.scalacheck.{Arbitrary, Gen}
+//import org.scalacheck.Arbitrary.arbitrary
 
-import scala.util.{Failure, Success, Try}
+//import scala.util.{Failure, Success, Try}
 
 trait TestSettings extends Configuration with Matchers {
 
@@ -35,7 +35,16 @@ trait TestSettings extends Configuration with Matchers {
  * An opinionated stack of traits to improve consistency and reduce
  * boilerplate in Cats tests.
  */
-trait CatsSuite extends FunSuite with Matchers with GeneratorDrivenPropertyChecks with Discipline with TestSettings with AllInstances with AllSyntax with TestInstances with StrictCatsEquality {
+trait CatsSuite extends FunSuite
+    with Matchers
+    with GeneratorDrivenPropertyChecks
+    with Discipline
+    with TestSettings
+    with AllInstances
+    with AllSyntax
+    with TestInstances
+    with StrictCatsEquality { self: FunSuiteLike =>
+
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration
 
@@ -54,9 +63,9 @@ trait SlowCatsSuite extends CatsSuite {
 }
 
 sealed trait TestInstances {
-  // To be replaced by https://github.com/rickynils/scalacheck/pull/170
-  implicit def arbitraryTry[A: Arbitrary]: Arbitrary[Try[A]] =
-    Arbitrary(Gen.oneOf(
-      arbitrary[A].map(Success(_)),
-      arbitrary[Throwable].map(Failure(_))))
+  // // To be replaced by https://github.com/rickynils/scalacheck/pull/170
+  // implicit def arbitraryTry[A: Arbitrary]: Arbitrary[Try[A]] =
+  //   Arbitrary(Gen.oneOf(
+  //     arbitrary[A].map(Success(_)),
+  //     arbitrary[Throwable].map(Failure(_))))
 }

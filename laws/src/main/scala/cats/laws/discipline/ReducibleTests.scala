@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop.forAll
 
 trait ReducibleTests[F[_]] extends FoldableTests[F] {
@@ -12,9 +12,10 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
     ArbFA: Arbitrary[F[A]],
     ArbFGA: Arbitrary[F[G[A]]],
     ArbGB: Arbitrary[G[B]],
-    B: Monoid[B],
+    CogenA: Cogen[A],
     EqG: Eq[G[Unit]],
-    EqB: Eq[B]
+    EqB: Eq[B],
+    MonoidB: Monoid[B]
   ): RuleSet =
     new DefaultRuleSet(
       name = "reducible",

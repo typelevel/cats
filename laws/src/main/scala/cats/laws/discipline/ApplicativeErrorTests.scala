@@ -5,7 +5,7 @@ package discipline
 import cats.data.EitherT
 import cats.laws.discipline.CartesianTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
-import org.scalacheck.{Arbitrary, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop.forAll
 
 trait ApplicativeErrorTests[F[_], E] extends ApplicativeTests[F] {
@@ -18,6 +18,10 @@ trait ApplicativeErrorTests[F[_], E] extends ApplicativeTests[F] {
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
     ArbE: Arbitrary[E],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    CogenE: Cogen[E],
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
