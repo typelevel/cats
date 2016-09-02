@@ -1,3 +1,32 @@
+## Version 0.7.2
+
+> 2016 September 1
+
+Version 0.7.2 is a patch release that was released to fix a major bug
+([#1346](https://github.com/typelevel/cats/issues/1346)) that appeared
+in 0.7.0. It also contains several other improvements.
+
+It should be safe to upgrade from 0.7.0 to 0.7.2 -- there are no major
+API changes between these releases.
+
+### Changes
+
+Fixes:
+
+ * [#1347](https://github.com/typelevel/cats/pull/1347): fixes broken `Monoid[Map[K, V]].combineAll` implementation.
+ * [#1304](https://github.com/typelevel/cats/pull/1304): fix `CoflatMap` documentation.
+ * [#1322](https://github.com/typelevel/cats/pull/1322): fix SBT commands (`release`, `validate`, etc.).
+ * [#1311](https://github.com/typelevel/cats/pull/1311): rename some implicit instances for consistency.
+
+Additions:
+
+ * [#1319](https://github.com/typelevel/cats/pull/1347): add missing `BigDecimal` instances.
+ * [#1324](https://github.com/typelevel/cats/pull/1324): add missing function and `BitSet` instances.
+
+Note that 0.7.2 was preceeded by a botched 0.7.1. release. Please
+avoid using this version of Cats -- it has major incompatibilities
+with 0.7.0 and is not documented here.
+
 ## Version 0.7.0
 
 > 2016 August 21
