@@ -116,7 +116,7 @@ lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ sc
 
 lazy val scalaCheckVersion = "1.13.1"
 lazy val scalaTestVersion = "3.0.0"
-lazy val disciplineVersion = "0.6-SNAPSHOT"
+lazy val disciplineVersion = "0.6"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
