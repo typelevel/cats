@@ -18,6 +18,7 @@ possible:
  * Aldo Stracquadanio
  * Alejandro Gómez
  * Alessandro Lacava
+ * Alexandru Nedelcu
  * Alexander Semenov
  * Alexey Levan
  * Alissa Pajer
@@ -37,6 +38,7 @@ possible:
  * Brian McKenna
  * Cody Allen
  * Colt Frederickson
+ * Csongor Kiss
  * Dale Wijnand
  * Daniel Spiewak
  * Dave Gurnell
@@ -53,11 +55,13 @@ possible:
  * Eugene Yokota
  * Feynman Liang
  * Frank S. Thomas
+ * Giulio De Luise
  * Hamish Dickson
  * Ian McIntosh
  * ImLiar
  * Jean-Rémi Desjardins
  * Jisoo Park
+ * Jose Emilio Labra Gayo
  * Josh Marcus
  * Juan Pedro Moreno
  * Julien Richard-Foy

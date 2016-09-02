@@ -30,7 +30,7 @@ To get started with SBT, simply add the following to your `build.sbt`
 file:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats" % "0.7.0"
+libraryDependencies += "org.typelevel" %% "cats" % "0.7.2"
 ```
 
 This will pull in all of Cats' modules. If you only require some
