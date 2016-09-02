@@ -4,7 +4,7 @@
 
 Version 0.7.2 is a patch release that was released to fix a major bug
 ([#1346](https://github.com/typelevel/cats/issues/1346)) that appeared
-in 0.7.2. It also contains several other improvements.
+in 0.7.0. It also contains several other improvements.
 
 It should be safe to upgrade from 0.7.0 to 0.7.2 -- there are no major
 API changes between these releases.
