@@ -103,6 +103,15 @@ lazy val commonJvmSettings = Seq(
 // JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
 ) ++ catsDoctestSettings
 
+lazy val includeGeneratedSrc: Setting[_] = {
+  mappings in (Compile, packageSrc) ++= {
+    val base = (sourceManaged in Compile).value
+    (managedSources in Compile).value.map { file =>
+      file -> file.relativeTo(base).get.getPath
+    }
+  }
+}
+
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
 lazy val scalacheckVersion = "1.12.5"
@@ -208,12 +217,7 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(publishSettings: _*)
   .settings(scoverageSettings: _*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(KernelBoiler.gen))
-  .settings(mappings in (Compile, packageSrc) ++= {
-    val base = (sourceManaged in Compile).value
-    (managedSources in Compile).value.map { file =>
-      file -> file.relativeTo(base).get.getPath
-    }
-  })
+  .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings((commonJvmSettings ++ (mimaPreviousArtifacts := Set("org.typelevel" %% "cats-kernel" % "0.7.0"))):_*)
 
@@ -241,12 +245,7 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-core")
   .settings(catsSettings:_*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
-  .settings(mappings in (Compile, packageSrc) ++= {
-    val base = (sourceManaged in Compile).value
-    (managedSources in Compile).value.map { file =>
-      file -> file.relativeTo(base).get.getPath
-    }
-  })
+  .settings(includeGeneratedSrc)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion % "test")
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
