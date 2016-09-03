@@ -92,8 +92,10 @@ class FunctionKTests extends CatsSuite {
     }
   }
 
-  // lifting concrete types should fail to compile
-  assertTypeError("FunctionK.lift(sample[String])")
-  assertTypeError("FunctionK.lift(sample[Nothing])")
+  { // lifting concrete types should fail to compile
+    def sample[A](option: Option[A]): List[A] = option.toList
+    assertTypeError("FunctionK.lift(sample[String])")
+    assertTypeError("FunctionK.lift(sample[Nothing])")
+  }
 
 }
