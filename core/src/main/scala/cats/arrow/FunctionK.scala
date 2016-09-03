@@ -35,7 +35,7 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
 
   /**
     * Composes two instances of FunctionK into a new FunctionK that transforms
-    * the [[Coproduct]]`[F, H, ?]` to `G`.
+    * a [[cats.data.Coproduct]] to a single functor.
     *
     * This transformation will be used to transform left `F` values while
     * `h` will be used to transform right `H` values.
@@ -62,8 +62,14 @@ object FunctionK {
   /**
     * Lifts function `f` of `F[A] => G[A]` into a `FunctionK[F, G]`.
     *
+    * {{{
+    *   def headOption[A](list: List[A]): Option[A] = list.headOption
+    *   val lifted: FunctionK[List, Option] = FunctionK.lift(headOption)
+    * }}}
+    *
     * Note: This method has a macro implementation that returns a new
     * `FunctionK` instance as follows:
+    *
     * {{{
     *   new FunctionK[F, G] {
     *     def apply[A](fa: F[A]): G[A] = f(fa)
