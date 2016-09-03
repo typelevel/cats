@@ -94,7 +94,8 @@ lazy val commonJsSettings = Seq(
   botBuild := scala.sys.env.get("TRAVIS").isDefined,
   // batch mode decreases the amount of memory needed to compile scala.js code
   scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value),
-  doctestGenTests := Seq.empty
+  doctestGenTests := Seq.empty,
+  doctestWithDependencies := false
 )
 
 lazy val commonJvmSettings = Seq(

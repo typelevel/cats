@@ -73,8 +73,8 @@ class FutureTests extends CatsSuite {
   // ScalaCheck? is something else happening? who knows?
   //
   // for now we'll let sleeping dogs lie.
-  implicit def fakeArbitraryFunction[A: Cogen, B: Arbitrary]: Arbitrary[A => B] =
-    Arbitrary(arbitrary[B].map(b => (a: A) => b))
+  //implicit def fakeArbitraryFunction[A: Cogen, B: Arbitrary]: Arbitrary[A => B] =
+  //  Arbitrary(arbitrary[B].map(b => (a: A) => b))
 
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
