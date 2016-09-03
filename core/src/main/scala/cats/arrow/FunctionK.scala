@@ -32,12 +32,25 @@ object FunctionK {
       def apply[A](fa: F[A]): F[A] = fa
     }
 
+  /**
+    * Lifts function `f` of `F[A] => G[A]` into a `FunctionK[F, G]`.
+    *
+    * Note: This method has a macro implementation that returns a new
+    * `FunctionK` instance as follows:
+    * {{{
+    *   new FunctionK[F, G] {
+    *     def apply[A](fa: F[A]): G[A] = f(fa)
+    *   }
+    * }}}
+    *
+    * Additionally, the type parameters on `f` must not be specified.
+    */
   def lift[F[_], G[_]](f: (F[α] ⇒ G[α]) forSome { type α }): FunctionK[F, G] =
     macro FunctionKMacros.lift[F, G]
 
 }
 
-object FunctionKMacros extends MacroCompat {
+private[arrow] object FunctionKMacros extends MacroCompat {
 
   def lift[F[_], G[_]](c: Context)(
     f: c.Expr[(F[α] ⇒ G[α]) forSome { type α }]
@@ -50,27 +63,29 @@ object FunctionKMacros extends MacroCompat {
   private[this] class Lifter[C <: Context](val c: C) {
     import c.universe._
 
-    def lift[F[_], G[_]](tree: Tree)(implicit evF: c.WeakTypeTag[F[_]], evG: c.WeakTypeTag[G[_]]): Tree =
-      unblock(tree) match {
-        case q"""($param) => $trans[..$typeArgs](${ arg: Ident })""" if param.name == arg.name ⇒
-          typeArgs
-            .collect { case tt: TypeTree => tt }
-            .find(tt => Option(tt.original).isDefined)
-            .foreach { param => c.abort(param.pos,
-              s"type parameter $param must not be supplied when lifting function $trans to FunctionK")
-          }
+    def lift[F[_], G[_]](tree: Tree)(
+      implicit evF: c.WeakTypeTag[F[_]], evG: c.WeakTypeTag[G[_]]
+    ): Tree = unblock(tree) match {
+      case q"($param) => $trans[..$typeArgs](${ arg: Ident })" if param.name == arg.name ⇒
 
-          val F = punchHole(evF.tpe)
-          val G = punchHole(evG.tpe)
+        typeArgs
+          .collect { case tt: TypeTree => tt }
+          .find(tt => Option(tt.original).isDefined)
+          .foreach { param => c.abort(param.pos,
+            s"type parameter $param must not be supplied when lifting function $trans to FunctionK")
+        }
 
-          q"""
-          new FunctionK[$F, $G] {
-            def apply[A](fa: $F[A]): $G[A] = $trans(fa)
-          }
-         """
-        case other ⇒
-          c.abort(other.pos, s"Unexpected tree $other when lifting to FunctionK")
-      }
+        val F = punchHole(evF.tpe)
+        val G = punchHole(evG.tpe)
+
+        q"""
+        new FunctionK[$F, $G] {
+          def apply[A](fa: $F[A]): $G[A] = $trans(fa)
+        }
+       """
+      case other ⇒
+        c.abort(other.pos, s"Unexpected tree $other when lifting to FunctionK")
+    }
 
     private[this] def unblock(tree: Tree): Tree = tree match {
       case Block(Nil, expr) ⇒ expr
