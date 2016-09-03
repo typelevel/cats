@@ -208,6 +208,12 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(publishSettings: _*)
   .settings(scoverageSettings: _*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(KernelBoiler.gen))
+  .settings(mappings in (Compile, packageSrc) ++= {
+    val base = (sourceManaged in Compile).value
+    (managedSources in Compile).value.map { file =>
+      file -> file.relativeTo(base).get.getPath
+    }
+  })
   .jsSettings(commonJsSettings:_*)
   .jvmSettings((commonJvmSettings ++ (mimaPreviousArtifacts := Set("org.typelevel" %% "cats-kernel" % "0.7.0"))):_*)
 
@@ -235,6 +241,12 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-core")
   .settings(catsSettings:_*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
+  .settings(mappings in (Compile, packageSrc) ++= {
+    val base = (sourceManaged in Compile).value
+    (managedSources in Compile).value.map { file =>
+      file -> file.relativeTo(base).get.getPath
+    }
+  })
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalacheckVersion % "test")
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
