@@ -3,7 +3,7 @@ package arrow
 
 import cats.data.Coproduct
 
-import reflect.macros.blackbox.Context
+import cats.macros.MacroCompat
 
 trait FunctionK[F[_], G[_]] extends Serializable { self =>
   def apply[A](fa: F[A]): G[A]
@@ -37,13 +37,12 @@ object FunctionK {
 
 }
 
-object FunctionKMacros {
+object FunctionKMacros extends MacroCompat {
 
-  def lift[
-    F[_]: λ[α[_] ⇒ c.WeakTypeTag[α[_]]],
-    G[_]: λ[α[_] ⇒ c.WeakTypeTag[α[_]]]
-  ](c: Context)(
-    f: c.Expr[F[α] ⇒ G[α]] forSome { type α }
+  def lift[F[_], G[_]](c: Context)(
+    f: c.Expr[(F[α] ⇒ G[α]) forSome { type α }]
+  )(
+    implicit evF: c.WeakTypeTag[F[_]], evG: c.WeakTypeTag[G[_]]
   ): c.Expr[FunctionK[F, G]] = {
     import c.universe._
 
@@ -54,7 +53,7 @@ object FunctionKMacros {
 
     def punchHole(tpe: Type): Tree = tpe match {
       case PolyType(undet :: Nil, underlying: TypeRef) ⇒
-        val α = TypeName("α")
+        val α = compatNewTypeName(c, "α")
         def rebind(typeRef: TypeRef): Tree =
           if (typeRef.sym == undet) tq"$α"
           else {
@@ -82,8 +81,8 @@ object FunctionKMacros {
             s"type parameter $param must not be supplied when lifting function $trans to FunctionK")
           }
 
-        val F = punchHole(weakTypeTag[F[_]].tpe)
-        val G = punchHole(weakTypeTag[G[_]].tpe)
+        val F = punchHole(evF.tpe)
+        val G = punchHole(evG.tpe)
 
         q"""
           new FunctionK[$F, $G] {
