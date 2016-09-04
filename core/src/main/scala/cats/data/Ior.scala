@@ -140,27 +140,9 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
     def show(f: A Ior B): String = f.show
   }
 
-  // scalastyle:off cyclomatic.complexity
   implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] = new Semigroup[Ior[A, B]] {
-    override def combine(x: Ior[A, B], y: Ior[A, B]): Ior[A, B] = x match {
-      case Ior.Left(a) => y match {
-        case Ior.Left(aa) => Ior.left(Semigroup[A].combine(a, aa))
-        case Ior.Right(bb) => Ior.both(a, bb)
-        case Ior.Both(aa, bb) => Ior.both(Semigroup[A].combine(a, aa), bb)
-      }
-      case Ior.Right(b) => y match {
-        case Ior.Left(aa) => Ior.both(aa, b)
-        case Ior.Right(bb) => Ior.right(Semigroup[B].combine(b, bb))
-        case Ior.Both(aa, bb) => Ior.both(aa, Semigroup[B].combine(b, bb))
-      }
-      case Ior.Both(a, b) => y match {
-        case Ior.Left(aa) => Ior.both(Semigroup[A].combine(a, aa), b)
-        case Ior.Right(bb) => Ior.right(Semigroup[B].combine(b, bb))
-        case Ior.Both(aa, bb) => Ior.both(Semigroup[A].combine(a, aa), Semigroup[B].combine(b, bb))
-      }
-    }
+    def combine(x: Ior[A, B], y: Ior[A, B]) = x.append(y)
   }
-  // scalastyle:on cyclomatic.complexity
 
   implicit def catsDataMonadForIor[A: Semigroup]: Monad[A Ior ?] with RecursiveTailRecM[A Ior ?] = new Monad[A Ior ?] with RecursiveTailRecM[A Ior ?] {
     def pure[B](b: B): A Ior B = Ior.right(b)
