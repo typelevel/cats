@@ -1,7 +1,9 @@
 package cats
 package tests
 
+import cats.data.NonEmptyVector
 import cats.laws.discipline.{MonadCombineTests, CoflatMapTests, SerializableTests, TraverseFilterTests, CartesianTests}
+import cats.laws.discipline.arbitrary._
 
 class VectorTests extends CatsSuite {
   checkAll("Vector[Int]", CartesianTests[Vector].cartesian[Int, Int, Int])
@@ -30,5 +32,15 @@ class VectorTests extends CatsSuite {
     forAll { vec: Vector[Int] =>
       FunctorFilter[Vector].collect(vec)(evenPf) should === (vec.collect(evenPf))
     }
+  }
+
+  test("nev => vector => nev returns original nev")(
+    forAll { fa: NonEmptyVector[Int] =>
+      assert(fa.toVector.toNev == Some(fa))
+    }
+  )
+
+  test("toNev on empty vector returns None"){
+    assert(Vector.empty[Int].toNev == None)
   }
 }
