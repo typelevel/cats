@@ -140,6 +140,10 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
     def show(f: A Ior B): String = f.show
   }
 
+  implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] = new Semigroup[Ior[A, B]] {
+    def combine(x: Ior[A, B], y: Ior[A, B]) = x.append(y)
+  }
+
   implicit def catsDataMonadForIor[A: Semigroup]: Monad[A Ior ?] with RecursiveTailRecM[A Ior ?] = new Monad[A Ior ?] with RecursiveTailRecM[A Ior ?] {
     def pure[B](b: B): A Ior B = Ior.right(b)
     def flatMap[B, C](fa: A Ior B)(f: B => A Ior C): A Ior C = fa.flatMap(f)

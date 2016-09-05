@@ -2,7 +2,8 @@ package cats
 package tests
 
 import cats.data.Ior
-import cats.laws.discipline.{BifunctorTests, TraverseTests, MonadTests, SerializableTests, CartesianTests}
+import cats.kernel.laws.GroupLaws
+import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
 
@@ -19,6 +20,9 @@ class IorTests extends CatsSuite {
   checkAll("Ior[String, Int] with Option", TraverseTests[String Ior ?].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[String Ior ?]", SerializableTests.serializable(Traverse[String Ior ?]))
   checkAll("? Ior ?", BifunctorTests[Ior].bifunctor[Int, Int, Int, String, String, String])
+
+  checkAll("Semigroup[Ior[A: Semigroup, B: Semigroup]]", GroupLaws[Ior[List[Int], List[Int]]].semigroup)
+  checkAll("SerializableTest Semigroup[Ior[A: Semigroup, B: Semigroup]]", SerializableTests.serializable(Semigroup[Ior[List[Int], List[Int]]]))
 
   test("left Option is defined left and both") {
     forAll { (i: Int Ior String) =>
