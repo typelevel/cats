@@ -185,6 +185,28 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
+  test(":+ is consistent with concat") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
+      nonEmptyVector :+ i should === (nonEmptyVector.concat(Vector(i)))
+    }
+  }
+  test("append is consistent with :+") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
+      nonEmptyVector append i should === (nonEmptyVector :+ i)
+    }
+  }
+
+  test("+: is consistent with concatNev") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
+      i +: nonEmptyVector should === (NonEmptyVector.of(i).concatNev(nonEmptyVector))
+    }
+  }
+  test("prepend is consistent with +:") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
+      nonEmptyVector prepend i should === (i +: nonEmptyVector)
+    }
+  }
+
   test("NonEmptyVector#of on varargs is consistent with NonEmptyVector#apply on Vector") {
     forAll { (head: Int, tail: Vector[Int]) =>
       NonEmptyVector.of(head, tail:_*) should === (NonEmptyVector(head, tail))

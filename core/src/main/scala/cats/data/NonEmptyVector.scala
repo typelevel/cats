@@ -57,6 +57,26 @@ final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
   def concatNev(other: NonEmptyVector[A]): NonEmptyVector[A] = new NonEmptyVector(toVector ++ other.toVector)
 
   /**
+   * Append an item to this, producing a new `NonEmptyVector`.
+   */
+  def append(a: A): NonEmptyVector[A] = new NonEmptyVector(toVector :+ a)
+
+  /**
+    * Alias for [[append]]
+    */
+  def :+(a: A): NonEmptyVector[A] = append(a)
+
+  /**
+   * Prepend an item to this, producing a new `NonEmptyVector`.
+   */
+  def prepend(a: A): NonEmptyVector[A] = new NonEmptyVector(a +: toVector)
+
+  /**
+    * Alias for [[prepend]]
+    */
+  def +:(a: A): NonEmptyVector[A] = prepend(a)
+
+  /**
    * Find the first element matching the predicate, if one exists
    */
   def find(f: A => Boolean): Option[A] = toVector.find(f)
