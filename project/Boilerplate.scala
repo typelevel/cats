@@ -111,21 +111,22 @@ object Boilerplate {
       }
 
       val n = if (arity == 1) { "" } else { arity.toString }
+      val aritySuffix = if (arity == 1) { "" } else { "A" + arity.toString }
 
       val map =
         if (arity == 1) s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F]): F[Z] = functor.map(${`a..n`})(f)"
-        else s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], cartesian: Cartesian[F]): F[Z] = Cartesian.map$n(${`a..n`})(f)"
+        else s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], cartesian: Cartesian[F]): F[Z] = Cartesian.map$aritySuffix(${`a..n`})(f)"
 
       val contramap =
         if (arity == 1) s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F]): F[Z] = contravariant.contramap(${`a..n`})(f)"
-        else s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.contramap$n(${`a..n`})(f)"
+        else s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.contramap$aritySuffix(${`a..n`})(f)"
 
       val imap =
         if (arity == 1) s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F]): F[Z] = invariant.imap(${`a..n`})(f)(g)"
-        else s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.imap$n(${`a..n`})(f)(g)"
+        else s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.imap$aritySuffix(${`a..n`})(f)(g)"
 
       val tupled = if (arity != 1) {
-        s"def tupled(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[(${`A..N`})] = Cartesian.tuple$n(${`a..n`})"
+        s"def tupled(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[(${`A..N`})] = Cartesian.tuple$aritySuffix(${`a..n`})"
       } else {
         ""
       }
@@ -141,7 +142,7 @@ object Boilerplate {
         |
         -  private[syntax] final class CartesianBuilder$arity[${`A..N`}]($params) {
         -    $next
-        -    def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)(${`a..n`})
+        -    def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$aritySuffix(f)(${`a..n`})
         -    $map
         -    $contramap
         -    $imap
@@ -169,8 +170,10 @@ object Boilerplate {
       val fArgsB = (a until arity) map { "f" + _ } mkString ","
       val argsA = (0 until a) map { n => "a" + n + ":A" + n } mkString ","
       val argsB = (a until arity) map { n => "a" + n + ":A" + n } mkString ","
-      def apN(n: Int) = if (n == 1) { "ap" } else { s"ap$n" }
+      def apN(n: Int) = if (n == 1) { "ap" } else { s"apA$n" }
       def allArgs = (0 until arity) map { "a" + _ } mkString ","
+
+      val aritySuffix = if (arity == 1) { "" } else { "A" + arity.toString }
 
       val apply =
         block"""
@@ -182,10 +185,10 @@ object Boilerplate {
       block"""
         |package cats
         |trait ApplyArityFunctions[F[_]] { self: Apply[F] =>
-        |  def tuple2[A, B](f1: F[A], f2: F[B]): F[(A, B)] = Cartesian.tuple2(f1, f2)(self, self)
-        -  def ap$arity[${`A..N`}, Z](f: F[(${`A..N`}) => Z])($fparams):F[Z] = $apply
-        -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Cartesian.map$arity($fparams)(f)(self, self)
-        -  def tuple$arity[${`A..N`}, Z]($fparams): F[(${`A..N`})] = Cartesian.tuple$arity($fparams)(self, self)
+        |  def tupleA2[A, B](f1: F[A], f2: F[B]): F[(A, B)] = Cartesian.tupleA2(f1, f2)(self, self)
+        -  def ap$aritySuffix[${`A..N`}, Z](f: F[(${`A..N`}) => Z])($fparams):F[Z] = $apply
+        -  def map$aritySuffix[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Cartesian.map$aritySuffix($fparams)(f)(self, self)
+        -  def tuple$aritySuffix[${`A..N`}, Z]($fparams): F[(${`A..N`})] = Cartesian.tuple$aritySuffix($fparams)(self, self)
         |}
       """
     }
@@ -202,20 +205,22 @@ object Boilerplate {
       val fparams = (fargs zip tpes) map { case (v,t) => s"$v:$t"} mkString ", "
       val fargsS = fargs mkString ", "
 
+      val aritySuffix = if (arity == 1) { "" } else { "A" + arity.toString }
+
       val nestedProducts = (0 until (arity - 2)).foldRight(s"cartesian.product(f${arity - 2}, f${arity - 1})")((i, acc) => s"cartesian.product(f$i, $acc)")
       val `nested (a..n)` = (0 until (arity - 2)).foldRight(s"(a${arity - 2}, a${arity - 1})")((i, acc) => s"(a$i, $acc)")
 
       block"""
          |package cats
          |trait CartesianArityFunctions {
-        -  def map$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit cartesian: Cartesian[F], functor: Functor[F]): F[Z] =
+        -  def map$aritySuffix[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit cartesian: Cartesian[F], functor: Functor[F]): F[Z] =
         -    functor.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
-        -  def contramap$arity[F[_], ${`A..N`}, Z]($fparams)(f: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], contravariant: functor.Contravariant[F]):F[Z] =
+        -  def contramap$aritySuffix[F[_], ${`A..N`}, Z]($fparams)(f: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], contravariant: functor.Contravariant[F]):F[Z] =
         -    contravariant.contramap($nestedProducts) { z => val ${`(a..n)`} = f(z); ${`nested (a..n)`} }
-        -  def imap$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[Z] =
+        -  def imap$aritySuffix[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[Z] =
         -    invariant.imap($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) } { z => val ${`(a..n)`} = g(z); ${`nested (a..n)`} }
-        -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[(${`A..N`})] =
-        -    imap$arity($fargsS)((${`_.._`}))(identity)
+        -  def tuple$aritySuffix[F[_], ${`A..N`}]($fparams)(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[(${`A..N`})] =
+        -    imap$aritySuffix($fargsS)((${`_.._`}))(identity)
          |}
       """
     }
@@ -235,18 +240,19 @@ object Boilerplate {
       val tupleArgs = (1 to arity) map { case n => s"t$arity._$n" } mkString ", "
 
       val n = if (arity == 1) { "" } else { arity.toString }
+      val aritySuffix = if (arity == 1) { "" } else { "A" + arity.toString }
 
       val map =
         if (arity == 1) s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F]): F[Z] = functor.map($tupleArgs)(f)"
-        else s"def map$arity[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], cartesian: Cartesian[F]): F[Z] = Cartesian.map$arity($tupleArgs)(f)"
+        else s"def map$aritySuffix[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], cartesian: Cartesian[F]): F[Z] = Cartesian.map$aritySuffix($tupleArgs)(f)"
 
       val contramap =
         if (arity == 1) s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F]): F[Z] = contravariant.contramap($tupleArgs)(f)"
-        else s"def contramap$arity[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.contramap$arity($tupleArgs)(f)"
+        else s"def contramap$aritySuffix[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.contramap$aritySuffix($tupleArgs)(f)"
 
       val imap =
         if (arity == 1) s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F]): F[Z] = invariant.imap($tupleArgs)(f)(g)"
-        else s"def imap$arity[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.imap$arity($tupleArgs)(f)(g)"
+        else s"def imap$aritySuffix[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.imap$aritySuffix($tupleArgs)(f)(g)"
 
       block"""
         |package cats
@@ -262,7 +268,7 @@ object Boilerplate {
         -  $map
         -  $contramap
         -  $imap
-        -  def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)($tupleArgs)
+        -  def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$aritySuffix(f)($tupleArgs)
         -}
         |
       """

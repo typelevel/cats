@@ -176,10 +176,10 @@ object SyntaxTests extends AllInstances with AllSyntax {
 
     val fb = mock[F[B]]
     val fabz = mock[F[(A, B) => Z]]
-    val fz0: F[Z] = fabz.ap2(fa, fb)
+    val fz0: F[Z] = fabz.apA2(fa, fb)
 
     val f = mock[(A, B) => Z]
-    val fz1: F[Z] = fa.map2(fb)(f)
+    val fz1: F[Z] = fa.mapA2(fb)(f)
 
     val f1 = mock[(A, B) => Z]
     val ff1 = mock[F[(A, B) => Z]]
@@ -193,34 +193,34 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val fz5: F[Z] = (fa |@| fb |@| fc).apWith(ff2)
   }
 
-  def testBifoldable[F[_, _]: Bifoldable, A, B, C, D: Monoid]: Unit = {
+  def testFoldable2[F[_, _]: Foldable2, A, B, C, D: Monoid]: Unit = {
     val fab = mock[F[A, B]]
 
     val f0 = mock[(C, A) => C]
     val g0 = mock[(C, B) => C]
-    val c0 = fab.bifoldLeft(mock[C])(f0, g0)
+    val c0 = fab.fold2Left(mock[C])(f0, g0)
 
     val f1 = mock[(A, Eval[C]) => Eval[C]]
     val g1 = mock[(B, Eval[C]) => Eval[C]]
-    val c1 = fab.bifoldRight(mock[Eval[C]])(f1, g1)
+    val c1 = fab.fold2Right(mock[Eval[C]])(f1, g1)
 
     val f2 = mock[A => D]
     val g2 = mock[B => D]
-    val d0 = fab.bifoldMap(f2, g2)
+    val d0 = fab.fold2Map(f2, g2)
   }
 
-  def testBitraverse[F[_, _]: Bitraverse, G[_]: Applicative, A, B, C, D]: Unit = {
+  def testTraverse2[F[_, _]: Traverse2, G[_]: Applicative, A, B, C, D]: Unit = {
     val f = mock[A => G[C]]
     val g = mock[B => G[D]]
 
     val fab = mock[F[A, B]]
-    val gfcd = fab.bitraverse(f, g)
+    val gfcd = fab.traverse2(f, g)
 
     val fgagb = mock[F[G[A], G[B]]]
-    val gfab = fgagb.bisequence
+    val gfab = fgagb.sequence2
   }
 
-  def testMonadCombine[F[_]: MonadCombine, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+  def testMonadCombine[F[_]: MonadCombine, G[_]: Foldable, H[_, _]: Foldable2, A, B]: Unit = {
     val fga = mock[F[G[A]]]
     val fa = fga.unite
 
@@ -266,8 +266,8 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val f = mock[(A, B, C) => Z]
     val ff = mock[F[(A, B, C) => Z]]
 
-    tfabc map3 f
-    (fa, fb, fc) map3 f
+    tfabc mapA3 f
+    (fa, fb, fc) mapA3 f
     (fa, fb, fc) apWith ff
 
     val tgabc = mock[(G[A], G[B])]
@@ -275,8 +275,8 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val gb = mock[G[B]]
     val g = mock[Z => (A, B)]
 
-    tgabc contramap2 g
-    (ga, gb) contramap2 g
+    tgabc contramapA2 g
+    (ga, gb) contramapA2 g
 
     val thabcde = mock[(H[A], H[B], H[C], H[D], H[E])]
     val ha = mock[H[A]]
@@ -287,8 +287,8 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val f5 = mock[(A, B, C, D, E) => Z]
     val g5 = mock[Z => (A, B, C, D, E)]
 
-    thabcde.imap5(f5)(g5)
-    (ha, hb, hc, hd, he).imap5(f5)(g5)
+    thabcde.imapA5(f5)(g5)
+    (ha, hb, hc, hd, he).imapA5(f5)(g5)
   }
 }
 

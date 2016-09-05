@@ -5,9 +5,9 @@ trait AllSyntax
     extends ApplicativeSyntax
     with ApplicativeErrorSyntax
     with ApplySyntax
-    with BifunctorSyntax
-    with BifoldableSyntax
-    with BitraverseSyntax
+    with Functor2Syntax
+    with Foldable2Syntax
+    with Traverse2Syntax
     with CartesianSyntax
     with CoflatMapSyntax
     with ComonadSyntax

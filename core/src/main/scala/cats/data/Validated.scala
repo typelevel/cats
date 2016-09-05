@@ -82,10 +82,10 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     Validated.fromEither(f(toEither))
 
   /**
-   * Validated is a [[functor.Bifunctor]], this method applies one of the
+   * Validated is a [[functor.Functor2]], this method applies one of the
    * given functions.
    */
-  def bimap[EE, AA](fe: E => EE, fa: A => AA): Validated[EE, AA] =
+  def map2[EE, AA](fe: E => EE, fa: A => AA): Validated[EE, AA] =
     fold(fe andThen Invalid.apply,
          fa andThen Valid.apply)
 
@@ -130,13 +130,13 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Apply a function to a Valid value, returning a new Valid value
    */
-  def map[B](f: A => B): Validated[E, B] = bimap(identity, f)
+  def map[B](f: A => B): Validated[E, B] = map2(identity, f)
 
   /**
    * Apply a function to an Invalid value, returning a new Invalid value.
    * Or, if the original valid was Valid, return it.
    */
-  def leftMap[EE](f: E => EE): Validated[EE, A] = bimap(f, identity)
+  def leftMap[EE](f: E => EE): Validated[EE, A] = map2(f, identity)
 
   /**
    * When Valid, apply the function, marking the result as valid
@@ -253,28 +253,28 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
     def show(f: Validated[A, B]): String = f.show
   }
 
-  implicit val catsDataBitraverseForValidated: Bitraverse[Validated] =
-    new Bitraverse[Validated] {
-      def bitraverse[G[_], A, B, C, D](fab: Validated[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Validated[C, D]] =
+  implicit val catsDataTraverse2ForValidated: Traverse2[Validated] =
+    new Traverse2[Validated] {
+      def traverse2[G[_], A, B, C, D](fab: Validated[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Validated[C, D]] =
         fab match {
           case Invalid(a) => G.map(f(a))(Validated.invalid)
           case Valid(b) => G.map(g(b))(Validated.valid)
         }
 
-      def bifoldLeft[A, B, C](fab: Validated[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
+      def fold2Left[A, B, C](fab: Validated[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
         fab match {
           case Invalid(a) => f(c, a)
           case Valid(b) => g(c, b)
         }
 
-      def bifoldRight[A, B, C](fab: Validated[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      def fold2Right[A, B, C](fab: Validated[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
         fab match {
           case Invalid(a) => f(a, c)
           case Valid(b) => g(b, c)
         }
 
-      override def bimap[A, B, C, D](fab: Validated[A, B])(f: A => C, g: B => D): Validated[C, D] =
-        fab.bimap(f, g)
+      override def map2[A, B, C, D](fab: Validated[A, B])(f: A => C, g: B => D): Validated[C, D] =
+        fab.map2(f, g)
 
       override def leftMap[A, B, C](fab: Validated[A, B])(f: A => C): Validated[C, B] =
         fab.leftMap(f)

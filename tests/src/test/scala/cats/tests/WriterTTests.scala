@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{EitherT, Validated, Writer, WriterT}
-import cats.functor.{Bifunctor, Contravariant}
+import cats.functor.{Functor2, Contravariant}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -133,8 +133,8 @@ class WriterTTests extends CatsSuite {
 
     Functor[Logged]
 
-    checkAll("WriterT[ListWrapper, ?, ?]", BifunctorTests[WriterT[ListWrapper, ?, ?]].bifunctor[Int, Int, Int, Int, Int, Int])
-    checkAll("Bifunctor[WriterT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bifunctor[WriterT[ListWrapper, ?, ?]]))
+    checkAll("WriterT[ListWrapper, ?, ?]", Functor2Tests[WriterT[ListWrapper, ?, ?]].functor2[Int, Int, Int, Int, Int, Int])
+    checkAll("Functor2[WriterT[ListWrapper, ?, ?]]", SerializableTests.serializable(Functor2[WriterT[ListWrapper, ?, ?]]))
   }
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[ListWrapper, ListWrapper[Int], ?]](WriterT.catsDataCoflatMapForWriterT(ListWrapper.functor))

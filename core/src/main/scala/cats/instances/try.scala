@@ -20,13 +20,13 @@ trait TryInstances extends TryInstances1 {
         case (_, f: Failure[_]) => castFailure[(A, B)](f)
       }
 
-      override def map2[A, B, Z](ta: Try[A], tb: Try[B])(f: (A, B) => Z): Try[Z] = (ta, tb) match {
+      override def mapA2[A, B, Z](ta: Try[A], tb: Try[B])(f: (A, B) => Z): Try[Z] = (ta, tb) match {
         case (Success(a), Success(b)) => Try(f(a, b))
         case (f: Failure[_], _) => castFailure[Z](f)
         case (_, f: Failure[_]) => castFailure[Z](f)
       }
 
-      override def map2Eval[A, B, Z](ta: Try[A], tb: Eval[Try[B]])(f: (A, B) => Z): Eval[Try[Z]] =
+      override def mapA2Eval[A, B, Z](ta: Try[A], tb: Eval[Try[B]])(f: (A, B) => Z): Eval[Try[Z]] =
         ta match {
           case f: Failure[_] => Now(castFailure[Z](f))
           case Success(a) => tb.map(_.map(f(a, _)))

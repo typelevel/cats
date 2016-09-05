@@ -22,7 +22,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       def flatMap[A, B](fa: Vector[A])(f: A => Vector[B]): Vector[B] =
         fa.flatMap(f)
 
-      override def map2[A, B, Z](fa: Vector[A], fb: Vector[B])(f: (A, B) => Z): Vector[Z] =
+      override def mapA2[A, B, Z](fa: Vector[A], fb: Vector[B])(f: (A, B) => Z): Vector[Z] =
         fa.flatMap(a => fb.map(b => f(a, b)))
 
       def coflatMap[A, B](fa: Vector[A])(f: Vector[A] => B): Vector[B] = {
@@ -45,7 +45,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       def traverseFilter[G[_], A, B](fa: Vector[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
         foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
-          G.map2Eval(f(a), lgvb)((ob, v) => ob.fold(v)(_ +: v))
+          G.mapA2Eval(f(a), lgvb)((ob, v) => ob.fold(v)(_ +: v))
         }.value
 
       def tailRecM[A, B](a: A)(fn: A => Vector[Either[A, B]]): Vector[B] = {
@@ -75,7 +75,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
       foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
-        G.map2Eval(f(a), lgvb)(_ +: _)
+        G.mapA2Eval(f(a), lgvb)(_ +: _)
       }.value
 
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =

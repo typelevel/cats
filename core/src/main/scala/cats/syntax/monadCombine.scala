@@ -39,5 +39,5 @@ final class SeparateOps[F[_], G[_, _], A, B](fgab: F[G[A, B]])(implicit F: Monad
    * res0: (List[String], List[Int]) = (List(error),List(1))
    * }}}
    */
-  def separate(implicit G: Bifoldable[G]): (F[A], F[B]) = F.separate(fgab)
+  def separate(implicit G: Foldable2[G]): (F[A], F[B]) = F.separate(fgab)
 }

@@ -43,7 +43,7 @@ class FreeApplicativeTests extends CatsSuite {
     val y = FreeApplicative.pure[Option, Int](n)
     val f = x.map(i => (j: Int) => i + j)
     val r = y.ap(f)
-    r.fold should === (Apply[Option].map2(o1, o2)(_ + _))
+    r.fold should === (Apply[Option].mapA2(o1, o2)(_ + _))
   }
 
   test("FreeApplicative#compile") {
@@ -112,8 +112,8 @@ class FreeApplicativeTests extends CatsSuite {
     val x: Dsl[Int] = FreeApplicative.lift(Bar(3))
     val y: Dsl[Long] = FreeApplicative.lift(Baz(5L))
 
-    val z1: Dsl[Long] = Apply[Dsl].map2(x, y)((x, y) => x.toLong + y)
-    val z2: Dsl[Long] = Apply[Dsl].map2(y, x)((y, x) => x.toLong + y)
+    val z1: Dsl[Long] = Apply[Dsl].mapA2(x, y)((x, y) => x.toLong + y)
+    val z2: Dsl[Long] = Apply[Dsl].mapA2(y, x)((y, x) => x.toLong + y)
 
     z1.foldMap(f).run("").value should === (("Bar(3);Baz(5);", 8L))
     z2.foldMap(f).run("").value should === (("Baz(5);Bar(3);", 8L))
@@ -124,7 +124,7 @@ class FreeApplicativeTests extends CatsSuite {
     val x: Dsl[String] = FreeApplicative.lift[Id, String]("x")
     val y: Dsl[String] = FreeApplicative.lift[Id, String]("y")
 
-    val z = Apply[Dsl].map2(x, y)((_, _) => ())
+    val z = Apply[Dsl].mapA2(x, y)((_, _) => ())
 
     val asString: FunctionK[Id, λ[α => String]] = new FunctionK[Id, λ[α => String]] {
       def apply[A](a: A): String = a.toString

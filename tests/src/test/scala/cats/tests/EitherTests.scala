@@ -22,8 +22,8 @@ class EitherTests extends CatsSuite {
   checkAll("Either[Int, Int] with Option", TraverseTests[Either[Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Either[Int, ?]", SerializableTests.serializable(Traverse[Either[Int, ?]]))
 
-  checkAll("Either[?, ?]", BitraverseTests[Either].bitraverse[Option, Int, Int, Int, String, String, String])
-  checkAll("Bitraverse[Either]", SerializableTests.serializable(Bitraverse[Either]))
+  checkAll("Either[?, ?]", Traverse2Tests[Either].traverse2[Option, Int, Int, Int, String, String, String])
+  checkAll("Traverse2[Either]", SerializableTests.serializable(Traverse2[Either]))
 
   checkAll("Either[ListWrapper[String], ?]", SemigroupKTests[Either[ListWrapper[String], ?]].semigroupK[Int])
   checkAll("SemigroupK[Either[ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[Either[ListWrapper[String], ?]]))
@@ -227,7 +227,7 @@ class EitherTests extends CatsSuite {
 
   test("withValidated") {
     forAll { (x: Either[Int, String], f: Int => Double) =>
-      x.withValidated(_.bimap(f, identity)) should === (x.leftMap(f))
+      x.withValidated(_.map2(f, identity)) should === (x.leftMap(f))
     }
   }
 

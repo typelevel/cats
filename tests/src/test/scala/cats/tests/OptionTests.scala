@@ -92,6 +92,6 @@ class OptionTests extends CatsSuite {
 
   test("map2Eval is lazy") {
     val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
-    none[Int].map2Eval(bomb)(_ + _).value should === (None)
+    none[Int].mapA2Eval(bomb)(_ + _).value should === (None)
   }
 }

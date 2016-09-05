@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.EitherT
-import cats.functor.Bifunctor
+import cats.functor.Functor2
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.{OrderLaws, GroupLaws}
@@ -26,8 +26,8 @@ class EitherTTests extends CatsSuite {
     //If a Functor for F is defined
     implicit val F = ListWrapper.functor
 
-    checkAll("EitherT[ListWrapper, ?, ?]", BifunctorTests[EitherT[ListWrapper, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
-    checkAll("Bifunctor[EitherT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bifunctor[EitherT[ListWrapper, ?, ?]]))
+    checkAll("EitherT[ListWrapper, ?, ?]", Functor2Tests[EitherT[ListWrapper, ?, ?]].functor2[Int, Int, Int, String, String, String])
+    checkAll("Functor2[EitherT[ListWrapper, ?, ?]]", SerializableTests.serializable(Functor2[EitherT[ListWrapper, ?, ?]]))
     checkAll("EitherT[ListWrapper, Int, ?]", FunctorTests[EitherT[ListWrapper, Int, ?]].functor[Int, Int, Int])
     checkAll("Functor[EitherT[ListWrapper, Int, ?]]", SerializableTests.serializable(Functor[EitherT[ListWrapper, Int, ?]]))
   }
@@ -38,8 +38,8 @@ class EitherTTests extends CatsSuite {
 
     checkAll("EitherT[ListWrapper, Int, ?]", TraverseTests[EitherT[ListWrapper, Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
     checkAll("Traverse[EitherT[ListWrapper, Int, ?]]", SerializableTests.serializable(Traverse[EitherT[ListWrapper, Int, ?]]))
-    checkAll("EitherT[ListWrapper, ?, ?]", BitraverseTests[EitherT[ListWrapper, ?, ?]].bitraverse[Option, Int, Int, Int, String, String, String])
-    checkAll("Bitraverse[EitherT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bitraverse[EitherT[ListWrapper, ?, ?]]))
+    checkAll("EitherT[ListWrapper, ?, ?]", Traverse2Tests[EitherT[ListWrapper, ?, ?]].traverse2[Option, Int, Int, Int, String, String, String])
+    checkAll("Traverse2[EitherT[ListWrapper, ?, ?]]", SerializableTests.serializable(Traverse2[EitherT[ListWrapper, ?, ?]]))
 
   }
 
@@ -121,7 +121,7 @@ class EitherTTests extends CatsSuite {
 
   test("withValidated") {
     forAll { (eithert: EitherT[List, String, Int], f: String => Char, g: Int => Double) =>
-      eithert.withValidated(_.bimap(f, g)) should === (eithert.bimap(f, g))
+      eithert.withValidated(_.map2(f, g)) should === (eithert.map2(f, g))
     }
   }
 

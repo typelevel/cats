@@ -14,15 +14,15 @@ final case class Coproduct[F[_], G[_], A](run: Either[F[A], G[A]]) {
   import Coproduct._
 
   def map[B](f: A => B)(implicit F: Functor[F], G: Functor[G]): Coproduct[F, G, B] =
-    Coproduct(run.bimap(F.lift(f), G.lift(f)))
+    Coproduct(run.map2(F.lift(f), G.lift(f)))
 
   def coflatMap[B](f: Coproduct[F, G, A] => B)(implicit F: CoflatMap[F], G: CoflatMap[G]): Coproduct[F, G, B] =
     Coproduct(
-      run.bimap(a => F.coflatMap(a)(x => f(leftc(x))), a => G.coflatMap(a)(x => f(rightc(x))))
+      run.map2(a => F.coflatMap(a)(x => f(leftc(x))), a => G.coflatMap(a)(x => f(rightc(x))))
     )
 
   def coflatten(implicit F: CoflatMap[F], G: CoflatMap[G]): Coproduct[F, G, Coproduct[F, G, A]] =
-    Coproduct(run.bimap(
+    Coproduct(run.map2(
       x => F.coflatMap(x)(a => leftc(a))
       , x => G.coflatMap(x)(a => rightc(a)))
     )
@@ -31,7 +31,7 @@ final case class Coproduct[F[_], G[_], A](run: Either[F[A], G[A]]) {
     run.fold(F.extract, G.extract)
 
   def contramap[B](f: B => A)(implicit F: Contravariant[F], G: Contravariant[G]): Coproduct[F, G, B] =
-    Coproduct(run.bimap(F.contramap(_)(f), G.contramap(_)(f)))
+    Coproduct(run.map2(F.contramap(_)(f), G.contramap(_)(f)))
 
   def foldRight[B](z: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F], G: Foldable[G]): Eval[B] =
     run.fold(a => F.foldRight(a, z)(f), a => G.foldRight(a, z)(f))

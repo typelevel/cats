@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Bifunctor
+import cats.functor.Functor2
 import scala.annotation.tailrec
 
 /** Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
@@ -56,11 +56,11 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def valueOr[BB >: B](f: A => BB)(implicit BB: Semigroup[BB]): BB =
     fold(f, identity, (a, b) => BB.combine(f(a), b))
 
-  final def bimap[C, D](fa: A => C, fb: B => D): C Ior D =
+  final def map2[C, D](fa: A => C, fb: B => D): C Ior D =
     fold(a => Ior.left(fa(a)), b => Ior.right(fb(b)), (a, b) => Ior.both(fa(a), fb(b)))
 
-  final def map[D](f: B => D): A Ior D = bimap(identity, f)
-  final def leftMap[C](f: A => C): C Ior B = bimap(f, identity)
+  final def map[D](f: B => D): A Ior D = map2(identity, f)
+  final def leftMap[C](f: A => C): C Ior B = map2(f, identity)
 
   final def flatMap[AA >: A, D](f: B => AA Ior D)(implicit AA: Semigroup[AA]): AA Ior D = this match {
     case l @ Ior.Left(_) => l
@@ -73,7 +73,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   }
 
   final def foreach(f: B => Unit): Unit = {
-    bimap(_ => (), f)
+    map2(_ => (), f)
     ()
   }
 
@@ -161,9 +161,9 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
     }
   }
 
-  implicit def catsDataBifunctorForIor: Bifunctor[Ior] =
-    new Bifunctor[Ior] {
-      override def bimap[A, B, C, D](fab: A Ior B)(f: A => C, g: B => D): C Ior D = fab.bimap(f, g)
+  implicit def catsDataFunctor2ForIor: Functor2[Ior] =
+    new Functor2[Ior] {
+      override def map2[A, B, C, D](fab: A Ior B)(f: A => C, g: B => D): C Ior D = fab.map2(f, g)
     }
 }
 
