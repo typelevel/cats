@@ -21,7 +21,8 @@ class IorTests extends CatsSuite {
   checkAll("Traverse[String Ior ?]", SerializableTests.serializable(Traverse[String Ior ?]))
   checkAll("? Ior ?", BifunctorTests[Ior].bifunctor[Int, Int, Int, String, String, String])
 
-  checkAll("Semigroup[Ior[List[A: Semigroup], List[B: Semigroup]]]", GroupLaws[Ior[List[Int], List[Int]]].semigroup)
+  checkAll("Semigroup[Ior[A: Semigroup, B: Semigroup]]", GroupLaws[Ior[List[Int], List[Int]]].semigroup)
+  checkAll("SerializableTest Semigroup[Ior[A: Semigroup, B: Semigroup]]", SerializableTests.serializable(Semigroup[Ior[List[Int], List[Int]]]))
 
   test("left Option is defined left and both") {
     forAll { (i: Int Ior String) =>
