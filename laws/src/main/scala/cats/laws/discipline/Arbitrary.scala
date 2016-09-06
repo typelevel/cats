@@ -28,18 +28,6 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForFunction0[A](implicit A: Cogen[A]): Cogen[Function0[A]] =
     A.contramap(_())
 
-  // // A special function1Arbitrary for testing operations like dropWhile specifically
-  // // in the context of Int => Boolean. Once scalacheck supports better Function1 arbitrary
-  // // instances this can be removed.
-  // implicit def catsLawsArbitraryForIntToBool: Arbitrary[(Int) => Boolean] =
-  //   Arbitrary(
-  //     getArbitrary[Int].map(x =>
-  //      new Function1[Int, Boolean] {
-  //        def apply(i: Int): Boolean = i < x
-  //
-  //        override def toString = s"<function testing whether input is less than $x>"
-  //      }))
-
   implicit def catsLawsArbitraryForConst[A, B](implicit A: Arbitrary[A]): Arbitrary[Const[A, B]] =
     Arbitrary(A.arbitrary.map(Const[A, B]))
 

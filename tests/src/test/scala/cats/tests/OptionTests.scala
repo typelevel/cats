@@ -11,8 +11,7 @@ class OptionTests extends CatsSuite {
   checkAll("Option[Int]", CoflatMapTests[Option].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[Option]", SerializableTests.serializable(CoflatMap[Option]))
 
-  // not actually lawful, fails distributivity
-  //checkAll("Option[Int]", MonadCombineTests[Option].monadCombine[Int, Int, Int])
+  checkAll("Option[Int]", MonadCombineTests[Option].monadCombine[Int, Int, Int])
   checkAll("MonadCombine[Option]", SerializableTests.serializable(MonadCombine[Option]))
 
   checkAll("Option[Int]", MonadTests[Option].monad[Int, Int, Int])

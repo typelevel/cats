@@ -51,31 +51,6 @@ class FutureTests extends CatsSuite {
   implicit def cogenForFuture[A]: Cogen[Future[A]] =
     Cogen[Unit].contramap(_ => ())
 
-  // FIXME: for some reason we aren't able to link against the correct
-  // function generator (Arbitrary.arbFunction1) here. i dont'
-  // understand why.  this method overrides the default implicit in
-  // scope.
-  //
-  // if you comment this method you'll get a compilation error:
-  //
-  //   Referring to non-existent method org.scalacheck.Arbitrary$.arbFunction1(org.scalacheck.Arbitrary)org.scalacheck.Arbitrary
-  //     called from cats.js.tests.FutureTests.<init>()
-  //     called from cats.js.tests.FutureTests.__exportedInits
-  //     exported to JavaScript with @JSExport
-  //   involving instantiated classes:
-  //     cats.js.tests.FutureTests
-  //
-  // if you look, you'll see that this is the wrong version of
-  // arbFunction1 -- it only takes an Arbitrary instead of an
-  // Arbitrary and a Cogen.
-  //
-  // what's going on? is this compiling against an earlier version of
-  // ScalaCheck? is something else happening? who knows?
-  //
-  // for now we'll let sleeping dogs lie.
-  //implicit def fakeArbitraryFunction[A: Cogen, B: Arbitrary]: Arbitrary[A => B] =
-  //  Arbitrary(arbitrary[B].map(b => (a: A) => b))
-
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
