@@ -4,7 +4,7 @@ package discipline
 
 import cats.laws.discipline.CartesianTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+//import Prop._
 
 trait MonadCombineTests[F[_]] extends MonadFilterTests[F] with AlternativeTests[F] {
   def laws: MonadCombineLaws[F]

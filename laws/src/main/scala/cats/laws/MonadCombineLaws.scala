@@ -1,7 +1,7 @@
 package cats
 package laws
 
-import cats.syntax.all._
+//import cats.syntax.all._
 
 /**
  * Laws that must be obeyed by any `MonadCombine`.
