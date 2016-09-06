@@ -92,6 +92,14 @@ In an attempt to be more modular, Cats is broken up into a number of sub-project
 * *tests* - tests that check type class instances with laws from *laws*
 * *docs* - The source for this website
 
+## Imports
+
+It should be sufficient to simply `import cats.implicits._`. However, if you wish to be more specific, use the following rules to get started on what to import:
+
+  * ``import cats.std.<type>._ `` -  Typeclass instances for standard library `<type>`, such as `List` or `Option`
+  * ``import cats.syntax.<type>._ `` - “Enhanced” methods for a givent `<type>`, such as calling `.left` to get a left `Xor`
+  * ``import cats.data.<type>._ `` - Imports a `<type>` not part of the standard library, such as `Xor`, `Kleisli`), _and its typeclass instances_
+
 <a name="copyright"></a>
 # Copyright and License
 
