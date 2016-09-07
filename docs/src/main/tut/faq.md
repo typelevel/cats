@@ -1,7 +1,8 @@
 ---
-layout: default
+layout: page
 title:  "FAQ"
 section: "faq"
+position: 4
 ---
 
 # Frequently Asked Questions
