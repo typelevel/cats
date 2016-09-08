@@ -30,9 +30,13 @@ class LawTests extends FunSuite with Discipline {
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
     Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
 
+  // this instance is not available in scalacheck 1.13.2.
+  // remove this once a newer version is available.
   implicit val cogenBigInt: Cogen[BigInt] =
     Cogen[Long].contramap(_.toLong)
 
+  // this instance is not available in scalacheck 1.13.2.
+  // remove this once a newer version is available.
   implicit val cogenBigDecimal: Cogen[BigDecimal] =
     Cogen[Double].contramap(_.toDouble)
 
