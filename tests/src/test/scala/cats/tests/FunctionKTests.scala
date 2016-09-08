@@ -3,7 +3,8 @@ package tests
 
 import cats.arrow.FunctionK
 import cats.data.Coproduct
-
+import cats.data.NonEmptyList
+import cats.laws.discipline.arbitrary._
 
 class FunctionKTests extends CatsSuite {
   val listToOption =
@@ -65,4 +66,36 @@ class FunctionKTests extends CatsSuite {
       combinedInterpreter(Coproduct.right(Test2(b))) should === (b)
     }
   }
+
+  test("lift simple unary") {
+    def optionToList[A](option: Option[A]): List[A] = option.toList
+    val fOptionToList = FunctionK.lift(optionToList _)
+    forAll { (a: Option[Int]) =>
+      fOptionToList(a) should === (optionToList(a))
+    }
+
+    val fO2I: FunctionK[Option, Iterable] = FunctionK.lift(Option.option2Iterable _)
+    forAll { (a: Option[String]) =>
+      fO2I(a).toList should === (Option.option2Iterable(a).toList)
+    }
+
+    val fNelFromListUnsafe = FunctionK.lift(NonEmptyList.fromListUnsafe _)
+    forAll { (a: NonEmptyList[Int]) =>
+      fNelFromListUnsafe(a.toList) should === (NonEmptyList.fromListUnsafe(a.toList))
+    }
+  }
+
+  test("lift compound unary") {
+    val fNelFromList = FunctionK.lift[List, λ[α ⇒ Option[NonEmptyList[α]]]](NonEmptyList.fromList _)
+    forAll { (a: List[String]) =>
+      fNelFromList(a) should === (NonEmptyList.fromList(a))
+    }
+  }
+
+  { // lifting concrete types should fail to compile
+    def sample[A](option: Option[A]): List[A] = option.toList
+    assertTypeError("FunctionK.lift(sample[String])")
+    assertTypeError("FunctionK.lift(sample[Nothing])")
+  }
+
 }
