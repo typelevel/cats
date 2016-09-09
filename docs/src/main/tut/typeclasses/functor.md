@@ -60,10 +60,10 @@ implicit def function1Functor[In]: Functor[Function1[In, ?]] =
 This example demonstrates the use of the
 [kind-projector compiler plugin](https://github.com/non/kind-projector).
 This compiler plugin can help us when we need to change the number of type
-holes. In the example above, we took a type which normally has two type holes, 
-`Function1[?,?]` and constrained one of the holes to be the `In` type, 
-leaving just one hole for the return type, resulting in `Function1[In,?]`. 
-Without kind-projector, we'd have to write this as something like 
+holes. In the example above, we took a type which normally has two type holes,
+`Function1[?,?]` and constrained one of the holes to be the `In` type,
+leaving just one hole for the return type, resulting in `Function1[In,?]`.
+Without kind-projector, we'd have to write this as something like
 `({type F[A] = Function1[In,A]})#F`, which is much harder to read and understand.
 
 ## Using Functor
@@ -77,7 +77,7 @@ val len: String => Int = _.length
 Functor[List].map(List("qwer", "adsfg"))(len)
 ```
 
-`Option` is a functor which only applies the function when the `Option` value 
+`Option` is a functor which only applies the function when the `Option` value
 is a `Some`:
 
 ```tut:book

@@ -154,7 +154,7 @@ Corresponding to our bunches of data are bunches of topics, a `List[Topic]` if y
 Since `Reader` has an `Applicative` instance, we can `traverse` over this list with `processTopic`.
 
 ```tut:silent
-def processTopics(topics: List[Topic]): Job[List[Result]] = 
+def processTopics(topics: List[Topic]): Job[List[Result]] =
   topics.traverse(processTopic)
 ```
 
@@ -227,13 +227,13 @@ same thing as `traverse` and `sequence` but ignores any value produced along the
 ```tut:silent
 import cats.implicits._
 
-def writeManyToStore(data: List[Data]) = 
+def writeManyToStore(data: List[Data]) =
   data.traverse_(writeToStore)
 
 // Int values are ignored with traverse_
-def writeToStoreV2(data: Data): Future[Int] = 
+def writeToStoreV2(data: Data): Future[Int] =
   ???
 
-def writeManyToStoreV2(data: List[Data]) = 
+def writeManyToStoreV2(data: List[Data]) =
   data.traverse_(writeToStoreV2)
 ```

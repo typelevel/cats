@@ -8,7 +8,7 @@ scaladoc: "#cats.MonoidK"
 # MonoidK
 
 `MonoidK` is a universal monoid which operates on kinds.
- 
+
 This type class is useful when its type parameter `F[_]` has a
 structure that can be combined for any particular type, and which
 also has an "empty" representation. Thus, `MonoidK` is like a `Monoid`

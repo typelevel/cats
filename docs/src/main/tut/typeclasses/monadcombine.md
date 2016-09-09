@@ -6,4 +6,3 @@ source: "core/src/main/scala/cats/MonadCombine.scala"
 scaladoc: "#cats.MonadCombine"
 ---
 # MonadCombine
-

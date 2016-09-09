@@ -1,5 +1,13 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Runs `jekyll serve` on the generated target/site dir.
+# Meant to be run after `sbt docs/makeSite`, which tut
+# typechecks and generates the site structure in target/
+# with sbt-site.
 
-jekyll serve --config "$DIR/../_config.dev.yml" --watch
+# real ugly way to get to the generated dir
+GENERATED_SITE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/../../../target/site
+
+cd $GENERATED_SITE_DIR
+
+jekyll serve --config _config.yml --watch
