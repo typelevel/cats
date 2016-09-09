@@ -113,12 +113,6 @@ private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 
 }
 
 private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 {
-  implicit def catsDataMonadFilterForWriterT[F[_], L](implicit F: MonadFilter[F], L: Monoid[L]): MonadFilter[WriterT[F, L, ?]] =
-    new WriterTMonadFilter[F, L] {
-      implicit val F0: MonadFilter[F] = F
-      implicit val L0: Monoid[L] = L
-    }
-
   implicit def catsDataMonoidForWriterT[F[_], L, V](implicit W: Monoid[F[(L, V)]]): Monoid[WriterT[F, L, V]] =
     new WriterTMonoid[F, L, V] {
       implicit val F0: Monoid[F[(L, V)]] = W
@@ -357,12 +351,6 @@ private[data] sealed trait WriterTMonoidK[F[_], L] extends MonoidK[WriterT[F, L,
 
 private[data] sealed trait WriterTAlternative[F[_], L] extends Alternative[WriterT[F, L, ?]] with WriterTMonoidK[F, L] with WriterTApplicative[F, L] {
   override implicit def F0: Alternative[F]
-}
-
-private[data] sealed trait WriterTMonadFilter[F[_], L] extends MonadFilter[WriterT[F, L, ?]] with WriterTMonad[F, L] {
-  override implicit def F0: MonadFilter[F]
-
-  def empty[A]: WriterT[F, L, A] = WriterT(F0.empty)
 }
 
 private[data] sealed trait WriterTMonadCombine[F[_], L] extends MonadCombine[WriterT[F, L, ?]] with WriterTMonad[F, L] with WriterTAlternative[F, L] {

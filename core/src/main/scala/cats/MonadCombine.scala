@@ -5,7 +5,10 @@ import simulacrum.typeclass
 /**
  * The combination of a Monad with a MonoidK
  */
-@typeclass trait MonadCombine[F[_]] extends MonadFilter[F] with Alternative[F] {
+@typeclass trait MonadCombine[F[_]] extends Monad[F] with FunctorFilter[F] with Alternative[F] {
+
+  override def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
+    flatMap(fa)(a => f(a).fold(empty[B])(pure))
 
   /**
    * Fold over the inner structure to combine all of the values with
