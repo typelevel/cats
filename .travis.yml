@@ -7,6 +7,9 @@ scala:
 - 2.10.6
 - 2.11.8
 
+before_install:
+ - export PATH=${PATH}:./vendor/bundle
+
 script:
   - scripts/travis-publish.sh
 
@@ -14,6 +17,7 @@ script:
 install:
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
   - pip install --user codecov
+  - gem install jekyll -v 2.5
 
 notifications:
   webhooks:
