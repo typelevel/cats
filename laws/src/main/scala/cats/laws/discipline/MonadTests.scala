@@ -20,6 +20,7 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
+    EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
   ): RuleSet = {
     new RuleSet {
@@ -29,7 +30,8 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
       def props: Seq[(String, Prop)] = Seq(
         "monad left identity" -> forAll(laws.monadLeftIdentity[A, B] _),
         "monad right identity" -> forAll(laws.monadRightIdentity[A] _),
-        "map flatMap coherence" -> forAll(laws.mapFlatMapCoherence[A, B] _)
+        "map flatMap coherence" -> forAll(laws.mapFlatMapCoherence[A, B] _),
+        "tailRecM stack safety" -> laws.tailRecMStackSafety
       )
     }
   }

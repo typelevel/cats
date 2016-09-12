@@ -169,9 +169,9 @@ final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
 private[data] sealed trait NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector] with Reducible[NonEmptyVector]
-    with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with Monad[NonEmptyVector] with RecursiveTailRecM[NonEmptyVector] =
+    with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with Monad[NonEmptyVector] =
     new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector] with Comonad[NonEmptyVector]
-      with Traverse[NonEmptyVector] with Monad[NonEmptyVector] with RecursiveTailRecM[NonEmptyVector] {
+      with Traverse[NonEmptyVector] with Monad[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
         a concatNev b

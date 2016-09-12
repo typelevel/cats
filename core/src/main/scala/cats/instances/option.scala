@@ -5,8 +5,8 @@ import scala.annotation.tailrec
 
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
-  implicit val catsStdInstancesForOption: TraverseFilter[Option] with MonadError[Option, Unit] with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] with RecursiveTailRecM[Option] =
-    new TraverseFilter[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] with RecursiveTailRecM[Option] {
+  implicit val catsStdInstancesForOption: TraverseFilter[Option] with MonadError[Option, Unit] with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] =
+    new TraverseFilter[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] {
 
       def empty[A]: Option[A] = None
 

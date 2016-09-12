@@ -207,11 +207,11 @@ trait FreeTTestsInstances {
 
   implicit def intStateArb[A: Arbitrary]: Arbitrary[IntState[A]] = stateArbitrary[Int, A]
 
-  implicit def freeTOptionEq[A](implicit A: Eq[A], OM: Monad[Option], RT: RecursiveTailRecM[Option]): Eq[FreeTOption[A]] = new Eq[FreeTOption[A]] {
+  implicit def freeTOptionEq[A](implicit A: Eq[A], OM: Monad[Option]): Eq[FreeTOption[A]] = new Eq[FreeTOption[A]] {
     def eqv(a: FreeTOption[A], b: FreeTOption[A]) = Eq[Option[A]].eqv(a.runM(identity), b.runM(identity))
   }
 
-  implicit def freeTStateEq[A](implicit A: Eq[A], SM: Monad[IntState], RT: RecursiveTailRecM[IntState]): Eq[FreeTState[A]] = new Eq[FreeTState[A]] {
-    def eqv(a: FreeTState[A], b: FreeTState[A]) = Eq[IntState[A]].eqv(a.runM(identity)(SM, SM, RT), b.runM(identity)(SM, SM, RT))
+  implicit def freeTStateEq[A](implicit A: Eq[A], SM: Monad[IntState]): Eq[FreeTState[A]] = new Eq[FreeTState[A]] {
+    def eqv(a: FreeTState[A], b: FreeTState[A]) = Eq[IntState[A]].eqv(a.runM(identity)(SM, SM), b.runM(identity)(SM, SM))
   }
 }

@@ -8,9 +8,8 @@ import scala.collection.mutable.ListBuffer
 
 trait ListInstances extends cats.kernel.instances.ListInstances {
 
-  implicit val catsStdInstancesForList: TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] with RecursiveTailRecM[List] =
-    new TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] with RecursiveTailRecM[List] {
-
+  implicit val catsStdInstancesForList: TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] =
+    new TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] {
       def empty[A]: List[A] = Nil
 
       def combineK[A](x: List[A], y: List[A]): List[A] = x ++ y

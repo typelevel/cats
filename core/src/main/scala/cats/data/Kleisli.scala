@@ -149,9 +149,6 @@ private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 
       Kleisli[F, A, C]({ a => FlatMap[F].tailRecM(b) { f(_).run(a) } })
   }
 
-  implicit def catsDataRecursiveTailRecMForKleisli[F[_]: RecursiveTailRecM, A]: RecursiveTailRecM[Kleisli[F, A, ?]] =
-    RecursiveTailRecM.create[Kleisli[F, A, ?]]
-
   implicit def catsDataSemigroupForKleisli[F[_], A, B](implicit M: Semigroup[F[B]]): Semigroup[Kleisli[F, A, B]] =
     new KleisliSemigroup[F, A, B] { def FB: Semigroup[F[B]] = M }
 

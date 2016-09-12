@@ -21,6 +21,7 @@ trait MonadWriterTests[F[_], W] extends MonadTests[F] {
     EqFC: Eq[F[C]],
     EqFU: Eq[F[Unit]],
     EqFABC: Eq[F[(A, B, C)]],
+    EqFInt: Eq[F[Int]],
     WA: Arbitrary[W],
     WM: Monoid[W],
     iso: Isomorphisms[F]

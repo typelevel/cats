@@ -48,52 +48,52 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
    * Runs to completion, mapping the suspension with the given transformation
    * at each step and accumulating into the monad `M`.
    */
-  def foldMap(f: S ~> M)(implicit MR: Monad[M], RT: RecursiveTailRecM[M]): M[A] = {
+  def foldMap(f: S ~> M)(implicit M: Monad[M]): M[A] = {
     def go(ft: FreeT[S, M, A]): M[Either[FreeT[S, M, A], A]] =
       ft match {
-        case Suspend(ma) => MR.flatMap(ma) {
-          case Right(a) => MR.pure(Right(a))
-          case Left(sa) => MR.map(f(sa))(Right(_))
+        case Suspend(ma) => M.flatMap(ma) {
+          case Right(a) => M.pure(Right(a))
+          case Left(sa) => M.map(f(sa))(Right(_))
         }
         case g @ FlatMapped(_, _) => g.a match {
-          case Suspend(mx) => MR.flatMap(mx) {
-            case Right(x) => MR.pure(Left(g.f(x)))
-            case Left(sx) => MR.map(f(sx))(x => Left(g.f(x)))
+          case Suspend(mx) => M.flatMap(mx) {
+            case Right(x) => M.pure(Left(g.f(x)))
+            case Left(sx) => M.map(f(sx))(x => Left(g.f(x)))
           }
-          case g0 @ FlatMapped(_, _) => MR.pure(Left(g0.a.flatMap(g0.f(_).flatMap(g.f))))
+          case g0 @ FlatMapped(_, _) => M.pure(Left(g0.a.flatMap(g0.f(_).flatMap(g.f))))
         }
       }
 
-    RT.sameType(MR).tailRecM(this)(go)
+    M.tailRecM(this)(go)
   }
 
   /** Evaluates a single layer of the free monad */
-  def resume(implicit S: Functor[S], MR: Monad[M], RT: RecursiveTailRecM[M]): M[Either[S[FreeT[S, M, A]], A]] = {
+  def resume(implicit S: Functor[S], M: Monad[M]): M[Either[S[FreeT[S, M, A]], A]] = {
     def go(ft: FreeT[S, M, A]): M[Either[FreeT[S, M, A], Either[S[FreeT[S, M, A]], A]]] =
       ft match {
-        case Suspend(f) => MR.map(f)(as => Right(as.left.map(S.map(_)(pure(_)))))
+        case Suspend(f) => M.map(f)(as => Right(as.left.map(S.map(_)(pure(_)))))
         case g1 @ FlatMapped(_, _) => g1.a match {
-          case Suspend(m1) => MR.map(m1) {
+          case Suspend(m1) => M.map(m1) {
             case Right(a) => Left(g1.f(a))
             case Left(fc) => Right(Left(S.map(fc)(g1.f(_))))
           }
-          case g2 @ FlatMapped(_, _) => MR.pure(Left(g2.a.flatMap(g2.f(_).flatMap(g1.f))))
+          case g2 @ FlatMapped(_, _) => M.pure(Left(g2.a.flatMap(g2.f(_).flatMap(g1.f))))
         }
       }
 
-    RT.sameType(MR).tailRecM(this)(go)
+    M.tailRecM(this)(go)
   }
 
   /**
    * Runs to completion, using a function that maps the resumption from `S` to a monad `M`.
    */
-  def runM(interp: S[FreeT[S, M, A]] => M[FreeT[S, M, A]])(implicit S: Functor[S], MR: Monad[M], RT: RecursiveTailRecM[M]): M[A] = {
+  def runM(interp: S[FreeT[S, M, A]] => M[FreeT[S, M, A]])(implicit S: Functor[S], M: Monad[M]): M[A] = {
     def runM2(ft: FreeT[S, M, A]): M[Either[FreeT[S, M, A], A]] =
-      MR.flatMap(ft.resume) {
-        case Right(a) => MR.pure(Right(a))
-        case Left(fc) => MR.map(interp(fc))(Left(_))
+      M.flatMap(ft.resume) {
+        case Right(a) => M.pure(Right(a))
+        case Left(fc) => M.map(interp(fc))(Left(_))
       }
-    RT.sameType(MR).tailRecM(this)(runM2)
+    M.tailRecM(this)(runM2)
   }
 
   /**
@@ -184,7 +184,7 @@ private[free] sealed trait FreeTInstances3 {
 }
 
 private[free] sealed trait FreeTInstances2 extends FreeTInstances3 {
-  implicit def catsFreeMonadErrorForFreeT[S[_], M[_]: RecursiveTailRecM, E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, ?], E] =
+  implicit def catsFreeMonadErrorForFreeT[S[_], M[_], E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, ?], E] =
     new MonadError[FreeT[S, M, ?], E] with FreeTMonad[S, M] {
       override def M = implicitly
       override def handleErrorWith[A](fa: FreeT[S, M, A])(f: E => FreeT[S, M, A]) =
@@ -211,7 +211,7 @@ private[free] sealed trait FreeTInstances1 extends FreeTInstances2 {
 }
 
 private[free] sealed trait FreeTInstances0 extends FreeTInstances1 {
-  implicit def catsFreeMonadForFreeT[S[_], M[_]](implicit M0: Applicative[M]): Monad[FreeT[S, M, ?]] with RecursiveTailRecM[FreeT[S, M, ?]] =
+  implicit def catsFreeMonadForFreeT[S[_], M[_]](implicit M0: Applicative[M]): Monad[FreeT[S, M, ?]] =
     new FreeTMonad[S, M] {
       def M = M0
     }
@@ -242,7 +242,7 @@ private[free] sealed trait FreeTFlatMap[S[_], M[_]] extends FlatMap[FreeT[S, M, 
     FreeT.tailRecM(a)(f)
 }
 
-private[free] sealed trait FreeTMonad[S[_], M[_]] extends Monad[FreeT[S, M, ?]] with RecursiveTailRecM[FreeT[S, M, ?]] with FreeTFlatMap[S, M] {
+private[free] sealed trait FreeTMonad[S[_], M[_]] extends Monad[FreeT[S, M, ?]] with FreeTFlatMap[S, M] {
   implicit def M: Applicative[M]
 
   override final def pure[A](a: A): FreeT[S, M, A] =

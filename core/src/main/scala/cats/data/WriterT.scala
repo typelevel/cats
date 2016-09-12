@@ -126,9 +126,6 @@ private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 
 
   implicit def catsDataCoflatMapForWriterTId[L]: CoflatMap[WriterT[Id, L, ?]] =
     catsDataCoflatMapForWriterT[Id, L]
-
-  implicit def catsDataRecursiveTailRecMForWriterT1[F[_]: RecursiveTailRecM, L]: RecursiveTailRecM[WriterT[F, L, ?]] =
-    RecursiveTailRecM.create[WriterT[F, L, ?]]
 }
 
 private[data] sealed abstract class WriterTInstances2 extends WriterTInstances3 {

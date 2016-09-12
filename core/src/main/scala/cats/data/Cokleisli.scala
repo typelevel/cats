@@ -48,7 +48,7 @@ private[data] sealed abstract class CokleisliInstances extends CokleisliInstance
   implicit def catsDataArrowForCokleisli[F[_]](implicit ev: Comonad[F]): Arrow[Cokleisli[F, ?, ?]] =
     new CokleisliArrow[F] { def F: Comonad[F] = ev }
 
-  implicit def catsDataMonadForCokleisli[F[_], A]: Monad[Cokleisli[F, A, ?]] with RecursiveTailRecM[Cokleisli[F, A, ?]] = new Monad[Cokleisli[F, A, ?]] with RecursiveTailRecM[Cokleisli[F, A, ?]] {
+  implicit def catsDataMonadForCokleisli[F[_], A]: Monad[Cokleisli[F, A, ?]] = new Monad[Cokleisli[F, A, ?]] {
     def pure[B](x: B): Cokleisli[F, A, B] =
       Cokleisli.pure(x)
 
