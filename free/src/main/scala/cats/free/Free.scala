@@ -128,14 +128,6 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     })
 
   /**
-   * Same as foldMap but without a guarantee of stack safety. If the recursion is shallow
-   * enough, this will work
-   */
-  final def foldMapUnsafe[M[_]](f: FunctionK[S, M])(implicit M: Monad[M]): M[A] =
-    foldMap[M](f)
-
-
-  /**
    * Compile your free monad into another language by changing the
    * suspension functor using the given natural transformation `f`.
    *
@@ -143,7 +135,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * effects will be applied by `compile`.
    */
   final def compile[T[_]](f: FunctionK[S, T]): Free[T, A] =
-    foldMapUnsafe[Free[T, ?]] { // this is safe because Free is stack safe
+    foldMap[Free[T, ?]] { // this is safe because Free is stack safe
       new FunctionK[S, Free[T, ?]] {
         def apply[B](fa: S[B]): Free[T, B] = Suspend(f(fa))
       }

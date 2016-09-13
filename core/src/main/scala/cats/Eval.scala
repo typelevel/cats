@@ -301,7 +301,10 @@ private[cats] trait EvalInstances extends EvalInstances0 {
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
       def extract[A](la: Eval[A]): A = la.value
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
-      def tailRecM[A, B](a: A)(f: A => Eval[Either[A, B]]): Eval[B] = defaultTailRecM(a)(f)
+      def tailRecM[A, B](a: A)(f: A => Eval[Either[A, B]]): Eval[B] = f(a).flatMap { // OK because Eval is trampolined
+        case Left(nextA) => tailRecM(nextA)(f)
+        case Right(b)    => pure(b)
+      }
     }
 
   implicit def catsOrderForEval[A: Order]: Order[Eval[A]] =
