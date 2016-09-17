@@ -280,8 +280,10 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
         fab.leftMap(f)
     }
 
-  implicit def catsDataInstancesForValidated[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =
-    new Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] {
+  implicit def catsDataInstancesForValidated[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] with Applicative[Validated[E, ?]]=
+    new Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] with Applicative[Validated[E, ?]] {
+      val applicative = this
+
       def traverse[F[_]: Applicative, A, B](fa: Validated[E, A])(f: A => F[B]): F[Validated[E, B]] =
         fa.traverse(f)
 

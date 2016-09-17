@@ -324,8 +324,14 @@ private[data] sealed trait WriterTMonad[F[_], L] extends WriterTApplicative[F, L
 
 }
 
-private[data] sealed trait WriterTApplicativeError[F[_], L, E] extends ApplicativeError[WriterT[F, L, ?], E] with WriterTApplicative[F, L] {
-  override implicit def F0: ApplicativeError[F, E]
+private[data] sealed trait WriterTApplicativeError[F[_], L, E] extends ApplicativeError[WriterT[F, L, ?], E] { outer =>
+  implicit def F0: ApplicativeError[F, E]
+  implicit def L0: Monoid[L]
+
+  def applicative = new WriterTApplicative[F, L] {
+    implicit def F0 = outer.F0.applicative
+    implicit def L0 = outer.L0
+  }
 
   def raiseError[A](e: E): WriterT[F, L, A] = WriterT(F0.raiseError[(L, A)](e))
 
@@ -333,8 +339,15 @@ private[data] sealed trait WriterTApplicativeError[F[_], L, E] extends Applicati
     WriterT(F0.handleErrorWith(fa.run)(e => f(e).run))
 }
 
-private[data] sealed trait WriterTMonadError[F[_], L, E] extends MonadError[WriterT[F, L, ?], E] with WriterTMonad[F, L] with WriterTApplicativeError[F, L, E]{
+private[data] sealed trait WriterTMonadError[F[_], L, E] extends MonadError[WriterT[F, L, ?], E] with WriterTApplicativeError[F, L, E] { outer =>
   override implicit def F0: MonadError[F, E]
+
+  def monad = new WriterTMonad[F, L] {
+    implicit def F0 = outer.F0.monad
+    implicit def L0 = outer.L0
+  }
+
+  override def applicative = monad
 }
 
 private[data] sealed trait WriterTMonadWriter[F[_], L] extends MonadWriter[WriterT[F, L, ?], L] { outer =>

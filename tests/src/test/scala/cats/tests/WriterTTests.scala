@@ -353,6 +353,7 @@ class WriterTTests extends CatsSuite {
     // F has an ApplicativeError and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
     implicit val appErr = WriterT.catsDataApplicativeErrorForWriterT[Validated[String, ?], ListWrapper[Int], String]
+    implicit val app = WriterT.catsDataApplicativeForWriterT[Validated[String, ?], ListWrapper[Int]]
     implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[Validated[String, ?], ListWrapper[Int], ?]]
     implicit def eq1[A:Eq]: Eq[WriterT[Validated[String, ?], ListWrapper[Int], A]] =
       WriterT.catsDataEqForWriterT[Validated[String, ?], ListWrapper[Int], A]

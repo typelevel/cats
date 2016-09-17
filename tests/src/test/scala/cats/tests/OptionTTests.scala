@@ -71,6 +71,7 @@ class OptionTTests extends CatsSuite {
     type SEither[A] = Either[String, A]
 
     implicit val monadError = OptionT.catsDataMonadErrorForOptionT[SEither, String]
+    implicit val monad = OptionT.catsDataMonadForOptionT[SEither]
 
     import org.scalacheck.Arbitrary
     implicit val arb1 = implicitly[Arbitrary[OptionT[SEither, Int]]]

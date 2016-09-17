@@ -172,18 +172,7 @@ object FreeT extends FreeTInstances {
 
 }
 
-private[free] sealed trait FreeTInstances2 {
-  implicit def catsFreeMonadErrorForFreeT[S[_], M[_]: RecursiveTailRecM, E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, ?], E] =
-    new MonadError[FreeT[S, M, ?], E] with FreeTMonad[S, M] {
-      override def M = implicitly
-      override def handleErrorWith[A](fa: FreeT[S, M, A])(f: E => FreeT[S, M, A]) =
-        FreeT.liftT[S, M, FreeT[S, M, A]](E.handleErrorWith(fa.toM)(f.andThen(_.toM)))(M).flatMap(identity)
-      override def raiseError[A](e: E) =
-        FreeT.liftT(E.raiseError[A](e))(M)
-    }
-}
-
-private[free] sealed trait FreeTInstances1 extends FreeTInstances2 {
+private[free] sealed trait FreeTInstances1 {
   implicit def catsFreeFlatMapForFreeT[S[_], M[_]](implicit M0: Applicative[M]): FlatMap[FreeT[S, M, ?]] =
     new FreeTFlatMap[S, M] {
       implicit def M: Applicative[M] = M0
@@ -213,6 +202,15 @@ private[free] sealed trait FreeTInstances0 extends FreeTInstances1 {
 }
 
 private[free] sealed trait FreeTInstances extends FreeTInstances0 {
+  implicit def catsFreeMonadErrorForFreeT[S[_], M[_]: RecursiveTailRecM, E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, ?], E] =
+    new MonadError[FreeT[S, M, ?], E] {
+      val monad = catsFreeMonadForFreeT[S, M](E.monad)
+      override def handleErrorWith[A](fa: FreeT[S, M, A])(f: E => FreeT[S, M, A]) =
+        FreeT.liftT[S, M, FreeT[S, M, A]](E.handleErrorWith(fa.toM(E.monad))(f.andThen(_.toM(E.monad))))(E.monad).flatMap(identity)
+      override def raiseError[A](e: E) =
+        FreeT.liftT(E.raiseError[A](e))(E.monad)
+    }
+
   implicit def catsFreeMonadStateForFreeT[S[_], M[_], E](implicit M1: MonadState[M, E]): MonadState[FreeT[S, M, ?], E] =
     new MonadState[FreeT[S, M, ?], E] {
       val monad = catsFreeMonadForFreeT[S, M](M1.monad)

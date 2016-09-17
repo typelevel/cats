@@ -179,6 +179,9 @@ private[data] sealed trait OptionTInstances extends OptionTInstances0 {
   implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
     new OptionTMonad[F] { implicit val F = F0 }
 
+  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
+    new OptionTMonadError[F, E] { implicit val F = F0 }
+
   implicit def catsDataFoldableForOptionT[F[_]](implicit F0: Foldable[F]): Foldable[OptionT[F, ?]] =
     new OptionTFoldable[F] { implicit val F = F0 }
 
@@ -193,9 +196,6 @@ private[data] sealed trait OptionTInstances extends OptionTInstances0 {
 }
 
 private[data] sealed trait OptionTInstances0 extends OptionTInstances1 {
-  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
-    new OptionTMonadError[F, E] { implicit val F = F0 }
-
   implicit def catsDataRecursiveTailRecMForOptionT[F[_]](implicit F: RecursiveTailRecM[F]): RecursiveTailRecM[OptionT[F, ?]] =
     RecursiveTailRecM.create[OptionT[F, ?]]
 
@@ -259,11 +259,13 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
     )))
 }
 
-private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, ?], E] with OptionTMonad[F] {
-  override def F: MonadError[F, E]
+private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, ?], E] { outer =>
+  def F: MonadError[F, E]
+
+  def monad = new OptionTMonad[F] { implicit def F = outer.F.monad }
 
   override def raiseError[A](e: E): OptionT[F, A] =
-    OptionT(F.map(F.raiseError[A](e))(Some(_)))
+    OptionT(F.monad.map(F.raiseError[A](e))(Some(_)))
 
   override def handleErrorWith[A](fa: OptionT[F, A])(f: E => OptionT[F, A]): OptionT[F, A] =
     OptionT(F.handleErrorWith(fa.value)(f(_).value))

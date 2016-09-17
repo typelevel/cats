@@ -282,6 +282,9 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
   }
   */
 
+  implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
+    new EitherTMonadError[F, L] { implicit val F = F0 }
+
   implicit def catsDataOrderForEitherT[F[_], L, R](implicit F: Order[F[Either[L, R]]]): Order[EitherT[F, L, R]] =
     new EitherTOrder[F, L, R] {
       val F0: Order[F[Either[L, R]]] = F
@@ -342,8 +345,8 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
 }
 
 private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
-  implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
-    new EitherTMonadError[F, L] { implicit val F = F0 }
+  implicit def catsDataMonadForEitherT[F[_], L](implicit F0: Monad[F]): Monad[EitherT[F, L, ?]] =
+    new EitherTMonad[F, L] { implicit val F = F0 }
 
   implicit def catsDataRecursiveTailRecMForEitherT[F[_]: RecursiveTailRecM, L]: RecursiveTailRecM[EitherT[F, L, ?]] =
     RecursiveTailRecM.create[EitherT[F, L, ?]]
@@ -399,7 +402,9 @@ private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, ?]] with E
     }))
 }
 
-private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, ?], L] with EitherTMonad[F, L] {
+private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, ?], L] { outer =>
+  implicit val F: Monad[F]
+  def monad = new EitherTMonad[F, L] { implicit val F = outer.F }
   def handleErrorWith[A](fea: EitherT[F, L, A])(f: L => EitherT[F, L, A]): EitherT[F, L, A] =
     EitherT(F.flatMap(fea.value) {
       case Left(e) => f(e).value
@@ -418,7 +423,7 @@ private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, 
     fla.recoverWith(pf)
 }
 
-private[data] trait EitherTMonadFilter[F[_], L] extends MonadFilter[EitherT[F, L, ?]] with EitherTMonadError[F, L] {
+private[data] trait EitherTMonadFilter[F[_], L] extends MonadFilter[EitherT[F, L, ?]] with EitherTMonad[F, L] {
   implicit val F: Monad[F]
   implicit val L: Monoid[L]
   def empty[A]: EitherT[F, L, A] = EitherT(F.pure(Either.left(L.empty)))

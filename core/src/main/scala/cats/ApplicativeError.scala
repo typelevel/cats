@@ -9,7 +9,9 @@ import scala.util.control.NonFatal
  *
  * This type class allows one to abstract over error-handling applicatives.
  */
-trait ApplicativeError[F[_], E] extends Applicative[F] {
+trait ApplicativeError[F[_], E] {
+  def applicative: Applicative[F]
+
   /**
    * Lift an error into the `F` context.
    */
@@ -34,7 +36,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * @see [[recover]] to only recover from certain errors.
    */
-  def handleError[A](fa: F[A])(f: E => A): F[A] = handleErrorWith(fa)(f andThen pure)
+  def handleError[A](fa: F[A])(f: E => A): F[A] = handleErrorWith(fa)(f andThen applicative.pure)
 
   /**
    * Handle errors by turning them into [[scala.util.Either]] values.
@@ -44,8 +46,8 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * All non-fatal errors should be handled by this method.
    */
   def attempt[A](fa: F[A]): F[Either[E, A]] = handleErrorWith(
-    map(fa)(Right(_): Either[E, A])
-  )(e => pure(Left(e)))
+    applicative.map(fa)(Right(_): Either[E, A])
+  )(e => applicative.pure(Left(e)))
 
   /**
    * Similar to [[attempt]], but wraps the result in a [[cats.data.EitherT]] for
@@ -63,7 +65,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    */
   def recover[A](fa: F[A])(pf: PartialFunction[E, A]): F[A] =
     handleErrorWith(fa)(e =>
-      (pf andThen pure) applyOrElse(e, raiseError))
+      (pf andThen applicative.pure) applyOrElse(e, raiseError))
 
   /**
    * Recover from certain errors by mapping them to an `F[A]` value.
@@ -81,7 +83,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * and raise.
    */
   def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< E): F[A] =
-    try pure(a)
+    try applicative.pure(a)
     catch {
       case NonFatal(e) => raiseError(e)
     }
@@ -91,7 +93,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * and raise
    */
   def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< E): F[A] =
-    try pure(a.value)
+    try applicative.pure(a.value)
     catch {
       case NonFatal(e) => raiseError(e)
     }
@@ -101,7 +103,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    */
   def fromTry[A](t: Try[A])(implicit ev: Throwable <:< E): F[A] =
     t match {
-      case Success(a) => pure(a)
+      case Success(a) => applicative.pure(a)
       case Failure(e) => raiseError(e)
     }
 }

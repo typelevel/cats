@@ -130,7 +130,7 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
     }
 
   implicit def catsDataApplicativeErrorForKleisli[F[_], A, E](implicit AE: ApplicativeError[F, E]): ApplicativeError[Kleisli[F, A, ?], E]
-    = new KleisliApplicativeError[F, A, E] { implicit def AF: ApplicativeError[F, E]  = AE }
+    = new KleisliApplicativeError[F, A, E] { implicit def F: ApplicativeError[F, E] = AE }
 }
 
 private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 {
@@ -283,17 +283,17 @@ private trait KleisliMonoidK[F[_]] extends MonoidK[λ[α => Kleisli[F, α, α]]]
 }
 
 
-private trait KleisliApplicativeError[F[_], A, E] extends KleisliApplicative[F, A] with ApplicativeError[Kleisli[F, A, ?], E] {
+private trait KleisliApplicativeError[F[_], A, E] extends ApplicativeError[Kleisli[F, A, ?], E] { outer =>
   type K[T] = Kleisli[F, A, T]
 
-  implicit def AF: ApplicativeError[F, E]
+  implicit def F: ApplicativeError[F, E]
 
-  implicit def F: Applicative[F] = AF
+  def applicative = new KleisliApplicative[F, A] { implicit def F = outer.F.applicative }
 
-  def raiseError[B](e: E): K[B] = Kleisli(_ => AF.raiseError(e))
+  def raiseError[B](e: E): K[B] = Kleisli(_ => F.raiseError(e))
 
   def handleErrorWith[B](kb: K[B])(f: E => K[B]): K[B] = Kleisli { a: A =>
-    AF.handleErrorWith(kb.run(a))((e: E) => f(e).run(a))
+    F.handleErrorWith(kb.run(a))((e: E) => f(e).run(a))
   }
 
 }
