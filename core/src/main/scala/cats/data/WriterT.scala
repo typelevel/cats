@@ -66,9 +66,11 @@ object WriterT extends WriterTInstances with WriterTFunctions {
 }
 
 private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
-
-  implicit def catsDataMonadForWriterTId[L:Monoid]: Monad[WriterT[Id, L, ?]] =
+  implicit def catsDataMonadWriterForWriterTId[L: Monoid]: MonadWriter[WriterT[Id, L, ?], L] =
     catsDataMonadWriterForWriterT[Id, L]
+
+  implicit def catsDataMonadForWriterTId[L: Monoid]: Monad[WriterT[Id, L, ?]] =
+    catsDataMonadForWriterT[Id, L]
 
   implicit def catsDataEqForWriterTId[L: Eq, V: Eq]: Eq[WriterT[Id, L, V]] =
     catsDataEqForWriterT[Id, L, V]
@@ -134,6 +136,12 @@ private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 
 private[data] sealed abstract class WriterTInstances2 extends WriterTInstances3 {
   implicit def catsDataMonadWriterForWriterT[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadWriter[WriterT[F, L, ?], L] =
     new WriterTMonadWriter[F, L] {
+      implicit val F0: Monad[F] = F
+      implicit val L0: Monoid[L] = L
+    }
+
+  implicit def catsDataMonadForWriterT[F[_], L](implicit F: Monad[F], L: Monoid[L]): Monad[WriterT[F, L, ?]] =
+    new WriterTMonad[F, L] {
       implicit val F0: Monad[F] = F
       implicit val L0: Monoid[L] = L
     }
@@ -329,7 +337,15 @@ private[data] sealed trait WriterTMonadError[F[_], L, E] extends MonadError[Writ
   override implicit def F0: MonadError[F, E]
 }
 
-private[data] sealed trait WriterTMonadWriter[F[_], L] extends MonadWriter[WriterT[F, L, ?], L] with WriterTMonad[F, L] {
+private[data] sealed trait WriterTMonadWriter[F[_], L] extends MonadWriter[WriterT[F, L, ?], L] { outer =>
+  implicit def F0: Monad[F]
+  implicit def L0: Monoid[L]
+
+  def monad = new WriterTMonad[F, L] {
+    implicit def F0 = outer.F0
+    implicit def L0 = outer.L0
+  }
+
   def writer[A](aw: (L, A)): WriterT[F, L, A] =
     WriterT.put(aw._2)(aw._1)
 
