@@ -3,7 +3,7 @@ package laws
 
 trait MonadWriterLaws[F[_], W] extends MonadLaws[F] {
   implicit def FW: MonadWriter[F, W]
-  implicit def F = FW.monad
+  implicit def F: Monad[F] = FW.monad
 
   def monadWriterWriterPure[A](a: A)(implicit W: Monoid[W]): IsEq[F[A]] =
     FW.writer((W.empty, a)) <-> F.pure(a)

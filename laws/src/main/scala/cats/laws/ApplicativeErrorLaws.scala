@@ -6,7 +6,7 @@ import cats.data.EitherT
 // Taken from http://functorial.com/psc-pages/docs/Control/Monad/Error/Class/index.html
 trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
   implicit def FE: ApplicativeError[F, E]
-  implicit def F = FE.applicative
+  implicit def F: Applicative[F] = FE.applicative
 
   def applicativeErrorHandleWith[A](e: E, f: E => F[A]): IsEq[F[A]] =
     FE.handleErrorWith(FE.raiseError[A](e))(f) <-> f(e)

@@ -4,7 +4,7 @@ package laws
 // Taken from http://functorial.com/psc-pages/docs/Control/Monad/Reader/Class/index.html
 trait MonadReaderLaws[F[_], R] extends MonadLaws[F] {
   implicit def FR: MonadReader[F, R]
-  implicit def F = FR.monad
+  implicit def F: Monad[F] = FR.monad
 
   val monadReaderAskIdempotent: IsEq[F[R]] =
     F.flatMap(FR.ask)(_ => FR.ask) <-> FR.ask
