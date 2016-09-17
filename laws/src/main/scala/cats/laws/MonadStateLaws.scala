@@ -3,22 +3,23 @@ package laws
 
 // Taken from http://functorial.com/psc-pages/docs/Control/Monad/State/Class/index.html
 trait MonadStateLaws[F[_], S] extends MonadLaws[F] {
-  implicit override def F: MonadState[F, S]
+  implicit def FS: MonadState[F, S]
+  implicit def F = FS.monad
 
   val monadStateGetIdempotent: IsEq[F[S]] =
-    F.flatMap(F.get)(_ => F.get) <-> F.get
+    F.flatMap(FS.get)(_ => FS.get) <-> FS.get
 
   def monadStateSetTwice(s: S, t: S): IsEq[F[Unit]] =
-    F.flatMap(F.set(s))(_ => F.set(t)) <-> F.set(t)
+    F.flatMap(FS.set(s))(_ => FS.set(t)) <-> FS.set(t)
 
   def monadStateSetGet(s: S): IsEq[F[S]] =
-    F.flatMap(F.set(s))(_ => F.get) <-> F.flatMap(F.set(s))(_ => F.pure(s))
+    F.flatMap(FS.set(s))(_ => FS.get) <-> F.flatMap(FS.set(s))(_ => F.pure(s))
 
   val monadStateGetSet: IsEq[F[Unit]] =
-    F.flatMap(F.get)(F.set) <-> F.pure(())
+    F.flatMap(FS.get)(FS.set) <-> F.pure(())
 }
 
 object MonadStateLaws {
-  def apply[F[_], S](implicit FS: MonadState[F, S]): MonadStateLaws[F, S] =
-    new MonadStateLaws[F, S] { def F: MonadState[F, S] = FS }
+  def apply[F[_], S](implicit FS0: MonadState[F, S]): MonadStateLaws[F, S] =
+    new MonadStateLaws[F, S] { def FS: MonadState[F, S] = FS0 }
 }

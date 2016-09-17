@@ -172,18 +172,7 @@ object FreeT extends FreeTInstances {
 
 }
 
-private[free] sealed trait FreeTInstances3 {
-  implicit def catsFreeMonadStateForFreeT[S[_], M[_], E](implicit M1: MonadState[M, E]): MonadState[FreeT[S, M, ?], E] =
-    new MonadState[FreeT[S, M, ?], E] with FreeTMonad[S, M] {
-      override def M = implicitly
-      override def get =
-        FreeT.liftT(M1.get)
-      override def set(s: E) =
-        FreeT.liftT(M1.set(s))
-    }
-}
-
-private[free] sealed trait FreeTInstances2 extends FreeTInstances3 {
+private[free] sealed trait FreeTInstances2 {
   implicit def catsFreeMonadErrorForFreeT[S[_], M[_]: RecursiveTailRecM, E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, ?], E] =
     new MonadError[FreeT[S, M, ?], E] with FreeTMonad[S, M] {
       override def M = implicitly
@@ -224,6 +213,15 @@ private[free] sealed trait FreeTInstances0 extends FreeTInstances1 {
 }
 
 private[free] sealed trait FreeTInstances extends FreeTInstances0 {
+  implicit def catsFreeMonadStateForFreeT[S[_], M[_], E](implicit M1: MonadState[M, E]): MonadState[FreeT[S, M, ?], E] =
+    new MonadState[FreeT[S, M, ?], E] {
+      val monad = catsFreeMonadForFreeT[S, M](M1.monad)
+      override def get =
+        FreeT.liftT(M1.get)(M1.monad)
+      override def set(s: E) =
+        FreeT.liftT(M1.set(s))(M1.monad)
+    }
+
   implicit def catsFreeMonadCombineForFreeT[S[_], M[_]: Alternative]: MonadCombine[FreeT[S, M, ?]] =
     new MonadCombine[FreeT[S, M, ?]] with FreeTCombine[S, M] with FreeTMonad[S, M] {
       override def M = implicitly
