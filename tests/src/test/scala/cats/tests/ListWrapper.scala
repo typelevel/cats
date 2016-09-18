@@ -44,17 +44,6 @@ object ListWrapper {
 
   def eqv[A : Eq]: Eq[ListWrapper[A]] = Eq[List[A]].on[ListWrapper[A]](_.list)
 
-  val traverseFilter: TraverseFilter[ListWrapper] = {
-    val F = TraverseFilter[List]
-
-    new TraverseFilter[ListWrapper] {
-      val traverseInstance = traverse
-      def traverseFilter[G[_], A, B](fa: ListWrapper[A])(f: A => G[Option[B]])(implicit G0: Applicative[G]): G[ListWrapper[B]] = {
-        G0.map(F.traverseFilter(fa.list)(f))(ListWrapper.apply)
-      }
-    }
-  }
-
   val traverse: Traverse[ListWrapper] = new Traverse[ListWrapper] {
     val F = Traverse[List]
 
@@ -64,6 +53,17 @@ object ListWrapper {
       F.foldLeft(fa.list, b)(f)
     def foldRight[A, B](fa: ListWrapper[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
       F.foldRight(fa.list, lb)(f)
+  }
+
+  val traverseFilter: TraverseFilter[ListWrapper] = {
+    val F = TraverseFilter[List]
+
+    new TraverseFilter[ListWrapper] {
+      val traverseInstance = traverse
+      def traverseFilter[G[_], A, B](fa: ListWrapper[A])(f: A => G[Option[B]])(implicit G0: Applicative[G]): G[ListWrapper[B]] = {
+        G0.map(F.traverseFilter(fa.list)(f))(ListWrapper.apply)
+      }
+    }
   }
 
   val foldable: Foldable[ListWrapper] = traverse
@@ -82,6 +82,18 @@ object ListWrapper {
 
   def semigroup[A]: Semigroup[ListWrapper[A]] = semigroupK.algebra[A]
 
+  val monad: Monad[ListWrapper] = new Monad[ListWrapper] {
+    val M = Monad[List]
+
+    def pure[A](x: A): ListWrapper[A] = ListWrapper(M.pure(x))
+
+    def flatMap[A, B](fa: ListWrapper[A])(f: A => ListWrapper[B]): ListWrapper[B] =
+      ListWrapper(M.flatMap(fa.list)(a => f(a).list))
+
+    def tailRecM[A, B](a: A)(f: A => ListWrapper[Either[A,B]]): ListWrapper[B] =
+      ListWrapper(M.tailRecM(a)(a => f(a).list))
+  }
+
   val monadCombine: MonadCombine[ListWrapper] = {
     val M = MonadCombine[List]
 
@@ -93,18 +105,6 @@ object ListWrapper {
       def combineK[A](x: ListWrapper[A], y: ListWrapper[A]): ListWrapper[A] =
         ListWrapper(M.combineK(x.list, y.list))
     }
-  }
-
-  val monad: Monad[ListWrapper] = new Monad[ListWrapper] {
-    val M = Monad[List]
-
-    def pure[A](x: A): ListWrapper[A] = ListWrapper(M.pure(x))
-
-    def flatMap[A, B](fa: ListWrapper[A])(f: A => ListWrapper[B]): ListWrapper[B] =
-      ListWrapper(M.flatMap(fa.list)(a => f(a).list))
-
-    def tailRecM[A, B](a: A)(f: A => ListWrapper[Either[A,B]]): ListWrapper[B] =
-      ListWrapper(M.tailRecM(a)(a => f(a).list))
   }
 
   val applicative: Applicative[ListWrapper] = monad

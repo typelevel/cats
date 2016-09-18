@@ -4,7 +4,7 @@ import simulacrum.typeclass
 
 /**
  * `TraverseFilter`, also known as `Witherable`, represents list-like structures
- * that can essentially have a [[traverse]] and a [[filter]] applied as a single
+ * that can essentially have a `traverse` and a [[filter]] applied as a single
  * combined operation ([[traverseFilter]]).
  *
  * Must obey the laws defined in cats.laws.TraverseFilterLaws.
@@ -16,7 +16,7 @@ import simulacrum.typeclass
   def functorInstance: Functor[F] = traverseInstance
 
   /**
-   * A combined [[traverse]] and [[filter]]. Filtering is handled via `Option`
+   * A combined `traverse` and [[filter]]. Filtering is handled via `Option`
    * instead of `Boolean` such that the output type `B` can be different than
    * the input type `A`.
    *

@@ -521,9 +521,9 @@ type TeletypeT[M[_], A] = FreeT[Teletype, M, A]
 type Log = List[String]
 
 /** Smart constructors, notice we are abstracting over any MonadState instance
- *  to potentially support other types beside State 
+ *  to potentially support other types beside State
  */
-class TeletypeOps[M[_]](implicit MS : MonadState[M, Log]) {
+class TeletypeOps[M[_]](implicit MS : MonadState[M, Log], M: Monad[M]) {
   def writeLine(line : String) : TeletypeT[M, Unit] =
 	FreeT.liftF[Teletype, M, Unit](WriteLine(line))
   def readLine(prompt : String) : TeletypeT[M, String] =

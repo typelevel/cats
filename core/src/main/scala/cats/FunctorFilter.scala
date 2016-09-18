@@ -6,7 +6,7 @@ import simulacrum.typeclass
   def functorInstance: Functor[F]
 
   /**
-   * A combined [[map]] and [[filter]]. Filtering is handled via `Option`
+   * A combined `map` and [[filter]]. Filtering is handled via `Option`
    * instead of `Boolean` such that the output type `B` can be different than
    * the input type `A`.
    *

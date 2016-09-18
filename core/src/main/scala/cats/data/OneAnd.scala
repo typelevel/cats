@@ -121,7 +121,7 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
     }
 
   implicit def catsDataMonadForOneAnd[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[F, ?]] = {
-    implicit def monadInstance = monad.monadInstance
+    implicit val monadInstance = monad.monadInstance
     new Monad[OneAnd[F, ?]] {
       override def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
         fa map f
