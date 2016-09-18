@@ -162,7 +162,7 @@ private[data] sealed trait StateTInstances extends StateTInstances1 {
 
 private[data] sealed trait StateTInstances1 extends StateTInstances2 {
   implicit def catsDataMonadCombineForStateT[F[_], S](implicit F0: MonadCombine[F]): MonadCombine[StateT[F, S, ?]] =
-    new StateTMonadCombine[F, S] { implicit def F = F0 }
+    new StateTMonadCombine[F, S] { implicit def G = F0 }
 }
 
 private[data] sealed trait StateTInstances2 {
@@ -249,9 +249,11 @@ private[data] sealed trait StateTSemigroupK[F[_], S] extends SemigroupK[StateT[F
     StateT(s => G.combineK(x.run(s), y.run(s)))
 }
 
-private[data] sealed trait StateTMonadCombine[F[_], S] extends MonadCombine[StateT[F, S, ?]] with StateTMonad[F, S] with StateTSemigroupK[F, S] with StateTTransLift[S] {
-  implicit def F: MonadCombine[F]
-  override def G: MonadCombine[F] = F
+private[data] sealed trait StateTMonadCombine[F[_], S] extends MonadCombine[StateT[F, S, ?]] with StateTSemigroupK[F, S] with StateTTransLift[S] { outer =>
+  implicit def F = G.monadInstance
+  override def G: MonadCombine[F]
 
-  def empty[A]: StateT[F, S, A] = liftT[F, A](F.empty[A])
+  def monadInstance = new StateTMonad[F, S] { implicit def F = outer.G.monadInstance }
+
+  def empty[A]: StateT[F, S, A] = liftT[F, A](G.empty[A])(F)
 }

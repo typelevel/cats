@@ -221,9 +221,11 @@ private[free] sealed trait FreeTInstances extends FreeTInstances0 {
     }
 
   implicit def catsFreeMonadCombineForFreeT[S[_], M[_]: Alternative]: MonadCombine[FreeT[S, M, ?]] =
-    new MonadCombine[FreeT[S, M, ?]] with FreeTCombine[S, M] with FreeTMonad[S, M] {
-      override def M = implicitly
+    new MonadCombine[FreeT[S, M, ?]] with FreeTCombine[S, M] {
+      override def M = Alternative[M].applicativeInstance
       override def M1 = implicitly
+
+      def monadInstance = catsFreeMonadForFreeT[S, M](Alternative[M].applicativeInstance)
 
       override def empty[A] = FreeT.liftT[S, M, A](MonoidK[M].empty[A])(M)
     }

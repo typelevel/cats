@@ -384,18 +384,37 @@ private[data] sealed trait WriterTMonoidK[F[_], L] extends MonoidK[WriterT[F, L,
   def empty[A]: WriterT[F, L, A] = WriterT(F0.empty)
 }
 
-private[data] sealed trait WriterTAlternative[F[_], L] extends Alternative[WriterT[F, L, ?]] with WriterTMonoidK[F, L] with WriterTApplicative[F, L] {
+private[data] sealed trait WriterTAlternative[F[_], L] extends Alternative[WriterT[F, L, ?]] with WriterTMonoidK[F, L] { outer =>
   override implicit def F0: Alternative[F]
+  implicit def L0: Monoid[L]
+
+  def applicativeInstance = new WriterTApplicative[F, L] {
+    def F0 = outer.F0.applicativeInstance
+    def L0 = outer.L0
+  }
 }
 
-private[data] sealed trait WriterTMonadFilter[F[_], L] extends MonadFilter[WriterT[F, L, ?]] with WriterTMonad[F, L] {
-  override implicit def F0: MonadFilter[F]
+private[data] sealed trait WriterTMonadFilter[F[_], L] extends MonadFilter[WriterT[F, L, ?]] { outer =>
+  implicit def F0: MonadFilter[F]
+  implicit def L0: Monoid[L]
+
+  def monadInstance = new WriterTMonad[F, L] {
+    def F0 = outer.F0.monadInstance
+    def L0 = outer.L0
+  }
 
   def empty[A]: WriterT[F, L, A] = WriterT(F0.empty)
 }
 
-private[data] sealed trait WriterTMonadCombine[F[_], L] extends MonadCombine[WriterT[F, L, ?]] with WriterTMonad[F, L] with WriterTAlternative[F, L] {
+private[data] sealed trait WriterTMonadCombine[F[_], L] extends MonadCombine[WriterT[F, L, ?]] with WriterTAlternative[F, L] { outer =>
   override implicit def F0: MonadCombine[F]
+
+  def monadInstance = new WriterTMonad[F, L] {
+    def F0 = outer.F0.monadInstance
+    def L0 = outer.L0
+  }
+
+  override def applicativeInstance = monadInstance
 }
 
 private[data] sealed trait WriterTSemigroup[F[_], L, A] extends Semigroup[WriterT[F, L, A]] {

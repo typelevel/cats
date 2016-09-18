@@ -145,7 +145,7 @@ class WriterTTests extends CatsSuite {
   // resolution and the laws of these various instances.
   {
     // F has an Apply and L has a Semigroup
-    implicit val F: Apply[ListWrapper] = ListWrapper.monadCombine
+    implicit val F: Apply[ListWrapper] = ListWrapper.applyInstance
     implicit val L: Semigroup[ListWrapper[Int]] = ListWrapper.semigroup[Int]
 
     Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
@@ -167,7 +167,7 @@ class WriterTTests extends CatsSuite {
 
   {
     // F has a Monad and L has a Semigroup
-    implicit val F: Monad[ListWrapper] = ListWrapper.monadCombine
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
     implicit val L: Semigroup[ListWrapper[Int]] = ListWrapper.semigroup[Int]
 
     Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
@@ -193,7 +193,7 @@ class WriterTTests extends CatsSuite {
   }
   {
     // F has a FlatMap and L has a Monoid
-    implicit val F: FlatMap[ListWrapper] = ListWrapper.monadCombine
+    implicit val F: FlatMap[ListWrapper] = ListWrapper.monad
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
 
     Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
@@ -220,7 +220,7 @@ class WriterTTests extends CatsSuite {
 
   {
     // F has an Applicative and L has a Monoid
-    implicit val F: Applicative[ListWrapper] = ListWrapper.monadCombine
+    implicit val F: Applicative[ListWrapper] = ListWrapper.monad
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
 
     Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
@@ -247,7 +247,7 @@ class WriterTTests extends CatsSuite {
 
   {
     // F has a Monad and L has a Monoid
-    implicit val F: Monad[ListWrapper] = ListWrapper.monadCombine
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
 
     Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
@@ -282,7 +282,8 @@ class WriterTTests extends CatsSuite {
 
   {
     // F has an Alternative and L has a Monoid
-    implicit val F: Alternative[ListWrapper] = ListWrapper.alternative
+    implicit val F0: Alternative[ListWrapper] = ListWrapper.alternative
+    implicit val F1 = F0.applicativeInstance
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
 
     Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
@@ -295,7 +296,8 @@ class WriterTTests extends CatsSuite {
 
   {
     // F has a MonadFilter and L has a Monoid
-    implicit val F: MonadFilter[ListWrapper] = ListWrapper.monadFilter
+    implicit val F0: MonadFilter[ListWrapper] = ListWrapper.monadFilter
+    implicit val F1 = F0.monadInstance
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
 
     Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]
@@ -310,7 +312,8 @@ class WriterTTests extends CatsSuite {
 
   {
     // F has a MonadCombine and L has a Monoid
-    implicit val F: MonadCombine[ListWrapper] = ListWrapper.monadCombine
+    implicit val F0: MonadCombine[ListWrapper] = ListWrapper.monadCombine
+    implicit val F1 = F0.monadInstance
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
 
     Functor[WriterT[ListWrapper, ListWrapper[Int], ?]]

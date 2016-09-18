@@ -2,7 +2,8 @@ package cats
 
 import simulacrum.typeclass
 
-@typeclass trait FunctorFilter[F[_]] extends Functor[F] {
+@typeclass trait FunctorFilter[F[_]] {
+  def functorInstance: Functor[F]
 
   /**
    * A combined [[map]] and [[filter]]. Filtering is handled via `Option`

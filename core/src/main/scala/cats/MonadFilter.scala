@@ -9,10 +9,12 @@ import simulacrum.typeclass
  * us since it allows us to add a `filter` method to a Monad, which is
  * used when pattern matching or using guards in for comprehensions.
  */
-@typeclass trait MonadFilter[F[_]] extends Monad[F] with FunctorFilter[F] {
+@typeclass trait MonadFilter[F[_]] extends FunctorFilter[F] {
+  def monadInstance: Monad[F]
+  def functorInstance: Functor[F] = monadInstance
 
   def empty[A]: F[A]
 
   override def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
-    flatMap(fa)(a => f(a).fold(empty[B])(pure))
+    monadInstance.flatMap(fa)(a => f(a).fold(empty[B])(monadInstance.pure))
 }

@@ -5,7 +5,8 @@ import cats.data.Nested
 import cats.implicits._
 
 trait TraverseFilterLaws[F[_]] extends TraverseLaws[F] with FunctorFilterLaws[F] {
-  implicit override def F: TraverseFilter[F]
+  implicit override def F0: TraverseFilter[F]
+  implicit override def F: Traverse[F] = F0.traverseInstance
 
   def traverseFilterIdentity[G[_]:Applicative, A](fa: F[A]): IsEq[G[F[A]]] = {
     fa.traverseFilter(_.some.pure[G]) <-> fa.pure[G]
@@ -29,5 +30,5 @@ trait TraverseFilterLaws[F[_]] extends TraverseLaws[F] with FunctorFilterLaws[F]
 
 object TraverseFilterLaws {
   def apply[F[_]](implicit ev: TraverseFilter[F]): TraverseFilterLaws[F] =
-    new TraverseFilterLaws[F] { def F: TraverseFilter[F] = ev }
+    new TraverseFilterLaws[F] { def F0: TraverseFilter[F] = ev }
 }

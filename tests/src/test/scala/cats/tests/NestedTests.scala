@@ -99,7 +99,7 @@ class NestedTests extends CatsSuite {
 
   {
     // Alternative composition
-    implicit val instance = ListWrapper.alternative
+    implicit val instance = ListWrapper.applicative
     checkAll("Nested[List, ListWrapper, ?]", AlternativeTests[Nested[List, ListWrapper, ?]].alternative[Int, Int, Int])
     checkAll("Alternative[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(Alternative[Nested[List, ListWrapper, ?]]))
   }

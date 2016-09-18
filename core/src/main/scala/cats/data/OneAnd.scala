@@ -20,21 +20,21 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
    * Combine the head and tail into a single `F[A]` value.
    */
   def unwrap(implicit F: MonadCombine[F]): F[A] =
-    F.combineK(F.pure(head), tail)
+    F.combineK(F.monadInstance.pure(head), tail)
 
   /**
    * remove elements not matching the predicate
    */
   def filter(f: A => Boolean)(implicit F: MonadCombine[F]): F[A] = {
     val rest = F.filter(tail)(f)
-    if (f(head)) F.combineK(F.pure(head), rest) else rest
+    if (f(head)) F.combineK(F.monadInstance.pure(head), rest) else rest
   }
 
   /**
    * Append another OneAnd to this
    */
   def combine(other: OneAnd[F, A])(implicit F: MonadCombine[F]): OneAnd[F, A] =
-    OneAnd(head, F.combineK(tail, F.combineK(F.pure(other.head), other.tail)))
+    OneAnd(head, F.combineK(tail, F.combineK(F.monadInstance.pure(other.head), other.tail)))
 
   /**
    * find the first element matching the predicate, if one exists
@@ -120,7 +120,8 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
       override def size[A](fa: OneAnd[F, A]): Long = 1 + F.size(fa.tail)
     }
 
-  implicit def catsDataMonadForOneAnd[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[F, ?]] =
+  implicit def catsDataMonadForOneAnd[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[F, ?]] = {
+    implicit val monadInstance = monad.monadInstance
     new Monad[OneAnd[F, ?]] {
       override def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
         fa map f
@@ -129,9 +130,9 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
         OneAnd(x, monad.empty)
 
       def flatMap[A, B](fa: OneAnd[F, A])(f: A => OneAnd[F, B]): OneAnd[F, B] = {
-        val end = monad.flatMap(fa.tail) { a =>
+        val end = monadInstance.flatMap(fa.tail) { a =>
           val fa = f(a)
-          monad.combineK(monad.pure(fa.head), fa.tail)
+          monad.combineK(monadInstance.pure(fa.head), fa.tail)
         }
         val fst = f(fa.head)
         OneAnd(fst.head, monad.combineK(fst.tail, end))
@@ -140,11 +141,11 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
       def tailRecM[A, B](a: A)(fn: A => OneAnd[F, Either[A, B]]): OneAnd[F, B] = {
         def stepF(a: A): F[Either[A, B]] = {
           val oneAnd = fn(a)
-          monad.combineK(monad.pure(oneAnd.head), oneAnd.tail)
+          monad.combineK(monadInstance.pure(oneAnd.head), oneAnd.tail)
         }
         def toFB(in: Either[A, B]): F[B] = in match {
-          case Right(b) => monad.pure(b)
-          case Left(a)  => monad.tailRecM(a)(stepF)
+          case Right(b) => monadInstance.pure(b)
+          case Left(a)  => monadInstance.tailRecM(a)(stepF)
         }
 
         // This could probably be in SemigroupK to perform well
@@ -159,16 +160,17 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
         def go(in: A, rest: List[F[B]]): OneAnd[F, B] =
           fn(in) match {
             case OneAnd(Right(b), tail) =>
-              val fbs = monad.flatMap(tail)(toFB)
+              val fbs = monadInstance.flatMap(tail)(toFB)
               OneAnd(b, combineAll(fbs :: rest))
             case OneAnd(Left(a), tail) =>
-              val fbs = monad.flatMap(tail)(toFB)
+              val fbs = monadInstance.flatMap(tail)(toFB)
               go(a, fbs :: rest)
           }
 
         go(a, Nil)
       }
     }
+  }
 
     implicit def catsDataOneAnd[F[_]: RecursiveTailRecM]: RecursiveTailRecM[OneAnd[F, ?]] =
       RecursiveTailRecM.create[OneAnd[F, ?]]

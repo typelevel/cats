@@ -6,13 +6,26 @@ import scala.annotation.tailrec
 import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
 
-trait VectorInstances extends cats.kernel.instances.VectorInstances {
-  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] =
-    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] {
+trait VectorInstances extends cats.kernel.instances.VectorInstances with VectorInstances0 {
+  implicit val catsStdMonadCombineForVector: MonadCombine[Vector] = new MonadCombine[Vector] {
+    val monadInstance = catsStdInstancesForVector
 
-      def empty[A]: Vector[A] = Vector.empty[A]
+    def empty[A]: Vector[A] = Vector.empty[A]
 
-      def combineK[A](x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
+    def combineK[A](x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
+  }
+
+  implicit def catsStdShowForVector[A:Show]: Show[Vector[A]] =
+    new Show[Vector[A]] {
+      def show(fa: Vector[A]): String =
+        fa.iterator.map(_.show).mkString("Vector(", ", ", ")")
+    }
+}
+
+private[instances] trait VectorInstances0 {
+  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with Traverse[Vector] with Monad[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] =
+    new TraverseFilter[Vector] with Traverse[Vector] with Monad[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] {
+      val traverseInstance = this
 
       def pure[A](x: A): Vector[A] = Vector(x)
 
@@ -86,11 +99,5 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def filter[A](fa: Vector[A])(f: A => Boolean): Vector[A] = fa.filter(f)
 
       override def collect[A, B](fa: Vector[A])(f: PartialFunction[A, B]): Vector[B] = fa.collect(f)
-    }
-
-  implicit def catsStdShowForVector[A:Show]: Show[Vector[A]] =
-    new Show[Vector[A]] {
-      def show(fa: Vector[A]): String =
-        fa.iterator.map(_.show).mkString("Vector(", ", ", ")")
     }
 }

@@ -60,7 +60,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     F.map(value)(_.to[G])
 
   def collectRight(implicit F: MonadCombine[F]): F[B] =
-    F.flatMap(value)(_.to[F])
+    F.monadInstance.flatMap(value)(_.to[F])
 
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): EitherT[F, C, D] = EitherT(F.map(value)(_.bimap(fa, fb)))
 
@@ -423,9 +423,15 @@ private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, 
     fla.recoverWith(pf)
 }
 
-private[data] trait EitherTMonadFilter[F[_], L] extends MonadFilter[EitherT[F, L, ?]] with EitherTMonad[F, L] {
+private[data] trait EitherTMonadFilter[F[_], L] extends MonadFilter[EitherT[F, L, ?]] { outer =>
   implicit val F: Monad[F]
   implicit val L: Monoid[L]
+
+  implicit def monad = new EitherTMonad[F, L] {
+    implicit val F = outer.F
+    implicit val L = outer.L
+  }
+
   def empty[A]: EitherT[F, L, A] = EitherT(F.pure(Either.left(L.empty)))
 }
 

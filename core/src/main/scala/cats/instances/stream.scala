@@ -4,13 +4,25 @@ package instances
 import cats.syntax.show._
 import scala.annotation.tailrec
 
-trait StreamInstances extends cats.kernel.instances.StreamInstances {
-  implicit val catsStdInstancesForStream: TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] =
-    new TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] {
+trait StreamInstances extends cats.kernel.instances.StreamInstances with StreamInstances0 {
+  implicit val catsStdMonadCombineForStream: MonadCombine[Stream] = new MonadCombine[Stream] {
+    val monadInstance = catsStdInstancesForStream
 
-      def empty[A]: Stream[A] = Stream.Empty
+    def empty[A]: Stream[A] = Stream.Empty
 
-      def combineK[A](x: Stream[A], y: Stream[A]): Stream[A] = x #::: y
+    def combineK[A](x: Stream[A], y: Stream[A]): Stream[A] = x #::: y
+  }
+
+  implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =
+    new Show[Stream[A]] {
+      def show(fa: Stream[A]): String = if (fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
+    }
+}
+
+private[instances] trait StreamInstances0 {
+  implicit val catsStdInstancesForStream: TraverseFilter[Stream] with Traverse[Stream] with Monad[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] =
+    new TraverseFilter[Stream] with Traverse[Stream] with Monad[Stream] with CoflatMap[Stream] with RecursiveTailRecM[Stream] {
+      val traverseInstance = this
 
       def pure[A](x: A): Stream[A] = Stream(x)
 
@@ -106,10 +118,5 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       override def filter[A](fa: Stream[A])(f: A => Boolean): Stream[A] = fa.filter(f)
 
       override def collect[A, B](fa: Stream[A])(f: PartialFunction[A, B]): Stream[B] = fa.collect(f)
-    }
-
-  implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =
-    new Show[Stream[A]] {
-      def show(fa: Stream[A]): String = if (fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
     }
 }

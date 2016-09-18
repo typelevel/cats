@@ -11,7 +11,9 @@ import simulacrum.typeclass
  *
  * Based on Haskell's [[https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html Data.Witherable]]
  */
-@typeclass trait TraverseFilter[F[_]] extends Traverse[F] with FunctorFilter[F] { self =>
+@typeclass trait TraverseFilter[F[_]] extends FunctorFilter[F] { self =>
+  def traverseInstance : Traverse[F]
+  def functorInstance: Functor[F] = traverseInstance
 
   /**
    * A combined [[traverse]] and [[filter]]. Filtering is handled via `Option`
@@ -59,7 +61,4 @@ import simulacrum.typeclass
 
   override def filter[A](fa: F[A])(f: A => Boolean): F[A] =
     filterA[Id, A](fa)(f)
-
-  override def traverse[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[F[B]] =
-    traverseFilter(fa)(a => G.map(f(a))(Some(_)))
 }

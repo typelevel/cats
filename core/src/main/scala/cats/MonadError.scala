@@ -7,7 +7,7 @@ package cats
  */
 trait MonadError[F[_], E] extends ApplicativeError[F, E] {
   def monad: Monad[F]
-  def applicative = monad
+  def applicative: Applicative[F] = monad
 
   /**
    * Turns a successful value into an error if it does not satisfy a given predicate.
