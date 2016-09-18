@@ -250,7 +250,7 @@ private[data] trait OptionTFunctor[F[_]] extends Functor[OptionT[F, ?]] {
 private[data] trait OptionTFunctorFilter[F[_]] extends FunctorFilter[OptionT[F, ?]] { outer =>
   implicit def F: Functor[F]
 
-  def functorInstance: Functor[OptionT[F, ?]] = new OptionTFunctor[F] { implicit def F = outer.F }
+  val functorInstance: Functor[OptionT[F, ?]] = new OptionTFunctor[F] { implicit def F = outer.F }
 
   override def mapFilter[A, B](fa: OptionT[F, A])(f: A => Option[B]): OptionT[F, B] =
     fa.mapFilter(f)
@@ -274,7 +274,7 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
 private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, ?], E] { outer =>
   def F: MonadError[F, E]
 
-  def monadInstance: Monad[OptionT[F, ?]] = new OptionTMonad[F] { implicit def F = outer.F.monadInstance }
+  val monadInstance: Monad[OptionT[F, ?]] = new OptionTMonad[F] { implicit def F = outer.F.monadInstance }
 
   override def raiseError[A](e: E): OptionT[F, A] =
     OptionT(F.monadInstance.map(F.raiseError[A](e))(Some(_)))
@@ -303,7 +303,7 @@ private[data] sealed trait OptionTTraverse[F[_]] extends Traverse[OptionT[F, ?]]
 private[data] sealed trait OptionTTraverseFilter[F[_]] extends TraverseFilter[OptionT[F, ?]] { outer =>
   implicit def F: Traverse[F]
 
-  def traverseInstance: Traverse[OptionT[F, ?]] = new OptionTTraverse[F] { implicit def F = outer.F }
+  val traverseInstance: Traverse[OptionT[F, ?]] = new OptionTTraverse[F] { implicit def F = outer.F }
 
   def traverseFilter[G[_]: Applicative, A, B](fa: OptionT[F, A])(f: A => G[Option[B]]): G[OptionT[F, B]] =
     fa traverseFilter f

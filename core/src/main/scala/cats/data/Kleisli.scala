@@ -288,7 +288,7 @@ private trait KleisliApplicativeError[F[_], A, E] extends ApplicativeError[Kleis
 
   implicit def F: ApplicativeError[F, E]
 
-  def applicativeInstance: Applicative[Kleisli[F, A, ?]] =
+  val applicativeInstance: Applicative[Kleisli[F, A, ?]] =
     new KleisliApplicative[F, A] { implicit def F = outer.F.applicativeInstance }
 
   def raiseError[B](e: E): K[B] = Kleisli(_ => F.raiseError(e))

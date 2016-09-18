@@ -228,7 +228,7 @@ private[data] sealed trait StateTMonad[F[_], S] extends Monad[StateT[F, S, ?]] {
 private[data] sealed trait StateTMonadState[F[_], S] extends MonadState[StateT[F, S, ?], S] { outer =>
   implicit def F: Monad[F]
 
-  def monadInstance: Monad[StateT[F, S, ?]] = new StateTMonad[F, S] { implicit def F = outer.F }
+  val monadInstance: Monad[StateT[F, S, ?]] = new StateTMonad[F, S] { implicit def F = outer.F }
 
   lazy val get: StateT[F, S, S] = StateT(s => F.pure((s, s)))
 
@@ -253,7 +253,7 @@ private[data] sealed trait StateTMonadCombine[F[_], S] extends MonadCombine[Stat
   implicit def F: Monad[F] = G.monadInstance
   override def G: MonadCombine[F]
 
-  def monadInstance: Monad[StateT[F, S, ?]] = new StateTMonad[F, S] { implicit def F = outer.G.monadInstance }
+  val monadInstance: Monad[StateT[F, S, ?]] = new StateTMonad[F, S] { implicit def F = outer.G.monadInstance }
 
   def empty[A]: StateT[F, S, A] = liftT[F, A](G.empty[A])(F)
 }
