@@ -154,8 +154,10 @@ private[data] trait NestedFunctor[F[_], G[_]] extends Functor[Nested[F, G, ?]] w
     Nested(FG.map(fga.value)(f))
 }
 
-private[data] trait NestedFunctorFilter[F[_], G[_]] extends FunctorFilter[Nested[F, G, ?]] with NestedFunctor[F, G] {
-  override def FG: FunctorFilter[λ[α => F[G[α]]]]
+private[data] trait NestedFunctorFilter[F[_], G[_]] extends FunctorFilter[Nested[F, G, ?]] { outer =>
+  def FG: FunctorFilter[λ[α => F[G[α]]]]
+
+  val functorInstance: Functor[Nested[F, G, ?]] = new NestedFunctor[F, G] { def FG = outer.FG.functorInstance }
 
   override def mapFilter[A, B](fga: Nested[F, G, A])(f: A => Option[B]): Nested[F, G, B] =
     Nested(FG.mapFilter(fga.value)(f))
@@ -167,8 +169,14 @@ private[data] trait NestedFunctorFilter[F[_], G[_]] extends FunctorFilter[Nested
     Nested(FG.filter(fga.value)(f))
 }
 
-private[data] trait NestedTraverseFilter[F[_], G[_]] extends TraverseFilter[Nested[F, G, ?]] with NestedFunctorFilter[F, G] with NestedTraverse[F, G] {
+private[data] trait NestedTraverseFilter[F[_], G[_]] extends TraverseFilter[Nested[F, G, ?]] with NestedFunctorFilter[F, G] { outer =>
   override def FG: TraverseFilter[λ[α => F[G[α]]]]
+
+  val traverseInstance: Traverse[Nested[F, G, ?]] = new NestedTraverse[F, G] {
+    def FG = outer.FG.traverseInstance
+  }
+
+  override val functorInstance: Functor[Nested[F, G, ?]] = traverseInstance
 
   override def traverseFilter[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[Option[B]]): H[Nested[F, G, B]] =
     Applicative[H].map(FG.traverseFilter(fga.value)(f))(Nested(_))
@@ -202,8 +210,11 @@ private[data] trait NestedMonoidK[F[_], G[_]] extends MonoidK[Nested[F, G, ?]] w
   def empty[A]: Nested[F, G, A] = Nested(FG.empty[A])
 }
 
-private[data] trait NestedAlternative[F[_], G[_]] extends Alternative[Nested[F, G, ?]] with NestedApplicative[F, G] with NestedMonoidK[F, G] {
+private[data] trait NestedAlternative[F[_], G[_]] extends Alternative[Nested[F, G, ?]] with NestedMonoidK[F, G] { outer =>
   def FG: Alternative[λ[α => F[G[α]]]]
+
+  val applicativeInstance: Applicative[Nested[F, G, ?]] =
+    new NestedApplicative[F, G] { def FG = outer.FG.applicativeInstance }
 }
 
 private[data] trait NestedFoldable[F[_], G[_]] extends Foldable[Nested[F, G, ?]] {

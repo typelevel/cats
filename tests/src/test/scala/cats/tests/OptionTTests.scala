@@ -7,7 +7,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
 class OptionTTests extends CatsSuite {
-  implicit val iso = CartesianTests.Isomorphisms.invariant[OptionT[ListWrapper, ?]](OptionT.catsDataFunctorFilterForOptionT(ListWrapper.functor))
+  implicit val iso = CartesianTests.Isomorphisms.invariant[OptionT[ListWrapper, ?]](OptionT.catsDataFunctorForOptionT(ListWrapper.functor))
 
   {
     implicit val F = ListWrapper.eqv[Option[Int]]
@@ -71,6 +71,7 @@ class OptionTTests extends CatsSuite {
     type SEither[A] = Either[String, A]
 
     implicit val monadError = OptionT.catsDataMonadErrorForOptionT[SEither, String]
+    implicit val monad = OptionT.catsDataMonadForOptionT[SEither]
 
     import org.scalacheck.Arbitrary
     implicit val arb1 = implicitly[Arbitrary[OptionT[SEither, Int]]]

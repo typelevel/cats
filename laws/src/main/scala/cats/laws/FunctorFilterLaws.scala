@@ -4,7 +4,8 @@ package laws
 import cats.implicits._
 
 trait FunctorFilterLaws[F[_]] extends FunctorLaws[F] {
-  implicit override def F: FunctorFilter[F]
+  implicit def F0: FunctorFilter[F]
+  implicit def F: Functor[F] = F0.functorInstance
 
   def mapFilterComposition[A, B, C](
     fa: F[A],
@@ -31,5 +32,5 @@ trait FunctorFilterLaws[F[_]] extends FunctorLaws[F] {
 
 object FunctorFilterLaws {
   def apply[F[_]](implicit ev: FunctorFilter[F]): FunctorFilterLaws[F] =
-    new FunctorFilterLaws[F] { def F: FunctorFilter[F] = ev }
+    new FunctorFilterLaws[F] { def F0: FunctorFilter[F] = ev }
 }

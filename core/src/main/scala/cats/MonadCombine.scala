@@ -6,6 +6,8 @@ import simulacrum.typeclass
  * The combination of a Monad with a MonoidK
  */
 @typeclass trait MonadCombine[F[_]] extends MonadFilter[F] with Alternative[F] {
+  def monadInstance: Monad[F]
+  def applicativeInstance: Applicative[F] = monadInstance
 
   /**
    * Fold over the inner structure to combine all of the values with
@@ -15,14 +17,14 @@ import simulacrum.typeclass
    * we collect all the Right values, etc.
    */
   def unite[G[_], A](fga: F[G[A]])(implicit G: Foldable[G]): F[A] =
-    flatMap(fga) { ga =>
-      G.foldLeft(ga, empty[A])((acc, a) => combineK(acc, pure(a)))
+    monadInstance.flatMap(fga) { ga =>
+      G.foldLeft(ga, empty[A])((acc, a) => combineK(acc, applicativeInstance.pure(a)))
     }
 
   /** Separate the inner foldable values into the "lefts" and "rights" */
   def separate[G[_, _], A, B](fgab: F[G[A, B]])(implicit G: Bifoldable[G]): (F[A], F[B]) = {
-    val as = flatMap(fgab)(gab => G.bifoldMap(gab)(pure, _ => empty[A])(algebra[A]))
-    val bs = flatMap(fgab)(gab => G.bifoldMap(gab)(_ => empty[B], pure)(algebra[B]))
+    val as = monadInstance.flatMap(fgab)(gab => G.bifoldMap(gab)(applicativeInstance.pure, _ => empty[A])(algebra[A]))
+    val bs = monadInstance.flatMap(fgab)(gab => G.bifoldMap(gab)(_ => empty[B], applicativeInstance.pure)(algebra[B]))
     (as, bs)
   }
 }

@@ -48,8 +48,14 @@ private[cats] trait ComposedMonoidK[F[_], G[_]] extends MonoidK[λ[α => F[G[α]
   override def empty[A]: F[G[A]] = F.empty
 }
 
-private[cats] trait ComposedAlternative[F[_], G[_]] extends Alternative[λ[α => F[G[α]]]] with ComposedApplicative[F, G] with ComposedMonoidK[F, G] { outer =>
+private[cats] trait ComposedAlternative[F[_], G[_]] extends Alternative[λ[α => F[G[α]]]] with ComposedMonoidK[F, G] { outer =>
   def F: Alternative[F]
+  def G: Applicative[G]
+
+  val applicativeInstance: Applicative[λ[α => F[G[α]]]] = new ComposedApplicative[F, G] {
+    def F = outer.F.applicativeInstance
+    def G = outer.G
+  }
 }
 
 private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] { outer =>
@@ -71,17 +77,27 @@ private[cats] trait ComposedTraverse[F[_], G[_]] extends Traverse[λ[α => F[G[�
     F.traverse(fga)(ga => G.traverse(ga)(f))
 }
 
-private[cats] trait ComposedTraverseFilter[F[_], G[_]] extends TraverseFilter[λ[α => F[G[α]]]] with ComposedTraverse[F, G] {
+private[cats] trait ComposedTraverseFilter[F[_], G[_]] extends TraverseFilter[λ[α => F[G[α]]]] { outer =>
   def F: Traverse[F]
   def G: TraverseFilter[G]
+
+  val traverseInstance: Traverse[λ[α => F[G[α]]]] = new ComposedTraverse[F, G] {
+    def F = outer.F
+    def G = outer.G.traverseInstance
+  }
 
   override def traverseFilter[H[_]: Applicative, A, B](fga: F[G[A]])(f: A => H[Option[B]]): H[F[G[B]]] =
     F.traverse[H, G[A], G[B]](fga)(ga => G.traverseFilter(ga)(f))
 }
 
-private[cats] trait ComposedFunctorFilter[F[_], G[_]] extends FunctorFilter[λ[α => F[G[α]]]] with ComposedFunctor[F, G] {
+private[cats] trait ComposedFunctorFilter[F[_], G[_]] extends FunctorFilter[λ[α => F[G[α]]]] { outer =>
   def F: Functor[F]
   def G: FunctorFilter[G]
+
+  val functorInstance: Functor[λ[α => F[G[α]]]] = new ComposedFunctor[F, G] {
+    def F = outer.F
+    def G = outer.G.functorInstance
+  }
 
   override def mapFilter[A, B](fga: F[G[A]])(f: A => Option[B]): F[G[B]] =
     F.map(fga)(G.mapFilter(_)(f))

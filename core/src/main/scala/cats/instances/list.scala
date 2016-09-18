@@ -6,14 +6,26 @@ import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
 
-trait ListInstances extends cats.kernel.instances.ListInstances {
+trait ListInstances extends cats.kernel.instances.ListInstances with ListInstances0 {
+  implicit val catsStdMonadCombineForList: MonadCombine[List] = new MonadCombine[List] {
+    val monadInstance = catsStdInstancesForList
 
-  implicit val catsStdInstancesForList: TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] with RecursiveTailRecM[List] =
-    new TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] with RecursiveTailRecM[List] {
+    def empty[A]: List[A] = Nil
 
-      def empty[A]: List[A] = Nil
+    def combineK[A](x: List[A], y: List[A]): List[A] = x ++ y
+  }
 
-      def combineK[A](x: List[A], y: List[A]): List[A] = x ++ y
+  implicit def catsStdShowForList[A:Show]: Show[List[A]] =
+    new Show[List[A]] {
+      def show(fa: List[A]): String =
+        fa.iterator.map(_.show).mkString("List(", ", ", ")")
+    }
+}
+
+private[instances] trait ListInstances0 {
+  implicit val catsStdInstancesForList: TraverseFilter[List] with Traverse[List] with Monad[List] with CoflatMap[List] with RecursiveTailRecM[List] =
+    new TraverseFilter[List] with Traverse[List] with Monad[List] with CoflatMap[List] with RecursiveTailRecM[List] {
+      val traverseInstance = this
 
       def pure[A](x: A): List[A] = x :: Nil
 
@@ -80,11 +92,5 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def isEmpty[A](fa: List[A]): Boolean = fa.isEmpty
 
       override def filter[A](fa: List[A])(f: A => Boolean): List[A] = fa.filter(f)
-    }
-
-  implicit def catsStdShowForList[A:Show]: Show[List[A]] =
-    new Show[List[A]] {
-      def show(fa: List[A]): String =
-        fa.iterator.map(_.show).mkString("List(", ", ", ")")
     }
 }

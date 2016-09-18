@@ -196,7 +196,8 @@ class StateTTests extends CatsSuite {
 
   {
     // F has a MonadCombine
-    implicit def F = ListWrapper.monadCombine
+    implicit def F0 = ListWrapper.monadCombine
+    implicit def F1 = F0.monadInstance
 
     checkAll("StateT[ListWrapper, Int, Int]", MonadCombineTests[StateT[ListWrapper, Int, ?]].monadCombine[Int, Int, Int])
     checkAll("MonadCombine[StateT[ListWrapper, Int, ?]]", SerializableTests.serializable(MonadCombine[StateT[ListWrapper, Int, ?]]))

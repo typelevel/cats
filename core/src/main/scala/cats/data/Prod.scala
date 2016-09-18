@@ -104,8 +104,12 @@ sealed trait ProdMonoidK[F[_], G[_]] extends MonoidK[λ[α => Prod[F, G, α]]] w
     Prod(F.empty[A], G.empty[A])
 }
 
-sealed trait ProdAlternative[F[_], G[_]] extends Alternative[λ[α => Prod[F, G, α]]]
-  with ProdApplicative[F, G] with ProdMonoidK[F, G] {
+sealed trait ProdAlternative[F[_], G[_]] extends Alternative[λ[α => Prod[F, G, α]]] with ProdMonoidK[F, G] { outer =>
   def F: Alternative[F]
   def G: Alternative[G]
+
+  val applicativeInstance: Applicative[λ[α => Prod[F, G, α]]] = new ProdApplicative[F, G] {
+    def F = outer.F.applicativeInstance
+    def G = outer.G.applicativeInstance
+  }
 }

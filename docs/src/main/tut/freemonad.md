@@ -353,7 +353,7 @@ object DataSource {
 ADTs are now easily composed and trivially intertwined inside monadic contexts.
 
 ```tut:silent
-def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]): Free[CatsApp, Unit] = {
+def program(implicit I: Interacts[CatsApp], D: DataSource[CatsApp]): Free[CatsApp, Unit] = {
 
   import I._, D._
 
@@ -495,9 +495,9 @@ right-associated structure not subject to quadratic complexity.
 
 ## FreeT
 
-Often times we want to interleave the syntax tree when building a Free monad 
-with some other effect not declared as part of the ADT. 
-FreeT solves this problem by allowing us to mix building steps of the AST 
+Often times we want to interleave the syntax tree when building a Free monad
+with some other effect not declared as part of the ADT.
+FreeT solves this problem by allowing us to mix building steps of the AST
 with calling action in other base monad.
 
 In the following example a basic console application is shown.
@@ -514,40 +514,40 @@ import cats.data._
 
 /* A base ADT for the user interaction without state semantics */
 sealed abstract class Teletype[A] extends Product with Serializable
-final case class WriteLine(line : String) extends Teletype[Unit]
-final case class ReadLine(prompt : String) extends Teletype[String]
+final case class WriteLine(line: String) extends Teletype[Unit]
+final case class ReadLine(prompt: String) extends Teletype[String]
 
 type TeletypeT[M[_], A] = FreeT[Teletype, M, A]
 type Log = List[String]
 
 /** Smart constructors, notice we are abstracting over any MonadState instance
- *  to potentially support other types beside State 
+ *  to potentially support other types beside State
  */
-class TeletypeOps[M[_]](implicit MS : MonadState[M, Log]) {
-  def writeLine(line : String) : TeletypeT[M, Unit] =
+class TeletypeOps[M[_]](implicit MS: MonadState[M, Log], M: Monad[M]) {
+  def writeLine(line: String): TeletypeT[M, Unit] =
 	FreeT.liftF[Teletype, M, Unit](WriteLine(line))
-  def readLine(prompt : String) : TeletypeT[M, String] =
+  def readLine(prompt: String): TeletypeT[M, String] =
 	FreeT.liftF[Teletype, M, String](ReadLine(prompt))
-  def log(s : String) : TeletypeT[M, Unit] =
+  def log(s: String): TeletypeT[M, Unit] =
 	FreeT.liftT[Teletype, M, Unit](MS.modify(s :: _))
 }
 
 object TeletypeOps {
-  implicit def teleTypeOpsInstance[M[_]](implicit MS : MonadState[M, Log]) : TeletypeOps[M] = new TeletypeOps
+  implicit def teleTypeOpsInstance[M[_]](implicit MS: MonadState[M, Log], M: Monad[M]): TeletypeOps[M] = new TeletypeOps
 }
 
 type TeletypeState[A] = State[List[String], A]
 
-def program(implicit TO : TeletypeOps[TeletypeState]) : TeletypeT[TeletypeState, Unit] = {
+def program(implicit TO: TeletypeOps[TeletypeState]): TeletypeT[TeletypeState, Unit] = {
   for {
 	userSaid <- TO.readLine("what's up?!")
-	_ <- TO.log(s"user said : $userSaid")
+	_ <- TO.log(s"user said: $userSaid")
 	_ <- TO.writeLine("thanks, see you soon!")
-  } yield () 
+  } yield ()
 }
 
 def interpreter = new (Teletype ~> TeletypeState) {
-  def apply[A](fa : Teletype[A]) : TeletypeState[A] = {  
+  def apply[A](fa: Teletype[A]): TeletypeState[A] = {
 	fa match {
 	  case ReadLine(prompt) =>
 		println(prompt)

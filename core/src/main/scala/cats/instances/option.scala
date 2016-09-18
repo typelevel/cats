@@ -3,14 +3,29 @@ package instances
 
 import scala.annotation.tailrec
 
-trait OptionInstances extends cats.kernel.instances.OptionInstances {
+trait OptionInstances extends cats.kernel.instances.OptionInstances with OptionInstances0 {
+  implicit val catsStdMonadCombineForOption: MonadCombine[Option] = new MonadCombine[Option] {
+    val monadInstance = catsStdInstancesForOption
 
-  implicit val catsStdInstancesForOption: TraverseFilter[Option] with MonadError[Option, Unit] with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] with RecursiveTailRecM[Option] =
-    new TraverseFilter[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] with RecursiveTailRecM[Option] {
+    def empty[A]: Option[A] = None
 
-      def empty[A]: Option[A] = None
+    def combineK[A](x: Option[A], y: Option[A]): Option[A] = x orElse y
+  }
 
-      def combineK[A](x: Option[A], y: Option[A]): Option[A] = x orElse y
+  implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =
+    new Show[Option[A]] {
+      def show(fa: Option[A]): String = fa match {
+        case Some(a) => s"Some(${A.show(a)})"
+        case None => "None"
+      }
+    }
+}
+
+private[instances] trait OptionInstances0 {
+  implicit val catsStdInstancesForOption: TraverseFilter[Option] with Traverse[Option] with MonadError[Option, Unit] with Monad[Option] with CoflatMap[Option] with RecursiveTailRecM[Option] =
+    new TraverseFilter[Option] with Traverse[Option] with MonadError[Option, Unit] with Monad[Option] with CoflatMap[Option] with RecursiveTailRecM[Option] {
+      val monadInstance = this
+      val traverseInstance = this
 
       def pure[A](x: A): Option[A] = Some(x)
 
@@ -79,13 +94,5 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       override def isEmpty[A](fa: Option[A]): Boolean =
         fa.isEmpty
-    }
-
-  implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =
-    new Show[Option[A]] {
-      def show(fa: Option[A]): String = fa match {
-        case Some(a) => s"Some(${A.show(a)})"
-        case None => "None"
-      }
     }
 }

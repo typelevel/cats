@@ -81,7 +81,6 @@ private[data] sealed trait KleisliFunctions {
 }
 
 private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
-
   implicit def catsDataMonoidForKleisli[F[_], A, B](implicit M: Monoid[F[B]]): Monoid[Kleisli[F, A, B]] =
     new KleisliMonoid[F, A, B] { def FB: Monoid[F[B]] = M }
 
@@ -114,6 +113,9 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
   implicit def catsDataMonadReaderForKleisliId[A]: MonadReader[Kleisli[Id, A, ?], A] =
     catsDataMonadReaderForKleisli[Id, A]
 
+  implicit def catsDataMonadForKleisliId[A]: Monad[Kleisli[Id, A, ?]] =
+    catsDataMonadForKleisli[Id, A]
+
   implicit def catsDataContravariantForKleisli[F[_], C]: Contravariant[Kleisli[F, ?, C]] =
     new Contravariant[Kleisli[F, ?, C]] {
       override def contramap[A, B](fa: Kleisli[F, A, C])(f: (B) => A): Kleisli[F, B, C] =
@@ -128,7 +130,7 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
     }
 
   implicit def catsDataApplicativeErrorForKleisli[F[_], A, E](implicit AE: ApplicativeError[F, E]): ApplicativeError[Kleisli[F, A, ?], E]
-    = new KleisliApplicativeError[F, A, E] { implicit def AF: ApplicativeError[F, E]  = AE }
+    = new KleisliApplicativeError[F, A, E] { implicit def F: ApplicativeError[F, E] = AE }
 }
 
 private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 {
@@ -187,19 +189,23 @@ private[data] sealed abstract class KleisliInstances3 extends KleisliInstances4 
 }
 
 private[data] sealed abstract class KleisliInstances4 {
-
   implicit def catsDataMonadReaderForKleisli[F[_]: Monad, A]: MonadReader[Kleisli[F, A, ?], A] =
     new MonadReader[Kleisli[F, A, ?], A] {
-      def pure[B](x: B): Kleisli[F, A, B] =
-        Kleisli.pure[F, A, B](x)
-
-      def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
-        fa.flatMap(f)
+      val monadInstance = catsDataMonadForKleisli[F, A]
 
       val ask: Kleisli[F, A, A] = Kleisli(Monad[F].pure)
 
       def local[B](f: A => A)(fa: Kleisli[F, A, B]): Kleisli[F, A, B] =
         Kleisli(f.andThen(fa.run))
+    }
+
+  implicit def catsDataMonadForKleisli[F[_]: Monad, A]: Monad[Kleisli[F, A, ?]] =
+    new Monad[Kleisli[F, A, ?]] {
+      def pure[B](x: B): Kleisli[F, A, B] =
+        Kleisli.pure[F, A, B](x)
+
+      def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
+        fa.flatMap(f)
 
       def tailRecM[B, C](b: B)(f: B => Kleisli[F, A, Either[B, C]]): Kleisli[F, A, C] =
         Kleisli[F, A, C]({ a => FlatMap[F].tailRecM(b) { f(_).run(a) } })
@@ -277,17 +283,18 @@ private trait KleisliMonoidK[F[_]] extends MonoidK[λ[α => Kleisli[F, α, α]]]
 }
 
 
-private trait KleisliApplicativeError[F[_], A, E] extends KleisliApplicative[F, A] with ApplicativeError[Kleisli[F, A, ?], E] {
+private trait KleisliApplicativeError[F[_], A, E] extends ApplicativeError[Kleisli[F, A, ?], E] { outer =>
   type K[T] = Kleisli[F, A, T]
 
-  implicit def AF: ApplicativeError[F, E]
+  implicit def F: ApplicativeError[F, E]
 
-  implicit def F: Applicative[F] = AF
+  val applicativeInstance: Applicative[Kleisli[F, A, ?]] =
+    new KleisliApplicative[F, A] { implicit def F = outer.F.applicativeInstance }
 
-  def raiseError[B](e: E): K[B] = Kleisli(_ => AF.raiseError(e))
+  def raiseError[B](e: E): K[B] = Kleisli(_ => F.raiseError(e))
 
   def handleErrorWith[B](kb: K[B])(f: E => K[B]): K[B] = Kleisli { a: A =>
-    AF.handleErrorWith(kb.run(a))((e: E) => f(e).run(a))
+    F.handleErrorWith(kb.run(a))((e: E) => f(e).run(a))
   }
 
 }

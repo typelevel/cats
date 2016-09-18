@@ -2,10 +2,11 @@ package cats
 
 import simulacrum.typeclass
 
-@typeclass trait FunctorFilter[F[_]] extends Functor[F] {
+@typeclass trait FunctorFilter[F[_]] extends Serializable {
+  def functorInstance: Functor[F]
 
   /**
-   * A combined [[map]] and [[filter]]. Filtering is handled via `Option`
+   * A combined `map` and [[filter]]. Filtering is handled via `Option`
    * instead of `Boolean` such that the output type `B` can be different than
    * the input type `A`.
    *

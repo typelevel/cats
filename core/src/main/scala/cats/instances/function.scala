@@ -42,8 +42,10 @@ private[instances] sealed trait Function1Instances {
         fa.compose(f)
     }
 
-  implicit def catsStdMonadReaderForFunction1[T1]: MonadReader[T1 => ?, T1] with RecursiveTailRecM[T1 => ?] =
-    new MonadReader[T1 => ?, T1] with RecursiveTailRecM[T1 => ?] {
+  implicit def catsStdMonadReaderForFunction1[T1]: MonadReader[T1 => ?, T1] with Monad[T1 => ?] with RecursiveTailRecM[T1 => ?] =
+    new MonadReader[T1 => ?, T1] with Monad[T1 => ?] with RecursiveTailRecM[T1 => ?] {
+      val monadInstance = this
+
       def pure[R](r: R): T1 => R = _ => r
 
       def flatMap[R1, R2](fa: T1 => R1)(f: R1 => T1 => R2): T1 => R2 =

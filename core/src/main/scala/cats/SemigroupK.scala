@@ -20,7 +20,7 @@ import simulacrum.typeclass
  *    The combination operation just depends on the structure of F,
  *    but not the structure of A.
  */
-@typeclass trait SemigroupK[F[_]] { self =>
+@typeclass trait SemigroupK[F[_]] extends Serializable { self =>
 
   /**
    * Combine two F[A] values.

@@ -1,7 +1,9 @@
 package cats
 
 /** A monad that support monoidal accumulation (e.g. logging List[String]) */
-trait MonadWriter[F[_], W] extends Monad[F] {
+trait MonadWriter[F[_], W] extends Serializable {
+  def monadInstance: Monad[F]
+
   /** Lift a writer action into the effect */
   def writer[A](aw: (W, A)): F[A]
 
@@ -16,11 +18,11 @@ trait MonadWriter[F[_], W] extends Monad[F] {
 
   /** Pair the value with an inspection of the accumulator */
   def listens[A, B](fa: F[A])(f: W => B): F[(B, A)] =
-    map(listen(fa)) { case (w, a) => (f(w), a) }
+    monadInstance.map(listen(fa)) { case (w, a) => (f(w), a) }
 
   /** Modify the accumulator */
   def censor[A](fa: F[A])(f: W => W): F[A] =
-    flatMap(listen(fa)) { case (w, a) => writer((f(w), a)) }
+    monadInstance.flatMap(listen(fa)) { case (w, a) => writer((f(w), a)) }
 }
 
 object MonadWriter {
