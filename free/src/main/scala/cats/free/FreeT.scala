@@ -225,7 +225,7 @@ private[free] sealed trait FreeTInstances extends FreeTInstances0 {
       override def M = Alternative[M].applicativeInstance
       override def M1 = implicitly
 
-      def monadInstance = catsFreeMonadForFreeT[S, M](Alternative[M].applicativeInstance)
+      val monadInstance = catsFreeMonadForFreeT[S, M](Alternative[M].applicativeInstance)
 
       override def empty[A] = FreeT.liftT[S, M, A](MonoidK[M].empty[A])(M)
     }
