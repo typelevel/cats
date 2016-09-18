@@ -24,7 +24,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances with OptionI
 private[instances] trait OptionInstances0 {
   implicit val catsStdInstancesForOption: TraverseFilter[Option] with Traverse[Option] with MonadError[Option, Unit] with Monad[Option] with CoflatMap[Option] with RecursiveTailRecM[Option] =
     new TraverseFilter[Option] with Traverse[Option] with MonadError[Option, Unit] with Monad[Option] with CoflatMap[Option] with RecursiveTailRecM[Option] {
-      val monad = this
+      val monadInstance = this
       val traverseInstance = this
 
       def pure[A](x: A): Option[A] = Some(x)

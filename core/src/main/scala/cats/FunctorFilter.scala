@@ -2,7 +2,7 @@ package cats
 
 import simulacrum.typeclass
 
-@typeclass trait FunctorFilter[F[_]] {
+@typeclass trait FunctorFilter[F[_]] extends Serializable {
   def functorInstance: Functor[F]
 
   /**

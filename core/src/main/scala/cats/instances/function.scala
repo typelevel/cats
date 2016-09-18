@@ -44,7 +44,7 @@ private[instances] sealed trait Function1Instances {
 
   implicit def catsStdMonadReaderForFunction1[T1]: MonadReader[T1 => ?, T1] with Monad[T1 => ?] with RecursiveTailRecM[T1 => ?] =
     new MonadReader[T1 => ?, T1] with Monad[T1 => ?] with RecursiveTailRecM[T1 => ?] {
-      val monad = this
+      val monadInstance = this
 
       def pure[R](r: R): T1 => R = _ => r
 

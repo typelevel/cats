@@ -52,7 +52,7 @@ private[cats] trait ComposedAlternative[F[_], G[_]] extends Alternative[λ[α =>
   def F: Alternative[F]
   def G: Applicative[G]
 
-  def applicativeInstance = new ComposedApplicative[F, G] {
+  def applicativeInstance: Applicative[λ[α => F[G[α]]]] = new ComposedApplicative[F, G] {
     def F = outer.F.applicativeInstance
     def G = outer.G
   }
@@ -81,7 +81,7 @@ private[cats] trait ComposedTraverseFilter[F[_], G[_]] extends TraverseFilter[λ
   def F: Traverse[F]
   def G: TraverseFilter[G]
 
-  def traverseInstance = new ComposedTraverse[F, G] {
+  def traverseInstance: Traverse[λ[α => F[G[α]]]] = new ComposedTraverse[F, G] {
     def F = outer.F
     def G = outer.G.traverseInstance
   }
@@ -94,7 +94,7 @@ private[cats] trait ComposedFunctorFilter[F[_], G[_]] extends FunctorFilter[λ[�
   def F: Functor[F]
   def G: FunctorFilter[G]
 
-  def functorInstance = new ComposedFunctor[F, G] {
+  def functorInstance: Functor[λ[α => F[G[α]]]] = new ComposedFunctor[F, G] {
     def F = outer.F
     def G = outer.G.functorInstance
   }

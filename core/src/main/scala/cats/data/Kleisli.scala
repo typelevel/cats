@@ -191,7 +191,7 @@ private[data] sealed abstract class KleisliInstances3 extends KleisliInstances4 
 private[data] sealed abstract class KleisliInstances4 {
   implicit def catsDataMonadReaderForKleisli[F[_]: Monad, A]: MonadReader[Kleisli[F, A, ?], A] =
     new MonadReader[Kleisli[F, A, ?], A] {
-      val monad = catsDataMonadForKleisli[F, A]
+      val monadInstance = catsDataMonadForKleisli[F, A]
 
       val ask: Kleisli[F, A, A] = Kleisli(Monad[F].pure)
 
@@ -288,7 +288,8 @@ private trait KleisliApplicativeError[F[_], A, E] extends ApplicativeError[Kleis
 
   implicit def F: ApplicativeError[F, E]
 
-  def applicative = new KleisliApplicative[F, A] { implicit def F = outer.F.applicative }
+  def applicativeInstance: Applicative[Kleisli[F, A, ?]] =
+    new KleisliApplicative[F, A] { implicit def F = outer.F.applicativeInstance }
 
   def raiseError[B](e: E): K[B] = Kleisli(_ => F.raiseError(e))
 

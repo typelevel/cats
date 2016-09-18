@@ -4,7 +4,7 @@ package laws
 // Taken from http://functorial.com/psc-pages/docs/Control/Monad/State/Class/index.html
 trait MonadStateLaws[F[_], S] extends MonadLaws[F] {
   implicit def FS: MonadState[F, S]
-  implicit def F: Monad[F] = FS.monad
+  implicit def F: Monad[F] = FS.monadInstance
 
   val monadStateGetIdempotent: IsEq[F[S]] =
     F.flatMap(FS.get)(_ => FS.get) <-> FS.get

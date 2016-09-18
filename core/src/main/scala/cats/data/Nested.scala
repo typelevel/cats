@@ -157,7 +157,7 @@ private[data] trait NestedFunctor[F[_], G[_]] extends Functor[Nested[F, G, ?]] w
 private[data] trait NestedFunctorFilter[F[_], G[_]] extends FunctorFilter[Nested[F, G, ?]] { outer =>
   def FG: FunctorFilter[λ[α => F[G[α]]]]
 
-  def functorInstance = new NestedFunctor[F, G] { def FG = outer.FG.functorInstance }
+  def functorInstance: Functor[Nested[F, G, ?]] = new NestedFunctor[F, G] { def FG = outer.FG.functorInstance }
 
   override def mapFilter[A, B](fga: Nested[F, G, A])(f: A => Option[B]): Nested[F, G, B] =
     Nested(FG.mapFilter(fga.value)(f))
@@ -172,11 +172,11 @@ private[data] trait NestedFunctorFilter[F[_], G[_]] extends FunctorFilter[Nested
 private[data] trait NestedTraverseFilter[F[_], G[_]] extends TraverseFilter[Nested[F, G, ?]] with NestedFunctorFilter[F, G] { outer =>
   override def FG: TraverseFilter[λ[α => F[G[α]]]]
 
-  def traverseInstance = new NestedTraverse[F, G] {
+  def traverseInstance: Traverse[Nested[F, G, ?]] = new NestedTraverse[F, G] {
     def FG = outer.FG.traverseInstance
   }
 
-  override def functorInstance = traverseInstance
+  override def functorInstance: Functor[Nested[F, G, ?]] = traverseInstance
 
   override def traverseFilter[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[Option[B]]): H[Nested[F, G, B]] =
     Applicative[H].map(FG.traverseFilter(fga.value)(f))(Nested(_))
@@ -213,7 +213,8 @@ private[data] trait NestedMonoidK[F[_], G[_]] extends MonoidK[Nested[F, G, ?]] w
 private[data] trait NestedAlternative[F[_], G[_]] extends Alternative[Nested[F, G, ?]] with NestedMonoidK[F, G] { outer =>
   def FG: Alternative[λ[α => F[G[α]]]]
 
-  def applicativeInstance = new NestedApplicative[F, G] { def FG = outer.FG.applicativeInstance }
+  def applicativeInstance: Applicative[Nested[F, G, ?]] =
+    new NestedApplicative[F, G] { def FG = outer.FG.applicativeInstance }
 }
 
 private[data] trait NestedFoldable[F[_], G[_]] extends Foldable[Nested[F, G, ?]] {

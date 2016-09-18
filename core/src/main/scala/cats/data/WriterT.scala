@@ -328,8 +328,8 @@ private[data] sealed trait WriterTApplicativeError[F[_], L, E] extends Applicati
   implicit def F0: ApplicativeError[F, E]
   implicit def L0: Monoid[L]
 
-  def applicative = new WriterTApplicative[F, L] {
-    implicit def F0 = outer.F0.applicative
+  def applicativeInstance: Applicative[WriterT[F, L, ?]] = new WriterTApplicative[F, L] {
+    implicit def F0 = outer.F0.applicativeInstance
     implicit def L0 = outer.L0
   }
 
@@ -342,19 +342,19 @@ private[data] sealed trait WriterTApplicativeError[F[_], L, E] extends Applicati
 private[data] sealed trait WriterTMonadError[F[_], L, E] extends MonadError[WriterT[F, L, ?], E] with WriterTApplicativeError[F, L, E] { outer =>
   override implicit def F0: MonadError[F, E]
 
-  def monad = new WriterTMonad[F, L] {
-    implicit def F0 = outer.F0.monad
+  def monadInstance: Monad[WriterT[F, L, ?]] = new WriterTMonad[F, L] {
+    implicit def F0 = outer.F0.monadInstance
     implicit def L0 = outer.L0
   }
 
-  override def applicative = monad
+  override def applicativeInstance: Applicative[WriterT[F, L, ?]] = monadInstance
 }
 
 private[data] sealed trait WriterTMonadWriter[F[_], L] extends MonadWriter[WriterT[F, L, ?], L] { outer =>
   implicit def F0: Monad[F]
   implicit def L0: Monoid[L]
 
-  def monad = new WriterTMonad[F, L] {
+  def monadInstance: Monad[WriterT[F, L, ?]] = new WriterTMonad[F, L] {
     implicit def F0 = outer.F0
     implicit def L0 = outer.L0
   }
@@ -388,7 +388,7 @@ private[data] sealed trait WriterTAlternative[F[_], L] extends Alternative[Write
   override implicit def F0: Alternative[F]
   implicit def L0: Monoid[L]
 
-  def applicativeInstance = new WriterTApplicative[F, L] {
+  def applicativeInstance: Applicative[WriterT[F, L, ?]] = new WriterTApplicative[F, L] {
     def F0 = outer.F0.applicativeInstance
     def L0 = outer.L0
   }
@@ -398,7 +398,7 @@ private[data] sealed trait WriterTMonadFilter[F[_], L] extends MonadFilter[Write
   implicit def F0: MonadFilter[F]
   implicit def L0: Monoid[L]
 
-  def monadInstance = new WriterTMonad[F, L] {
+  def monadInstance: Monad[WriterT[F, L, ?]] = new WriterTMonad[F, L] {
     def F0 = outer.F0.monadInstance
     def L0 = outer.L0
   }
@@ -409,12 +409,12 @@ private[data] sealed trait WriterTMonadFilter[F[_], L] extends MonadFilter[Write
 private[data] sealed trait WriterTMonadCombine[F[_], L] extends MonadCombine[WriterT[F, L, ?]] with WriterTAlternative[F, L] { outer =>
   override implicit def F0: MonadCombine[F]
 
-  def monadInstance = new WriterTMonad[F, L] {
+  def monadInstance: Monad[WriterT[F, L, ?]] = new WriterTMonad[F, L] {
     def F0 = outer.F0.monadInstance
     def L0 = outer.L0
   }
 
-  override def applicativeInstance = monadInstance
+  override def applicativeInstance: Applicative[WriterT[F, L, ?]] = monadInstance
 }
 
 private[data] sealed trait WriterTSemigroup[F[_], L, A] extends Semigroup[WriterT[F, L, A]] {

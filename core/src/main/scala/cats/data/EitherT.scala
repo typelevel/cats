@@ -404,7 +404,7 @@ private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, ?]] with E
 
 private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, ?], L] { outer =>
   implicit val F: Monad[F]
-  def monad = new EitherTMonad[F, L] { implicit val F = outer.F }
+  def monadInstance: Monad[EitherT[F, L, ?]] = new EitherTMonad[F, L] { implicit val F = outer.F }
   def handleErrorWith[A](fea: EitherT[F, L, A])(f: L => EitherT[F, L, A]): EitherT[F, L, A] =
     EitherT(F.flatMap(fea.value) {
       case Left(e) => f(e).value
@@ -427,7 +427,7 @@ private[data] trait EitherTMonadFilter[F[_], L] extends MonadFilter[EitherT[F, L
   implicit val F: Monad[F]
   implicit val L: Monoid[L]
 
-  implicit def monad = new EitherTMonad[F, L] {
+  implicit def monadInstance: Monad[EitherT[F, L, ?]] = new EitherTMonad[F, L] {
     implicit val F = outer.F
     implicit val L = outer.L
   }

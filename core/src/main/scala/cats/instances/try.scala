@@ -12,7 +12,7 @@ trait TryInstances extends TryInstances1 {
   // scalastyle:off method.length
   implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] with Monad[Try] with RecursiveTailRecM[Try] =
     new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] with Monad[Try] with RecursiveTailRecM[Try] {
-      val monad = this
+      val monadInstance = this
 
       def pure[A](x: A): Try[A] = Success(x)
 
