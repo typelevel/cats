@@ -20,6 +20,7 @@ class MonadRecInstancesTests extends CatsSuite {
     val n = 50000
     val res = M.tailRecM(0)(i => M.pure(if (i < n) Either.left(i + 1) else Either.right(i)))
     res should === (M.pure(n))
+    ()
   }
 
   test("tailRecM stack-safety for Cokleisli[Option, Int, ?]") {

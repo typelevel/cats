@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.{Prop, Arbitrary}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 
@@ -14,6 +14,9 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] {
     ArbXB: Arbitrary[X[B]],
     ArbYB: Arbitrary[Y[B]],
     ArbYC: Arbitrary[Y[C]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
     M: Monoid[M],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]],

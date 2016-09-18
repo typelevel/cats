@@ -127,9 +127,15 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
+  def excise[A](as: Vector[A]): (Vector[A], A) =
+    (as.slice(0, as.size - 1), as.last)
+
   test("reduceRight consistent with foldRight") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], f: (Int, Eval[Int]) => Eval[Int]) =>
-      nonEmptyVector.reduceRight(f).value should === (nonEmptyVector.tail.foldRight(nonEmptyVector.head)((a, b) => f(a, Now(b)).value))
+      val got = nonEmptyVector.reduceRight(f).value
+      val (first, last) = excise(nonEmptyVector.toVector)
+      val expected = first.foldRight(last)((a, b) => f(a, Now(b)).value)
+      got should === (expected)
     }
   }
 
@@ -156,7 +162,8 @@ class NonEmptyVectorTests extends CatsSuite {
 
   test("reduceRightToOption consistent with foldRight + Option") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], f: Int => String, g: (Int, Eval[String]) => Eval[String]) =>
-      val expected = nonEmptyVector.tail.foldRight(Option(f(nonEmptyVector.head))) { (i, opt) =>
+      val (first, last) = excise(nonEmptyVector.toVector)
+      val expected = first.foldRight(Option(f(last))) { (i, opt) =>
         opt.map(s => g(i, Now(s)).value)
       }
       nonEmptyVector.reduceRightToOption(f)(g).value should === (expected)

@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws
 
@@ -12,6 +12,7 @@ trait FoldableTests[F[_]] extends Laws {
   def foldable[A: Arbitrary, B: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
     B: Monoid[B],
+    CogenA: Cogen[A],
     EqB: Eq[B]
   ): RuleSet = {
     new DefaultRuleSet(

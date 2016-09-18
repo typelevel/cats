@@ -4,7 +4,7 @@ package tests
 import cats.functor.Invariant
 import cats.instances.list._
 
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 
 /** This data type exists purely for testing.
@@ -25,7 +25,7 @@ import org.scalacheck.Arbitrary.arbitrary
   * By providing this data type, we can have implicit search pick up
   * a specific type class instance by asking for it explicitly in a block.
   * Note that ListWrapper has no type class instances in implicit scope,
-  * save for ones related to testing (e.g. Eq and Arbitrary).
+  * save for ones related to testing (e.g. Eq, Arbitrary, Cogen).
   *
   * {{{
   * {
@@ -113,5 +113,9 @@ object ListWrapper {
   implicit def listWrapperArbitrary[A: Arbitrary]: Arbitrary[ListWrapper[A]] =
     Arbitrary(arbitrary[List[A]].map(ListWrapper.apply))
 
-  implicit def listWrapperEq[A: Eq]: Eq[ListWrapper[A]] = Eq.by(_.list)
+  implicit def listWrapperCogen[A: Cogen]: Cogen[ListWrapper[A]] =
+    Cogen[List[A]].contramap(_.list)
+
+  implicit def listWrapperEq[A: Eq]: Eq[ListWrapper[A]] =
+    Eq.by(_.list)
 }

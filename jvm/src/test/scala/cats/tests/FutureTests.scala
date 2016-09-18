@@ -3,6 +3,7 @@ package jvm
 package tests
 
 import cats.laws.discipline._
+import cats.laws.discipline.arbitrary._
 import cats.tests.CatsSuite
 
 import scala.concurrent.{Await, Future}
@@ -27,7 +28,7 @@ class FutureTests extends CatsSuite {
     }
 
   implicit val throwableEq: Eq[Throwable] =
-    Eq.fromUniversalEquals
+    Eq[String].on(_.toString)
 
   // Need non-fatal Throwables for Future recoverWith/handleError
   implicit val nonFatalArbitrary: Arbitrary[Throwable] =

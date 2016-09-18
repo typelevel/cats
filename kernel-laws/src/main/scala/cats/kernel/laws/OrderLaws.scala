@@ -3,22 +3,25 @@ package laws
 
 import org.typelevel.discipline.Laws
 
-import org.scalacheck.{Arbitrary, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop._
 
 import cats.kernel.instances.all._
 
 object OrderLaws {
-  def apply[A: Eq: Arbitrary]: OrderLaws[A] = new OrderLaws[A] {
-    def Equ = Eq[A]
-    def Arb = implicitly[Arbitrary[A]]
-  }
+  def apply[A: Eq: Arbitrary: Cogen]: OrderLaws[A] =
+    new OrderLaws[A] {
+      def Equ = Eq[A]
+      def Arb = implicitly[Arbitrary[A]]
+      def Cog = implicitly[Cogen[A]]
+    }
 }
 
 trait OrderLaws[A] extends Laws {
 
   implicit def Equ: Eq[A]
   implicit def Arb: Arbitrary[A]
+  implicit def Cog: Cogen[A]
 
   def eqv: OrderProperties = new OrderProperties(
     name = "eq",

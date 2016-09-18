@@ -8,7 +8,7 @@ import cats.laws.discipline._
 import cats.tests.CatsSuite
 import cats.instances.option._
 
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{Arbitrary, Gen, Cogen}
 
 class FreeTTests extends CatsSuite {
 
@@ -165,7 +165,7 @@ object FreeTTests extends FreeTTestsInstances {
     def withFlatMapped = for {
       fDepth <- nextDepth
       freeDepth <- nextDepth
-      f <- arbFunction1[A, FreeT[F, G, A]](Arbitrary(freeTGen[F, G, A](fDepth))).arbitrary
+      f <- arbFunction1[A, FreeT[F, G, A]](Arbitrary(freeTGen[F, G, A](fDepth)), Cogen[Unit].contramap(_ => ())).arbitrary
       freeFGA <- freeTGen[F, G, A](freeDepth)
     } yield freeFGA.flatMap(f)
 
