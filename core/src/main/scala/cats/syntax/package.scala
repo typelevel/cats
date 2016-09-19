@@ -20,7 +20,7 @@ package object syntax {
   object foldable extends FoldableSyntax
   object functor extends FunctorSyntax
   object functorFilter extends FunctorFilterSyntax
-  object functorFlatten extends FunctorFlattenSyntax
+  object alternativeFlatten extends AlternativeFlattenSyntax
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
   object list extends ListSyntax
