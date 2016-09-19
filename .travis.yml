@@ -10,8 +10,14 @@ git:
 scala:
 - 2.10.6
 - 2.11.8
+- 2.12.0-RC1
+
+jdk:
+  - oraclejdk8
 
 script:
+  - scripts/publishLocalScoverage.sh
+  - scripts/publishLocalSbtScoverage.sh
   - scripts/travis-publish.sh
 
 # http://austinpray.com/ops/2015/09/20/change-travis-node-version.html
