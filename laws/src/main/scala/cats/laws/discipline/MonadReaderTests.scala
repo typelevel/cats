@@ -25,6 +25,7 @@ trait MonadReaderTests[F[_], R] extends MonadTests[F] {
     EqFC: Eq[F[C]],
     EqFR: Eq[F[R]],
     EqFABC: Eq[F[(A, B, C)]],
+    EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
   ): RuleSet = {
     new RuleSet {

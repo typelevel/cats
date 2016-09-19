@@ -7,8 +7,8 @@ import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
-  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] =
-    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with RecursiveTailRecM[Vector] {
+  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
+    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 

@@ -161,9 +161,9 @@ object NonEmptyList extends NonEmptyListInstances {
 private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 {
 
   implicit val catsDataInstancesForNonEmptyList: SemigroupK[NonEmptyList] with Reducible[NonEmptyList]
-      with Comonad[NonEmptyList] with Traverse[NonEmptyList] with Monad[NonEmptyList] with RecursiveTailRecM[NonEmptyList] =
+      with Comonad[NonEmptyList] with Traverse[NonEmptyList] with Monad[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList] with Comonad[NonEmptyList]
-      with Traverse[NonEmptyList] with Monad[NonEmptyList] with RecursiveTailRecM[NonEmptyList] {
+      with Traverse[NonEmptyList] with Monad[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a concat b

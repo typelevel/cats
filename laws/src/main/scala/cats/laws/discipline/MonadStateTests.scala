@@ -27,6 +27,7 @@ trait MonadStateTests[F[_], S] extends MonadTests[F] {
     EqFUnit: Eq[F[Unit]],
     EqFS: Eq[F[S]],
     EqFABC: Eq[F[(A, B, C)]],
+    EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
   ): RuleSet = {
     new RuleSet {

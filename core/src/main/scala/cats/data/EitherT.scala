@@ -345,9 +345,6 @@ private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
   implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
     new EitherTMonadError[F, L] { implicit val F = F0 }
 
-  implicit def catsDataRecursiveTailRecMForEitherT[F[_]: RecursiveTailRecM, L]: RecursiveTailRecM[EitherT[F, L, ?]] =
-    RecursiveTailRecM.create[EitherT[F, L, ?]]
-
   implicit def catsDataSemigroupKForEitherT[F[_], L](implicit F0: Monad[F]): SemigroupK[EitherT[F, L, ?]] =
     new EitherTSemigroupK[F, L] { implicit val F = F0 }
 

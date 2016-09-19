@@ -60,13 +60,30 @@ implicit def optionMonad(implicit app: Applicative[Option]) =
 follows this tradition by providing implementations of `flatten` and `map`
 derived from `flatMap` and `pure`.
 
+In addition to requiring `flatMap` and pure`, Cats has chosen to require
+`tailRecM` which encodes stack safe monadic recursion, as described in
+[Stack Safety for Free](http://functorial.com/stack-safety-for-free/index.pdf) by
+Phil Freeman. Because monadic recursion is so common in functional programming but
+is not stack safe on the JVM, Cats has chosen to require this method of all monad implementations
+as opposed to just a subset. All functions requiring monadic recursion in Cats is done via
+`tailRecM`.
+
+An example `Monad` implementation for `Option` is shown below. Note the tail recursive
+and therefore stack safe implementation of `tailRecM`.
+
 ```tut:silent
-implicit val listMonad = new Monad[List] {
-  def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] = fa.flatMap(f)
-  def pure[A](a: A): List[A] = List(a)
-  def tailRecM[A, B](a: A)(f: A => List[Either[A, B]]): List[B] =
-    defaultTailRecM(a)(f)
-}
+import scala.annotation.tailrec
+
+implicit val optionMonad = new Monad[Option] {
+  def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] = fa.flatMap(f)
+  def pure[A](a: A): Option[A] = Some(a)
+
+  @tailrec
+  def tailRecM[A, B](a: A)(f: A => Option[Either[A, B]]): Option[B] = f(a) match {
+    case None              => None
+    case Some(Left(nextA)) => tailRecM(nextA)(f) // continue the recursion
+    case Some(Right(b))    => Some(b)            // recursion done
+  }
 ```
 
 Part of the reason for this is that name `flatMap` has special significance in

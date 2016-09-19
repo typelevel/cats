@@ -86,9 +86,6 @@ private[data] sealed abstract class IdTInstances0 extends IdTInstances1 {
       implicit val F0: Monad[F] = F
     }
 
-  implicit def catsDataRecursiveTailRecMForIdT[F[_]: RecursiveTailRecM]: RecursiveTailRecM[IdT[F, ?]] =
-    RecursiveTailRecM.create[IdT[F, ?]]
-
   implicit def catsDataFoldableForIdT[F[_]](implicit F: Foldable[F]): Foldable[IdT[F, ?]] =
     new IdTFoldable[F] {
       implicit val F0: Foldable[F] = F

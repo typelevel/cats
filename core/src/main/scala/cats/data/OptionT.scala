@@ -196,9 +196,6 @@ private[data] sealed trait OptionTInstances0 extends OptionTInstances1 {
   implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
     new OptionTMonadError[F, E] { implicit val F = F0 }
 
-  implicit def catsDataRecursiveTailRecMForOptionT[F[_]](implicit F: RecursiveTailRecM[F]): RecursiveTailRecM[OptionT[F, ?]] =
-    RecursiveTailRecM.create[OptionT[F, ?]]
-
   implicit def catsDataSemigroupKForOptionT[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, ?]] =
     new OptionTSemigroupK[F] { implicit val F = F0 }
 
