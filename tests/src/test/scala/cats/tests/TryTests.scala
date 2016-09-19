@@ -3,6 +3,7 @@ package tests
 
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline._
+import cats.laws.discipline.arbitrary._
 
 import scala.util.{Success, Try}
 

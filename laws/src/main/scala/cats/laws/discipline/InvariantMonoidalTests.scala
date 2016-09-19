@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import cats.laws.discipline.CartesianTests.Isomorphisms
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 
 trait InvariantMonoidalTests[F[_]] extends InvariantTests[F] with CartesianTests[F] {
@@ -13,6 +13,9 @@ trait InvariantMonoidalTests[F[_]] extends InvariantTests[F] with CartesianTests
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
     EqFABC: Eq[F[(A, (B, C))]],
     EqFABC2: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F],

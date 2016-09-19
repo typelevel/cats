@@ -10,8 +10,9 @@ import cats.tests.CatsSuite
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
+import cats.laws.discipline.arbitrary._
 
 // https://issues.scala-lang.org/browse/SI-7934
 @deprecated("", "")
@@ -36,13 +37,19 @@ class FutureTests extends CatsSuite {
     }
 
   implicit val throwableEq: Eq[Throwable] =
-    Eq.fromUniversalEquals
+    Eq[String].on(_.toString)
 
   implicit val comonad: Comonad[Future] = futureComonad(timeout)
 
   // Need non-fatal Throwables for Future recoverWith/handleError
   implicit val nonFatalArbitrary: Arbitrary[Throwable] =
     Arbitrary(arbitrary[Exception].map(identity))
+
+  // We can't block on futures in JS, so we can't create interesting
+  // cogen instances. This will allow the tests to run in a
+  // less-useful way.
+  implicit def cogenForFuture[A]: Cogen[Future[A]] =
+    Cogen[Unit].contramap(_ => ())
 
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])

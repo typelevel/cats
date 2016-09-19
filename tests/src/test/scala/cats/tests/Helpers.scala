@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
 import Arbitrary.arbitrary
 
 import cats.kernel.{ CommutativeSemigroup, CommutativeMonoid, CommutativeGroup }
@@ -23,22 +23,25 @@ import cats.kernel.{ Band, Semilattice, BoundedSemilattice }
  */
 object Helpers {
 
-  abstract class Arb[E](f: Int => E) {
+  abstract class N { def n: Int }
+
+  abstract class Arb[E <: N](f: Int => E) {
     implicit val earb: Arbitrary[E] = Arbitrary(arbitrary[Int].map(f))
+    implicit val ccog: Cogen[E] = Cogen[Int].contramap(_.n)
   }
 
   trait Q[E] {
     implicit val eeq: Eq[E] = Eq.fromUniversalEquals
   }
 
-  abstract class Companion[E](f: Int => E) extends Arb[E](f) with Q[E]
+  abstract class Companion[E <: N](f: Int => E) extends Arb[E](f) with Q[E]
 
   // Eq
-  case class Eqed(n: Int)
+  case class Eqed(n: Int) extends N
   object Eqed extends Companion(new Eqed(_))
 
   // PartialOrder
-  case class POrd(n: Int)
+  case class POrd(n: Int) extends N
   object POrd extends Arb(new POrd(_)) {
     implicit object O extends PartialOrder[POrd] {
       def partialCompare(x: POrd, y: POrd): Double =
@@ -49,7 +52,7 @@ object Helpers {
   }
 
   // Order
-  case class Ord(n: Int)
+  case class Ord(n: Int) extends N
   object Ord extends Arb(new Ord(_)) {
     implicit object O extends Order[Ord] {
       def compare(x: Ord, y: Ord): Int = x.n compare y.n
@@ -57,7 +60,7 @@ object Helpers {
   }
 
   // Band
-  case class Bnd(n: Int)
+  case class Bnd(n: Int) extends N
   object Bnd extends Companion(new Bnd(_)) {
     implicit object Alg extends Band[Bnd] {
       def combine(x: Bnd, y: Bnd): Bnd = Bnd(x.n & y.n)
@@ -65,7 +68,7 @@ object Helpers {
   }
 
   // Semilattice
-  case class SL(n: Int)
+  case class SL(n: Int) extends N
   object SL extends Companion(new SL(_)) {
     implicit object Alg extends Semilattice[SL] {
       def combine(x: SL, y: SL): SL = SL(x.n & y.n)
@@ -73,7 +76,7 @@ object Helpers {
   }
 
   // BoundedSemilattice
-  case class BSL(n: Int)
+  case class BSL(n: Int) extends N
   object BSL extends Companion(new BSL(_)) {
     implicit object Alg extends BoundedSemilattice[BSL] {
       def empty: BSL = BSL(0)
@@ -82,7 +85,7 @@ object Helpers {
   }
 
   // Semigroup
-  case class Semi(n: Int)
+  case class Semi(n: Int) extends N
   object Semi extends Companion(new Semi(_)) {
     implicit object Alg extends Semigroup[Semi] {
       def combine(x: Semi, y: Semi): Semi = Semi(x.n ^ y.n)
@@ -90,7 +93,7 @@ object Helpers {
   }
 
   // CommutativeSemigroup
-  case class CSemi(n: Int)
+  case class CSemi(n: Int) extends N
   object CSemi extends Companion(new CSemi(_)) {
     implicit object Alg extends CommutativeSemigroup[CSemi] {
       def combine(x: CSemi, y: CSemi): CSemi = CSemi(x.n ^ y.n)
@@ -98,7 +101,7 @@ object Helpers {
   }
 
   // Monoid
-  case class Mono(n: Int)
+  case class Mono(n: Int) extends N
   object Mono extends Companion(new Mono(_)) {
     implicit object Alg extends Monoid[Mono] {
       def empty: Mono = Mono(Int.MaxValue)
@@ -107,7 +110,7 @@ object Helpers {
   }
 
   // CommutativeMonoid
-  case class CMono(n: Int)
+  case class CMono(n: Int) extends N
   object CMono extends Companion(new CMono(_)) {
     implicit object Alg extends CommutativeMonoid[CMono] {
       def empty: CMono = CMono(Int.MaxValue)
@@ -116,7 +119,7 @@ object Helpers {
   }
 
   // Group
-  case class Grp(n: Int)
+  case class Grp(n: Int) extends N
   object Grp extends Companion(new Grp(_)) {
     implicit object Alg extends Group[Grp] {
       def empty: Grp = Grp(0)
@@ -126,7 +129,7 @@ object Helpers {
   }
 
   // CommutativeGroup
-  case class CGrp(n: Int)
+  case class CGrp(n: Int) extends N
   object CGrp extends Companion(new CGrp(_)) {
     implicit object Alg extends CommutativeGroup[CGrp] {
       def empty: CGrp = CGrp(0)

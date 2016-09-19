@@ -4,8 +4,7 @@ package discipline
 
 import catalysts.Platform
 import cats.laws.discipline.CartesianTests.Isomorphisms
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
@@ -17,6 +16,9 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
     ArbFC: Arbitrary[F[C]],
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],

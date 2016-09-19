@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import cats.functor.Contravariant
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 
 trait ContravariantTests[F[_]] extends InvariantTests[F] {
@@ -11,6 +11,9 @@ trait ContravariantTests[F[_]] extends InvariantTests[F] {
 
   def contravariant[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]]
   ): RuleSet = {

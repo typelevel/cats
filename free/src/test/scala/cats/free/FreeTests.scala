@@ -6,7 +6,7 @@ import cats.arrow.FunctionK
 import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{Arbitrary, Gen, Cogen}
 import Arbitrary.arbFunction1
 
 class FreeTests extends CatsSuite {
@@ -131,7 +131,7 @@ sealed trait FreeTestsInstances {
     def withFlatMapped = for {
       fDepth <- nextDepth
       freeDepth <- nextDepth
-      f <- arbFunction1[A, Free[F, A]](Arbitrary(freeGen[F, A](fDepth))).arbitrary
+      f <- arbFunction1[A, Free[F, A]](Arbitrary(freeGen[F, A](fDepth)), Cogen[Unit].contramap(_ => ())).arbitrary
       freeFA <- freeGen[F, A](freeDepth)
     } yield freeFA.flatMap(f)
 
