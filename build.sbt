@@ -159,6 +159,7 @@ lazy val docs = project
   .settings(tutSettings)
   .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
+  .settings(fix2_12:_*)
   .dependsOn(coreJVM, freeJVM)
 
 lazy val cats = project.in(file("."))
@@ -562,6 +563,12 @@ lazy val update2_12 = Seq(
 
 lazy val fix2_12 = Seq(
   scalacOptions -= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 12)) => "-Xfatal-warnings"
+      case _ => ""
+    }
+  },
+  scalacOptions in (ScalaUnidoc, unidoc) -= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, 12)) => "-Xfatal-warnings"
       case _ => ""
