@@ -44,18 +44,18 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
 }
 
 sealed trait Tuple2Instances1 extends Tuple2Instances2 {
-  implicit def catsStdMonadForTuple2[X](implicit MX: Monoid[X]): Monad[(X, ?)] with RecursiveTailRecM[(X, ?)] =
+  implicit def catsStdMonadForTuple2[X](implicit MX: Monoid[X]): Monad[(X, ?)] =
     new FlatMapTuple2[X](MX) with Monad[(X, ?)] {
       def pure[A](a: A): (X, A) = (MX.empty, a)
     }
 }
 
 sealed trait Tuple2Instances2 {
-  implicit def catsStdFlatMapForTuple2[X](implicit SX: Semigroup[X]): FlatMap[(X, ?)] with RecursiveTailRecM[(X, ?)]=
+  implicit def catsStdFlatMapForTuple2[X](implicit SX: Semigroup[X]): FlatMap[(X, ?)] =
     new FlatMapTuple2[X](SX)
 }
 
-private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?)] with RecursiveTailRecM[(X, ?)] {
+private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?)] {
   override def ap[A, B](ff: (X, A => B))(fa: (X, A)): (X, B) = {
     val x = s.combine(ff._1, fa._1)
     val b = ff._2(fa._2)

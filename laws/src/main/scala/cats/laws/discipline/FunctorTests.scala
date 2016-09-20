@@ -2,8 +2,7 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait FunctorTests[F[_]] extends InvariantTests[F] {
@@ -11,6 +10,9 @@ trait FunctorTests[F[_]] extends InvariantTests[F] {
 
   def functor[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]]
   ): RuleSet = {

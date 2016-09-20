@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import cats.laws.discipline.CartesianTests.Isomorphisms
-import org.scalacheck.{Arbitrary, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop.forAll
 
 trait MonadReaderTests[F[_], R] extends MonadTests[F] {
@@ -16,11 +16,16 @@ trait MonadReaderTests[F[_], R] extends MonadTests[F] {
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
     ArbR: Arbitrary[R],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    CogenR: Cogen[R],
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
     EqFR: Eq[F[R]],
     EqFABC: Eq[F[(A, B, C)]],
+    EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
   ): RuleSet = {
     new RuleSet {

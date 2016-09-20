@@ -117,7 +117,10 @@ class NonEmptyListTests extends CatsSuite {
 
   test("reduceRight consistent with foldRight") {
     forAll { (nel: NonEmptyList[Int], f: (Int, Eval[Int]) => Eval[Int]) =>
-      nel.reduceRight(f).value should === (nel.tail.foldRight(nel.head)((a, b) => f(a, Now(b)).value))
+      val got = nel.reduceRight(f).value
+      val last :: rev = nel.toList.reverse
+      val expected = rev.reverse.foldRight(last)((a, b) => f(a, Now(b)).value)
+      got should === (expected)
     }
   }
 
@@ -144,10 +147,12 @@ class NonEmptyListTests extends CatsSuite {
 
   test("reduceRightToOption consistent with foldRight + Option") {
     forAll { (nel: NonEmptyList[Int], f: Int => String, g: (Int, Eval[String]) => Eval[String]) =>
-      val expected = nel.tail.foldRight(Option(f(nel.head))) { (i, opt) =>
+      val got = nel.reduceRightToOption(f)(g).value
+      val last :: rev = nel.toList.reverse
+      val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) =>
         opt.map(s => g(i, Now(s)).value)
       }
-      nel.reduceRightToOption(f)(g).value should === (expected)
+      got should === (expected)
     }
   }
 

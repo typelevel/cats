@@ -4,7 +4,7 @@ package discipline
 
 import cats.data.EitherT
 import cats.laws.discipline.CartesianTests.Isomorphisms
-import org.scalacheck.{Arbitrary, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop.forAll
 
 trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTests[F] {
@@ -17,6 +17,10 @@ trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTes
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
     ArbE: Arbitrary[E],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    CogenE: Cogen[E],
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
@@ -25,6 +29,7 @@ trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTes
     EqFEitherEA: Eq[F[Either[E, A]]],
     EqEitherTFEA: Eq[EitherT[F, E, A]],
     EqFABC: Eq[F[(A, B, C)]],
+    EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
   ): RuleSet = {
     new RuleSet {

@@ -2,8 +2,7 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait ComonadTests[F[_]] extends CoflatMapTests[F] {
@@ -12,6 +11,11 @@ trait ComonadTests[F[_]] extends CoflatMapTests[F] {
 
   def comonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
     ArbFA: Arbitrary[F[A]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    CogenFA: Cogen[F[A]],
+    CogenFB: Cogen[F[B]],
     EqFA: Eq[F[A]],
     EqFFA: Eq[F[F[A]]],
     EqFFFA: Eq[F[F[F[A]]]],

@@ -6,7 +6,7 @@ import cats.kernel.laws.{GroupLaws, OrderLaws}
 import cats.data.{Const, NonEmptyList}
 import cats.functor.Contravariant
 import cats.laws.discipline._
-import cats.laws.discipline.arbitrary.{catsLawsArbitraryForConst, catsLawsArbitraryForNonEmptyList}
+import cats.laws.discipline.arbitrary._
 
 class ConstTests extends CatsSuite {
 

@@ -6,7 +6,7 @@ import cats.arrow.FunctionK
 import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{Arbitrary, Gen, Cogen}
 import Arbitrary.arbFunction1
 
 class FreeTests extends CatsSuite {
@@ -131,7 +131,7 @@ sealed trait FreeTestsInstances {
     def withFlatMapped = for {
       fDepth <- nextDepth
       freeDepth <- nextDepth
-      f <- arbFunction1[A, Free[F, A]](Arbitrary(freeGen[F, A](fDepth))).arbitrary
+      f <- arbFunction1[A, Free[F, A]](Arbitrary(freeGen[F, A](fDepth)), Cogen[Unit].contramap(_ => ())).arbitrary
       freeFA <- freeGen[F, A](freeDepth)
     } yield freeFA.flatMap(f)
 
@@ -142,7 +142,7 @@ sealed trait FreeTestsInstances {
   implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[Free[F, A]] =
     Arbitrary(freeGen[F, A](4))
 
-  implicit def freeEq[S[_]: Monad: RecursiveTailRecM, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
+  implicit def freeEq[S[_]: Monad, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
     new Eq[Free[S, A]] {
       def eqv(a: Free[S, A], b: Free[S, A]): Boolean =
         SA.eqv(a.runM(identity),  b.runM(identity))

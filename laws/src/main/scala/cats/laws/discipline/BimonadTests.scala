@@ -3,8 +3,7 @@ package laws
 package discipline
 
 import cats.laws.discipline.CartesianTests.Isomorphisms
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait BimonadTests[F[_]] extends MonadTests[F] with ComonadTests[F] {
@@ -17,12 +16,18 @@ trait BimonadTests[F[_]] extends MonadTests[F] with ComonadTests[F] {
     ArbFC: Arbitrary[F[C]],
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    CogenFA: Cogen[F[A]],
+    CogenFB: Cogen[F[B]],
     EqFFFA: Eq[F[F[A]]],
     EqFFA: Eq[F[F[F[A]]]],
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
+    EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
   ): RuleSet = {
     new RuleSet {

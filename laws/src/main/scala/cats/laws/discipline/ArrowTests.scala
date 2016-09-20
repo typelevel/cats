@@ -3,8 +3,7 @@ package laws
 package discipline
 
 import cats.arrow.Arrow
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with StrongTests[F] {
@@ -16,6 +15,11 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with Stron
     ArbFCD: Arbitrary[F[C, D]],
     ArbFDE: Arbitrary[F[D, E]],
     ArbFEG: Arbitrary[F[E, G]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    CogenD: Cogen[D],
+    CogenE: Cogen[E],
     EqFAA: Eq[F[A, A]],
     EqFAB: Eq[F[A, B]],
     EqFAC: Eq[F[A, C]],

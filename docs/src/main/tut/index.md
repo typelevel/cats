@@ -14,13 +14,13 @@ The name is a playful shortening of the word *category*.
   around Q3 2016).</p> </div>
 
 
-# <a name="getting-started" href="#getting-started"></a>Getting Started
+### <a name="getting-started" href="#getting-started"></a>Getting Started
 
 Cats is currently available for Scala 2.10 and 2.11.
 
 To get started with SBT, simply add the following to your build.sbt file:
 
-    libraryDependencies += "org.typelevel" %% "cats" % "0.7.0"
+    libraryDependencies += "org.typelevel" %% "cats" % "0.7.2"
 
 This will pull in all of Cats' modules. If you only require some
 functionality, you can pick-and-choose from amongst these modules
@@ -78,7 +78,7 @@ we can without making unnecessary sacrifices of purity and
 usability. Where sacrifices have to be made, we will strive to make
 these obvious, and will keep them well documented.
 
-# <a name="project-structure" href="#project-structure"></a>Project Structure
+### <a name="project-structure" href="#project-structure"></a>Project Structure
 
 In an attempt to be more modular, Cats is broken up into a number of sub-projects:
 
@@ -89,7 +89,7 @@ In an attempt to be more modular, Cats is broken up into a number of sub-project
 * *tests* - tests that check type class instances with laws from *laws*
 * *docs* - The source for this website
 
-# <a name="copyright" href="#copyright"></a>Copyright and License
+### <a name="copyright" href="#copyright"></a>Copyright and License
 
 All code is available to you under the MIT license, available at
 http://opensource.org/licenses/mit-license.php and also in the

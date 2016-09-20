@@ -28,8 +28,8 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
     }
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForEither[A]: MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] with RecursiveTailRecM[Either[A, ?]] =
-    new MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] with RecursiveTailRecM[Either[A, ?]] {
+  implicit def catsStdInstancesForEither[A]: MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] =
+    new MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] {
       def pure[B](b: B): Either[A, B] = Right(b)
 
       def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =
