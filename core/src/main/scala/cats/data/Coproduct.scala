@@ -67,10 +67,7 @@ final case class Coproduct[F[_], G[_], A](run: Either[F[A], G[A]]) {
    * {{{
    * scala> import cats.arrow.FunctionK
    * scala> import cats.data.Coproduct
-   * scala> val listToOption =
-   *      |   new FunctionK[List, Option] {
-   *      |     def apply[A](fa: List[A]): Option[A] = fa.headOption
-   *      |   }
+   * scala> val listToOption = λ[FunctionK[List, Option]](_.headOption)
    * scala> val optionToOption = FunctionK.id[Option]
    * scala> val cp1: Coproduct[List, Option, Int] = Coproduct.leftc(List(1,2,3))
    * scala> val cp2: Coproduct[List, Option, Int] = Coproduct.rightc(Some(4))
