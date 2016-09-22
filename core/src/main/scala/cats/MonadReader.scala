@@ -7,6 +7,9 @@ trait MonadReader[F[_], R] extends Monad[F] {
 
   /** Modify the environment */
   def local[A](f: R => R)(fa: F[A]): F[A]
+
+  /** Retrieves a function of the environment */
+  def reader[A](f: R => A): F[A] = map(ask)(f)
 }
 
 object MonadReader {

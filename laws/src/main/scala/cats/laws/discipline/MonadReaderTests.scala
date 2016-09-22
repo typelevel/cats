@@ -36,7 +36,8 @@ trait MonadReaderTests[F[_], R] extends MonadTests[F] {
         "monadReader ask idempotent" -> laws.monadReaderAskIdempotent,
         "monadReader local ask" -> forAll(laws.monadReaderLocalAsk _),
         "monadReader local pure" -> forAll(laws.monadReaderLocalPure[A] _),
-        "monadReader local flatMap" -> forAll(laws.monadReaderLocalFlatMap[A, B] _)
+        "monadReader local flatMap" -> forAll(laws.monadReaderLocalFlatMap[A, B] _),
+        "monadReader reader ask" -> forAll(laws.monadReaderReaderAsk[A] _)
       )
     }
   }
