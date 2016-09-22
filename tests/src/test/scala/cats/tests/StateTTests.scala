@@ -69,6 +69,22 @@ class StateTTests extends CatsSuite {
     }
   }
 
+  test("State.set and StateT.set are consistent") {
+    forAll { (init: String, s: String) =>
+      val state: State[String, Unit] = State.set(s)
+      val stateT: StateT[Eval, String, Unit] = StateT.set(s)
+      state.run(init) should === (stateT.run(init))
+    }
+  }
+
+  test("State.set and StateT.setF are consistent") {
+    forAll { (init: String, s: String) =>
+      val state: State[String, Unit] = State.set(s)
+      val stateT: StateT[Eval, String, Unit] = StateT.setF(Eval.now(s))
+      state.run(init) should === (stateT.run(init))
+    }
+  }
+
   test("Cartesian syntax is usable on State") {
     val x = add1 *> add1
     x.runS(0).value should === (2)
@@ -121,6 +137,22 @@ class StateTTests extends CatsSuite {
       val s2 = State.modify(f)
 
       s1 should === (s2)
+    }
+  }
+
+  test("StateT.set equivalent to modify ignoring first param") {
+    forAll { (init: String, update: String) =>
+      val s1 = StateT.modify[Eval, String](_ => update)
+      val s2 = StateT.set[Eval, String](update)
+      s1.run(init) should === (s2.run(init))
+    }
+  }
+
+  test("StateT.setF equivalent to modifyF ignoring first param") {
+    forAll { (init: String, update: String) =>
+      val s1 = StateT.modifyF[Eval, String](_ => Eval.now(update))
+      val s2 = StateT.setF(Eval.now(update))
+      s1.run(init) should === (s2.run(init))
     }
   }
 

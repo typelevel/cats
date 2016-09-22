@@ -150,6 +150,12 @@ object StateT extends StateTInstances {
 
   def modifyF[F[_], S](f: S => F[S])(implicit F: Applicative[F]): StateT[F, S, Unit] =
     StateT(s => F.map(f(s))(s => (s, ())))
+
+  def set[F[_], S](s: S)(implicit F: Applicative[F]): StateT[F, S, Unit] =
+    StateT(_ => F.pure((s, ())))
+
+  def setF[F[_], S](fs: F[S])(implicit F: Applicative[F]): StateT[F, S, Unit] =
+    StateT(_ => F.map(fs)(s => (s, ())))
 }
 
 private[data] sealed trait StateTInstances extends StateTInstances1 {
