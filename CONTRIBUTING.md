@@ -264,9 +264,9 @@ venues.
 We hope that our community will be respectful, helpful, and kind. If
 you find yourself embroiled in a situation that becomes heated, or
 that fails to live up to our expectations, you should disengage and
-contact one of the [project maintainers](README.md#maintainers) in private. We
-hope to avoid letting minor aggressions and misunderstandings escalate
-into larger problems.
+contact one of the [project maintainers](https://github.com/typelevel/cats#maintainers)
+in private. We hope to avoid letting minor aggressions and misunderstandings
+escalate into larger problems.
 
-If you are being harassed, please contact one of [us](README.md#maintainers)
+If you are being harassed, please contact one of [us](https://github.com/typelevel/cats#maintainers)
 immediately so that we can support you.

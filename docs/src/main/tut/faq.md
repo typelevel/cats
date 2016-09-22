@@ -105,10 +105,11 @@ In purely functional programming, a monadic `IO` or `Task` type is often used to
 For some use-cases, a very simple `IO` is the best answer, as it avoids a lot of the overhead and complexity of other solutions. However, other use-cases require low-level concurrency control with asynchrony, resource management, and stack-safety. Considering all of the competing concerns, Cats has opted to not implement its own `IO`/`Task` types and instead encourage users to use a separate library that best serves their use-case.
 
 Here are a couple libraries with `Task` implementations that you may find useful (in no particular order):
+
 - [Monix](https://monix.io/) - Asynchronous Programming for Scala and [Scala.js](https://www.scala-js.org/).
   - The `monix-eval` module provides a full-featured [Task](https://monix.io/docs/2x/eval/task.html) that is both cancellable and Scala.js-compatible.
 - [fs2](https://github.com/functional-streams-for-scala/fs2) - Compositional, streaming I/O library for Scala
-  - fs2 provides a [Task](https://github.com/functional-streams-for-scala/fs2/blob/series/0.9/core/src/main/scala/fs2/task.scala) that is a convenient option if you are already using fs2. At the time of this writing, Scala.js support is [in progress](https://github.com/functional-streams-for-scala/fs2/issues/500).
+  - fs2 provides a [Task](https://github.com/functional-streams-for-scala/fs2/blob/series/0.9/core/shared/src/main/scala/fs2/Task.scala) that is a convenient option if you are already using fs2. fs2's `Task` is also Scala.js-compatible.
 
 It may be worth keeping in mind that `IO` and `Task` are pretty blunt instruments (they are essentially the `Any` of side effect management), and you may want to narrow the scope of your effects throughout most of your application. The [free monad]({{ site.baseurl }}/tut/freemonad.html) documentation describes a way to abstractly define controlled effects and interpret them into a type such as `IO` or `Task` (or even simply `Try`, `Future`, or [`Id`]({{ site.baseurl }}/tut/id.html)) as late as possible. As more of your code becomes pure through these controlled effects the less it matters which type you end up choosing to represent your side effects.
 
