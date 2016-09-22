@@ -151,6 +151,9 @@ object StateT extends StateTInstances {
   def modifyF[F[_], S](f: S => F[S])(implicit F: Applicative[F]): StateT[F, S, Unit] =
     StateT(s => F.map(f(s))(s => (s, ())))
 
+  def get[F[_], S](implicit F: Applicative[F]): StateT[F, S, S] =
+    StateT(s => F.pure((s, s)))
+
   def set[F[_], S](s: S)(implicit F: Applicative[F]): StateT[F, S, Unit] =
     StateT(_ => F.pure((s, ())))
 

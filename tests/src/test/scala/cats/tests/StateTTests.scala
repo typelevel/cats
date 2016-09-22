@@ -29,6 +29,14 @@ class StateTTests extends CatsSuite {
     }
   }
 
+  test("State.get and StateT.get are consistent") {
+    forAll{ (s: String) => 
+      val state: State[String, String] = State.get
+      val stateT: State[String, String] = StateT.get
+      state.run(s) should === (stateT.run(s))
+    }
+  }
+
   test("State.inspect and StateT.inspect are consistent") {
     forAll { (s: String, f: String => Int) =>
       val state: State[String, Int] = State.inspect(f)
