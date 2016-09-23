@@ -169,7 +169,9 @@ of the combined Kleisli arrows, which together return two `F[B]` values. Then, t
 using the `Monoid[F[B]]` instance.
 
 ## Other uses
+
 ### Monad Transformers
+
 Many data types have a monad transformer equivalent that allows us to compose the `Monad` instance of the data
 type with any other `Monad` instance. For instance, `OptionT[F[_], A]` allows us to compose the monadic properties
 of `Option` with any other `F[_]`, such as a `List`. This allows us to work with nested contexts/effects in a
