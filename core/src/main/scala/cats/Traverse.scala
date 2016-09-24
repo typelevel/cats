@@ -84,6 +84,24 @@ import simulacrum.typeclass
     traverse(fga)(ga => ga)
 
   /**
+   * Thread all the G effects through the F structure and flatten to invert the
+   * structure from F[G[F[A]]] to G[F[A]].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val x: List[Option[List[Int]]] = List(Some(List(1, 2)), Some(List(3)))
+   * scala> val y: List[Option[List[Int]]] = List(None, Some(List(3)))
+   * scala> x.sequenceM
+   * res0: Option[List[Int]] = Some(List(1, 2, 3))
+   * scala> y.sequenceM
+   * res1: Option[List[Int]] = None
+   * }}}
+   */
+  def sequenceM[G[_], A](fgfa: F[G[F[A]]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[A]] =
+    G.map(sequence(fgfa))(F.flatten)
+
+  /**
    * Behaves just like sequence, but uses [[Unapply]] to find the
    * Applicative instance for G.
    *
