@@ -126,7 +126,7 @@ class KleisliTests extends CatsSuite {
 
   test("transform") {
     val opt = Kleisli { (x: Int) => Option(x.toDouble) }
-    val optToList = new FunctionK[Option,List] { def apply[A](fa: Option[A]): List[A] = fa.toList }
+    val optToList = λ[FunctionK[Option,List]](_.toList)
     val list = opt.transform(optToList)
 
     val is = 0.to(10).toList

@@ -1,7 +1,7 @@
 # see https://weblogs.java.net/blog/kcpeppe/archive/2013/12/11/case-study-jvm-hotspot-flags
 -Dfile.encoding=UTF8
 -Xms1G
--Xmx3G
+-Xmx6G
 -XX:MaxPermSize=512M
 -XX:ReservedCodeCacheSize=250M
 -XX:+TieredCompilation

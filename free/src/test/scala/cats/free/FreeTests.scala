@@ -69,10 +69,8 @@ class FreeTests extends CatsSuite {
       z <- if (j<10000) a(j) else Free.pure[FTestApi, Int](j)
     } yield z
 
-    def runner: FunctionK[FTestApi,Id] = new FunctionK[FTestApi,Id] {
-      def apply[A](fa: FTestApi[A]): Id[A] = fa match {
-        case TB(i) => i+1
-      }
+    def runner: FunctionK[FTestApi,Id] = λ[FunctionK[FTestApi,Id]] {
+      case TB(i) => i+1
     }
 
     assert(10000 == a(0).foldMap(runner))
@@ -117,9 +115,7 @@ object FreeTests extends FreeTestsInstances {
 }
 
 sealed trait FreeTestsInstances {
-  val headOptionU: FunctionK[List,Option] = new FunctionK[List,Option] {
-    def apply[A](fa: List[A]): Option[A] = fa.headOption
-  }
+  val headOptionU = λ[FunctionK[List,Option]](_.headOption)
 
   private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {
     val noFlatMapped = Gen.oneOf(

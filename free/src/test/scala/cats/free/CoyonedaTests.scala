@@ -26,10 +26,7 @@ class CoyonedaTests extends CatsSuite {
   }
 
   test("transform and run is same as applying natural trans") {
-      val nt =
-        new FunctionK[Option, List] {
-          def apply[A](fa: Option[A]): List[A] = fa.toList
-        }
+      val nt = λ[FunctionK[Option, List]](_.toList)
       val o = Option("hello")
       val c = Coyoneda.lift(o)
       c.transform(nt).run should === (nt(o))

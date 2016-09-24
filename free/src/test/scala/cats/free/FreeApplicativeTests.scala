@@ -62,10 +62,7 @@ class FreeApplicativeTests extends CatsSuite {
     val f = x.map(i => (j: Int) => i + j)
     val r1 = y.ap(f)
     val r2 = r1.monad
-    val nt =
-      new FunctionK[Id, Id] {
-        def apply[A](fa: Id[A]): Id[A] = fa
-      }
+    val nt = FunctionK.id[Id]
     r1.foldMap(nt) should === (r2.foldMap(nt))
   }
 
@@ -81,9 +78,7 @@ class FreeApplicativeTests extends CatsSuite {
 
   test("FreeApplicative#analyze") {
     type G[A] = List[Int]
-    val countingNT = new FunctionK[List, G] {
-      def apply[A](la: List[A]): G[A] = List(la.length)
-    }
+    val countingNT = λ[FunctionK[List, G]](la => List(la.length))
 
     val fli1 = FreeApplicative.lift[List, Int](List(1, 3, 5, 7))
     fli1.analyze[G[Int]](countingNT) should === (List(4))
@@ -103,8 +98,8 @@ class FreeApplicativeTests extends CatsSuite {
 
     type Tracked[A] = State[String, A]
 
-    val f: FunctionK[Foo,Tracked] = new FunctionK[Foo,Tracked] {
-      def apply[A](fa: Foo[A]): Tracked[A] = State[String, A]{ s0 =>
+    val f = λ[FunctionK[Foo,Tracked]] { fa =>
+      State { s0 =>
         (s0 + fa.toString + ";", fa.getA)
       }
     }
@@ -126,9 +121,7 @@ class FreeApplicativeTests extends CatsSuite {
 
     val z = Apply[Dsl].map2(x, y)((_, _) => ())
 
-    val asString: FunctionK[Id, λ[α => String]] = new FunctionK[Id, λ[α => String]] {
-      def apply[A](a: A): String = a.toString
-    }
+    val asString = λ[FunctionK[Id, λ[α => String]]](_.toString)
 
     z.analyze(asString) should === ("xy")
   }

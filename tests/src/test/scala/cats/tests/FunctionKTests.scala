@@ -7,15 +7,11 @@ import cats.data.NonEmptyList
 import cats.laws.discipline.arbitrary._
 
 class FunctionKTests extends CatsSuite {
-  val listToOption =
-    new FunctionK[List, Option] {
-      def apply[A](fa: List[A]): Option[A] = fa.headOption
-    }
 
-  val optionToList =
-    new FunctionK[Option, List] {
-      def apply[A](fa: Option[A]): List[A] = fa.toList
-    }
+  val listToOption = λ[FunctionK[List, Option]](_.headOption)
+
+  val optionToList = λ[FunctionK[Option, List]](_.toList)
+
 
   sealed trait Test1Algebra[A] {
     def v : A
@@ -29,13 +25,9 @@ class FunctionKTests extends CatsSuite {
 
   case class Test2[A](v : A) extends Test2Algebra[A]
 
-  object Test1NT extends FunctionK[Test1Algebra,Id] {
-    override def apply[A](fa: Test1Algebra[A]): Id[A] = fa.v
-  }
+  val Test1NT = λ[FunctionK[Test1Algebra,Id]](_.v)
 
-  object Test2NT extends FunctionK[Test2Algebra,Id] {
-    override def apply[A](fa: Test2Algebra[A]): Id[A] = fa.v
-  }
+  val Test2NT = λ[FunctionK[Test2Algebra,Id]](_.v)
 
   type T[A] = Coproduct[Test1Algebra, Test2Algebra, A]
 
