@@ -154,7 +154,7 @@ lazy val docSettings = Seq(
   micrositeBaseUrl := "cats",
   micrositeDocumentationUrl := "api",
   micrositeGithubOwner := "typelevel",
-  micrositeExtratMdFiles := Map(file("CONTRIBUTING.md") -> "contributing.md"),
+  micrositeExtraMdFiles := Map(file("CONTRIBUTING.md") -> "contributing.md"),
   micrositeGithubRepo := "cats",
   micrositePalette := Map(
     "brand-primary" -> "#5B5988",
