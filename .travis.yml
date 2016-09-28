@@ -8,19 +8,21 @@ git:
   depth: 9999
 
 scala:
-- 2.10.6
-- 2.11.8
-- 2.12.0-RC1
+  - 2.10.6
+  - 2.11.8
 
 jdk:
-  - oraclejdk8
+  - oraclejdk7
+
+matrix:
+  include:
+  - scala: 2.12.0-RC1
+    jdk: oraclejdk8
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
 
 script:
-  - scripts/publishLocalScoverage.sh
-  - scripts/publishLocalSbtScoverage.sh
   - scripts/travis-publish.sh
 
 # http://austinpray.com/ops/2015/09/20/change-travis-node-version.html

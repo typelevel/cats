@@ -105,8 +105,8 @@ lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion)
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.3-SNAPSHOT",
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.3-SNAPSHOT" % "test",
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.3",
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.3" % "test",
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
 
 
@@ -184,14 +184,14 @@ lazy val cats = project.in(file("."))
   .settings(catsSettings)
   .settings(noPublishSettings)
   .aggregate(catsJVM, catsJS)
-  .dependsOn(catsJVM, catsJS, testsJVM % "test-internal -> test")//, bench % "compile-internal;test-internal -> test")
+  .dependsOn(catsJVM, catsJS, testsJVM % "test-internal -> test", bench % "compile-internal;test-internal -> test")
 
 lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
   .settings(commonJvmSettings)
   .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM, jvm, docs) //, bench)
-  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM % "test-internal -> test", jvm) //, bench % "compile-internal;test-internal -> test")
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
@@ -269,7 +269,7 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
   .configure(disableScoverage210Jvm)
-  .settings(libraryDependencies ++= Seq("org.typelevel" %%% "catalysts-platform" % "0.0.3-SNAPSHOT"))
+  .settings(libraryDependencies ++= Seq("org.typelevel" %%% "catalysts-platform" % "0.0.3"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
   .jsSettings(coverageEnabled := false)
@@ -303,7 +303,7 @@ lazy val testsJVM = tests.jvm
 lazy val testsJS = tests.js
 
 // bench is currently JVM-only
-/*
+
 lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
@@ -311,9 +311,8 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(libraryDependencies ++= Seq(
-    "org.scalaz" %% "scalaz-core" % "7.2.5"))
+    "org.scalaz" %% "scalaz-core" % "7.2.6"))
   .enablePlugins(JmhPlugin)
- */
 
 // cats-js is JS-only
 lazy val js = project
