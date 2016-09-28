@@ -30,6 +30,9 @@ class LawTests extends FunSuite with Discipline {
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
     Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
 
+  implicit val arbitrarySymbol: Arbitrary[Symbol] =
+    Arbitrary(arbitrary[String].map(s => Symbol(s)))
+
   // this instance is not available in scalacheck 1.13.2.
   // remove this once a newer version is available.
   implicit val cogenBigInt: Cogen[BigInt] =
@@ -39,6 +42,9 @@ class LawTests extends FunSuite with Discipline {
   // remove this once a newer version is available.
   implicit val cogenBigDecimal: Cogen[BigDecimal] =
     Cogen[Double].contramap(_.toDouble)
+
+  implicit val cogenSymbol: Cogen[Symbol] =
+    Cogen[String].contramap(_.name)
 
   {
     // needed for Cogen[Map[...]]
@@ -64,6 +70,7 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Unit].check(_.order)
   laws[OrderLaws, Boolean].check(_.order)
   laws[OrderLaws, String].check(_.order)
+  laws[OrderLaws, Symbol].check(_.order)
   laws[OrderLaws, Byte].check(_.order)
   laws[OrderLaws, Short].check(_.order)
   laws[OrderLaws, Char].check(_.order)
