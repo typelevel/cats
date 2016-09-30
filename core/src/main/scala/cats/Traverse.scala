@@ -92,13 +92,13 @@ import simulacrum.typeclass
    * scala> import cats.implicits._
    * scala> val x: List[Option[List[Int]]] = List(Some(List(1, 2)), Some(List(3)))
    * scala> val y: List[Option[List[Int]]] = List(None, Some(List(3)))
-   * scala> x.sequenceM
+   * scala> x.sequenceA
    * res0: Option[List[Int]] = Some(List(1, 2, 3))
-   * scala> y.sequenceM
+   * scala> y.sequenceA
    * res1: Option[List[Int]] = None
    * }}}
    */
-  def sequenceM[G[_], A](fgfa: F[G[F[A]]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[A]] =
+  def sequenceA[G[_], A](fgfa: F[G[F[A]]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[A]] =
     G.map(sequence(fgfa))(F.flatten)
 
   /**
