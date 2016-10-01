@@ -17,3 +17,4 @@ trait AllInstances
   with    FutureInstances
   with    TryInstances
   with    TupleInstances
+  with    UUIDInstances
