@@ -52,8 +52,9 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val y = mock[F[B, C]]
     val z = mock[F[C, D]]
 
-    x >>: y >>: z
-    z :<< y :<< x
+    val a = x >>> y >>> z
+    val b = z :<< y :<< x
+
   }
 
   def testEq[A: Eq]: Unit = {
