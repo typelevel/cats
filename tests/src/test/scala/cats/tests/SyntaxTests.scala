@@ -47,12 +47,13 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val z: Boolean = x.isEmpty
   }
 
-  def testCompose[F[_,_] : Compose, A, B, C]: Unit = {
+  def testCompose[F[_,_] : Compose, A, B, C, D]: Unit = {
     val x = mock[F[A, B]]
     val y = mock[F[B, C]]
+    val z = mock[F[C, D]]
 
-    x >>> y
-    y <<< x
+    x >>: y >>: z
+    z :<< y :<< x
   }
 
   def testEq[A: Eq]: Unit = {
