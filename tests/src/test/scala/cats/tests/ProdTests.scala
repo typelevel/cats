@@ -42,4 +42,10 @@ class ProdTests extends CatsSuite {
     checkAll("Prod[ListWrapper, ListWrapper, ?]", FunctorTests[Prod[ListWrapper, ListWrapper, ?]].functor[Int, Int, Int])
     checkAll("Functor[Prod[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Functor[Prod[ListWrapper, ListWrapper, ?]]))
   }
+
+  {
+    implicit val monad = ListWrapper.monad
+    checkAll("Prod[ListWrapper, ListWrapper, ?]", MonadTests[Prod[ListWrapper, ListWrapper, ?]].monad[Int, Int, Int])
+    checkAll("Monad[Prod[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Monad[Prod[ListWrapper, ListWrapper, ?]]))
+  }
 }
