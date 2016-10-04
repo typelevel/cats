@@ -24,6 +24,9 @@ object Continuation {
     def apply[I](i: I): Continuation[O, I] = Const(i)
   }
   def from[I, O](fn: (I => O) => O): Continuation[O, I] = Cont(fn)
+  def from2[I1, I2, O](call: (Function2[I1, I2, O]) => O): Continuation[O, (I1, I2)] = from { fn: (((I1, I2)) => O) =>
+    call { (i1: I1, i2: I2) => fn((i1, i2)) }
+  }
 
   implicit def catsDataContinuationMonad[O]: Monad[Continuation[O, ?]] = new Monad[Continuation[O, ?]] {
     def pure[I](i: I): Continuation[O, I] = Const(i)

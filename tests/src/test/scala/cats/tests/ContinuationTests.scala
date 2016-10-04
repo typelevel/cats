@@ -29,7 +29,7 @@ class ContinuationTests extends CatsSuite {
   checkAll("Monad[Continuation[Int, ?]]", SerializableTests.serializable(Monad[Continuation[Int, ?]]))
 
   test("continuations are called") {
-    val c = Continuation.from[(Int, Int), Int] { fn => (0 to 100).reduce { (a, b) => fn((a, b)) }}
+    val c = Continuation.from2[Int, Int, Int]((0 to 100).reduce(_))
     assert(c { case (a, b) => a + b } == (0 to 100).reduce(_ + _))
   }
   test("flatMaps are sane") {
