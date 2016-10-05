@@ -52,7 +52,7 @@ private[data] sealed abstract class ProdInstances3 extends ProdInstances4 {
   }
 }
 
-private[data] sealed abstract class ProdInstances4 {
+private[data] sealed abstract class ProdInstances4 extends ProdInstances5 {
   implicit def catsDataFunctorForProd[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[λ[α => Prod[F, G, α]]] = new ProdFunctor[F, G] {
     def F: Functor[F] = FF
     def G: Functor[G] = GG
@@ -60,6 +60,13 @@ private[data] sealed abstract class ProdInstances4 {
   implicit def catsDataContravariantForProd[F[_], G[_]](implicit FC: Contravariant[F], GC: Contravariant[G]): Contravariant[λ[α => Prod[F, G, α]]] = new ProdContravariant[F, G] {
     def F: Contravariant[F] = FC
     def G: Contravariant[G] = GC
+  }
+}
+
+private[data] sealed abstract class ProdInstances5 {
+  implicit def catsDataMonadForProd[F[_], G[_]](implicit FM: Monad[F], GM: Monad[G]): Monad[λ[α => Prod[F, G, α]]] = new ProdMonad[F, G] {
+    def F: Monad[F] = FM
+    def G: Monad[G] = GM
   }
 }
 
@@ -108,4 +115,17 @@ sealed trait ProdAlternative[F[_], G[_]] extends Alternative[λ[α => Prod[F, G,
   with ProdApplicative[F, G] with ProdMonoidK[F, G] {
   def F: Alternative[F]
   def G: Alternative[G]
+}
+
+sealed trait ProdMonad[F[_], G[_]] extends Monad[λ[α => Prod[F, G, α]]] with ProdFunctor[F, G] {
+  def F: Monad[F]
+  def G: Monad[G]
+  override def pure[A](a: A): Prod[F, G, A] =
+    Prod(F.pure(a), G.pure(a))
+
+  override def flatMap[A, B](p: Prod[F, G, A])(f: A => Prod[F, G, B]): Prod[F, G, B] =
+    Prod(F.flatMap(p.first)(f(_).first), G.flatMap(p.second)(f(_).second))
+
+  def tailRecM[A, B](a: A)(f: A => Prod[F, G, Either[A, B]]): Prod[F, G, B] =
+    Prod(F.tailRecM(a)(f(_).first), G.tailRecM(a)(f(_).second))
 }
