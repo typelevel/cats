@@ -45,6 +45,7 @@ class ProdTests extends CatsSuite {
 
   {
     implicit val monad = ListWrapper.monad
+    implicit val iso = CartesianTests.Isomorphisms.invariant[Prod[ListWrapper, ListWrapper, ?]]
     checkAll("Prod[ListWrapper, ListWrapper, ?]", MonadTests[Prod[ListWrapper, ListWrapper, ?]].monad[Int, Int, Int])
     checkAll("Monad[Prod[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Monad[Prod[ListWrapper, ListWrapper, ?]]))
   }
