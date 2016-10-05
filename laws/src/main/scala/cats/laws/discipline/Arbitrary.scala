@@ -103,6 +103,24 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForEval[A: Cogen]: Cogen[Eval[A]] =
     Cogen[A].contramap(_.value)
 
+  implicit def catsLawsArbitraryForContinuation[O, I](implicit I: Arbitrary[I], O: Arbitrary[O]): Arbitrary[Continuation[O, I]] = {
+    def genContFn: Gen[(I => O) => O] = {
+      def call(i: I): (I => O) => O = { fn => fn(i) }
+      def const(o: O): (I => O) => O = { fn => o }
+
+      Gen.oneOf(I.arbitrary.map(call(_)), O.arbitrary.map { o => const(o) })
+    }
+    lazy val res: Gen[Continuation[O, I]] = {
+      Gen.frequency(
+        (4, I.arbitrary.map(Continuation.pure[O](_))),
+        (4, genContFn.map(Continuation.from(_))),
+        (1, Gen.lzy(res).map(_.map(identity))),
+        (1, Gen.lzy(res).flatMap { c => genContFn.map { fn => c.flatMap(_ => Continuation.from(fn)) }})
+      )
+    }
+    Arbitrary(res)
+  }
+
   implicit def catsLawsArbitraryForProd[F[_], G[_], A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]]): Arbitrary[Prod[F, G, A]] =
     Arbitrary(F.arbitrary.flatMap(fa => G.arbitrary.map(ga => Prod[F, G, A](fa, ga))))
 

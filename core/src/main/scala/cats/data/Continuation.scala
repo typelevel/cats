@@ -4,26 +4,67 @@ package data
 import java.io.Serializable
 import scala.annotation.tailrec
 
+/**
+ * A Continuation[O, +I] is isomorphic to (I => O) => O
+ * but equiped with a monad. The monad consumes stack size
+ * proportional to the number of `Continuation.from` instances
+ * are embedded inside (not the number of flatMaps).
+ * Continuation.pure and flatMap are stack safe.
+ */
 sealed abstract class Continuation[O, +I] extends Serializable {
-  def map[I2](fn: I => I2): Continuation[O, I2] =
+  final def map[I2](fn: I => I2): Continuation[O, I2] =
     Continuation.Mapped(this, fn)
 
-  def flatMap[I2](fn: I => Continuation[O, I2]): Continuation[O, I2] =
+  final def flatMap[I2](fn: I => Continuation[O, I2]): Continuation[O, I2] =
     Continuation.FlatMapped(this, fn)
 
   final def apply(fn: I => O): O = {
-    import Continuation._
-    val re = new RunEnv[O]
+    val re = new Continuation.RunEnv[O]
     re.eval(this, re.ScalaFn(fn)).get
   }
+
+  final def widen[I2 >: I]: Continuation[O, I2] = this
 }
 
 object Continuation {
-  def pure[O] = new PureBuilder[O]
-  class PureBuilder[O] {
+  def pure[O]: PureBuilder[O] = new PureBuilder[O]
+  final class PureBuilder[O] private[Continuation] {
+    @inline
     def apply[I](i: I): Continuation[O, I] = Const(i)
   }
+
+  /**
+   * Evaluate the argument each time we call apply on
+   * the continuation
+   */
+  def always[I, O](i: => I): Continuation[O, I] =
+    Const(()).flatMap(_ => Const(i))
+
+  /**
+   * Evaluate the argument on the first call to apply
+   */
+  def later[I, O](i: => I): Continuation[O, I] = {
+    lazy val evaluated = i
+    Const(()).flatMap(_ => Const(evaluated))
+  }
+  /**
+   * Always return a given value in the continuation
+   */
+  def fixed[O](o: O): Continuation[O, Nothing] =
+    from(_ => o)
+  /**
+   * This does not evaluate Eval until apply is called
+   * on the Continuation
+   */
+  def fromEval[I, O](e: Eval[I]): Continuation[O, I] =
+    Const(()).flatMap(_ => Const(e.value))
+  /**
+   * Wrap a function as a Continuation
+   */
   def from[I, O](fn: (I => O) => O): Continuation[O, I] = Cont(fn)
+  /**
+   * Convenience to wrap scala.Function2
+   */
   def from2[I1, I2, O](call: (Function2[I1, I2, O]) => O): Continuation[O, (I1, I2)] = from { fn: (((I1, I2)) => O) =>
     call { (i1: I1, i2: I2) => fn((i1, i2)) }
   }

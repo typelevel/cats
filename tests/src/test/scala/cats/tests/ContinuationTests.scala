@@ -3,20 +3,9 @@ package tests
 
 import cats.data.Continuation
 import cats.laws.discipline._
-import org.scalacheck.{ Arbitrary, Gen }
+import cats.laws.discipline.arbitrary._
 
 class ContinuationTests extends CatsSuite {
-
-  implicit def arbContFn[O, I](implicit I: Arbitrary[I], O: Arbitrary[O]): Arbitrary[(I => O) => O] = {
-    def call(i: I): (I => O) => O = { fn => fn(i) }
-    def const(o: O): (I => O) => O = { fn => o }
-
-    Arbitrary(Gen.oneOf(I.arbitrary.map(call(_)), O.arbitrary.map { o => const(o) }))
-  }
-  implicit def arbCont[O, I](implicit I: Arbitrary[I], fn: Arbitrary[(I => O) => O]): Arbitrary[Continuation[O, I]] =
-    Arbitrary(Gen.oneOf(I.arbitrary.map(Continuation.pure[O](_)),
-      fn.arbitrary.map(Continuation.from(_))))
-
   def eq0[I, O: Eq](fn: I => O) = new Eq[Continuation[O, I]] {
     def eqv(a: Continuation[O, I], b: Continuation[O, I]) =
       Eq[O].eqv(a(fn), b(fn))
@@ -46,5 +35,36 @@ class ContinuationTests extends CatsSuite {
     assert(c { case (x, y) => (x >= y) } == true)
     // Does there exist a number that is > all the numbers? no.
     assert(c { case (x, y) => (x == y) } == false)
+  }
+  test("Continuation.always works") {
+    var cnt = 0
+    val c = Continuation.always[Int, Int] { cnt += 1; 0 }
+    assert(cnt == 0)
+    c(identity)
+    assert(cnt == 1)
+    c(identity)
+    assert(cnt == 2)
+  }
+  test("Continuation.later works") {
+    var cnt = 0
+    val c = Continuation.later[Int, Int] { cnt += 1; 0 }
+    assert(cnt == 0)
+    c(identity)
+    assert(cnt == 1)
+    c(identity)
+    assert(cnt == 1)
+  }
+  test("Continuation.fromEval works") {
+    var cnt = 0
+    val c = Continuation.fromEval[Int, Int](Eval.later { cnt += 1; 0 })
+    assert(cnt == 0)
+    c(identity)
+    assert(cnt == 1)
+    c(identity)
+    assert(cnt == 1)
+  }
+  test("Continuation.fixed works") {
+    val c = Continuation.fixed(100).widen[String] // compiler sees Nothing and warns on calling it, since any call is dead code
+    assert(c(_ => sys.error("never called")) == 100)
   }
 }
