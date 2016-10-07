@@ -2,6 +2,7 @@ package cats
 package data
 
 import cats.functor.Contravariant
+import cats.syntax.cartesian._
 
 /**
  * [[Prod]] is a product to two independent functor values.
@@ -63,10 +64,24 @@ private[data] sealed abstract class ProdInstances4 extends ProdInstances5 {
   }
 }
 
-private[data] sealed abstract class ProdInstances5 {
+private[data] sealed abstract class ProdInstances5 extends ProdInstances6 {
   implicit def catsDataMonadForProd[F[_], G[_]](implicit FM: Monad[F], GM: Monad[G]): Monad[λ[α => Prod[F, G, α]]] = new ProdMonad[F, G] {
     def F: Monad[F] = FM
     def G: Monad[G] = GM
+  }
+}
+
+private[data] sealed abstract class ProdInstances6 extends ProdInstances7 {
+  implicit def catsDataFoldableForProd[F[_], G[_]](implicit FF: Foldable[F], GF: Foldable[G]): Foldable[λ[α => Prod[F, G, α]]] = new ProdFoldable[F, G] {
+    def F: Foldable[F] = FF
+    def G: Foldable[G] = GF
+  }
+}
+
+private[data] sealed abstract class ProdInstances7 {
+  implicit def catsDataTraverseForProd[F[_], G[_]](implicit FF: Traverse[F], GF: Traverse[G]): Traverse[λ[α => Prod[F, G, α]]] = new ProdTraverse[F, G] {
+    def F: Traverse[F] = FF
+    def G: Traverse[G] = GF
   }
 }
 
@@ -128,4 +143,23 @@ sealed trait ProdMonad[F[_], G[_]] extends Monad[λ[α => Prod[F, G, α]]] with 
 
   def tailRecM[A, B](a: A)(f: A => Prod[F, G, Either[A, B]]): Prod[F, G, B] =
     Prod(F.tailRecM(a)(f(_).first), G.tailRecM(a)(f(_).second))
+}
+
+sealed trait ProdFoldable[F[_], G[_]] extends Foldable[λ[α => Prod[F, G, α]]] {
+  def F: Foldable[F]
+  def G: Foldable[G]
+
+  override def foldLeft[A, B](fa: Prod[F, G, A], b: B)(f: (B, A) => B): B =
+    G.foldLeft(fa.second, F.foldLeft(fa.first, b)(f))(f)
+
+  override def foldRight[A, B](fa: Prod[F, G, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    F.foldRight(fa.first, G.foldRight(fa.second, lb)(f))(f)
+}
+
+sealed trait ProdTraverse[F[_], G[_]] extends Traverse[λ[α => Prod[F, G, α]]] with ProdFoldable[F, G] {
+  def F: Traverse[F]
+  def G: Traverse[G]
+
+  override def traverse[H[_]: Applicative, A, B](fa: Prod[F, G, A])(f: A => H[B]): H[Prod[F, G, B]] =
+    (F.traverse(fa.first)(f) |@| G.traverse(fa.second)(f)).map(Prod(_, _))
 }
