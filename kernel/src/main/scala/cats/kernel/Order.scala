@@ -203,4 +203,11 @@ object Order extends OrderFunctions[Order] {
 
       override def toOrdering: Ordering[A] = ev
     }
+
+  def fromComparable[A <: Comparable[A]]: Order[A] = {
+    new Order[A] {
+      override def compare(x: A, y: A): Int =
+        x compareTo y
+    }
+  }
 }
