@@ -58,9 +58,15 @@ class ProdTests extends CatsSuite {
 
   {
     implicit val traverse = ListWrapper.traverse
-
     checkAll("Prod[ListWrapper, ListWrapper, ?]", TraverseTests[Prod[ListWrapper, ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
     checkAll("Traverse[Prod[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Traverse[Prod[ListWrapper, ListWrapper, ?]]))
+  }
+
+  {
+    implicit val monadCombine = ListWrapper.monadCombine
+    implicit val iso = CartesianTests.Isomorphisms.invariant[Prod[ListWrapper, ListWrapper, ?]]
+    checkAll("Prod[ListWrapper, ListWrapper, ?]", MonadCombineTests[Prod[ListWrapper, ListWrapper, ?]].monadCombine[Int, Int, Int])
+    checkAll("MonadCombine[Prod[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(MonadCombine[Prod[ListWrapper, ListWrapper, ?]]))
   }
 
 }

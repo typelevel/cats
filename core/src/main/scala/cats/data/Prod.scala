@@ -78,10 +78,17 @@ private[data] sealed abstract class ProdInstances6 extends ProdInstances7 {
   }
 }
 
-private[data] sealed abstract class ProdInstances7 {
+private[data] sealed abstract class ProdInstances7 extends ProdInstances8 {
   implicit def catsDataTraverseForProd[F[_], G[_]](implicit FF: Traverse[F], GF: Traverse[G]): Traverse[λ[α => Prod[F, G, α]]] = new ProdTraverse[F, G] {
     def F: Traverse[F] = FF
     def G: Traverse[G] = GF
+  }
+}
+
+private[data] sealed abstract class ProdInstances8 {
+  implicit def catsDataMonadCombineForProd[F[_], G[_]](implicit FF: MonadCombine[F], GF: MonadCombine[G]): MonadCombine[λ[α => Prod[F, G, α]]] = new ProdMonadCombine[F, G] {
+    def F: MonadCombine[F] = FF
+    def G: MonadCombine[G] = GF
   }
 }
 
@@ -100,7 +107,7 @@ sealed trait ProdContravariant[F[_], G[_]] extends Contravariant[λ[α => Prod[F
 sealed trait ProdApply[F[_], G[_]] extends Apply[λ[α => Prod[F, G, α]]] with ProdFunctor[F, G] {
   def F: Apply[F]
   def G: Apply[G]
-  def ap[A, B](f: Prod[F, G, A => B])(fa: Prod[F, G, A]): Prod[F, G, B] =
+  override def ap[A, B](f: Prod[F, G, A => B])(fa: Prod[F, G, A]): Prod[F, G, B] =
     Prod(F.ap(f.first)(fa.first), G.ap(f.second)(fa.second))
   override def product[A, B](fa: Prod[F, G, A], fb: Prod[F, G, B]): Prod[F, G, (A, B)] =
     Prod(F.product(fa.first, fb.first), G.product(fa.second, fb.second))
@@ -132,7 +139,7 @@ sealed trait ProdAlternative[F[_], G[_]] extends Alternative[λ[α => Prod[F, G,
   def G: Alternative[G]
 }
 
-sealed trait ProdMonad[F[_], G[_]] extends Monad[λ[α => Prod[F, G, α]]] with ProdFunctor[F, G] {
+sealed trait ProdMonad[F[_], G[_]] extends Monad[λ[α => Prod[F, G, α]]] with ProdApplicative[F, G] {
   def F: Monad[F]
   def G: Monad[G]
   override def pure[A](a: A): Prod[F, G, A] =
@@ -162,4 +169,10 @@ sealed trait ProdTraverse[F[_], G[_]] extends Traverse[λ[α => Prod[F, G, α]]]
 
   override def traverse[H[_]: Applicative, A, B](fa: Prod[F, G, A])(f: A => H[B]): H[Prod[F, G, B]] =
     (F.traverse(fa.first)(f) |@| G.traverse(fa.second)(f)).map(Prod(_, _))
+}
+
+sealed trait ProdMonadCombine[F[_], G[_]] extends MonadCombine[λ[α => Prod[F, G, α]]]
+  with ProdMonad[F, G] with ProdAlternative[F, G] {
+  def F: MonadCombine[F]
+  def G: MonadCombine[G]
 }
