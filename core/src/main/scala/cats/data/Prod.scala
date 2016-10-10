@@ -85,10 +85,21 @@ private[data] sealed abstract class ProdInstances7 extends ProdInstances8 {
   }
 }
 
-private[data] sealed abstract class ProdInstances8 {
+private[data] sealed abstract class ProdInstances8 extends ProdInstances9 {
   implicit def catsDataMonadCombineForProd[F[_], G[_]](implicit FF: MonadCombine[F], GF: MonadCombine[G]): MonadCombine[λ[α => Prod[F, G, α]]] = new ProdMonadCombine[F, G] {
     def F: MonadCombine[F] = FF
     def G: MonadCombine[G] = GF
+  }
+}
+
+private[data] sealed abstract class ProdInstances9 {
+  implicit def catsDataOrderForProd[F[_], G[_], A](implicit FF: Order[F[A]], GF: Order[G[A]]): Order[Prod[F, G, A]] = new ProdOrder[F, G, A] {
+    def F: Order[F[A]] = FF
+    def G: Order[G[A]] = GF
+  }
+  implicit def catsDataShowForProd[F[_], G[_], A](implicit FF: Show[F[A]], GF: Show[G[A]]): Show[Prod[F, G, A]] = new ProdShow[F, G, A] {
+    def F: Show[F[A]] = FF
+    def G: Show[G[A]] = GF
   }
 }
 
@@ -175,4 +186,19 @@ sealed trait ProdMonadCombine[F[_], G[_]] extends MonadCombine[λ[α => Prod[F, 
   with ProdMonad[F, G] with ProdAlternative[F, G] {
   def F: MonadCombine[F]
   def G: MonadCombine[G]
+}
+
+sealed trait ProdShow[F[_], G[_], A] extends Show[Prod[F, G, A]] {
+  def F: Show[F[A]]
+  def G: Show[G[A]]
+
+  def show(prod: Prod[F, G, A]): String = s"Prod(${F.show(prod.first)}, ${G.show(prod.second)})"
+}
+
+sealed trait ProdOrder[F[_], G[_], A] extends Order[Prod[F, G, A]] {
+  def F: Order[F[A]]
+  def G: Order[G[A]]
+
+  def compare(x: Prod[F, G, A], y: Prod[F, G, A]): Int =
+    Array(F.compare(x.first, y.first), G.compare(x.second, y.second)).find(_ != 0).getOrElse(0)
 }
