@@ -122,7 +122,7 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val gfb: G[F[B]] = fa.traverse(f1)
 
     val f2 = mock[A => G[F[B]]]
-    val gfb2: G[F[B]] = fa.traverseM(f2)
+    val gfb2: G[F[B]] = fa.flatTraverse(f2)
 
     val fga = mock[F[G[A]]]
     val gunit: G[F[A]] = fga.sequence

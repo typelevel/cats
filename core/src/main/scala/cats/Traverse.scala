@@ -58,11 +58,11 @@ import simulacrum.typeclass
    * scala> import cats.implicits._
    * scala> def parseInt(s: String): Option[Int] = Either.catchOnly[NumberFormatException](s.toInt).toOption
    * scala> val x = Option(List("1", "two", "3"))
-   * scala> x.traverseM(_.map(parseInt))
+   * scala> x.flatTraverse(_.map(parseInt))
    * res0: List[Option[Int]] = List(Some(1), None, Some(3))
    * }}}
    */
-  def traverseM[G[_], A, B](fa: F[A])(f: A => G[F[B]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[B]] =
+  def flatTraverse[G[_], A, B](fa: F[A])(f: A => G[F[B]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[B]] =
     G.map(traverse(fa)(f))(F.flatten)
 
   /**
@@ -92,13 +92,13 @@ import simulacrum.typeclass
    * scala> import cats.implicits._
    * scala> val x: List[Option[List[Int]]] = List(Some(List(1, 2)), Some(List(3)))
    * scala> val y: List[Option[List[Int]]] = List(None, Some(List(3)))
-   * scala> x.sequenceA
+   * scala> x.flatSequence
    * res0: Option[List[Int]] = Some(List(1, 2, 3))
-   * scala> y.sequenceA
+   * scala> y.flatSequence
    * res1: Option[List[Int]] = None
    * }}}
    */
-  def sequenceA[G[_], A](fgfa: F[G[F[A]]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[A]] =
+  def flatSequence[G[_], A](fgfa: F[G[F[A]]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[A]] =
     G.map(sequence(fgfa))(F.flatten)
 
   /**
