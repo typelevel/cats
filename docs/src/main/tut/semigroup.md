@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title:  "Semigroup"
 section: "typeclasses"
 source: "kernel/src/main/scala/cats/kernel/Semigroup.scala"
