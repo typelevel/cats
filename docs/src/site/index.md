@@ -16,6 +16,7 @@ The name is a playful shortening of the word *category*.
 
 ### <a name="getting-started" href="#getting-started"></a>Getting Started
 
+
 Cats is currently available for Scala 2.10 and 2.11.
 
 To get started with SBT, simply add the following to your build.sbt file:
@@ -34,7 +35,9 @@ functionality, you can pick-and-choose from amongst these modules
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
+
 # <a name="motivations" href="#motivations"></a>Motivations
+
 
 ### Approachability
 
