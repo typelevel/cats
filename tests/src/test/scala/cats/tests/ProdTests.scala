@@ -6,6 +6,7 @@ import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.kernel.laws.OrderLaws
 
 class ProdTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[Prod[Option, List, ?]]
@@ -71,14 +72,14 @@ class ProdTests extends CatsSuite {
     checkAll("MonadCombine[Prod[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(MonadCombine[Prod[ListWrapper, ListWrapper, ?]]))
   }
 
-  test("order") {
-    forAll { t: Prod[Id, Id, Int] =>
-      val u: Prod[Id, Id, Int] = Prod(t.second, t.first)
-      val Prod(t1, t2) = t
-      val Prod(u1, u2) = u
+  {
+    implicit val E = ListWrapper.eqv[Int]
+    implicit val O = ListWrapper.order[Int]
+    implicit val P = ListWrapper.partialOrder[Int]
 
-      Order[Prod[Id, Id, Int]].compare(t, u) should === (Order[(Int, Int)].compare((t1, t2), (u1, u2)))
-    }
+    checkAll("Prod[ListWrapper, ListWrapper, Int]", OrderLaws[Prod[ListWrapper, ListWrapper, Int]].eqv)
+    checkAll("Prod[ListWrapper, ListWrapper, Int]", OrderLaws[Prod[ListWrapper, ListWrapper, Int]].order)
+    checkAll("Prod[ListWrapper, ListWrapper, Int]", OrderLaws[Prod[ListWrapper, ListWrapper, Int]].partialOrder)
   }
 
   test("show") {
