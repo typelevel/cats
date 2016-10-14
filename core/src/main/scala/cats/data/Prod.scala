@@ -23,12 +23,22 @@ private[data] sealed abstract class ProdInstances extends ProdInstances0 {
     def eqv(x: Prod[F, G, A], y: Prod[F, G, A]): Boolean =
       FF.eqv(x.first, y.first) && GG.eqv(x.second, y.second)
   }
+
+  implicit def catsDataShowForProd[F[_], G[_], A](implicit FF: Show[F[A]], GF: Show[G[A]]): Show[Prod[F, G, A]] = new ProdShow[F, G, A] {
+    def F: Show[F[A]] = FF
+    def G: Show[G[A]] = GF
+  }
 }
 
 private[data] sealed abstract class ProdInstances0 extends ProdInstances1 {
   implicit def catsDataMonoidKForProd[F[_], G[_]](implicit FF: MonoidK[F], GG: MonoidK[G]): MonoidK[λ[α => Prod[F, G, α]]] = new ProdMonoidK[F, G] {
     def F: MonoidK[F] = FF
     def G: MonoidK[G] = GG
+  }
+
+  implicit def catsDataOrderForProd[F[_], G[_], A](implicit FF: Order[F[A]], GF: Order[G[A]]): Order[Prod[F, G, A]] = new ProdOrder[F, G, A] {
+    def F: Order[F[A]] = FF
+    def G: Order[G[A]] = GF
   }
 }
 
@@ -85,21 +95,10 @@ private[data] sealed abstract class ProdInstances7 extends ProdInstances8 {
   }
 }
 
-private[data] sealed abstract class ProdInstances8 extends ProdInstances9 {
+private[data] sealed abstract class ProdInstances8 {
   implicit def catsDataMonadCombineForProd[F[_], G[_]](implicit FF: MonadCombine[F], GF: MonadCombine[G]): MonadCombine[λ[α => Prod[F, G, α]]] = new ProdMonadCombine[F, G] {
     def F: MonadCombine[F] = FF
     def G: MonadCombine[G] = GF
-  }
-}
-
-private[data] sealed abstract class ProdInstances9 {
-  implicit def catsDataOrderForProd[F[_], G[_], A](implicit FF: Order[F[A]], GF: Order[G[A]]): Order[Prod[F, G, A]] = new ProdOrder[F, G, A] {
-    def F: Order[F[A]] = FF
-    def G: Order[G[A]] = GF
-  }
-  implicit def catsDataShowForProd[F[_], G[_], A](implicit FF: Show[F[A]], GF: Show[G[A]]): Show[Prod[F, G, A]] = new ProdShow[F, G, A] {
-    def F: Show[F[A]] = FF
-    def G: Show[G[A]] = GF
   }
 }
 
