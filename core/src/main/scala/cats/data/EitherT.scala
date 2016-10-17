@@ -207,6 +207,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * decided [[https://github.com/typelevel/cats/issues/1073 how to handle the SI-2712 fix]].
    */
   def toNested: Nested[F, Either[A, ?], B] = Nested[F, Either[A, ?], B](value)
+
+  def toNestedValidated(implicit F: Functor[F]): Nested[F, Validated[A, ?], B] =
+    Nested[F, Validated[A, ?], B](F.map(value)(_.toValidated))
+
+  def toNestedValidatedNel(implicit F: Functor[F]): Nested[F, ValidatedNel[A, ?], B] =
+    Nested[F, ValidatedNel[A, ?], B](F.map(value)(_.toValidatedNel))
 }
 
 object EitherT extends EitherTInstances with EitherTFunctions
