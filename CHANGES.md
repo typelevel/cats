@@ -1,3 +1,60 @@
+## Version 0.8.0
+
+> 2016 October 18
+
+Version 0.8.0 is the eighth Cats release.
+
+Removals:
+
+ * [#1310](https://github.com/typelevel/cats/pull/1310): `Xor` and `XorT`
+ * [#1370](https://github.com/typelevel/cats/pull/1370): `RecursiveTailRecM` and `Free#foldMapUnsafe` are gone and stack safety is checked in the laws for `Monad`
+
+Additions:
+
+ * [#1356](https://github.com/typelevel/cats/pull/1356): `append` and `prepend` (and operator aliases) for `NonEmptyVector`
+ * [#1327](https://github.com/typelevel/cats/pull/1327): `EitherT.fromOption`
+ * [#1388](https://github.com/typelevel/cats/pull/1388): `StateT.set` and `StateT.setF`
+ * [#1392](https://github.com/typelevel/cats/pull/1392): `StateT.get`
+ * [#1325](https://github.com/typelevel/cats/pull/1325): `WriterT.lift`
+ * [#1391](https://github.com/typelevel/cats/pull/1391): `MonadReader#reader`
+ * [#1352](https://github.com/typelevel/cats/pull/1352): Macro-powered `FunctionK.lift`
+ * [#1398](https://github.com/typelevel/cats/pull/1398): `<<<` and `>>>` aliases for `Compose`'s `compose` and `andThen`
+
+New instances:
+
+ * [#1319](https://github.com/typelevel/cats/pull/1319): `Order` and `Group` for `BigDecimal`
+ * [#1354](https://github.com/typelevel/cats/pull/1354): `Semigroup` for `Ior`
+ * [#1395](https://github.com/typelevel/cats/pull/1395): `Order` for `Symbol`
+ * [#1324](https://github.com/typelevel/cats/pull/1324): `PartialOrder` and other instances for `BitSet`
+ * [#1324](https://github.com/typelevel/cats/pull/1324): `Eq` and `PartialOrder` for `Either`
+ * [#1324](https://github.com/typelevel/cats/pull/1324): `PartialOrder`, `Monoid`, and other instances for `Function0`
+ * [#1324](https://github.com/typelevel/cats/pull/1324): `Monoid` and other instances for `Function1`
+
+Renaming and rearrangements:
+
+ * [#1385](https://github.com/typelevel/cats/pull/1385): The `cats.js.std` package is now `cats.js.instances`
+ * [#1324](https://github.com/typelevel/cats/pull/1324): Many instances moved from cats-core to cats-kernel
+
+Miscellaneous improvements (syntax, documentation, tests):
+
+ * [#1347](https://github.com/typelevel/cats/pull/1347): Consistency laws for `combineAll` and `combineAllOption`
+ * [#1324](https://github.com/typelevel/cats/pull/1324): Performance improvements for `Either` instances
+ * [#1386](https://github.com/typelevel/cats/pull/1386): `FunctionK` tests and examples now use kind-projector 0.9's polymorphic lambdas
+ * [#1410](https://github.com/typelevel/cats/pull/1410): Replace `Coproduct#run` with `Coproduct#fold`
+ * [#1331](https://github.com/typelevel/cats/pull/1331): Less expensive `tailRecM`-`flatMap` consistency checking
+ * [#1330](https://github.com/typelevel/cats/pull/1330): More consistent parameter-less method definitions and usage, other syntactic improvments
+ * [#1340](https://github.com/typelevel/cats/pull/1340): New [Scaladex](https://index.scala-lang.org) badge
+ * [#1352](https://github.com/typelevel/cats/pull/1352): API docs for `FunctionK`
+ * [#1259](https://github.com/typelevel/cats/pull/1259): 0.6-to-0.7 migration guide
+ * [#1304](https://github.com/typelevel/cats/pull/1304), [#1317](https://github.com/typelevel/cats/pull/1317), [#1323](https://github.com/typelevel/cats/pull/1323), [#1350](https://github.com/typelevel/cats/pull/1350), [#1366](https://github.com/typelevel/cats/pull/1366), [#1376](https://github.com/typelevel/cats/pull/1376), [#1380](https://github.com/typelevel/cats/pull/1380), [#1390](https://github.com/typelevel/cats/pull/1390), [#1407](https://github.com/typelevel/cats/pull/1407): Other miscellaneous documentation improvements
+
+Build:
+
+ * [#1345](https://github.com/typelevel/cats/pull/1345): Update ScalaCheck (to 1.13.2) and Discipline (to 0.6)
+ * [#1353](https://github.com/typelevel/cats/pull/1353): Generated sources are included in source jars
+ * [#1322](https://github.com/typelevel/cats/pull/1322): Scala.js test clean-up
+ * [#1389](https://github.com/typelevel/cats/pull/1389): More memory for Travis CI
+
 ## Version 0.7.2
 
 > 2016 September 1
