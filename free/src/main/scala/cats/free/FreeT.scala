@@ -170,6 +170,15 @@ object FreeT extends FreeTInstances {
   def roll[S[_], M[_], A](value: S[FreeT[S, M, A]])(implicit M: Applicative[M]): FreeT[S, M, A] =
     liftF[S, M, FreeT[S, M, A]](value).flatMap(identity)
 
+  def interpret[S[_], T[_], M[_]: Functor](st: S ~> T): FreeT[S, M, ?] ~> FreeT[T, M, ?] =
+    new ~>[FreeT[S, M, ?], FreeT[T, M, ?]] {
+     def apply[A](f: FreeT[S, M, A]) = f.interpret(st)
+    }
+
+  def foldMap[S[_], M[_]: Monad](fk: S ~> M): FreeT[S, M, ?] ~> M =
+    new ~>[FreeT[S, M, ?], M] {
+     def apply[A](f: FreeT[S, M, A]) = f.foldMap(fk)
+    }
 }
 
 private[free] sealed trait FreeTInstances3 {

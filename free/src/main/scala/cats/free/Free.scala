@@ -175,6 +175,21 @@ object Free {
     pure(()).flatMap(_ => value)
 
   /**
+   * a FunctionK, suitable for composition, which calls compile
+   */
+  def compile[F[_], G[_]](fk: FunctionK[F, G]): FunctionK[Free[F, ?], Free[G, ?]] =
+    new FunctionK[Free[F, ?], Free[G, ?]] {
+      def apply[A](f: Free[F, A]): Free[G, A] = f.compile(fk)
+    }
+  /**
+   * a FunctionK, suitable for composition, which calls foldMap
+   */
+  def foldMap[F[_], M[_]: Monad](fk: FunctionK[F, M]): FunctionK[Free[F, ?], M] =
+    new FunctionK[Free[F, ?], M] {
+      def apply[A](f: Free[F, A]): M[A] = f.foldMap(fk)
+    }
+
+  /**
    * This method is used to defer the application of an Inject[F, G]
    * instance. The actual work happens in
    * `FreeInjectPartiallyApplied#apply`.

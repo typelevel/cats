@@ -105,6 +105,8 @@ class FreeTTests extends CatsSuite {
     forAll { a: FreeTOption[Int] =>
       val b = a.interpret(FunctionK.id)
       Eq[FreeTOption[Int]].eqv(a, b) should ===(true)
+      val fk = FreeT.interpret[Option, Option, Option](FunctionK.id)
+      a should === (fk(a))
     }
   }
 
@@ -119,7 +121,9 @@ class FreeTTests extends CatsSuite {
     forAll { a: FreeTOption[Int] =>
       val x = a.runM(identity)
       val y = a.foldMap(FunctionK.id)
+      val fk = FreeT.foldMap[Option, Option](FunctionK.id)
       Eq[Option[Int]].eqv(x, y) should ===(true)
+      y should === (fk(a))
     }
   }
 
