@@ -53,7 +53,7 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val z = mock[F[C, D]]
 
     val a = x >>> y >>> z
-    val b = z :<< y :<< x
+    val b = z <<< y <<< x
 
   }
 

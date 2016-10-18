@@ -8,7 +8,7 @@ import simulacrum.typeclass
  */
 @typeclass trait Compose[F[_, _]] { self =>
 
-  @simulacrum.op(":<<", alias = true)
+  @simulacrum.op("<<<", alias = true)
   def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]
 
   @simulacrum.op(">>>", alias = true)
