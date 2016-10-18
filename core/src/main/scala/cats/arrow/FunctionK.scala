@@ -47,10 +47,7 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
     */
   def or[H[_]](h: FunctionK[H, G]): FunctionK[Coproduct[F, H, ?], G] =
     new FunctionK[Coproduct[F, H, ?], G] {
-      def apply[A](fa: Coproduct[F, H, A]): G[A] = fa.run match {
-        case Left(ff) => self(ff)
-        case Right(gg) => h(gg)
-      }
+      def apply[A](fa: Coproduct[F, H, A]): G[A] = fa.fold(self, h)
     }
 }
 
