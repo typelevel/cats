@@ -115,8 +115,7 @@ class FoldableTestsAdditional extends CatsSuite {
     val expected = n.toLong*(n.toLong+1)/2
     val foldMResult = F.foldM(fromRange(1 to n), 0L)(nonzero)
     assert(foldMResult.get == expected)
-    val foldMRecResult = F.foldMRec(fromRange(1 to n), 0L)(nonzero)
-    assert(foldMRecResult.get == expected)
+    ()
   }
 
   test("Foldable[List].foldM stack safety") {
@@ -164,8 +163,8 @@ class FoldableTestsAdditional extends CatsSuite {
     val large = Stream((1 to 10000): _*)
     assert(contains(large, 10000).value)
 
-    // test laziness of foldMRec
-    dangerous.foldMRec(0)((acc, a) => if (a < 2) Some(acc + a) else None) should === (None)
+    // test laziness of foldM
+    dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should === (None)
   }
 }
 

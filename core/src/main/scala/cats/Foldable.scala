@@ -1,6 +1,5 @@
 package cats
 
-import cats.data.Xor
 import scala.collection.mutable
 import cats.instances.long._
 import simulacrum.typeclass
@@ -173,26 +172,16 @@ import simulacrum.typeclass
     foldLeft(fa, B.empty)((b, a) => B.combine(b, f(a)))
 
   /**
-   * Left associative monadic fold on `F`.
+   * Left associative monadic folding on `F`.
    *
    * The default implementation of this is based on `foldLeft`, and thus will
-   * always fold across the entire structure. When `G` has a `MonadRec` instance,
-   * the [[foldMRec]] variation may be preferred, as it may be able to
-   * short-circuit the fold.
+   * always fold across the entire structure. Certain structures are able to
+   * implement this in such a way that folds can be short-circuited (not
+   * traverse the entirety of the structure), depending on the `G` result
+   * produced at a given step.
    */
   def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
     foldLeft(fa, G.pure(z))((gb, a) => G.flatMap(gb)(f(_, a)))
-
-  /**
-   * Left associative monadic fold on `F`.
-   *
-   * This is similar to [[foldM]] (and the default implementation is
-   * identical), but certain structures are able to implement this in such a
-   * way that folds can be short-circuited (not traverse the entirety of the
-   * structure), depending on the `G` result produced at a given step.
-   */
-  def foldMRec[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: MonadRec[G]): G[B] =
-    foldM(fa, z)(f)
 
   /**
    * Traverse `F[A]` using `Applicative[G]`.
@@ -390,10 +379,10 @@ object Foldable {
     loop()
   }
 
-  def iterableFoldMRec[M[_], A, B](fa: Iterable[A], z: B)(f: (B, A) => M[B])(implicit M: MonadRec[M]): M[B] = {
-    val go: ((B, Iterable[A])) => M[(B, Iterable[A]) Xor B] = { case (b, fa) =>
-      if (fa.isEmpty) M.pure(Xor.right(b))
-      else M.map(f(b, fa.head))(b1 => Xor.left((b1, fa.tail)))
+  def iterableFoldM[M[_], A, B](fa: Iterable[A], z: B)(f: (B, A) => M[B])(implicit M: Monad[M]): M[B] = {
+    val go: ((B, Iterable[A])) => M[Either[(B, Iterable[A]), B]] = { case (b, fa) =>
+      if (fa.isEmpty) M.pure(Right(b))
+      else M.map(f(b, fa.head))(b1 => Left((b1, fa.tail)))
     }
     M.tailRecM((z, fa))(go)
   }

@@ -79,8 +79,8 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
 
       override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
 
-      override def foldMRec[G[_], A, B](fa: Map[K, A], z: B)(f: (B, A) => G[B])(implicit G: MonadRec[G]): G[B] =
-        Foldable.iterableFoldMRec(fa.values, z)(f)
+      override def foldM[G[_], A, B](fa: Map[K, A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
+        Foldable.iterableFoldM(fa.values, z)(f)
     }
   // scalastyle:on method.length
 }
