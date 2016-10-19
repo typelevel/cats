@@ -74,8 +74,8 @@ sealed abstract class Eval[+A] extends Serializable { self =>
       case c: Eval.Compute[A] =>
         new Eval.Compute[B] {
           type Start = c.Start
-          val start = c.start
-          val run = (s: c.Start) =>
+          val start: () => Eval[Start] = c.start
+          val run: Start => Eval[B] = (s: c.Start) =>
             new Eval.Compute[B] {
               type Start = A
               val start = () => c.run(s)
