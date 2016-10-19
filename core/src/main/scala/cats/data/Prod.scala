@@ -19,9 +19,9 @@ private[data] sealed abstract class ProdInstances extends ProdInstances0 {
     def G: Alternative[G] = GG
   }
 
-  implicit def catsDataEqForProd[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]]): Eq[Prod[F, G, A]] = new Eq[Prod[F, G, A]] {
-    def eqv(x: Prod[F, G, A], y: Prod[F, G, A]): Boolean =
-      FF.eqv(x.first, y.first) && GG.eqv(x.second, y.second)
+  implicit def catsDataOrderForProd[F[_], G[_], A](implicit FF: Order[F[A]], GF: Order[G[A]]): Order[Prod[F, G, A]] = new ProdOrder[F, G, A] {
+    def F: Order[F[A]] = FF
+    def G: Order[G[A]] = GF
   }
 
   implicit def catsDataShowForProd[F[_], G[_], A](implicit FF: Show[F[A]], GF: Show[G[A]]): Show[Prod[F, G, A]] = new ProdShow[F, G, A] {
@@ -36,9 +36,9 @@ private[data] sealed abstract class ProdInstances0 extends ProdInstances1 {
     def G: MonoidK[G] = GG
   }
 
-  implicit def catsDataOrderForProd[F[_], G[_], A](implicit FF: Order[F[A]], GF: Order[G[A]]): Order[Prod[F, G, A]] = new ProdOrder[F, G, A] {
-    def F: Order[F[A]] = FF
-    def G: Order[G[A]] = GF
+  implicit def catsDataEqForProd[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]]): Eq[Prod[F, G, A]] = new Eq[Prod[F, G, A]] {
+    def eqv(x: Prod[F, G, A], y: Prod[F, G, A]): Boolean =
+      FF.eqv(x.first, y.first) && GG.eqv(x.second, y.second)
   }
 }
 
