@@ -235,16 +235,30 @@ object Service {
 Let's say we have an application that wants to do database things, and then take database
 values and do service things. Glancing at the types, it looks like `flatMap` will do it.
 
-```tut:fail:silent
+```scala
 def doApp = Database.databaseThings().flatMap(Service.serviceThings)
 ```
 
-This doesn't work! The reason this occurs is because the first type parameter in the two `Either`s are different -
-`databaseThings()` can give us a `DatabaseError` whereas `serviceThings()` can give us a
-`ServiceError`: two completely unrelated types. While `Either`'s type parameters are covariant,
-the aforementioned syntax enrichment is invariant to avoid nasty variance issues like inferring
-`Object`. Therefore, when the compiler sees `Either[E1, A1]` and an `Either[E2, A2]`, it
-will simply reject the `flatMap` call.
+If you're on Scala 2.12, this line will compile and work as expected, but if you're on an earlier
+version of Scala it won't! This difference is related to the right-biasing of `Either` in Scala 2.12
+that was mentioned above. In Scala 2.12 the `flatMap` we get here is a method on `Either` with this
+signature:
+
+```scala
+def flatMap[AA >: A, Y](f: (B) => Either[AA, Y]): Either[AA, Y]
+```
+
+This `flatMap` is different from the ones you'll find on `List` or `Option`, for example, in that it
+has two type parameters, with the extra `AA` parameter allowing us to `flatMap` into an `Either`
+with a different type on the left side.
+
+This behavior is consistent with the covariance of `Either`, and in some cases it can be convenient,
+but it also makes it easy to run into nasty variance issues (such as `Object` being inferred as the
+type of the left side, as it is in this case).
+
+For this reason the `flatMap` provided by Cats's `Either` syntax (which is the one you'll get for
+Scala 2.10 and 2.11) does not include this extra type parameter. Instead the left sides have to
+match, which means our `doApp` definition above will not compile on versions of Scala before 2.12.
 
 ### Solution 1: Application-wide errors
 So clearly in order for us to easily compose `Either` values, the left type parameter must be the same.
