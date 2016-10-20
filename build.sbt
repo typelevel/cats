@@ -14,7 +14,7 @@ lazy val scoverageSettings = Seq(
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
   scalaVersion := "2.11.8",
-  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-RC1")
+  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-RC2")
 )
 
 lazy val catsDoctestSettings = Seq(
@@ -40,10 +40,10 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.9.0",
-    "org.typelevel" %%% "machinist" % "0.5.0",
+    "com.github.mpilquist" %%% "simulacrum" % "0.10.0",
+    "org.typelevel" %%% "machinist" % "0.6.0",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.0")
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.2")
   ),
   fork in test := false, //true,
   parallelExecution in Test := false,
@@ -98,15 +98,15 @@ lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ sc
 
 lazy val scalaCheckVersion = "1.13.2"
 lazy val scalaTestVersion = "3.0.0"
-lazy val disciplineVersion = "0.7"
+lazy val disciplineVersion = "0.7.1"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
   libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion)
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.3",
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.3" % "test",
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.4-SNAPSHOT",
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.4-SNAPSHOT" % "test",
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
 
 
@@ -268,8 +268,7 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
-  .configure(disableScoverage210Jvm)
-  .settings(libraryDependencies ++= Seq("org.typelevel" %%% "catalysts-platform" % "0.0.3"))
+  .settings(libraryDependencies ++= Seq("org.typelevel" %%% "catalysts-platform" % "0.0.4-SNAPSHOT"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
   .jsSettings(coverageEnabled := false)
