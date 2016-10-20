@@ -49,7 +49,7 @@ lazy val commonSettings = Seq(
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
   // workaround for https://github.com/scalastyle/scalastyle-sbt-plugin/issues/47
-  (scalastyleSources in Compile) <++= unmanagedSourceDirectories in Compile
+  scalastyleSources in Compile ++= (unmanagedSourceDirectories in Compile).value
 ) ++ warnUnusedImport ++ update2_12
 
 lazy val tagName = Def.setting{
@@ -67,8 +67,6 @@ lazy val commonJsSettings = Seq(
   },
   scalaJSStage in Global := FastOptStage,
   parallelExecution := false,
-  // Using Rhino as jsEnv to build scala.js code can lead to OOM, switch to PhantomJS by default
-  scalaJSUseRhino := false,
   requiresDOM := false,
   jsEnv := NodeJSEnv().value,
   // Only used for scala.js for now
@@ -221,7 +219,7 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(buildSettings: _*)
   .settings(publishSettings: _*)
   .settings(scoverageSettings: _*)
-  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(KernelBoiler.gen))
+  .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings((commonJvmSettings ++ (mimaPreviousArtifacts := Set("org.typelevel" %% "cats-kernel" % "0.7.0"))):_*)
@@ -251,11 +249,11 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, kernel)
   .settings(moduleName := "cats-core")
   .settings(catsSettings:_*)
-  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
+  .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
   .settings(fix2_12:_*)
-  .configure(disableScoverage210Jvm)
-  .configure(disableScoverage210Js)
+  .configureCross(disableScoverage210Jvm)
+  .configureCross(disableScoverage210Js)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
@@ -524,7 +522,7 @@ lazy val warnUnusedImport = Seq(
     }
   },
   scalacOptions in (Compile, console) ~= {_.filterNot("-Ywarn-unused-import" == _)},
-  scalacOptions in (Test, console) <<= (scalacOptions in (Compile, console))
+  scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 )
 
 lazy val credentialSettings = Seq(
