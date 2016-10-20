@@ -14,9 +14,9 @@ final case class Prod[F[_], G[_], A](first: F[A], second: G[A])
 object Prod extends ProdInstances
 
 private[data] sealed abstract class ProdInstances extends ProdInstances0 {
-  implicit def catsDataAlternativeForProd[F[_], G[_]](implicit FF: Alternative[F], GG: Alternative[G]): Alternative[λ[α => Prod[F, G, α]]] = new ProdAlternative[F, G] {
-    def F: Alternative[F] = FF
-    def G: Alternative[G] = GG
+  implicit def catsDataMonadCombineForProd[F[_], G[_]](implicit FF: MonadCombine[F], GF: MonadCombine[G]): MonadCombine[λ[α => Prod[F, G, α]]] = new ProdMonadCombine[F, G] {
+    def F: MonadCombine[F] = FF
+    def G: MonadCombine[G] = GF
   }
 
   implicit def catsDataOrderForProd[F[_], G[_], A](implicit FF: Order[F[A]], GF: Order[G[A]]): Order[Prod[F, G, A]] = new ProdOrder[F, G, A] {
@@ -57,16 +57,16 @@ private[data] sealed abstract class ProdInstances2 extends ProdInstances3 {
 }
 
 private[data] sealed abstract class ProdInstances3 extends ProdInstances4 {
-  implicit def catsDataApplyForProd[F[_], G[_]](implicit FF: Apply[F], GG: Apply[G]): Apply[λ[α => Prod[F, G, α]]] = new ProdApply[F, G] {
-    def F: Apply[F] = FF
-    def G: Apply[G] = GG
+  implicit def catsDataMonadForProd[F[_], G[_]](implicit FM: Monad[F], GM: Monad[G]): Monad[λ[α => Prod[F, G, α]]] = new ProdMonad[F, G] {
+    def F: Monad[F] = FM
+    def G: Monad[G] = GM
   }
 }
 
 private[data] sealed abstract class ProdInstances4 extends ProdInstances5 {
-  implicit def catsDataFunctorForProd[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[λ[α => Prod[F, G, α]]] = new ProdFunctor[F, G] {
-    def F: Functor[F] = FF
-    def G: Functor[G] = GG
+  implicit def catsDataTraverseForProd[F[_], G[_]](implicit FF: Traverse[F], GF: Traverse[G]): Traverse[λ[α => Prod[F, G, α]]] = new ProdTraverse[F, G] {
+    def F: Traverse[F] = FF
+    def G: Traverse[G] = GF
   }
   implicit def catsDataContravariantForProd[F[_], G[_]](implicit FC: Contravariant[F], GC: Contravariant[G]): Contravariant[λ[α => Prod[F, G, α]]] = new ProdContravariant[F, G] {
     def F: Contravariant[F] = FC
@@ -75,30 +75,27 @@ private[data] sealed abstract class ProdInstances4 extends ProdInstances5 {
 }
 
 private[data] sealed abstract class ProdInstances5 extends ProdInstances6 {
-  implicit def catsDataMonadForProd[F[_], G[_]](implicit FM: Monad[F], GM: Monad[G]): Monad[λ[α => Prod[F, G, α]]] = new ProdMonad[F, G] {
-    def F: Monad[F] = FM
-    def G: Monad[G] = GM
+  implicit def catsDataApplyForProd[F[_], G[_]](implicit FF: Apply[F], GG: Apply[G]): Apply[λ[α => Prod[F, G, α]]] = new ProdApply[F, G] {
+    def F: Apply[F] = FF
+    def G: Apply[G] = GG
   }
 }
 
 private[data] sealed abstract class ProdInstances6 extends ProdInstances7 {
+  implicit def catsDataFunctorForProd[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[λ[α => Prod[F, G, α]]] = new ProdFunctor[F, G] {
+    def F: Functor[F] = FF
+    def G: Functor[G] = GG
+  }
   implicit def catsDataFoldableForProd[F[_], G[_]](implicit FF: Foldable[F], GF: Foldable[G]): Foldable[λ[α => Prod[F, G, α]]] = new ProdFoldable[F, G] {
     def F: Foldable[F] = FF
     def G: Foldable[G] = GF
   }
 }
 
-private[data] sealed abstract class ProdInstances7 extends ProdInstances8 {
-  implicit def catsDataTraverseForProd[F[_], G[_]](implicit FF: Traverse[F], GF: Traverse[G]): Traverse[λ[α => Prod[F, G, α]]] = new ProdTraverse[F, G] {
-    def F: Traverse[F] = FF
-    def G: Traverse[G] = GF
-  }
-}
-
-private[data] sealed abstract class ProdInstances8 {
-  implicit def catsDataMonadCombineForProd[F[_], G[_]](implicit FF: MonadCombine[F], GF: MonadCombine[G]): MonadCombine[λ[α => Prod[F, G, α]]] = new ProdMonadCombine[F, G] {
-    def F: MonadCombine[F] = FF
-    def G: MonadCombine[G] = GF
+private[data] sealed abstract class ProdInstances7 {
+  implicit def catsDataAlternativeForProd[F[_], G[_]](implicit FF: Alternative[F], GG: Alternative[G]): Alternative[λ[α => Prod[F, G, α]]] = new ProdAlternative[F, G] {
+    def F: Alternative[F] = FF
+    def G: Alternative[G] = GG
   }
 }
 
