@@ -379,11 +379,11 @@ object Foldable {
     loop()
   }
 
-  def iterableFoldM[M[_], A, B](fa: Iterable[A], z: B)(f: (B, A) => M[B])(implicit M: Monad[M]): M[B] = {
-    val go: ((B, Iterable[A])) => M[Either[(B, Iterable[A]), B]] = { case (b, fa) =>
-      if (fa.isEmpty) M.pure(Right(b))
-      else M.map(f(b, fa.head))(b1 => Left((b1, fa.tail)))
+  def iteratorFoldM[M[_], A, B](it: Iterator[A], z: B)(f: (B, A) => M[B])(implicit M: Monad[M]): M[B] = {
+    val go: ((B, Iterator[A])) => M[Either[(B, Iterator[A]), B]] = { case (b, it) =>
+      if (it.hasNext) M.map(f(b, it.next))(b1 => Left((b1, it)))
+      else M.pure(Right(b))
     }
-    M.tailRecM((z, fa))(go)
+    M.tailRecM((z, it))(go)
   }
 }
