@@ -1,0 +1,146 @@
+<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/atom-one-light.min.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper" style="background:url('/cats/img/sidebar_brand.png') no-repeat"><span>Cats</span></div></a></li> </li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="monad">Monad</h1>
+
+<p><code class="highlighter-rouge">Monad</code> extends the <a href="applicative.html"><code class="highlighter-rouge">Applicative</code></a> type class with a
+new function <code class="highlighter-rouge">flatten</code>. Flatten takes a value in a nested context (eg.
+<code class="highlighter-rouge">F[F[A]]</code> where F is the context) and “joins” the contexts together so
+that we have a single context (ie. <code class="highlighter-rouge">F[A]</code>).</p>
+
+<p>The name <code class="highlighter-rouge">flatten</code> should remind you of the functions of the same name on many
+classes in the standard library.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Option</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="n">flatten</span>
+<span class="c1">// res0: Option[Int] = Some(1)
+</span>
+<span class="nc">Option</span><span class="o">(</span><span class="nc">None</span><span class="o">).</span><span class="n">flatten</span>
+<span class="c1">// res1: Option[Nothing] = None
+</span>
+<span class="nc">List</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span><span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">)).</span><span class="n">flatten</span>
+<span class="c1">// res2: List[Int] = List(1, 2, 3)
+</span></code></pre>
+</div>
+
+<h3 id="monad-instances">Monad instances</h3>
+
+<p>If <code class="highlighter-rouge">Applicative</code> is already present and <code class="highlighter-rouge">flatten</code> is well-behaved,
+extending the <code class="highlighter-rouge">Applicative</code> to a <code class="highlighter-rouge">Monad</code> is trivial. To provide evidence
+that a type belongs in the <code class="highlighter-rouge">Monad</code> type class, cats’ implementation
+requires us to provide an implementation of <code class="highlighter-rouge">pure</code> (which can be reused
+from <code class="highlighter-rouge">Applicative</code>) and <code class="highlighter-rouge">flatMap</code>.</p>
+
+<p>We can use <code class="highlighter-rouge">flatten</code> to define <code class="highlighter-rouge">flatMap</code>: <code class="highlighter-rouge">flatMap</code> is just <code class="highlighter-rouge">map</code>
+followed by <code class="highlighter-rouge">flatten</code>. Conversely, <code class="highlighter-rouge">flatten</code> is just <code class="highlighter-rouge">flatMap</code> using
+the identity function <code class="highlighter-rouge">x =&gt; x</code> (i.e. <code class="highlighter-rouge">flatMap(_)(x =&gt; x)</code>).</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+
+<span class="k">implicit</span> <span class="k">def</span> <span class="n">optionMonad</span><span class="o">(</span><span class="k">implicit</span> <span class="n">app</span><span class="k">:</span> <span class="kt">Applicative</span><span class="o">[</span><span class="kt">Option</span><span class="o">])</span> <span class="k">=</span>
+  <span class="k">new</span> <span class="nc">Monad</span><span class="o">[</span><span class="kt">Option</span><span class="o">]</span> <span class="o">{</span>
+    <span class="c1">// Define flatMap using Option's flatten method
+</span>    <span class="k">override</span> <span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+      <span class="n">app</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">fa</span><span class="o">)(</span><span class="n">f</span><span class="o">).</span><span class="n">flatten</span>
+    <span class="c1">// Reuse this definition from Applicative.
+</span>    <span class="k">override</span> <span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">app</span><span class="o">.</span><span class="n">pure</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>
+
+    <span class="nd">@annotation</span><span class="o">.</span><span class="n">tailrec</span>
+    <span class="k">def</span> <span class="n">tailRecM</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">init</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">fn</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+      <span class="n">fn</span><span class="o">(</span><span class="n">init</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">None</span>
+        <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="n">b</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="n">b</span><span class="o">)</span>
+        <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="n">a</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="n">tailRecM</span><span class="o">(</span><span class="n">a</span><span class="o">)(</span><span class="n">fn</span><span class="o">)</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="flatmap">flatMap</h3>
+
+<p><code class="highlighter-rouge">flatMap</code> is often considered to be the core function of <code class="highlighter-rouge">Monad</code>, and cats
+follows this tradition by providing implementations of <code class="highlighter-rouge">flatten</code> and <code class="highlighter-rouge">map</code>
+derived from <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">pure</code>.</p>
+
+<p>In addition to requiring <code class="highlighter-rouge">flatMap</code> and pure<code class="highlighter-rouge">, Cats has chosen to require
+</code>tailRecM<code class="highlighter-rouge"> which encodes stack safe monadic recursion, as described in
+[Stack Safety for Free](http://functorial.com/stack-safety-for-free/index.pdf) by
+Phil Freeman. Because monadic recursion is so common in functional programming but
+is not stack safe on the JVM, Cats has chosen to require this method of all monad implementations
+as opposed to just a subset. All functions requiring monadic recursion in Cats is done via
+</code>tailRecM`.</p>
+
+<p>An example <code class="highlighter-rouge">Monad</code> implementation for <code class="highlighter-rouge">Option</code> is shown below. Note the tail recursive
+and therefore stack safe implementation of <code class="highlighter-rouge">tailRecM</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.annotation.tailrec</span>
+
+<span class="k">implicit</span> <span class="k">val</span> <span class="n">optionMonad</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Monad</span><span class="o">[</span><span class="kt">Option</span><span class="o">]</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">fa</span><span class="o">.</span><span class="n">flatMap</span><span class="o">(</span><span class="n">f</span><span class="o">)</span>
+  <span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>
+
+  <span class="nd">@tailrec</span>
+  <span class="k">def</span> <span class="n">tailRecM</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">None</span>              <span class="k">=&gt;</span> <span class="nc">None</span>
+    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="n">nextA</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="n">tailRecM</span><span class="o">(</span><span class="n">nextA</span><span class="o">)(</span><span class="n">f</span><span class="o">)</span> <span class="c1">// continue the recursion
+</span>    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="n">b</span><span class="o">))</span>    <span class="k">=&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="n">b</span><span class="o">)</span>            <span class="c1">// recursion done
+</span>  <span class="o">}</span>
+</code></pre>
+</div>
+
+<p>Part of the reason for this is that name <code class="highlighter-rouge">flatMap</code> has special significance in
+scala, as for-comprehensions rely on this method to chain together operations
+in a monadic context.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.reflect.runtime.universe</span>
+
+<span class="n">universe</span><span class="o">.</span><span class="n">reify</span><span class="o">(</span>
+  <span class="k">for</span> <span class="o">{</span>
+    <span class="n">x</span> <span class="k">&lt;-</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+    <span class="n">y</span> <span class="k">&lt;-</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+  <span class="o">}</span> <span class="k">yield</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="o">).</span><span class="n">tree</span>
+</code></pre>
+</div>
+
+<h3 id="ifm">ifM</h3>
+
+<p><code class="highlighter-rouge">Monad</code> provides the ability to choose later operations in a sequence based on
+the results of earlier ones. This is embodied in <code class="highlighter-rouge">ifM</code>, which lifts an <code class="highlighter-rouge">if</code>
+statement into the monadic context.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Monad</span><span class="o">[</span><span class="kt">List</span><span class="o">].</span><span class="n">ifM</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">true</span><span class="o">))(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">))</span>
+</code></pre>
+</div>
+
+<h3 id="composition">Composition</h3>
+<p>Unlike <a href="functor.html"><code class="highlighter-rouge">Functor</code>s</a> and <a href="applicative.html"><code class="highlighter-rouge">Applicative</code>s</a>,
+not all <code class="highlighter-rouge">Monad</code>s compose. This means that even if <code class="highlighter-rouge">M[_]</code> and <code class="highlighter-rouge">N[_]</code> are
+both <code class="highlighter-rouge">Monad</code>s, <code class="highlighter-rouge">M[N[_]]</code> is not guaranteed to be a <code class="highlighter-rouge">Monad</code>.</p>
+
+<p>However, many common cases do. One way of expressing this is to provide
+instructions on how to compose any outer monad (<code class="highlighter-rouge">F</code> in the following
+example) with a specific inner monad (<code class="highlighter-rouge">Option</code> in the following
+example).</p>
+
+<p><em>Note</em>: the example below assumes usage of the <a href="https://github.com/non/kind-projector">kind-projector compiler plugin</a> and will not compile if it is not being used in a project.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">OptionT</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">](</span><span class="n">value</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]])</span>
+
+<span class="k">implicit</span> <span class="k">def</span> <span class="n">optionTMonad</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">F</span> <span class="k">:</span> <span class="kt">Monad</span><span class="o">[</span><span class="kt">F</span><span class="o">])</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">new</span> <span class="nc">Monad</span><span class="o">[</span><span class="kt">OptionT</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">?</span><span class="o">]]</span> <span class="o">{</span>
+    <span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OptionT</span><span class="o">(</span><span class="n">F</span><span class="o">.</span><span class="n">pure</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">a</span><span class="o">)))</span>
+    <span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">OptionT</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+      <span class="nc">OptionT</span> <span class="o">{</span>
+        <span class="n">F</span><span class="o">.</span><span class="n">flatMap</span><span class="o">(</span><span class="n">fa</span><span class="o">.</span><span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="n">F</span><span class="o">.</span><span class="n">pure</span><span class="o">(</span><span class="nc">None</span><span class="o">)</span>
+          <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">).</span><span class="n">value</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="k">def</span> <span class="n">tailRecM</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">OptionT</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Either</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]])</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+      <span class="n">defaultTailRecM</span><span class="o">(</span><span class="n">a</span><span class="o">)(</span><span class="n">f</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>This sort of construction is called a monad transformer.</p>
+
+<p>Cats has an <a href="optiont.html"><code class="highlighter-rouge">OptionT</code></a> monad transformer, which adds a lot of useful functions to the simple implementation above.</p>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/scala.min.js"></script><script src="/cats/js/main.js"></script></body></html>

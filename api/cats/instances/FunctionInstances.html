@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">FunctionInstances</span><span class="result"> extends <span class="extype" name="cats.instances.Function0Instances">Function0Instances</span> with <span class="extype" name="cats.instances.Function1Instances">Function1Instances</span></span>
+        <span class="name">FunctionInstances</span><span class="result"> extends <a href="../kernel/instances/FunctionInstances.html" class="extype" name="cats.kernel.instances.FunctionInstances">kernel.instances.FunctionInstances</a> with <span class="extype" name="cats.instances.Function0Instances">Function0Instances</span> with <span class="extype" name="cats.instances.Function1Instances">Function1Instances</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/instances/function.scala" target="_blank">function.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="cats.instances.Function1Instances">Function1Instances</span>, <span class="extype" name="cats.instances.Function1Instances0">Function1Instances0</span>, <span class="extype" name="cats.instances.Function0Instances">Function0Instances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.instances.Function1Instances">Function1Instances</span>, <span class="extype" name="cats.instances.Function0Instances">Function0Instances</span>, <a href="../kernel/instances/FunctionInstances.html" class="extype" name="cats.kernel.instances.FunctionInstances">kernel.instances.FunctionInstances</a>, <a href="../kernel/instances/FunctionInstances0.html" class="extype" name="cats.kernel.instances.FunctionInstances0">FunctionInstances0</a>, <a href="../kernel/instances/FunctionInstances1.html" class="extype" name="cats.kernel.instances.FunctionInstances1">FunctionInstances1</a>, <a href="../kernel/instances/FunctionInstances2.html" class="extype" name="cats.kernel.instances.FunctionInstances2">FunctionInstances2</a>, <a href="../kernel/instances/FunctionInstances3.html" class="extype" name="cats.kernel.instances.FunctionInstances3">FunctionInstances3</a>, <a href="../kernel/instances/FunctionInstances4.html" class="extype" name="cats.kernel.instances.FunctionInstances4">FunctionInstances4</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="AllInstances.html" class="extype" name="cats.instances.AllInstances">AllInstances</a>, <a href="package$$all$.html" class="extype" name="cats.instances.all">all</a>, <a href="package$$function$.html" class="extype" name="cats.instances.function">function</a>, <a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a></div>
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.instances.FunctionInstances"><span>FunctionInstances</span></li><li class="in" name="cats.instances.Function1Instances"><span>Function1Instances</span></li><li class="in" name="cats.instances.Function1Instances0"><span>Function1Instances0</span></li><li class="in" name="cats.instances.Function0Instances"><span>Function0Instances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.instances.FunctionInstances"><span>FunctionInstances</span></li><li class="in" name="cats.instances.Function1Instances"><span>Function1Instances</span></li><li class="in" name="cats.instances.Function0Instances"><span>Function0Instances</span></li><li class="in" name="cats.kernel.instances.FunctionInstances"><span>FunctionInstances</span></li><li class="in" name="cats.kernel.instances.FunctionInstances0"><span>FunctionInstances0</span></li><li class="in" name="cats.kernel.instances.FunctionInstances1"><span>FunctionInstances1</span></li><li class="in" name="cats.kernel.instances.FunctionInstances2"><span>FunctionInstances2</span></li><li class="in" name="cats.kernel.instances.FunctionInstances3"><span>FunctionInstances3</span></li><li class="in" name="cats.kernel.instances.FunctionInstances4"><span>FunctionInstances4</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -165,57 +165,397 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances2#catsKernelBandForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelBandForFunction0[A](implicitS:cats.kernel.Band[A]):cats.kernel.Band[()=&gt;A]"></a>
+      <a id="catsKernelBandForFunction0[A](Band[A]):Band[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelBandForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="S">S: <a href="../kernel/Band.html" class="extype" name="cats.kernel.Band">Band</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances2.catsKernelBandForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/Band.html" class="extype" name="cats.kernel.Band">Band</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances2.catsKernelBandForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelBandForFunction0[A](implicitS:cats.kernel.Band[A]):cats.kernel.Band[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances2.html" class="extype" name="cats.kernel.instances.FunctionInstances2">FunctionInstances2</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances2#catsKernelBandForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelBandForFunction1[A,B](implicitS:cats.kernel.Band[B]):cats.kernel.Band[A=&gt;B]"></a>
+      <a id="catsKernelBandForFunction1[A,B](Band[B]):Band[(A)⇒B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelBandForFunction1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="S">S: <a href="../kernel/Band.html" class="extype" name="cats.kernel.Band">Band</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances2.catsKernelBandForFunction1.B">B</span>]</span>)</span><span class="result">: <a href="../kernel/Band.html" class="extype" name="cats.kernel.Band">Band</a>[(<span class="extype" name="cats.kernel.instances.FunctionInstances2.catsKernelBandForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances2.catsKernelBandForFunction1.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelBandForFunction1[A,B](implicitS:cats.kernel.Band[B]):cats.kernel.Band[A=&gt;B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances2.html" class="extype" name="cats.kernel.instances.FunctionInstances2">FunctionInstances2</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances0#catsKernelBoundedSemilatticeForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelBoundedSemilatticeForFunction0[A](implicitG:cats.kernel.BoundedSemilattice[A]):cats.kernel.BoundedSemilattice[()=&gt;A]"></a>
+      <a id="catsKernelBoundedSemilatticeForFunction0[A](BoundedSemilattice[A]):BoundedSemilattice[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelBoundedSemilatticeForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../kernel/BoundedSemilattice.html" class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelBoundedSemilatticeForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/BoundedSemilattice.html" class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelBoundedSemilatticeForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelBoundedSemilatticeForFunction0[A](implicitG:cats.kernel.BoundedSemilattice[A]):cats.kernel.BoundedSemilattice[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances0.html" class="extype" name="cats.kernel.instances.FunctionInstances0">FunctionInstances0</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances0#catsKernelBoundedSemilatticeForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelBoundedSemilatticeForFunction1[A,B](implicitG:cats.kernel.BoundedSemilattice[B]):cats.kernel.BoundedSemilattice[A=&gt;B]"></a>
+      <a id="catsKernelBoundedSemilatticeForFunction1[A,B](BoundedSemilattice[B]):BoundedSemilattice[(A)⇒B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelBoundedSemilatticeForFunction1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../kernel/BoundedSemilattice.html" class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelBoundedSemilatticeForFunction1.B">B</span>]</span>)</span><span class="result">: <a href="../kernel/BoundedSemilattice.html" class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</a>[(<span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelBoundedSemilatticeForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelBoundedSemilatticeForFunction1.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelBoundedSemilatticeForFunction1[A,B](implicitG:cats.kernel.BoundedSemilattice[B]):cats.kernel.BoundedSemilattice[A=&gt;B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances0.html" class="extype" name="cats.kernel.instances.FunctionInstances0">FunctionInstances0</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances#catsKernelCommutativeGroupForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelCommutativeGroupForFunction0[A](implicitG:cats.kernel.CommutativeGroup[A]):cats.kernel.CommutativeGroup[()=&gt;A]"></a>
+      <a id="catsKernelCommutativeGroupForFunction0[A](CommutativeGroup[A]):CommutativeGroup[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelCommutativeGroupForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../kernel/CommutativeGroup.html" class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances.catsKernelCommutativeGroupForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/CommutativeGroup.html" class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances.catsKernelCommutativeGroupForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelCommutativeGroupForFunction0[A](implicitG:cats.kernel.CommutativeGroup[A]):cats.kernel.CommutativeGroup[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances.html" class="extype" name="cats.kernel.instances.FunctionInstances">FunctionInstances</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances#catsKernelCommutativeGroupForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelCommutativeGroupForFunction1[A,B](implicitG:cats.kernel.CommutativeGroup[B]):cats.kernel.CommutativeGroup[A=&gt;B]"></a>
+      <a id="catsKernelCommutativeGroupForFunction1[A,B](CommutativeGroup[B]):CommutativeGroup[(A)⇒B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelCommutativeGroupForFunction1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../kernel/CommutativeGroup.html" class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances.catsKernelCommutativeGroupForFunction1.B">B</span>]</span>)</span><span class="result">: <a href="../kernel/CommutativeGroup.html" class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</a>[(<span class="extype" name="cats.kernel.instances.FunctionInstances.catsKernelCommutativeGroupForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances.catsKernelCommutativeGroupForFunction1.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelCommutativeGroupForFunction1[A,B](implicitG:cats.kernel.CommutativeGroup[B]):cats.kernel.CommutativeGroup[A=&gt;B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances.html" class="extype" name="cats.kernel.instances.FunctionInstances">FunctionInstances</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances1#catsKernelCommutativeMonoidForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelCommutativeMonoidForFunction0[A](implicitM:cats.kernel.CommutativeMonoid[A]):cats.kernel.CommutativeMonoid[()=&gt;A]"></a>
+      <a id="catsKernelCommutativeMonoidForFunction0[A](CommutativeMonoid[A]):CommutativeMonoid[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelCommutativeMonoidForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../kernel/CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelCommutativeMonoidForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelCommutativeMonoidForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelCommutativeMonoidForFunction0[A](implicitM:cats.kernel.CommutativeMonoid[A]):cats.kernel.CommutativeMonoid[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances1.html" class="extype" name="cats.kernel.instances.FunctionInstances1">FunctionInstances1</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances1#catsKernelCommutativeMonoidForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelCommutativeMonoidForFunction1[A,B](implicitM:cats.kernel.CommutativeMonoid[B]):cats.kernel.CommutativeMonoid[A=&gt;B]"></a>
+      <a id="catsKernelCommutativeMonoidForFunction1[A,B](CommutativeMonoid[B]):CommutativeMonoid[(A)⇒B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelCommutativeMonoidForFunction1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../kernel/CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelCommutativeMonoidForFunction1.B">B</span>]</span>)</span><span class="result">: <a href="../kernel/CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[(<span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelCommutativeMonoidForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelCommutativeMonoidForFunction1.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelCommutativeMonoidForFunction1[A,B](implicitM:cats.kernel.CommutativeMonoid[B]):cats.kernel.CommutativeMonoid[A=&gt;B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances1.html" class="extype" name="cats.kernel.instances.FunctionInstances1">FunctionInstances1</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances3#catsKernelCommutativeSemigroupForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelCommutativeSemigroupForFunction0[A](implicitS:cats.kernel.CommutativeSemigroup[A]):cats.kernel.CommutativeSemigroup[()=&gt;A]"></a>
+      <a id="catsKernelCommutativeSemigroupForFunction0[A](CommutativeSemigroup[A]):CommutativeSemigroup[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelCommutativeSemigroupForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="S">S: <a href="../kernel/CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances3.catsKernelCommutativeSemigroupForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances3.catsKernelCommutativeSemigroupForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelCommutativeSemigroupForFunction0[A](implicitS:cats.kernel.CommutativeSemigroup[A]):cats.kernel.CommutativeSemigroup[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances3.html" class="extype" name="cats.kernel.instances.FunctionInstances3">FunctionInstances3</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances3#catsKernelCommutativeSemigroupForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelCommutativeSemigroupForFunction1[A,B](implicitS:cats.kernel.CommutativeSemigroup[B]):cats.kernel.CommutativeSemigroup[A=&gt;B]"></a>
+      <a id="catsKernelCommutativeSemigroupForFunction1[A,B](CommutativeSemigroup[B]):CommutativeSemigroup[(A)⇒B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelCommutativeSemigroupForFunction1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="S">S: <a href="../kernel/CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances3.catsKernelCommutativeSemigroupForFunction1.B">B</span>]</span>)</span><span class="result">: <a href="../kernel/CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[(<span class="extype" name="cats.kernel.instances.FunctionInstances3.catsKernelCommutativeSemigroupForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances3.catsKernelCommutativeSemigroupForFunction1.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelCommutativeSemigroupForFunction1[A,B](implicitS:cats.kernel.CommutativeSemigroup[B]):cats.kernel.CommutativeSemigroup[A=&gt;B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances3.html" class="extype" name="cats.kernel.instances.FunctionInstances3">FunctionInstances3</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances1#catsKernelEqForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelEqForFunction0[A](implicitev:cats.kernel.Eq[A]):cats.kernel.Eq[()=&gt;A]"></a>
+      <a id="catsKernelEqForFunction0[A](kernel.Eq[A]):kernel.Eq[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelEqForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../kernel/Eq.html" class="extype" name="cats.kernel.Eq">kernel.Eq</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelEqForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/Eq.html" class="extype" name="cats.kernel.Eq">kernel.Eq</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelEqForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelEqForFunction0[A](implicitev:cats.kernel.Eq[A]):cats.kernel.Eq[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances1.html" class="extype" name="cats.kernel.instances.FunctionInstances1">FunctionInstances1</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances0#catsKernelGroupForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelGroupForFunction0[A](implicitG:cats.kernel.Group[A]):cats.kernel.Group[()=&gt;A]"></a>
+      <a id="catsKernelGroupForFunction0[A](kernel.Group[A]):kernel.Group[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelGroupForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../kernel/Group.html" class="extype" name="cats.kernel.Group">kernel.Group</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelGroupForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/Group.html" class="extype" name="cats.kernel.Group">kernel.Group</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelGroupForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelGroupForFunction0[A](implicitG:cats.kernel.Group[A]):cats.kernel.Group[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances0.html" class="extype" name="cats.kernel.instances.FunctionInstances0">FunctionInstances0</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances0#catsKernelGroupForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelGroupForFunction1[A,B](implicitG:cats.kernel.Group[B]):cats.kernel.Group[A=&gt;B]"></a>
+      <a id="catsKernelGroupForFunction1[A,B](kernel.Group[B]):kernel.Group[(A)⇒B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelGroupForFunction1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="../kernel/Group.html" class="extype" name="cats.kernel.Group">kernel.Group</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelGroupForFunction1.B">B</span>]</span>)</span><span class="result">: <a href="../kernel/Group.html" class="extype" name="cats.kernel.Group">kernel.Group</a>[(<span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelGroupForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelGroupForFunction1.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelGroupForFunction1[A,B](implicitG:cats.kernel.Group[B]):cats.kernel.Group[A=&gt;B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances0.html" class="extype" name="cats.kernel.instances.FunctionInstances0">FunctionInstances0</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances2#catsKernelMonoidForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelMonoidForFunction0[A](implicitM:cats.kernel.Monoid[A]):cats.kernel.Monoid[()=&gt;A]"></a>
+      <a id="catsKernelMonoidForFunction0[A](kernel.Monoid[A]):kernel.Monoid[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelMonoidForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">kernel.Monoid</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances2.catsKernelMonoidForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">kernel.Monoid</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances2.catsKernelMonoidForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelMonoidForFunction0[A](implicitM:cats.kernel.Monoid[A]):cats.kernel.Monoid[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances2.html" class="extype" name="cats.kernel.instances.FunctionInstances2">FunctionInstances2</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances2#catsKernelMonoidForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelMonoidForFunction1[A,B](implicitM:cats.kernel.Monoid[B]):cats.kernel.Monoid[A=&gt;B]"></a>
+      <a id="catsKernelMonoidForFunction1[A,B](kernel.Monoid[B]):kernel.Monoid[(A)⇒B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelMonoidForFunction1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">kernel.Monoid</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances2.catsKernelMonoidForFunction1.B">B</span>]</span>)</span><span class="result">: <a href="../kernel/Monoid.html" class="extype" name="cats.kernel.Monoid">kernel.Monoid</a>[(<span class="extype" name="cats.kernel.instances.FunctionInstances2.catsKernelMonoidForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances2.catsKernelMonoidForFunction1.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelMonoidForFunction1[A,B](implicitM:cats.kernel.Monoid[B]):cats.kernel.Monoid[A=&gt;B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances2.html" class="extype" name="cats.kernel.instances.FunctionInstances2">FunctionInstances2</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances#catsKernelOrderForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelOrderForFunction0[A](implicitev:cats.kernel.Order[A]):cats.kernel.Order[()=&gt;A]"></a>
+      <a id="catsKernelOrderForFunction0[A](kernel.Order[A]):kernel.Order[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelOrderForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances.catsKernelOrderForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances.catsKernelOrderForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelOrderForFunction0[A](implicitev:cats.kernel.Order[A]):cats.kernel.Order[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances.html" class="extype" name="cats.kernel.instances.FunctionInstances">FunctionInstances</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances0#catsKernelPartialOrderForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelPartialOrderForFunction0[A](implicitev:cats.kernel.PartialOrder[A]):cats.kernel.PartialOrder[()=&gt;A]"></a>
+      <a id="catsKernelPartialOrderForFunction0[A](kernel.PartialOrder[A]):kernel.PartialOrder[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelPartialOrderForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../kernel/PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">kernel.PartialOrder</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelPartialOrderForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">kernel.PartialOrder</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances0.catsKernelPartialOrderForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelPartialOrderForFunction0[A](implicitev:cats.kernel.PartialOrder[A]):cats.kernel.PartialOrder[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances0.html" class="extype" name="cats.kernel.instances.FunctionInstances0">FunctionInstances0</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances4#catsKernelSemigroupForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelSemigroupForFunction0[A](implicitS:cats.kernel.Semigroup[A]):cats.kernel.Semigroup[()=&gt;A]"></a>
+      <a id="catsKernelSemigroupForFunction0[A](kernel.Semigroup[A]):kernel.Semigroup[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelSemigroupForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="S">S: <a href="../kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances4.catsKernelSemigroupForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances4.catsKernelSemigroupForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelSemigroupForFunction0[A](implicitS:cats.kernel.Semigroup[A]):cats.kernel.Semigroup[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances4.html" class="extype" name="cats.kernel.instances.FunctionInstances4">FunctionInstances4</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances4#catsKernelSemigroupForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelSemigroupForFunction1[A,B](implicitS:cats.kernel.Semigroup[B]):cats.kernel.Semigroup[A=&gt;B]"></a>
+      <a id="catsKernelSemigroupForFunction1[A,B](kernel.Semigroup[B]):kernel.Semigroup[(A)⇒B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelSemigroupForFunction1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="S">S: <a href="../kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances4.catsKernelSemigroupForFunction1.B">B</span>]</span>)</span><span class="result">: <a href="../kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</a>[(<span class="extype" name="cats.kernel.instances.FunctionInstances4.catsKernelSemigroupForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances4.catsKernelSemigroupForFunction1.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelSemigroupForFunction1[A,B](implicitS:cats.kernel.Semigroup[B]):cats.kernel.Semigroup[A=&gt;B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances4.html" class="extype" name="cats.kernel.instances.FunctionInstances4">FunctionInstances4</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances1#catsKernelSemilatticeForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelSemilatticeForFunction0[A](implicitM:cats.kernel.Semilattice[A]):cats.kernel.Semilattice[()=&gt;A]"></a>
+      <a id="catsKernelSemilatticeForFunction0[A](Semilattice[A]):Semilattice[()⇒A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelSemilatticeForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../kernel/Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelSemilatticeForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>[() ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelSemilatticeForFunction0.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelSemilatticeForFunction0[A](implicitM:cats.kernel.Semilattice[A]):cats.kernel.Semilattice[()=&gt;A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances1.html" class="extype" name="cats.kernel.instances.FunctionInstances1">FunctionInstances1</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.FunctionInstances1#catsKernelSemilatticeForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelSemilatticeForFunction1[A,B](implicitM:cats.kernel.Semilattice[B]):cats.kernel.Semilattice[A=&gt;B]"></a>
+      <a id="catsKernelSemilatticeForFunction1[A,B](Semilattice[B]):Semilattice[(A)⇒B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelSemilatticeForFunction1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../kernel/Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>[<span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelSemilatticeForFunction1.B">B</span>]</span>)</span><span class="result">: <a href="../kernel/Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>[(<span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelSemilatticeForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.kernel.instances.FunctionInstances1.catsKernelSemilatticeForFunction1.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsKernelSemilatticeForFunction1[A,B](implicitM:cats.kernel.Semilattice[B]):cats.kernel.Semilattice[A=&gt;B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FunctionInstances1.html" class="extype" name="cats.kernel.instances.FunctionInstances1">FunctionInstances1</a></dd></dl></div>
     </li><li name="cats.instances.Function0Instances#catsStdBimonadForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsStdBimonadForFunction0:cats.Bimonad[Function0]withcats.RecursiveTailRecM[Function0]"></a>
-      <a id="catsStdBimonadForFunction0:Bimonad[Function0]withRecursiveTailRecM[Function0]"></a>
+      <a id="catsStdBimonadForFunction0:cats.Bimonad[Function0]"></a>
+      <a id="catsStdBimonadForFunction0:Bimonad[Function0]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">catsStdBimonadForFunction0</span><span class="result">: <a href="../Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Function0" class="extype" target="_top">Function0</a>] with <a href="../RecursiveTailRecM.html" class="extype" name="cats.RecursiveTailRecM">RecursiveTailRecM</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Function0" class="extype" target="_top">Function0</a>]</span>
+        <span class="name">catsStdBimonadForFunction0</span><span class="result">: <a href="../Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Function0" class="extype" target="_top">Function0</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.instances.FunctionInstances@catsStdBimonadForFunction0:cats.Bimonad[Function0]withcats.RecursiveTailRecM[Function0]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsStdBimonadForFunction0:cats.Bimonad[Function0]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function0Instances</dd></dl></div>
     </li><li name="cats.instances.Function1Instances#catsStdContravariantForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsStdContravariantForFunction1[R]:cats.functor.Contravariant[[α]α=&gt;R]"></a>
-      <a id="catsStdContravariantForFunction1[R]:Contravariant[[α](α)⇒R]"></a>
+      <a id="catsStdContravariantForFunction1[R]:cats.functor.Contravariant[[α$0$]α$0$=&gt;R]"></a>
+      <a id="catsStdContravariantForFunction1[R]:Contravariant[[α$0$](α$0$)⇒R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsStdContravariantForFunction1</span><span class="tparams">[<span name="R">R</span>]</span><span class="result">: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[α](<span class="extype" name="cats.instances.Function1Instances.&lt;refinement&gt;.Λ$.α">α</span>) ⇒ <span class="extype" name="cats.instances.Function1Instances.catsStdContravariantForFunction1.R">R</span>]</span>
+        <span class="name">catsStdContravariantForFunction1</span><span class="tparams">[<span name="R">R</span>]</span><span class="result">: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[α$0$](<span class="extype" name="cats.instances.Function1Instances.&lt;refinement&gt;.Λ$.α$0$">α$0$</span>) ⇒ <span class="extype" name="cats.instances.Function1Instances.catsStdContravariantForFunction1.R">R</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.instances.FunctionInstances@catsStdContravariantForFunction1[R]:cats.functor.Contravariant[[α]α=&gt;R]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsStdContravariantForFunction1[R]:cats.functor.Contravariant[[α$0$]α$0$=&gt;R]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances</dd></dl></div>
-    </li><li name="cats.instances.Function0Instances#catsStdEqForFunction0" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsStdEqForFunction0[A](implicitA:cats.Eq[A]):cats.Eq[()=&gt;A]"></a>
-      <a id="catsStdEqForFunction0[A](Eq[A]):Eq[()⇒A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsStdEqForFunction0</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.instances.Function0Instances.catsStdEqForFunction0.A">A</span>]</span>)</span><span class="result">: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[() ⇒ <span class="extype" name="cats.instances.Function0Instances.catsStdEqForFunction0.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.instances.FunctionInstances@catsStdEqForFunction0[A](implicitA:cats.Eq[A]):cats.Eq[()=&gt;A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function0Instances</dd></dl></div>
     </li><li name="cats.instances.Function1Instances#catsStdInstancesForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsStdInstancesForFunction1:cats.arrow.Choice[Function1]withcats.arrow.Arrow[Function1]"></a>
       <a id="catsStdInstancesForFunction1:Choice[Function1]withArrow[Function1]"></a>
@@ -234,35 +574,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances</dd></dl></div>
     </li><li name="cats.instances.Function1Instances#catsStdMonadReaderForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsStdMonadReaderForFunction1[T1]:cats.MonadReader[[β]T1=&gt;β,T1]withcats.RecursiveTailRecM[[β]T1=&gt;β]"></a>
-      <a id="catsStdMonadReaderForFunction1[T1]:MonadReader[[β](T1)⇒β,T1]withRecursiveTailRecM[[β](T1)⇒β]"></a>
+      <a id="catsStdMonadReaderForFunction1[T1]:cats.MonadReader[[β$2$]T1=&gt;β$2$,T1]"></a>
+      <a id="catsStdMonadReaderForFunction1[T1]:MonadReader[[β$2$](T1)⇒β$2$,T1]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsStdMonadReaderForFunction1</span><span class="tparams">[<span name="T1">T1</span>]</span><span class="result">: <a href="../MonadReader.html" class="extype" name="cats.MonadReader">MonadReader</a>[[β](<span class="extype" name="cats.instances.Function1Instances.catsStdMonadReaderForFunction1.T1">T1</span>) ⇒ <span class="extype" name="cats.instances.Function1Instances.&lt;refinement&gt;.Λ$.β">β</span>, <span class="extype" name="cats.instances.Function1Instances.catsStdMonadReaderForFunction1.T1">T1</span>] with <a href="../RecursiveTailRecM.html" class="extype" name="cats.RecursiveTailRecM">RecursiveTailRecM</a>[[β](<span class="extype" name="cats.instances.Function1Instances.catsStdMonadReaderForFunction1.T1">T1</span>) ⇒ <span class="extype" name="cats.instances.Function1Instances.&lt;refinement&gt;.Λ$.β">β</span>]</span>
+        <span class="name">catsStdMonadReaderForFunction1</span><span class="tparams">[<span name="T1">T1</span>]</span><span class="result">: <a href="../MonadReader.html" class="extype" name="cats.MonadReader">MonadReader</a>[[β$2$](<span class="extype" name="cats.instances.Function1Instances.catsStdMonadReaderForFunction1.T1">T1</span>) ⇒ <span class="extype" name="cats.instances.Function1Instances.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>, <span class="extype" name="cats.instances.Function1Instances.catsStdMonadReaderForFunction1.T1">T1</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.instances.FunctionInstances@catsStdMonadReaderForFunction1[T1]:cats.MonadReader[[β]T1=&gt;β,T1]withcats.RecursiveTailRecM[[β]T1=&gt;β]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances</dd></dl></div>
-    </li><li name="cats.instances.Function1Instances#catsStdMonoidForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsStdMonoidForFunction1[A,B](implicitM:cats.Monoid[B]):cats.Monoid[A=&gt;B]"></a>
-      <a id="catsStdMonoidForFunction1[A,B](Monoid[B]):Monoid[(A)⇒B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsStdMonoidForFunction1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.instances.Function1Instances.catsStdMonoidForFunction1.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[(<span class="extype" name="cats.instances.Function1Instances.catsStdMonoidForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.instances.Function1Instances.catsStdMonoidForFunction1.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.instances.FunctionInstances@catsStdMonoidForFunction1[A,B](implicitM:cats.Monoid[B]):cats.Monoid[A=&gt;B]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.instances.FunctionInstances@catsStdMonadReaderForFunction1[T1]:cats.MonadReader[[β$2$]T1=&gt;β$2$,T1]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -284,40 +607,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances</dd></dl></div>
-    </li><li name="cats.instances.Function1Instances0#catsStdSemigroupForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsStdSemigroupForFunction1[A,B](implicitS:cats.Semigroup[B]):cats.Semigroup[A=&gt;B]"></a>
-      <a id="catsStdSemigroupForFunction1[A,B](Semigroup[B]):Semigroup[(A)⇒B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsStdSemigroupForFunction1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="S">S: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.instances.Function1Instances0.catsStdSemigroupForFunction1.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[(<span class="extype" name="cats.instances.Function1Instances0.catsStdSemigroupForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.instances.Function1Instances0.catsStdSemigroupForFunction1.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.instances.FunctionInstances@catsStdSemigroupForFunction1[A,B](implicitS:cats.Semigroup[B]):cats.Semigroup[A=&gt;B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances0</dd></dl></div>
-    </li><li name="cats.instances.Function1Instances0#catsStdSemigroupKForFunction1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsStdSemigroupKForFunction1:cats.SemigroupK[[α]α=&gt;α]"></a>
-      <a id="catsStdSemigroupKForFunction1:SemigroupK[[α](α)⇒α]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsStdSemigroupKForFunction1</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[α](<span class="extype" name="cats.instances.Function1Instances0.&lt;refinement&gt;.Λ$.α">α</span>) ⇒ <span class="extype" name="cats.instances.Function1Instances0.&lt;refinement&gt;.Λ$.α">α</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.instances.FunctionInstances@catsStdSemigroupKForFunction1:cats.SemigroupK[[α]α=&gt;α]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1Instances0</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -614,10 +903,20 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.instances.Function1Instances">
               <h3>Inherited from <span class="extype" name="cats.instances.Function1Instances">Function1Instances</span></h3>
-            </div><div class="parent" name="cats.instances.Function1Instances0">
-              <h3>Inherited from <span class="extype" name="cats.instances.Function1Instances0">Function1Instances0</span></h3>
             </div><div class="parent" name="cats.instances.Function0Instances">
               <h3>Inherited from <span class="extype" name="cats.instances.Function0Instances">Function0Instances</span></h3>
+            </div><div class="parent" name="cats.kernel.instances.FunctionInstances">
+              <h3>Inherited from <a href="../kernel/instances/FunctionInstances.html" class="extype" name="cats.kernel.instances.FunctionInstances">kernel.instances.FunctionInstances</a></h3>
+            </div><div class="parent" name="cats.kernel.instances.FunctionInstances0">
+              <h3>Inherited from <a href="../kernel/instances/FunctionInstances0.html" class="extype" name="cats.kernel.instances.FunctionInstances0">FunctionInstances0</a></h3>
+            </div><div class="parent" name="cats.kernel.instances.FunctionInstances1">
+              <h3>Inherited from <a href="../kernel/instances/FunctionInstances1.html" class="extype" name="cats.kernel.instances.FunctionInstances1">FunctionInstances1</a></h3>
+            </div><div class="parent" name="cats.kernel.instances.FunctionInstances2">
+              <h3>Inherited from <a href="../kernel/instances/FunctionInstances2.html" class="extype" name="cats.kernel.instances.FunctionInstances2">FunctionInstances2</a></h3>
+            </div><div class="parent" name="cats.kernel.instances.FunctionInstances3">
+              <h3>Inherited from <a href="../kernel/instances/FunctionInstances3.html" class="extype" name="cats.kernel.instances.FunctionInstances3">FunctionInstances3</a></h3>
+            </div><div class="parent" name="cats.kernel.instances.FunctionInstances4">
+              <h3>Inherited from <a href="../kernel/instances/FunctionInstances4.html" class="extype" name="cats.kernel.instances.FunctionInstances4">FunctionInstances4</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

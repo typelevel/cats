@@ -894,25 +894,6 @@ otherwise return an empty List
       </a>
     </span>
       <p class="shortcomment cmt">Lift the Invalid value into a NonEmptyList.</p><div class="fullcomment"><div class="comment cmt"><p>Lift the Invalid value into a NonEmptyList.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
-    </li><li name="cats.data.Validated#toXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toXor:cats.data.Xor[E,A]"></a>
-      <a id="toXor:Xor[Nothing,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toXor</span><span class="result">: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="scala.Nothing">Nothing</span>, <span class="extype" name="cats.data.Validated.Valid.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Validated$$Valid@toXor:cats.data.Xor[E,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Convert this value to RightOr if Valid or LeftOr if Invalid
-</p><div class="fullcomment"><div class="comment cmt"><p>Convert this value to RightOr if Valid or LeftOr if Invalid
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
     </li><li name="cats.data.Validated#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverse[F[_],EE&gt;:E,B](f:A=&gt;F[B])(implicitF:cats.Applicative[F]):F[cats.data.Validated[EE,B]]"></a>
       <a id="traverse[F[_],EE&gt;:Nothing,B]((A)⇒F[B])(Applicative[F]):F[Validated[EE,B]]"></a>
@@ -1024,24 +1005,24 @@ when Invalid, lift the Error into the Applicative's context
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.data.Validated#withXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="withXor[EE,B](f:cats.data.Xor[E,A]=&gt;cats.data.Xor[EE,B]):cats.data.Validated[EE,B]"></a>
-      <a id="withXor[EE,B]((Xor[Nothing,A])⇒Xor[EE,B]):Validated[EE,B]"></a>
+    </li><li name="cats.data.Validated#withEither" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withEither[EE,B](f:Either[E,A]=&gt;Either[EE,B]):cats.data.Validated[EE,B]"></a>
+      <a id="withEither[EE,B]((Either[Nothing,A])⇒Either[EE,B]):Validated[EE,B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withXor</span><span class="tparams">[<span name="EE">EE</span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="scala.Nothing">Nothing</span>, <span class="extype" name="cats.data.Validated.Valid.A">A</span>]) ⇒ <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Validated.withXor.EE">EE</span>, <span class="extype" name="cats.data.Validated.withXor.B">B</span>]</span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.withXor.EE">EE</span>, <span class="extype" name="cats.data.Validated.withXor.B">B</span>]</span>
+        <span class="name">withEither</span><span class="tparams">[<span name="EE">EE</span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Nothing">Nothing</span>, <span class="extype" name="cats.data.Validated.Valid.A">A</span>]) ⇒ <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Validated.withEither.EE">EE</span>, <span class="extype" name="cats.data.Validated.withEither.B">B</span>]</span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.withEither.EE">EE</span>, <span class="extype" name="cats.data.Validated.withEither.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Validated$$Valid@withXor[EE,B](f:cats.data.Xor[E,A]=&gt;cats.data.Xor[EE,B]):cats.data.Validated[EE,B]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Validated$$Valid@withEither[EE,B](f:Either[E,A]=&gt;Either[EE,B]):cats.data.Validated[EE,B]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Convert to an Xor, apply a function, convert back.</p><div class="fullcomment"><div class="comment cmt"><p>Convert to an Xor, apply a function, convert back.  This is handy
-when you want to use the Monadic properties of the Xor type.
+      <p class="shortcomment cmt">Convert to an Either, apply a function, convert back.</p><div class="fullcomment"><div class="comment cmt"><p>Convert to an Either, apply a function, convert back.  This is handy
+when you want to use the Monadic properties of the Either type.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
     </li></ol>
             </div>

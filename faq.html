@@ -1,0 +1,162 @@
+<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/atom-one-light.min.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body><header id="site-header"><div class="navbar-wrapper navbar-inverse"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/cats/" class="brand"><div class="icon-wrapper" style="background:url('/cats/img/navbar_brand.png') no-repeat"><span>Cats</span></div></a></div><nav class="text-right"><ul class=""><li><a href="https://github.com/typelevel/cats"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li><li><a href="api"><i class="fa fa-file-text"></i><span class="hidden-xs">Documentation</span></a></li></ul></nav></div></div><div class="jumbotron" style="background-image:url('/cats/img/jumbotron_pattern.png')"></div><div><ul class="horizontalNav">                                                           <li><a class="" href="/cats/typeclasses.html">Type Classes</a></li>  <li><a class="" href="/cats/datatypes.html">Data Types</a></li>  <li><a class="" href="/cats/resources_for_learners.html">Resources for Learners</a></li>  <li><a class=" active " href="/cats/faq.html">FAQ</a></li>  <li><a class="" href="/cats/contributing.html">Contributing</a></li>  <li><a class="" href="/cats/colophon.html">Colophon</a></li> </ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
+
+<h2 id="questions">Questions</h2>
+
+<ul>
+  <li><a href="#what-imports">What imports do I need?</a></li>
+  <li><a href="#either">Where is right-biased <code class="highlighter-rouge">Either</code>?</a></li>
+  <li><a href="#future-instances">Why can’t the compiler find implicit instances for Future?</a></li>
+  <li><a href="#traverse">How can I turn my List of <code class="highlighter-rouge">&lt;something&gt;</code> into a <code class="highlighter-rouge">&lt;something&gt;</code> of a list?</a></li>
+  <li><a href="#listt">Where is <code class="highlighter-rouge">ListT</code>?</a></li>
+  <li><a href="#task">Where is <code class="highlighter-rouge">IO</code>/<code class="highlighter-rouge">Task</code>?</a></li>
+  <li><a href="#simulacrum">What does <code class="highlighter-rouge">@typeclass</code> mean?</a></li>
+  <li><a href="#kind-projector">What do types like <code class="highlighter-rouge">?</code> and <code class="highlighter-rouge">λ</code> mean?</a></li>
+  <li><a href="#machinist">What does <code class="highlighter-rouge">macro Ops</code> do? What is <code class="highlighter-rouge">cats.macros.Ops</code>?</a></li>
+  <li><a href="#contributing">How can I help?</a></li>
+</ul>
+
+<h2 id="a-idwhat-imports-hrefwhat-importsawhat-imports-do-i-need"><a id="what-imports" href="#what-imports"></a>What imports do I need?</h2>
+
+<p>The easiest approach to cats imports is to import everything that’s commonly needed:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<span class="k">import</span> <span class="nn">cats.data._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
+</code></pre>
+</div>
+
+<p>This should be all that you need, but if you’d like to learn more about the details of imports than you can check out the <a href="imports.html">import guide</a>.</p>
+
+<h2 id="a-ideither-hrefeitherawhere-is-right-biased-either"><a id="either" href="#either"></a>Where is right-biased Either?</h2>
+<p>Up to Cats 0.6.x we had <code class="highlighter-rouge">cats.data.Xor</code> which was effectively <code class="highlighter-rouge">scala.util.Either</code>, but right-biased by default and with
+a bunch of useful combinators around it. In Scala 2.12.x <code class="highlighter-rouge">Either</code>
+<a href="https://github.com/scala/scala/pull/5135">became right-biased</a> so we revisited the use of <code class="highlighter-rouge">Xor</code> and
+<a href="https://github.com/typelevel/cats/issues/1192">decided</a> that in the interest of interoperability we move to
+<code class="highlighter-rouge">scala.util.Either</code> and fill in the gaps via
+<a href="https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/syntax/either.scala">syntax enrichment</a>.</p>
+
+<p>This syntax can be imported via <code class="highlighter-rouge">cats.syntax.either._</code> or through <code class="highlighter-rouge">cats.implicits._</code>.</p>
+
+<p>Similarly, <code class="highlighter-rouge">cats.data.XorT</code> has been replaced with <code class="highlighter-rouge">cats.data.EitherT</code>.</p>
+
+<h2 id="a-idfuture-instances-hreffuture-instancesawhy-cant-the-compiler-find-implicit-instances-for-future"><a id="future-instances" href="#future-instances"></a>Why can’t the compiler find implicit instances for Future?</h2>
+
+<p>If you have already followed the <a href="#what-imports">imports advice</a> but are still getting error messages like <code class="highlighter-rouge">could not find implicit value for parameter e: cats.Monad[scala.concurrent.Future]</code> or <code class="highlighter-rouge">value |+| is not a member of scala.concurrent.Future[Int]</code>, then make sure that you have an implicit <code class="highlighter-rouge">scala.concurrent.ExecutionContext</code> in scope. The easiest way to do this is to <code class="highlighter-rouge">import scala.concurrent.ExecutionContext.Implicits.global</code>, but note that you may want to use a different execution context for your production application.</p>
+
+<h2 id="a-idtraverse-hreftraverseahow-can-i-turn-my-list-of-something-into-a-something-of-a-list"><a id="traverse" href="#traverse"></a>How can I turn my List of <code class="highlighter-rouge">&lt;something&gt;</code> into a <code class="highlighter-rouge">&lt;something&gt;</code> of a list?</h2>
+
+<p>It’s really common to have a <code class="highlighter-rouge">List</code> of values with types like <code class="highlighter-rouge">Option</code>, <code class="highlighter-rouge">Either</code>, or <code class="highlighter-rouge">Validated</code> that you would like to turn “inside out” into an <code class="highlighter-rouge">Option</code> (or <code class="highlighter-rouge">Either</code> or <code class="highlighter-rouge">Validated</code>) of a <code class="highlighter-rouge">List</code>. The <code class="highlighter-rouge">sequence</code>, <code class="highlighter-rouge">sequenceU</code>, <code class="highlighter-rouge">traverse</code>, and <code class="highlighter-rouge">traverseU</code> methods are <em>really</em> handy for this. You can read more about them in the <a href="/cats/tut/traverse.html">Traverse documentation</a>.</p>
+
+<h2 id="a-idlistt-hreflisttawhere-is-listt"><a id="listt" href="#listt"></a>Where is ListT?</h2>
+
+<p>There are monad transformers for various types, such as <a href="/cats/tut/optiont.html">OptionT</a>, so people often wonder why there isn’t a <code class="highlighter-rouge">ListT</code>. For example, in the following example, people might reach for <code class="highlighter-rouge">ListT</code> to simplify making nested <code class="highlighter-rouge">map</code> and <code class="highlighter-rouge">exists</code> calls:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">l</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">))</span>
+
+<span class="k">def</span> <span class="n">isEven</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+</code></pre>
+</div>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">l</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span>
+<span class="c1">// res1: Option[List[Int]] = Some(List(2, 3, 4, 5, 6))
+</span>
+<span class="n">l</span><span class="o">.</span><span class="n">exists</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">exists</span><span class="o">(</span><span class="n">isEven</span><span class="o">))</span>
+<span class="c1">// res2: Boolean = true
+</span></code></pre>
+</div>
+
+<p>A naive implementation of <code class="highlighter-rouge">ListT</code> suffers from associativity issues; see <a href="https://gist.github.com/tpolecat/1227e22e3161b5816e014c00650f3b57">this gist</a> for an example. It’s possible to create a <code class="highlighter-rouge">ListT</code> that doesn’t have these issues, but it tends to be pretty inefficient. For many use-cases, <a href="https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/Nested.scala">Nested</a> can be used to achieve the desired results.</p>
+
+<p>Here is how we could achieve the effect of the previous example using <code class="highlighter-rouge">Nested</code>:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Nested</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
+</code></pre>
+</div>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">nl</span> <span class="k">=</span> <span class="nc">Nested</span><span class="o">(</span><span class="n">l</span><span class="o">)</span>
+<span class="c1">// nl: cats.data.Nested[Option,List,Int] = Nested(Some(List(1, 2, 3, 4, 5)))
+</span>
+<span class="n">nl</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+<span class="c1">// res3: cats.data.Nested[Option,[+A]List[A],Int] = Nested(Some(List(2, 3, 4, 5, 6)))
+</span>
+<span class="n">nl</span><span class="o">.</span><span class="n">exists</span><span class="o">(</span><span class="n">isEven</span><span class="o">)</span>
+<span class="c1">// res4: Boolean = true
+</span></code></pre>
+</div>
+
+<p>We can even perform more complicated operations, such as a <code class="highlighter-rouge">traverse</code> of the nested structure:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.ValidatedNel</span>
+<span class="k">type</span> <span class="kt">ErrorsOr</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">ValidatedNel</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">A</span><span class="o">]</span>
+<span class="k">def</span> <span class="n">even</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">ErrorsOr</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="n">i</span><span class="o">.</span><span class="n">validNel</span> <span class="k">else</span> <span class="n">s</span><span class="s">"$i is odd"</span><span class="o">.</span><span class="n">invalidNel</span>
+
+<span class="o">```</span><span class="n">scala</span>
+<span class="n">nl</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">even</span><span class="o">)</span>
+<span class="c1">// res6: ErrorsOr[cats.data.Nested[Option,[+A]List[A],Int]] = Invalid(NonEmptyList(1 is odd, 3 is odd, 5 is odd))
+</span></code></pre>
+</div>
+
+<h2 id="a-idtask-hreftaskawhere-is-iotask"><a id="task" href="#task"></a>Where is IO/Task?</h2>
+
+<p>In purely functional programming, a monadic <code class="highlighter-rouge">IO</code> or <code class="highlighter-rouge">Task</code> type is often used to handle side effects such as file/network IO. There <a href="https://github.com/typelevel/cats/pull/894">have</a> <a href="https://github.com/typelevel/cats/pull/907">been</a> <a href="https://github.com/typelevel/cats/issues/1224">several</a> GitHub issues/PRs about this and many more Gitter/IRL conversations, but they all seem to arrive at the conclusion that there isn’t a clear canonical <code class="highlighter-rouge">IO</code> or <code class="highlighter-rouge">Task</code> that serves everyones’ needs. Some of the questions that come up are:</p>
+
+<ul>
+  <li>Should tasks be interruptible?</li>
+  <li>Should there be a single <code class="highlighter-rouge">Task</code> that subsumes <code class="highlighter-rouge">IO</code> and adds support for asynchrony and concurrency, or should there be separate <code class="highlighter-rouge">IO</code> and <code class="highlighter-rouge">Task</code> types?</li>
+  <li>How should concurrency be managed/configured?</li>
+  <li>Is <a href="https://www.scala-js.org/">scala.js</a> supported?</li>
+  <li>Should you be able to block a thread waiting for the result of a task? This is really convenient for tests, but it isn’t really compatible with a JavaScript runtime and therefore is an issue for <a href="https://www.scala-js.org/">scala.js</a>.</li>
+</ul>
+
+<p>For some use-cases, a very simple <code class="highlighter-rouge">IO</code> is the best answer, as it avoids a lot of the overhead and complexity of other solutions. However, other use-cases require low-level concurrency control with asynchrony, resource management, and stack-safety. Considering all of the competing concerns, Cats has opted to not implement its own <code class="highlighter-rouge">IO</code>/<code class="highlighter-rouge">Task</code> types and instead encourage users to use a separate library that best serves their use-case.</p>
+
+<p>Here are a couple libraries with <code class="highlighter-rouge">Task</code> implementations that you may find useful (in no particular order):</p>
+
+<ul>
+  <li><a href="https://monix.io/">Monix</a> - Asynchronous Programming for Scala and <a href="https://www.scala-js.org/">Scala.js</a>.
+    <ul>
+      <li>The <code class="highlighter-rouge">monix-eval</code> module provides a full-featured <a href="https://monix.io/docs/2x/eval/task.html">Task</a> that is both cancellable and Scala.js-compatible.</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/functional-streams-for-scala/fs2">fs2</a> - Compositional, streaming I/O library for Scala
+    <ul>
+      <li>fs2 provides a <a href="https://github.com/functional-streams-for-scala/fs2/blob/series/0.9/core/shared/src/main/scala/fs2/Task.scala">Task</a> that is a convenient option if you are already using fs2. fs2’s <code class="highlighter-rouge">Task</code> is also Scala.js-compatible.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>It may be worth keeping in mind that <code class="highlighter-rouge">IO</code> and <code class="highlighter-rouge">Task</code> are pretty blunt instruments (they are essentially the <code class="highlighter-rouge">Any</code> of side effect management), and you may want to narrow the scope of your effects throughout most of your application. The <a href="/cats/tut/freemonad.html">free monad</a> documentation describes a way to abstractly define controlled effects and interpret them into a type such as <code class="highlighter-rouge">IO</code> or <code class="highlighter-rouge">Task</code> (or even simply <code class="highlighter-rouge">Try</code>, <code class="highlighter-rouge">Future</code>, or <a href="/cats/tut/id.html"><code class="highlighter-rouge">Id</code></a>) as late as possible. As more of your code becomes pure through these controlled effects the less it matters which type you end up choosing to represent your side effects.</p>
+
+<h2 id="a-idsimulacrum-hrefsimulacrumawhat-does-typeclass-mean"><a id="simulacrum" href="#simulacrum"></a>What does <code class="highlighter-rouge">@typeclass</code> mean?</h2>
+
+<p>Cats defines and implements numerous type classes. Unfortunately, encoding these type classes in Scala can incur a large amount of boilerplate. To address this, <a href="https://github.com/mpilquist/simulacrum">Simulacrum</a> introduces <code class="highlighter-rouge">@typeclass</code>, a macro annotation which generates a lot of this boilerplate. This elevates type classes to a first class construct and increases the legibility and maintainability of the code. Use of simulacrum also ensures consistency in how the type classes are encoded across a project. Cats uses simulacrum wherever possible to encode type classes, and you can read more about it at the <a href="https://github.com/mpilquist/simulacrum">project page</a>.</p>
+
+<p>Note that the one area where simulacrum is intentionally not used is in the <code class="highlighter-rouge">cats-kernel</code> module. The <code class="highlighter-rouge">cats-kernel</code> module is intended to be a shared dependency for a number of projects, and as such, it is important that it is both lightweight and very stable from a binary compatibility perspective. At some point there may be a transition from simulacrum to <a href="https://github.com/typelevel/typeclassic">typeclassic</a>, and the binary compatibility of moving between simulacrum and typeclassic is unclear at this point. Avoiding the dependency on simulacrum in <code class="highlighter-rouge">cats-kernel</code>, provides insulation against any potential binary compatibility problems in such a transition.</p>
+
+<h2 id="a-idkind-projector-hrefkind-projectorawhat-do-types-like--and--mean"><a id="kind-projector" href="#kind-projector"></a>What do types like <code class="highlighter-rouge">?</code> and <code class="highlighter-rouge">λ</code> mean?</h2>
+
+<p>Cats defines a wealth of type classes and type class instances. For a number of the type class and instance combinations, there is a mismatch between the type parameter requirements of the type class and the type parameter requirements of the data type for which the instance is being defined. For example, the <a href="/cats/tut/either.html">Either</a> data type is a type constructor with two type parameters. We would like to be able to define a <a href="/cats/tut/monad.html">Monad</a> for <code class="highlighter-rouge">Either</code>, but the <code class="highlighter-rouge">Monad</code> type class operates on type constructors having only one type parameter.</p>
+
+<p><strong>Enter type lambdas!</strong> Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of <code class="highlighter-rouge">Either</code> then, when defining a <code class="highlighter-rouge">Monad</code> for <code class="highlighter-rouge">Either</code>, we want to fix one of the type parameters at the point where a <code class="highlighter-rouge">Monad</code> instance is summoned, so that the type parameters line up. As <code class="highlighter-rouge">Either</code> is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when <code class="highlighter-rouge">Either</code> is treated as a <code class="highlighter-rouge">Monad</code>. The right biased nature of <code class="highlighter-rouge">Either</code> is discussed further in the <a href="/cats/tut/either.html"><code class="highlighter-rouge">Either</code> documentation</a>.</p>
+
+<p><strong>Enter <a href="https://github.com/non/kind-projector">kind-projector</a>!</strong> kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols <code class="highlighter-rouge">?</code> and <code class="highlighter-rouge">λ</code> are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the <a href="https://github.com/non/kind-projector">project page</a>.</p>
+
+<h2 id="a-idmachinist-hrefmachinistawhat-does-macro-ops-do-what-is-catsmacrosops"><a id="machinist" href="#machinist"></a>What does <code class="highlighter-rouge">macro Ops</code> do? What is <code class="highlighter-rouge">cats.macros.Ops</code>?</h2>
+
+<p><code class="highlighter-rouge">macro Ops</code> invokes the <a href="https://github.com/typelevel/machinist">Machinist</a> Ops macro, and is used in cats in a number of places to enrich types with operations with the minimal possible cost when those operations are called in code. Machinist supports an extension mechanism where users of the macro can provide a mapping between symbolic operator names and method names. The <code class="highlighter-rouge">cats.macros.Ops</code> class uses this extension mechanism to supply the set of mappings that the cats project is interested in.</p>
+
+<p>More about the history of machinist and how it works can be discovered at the <a href="https://github.com/typelevel/machinist">project page</a>, or <a href="http://typelevel.org/blog/2013/10/13/spires-ops-macros.html">this article on the typelevel blog</a>.</p>
+
+<h2 id="a-idcontributing-hrefcontributingahow-can-i-help"><a id="contributing" href="#contributing"></a>How can I help?</h2>
+
+<p>The cats community welcomes and encourages contributions, even if you are completely new to cats and functional programming. Here are a few ways to help out:</p>
+
+<ul>
+  <li>Find an undocumented method and write a ScalaDoc entry for it. See <a href="/core/src/main/scala/cats/arrow/Arrow.scala">Arrow.scala</a> for some examples of ScalaDoc entries that use <a href="https://github.com/tkawachi/sbt-doctest">sbt-doctest</a>.</li>
+  <li>Look at the <a href="https://codecov.io/github/typelevel/cats?branch=master">code coverage report</a>, find some untested code, and write a test for it. Even simple helper methods and syntax enrichment should be tested.</li>
+  <li>Find an <a href="https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready">open issue</a>, leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to cats, you may want to look for items with the <a href="https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22">low-hanging-fruit</a> label.</li>
+</ul>
+
+<p>See the <a href="/cats/contributing.html">contributing guide</a> for more information.</p>
+</div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Cats is designed and developed by <a href="http://typelevel.org/cats" target="_blank">Typelevel contributors</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/typelevel/cats"><span class="fa fa-github"></span>View on Github</a></p></div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/scala.min.js"></script><script>jQuery(document).ready(function(){hljs.initHighlightingOnLoad();});</script></body></html>

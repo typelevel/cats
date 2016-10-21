@@ -1,0 +1,251 @@
+<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/atom-one-light.min.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper" style="background:url('/cats/img/sidebar_brand.png') no-repeat"><span>Cats</span></div></a></li> </li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="traverse">Traverse</h1>
+<p>In functional programming it is very common to encode “effects” as data types - common effects
+include <code class="highlighter-rouge">Option</code> for possibly missing values, <code class="highlighter-rouge">Either</code> and <code class="highlighter-rouge">Validated</code> for possible errors, and
+<code class="highlighter-rouge">Future</code> for asynchronous computations.</p>
+
+<p>These effects tend to show up in functions working on a single piece of data - for instance
+parsing a single <code class="highlighter-rouge">String</code> into an <code class="highlighter-rouge">Int</code>, validating a login, or asynchronously fetching website
+information for a user.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
+
+<span class="k">def</span> <span class="n">parseInt</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+
+<span class="k">trait</span> <span class="nc">SecurityError</span>
+<span class="k">trait</span> <span class="nc">Credentials</span>
+
+<span class="k">def</span> <span class="n">validateLogin</span><span class="o">(</span><span class="n">cred</span><span class="k">:</span> <span class="kt">Credentials</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">SecurityError</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+
+<span class="k">trait</span> <span class="nc">Profile</span>
+<span class="k">trait</span> <span class="nc">User</span>
+
+<span class="k">def</span> <span class="n">userInfo</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">User</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Profile</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+</code></pre>
+</div>
+
+<p>Each function asks only for the data it actually needs; in the case of <code class="highlighter-rouge">userInfo</code>, a single <code class="highlighter-rouge">User</code>. We
+certainly could write one that takes a <code class="highlighter-rouge">List[User]</code> and fetch profile for all of them, would be a bit strange.
+If we just wanted to fetch the profile of just one user, we would either have to wrap it in a <code class="highlighter-rouge">List</code> or write
+a separate function that takes in a single user anyways. More fundamentally, functional programming is about
+building lots of small, independent pieces and composing them to make larger and larger pieces - does this
+hold true in this case?</p>
+
+<p>Given just <code class="highlighter-rouge">User =&gt; Future[Profile]</code>, what should we do if we want to fetch profiles for a <code class="highlighter-rouge">List[User]</code>?
+We could try familiar combinators like <code class="highlighter-rouge">map</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">profilesFor</span><span class="o">(</span><span class="n">users</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Future</span><span class="o">[</span><span class="kt">Profile</span><span class="o">]]</span> <span class="k">=</span> <span class="n">users</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">userInfo</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>Note the return type <code class="highlighter-rouge">List[Future[Profile]]</code>. This makes sense given the type signatures, but seems unwieldy.
+We now have a list of asynchronous values, and to work with those values we must then use the combinators on
+<code class="highlighter-rouge">Future</code> for every single one. It would be nicer instead if we could get the aggregate result in a single
+<code class="highlighter-rouge">Future</code>, say a <code class="highlighter-rouge">Future[List[Profile]]</code>.</p>
+
+<p>As it turns out, the <code class="highlighter-rouge">Future</code> companion object has a <code class="highlighter-rouge">traverse</code> method on it. However, that method is
+specialized to standard library collections and <code class="highlighter-rouge">Future</code>s - there exists a much more generalized form
+that would allow us to parse a <code class="highlighter-rouge">List[String]</code> or validate credentials for a <code class="highlighter-rouge">List[User]</code>.</p>
+
+<p>Enter <code class="highlighter-rouge">Traverse</code>.</p>
+
+<h2 id="the-type-class">The type class</h2>
+<p>At center stage of <code class="highlighter-rouge">Traverse</code> is the <code class="highlighter-rouge">traverse</code> method.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">traverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span> <span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>In our above example, <code class="highlighter-rouge">F</code> is <code class="highlighter-rouge">List</code>, and <code class="highlighter-rouge">G</code> is <code class="highlighter-rouge">Option</code>, <code class="highlighter-rouge">Either</code>, or <code class="highlighter-rouge">Future</code>. For the profile example,
+<code class="highlighter-rouge">traverse</code> says given a <code class="highlighter-rouge">List[User]</code> and a function <code class="highlighter-rouge">User =&gt; Future[Profile]</code>, it can give you a
+<code class="highlighter-rouge">Future[List[Profile]]</code>.</p>
+
+<p>Abstracting away the <code class="highlighter-rouge">G</code> (still imagining <code class="highlighter-rouge">F</code> to be <code class="highlighter-rouge">List</code>), <code class="highlighter-rouge">traverse</code> says given a collection of data,
+and a function that takes a piece of data and returns an effectful value, it will traverse the collection,
+applying the function and aggregating the effectful values (in a <code class="highlighter-rouge">List</code>) as it goes.</p>
+
+<p>In the most general form, <code class="highlighter-rouge">F[_]</code> is some sort of context which may contain a value (or several). While
+<code class="highlighter-rouge">List</code> tends to be among the most general cases, there also exist <code class="highlighter-rouge">Traverse</code> instances for <code class="highlighter-rouge">Option</code>,
+<code class="highlighter-rouge">Either</code>, and <code class="highlighter-rouge">Validated</code> (among others).</p>
+
+<h2 id="choose-your-effect">Choose your effect</h2>
+<p>The type signature of <code class="highlighter-rouge">Traverse</code> appears highly abstract, and indeed it is - what <code class="highlighter-rouge">traverse</code> does as it
+walks the <code class="highlighter-rouge">F[A]</code> depends on the effect of the function. Let’s see some examples where <code class="highlighter-rouge">F</code> is taken to be
+<code class="highlighter-rouge">List</code>.</p>
+
+<p>Note in the following code snippet we are using <code class="highlighter-rouge">traverseU</code> instead of <code class="highlighter-rouge">traverse</code>.
+<code class="highlighter-rouge">traverseU</code> is for all intents and purposes the same as <code class="highlighter-rouge">traverse</code>, but with some
+<a href="http://typelevel.org/blog/2013/09/11/using-scalaz-Unapply.html">type-level trickery</a>
+to allow it to infer the <code class="highlighter-rouge">Applicative[Either[A, ?]]</code> and <code class="highlighter-rouge">Applicative[Validated[A, ?]]</code>
+instances - <code class="highlighter-rouge">scalac</code> has issues inferring the instances for data types that do not
+trivially satisfy the <code class="highlighter-rouge">F[_]</code> shape required by <code class="highlighter-rouge">Applicative</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Semigroup</span>
+<span class="k">import</span> <span class="nn">cats.data.</span><span class="o">{</span><span class="nc">NonEmptyList</span><span class="o">,</span> <span class="nc">OneAnd</span><span class="o">,</span> <span class="nc">Validated</span><span class="o">,</span> <span class="nc">ValidatedNel</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
+
+<span class="k">def</span> <span class="n">parseIntEither</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">NumberFormatException</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nc">Either</span><span class="o">.</span><span class="n">catchOnly</span><span class="o">[</span><span class="kt">NumberFormatException</span><span class="o">](</span><span class="n">s</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
+
+<span class="k">def</span> <span class="n">parseIntValidated</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidatedNel</span><span class="o">[</span><span class="kt">NumberFormatException</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nc">Validated</span><span class="o">.</span><span class="n">catchOnly</span><span class="o">[</span><span class="kt">NumberFormatException</span><span class="o">](</span><span class="n">s</span><span class="o">.</span><span class="n">toInt</span><span class="o">).</span><span class="n">toValidatedNel</span>
+</code></pre>
+</div>
+
+<p>Examples.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">x1</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"1"</span><span class="o">,</span> <span class="s">"2"</span><span class="o">,</span> <span class="s">"3"</span><span class="o">).</span><span class="n">traverseU</span><span class="o">(</span><span class="n">parseIntEither</span><span class="o">)</span>
+<span class="c1">// x1: scala.util.Either[NumberFormatException,List[Int]] = Right(List(1, 2, 3))
+</span>
+<span class="k">val</span> <span class="n">x2</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"1"</span><span class="o">,</span> <span class="s">"abc"</span><span class="o">,</span> <span class="s">"3"</span><span class="o">).</span><span class="n">traverseU</span><span class="o">(</span><span class="n">parseIntEither</span><span class="o">)</span>
+<span class="c1">// x2: scala.util.Either[NumberFormatException,List[Int]] = Left(java.lang.NumberFormatException: For input string: "abc")
+</span>
+<span class="k">val</span> <span class="n">x3</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"1"</span><span class="o">,</span> <span class="s">"abc"</span><span class="o">,</span> <span class="s">"def"</span><span class="o">).</span><span class="n">traverseU</span><span class="o">(</span><span class="n">parseIntEither</span><span class="o">)</span>
+<span class="c1">// x3: scala.util.Either[NumberFormatException,List[Int]] = Left(java.lang.NumberFormatException: For input string: "abc")
+</span>
+<span class="k">val</span> <span class="n">v1</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"1"</span><span class="o">,</span> <span class="s">"2"</span><span class="o">,</span> <span class="s">"3"</span><span class="o">).</span><span class="n">traverseU</span><span class="o">(</span><span class="n">parseIntValidated</span><span class="o">)</span>
+<span class="c1">// v1: cats.data.Validated[cats.data.NonEmptyList[NumberFormatException],List[Int]] = Valid(List(1, 2, 3))
+</span>
+<span class="k">val</span> <span class="n">v2</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"1"</span><span class="o">,</span> <span class="s">"abc"</span><span class="o">,</span> <span class="s">"3"</span><span class="o">).</span><span class="n">traverseU</span><span class="o">(</span><span class="n">parseIntValidated</span><span class="o">)</span>
+<span class="c1">// v2: cats.data.Validated[cats.data.NonEmptyList[NumberFormatException],List[Int]] = Invalid(NonEmptyList(java.lang.NumberFormatException: For input string: "abc"))
+</span>
+<span class="k">val</span> <span class="n">v3</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"1"</span><span class="o">,</span> <span class="s">"abc"</span><span class="o">,</span> <span class="s">"def"</span><span class="o">).</span><span class="n">traverseU</span><span class="o">(</span><span class="n">parseIntValidated</span><span class="o">)</span>
+<span class="c1">// v3: cats.data.Validated[cats.data.NonEmptyList[NumberFormatException],List[Int]] = Invalid(NonEmptyList(java.lang.NumberFormatException: For input string: "abc", java.lang.NumberFormatException: For input string: "def"))
+</span></code></pre>
+</div>
+
+<p>Notice that in the <code class="highlighter-rouge">Either</code> case, should any string fail to parse the entire traversal
+is considered a failure. Moreover, once it hits its first bad parse, it will not
+attempt to parse any others down the line (similar behavior would be found with
+using <code class="highlighter-rouge">Option</code> as the effect). Contrast this with <code class="highlighter-rouge">Validated</code> where even
+if one bad parse is hit, it will continue trying to parse the others, accumulating
+any and all errors as it goes. The behavior of traversal is closely tied with the
+<code class="highlighter-rouge">Applicative</code> behavior of the data type.</p>
+
+<p>Going back to our <code class="highlighter-rouge">Future</code> example, we can write an <code class="highlighter-rouge">Applicative</code> instance for
+<code class="highlighter-rouge">Future</code> that runs each <code class="highlighter-rouge">Future</code> concurrently. Then when we traverse a <code class="highlighter-rouge">List[A]</code>
+with an <code class="highlighter-rouge">A =&gt; Future[B]</code>, we can imagine the traversal as a scatter-gather.
+Each <code class="highlighter-rouge">A</code> creates a concurrent computation that will produce a <code class="highlighter-rouge">B</code> (the scatter),
+and as the <code class="highlighter-rouge">Future</code>s complete they will be gathered back into a <code class="highlighter-rouge">List</code>.</p>
+
+<h3 id="playing-with-reader">Playing with <code class="highlighter-rouge">Reader</code></h3>
+<p>Another interesting effect we can use is <code class="highlighter-rouge">Reader</code>. Recall that a <code class="highlighter-rouge">Reader[E, A]</code> is
+a type alias for <code class="highlighter-rouge">Kleisli[Id, E, A]</code> which is a wrapper around <code class="highlighter-rouge">E =&gt; A</code>.</p>
+
+<p>If we fix <code class="highlighter-rouge">E</code> to be some sort of environment or configuration, we can use the
+<code class="highlighter-rouge">Reader</code> applicative in our traverse.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Reader</span>
+
+<span class="k">trait</span> <span class="nc">Context</span>
+<span class="k">trait</span> <span class="nc">Topic</span>
+<span class="k">trait</span> <span class="nc">Result</span>
+
+<span class="k">type</span> <span class="kt">Job</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Reader</span><span class="o">[</span><span class="kt">Context</span>, <span class="kt">A</span><span class="o">]</span>
+
+<span class="k">def</span> <span class="n">processTopic</span><span class="o">(</span><span class="n">topic</span><span class="k">:</span> <span class="kt">Topic</span><span class="o">)</span><span class="k">:</span> <span class="kt">Job</span><span class="o">[</span><span class="kt">Result</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+</code></pre>
+</div>
+
+<p>We can imagine we have a data pipeline that processes a bunch of data, each piece of data
+being categorized by a topic. Given a specific topic, we produce a <code class="highlighter-rouge">Job</code> that processes
+that topic. (Note that since a <code class="highlighter-rouge">Job</code> is just a <code class="highlighter-rouge">Reader</code>/<code class="highlighter-rouge">Kleisli</code>, one could write many small
+<code class="highlighter-rouge">Job</code>s and compose them together into one <code class="highlighter-rouge">Job</code> that is used/returned by <code class="highlighter-rouge">processTopic</code>.)</p>
+
+<p>Corresponding to our bunches of data are bunches of topics, a <code class="highlighter-rouge">List[Topic]</code> if you will.
+Since <code class="highlighter-rouge">Reader</code> has an <code class="highlighter-rouge">Applicative</code> instance, we can <code class="highlighter-rouge">traverse</code> over this list with <code class="highlighter-rouge">processTopic</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">processTopics</span><span class="o">(</span><span class="n">topics</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Topic</span><span class="o">])</span><span class="k">:</span> <span class="kt">Job</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Result</span><span class="o">]]</span> <span class="k">=</span> 
+  <span class="n">topics</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">processTopic</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>Note the nice return type - <code class="highlighter-rouge">Job[List[Result]]</code>. We now have one aggregate <code class="highlighter-rouge">Job</code> that when run,
+will go through each topic and run the topic-specific job, collecting results as it goes.
+We say “when run” because a <code class="highlighter-rouge">Job</code> is some function that requires a <code class="highlighter-rouge">Context</code> before producing
+the value we want.</p>
+
+<p>One example of a “context” can be found in the <a href="http://spark.apache.org/">Spark</a> project. In
+Spark, information needed to run a Spark job (where the master node is, memory allocated, etc.)
+resides in a <code class="highlighter-rouge">SparkContext</code>. Going back to the above example, we can see how one may define
+topic-specific Spark jobs (<code class="highlighter-rouge">type Job[A] = Reader[SparkContext, A]</code>) and then run several
+Spark jobs on a collection of topics via <code class="highlighter-rouge">traverse</code>. We then get back a <code class="highlighter-rouge">Job[List[Result]]</code>,
+which is equivalent to <code class="highlighter-rouge">SparkContext =&gt; List[Result]</code>. When finally passed a <code class="highlighter-rouge">SparkContext</code>,
+we can run the job and get our results back.</p>
+
+<p>Moreover, the fact that our aggregate job is not tied to any specific <code class="highlighter-rouge">SparkContext</code> allows us
+to pass in a <code class="highlighter-rouge">SparkContext</code> pointing to a production cluster, or (using the exact same job) pass
+in a test <code class="highlighter-rouge">SparkContext</code> that just runs locally across threads. This makes testing our large
+job nice and easy.</p>
+
+<p>Finally, this encoding ensures that all the jobs for each topic run on the exact same cluster.
+At no point do we manually pass in or thread a <code class="highlighter-rouge">SparkContext</code> through - that is taken care for us
+by the (applicative) effect of <code class="highlighter-rouge">Reader</code> and therefore by <code class="highlighter-rouge">traverse</code>.</p>
+
+<h2 id="sequencing">Sequencing</h2>
+<p>Sometimes you may find yourself with a collection of data, each of which is already in an effect,
+for instance a <code class="highlighter-rouge">List[Option[A]]</code>. To make this easier to work with, you want a <code class="highlighter-rouge">Option[List[A]]</code>.
+Given <code class="highlighter-rouge">Option</code> has an <code class="highlighter-rouge">Applicative</code> instance, we can traverse over the list with the identity function.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="c1">// import cats.implicits._
+</span>
+<span class="k">val</span> <span class="n">l1</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">2</span><span class="o">),</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">3</span><span class="o">)).</span><span class="n">traverse</span><span class="o">(</span><span class="n">identity</span><span class="o">)</span>
+<span class="c1">// l1: Option[List[Int]] = Some(List(1, 2, 3))
+</span>
+<span class="k">val</span> <span class="n">l2</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">None</span><span class="o">,</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">3</span><span class="o">)).</span><span class="n">traverse</span><span class="o">(</span><span class="n">identity</span><span class="o">)</span>
+<span class="c1">// l2: Option[List[Int]] = None
+</span></code></pre>
+</div>
+
+<p><code class="highlighter-rouge">Traverse</code> provides a convenience method <code class="highlighter-rouge">sequence</code> that does exactly this.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">l1</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">2</span><span class="o">),</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">3</span><span class="o">)).</span><span class="n">sequence</span>
+<span class="c1">// l1: Option[List[Int]] = Some(List(1, 2, 3))
+</span>
+<span class="k">val</span> <span class="n">l2</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">None</span><span class="o">,</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">3</span><span class="o">)).</span><span class="n">sequence</span>
+<span class="c1">// l2: Option[List[Int]] = None
+</span></code></pre>
+</div>
+
+<h2 id="traversing-for-effect">Traversing for effect</h2>
+<p>Sometimes our effectful functions return a <code class="highlighter-rouge">Unit</code> value in cases where there is no interesting value
+to return (e.g. writing to some sort of store).</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Data</span>
+<span class="k">def</span> <span class="n">writeToStore</span><span class="o">(</span><span class="n">data</span><span class="k">:</span> <span class="kt">Data</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+</code></pre>
+</div>
+
+<p>If we traverse using this, we end up with a funny type.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
+
+<span class="k">def</span> <span class="n">writeManyToStore</span><span class="o">(</span><span class="n">data</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Data</span><span class="o">])</span> <span class="k">=</span>
+  <span class="n">data</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">writeToStore</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>We end up with a <code class="highlighter-rouge">Future[List[Unit]]</code>! A <code class="highlighter-rouge">List[Unit]</code> is not of any use to us, and communicates the
+same amount of information as a single <code class="highlighter-rouge">Unit</code> does.</p>
+
+<p>Traversing solely for the sake of the effect (ignoring any values that may be produced, <code class="highlighter-rouge">Unit</code> or otherwise)
+is common, so <code class="highlighter-rouge">Foldable</code> (superclass of <code class="highlighter-rouge">Traverse</code>) provides <code class="highlighter-rouge">traverse_</code> and <code class="highlighter-rouge">sequence_</code> methods that do the
+same thing as <code class="highlighter-rouge">traverse</code> and <code class="highlighter-rouge">sequence</code> but ignores any value produced along the way, returning <code class="highlighter-rouge">Unit</code> at the end.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+
+<span class="k">def</span> <span class="n">writeManyToStore</span><span class="o">(</span><span class="n">data</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Data</span><span class="o">])</span> <span class="k">=</span> 
+  <span class="n">data</span><span class="o">.</span><span class="n">traverse_</span><span class="o">(</span><span class="n">writeToStore</span><span class="o">)</span>
+
+<span class="c1">// Int values are ignored with traverse_
+</span><span class="k">def</span> <span class="n">writeToStoreV2</span><span class="o">(</span><span class="n">data</span><span class="k">:</span> <span class="kt">Data</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> 
+  <span class="o">???</span>
+
+<span class="k">def</span> <span class="n">writeManyToStoreV2</span><span class="o">(</span><span class="n">data</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Data</span><span class="o">])</span> <span class="k">=</span> 
+  <span class="n">data</span><span class="o">.</span><span class="n">traverse_</span><span class="o">(</span><span class="n">writeToStoreV2</span><span class="o">)</span>
+</code></pre>
+</div>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/scala.min.js"></script><script src="/cats/js/main.js"></script></body></html>

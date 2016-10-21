@@ -110,6 +110,23 @@
       </a>
     </span>
       
+    </li><li name="cats.data.EitherTFunctions.FromOptionPartiallyApplied" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FromOptionPartiallyApplied[F[_]]extendsAnyRef"></a>
+      <a id="FromOptionPartiallyApplied[F[_]]:FromOptionPartiallyApplied[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="EitherTFunctions$FromOptionPartiallyApplied.html"><span class="name">FromOptionPartiallyApplied</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherTFunctions@FromOptionPartiallyApplied[F[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
 
@@ -287,6 +304,30 @@ scala&gt; <span class="kw">val</span> t: Either[<span class="std">String</span>,
 scala&gt; EitherT.fromEither[<span class="std">Option</span>](t)
 res0: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Right(<span class="num">3</span>)))</pre><p>The reason for the indirection is to emulate currying type parameters.
 </p></div></div>
+    </li><li name="cats.data.EitherTFunctions#fromOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromOption[F[_]]:EitherTFunctions.this.FromOptionPartiallyApplied[F]"></a>
+      <a id="fromOption[F[_]]:FromOptionPartiallyApplied[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromOption</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="EitherTFunctions$FromOptionPartiallyApplied.html" class="extype" name="cats.data.EitherTFunctions.FromOptionPartiallyApplied">FromOptionPartiallyApplied</a>[<span class="extype" name="cats.data.EitherTFunctions.fromOption.F">F</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherTFunctions@fromOption[F[_]]:EitherTFunctions.this.FromOptionPartiallyApplied[F]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Transforms an <code>Option</code> into an <code>EitherT</code>, lifted into the specified <code>Applicative</code> and using
+ the second argument if the <code>Option</code> is a <code>None</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transforms an <code>Option</code> into an <code>EitherT</code>, lifted into the specified <code>Applicative</code> and using
+ the second argument if the <code>Option</code> is a <code>None</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> o: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
+scala&gt; EitherT.fromOption[<span class="std">List</span>](o, <span class="lit">"Answer not known."</span>)
+res0: EitherT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span>]  = EitherT(<span class="std">List</span>(Left(Answer not known.)))
+scala&gt; EitherT.fromOption[<span class="std">List</span>](<span class="std">Some</span>(<span class="num">42</span>), <span class="lit">"Answer not known."</span>)
+res1: EitherT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">List</span>(Right(<span class="num">42</span>)))</pre></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>

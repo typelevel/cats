@@ -253,8 +253,8 @@ res0: Either[NumberFormatException, <span class="std">Int</span>] = Left(java.la
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Converts an <code>Option[B]</code> to an <code>A Xor B</code>, where the provided <code>ifNone</code> values is returned on
-the left of the <code>Xor</code> when the specified <code>Option</code> is <code>None</code>.</p>
+      <p class="shortcomment cmt">Converts an <code>Option[B]</code> to an <code>Either[A, B]</code>, where the provided <code>ifNone</code> values is returned on
+the left of the <code>Either</code> when the specified <code>Option</code> is <code>None</code>.</p>
     </li><li name="cats.syntax.EitherObjectOps#fromTry" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="fromTry[A](t:scala.util.Try[A]):Either[Throwable,A]"></a>
       <a id="fromTry[A](Try[A]):Either[Throwable,A]"></a>
@@ -271,7 +271,7 @@ the left of the <code>Xor</code> when the specified <code>Option</code> is <code
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Converts a <code>Try[A]</code> to a <code>Throwable Xor A</code>.</p>
+      <p class="shortcomment cmt">Converts a <code>Try[A]</code> to a <code>Either[Throwable, A]</code>.</p>
     </li><li name="scala.AnyVal#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_&lt;:AnyVal]"></a>
       <a id="getClass():Class[_&lt;:AnyVal]"></a>

@@ -1,0 +1,113 @@
+<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/atom-one-light.min.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper" style="background:url('/cats/img/sidebar_brand.png') no-repeat"><span>Cats</span></div></a></li> </li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="contravariant">Contravariant</h1>
+
+<p>The <code class="highlighter-rouge">Contravariant</code> type class is for functors that define a <code class="highlighter-rouge">contramap</code>
+function with the following type:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">contramap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
+</code></pre>
+</div>
+
+<p>It looks like regular (also called <code class="highlighter-rouge">Covariant</code>) <a href="functor.html"><code class="highlighter-rouge">Functor</code></a>’s <code class="highlighter-rouge">map</code>,
+but with the <code class="highlighter-rouge">f</code> transformation reversed.</p>
+
+<p>Generally speaking, if you have some context <code class="highlighter-rouge">F[A]</code> for type <code class="highlighter-rouge">A</code>,
+and you can get an <code class="highlighter-rouge">A</code> value out of a <code class="highlighter-rouge">B</code> value — <code class="highlighter-rouge">Contravariant</code> allows you to get the <code class="highlighter-rouge">F[B]</code> context for <code class="highlighter-rouge">B</code>.</p>
+
+<p>Examples of <code class="highlighter-rouge">Contravariant</code> instances are <a href="show.html"><code class="highlighter-rouge">Show</code></a> and <code class="highlighter-rouge">scala.math.Ordering</code> (along with <code class="highlighter-rouge">cats.kernel.Order</code>).</p>
+
+<h2 id="contravariant-instance-for-show">Contravariant instance for Show.</h2>
+
+<p>Say we have class <code class="highlighter-rouge">Money</code> with a <code class="highlighter-rouge">Show</code> instance, and <code class="highlighter-rouge">Salary</code> class.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<span class="k">import</span> <span class="nn">cats.functor._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Money</span><span class="o">(</span><span class="n">amount</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Salary</span><span class="o">(</span><span class="n">size</span><span class="k">:</span> <span class="kt">Money</span><span class="o">)</span>
+
+<span class="k">implicit</span> <span class="k">val</span> <span class="n">showMoney</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Money</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Show</span><span class="o">.</span><span class="n">show</span><span class="o">(</span><span class="n">m</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="s">"$$${m.amount}"</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>If we want to show a <code class="highlighter-rouge">Salary</code> instance, we can just convert it to a <code class="highlighter-rouge">Money</code> instance and show it instead.</p>
+
+<p>Let’s use <code class="highlighter-rouge">Show</code>’s <code class="highlighter-rouge">Contravariant</code>:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">showSalary</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Salary</span><span class="o">]</span> <span class="k">=</span> <span class="n">showMoney</span><span class="o">.</span><span class="n">contramap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">size</span><span class="o">)</span>
+<span class="c1">// showSalary: cats.Show[Salary] = cats.Show$$anon$2@4544851e
+</span>
+<span class="nc">Salary</span><span class="o">(</span><span class="nc">Money</span><span class="o">(</span><span class="mi">1000</span><span class="o">)).</span><span class="n">show</span>
+<span class="c1">// res2: String = $1000
+</span></code></pre>
+</div>
+
+<h2 id="contravariant-instance-for-scalamathordering">Contravariant instance for scala.math.Ordering.</h2>
+
+<p><code class="highlighter-rouge">Show</code> example is trivial and quite far-fetched, let’s see how <code class="highlighter-rouge">Contravariant</code> can help with orderings.</p>
+
+<p><code class="highlighter-rouge">scala.math.Ordering</code> type class defines comparison operations, e.g. <code class="highlighter-rouge">compare</code>:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Ordering</span><span class="o">.</span><span class="nc">Int</span><span class="o">.</span><span class="n">compare</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span>
+<span class="c1">// res3: Int = 1
+</span>
+<span class="nc">Ordering</span><span class="o">.</span><span class="nc">Int</span><span class="o">.</span><span class="n">compare</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
+<span class="c1">// res4: Int = -1
+</span></code></pre>
+</div>
+
+<p>There’s also a method, called <code class="highlighter-rouge">by</code>, that creates new <code class="highlighter-rouge">Orderings</code> out of existing ones:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">by</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">S</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=&gt;</span> <span class="n">S</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">ord</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">S</span><span class="o">])</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+</code></pre>
+</div>
+
+<p>In fact, it is just <code class="highlighter-rouge">contramap</code>, defined in a slightly different way! We supply <code class="highlighter-rouge">T =&gt; S</code> to receive <code class="highlighter-rouge">F[S] =&gt; F[T]</code> back.</p>
+
+<p>So let’s use it in our advantage and get <code class="highlighter-rouge">Ordering[Money]</code> for free:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// we need this for `&lt;` to work
+</span><span class="k">import</span> <span class="nn">scala.math.Ordered._</span>
+<span class="c1">// import scala.math.Ordered._
+</span>
+<span class="k">implicit</span> <span class="k">val</span> <span class="n">moneyOrdering</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">Money</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ordering</span><span class="o">.</span><span class="n">by</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">amount</span><span class="o">)</span>
+<span class="c1">// moneyOrdering: Ordering[Money] = scala.math.Ordering$$anon$9@2106f067
+</span>
+<span class="nc">Money</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span> <span class="o">&lt;</span> <span class="nc">Money</span><span class="o">(</span><span class="mi">200</span><span class="o">)</span>
+<span class="c1">// res6: Boolean = true
+</span></code></pre>
+</div>
+
+<h2 id="subtyping">Subtyping</h2>
+
+<p>Contravariant functors have a natural relationship with subtyping, dual to that of covariant functors:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span>
+<span class="c1">// defined class A
+</span>
+<span class="k">class</span> <span class="nc">B</span> <span class="k">extends</span> <span class="n">A</span>
+<span class="c1">// defined class B
+</span>
+<span class="k">val</span> <span class="n">b</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span>
+<span class="c1">// b: B = B@74c325cd
+</span>
+<span class="k">val</span> <span class="n">a</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="n">b</span>
+<span class="c1">// a: A = B@74c325cd
+</span>
+<span class="k">val</span> <span class="n">showA</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Show</span><span class="o">.</span><span class="n">show</span><span class="o">(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="s">"a!"</span><span class="o">)</span>
+<span class="c1">// showA: cats.Show[A] = cats.Show$$anon$2@65ed6027
+</span>
+<span class="k">val</span> <span class="n">showB1</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">showA</span><span class="o">.</span><span class="n">contramap</span><span class="o">(</span><span class="n">b</span> <span class="k">=&gt;</span> <span class="n">b</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span>
+<span class="c1">// showB1: cats.Show[B] = cats.Show$$anon$2@62270d9c
+</span>
+<span class="k">val</span> <span class="n">showB2</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">showA</span><span class="o">.</span><span class="n">contramap</span><span class="o">(</span><span class="n">identity</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span>
+<span class="c1">// showB2: cats.Show[B] = cats.Show$$anon$2@27a6492e
+</span>
+<span class="k">val</span> <span class="n">showB3</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Contravariant</span><span class="o">[</span><span class="kt">Show</span><span class="o">].</span><span class="n">narrow</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">showA</span><span class="o">)</span>
+<span class="c1">// showB3: cats.Show[B] = cats.Show$$anon$2@65ed6027
+</span></code></pre>
+</div>
+
+<p>Subtyping relationships are “lifted backwards” by contravariant functors, such that if <code class="highlighter-rouge">F</code> is a
+lawful contravariant functor and <code class="highlighter-rouge">A &lt;: B</code> then <code class="highlighter-rouge">F[B] &lt;: F[A]</code>, which is expressed by <code class="highlighter-rouge">Contravariant.narrow</code>.</p>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/scala.min.js"></script><script src="/cats/js/main.js"></script></body></html>

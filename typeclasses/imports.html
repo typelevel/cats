@@ -1,0 +1,45 @@
+<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/atom-one-light.min.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper" style="background:url('/cats/img/sidebar_brand.png') no-repeat"><span>Cats</span></div></a></li> </li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="imports">Imports</h1>
+
+<p>The easiest approach to cats imports is to import everything that’s commonly needed:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<span class="k">import</span> <span class="nn">cats.data._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">cats._</code> import brings in quite a few <a href="http://typelevel.org/cats/typeclasses.html">type classes</a> (similar to interfaces) such as <a href="http://typelevel.org/cats/tut/monad.html">Monad</a>, <a href="http://typelevel.org/cats/tut/semigroup.html">Semigroup</a>, and <a href="http://typelevel.org/cats/tut/foldable.html">Foldable</a>. Instead of the entire <code class="highlighter-rouge">cats</code> package, you can import only the types that you need, for example:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monad</span>
+<span class="k">import</span> <span class="nn">cats.Semigroup</span>
+<span class="k">import</span> <span class="nn">cats.Foldable</span>
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">cats.data._</code>, import brings in data structures such as <a href="http://typelevel.org/cats/tut/validated.html">Validated</a> and <a href="http://typelevel.org/cats/tut/state.html">State</a>. Instead of the entire <code class="highlighter-rouge">cats.data</code> package, you can import only the types that you need, for example:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Validated</span>
+<span class="k">import</span> <span class="nn">cats.data.State</span>
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">cats.implicits._</code> import does a couple of things. Firstly, it brings in implicit type class instances for standard library types - so after this import you will have <code class="highlighter-rouge">Monad[List]</code> and <code class="highlighter-rouge">Semigroup[Int]</code> instances in implicit scope. Secondly, it adds syntax enrichment onto certain types to provide some handy methods such as right-biased <code class="highlighter-rouge">Either</code> combinators:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// cats adds right-biased combinators to the standard library's Either
+</span><span class="k">val</span> <span class="n">e</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
+<span class="c1">// e: Either[String,Int] = Right(3)
+</span>
+<span class="n">e</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+<span class="c1">// res1: Either[String,Int] = Right(4)
+</span>
+<span class="c1">// cats adds an orEmpty method to the standard library's Option
+</span><span class="k">val</span> <span class="n">o</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
+<span class="c1">// o: Option[String] = None
+</span>
+<span class="n">o</span><span class="o">.</span><span class="n">orEmpty</span>
+<span class="c1">// res3: String = ""
+</span></code></pre>
+</div>
+
+<p><strong>Note</strong>: if you import <code class="highlighter-rouge">cats.implicits._</code> (the preferred method), you should <em>not</em> also use imports like <code class="highlighter-rouge">cats.syntax.option._</code> or <code class="highlighter-rouge">cats.instances.either._</code>. This can result in ambiguous implicit values that cause bewildering compile errors.</p>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/scala.min.js"></script><script src="/cats/js/main.js"></script></body></html>

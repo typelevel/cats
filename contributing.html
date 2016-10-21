@@ -1,0 +1,291 @@
+<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/atom-one-light.min.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body><header id="site-header"><div class="navbar-wrapper navbar-inverse"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/cats/" class="brand"><div class="icon-wrapper" style="background:url('/cats/img/navbar_brand.png') no-repeat"><span>Cats</span></div></a></div><nav class="text-right"><ul class=""><li><a href="https://github.com/typelevel/cats"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li><li><a href="api"><i class="fa fa-file-text"></i><span class="hidden-xs">Documentation</span></a></li></ul></nav></div></div><div class="jumbotron" style="background-image:url('/cats/img/jumbotron_pattern.png')"></div><div><ul class="horizontalNav">                                                           <li><a class="" href="/cats/typeclasses.html">Type Classes</a></li>  <li><a class="" href="/cats/datatypes.html">Data Types</a></li>  <li><a class="" href="/cats/resources_for_learners.html">Resources for Learners</a></li>  <li><a class="" href="/cats/faq.html">FAQ</a></li>  <li><a class=" active " href="/cats/contributing.html">Contributing</a></li>  <li><a class="" href="/cats/colophon.html">Colophon</a></li> </ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><h1 id="contributor-guide">Contributor guide</h1>
+
+<h2 id="about-this-document">About this document</h2>
+
+<p>This guide is for people who would like to be involved in building Cats.</p>
+
+<p>This guide assumes that you have some experience doing Scala
+development. If you get stuck on any of these steps, please feel free
+to <a href="#getting-in-touch">ask for help</a>.</p>
+
+<h2 id="how-can-i-help">How can I help?</h2>
+
+<p>Cats follows a standard
+<a href="https://help.github.com/articles/using-pull-requests/">fork and pull</a>
+model for contributions via GitHub pull requests.</p>
+
+<p>Below is a list of the steps that might be involved in an ideal
+contribution. If you don’t have the time to go through every step,
+contribute what you can, and someone else will probably be happy to
+follow up with any polishing that may need to be done.</p>
+
+<p>If you want to touch up some documentation or fix typos, feel free to
+skip these steps and jump straight to submitting a pull request.</p>
+
+<ol>
+  <li><a href="#find-something-that-belongs-in-cats">Find something that belongs in cats</a></li>
+  <li><a href="#let-us-know-you-are-working-on-it">Let us know you are working on it</a></li>
+  <li><a href="#build-project">Build the project</a></li>
+  <li><a href="#write-code">Implement your contribution</a></li>
+  <li><a href="#write-tests">Write tests</a></li>
+  <li><a href="#write-documentation">Write documentation</a></li>
+  <li><a href="#write-examples">Write examples</a></li>
+  <li><a href="#submit-a-pull-request">Submit pull request</a></li>
+</ol>
+
+<h3 id="find-something-that-belongs-in-cats">Find something that belongs in cats</h3>
+
+<p>Looking for a way that you can help out? Check out our
+<a href="https://waffle.io/typelevel/cats">Waffle.io page</a>. Choose a card from the
+“Ready” column. Before you start working on it, make sure that it’s
+not already assigned to someone and that nobody has left a comment
+saying that they are working on it!</p>
+
+<p>(Of course, you can also comment on an issue someone is already
+working on and offer to collaborate.)</p>
+
+<p>Have an idea for something new? That’s great! We recommend that you
+make sure it belongs in cats before you put effort into creating a
+pull request. The preferred ways to do that are to either:</p>
+
+<ul>
+  <li><a href="https://github.com/typelevel/cats/issues/new">create a GitHub issue</a>
+describing your idea.</li>
+  <li>get feedback in the <a href="https://gitter.im/typelevel/cats">cats Gitter room</a>.</li>
+</ul>
+
+<p>Things that belong in cats generally have the following characteristics:</p>
+
+<ul>
+  <li>Their behavior is governed by well-defined <a href="laws">laws</a>.</li>
+  <li>They provide general abstractions.</li>
+</ul>
+
+<p>Laws help keep types consistent, and remove ambiguity or sensitivity
+about how particular instances can behave. We’ve found that types with
+laws are often more useful than <em>lawless</em> types</p>
+
+<p>(In some cases, <em>lawless</em> type classes and instances are useful. We
+intend to support some of these in a future module.)</p>
+
+<p>By staying general, Cats’ abstractions are widely-applicable, and not
+tied to particular libraries or strategies. Rather than being a
+library to work with databases, HTTP requests, etc, Cats provides
+abstractions used to build those libraries.</p>
+
+<p>Cats (and especially <code class="highlighter-rouge">cats-core</code>) is intended to be lean and modular.
+Some great ideas are not a great fit, either due to their size or
+their complexity. In these cases, creating your own library that
+depends on Cats is probably the best plan.</p>
+
+<h3 id="let-us-know-you-are-working-on-it">Let us know you are working on it</h3>
+
+<p>If there is already a GitHub issue for the task you are working on,
+leave a comment to let people know that you are working on it. If
+there isn’t already an issue and it is a non-trivial task, it’s a good
+idea to create one (and note that you’re working on it). This prevents
+contributors from duplicating effort.</p>
+
+<h3 id="build-the-project">Build the project</h3>
+
+<p>First you’ll need to checkout a local copy of the code base:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>git clone git@github.com:typelevel/cats.git
+</code></pre>
+</div>
+
+<p>To build Cats you should have
+<a href="http://www.scala-sbt.org/0.13/tutorial/Setup.html">sbt</a> and <a href="https://nodejs.org/">Node.js</a>
+ installed. Run <code class="highlighter-rouge">sbt</code>, and then use any of the following commands:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">compile</code>: compile the code</li>
+  <li><code class="highlighter-rouge">console</code>: launch a REPL</li>
+  <li><code class="highlighter-rouge">test</code>: run the tests</li>
+  <li><code class="highlighter-rouge">unidoc</code>: generate the documentation</li>
+  <li><code class="highlighter-rouge">scalastyle</code>: run the style-checker on the code</li>
+  <li><code class="highlighter-rouge">validate</code>: run tests, style-checker, and doc generation</li>
+</ul>
+
+<h4 id="scala-and-scala-js">Scala and Scala-js</h4>
+
+<p>Cats cross-compiles to both JVM and Javascript(JS). If you are not used to
+working with cross-compiling builds, the first things that you will notice is that
+builds:</p>
+
+<ul>
+  <li>Will take longer: To build JVM only, just use the <code class="highlighter-rouge">catsJVM</code>, or <code class="highlighter-rouge">catsJS</code> for</li>
+</ul>
+
+<p>JS only. And if you want the default project to be <code class="highlighter-rouge">catsJVM</code>, just copy the
+   file <code class="highlighter-rouge">scripts/sbtrc-JVM</code> to <code class="highlighter-rouge">.sbtrc</code> in the root directory.</p>
+
+<ul>
+  <li>May run out of memory: We suggest you use
+<a href="https://github.com/paulp/sbt-extras">Paul Philips’s sbt script</a> that will use the settings from Cats.</li>
+</ul>
+
+<h3 id="write-code">Write code</h3>
+
+<p>TODO</p>
+
+<p><em>Should this just link to a separate doc? This might get large.</em></p>
+
+<p>Write about implicit params as discussed in https://github.com/typelevel/cats/issues/27</p>
+
+<p>Write about type class methods on data structures as described in https://github.com/typelevel/cats/issues/25</p>
+
+<p>Write about https://github.com/typelevel/cats/pull/36#issuecomment-72892359</p>
+
+<h3 id="attributions">Attributions</h3>
+
+<p>If your contribution has been derived from or inspired by other work, please
+state this in its ScalaDoc comment and provide proper attribution. When
+possible, include the original authors’ names and a link to the original work.</p>
+
+<h3 id="write-tests">Write tests</h3>
+
+<ul>
+  <li>Tests for cats-core go into the tests module, under the <code class="highlighter-rouge">cats.tests</code> package.</li>
+  <li>Tests for additional modules, such as ‘jvm’, go into the tests directory within that module.</li>
+  <li>Cats tests should extend <code class="highlighter-rouge">CatsSuite</code>.  <code class="highlighter-rouge">CatsSuite</code> integrates <a href="http://www.scalatest.org/">ScalaTest</a>
+with <a href="https://github.com/typelevel/discipline">Discipline</a> for law checking, and imports all syntax and standard instances for convenience.</li>
+  <li>The first parameter to the <code class="highlighter-rouge">checkAll</code> method provided by
+ <a href="https://github.com/typelevel/discipline">Discipline</a>, is the name of the test and will be output to the
+ console as part of the test execution. By convention:</li>
+  <li>When checking laws, this parameter generally takes a form that describes the data type being tested.
+ For example the name <em>“Validated[String, Int]”</em> might be used when testing a type class instance
+ that the <code class="highlighter-rouge">Validated</code> data type supports.</li>
+  <li>An exception to this is serializability tests, where the type class name is also included in the name.
+ For example, in the case of <code class="highlighter-rouge">Validated</code>, the serializability test would take the form,
+ <em>“Applicative[Validated[String, Int]”</em>, to indicate that this test is verifying that the <code class="highlighter-rouge">Applicative</code>
+ type class instance for the <code class="highlighter-rouge">Validated</code> data type is serializable.</li>
+  <li>This convention helps to ensure clear and easy to understand output, with minimal duplication in the output.</li>
+  <li>It is also a goal that, for every combination of data type and supported type class instance:</li>
+  <li>Appropriate law checks for that combination are included to ensure that the instance meets the laws for that type class.</li>
+  <li>A serializability test for that combination is also included, such that we know that frameworks which
+ rely heavily on serialization, such as <code class="highlighter-rouge">Spark</code>, will have strong compatibility with <code class="highlighter-rouge">cats</code>.</li>
+  <li>Note that custom serialization tests are not required for instances of type classes which come from
+ <code class="highlighter-rouge">algebra</code>, such as <code class="highlighter-rouge">Monoid</code>, because the <code class="highlighter-rouge">algebra</code> laws include a test for serialization.</li>
+</ul>
+
+<p>TODO</p>
+
+<p>Write about checking laws</p>
+
+<h2 id="contributing-documentation">Contributing documentation</h2>
+
+<h3 id="source-for-the-documentation">source for the documentation</h3>
+<p>The documentation for this website is stored alongside the source, in the <a href="https://github.com/typelevel/cats/tree/master/docs">docs subproject</a>.</p>
+
+<ul>
+  <li>The source for the static pages is in <code class="highlighter-rouge">docs/src/site</code></li>
+  <li>The source for the tut compiled pages is in <code class="highlighter-rouge">docs/src/main/tut</code></li>
+</ul>
+
+<h3 id="generating-the-site">Generating the Site</h3>
+
+<p>run <code class="highlighter-rouge">sbt docs/makeMicrosite</code></p>
+
+<h3 id="previewing-the-site">Previewing the site</h3>
+
+<ol>
+  <li>
+    <p>Install jekyll locally, depending on your platform, you might do this with:</p>
+
+    <p>yum install jekyll</p>
+
+    <p>apt-get install jekyll</p>
+
+    <p>gem install jekyll</p>
+  </li>
+  <li>
+    <p>In a shell, navigate to the generated site directory in <code class="highlighter-rouge">docs/target/site</code></p>
+  </li>
+  <li>
+    <p>Start jekyll with <code class="highlighter-rouge">jekyll serve</code></p>
+  </li>
+  <li>
+    <p>Navigate to http://localhost:4000/cats/ in your browser</p>
+  </li>
+  <li>
+    <p>Make changes to your site, and run <code class="highlighter-rouge">sbt docs/makeMicrosite</code> to regenerate the site. The changes should be reflected as soon as you run <code class="highlighter-rouge">makeMicrosite</code>.</p>
+  </li>
+</ol>
+
+<h3 id="compiler-verified-documentation">Compiler verified documentation</h3>
+
+<p>We use <a href="https://github.com/tpolecat/tut">tut</a> to compile source code
+which appears in the documentation, this ensures us that our examples
+should always compile, and our documentation has a better chance of
+staying up-to-date.</p>
+
+<h3 id="publishing-the-site-to-github">Publishing the site to github.</h3>
+
+<p>The <code class="highlighter-rouge">git.remoteRepo</code> variable in <code class="highlighter-rouge">docs/build.sbt</code> controls which
+repository you will push to. Ensure that this variable points to a
+repo you wish to push to, and that it is one for which you have push
+access, then run <code class="highlighter-rouge">sbt ghpagesPushSite</code></p>
+
+<h3 id="write-examples">Write examples</h3>
+
+<p>TODO</p>
+
+<h3 id="submit-a-pull-request">Submit a pull request</h3>
+
+<p>Before you open a pull request, you should make sure that <code class="highlighter-rouge">sbt
+validate</code> runs successfully. Travis will run this as well, but it may
+save you some time to be alerted to style problems earlier.</p>
+
+<p>If your pull request addresses an existing issue, please tag that
+issue number in the body of your pull request or commit message. For
+example, if your pull request addresses issue number 52, please
+include “fixes #52”.</p>
+
+<p>If you make changes after you have opened your pull request, please
+add them as separate commits and avoid squashing or
+rebasing. Squashing and rebasing can lead to a tidier git history, but
+they can also be a hassle if somebody else has done work based on your
+branch.</p>
+
+<h2 id="how-did-we-do">How did we do?</h2>
+
+<p>Getting involved in an open source project can be tough. As a
+newcomer, you may not be familiar with coding style conventions,
+project layout, release cycles, etc. This document seeks to demystify
+the contribution process for the cats project.</p>
+
+<p>It may take a while to familiarize yourself with this document, but if
+we are doing our job right, you shouldn’t have to spend months poring
+over the project source code or lurking the
+<a href="https://gitter.im/typelevel/cats">Gitter room</a> before you feel comfortable
+contributing. In fact, if you encounter any confusion or frustration
+during the contribution process, please create a GitHub issue and
+we’ll do our best to improve the process.</p>
+
+<h2 id="getting-in-touch">Getting in touch</h2>
+
+<p>Discussion around Cats is currently happening in the
+<a href="https://gitter.im/typelevel/cats">Gitter channel</a> as well as on Github
+issue and PR pages. You can get an overview of who is working on what
+via <a href="https://waffle.io/typelevel/cats">Waffle.io</a>.</p>
+
+<p>Feel free to open an issue if you notice a bug, have an idea for a
+feature, or have a question about the code. Pull requests are also
+gladly accepted.</p>
+
+<p>People are expected to follow the
+<a href="http://typelevel.org/conduct.html">Typelevel Code of Conduct</a> when
+discussing Cats on the Github page, Gitter channel, or other
+venues.</p>
+
+<p>We hope that our community will be respectful, helpful, and kind. If
+you find yourself embroiled in a situation that becomes heated, or
+that fails to live up to our expectations, you should disengage and
+contact one of the <a href="https://github.com/typelevel/cats#maintainers">project maintainers</a>
+in private. We hope to avoid letting minor aggressions and misunderstandings
+escalate into larger problems.</p>
+
+<p>If you are being harassed, please contact one of <a href="https://github.com/typelevel/cats#maintainers">us</a>
+immediately so that we can support you.</p>
+</div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Cats is designed and developed by <a href="http://typelevel.org/cats" target="_blank">Typelevel contributors</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/typelevel/cats"><span class="fa fa-github"></span>View on Github</a></p></div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/scala.min.js"></script><script>jQuery(document).ready(function(){hljs.initHighlightingOnLoad();});</script></body></html>

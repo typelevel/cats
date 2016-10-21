@@ -1073,9 +1073,9 @@ res1: cats.data.ValidatedNel[<span class="std">String</span>,<span class="std">L
     </span>
       <p class="shortcomment cmt">Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
 <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <code>scala.util.Either</code></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+type constructor with two or more parameters such as <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
 <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <code>scala.util.Either</code></p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+type constructor with two or more parameters such as <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a></p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
 scala&gt; F.sequenceU_(<span class="std">List</span>(Either.right[<span class="std">String</span>, <span class="std">Int</span>](<span class="num">333</span>), Right(<span class="num">444</span>)))
 res0: Either[<span class="std">String</span>, <span class="std">Unit</span>] = Right(())
@@ -1262,9 +1262,9 @@ res1: Either[<span class="std">String</span>, <span class="std">List</span>[<spa
     </span>
       <p class="shortcomment cmt">Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
 <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <code>scala.util.Either</code></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
+type constructor with two or more parameters such as <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
 <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <code>scala.util.Either</code></p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+type constructor with two or more parameters such as <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a></p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): Either[<span class="std">String</span>, <span class="std">Int</span>] =
      |   <span class="kw">try</span> { Right(s.toInt) }
      |   <span class="kw">catch</span> { <span class="kw">case</span> _: NumberFormatException <span class="kw">=&gt;</span> Left(<span class="lit">"boo"</span>) }

@@ -769,32 +769,6 @@ res0: cats.data.EitherT[<span class="std">Option</span>, <span class="std">Strin
     </span>
       <p class="shortcomment cmt">Returns a <a href="../data/package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">cats.data.ValidatedNel</a> representation of this disjunction with the <code>Left</code> value
 as a single element on the <code>Invalid</code> side of the <a href="../data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">cats.data.NonEmptyList</a>.</p>
-    </li><li name="cats.syntax.EitherOps#toXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toXor:cats.data.Xor[A,B]"></a>
-      <a id="toXor:Xor[A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toXor</span><span class="result">: <a href="../data/Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.syntax.EitherOps.A">A</span>, <span class="extype" name="cats.syntax.EitherOps.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.EitherOps@toXor:cats.data.Xor[A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Convert a <code>scala.util.Either</code> into a <a href="../data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Convert a <code>scala.util.Either</code> into a <a href="../data/Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.implicits._
-
-scala&gt; <span class="kw">val</span> i: Either[<span class="std">String</span>, <span class="std">Int</span>] = Right(<span class="num">3</span>)
-scala&gt; i.toXor
-res0: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Right(<span class="num">3</span>)
-
-scala&gt; <span class="kw">val</span> s: Either[<span class="std">String</span>, <span class="std">Int</span>] = Left(<span class="lit">"error!"</span>)
-scala&gt; s.toXor
-res0: Xor[<span class="std">String</span>, <span class="std">Int</span>] = Left(error!)</pre></div></div>
     </li><li name="cats.syntax.EitherOps#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="traverse[F[_],D](f:B=&gt;F[D])(implicitF:cats.Applicative[F]):F[Either[A,D]]"></a>
       <a id="traverse[F[_],D]((B)⇒F[D])(Applicative[F]):F[Either[A,D]]"></a>

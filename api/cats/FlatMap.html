@@ -156,11 +156,7 @@ Must obey the laws defined in cats.laws.FlatMapLaws.</p></span></dd></dl><div cl
       </a>
     </span>
       <p class="shortcomment cmt">Keeps calling <code>f</code> until a <code>scala.util.Right[B]</code> is returned.</p><div class="fullcomment"><div class="comment cmt"><p>Keeps calling <code>f</code> until a <code>scala.util.Right[B]</code> is returned.</p><p>Based on Phil Freeman's
-<a href="http://functorial.com/stack-safety-for-free/index.pdf" target="_blank">Stack Safety for Free</a>.</p><p>Implementations of this method should ideally use constant stack space. If
-it is constant stack space, an instance of <code>RecursiveTailRecM[F]</code> should
-be made available.</p><p>Note, Monad subclasses can call <code>defaultTailRecM(a)(f)</code> to get an implementation
-using recursive flatMap. Such an implementation will only be stack safe if
-the Monad is trampolined.
+<a href="http://functorial.com/stack-safety-for-free/index.pdf" target="_blank">Stack Safety for Free</a>.</p><p>Implementations of this method should use constant stack space relative to <code>f</code>.
 </p></div></div>
     </li></ol>
             </div>

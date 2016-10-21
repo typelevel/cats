@@ -180,11 +180,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">Keeps calling <code>f</code> until a <code>scala.util.Right[B]</code> is returned.</p><div class="fullcomment"><div class="comment cmt"><p>Keeps calling <code>f</code> until a <code>scala.util.Right[B]</code> is returned.</p><p>Based on Phil Freeman's
-<a href="http://functorial.com/stack-safety-for-free/index.pdf" target="_blank">Stack Safety for Free</a>.</p><p>Implementations of this method should ideally use constant stack space. If
-it is constant stack space, an instance of <code>RecursiveTailRecM[F]</code> should
-be made available.</p><p>Note, Monad subclasses can call <code>defaultTailRecM(a)(f)</code> to get an implementation
-using recursive flatMap. Such an implementation will only be stack safe if
-the Monad is trampolined.
+<a href="http://functorial.com/stack-safety-for-free/index.pdf" target="_blank">Stack Safety for Free</a>.</p><p>Implementations of this method should use constant stack space relative to <code>f</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a></dd></dl></div>
     </li></ol>
             </div>
@@ -835,28 +831,6 @@ function to the value.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a></dd></dl></div>
-    </li><li name="cats.Monad#defaultTailRecM" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="defaultTailRecM[A,B](a:A)(fn:A=&gt;F[Either[A,B]]):F[B]"></a>
-      <a id="defaultTailRecM[A,B](A)((A)⇒F[Either[A,B]]):F[B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">defaultTailRecM</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.Monad.defaultTailRecM.A">A</span></span>)</span><span class="params">(<span name="fn">fn: (<span class="extype" name="cats.Monad.defaultTailRecM.A">A</span>) ⇒ <span class="extype" name="cats.MonadReader.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.Monad.defaultTailRecM.A">A</span>, <span class="extype" name="cats.Monad.defaultTailRecM.B">B</span>]]</span>)</span><span class="result">: <span class="extype" name="cats.MonadReader.F">F</span>[<span class="extype" name="cats.Monad.defaultTailRecM.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.MonadReader@defaultTailRecM[A,B](a:A)(fn:A=&gt;F[Either[A,B]]):F[B]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">This is not stack safe if the monad is not trampolined, but it
-is always lawful.</p><div class="fullcomment"><div class="comment cmt"><p>This is not stack safe if the monad is not trampolined, but it
-is always lawful. It it better if you can find a stack safe way
-to write this method (all cats types have a stack safe version
-of this). When this method is safe you can find an <code>implicit r: RecursiveTailRecM</code>.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Monad.html" class="extype" name="cats.Monad">Monad</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -1595,6 +1569,23 @@ res0: <span class="std">List</span>[(<span class="std">String</span>, <span clas
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a> → <a href="Apply.html" class="extype" name="cats.Apply">Apply</a> → <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a></dd></dl></div>
+    </li><li name="cats.MonadReader#reader" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reader[A](f:R=&gt;A):F[A]"></a>
+      <a id="reader[A]((R)⇒A):F[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reader</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.MonadReader.R">R</span>) ⇒ <span class="extype" name="cats.MonadReader.reader.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.MonadReader.F">F</span>[<span class="extype" name="cats.MonadReader.reader.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.MonadReader@reader[A](f:R=&gt;A):F[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Retrieves a function of the environment</p>
     </li><li name="cats.Applicative#replicateA" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="replicateA[A](n:Int,fa:F[A]):F[List[A]]"></a>
       <a id="replicateA[A](Int,F[A]):F[List[A]]"></a>

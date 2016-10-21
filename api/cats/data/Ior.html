@@ -51,12 +51,12 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents a right-biased disjunction that is either an <code>A</code>, or a <code>B</code>, or both an <code>A</code> and a <code>B</code>.</p><p>An instance of <code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is one of:</p><ul><li><code><a href="Ior$$Left.html" class="extype" name="cats.data.Ior.Left">Left</a>[A]</code></li><li><code><a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a>[B]</code></li><li><code><a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>[A, B]</code></li></ul><p><code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is similar to <code>Xor[A, B]</code>, except that it can represent the simultaneous presence of
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents a right-biased disjunction that is either an <code>A</code>, or a <code>B</code>, or both an <code>A</code> and a <code>B</code>.</p><p>An instance of <code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is one of:</p><ul><li><code><a href="Ior$$Left.html" class="extype" name="cats.data.Ior.Left">Left</a>[A]</code></li><li><code><a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a>[B]</code></li><li><code><a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>[A, B]</code></li></ul><p><code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is similar to <code>Either[A, B]</code>, except that it can represent the simultaneous presence of
 an <code>A</code> and a <code>B</code>. It is right-biased so methods such as <code>map</code> and <code>flatMap</code> operate on the
 <code>B</code> value. Some methods, like <code>flatMap</code>, handle the presence of two <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a> values using a
-<code><a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[A]</code>, while other methods, like <a href="#toXor:cats.data.Xor[A,B]" class="extmbr" name="cats.data.Ior#toXor">toXor</a>, ignore the <code>A</code> value in a <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>.</p><p><code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is isomorphic to <code>Xor[Xor[A, B], (A, B)]</code>, but provides methods biased toward <code>B</code>
+<code><a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[A]</code>, while other methods, like <a href="#toEither:Either[A,B]" class="extmbr" name="cats.data.Ior#toEither">toEither</a>, ignore the <code>A</code> value in a <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>.</p><p><code>A <a href="" class="extype" name="cats.data.Ior">Ior</a> B</code> is isomorphic to <code>Either[Either[A, B], (A, B)]</code>, but provides methods biased toward <code>B</code>
 values, regardless of whether the <code>B</code> values appear in a <a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a> or a <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>.
-The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a> form can be accessed via the <a href="#unwrap:cats.data.Xor[cats.data.Xor[A,B],(A,B)]" class="extmbr" name="cats.data.Ior#unwrap">unwrap</a> method.
+The isomorphic <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a> form can be accessed via the <a href="#unwrap:Either[Either[A,B],(A,B)]" class="extmbr" name="cats.data.Ior#unwrap">unwrap</a> method.
 </p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Ior.scala" target="_blank">Ior.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -750,18 +750,18 @@ The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.
     </span>
       
     </li><li name="cats.data.Ior#onlyLeftOrRight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="onlyLeftOrRight:Option[cats.data.Xor[A,B]]"></a>
-      <a id="onlyLeftOrRight:Option[Xor[A,B]]"></a>
+      <a id="onlyLeftOrRight:Option[Either[A,B]]"></a>
+      <a id="onlyLeftOrRight:Option[Either[A,B]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">onlyLeftOrRight</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Ior.A">A</span>, <span class="extype" name="cats.data.Ior.B">B</span>]]</span>
+        <span class="name">onlyLeftOrRight</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Ior.A">A</span>, <span class="extype" name="cats.data.Ior.B">B</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Ior@onlyLeftOrRight:Option[cats.data.Xor[A,B]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Ior@onlyLeftOrRight:Option[Either[A,B]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -987,23 +987,6 @@ The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.data.Ior#toXor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toXor:cats.data.Xor[A,B]"></a>
-      <a id="toXor:Xor[A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toXor</span><span class="result">: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Ior.A">A</span>, <span class="extype" name="cats.data.Ior.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Ior@toXor:cats.data.Xor[A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="cats.data.Ior#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="traverse[F[_],AA&gt;:A,D](g:B=&gt;F[D])(implicitF:cats.Applicative[F]):F[cats.data.Ior[AA,D]]"></a>
       <a id="traverse[F[_],AA&gt;:A,D]((B)⇒F[D])(Applicative[F]):F[Ior[AA,D]]"></a>
@@ -1022,18 +1005,18 @@ The isomorphic <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.
     </span>
       
     </li><li name="cats.data.Ior#unwrap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="unwrap:cats.data.Xor[cats.data.Xor[A,B],(A,B)]"></a>
-      <a id="unwrap:Xor[Xor[A,B],(A,B)]"></a>
+      <a id="unwrap:Either[Either[A,B],(A,B)]"></a>
+      <a id="unwrap:Either[Either[A,B],(A,B)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unwrap</span><span class="result">: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Ior.A">A</span>, <span class="extype" name="cats.data.Ior.B">B</span>], (<span class="extype" name="cats.data.Ior.A">A</span>, <span class="extype" name="cats.data.Ior.B">B</span>)]</span>
+        <span class="name">unwrap</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Ior.A">A</span>, <span class="extype" name="cats.data.Ior.B">B</span>], (<span class="extype" name="cats.data.Ior.A">A</span>, <span class="extype" name="cats.data.Ior.B">B</span>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Ior@unwrap:cats.data.Xor[cats.data.Xor[A,B],(A,B)]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Ior@unwrap:Either[Either[A,B],(A,B)]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

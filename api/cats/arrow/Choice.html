@@ -95,18 +95,18 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="cats.arrow.Choice#choice" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="choice[A,B,C](f:F[A,C],g:F[B,C]):F[cats.data.Xor[A,B],C]"></a>
-      <a id="choice[A,B,C](F[A,C],F[B,C]):F[Xor[A,B],C]"></a>
+      <a id="choice[A,B,C](f:F[A,C],g:F[B,C]):F[Either[A,B],C]"></a>
+      <a id="choice[A,B,C](F[A,C],F[B,C]):F[Either[A,B],C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">choice</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Choice.choice.A">A</span>, <span class="extype" name="cats.arrow.Choice.choice.C">C</span>]</span>, <span name="g">g: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Choice.choice.B">B</span>, <span class="extype" name="cats.arrow.Choice.choice.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Choice.F">F</span>[<a href="../data/Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.arrow.Choice.choice.A">A</span>, <span class="extype" name="cats.arrow.Choice.choice.B">B</span>], <span class="extype" name="cats.arrow.Choice.choice.C">C</span>]</span>
+        <span class="name">choice</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Choice.choice.A">A</span>, <span class="extype" name="cats.arrow.Choice.choice.C">C</span>]</span>, <span name="g">g: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Choice.choice.B">B</span>, <span class="extype" name="cats.arrow.Choice.choice.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.Choice.choice.A">A</span>, <span class="extype" name="cats.arrow.Choice.choice.B">B</span>], <span class="extype" name="cats.arrow.Choice.choice.C">C</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.arrow.Choice@choice[A,B,C](f:F[A,C],g:F[B,C]):F[cats.data.Xor[A,B],C]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.arrow.Choice@choice[A,B,C](f:F[A,C],g:F[B,C]):F[Either[A,B],C]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -114,16 +114,15 @@
 with the same target type, but with a source type of either <code>f</code>'s source
 type OR <code>g</code>'s source type.</p><div class="fullcomment"><div class="comment cmt"><p>Given two <code>F</code>s (<code>f</code> and <code>g</code>) with a common target type, create a new <code>F</code>
 with the same target type, but with a source type of either <code>f</code>'s source
-type OR <code>g</code>'s source type.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.implicits._
+type OR <code>g</code>'s source type.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> b: <span class="std">Boolean</span> <span class="kw">=&gt;</span> <span class="std">String</span> = _ + <span class="lit">" is a boolean"</span>
 scala&gt; <span class="kw">val</span> i: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span> =  _ + <span class="lit">" is an integer"</span>
-scala&gt; <span class="kw">val</span> f: Xor[<span class="std">Boolean</span>, <span class="std">Int</span>] <span class="kw">=&gt;</span> <span class="std">String</span> = Choice[Function1].choice(b, i)
+scala&gt; <span class="kw">val</span> f: (Either[<span class="std">Boolean</span>, <span class="std">Int</span>]) <span class="kw">=&gt;</span> <span class="std">String</span> = Choice[Function1].choice(b, i)
 
-scala&gt; f(Xor.Right(<span class="num">3</span>))
+scala&gt; f(Right(<span class="num">3</span>))
 res0: <span class="std">String</span> = <span class="num">3</span> is an integer
 
-scala&gt; f(Xor.Left(<span class="kw">false</span>))
+scala&gt; f(Left(<span class="kw">false</span>))
 res0: <span class="std">String</span> = <span class="kw">false</span> is a boolean</pre></div></div>
     </li><li name="cats.arrow.Compose#compose" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="compose[A,B,C](f:F[B,C],g:F[A,B]):F[A,C]"></a>
@@ -307,31 +306,30 @@ res0: <span class="std">String</span> = <span class="kw">false</span> is a boole
               
         </dd></dl></div>
     </li><li name="cats.arrow.Choice#codiagonal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="codiagonal[A]:F[cats.data.Xor[A,A],A]"></a>
-      <a id="codiagonal[A]:F[Xor[A,A],A]"></a>
+      <a id="codiagonal[A]:F[Either[A,A],A]"></a>
+      <a id="codiagonal[A]:F[Either[A,A],A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">codiagonal</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <span class="extype" name="cats.arrow.Choice.F">F</span>[<a href="../data/Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.arrow.Choice.codiagonal.A">A</span>, <span class="extype" name="cats.arrow.Choice.codiagonal.A">A</span>], <span class="extype" name="cats.arrow.Choice.codiagonal.A">A</span>]</span>
+        <span class="name">codiagonal</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.Choice.codiagonal.A">A</span>, <span class="extype" name="cats.arrow.Choice.codiagonal.A">A</span>], <span class="extype" name="cats.arrow.Choice.codiagonal.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.arrow.Choice@codiagonal[A]:F[cats.data.Xor[A,A],A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.arrow.Choice@codiagonal[A]:F[Either[A,A],A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">An <code>F</code> that, given a source <code>A</code> on either the right or left side, will
 return that same <code>A</code> object.</p><div class="fullcomment"><div class="comment cmt"><p>An <code>F</code> that, given a source <code>A</code> on either the right or left side, will
-return that same <code>A</code> object.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">val</span> f: (Xor[<span class="std">Int</span>, <span class="std">Int</span>]) <span class="kw">=&gt;</span> <span class="std">Int</span> = Choice[Function1].codiagonal[<span class="std">Int</span>]
+return that same <code>A</code> object.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> f: (Either[<span class="std">Int</span>, <span class="std">Int</span>]) <span class="kw">=&gt;</span> <span class="std">Int</span> = Choice[Function1].codiagonal[<span class="std">Int</span>]
 
-scala&gt; f(Xor.Right(<span class="num">3</span>))
+scala&gt; f(Right(<span class="num">3</span>))
 res0: <span class="std">Int</span> = <span class="num">3</span>
 
-scala&gt; f(Xor.Left(<span class="num">3</span>))
+scala&gt; f(Left(<span class="num">3</span>))
 res1: <span class="std">Int</span> = <span class="num">3</span></pre></div></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>

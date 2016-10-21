@@ -1,0 +1,301 @@
+<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/atom-one-light.min.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper" style="background:url('/cats/img/sidebar_brand.png') no-repeat"><span>Cats</span></div></a></li> </li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="kleisli">Kleisli</h1>
+<p>Kleisli enables composition of functions that return a monadic value, for instance an <code class="highlighter-rouge">Option[Int]</code> 
+or a <code class="highlighter-rouge">Either[String, List[Double]]</code>, without having functions take an <code class="highlighter-rouge">Option</code> or <code class="highlighter-rouge">Either</code> as a parameter, 
+which can be strange and unwieldy.</p>
+
+<p>We may also have several functions which depend on some environment and want a nice way to compose these functions
+to ensure they all receive the same environment. Or perhaps we have functions which depend on their own “local”
+configuration and all the configurations together make up a “global” application configuration. How do we
+have these functions play nice with each other despite each only knowing about their own local requirements?</p>
+
+<p>These situations are where <code class="highlighter-rouge">Kleisli</code> is immensely helpful.</p>
+
+<h2 id="functions">Functions</h2>
+<p>One of the most useful properties of functions is that they <strong>compose</strong>. That is, given a function
+<code class="highlighter-rouge">A =&gt; B</code> and a function <code class="highlighter-rouge">B =&gt; C</code>, we can combine them to create a new function <code class="highlighter-rouge">A =&gt; C</code>. It is through
+this compositional property that we are able to write many small functions and compose them together
+to create a larger one that suits our needs.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">twice</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span>
+  <span class="n">x</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+
+<span class="k">val</span> <span class="n">countCats</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">String</span> <span class="k">=</span>
+  <span class="n">x</span> <span class="k">=&gt;</span> <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="s">"1 cat"</span> <span class="k">else</span> <span class="n">s</span><span class="s">"$x cats"</span>
+
+<span class="k">val</span> <span class="n">twiceAsManyCats</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">String</span> <span class="k">=</span>
+  <span class="n">twice</span> <span class="n">andThen</span> <span class="n">countCats</span> <span class="c1">// equivalent to: countCats compose twice  
+</span></code></pre>
+</div>
+
+<p>Thus.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">twiceAsManyCats</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="c1">// "2 cats"
+// res2: String = 2 cats
+</span></code></pre>
+</div>
+
+<p>Sometimes, our functions will need to return monadic values. For instance, consider the following set of functions.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">parse</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+  <span class="n">s</span> <span class="k">=&gt;</span> <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"-?[0-9]+"</span><span class="o">))</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span> <span class="k">else</span> <span class="nc">None</span>
+
+<span class="k">val</span> <span class="n">reciprocal</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span> <span class="k">=</span>
+  <span class="n">i</span> <span class="k">=&gt;</span> <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">Some</span><span class="o">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">i</span><span class="o">)</span> <span class="k">else</span> <span class="nc">None</span>
+</code></pre>
+</div>
+
+<p>As it stands we cannot use <code class="highlighter-rouge">Function1.compose</code> (or <code class="highlighter-rouge">Function1.andThen</code>) to compose these two functions.
+The output type of <code class="highlighter-rouge">parse</code> is <code class="highlighter-rouge">Option[Int]</code> whereas the input type of <code class="highlighter-rouge">reciprocal</code> is <code class="highlighter-rouge">Int</code>.</p>
+
+<p>This is where <code class="highlighter-rouge">Kleisli</code> comes into play.</p>
+
+<h2 id="kleisli-1">Kleisli</h2>
+<p>At it’s core, <code class="highlighter-rouge">Kleisli[F[_], A, B]</code> is just a wrapper around the function <code class="highlighter-rouge">A =&gt; F[B]</code>. Depending on the
+properties of the <code class="highlighter-rouge">F[_]</code>, we can do different things with <code class="highlighter-rouge">Kleisli</code>s. For instance, if <code class="highlighter-rouge">F[_]</code> has a
+<code class="highlighter-rouge">FlatMap[F]</code> instance (we can call <code class="highlighter-rouge">flatMap</code> on <code class="highlighter-rouge">F[A]</code> values), we can
+compose two <code class="highlighter-rouge">Kleisli</code>s much like we can two functions.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.FlatMap</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
+
+<span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">run</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">compose</span><span class="o">[</span><span class="kt">Z</span><span class="o">](</span><span class="n">k</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">A</span><span class="o">])(</span><span class="k">implicit</span> <span class="n">F</span><span class="k">:</span> <span class="kt">FlatMap</span><span class="o">[</span><span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">B</span><span class="o">](</span><span class="n">z</span> <span class="k">=&gt;</span> <span class="n">k</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="n">z</span><span class="o">).</span><span class="n">flatMap</span><span class="o">(</span><span class="n">run</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>Returning to our earlier example:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// Bring in cats.FlatMap[Option] instance
+</span><span class="k">import</span> <span class="nn">cats.implicits._</span>
+
+<span class="k">val</span> <span class="n">parse</span> <span class="k">=</span> <span class="nc">Kleisli</span><span class="o">((</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="k">try</span> <span class="o">{</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span> <span class="o">}</span> <span class="k">catch</span> <span class="o">{</span> <span class="k">case</span> <span class="k">_:</span> <span class="kt">NumberFormatException</span> <span class="o">=&gt;</span> <span class="nc">None</span> <span class="o">})</span>
+
+<span class="k">val</span> <span class="n">reciprocal</span> <span class="k">=</span> <span class="nc">Kleisli</span><span class="o">((</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">None</span> <span class="k">else</span> <span class="nc">Some</span><span class="o">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">i</span><span class="o">))</span>
+
+<span class="k">val</span> <span class="n">parseAndReciprocal</span> <span class="k">=</span> <span class="n">reciprocal</span><span class="o">.</span><span class="n">compose</span><span class="o">(</span><span class="n">parse</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">Kleisli#andThen</code> can be defined similarly.</p>
+
+<p>It is important to note that the <code class="highlighter-rouge">F[_]</code> having a <code class="highlighter-rouge">FlatMap</code> (or a <code class="highlighter-rouge">Monad</code>) instance is not a hard requirement -
+we can do useful things with weaker requirements. Such an example would be <code class="highlighter-rouge">Kleisli#map</code>, which only requires
+that <code class="highlighter-rouge">F[_]</code> have a <code class="highlighter-rouge">Functor</code> instance (e.g. is equipped with <code class="highlighter-rouge">map: F[A] =&gt; (A =&gt; B) =&gt; F[B]</code>).</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Functor</span>
+
+<span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">run</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">C</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">C</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">F</span><span class="k">:</span> <span class="kt">Functor</span><span class="o">[</span><span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span>, <span class="kt">C</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span>, <span class="kt">C</span><span class="o">](</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="n">F</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">run</span><span class="o">(</span><span class="n">a</span><span class="o">))(</span><span class="n">f</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>Below are some more methods on <code class="highlighter-rouge">Kleisli</code> that can be used so long as the constraint on <code class="highlighter-rouge">F[_]</code>
+is satisfied.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Method    | Constraint on `F[_]`
+--------- | -------------------
+andThen   | FlatMap
+compose   | FlatMap
+flatMap   | FlatMap
+lower     | Monad
+map       | Functor
+traverse  | Applicative
+</code></pre>
+</div>
+
+<h3 id="type-class-instances">Type class instances</h3>
+<p>The type class instances for <code class="highlighter-rouge">Kleisli</code>, like that for functions, often fix the input type (and the <code class="highlighter-rouge">F[_]</code>) and leave
+the output type free. What type class instances it has tends to depend on what instances the <code class="highlighter-rouge">F[_]</code> has. For
+instance, <code class="highlighter-rouge">Kleisli[F, A, B]</code> has a <code class="highlighter-rouge">Functor</code> instance so long as the chosen <code class="highlighter-rouge">F[_]</code> does. It has a <code class="highlighter-rouge">Monad</code>
+instance so long as the chosen <code class="highlighter-rouge">F[_]</code> does. The instances in Cats are laid out in a way such that implicit
+resolution will pick up the most specific instance it can (depending on the <code class="highlighter-rouge">F[_]</code>).</p>
+
+<p>An example of a <code class="highlighter-rouge">Monad</code> instance for <code class="highlighter-rouge">Kleisli</code> is shown below.</p>
+
+<p><em>Note</em>: the example below assumes usage of the <a href="https://github.com/non/kind-projector">kind-projector compiler plugin</a> and will not compile if it is not being used in a project.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+
+<span class="c1">// We can define a FlatMap instance for Kleisli if the F[_] we chose has a FlatMap instance
+// Note the input type and F are fixed, with the output type left free
+</span><span class="k">implicit</span> <span class="k">def</span> <span class="n">kleisliFlatMap</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">Z</span><span class="o">](</span><span class="k">implicit</span> <span class="n">F</span><span class="k">:</span> <span class="kt">FlatMap</span><span class="o">[</span><span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">FlatMap</span><span class="o">[</span><span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">?</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="k">new</span> <span class="nc">FlatMap</span><span class="o">[</span><span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">?</span><span class="o">]]</span> <span class="o">{</span>
+    <span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+      <span class="nc">Kleisli</span><span class="o">(</span><span class="n">z</span> <span class="k">=&gt;</span> <span class="n">fa</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="n">z</span><span class="o">).</span><span class="n">flatMap</span><span class="o">(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">).</span><span class="n">run</span><span class="o">(</span><span class="n">z</span><span class="o">)))</span>
+
+    <span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+      <span class="nc">Kleisli</span><span class="o">(</span><span class="n">z</span> <span class="k">=&gt;</span> <span class="n">fa</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="n">z</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="n">f</span><span class="o">))</span>
+
+    <span class="k">def</span> <span class="n">tailRecM</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">Either</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]])</span> <span class="k">=</span>
+      <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">B</span><span class="o">]({</span> <span class="n">z</span> <span class="k">=&gt;</span> <span class="nc">FlatMap</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="n">tailRecM</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="k">_</span><span class="o">).</span><span class="n">run</span><span class="o">(</span><span class="n">z</span><span class="o">)</span> <span class="o">}</span> <span class="o">})</span>
+  <span class="o">}</span>
+</code></pre>
+</div>
+
+<p>Below is a table of some of the type class instances <code class="highlighter-rouge">Kleisli</code> can have depending on what instances <code class="highlighter-rouge">F[_]</code> has.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Type class     | Constraint on `F[_]`
+-------------- | -------------------
+Functor        | Functor
+Apply          | Apply
+Applicative    | Applicative
+FlatMap        | FlatMap
+Monad          | Monad
+Arrow          | Monad
+Split          | FlatMap
+Strong         | Functor
+SemigroupK*    | FlatMap
+MonoidK*       | Monad
+</code></pre>
+</div>
+
+<p>*These instances only exist for Kleisli arrows with identical input and output types; that is, 
+<code class="highlighter-rouge">Kleisli[F, A, A]</code> for some type A. These instances use Kleisli composition as the <code class="highlighter-rouge">combine</code> operation,
+and <code class="highlighter-rouge">Monad.pure</code> as the <code class="highlighter-rouge">empty</code> value.</p>
+
+<p>Also, there is an instance of <code class="highlighter-rouge">Monoid[Kleisli[F, A, B]]</code> if there is an instance of <code class="highlighter-rouge">Monoid[F[B]]</code>. 
+<code class="highlighter-rouge">Monoid.combine</code> here creates a new Kleisli arrow which takes an <code class="highlighter-rouge">A</code> value and feeds it into each 
+of the combined Kleisli arrows, which together return two <code class="highlighter-rouge">F[B]</code> values. Then, they are combined into one 
+using the <code class="highlighter-rouge">Monoid[F[B]]</code> instance.</p>
+
+<h2 id="other-uses">Other uses</h2>
+<h3 id="monad-transformers">Monad Transformers</h3>
+<p>Many data types have a monad transformer equivalent that allows us to compose the <code class="highlighter-rouge">Monad</code> instance of the data
+type with any other <code class="highlighter-rouge">Monad</code> instance. For instance, <code class="highlighter-rouge">OptionT[F[_], A]</code> allows us to compose the monadic properties
+of <code class="highlighter-rouge">Option</code> with any other <code class="highlighter-rouge">F[_]</code>, such as a <code class="highlighter-rouge">List</code>. This allows us to work with nested contexts/effects in a
+nice way (for example, in for-comprehensions).</p>
+
+<p><code class="highlighter-rouge">Kleisli</code> can be viewed as the monad transformer for functions. Recall that at its essence, <code class="highlighter-rouge">Kleisli[F, A, B]</code>
+is just a function <code class="highlighter-rouge">A =&gt; F[B]</code>, with niceties to make working with the value we actually care about, the <code class="highlighter-rouge">B</code>, easy.
+<code class="highlighter-rouge">Kleisli</code> allows us to take the effects of functions and have them play nice with the effects of any other <code class="highlighter-rouge">F[_]</code>.</p>
+
+<p>This may raise the question, what exactly is the “effect” of a function?</p>
+
+<p>Well, if we take a look at any function, we can see it takes some input and produces some output with it, without
+having touched the input (assuming the function is pure, i.e.
+<a href="https://en.wikipedia.org/wiki/Referential_transparency_%28computer_science%29">referentially transparent</a>).
+That is, we take a read-only value, and produce some value with it. For this reason, the type class instances for
+functions often refer to the function as a <code class="highlighter-rouge">Reader</code>. For instance, it is common to hear about the <code class="highlighter-rouge">Reader</code> monad.
+In the same spirit, Cats defines a <code class="highlighter-rouge">Reader</code> type alias along the lines of:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// We want A =&gt; B, but Kleisli provides A =&gt; F[B]. To make the types/shapes match,
+// we need an F[_] such that providing it a type A is equivalent to A
+// This can be thought of as the type-level equivalent of the identity function
+</span><span class="k">type</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">A</span>
+
+<span class="k">type</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">Id</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span>
+<span class="k">object</span> <span class="nc">Reader</span> <span class="o">{</span>
+  <span class="c1">// Lifts a plain function A =&gt; B into a Kleisli, giving us access
+</span>  <span class="c1">// to all the useful methods and type class instances
+</span>  <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">Id</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="k">type</span> <span class="kt">ReaderT</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span>
+<span class="k">val</span> <span class="nc">ReaderT</span> <span class="k">=</span> <span class="nc">Kleisli</span>
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">ReaderT</code> value alias exists to allow users to use the <code class="highlighter-rouge">Kleisli</code> companion object as if it were <code class="highlighter-rouge">ReaderT</code>, if
+they were so inclined.</p>
+
+<p>The topic of functions as a read-only environment brings us to our next common use case of <code class="highlighter-rouge">Kleisli</code> - configuration.</p>
+
+<h3 id="configuration">Configuration</h3>
+<p>Functional programming advocates the creation of programs and modules by composing smaller, simpler modules. This
+philosophy intentionally mirrors that of function composition - write many small functions, and compose them
+to build larger ones. After all, our programs are just functions.</p>
+
+<p>Let’s look at some example modules, where each module has it’s own configuration that is validated by a function.
+If the configuration is good, we return a <code class="highlighter-rouge">Some</code> of the module, otherwise a <code class="highlighter-rouge">None</code>. This example uses <code class="highlighter-rouge">Option</code> for
+simplicity - if you want to provide error messages or other failure context, consider using <code class="highlighter-rouge">Either</code> instead.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">DbConfig</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">user</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">pass</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+<span class="k">trait</span> <span class="nc">Db</span>
+<span class="k">object</span> <span class="nc">Db</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">fromDbConfig</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">DbConfig</span>, <span class="kt">Db</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+<span class="o">}</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">ServiceConfig</span><span class="o">(</span><span class="n">addr</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">port</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+<span class="k">trait</span> <span class="nc">Service</span>
+<span class="k">object</span> <span class="nc">Service</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">fromServiceConfig</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">ServiceConfig</span>, <span class="kt">Service</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>We have two independent modules, a <code class="highlighter-rouge">Db</code> (allowing access to a database) and a <code class="highlighter-rouge">Service</code> (supporting an API to provide
+data over the web). Both depend on their own configuration parameters. Neither know or care about the other, as it
+should be. However our application needs both of these modules to work. It is plausible we then have a more global
+application configuration.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">AppConfig</span><span class="o">(</span><span class="n">dbConfig</span><span class="k">:</span> <span class="kt">DbConfig</span><span class="o">,</span> <span class="n">serviceConfig</span><span class="k">:</span> <span class="kt">ServiceConfig</span><span class="o">)</span>
+
+<span class="k">class</span> <span class="nc">App</span><span class="o">(</span><span class="n">db</span><span class="k">:</span> <span class="kt">Db</span><span class="o">,</span> <span class="n">service</span><span class="k">:</span> <span class="kt">Service</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>As it stands, we cannot use both <code class="highlighter-rouge">Kleisli</code> validation functions together nicely - one takes a <code class="highlighter-rouge">DbConfig</code>, the
+other a <code class="highlighter-rouge">ServiceConfig</code>. That means the <code class="highlighter-rouge">FlatMap</code> (and by extension, the <code class="highlighter-rouge">Monad</code>) instances differ (recall the
+input type is fixed in the type class instances). However, there is a nice function on <code class="highlighter-rouge">Kleisli</code> called <code class="highlighter-rouge">local</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">run</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">local</span><span class="o">[</span><span class="kt">AA</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">AA</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">AA</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Kleisli</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="n">andThen</span><span class="o">(</span><span class="n">run</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>What <code class="highlighter-rouge">local</code> allows us to do is essentially “expand” our input type to a more “general” one. In our case, we
+can take a <code class="highlighter-rouge">Kleisli</code> that expects a <code class="highlighter-rouge">DbConfig</code> or <code class="highlighter-rouge">ServiceConfig</code> and turn it into one that expects an <code class="highlighter-rouge">AppConfig</code>,
+so long as we tell it how to go from an <code class="highlighter-rouge">AppConfig</code> to the other configs.</p>
+
+<p>Now we can create our application config validator!</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">Z</span>, <span class="kt">A</span><span class="o">](</span><span class="n">run</span><span class="k">:</span> <span class="kt">Z</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">B</span><span class="o">])(</span><span class="k">implicit</span> <span class="n">F</span><span class="k">:</span> <span class="kt">FlatMap</span><span class="o">[</span><span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nc">Kleisli</span><span class="o">(</span><span class="n">z</span> <span class="k">=&gt;</span> <span class="n">F</span><span class="o">.</span><span class="n">flatMap</span><span class="o">(</span><span class="n">run</span><span class="o">(</span><span class="n">z</span><span class="o">))(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">).</span><span class="n">run</span><span class="o">(</span><span class="n">z</span><span class="o">)))</span>
+
+  <span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">F</span><span class="k">:</span> <span class="kt">Functor</span><span class="o">[</span><span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Z</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nc">Kleisli</span><span class="o">(</span><span class="n">z</span> <span class="k">=&gt;</span> <span class="n">F</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">run</span><span class="o">(</span><span class="n">z</span><span class="o">))(</span><span class="n">f</span><span class="o">))</span>
+
+  <span class="k">def</span> <span class="n">local</span><span class="o">[</span><span class="kt">ZZ</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">ZZ</span> <span class="o">=&gt;</span> <span class="n">Z</span><span class="o">)</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">ZZ</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Kleisli</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="n">andThen</span><span class="o">(</span><span class="n">run</span><span class="o">))</span>
+<span class="o">}</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">DbConfig</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">user</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">pass</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+<span class="k">trait</span> <span class="nc">Db</span>
+<span class="k">object</span> <span class="nc">Db</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">fromDbConfig</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">DbConfig</span>, <span class="kt">Db</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+<span class="o">}</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">ServiceConfig</span><span class="o">(</span><span class="n">addr</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">port</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+<span class="k">trait</span> <span class="nc">Service</span>
+<span class="k">object</span> <span class="nc">Service</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">fromServiceConfig</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">ServiceConfig</span>, <span class="kt">Service</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+<span class="o">}</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">AppConfig</span><span class="o">(</span><span class="n">dbConfig</span><span class="k">:</span> <span class="kt">DbConfig</span><span class="o">,</span> <span class="n">serviceConfig</span><span class="k">:</span> <span class="kt">ServiceConfig</span><span class="o">)</span>
+
+<span class="k">class</span> <span class="nc">App</span><span class="o">(</span><span class="n">db</span><span class="k">:</span> <span class="kt">Db</span><span class="o">,</span> <span class="n">service</span><span class="k">:</span> <span class="kt">Service</span><span class="o">)</span>
+
+<span class="k">def</span> <span class="n">appFromAppConfig</span><span class="k">:</span> <span class="kt">Kleisli</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">AppConfig</span>, <span class="kt">App</span><span class="o">]</span> <span class="k">=</span>
+  <span class="k">for</span> <span class="o">{</span>
+    <span class="n">db</span> <span class="k">&lt;-</span> <span class="nc">Db</span><span class="o">.</span><span class="n">fromDbConfig</span><span class="o">.</span><span class="n">local</span><span class="o">[</span><span class="kt">AppConfig</span><span class="o">](</span><span class="k">_</span><span class="o">.</span><span class="n">dbConfig</span><span class="o">)</span>
+    <span class="n">sv</span> <span class="k">&lt;-</span> <span class="nc">Service</span><span class="o">.</span><span class="n">fromServiceConfig</span><span class="o">.</span><span class="n">local</span><span class="o">[</span><span class="kt">AppConfig</span><span class="o">](</span><span class="k">_</span><span class="o">.</span><span class="n">serviceConfig</span><span class="o">)</span>
+  <span class="o">}</span> <span class="k">yield</span> <span class="k">new</span> <span class="nc">App</span><span class="o">(</span><span class="n">db</span><span class="o">,</span> <span class="n">sv</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>What if we need a module that doesn’t need any config validation, say a strategy to log events? We would have such a
+module be instantiated from a config directly, without an <code class="highlighter-rouge">Option</code> - we would have something like
+<code class="highlighter-rouge">Kleisli[Id, LogConfig, Log]</code> (alternatively, <code class="highlighter-rouge">Reader[LogConfig, Log]</code>). However, this won’t play nice with our other
+<code class="highlighter-rouge">Kleisli</code>s since those use <code class="highlighter-rouge">Option</code> instead of <code class="highlighter-rouge">Id</code>.</p>
+
+<p>We can define a <code class="highlighter-rouge">lift</code> method on <code class="highlighter-rouge">Kleisli</code> (available already on <code class="highlighter-rouge">Kleisli</code> in Cats) that takes a type parameter <code class="highlighter-rouge">G[_]</code>
+such that <code class="highlighter-rouge">G</code> has an <code class="highlighter-rouge">Applicative</code> instance and lifts a <code class="highlighter-rouge">Kleisli</code> value such that its output type is <code class="highlighter-rouge">G[F[B]]</code>. This
+allows us to then lift a <code class="highlighter-rouge">Reader[A, B]</code> into a <code class="highlighter-rouge">Kleisli[G, A, B]</code>. Note that lifting a <code class="highlighter-rouge">Reader[A, B]</code> into some <code class="highlighter-rouge">G[_]</code>
+is equivalent to having a <code class="highlighter-rouge">Kleisli[G, A, B]</code> since <code class="highlighter-rouge">Reader[A, B]</code> is just a type alias for <code class="highlighter-rouge">Kleisli[Id, A, B]</code>, and
+<code class="highlighter-rouge">type Id[A] = A</code> so <code class="highlighter-rouge">G[Id[A]]</code> is equivalent to <code class="highlighter-rouge">G[A]</code>.</p>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/scala.min.js"></script><script src="/cats/js/main.js"></script></body></html>

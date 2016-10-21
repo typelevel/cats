@@ -705,18 +705,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a></dd></dl></div>
     </li><li name="cats.data.Ior#onlyLeftOrRight" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="onlyLeftOrRight:Option[cats.data.Xor[A,B]]"></a>
-      <a id="onlyLeftOrRight:Option[Xor[A,B]]"></a>
+      <a id="onlyLeftOrRight:Option[Either[A,B]]"></a>
+      <a id="onlyLeftOrRight:Option[Either[A,B]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">onlyLeftOrRight</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Ior.Both.A">A</span>, <span class="extype" name="cats.data.Ior.Both.B">B</span>]]</span>
+        <span class="name">onlyLeftOrRight</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Ior.Both.A">A</span>, <span class="extype" name="cats.data.Ior.Both.B">B</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Ior$$Both@onlyLeftOrRight:Option[cats.data.Xor[A,B]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Ior$$Both@onlyLeftOrRight:Option[Either[A,B]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -891,23 +891,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a></dd></dl></div>
-    </li><li name="cats.data.Ior#toXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toXor:cats.data.Xor[A,B]"></a>
-      <a id="toXor:Xor[A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toXor</span><span class="result">: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Ior.Both.A">A</span>, <span class="extype" name="cats.data.Ior.Both.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Ior$$Both@toXor:cats.data.Xor[A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a></dd></dl></div>
     </li><li name="cats.data.Ior#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverse[F[_],AA&gt;:A,D](g:B=&gt;F[D])(implicitF:cats.Applicative[F]):F[cats.data.Ior[AA,D]]"></a>
       <a id="traverse[F[_],AA&gt;:A,D]((B)⇒F[D])(Applicative[F]):F[Ior[AA,D]]"></a>
@@ -926,18 +909,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a></dd></dl></div>
     </li><li name="cats.data.Ior#unwrap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="unwrap:cats.data.Xor[cats.data.Xor[A,B],(A,B)]"></a>
-      <a id="unwrap:Xor[Xor[A,B],(A,B)]"></a>
+      <a id="unwrap:Either[Either[A,B],(A,B)]"></a>
+      <a id="unwrap:Either[Either[A,B],(A,B)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unwrap</span><span class="result">: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Ior.Both.A">A</span>, <span class="extype" name="cats.data.Ior.Both.B">B</span>], (<span class="extype" name="cats.data.Ior.Both.A">A</span>, <span class="extype" name="cats.data.Ior.Both.B">B</span>)]</span>
+        <span class="name">unwrap</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Ior.Both.A">A</span>, <span class="extype" name="cats.data.Ior.Both.B">B</span>], (<span class="extype" name="cats.data.Ior.Both.A">A</span>, <span class="extype" name="cats.data.Ior.Both.B">B</span>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Ior$$Both@unwrap:cats.data.Xor[cats.data.Xor[A,B],(A,B)]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Ior$$Both@unwrap:Either[Either[A,B],(A,B)]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

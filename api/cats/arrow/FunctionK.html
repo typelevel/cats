@@ -51,7 +51,11 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.arrow.FunctionK.F">F</span>, <span class="extype" name="cats.arrow.FunctionK.G">G</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/arrow/FunctionK.scala" target="_blank">FunctionK.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><code>FunctionK[F[_], G[_]]</code> is a functor transformation from <code>F</code> to <code>G</code>
+in the same manner that function <code>A =&gt; B</code> is a morphism from values
+of type <code>A</code> to <code>B</code>.
+An easy way to create a FunctionK instance is to use the Polymorphic
+lambdas provided by non/kind-projector v0.9+. E.g.</p><pre><span class="kw">val</span> listToOption = λ[FunctionK[<span class="std">List</span>, <span class="std">Option</span>]](_.headOption)</pre></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.arrow.FunctionK.F">F</span>, <span class="extype" name="cats.arrow.FunctionK.G">G</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/arrow/FunctionK.scala" target="_blank">FunctionK.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -110,7 +114,8 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Applies this functor transformation from <code>F</code> to <code>G</code>
+</p>
     </li></ol>
             </div>
 
@@ -183,7 +188,8 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Composes two instances of FunctionK into a new FunctionK with this
+transformation applied first.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -240,7 +246,8 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Composes two instances of FunctionK into a new FunctionK with this
+transformation applied last.</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -400,23 +407,27 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.arrow.FunctionK#or" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ]cats.data.Coproduct[F,H,γ],G]"></a>
-      <a id="or[H[_]](FunctionK[H,G]):FunctionK[[γ]Coproduct[F,H,γ],G]"></a>
+    </li><li name="cats.arrow.FunctionK#or" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ$0$]cats.data.Coproduct[F,H,γ$0$],G]"></a>
+      <a id="or[H[_]](FunctionK[H,G]):FunctionK[[γ$0$]Coproduct[F,H,γ$0$],G]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">or</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="h">h: <a href="" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[[γ]<a href="../data/Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a>[<span class="extype" name="cats.arrow.FunctionK.F">F</span>, <span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.&lt;refinement&gt;.Λ$.γ">γ</span>], <span class="extype" name="cats.arrow.FunctionK.G">G</span>]</span>
+        <span class="name">or</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="h">h: <a href="" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[[γ$0$]<a href="../data/Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a>[<span class="extype" name="cats.arrow.FunctionK.F">F</span>, <span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.&lt;refinement&gt;.Λ$.γ$0$">γ$0$</span>], <span class="extype" name="cats.arrow.FunctionK.G">G</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.arrow.FunctionK@or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ]cats.data.Coproduct[F,H,γ],G]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.arrow.FunctionK@or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ$0$]cats.data.Coproduct[F,H,γ$0$],G]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Composes two instances of FunctionK into a new FunctionK that transforms
+a <a href="../data/Coproduct.html" class="extype" name="cats.data.Coproduct">cats.data.Coproduct</a> to a single functor.</p><div class="fullcomment"><div class="comment cmt"><p>Composes two instances of FunctionK into a new FunctionK that transforms
+a <a href="../data/Coproduct.html" class="extype" name="cats.data.Coproduct">cats.data.Coproduct</a> to a single functor.</p><p>This transformation will be used to transform left <code>F</code> values while
+<code>h</code> will be used to transform right <code>H</code> values.
+</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

@@ -317,62 +317,6 @@ res0: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>
 scala&gt; <span class="kw">val</span> error2: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">None</span>
 scala&gt; error2.toInvalidNel(<span class="num">3</span>)
 res1: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>] = Valid(<span class="num">3</span>)</pre></div></div>
-    </li><li name="cats.syntax.OptionOps#toLeftXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toLeftXor[B](b:=&gt;B):cats.data.Xor[A,B]"></a>
-      <a id="toLeftXor[B](⇒B):Xor[A,B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toLeftXor</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toLeftXor.B">B</span></span>)</span><span class="result">: <a href="../data/Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>, <span class="extype" name="cats.syntax.OptionOps.toLeftXor.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@toLeftXor[B](b:=&gt;B):cats.data.Xor[A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Xor$$Left.html" class="extype" name="cats.data.Xor.Left">cats.data.Xor.Left</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Xor$$Left.html" class="extype" name="cats.data.Xor.Left">cats.data.Xor.Left</a>.
-If the <code>Option</code> is <code>None</code>, return the provided <code>B</code> value in a
-<a href="../data/Xor$$Right.html" class="extype" name="cats.data.Xor.Right">cats.data.Xor.Right</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.implicits._
-
-scala&gt; <span class="kw">val</span> error1: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">Some</span>(<span class="lit">"error!"</span>)
-scala&gt; error1.toLeftXor(<span class="num">3</span>)
-res0: <span class="std">String</span> Xor <span class="std">Int</span> = Left(error!)
-
-scala&gt; <span class="kw">val</span> error2: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">None</span>
-scala&gt; error2.toLeftXor(<span class="num">3</span>)
-res1: <span class="std">String</span> Xor <span class="std">Int</span> = Right(<span class="num">3</span>)</pre></div></div>
-    </li><li name="cats.syntax.OptionOps#toRightXor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toRightXor[B](b:=&gt;B):cats.data.Xor[B,A]"></a>
-      <a id="toRightXor[B](⇒B):Xor[B,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toRightXor</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toRightXor.B">B</span></span>)</span><span class="result">: <a href="../data/Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.syntax.OptionOps.toRightXor.B">B</span>, <span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@toRightXor[B](b:=&gt;B):cats.data.Xor[B,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Xor$$Right.html" class="extype" name="cats.data.Xor.Right">cats.data.Xor.Right</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Xor$$Right.html" class="extype" name="cats.data.Xor.Right">cats.data.Xor.Right</a>.
-If the <code>Option</code> is <code>None</code>, return the provided <code>B</code> value in a
-<a href="../data/Xor$$Left.html" class="extype" name="cats.data.Xor.Left">cats.data.Xor.Left</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Xor
-scala&gt; <span class="kw">import</span> cats.implicits._
-
-scala&gt; <span class="kw">val</span> result1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)
-scala&gt; result1.toRightXor(<span class="lit">"error!"</span>)
-res0: <span class="std">String</span> Xor <span class="std">Int</span> = Right(<span class="num">3</span>)
-
-scala&gt; <span class="kw">val</span> result2: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
-scala&gt; result2.toRightXor(<span class="lit">"error!"</span>)
-res1: <span class="std">String</span> Xor <span class="std">Int</span> = Left(error!)</pre></div></div>
     </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>

@@ -780,18 +780,18 @@ contexts.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.data.OptionT#toLeft" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toLeft[R](right:=&gt;R)(implicitF:cats.Functor[F]):cats.data.XorT[F,A,R]"></a>
-      <a id="toLeft[R](⇒R)(Functor[F]):XorT[F,A,R]"></a>
+      <a id="toLeft[R](right:=&gt;R)(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,R]"></a>
+      <a id="toLeft[R](⇒R)(Functor[F]):EitherT[F,A,R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toLeft</span><span class="tparams">[<span name="R">R</span>]</span><span class="params">(<span name="right">right: ⇒ <span class="extype" name="cats.data.OptionT.toLeft.R">R</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <a href="XorT.html" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.A">A</span>, <span class="extype" name="cats.data.OptionT.toLeft.R">R</span>]</span>
+        <span class="name">toLeft</span><span class="tparams">[<span name="R">R</span>]</span><span class="params">(<span name="right">right: ⇒ <span class="extype" name="cats.data.OptionT.toLeft.R">R</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.A">A</span>, <span class="extype" name="cats.data.OptionT.toLeft.R">R</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT@toLeft[R](right:=&gt;R)(implicitF:cats.Functor[F]):cats.data.XorT[F,A,R]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OptionT@toLeft[R](right:=&gt;R)(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,R]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -824,18 +824,18 @@ res0: OptionT[<span class="std">List</span>,<span class="std">String</span>] = O
 scala&gt; OptionT(ff.toNested.ap(fa.toNested).value)
 res1: OptionT[<span class="std">List</span>,<span class="std">String</span>] = OptionT(<span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">Some</span>(<span class="num">2</span>), <span class="std">None</span>, <span class="std">None</span>))</pre></div></div>
     </li><li name="cats.data.OptionT#toRight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toRight[L](left:=&gt;L)(implicitF:cats.Functor[F]):cats.data.XorT[F,L,A]"></a>
-      <a id="toRight[L](⇒L)(Functor[F]):XorT[F,L,A]"></a>
+      <a id="toRight[L](left:=&gt;L)(implicitF:cats.Functor[F]):cats.data.EitherT[F,L,A]"></a>
+      <a id="toRight[L](⇒L)(Functor[F]):EitherT[F,L,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toRight</span><span class="tparams">[<span name="L">L</span>]</span><span class="params">(<span name="left">left: ⇒ <span class="extype" name="cats.data.OptionT.toRight.L">L</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <a href="XorT.html" class="extype" name="cats.data.XorT">XorT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.toRight.L">L</span>, <span class="extype" name="cats.data.OptionT.A">A</span>]</span>
+        <span class="name">toRight</span><span class="tparams">[<span name="L">L</span>]</span><span class="params">(<span name="left">left: ⇒ <span class="extype" name="cats.data.OptionT.toRight.L">L</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.OptionT.F">F</span>, <span class="extype" name="cats.data.OptionT.toRight.L">L</span>, <span class="extype" name="cats.data.OptionT.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT@toRight[L](left:=&gt;L)(implicitF:cats.Functor[F]):cats.data.XorT[F,L,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.OptionT@toRight[L](left:=&gt;L)(implicitF:cats.Functor[F]):cats.data.EitherT[F,L,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

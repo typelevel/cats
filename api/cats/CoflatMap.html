@@ -115,11 +115,10 @@
       </a>
     </span>
       <p class="shortcomment cmt"><code>coflatMap</code> is the dual of <code>flatMap</code> on <code>FlatMap</code>.</p><div class="fullcomment"><div class="comment cmt"><p><code>coflatMap</code> is the dual of <code>flatMap</code> on <code>FlatMap</code>. It applies
-a value in a Monadic context to a function that takes a value
+a value in a context to a function that takes a value
 in a context and returns a normal value.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">import</span> cats.Monad
 scala&gt; <span class="kw">import</span> cats.CoflatMap
-scala&gt; <span class="kw">val</span> fa = Monad[<span class="std">Option</span>].pure(<span class="num">3</span>)
+scala&gt; <span class="kw">val</span> fa = <span class="std">Some</span>(<span class="num">3</span>)
 scala&gt; <span class="kw">def</span> f(a: <span class="std">Option</span>[<span class="std">Int</span>]): <span class="std">Int</span> = a <span class="kw">match</span> {
      | <span class="kw">case</span> <span class="std">Some</span>(x) <span class="kw">=&gt;</span> <span class="num">2</span> * x
      | <span class="kw">case</span> <span class="std">None</span> <span class="kw">=&gt;</span> <span class="num">0</span> }
@@ -274,9 +273,8 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
     </span>
       <p class="shortcomment cmt"><code>coflatten</code> is the dual of <code>flatten</code> on <code>FlatMap</code>.</p><div class="fullcomment"><div class="comment cmt"><p><code>coflatten</code> is the dual of <code>flatten</code> on <code>FlatMap</code>. Whereas flatten removes
 a layer of <code>F</code>, coflatten adds a layer of <code>F</code></p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">import</span> cats.Monad
 scala&gt; <span class="kw">import</span> cats.CoflatMap
-scala&gt; <span class="kw">val</span> fa = Monad[<span class="std">Option</span>].pure(<span class="num">3</span>)
+scala&gt; <span class="kw">val</span> fa = <span class="std">Some</span>(<span class="num">3</span>)
 fa: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)
 scala&gt; CoflatMap[<span class="std">Option</span>].coflatten(fa)
 res0: <span class="std">Option</span>[<span class="std">Option</span>[<span class="std">Int</span>]] = <span class="std">Some</span>(<span class="std">Some</span>(<span class="num">3</span>))</pre></div></div>

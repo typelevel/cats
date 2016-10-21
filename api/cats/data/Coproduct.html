@@ -47,12 +47,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Coproduct</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="run">run: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Coproduct.F">F</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>], <span class="extype" name="cats.data.Coproduct.G">G</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Coproduct</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="run">run: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Coproduct.F">F</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>], <span class="extype" name="cats.data.Coproduct.G">G</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><code>F</code> on the left and <code>G</code> on the right of <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a>.
-</p></div><dl class="paramcmts block"><dt class="param">run</dt><dd class="cmt"><p>The underlying <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a>.</p></dd></dl><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Coproduct.scala" target="_blank">Coproduct.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><code>F</code> on the left and <code>G</code> on the right of <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a>.
+</p></div><dl class="paramcmts block"><dt class="param">run</dt><dd class="cmt"><p>The underlying <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a>.</p></dd></dl><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Coproduct.scala" target="_blank">Coproduct.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -92,7 +92,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="cats.data.Coproduct#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(run:cats.data.Xor[F[A],G[A]]):cats.data.Coproduct[F,G,A]"></a>
+      <a id="&lt;init&gt;(run:Either[F[A],G[A]]):cats.data.Coproduct[F,G,A]"></a>
       <a id="&lt;init&gt;:Coproduct[F,G,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -100,14 +100,14 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Coproduct</span><span class="params">(<span name="run">run: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Coproduct.F">F</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>], <span class="extype" name="cats.data.Coproduct.G">G</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>]]</span>)</span>
+        <span class="name">Coproduct</span><span class="params">(<span name="run">run: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Coproduct.F">F</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>], <span class="extype" name="cats.data.Coproduct.G">G</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>]]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Coproduct@&lt;init&gt;(run:cats.data.Xor[F[A],G[A]]):cats.data.Coproduct[F,G,A]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Coproduct@&lt;init&gt;(run:Either[F[A],G[A]]):cats.data.Coproduct[F,G,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">run</dt><dd class="cmt"><p>The underlying <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a>.</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">run</dt><dd class="cmt"><p>The underlying <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a>.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -334,10 +334,7 @@
     </span>
       <p class="shortcomment cmt">Fold this coproduct into a new type constructor using two natural transformations.</p><div class="fullcomment"><div class="comment cmt"><p>Fold this coproduct into a new type constructor using two natural transformations.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.arrow.FunctionK
 scala&gt; <span class="kw">import</span> cats.data.Coproduct
-scala&gt; <span class="kw">val</span> listToOption =
-     |   <span class="kw">new</span> FunctionK[<span class="std">List</span>, <span class="std">Option</span>] {
-     |     <span class="kw">def</span> apply[A](fa: <span class="std">List</span>[A]): <span class="std">Option</span>[A] = fa.headOption
-     |   }
+scala&gt; <span class="kw">val</span> listToOption = λ[FunctionK[<span class="std">List</span>, <span class="std">Option</span>]](_.headOption)
 scala&gt; <span class="kw">val</span> optionToOption = FunctionK.id[<span class="std">Option</span>]
 scala&gt; <span class="kw">val</span> cp1: Coproduct[<span class="std">List</span>, <span class="std">Option</span>, <span class="std">Int</span>] = Coproduct.leftc(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>))
 scala&gt; <span class="kw">val</span> cp2: Coproduct[<span class="std">List</span>, <span class="std">Option</span>, <span class="std">Int</span>] = Coproduct.rightc(<span class="std">Some</span>(<span class="num">4</span>))
@@ -533,22 +530,22 @@ res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.data.Coproduct#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="run:cats.data.Xor[F[A],G[A]]"></a>
-      <a id="run:Xor[F[A],G[A]]"></a>
+      <a id="run:Either[F[A],G[A]]"></a>
+      <a id="run:Either[F[A],G[A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">run</span><span class="result">: <a href="Xor.html" class="extype" name="cats.data.Xor">Xor</a>[<span class="extype" name="cats.data.Coproduct.F">F</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>], <span class="extype" name="cats.data.Coproduct.G">G</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>]]</span>
+        <span class="name">run</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Coproduct.F">F</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>], <span class="extype" name="cats.data.Coproduct.G">G</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.Coproduct@run:cats.data.Xor[F[A],G[A]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.Coproduct@run:Either[F[A],G[A]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">The underlying <a href="Xor.html" class="extype" name="cats.data.Xor">cats.data.Xor</a>.</p>
+      <p class="shortcomment cmt">The underlying <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a>.</p>
     </li><li name="cats.data.Coproduct#swap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="swap:cats.data.Coproduct[G,F,A]"></a>
       <a id="swap:Coproduct[G,F,A]"></a>

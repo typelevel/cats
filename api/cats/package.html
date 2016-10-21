@@ -812,8 +812,8 @@ for kinds (i.e. parameterized types).</p><p>A MonoidK[F] can produce a Monoid[F[
       </a>
     </span>
       <p class="shortcomment cmt">This class defines a <code>Reducible[F]</code> in terms of a <code>Foldable[G]</code>
-together with a <code>split method, </code>F[A]<code> =&gt; </code>(A, G[A])<code>.</code></p><div class="fullcomment"><div class="comment cmt"><p>This class defines a <code>Reducible[F]</code> in terms of a <code>Foldable[G]</code>
-together with a <code>split method, </code>F[A]<code> =&gt; </code>(A, G[A])<code>.</code></p><p>This class can be used on any type where the first value (<code>A</code>) and
+together with a <code>split</code> method, <code>F[A]</code> =&gt; <code>(A, G[A])</code>.</p><div class="fullcomment"><div class="comment cmt"><p>This class defines a <code>Reducible[F]</code> in terms of a <code>Foldable[G]</code>
+together with a <code>split</code> method, <code>F[A]</code> =&gt; <code>(A, G[A])</code>.</p><p>This class can be used on any type where the first value (<code>A</code>) and
 the &quot;rest&quot; of the values (<code>G[A]</code>) can be easily found.
 </p></div></div>
     </li><li name="cats.NotNull" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
@@ -894,24 +894,6 @@ when the computation to produce an A value is pure and very fast.
       </a>
     </span>
       
-    </li><li name="cats.RecursiveTailRecM" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="RecursiveTailRecM[F[_]]extendsSerializable"></a>
-      <a id="RecursiveTailRecM[F[_]]:RecursiveTailRecM[F]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="RecursiveTailRecM.html"><span class="name">RecursiveTailRecM</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@RecursiveTailRecM[F[_]]extendsSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">This is a marker type that promises that the method
-.tailRecM for this type is stack-safe for arbitrary recursion.</p>
     </li><li name="cats.Reducible" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Reducible[F[_]]extendsFoldable[F]withSerializable"></a>
       <a id="Reducible[F[_]]:Reducible[F]"></a>
@@ -1726,23 +1708,6 @@ however the Scala compiler will not find them without some coercing.
       </a>
     </span>
       
-    </li><li name="cats.RecursiveTailRecM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RecursiveTailRecM"></a>
-      <a id="RecursiveTailRecM:RecursiveTailRecM"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="RecursiveTailRecM$.html"><span class="name">RecursiveTailRecM</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.package@RecursiveTailRecM" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="cats.Reducible" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Reducible"></a>
       <a id="Reducible:Reducible"></a>
@@ -1914,18 +1879,18 @@ however the Scala compiler will not find them without some coercing.
     </span>
       
     </li><li name="cats#catsInstancesForId" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsInstancesForId:cats.Bimonad[cats.package.Id]withcats.Monad[cats.package.Id]withcats.Traverse[cats.package.Id]withcats.RecursiveTailRecM[cats.package.Id]"></a>
-      <a id="catsInstancesForId:Bimonad[Id]withMonad[Id]withTraverse[Id]withRecursiveTailRecM[Id]"></a>
+      <a id="catsInstancesForId:cats.Bimonad[cats.package.Id]withcats.Monad[cats.package.Id]withcats.Traverse[cats.package.Id]"></a>
+      <a id="catsInstancesForId:Bimonad[Id]withMonad[Id]withTraverse[Id]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">catsInstancesForId</span><span class="result">: <a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="RecursiveTailRecM.html" class="extype" name="cats.RecursiveTailRecM">RecursiveTailRecM</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>]</span>
+        <span class="name">catsInstancesForId</span><span class="result">: <a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#cats.package@catsInstancesForId:cats.Bimonad[cats.package.Id]withcats.Monad[cats.package.Id]withcats.Traverse[cats.package.Id]withcats.RecursiveTailRecM[cats.package.Id]" title="Permalink" target="_top">
+      <a href="../index.html#cats.package@catsInstancesForId:cats.Bimonad[cats.package.Id]withcats.Monad[cats.package.Id]withcats.Traverse[cats.package.Id]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

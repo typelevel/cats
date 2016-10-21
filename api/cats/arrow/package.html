@@ -134,7 +134,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">Must obey the laws defined in cats.laws.ComposeLaws.</p>
-    </li><li name="cats.arrow.FunctionK" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="cats.arrow.FunctionK" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="FunctionK[F[_],G[_]]extendsSerializable"></a>
       <a id="FunctionK[F[_],G[_]]:FunctionK[F,G]"></a>
       <h4 class="signature">
@@ -150,7 +150,13 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"><code>FunctionK[F[_], G[_]]</code> is a functor transformation from <code>F</code> to <code>G</code>
+in the same manner that function <code>A =&gt; B</code> is a morphism from values
+of type <code>A</code> to <code>B</code>.</p><div class="fullcomment"><div class="comment cmt"><p><code>FunctionK[F[_], G[_]]</code> is a functor transformation from <code>F</code> to <code>G</code>
+in the same manner that function <code>A =&gt; B</code> is a morphism from values
+of type <code>A</code> to <code>B</code>.
+An easy way to create a FunctionK instance is to use the Polymorphic
+lambdas provided by non/kind-projector v0.9+. E.g.</p><pre><span class="kw">val</span> listToOption = λ[FunctionK[<span class="std">List</span>, <span class="std">Option</span>]](_.headOption)</pre></div></div>
     </li><li name="cats.arrow.Split" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Split[F[_,_]]extendsCompose[F]withSerializable"></a>
       <a id="Split[F[_,_]]:Split[F]"></a>
