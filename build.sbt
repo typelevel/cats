@@ -1,5 +1,3 @@
-import com.typesafe.sbt.pgp.PgpKeys.publishSigned
-import com.typesafe.sbt.SbtSite.SiteKeys._
 import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
@@ -145,16 +143,36 @@ lazy val javadocSettings = Seq(
   sources in (Compile, doc) := (if (docsSourcesAndProjects(scalaVersion.value)._1) (sources in (Compile, doc)).value else Nil)
 )
 
+lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site target directory for api docs")
+
 lazy val docSettings = Seq(
+  micrositeName := "Cats",
+  micrositeDescription := "Lightweight, modular, and extensible library for functional programming",
+  micrositeAuthor := "Typelevel contributors",
+  micrositeHighlightTheme := "atom-one-light",
+  micrositeHomepage := "http://typelevel.org/cats",
+  micrositeBaseUrl := "cats",
+  micrositeDocumentationUrl := "api",
+  micrositeGithubOwner := "typelevel",
+  micrositeExtraMdFiles := Map(file("CONTRIBUTING.md") -> "contributing.md"),
+  micrositeGithubRepo := "cats",
+  micrositePalette := Map(
+    "brand-primary" -> "#5B5988",
+    "brand-secondary" -> "#292E53",
+    "brand-tertiary" -> "#222749",
+    "gray-dark" -> "#49494B",
+    "gray" -> "#7B7B7E",
+    "gray-light" -> "#E5E5E6",
+    "gray-lighter" -> "#F4F3F4",
+    "white-color" -> "#FFFFFF"),
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) :=
     inProjects(docsSourcesAndProjects(scalaVersion.value)._2:_*),
-  site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
-  site.addMappingsToSiteDir(tut, "_tut"),
+  docsMappingsAPIDir := "api",
+  addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), docsMappingsAPIDir),
   ghpagesNoJekyll := false,
   fork in tut := true,
   fork in (ScalaUnidoc, unidoc) := true,
-  siteMappings += file("CONTRIBUTING.md") -> "contributing.md",
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
     "-Xfatal-warnings",
     "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
@@ -166,14 +184,13 @@ lazy val docSettings = Seq(
 )
 
 lazy val docs = project
+  .enablePlugins(MicrositesPlugin)
   .settings(moduleName := "cats-docs")
   .settings(catsSettings)
   .settings(noPublishSettings)
   .settings(unidocSettings)
-  .settings(site.settings)
   .settings(ghpages.settings)
   .settings(docSettings)
-  .settings(tutSettings)
   .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
   .dependsOn(coreJVM, freeJVM)
@@ -402,7 +419,7 @@ lazy val publishSettings = Seq(
 // These aliases serialise the build for the benefit of Travis-CI.
 addCommandAlias("buildJVM", "catsJVM/test")
 
-addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeSite")
+addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeMicrosite")
 
 addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 
