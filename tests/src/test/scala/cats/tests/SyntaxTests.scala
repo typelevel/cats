@@ -1,9 +1,10 @@
 package cats
 package tests
 
+import cats.arrow.Compose
 import cats.instances.AllInstances
 import cats.syntax.AllSyntax
-import cats.functor.{Invariant, Contravariant}
+import cats.functor.{Contravariant, Invariant}
 
 /**
  * Test that our syntax implicits are working.
@@ -44,6 +45,16 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val x = mock[A]
     implicit val y = mock[Eq[A]]
     val z: Boolean = x.isEmpty
+  }
+
+  def testCompose[F[_,_] : Compose, A, B, C, D]: Unit = {
+    val x = mock[F[A, B]]
+    val y = mock[F[B, C]]
+    val z = mock[F[C, D]]
+
+    val a = x >>> y >>> z
+    val b = z <<< y <<< x
+
   }
 
   def testEq[A: Eq]: Unit = {

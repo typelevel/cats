@@ -25,3 +25,37 @@ Here's how to distinguish `Monoid` and `MonoidK`:
     also means that for any `A`, there is an "empty" `F[A]` value. The
     combination operation and empty value just depend on the
     structure of `F`, but not on the structure of `A`.
+
+Let's compare the usage of `Monoid[A]` and `MonoidK[F]`.
+
+First some imports:
+
+```tut:silent
+import cats.{Monoid, MonoidK}
+import cats.implicits._
+```
+
+Just like `Monoid[A]`, `MonoidK[F]` has an `empty` method, but it is parameterized on the type of the element contained in `F`:
+
+```tut:book
+Monoid[List[String]].empty
+MonoidK[List].empty[String]
+MonoidK[List].empty[Int]
+```
+
+And instead of `combine`, it has `combineK`, which also takes one type parameter:
+
+```tut:book
+Monoid[List[String]].combine(List("hello", "world"), List("goodbye", "moon"))
+MonoidK[List].combineK[String](List("hello", "world"), List("goodbye", "moon"))
+MonoidK[List].combineK[Int](List(1, 2), List(3, 4))
+```
+
+Actually the type parameter can usually be inferred:
+
+```tut:book
+MonoidK[List].combineK(List("hello", "world"), List("goodbye", "moon"))
+MonoidK[List].combineK(List(1, 2), List(3, 4))
+```
+
+`MonoidK` extends [`SemigroupK`](semigroupk.html), so take a look at the `SemigroupK` documentation for more examples.
