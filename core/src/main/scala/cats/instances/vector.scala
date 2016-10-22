@@ -86,6 +86,9 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def filter[A](fa: Vector[A])(f: A => Boolean): Vector[A] = fa.filter(f)
 
       override def collect[A, B](fa: Vector[A])(f: PartialFunction[A, B]): Vector[B] = fa.collect(f)
+
+      override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
+        Foldable.iteratorFoldM(fa.toIterator, z)(f)
     }
 
   implicit def catsStdShowForVector[A:Show]: Show[Vector[A]] =

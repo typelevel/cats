@@ -27,6 +27,9 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
         fa.forall(p)
 
       override def isEmpty[A](fa: Set[A]): Boolean = fa.isEmpty
+
+      override def foldM[G[_], A, B](fa: Set[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
+        Foldable.iteratorFoldM(fa.toIterator, z)(f)
     }
 
   implicit def catsStdShowForSet[A:Show]: Show[Set[A]] = new Show[Set[A]] {

@@ -79,6 +79,9 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def isEmpty[A](fa: List[A]): Boolean = fa.isEmpty
 
       override def filter[A](fa: List[A])(f: A => Boolean): List[A] = fa.filter(f)
+
+      override def foldM[G[_], A, B](fa: List[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
+        Foldable.iteratorFoldM(fa.toIterator, z)(f)
     }
 
   implicit def catsStdShowForList[A:Show]: Show[List[A]] =

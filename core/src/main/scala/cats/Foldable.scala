@@ -173,6 +173,12 @@ import simulacrum.typeclass
 
   /**
    * Left associative monadic folding on `F`.
+   *
+   * The default implementation of this is based on `foldLeft`, and thus will
+   * always fold across the entire structure. Certain structures are able to
+   * implement this in such a way that folds can be short-circuited (not
+   * traverse the entirety of the structure), depending on the `G` result
+   * produced at a given step.
    */
   def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
     foldLeft(fa, G.pure(z))((gb, a) => G.flatMap(gb)(f(_, a)))
@@ -371,5 +377,40 @@ object Foldable {
     def loop(): Eval[B] =
       Eval.defer(if (it.hasNext) f(it.next, loop()) else lb)
     loop()
+  }
+
+  /**
+   * Implementation of [[Foldable.foldM]] which can short-circuit for
+   * structures with an `Iterator`.
+   *
+   * For example we can sum a `Stream` of integers and stop if
+   * the sum reaches 100 (if we reach the end of the `Stream`
+   * before getting to 100 we return the total sum) :
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> type LongOr[A] = Either[Long, A]
+   * scala> def sumStream(s: Stream[Int]): Long =
+   *      |   Foldable.iteratorFoldM[LongOr, Int, Long](s.toIterator, 0L){ (acc, n) =>
+   *      |     val sum = acc + n
+   *      |     if (sum < 100L) Right(sum) else Left(sum)
+   *      |   }.merge
+   *
+   * scala> sumStream(Stream.continually(1))
+   * res0: Long = 100
+   *
+   * scala> sumStream(Stream(1,2,3,4))
+   * res1: Long = 10
+   * }}}
+   *
+   * Note that `Foldable[Stream].foldM` uses this method underneath, so
+   * you wouldn't call this method explicitly like in the example above.
+   */
+  def iteratorFoldM[M[_], A, B](it: Iterator[A], z: B)(f: (B, A) => M[B])(implicit M: Monad[M]): M[B] = {
+    val go: B => M[Either[B, B]] = { b =>
+      if (it.hasNext) M.map(f(b, it.next))(Left(_))
+      else M.pure(Right(b))
+    }
+    M.tailRecM(z)(go)
   }
 }

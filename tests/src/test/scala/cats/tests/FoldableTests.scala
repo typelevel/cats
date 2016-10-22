@@ -107,14 +107,35 @@ class FoldableTestsAdditional extends CatsSuite {
     larger.value should === (large.map(_ + 1))
   }
 
-  test("Foldable[List].foldM stack safety") {
-    def nonzero(acc: Long, x: Long): Option[Long] =
+  def checkFoldMStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Foldable[F]): Unit = {
+    def nonzero(acc: Long, x: Int): Option[Long] =
       if (x == 0) None else Some(acc + x)
 
-    val n = 100000L
-    val expected = n*(n+1)/2
-    val actual = Foldable[List].foldM((1L to n).toList, 0L)(nonzero)
-    assert(actual.get == expected)
+    val n = 100000
+    val expected = n.toLong*(n.toLong+1)/2
+    val foldMResult = F.foldM(fromRange(1 to n), 0L)(nonzero)
+    assert(foldMResult.get == expected)
+    ()
+  }
+
+  test("Foldable[List].foldM stack safety") {
+    checkFoldMStackSafety[List](_.toList)
+  }
+
+  test("Foldable[Stream].foldM stack safety") {
+    checkFoldMStackSafety[Stream](_.toStream)
+  }
+
+  test("Foldable[Vector].foldM stack safety") {
+    checkFoldMStackSafety[Vector](_.toVector)
+  }
+
+  test("Foldable[Set].foldM stack safety") {
+    checkFoldMStackSafety[Set](_.toSet)
+  }
+
+  test("Foldable[Map[String, ?]].foldM stack safety") {
+    checkFoldMStackSafety[Map[String, ?]](_.map(x => x.toString -> x).toMap)
   }
 
   test("Foldable[Stream]") {
@@ -141,6 +162,9 @@ class FoldableTestsAdditional extends CatsSuite {
     // test trampolining
     val large = Stream((1 to 10000): _*)
     assert(contains(large, 10000).value)
+
+    // test laziness of foldM
+    dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should === (None)
   }
 }
 
