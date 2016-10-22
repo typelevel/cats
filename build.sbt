@@ -45,7 +45,7 @@ lazy val commonSettings = Seq(
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.2")
   ),
-  fork in test := false, //true,
+  fork in test := true,
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
   // workaround for https://github.com/scalastyle/scalastyle-sbt-plugin/issues/47
