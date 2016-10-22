@@ -14,7 +14,7 @@ import scala.util.Properties
 class NonEmptyVectorTests extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfig(maxSize = 5, minSuccessful = 20)
+    PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
   checkAll("NonEmptyVector[Int]", OrderLaws[NonEmptyVector[Int]].eqv)
 
