@@ -174,7 +174,6 @@ lazy val docs = project
   .settings(docSettings)
   .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
-  .settings(fix2_12:_*)
   .dependsOn(coreJVM, freeJVM)
 
 lazy val cats = project.in(file("."))
@@ -236,7 +235,6 @@ lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
   .settings(scoverageSettings: _*)
   .settings(disciplineDependencies: _*)
   .settings(testingDependencies: _*)
-  .settings(fix2_12:_*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
   .jsSettings(coverageEnabled := false)
@@ -251,7 +249,6 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(catsSettings:_*)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
-  .settings(fix2_12:_*)
   .configureCross(disableScoverage210Jvm)
   .configureCross(disableScoverage210Js)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
@@ -280,7 +277,6 @@ lazy val free = crossProject.crossType(CrossType.Pure)
   .settings(catsSettings:_*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
-  .settings(fix2_12:_*)
 
 lazy val freeJVM = free.jvm
 lazy val freeJS = free.js
@@ -294,7 +290,6 @@ lazy val tests = crossProject.crossType(CrossType.Pure)
   .settings(testingDependencies: _*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
-  .settings(fix2_12:_*)
 
 lazy val testsJVM = tests.jvm
 lazy val testsJS = tests.js
@@ -574,17 +569,3 @@ lazy val update2_12 = Seq(
   }
 )
 
-lazy val fix2_12 = Seq(
-  scalacOptions -= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 12)) => "-Xfatal-warnings"
-      case _ => ""
-    }
-  },
-  scalacOptions in (ScalaUnidoc, unidoc) -= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 12)) => "-Xfatal-warnings"
-      case _ => ""
-    }
-  }
-)
