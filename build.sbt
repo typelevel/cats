@@ -103,8 +103,8 @@ lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion)
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.4-SNAPSHOT",
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.4-SNAPSHOT" % "test",
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.4",
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.4" % "test",
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
 
 
@@ -263,7 +263,7 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
-  .settings(libraryDependencies ++= Seq("org.typelevel" %%% "catalysts-platform" % "0.0.4-SNAPSHOT"))
+  .settings(libraryDependencies ++= Seq("org.typelevel" %%% "catalysts-platform" % "0.0.4"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
   .jsSettings(coverageEnabled := false)
