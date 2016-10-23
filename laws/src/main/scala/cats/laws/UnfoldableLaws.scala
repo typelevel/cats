@@ -12,8 +12,8 @@ trait UnfoldableLaws[F[_]] {
   def singletonConsistentWithDefault[A](a: A): IsEq[F[A]] =
     F.singleton(a) <-> Unfoldable.DefaultImpl.singleton[F, A](a)
 
-  def replicateConsistentWithDefault[A](n: Int, a: A): IsEq[F[A]] =
-    F.replicate(n)(a) <-> Unfoldable.DefaultImpl.replicate[F, A](n)(a)
+  def replicateConsistentWithDefault[A](n: Size, a: A): IsEq[F[A]] =
+    F.replicate(n.value)(a) <-> Unfoldable.DefaultImpl.replicate[F, A](n.value)(a)
 
   def buildConsistentWithDefault[A](as: List[A]): IsEq[F[A]] =
     F.build(as: _*) <-> Unfoldable.DefaultImpl.build[F, A](as: _*)
@@ -26,3 +26,5 @@ object UnfoldableLaws {
   def apply[F[_]](implicit ev: Unfoldable[F]): UnfoldableLaws[F] =
     new UnfoldableLaws[F] { def F: Unfoldable[F] = ev }
 }
+
+case class Size(value: Int)

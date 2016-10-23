@@ -43,7 +43,7 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
 
       override def none[A]: Set[A] = Set.empty
       override def singleton[A](value: A): Set[A] = Set(value)
-      override def replicate[A](n: Int)(value: A): Set[A] = Set(value)
+      override def replicate[A](n: Int)(value: A): Set[A] = if (n > 0) Set(value) else Set.empty
       override def build[A](as: A*): Set[A] = as.toSet
     }
 
