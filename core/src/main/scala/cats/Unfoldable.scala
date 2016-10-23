@@ -40,7 +40,7 @@ object Unfoldable {
       replicate(1)(value)
 
     def replicate[F[_], A](n: Int)(value: A)(implicit F: Unfoldable[F]): F[A] =
-      F.unfoldLeft(n)(i => if(i <= 0) None else Some((i - 1, value)))
+      F.unfoldLeft(n)(i => if (i <= 0) None else Some((i - 1, value)))
 
     def build[F[_], A](as: A*)(implicit F: Unfoldable[F]): F[A] =
       fromList(as.toList)
