@@ -8,8 +8,7 @@ lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev 
 
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
-  coverageFailOnMinimum := false,
-  coverageHighlighting := scalaBinaryVersion.value != "2.10"
+  coverageFailOnMinimum := false
 )
 
 lazy val buildSettings = Seq(
@@ -264,6 +263,7 @@ lazy val laws = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
+  .configureCross(disableScoverage210Jvm)
   .settings(libraryDependencies ++= Seq("org.typelevel" %%% "catalysts-platform" % "0.0.4"))
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
