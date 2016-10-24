@@ -84,10 +84,9 @@ class ProdTests extends CatsSuite {
 
   test("show") {
     forAll { (l1: Option[Int], l2: Option[Int]) =>
-      val showOptionInt = implicitly[Show[Option[Int]]]
       val prod = Prod(l1, l2)
 
-      Show[Prod[Option, Option, Int]].show(prod) should === (s"Prod(${showOptionInt.show(l1)}, ${showOptionInt.show(l2)})")
+      Show[Prod[Option, Option, Int]].show(prod) should === (s"Prod(${Show[Option[Int]].show(l1)}, ${Show[Option[Int]].show(l2)})")
     }
   }
 
