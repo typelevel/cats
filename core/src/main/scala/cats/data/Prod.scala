@@ -18,55 +18,13 @@ private[data] sealed abstract class ProdInstances extends ProdInstances0 {
     def F: MonadCombine[F] = FF
     def G: MonadCombine[G] = GF
   }
-
   implicit def catsDataOrderForProd[F[_], G[_], A](implicit FF: Order[F[A]], GF: Order[G[A]]): Order[Prod[F, G, A]] = new ProdOrder[F, G, A] {
     def F: Order[F[A]] = FF
     def G: Order[G[A]] = GF
   }
-
   implicit def catsDataShowForProd[F[_], G[_], A](implicit FF: Show[F[A]], GF: Show[G[A]]): Show[Prod[F, G, A]] = new ProdShow[F, G, A] {
     def F: Show[F[A]] = FF
     def G: Show[G[A]] = GF
-  }
-}
-
-private[data] sealed abstract class ProdInstances0 extends ProdInstances1 {
-  implicit def catsDataMonoidKForProd[F[_], G[_]](implicit FF: MonoidK[F], GG: MonoidK[G]): MonoidK[λ[α => Prod[F, G, α]]] = new ProdMonoidK[F, G] {
-    def F: MonoidK[F] = FF
-    def G: MonoidK[G] = GG
-  }
-
-  implicit def catsDataEqForProd[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]]): Eq[Prod[F, G, A]] = new Eq[Prod[F, G, A]] {
-    def eqv(x: Prod[F, G, A], y: Prod[F, G, A]): Boolean =
-      FF.eqv(x.first, y.first) && GG.eqv(x.second, y.second)
-  }
-}
-
-private[data] sealed abstract class ProdInstances1 extends ProdInstances2 {
-  implicit def catsDataSemigroupKForProd[F[_], G[_]](implicit FF: SemigroupK[F], GG: SemigroupK[G]): SemigroupK[λ[α => Prod[F, G, α]]] = new ProdSemigroupK[F, G] {
-    def F: SemigroupK[F] = FF
-    def G: SemigroupK[G] = GG
-  }
-}
-
-private[data] sealed abstract class ProdInstances2 extends ProdInstances3 {
-  implicit def catsDataApplicativeForProd[F[_], G[_]](implicit FF: Applicative[F], GG: Applicative[G]): Applicative[λ[α => Prod[F, G, α]]] = new ProdApplicative[F, G] {
-    def F: Applicative[F] = FF
-    def G: Applicative[G] = GG
-  }
-}
-
-private[data] sealed abstract class ProdInstances3 extends ProdInstances4 {
-  implicit def catsDataMonadForProd[F[_], G[_]](implicit FM: Monad[F], GM: Monad[G]): Monad[λ[α => Prod[F, G, α]]] = new ProdMonad[F, G] {
-    def F: Monad[F] = FM
-    def G: Monad[G] = GM
-  }
-}
-
-private[data] sealed abstract class ProdInstances4 extends ProdInstances5 {
-  implicit def catsDataTraverseForProd[F[_], G[_]](implicit FF: Traverse[F], GF: Traverse[G]): Traverse[λ[α => Prod[F, G, α]]] = new ProdTraverse[F, G] {
-    def F: Traverse[F] = FF
-    def G: Traverse[G] = GF
   }
   implicit def catsDataContravariantForProd[F[_], G[_]](implicit FC: Contravariant[F], GC: Contravariant[G]): Contravariant[λ[α => Prod[F, G, α]]] = new ProdContravariant[F, G] {
     def F: Contravariant[F] = FC
@@ -74,28 +32,55 @@ private[data] sealed abstract class ProdInstances4 extends ProdInstances5 {
   }
 }
 
-private[data] sealed abstract class ProdInstances5 extends ProdInstances6 {
+private[data] sealed abstract class ProdInstances0 extends ProdInstances1 {
+  implicit def catsDataTraverseForProd[F[_], G[_]](implicit FF: Traverse[F], GF: Traverse[G]): Traverse[λ[α => Prod[F, G, α]]] = new ProdTraverse[F, G] {
+    def F: Traverse[F] = FF
+    def G: Traverse[G] = GF
+  }
+  implicit def catsDataAlternativeForProd[F[_], G[_]](implicit FF: Alternative[F], GG: Alternative[G]): Alternative[λ[α => Prod[F, G, α]]] = new ProdAlternative[F, G] {
+    def F: Alternative[F] = FF
+    def G: Alternative[G] = GG
+  }
+  implicit def catsDataMonadForProd[F[_], G[_]](implicit FM: Monad[F], GM: Monad[G]): Monad[λ[α => Prod[F, G, α]]] = new ProdMonad[F, G] {
+    def F: Monad[F] = FM
+    def G: Monad[G] = GM
+  }
+  implicit def catsDataEqForProd[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]]): Eq[Prod[F, G, A]] = new Eq[Prod[F, G, A]] {
+    def eqv(x: Prod[F, G, A], y: Prod[F, G, A]): Boolean =
+      FF.eqv(x.first, y.first) && GG.eqv(x.second, y.second)
+  }
+}
+
+private[data] sealed abstract class ProdInstances1 extends ProdInstances2 {
+  implicit def catsDataFoldableForProd[F[_], G[_]](implicit FF: Foldable[F], GF: Foldable[G]): Foldable[λ[α => Prod[F, G, α]]] = new ProdFoldable[F, G] {
+    def F: Foldable[F] = FF
+    def G: Foldable[G] = GF
+  }
+  implicit def catsDataMonoidKForProd[F[_], G[_]](implicit FF: MonoidK[F], GG: MonoidK[G]): MonoidK[λ[α => Prod[F, G, α]]] = new ProdMonoidK[F, G] {
+    def F: MonoidK[F] = FF
+    def G: MonoidK[G] = GG
+  }
+  implicit def catsDataApplicativeForProd[F[_], G[_]](implicit FF: Applicative[F], GG: Applicative[G]): Applicative[λ[α => Prod[F, G, α]]] = new ProdApplicative[F, G] {
+    def F: Applicative[F] = FF
+    def G: Applicative[G] = GG
+  }
+}
+
+private[data] sealed abstract class ProdInstances2 extends ProdInstances3 {
+  implicit def catsDataSemigroupKForProd[F[_], G[_]](implicit FF: SemigroupK[F], GG: SemigroupK[G]): SemigroupK[λ[α => Prod[F, G, α]]] = new ProdSemigroupK[F, G] {
+    def F: SemigroupK[F] = FF
+    def G: SemigroupK[G] = GG
+  }
   implicit def catsDataApplyForProd[F[_], G[_]](implicit FF: Apply[F], GG: Apply[G]): Apply[λ[α => Prod[F, G, α]]] = new ProdApply[F, G] {
     def F: Apply[F] = FF
     def G: Apply[G] = GG
   }
 }
 
-private[data] sealed abstract class ProdInstances6 extends ProdInstances7 {
+private[data] sealed abstract class ProdInstances3 {
   implicit def catsDataFunctorForProd[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[λ[α => Prod[F, G, α]]] = new ProdFunctor[F, G] {
     def F: Functor[F] = FF
     def G: Functor[G] = GG
-  }
-  implicit def catsDataFoldableForProd[F[_], G[_]](implicit FF: Foldable[F], GF: Foldable[G]): Foldable[λ[α => Prod[F, G, α]]] = new ProdFoldable[F, G] {
-    def F: Foldable[F] = FF
-    def G: Foldable[G] = GF
-  }
-}
-
-private[data] sealed abstract class ProdInstances7 {
-  implicit def catsDataAlternativeForProd[F[_], G[_]](implicit FF: Alternative[F], GG: Alternative[G]): Alternative[λ[α => Prod[F, G, α]]] = new ProdAlternative[F, G] {
-    def F: Alternative[F] = FF
-    def G: Alternative[G] = GG
   }
 }
 
