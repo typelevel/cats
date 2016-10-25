@@ -35,6 +35,8 @@ New instances:
  * [#1324](https://github.com/typelevel/cats/pull/1324): `Eq` and `PartialOrder` for `Either`
  * [#1324](https://github.com/typelevel/cats/pull/1324): `PartialOrder`, `Monoid`, and other instances for `Function0`
  * [#1324](https://github.com/typelevel/cats/pull/1324): `Monoid` and other instances for `Function1`
+ * [#1402](https://github.com/typelevel/cats/pull/1402): `Monad`, `MonadCombine`, `Traverse`, `Order`, etc. for `Prod`
+ * [#1413](https://github.com/typelevel/cats/pull/1413): `MonadError` for `StateT`
  * [#1399](https://github.com/typelevel/cats/pull/1399): Instances for `java.util.UUID`
 
 Renaming and rearrangements:
@@ -52,6 +54,7 @@ Miscellaneous improvements (syntax, documentation, tests):
  * [#1331](https://github.com/typelevel/cats/pull/1331): Less expensive `tailRecM`-`flatMap` consistency checking
  * [#1330](https://github.com/typelevel/cats/pull/1330): More consistent parameter-less method definitions and usage, other syntactic improvments
  * [#1340](https://github.com/typelevel/cats/pull/1340): New [Scaladex](https://index.scala-lang.org) badge
+ * [#1416](https://github.com/typelevel/cats/pull/1416): New diagram of type classes
  * [#1352](https://github.com/typelevel/cats/pull/1352): API docs for `FunctionK`
  * [#1369](https://github.com/typelevel/cats/pull/1369), [#1418](https://github.com/typelevel/cats/pull/1418): New project site based on [sbt-microsites](https://github.com/47deg/sbt-microsites)
  * [#1259](https://github.com/typelevel/cats/pull/1259): 0.6-to-0.7 migration guide
@@ -62,6 +65,7 @@ Build:
  * [#1345](https://github.com/typelevel/cats/pull/1345): Update ScalaCheck (to 1.13.2) and Discipline (to 0.6)
  * [#1353](https://github.com/typelevel/cats/pull/1353): Generated sources are included in source jars
  * [#1322](https://github.com/typelevel/cats/pull/1322): Scala.js test clean-up
+ * [#1426](https://github.com/typelevel/cats/pull/1426): Human-friendly names in metadata for published artifacts
  * [#1389](https://github.com/typelevel/cats/pull/1389): More memory for Travis CI
 
 ## Version 0.7.2
