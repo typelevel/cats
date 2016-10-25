@@ -25,4 +25,5 @@ trait AllInstances
     with SymbolInstances
     with TupleInstances
     with UnitInstances
+    with UUIDInstances
     with VectorInstances

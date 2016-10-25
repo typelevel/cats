@@ -3,6 +3,7 @@ package tests
 
 import cats.data.EitherT
 import cats.functor.Bifunctor
+import cats.functor._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.{OrderLaws, GroupLaws}
@@ -116,6 +117,24 @@ class EitherTTests extends CatsSuite {
   test("toValidatedNel") {
     forAll { (eithert: EitherT[List, String, Int]) =>
       eithert.toValidatedNel.map(_.toEither.leftMap(_.head)) should === (eithert.value)
+    }
+  }
+
+  test("toNested") {
+    forAll { (eithert: EitherT[List, String, Int]) =>
+      eithert.toNested.value should === (eithert.value)
+    }
+  }
+
+  test("toNestedValidated") {
+    forAll { (eithert: EitherT[List, String, Int]) =>
+      eithert.toNestedValidated.value should === (eithert.value.map(_.toValidated))
+    }
+  }
+
+  test("toNestedValidatedNel") {
+    forAll { (eithert: EitherT[List, String, Int]) =>
+      eithert.toNestedValidatedNel.value should === (eithert.value.map(_.toValidatedNel))
     }
   }
 

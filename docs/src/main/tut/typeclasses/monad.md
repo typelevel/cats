@@ -60,7 +60,7 @@ implicit def optionMonad(implicit app: Applicative[Option]) =
 follows this tradition by providing implementations of `flatten` and `map`
 derived from `flatMap` and `pure`.
 
-In addition to requiring `flatMap` and pure`, Cats has chosen to require
+In addition to requiring `flatMap` and `pure`, Cats has chosen to require
 `tailRecM` which encodes stack safe monadic recursion, as described in
 [Stack Safety for Free](http://functorial.com/stack-safety-for-free/index.pdf) by
 Phil Freeman. Because monadic recursion is so common in functional programming but

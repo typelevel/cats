@@ -33,11 +33,11 @@ import cats.implicits._
 This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](imports.html).
 
 ## <a id="either" href="#either"></a>Where is right-biased Either?
-Up to Cats 0.6.x we had `cats.data.Xor` which was effectively `scala.util.Either`, but right-biased by default and with
+Up through Cats 0.7.x we had `cats.data.Xor`, which was effectively `scala.util.Either`, but right-biased by default and with
 a bunch of useful combinators around it. In Scala 2.12.x `Either`
 [became right-biased](https://github.com/scala/scala/pull/5135) so we revisited the use of `Xor` and
-[decided](https://github.com/typelevel/cats/issues/1192) that in the interest of interoperability we move to
-`scala.util.Either` and fill in the gaps via
+[decided](https://github.com/typelevel/cats/issues/1192) that in the interest of interoperability, we would remove `Xor` in the Cats 0.8.0 release and
+fill in the gaps in the `scala.util.Either` API via
 [syntax enrichment](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/syntax/either.scala).
 
 This syntax can be imported via `cats.syntax.either._` or through `cats.implicits._`.

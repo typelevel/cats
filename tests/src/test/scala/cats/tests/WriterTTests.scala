@@ -17,7 +17,7 @@ class WriterTTests extends CatsSuite {
   // Scalacheck to calm down a bit so we don't hit memory and test duration
   // issues.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfig(maxSize = 5, minSuccessful = 20)
+    PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
   checkAll("WriterT[List, Int, Int]", OrderLaws[WriterT[List, Int, Int]].eqv)
   checkAll("Eq[WriterT[List, Int, Int]]", SerializableTests.serializable(Eq[WriterT[List, Int, Int]]))

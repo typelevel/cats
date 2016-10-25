@@ -207,6 +207,29 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * decided [[https://github.com/typelevel/cats/issues/1073 how to handle the SI-2712 fix]].
    */
   def toNested: Nested[F, Either[A, ?], B] = Nested[F, Either[A, ?], B](value)
+
+  /**
+    * Transform this `EitherT[F, A, B]` into a `[[Nested]][F, Validated[A, ?], B]` or `[[Nested]][F, ValidatedNel[A, B]`.
+    * Example:
+    * {{{
+    * scala> import cats.data.{Validated, EitherT, Nested}
+    * scala> import cats.implicits._
+    * scala> val f: Int => String = i => (i*2).toString
+    * scala> val r1: EitherT[Option, String, Int => String] = EitherT.right(Some(f))
+    *     | r1: cats.data.EitherT[Option,String,Int => String] = EitherT(Some(Right(<function1>)))
+    * scala> val r2: EitherT[Option, String, Int] = EitherT.right(Some(10))
+    *     | r2: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(10)))
+    * scala> type ValidatedOr[A] = Validated[String, A]
+    * scala> type OptionErrorOr[A] = Nested[Option, ValidatedOr, A]
+    * scala> (r1.toNestedValidated: OptionErrorOr[Int => String]).ap(r2.toNestedValidated: OptionErrorOr[Int])
+    * res0: OptionErrorOr[String] = Nested(Some(Valid(20)))
+    * }}}
+    */
+  def toNestedValidated(implicit F: Functor[F]): Nested[F, Validated[A, ?], B] =
+    Nested[F, Validated[A, ?], B](F.map(value)(_.toValidated))
+
+  def toNestedValidatedNel(implicit F: Functor[F]): Nested[F, ValidatedNel[A, ?], B] =
+    Nested[F, ValidatedNel[A, ?], B](F.map(value)(_.toValidatedNel))
 }
 
 object EitherT extends EitherTInstances with EitherTFunctions

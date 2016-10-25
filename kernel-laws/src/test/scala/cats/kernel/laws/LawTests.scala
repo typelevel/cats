@@ -10,19 +10,22 @@ import org.typelevel.discipline.{ Laws }
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{ Arbitrary, Cogen, Gen }
 import Arbitrary.arbitrary
+import org.scalactic.anyvals.{ PosInt, PosZInt }
 import org.scalatest.FunSuite
 
 import scala.util.Random
 import scala.collection.immutable.BitSet
 
+import java.util.UUID
+
 class LawTests extends FunSuite with Discipline {
 
   // The scalacheck defaults (100,100) are too high for scala-js.
-  final val PropMaxSize = if (Platform.isJs) 10 else 100
-  final val PropMinSuccessful = if (Platform.isJs) 10 else 100
+  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
+  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfig(maxSize = PropMaxSize, minSuccessful = PropMinSuccessful)
+    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
 
   implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
   implicit def groupLaws[A: Cogen: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
@@ -32,6 +35,9 @@ class LawTests extends FunSuite with Discipline {
 
   implicit val arbitrarySymbol: Arbitrary[Symbol] =
     Arbitrary(arbitrary[String].map(s => Symbol(s)))
+
+  implicit val arbitraryUUID: Arbitrary[UUID] =
+    Arbitrary(Gen.uuid)
 
   // this instance is not available in scalacheck 1.13.2.
   // remove this once a newer version is available.
@@ -45,6 +51,9 @@ class LawTests extends FunSuite with Discipline {
 
   implicit val cogenSymbol: Cogen[Symbol] =
     Cogen[String].contramap(_.name)
+
+  implicit val cogenUUID: Cogen[UUID] =
+    Cogen[(Long, Long)].contramap(u => (u.getMostSignificantBits, u.getLeastSignificantBits))
 
   {
     // needed for Cogen[Map[...]]
@@ -78,6 +87,7 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Long].check(_.order)
   laws[OrderLaws, BitSet].check(_.partialOrder)
   laws[OrderLaws, BigInt].check(_.order)
+  laws[OrderLaws, UUID].check(_.order)
   laws[OrderLaws, List[Int]].check(_.order)
   laws[OrderLaws, Option[String]].check(_.order)
   laws[OrderLaws, List[String]].check(_.order)
