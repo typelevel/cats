@@ -2,7 +2,7 @@
 
 > 2016 October 18
 
-Version 0.8.0 is the eighth Cats release.
+Version 0.8.0 is the eighth Cats release, and the first release with support for Scala 2.12 (specifically the 2.12.0-RC2 release candidate).
 
 Removals:
 
@@ -11,6 +11,8 @@ Removals:
 
 Additions:
 
+ * [#1382](https://github.com/typelevel/cats/pull/1382), [#1415](https://github.com/typelevel/cats/pull/1415): Support for Scala 2.12.0-RC2
+ * [#1414](https://github.com/typelevel/cats/pull/1414): `Foldable#iteratorFoldM` and lazy `foldM` implementations for many standard library instances
  * [#1356](https://github.com/typelevel/cats/pull/1356): `append` and `prepend` (and operator aliases) for `NonEmptyVector`
  * [#1327](https://github.com/typelevel/cats/pull/1327): `EitherT.fromOption`
  * [#1388](https://github.com/typelevel/cats/pull/1388): `StateT.set` and `StateT.setF`
@@ -19,6 +21,10 @@ Additions:
  * [#1391](https://github.com/typelevel/cats/pull/1391): `MonadReader#reader`
  * [#1352](https://github.com/typelevel/cats/pull/1352): Macro-powered `FunctionK.lift`
  * [#1398](https://github.com/typelevel/cats/pull/1398): `<<<` and `>>>` aliases for `Compose`'s `compose` and `andThen`
+ * [#1408](https://github.com/typelevel/cats/pull/1408): `toNestedValidated` and `toNestedValidatedNel` for `EitherT`
+ * [#1399](https://github.com/typelevel/cats/pull/1399): `Order.fromComparable`
+ * [#1394](https://github.com/typelevel/cats/pull/1394): `Traverse#flatSequence`
+ * [#1417](https://github.com/typelevel/cats/pull/1417): `MonadTests#stackUnsafeMonad` laws for instances where `tailRecM` is known to be unsafe
 
 New instances:
 
@@ -29,11 +35,13 @@ New instances:
  * [#1324](https://github.com/typelevel/cats/pull/1324): `Eq` and `PartialOrder` for `Either`
  * [#1324](https://github.com/typelevel/cats/pull/1324): `PartialOrder`, `Monoid`, and other instances for `Function0`
  * [#1324](https://github.com/typelevel/cats/pull/1324): `Monoid` and other instances for `Function1`
+ * [#1399](https://github.com/typelevel/cats/pull/1399): Instances for `java.util.UUID`
 
 Renaming and rearrangements:
 
  * [#1385](https://github.com/typelevel/cats/pull/1385): The `cats.js.std` package is now `cats.js.instances`
  * [#1324](https://github.com/typelevel/cats/pull/1324): Many instances moved from cats-core to cats-kernel
+ * [#1394](https://github.com/typelevel/cats/pull/1394): `Traverse#traverseM` is now `flatTraverse`
 
 Miscellaneous improvements (syntax, documentation, tests):
 
@@ -45,8 +53,9 @@ Miscellaneous improvements (syntax, documentation, tests):
  * [#1330](https://github.com/typelevel/cats/pull/1330): More consistent parameter-less method definitions and usage, other syntactic improvments
  * [#1340](https://github.com/typelevel/cats/pull/1340): New [Scaladex](https://index.scala-lang.org) badge
  * [#1352](https://github.com/typelevel/cats/pull/1352): API docs for `FunctionK`
+ * [#1369](https://github.com/typelevel/cats/pull/1369), [#1418](https://github.com/typelevel/cats/pull/1418): New project site based on [sbt-microsites](https://github.com/47deg/sbt-microsites)
  * [#1259](https://github.com/typelevel/cats/pull/1259): 0.6-to-0.7 migration guide
- * [#1304](https://github.com/typelevel/cats/pull/1304), [#1317](https://github.com/typelevel/cats/pull/1317), [#1323](https://github.com/typelevel/cats/pull/1323), [#1350](https://github.com/typelevel/cats/pull/1350), [#1366](https://github.com/typelevel/cats/pull/1366), [#1376](https://github.com/typelevel/cats/pull/1376), [#1380](https://github.com/typelevel/cats/pull/1380), [#1390](https://github.com/typelevel/cats/pull/1390), [#1407](https://github.com/typelevel/cats/pull/1407): Other miscellaneous documentation improvements
+ * [#1304](https://github.com/typelevel/cats/pull/1304), [#1317](https://github.com/typelevel/cats/pull/1317), [#1323](https://github.com/typelevel/cats/pull/1323), [#1350](https://github.com/typelevel/cats/pull/1350), [#1366](https://github.com/typelevel/cats/pull/1366), [#1376](https://github.com/typelevel/cats/pull/1376), [#1380](https://github.com/typelevel/cats/pull/1380), [#1390](https://github.com/typelevel/cats/pull/1390), [#1403](https://github.com/typelevel/cats/pull/1403), [#1407](https://github.com/typelevel/cats/pull/1407), [#1421](https://github.com/typelevel/cats/pull/1421): Other miscellaneous documentation improvements
 
 Build:
 
