@@ -12,7 +12,7 @@ import cats.instances.vector._
  * `NonEmptyVector`. However, due to https://issues.scala-lang.org/browse/SI-6601, on
  * Scala 2.10, this may be bypassed due to a compiler bug.
  */
-final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
+final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal {
 
   /** Gets the element at the index, if it exists */
   def get(i: Int): Option[A] =
@@ -22,15 +22,15 @@ final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
   def getUnsafe(i: Int): A = toVector(i)
 
   /** Updates the element at the index, if it exists */
-  def updated(i: Int, a: A): Option[NonEmptyVector[A]] =
+  def updated[AA >: A](i: Int, a: AA): Option[NonEmptyVector[AA]] =
     if (toVector.isDefinedAt(i)) Some(new NonEmptyVector(toVector.updated(i, a))) else None
 
   /**
    * Updates the element at the index, or throws an `IndexOutOfBoundsException`
    * if none exists (if `i` does not satisfy `0 <= i < length`).
    */
-  def updatedUnsafe(i: Int, a: A):
-      NonEmptyVector[A] = new NonEmptyVector(toVector.updated(i, a))
+  def updatedUnsafe[AA >: A](i: Int, a: AA):
+      NonEmptyVector[AA] = new NonEmptyVector(toVector.updated(i, a))
 
   def head: A = toVector.head
 
@@ -63,37 +63,37 @@ final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
   /**
    * Alias for [[concat]]
    */
-  def ++(other: Vector[A]): NonEmptyVector[A] = concat(other)
+  def ++[AA >: A](other: Vector[AA]): NonEmptyVector[AA] = concat(other)
 
   /**
    * Append another `Vector` to this, producing a new `NonEmptyVector`.
    */
-  def concat(other: Vector[A]): NonEmptyVector[A] = new NonEmptyVector(toVector ++ other)
+  def concat[AA >: A](other: Vector[AA]): NonEmptyVector[AA] = new NonEmptyVector(toVector ++ other)
 
   /**
    * Append another `NonEmptyVector` to this, producing a new `NonEmptyVector`.
    */
-  def concatNev(other: NonEmptyVector[A]): NonEmptyVector[A] = new NonEmptyVector(toVector ++ other.toVector)
+  def concatNev[AA >: A](other: NonEmptyVector[AA]): NonEmptyVector[AA] = new NonEmptyVector(toVector ++ other.toVector)
 
   /**
    * Append an item to this, producing a new `NonEmptyVector`.
    */
-  def append(a: A): NonEmptyVector[A] = new NonEmptyVector(toVector :+ a)
+  def append[AA >: A](a: AA): NonEmptyVector[AA] = new NonEmptyVector(toVector :+ a)
 
   /**
     * Alias for [[append]]
     */
-  def :+(a: A): NonEmptyVector[A] = append(a)
+  def :+[AA >: A](a: AA): NonEmptyVector[AA] = append(a)
 
   /**
    * Prepend an item to this, producing a new `NonEmptyVector`.
    */
-  def prepend(a: A): NonEmptyVector[A] = new NonEmptyVector(a +: toVector)
+  def prepend[AA >: A](a: AA): NonEmptyVector[AA] = new NonEmptyVector(a +: toVector)
 
   /**
     * Alias for [[prepend]]
     */
-  def +:(a: A): NonEmptyVector[A] = prepend(a)
+  def +:[AA >: A](a: AA): NonEmptyVector[AA] = prepend(a)
 
   /**
    * Find the first element matching the predicate, if one exists
@@ -137,13 +137,13 @@ final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
   /**
     * Left-associative reduce using f.
     */
-  def reduceLeft(f: (A, A) => A): A =
-    tail.foldLeft(head)(f)
+  def reduceLeft[AA >: A](f: (AA, AA) => AA): AA =
+    tail.foldLeft(head: AA)(f)
 
   /**
     * Reduce using the Semigroup of A
     */
-  def reduce(implicit S: Semigroup[A]): A =
+  def reduce[AA >: A](implicit S: Semigroup[AA]): AA =
     S.combineAllOption(toVector).get
 
   /**
@@ -154,7 +154,8 @@ final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
    * equality provided by Eq[_] instances, rather than using the
    * universal equality provided by .equals.
    */
-  def ===(that: NonEmptyVector[A])(implicit A: Eq[A]): Boolean = Eq[Vector[A]].eqv(toVector, that.toVector)
+  def ===[AA >: A](that: NonEmptyVector[AA])(implicit A: Eq[AA]): Boolean =
+    Eq[Vector[AA]].eqv(toVector, that.toVector)
 
   /**
    * Typesafe stringification method.
@@ -163,8 +164,8 @@ final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
    * values according to Show[_] instances, rather than using the
    * universal .toString method.
    */
-  def show(implicit A: Show[A]): String =
-    s"NonEmpty${Show[Vector[A]].show(toVector)}"
+  def show[AA >: A](implicit AA: Show[AA]): String =
+    s"NonEmpty${Show[Vector[AA]].show(toVector)}"
 
   def length: Int = toVector.length
 
@@ -173,11 +174,11 @@ final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
   /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
    */
-  def distinct(implicit O: Order[A]): NonEmptyVector[A] = {
+  def distinct[AA >: A](implicit O: Order[AA]): NonEmptyVector[AA] = {
     implicit val ord = O.toOrdering
 
-    val buf = Vector.newBuilder[A]
-    tail.foldLeft(TreeSet(head)) { (elementsSoFar, a) =>
+    val buf = Vector.newBuilder[AA]
+    tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, a) =>
       if (elementsSoFar(a)) elementsSoFar else { buf += a; elementsSoFar + a }
     }
 
