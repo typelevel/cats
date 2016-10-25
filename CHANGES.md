@@ -56,7 +56,7 @@ Miscellaneous improvements (syntax, documentation, tests):
  * [#1386](https://github.com/typelevel/cats/pull/1386): `FunctionK` tests and examples now use kind-projector 0.9's polymorphic lambdas
  * [#1410](https://github.com/typelevel/cats/pull/1410): Replace `Coproduct#run` with `Coproduct#fold`
  * [#1331](https://github.com/typelevel/cats/pull/1331): Less expensive `tailRecM`-`flatMap` consistency checking
- * [#1330](https://github.com/typelevel/cats/pull/1330): More consistent parameter-less method definitions and usage, other syntactic improvments
+ * [#1330](https://github.com/typelevel/cats/pull/1330): More consistent parameter-less method definitions and usage, other syntactic improvements
  * [#1340](https://github.com/typelevel/cats/pull/1340): New [Scaladex](https://index.scala-lang.org) badge
  * [#1416](https://github.com/typelevel/cats/pull/1416): New diagram of type classes
  * [#1352](https://github.com/typelevel/cats/pull/1352): API docs for `FunctionK`
