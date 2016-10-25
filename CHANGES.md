@@ -1,6 +1,6 @@
 ## Version 0.8.0
 
-> 2016 October 18
+> 2016 October 25
 
 Version 0.8.0 is the eighth Cats release, and the first release with support for Scala 2.12 (specifically the 2.12.0-RC2 release candidate).
 
@@ -8,10 +8,11 @@ Apart from the introduction of Scala 2.12 support, the biggest change in this re
 of `Xor` and `XorT`. See the [FAQ](http://typelevel.org/cats/faq.html#either) for information about
 the motivations for this change and recommendations for migration.
 
-Removals:
+Removals and deprecations:
 
- * [#1310](https://github.com/typelevel/cats/pull/1310): `Xor` and `XorT`
+ * [#1310](https://github.com/typelevel/cats/pull/1310): `Xor` and `XorT` are gone
  * [#1370](https://github.com/typelevel/cats/pull/1370): `RecursiveTailRecM` and `Free#foldMapUnsafe` are gone and stack safety is checked in the laws for `Monad`
+ * [#1411](https://github.com/typelevel/cats/pull/1411): `FreeT#interpret` is deprecated in favor of the (equivalent) `compile`
 
 Additions:
 
@@ -29,6 +30,7 @@ Additions:
  * [#1399](https://github.com/typelevel/cats/pull/1399): `Order.fromComparable`
  * [#1394](https://github.com/typelevel/cats/pull/1394): `Traverse#flatSequence`
  * [#1417](https://github.com/typelevel/cats/pull/1417): `MonadTests#stackUnsafeMonad` laws for instances where `tailRecM` is known to be unsafe
+ * [#1411](https://github.com/typelevel/cats/pull/1411): `compile` and `foldMap` for the `Free` and `FreeT` companion objects
 
 New instances:
 
