@@ -4,6 +4,10 @@
 
 Version 0.8.0 is the eighth Cats release, and the first release with support for Scala 2.12 (specifically the 2.12.0-RC2 release candidate).
 
+Apart from the introduction of Scala 2.12 support, the biggest change in this release is the removal
+of `Xor` and `XorT`. See the [FAQ](http://typelevel.org/cats/faq.html#either) for information about
+the motivations for this change and recommendations for migration.
+
 Removals:
 
  * [#1310](https://github.com/typelevel/cats/pull/1310): `Xor` and `XorT`
