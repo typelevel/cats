@@ -139,16 +139,13 @@ More about the history of machinist and how it works can be discovered at the [p
 
 The `FlatMap` type class has a `tailRecM` method with the following signature:
 
-```tut:fail:silent
+```scala
 def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B]
-}
 ```
 
 When you are defining a `FlatMap` instance, its `tailRecM` implementation must have two properties in order for the instance to be considered lawful. The first property is that `tailRecM` must return the same result that you would get if you recursively called `flatMap` until you got a `Right` value (assuming you had unlimited stack space—we'll get to that in a moment). In other words, it must give the same result as this implementation:
 
 ```tut:silent
-import cats.Monad
-
 trait Monad[F[_]] {
   def pure[A](x: A): F[A] = ???
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B] = ???
