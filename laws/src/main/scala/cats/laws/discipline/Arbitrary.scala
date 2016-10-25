@@ -130,6 +130,9 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForCoproduct[F[_], G[_], A](implicit F: Cogen[F[A]], G: Cogen[G[A]]): Cogen[Coproduct[F, G, A]] =
     Cogen((seed, x) => x.run.fold(F.perturb(seed, _), G.perturb(seed, _)))
 
+  implicit def catLawsCogenForProd[F[_], G[_], A](implicit F: Cogen[F[A]], G: Cogen[G[A]]): Cogen[Prod[F, G, A]] =
+    Cogen((seed, t) => F.perturb(G.perturb(seed, t.second), t.first))
+
   implicit def catsLawsArbitraryForShow[A: Arbitrary]: Arbitrary[Show[A]] =
     Arbitrary(Show.fromToString[A])
 
