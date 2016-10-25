@@ -8,8 +8,16 @@ git:
   depth: 9999
 
 scala:
-- 2.10.6
-- 2.11.8
+  - 2.10.6
+  - 2.11.8
+
+jdk:
+  - oraclejdk7
+
+matrix:
+  include:
+  - scala: 2.12.0-RC2
+    jdk: oraclejdk8
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle

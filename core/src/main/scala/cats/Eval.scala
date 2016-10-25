@@ -74,8 +74,11 @@ sealed abstract class Eval[+A] extends Serializable { self =>
       case c: Eval.Compute[A] =>
         new Eval.Compute[B] {
           type Start = c.Start
-          val start = c.start
-          val run = (s: c.Start) =>
+          // See https://issues.scala-lang.org/browse/SI-9931 for an explanation
+          // of why the type annotations are necessary in these two lines on
+          // Scala 2.12.0.
+          val start: () => Eval[Start] = c.start
+          val run: Start => Eval[B] = (s: c.Start) =>
             new Eval.Compute[B] {
               type Start = A
               val start = () => c.run(s)

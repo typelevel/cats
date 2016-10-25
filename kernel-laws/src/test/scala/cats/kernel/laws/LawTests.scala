@@ -10,6 +10,7 @@ import org.typelevel.discipline.{ Laws }
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{ Arbitrary, Cogen, Gen }
 import Arbitrary.arbitrary
+import org.scalactic.anyvals.{ PosInt, PosZInt }
 import org.scalatest.FunSuite
 
 import scala.util.Random
@@ -20,11 +21,11 @@ import java.util.UUID
 class LawTests extends FunSuite with Discipline {
 
   // The scalacheck defaults (100,100) are too high for scala-js.
-  final val PropMaxSize = if (Platform.isJs) 10 else 100
-  final val PropMinSuccessful = if (Platform.isJs) 10 else 100
+  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
+  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfig(maxSize = PropMaxSize, minSuccessful = PropMinSuccessful)
+    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
 
   implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
   implicit def groupLaws[A: Cogen: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]

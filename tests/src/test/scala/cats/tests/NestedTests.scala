@@ -13,7 +13,7 @@ class NestedTests extends CatsSuite {
   // Scalacheck to calm down a bit so we don't hit memory and test duration
   // issues.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfig(maxSize = 5, minSuccessful = 20)
+    PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
   implicit val iso = {
     implicit val instance = ListWrapper.functor
