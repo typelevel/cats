@@ -30,7 +30,7 @@ import cats.data._
 import cats.implicits._
 ```
 
-This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](imports.html).
+This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](typeclasses/imports.html).
 
 ## <a id="either" href="#either"></a>Where is right-biased Either?
 Up through Cats 0.7.x we had `cats.data.Xor`, which was effectively `scala.util.Either`, but right-biased by default and with
@@ -40,7 +40,7 @@ a bunch of useful combinators around it. In Scala 2.12.x `Either`
 fill in the gaps in the `scala.util.Either` API via
 [syntax enrichment](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/syntax/either.scala).
 
-This syntax can be imported via `cats.syntax.either._` or through `cats.implicits._`.
+This syntax and the type class instances for `Either` can be imported using `cats.implicits._` or with `cats.syntax.either._` and `cats.instances.either._`. 
 
 Similarly, `cats.data.XorT` has been replaced with `cats.data.EitherT`.
 
