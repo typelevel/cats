@@ -201,7 +201,7 @@ lazy val catsJS = project.in(file(".catsJS"))
 
 
 lazy val macros = crossProject.crossType(CrossType.Pure)
-  .settings(moduleName := "cats-macros")
+  .settings(moduleName := "cats-macros", name := "Cats macros")
   .settings(catsSettings:_*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
@@ -213,7 +213,7 @@ lazy val macrosJS = macros.js
 
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
-  .settings(moduleName := "cats-kernel")
+  .settings(moduleName := "cats-kernel", name := "Cats kernel")
   .settings(kernelSettings: _*)
   .settings(buildSettings: _*)
   .settings(publishSettings: _*)
@@ -228,7 +228,7 @@ lazy val kernelJS = kernel.js
 
 lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
   .in(file("kernel-laws"))
-  .settings(moduleName := "cats-kernel-laws")
+  .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
   .settings(kernelSettings: _*)
   .settings(buildSettings: _*)
   .settings(publishSettings: _*)
@@ -245,7 +245,7 @@ lazy val kernelLawsJS = kernelLaws.js
 
 lazy val core = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, kernel)
-  .settings(moduleName := "cats-core")
+  .settings(moduleName := "cats-core", name := "Cats core")
   .settings(catsSettings:_*)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
@@ -260,7 +260,7 @@ lazy val coreJS = core.js
 
 lazy val laws = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, kernel, core, kernelLaws)
-  .settings(moduleName := "cats-laws")
+  .settings(moduleName := "cats-laws", name := "Cats laws")
   .settings(catsSettings:_*)
   .settings(disciplineDependencies:_*)
   .configureCross(disableScoverage210Jvm)
@@ -274,7 +274,7 @@ lazy val lawsJS = laws.js
 
 lazy val free = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, tests % "test-internal -> test")
-  .settings(moduleName := "cats-free")
+  .settings(moduleName := "cats-free", name := "Cats Free")
   .settings(catsSettings:_*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
