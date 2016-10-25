@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{State, StateT}
+import cats.data.{State, StateT, EitherT}
 import cats.kernel.instances.tuple._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
@@ -260,6 +260,16 @@ class StateTTests extends CatsSuite {
     checkAll("State[Long, ?]", MonadTests[State[Long, ?]].monad[Int, Int, Int])
     checkAll("Monad[State[Long, ?]]", SerializableTests.serializable(Monad[State[Long, ?]]))
   }
+
+  {
+    // F has a MonadError
+    implicit val iso = CartesianTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
+    implicit val eqEitherTFA: Eq[EitherT[StateT[Option, Int , ?], Unit, Int]] = EitherT.catsDataEqForEitherT[StateT[Option, Int , ?], Unit, Int]
+    
+    checkAll("StateT[Option, Int, Int]", MonadErrorTests[StateT[Option, Int , ?], Unit].monadError[Int, Int, Int])
+    checkAll("MonadError[StateT[Option, Int , ?], Unit]", SerializableTests.serializable(MonadError[StateT[Option, Int , ?], Unit]))
+  }
+
 }
 
 object StateTTests extends StateTTestsInstances {
