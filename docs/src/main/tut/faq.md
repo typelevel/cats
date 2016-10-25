@@ -40,9 +40,11 @@ a bunch of useful combinators around it. In Scala 2.12.x `Either`
 `scala.util.Either` and fill in the gaps via
 [syntax enrichment](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/syntax/either.scala).
 
-This syntax can be imported via `cats.syntax.either._` or through `cats.implicits._`.
+This syntax can be imported via `cats.syntax.either._`, and type class instances for `Either` are available via `cats.instances.either._`. You can get both the syntax and the instances for `Either` (together with syntactic enrichment and instances for other standard library types) via `cats.implicits._`.
 
-Similarly, `cats.data.XorT` has been replaced with `cats.data.EitherT`.
+There are a few minor mismatches between `Xor` and `Either`. For example, in some cases you may need to specify a type parameter for an enrichment method on `Either` (such as `leftMap`) even though it was properly inferred for `Xor`. See the [`Either` section of this guide](http://typelevel.org/cats/datatypes/either.html#either-in-the-small-either-in-the-large) for more information about these issues.
+
+Similarly, `cats.data.XorT` has been replaced with `cats.data.EitherT`, although since this is a type defined in Cats, you don't need to import syntax or instances for it (although you may need imports for the underlying monad).
 
 ## <a id="future-instances" href="#future-instances"></a>Why can't the compiler find implicit instances for Future?
 
