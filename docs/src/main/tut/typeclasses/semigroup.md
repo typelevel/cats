@@ -84,8 +84,8 @@ two |+| n
 
 You'll notice that instead of declaring `one` as `Some(1)`, I chose
 `Option(1)`, and I added an explicit type declaration for `n`. This is
-because there aren't type class instances for Some or None, but for
-Option. If we try to use Some and None, we'll get errors:
+because there aren't type class instances for `Some` or `None`, but for
+`Option`. If we try to use `Some` and `None`, we'll get errors:
 
 ```tut:nofail
 Some(1) |+| None
