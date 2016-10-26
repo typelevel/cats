@@ -101,20 +101,20 @@ class FreeTTests extends CatsSuite {
     val d: FreeT[JustFunctor, JustFunctor, Int] = transLiftInstance.liftT[JustFunctor, Int](JustFunctor(1))
   }
 
-  test("interpret to universal id equivalent to original instance") {
+  test("compile to universal id equivalent to original instance") {
     forAll { a: FreeTOption[Int] =>
-      val b = a.interpret(FunctionK.id)
+      val b = a.compile(FunctionK.id)
       Eq[FreeTOption[Int]].eqv(a, b) should ===(true)
-      val fk = FreeT.interpret[Option, Option, Option](FunctionK.id)
+      val fk = FreeT.compile[Option, Option, Option](FunctionK.id)
       a should === (fk(a))
     }
   }
 
-  test("interpret stack-safety") {
+  test("compile stack-safety") {
     val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))(
       (fu, i) => fu.flatMap(u => Applicative[FreeTOption].pure(u))
     )
-    val b = a.interpret(FunctionK.id) // used to overflow
+    val b = a.compile(FunctionK.id) // used to overflow
   }
 
   test("foldMap consistent with runM") {
