@@ -17,7 +17,7 @@ It is encoded as:
 type Id[A] = A
 ```
 
-That is to say that the type Id[A] is just a synonym for A.  We can
+That is to say that the type `Id[A]` is just a synonym for `A`.  We can
 freely treat values of type `A` as values of type `Id[A]`, and
 vice-versa.
 
@@ -50,7 +50,7 @@ Compare the signatures of `map` and `flatMap` and `coflatMap`:
 ```
 
 You'll notice that in the flatMap signature, since `Id[B]` is the same
-as `B` for all B, we can rewrite the type of the `f` parameter to be
+as `B` for all `B`, we can rewrite the type of the `f` parameter to be
 `A => B` instead of `A => Id[B]`, and this makes the signatures of the
 two functions the same, and, in fact, they can have the same
 implementation, meaning that for `Id`, `flatMap` is also just function
@@ -64,7 +64,7 @@ Monad[Id].map(one)(_ + 1)
 Monad[Id].flatMap(one)(_ + 1)
 ```
 
-And that similarly, coflatMap is just function application:
+And that similarly, `coflatMap` is just function application:
 
 ```tut:book
 import cats.Comonad
