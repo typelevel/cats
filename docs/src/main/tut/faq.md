@@ -53,11 +53,11 @@ If you have already followed the [imports advice](#what-imports) but are still g
 
 ## <a id="traverse" href="#traverse"></a>How can I turn my List of `<something>` into a `<something>` of a list?
 
-It's really common to have a `List` of values with types like `Option`, `Either`, or `Validated` that you would like to turn "inside out" into an `Option` (or `Either` or `Validated`) of a `List`. The `sequence`, `sequenceU`, `traverse`, and `traverseU` methods are _really_ handy for this. You can read more about them in the [Traverse documentation]({{ site.baseurl }}/tut/traverse.html).
+It's really common to have a `List` of values with types like `Option`, `Either`, or `Validated` that you would like to turn "inside out" into an `Option` (or `Either` or `Validated`) of a `List`. The `sequence`, `sequenceU`, `traverse`, and `traverseU` methods are _really_ handy for this. You can read more about them in the [Traverse documentation]({{ site.baseurl }}/typeclasses/traverse.html).
 
 ## <a id="listt" href="#listt"></a>Where is ListT?
 
-There are monad transformers for various types, such as [OptionT]({{ site.baseurl }}/tut/optiont.html), so people often wonder why there isn't a `ListT`. For example, in the following example, people might reach for `ListT` to simplify making nested `map` and `exists` calls:
+There are monad transformers for various types, such as [OptionT]({{ site.baseurl }}/datatypes/optiont.html), so people often wonder why there isn't a `ListT`. For example, in the following example, people might reach for `ListT` to simplify making nested `map` and `exists` calls:
 
 ```tut:reset:silent
 val l: Option[List[Int]] = Some(List(1, 2, 3, 4, 5))
@@ -115,7 +115,7 @@ Here are a couple libraries with `Task` implementations that you may find useful
 - [fs2](https://github.com/functional-streams-for-scala/fs2) - Compositional, streaming I/O library for Scala
   - fs2 provides a [Task](https://github.com/functional-streams-for-scala/fs2/blob/series/0.9/core/shared/src/main/scala/fs2/Task.scala) that is a convenient option if you are already using fs2. fs2's `Task` is also Scala.js-compatible.
 
-It may be worth keeping in mind that `IO` and `Task` are pretty blunt instruments (they are essentially the `Any` of side effect management), and you may want to narrow the scope of your effects throughout most of your application. The [free monad]({{ site.baseurl }}/tut/freemonad.html) documentation describes a way to abstractly define controlled effects and interpret them into a type such as `IO` or `Task` (or even simply `Try`, `Future`, or [`Id`]({{ site.baseurl }}/tut/id.html)) as late as possible. As more of your code becomes pure through these controlled effects the less it matters which type you end up choosing to represent your side effects.
+It may be worth keeping in mind that `IO` and `Task` are pretty blunt instruments (they are essentially the `Any` of side effect management), and you may want to narrow the scope of your effects throughout most of your application. The [free monad]({{ site.baseurl }}/datatypes/freemonad.html) documentation describes a way to abstractly define controlled effects and interpret them into a type such as `IO` or `Task` (or even simply `Try`, `Future`, or [`Id`]({{ site.baseurl }}/typeclasses/id.html)) as late as possible. As more of your code becomes pure through these controlled effects the less it matters which type you end up choosing to represent your side effects.
 
 ## <a id="simulacrum" href="#simulacrum"></a>What does `@typeclass` mean?
 
@@ -125,9 +125,9 @@ Note that the one area where simulacrum is intentionally not used is in the `cat
 
 ## <a id="kind-projector" href="#kind-projector"></a>What do types like `?` and `λ` mean?
 
-Cats defines a wealth of type classes and type class instances. For a number of the type class and instance combinations, there is a mismatch between the type parameter requirements of the type class and the type parameter requirements of the data type for which the instance is being defined. For example, the [Either]({{ site.baseurl }}/tut/either.html) data type is a type constructor with two type parameters. We would like to be able to define a [Monad]({{ site.baseurl }}/tut/monad.html) for `Either`, but the `Monad` type class operates on type constructors having only one type parameter.
+Cats defines a wealth of type classes and type class instances. For a number of the type class and instance combinations, there is a mismatch between the type parameter requirements of the type class and the type parameter requirements of the data type for which the instance is being defined. For example, the [Either]({{ site.baseurl }}/datatypes/either.html) data type is a type constructor with two type parameters. We would like to be able to define a [Monad]({{ site.baseurl }}/typeclasses/monad.html) for `Either`, but the `Monad` type class operates on type constructors having only one type parameter.
 
-**Enter type lambdas!** Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of `Either` then, when defining a `Monad` for `Either`, we want to fix one of the type parameters at the point where a `Monad` instance is summoned, so that the type parameters line up. As `Either` is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when `Either` is treated as a `Monad`. The right biased nature of `Either` is discussed further in the [`Either` documentation]({{ site.baseurl }}/tut/either.html).
+**Enter type lambdas!** Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of `Either` then, when defining a `Monad` for `Either`, we want to fix one of the type parameters at the point where a `Monad` instance is summoned, so that the type parameters line up. As `Either` is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when `Either` is treated as a `Monad`. The right biased nature of `Either` is discussed further in the [`Either` documentation]({{ site.baseurl }}/datatypes/either.html).
 
 **Enter [kind-projector](https://github.com/non/kind-projector)!** kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols `?` and `λ` are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the [project page](https://github.com/non/kind-projector).
 
