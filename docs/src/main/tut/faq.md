@@ -18,6 +18,7 @@ position: 4
  * [What does `@typeclass` mean?](#simulacrum)
  * [What do types like `?` and `λ` mean?](#kind-projector)
  * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
+ * [What is `tailRecM`?](#tailrecm)
  * [How can I help?](#contributing)
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
@@ -133,6 +134,60 @@ Cats defines a wealth of type classes and type class instances. For a number of 
 `macro Ops` invokes the [Machinist](https://github.com/typelevel/machinist) Ops macro, and is used in cats in a number of places to enrich types with operations with the minimal possible cost when those operations are called in code. Machinist supports an extension mechanism where users of the macro can provide a mapping between symbolic operator names and method names. The `cats.macros.Ops` class uses this extension mechanism to supply the set of mappings that the cats project is interested in.
 
 More about the history of machinist and how it works can be discovered at the [project page](https://github.com/typelevel/machinist), or [this article on the typelevel blog](http://typelevel.org/blog/2013/10/13/spires-ops-macros.html).
+
+## <a id="tailrecm" href="#tailrecm"></a>What is `tailRecM`?
+
+The `FlatMap` type class has a `tailRecM` method with the following signature:
+
+```scala
+def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B]
+```
+
+When you are defining a `FlatMap` instance, its `tailRecM` implementation must have two properties in order for the instance to be considered lawful. The first property is that `tailRecM` must return the same result that you would get if you recursively called `flatMap` until you got a `Right` value (assuming you had unlimited stack space—we'll get to that in a moment). In other words, it must give the same result as this implementation:
+
+```tut:silent
+trait Monad[F[_]] {
+  def pure[A](x: A): F[A] = ???
+  def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B] = ???
+
+  def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B] =
+    flatMap(f(a)) {
+      case Right(b) => pure(b)
+      case Left(nextA) => tailRecM(nextA)(f)
+    }
+}
+```
+
+The reason we can't simply use this implementation for all type constructors (and the reason that `tailRecM` is useful at all) is that for many monadic types, recursively `flatMap`-ing in this way will quickly exhaust the stack.
+
+`Option` is one example of a monadic type whose `flatMap` consumes stack in such a way that nesting `flatMap` calls deeply enough (usually around a couple thousand levels) will result in a stack overflow. We can provide a stack-safe `tailRecM` implementation for `Option`, though:
+
+```tut:silent
+import cats.FlatMap
+import scala.annotation.tailrec
+
+implicit val optionFlatMap: FlatMap[Option] = new FlatMap[Option] {
+  def map[A, B](fa: Option[A])(f: A => B): Option[B] = fa.map(f)
+  def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] = fa.flatMap(f)
+
+  @tailrec
+  def tailRecM[A, B](a: A)(f: A => Option[Either[A, B]]): Option[B] = f(a) match {
+    case None => None
+    case Some(Left(a1)) => tailRecM(a1)(f)
+    case Some(Right(b)) => Some(b)
+  }
+}
+```
+
+Now we don't have to worry about overflowing the stack, no matter how many times we have to call `tailRecM` before we get a `Right`.
+
+This is useful because any operation that you would write using recursive `flatMap`s can be rewritten to use `tailRecM`, and if the `FlatMap` instance for your type constructor is lawful, you don't have to worry about stack safety.
+
+The downside is that how you write a lawful `tailRecM` for your type constructor may not always be obvious. For some type constructors, such as `Future`, recursively `flatMap`-ing is already safe, and the first simple implementation above will be lawful. For types like `Option` and `Try`, you'll need to arrange the recursion in such a way that the `tailRecM` calls are tail calls (which you can confirm with Scala's `tailrec` annotation). Collection types require yet another approach (see for example the [implementation for `List`](https://github.com/typelevel/cats/pull/1041/files#diff-e4d8b82ab5544972195d955591ffe18cR31)).
+
+If you're having trouble figuring out how to implement `tailRecM` lawfully, you can try to find an instance in Cats itself for a type that is semantically similar to yours (all of the `FlatMap` instances provided by Cats have lawful, stack-safe `tailRecM` implementations).
+
+In some cases you may decide that providing a lawful `tailRecM` may be impractical or even impossible (if so we'd like to hear about it). For these cases we provide a way of testing all of the monad laws _except_ for the stack safety of `tailRecM`: just replace `MonadTests[F].monad[A, B, C]` in your tests with `MonadTests[F].stackUnsafeMonad[A, B, C]`.
 
 ## <a id="contributing" href="#contributing"></a>How can I help?
 
