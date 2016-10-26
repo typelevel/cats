@@ -13,7 +13,7 @@ import cats.data._
 import cats.implicits._
 ```
 
-The `cats._` import brings in quite a few [type classes](http://typelevel.org/cats/typeclasses.html) (similar to interfaces) such as [Monad](http://typelevel.org/cats/tut/monad.html), [Semigroup](http://typelevel.org/cats/tut/semigroup.html), and [Foldable](http://typelevel.org/cats/tut/foldable.html). Instead of the entire `cats` package, you can import only the types that you need, for example:
+The `cats._` import brings in quite a few [type classes](http://typelevel.org/cats/typeclasses.html) (similar to interfaces) such as [Monad](http://typelevel.org/cats/typeclasses/monad.html), [Semigroup](http://typelevel.org/cats/typeclasses/semigroup.html), and [Foldable](http://typelevel.org/cats/typeclasses/foldable.html). Instead of the entire `cats` package, you can import only the types that you need, for example:
 
 ```tut:silent
 import cats.Monad
@@ -21,7 +21,7 @@ import cats.Semigroup
 import cats.Foldable
 ```
 
-The `cats.data._`, import brings in data structures such as [Validated](http://typelevel.org/cats/tut/validated.html) and [State](http://typelevel.org/cats/tut/state.html). Instead of the entire `cats.data` package, you can import only the types that you need, for example:
+The `cats.data._`, import brings in data structures such as [Validated](http://typelevel.org/cats/datatypes/validated.html) and [State](http://typelevel.org/cats/datatypes/state.html). Instead of the entire `cats.data` package, you can import only the types that you need, for example:
 
 ```tut:silent
 import cats.data.Validated
