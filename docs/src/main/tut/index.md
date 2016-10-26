@@ -17,7 +17,7 @@ The name is a playful shortening of the word *category*.
 ### <a name="getting-started" href="#getting-started"></a>Getting Started
 
 
-Cats is currently available for Scala 2.10 and 2.11.
+Cats is currently available for Scala 2.10, 2.11 and 2.12.
 
 To get started with SBT, simply add the following to your build.sbt file:
 
