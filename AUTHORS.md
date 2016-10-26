@@ -26,18 +26,22 @@ possible:
  * Amir Mohammad Saied
  * Andrea Fiore
  * Andrew Jones
+ * Andy Scott
  * Angelo Genovese
  * Antoine Comte
  * Arya Irani
  * Ash Pook
  * Aλ
+ * Ben Hutchison
  * Benjamin Thuillier
  * Binh Nguyen
  * Bobby Rauchenberg
  * Brendan McAdams
  * Brian McKenna
+ * Chris Birchall
  * Cody Allen
  * Colt Frederickson
+ * Connie Chen
  * Csongor Kiss
  * Dale Wijnand
  * Daniel Spiewak
@@ -48,6 +52,7 @@ possible:
  * David Gregory
  * Denis Mikhaylov
  * Derek Wickern
+ * Earl St Sauver
  * Edmund Noble
  * Eric Torreborre
  * Erik LaBianca
@@ -57,11 +62,15 @@ possible:
  * Feynman Liang
  * Frank S. Thomas
  * Giulio De Luise
+ * Guillaume Massé
  * Hamish Dickson
  * Ian McIntosh
  * ImLiar
+ * Israel Pérez González
+ * Jan-Hendrik Zab
  * Jean-Rémi Desjardins
  * Jisoo Park
+ * Jon Hanson
  * Jose Emilio Labra Gayo
  * Josh Marcus
  * Juan Pedro Moreno
@@ -75,6 +84,7 @@ possible:
  * Luke Wyman
  * Madder
  * Marc Siegel
+ * Mark de Jong
  * Markus Hauck
  * mathhun
  * Matt Martin
@@ -91,16 +101,20 @@ possible:
  * Pascal Voitot
  * Paul Phillips
  * Pavkin Vladimir
+ * Pepe García
  * Pere Villega
  * Peter Neyens
  * Philip Wills
+ * Rafa Paradela
  * Raúl Raja Martínez
  * Richard Miller
  * Rintcius Blok
  * Rob Norris
  * Romain Ruetschi
  * Ross A. Baker
+ * Rüdiger Klaehn
  * Ryan Case
+ * Sam Ritchie
  * Sarunas Valaskevicius
  * Shunsuke Otani
  * Simeon H. K. Fitch
@@ -110,6 +124,7 @@ possible:
  * Stew O'Connor
  * Sumedh Mungee
  * Taylor Brown
+ * Tom Switzer
  * Tomas Mikula
  * Travis Brown
  * Wedens
