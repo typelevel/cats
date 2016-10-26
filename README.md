@@ -24,13 +24,13 @@ standard library. Cats augments the standard library with tools that further ena
 
 ### Getting Started
 
-Cats is currently available for Scala 2.10 and 2.11, and [Scala.js](http://www.scala-js.org/).
+Cats is currently available for Scala 2.10, 2.11 and 2.12, and [Scala.js](http://www.scala-js.org/).
 
 To get started with SBT, simply add the following to your `build.sbt`
 file:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats" % "0.7.2"
+libraryDependencies += "org.typelevel" %% "cats" % "0.8.0"
 ```
 
 This will pull in all of Cats' modules. If you only require some
