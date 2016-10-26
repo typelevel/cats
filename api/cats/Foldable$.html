@@ -386,6 +386,41 @@
       </a>
     </span>
       
+    </li><li name="cats.Foldable#iteratorFoldM" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iteratorFoldM[M[_],A,B](it:Iterator[A],z:B)(f:(B,A)=&gt;M[B])(implicitM:cats.Monad[M]):M[B]"></a>
+      <a id="iteratorFoldM[M[_],A,B](Iterator[A],B)((B,A)⇒M[B])(Monad[M]):M[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iteratorFoldM</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="it">it: <span class="extype" name="scala.Iterator">Iterator</span>[<span class="extype" name="cats.Foldable.iteratorFoldM.A">A</span>]</span>, <span name="z">z: <span class="extype" name="cats.Foldable.iteratorFoldM.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.iteratorFoldM.B">B</span>, <span class="extype" name="cats.Foldable.iteratorFoldM.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.iteratorFoldM.M">M</span>[<span class="extype" name="cats.Foldable.iteratorFoldM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.iteratorFoldM.M">M</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.iteratorFoldM.M">M</span>[<span class="extype" name="cats.Foldable.iteratorFoldM.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.Foldable$@iteratorFoldM[M[_],A,B](it:Iterator[A],z:B)(f:(B,A)=&gt;M[B])(implicitM:cats.Monad[M]):M[B]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of <a href="Foldable.html#foldM[G[_],A,B](fa:F[A],z:B)(f:(B,A)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]" class="extmbr" name="cats.Foldable#foldM">Foldable.foldM</a> which can short-circuit for
+structures with an <code>Iterator</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of <a href="Foldable.html#foldM[G[_],A,B](fa:F[A],z:B)(f:(B,A)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]" class="extmbr" name="cats.Foldable#foldM">Foldable.foldM</a> which can short-circuit for
+structures with an <code>Iterator</code>.</p><p>For example we can sum a <code>Stream</code> of integers and stop if
+the sum reaches 100 (if we reach the end of the <code>Stream</code>
+before getting to 100 we return the total sum) :</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">type</span> LongOr[A] = Either[<span class="std">Long</span>, A]
+scala&gt; <span class="kw">def</span> sumStream(s: Stream[<span class="std">Int</span>]): <span class="std">Long</span> =
+     |   Foldable.iteratorFoldM[LongOr, <span class="std">Int</span>, <span class="std">Long</span>](s.toIterator, <span class="num">0</span>L){ (acc, n) <span class="kw">=&gt;</span>
+     |     <span class="kw">val</span> sum = acc + n
+     |     <span class="kw">if</span> (sum &lt; <span class="num">100</span>L) Right(sum) <span class="kw">else</span> Left(sum)
+     |   }.merge
+
+scala&gt; sumStream(Stream.continually(<span class="num">1</span>))
+res0: <span class="std">Long</span> = <span class="num">100</span>
+
+scala&gt; sumStream(Stream(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>))
+res1: <span class="std">Long</span> = <span class="num">10</span></pre><p>Note that <code>Foldable[Stream].foldM</code> uses this method underneath, so
+you wouldn't call this method explicitly like in the example above.
+</p></div></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

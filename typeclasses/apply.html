@@ -171,10 +171,10 @@ Here we see that the following two functions, <code class="highlighter-rouge">f1
 <p>All instances created by <code class="highlighter-rouge">|@|</code> have <code class="highlighter-rouge">map</code>, <code class="highlighter-rouge">ap</code>, and <code class="highlighter-rouge">tupled</code> methods of the appropriate arity:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">option2</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">|@|</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
-<span class="c1">// option2: cats.syntax.CartesianBuilder[Option]#CartesianBuilder2[Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder2@33208204
+<span class="c1">// option2: cats.syntax.CartesianBuilder[Option]#CartesianBuilder2[Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder2@1f108fcd
 </span>
 <span class="k">val</span> <span class="n">option3</span> <span class="k">=</span> <span class="n">option2</span> <span class="o">|@|</span> <span class="nc">Option</span><span class="o">.</span><span class="n">empty</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
-<span class="c1">// option3: cats.syntax.CartesianBuilder[Option]#CartesianBuilder3[Int,Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder3@56143f38
+<span class="c1">// option3: cats.syntax.CartesianBuilder[Option]#CartesianBuilder3[Int,Int,Int] = cats.syntax.CartesianBuilder$CartesianBuilder3@5f9646a6
 </span>
 <span class="n">option2</span> <span class="n">map</span> <span class="n">addArity2</span>
 <span class="c1">// res22: Option[Int] = Some(3)

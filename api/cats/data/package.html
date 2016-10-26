@@ -498,7 +498,7 @@ used to represent a List which is guaranteed to not be empty:</p><pre><span clas
     </span>
       <p class="shortcomment cmt"><code>OptionT[F[_], A]</code> is a light wrapper on an <code>F[Option[A]]</code> with some
 convenient methods for working with this nested structure.</p><div class="fullcomment"><div class="comment cmt"><p><code>OptionT[F[_], A]</code> is a light wrapper on an <code>F[Option[A]]</code> with some
-convenient methods for working with this nested structure.</p><p>It may also be said that <code>OptionT</code> is a monad transformer for <code>Option</code>.</p><p>For more information, see the <a href="http://typelevel.org/cats/tut/optiont.html" target="_blank">documentation</a>.
+convenient methods for working with this nested structure.</p><p>It may also be said that <code>OptionT</code> is a monad transformer for <code>Option</code>.</p><p>For more information, see the <a href="http://typelevel.org/cats/datatypes/optiont.html" target="_blank">documentation</a>.
 </p></div></div>
     </li><li name="cats.data.Prod" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Prod[F[_],G[_],A]extendsProductwithSerializable"></a>
@@ -586,6 +586,23 @@ convenient methods for working with this nested structure.</p><p>It may also be 
       </a>
     </span>
       
+    </li><li name="cats.data.ProdFoldable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdFoldable[F[_],G[_]]extendsFoldable[[α]cats.data.Prod[F,G,α]]"></a>
+      <a id="ProdFoldable[F[_],G[_]]:ProdFoldable[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdFoldable.html"><span class="name">ProdFoldable</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdFoldable.F">F</span>, <span class="extype" name="cats.data.ProdFoldable.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdFoldable[F[_],G[_]]extendsFoldable[[α]cats.data.Prod[F,G,α]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.ProdFunctor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ProdFunctor[F[_],G[_]]extendsFunctor[[α]cats.data.Prod[F,G,α]]"></a>
       <a id="ProdFunctor[F[_],G[_]]:ProdFunctor[F,G]"></a>
@@ -599,6 +616,40 @@ convenient methods for working with this nested structure.</p><p>It may also be 
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.package@ProdFunctor[F[_],G[_]]extendsFunctor[[α]cats.data.Prod[F,G,α]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdMonad" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdMonad[F[_],G[_]]extendsMonad[[α]cats.data.Prod[F,G,α]]withProdApplicative[F,G]"></a>
+      <a id="ProdMonad[F[_],G[_]]:ProdMonad[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdMonad.html"><span class="name">ProdMonad</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonad.F">F</span>, <span class="extype" name="cats.data.ProdMonad.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]] with <a href="ProdApplicative.html" class="extype" name="cats.data.ProdApplicative">ProdApplicative</a>[<span class="extype" name="cats.data.ProdMonad.F">F</span>, <span class="extype" name="cats.data.ProdMonad.G">G</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdMonad[F[_],G[_]]extendsMonad[[α]cats.data.Prod[F,G,α]]withProdApplicative[F,G]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdMonadCombine" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdMonadCombine[F[_],G[_]]extendsMonadCombine[[α]cats.data.Prod[F,G,α]]withProdMonad[F,G]withProdAlternative[F,G]"></a>
+      <a id="ProdMonadCombine[F[_],G[_]]:ProdMonadCombine[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdMonadCombine.html"><span class="name">ProdMonadCombine</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdMonadCombine.F">F</span>, <span class="extype" name="cats.data.ProdMonadCombine.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]] with <a href="ProdMonad.html" class="extype" name="cats.data.ProdMonad">ProdMonad</a>[<span class="extype" name="cats.data.ProdMonadCombine.F">F</span>, <span class="extype" name="cats.data.ProdMonadCombine.G">G</span>] with <a href="ProdAlternative.html" class="extype" name="cats.data.ProdAlternative">ProdAlternative</a>[<span class="extype" name="cats.data.ProdMonadCombine.F">F</span>, <span class="extype" name="cats.data.ProdMonadCombine.G">G</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdMonadCombine[F[_],G[_]]extendsMonadCombine[[α]cats.data.Prod[F,G,α]]withProdMonad[F,G]withProdAlternative[F,G]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -620,6 +671,23 @@ convenient methods for working with this nested structure.</p><p>It may also be 
       </a>
     </span>
       
+    </li><li name="cats.data.ProdOrder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdOrder[F[_],G[_],A]extendscats.Order[cats.data.Prod[F,G,A]]"></a>
+      <a id="ProdOrder[F[_],G[_],A]:ProdOrder[F,G,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdOrder.html"><span class="name">ProdOrder</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdOrder.F">F</span>, <span class="extype" name="cats.data.ProdOrder.G">G</span>, <span class="extype" name="cats.data.ProdOrder.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdOrder[F[_],G[_],A]extendscats.Order[cats.data.Prod[F,G,A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.ProdSemigroupK" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ProdSemigroupK[F[_],G[_]]extendsSemigroupK[[α]cats.data.Prod[F,G,α]]"></a>
       <a id="ProdSemigroupK[F[_],G[_]]:ProdSemigroupK[F,G]"></a>
@@ -633,6 +701,40 @@ convenient methods for working with this nested structure.</p><p>It may also be 
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#cats.data.package@ProdSemigroupK[F[_],G[_]]extendsSemigroupK[[α]cats.data.Prod[F,G,α]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdShow" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdShow[F[_],G[_],A]extendsShow[cats.data.Prod[F,G,A]]"></a>
+      <a id="ProdShow[F[_],G[_],A]:ProdShow[F,G,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdShow.html"><span class="name">ProdShow</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdShow.F">F</span>, <span class="extype" name="cats.data.ProdShow.G">G</span>, <span class="extype" name="cats.data.ProdShow.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdShow[F[_],G[_],A]extendsShow[cats.data.Prod[F,G,A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="cats.data.ProdTraverse" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProdTraverse[F[_],G[_]]extendsTraverse[[α]cats.data.Prod[F,G,α]]withProdFoldable[F,G]"></a>
+      <a id="ProdTraverse[F[_],G[_]]:ProdTraverse[F,G]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ProdTraverse.html"><span class="name">ProdTraverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdTraverse.F">F</span>, <span class="extype" name="cats.data.ProdTraverse.G">G</span>, <span class="extype" name="cats.data.&lt;refinement&gt;.Λ$.α">α</span>]] with <a href="ProdFoldable.html" class="extype" name="cats.data.ProdFoldable">ProdFoldable</a>[<span class="extype" name="cats.data.ProdTraverse.F">F</span>, <span class="extype" name="cats.data.ProdTraverse.G">G</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.package@ProdTraverse[F[_],G[_]]extendsTraverse[[α]cats.data.Prod[F,G,α]]withProdFoldable[F,G]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

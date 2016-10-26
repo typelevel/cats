@@ -511,7 +511,11 @@ res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class=
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Left associative monadic folding on <code>F</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Left associative monadic folding on <code>F</code>.
+      <p class="shortcomment cmt">Left associative monadic folding on <code>F</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Left associative monadic folding on <code>F</code>.</p><p>The default implementation of this is based on <code>foldLeft</code>, and thus will
+always fold across the entire structure. Certain structures are able to
+implement this in such a way that folds can be short-circuited (not
+traverse the entirety of the structure), depending on the <code>G</code> result
+produced at a given step.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#foldMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foldMap[A,B](fa:F[A])(f:A=&gt;B)(implicitB:cats.Monoid[B]):B"></a>

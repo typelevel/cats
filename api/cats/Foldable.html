@@ -62,7 +62,7 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="NonEmptyReducible.html" class="extype" name="cats.NonEmptyReducible">NonEmptyReducible</a>, <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>, <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>, <a href="TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a></div>
+            <div class="subClasses hiddenContent"><a href="NonEmptyReducible.html" class="extype" name="cats.NonEmptyReducible">NonEmptyReducible</a>, <a href="data/ProdFoldable.html" class="extype" name="cats.data.ProdFoldable">ProdFoldable</a>, <a href="data/ProdTraverse.html" class="extype" name="cats.data.ProdTraverse">ProdTraverse</a>, <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>, <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>, <a href="TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a></div>
           </div></div>
         
 
@@ -391,7 +391,7 @@ to get a <code>Monoid[G[A]]</code> instance.</p><p>For example:</p><pre>scala&gt
 scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
 scala&gt; F.foldK(<span class="std">List</span>(<span class="num">1</span> :: <span class="num">2</span> :: Nil, <span class="num">3</span> :: <span class="num">4</span> :: <span class="num">5</span> :: Nil))
 res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>)</pre></div></div>
-    </li><li name="cats.Foldable#foldM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.Foldable#foldM" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foldM[G[_],A,B](fa:F[A],z:B)(f:(B,A)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]"></a>
       <a id="foldM[G[_],A,B](F[A],B)((B,A)⇒G[B])(Monad[G]):G[B]"></a>
       <h4 class="signature">
@@ -407,7 +407,12 @@ res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class=
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Left associative monadic folding on <code>F</code>.</p>
+      <p class="shortcomment cmt">Left associative monadic folding on <code>F</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Left associative monadic folding on <code>F</code>.</p><p>The default implementation of this is based on <code>foldLeft</code>, and thus will
+always fold across the entire structure. Certain structures are able to
+implement this in such a way that folds can be short-circuited (not
+traverse the entirety of the structure), depending on the <code>G</code> result
+produced at a given step.
+</p></div></div>
     </li><li name="cats.Foldable#foldMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="foldMap[A,B](fa:F[A])(f:A=&gt;B)(implicitB:cats.Monoid[B]):B"></a>
       <a id="foldMap[A,B](F[A])((A)⇒B)(Monoid[B]):B"></a>

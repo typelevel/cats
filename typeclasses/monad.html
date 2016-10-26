@@ -58,13 +58,13 @@ the identity function <code class="highlighter-rouge">x =&gt; x</code> (i.e. <co
 follows this tradition by providing implementations of <code class="highlighter-rouge">flatten</code> and <code class="highlighter-rouge">map</code>
 derived from <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">pure</code>.</p>
 
-<p>In addition to requiring <code class="highlighter-rouge">flatMap</code> and pure<code class="highlighter-rouge">, Cats has chosen to require
-</code>tailRecM<code class="highlighter-rouge"> which encodes stack safe monadic recursion, as described in
-[Stack Safety for Free](http://functorial.com/stack-safety-for-free/index.pdf) by
+<p>In addition to requiring <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">pure</code>, Cats has chosen to require
+<code class="highlighter-rouge">tailRecM</code> which encodes stack safe monadic recursion, as described in
+<a href="http://functorial.com/stack-safety-for-free/index.pdf">Stack Safety for Free</a> by
 Phil Freeman. Because monadic recursion is so common in functional programming but
 is not stack safe on the JVM, Cats has chosen to require this method of all monad implementations
 as opposed to just a subset. All functions requiring monadic recursion in Cats is done via
-</code>tailRecM`.</p>
+<code class="highlighter-rouge">tailRecM</code>.</p>
 
 <p>An example <code class="highlighter-rouge">Monad</code> implementation for <code class="highlighter-rouge">Option</code> is shown below. Note the tail recursive
 and therefore stack safe implementation of <code class="highlighter-rouge">tailRecM</code>.</p>

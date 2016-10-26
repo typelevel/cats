@@ -942,6 +942,51 @@ res1: EitherT[<span class="std">List</span>,<span class="std">String</span>,<spa
 syntax function <code>ap</code> on <code>Nested[List, Either[A, ?], B]</code>. This won't be needed after cats has
 decided <a href="https://github.com/typelevel/cats/issues/1073" target="_blank">how to handle the SI-2712 fix</a>.
 </p></div></div>
+    </li><li name="cats.data.EitherT#toNestedValidated" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toNestedValidated(implicitF:cats.Functor[F]):cats.data.Nested[F,[β$4$]cats.data.Validated[A,β$4$],B]"></a>
+      <a id="toNestedValidated(Functor[F]):Nested[F,[β$4$]Validated[A,β$4$],B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNestedValidated</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, [β$4$]<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.&lt;refinement&gt;.Λ$.β$4$">β$4$</span>], <span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@toNestedValidated(implicitF:cats.Functor[F]):cats.data.Nested[F,[β$4$]cats.data.Validated[A,β$4$],B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Transform this <code>EitherT[F, A, B]</code> into a <code><a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[F, Validated[A, ?], B]</code> or <code><a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[F, ValidatedNel[A, B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transform this <code>EitherT[F, A, B]</code> into a <code><a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[F, Validated[A, ?], B]</code> or <code><a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[F, ValidatedNel[A, B]</code>.
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.{Validated, EitherT, Nested}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span> = i <span class="kw">=&gt;</span> (i*<span class="num">2</span>).toString
+scala&gt; <span class="kw">val</span> r1: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span>] = EitherT.right(<span class="std">Some</span>(f))
+    | r1: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span>] = EitherT(<span class="std">Some</span>(Right(&lt;function1&gt;)))
+scala&gt; <span class="kw">val</span> r2: EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT.right(<span class="std">Some</span>(<span class="num">10</span>))
+    | r2: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Right(<span class="num">10</span>)))
+scala&gt; <span class="kw">type</span> ValidatedOr[A] = Validated[<span class="std">String</span>, A]
+scala&gt; <span class="kw">type</span> OptionErrorOr[A] = Nested[<span class="std">Option</span>, ValidatedOr, A]
+scala&gt; (r1.toNestedValidated: OptionErrorOr[<span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span>]).ap(r2.toNestedValidated: OptionErrorOr[<span class="std">Int</span>])
+res0: OptionErrorOr[<span class="std">String</span>] = Nested(<span class="std">Some</span>(Valid(<span class="num">20</span>)))</pre></div></div>
+    </li><li name="cats.data.EitherT#toNestedValidatedNel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toNestedValidatedNel(implicitF:cats.Functor[F]):cats.data.Nested[F,[β$6$]cats.data.Validated[cats.data.NonEmptyList[A],β$6$],B]"></a>
+      <a id="toNestedValidatedNel(Functor[F]):Nested[F,[β$6$]Validated[NonEmptyList[A],β$6$],B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNestedValidatedNel</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, [β$6$]<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<a href="NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.EitherT.A">A</span>], <span class="extype" name="cats.data.EitherT.&lt;refinement&gt;.Λ$.β$6$">β$6$</span>], <span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.EitherT@toNestedValidatedNel(implicitF:cats.Functor[F]):cats.data.Nested[F,[β$6$]cats.data.Validated[cats.data.NonEmptyList[A],β$6$],B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="cats.data.EitherT#toOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="toOption(implicitF:cats.Functor[F]):cats.data.OptionT[F,B]"></a>
       <a id="toOption(Functor[F]):OptionT[F,B]"></a>

@@ -149,22 +149,22 @@ create a new functor <code class="highlighter-rouge">F[G[_]]</code> by composing
 <span class="c1">// defined class B
 </span>
 <span class="k">val</span> <span class="n">b</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span>
-<span class="c1">// b: B = B@33440cd7
+<span class="c1">// b: B = B@28913ea3
 </span>
 <span class="k">val</span> <span class="n">a</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="n">b</span>
-<span class="c1">// a: A = B@33440cd7
+<span class="c1">// a: A = B@28913ea3
 </span>
 <span class="k">val</span> <span class="n">listB</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="k">new</span> <span class="n">B</span><span class="o">)</span>
-<span class="c1">// listB: List[B] = List(B@58e0e75b)
+<span class="c1">// listB: List[B] = List(B@65f5692d)
 </span>
 <span class="k">val</span> <span class="n">listA1</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">listB</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">b</span> <span class="k">=&gt;</span> <span class="n">b</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span>
-<span class="c1">// listA1: List[A] = List(B@58e0e75b)
+<span class="c1">// listA1: List[A] = List(B@65f5692d)
 </span>
 <span class="k">val</span> <span class="n">listA2</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">listB</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">identity</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span>
-<span class="c1">// listA2: List[A] = List(B@58e0e75b)
+<span class="c1">// listA2: List[A] = List(B@65f5692d)
 </span>
 <span class="k">val</span> <span class="n">listA3</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">List</span><span class="o">].</span><span class="n">widen</span><span class="o">[</span><span class="kt">B</span>, <span class="kt">A</span><span class="o">](</span><span class="n">listB</span><span class="o">)</span>
-<span class="c1">// listA3: List[A] = List(B@58e0e75b)
+<span class="c1">// listA3: List[A] = List(B@65f5692d)
 </span></code></pre>
 </div>
 

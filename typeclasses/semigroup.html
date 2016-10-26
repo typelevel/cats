@@ -99,8 +99,8 @@ operator from <code class="highlighter-rouge">Semigroup</code>.</p>
 
 <p>You’ll notice that instead of declaring <code class="highlighter-rouge">one</code> as <code class="highlighter-rouge">Some(1)</code>, I chose
 <code class="highlighter-rouge">Option(1)</code>, and I added an explicit type declaration for <code class="highlighter-rouge">n</code>. This is
-because there aren’t type class instances for Some or None, but for
-Option. If we try to use Some and None, we’ll get errors:</p>
+because there aren’t type class instances for <code class="highlighter-rouge">Some</code> or <code class="highlighter-rouge">None</code>, but for
+<code class="highlighter-rouge">Option</code>. If we try to use <code class="highlighter-rouge">Some</code> and <code class="highlighter-rouge">None</code>, we’ll get errors:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">|+|</span> <span class="nc">None</span>
 <span class="o">&lt;</span><span class="n">console</span><span class="k">&gt;:</span><span class="mi">22</span><span class="k">:</span> <span class="kt">error:</span> <span class="kt">value</span> <span class="kt">|+|</span> <span class="kt">is</span> <span class="kt">not</span> <span class="kt">a</span> <span class="kt">member</span> <span class="kt">of</span> <span class="kt">Some</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>

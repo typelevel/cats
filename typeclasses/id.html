@@ -10,7 +10,7 @@ values are values of <code class="highlighter-rouge">Id</code>.</p>
 </code></pre>
 </div>
 
-<p>That is to say that the type Id[A] is just a synonym for A.  We can
+<p>That is to say that the type <code class="highlighter-rouge">Id[A]</code> is just a synonym for <code class="highlighter-rouge">A</code>.  We can
 freely treat values of type <code class="highlighter-rouge">A</code> as values of type <code class="highlighter-rouge">Id[A]</code>, and
 vice-versa.</p>
 
@@ -51,7 +51,7 @@ application:</p>
 </div>
 
 <p>You’ll notice that in the flatMap signature, since <code class="highlighter-rouge">Id[B]</code> is the same
-as <code class="highlighter-rouge">B</code> for all B, we can rewrite the type of the <code class="highlighter-rouge">f</code> parameter to be
+as <code class="highlighter-rouge">B</code> for all <code class="highlighter-rouge">B</code>, we can rewrite the type of the <code class="highlighter-rouge">f</code> parameter to be
 <code class="highlighter-rouge">A =&gt; B</code> instead of <code class="highlighter-rouge">A =&gt; Id[B]</code>, and this makes the signatures of the
 two functions the same, and, in fact, they can have the same
 implementation, meaning that for <code class="highlighter-rouge">Id</code>, <code class="highlighter-rouge">flatMap</code> is also just function
@@ -71,7 +71,7 @@ application:</p>
 </span></code></pre>
 </div>
 
-<p>And that similarly, coflatMap is just function application:</p>
+<p>And that similarly, <code class="highlighter-rouge">coflatMap</code> is just function application:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Comonad</span>
 <span class="c1">// import cats.Comonad

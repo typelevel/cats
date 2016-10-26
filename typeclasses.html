@@ -91,6 +91,55 @@ implement <code class="highlighter-rouge">Show</code> for <code class="highlight
 <p>That is that declaring the type parameter as <code class="highlighter-rouge">A : Show</code>, it will add
 an implicit parameter to the method signature (with a name we do not know).</p>
 
+<h1 id="typeclass-hierarchy">Typeclass hierarchy</h1>
+
+<p>Typeclass hierarchy for types parameterized on a type <code class="highlighter-rouge">F[_]</code></p>
+
+<p>![Typeclass hierarchy](http://g.gravizo.com/g?
+  digraph G {
+    aize =”4,4”;
+    edge [dir=back]
+    node [shape=box,style=”rounded”]
+    Functor [group=g2]
+    Apply [group=g2]
+    Applicative [group=g2]
+    Monad [group=g2]
+    SemigroupK [group=g1]
+    MonoidK [group=g1]
+    Alternative [group=g1]
+    MonadFilter [group=g1]
+    MonadCombine [group=g1]
+    “functor.Invariant” [group=g4]
+    “functor.Contravariant” [group=g4]
+    “functor.Invariant” [group=g4]
+    CoflatMap [group=g5]
+    Comonad [group=g5]
+    Bimonad [group=g5]
+    Functor -&gt; Apply -&gt; Applicative -&gt; Monad -&gt; MonadFilter -&gt; MonadCombine
+    Applicative -&gt; Alternative -&gt; MonadCombine
+    MonoidK -&gt; Alternative
+    Functor -&gt; CoflatMap
+    subgraph cluster_s3{
+      “functor.Invariant” -&gt; “functor.Contravariant”
+      graph[style=dotted]
+    }
+    “functor.Invariant” -&gt; Functor
+    subgraph cluster_s2{
+      SemigroupK -&gt; MonoidK
+      graph[style=dotted]
+    }
+    subgraph cluster_s1{
+      CoflatMap -&gt; Comonad -&gt; Bimonad
+      graph[style=dotted]
+    }
+    Monad -&gt; Bimonad
+    Apply -&gt; FlatMap -&gt; Monad
+    Foldable -&gt; Traverse
+    Functor -&gt; Traverse
+    Foldable -&gt; Reducible
+  }
+)</p>
+
 <ul>
   <li>
     <p><a href="/cats/typeclasses/applicative.html">Applicative</a></p>

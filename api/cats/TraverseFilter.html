@@ -634,6 +634,52 @@ res1: <span class="std">List</span>[<span class="std">List</span>[<span class="s
     </span>
       <p class="shortcomment cmt">Find the first element matching the predicate, if one exists.</p><div class="fullcomment"><div class="comment cmt"><p>Find the first element matching the predicate, if one exists.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+    </li><li name="cats.Traverse#flatSequence" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flatSequence[G[_],A](fgfa:F[G[F[A]]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[A]]"></a>
+      <a id="flatSequence[G[_],A](F[G[F[A]]])(Applicative[G],FlatMap[F]):G[F[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatSequence</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fgfa">fgfa: <span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Traverse.flatSequence.G">G</span>[<span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Traverse.flatSequence.A">A</span>]]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.flatSequence.G">G</span>]</span>, <span name="F">F: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.flatSequence.G">G</span>[<span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Traverse.flatSequence.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.TraverseFilter@flatSequence[G[_],A](fgfa:F[G[F[A]]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[A]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Thread all the G effects through the F structure and flatten to invert the
+structure from F[G[F[A]]] to G[F[A]].</p><div class="fullcomment"><div class="comment cmt"><p>Thread all the G effects through the F structure and flatten to invert the
+structure from F[G[F[A]]] to G[F[A]].</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> x: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]]] = <span class="std">List</span>(<span class="std">Some</span>(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>)), <span class="std">Some</span>(<span class="std">List</span>(<span class="num">3</span>)))
+scala&gt; <span class="kw">val</span> y: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]]] = <span class="std">List</span>(<span class="std">None</span>, <span class="std">Some</span>(<span class="std">List</span>(<span class="num">3</span>)))
+scala&gt; x.flatSequence
+res0: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">Some</span>(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>))
+scala&gt; y.flatSequence
+res1: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a></dd></dl></div>
+    </li><li name="cats.Traverse#flatTraverse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flatTraverse[G[_],A,B](fa:F[A])(f:A=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]"></a>
+      <a id="flatTraverse[G[_],A,B](F[A])((A)⇒G[F[B]])(Applicative[G],FlatMap[F]):G[F[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatTraverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Traverse.flatTraverse.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.flatTraverse.A">A</span>) ⇒ <span class="extype" name="cats.Traverse.flatTraverse.G">G</span>[<span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Traverse.flatTraverse.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.flatTraverse.G">G</span>]</span>, <span name="F">F: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.flatTraverse.G">G</span>[<span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Traverse.flatTraverse.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#cats.TraverseFilter@flatTraverse[G[_],A,B](fa:F[A])(f:A=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A traverse followed by flattening the inner result.</p><div class="fullcomment"><div class="comment cmt"><p>A traverse followed by flattening the inner result.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): <span class="std">Option</span>[<span class="std">Int</span>] = Either.catchOnly[NumberFormatException](s.toInt).toOption
+scala&gt; <span class="kw">val</span> x = <span class="std">Option</span>(<span class="std">List</span>(<span class="lit">"1"</span>, <span class="lit">"two"</span>, <span class="lit">"3"</span>))
+scala&gt; x.flatTraverse(_.map(parseInt))
+res0: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">Int</span>]] = <span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">None</span>, <span class="std">Some</span>(<span class="num">3</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a></dd></dl></div>
     </li><li name="cats.FunctorFilter#flattenOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flattenOption[A](fa:F[Option[A]]):F[A]"></a>
       <a id="flattenOption[A](F[Option[A]]):F[A]"></a>
@@ -709,7 +755,11 @@ res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class=
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Left associative monadic folding on <code>F</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Left associative monadic folding on <code>F</code>.
+      <p class="shortcomment cmt">Left associative monadic folding on <code>F</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Left associative monadic folding on <code>F</code>.</p><p>The default implementation of this is based on <code>foldLeft</code>, and thus will
+always fold across the entire structure. Certain structures are able to
+implement this in such a way that folds can be short-circuited (not
+traverse the entirety of the structure), depending on the <code>G</code> result
+produced at a given step.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#foldMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foldMap[A,B](fa:F[A])(f:A=&gt;B)(implicitB:cats.Monoid[B]):B"></a>
@@ -1337,27 +1387,6 @@ scala&gt; <span class="std">List</span>(<span class="lit">"1"</span>, <span clas
 res0: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">Some</span>(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>))
 scala&gt; <span class="std">List</span>(<span class="lit">"1"</span>, <span class="lit">"two"</span>, <span class="lit">"3"</span>).traverse(parseInt)
 res1: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.TraverseFilter">TraverseFilter</a> → <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a></dd></dl></div>
-    </li><li name="cats.Traverse#traverseM" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="traverseM[G[_],A,B](fa:F[A])(f:A=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]"></a>
-      <a id="traverseM[G[_],A,B](F[A])((A)⇒G[F[B]])(Applicative[G],FlatMap[F]):G[F[B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">traverseM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Traverse.traverseM.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.traverseM.A">A</span>) ⇒ <span class="extype" name="cats.Traverse.traverseM.G">G</span>[<span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Traverse.traverseM.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.traverseM.G">G</span>]</span>, <span name="F">F: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.traverseM.G">G</span>[<span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Traverse.traverseM.B">B</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#cats.TraverseFilter@traverseM[G[_],A,B](fa:F[A])(f:A=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">A traverse followed by flattening the inner result.</p><div class="fullcomment"><div class="comment cmt"><p>A traverse followed by flattening the inner result.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): <span class="std">Option</span>[<span class="std">Int</span>] = Either.catchOnly[NumberFormatException](s.toInt).toOption
-scala&gt; <span class="kw">val</span> x = <span class="std">Option</span>(<span class="std">List</span>(<span class="lit">"1"</span>, <span class="lit">"two"</span>, <span class="lit">"3"</span>))
-scala&gt; x.traverseM(_.map(parseInt))
-res0: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">Int</span>]] = <span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">None</span>, <span class="std">Some</span>(<span class="num">3</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a></dd></dl></div>
     </li><li name="cats.Traverse#traverseU" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverseU[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[F[U.A]]"></a>
       <a id="traverseU[A,GB](F[A])((A)⇒GB)(Unapply[Applicative,GB]):M[F[A]]"></a>

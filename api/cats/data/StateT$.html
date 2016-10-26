@@ -53,7 +53,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/StateT.scala" target="_blank">StateT.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.StateTInstances">StateTInstances</span>, <span class="extype" name="cats.data.StateTInstances1">StateTInstances1</span>, <span class="extype" name="cats.data.StateTInstances2">StateTInstances2</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.StateTInstances">StateTInstances</span>, <span class="extype" name="cats.data.StateTInstances1">StateTInstances1</span>, <span class="extype" name="cats.data.StateTInstances2">StateTInstances2</span>, <span class="extype" name="cats.data.StateTInstances3">StateTInstances3</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="cats.data.StateT"><span>StateT</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.StateTInstances"><span>StateTInstances</span></li><li class="in" name="cats.data.StateTInstances1"><span>StateTInstances1</span></li><li class="in" name="cats.data.StateTInstances2"><span>StateTInstances2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="cats.data.StateT"><span>StateT</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.StateTInstances"><span>StateTInstances</span></li><li class="in" name="cats.data.StateTInstances1"><span>StateTInstances1</span></li><li class="in" name="cats.data.StateTInstances2"><span>StateTInstances2</span></li><li class="in" name="cats.data.StateTInstances3"><span>StateTInstances3</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -232,23 +232,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateTInstances1</dd></dl></div>
-    </li><li name="cats.data.StateTInstances2#catsDataMonadForStateT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadForStateT[F[_],S](implicitF0:cats.Monad[F]):cats.Monad[[γ$4$]cats.data.StateT[F,S,γ$4$]]"></a>
-      <a id="catsDataMonadForStateT[F[_],S](Monad[F]):Monad[[γ$4$]StateT[F,S,γ$4$]]"></a>
+    </li><li name="cats.data.StateTInstances2#catsDataMonadErrorForStateT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadErrorForStateT[F[_],S,E](implicitF0:cats.MonadError[F,E]):cats.MonadError[[γ$4$]cats.data.StateT[F,S,γ$4$],E]"></a>
+      <a id="catsDataMonadErrorForStateT[F[_],S,E](MonadError[F,E]):MonadError[[γ$4$]StateT[F,S,γ$4$],E]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadForStateT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StateTInstances2.catsDataMonadForStateT.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[γ$4$]<a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateTInstances2.catsDataMonadForStateT.F">F</span>, <span class="extype" name="cats.data.StateTInstances2.catsDataMonadForStateT.S">S</span>, <span class="extype" name="cats.data.StateTInstances2.&lt;refinement&gt;.Λ$.γ$4$">γ$4$</span>]]</span>
+        <span class="name">catsDataMonadErrorForStateT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.StateTInstances2.catsDataMonadErrorForStateT.F">F</span>, <span class="extype" name="cats.data.StateTInstances2.catsDataMonadErrorForStateT.E">E</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$4$]<a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateTInstances2.catsDataMonadErrorForStateT.F">F</span>, <span class="extype" name="cats.data.StateTInstances2.catsDataMonadErrorForStateT.S">S</span>, <span class="extype" name="cats.data.StateTInstances2.&lt;refinement&gt;.Λ$.γ$4$">γ$4$</span>], <span class="extype" name="cats.data.StateTInstances2.catsDataMonadErrorForStateT.E">E</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#cats.data.StateT$@catsDataMonadForStateT[F[_],S](implicitF0:cats.Monad[F]):cats.Monad[[γ$4$]cats.data.StateT[F,S,γ$4$]]" title="Permalink" target="_top">
+      <a href="../../index.html#cats.data.StateT$@catsDataMonadErrorForStateT[F[_],S,E](implicitF0:cats.MonadError[F,E]):cats.MonadError[[γ$4$]cats.data.StateT[F,S,γ$4$],E]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateTInstances2</dd></dl></div>
+    </li><li name="cats.data.StateTInstances3#catsDataMonadForStateT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadForStateT[F[_],S](implicitF0:cats.Monad[F]):cats.Monad[[γ$6$]cats.data.StateT[F,S,γ$6$]]"></a>
+      <a id="catsDataMonadForStateT[F[_],S](Monad[F]):Monad[[γ$6$]StateT[F,S,γ$6$]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataMonadForStateT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.StateTInstances3.catsDataMonadForStateT.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[γ$6$]<a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<span class="extype" name="cats.data.StateTInstances3.catsDataMonadForStateT.F">F</span>, <span class="extype" name="cats.data.StateTInstances3.catsDataMonadForStateT.S">S</span>, <span class="extype" name="cats.data.StateTInstances3.&lt;refinement&gt;.Λ$.γ$6$">γ$6$</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#cats.data.StateT$@catsDataMonadForStateT[F[_],S](implicitF0:cats.Monad[F]):cats.Monad[[γ$6$]cats.data.StateT[F,S,γ$6$]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateTInstances3</dd></dl></div>
     </li><li name="cats.data.StateTInstances#catsDataMonadStateForStateT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsDataMonadStateForStateT[F[_],S](implicitF0:cats.Monad[F]):cats.MonadState[[γ$0$]cats.data.StateT[F,S,γ$0$],S]"></a>
       <a id="catsDataMonadStateForStateT[F[_],S](Monad[F]):MonadState[[γ$0$]StateT[F,S,γ$0$],S]"></a>
@@ -740,6 +757,8 @@
               <h3>Inherited from <span class="extype" name="cats.data.StateTInstances1">StateTInstances1</span></h3>
             </div><div class="parent" name="cats.data.StateTInstances2">
               <h3>Inherited from <span class="extype" name="cats.data.StateTInstances2">StateTInstances2</span></h3>
+            </div><div class="parent" name="cats.data.StateTInstances3">
+              <h3>Inherited from <span class="extype" name="cats.data.StateTInstances3">StateTInstances3</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
