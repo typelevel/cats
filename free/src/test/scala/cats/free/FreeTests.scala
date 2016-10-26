@@ -26,6 +26,8 @@ class FreeTests extends CatsSuite {
   test("compile id"){
     forAll { x: Free[List, Int] =>
       x.compile(FunctionK.id[List]) should === (x)
+      val fk = Free.compile(FunctionK.id[List])
+      fk(x) === x
     }
   }
 
@@ -46,6 +48,9 @@ class FreeTests extends CatsSuite {
       val mapped = x.compile(headOptionU)
       val folded = mapped.foldMap(FunctionK.id[Option])
       folded should === (x.foldMap(headOptionU))
+
+      val fk = Free.foldMap(headOptionU)
+      folded should === (fk(x))
     }
   }
 

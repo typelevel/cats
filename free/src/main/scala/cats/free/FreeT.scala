@@ -3,6 +3,8 @@ package free
 
 import scala.annotation.tailrec
 
+import cats.arrow.FunctionK
+
 /**
  * FreeT is a monad transformer for Free monads over a Functor S
  *
@@ -27,7 +29,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
    * Changes the underlying `Monad` for this `FreeT`, ie.
    * turning this `FreeT[S, M, A]` into a `FreeT[S, N, A]`.
    */
-  def hoist[N[_]](mn: M ~> N): FreeT[S, N, A] =
+  def hoist[N[_]](mn: FunctionK[M, N]): FreeT[S, N, A] =
     step match {
       case e @ FlatMapped(_, _) =>
         FlatMapped(e.a.hoist(mn), e.f.andThen(_.hoist(mn)))
@@ -35,11 +37,14 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
         Suspend(mn(m))
     }
 
+  @deprecated("Use compile", "0.8.0")
+  def interpret[T[_]](st: FunctionK[S, T])(implicit M: Functor[M]): FreeT[T, M, A] = compile(st)
+
   /** Change the base functor `S` for a `FreeT` action. */
-  def interpret[T[_]](st: S ~> T)(implicit M: Functor[M]): FreeT[T, M, A] =
+  def compile[T[_]](st: FunctionK[S, T])(implicit M: Functor[M]): FreeT[T, M, A] =
     step match {
       case e @ FlatMapped(_, _) =>
-        FlatMapped(e.a.interpret(st), e.f.andThen(_.interpret(st)))
+        FlatMapped(e.a.compile(st), e.f.andThen(_.compile(st)))
       case Suspend(m) =>
         Suspend(M.map(m)(_.left.map(s => st(s))))
     }
@@ -48,7 +53,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
    * Runs to completion, mapping the suspension with the given transformation
    * at each step and accumulating into the monad `M`.
    */
-  def foldMap(f: S ~> M)(implicit M: Monad[M]): M[A] = {
+  def foldMap(f: FunctionK[S, M])(implicit M: Monad[M]): M[A] = {
     def go(ft: FreeT[S, M, A]): M[Either[FreeT[S, M, A], A]] =
       ft match {
         case Suspend(ma) => M.flatMap(ma) {
@@ -170,6 +175,15 @@ object FreeT extends FreeTInstances {
   def roll[S[_], M[_], A](value: S[FreeT[S, M, A]])(implicit M: Applicative[M]): FreeT[S, M, A] =
     liftF[S, M, FreeT[S, M, A]](value).flatMap(identity)
 
+  def compile[S[_], T[_], M[_]: Functor](st: FunctionK[S, T]): FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]] =
+    new FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]] {
+     def apply[A](f: FreeT[S, M, A]) = f.compile(st)
+    }
+
+  def foldMap[S[_], M[_]: Monad](fk: FunctionK[S, M]): FunctionK[FreeT[S, M, ?], M] =
+    new FunctionK[FreeT[S, M, ?], M] {
+     def apply[A](f: FreeT[S, M, A]) = f.foldMap(fk)
+    }
 }
 
 private[free] sealed trait FreeTInstances3 {
