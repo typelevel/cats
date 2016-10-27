@@ -25,6 +25,12 @@ trait Monoid[A] {
   def empty: A
   def combine(x: A, y: A): A
 }
+
+// Implementation for Int
+val intAdditionMonoid: Monoid[Int] = new Monoid[Int] {
+  def empty: Int = 0
+  def combine(x: Int, y: Int): Int = x + y
+}
 ```
 
 The name `Monoid` is taken from abstract algebra which specifies precisely this kind of structure.
@@ -108,22 +114,47 @@ object Demo { // needed for tut, irrelevant to demonstration
   final case class Pair[A, B](first: A, second: B)
 
   object Pair {
-    implicit def tuple2Instance[A, B](implicit A: Monoid[A], B: Monoid[B]): Monoid[Pair[A, B]] = ??? /* as before */
+    implicit def tuple2Instance[A, B](implicit A: Monoid[A], B: Monoid[B]): Monoid[Pair[A, B]] =
+      new Monoid[Pair[A, B]] {
+        def empty: Pair[A, B] = Pair(A.empty, B.empty)
+
+        def combine(x: Pair[A, B], y: Pair[A, B]): Pair[A, B] =
+          Pair(A.combine(x.first, y.first), B.combine(x.second, y.second))
+      }
   }
 }
 ```
 
-We also change any functions that have a `Monoid` constraint on the type parameter to take the argument implicitly.
+We also change any functions that have a `Monoid` constraint on the type parameter to take the argument implicitly,
+and any instances of the type class to be implicit.
 
 ```tut:book:silent
+implicit val intAdditionMonoid: Monoid[Int] = new Monoid[Int] {
+  def empty: Int = 0
+  def combine(x: Int, y: Int): Int = x + y
+}
+
 def combineAll[A](list: List[A])(implicit A: Monoid[A]): A = list.foldRight(A.empty)(A.combine)
 ```
 
 Now we can also `combineAll` a list of `Pair`s so long as `Pair`'s type parameters themselves have `Monoid`
 instances.
 
+```tut:book:silent
+implicit val stringMonoid: Monoid[String] = new Monoid[String] {
+  def empty: String = ""
+  def combine(x: String, y: String): String = x ++ y
+}
+```
+
+```tut:book
+import Demo.{Pair => Paired}
+
+combineAll(List(Paired(1, "hello"), Paired(2, " "), Paired(3, "world")))
+```
+
 ## A note on syntax
-In many cases, including the `combineAll` function above, the implicit arguments are written with syntactic sugar.
+In many cases, including the `combineAll` function above, the implicit arguments can be written with syntactic sugar.
 
 ```tut:book:silent
 def combineAll[A : Monoid](list: List[A]): A = ???
@@ -153,6 +184,42 @@ def combineAll[A : Monoid](list: List[A]): A =
 ```
 
 Cats uses [simulacrum][simulacrum] for defining type classes which will auto-generate such an `apply` method.
+
+# Laws
+
+Conceptually, all type classes come with laws. These laws constrain implementations for a given
+type and can be exploited and used to reason about generic code.
+
+For instance, the `Monoid` type class requires that
+`combine` be associative and `empty` be an identity element for `combine`. That means the following
+equalities should hold for any choice of `x`, `y`, and `z`.
+
+```
+combine(x, combine(y, z)) = combine(combine(x, y), z)
+combine(x, id) = combine(id, x) = x
+```
+
+With these laws in place, functions parameterized over a `Monoid` can leverage them for say, performance
+reasons. A function that collapses a `List[A]` into a single `A` can do so with `foldLeft` or
+`foldRight` since `combine` is assumed to be associative, or it can break apart the list into smaller
+lists and collapse in parallel, such as
+
+```tut:book:silent
+val list = List(1, 2, 3, 4, 5)
+val (left, right) = list.splitAt(2)
+```
+
+```tut:book
+// Imagine the following two operations run in parallel
+val sumLeft = combineAll(left)
+val sumRight = combineAll(right)
+
+// Now gather the results
+val result = Monoid[Int].combine(sumLeft, sumRight)
+```
+
+Cats provides laws for type classes via the `kernel-laws` and `laws` modules which makes law checking
+type class instances easy.
 
 ## Further reading
 * [Returning the "Current" Type in Scala][fbounds]
