@@ -107,7 +107,6 @@ Typeclass hierarchy for types parameterized on a type `F[_]`
     MonadCombine [group=g1]
     Invariant [group=g4]
     Contravariant [group=g4]
-    Invariant [group=g4]
     CoflatMap [group=g5]
     Comonad [group=g5]
     Bimonad [group=g5]
