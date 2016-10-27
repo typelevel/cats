@@ -93,7 +93,7 @@ Typeclass hierarchy for types parameterized on a type `F[_]`
 
 ![Typeclass hierarchy](http://g.gravizo.com/g?
   digraph G {
-    aize ="4,4";
+    size ="6,6";
     edge [dir=back]
     node [shape=box,style="rounded"]
     Functor [group=g2]
@@ -105,9 +105,9 @@ Typeclass hierarchy for types parameterized on a type `F[_]`
     Alternative [group=g1]
     MonadFilter [group=g1]
     MonadCombine [group=g1]
-    "functor.Invariant" [group=g4]
-    "functor.Contravariant" [group=g4]
-    "functor.Invariant" [group=g4]
+    Invariant [group=g4]
+    Contravariant [group=g4]
+    Invariant [group=g4]
     CoflatMap [group=g5]
     Comonad [group=g5]
     Bimonad [group=g5]
@@ -116,10 +116,10 @@ Typeclass hierarchy for types parameterized on a type `F[_]`
     MonoidK -> Alternative
     Functor -> CoflatMap
     subgraph cluster_s3{
-      "functor.Invariant" -> "functor.Contravariant"
-      graph[style=dotted]
+      Invariant -> Contravariant
+      graph[style=dotted,label="functor"]
     }
-    "functor.Invariant" -> Functor
+    Invariant -> Functor
     subgraph cluster_s2{
       SemigroupK -> MonoidK
       graph[style=dotted]
