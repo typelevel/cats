@@ -84,6 +84,7 @@ implicit val optionMonad = new Monad[Option] {
     case Some(Left(nextA)) => tailRecM(nextA)(f) // continue the recursion
     case Some(Right(b))    => Some(b)            // recursion done
   }
+}
 ```
 
 Part of the reason for this is that name `flatMap` has special significance in
@@ -108,6 +109,8 @@ the results of earlier ones. This is embodied in `ifM`, which lifts an `if`
 statement into the monadic context.
 
 ```tut:book
+import cats.implicits._
+
 Monad[List].ifM(List(true, false, true))(List(1, 2), List(3, 4))
 ```
 
