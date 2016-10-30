@@ -15,7 +15,7 @@ trait Semigroup[A] {
 }
 ```
 
-`combine` also needs to be associative, which means the following equality must hold for any choices of `x`, `y`, and
+Associativity means the following equality must hold for any choice of `x`, `y`, and
 `z`.
 
 ```
@@ -50,6 +50,22 @@ Infix syntax is also available for types that have a `Semigroup` instance.
 import cats.syntax.semigroup._
 
 1 |+| 2
+```
+
+A more compelling example which we'll see later in this tutorial is the `Semigroup`
+for `Map`s.
+
+```tut:book:silent
+import cats.instances.map._
+
+val map1 = Map("hello" -> 0, "world" -> 1)
+val map2 = Map("hello" -> 2, "cats"  -> 3)
+```
+
+```tut:book
+Semigroup[Map[String, Int]].combine(map1, map2)
+
+map1 |+| map2
 ```
 
 # Example instances

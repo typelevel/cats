@@ -45,7 +45,7 @@ Monoid[Int].combine(x, Monoid[Int].empty)
 Monoid[Int].combine(Monoid[Int].empty, x)
 ```
 
-# Exploiting laws: associativity and identity
+# Example usage: Collapsing a list
 
 In the `Semigroup` section we had trouble writing a generic `combineAll` function because we had nothing
 to give if the list was empty. With `Monoid` we can return `empty`, giving us
