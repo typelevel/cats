@@ -1,8 +1,8 @@
 # Type classes
-Polymorphism is the idea that a single entity (function, object, interface) can change behavior depending on various
-implementations of an (potentially different) entity. In object-oriented languages the most common type of polymorphism
-is *subtype* polymorphism, where an abstract class or interface takes on many forms through inheritance.  Contrast this
-with *ad hoc* polymorphism, where a function varies with its inputs depending on the type.
+Type classes are a powerful tool used in functional programming to enable ad-hoc polymorphism, more commonly
+known as overloading. Where many object-oriented languages leverage subtyping for polymorphic code, functional
+programming tends towards a combination of parametric polymorphism (think type parameters, like Java generics)
+and ad-hoc polymorphism.
 
 ## Example: collapsing a list
 The following code snippets show code that sums a list of integers, concatenates a list of strings, and unions a list
