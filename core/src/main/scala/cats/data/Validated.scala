@@ -44,12 +44,26 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
   /**
    * Return this if it is Valid, or else fall back to the given default.
+   * The functionality is similar to that of [[findValid]] except for failure accumulation,
+   * where here only the error on the right is preserved and the error on the left is ignored.
    */
   def orElse[EE, AA >: A](default: => Validated[EE, AA]): Validated[EE, AA] =
     this match {
       case v @ Valid(_) => v
       case Invalid(_) => default
     }
+
+  /**
+    * If `this` is valid return `this`, otherwise if `that` is valid return `that`, otherwise combine the failures.
+    * This is similar to [[orElse]] except that here failures are accumulated.
+    */
+  def findValid[EE >: E, AA >: A](that: => Validated[EE, AA])(implicit EE: Semigroup[EE]): Validated[EE, AA] = this match {
+    case v @ Valid(_) => v
+    case Invalid(e) => that match {
+      case v @ Valid(_) => v
+      case Invalid(ee) => Invalid(EE.combine(e, ee))
+    }
+  }
 
   /**
    * Converts the value to an Either[E, A]
