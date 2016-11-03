@@ -41,7 +41,7 @@ lazy val commonSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.10.0",
-    "org.typelevel" %%% "machinist" % "0.6.0",
+    "org.typelevel" %%% "machinist" % "0.6.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.2")
   ),
@@ -96,7 +96,7 @@ lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ sc
 
 lazy val scalaCheckVersion = "1.13.2"
 lazy val scalaTestVersion = "3.0.0"
-lazy val disciplineVersion = "0.7.1"
+lazy val disciplineVersion = "0.7.2"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
