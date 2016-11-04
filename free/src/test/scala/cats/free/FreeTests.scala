@@ -127,7 +127,7 @@ sealed trait FreeTestsInstances {
       A.arbitrary.map(Free.pure[F, A]),
       F.arbitrary.map(Free.liftF[F, A]))
 
-    val nextDepth = Gen.chooseNum(1, maxDepth - 1)
+    val nextDepth = Gen.chooseNum(1, math.max(1, maxDepth - 1))
 
     def withFlatMapped = for {
       fDepth <- nextDepth
