@@ -114,6 +114,25 @@ class ValidatedTests extends CatsSuite {
     }
   }
 
+  test("findValid accumulates failures") {
+    forAll { (v: Validated[String, Int], u: Validated[String, Int]) =>
+      v findValid u shouldEqual { (v, u) match {
+        case (vv @ Valid(_), _) => vv
+        case (_, uu @ Valid(_)) => uu
+        case (Invalid(s1), Invalid(s2)) => Invalid(s1 ++ s2)
+      }}
+    }
+  }
+
+  test("orElse ignores left failure") {
+    forAll { (v: Validated[String, Int], u: Validated[String, Int]) =>
+      v orElse u shouldEqual { (v, u) match {
+        case (vv @ Valid(_), _) => vv
+        case (_, uu) => uu
+      }}
+    }
+  }
+
   test("valueOr consistent with swap then map then merge") {
     forAll { (v: Validated[String, Int], f: String => Int) =>
       v.valueOr(f) should === (v.swap.map(f).merge)
