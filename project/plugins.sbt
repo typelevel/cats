@@ -9,5 +9,9 @@ addSbtPlugin("org.scoverage"        % "sbt-scoverage"         % "1.5.0-RC2")
 addSbtPlugin("com.typesafe.sbt"     % "sbt-git"               % "0.8.5")
 addSbtPlugin("org.scala-js"         % "sbt-scalajs"           % "0.6.13")
 addSbtPlugin("com.github.tkawachi"  % "sbt-doctest"           % "0.4.1")
-addSbtPlugin("org.xerial.sbt"       % "sbt-sonatype"          %  "1.1")
-addSbtPlugin("com.fortysevendeg"    % "sbt-microsites"        % "0.3.0")
+addSbtPlugin("org.xerial.sbt"       % "sbt-sonatype"          % "1.1")
+addSbtPlugin("com.fortysevendeg"    % "sbt-microsites"        % "0.3.1")
+
+// Tut is transitively pulled in by sbt-microsites, but as of 0.3.1 that
+// results in the wrong version (0.4.5 instead of 0.4.6).
+addSbtPlugin("org.tpolecat"         % "tut-plugin"            % "0.4.6")
