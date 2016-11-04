@@ -43,7 +43,7 @@ lazy val commonSettings = Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.10.0",
     "org.typelevel" %%% "machinist" % "0.6.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.2")
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")
   ),
   fork in test := true,
   parallelExecution in Test := false,
