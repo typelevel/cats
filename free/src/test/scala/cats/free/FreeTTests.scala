@@ -164,7 +164,7 @@ object FreeTTests extends FreeTTestsInstances {
       F.arbitrary.map(FreeT.liftF[F, G, A])
     )
 
-    val nextDepth = Gen.chooseNum(1, maxDepth - 1)
+    val nextDepth = Gen.chooseNum(1, math.max(1, maxDepth - 1))
 
     def withFlatMapped = for {
       fDepth <- nextDepth
