@@ -103,8 +103,8 @@ lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion)
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.4",
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.4" % "test",
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.5",
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.5" % "test",
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
 
 
