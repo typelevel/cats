@@ -156,6 +156,22 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
+  test("reduceLeftM consistent with foldM") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Option[Int]) =>
+      val got = nel.reduceLeftM(f)((acc, i) => f(i).map(acc + _))
+      val expected = f(nel.head).flatMap { hd =>
+        nel.tail.foldM(hd)((acc, i) => f(i).map(acc + _))
+      }
+      got should === (expected)
+    }
+  }
+
+  test("reduceMapM consistent with foldMapM") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Option[Int]) =>
+      nel.reduceMapM(f) should === (nel.foldMapM(f))
+    }
+  }
+
   test("fromList round trip") {
     forAll { l: List[Int] =>
       NonEmptyList.fromList(l).map(_.toList).getOrElse(List.empty) should === (l)

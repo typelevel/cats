@@ -184,6 +184,27 @@ import simulacrum.typeclass
     foldLeft(fa, G.pure(z))((gb, a) => G.flatMap(gb)(f(_, a)))
 
   /**
+   * Monadic folding on `F` by mapping `A` values to `G[B]`, combining the `B`
+   * values using the given `Monoid[B]` instance.
+   *
+   * Similar to [[foldM]], but using a `Monoid[B]`.
+   *
+   * {{{
+   * scala> import cats.Foldable
+   * scala> import cats.implicits._
+   * scala> val evenNumbers = List(2,4,6,8,10)
+   * scala> val evenOpt: Int => Option[Int] =
+   *      |   i => if (i % 2 == 0) Some(i) else None
+   * scala> Foldable[List].foldMapM(evenNumbers)(evenOpt)
+   * res0: Option[Int] = Some(30)
+   * scala> Foldable[List].foldMapM(evenNumbers :+ 11)(evenOpt)
+   * res1: Option[Int] = None
+   * }}}
+   */
+  def foldMapM[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Monad[G], B: Monoid[B]): G[B] =
+    foldM(fa, B.empty)((b, a) => G.map(f(a))(B.combine(b, _)))
+
+  /**
    * Traverse `F[A]` using `Applicative[G]`.
    *
    * `A` values will be mapped into `G[B]` and combined using
