@@ -57,6 +57,13 @@ class EitherTests extends CatsSuite {
     }
   }
 
+  test("Left/Right id syntax") {
+    forAll { (e: Int) =>
+      assert(Left[Int, String](e) === e.asLeft[String])
+      assert(Right[String, Int](e) === e.asRight[String])
+    }
+  }
+
   test("implicit instances resolve specifically") {
     val eq = catsStdEqForEither[Int, String]
     assert(!eq.isInstanceOf[PartialOrder[_]])

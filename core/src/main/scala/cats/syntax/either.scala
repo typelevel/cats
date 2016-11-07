@@ -13,6 +13,8 @@ trait EitherSyntax {
   implicit def catsSyntaxLeft[A, B](left: Left[A, B]): LeftOps[A, B] = new LeftOps(left)
 
   implicit def catsSyntaxRight[A, B](right: Right[A, B]): RightOps[A, B] = new RightOps(right)
+
+  implicit def catsSyntaxEitherId[A](a: A): EitherIdOps[A] = new EitherIdOps(a)
 }
 
 final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
@@ -304,6 +306,14 @@ final class LeftOps[A, B](val left: Left[A, B]) extends AnyVal {
 final class RightOps[A, B](val right: Right[A, B]) extends AnyVal {
   /** Cast the left type parameter of the `Right`. */
   def leftCast[C]: Either[C, B] = right.asInstanceOf[Either[C, B]]
+}
+
+final class EitherIdOps[A](val obj: A) extends AnyVal {
+  /** Wrap a value in `Left`. */
+  def asLeft[B]: Either[A, B] = Left(obj)
+
+  /** Wrap a value in `Right`. */
+  def asRight[B]: Either[B, A] = Right(obj)
 }
 
 /** Convenience methods to use `Either` syntax inside `Either` syntax definitions. */
