@@ -220,7 +220,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     fold(_ => this, a => if (f(a)) this else Validated.invalid(onFailure))
 }
 
-object Validated extends ValidatedInstances with ValidatedFunctions{
+object Validated extends ValidatedInstances with ValidatedFunctions {
   final case class Valid[+A](a: A) extends Validated[Nothing, A]
   final case class Invalid[+E](e: E) extends Validated[E, Nothing]
 }
@@ -391,4 +391,17 @@ trait ValidatedFunctions {
    * the invalid of the `Validated` when the specified `Option` is `None`.
    */
   def fromOption[A, B](o: Option[B], ifNone: => A): Validated[A, B] = o.fold(invalid[A, B](ifNone))(valid)
+
+  /**
+   * Converts `false` to an Invalid with the given value or a Valid with Unit if `true`.
+   * This is useful to convert boolean checks, for example
+   * {{{
+   * scala> Validated.fromBoolean(1 > 42, "Not the answer")
+   * res0: Validated[String, Unit] = Invalid(Not the answer)
+   * scala> Validated.fromBoolean(42 > 1, "Not the answer")
+   * res1: Validated[String, Unit] = Valid(())
+   * }}}
+   */
+  def fromBoolean[A](cond: Boolean, ifFalse: => A): Validated[A, Unit] =
+    if (cond) valid(()) else invalid(ifFalse)
 }
