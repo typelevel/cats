@@ -8,13 +8,14 @@ lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev 
 
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
-  coverageFailOnMinimum := false
+  coverageFailOnMinimum := false,
+  coverageScalacPluginVersion := "1.3.0"
 )
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
-  scalaVersion := "2.11.8",
-  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-RC2")
+  scalaVersion := "2.12.0",
+  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0")
 )
 
 lazy val catsDoctestSettings = Seq(
@@ -41,9 +42,9 @@ lazy val commonSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.10.0",
-    "org.typelevel" %%% "machinist" % "0.6.0",
+    "org.typelevel" %%% "machinist" % "0.6.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.2")
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")
   ),
   fork in test := true,
   parallelExecution in Test := false,
@@ -94,17 +95,17 @@ lazy val includeGeneratedSrc: Setting[_] = {
 
 lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
-lazy val scalaCheckVersion = "1.13.3"
+lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.0"
-lazy val disciplineVersion = "0.7.1"
+lazy val disciplineVersion = "0.7.2"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
   libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion)
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.4",
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.4" % "test",
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.5",
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.5" % "test",
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
 
 
@@ -304,7 +305,7 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(libraryDependencies ++= Seq(
-    "org.scalaz" %% "scalaz-core" % "7.2.6"))
+    "org.scalaz" %% "scalaz-core" % "7.2.7"))
   .enablePlugins(JmhPlugin)
 
 // cats-js is JS-only
