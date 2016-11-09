@@ -1,42 +1,842 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>OptionOps - cats.syntax.OptionOps</title>
-          <meta name="description" content="OptionOps - cats.syntax.OptionOps" />
-          <meta name="keywords" content="OptionOps cats.syntax.OptionOps" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
+      <link href="../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../lib/index.js"></script>
+      <script type="text/javascript" src="../../index.js"></script>
+      <script type="text/javascript" src="../../lib/scheduler.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
       <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
-         if(top === self) {
-            var url = '../../index.html';
-            var hash = 'cats.syntax.OptionOps';
-            var anchor = window.location.hash;
-            var anchor_opt = '';
-            if (anchor.length >= 1)
-              anchor_opt = '@' + anchor.substring(1);
-            window.location.href = url + '#' + hash + anchor_opt;
-         }
-   	  </script>
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../';
+      </script>
     
         </head>
-        <body class="type">
-      <div id="definition">
-        <img alt="Class" src="../../lib/class_big.png" />
-        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.syntax">syntax</a></p>
-        <h1>OptionOps</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="cats.syntax">package syntax</a>
-          </div></span></h3><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="index.html#_root_" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html">
+              <span class="name">root</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.cats" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cats"></a><a id="cats:cats"></a>
+      <span class="permalink">
+      <a href="index.html#cats" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="Symbolic aliases for various types are defined here." href="../index.html">
+              <span class="name">cats</span>
+            </a>
+      </span>
+      
+      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="cats.syntax" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="syntax"></a><a id="syntax:syntax"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#syntax" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="index.html">
+              <span class="name">syntax</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllSyntax.html" title=""></a>
+                        <a href="AllSyntax.html" title="">
+                          AllSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ApplicativeErrorIdOps.html" title=""></a>
+                        <a href="ApplicativeErrorIdOps.html" title="">
+                          ApplicativeErrorIdOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ApplicativeErrorOps.html" title=""></a>
+                        <a href="ApplicativeErrorOps.html" title="">
+                          ApplicativeErrorOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ApplicativeErrorSyntax.html" title=""></a>
+                        <a href="ApplicativeErrorSyntax.html" title="">
+                          ApplicativeErrorSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ApplicativeIdOps.html" title=""></a>
+                        <a href="ApplicativeIdOps.html" title="">
+                          ApplicativeIdOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ApplicativeSyntax.html" title=""></a>
+                        <a href="ApplicativeSyntax.html" title="">
+                          ApplicativeSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ApplySyntax.html" title=""></a>
+                        <a href="ApplySyntax.html" title="">
+                          ApplySyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="BifoldableSyntax.html" title=""></a>
+                        <a href="BifoldableSyntax.html" title="">
+                          BifoldableSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="BifunctorSyntax.html" title=""></a>
+                        <a href="BifunctorSyntax.html" title="">
+                          BifunctorSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="BitraverseOps.html" title=""></a>
+                        <a href="BitraverseOps.html" title="">
+                          BitraverseOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="BitraverseSyntax.html" title=""></a>
+                        <a href="BitraverseSyntax.html" title="">
+                          BitraverseSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="CartesianOps.html" title=""></a>
+                        <a href="CartesianOps.html" title="">
+                          CartesianOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="CartesianSyntax.html" title=""></a>
+                        <a href="CartesianSyntax.html" title="">
+                          CartesianSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="CatchOnlyPartiallyApplied.html" title=""></a>
+                        <a href="CatchOnlyPartiallyApplied.html" title="">
+                          CatchOnlyPartiallyApplied
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="CoflatMapSyntax.html" title=""></a>
+                        <a href="CoflatMapSyntax.html" title="">
+                          CoflatMapSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ComonadSyntax.html" title=""></a>
+                        <a href="ComonadSyntax.html" title="">
+                          ComonadSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ComposeSyntax.html" title=""></a>
+                        <a href="ComposeSyntax.html" title="">
+                          ComposeSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ContravariantSyntax.html" title=""></a>
+                        <a href="ContravariantSyntax.html" title="">
+                          ContravariantSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="CoproductOps.html" title=""></a>
+                        <a href="CoproductOps.html" title="">
+                          CoproductOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="CoproductSyntax.html" title=""></a>
+                        <a href="CoproductSyntax.html" title="">
+                          CoproductSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="EitherIdOps.html" title=""></a>
+                        <a href="EitherIdOps.html" title="">
+                          EitherIdOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="EitherObjectOps.html" title=""></a>
+                        <a href="EitherObjectOps.html" title="">
+                          EitherObjectOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="EitherOps.html" title=""></a>
+                        <a href="EitherOps.html" title="">
+                          EitherOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="EitherSyntax.html" title=""></a>
+                        <a href="EitherSyntax.html" title="">
+                          EitherSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="EqOps.html" title=""></a>
+                        <a href="EqOps.html" title="">
+                          EqOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="EqSyntax.html" title=""></a>
+                        <a href="EqSyntax.html" title="">
+                          EqSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="FlatMapSyntax.html" title=""></a>
+                        <a href="FlatMapSyntax.html" title="">
+                          FlatMapSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="FlattenOps.html" title=""></a>
+                        <a href="FlattenOps.html" title="">
+                          FlattenOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="FoldableSyntax.html" title=""></a>
+                        <a href="FoldableSyntax.html" title="">
+                          FoldableSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="FunctorFilterSyntax.html" title=""></a>
+                        <a href="FunctorFilterSyntax.html" title="">
+                          FunctorFilterSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="FunctorSyntax.html" title=""></a>
+                        <a href="FunctorSyntax.html" title="">
+                          FunctorSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="GroupOps.html" title=""></a>
+                        <a href="GroupOps.html" title="">
+                          GroupOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="GroupSyntax.html" title=""></a>
+                        <a href="GroupSyntax.html" title="">
+                          GroupSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="IfMOps.html" title=""></a>
+                        <a href="IfMOps.html" title="">
+                          IfMOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="InvariantSyntax.html" title=""></a>
+                        <a href="InvariantSyntax.html" title="">
+                          InvariantSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="LeftOps.html" title=""></a>
+                        <a href="LeftOps.html" title="">
+                          LeftOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ListOps.html" title=""></a>
+                        <a href="ListOps.html" title="">
+                          ListOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ListSyntax.html" title=""></a>
+                        <a href="ListSyntax.html" title="">
+                          ListSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="MonadCombineOps.html" title=""></a>
+                        <a href="MonadCombineOps.html" title="">
+                          MonadCombineOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="MonadCombineSyntax.html" title=""></a>
+                        <a href="MonadCombineSyntax.html" title="">
+                          MonadCombineSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="MonadErrorOps.html" title=""></a>
+                        <a href="MonadErrorOps.html" title="">
+                          MonadErrorOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="MonadErrorSyntax.html" title=""></a>
+                        <a href="MonadErrorSyntax.html" title="">
+                          MonadErrorSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="MonadFilterSyntax.html" title=""></a>
+                        <a href="MonadFilterSyntax.html" title="">
+                          MonadFilterSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="MonoidOps.html" title=""></a>
+                        <a href="MonoidOps.html" title="">
+                          MonoidOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="MonoidSyntax.html" title=""></a>
+                        <a href="MonoidSyntax.html" title="">
+                          MonoidSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NestedBitraverseOps.html" title=""></a>
+                        <a href="NestedBitraverseOps.html" title="">
+                          NestedBitraverseOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NestedFoldableOps.html" title=""></a>
+                        <a href="NestedFoldableOps.html" title="">
+                          NestedFoldableOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NestedReducibleOps.html" title=""></a>
+                        <a href="NestedReducibleOps.html" title="">
+                          NestedReducibleOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="OptionIdOps.html" title=""></a>
+                        <a href="OptionIdOps.html" title="">
+                          OptionIdOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="" title=""></a>
+                        <a href="" title="">
+                          OptionOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="OptionSyntax.html" title=""></a>
+                        <a href="OptionSyntax.html" title="">
+                          OptionSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="OrderOps.html" title=""></a>
+                        <a href="OrderOps.html" title="">
+                          OrderOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="OrderSyntax.html" title=""></a>
+                        <a href="OrderSyntax.html" title="">
+                          OrderSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="PartialOrderOps.html" title=""></a>
+                        <a href="PartialOrderOps.html" title="">
+                          PartialOrderOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialOrderSyntax.html" title=""></a>
+                        <a href="PartialOrderSyntax.html" title="">
+                          PartialOrderSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProfunctorSyntax.html" title=""></a>
+                        <a href="ProfunctorSyntax.html" title="">
+                          ProfunctorSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ReducibleSyntax.html" title=""></a>
+                        <a href="ReducibleSyntax.html" title="">
+                          ReducibleSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="RightOps.html" title=""></a>
+                        <a href="RightOps.html" title="">
+                          RightOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SemigroupKSyntax.html" title=""></a>
+                        <a href="SemigroupKSyntax.html" title="">
+                          SemigroupKSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="SemigroupOps.html" title=""></a>
+                        <a href="SemigroupOps.html" title="">
+                          SemigroupOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SemigroupSyntax.html" title=""></a>
+                        <a href="SemigroupSyntax.html" title="">
+                          SemigroupSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="SeparateOps.html" title=""></a>
+                        <a href="SeparateOps.html" title="">
+                          SeparateOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SplitSyntax.html" title=""></a>
+                        <a href="SplitSyntax.html" title="">
+                          SplitSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="StrongSyntax.html" title=""></a>
+                        <a href="StrongSyntax.html" title="">
+                          StrongSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="TLExtract$.html" title=""></a>
+                        <a class="trait" href="TLExtract.html" title=""></a>
+                        <a href="TLExtract.html" title="">
+                          TLExtract
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="TransLiftOps.html" title=""></a>
+                        <a href="TransLiftOps.html" title="">
+                          TransLiftOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="TransLiftSyntax.html" title=""></a>
+                        <a href="TransLiftSyntax.html" title="">
+                          TransLiftSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="TraverseFilterSyntax.html" title=""></a>
+                        <a href="TraverseFilterSyntax.html" title="">
+                          TraverseFilterSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="TraverseSyntax.html" title=""></a>
+                        <a href="TraverseSyntax.html" title="">
+                          TraverseSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="TupleCartesianSyntax.html" title=""></a>
+                        <a href="TupleCartesianSyntax.html" title="">
+                          TupleCartesianSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="TupleSyntax.html" title=""></a>
+                        <a href="TupleSyntax.html" title="">
+                          TupleSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ValidatedIdSyntax.html" title=""></a>
+                        <a href="ValidatedIdSyntax.html" title="">
+                          ValidatedIdSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ValidatedSyntax.html" title=""></a>
+                        <a href="ValidatedSyntax.html" title="">
+                          ValidatedSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="VectorOps.html" title=""></a>
+                        <a href="VectorOps.html" title="">
+                          VectorOps
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="VectorSyntax.html" title=""></a>
+                        <a href="VectorSyntax.html" title="">
+                          VectorSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="WriterIdSyntax.html" title=""></a>
+                        <a href="WriterIdSyntax.html" title="">
+                          WriterIdSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="WriterSyntax.html" title=""></a>
+                        <a href="WriterSyntax.html" title="">
+                          WriterSyntax
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$all$.html" title=""></a>
+                        <a href="package$$all$.html" title="">
+                          all
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$applicative$.html" title=""></a>
+                        <a href="package$$applicative$.html" title="">
+                          applicative
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$applicativeError$.html" title=""></a>
+                        <a href="package$$applicativeError$.html" title="">
+                          applicativeError
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$apply$.html" title=""></a>
+                        <a href="package$$apply$.html" title="">
+                          apply
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$bifoldable$.html" title=""></a>
+                        <a href="package$$bifoldable$.html" title="">
+                          bifoldable
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$bifunctor$.html" title=""></a>
+                        <a href="package$$bifunctor$.html" title="">
+                          bifunctor
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$bitraverse$.html" title=""></a>
+                        <a href="package$$bitraverse$.html" title="">
+                          bitraverse
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$cartesian$.html" title=""></a>
+                        <a href="package$$cartesian$.html" title="">
+                          cartesian
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$coflatMap$.html" title=""></a>
+                        <a href="package$$coflatMap$.html" title="">
+                          coflatMap
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$comonad$.html" title=""></a>
+                        <a href="package$$comonad$.html" title="">
+                          comonad
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$compose$.html" title=""></a>
+                        <a href="package$$compose$.html" title="">
+                          compose
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$contravariant$.html" title=""></a>
+                        <a href="package$$contravariant$.html" title="">
+                          contravariant
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$coproduct$.html" title=""></a>
+                        <a href="package$$coproduct$.html" title="">
+                          coproduct
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$either$.html" title=""></a>
+                        <a href="package$$either$.html" title="">
+                          either
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$eq$.html" title=""></a>
+                        <a href="package$$eq$.html" title="">
+                          eq
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$flatMap$.html" title=""></a>
+                        <a href="package$$flatMap$.html" title="">
+                          flatMap
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$foldable$.html" title=""></a>
+                        <a href="package$$foldable$.html" title="">
+                          foldable
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$functor$.html" title=""></a>
+                        <a href="package$$functor$.html" title="">
+                          functor
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$functorFilter$.html" title=""></a>
+                        <a href="package$$functorFilter$.html" title="">
+                          functorFilter
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$group$.html" title=""></a>
+                        <a href="package$$group$.html" title="">
+                          group
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$invariant$.html" title=""></a>
+                        <a href="package$$invariant$.html" title="">
+                          invariant
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$list$.html" title=""></a>
+                        <a href="package$$list$.html" title="">
+                          list
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$monadCombine$.html" title=""></a>
+                        <a href="package$$monadCombine$.html" title="">
+                          monadCombine
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$monadFilter$.html" title=""></a>
+                        <a href="package$$monadFilter$.html" title="">
+                          monadFilter
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$monoid$.html" title=""></a>
+                        <a href="package$$monoid$.html" title="">
+                          monoid
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$option$.html" title=""></a>
+                        <a href="package$$option$.html" title="">
+                          option
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$order$.html" title=""></a>
+                        <a href="package$$order$.html" title="">
+                          order
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$partialOrder$.html" title=""></a>
+                        <a href="package$$partialOrder$.html" title="">
+                          partialOrder
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$profunctor$.html" title=""></a>
+                        <a href="package$$profunctor$.html" title="">
+                          profunctor
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$reducible$.html" title=""></a>
+                        <a href="package$$reducible$.html" title="">
+                          reducible
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$semigroup$.html" title=""></a>
+                        <a href="package$$semigroup$.html" title="">
+                          semigroup
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$semigroupk$.html" title=""></a>
+                        <a href="package$$semigroupk$.html" title="">
+                          semigroupk
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$show$.html" title=""></a>
+                        <a href="package$$show$.html" title="">
+                          show
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$split$.html" title=""></a>
+                        <a href="package$$split$.html" title="">
+                          split
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$strong$.html" title=""></a>
+                        <a href="package$$strong$.html" title="">
+                          strong
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$transLift$.html" title=""></a>
+                        <a href="package$$transLift$.html" title="">
+                          transLift
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$traverse$.html" title=""></a>
+                        <a href="package$$traverse$.html" title="">
+                          traverse
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$traverseFilter$.html" title=""></a>
+                        <a href="package$$traverseFilter$.html" title="">
+                          traverseFilter
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$tuple$.html" title=""></a>
+                        <a href="package$$tuple$.html" title="">
+                          tuple
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$validated$.html" title=""></a>
+                        <a href="package$$validated$.html" title="">
+                          validated
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$vector$.html" title=""></a>
+                        <a href="package$$vector$.html" title="">
+                          vector
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$writer$.html" title=""></a>
+                        <a href="package$$writer$.html" title="">
+                          writer
+                        </a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="class type">
+      <div id="definition">
+        <div class="big-circle class">c</div>
+        <p id="owner"><a href="../index.html" class="extype" name="cats">cats</a>.<a href="index.html" class="extype" name="cats.syntax">syntax</a></p>
+        <h1>OptionOps<span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
@@ -48,62 +848,73 @@
         <span class="name">OptionOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
       </span>
       </h4>
+
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/syntax/option.scala" target="_blank">option.scala</a></dd></dl><div class="toggleContainer block">
-          <span class="toggle">Linear Supertypes</span>
+          <span class="toggle">
+            Linear Supertypes
+          </span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyVal">AnyVal</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
       <div id="mbrsel">
-        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
-        <div id="order">
-              <span class="filtertype">Ordering</span>
-              <ol>
-                
-                <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By Inheritance</span></li>
-              </ol>
-            </div>
-        <div id="ancestors">
-                <span class="filtertype">Inherited<br />
-                </span>
-                <ol id="linearization">
-                  <li class="in" name="cats.syntax.OptionOps"><span>OptionOps</span></li><li class="in" name="scala.AnyVal"><span>AnyVal</span></li><li class="in" name="scala.Any"><span>Any</span></li>
-                </ol>
-              </div><div id="ancestors">
-            <span class="filtertype"></span>
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
             <ol>
-              <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show All</span></li>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
             </ol>
           </div>
-        <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
-          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="cats.syntax.OptionOps"><span>OptionOps</span></li><li class="in" name="scala.AnyVal"><span>AnyVal</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
       </div>
 
       <div id="template">
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="cats.syntax.OptionOps#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(oa:Option[A]):cats.syntax.OptionOps[A]"></a>
-      <a id="&lt;init&gt;:OptionOps[A]"></a>
-      <h4 class="signature">
+              <ol><li name="cats.syntax.OptionOps#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(oa:Option[A]):cats.syntax.OptionOps[A]"></a><a id="&lt;init&gt;:OptionOps[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#&lt;init&gt;(oa:Option[A]):cats.syntax.OptionOps[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">OptionOps</span><span class="params">(<span name="oa">oa: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>)</span>
+        <span class="name">OptionOps</span><span class="params">(<span name="oa">oa: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>)</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@&lt;init&gt;(oa:Option[A]):cats.syntax.OptionOps[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       
     </li></ol>
             </div>
@@ -112,63 +923,64 @@
 
         
 
-        <div id="values" class="values members">
+        <div class="values members">
               <h3>Value Members</h3>
-              <ol><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:Any):Boolean"></a>
-      <a id="!=(Any):Boolean"></a>
-      <h4 class="signature">
+              <ol>
+                <li name="scala.Any#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.Any###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.Any###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
-      <a id="##():Int"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@##():Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:Any):Boolean"></a>
-      <a id="==(Any):Boolean"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="asInstanceOf[T0]:T0"></a>
-      <a id="asInstanceOf[T0]:T0"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -176,16 +988,15 @@
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyVal#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_&lt;:AnyVal]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#getClass():Class[_&lt;:AnyVal]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyVal#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getClass():Class[_&lt;:AnyVal]"></a>
-      <a id="getClass():Class[_&lt;:AnyVal]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -193,62 +1004,55 @@
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="scala.AnyVal">AnyVal</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@getClass():Class[_&lt;:AnyVal]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyVal → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyVal → Any</dd></dl></div>
-    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="isInstanceOf[T0]:Boolean"></a>
-      <a id="isInstanceOf[T0]:Boolean"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.syntax.OptionOps#oa" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="oa:Option[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#oa:Option[A]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.syntax.OptionOps#oa" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="oa:Option[A]"></a>
-      <a id="oa:Option[A]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">oa</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>
+        <span class="name">oa</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@oa:Option[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="cats.syntax.OptionOps#orEmpty" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orEmpty(implicitA:cats.Monoid[A]):A"></a><a id="orEmpty(Monoid[A]):A"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#orEmpty(implicitA:cats.Monoid[A]):A" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="cats.syntax.OptionOps#orEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="orEmpty(implicitA:cats.Monoid[A]):A"></a>
-      <a id="orEmpty(Monoid[A]):A"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">orEmpty</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.OptionOps.A">A</span></span>
+        <span class="name">orEmpty</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.OptionOps.A">A</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@orEmpty(implicitA:cats.Monoid[A]):A" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value. If the <code>Option</code> is <code>None</code>,
 return the <code>empty</code> value for <code>Monoid[A]</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 
@@ -259,10 +1063,13 @@ res0: <span class="std">String</span> = hello
 scala&gt; <span class="kw">val</span> noneString: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">None</span>
 scala&gt; noneString.orEmpty
 res1: <span class="std">String</span> = <span class="lit">""</span></pre></div></div>
-    </li><li name="cats.syntax.OptionOps#toInvalid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toInvalid[B](b:=&gt;B):cats.data.Validated[A,B]"></a>
-      <a id="toInvalid[B](⇒B):Validated[A,B]"></a>
-      <h4 class="signature">
+    </li><li name="cats.syntax.OptionOps#toInvalid" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toInvalid[B](b:=&gt;B):cats.data.Validated[A,B]"></a><a id="toInvalid[B](⇒B):Validated[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#toInvalid[B](b:=&gt;B):cats.data.Validated[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -270,11 +1077,7 @@ res1: <span class="std">String</span> = <span class="lit">""</span></pre></div><
       <span class="symbol">
         <span class="name">toInvalid</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toInvalid.B">B</span></span>)</span><span class="result">: <a href="../data/Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>, <span class="extype" name="cats.syntax.OptionOps.toInvalid.B">B</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@toInvalid[B](b:=&gt;B):cats.data.Validated[A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.
 If the <code>Option</code> is <code>None</code>, return the provided <code>B</code> value in a
 <a href="../data/Validated$$Valid.html" class="extype" name="cats.data.Validated.Valid">cats.data.Validated.Valid</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Validated
@@ -287,22 +1090,21 @@ res0: Validated[<span class="std">String</span>, <span class="std">Int</span>] =
 scala&gt; <span class="kw">val</span> error2: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">None</span>
 scala&gt; error2.toInvalid(<span class="num">3</span>)
 res1: Validated[<span class="std">String</span>, <span class="std">Int</span>] = Valid(<span class="num">3</span>)</pre></div></div>
-    </li><li name="cats.syntax.OptionOps#toInvalidNel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toInvalidNel[B](b:=&gt;B):cats.data.ValidatedNel[A,B]"></a>
-      <a id="toInvalidNel[B](⇒B):ValidatedNel[A,B]"></a>
-      <h4 class="signature">
+    </li><li name="cats.syntax.OptionOps#toInvalidNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toInvalidNel[B](b:=&gt;B):cats.data.ValidatedNel[A,B]"></a><a id="toInvalidNel[B](⇒B):ValidatedNel[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#toInvalidNel[B](b:=&gt;B):cats.data.ValidatedNel[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toInvalidNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toInvalidNel.B">B</span></span>)</span><span class="result">: <a href="../data/package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>, <span class="extype" name="cats.syntax.OptionOps.toInvalidNel.B">B</span>]</span>
+        <span class="name">toInvalidNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toInvalidNel.B">B</span></span>)</span><span class="result">: <a href="../data/index.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.syntax.OptionOps.A">A</span>, <span class="extype" name="cats.syntax.OptionOps.toInvalidNel.B">B</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@toInvalidNel[B](b:=&gt;B):cats.data.ValidatedNel[A,B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, wrap its value in a <a href="../data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">cats.data.NonEmptyList</a>
 and return it in a <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, wrap its value in a <a href="../data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">cats.data.NonEmptyList</a>
 and return it in a <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.
@@ -317,10 +1119,13 @@ res0: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>
 scala&gt; <span class="kw">val</span> error2: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">None</span>
 scala&gt; error2.toInvalidNel(<span class="num">3</span>)
 res1: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>] = Valid(<span class="num">3</span>)</pre></div></div>
-    </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.Any#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
-      <a id="toString():String"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -328,16 +1133,15 @@ res1: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@toString():String" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.syntax.OptionOps#toValid" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toValid[B](b:=&gt;B):cats.data.Validated[B,A]"></a><a id="toValid[B](⇒B):Validated[B,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#toValid[B](b:=&gt;B):cats.data.Validated[B,A]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.syntax.OptionOps#toValid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toValid[B](b:=&gt;B):cats.data.Validated[B,A]"></a>
-      <a id="toValid[B](⇒B):Validated[B,A]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -345,11 +1149,7 @@ res1: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>
       <span class="symbol">
         <span class="name">toValid</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toValid.B">B</span></span>)</span><span class="result">: <a href="../data/Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.syntax.OptionOps.toValid.B">B</span>, <span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@toValid[B](b:=&gt;B):cats.data.Validated[B,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Valid.html" class="extype" name="cats.data.Validated.Valid">cats.data.Validated.Valid</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Valid.html" class="extype" name="cats.data.Validated.Valid">cats.data.Validated.Valid</a>.
 If the <code>Option</code> is <code>None</code>, return the provided <code>B</code> value in a
 <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Validated
@@ -362,22 +1162,21 @@ res0: Validated[<span class="std">String</span>, <span class="std">Int</span>] =
 scala&gt; <span class="kw">val</span> result2: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
 scala&gt; result2.toValid(<span class="lit">"error!"</span>)
 res1: Validated[<span class="std">String</span>, <span class="std">Int</span>] = Invalid(error!)</pre></div></div>
-    </li><li name="cats.syntax.OptionOps#toValidNel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toValidNel[B](b:=&gt;B):cats.data.ValidatedNel[B,A]"></a>
-      <a id="toValidNel[B](⇒B):ValidatedNel[B,A]"></a>
-      <h4 class="signature">
+    </li><li name="cats.syntax.OptionOps#toValidNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toValidNel[B](b:=&gt;B):cats.data.ValidatedNel[B,A]"></a><a id="toValidNel[B](⇒B):ValidatedNel[B,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/OptionOps.html#toValidNel[B](b:=&gt;B):cats.data.ValidatedNel[B,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toValidNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toValidNel.B">B</span></span>)</span><span class="result">: <a href="../data/package.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.syntax.OptionOps.toValidNel.B">B</span>, <span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>
+        <span class="name">toValidNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.syntax.OptionOps.toValidNel.B">B</span></span>)</span><span class="result">: <a href="../data/index.html#ValidatedNel[E,A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.syntax.OptionOps.toValidNel.B">B</span>, <span class="extype" name="cats.syntax.OptionOps.A">A</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.syntax.OptionOps@toValidNel[B](b:=&gt;B):cats.data.ValidatedNel[B,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <p class="shortcomment cmt">If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Valid.html" class="extype" name="cats.data.Validated.Valid">cats.data.Validated.Valid</a>.</p><div class="fullcomment"><div class="comment cmt"><p>If the <code>Option</code> is a <code>Some</code>, return its value in a <a href="../data/Validated$$Valid.html" class="extype" name="cats.data.Validated.Valid">cats.data.Validated.Valid</a>.
 If the <code>Option</code> is <code>None</code>, wrap the provided <code>B</code> value in a <a href="../data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">cats.data.NonEmptyList</a>
 and return the result in a <a href="../data/Validated$$Invalid.html" class="extype" name="cats.data.Validated.Invalid">cats.data.Validated.Invalid</a>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.ValidatedNel
@@ -390,7 +1189,8 @@ res0: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>
 scala&gt; <span class="kw">val</span> result2: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
 scala&gt; result2.toValidNel(<span class="lit">"error!"</span>)
 res1: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>] = Invalid(NonEmptyList(error!))</pre></div></div>
-    </li></ol>
+    </li>
+              </ol>
             </div>
 
         
@@ -419,7 +1219,9 @@ res1: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+    </body>
+          </div>
+        </div>
+      </div>
     </body>
       </html>

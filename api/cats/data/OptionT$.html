@@ -1,44 +1,402 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>OptionT - cats.data.OptionT</title>
-          <meta name="description" content="OptionT - cats.data.OptionT" />
-          <meta name="keywords" content="OptionT cats.data.OptionT" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
+      <link href="../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../lib/index.js"></script>
+      <script type="text/javascript" src="../../index.js"></script>
+      <script type="text/javascript" src="../../lib/scheduler.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
       <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
-         if(top === self) {
-            var url = '../../index.html';
-            var hash = 'cats.data.OptionT$';
-            var anchor = window.location.hash;
-            var anchor_opt = '';
-            if (anchor.length >= 1)
-              anchor_opt = '@' + anchor.substring(1);
-            window.location.href = url + '#' + hash + anchor_opt;
-         }
-   	  </script>
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../';
+      </script>
     
         </head>
-        <body class="value">
-      <div id="definition">
-        <a href="OptionT.html" title="See companion class"><img alt="Object/Class" src="../../lib/object_to_class_big.png" /></a>
-        <p id="owner"><a href="../package.html" class="extype" name="cats">cats</a>.<a href="package.html" class="extype" name="cats.data">data</a></p>
-        <h1><a href="OptionT.html" title="See companion class">OptionT</a></h1><h3><span class="morelinks"><div>
-            Related Docs:
-            <a href="OptionT.html" title="See companion class">class OptionT</a>
-            | <a href="package.html" class="extype" name="cats.data">package data</a>
-          </div></span></h3><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="index.html#_root_" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html">
+              <span class="name">root</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.cats" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cats"></a><a id="cats:cats"></a>
+      <span class="permalink">
+      <a href="index.html#cats" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="Symbolic aliases for various types are defined here." href="../index.html">
+              <span class="name">cats</span>
+            </a>
+      </span>
+      
+      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="data"></a><a id="data:data"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#data" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="index.html">
+              <span class="name">data</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li class="current-entities indented2">
+                        <a class="object" href="AppFunc$.html" title=""></a>
+                        <a class="class" href="AppFunc.html" title="An implementation of Func that's specialized to Applicative."></a>
+                        <a href="AppFunc.html" title="An implementation of Func that's specialized to Applicative.">
+                          AppFunc
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Cokleisli$.html" title=""></a>
+                        <a class="class" href="Cokleisli.html" title="Represents a function F[A] =&gt; B."></a>
+                        <a href="Cokleisli.html" title="Represents a function F[A] =&gt; B.">
+                          Cokleisli
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Const$.html" title=""></a>
+                        <a class="class" href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B
+Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A
+"></a>
+                        <a href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B
+Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A
+">
+                          Const
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Coproduct$.html" title=""></a>
+                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
+                          Coproduct
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="CoproductInstances.html" title=""></a>
+                        <a href="CoproductInstances.html" title="">
+                          CoproductInstances
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="EitherT$.html" title=""></a>
+                        <a class="class" href="EitherT.html" title="Transformer for Either, allowing the effect of an arbitrary type constructor F to be combined with the
+fail-fast effect of Either."></a>
+                        <a href="EitherT.html" title="Transformer for Either, allowing the effect of an arbitrary type constructor F to be combined with the
+fail-fast effect of Either.">
+                          EitherT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="EitherTFunctions.html" title=""></a>
+                        <a href="EitherTFunctions.html" title="">
+                          EitherTFunctions
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Func$.html" title=""></a>
+                        <a class="class" href="Func.html" title="Func is a function A =&gt; F[B]."></a>
+                        <a href="Func.html" title="Func is a function A =&gt; F[B].">
+                          Func
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="FuncApplicative.html" title=""></a>
+                        <a href="FuncApplicative.html" title="">
+                          FuncApplicative
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="FuncApply.html" title=""></a>
+                        <a href="FuncApply.html" title="">
+                          FuncApply
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="FuncContravariant.html" title=""></a>
+                        <a href="FuncContravariant.html" title="">
+                          FuncContravariant
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="FuncFunctor.html" title=""></a>
+                        <a href="FuncFunctor.html" title="">
+                          FuncFunctor
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="IdT$.html" title=""></a>
+                        <a class="class" href="IdT.html" title="IdT[F[_], A] is the identity monad transformer."></a>
+                        <a href="IdT.html" title="IdT[F[_], A] is the identity monad transformer.">
+                          IdT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Ior$.html" title=""></a>
+                        <a class="class" href="Ior.html" title="Represents a right-biased disjunction that is either an A, or a B, or both an A and a B."></a>
+                        <a href="Ior.html" title="Represents a right-biased disjunction that is either an A, or a B, or both an A and a B.">
+                          Ior
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="IorFunctions.html" title=""></a>
+                        <a href="IorFunctions.html" title="">
+                          IorFunctions
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Kleisli$.html" title=""></a>
+                        <a class="class" href="Kleisli.html" title="Represents a function A =&gt; F[B]."></a>
+                        <a href="Kleisli.html" title="Represents a function A =&gt; F[B].">
+                          Kleisli
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Nested$.html" title=""></a>
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Prod, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Prod, but for nested composition.">
+                          Nested
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptyList$.html" title=""></a>
+                        <a class="class" href="NonEmptyList.html" title="A data type which represents a non empty list of A, with
+single element (head) and optional structure (tail)."></a>
+                        <a href="NonEmptyList.html" title="A data type which represents a non empty list of A, with
+single element (head) and optional structure (tail).">
+                          NonEmptyList
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptyVector$.html" title=""></a>
+                        <a class="class" href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element."></a>
+                        <a href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element.">
+                          NonEmptyVector
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="OneAnd$.html" title=""></a>
+                        <a class="class" href="OneAnd.html" title="A data type which represents a single element (head) and some other
+structure (tail)."></a>
+                        <a href="OneAnd.html" title="A data type which represents a single element (head) and some other
+structure (tail).">
+                          OneAnd
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="" title=""></a>
+                        <a class="class" href="OptionT.html" title="OptionT[F[_], A] is a light wrapper on an F[Option[A]] with some
+convenient methods for working with this nested structure."></a>
+                        <a href="OptionT.html" title="OptionT[F[_], A] is a light wrapper on an F[Option[A]] with some
+convenient methods for working with this nested structure.">
+                          OptionT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Prod$.html" title=""></a>
+                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
+                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
+                          Prod
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdAlternative.html" title=""></a>
+                        <a href="ProdAlternative.html" title="">
+                          ProdAlternative
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdApplicative.html" title=""></a>
+                        <a href="ProdApplicative.html" title="">
+                          ProdApplicative
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdApply.html" title=""></a>
+                        <a href="ProdApply.html" title="">
+                          ProdApply
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdContravariant.html" title=""></a>
+                        <a href="ProdContravariant.html" title="">
+                          ProdContravariant
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdFoldable.html" title=""></a>
+                        <a href="ProdFoldable.html" title="">
+                          ProdFoldable
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdFunctor.html" title=""></a>
+                        <a href="ProdFunctor.html" title="">
+                          ProdFunctor
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdMonad.html" title=""></a>
+                        <a href="ProdMonad.html" title="">
+                          ProdMonad
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdMonadCombine.html" title=""></a>
+                        <a href="ProdMonadCombine.html" title="">
+                          ProdMonadCombine
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdMonoidK.html" title=""></a>
+                        <a href="ProdMonoidK.html" title="">
+                          ProdMonoidK
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdOrder.html" title=""></a>
+                        <a href="ProdOrder.html" title="">
+                          ProdOrder
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdSemigroupK.html" title=""></a>
+                        <a href="ProdSemigroupK.html" title="">
+                          ProdSemigroupK
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdShow.html" title=""></a>
+                        <a href="ProdShow.html" title="">
+                          ProdShow
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ProdTraverse.html" title=""></a>
+                        <a href="ProdTraverse.html" title="">
+                          ProdTraverse
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Reader$.html" title=""></a>
+                        <a href="package$$Reader$.html" title="">
+                          Reader
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$State$.html" title=""></a>
+                        <a href="package$$State$.html" title="">
+                          State
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="StateT$.html" title=""></a>
+                        <a class="class" href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
+argument and produces an A value wrapped in F."></a>
+                        <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
+argument and produces an A value wrapped in F.">
+                          StateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Validated$.html" title=""></a>
+                        <a class="class" href="Validated.html" title=""></a>
+                        <a href="Validated.html" title="">
+                          Validated
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ValidatedFunctions.html" title=""></a>
+                        <a href="ValidatedFunctions.html" title="">
+                          ValidatedFunctions
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Writer$.html" title=""></a>
+                        <a href="package$$Writer$.html" title="">
+                          Writer
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="WriterT$.html" title=""></a>
+                        <a class="class" href="WriterT.html" title=""></a>
+                        <a href="WriterT.html" title="">
+                          WriterT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="WriterTFunctions.html" title=""></a>
+                        <a href="WriterTFunctions.html" title="">
+                          WriterTFunctions
+                        </a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="object value">
+      <div id="definition">
+        <a href="OptionT.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
+        <p id="owner"><a href="../index.html" class="extype" name="cats">cats</a>.<a href="index.html" class="extype" name="cats.data">data</a></p>
+        <h1><a href="OptionT.html" title="See companion class">OptionT</a><span class="permalink">
+      <a href="../../cats/data/OptionT$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"><div>
+            Companion <a href="OptionT.html" title="See companion class">class OptionT</a>
+          </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
@@ -47,43 +405,55 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">OptionT</span><span class="result"> extends <span class="extype" name="cats.data.OptionTInstances">OptionTInstances</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">OptionT</span><span class="result"> extends <span class="extype" name="cats.data.OptionTInstances">OptionTInstances</span> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
+
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/OptionT.scala" target="_blank">OptionT.scala</a></dd></dl><div class="toggleContainer block">
-          <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.OptionTInstances">OptionTInstances</span>, <span class="extype" name="cats.data.OptionTInstances0">OptionTInstances0</span>, <span class="extype" name="cats.data.OptionTInstances1">OptionTInstances1</span>, <span class="extype" name="cats.data.OptionTInstances2">OptionTInstances2</span>, <span class="extype" name="cats.data.OptionTInstances3">OptionTInstances3</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.OptionTInstances">OptionTInstances</span>, <span class="extype" name="cats.data.OptionTInstances0">OptionTInstances0</span>, <span class="extype" name="cats.data.OptionTInstances1">OptionTInstances1</span>, <span class="extype" name="cats.data.OptionTInstances2">OptionTInstances2</span>, <span class="extype" name="cats.data.OptionTInstances3">OptionTInstances3</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
       <div id="mbrsel">
-        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
-        <div id="order">
-              <span class="filtertype">Ordering</span>
-              <ol>
-                
-                <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By Inheritance</span></li>
-              </ol>
-            </div>
-        <div id="ancestors">
-                <span class="filtertype">Inherited<br />
-                </span>
-                <ol id="linearization">
-                  <li class="in" name="cats.data.OptionT"><span>OptionT</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.OptionTInstances"><span>OptionTInstances</span></li><li class="in" name="cats.data.OptionTInstances0"><span>OptionTInstances0</span></li><li class="in" name="cats.data.OptionTInstances1"><span>OptionTInstances1</span></li><li class="in" name="cats.data.OptionTInstances2"><span>OptionTInstances2</span></li><li class="in" name="cats.data.OptionTInstances3"><span>OptionTInstances3</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
-                </ol>
-              </div><div id="ancestors">
-            <span class="filtertype"></span>
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
             <ol>
-              <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show All</span></li>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
             </ol>
           </div>
-        <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
-          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="cats.data.OptionT"><span>OptionT</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.OptionTInstances"><span>OptionTInstances</span></li><li class="in" name="cats.data.OptionTInstances0"><span>OptionTInstances0</span></li><li class="in" name="cats.data.OptionTInstances1"><span>OptionTInstances1</span></li><li class="in" name="cats.data.OptionTInstances2"><span>OptionTInstances2</span></li><li class="in" name="cats.data.OptionTInstances3"><span>OptionTInstances3</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
       </div>
 
       <div id="template">
@@ -92,85 +462,87 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.data.OptionT.FromOptionPartiallyApplied" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FromOptionPartiallyApplied[F[_]]extendsAnyRef"></a>
-      <a id="FromOptionPartiallyApplied[F[_]]:FromOptionPartiallyApplied[F]"></a>
-      <h4 class="signature">
+              <ol><li name="cats.data.OptionT.FromOptionPartiallyApplied" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FromOptionPartiallyApplied[F[_]]extendsAnyRef"></a><a id="FromOptionPartiallyApplied[F[_]]:FromOptionPartiallyApplied[F]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#FromOptionPartiallyApplied[F[_]]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="OptionT$$FromOptionPartiallyApplied.html"><span class="name">FromOptionPartiallyApplied</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a title="" href="OptionT$$FromOptionPartiallyApplied.html">
+              <span class="name">FromOptionPartiallyApplied</span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@FromOptionPartiallyApplied[F[_]]extendsAnyRef" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       
     </li></ol>
             </div>
 
         
 
-        <div id="values" class="values members">
+        <div class="values members">
               <h3>Value Members</h3>
-              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:Any):Boolean"></a>
-      <a id="!=(Any):Boolean"></a>
-      <h4 class="signature">
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
-      <a id="##():Int"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@##():Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:Any):Boolean"></a>
-      <a id="==(Any):Boolean"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="asInstanceOf[T0]:T0"></a>
-      <a id="asInstanceOf[T0]:T0"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -178,33 +550,31 @@
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.OptionTInstances1#catsDataEqForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataEqForOptionT[F[_],A](implicitF0:cats.Eq[F[Option[A]]]):cats.Eq[cats.data.OptionT[F,A]]"></a><a id="catsDataEqForOptionT[F[_],A](Eq[F[Option[A]]]):Eq[OptionT[F,A]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataEqForOptionT[F[_],A](implicitF0:cats.Eq[F[Option[A]]]):cats.Eq[cats.data.OptionT[F,A]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances1#catsDataEqForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataEqForOptionT[F[_],A](implicitF0:cats.Eq[F[Option[A]]]):cats.Eq[cats.data.OptionT[F,A]]"></a>
-      <a id="catsDataEqForOptionT[F[_],A](Eq[F[Option[A]]]):Eq[OptionT[F,A]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataEqForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../package.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataEqForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.A">A</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataEqForOptionT[F[_],A](implicitF0:cats.Eq[F[Option[A]]]):cats.Eq[cats.data.OptionT[F,A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances1</dd></dl></div>
+    </li><li name="cats.data.OptionTInstances#catsDataFoldableForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataFoldableForOptionT[F[_]](implicitF0:cats.Foldable[F]):cats.Foldable[[β$1$]cats.data.OptionT[F,β$1$]]"></a><a id="catsDataFoldableForOptionT[F[_]](Foldable[F]):Foldable[[β$1$]OptionT[F,β$1$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataFoldableForOptionT[F[_]](implicitF0:cats.Foldable[F]):cats.Foldable[[β$1$]cats.data.OptionT[F,β$1$]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances1</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances#catsDataFoldableForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFoldableForOptionT[F[_]](implicitF0:cats.Foldable[F]):cats.Foldable[[β$1$]cats.data.OptionT[F,β$1$]]"></a>
-      <a id="catsDataFoldableForOptionT[F[_]](Foldable[F]):Foldable[[β$1$]OptionT[F,β$1$]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
@@ -212,16 +582,15 @@
       <span class="symbol">
         <span class="name">catsDataFoldableForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataFoldableForOptionT.F">F</span>]</span>)</span><span class="result">: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[β$1$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataFoldableForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.&lt;refinement&gt;.Λ$.β$1$">β$1$</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataFoldableForOptionT[F[_]](implicitF0:cats.Foldable[F]):cats.Foldable[[β$1$]cats.data.OptionT[F,β$1$]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
+    </li><li name="cats.data.OptionTInstances3#catsDataFunctorFilterForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataFunctorFilterForOptionT[F[_]](implicitF0:cats.Functor[F]):cats.FunctorFilter[[β$6$]cats.data.OptionT[F,β$6$]]"></a><a id="catsDataFunctorFilterForOptionT[F[_]](Functor[F]):FunctorFilter[[β$6$]OptionT[F,β$6$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataFunctorFilterForOptionT[F[_]](implicitF0:cats.Functor[F]):cats.FunctorFilter[[β$6$]cats.data.OptionT[F,β$6$]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances3#catsDataFunctorFilterForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFunctorFilterForOptionT[F[_]](implicitF0:cats.Functor[F]):cats.FunctorFilter[[β$6$]cats.data.OptionT[F,β$6$]]"></a>
-      <a id="catsDataFunctorFilterForOptionT[F[_]](Functor[F]):FunctorFilter[[β$6$]OptionT[F,β$6$]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
@@ -229,16 +598,15 @@
       <span class="symbol">
         <span class="name">catsDataFunctorFilterForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OptionTInstances3.catsDataFunctorFilterForOptionT.F">F</span>]</span>)</span><span class="result">: <a href="../FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[[β$6$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances3.catsDataFunctorFilterForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances3.&lt;refinement&gt;.Λ$.β$6$">β$6$</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataFunctorFilterForOptionT[F[_]](implicitF0:cats.Functor[F]):cats.FunctorFilter[[β$6$]cats.data.OptionT[F,β$6$]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances3</dd></dl></div>
+    </li><li name="cats.data.OptionTInstances0#catsDataMonadErrorForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadErrorForOptionT[F[_],E](implicitF0:cats.MonadError[F,E]):cats.MonadError[[β$2$]cats.data.OptionT[F,β$2$],E]"></a><a id="catsDataMonadErrorForOptionT[F[_],E](MonadError[F,E]):MonadError[[β$2$]OptionT[F,β$2$],E]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataMonadErrorForOptionT[F[_],E](implicitF0:cats.MonadError[F,E]):cats.MonadError[[β$2$]cats.data.OptionT[F,β$2$],E]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances3</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances0#catsDataMonadErrorForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadErrorForOptionT[F[_],E](implicitF0:cats.MonadError[F,E]):cats.MonadError[[β$2$]cats.data.OptionT[F,β$2$],E]"></a>
-      <a id="catsDataMonadErrorForOptionT[F[_],E](MonadError[F,E]):MonadError[[β$2$]OptionT[F,β$2$],E]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
@@ -246,16 +614,15 @@
       <span class="symbol">
         <span class="name">catsDataMonadErrorForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataMonadErrorForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances0.catsDataMonadErrorForOptionT.E">E</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[β$2$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataMonadErrorForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances0.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>], <span class="extype" name="cats.data.OptionTInstances0.catsDataMonadErrorForOptionT.E">E</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataMonadErrorForOptionT[F[_],E](implicitF0:cats.MonadError[F,E]):cats.MonadError[[β$2$]cats.data.OptionT[F,β$2$],E]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances0</dd></dl></div>
+    </li><li name="cats.data.OptionTInstances#catsDataMonadForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.Monad[[β$0$]cats.data.OptionT[F,β$0$]]"></a><a id="catsDataMonadForOptionT[F[_]](Monad[F]):Monad[[β$0$]OptionT[F,β$0$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataMonadForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.Monad[[β$0$]cats.data.OptionT[F,β$0$]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances0</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances#catsDataMonadForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.Monad[[β$0$]cats.data.OptionT[F,β$0$]]"></a>
-      <a id="catsDataMonadForOptionT[F[_]](Monad[F]):Monad[[β$0$]OptionT[F,β$0$]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
@@ -263,33 +630,31 @@
       <span class="symbol">
         <span class="name">catsDataMonadForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataMonadForOptionT.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β$0$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataMonadForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataMonadForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.Monad[[β$0$]cats.data.OptionT[F,β$0$]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
+    </li><li name="cats.data.OptionTInstances0#catsDataMonoidForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonoidForOptionT[F[_],A](implicitF0:cats.Monoid[F[Option[A]]]):cats.Monoid[cats.data.OptionT[F,A]]"></a><a id="catsDataMonoidForOptionT[F[_],A](Monoid[F[Option[A]]]):Monoid[OptionT[F,A]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataMonoidForOptionT[F[_],A](implicitF0:cats.Monoid[F[Option[A]]]):cats.Monoid[cats.data.OptionT[F,A]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances0#catsDataMonoidForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonoidForOptionT[F[_],A](implicitF0:cats.Monoid[F[Option[A]]]):cats.Monoid[cats.data.OptionT[F,A]]"></a>
-      <a id="catsDataMonoidForOptionT[F[_],A](Monoid[F[Option[A]]]):Monoid[OptionT[F,A]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonoidForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataMonoidForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataMonoidForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../package.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataMonoidForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances0.catsDataMonoidForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataMonoidForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataMonoidForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataMonoidForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataMonoidForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances0.catsDataMonoidForOptionT.A">A</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataMonoidForOptionT[F[_],A](implicitF0:cats.Monoid[F[Option[A]]]):cats.Monoid[cats.data.OptionT[F,A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances0</dd></dl></div>
+    </li><li name="cats.data.OptionTInstances1#catsDataMonoidKForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonoidKForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.MonoidK[[β$4$]cats.data.OptionT[F,β$4$]]"></a><a id="catsDataMonoidKForOptionT[F[_]](Monad[F]):MonoidK[[β$4$]OptionT[F,β$4$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataMonoidKForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.MonoidK[[β$4$]cats.data.OptionT[F,β$4$]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances0</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances1#catsDataMonoidKForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonoidKForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.MonoidK[[β$4$]cats.data.OptionT[F,β$4$]]"></a>
-      <a id="catsDataMonoidKForOptionT[F[_]](Monad[F]):MonoidK[[β$4$]OptionT[F,β$4$]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
@@ -297,67 +662,63 @@
       <span class="symbol">
         <span class="name">catsDataMonoidKForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataMonoidKForOptionT.F">F</span>]</span>)</span><span class="result">: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[β$4$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataMonoidKForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances1.&lt;refinement&gt;.Λ$.β$4$">β$4$</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataMonoidKForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.MonoidK[[β$4$]cats.data.OptionT[F,β$4$]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances1</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances#catsDataOrderForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataOrderForOptionT[F[_],A](implicitF0:cats.Order[F[Option[A]]]):cats.Order[cats.data.OptionT[F,A]]"></a>
-      <a id="catsDataOrderForOptionT[F[_],A](Order[F[Option[A]]]):Order[OptionT[F,A]]"></a>
-      <h4 class="signature">
+    </li><li name="cats.data.OptionTInstances#catsDataOrderForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataOrderForOptionT[F[_],A](implicitF0:cats.Order[F[Option[A]]]):cats.Order[cats.data.OptionT[F,A]]"></a><a id="catsDataOrderForOptionT[F[_],A](Order[F[Option[A]]]):Order[OptionT[F,A]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataOrderForOptionT[F[_],A](implicitF0:cats.Order[F[Option[A]]]):cats.Order[cats.data.OptionT[F,A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataOrderForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../package.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataOrderForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.A">A</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataOrderForOptionT[F[_],A](implicitF0:cats.Order[F[Option[A]]]):cats.Order[cats.data.OptionT[F,A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances0#catsDataPartialOrderForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataPartialOrderForOptionT[F[_],A](implicitF0:cats.PartialOrder[F[Option[A]]]):cats.PartialOrder[cats.data.OptionT[F,A]]"></a>
-      <a id="catsDataPartialOrderForOptionT[F[_],A](PartialOrder[F[Option[A]]]):PartialOrder[OptionT[F,A]]"></a>
-      <h4 class="signature">
+    </li><li name="cats.data.OptionTInstances0#catsDataPartialOrderForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataPartialOrderForOptionT[F[_],A](implicitF0:cats.PartialOrder[F[Option[A]]]):cats.PartialOrder[cats.data.OptionT[F,A]]"></a><a id="catsDataPartialOrderForOptionT[F[_],A](PartialOrder[F[Option[A]]]):PartialOrder[OptionT[F,A]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataPartialOrderForOptionT[F[_],A](implicitF0:cats.PartialOrder[F[Option[A]]]):cats.PartialOrder[cats.data.OptionT[F,A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataPartialOrderForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../package.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../package.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataPartialOrderForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.A">A</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataPartialOrderForOptionT[F[_],A](implicitF0:cats.PartialOrder[F[Option[A]]]):cats.PartialOrder[cats.data.OptionT[F,A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances0</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances#catsDataSemigroupForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataSemigroupForOptionT[F[_],A](implicitF0:cats.Semigroup[F[Option[A]]]):cats.Semigroup[cats.data.OptionT[F,A]]"></a>
-      <a id="catsDataSemigroupForOptionT[F[_],A](Semigroup[F[Option[A]]]):Semigroup[OptionT[F,A]]"></a>
-      <h4 class="signature">
+    </li><li name="cats.data.OptionTInstances#catsDataSemigroupForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataSemigroupForOptionT[F[_],A](implicitF0:cats.Semigroup[F[Option[A]]]):cats.Semigroup[cats.data.OptionT[F,A]]"></a><a id="catsDataSemigroupForOptionT[F[_],A](Semigroup[F[Option[A]]]):Semigroup[OptionT[F,A]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataSemigroupForOptionT[F[_],A](implicitF0:cats.Semigroup[F[Option[A]]]):cats.Semigroup[cats.data.OptionT[F,A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataSemigroupForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataSemigroupForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataSemigroupForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../package.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataSemigroupForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataSemigroupForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataSemigroupForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataSemigroupForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataSemigroupForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataSemigroupForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataSemigroupForOptionT.A">A</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataSemigroupForOptionT[F[_],A](implicitF0:cats.Semigroup[F[Option[A]]]):cats.Semigroup[cats.data.OptionT[F,A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
+    </li><li name="cats.data.OptionTInstances0#catsDataSemigroupKForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataSemigroupKForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.SemigroupK[[β$3$]cats.data.OptionT[F,β$3$]]"></a><a id="catsDataSemigroupKForOptionT[F[_]](Monad[F]):SemigroupK[[β$3$]OptionT[F,β$3$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataSemigroupKForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.SemigroupK[[β$3$]cats.data.OptionT[F,β$3$]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances0#catsDataSemigroupKForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataSemigroupKForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.SemigroupK[[β$3$]cats.data.OptionT[F,β$3$]]"></a>
-      <a id="catsDataSemigroupKForOptionT[F[_]](Monad[F]):SemigroupK[[β$3$]OptionT[F,β$3$]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
@@ -365,33 +726,31 @@
       <span class="symbol">
         <span class="name">catsDataSemigroupKForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataSemigroupKForOptionT.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[β$3$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataSemigroupKForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances0.&lt;refinement&gt;.Λ$.β$3$">β$3$</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataSemigroupKForOptionT[F[_]](implicitF0:cats.Monad[F]):cats.SemigroupK[[β$3$]cats.data.OptionT[F,β$3$]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances0</dd></dl></div>
+    </li><li name="cats.data.OptionTInstances#catsDataShowForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataShowForOptionT[F[_],A](implicitF:cats.Show[F[Option[A]]]):cats.Show[cats.data.OptionT[F,A]]"></a><a id="catsDataShowForOptionT[F[_],A](Show[F[Option[A]]]):Show[OptionT[F,A]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataShowForOptionT[F[_],A](implicitF:cats.Show[F[Option[A]]]):cats.Show[cats.data.OptionT[F,A]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances0</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances#catsDataShowForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataShowForOptionT[F[_],A](implicitF:cats.Show[F[Option[A]]]):cats.Show[cats.data.OptionT[F,A]]"></a>
-      <a id="catsDataShowForOptionT[F[_],A](Show[F[Option[A]]]):Show[OptionT[F,A]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataShowForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataShowForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.A">A</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataShowForOptionT[F[_],A](implicitF:cats.Show[F[Option[A]]]):cats.Show[cats.data.OptionT[F,A]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
+    </li><li name="cats.data.OptionTInstances1#catsDataTransLiftForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataTransLiftForOptionT:cats.TransLift.Aux[cats.data.OptionT,cats.Functor]"></a><a id="catsDataTransLiftForOptionT:Aux[OptionT,Functor]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataTransLiftForOptionT:cats.TransLift.Aux[cats.data.OptionT,cats.Functor]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances1#catsDataTransLiftForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataTransLiftForOptionT:cats.TransLift.Aux[cats.data.OptionT,cats.Functor]"></a>
-      <a id="catsDataTransLiftForOptionT:Aux[OptionT,Functor]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
@@ -399,16 +758,15 @@
       <span class="symbol">
         <span class="name">catsDataTransLiftForOptionT</span><span class="result">: <a href="../TransLift$.html#Aux[MT[_[_],_],TC0[_[_]]]=cats.TransLift[MT]{typeTC[M[_]]=TC0[M]}" class="extmbr" name="cats.TransLift.Aux">Aux</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>, <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataTransLiftForOptionT:cats.TransLift.Aux[cats.data.OptionT,cats.Functor]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances1</dd></dl></div>
+    </li><li name="cats.data.OptionTInstances2#catsDataTraverseForOptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataTraverseForOptionT[F[_]](implicitF0:cats.Traverse[F]):cats.TraverseFilter[[β$5$]cats.data.OptionT[F,β$5$]]"></a><a id="catsDataTraverseForOptionT[F[_]](Traverse[F]):TraverseFilter[[β$5$]OptionT[F,β$5$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#catsDataTraverseForOptionT[F[_]](implicitF0:cats.Traverse[F]):cats.TraverseFilter[[β$5$]cats.data.OptionT[F,β$5$]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances1</dd></dl></div>
-    </li><li name="cats.data.OptionTInstances2#catsDataTraverseForOptionT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataTraverseForOptionT[F[_]](implicitF0:cats.Traverse[F]):cats.TraverseFilter[[β$5$]cats.data.OptionT[F,β$5$]]"></a>
-      <a id="catsDataTraverseForOptionT[F[_]](Traverse[F]):TraverseFilter[[β$5$]OptionT[F,β$5$]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
@@ -416,16 +774,15 @@
       <span class="symbol">
         <span class="name">catsDataTraverseForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.OptionTInstances2.catsDataTraverseForOptionT.F">F</span>]</span>)</span><span class="result">: <a href="../TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a>[[β$5$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances2.catsDataTraverseForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances2.&lt;refinement&gt;.Λ$.β$5$">β$5$</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@catsDataTraverseForOptionT[F[_]](implicitF0:cats.Traverse[F]):cats.TraverseFilter[[β$5$]cats.data.OptionT[F,β$5$]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances2</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances2</dd></dl></div>
-    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="clone():Object"></a>
-      <a id="clone():AnyRef"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -433,11 +790,7 @@
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@clone():Object" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -445,56 +798,53 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="eq(x$1:AnyRef):Boolean"></a>
-      <a id="eq(AnyRef):Boolean"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#equals(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
-      <a id="finalize():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -502,10 +852,13 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="cats.data.OptionT#fromOption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fromOption[F[_]]:cats.data.OptionT.FromOptionPartiallyApplied[F]"></a>
-      <a id="fromOption[F[_]]:FromOptionPartiallyApplied[F]"></a>
-      <h4 class="signature">
+    </li><li name="cats.data.OptionT#fromOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromOption[F[_]]:cats.data.OptionT.FromOptionPartiallyApplied[F]"></a><a id="fromOption[F[_]]:FromOptionPartiallyApplied[F]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#fromOption[F[_]]:cats.data.OptionT.FromOptionPartiallyApplied[F]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -513,21 +866,20 @@
       <span class="symbol">
         <span class="name">fromOption</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="OptionT$$FromOptionPartiallyApplied.html" class="extype" name="cats.data.OptionT.FromOptionPartiallyApplied">FromOptionPartiallyApplied</a>[<span class="extype" name="cats.data.OptionT.fromOption.F">F</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@fromOption[F[_]]:cats.data.OptionT.FromOptionPartiallyApplied[F]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <p class="shortcomment cmt">Transforms an <code>Option</code> into an <code>OptionT</code>, lifted into the specified <code>Applicative</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transforms an <code>Option</code> into an <code>OptionT</code>, lifted into the specified <code>Applicative</code>.</p><p>Note: The return type is a <code>FromOptionPartiallyApplied[F]</code>, which has an apply method
 on it, allowing you to call <code>fromOption</code> like this:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> o: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">2</span>)
 scala&gt; OptionT.fromOption[<span class="std">List</span>](o)
 res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = OptionT(<span class="std">List</span>(<span class="std">Some</span>(<span class="num">2</span>)))</pre><p>The reason for the indirection is to emulate currying type parameters.
 </p></div></div>
-    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
-      <a id="getClass():Class[_]"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -535,50 +887,47 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#hashCode():Int" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="isInstanceOf[T0]:Boolean"></a>
-      <a id="isInstanceOf[T0]:Boolean"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.OptionT#liftF" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="liftF[F[_],A](fa:F[A])(implicitF:cats.Functor[F]):cats.data.OptionT[F,A]"></a><a id="liftF[F[_],A](F[A])(Functor[F]):OptionT[F,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#liftF[F[_],A](fa:F[A])(implicitF:cats.Functor[F]):cats.data.OptionT[F,A]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.data.OptionT#liftF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="liftF[F[_],A](fa:F[A])(implicitF:cats.Functor[F]):cats.data.OptionT[F,A]"></a>
-      <a id="liftF[F[_],A](F[A])(Functor[F]):OptionT[F,A]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -586,33 +935,31 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
       <span class="symbol">
         <span class="name">liftF</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.data.OptionT.liftF.F">F</span>[<span class="extype" name="cats.data.OptionT.liftF.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OptionT.liftF.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.liftF.F">F</span>, <span class="extype" name="cats.data.OptionT.liftF.A">A</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@liftF[F[_],A](fa:F[A])(implicitF:cats.Functor[F]):cats.data.OptionT[F,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <p class="shortcomment cmt">Lifts the <code>F[A]</code> Functor into an <code>OptionT[F, A]</code>.</p>
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <p class="shortcomment cmt">Lifts the <code>F[A]</code> Functor into an <code>OptionT[F, A]</code>.</p>
-    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ne(x$1:AnyRef):Boolean"></a>
-      <a id="ne(AnyRef):Boolean"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.OptionT#none" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="none[F[_],A](implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]"></a><a id="none[F[_],A](Applicative[F]):OptionT[F,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#none[F[_],A](implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.data.OptionT#none" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="none[F[_],A](implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]"></a>
-      <a id="none[F[_],A](Applicative[F]):OptionT[F,A]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -620,50 +967,47 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
       <span class="symbol">
         <span class="name">none</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.none.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.none.F">F</span>, <span class="extype" name="cats.data.OptionT.none.A">A</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@none[F[_],A](implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
       
-    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
-      <a id="notify():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@notify():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notifyAll():Unit"></a>
-      <a id="notifyAll():Unit"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.OptionT#pure" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="pure[F[_],A](a:A)(implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]"></a><a id="pure[F[_],A](A)(Applicative[F]):OptionT[F,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#pure[F[_],A](a:A)(implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.data.OptionT#pure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="pure[F[_],A](a:A)(implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]"></a>
-      <a id="pure[F[_],A](A)(Applicative[F]):OptionT[F,A]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -671,16 +1015,15 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
       <span class="symbol">
         <span class="name">pure</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.OptionT.pure.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.pure.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.pure.F">F</span>, <span class="extype" name="cats.data.OptionT.pure.A">A</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@pure[F[_],A](a:A)(implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="cats.data.OptionT#some" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="some[F[_],A](a:A)(implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]"></a><a id="some[F[_],A](A)(Applicative[F]):OptionT[F,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#some[F[_],A](a:A)(implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="cats.data.OptionT#some" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="some[F[_],A](a:A)(implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]"></a>
-      <a id="some[F[_],A](A)(Applicative[F]):OptionT[F,A]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -688,16 +1031,15 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
       <span class="symbol">
         <span class="name">some</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.OptionT.some.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.some.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.some.F">F</span>, <span class="extype" name="cats.data.OptionT.some.A">A</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@some[F[_],A](a:A)(implicitF:cats.Applicative[F]):cats.data.OptionT[F,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <p class="shortcomment cmt">An alias for pure</p>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <p class="shortcomment cmt">An alias for pure</p>
-    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
-      <a id="synchronized[T0](⇒T0):T0"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -705,16 +1047,15 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
-      <a id="toString():String"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -722,28 +1063,23 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@toString():String" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
-      <a id="wait():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@wait():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -751,22 +1087,21 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
-      <a id="wait(Long,Int):Unit"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -774,22 +1109,21 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long):Unit"></a>
-      <a id="wait(Long):Unit"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#cats.data.OptionT$@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -797,7 +1131,8 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
     </span>)</span>
               
         </dd></dl></div>
-    </li></ol>
+    </li>
+              </ol>
             </div>
 
         
@@ -807,7 +1142,7 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="cats.data.OptionTInstances">
@@ -840,7 +1175,9 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+    </body>
+          </div>
+        </div>
+      </div>
     </body>
       </html>

@@ -5873,6 +5873,10 @@ pre {
 .tooltip-inner {
   padding: 6px 15px; }
 
+table th, table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd; }
+
 #wrapper {
   padding-left: 0;
   -webkit-transition: all 0.5s ease;
