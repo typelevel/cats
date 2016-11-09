@@ -1,3 +1,21 @@
+## Version 0.8.1
+
+> 2016 November 9
+
+Version 0.8.1 is a release to support Scala 2.12.0 with few code change from v0.8.0
+
+Build:
+
+* [#1457](https://github.com/typelevel/cats/pull/1457): Update to Scala 2.12.0
+
+Miscellaneous improvements (syntax, documentation, tests):
+
+* [#1444](https://github.com/typelevel/cats/pull/1444): Remove `defaultTailRecM` from monad doc
+* [#1441](https://github.com/typelevel/cats/pull/1441): Fixes #1438 by replacing quoted entry name
+* [#1432](https://github.com/typelevel/cats/pull/1432): Ordering for type classes
+* [#1439](https://github.com/typelevel/cats/pull/1439): Update version on index
+
+
 ## Version 0.8.0
 
 > 2016 October 25
