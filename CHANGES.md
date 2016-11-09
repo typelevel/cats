@@ -1,3 +1,21 @@
+## Version 0.8.1
+
+> 2016 November 9
+
+Version 0.8.1 is a release to support Scala 2.12.0 with no changes to published code (only tests and documentation).
+
+Build:
+
+* [#1457](https://github.com/typelevel/cats/pull/1457): Update to Scala 2.12.0
+
+Miscellaneous improvements (syntax, documentation, tests):
+
+* [#1444](https://github.com/typelevel/cats/pull/1444): Remove `defaultTailRecM` from monad doc
+* [#1441](https://github.com/typelevel/cats/pull/1441): Fixes #1438 by replacing quoted entry name
+* [#1432](https://github.com/typelevel/cats/pull/1432): Type class organization in documentation
+* [#1439](https://github.com/typelevel/cats/pull/1439): Update version on index
+* [#1451](https://github.com/typelevel/cats/pull/1451): Fix `Arbitrary` instances for ScalaCheck 1.13.3+
+
 ## Version 0.8.0
 
 > 2016 October 25
