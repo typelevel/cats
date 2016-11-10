@@ -97,7 +97,7 @@ on that page, or if the relevant release already exists, you can click
 
 The website should then be updated via [sbt-microsites](https://47deg.github.io/sbt-microsites/)
 using `sbt docs/publishMicrosite`. 
-Please check the [prerequists](https://47deg.github.io/sbt-microsites/docs/) of sbt-microsites.
+Please check the [prerequisites](https://47deg.github.io/sbt-microsites/docs/) of sbt-microsites.
 
 ### Conclusion
 
