@@ -8,8 +8,7 @@ lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev 
 
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
-  coverageFailOnMinimum := false,
-  coverageScalacPluginVersion := "1.3.0"
+  coverageFailOnMinimum := false
 )
 
 lazy val buildSettings = Seq(
