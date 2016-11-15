@@ -12,25 +12,32 @@ import cats.syntax.either._
 final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable {
 
   def flatMap[B](fas: A => StateT[F, S, B])(implicit F: Monad[F]): StateT[F, S, B] =
-    StateT(s =>
-      F.flatMap(runF) { fsf =>
-        F.flatMap(fsf(s)) { case (s, a) =>
+    StateT.applyF(F.map(runF) { sfsa =>
+      sfsa.andThen { fsa =>
+        F.flatMap(fsa) { case (s, a) =>
           fas(a).run(s)
         }
-      })
+      }
+    })
 
   def flatMapF[B](faf: A => F[B])(implicit F: Monad[F]): StateT[F, S, B] =
-    StateT(s =>
-      F.flatMap(runF) { fsf =>
-        F.flatMap(fsf(s)) { case (s, a) =>
-          F.map(faf(a))((s, _))
-        }
+    StateT.applyF(F.map(runF) { sfsa =>
+      sfsa.andThen { fsa =>
+        F.flatMap(fsa) { case (s, a) => F.map(faf(a))((s, _)) }
       }
-    )
+    })
 
   def map[B](f: A => B)(implicit F: Monad[F]): StateT[F, S, B] =
     transform { case (s, a) => (s, f(a)) }
 
+  def product[B](sb: StateT[F, S, B])(implicit F: Monad[F]): StateT[F, S, (A, B)] =
+    StateT.applyF(F.map2(runF, sb.runF) { (ssa, ssb) =>
+      ssa.andThen { fsa =>
+        F.flatMap(fsa) { case (s, a) =>
+          F.map(ssb(s)) { case (s, b) => (s, (a, b)) }
+        }
+      }
+    })
   /**
    * Run with the provided initial state value
    */
@@ -70,9 +77,12 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
    * Like [[map]], but also allows the state (`S`) value to be modified.
    */
   def transform[B](f: (S, A) => (S, B))(implicit F: Monad[F]): StateT[F, S, B] =
-    transformF { fsa =>
-      F.map(fsa){ case (s, a) => f(s, a) }
-    }
+    StateT.applyF(
+      F.map(runF) { sfsa =>
+        sfsa.andThen { fsa =>
+          F.map(fsa) { case (s, a) => f(s, a) }
+        }
+      })
 
   /**
    * Like [[transform]], but allows the context to change from `F` to `G`.
@@ -230,6 +240,12 @@ private[data] sealed trait StateTMonad[F[_], S] extends Monad[StateT[F, S, ?]] {
     fa.flatMap(f)
 
   override def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] = fa.map(f)
+
+  override def ap[A, B](ff: StateT[F, S, A => B])(fa: StateT[F, S, A]): StateT[F, S, B] =
+    map2(ff, fa) { case (f, a) => f(a) }
+
+  override def product[A, B](fa: StateT[F, S, A], fb: StateT[F, S, B]): StateT[F, S, (A, B)] =
+    fa.product(fb)
 
   def tailRecM[A, B](a: A)(f: A => StateT[F, S, Either[A, B]]): StateT[F, S, B] =
     StateT[F, S, B](s => F.tailRecM[(S, A), (S, B)]((s, a)) {
