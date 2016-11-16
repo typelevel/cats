@@ -22,7 +22,7 @@ must be the same as
 (a combine (b combine c))
 ```
 
-for all possible values of a,b,c. 
+for all possible values of a,b,c.
 
 There are instances of `Semigroup` defined for many types found in the
 scala common library:
@@ -61,9 +61,9 @@ Map("foo" -> Map("bar" -> 5)) ++  Map("foo" -> Map("bar" -> 6), "baz" -> Map())
 Map("foo" -> List(1, 2)) ++ Map("foo" -> List(3,4), "bar" -> List(42))
 ```
 
-There is inline syntax available for `Semigroup`. Here we are 
-following the convention from scalaz, that `|+|` is the 
-operator from `Semigroup`.
+There is inline combinator syntax available for `Semigroup`. Here Cats
+follows the convention set by Scalaz, `|+|`, used to combine two semigroups. Consider
+three `Option`s:
 
 ```tut:silent
 import cats.implicits._
@@ -73,7 +73,7 @@ val two = Option(2)
 val n: Option[Int] = None
 ```
 
-Thus.
+Since `Option` is a semigroup, these can be added or combined with `|+|`:
 
 ```tut:book
 one |+| two
@@ -83,13 +83,30 @@ two |+| n
 ```
 
 You'll notice that instead of declaring `one` as `Some(1)`, I chose
-`Option(1)`, and I added an explicit type declaration for `n`. This is
-because there aren't type class instances for `Some` or `None`, but for
-`Option`. If we try to use `Some` and `None`, we'll get errors:
+`Option(1)`, and I added an explicit type declaration for `n`. This is because
+the type class instance for `Semigroup` is defined for `Option`. There is no `Semigroup`
+instance defined for `None` or `Some`--you will get errors if you attempt to combine a
+`Some` or `None` instance:
 
-```tut:nofail
-Some(1) |+| None
-None |+| Some(1)
+```tut:book
+import cats.implicits._
+
+val someInstance = Some(1)
+val noneInstance = None
+```
+```tut:fail
+val result = someInstance |+| noneInstance
+```
+
+whereby telling the compiler your vals are `Option` instances succeeds:
+
+
+```tut:book
+import cats.implicits._
+
+val optionInstanceSome : Option[Int] = Some(1)
+val optionInstanceNone : Option[Int] = None
+val result = optionInstanceSome |+| optionInstanceNone
 ```
 
 N.B.
