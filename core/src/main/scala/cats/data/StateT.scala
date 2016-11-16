@@ -11,7 +11,7 @@ import cats.syntax.either._
  */
 final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable {
 
-  def flatMap[B](fas: A => StateT[F, S, B])(implicit F: Monad[F]): StateT[F, S, B] =
+  def flatMap[B](fas: A => StateT[F, S, B])(implicit F: FlatMap[F]): StateT[F, S, B] =
     StateT.applyF(F.map(runF) { sfsa =>
       sfsa.andThen { fsa =>
         F.flatMap(fsa) { case (s, a) =>
@@ -20,14 +20,14 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
       }
     })
 
-  def flatMapF[B](faf: A => F[B])(implicit F: Monad[F]): StateT[F, S, B] =
+  def flatMapF[B](faf: A => F[B])(implicit F: FlatMap[F]): StateT[F, S, B] =
     StateT.applyF(F.map(runF) { sfsa =>
       sfsa.andThen { fsa =>
         F.flatMap(fsa) { case (s, a) => F.map(faf(a))((s, _)) }
       }
     })
 
-  def map[B](f: A => B)(implicit F: Monad[F]): StateT[F, S, B] =
+  def map[B](f: A => B)(implicit F: Functor[F]): StateT[F, S, B] =
     transform { case (s, a) => (s, f(a)) }
 
   def product[B](sb: StateT[F, S, B])(implicit F: FlatMap[F]): StateT[F, S, (A, B)] =
@@ -76,7 +76,7 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
   /**
    * Like [[map]], but also allows the state (`S`) value to be modified.
    */
-  def transform[B](f: (S, A) => (S, B))(implicit F: Monad[F]): StateT[F, S, B] =
+  def transform[B](f: (S, A) => (S, B))(implicit F: Functor[F]): StateT[F, S, B] =
     StateT.applyF(
       F.map(runF) { sfsa =>
         sfsa.andThen { fsa =>
@@ -108,31 +108,31 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
    * res1: Option[(GlobalEnv, Double)] = Some(((6,hello),5.0))
    * }}}
    */
-  def transformS[R](f: R => S, g: (R, S) => R)(implicit F: Monad[F]): StateT[F, R, A] =
-    StateT { r =>
-      F.flatMap(runF) { ff =>
+  def transformS[R](f: R => S, g: (R, S) => R)(implicit F: Functor[F]): StateT[F, R, A] =
+    StateT.applyF(F.map(runF) { sfsa =>
+      { r: R =>
         val s = f(r)
-        val nextState = ff(s)
-        F.map(nextState) { case (s, a) => (g(r, s), a) }
+        val fsa = sfsa(s)
+        F.map(fsa) { case (s, a) => (g(r, s), a) }
       }
-    }
+    })
 
   /**
    * Modify the state (`S`) component.
    */
-  def modify(f: S => S)(implicit F: Monad[F]): StateT[F, S, A] =
+  def modify(f: S => S)(implicit F: Functor[F]): StateT[F, S, A] =
     transform((s, a) => (f(s), a))
 
   /**
    * Inspect a value from the input state, without modifying the state.
    */
-  def inspect[B](f: S => B)(implicit F: Monad[F]): StateT[F, S, B] =
+  def inspect[B](f: S => B)(implicit F: Functor[F]): StateT[F, S, B] =
     transform((s, _) => (s, f(s)))
 
   /**
    * Get the input state, without modifying the state.
    */
-  def get(implicit F: Monad[F]): StateT[F, S, S] =
+  def get(implicit F: Functor[F]): StateT[F, S, S] =
     inspect(identity)
 }
 
@@ -192,9 +192,14 @@ private[data] sealed trait StateTInstances2 extends StateTInstances3 {
     new StateTSemigroupK[F, S] { implicit def F = F0; implicit def G = G0 }
 }
 
-private[data] sealed trait StateTInstances3 {
+private[data] sealed trait StateTInstances3 extends StateTInstances4 {
   implicit def catsDataMonadForStateT[F[_], S](implicit F0: Monad[F]): Monad[StateT[F, S, ?]] =
     new StateTMonad[F, S] { implicit def F = F0 }
+}
+
+private[data] sealed trait StateTInstances4 {
+  implicit def catsDataFunctorForStateT[F[_], S](implicit F0: Functor[F]): Functor[StateT[F, S, ?]] =
+    new StateTFunctor[F, S] { implicit def F = F0 }
 }
 
 // To workaround SI-7139 `object State` needs to be defined inside the package object
@@ -228,6 +233,12 @@ private[data] abstract class StateFunctions {
    * Set the state to `s` and return Unit.
    */
   def set[S](s: S): State[S, Unit] = State(_ => (s, ()))
+}
+
+private[data] sealed trait StateTFunctor[F[_], S] extends Functor[StateT[F, S, ?]] {
+  implicit def F: Functor[F]
+
+  def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] = fa.map(f)
 }
 
 private[data] sealed trait StateTMonad[F[_], S] extends Monad[StateT[F, S, ?]] {
