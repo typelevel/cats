@@ -240,6 +240,7 @@ type class instances easy.
     MonadCombine [group=g1]
     Invariant [group=g4]
     Contravariant [group=g4]
+    Phantom [group=g4]
     CoflatMap [group=g5]
     Comonad [group=g5]
     Bimonad [group=g5]
@@ -249,6 +250,8 @@ type class instances easy.
     Functor -> CoflatMap
     subgraph cluster_s3{
       Invariant -> Contravariant
+      Functor -> Phantom 
+      Contravariant -> Phantom 
       graph[style=dotted,label="functor"]
     }
     Invariant -> Functor

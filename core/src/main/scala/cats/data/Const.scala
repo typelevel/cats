@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Contravariant
+import cats.functor.Phantom
 
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
@@ -51,8 +51,8 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
     def show(f: Const[A, B]): String = f.show
   }
 
-  implicit def catsDataContravariantForConst[C]: Contravariant[Const[C, ?]] = new Contravariant[Const[C, ?]] {
-    override def contramap[A, B](fa: Const[C, A])(f: (B) => A): Const[C, B] =
+  implicit def catsDataPhantomForConst[C]: Phantom[Const[C, ?]] = new Phantom[Const[C, ?]] {
+    override def pmap[A, B](fa: Const[C, A]): Const[C, B] =
       fa.retag[B]
   }
 

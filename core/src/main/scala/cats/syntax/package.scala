@@ -29,6 +29,7 @@ package object syntax {
   object option extends OptionSyntax
   object order extends OrderSyntax
   object partialOrder extends PartialOrderSyntax
+  object phantom extends PhantomSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax
   object semigroup extends SemigroupSyntax

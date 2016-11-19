@@ -7,7 +7,7 @@ import org.scalactic.CanEqual
 class ContravariantTest extends CatsSuite {
 
   test("narrow equals contramap(identity)") {
-    implicit val constInst = Const.catsDataContravariantForConst[Int]
+    implicit val constInst = Const.catsDataPhantomForConst[Int]
     implicit val canEqual: CanEqual[cats.data.Const[Int,Some[Int]],cats.data.Const[Int,Some[Int]]] =
       StrictCatsEquality.lowPriorityConversionCheckedConstraint
     forAll { (i: Int) =>
