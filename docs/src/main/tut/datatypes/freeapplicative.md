@@ -60,14 +60,13 @@ import cats.implicits._
 // a function that takes a string as input
 type FromString[A] = String => A
 
-val compiler =
-   λ[FunctionK[ValidationOp, FromString]] { fa =>
-      str =>
-        fa match {
-          case Size(size) => str.size >= size
-          case HasNumber  => str.exists(c => "0123456789".contains(c))
-        }
-   }
+val compiler = new FunctionK[ValidationOp, FromString] {
+  def apply[A](fa: ValidationOp[A]): FromString[A] = str =>
+    fa match {
+      case Size(size) => str.size >= size
+      case HasNumber  => str.exists(c => "0123456789".contains(c))
+    }
+}
 ```
 
 ```tut:book
@@ -101,15 +100,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 // recall Kleisli[Future, String, A] is the same as String => Future[A]
 type ParValidator[A] = Kleisli[Future, String, A]
 
-val parCompiler =
-  λ[FunctionK[ValidationOp, ParValidator]] { fa =>
-    Kleisli { str =>
-      fa match {
-        case Size(size) => Future { str.size >= size }
-        case HasNumber  => Future { str.exists(c => "0123456789".contains(c)) }
-      }
+val parCompiler = new FunctionK[ValidationOp, ParValidator] {
+  def apply[A](fa: ValidationOp[A]): ParValidator[A] = Kleisli { str =>
+    fa match {
+      case Size(size) => Future { str.size >= size }
+      case HasNumber => Future { str.exists(c => "0123456789".contains(c)) }
     }
   }
+}
 
 val parValidation = prog.foldMap[ParValidator](parCompiler)
 ```
@@ -127,11 +125,12 @@ import cats.implicits._
 
 type Log[A] = Const[List[String], A]
 
-val logCompiler =
-  λ[FunctionK[ValidationOp, Log]] {
+val logCompiler = new FunctionK[ValidationOp, Log] {
+  def apply[A](fa: ValidationOp[A]): Log[A] = fa match {
     case Size(size) => Const(List(s"size >= $size"))
-    case HasNumber  => Const(List("has number"))
+    case HasNumber => Const(List("has number"))
   }
+}
 
 def logValidation[A](validation: Validation[A]): List[String] =
   validation.foldMap[Log](logCompiler).getConst
@@ -160,17 +159,20 @@ import cats.data.Prod
 
 type ValidateAndLog[A] = Prod[ParValidator, Log, A]
 
-val prodCompiler =
-  λ[FunctionK[ValidationOp, ValidateAndLog]] {
+val prodCompiler = new FunctionK[ValidationOp, ValidateAndLog] {
+  def apply[A](fa: ValidationOp[A]): ValidateAndLog[A] = fa match {
     case Size(size) =>
-      val f: ParValidator[Boolean] = Kleisli(str => Future { str.size >= size })
+      val f: ParValidator[Boolean] = Kleisli(str =>
+        Future { str.size >= size })
       val l: Log[Boolean] = Const(List(s"size > $size"))
       Prod[ParValidator, Log, Boolean](f, l)
-    case HasNumber  =>
-      val f: ParValidator[Boolean] = Kleisli(str => Future(str.exists(c => "0123456789".contains(c))))
+    case HasNumber =>
+      val f: ParValidator[Boolean] = Kleisli(str =>
+        Future(str.exists(c => "0123456789".contains(c))))
       val l: Log[Boolean] = Const(List("has number"))
       Prod[ParValidator, Log, Boolean](f, l)
   }
+}
 
 val prodValidation = prog.foldMap[ValidateAndLog](prodCompiler)
 ```
