@@ -30,14 +30,27 @@ final class StateT[F[_], S, A](val runF: F[S => F[(S, A)]]) extends Serializable
   def map[B](f: A => B)(implicit F: Functor[F]): StateT[F, S, B] =
     transform { case (s, a) => (s, f(a)) }
 
-  def product[B](sb: StateT[F, S, B])(implicit F: FlatMap[F]): StateT[F, S, (A, B)] =
+  def map2[B, Z](sb: StateT[F, S, B])(fn: (A, B) => Z)(implicit F: FlatMap[F]): StateT[F, S, Z] =
     StateT.applyF(F.map2(runF, sb.runF) { (ssa, ssb) =>
       ssa.andThen { fsa =>
         F.flatMap(fsa) { case (s, a) =>
-          F.map(ssb(s)) { case (s, b) => (s, (a, b)) }
+          F.map(ssb(s)) { case (s, b) => (s, fn(a, b)) }
         }
       }
     })
+
+  def map2Eval[B, Z](sb: Eval[StateT[F, S, B]])(fn: (A, B) => Z)(implicit F: FlatMap[F]): Eval[StateT[F, S, Z]] =
+    F.map2Eval(runF, sb.map(_.runF)) { (ssa, ssb) =>
+      ssa.andThen { fsa =>
+        F.flatMap(fsa) { case (s, a) =>
+          F.map(ssb(s)) { case (s, b) => (s, fn(a, b)) }
+        }
+      }
+    }.map(StateT.applyF)
+
+  def product[B](sb: StateT[F, S, B])(implicit F: FlatMap[F]): StateT[F, S, (A, B)] =
+    map2(sb)((_, _))
+
   /**
    * Run with the provided initial state value
    */
@@ -250,10 +263,16 @@ private[data] sealed trait StateTMonad[F[_], S] extends Monad[StateT[F, S, ?]] {
   def flatMap[A, B](fa: StateT[F, S, A])(f: A => StateT[F, S, B]): StateT[F, S, B] =
     fa.flatMap(f)
 
+  override def ap[A, B](ff: StateT[F, S, A => B])(fa: StateT[F, S, A]): StateT[F, S, B] =
+    ff.map2(fa) { case (f, a) => f(a) }
+
   override def map[A, B](fa: StateT[F, S, A])(f: A => B): StateT[F, S, B] = fa.map(f)
 
-  override def ap[A, B](ff: StateT[F, S, A => B])(fa: StateT[F, S, A]): StateT[F, S, B] =
-    map2(ff, fa) { case (f, a) => f(a) }
+  override def map2[A, B, Z](fa: StateT[F, S, A], fb: StateT[F, S, B])(fn: (A, B) => Z): StateT[F, S, Z] =
+    fa.map2(fb)(fn)
+
+  override def map2Eval[A, B, Z](fa: StateT[F, S, A], fb: Eval[StateT[F, S, B]])(fn: (A, B) => Z): Eval[StateT[F, S, Z]] =
+    fa.map2Eval(fb)(fn)
 
   override def product[A, B](fa: StateT[F, S, A], fb: StateT[F, S, B]): StateT[F, S, (A, B)] =
     fa.product(fb)
