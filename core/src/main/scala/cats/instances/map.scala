@@ -25,6 +25,17 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
         G.map(gbb)(_.toMap)
       }
 
+      override def traverseM[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Monad[G]): G[Map[K, B]] = {
+        def step(u: (List[(K, A)], Map[K, B])): G[Either[(List[(K, A)], Map[K, B]), Map[K, B]]] = u match {
+          case (Nil, m) => G.pure(Right(m))
+          case ((k, a) :: tail, m) =>
+            G.map(f(a)) { b =>
+              Left((tail, m + ((k, b))))
+            }
+        }
+        G.tailRecM((fa.toList, Map.empty[K, B]))(step)
+      }
+
       def traverseFilter[G[_], A, B](fa: Map[K, A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Map[K, B]] = {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
         val gbb = Foldable.iterateRight(fa.iterator, gba){ (kv, lbuf) =>

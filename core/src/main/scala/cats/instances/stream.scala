@@ -54,6 +54,18 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
         }.value
       }
 
+      override def traverseM[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Monad[G]): G[Stream[B]] = {
+        // This forces the stream as it goes, which seems unavoidable since
+        // by the time we apply f we have materialize b
+        def step(pair: (Stream[A], List[B])): G[Either[(Stream[A], List[B]), Stream[B]]] =
+          pair match {
+            case (a #:: tail, bs) => G.map(f(a)) { b => Left((tail, b :: bs)) }
+            case (_, bs) => G.pure(Right(bs.reverse.toStream))
+          }
+
+        G.tailRecM((fa, List.empty[B]))(step)
+      }
+
       def tailRecM[A, B](a: A)(fn: A => Stream[Either[A, B]]): Stream[B] = {
         val it: Iterator[B] = new Iterator[B] {
           var stack: Stream[Either[A, B]] = fn(a)

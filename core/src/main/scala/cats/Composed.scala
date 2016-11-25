@@ -69,6 +69,9 @@ private[cats] trait ComposedTraverse[F[_], G[_]] extends Traverse[λ[α => F[G[�
 
   override def traverse[H[_]: Applicative, A, B](fga: F[G[A]])(f: A => H[B]): H[F[G[B]]] =
     F.traverse(fga)(ga => G.traverse(ga)(f))
+
+  override def traverseM[H[_]: Monad, A, B](fga: F[G[A]])(f: A => H[B]): H[F[G[B]]] =
+    F.traverseM(fga)(ga => G.traverseM(ga)(f))
 }
 
 private[cats] trait ComposedTraverseFilter[F[_], G[_]] extends TraverseFilter[λ[α => F[G[α]]]] with ComposedTraverse[F, G] {

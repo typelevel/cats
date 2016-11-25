@@ -207,6 +207,9 @@ private[data] trait OneAndLowPriority2 extends OneAndLowPriority1 {
       def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {
         G.map2Eval(f(fa.head), Always(F.traverse(fa.tail)(f)))(OneAnd(_, _)).value
       }
+      override def traverseM[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Monad[G]): G[OneAnd[F, B]] = {
+        G.map2Eval(f(fa.head), Always(F.traverseM(fa.tail)(f)))(OneAnd(_, _)).value
+      }
 
       def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B = {
         fa.foldLeft(b)(f)

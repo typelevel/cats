@@ -35,6 +35,7 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] {
       def parents: Seq[RuleSet] = Seq(functor[A, B, C], foldable[A, M])
       def props: Seq[(String, Prop)] = Seq(
         "traverse identity" -> forAll(laws.traverseIdentity[A, C] _),
+        "traverseM consistency" -> forAll(laws.traverseMConsistency[A, C, Id] _),
         "traverse sequential composition" -> forAll(laws.traverseSequentialComposition[A, B, C, X, Y] _),
         "traverse parallel composition" -> forAll(laws.traverseParallelComposition[A, B, X, Y] _),
         "traverse derive foldMap" -> forAll(laws.foldMapDerived[A, M] _)

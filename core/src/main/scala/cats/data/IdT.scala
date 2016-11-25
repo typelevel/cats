@@ -24,6 +24,9 @@ final case class IdT[F[_], A](value: F[A]) {
   def traverse[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Applicative[G]): G[IdT[F, B]] =
     G.map(F.traverse(value)(f))(IdT(_))
 
+  def traverseM[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Monad[G]): G[IdT[F, B]] =
+    G.map(F.traverseM(value)(f))(IdT(_))
+
   def ap[B](f: IdT[F, A => B])(implicit F: Apply[F]): IdT[F, B] =
     IdT(F.ap(f.value)(value))
 
@@ -70,6 +73,9 @@ private[data] sealed trait IdTTraverse[F[_]] extends Traverse[IdT[F, ?]] with Id
 
   def traverse[G[_]: Applicative, A, B](fa: IdT[F, A])(f: A => G[B]): G[IdT[F, B]] =
     fa.traverse(f)
+
+  override def traverseM[G[_]: Monad, A, B](fa: IdT[F, A])(f: A => G[B]): G[IdT[F, B]] =
+    fa.traverseM(f)
 }
 
 private[data] sealed abstract class IdTInstances1 {

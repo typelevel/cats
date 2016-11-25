@@ -161,6 +161,9 @@ sealed trait ProdTraverse[F[_], G[_]] extends Traverse[λ[α => Prod[F, G, α]]]
 
   override def traverse[H[_]: Applicative, A, B](fa: Prod[F, G, A])(f: A => H[B]): H[Prod[F, G, B]] =
     (F.traverse(fa.first)(f) |@| G.traverse(fa.second)(f)).map(Prod(_, _))
+
+  override def traverseM[H[_]: Monad, A, B](fa: Prod[F, G, A])(f: A => H[B]): H[Prod[F, G, B]] =
+    (F.traverseM(fa.first)(f) |@| G.traverseM(fa.second)(f)).map(Prod(_, _))
 }
 
 sealed trait ProdMonadCombine[F[_], G[_]] extends MonadCombine[λ[α => Prod[F, G, α]]]

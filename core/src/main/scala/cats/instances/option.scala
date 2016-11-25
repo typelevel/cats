@@ -67,6 +67,8 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
           case None => Applicative[G].pure(None)
           case Some(a) => Applicative[G].map(f(a))(Some(_))
         }
+      override def traverseM[G[_]: Monad, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =
+        traverse[G, A, B](fa)(f)
 
       override def filter[A](fa: Option[A])(p: A => Boolean): Option[A] =
         fa.filter(p)

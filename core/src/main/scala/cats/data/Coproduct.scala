@@ -48,6 +48,12 @@ final case class Coproduct[F[_], G[_], A](run: Either[F[A], G[A]]) {
       , x => A.map(G.traverse(x)(g))(rightc(_))
     )
 
+  def traverseM[X[_], B](g: A => X[B])(implicit F: Traverse[F], G: Traverse[G], A: Monad[X]): X[Coproduct[F, G, B]] =
+    run.fold(
+      x => A.map(F.traverseM(x)(g))(leftc(_))
+      , x => A.map(G.traverseM(x)(g))(rightc(_))
+    )
+
   def isLeft: Boolean =
     run.isLeft
 
@@ -203,6 +209,9 @@ private[data] trait CoproductTraverse[F[_], G[_]] extends CoproductFoldable[F, G
 
   override def traverse[X[_] : Applicative, A, B](fa: Coproduct[F, G, A])(f: A => X[B]): X[Coproduct[F, G, B]] =
     fa traverse f
+
+  override def traverseM[X[_] : Monad, A, B](fa: Coproduct[F, G, A])(f: A => X[B]): X[Coproduct[F, G, B]] =
+    fa traverseM f
 }
 
 private[data] trait CoproductCoflatMap[F[_], G[_]] extends CoflatMap[Coproduct[F, G, ?]] {
