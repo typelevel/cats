@@ -27,8 +27,8 @@ package object cats {
  * encodes pure unary function application.
  */
   type Id[A] = A
-  implicit val catsInstancesForId: Bimonad[Id] with Monad[Id] with Traverse[Id] =
-    new Bimonad[Id] with Monad[Id] with Traverse[Id] {
+  implicit val catsInstancesForId: Bimonad[Id] with Monad[Id] with Traverse[Id] with Reducible[Id] =
+    new Bimonad[Id] with Monad[Id] with Traverse[Id] with Reducible[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
@@ -48,6 +48,22 @@ package object cats {
         f(a, lb)
       def traverse[G[_], A, B](a: A)(f: A => G[B])(implicit G: Applicative[G]): G[B] =
         f(a)
+      override def reduce[A](fa: Id[A])(implicit A: Semigroup[A]): A =
+        fa
+      def reduceLeftTo[A, B](fa: Id[A])(f: A => B)(g: (B, A) => B): B =
+        f(fa)
+      override def reduceLeft[A](fa: Id[A])(f: (A, A) => A): A =
+        fa
+      override def reduceLeftToOption[A, B](fa: Id[A])(f: A => B)(g: (B, A) => B): Option[B] =
+        Some(f(fa))
+      override def reduceRight[A](fa: Id[A])(f: (A, Eval[A]) => Eval[A]): Eval[A] =
+        Now(fa)
+      def reduceRightTo[A, B](fa: Id[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Now(f(fa))
+      override def reduceRightToOption[A, B](fa: Id[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+        Now(Some(f(fa)))
+      override def reduceMap[A, B](fa: Id[A])(f: A => B)(implicit B: Semigroup[B]): B = f(fa)
+      override def size[A](fa: Id[A]): Long = 1L
   }
 
   type Eq[A] = cats.kernel.Eq[A]

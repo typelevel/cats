@@ -3,7 +3,7 @@ package tests
 
 import scala.math.min
 import cats.laws.ComonadLaws
-import cats.laws.discipline.{BimonadTests, CartesianTests, MonadTests, SerializableTests}
+import cats.laws.discipline.{BimonadTests, CartesianTests, MonadTests, ReducibleTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
@@ -98,6 +98,9 @@ class EvalTests extends CatsSuite {
   }
   checkAll("Bimonad[Eval]", SerializableTests.serializable(Bimonad[Eval]))
   checkAll("Monad[Eval]", SerializableTests.serializable(Monad[Eval]))
+
+  checkAll("Eval[Int]", ReducibleTests[Eval].reducible[Option, Int, Int])
+  checkAll("Reducible[Eval]", SerializableTests.serializable(Reducible[Eval]))
 
   checkAll("Eval[Int]", GroupLaws[Eval[Int]].group)
 
