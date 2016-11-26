@@ -28,16 +28,14 @@ sealed abstract class FreeInvariantMonoidal[F[_], A] extends Product with Serial
   /** Interpret this algebra into another InvariantMonoidal */
   final def compile[G[_]](f: FunctionK[F, G]): FA[G, A] =
     foldMap[FA[G, ?]] {
-      new FunctionK[F, FA[G, ?]] {
-        def apply[B](fa: F[B]): FA[G, B] = lift(f(fa))
-      }
+      λ[FunctionK[F, FA[G, ?]]](fa => lift(f(fa)))
     }
 
   /** Interpret this algebra into a Monoid */
   final def analyze[M: Monoid](f: FunctionK[F, λ[α => M]]): M =
-    foldMap[Const[M, ?]](new FunctionK[F, Const[M, ?]] {
-      def apply[X](x: F[X]): Const[M, X] = Const(f(x))
-    }).getConst
+    foldMap[Const[M, ?]](
+      λ[FunctionK[F, Const[M, ?]]](x => Const(f(x)))
+    ).getConst
 }
 
 object FreeInvariantMonoidal {

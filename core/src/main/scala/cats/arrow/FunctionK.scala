@@ -27,9 +27,7 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
     * transformation applied last.
     */
   def compose[E[_]](f: FunctionK[E, F]): FunctionK[E, G] =
-    new FunctionK[E, G] {
-      def apply[A](fa: E[A]): G[A] = self.apply(f(fa))
-    }
+    λ[FunctionK[E, G]](fa => self(f(fa)))
 
   /**
     * Composes two instances of FunctionK into a new FunctionK with this
@@ -46,9 +44,7 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
     * `h` will be used to transform right `H` values.
     */
   def or[H[_]](h: FunctionK[H, G]): FunctionK[Coproduct[F, H, ?], G] =
-    new FunctionK[Coproduct[F, H, ?], G] {
-      def apply[A](fa: Coproduct[F, H, A]): G[A] = fa.fold(self, h)
-    }
+    λ[FunctionK[Coproduct[F, H, ?], G]](fa => fa.fold(self, h))
 }
 
 object FunctionK {
@@ -56,10 +52,8 @@ object FunctionK {
   /**
     * The identity transformation of `F` to `F`
     */
-  def id[F[_]]: FunctionK[F, F] =
-    new FunctionK[F, F] {
-      def apply[A](fa: F[A]): F[A] = fa
-    }
+  def id[F[_]]: FunctionK[F, F] = λ[FunctionK[F, F]](fa => fa)
+
 
   /**
     * Lifts function `f` of `F[A] => G[A]` into a `FunctionK[F, G]`.
