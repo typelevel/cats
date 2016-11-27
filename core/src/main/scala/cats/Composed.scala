@@ -155,3 +155,19 @@ private[cats] trait ComposedInvariantContravariant[F[_], G[_]] extends Invariant
   override def imap[A, B](fga: F[G[A]])(f: A => B)(g: B => A): F[G[B]] =
     F.imap(fga)(ga => G.contramap(ga)(g))(gb => G.contramap(gb)(f))
 }
+
+private [cats] trait ComposedTraverseMonad[F[_], G[_]] extends Monad[λ[α => F[G[α]]]] with ComposedApplicative[F, G] { outer =>
+  def F: Monad[F]
+  def G: Monad[G]
+  def TG: Traverse[G]
+
+  def flatMap[A, B](f: F[G[A]])(fn: A => F[G[B]]): F[G[B]] =
+    F.flatMap(f) { ga => TG.flatTraverse(ga)(fn)(F, G) }
+
+  // TODO: this is not stack safe if F is not trampolined
+  def tailRecM[A, B](a: A)(fn: A => F[G[Either[A, B]]]): F[G[B]] =
+    flatMap(fn(a)) {
+      case Left(a) => tailRecM(a)(fn)
+      case Right(b) => pure(b)
+    }
+}

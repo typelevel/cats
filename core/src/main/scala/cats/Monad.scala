@@ -11,7 +11,14 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.MonadLaws.
  */
-@typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
+@typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F] { self =>
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
+
+  def composeTraverseMonad[G[_]](implicit tg: Traverse[G], mg: Monad[G]): Monad[λ[α => F[G[α]]]] =
+    new ComposedTraverseMonad[F, G] {
+      def F = self
+      def G = mg
+      def TG = tg
+    }
 }
