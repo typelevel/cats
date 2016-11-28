@@ -385,7 +385,7 @@ private[data] sealed trait WriterTCoflatMap[F[_], L] extends CoflatMap[WriterT[F
 }
 
 
-trait WriterTFunctions {
+private[data] trait WriterTFunctions {
   def putT[F[_], L, V](vf: F[V])(l: L)(implicit functorF: Functor[F]): WriterT[F, L, V] =
     WriterT(functorF.map(vf)(v => (l, v)))
 

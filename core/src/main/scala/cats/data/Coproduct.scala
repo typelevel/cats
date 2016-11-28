@@ -150,7 +150,7 @@ private[data] sealed abstract class CoproductInstances0 extends CoproductInstanc
     }
 }
 
-sealed abstract class CoproductInstances extends CoproductInstances0 {
+private[data] sealed abstract class CoproductInstances extends CoproductInstances0 {
 
   implicit def catsDataComonadForCoproduct[F[_], G[_]](implicit F0: Comonad[F], G0: Comonad[G]): Comonad[Coproduct[F, G, ?]] =
     new CoproductComonad[F, G] {
