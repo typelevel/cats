@@ -176,14 +176,10 @@ object FreeT extends FreeTInstances {
     liftF[S, M, FreeT[S, M, A]](value).flatMap(identity)
 
   def compile[S[_], T[_], M[_]: Functor](st: FunctionK[S, T]): FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]] =
-    new FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]] {
-     def apply[A](f: FreeT[S, M, A]) = f.compile(st)
-    }
+    λ[FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]]](f => f.compile(st))
 
   def foldMap[S[_], M[_]: Monad](fk: FunctionK[S, M]): FunctionK[FreeT[S, M, ?], M] =
-    new FunctionK[FreeT[S, M, ?], M] {
-     def apply[A](f: FreeT[S, M, A]) = f.foldMap(fk)
-    }
+    λ[FunctionK[FreeT[S, M, ?], M]](f => f.foldMap(fk))
 }
 
 private[free] sealed trait FreeTInstances3 {
