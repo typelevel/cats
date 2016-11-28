@@ -59,19 +59,19 @@ private[data] abstract class FuncInstances1 {
     }
 }
 
-sealed trait FuncFunctor[F[_], C] extends Functor[λ[α => Func[F, C, α]]] {
+private[data] sealed trait FuncFunctor[F[_], C] extends Functor[λ[α => Func[F, C, α]]] {
   def F: Functor[F]
   override def map[A, B](fa: Func[F, C, A])(f: A => B): Func[F, C, B] =
     fa.map(f)(F)
 }
 
-sealed trait FuncContravariant[F[_], C] extends Contravariant[λ[α => Func[F, α, C]]] {
+private[data] sealed trait FuncContravariant[F[_], C] extends Contravariant[λ[α => Func[F, α, C]]] {
   def F: Contravariant[F]
   def contramap[A, B](fa: Func[F, A, C])(f: B => A): Func[F, B, C] =
     Func.func(a => fa.run(f(a)))
 }
 
-sealed trait FuncApply[F[_], C] extends Apply[λ[α => Func[F, C, α]]] with FuncFunctor[F, C] {
+private[data] sealed trait FuncApply[F[_], C] extends Apply[λ[α => Func[F, C, α]]] with FuncFunctor[F, C] {
   def F: Apply[F]
   def ap[A, B](f: Func[F, C, A => B])(fa: Func[F, C, A]): Func[F, C, B] =
     Func.func(c => F.ap(f.run(c))(fa.run(c)))
@@ -79,7 +79,7 @@ sealed trait FuncApply[F[_], C] extends Apply[λ[α => Func[F, C, α]]] with Fun
     Func.func(c => F.product(fa.run(c), fb.run(c)))
 }
 
-sealed trait FuncApplicative[F[_], C] extends Applicative[λ[α => Func[F, C, α]]] with FuncApply[F, C] {
+private[data] sealed trait FuncApplicative[F[_], C] extends Applicative[λ[α => Func[F, C, α]]] with FuncApply[F, C] {
   def F: Applicative[F]
   def pure[A](a: A): Func[F, C, A] =
     Func.func(c => F.pure(a))

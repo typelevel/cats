@@ -185,7 +185,7 @@ private[data] sealed abstract class IorInstances0 {
   }
 }
 
-sealed trait IorFunctions {
+private[data] sealed trait IorFunctions {
   def left[A, B](a: A): A Ior B = Ior.Left(a)
   def right[A, B](b: B): A Ior B = Ior.Right(b)
   def both[A, B](a: A, b: B): A Ior B = Ior.Both(a, b)

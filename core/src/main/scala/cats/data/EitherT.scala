@@ -234,7 +234,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
 object EitherT extends EitherTInstances with EitherTFunctions
 
-trait EitherTFunctions {
+private[data] trait EitherTFunctions {
   final def left[F[_], A, B](fa: F[A])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fa)(Either.left))
 
   final def right[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fb)(Either.right))
