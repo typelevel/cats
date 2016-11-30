@@ -1,7 +1,7 @@
 package cats
 package arrow
 
-import cats.data.Coproduct
+import cats.data.{Coproduct, Prod}
 
 import cats.macros.MacroCompat
 
@@ -45,6 +45,22 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
     */
   def or[H[_]](h: FunctionK[H, G]): FunctionK[Coproduct[F, H, ?], G] =
     λ[FunctionK[Coproduct[F, H, ?], G]](fa => fa.fold(self, h))
+
+  /**
+   * Composes two instances of `FunctionK` into a new `FunctionK` that transforms
+   * one single functor to a [[cats.data.Prod]] of two functors.
+   *
+   * {{{
+   * scala> import cats.arrow.FunctionK
+   * scala> val list2option = λ[FunctionK[List, Option]](_.headOption)
+   * scala> val list2vector = λ[FunctionK[List, Vector]](_.toVector)
+   * scala> val optionAndVector = list2option and list2vector
+   * scala> optionAndVector(List(1,2,3))
+   * res0: cats.data.Prod[Option,Vector,Int] = Prod(Some(1),Vector(1, 2, 3))
+   * }}}
+   */
+  def and[H[_]](h: FunctionK[F, H]): FunctionK[F, Prod[G, H, ?]] =
+    λ[FunctionK[F, Prod[G, H, ?]]](fa => Prod(self(fa), h(fa)))
 }
 
 object FunctionK {
