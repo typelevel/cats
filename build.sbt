@@ -211,6 +211,8 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
+val binaryCompatibleVersion = "0.8.0"
+
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
@@ -221,7 +223,13 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings:_*)
-  .jvmSettings((commonJvmSettings ++ (mimaPreviousArtifacts := Set("org.typelevel" %% "cats-kernel" % "0.7.0"))):_*)
+  .jvmSettings((commonJvmSettings ++
+    (mimaPreviousArtifacts := {
+      if (scalaVersion.value startsWith "2.12")
+        Set()
+      else
+        Set("org.typelevel" %% "cats-kernel" % binaryCompatibleVersion)
+    })):_*)
 
 lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js
@@ -409,7 +417,7 @@ lazy val publishSettings = Seq(
 // These aliases serialise the build for the benefit of Travis-CI.
 addCommandAlias("buildJVM", "catsJVM/test")
 
-addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeMicrosite")
+addCommandAlias("validateJVM", ";scalastyle;buildJVM;mimaReportBinaryIssues;makeMicrosite")
 
 addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 
@@ -569,4 +577,3 @@ lazy val update2_12 = Seq(
     }
   }
 )
-
