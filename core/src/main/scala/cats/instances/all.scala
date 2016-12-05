@@ -18,3 +18,4 @@ trait AllInstances
   with    TryInstances
   with    TupleInstances
   with    UUIDInstances
+  with    SymbolInstances
