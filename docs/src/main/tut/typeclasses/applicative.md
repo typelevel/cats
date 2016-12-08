@@ -272,7 +272,7 @@ The second expects the effects in a tuple and works by enriching syntax on top o
 `TupleN` types.
 
 ```tut:book
-(o1, o2).map2((i: Int, s: String) => i.toString ++ s)
+(o1, o2).mapN((i: Int, s: String) => i.toString ++ s)
 ```
 
 ## Further Reading

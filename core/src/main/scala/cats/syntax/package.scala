@@ -42,7 +42,6 @@ package object syntax {
   object monadTrans extends MonadTransSyntax
   object traverse extends TraverseSyntax
   object traverseFilter extends TraverseFilterSyntax
-  object tuple extends TupleSyntax
   object validated extends ValidatedSyntax
   object vector extends VectorSyntax
   object writer extends WriterSyntax
