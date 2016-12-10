@@ -97,6 +97,12 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
   implicit val catsDataArrowForKleisliId: Arrow[Kleisli[Id, ?, ?]] =
     catsDataArrowForKleisli[Id]
 
+  implicit def catsDataMFunctorForKleisli[A, B]: MFunctor[Kleisli[?[_], A, B]] =
+    new MFunctor[Kleisli[?[_], A, B]] {
+      def hoist[M[_], N[_]](m: M ~> N): Kleisli[M, A, B] => Kleisli[N, A, B] =
+        k => k.transform(m)
+    }
+
   implicit def catsDataChoiceForKleisli[F[_]](implicit ev: Monad[F]): Choice[Kleisli[F, ?, ?]] =
     new Choice[Kleisli[F, ?, ?]] {
       def id[A]: Kleisli[F, A, A] = Kleisli(ev.pure)

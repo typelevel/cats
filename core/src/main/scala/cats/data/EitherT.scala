@@ -331,6 +331,12 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
         EitherT.liftT(ma)
     }
 
+  implicit def catsDataMFunctorForEitherT[E, A]: MFunctor[EitherT[?[_], E, A]] =
+    new MFunctor[EitherT[?[_], E, A]] {
+      def hoist[M[_], N[_]](m: M ~> N): EitherT[M, E, A] => EitherT[N, E, A] =
+        e => EitherT(m(e.value))
+    }
+
   implicit def catsMonoidForEitherT[F[_], L, A](implicit F: Monoid[F[Either[L, A]]]): Monoid[EitherT[F, L, A]] =
     new EitherTMonoid[F, L, A] { implicit val F0 = F }
 

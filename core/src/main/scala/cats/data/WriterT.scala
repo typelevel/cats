@@ -87,6 +87,12 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
         WriterT(Functor[M].map(ma)((W.empty, _)))
     }
 
+  implicit def catsDataMFunctorForWriterT[W, A](implicit W: Monoid[W]): MFunctor[WriterT[?[_], W, A]] =
+    new MFunctor[WriterT[?[_], W, A]] {
+      def hoist[M[_], N[_]](m: M ~> N): WriterT[M, W, A] => WriterT[N, W, A] =
+        w => WriterT(m(w.run))
+    }
+
   implicit def catsDataShowForWriterT[F[_], L, V](implicit F: Show[F[(L, V)]]): Show[WriterT[F, L, V]] = new Show[WriterT[F, L, V]] {
     override def show(f: WriterT[F, L, V]): String = f.show
   }

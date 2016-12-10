@@ -218,6 +218,12 @@ private[free] sealed trait FreeTInstances1 extends FreeTInstances2 {
       override def liftT[M[_]: Functor, A](ma: M[A]): FreeT[S, M, A] =
         FreeT.liftT(ma)
     }
+
+  implicit def catsDataMFunctorForFreeT[S[_], A]: MFunctor[FreeT[S, ?[_], A]] =
+    new MFunctor[FreeT[S, ?[_], A]] {
+      def hoist[M[_], N[_]](m: M ~> N): FreeT[S, M, A] => FreeT[S, N, A] =
+        f => f.hoist(m)
+    }
 }
 
 private[free] sealed trait FreeTInstances0 extends FreeTInstances1 {

@@ -215,6 +215,12 @@ private[data] sealed trait OptionTInstances1 extends OptionTInstances2 {
       def liftT[M[_]: Functor, A](ma: M[A]): OptionT[M, A] = OptionT.liftF(ma)
     }
 
+  implicit def catsDataMFunctorForOptionT[A]: MFunctor[OptionT[?[_], A]] =
+    new MFunctor[OptionT[?[_], A]] {
+      def hoist[M[_], N[_]](m: M ~> N): OptionT[M, A] => OptionT[N, A] =
+        o => OptionT(m(o.value))
+    }
+
   implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, ?]] =
     new OptionTMonoidK[F] { implicit val F = F0 }
 

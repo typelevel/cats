@@ -93,6 +93,12 @@ private[data] sealed abstract class IdTInstances0 extends IdTInstances1 {
 
   implicit def catsDataOrderForIdT[F[_], A](implicit F: Order[F[A]]): Order[IdT[F, A]] =
     F.on(_.value)
+
+  implicit def catsDataMFunctorForIdT[F[_], A]: MFunctor[IdT[?[_], A]] =
+    new MFunctor[IdT[?[_], A]] {
+      def hoist[M[_], N[_]](m: M ~> N): IdT[M, A] => IdT[N, A] =
+        i => IdT(m(i.value))
+    }
 }
 
 private[data] sealed abstract class IdTInstances extends IdTInstances0 {
