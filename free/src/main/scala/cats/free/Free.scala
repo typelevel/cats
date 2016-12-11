@@ -2,7 +2,6 @@ package cats
 package free
 
 import scala.annotation.tailrec
-
 import cats.arrow.FunctionK
 
 /**
@@ -165,6 +164,41 @@ object Free {
    * Lift an `F[A]` value into the free monad.
    */
   def liftF[F[_], A](value: F[A]): Free[F, A] = Suspend(value)
+
+  /**
+   * Absorb one layer of `F` into the free monad.
+   */
+  def roll[F[_], A](value: F[Free[F, A]]): Free[F, A] =
+    Suspend(value).flatMap(identity)
+
+  /**
+    * A stack-safe algebraic recursive fold out of the free monad.
+    */
+  def cata[F[_], A, B](value: Free[F, A])(folder: (F[B] Either A) => Eval[B])(implicit F: Traverse[F]): Eval[B] = {
+    def loop(fr: Free[F, A]): Eval[B] = fr.resume match {
+      case Left(ff) =>
+        val looped: Eval[F[B]] = F.traverse(ff)(fr => Eval.defer(loop(fr)))
+        val folded: Eval[B] = looped.flatMap(fb => folder(Left(fb)))
+        folded
+      case Right(a) => folder(Right(a))
+    }
+    loop(value)
+  }
+
+  /**
+    * A monadic recursive fold out of the free monad into a monad which can express Eval's lazy stack-safety.
+    */
+  def cataM[F[_], M[_], A, B](value: Free[F, A])(folder: (F[B] Either A) => M[B])(inclusion: Eval ~> M)
+                             (implicit F: Traverse[F], M: Monad[M]): M[B] = {
+    def loop(fr: Free[F, A]): Eval[M[B]] = fr.resume match {
+      case Left(ff) =>
+        val looped: M[F[B]] = F.traverse(ff)(fr => M.flatten(inclusion(Eval.defer(loop(fr)))))
+        val folded: M[B] = M.flatMap(looped)(fb => folder(Left(fb)))
+        Eval.now(folded)
+      case Right(a) => Eval.now(folder(Right(a)))
+    }
+    M.flatten(inclusion(loop(value)))
+  }
 
   /**
    * Suspend the creation of a `Free[F, A]` value.

@@ -117,6 +117,18 @@ class FreeTTests extends CatsSuite {
     val b = a.compile(FunctionK.id) // used to overflow
   }
 
+  test("rollM") {
+    forAll { (a: Option[FreeTOption[Int]]) =>
+      FreeT.rollM(a) should ===(FreeT.liftT(a).flatMap(identity))
+    }
+  }
+
+  test("roll") {
+    forAll { (a: Option[FreeTOption[Int]]) =>
+      FreeT.roll(a) should ===(FreeT.liftF(a).flatMap(identity))
+    }
+  }
+
   test("foldMap consistent with runM") {
     forAll { a: FreeTOption[Int] =>
       val x = a.runM(identity)

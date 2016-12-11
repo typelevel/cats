@@ -175,6 +175,9 @@ object FreeT extends FreeTInstances {
   def roll[S[_], M[_], A](value: S[FreeT[S, M, A]])(implicit M: Applicative[M]): FreeT[S, M, A] =
     liftF[S, M, FreeT[S, M, A]](value).flatMap(identity)
 
+  def rollM[S[_], M[_], A](value: M[FreeT[S, M, A]]): FreeT[S, M, A] =
+    liftT[S, M, FreeT[S, M, A]](value).flatMap(identity)
+
   def compile[S[_], T[_], M[_]: Functor](st: FunctionK[S, T]): FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]] =
     λ[FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]]](f => f.compile(st))
 
