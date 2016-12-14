@@ -112,6 +112,47 @@ class IorTests extends CatsSuite {
     }
   }
 
+
+  test("merge") {
+    forAll { (i: Int Ior Int) =>
+        i.merge should === (i.left.getOrElse(0) + i.right.getOrElse(0))
+    }
+  }
+
+  test("mergeLeft") {
+    forAll { (i: Int Ior Int) =>
+      i.mergeLeft should === (i.left.orElse(i.right).get)
+    }
+  }
+
+  test("mergeRight") {
+    forAll { (i: Int Ior Int) =>
+      i.mergeRight should === (i.right.orElse(i.left).get)
+    }
+  }
+
+  test("putLeft") {
+    forAll { (i: Int Ior Int) =>
+      val expectedResult =
+      if (i.isLeft)
+        Ior.left(2)
+      else
+        Ior.both(2, i.right.get)
+      i.putLeft(2) should === (expectedResult)
+    }
+  }
+
+  test("putRight") {
+    forAll { (i: Int Ior Int) =>
+      val expectedResult =
+      if (i.isRight)
+        Ior.right(2)
+      else
+        Ior.both(i.left.get, 2)
+      i.putRight(2) should === (expectedResult)
+    }
+  }
+
   test("append left") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
       i.append(j).left should === (i.left.map(_ + j.left.getOrElse(0)).orElse(j.left))

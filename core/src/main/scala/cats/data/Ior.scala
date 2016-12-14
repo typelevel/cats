@@ -28,6 +28,11 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     case Ior.Both(a, b) => fab(a, b)
   }
 
+  final def putLeft[C](left: C): C Ior B =
+    fold(_ => Ior.left(left), Ior.both(left, _), (_, b) => Ior.both(left, b))
+  final def putRight[C](right: C): A Ior C =
+    fold(Ior.both(_, right), _ => Ior.right(right), (a, _) => Ior.both(a, right))
+
   final def isLeft: Boolean = fold(_ => true, _ => false, (_, _) => false)
   final def isRight: Boolean = fold(_ => false, _ => true, (_, _) => false)
   final def isBoth: Boolean = fold(_ => false, _ => false, (_, _) => true)
@@ -90,7 +95,11 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     fold(_ => lc, f(_, lc), (_, b) => f(b, lc))
 
   final def merge[AA >: A](implicit ev: B <:< AA, AA: Semigroup[AA]): AA =
-    fold(identity, ev.apply, (a, b) => AA.combine(a, b))
+    fold(identity, ev, (a, b) => AA.combine(a, b))
+  final def mergeLeft[AA >: A](implicit ev: B <:< AA): AA =
+    fold(identity, ev, (a, _) => a)
+  final def mergeRight[AA >: A](implicit ev: B <:< AA): AA =
+    fold(identity, ev, (_, b) => ev(b))
 
   // scalastyle:off cyclomatic.complexity
   final def append[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Ior BB = this match {
