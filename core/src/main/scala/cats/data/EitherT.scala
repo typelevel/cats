@@ -293,6 +293,28 @@ private[data] trait EitherTFunctions {
     def apply[E, A](opt: Option[A], ifNone: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(Either.fromOption(opt, ifNone)))
   }
+
+  /**  If the condition is satisfied, return the given `A` in `Right`
+    *  lifted into the specified `Applicative`, otherwise, return the
+    *  given `E` in `Left` lifted into the specified `Applicative`.
+    *
+    * {{{
+    * scala> import cats.Id
+    * scala> import cats.data.EitherT
+    * scala> val userInput = "hello world"
+    * scala> EitherT.cond[Id](
+    *      |   userInput.forall(_.isDigit) && userInput.size == 10,
+    *      |   userInput,
+    *      |   "The input does not look like a phone number")
+    * res0: EitherT[Id, String, String] = EitherT(Left(The input does not look like a phone number))
+    * }}}
+    */
+  final def cond[F[_]]: CondPartiallyApplied[F] = new CondPartiallyApplied
+
+  final class CondPartiallyApplied[F[_]] private[EitherTFunctions] {
+    def apply[E, A](test: Boolean, right: => A, left: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
+      EitherT(F.pure(Either.cond(test, right, left)))
+  }
 }
 
 private[data] abstract class EitherTInstances extends EitherTInstances1 {

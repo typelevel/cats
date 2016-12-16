@@ -156,6 +156,12 @@ class EitherTTests extends CatsSuite {
     }
   }
 
+  test("cond") {
+    forAll { (cond: Boolean, s: String, i: Int) =>
+      Either.cond(cond, s, i) should === (EitherT.cond[Id](cond, s, i).value)
+    }
+  }
+
   test("isLeft negation of isRight") {
     forAll { (eithert: EitherT[List, String, Int]) =>
       eithert.isLeft should === (eithert.isRight.map(! _))
