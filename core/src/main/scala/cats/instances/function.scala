@@ -13,18 +13,18 @@ private[instances] sealed trait Function0Instances {
 
   implicit val catsStdBimonadForFunction0: Bimonad[Function0] =
     new Bimonad[Function0] {
-      def extract[A](x: () => A): A = x()
+      def extract[A](x: Thunk[A]): A = x()
 
-      def coflatMap[A, B](fa: () => A)(f: (() => A) => B): () => B =
-        () => f(fa)
+      def coflatMap[A, B](fa: Thunk[A])(f: Thunk[A] => B): Thunk[B] =
+        Thunk(f(fa))
 
-      def pure[A](x: A): () => A = () => x
+      def pure[A](x: A): Thunk[A] = Thunk(x)
 
-      def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
-        () => f(fa())()
+      def flatMap[A, B](fa: Thunk[A])(f: A => Thunk[B]): Thunk[B] =
+        Thunk(f(fa())())
 
-      def tailRecM[A, B](a: A)(fn: A => () => Either[A, B]): () => B =
-        () => {
+      def tailRecM[A, B](a: A)(fn: A => Thunk[Either[A, B]]): Thunk[B] =
+        Thunk {
           @tailrec
           def loop(thisA: A): B = fn(thisA)() match {
             case Right(b) => b
