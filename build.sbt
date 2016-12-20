@@ -11,11 +11,7 @@ lazy val scoverageSettings = Seq(
   coverageFailOnMinimum := false
 )
 
-lazy val buildSettings = Seq(
-  organization := "org.typelevel",
-  scalaVersion := "2.12.1",
-  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
-)
+organization in ThisBuild := "org.typelevel"
 
 lazy val catsDoctestSettings = Seq(
   doctestWithDependencies := false
@@ -92,7 +88,7 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
+lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
 lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.0"
@@ -217,7 +213,6 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
   .settings(kernelSettings: _*)
-  .settings(buildSettings: _*)
   .settings(publishSettings: _*)
   .settings(scoverageSettings: _*)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
@@ -238,7 +233,6 @@ lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
   .in(file("kernel-laws"))
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
   .settings(kernelSettings: _*)
-  .settings(buildSettings: _*)
   .settings(publishSettings: _*)
   .settings(scoverageSettings: _*)
   .settings(disciplineDependencies: _*)
