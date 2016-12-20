@@ -34,7 +34,7 @@ trait AllSyntax
     with ReducibleSyntax
     with SemigroupSyntax
     with SemigroupKSyntax
-    with Show.ToShowOps
+    with ShowSyntax
     with SplitSyntax
     with StrongSyntax
     with TransLiftSyntax

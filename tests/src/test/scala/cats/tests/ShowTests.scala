@@ -11,7 +11,7 @@ class ShowTests extends CatsSuite {
   checkAll("Contravariant[Show]", SerializableTests.serializable(Contravariant[Show]))
 
   test("show string interpolator") {
-    import Show._
+    import cats.syntax.show._
 
     case class Cat(name: String)
     object Cat {

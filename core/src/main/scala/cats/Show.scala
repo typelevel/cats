@@ -30,7 +30,7 @@ object Show {
     implicit def mat[A](x: A)(implicit z: Show[A]): Shown = Shown(z show x)
   }
 
-  implicit class ShowInterpolator(val _sc: StringContext) extends AnyVal {
+  final case class ShowInterpolator(_sc: StringContext) extends AnyVal {
     def show(args: Shown*): String = _sc s (args: _*)
   }
 
