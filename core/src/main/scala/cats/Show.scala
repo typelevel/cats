@@ -25,6 +25,13 @@ object Show {
     def show(a: A): String = a.toString
   }
 
+  def doShow[A](a: A)(implicit ev: Show[A]): String =
+    ev.show(a)
+
+  implicit class ShowInterpolation(val ctx: StringContext) extends AnyVal {
+    def show(args: Any*): String = macro cats.macros.ShowInterpolator.show
+  }
+
   implicit val catsContravariantForShow: Contravariant[Show] = new Contravariant[Show] {
     def contramap[A, B](fa: Show[A])(f: B => A): Show[B] =
       show[B](fa.show _ compose f)
