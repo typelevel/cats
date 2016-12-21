@@ -8,17 +8,6 @@ import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 class EvalTests extends CatsSuite {
-
-  /**
-   * Class for spooky side-effects and action-at-a-distance.
-   *
-   * It is basically a mutable counter that can be used to measure how
-   * many times an otherwise pure function is being evaluted.
-   */
-  class Spooky(var counter: Int = 0) {
-    def increment(): Unit = counter += 1
-  }
-
   /**
    * This method creates a Eval[A] instance (along with a
    * corresponding Spooky instance) from an initial `value` using the
