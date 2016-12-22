@@ -74,9 +74,14 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def size[A](fa: Vector[A]): Long = fa.size.toLong
 
       override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
-      foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
-        G.map2Eval(f(a), lgvb)(_ +: _)
-      }.value
+        Monad.maybeFromApplicative(G) match {
+          case Some(monad) =>
+            foldM[G, A, Vector[B]](fa, Vector.empty[B]) { (vec, a) => G.map(f(a))(vec :+ _) }(monad)
+          case None =>
+            foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
+              G.map2Eval(f(a), lgvb)(_ +: _)
+            }.value
+        }
 
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)

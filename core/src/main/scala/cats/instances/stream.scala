@@ -36,22 +36,36 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
           if (s.isEmpty) lb else f(s.head, Eval.defer(foldRight(s.tail, lb)(f)))
         }
 
-      def traverseFilter[G[_], A, B](fa: Stream[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] = {
+      def traverseFilter[G[_], A, B](fa: Stream[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] =
         // We use foldRight to avoid possible stack overflows. Since
         // we don't want to return a Eval[_] instance, we call .value
         // at the end.
         foldRight(fa, Always(G.pure(Stream.empty[B]))){ (a, lgsb) =>
           G.map2Eval(f(a), lgsb)((ob, s) => ob.fold(s)(_ #:: s))
         }.value
-      }
 
-      override def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] = {
-        // We use foldRight to avoid possible stack overflows. Since
-        // we don't want to return a Eval[_] instance, we call .value
-        // at the end.
-        foldRight(fa, Always(G.pure(Stream.empty[B]))){ (a, lgsb) =>
-          G.map2Eval(f(a), lgsb)(_ #:: _)
-        }.value
+      override def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] =
+        Monad.maybeFromApplicative(G) match {
+          case Some(monad) => traverseM[G, A, B](fa)(f)(monad)
+          case None =>
+            // We use foldRight to avoid possible stack overflows. Since
+            // we don't want to return a Eval[_] instance, we call .value
+            // at the end.
+            foldRight(fa, Always(G.pure(Stream.empty[B]))){ (a, lgsb) =>
+              G.map2Eval(f(a), lgsb)(_ #:: _)
+            }.value
+        }
+
+      private def traverseM[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Monad[G]): G[Stream[B]] = {
+        // This forces the stream as it goes, which seems unavoidable since
+        // by the time we apply f we have materialize b
+        def step(pair: (Stream[A], List[B])): G[Either[(Stream[A], List[B]), Stream[B]]] =
+          pair match {
+            case (a #:: tail, bs) => G.map(f(a)) { b => Left((tail, b :: bs)) }
+            case (_, bs) => G.pure(Right(bs.reverse.toStream))
+          }
+
+        G.tailRecM((fa, List.empty[B]))(step)
       }
 
       def tailRecM[A, B](a: A)(fn: A => Stream[Either[A, B]]): Stream[B] = {

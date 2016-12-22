@@ -15,3 +15,15 @@ import simulacrum.typeclass
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
 }
+
+object Monad {
+  /**
+   * Sometimes we only require an Applicative, but if we have a Monad we could
+   * do some optimization (for instance, using tailRecM). This method optionally
+   * gives that.
+   */
+  private[cats] def maybeFromApplicative[F[_]](implicit a: Applicative[F]): Option[Monad[F]] = a match {
+    case m: Monad[F] => Some(m) // Since Monad extends Applicative, the only value for the type is F
+    case _ => None
+  }
+}

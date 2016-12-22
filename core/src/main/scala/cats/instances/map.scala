@@ -17,12 +17,26 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
   implicit def catsStdInstancesForMap[K]: TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] =
     new TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] {
 
-      override def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
-        val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
-        val gbb = Foldable.iterateRight(fa.iterator, gba){ (kv, lbuf) =>
-          G.map2Eval(f(kv._2), lbuf)({ (b, buf) => buf + (kv._1 -> b)})
-        }.value
-        G.map(gbb)(_.toMap)
+      override def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] =
+        Monad.maybeFromApplicative(G) match {
+          case Some(monad) => traverseM(fa)(f)(monad)
+          case None =>
+            val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
+            val gbb = Foldable.iterateRight(fa.iterator, gba){ (kv, lbuf) =>
+              G.map2Eval(f(kv._2), lbuf)({ (b, buf) => buf + (kv._1 -> b)})
+            }.value
+            G.map(gbb)(_.toMap)
+        }
+
+      private def traverseM[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Monad[G]): G[Map[K, B]] = {
+        def step(u: (List[(K, A)], Map[K, B])): G[Either[(List[(K, A)], Map[K, B]), Map[K, B]]] = u match {
+          case (Nil, m) => G.pure(Right(m))
+          case ((k, a) :: tail, m) =>
+            G.map(f(a)) { b =>
+              Left((tail, m + ((k, b))))
+            }
+        }
+        G.tailRecM((fa.toList, Map.empty[K, B]))(step)
       }
 
       def traverseFilter[G[_], A, B](fa: Map[K, A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Map[K, B]] = {
@@ -31,6 +45,18 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
           G.map2Eval(f(kv._2), lbuf)({ (ob, buf) => ob.fold(buf)(b => buf + (kv._1 -> b))})
         }.value
         G.map(gbb)(_.toMap)
+      }
+
+      private def traverseMFilter[G[_], A, B](fa: Map[K, A])(f: A => G[Option[B]])(implicit G: Monad[G]): G[Map[K, B]] = {
+        def step(u: (List[(K, A)], Map[K, B])): G[Either[(List[(K, A)], Map[K, B]), Map[K, B]]] = u match {
+          case (Nil, m) => G.pure(Right(m))
+          case ((k, a) :: tail, m) =>
+            G.map(f(a)) {
+              case Some(b) => Left((tail, m + ((k, b))))
+              case None => Left((tail, m))
+            }
+        }
+        G.tailRecM((fa.toList, Map.empty[K, B]))(step)
       }
 
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =

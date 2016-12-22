@@ -66,9 +66,18 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         }.value
 
       override def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
-        foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglb) =>
-          G.map2Eval(f(a), lglb)(_ :: _)
-        }.value
+        Monad.maybeFromApplicative[G] match {
+          case Some(monad) => traverseM[G, A, B](fa)(f)(monad)
+          case None =>
+            foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglb) =>
+              G.map2Eval(f(a), lglb)(_ :: _)
+            }.value
+        }
+
+      private def traverseM[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Monad[G]): G[List[B]] =
+        G.map(foldM[G, A, List[B]](fa, List.empty[B]) { (listB, a) =>
+          G.map(f(a))(_ :: listB)
+        })(_.reverse)
 
       override def exists[A](fa: List[A])(p: A => Boolean): Boolean =
         fa.exists(p)
