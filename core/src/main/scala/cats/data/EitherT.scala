@@ -333,7 +333,9 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
 
   implicit def catsDataMFunctorForEitherT[E, A]: MFunctor[EitherT[?[_], E, A]] =
     new MFunctor[EitherT[?[_], E, A]] {
-      def hoist[M[_], N[_]](m: M ~> N): EitherT[M, E, A] => EitherT[N, E, A] =
+      type C[M[_]] = Monad[M]
+
+      def hoist[M[_]: Monad, N[_]: Monad](m: M ~> N): EitherT[M, E, A] => EitherT[N, E, A] =
         e => EitherT(m(e.value))
     }
 

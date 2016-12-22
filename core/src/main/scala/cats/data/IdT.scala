@@ -96,7 +96,9 @@ private[data] sealed abstract class IdTInstances0 extends IdTInstances1 {
 
   implicit def catsDataMFunctorForIdT[F[_], A]: MFunctor[IdT[?[_], A]] =
     new MFunctor[IdT[?[_], A]] {
-      def hoist[M[_], N[_]](m: M ~> N): IdT[M, A] => IdT[N, A] =
+      type C[M[_]] = Monad[M]
+
+      def hoist[M[_]: Monad, N[_]: Monad](m: M ~> N): IdT[M, A] => IdT[N, A] =
         i => IdT(m(i.value))
     }
 }

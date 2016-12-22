@@ -1,16 +1,33 @@
 package cats
 
+import simulacrum.typeclass
+
 /**
- * A type class which abstracts over the ability to lift a natural transformation
- * (monad morphism) `M ~> N` into a MonadTransformer. In other words, a functor
- * in the category of monads.
+ * Functor in the category of functors.
+ *
+ * If the ordinary `Functor` lifts a function `A => B` to `F[A] => F[B]`, then
+ * this lifts a natural transformation `M ~> N` to `F[M] => F[N]`, where
+ * `~>` represents the type `M[A] => N[A]`, for all `A`.
+ *
+ * All monad transformers are an instance of this, with the underlying monad
+ * being the subject of the lifted transformation.
+ *
  */
 
-trait MFunctor[MT[_[_]]] {
+@typeclass trait MFunctor[F[_[_]]] {
+
+ /**
+  * Sometimes we know more about the underlying `F`, so the transformation
+  * can be constrained to reflect this knowledge.
+  *
+  * In case of monad transformers, for instance, we always know that `F`
+  * is a monad.
+  */
+  type C[M[_]]
 
   /**
-   * Analogous to fmap
+   * Analogous to `lift` of `Functor`
    */
-  def hoist[M[_], N[_]](m: M ~> N): MT[M] => MT[N]
+  def hoist[M[_]: C, N[_]: C](m: M ~> N): F[M] => F[N]
 
 }

@@ -89,7 +89,9 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
 
   implicit def catsDataMFunctorForWriterT[W, A](implicit W: Monoid[W]): MFunctor[WriterT[?[_], W, A]] =
     new MFunctor[WriterT[?[_], W, A]] {
-      def hoist[M[_], N[_]](m: M ~> N): WriterT[M, W, A] => WriterT[N, W, A] =
+      type C[M[_]] = Monad[M]
+
+      def hoist[M[_]: Monad, N[_]: Monad](m: M ~> N): WriterT[M, W, A] => WriterT[N, W, A] =
         w => WriterT(m(w.run))
     }
 

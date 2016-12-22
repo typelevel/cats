@@ -99,7 +99,9 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
 
   implicit def catsDataMFunctorForKleisli[A, B]: MFunctor[Kleisli[?[_], A, B]] =
     new MFunctor[Kleisli[?[_], A, B]] {
-      def hoist[M[_], N[_]](m: M ~> N): Kleisli[M, A, B] => Kleisli[N, A, B] =
+      type C[M[_]] = Monad[M]
+
+      def hoist[M[_]: Monad, N[_]: Monad](m: M ~> N): Kleisli[M, A, B] => Kleisli[N, A, B] =
         k => k.transform(m)
     }
 
