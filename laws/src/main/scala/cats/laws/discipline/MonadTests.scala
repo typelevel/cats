@@ -34,7 +34,7 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
         "monad left identity" -> forAll(laws.monadLeftIdentity[A, B] _),
         "monad right identity" -> forAll(laws.monadRightIdentity[A] _),
         "map flatMap coherence" -> forAll(laws.mapFlatMapCoherence[A, B] _)
-      ) ++ (if (Platform.isJvm) Seq[(String, Prop)]("tailRecM stack safety" -> laws.tailRecMStackSafety) else Seq.empty)
+      ) ++ (if (Platform.isJvm) Seq[(String, Prop)]("tailRecM stack safety" -> Prop.lzy(laws.tailRecMStackSafety)) else Seq.empty)
     }
   }
 
