@@ -212,6 +212,128 @@ magic("123") match {
 }
 ```
 
+## Either in the small, Either in the large
+Once you start using `Either` for all your error-handling, you may quickly run into an issue where
+you need to call into two separate modules which give back separate kinds of errors.
+
+```tut:silent
+sealed abstract class DatabaseError
+trait DatabaseValue
+
+object Database {
+  def databaseThings(): Either[DatabaseError, DatabaseValue] = ???
+}
+
+sealed abstract class ServiceError
+trait ServiceValue
+
+object Service {
+  def serviceThings(v: DatabaseValue): Either[ServiceError, ServiceValue] = ???
+}
+```
+
+Let's say we have an application that wants to do database things, and then take database
+values and do service things. Glancing at the types, it looks like `flatMap` will do it.
+
+```scala
+def doApp = Database.databaseThings().flatMap(Service.serviceThings)
+```
+
+This line will compile and work as expected, no matter if you're on 2.12 or an earlier
+version of Scala.  The `flatMap` we get here (either provided by Cats's `Either` syntax for
+Scala 2.10 and 2.11, or, in Scala 2.12, a method on `Either`) has this signature:
+
+```scala
+def flatMap[AA >: A, Y](f: (B) => Either[AA, Y]): Either[AA, Y]
+```
+
+This `flatMap` is different from the ones you'll find on `List` or `Option`, for example, in that it
+has two type parameters, with the extra `AA` parameter allowing us to `flatMap` into an `Either`
+with a different type on the left side.
+
+This behavior is consistent with the covariance of `Either`, and in some cases it can be convenient,
+but it also makes it easy to run into nasty variance issues - such as `Object` being inferred as the
+type of the left side, as it is in this case.
+
+
+### Solution 1: Application-wide errors
+We may then be tempted to make our entire application share an error data type.
+
+```tut:silent
+sealed abstract class AppError
+final case object DatabaseError1 extends AppError
+final case object DatabaseError2 extends AppError
+final case object ServiceError1 extends AppError
+final case object ServiceError2 extends AppError
+
+trait DatabaseValue
+
+object Database {
+  def databaseThings(): Either[AppError, DatabaseValue] = ???
+}
+
+object Service {
+  def serviceThings(v: DatabaseValue): Either[AppError, ServiceValue] = ???
+}
+
+def doApp = Database.databaseThings().flatMap(Service.serviceThings)
+```
+
+This certainly works, or at least it compiles. But consider the case where another module wants to just use
+`Database`, and gets an `Either[AppError, DatabaseValue]` back. Should it want to inspect the errors, it
+must inspect **all** the `AppError` cases, even though it was only intended for `Database` to use
+`DatabaseError1` or `DatabaseError2`.
+
+### Solution 2: ADTs all the way down
+Instead of lumping all our errors into one big ADT, we can instead keep them local to each module, and have
+an application-wide error ADT that wraps each error ADT we need.
+
+```tut:silent
+sealed abstract class DatabaseError
+trait DatabaseValue
+
+object Database {
+  def databaseThings(): Either[DatabaseError, DatabaseValue] = ???
+}
+
+sealed abstract class ServiceError
+trait ServiceValue
+
+object Service {
+  def serviceThings(v: DatabaseValue): Either[ServiceError, ServiceValue] = ???
+}
+
+sealed abstract class AppError
+object AppError {
+  final case class Database(error: DatabaseError) extends AppError
+  final case class Service(error: ServiceError) extends AppError
+}
+```
+
+Now in our outer application, we can wrap/lift each module-specific error into `AppError` and then
+call our combinators as usual. `Either` provides a convenient method to assist with this, called `Either.leftMap` -
+it can be thought of as the same as `map`, but for the `Left` side.
+
+```tut:silent
+def doApp: Either[AppError, ServiceValue] =
+  Database.databaseThings().leftMap[AppError](AppError.Database).
+  flatMap(dv => Service.serviceThings(dv).leftMap(AppError.Service))
+```
+
+Hurrah! Each module only cares about its own errors as it should be, and more composite modules have their
+own error ADT that encapsulates each constituent module's error ADT. Doing this also allows us to take action
+on entire classes of errors instead of having to pattern match on each individual one.
+
+```tut:silent
+def awesome =
+  doApp match {
+    case Left(AppError.Database(_)) => "something in the database went wrong"
+    case Left(AppError.Service(_))  => "something in the service went wrong"
+    case Right(_)                   => "everything is alright!"
+  }
+```
+
+
 ## Working with exception-y code
 There will inevitably come a time when your nice `Either` code will have to interact with exception-throwing
 code. Handling such situations is easy enough.
