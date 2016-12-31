@@ -30,7 +30,7 @@ class StateTTests extends CatsSuite {
   }
 
   test("State.get and StateT.get are consistent") {
-    forAll{ (s: String) => 
+    forAll{ (s: String) =>
       val state: State[String, String] = State.get
       val stateT: State[String, String] = StateT.get
       state.run(s) should === (stateT.run(s))
@@ -195,7 +195,25 @@ class StateTTests extends CatsSuite {
   }
 
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[StateT[ListWrapper, Int, ?]](StateT.catsDataMonadForStateT(ListWrapper.monad))
+  implicit val iso = CartesianTests.Isomorphisms.invariant[StateT[ListWrapper, Int, ?]](StateT.catsDataFunctorForStateT(ListWrapper.monad))
+
+  {
+    // F has a Functor
+    implicit val F: Functor[ListWrapper] = ListWrapper.monad
+    // We only need a Functor on F to find a Functor on StateT
+    Functor[StateT[ListWrapper, Int, ?]]
+  }
+
+  {
+    // F needs a Monad to do Eq on StateT
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
+    implicit val FS: Functor[StateT[ListWrapper, Int, ?]] = StateT.catsDataFunctorForStateT
+
+    checkAll("StateT[ListWrapper, Int, Int]", FunctorTests[StateT[ListWrapper, Int, ?]].functor[Int, Int, Int])
+    checkAll("Functor[StateT[ListWrapper, Int, ?]]", SerializableTests.serializable(Functor[StateT[ListWrapper, Int, ?]]))
+
+    Functor[StateT[ListWrapper, Int, ?]]
+  }
 
   {
     // F has a Monad
@@ -265,7 +283,7 @@ class StateTTests extends CatsSuite {
     // F has a MonadError
     implicit val iso = CartesianTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
     implicit val eqEitherTFA: Eq[EitherT[StateT[Option, Int , ?], Unit, Int]] = EitherT.catsDataEqForEitherT[StateT[Option, Int , ?], Unit, Int]
-    
+
     checkAll("StateT[Option, Int, Int]", MonadErrorTests[StateT[Option, Int , ?], Unit].monadError[Int, Int, Int])
     checkAll("MonadError[StateT[Option, Int , ?], Unit]", SerializableTests.serializable(MonadError[StateT[Option, Int , ?], Unit]))
   }
