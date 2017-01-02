@@ -121,6 +121,27 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
 
     NonEmptyList(head, buf.toList)
   }
+
+  /**
+   * Reverse this `NonEmptyList`.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3)
+   * scala> nel.reverse
+   * res0: cats.data.NonEmptyList[Int] = NonEmptyList(3, 2, 1)
+   * }}}
+   */
+  def reverse: NonEmptyList[A] = {
+    @tailrec
+    def go(h: A, rest: List[A], acc: List[A]): NonEmptyList[A] =
+      rest match {
+        case Nil => NonEmptyList(h, acc)
+        case h1 :: t1 => go(h1, t1, h :: acc)
+      }
+    go(head, tail, Nil)
+  }
+
 }
 
 object NonEmptyList extends NonEmptyListInstances {

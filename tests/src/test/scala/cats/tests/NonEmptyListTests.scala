@@ -189,6 +189,12 @@ class NonEmptyListTests extends CatsSuite {
       nel.distinct.toList should === (nel.toList.distinct)
     }
   }
+
+  test("NonEmptyList#reverse is consistent with List#reverse") {
+    forAll { nel: NonEmptyList[Int] =>
+      nel.reverse.toList should === (nel.toList.reverse)
+    }
+  }
 }
 
 class ReducibleNonEmptyListCheck extends ReducibleCheck[NonEmptyList]("NonEmptyList") {
