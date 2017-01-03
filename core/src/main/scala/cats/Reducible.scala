@@ -68,7 +68,32 @@ import simulacrum.typeclass
     reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
 
   /**
-   * Overriden from Foldable[_] for efficiency.
+   * Monadic reducing by mapping the `A` values to `G[B]`. combining
+   * the `B` values using the given `Semigroup[B]` instance.
+   *
+   * Similar to [[reduceLeftM]], but using a `Semigroup[B]`.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val evenOpt: Int => Option[Int] =
+   *      |   i => if (i % 2 == 0) Some(i) else None
+   * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
+   * allEven: cats.data.NonEmptyList[Int] = NonEmptyList(2, 4, 6, 8, 10)
+   * scala> val notAllEven = allEven ++ List(11)
+   * notAllEven: cats.data.NonEmptyList[Int] = NonEmptyList(2, 4, 6, 8, 10, 11)
+   * scala> Reducible[NonEmptyList].reduceMapM(allEven)(evenOpt)
+   * res0: Option[Int] = Some(30)
+   * scala> Reducible[NonEmptyList].reduceMapM(notAllEven)(evenOpt)
+   * res1: Option[Int] = None
+   * }}}
+   */
+  def reduceMapM[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: FlatMap[G], B: Semigroup[B]): G[B] =
+    reduceLeftM(fa)(f)((b, a) => G.map(f(a))(B.combine(b, _)))
+
+  /**
+   * Overriden from [[Foldable]] for efficiency.
    */
   override def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
     Some(reduceLeftTo(fa)(f)(g))
@@ -80,7 +105,7 @@ import simulacrum.typeclass
   def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B]
 
   /**
-   * Overriden from `Foldable[_]` for efficiency.
+   * Overriden from [[Foldable]] for efficiency.
    */
   override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
     reduceRightTo(fa)(f)(g).map(Some(_))
