@@ -1,3 +1,70 @@
+## Version 0.9.0
+
+> 2017 January 3
+
+The biggest user-facing change in this release is to the behavior of the `flatMap` (and related methods) provided by `EitherOps` for the standard library's `Either` for Scala 2.10 and 2.11. These methods now match the behavior of the `flatMap` on `Either` in Scala 2.12 in that they don't require the left-hand side types to match.
+
+For example, the following would previously compile on 2.12, but not 2.10 or 2.11:
+
+```scala
+import cats.syntax.either._
+
+sealed abstract class AppError
+case object Error1 extends AppError
+case object Error2 extends AppError
+
+val either1: Either[Error1.type, String] = Right("hi")
+val either2: Either[Error2.type, String] = Right("bye")
+
+val result: Either[AppError, String] = for {
+  v1 <- either1
+  v2 <- either2
+} yield v1 + v2
+```
+
+This code now works equivalently on all supported Scala versions.
+
+Changes:
+
+ * [#1506](https://github.com/typelevel/cats/pull/1506): `flatMap` provided by `Either` syntax matches 2.12's `Either#flatMap`
+ * [#1466](https://github.com/typelevel/cats/pull/1466): Improved stack safety for `StateT`
+
+Bug fixes:
+
+ * [#1465](https://github.com/typelevel/cats/pull/1465) and [#1507](https://github.com/typelevel/cats/pull/1507): Stack safety law for `Monad#tailRecM` is less eager and doesn't throw exceptions
+
+Additions:
+
+ * [#1446](https://github.com/typelevel/cats/pull/1446): `Cofree` comonad
+ * [#1454](https://github.com/typelevel/cats/pull/1454): `asLeft` and `asRight` syntax methods for creating `Either` values
+ * [#1468](https://github.com/typelevel/cats/pull/1468): `tupleLeft` and `tupleRight` for `Functor`
+ * [#1495](https://github.com/typelevel/cats/pull/1495): `show` string interpolator
+ * [#1448](https://github.com/typelevel/cats/pull/1448): `Validated#findValid` (like `orElse` but error accumulating)
+ * [#1455](https://github.com/typelevel/cats/pull/1455): `reverse` for `NonEmptyList`
+ * [#1496](https://github.com/typelevel/cats/pull/1496): `Choice` instance for `Kleisli`
+ * [#1484](https://github.com/typelevel/cats/pull/1484): `Show` instance for `Symbol`
+ * [#1481](https://github.com/typelevel/cats/pull/1481): `EitherT.cond`
+
+Miscellaneous improvements (syntax, documentation, tests):
+
+ * [#1440](https://github.com/typelevel/cats/pull/1440): Improved type class documentation
+ * [#1442](https://github.com/typelevel/cats/pull/1442): Improved documentation for `Semigroup` and `Monoid`
+ * [#1479](https://github.com/typelevel/cats/pull/1479): Some instance traits are now package-private
+ * [#1445](https://github.com/typelevel/cats/pull/1445): Workaround for Tut issue
+ * [#1477](https://github.com/typelevel/cats/pull/1477): Use new kind-projector syntax for polymorphic lambdas
+ * [#1483](https://github.com/typelevel/cats/pull/1483): Binary compatibility checking is now part of the build for cats-kernel
+ * [#1469](https://github.com/typelevel/cats/pull/1469): More consistent instance names
+ * [#1490](https://github.com/typelevel/cats/pull/1490): Avoid some duplication in build via sbt-travisci
+ * [#1497](https://github.com/typelevel/cats/pull/1497): Site list clean-up
+
+And version updates:
+
+ * [#1499](https://github.com/typelevel/cats/pull/1499): 2.12 version is now 2.12.1
+ * [#1509](https://github.com/typelevel/cats/pull/1509): Scala.js version is 0.6.14
+
+As always thanks to everyone who filed issues, participated in the Cats Gitter
+channel, submitted code, or helped review pull requests.
+
 ## Version 0.8.1
 
 > 2016 November 9
