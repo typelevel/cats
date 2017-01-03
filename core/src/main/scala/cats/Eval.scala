@@ -310,6 +310,30 @@ private[cats] trait EvalInstances extends EvalInstances0 {
       }
     }
 
+  implicit val catsReducibleForEval: Reducible[Eval] =
+    new Reducible[Eval] {
+      def foldLeft[A, B](fa: Eval[A], b: B)(f: (B, A) => B): B =
+        f(b, fa.value)
+      def foldRight[A, B](fa: Eval[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa.flatMap(f(_, lb))
+
+      override def reduce[A](fa: Eval[A])(implicit A: Semigroup[A]): A =
+        fa.value
+      override def reduceLeft[A](fa: Eval[A])(f: (A, A) => A): A =
+        fa.value
+      def reduceLeftTo[A, B](fa: Eval[A])(f: A => B)(g: (B, A) => B): B =
+        f(fa.value)
+      override def reduceRight[A](fa: Eval[A])(f: (A, Eval[A]) => Eval[A]): Eval[A] =
+        fa
+      def reduceRightTo[A, B](fa: Eval[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa.map(f)
+      override def reduceRightOption[A](fa: Eval[A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] =
+        fa.map(Some(_))
+      override def reduceRightToOption[A, B](fa: Eval[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+        fa.map { a => Some(f(a)) }
+      override def size[A](f: Eval[A]): Long = 1L
+    }
+
   implicit def catsOrderForEval[A: Order]: Order[Eval[A]] =
     new Order[Eval[A]] {
       def compare(lx: Eval[A], ly: Eval[A]): Int =

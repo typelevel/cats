@@ -14,4 +14,7 @@ class IdTests extends CatsSuite {
 
   checkAll("Id[Int]", TraverseTests[Id].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Id]", SerializableTests.serializable(Traverse[Id]))
+
+  checkAll("Id[Int]", ReducibleTests[Id].reducible[Option, Int, Int])
+  checkAll("Reducible[Id]", SerializableTests.serializable(Reducible[Id]))
 }
