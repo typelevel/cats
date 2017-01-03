@@ -33,16 +33,22 @@ Bug fixes:
 
  * [#1465](https://github.com/typelevel/cats/pull/1465) and [#1507](https://github.com/typelevel/cats/pull/1507): Stack safety law for `Monad#tailRecM` is less eager and doesn't throw exceptions
 
-Additions:
+New type class instances:
+
+ * [#1475](https://github.com/typelevel/cats/pull/1475): `Reducible` instances for `Eval` and `Id`
+ * [#1496](https://github.com/typelevel/cats/pull/1496): `Choice` instance for `Kleisli`
+ * [#1484](https://github.com/typelevel/cats/pull/1484): `Show` instance for `Symbol`
+
+Other additions:
 
  * [#1446](https://github.com/typelevel/cats/pull/1446): `Cofree` comonad
  * [#1454](https://github.com/typelevel/cats/pull/1454): `asLeft` and `asRight` syntax methods for creating `Either` values
  * [#1468](https://github.com/typelevel/cats/pull/1468): `tupleLeft` and `tupleRight` for `Functor`
+ * [#1500](https://github.com/typelevel/cats/pull/1500): `putLeft`, `putRight`, `mergeLeft`, and `mergeRight` methods for `Ior`
  * [#1495](https://github.com/typelevel/cats/pull/1495): `show` string interpolator
  * [#1448](https://github.com/typelevel/cats/pull/1448): `Validated#findValid` (like `orElse` but error accumulating)
  * [#1455](https://github.com/typelevel/cats/pull/1455): `reverse` for `NonEmptyList`
- * [#1496](https://github.com/typelevel/cats/pull/1496): `Choice` instance for `Kleisli`
- * [#1484](https://github.com/typelevel/cats/pull/1484): `Show` instance for `Symbol`
+ * [#1480](https://github.com/typelevel/cats/pull/1480): `FunctionK#and`
  * [#1481](https://github.com/typelevel/cats/pull/1481): `EitherT.cond`
 
 Miscellaneous improvements (syntax, documentation, tests):
