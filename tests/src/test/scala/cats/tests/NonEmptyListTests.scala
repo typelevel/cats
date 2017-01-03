@@ -81,6 +81,13 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
+  test("NonEmptyList#filterNot is consistent with List#filterNot") {
+    forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
+      val list = nel.toList
+      nel.filterNot(p) should === (list.filterNot(p))
+    }
+  }
+
   test("NonEmptyList#find is consistent with List#find") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.toList
