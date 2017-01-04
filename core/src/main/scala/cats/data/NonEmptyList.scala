@@ -34,12 +34,35 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
   def ::(a: A): NonEmptyList[A] = NonEmptyList(a, head :: tail)
 
   /**
-   * remove elements not matching the predicate
+   * Remove elements not matching the predicate
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.filter(_ < 3)
+   * res0: scala.collection.immutable.List[Int] = List(1, 2)
+   * }}}
    */
   def filter(p: A => Boolean): List[A] = {
     val ftail = tail.filter(p)
     if (p(head)) head :: ftail
     else ftail
+  }
+
+  /**
+    * Remove elements matching the predicate
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+    * scala> nel.filterNot(_ < 3)
+    * res0: scala.collection.immutable.List[Int] = List(3, 4, 5)
+    * }}}
+    */
+  def filterNot(p: A => Boolean): List[A] = {
+    val ftail = tail.filterNot(p)
+    if (p(head)) ftail
+    else head :: ftail
   }
 
   /**
