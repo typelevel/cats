@@ -28,6 +28,7 @@ Changes:
 
  * [#1506](https://github.com/typelevel/cats/pull/1506): `flatMap` provided by `Either` syntax matches 2.12's `Either#flatMap`
  * [#1466](https://github.com/typelevel/cats/pull/1466): Improved stack safety for `StateT`
+ * [#1510](https://github.com/typelevel/cats/pull/1510): `catchNonFatal` for `Future` is now asynchronous
 
 Bug fixes:
 
@@ -48,6 +49,7 @@ Other additions:
  * [#1495](https://github.com/typelevel/cats/pull/1495): `show` string interpolator
  * [#1448](https://github.com/typelevel/cats/pull/1448): `Validated#findValid` (like `orElse` but error accumulating)
  * [#1455](https://github.com/typelevel/cats/pull/1455): `reverse` for `NonEmptyList`
+ * [#1512](https://github.com/typelevel/cats/pull/1512) and [#1514](https://github.com/typelevel/cats/pull/1514): `filterNot` for `NonEmptyList` and `NonEmptyVector`
  * [#1480](https://github.com/typelevel/cats/pull/1480): `FunctionK#and`
  * [#1481](https://github.com/typelevel/cats/pull/1481): `EitherT.cond`
 
