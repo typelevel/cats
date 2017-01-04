@@ -53,14 +53,6 @@ class NonEmptyVectorTests extends CatsSuite {
   checkAll("NonEmptyVector[Int]", MonadTests[NonEmptyVector].monad[Int, Int, Int])
   checkAll("Monad[NonEmptyVector]", SerializableTests.serializable(Monad[NonEmptyVector]))
 
-
-  test("size is consistent with toList.size") {
-    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      nonEmptyVector.size should === (nonEmptyVector.toList.size.toLong)
-    }
-  }
-
-
   test("Show is not empty and is formatted as expected") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
       nonEmptyVector.show.nonEmpty should === (true)
@@ -286,6 +278,18 @@ class NonEmptyVectorTests extends CatsSuite {
           head should === (nonEmptyVector.head)
           tail should === (nonEmptyVector.tail)
       }
+    }
+  }
+
+  test("NonEmptyVector#length consistent with Vector#length") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
+      nonEmptyVector.length should === (nonEmptyVector.toVector.length)
+    }
+  }
+
+  test("NonEmptyVector#size consistent with Vector#size") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
+      nonEmptyVector.size should === (nonEmptyVector.toVector.size)
     }
   }
 
