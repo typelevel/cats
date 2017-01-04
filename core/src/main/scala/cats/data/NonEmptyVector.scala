@@ -37,9 +37,28 @@ final class NonEmptyVector[A] private (val toVector: Vector[A]) extends AnyVal {
   def tail: Vector[A] = toVector.tail
 
   /**
-   * remove elements not matching the predicate
-   */
+    * Remove elements not matching the predicate
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyVector
+    * scala> val nev = NonEmptyVector.of(1, 2, 3, 4, 5)
+    * scala> nev.filter(_ < 3)
+    * res0: scala.collection.immutable.Vector[Int] = Vector(1, 2)
+    * }}}
+    */
   def filter(f: A => Boolean): Vector[A] = toVector.filter(f)
+
+  /**
+    * Remove elements matching the predicate
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyVector
+    * scala> val nev = NonEmptyVector.of(1, 2, 3, 4, 5)
+    * scala> nev.filterNot(_ < 3)
+    * res0: scala.collection.immutable.Vector[Int] = Vector(3, 4, 5)
+    * }}}
+    */
+  def filterNot(f: A => Boolean): Vector[A] = toVector.filterNot(f)
 
   /**
    * Alias for [[concat]]

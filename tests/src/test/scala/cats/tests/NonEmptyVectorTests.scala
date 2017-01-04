@@ -93,6 +93,13 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
+  test("NonEmptyVector#filterNot is consistent with Vector#filterNot") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
+      val vector = nonEmptyVector.toVector
+      nonEmptyVector.filterNot(p) should === (vector.filterNot(p))
+    }
+  }
+
   test("NonEmptyVector#find is consistent with Vector#find") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
       val vector = nonEmptyVector.toVector
