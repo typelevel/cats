@@ -88,6 +88,13 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
+  test("NonEmptyList#collect is consistent with List#collect") {
+    forAll { (nel: NonEmptyList[Int], pf: PartialFunction[Int, String]) =>
+      val list = nel.toList
+      nel.collect(pf) should === (list.collect(pf))
+    }
+  }
+
   test("NonEmptyList#find is consistent with List#find") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.toList
