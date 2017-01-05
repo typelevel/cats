@@ -165,6 +165,26 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
     go(head, tail, Nil)
   }
 
+  /**
+   * Zips each element of this `NonEmptyList` with its index.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of("a", "b", "c")
+   * scala> nel.zipWithIndex
+   * res0: cats.data.NonEmptyList[(String, Int)] = NonEmptyList((a,0), (b,1), (c,2))
+   * }}}
+   */
+  def zipWithIndex: NonEmptyList[(A, Int)] = {
+    @tailrec
+    def go(rest: List[A], ix: Int, acc: List[(A, Int)]): List[(A, Int)] =
+      rest match {
+        case Nil => acc.reverse
+        case h :: t => go(t, ix + 1, (h, ix) :: acc)
+      }
+    NonEmptyList((head, 0), go(tail, 1, Nil))
+  }
+
 }
 
 object NonEmptyList extends NonEmptyListInstances {
