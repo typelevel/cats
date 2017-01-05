@@ -176,13 +176,14 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
    * }}}
    */
   def zipWithIndex: NonEmptyList[(A, Int)] = {
-    @tailrec
-    def go(rest: List[A], ix: Int, acc: List[(A, Int)]): List[(A, Int)] =
-      rest match {
-        case Nil => acc.reverse
-        case h :: t => go(t, ix + 1, (h, ix) :: acc)
-      }
-    NonEmptyList((head, 0), go(tail, 1, Nil))
+    val bldr = List.newBuilder[(A, Int)]
+    var idx = 1
+    val it = tail.iterator
+    while (it.hasNext) {
+      bldr += ((it.next, idx))
+      idx += 1
+    }
+    NonEmptyList((head, 0), bldr.result)
   }
 
 }
