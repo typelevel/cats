@@ -133,6 +133,62 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   override def toString: String = s"NonEmpty$toList"
 
   /**
+    * Displays all elements of this `NonEmptyList` in a string
+    * without any separation while using the implicit `Show` implementation
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> import cats.instances.int._
+    * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+    * scala> nel.mkString
+    * res0: String = 12345
+    * }}}
+    */
+  def mkString[AA >: A](implicit showImpl: Show[AA]) : String = {
+    val sb = new StringBuilder()
+    sb ++= showImpl.show(head)
+    tail.foldLeft(sb)(_ ++= showImpl.show(_))
+    sb.toString()
+  }
+
+  /**
+    * Displays all elements of this `NonEmptyList` in a string using a
+    * separator string, with the implicit `Show` implementation
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> import cats.instances.int._
+    * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+    * scala> nel.mkString("->")
+    * res0: String = 1->2->3->4->5
+    * }}}
+    */
+  def mkString[AA >: A](separator: String)(implicit showImpl: Show[AA]) : String =
+    tail match {
+      case Nil => showImpl.show(head)
+      case _ =>
+        showImpl.show(head) + tail.foldLeft("")(_ + separator + showImpl.show(_))
+    }
+
+  /**
+    * Displays all elements of this `NonEmptyList` in a string
+    * using a start, end and separator strings, with the implicit
+    * `Show` implementation.
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> import cats.instances.int._
+    * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+    * scala> nel.mkString("(", ",", ")")
+    * res0: String = (1,2,3,4,5)
+    * }}}
+    */
+  def mkString[AA >: A](start: String,
+                        separator: String,
+                        end: String)(implicit showImpl: Show[AA]) : String =
+    start + mkString[AA](separator)(showImpl) + end
+
+  /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
    */
   def distinct[AA >: A](implicit O: Order[AA]): NonEmptyList[AA] = {
