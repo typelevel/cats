@@ -165,6 +165,27 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
     go(head, tail, Nil)
   }
 
+  /**
+   * Zips each element of this `NonEmptyList` with its index.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of("a", "b", "c")
+   * scala> nel.zipWithIndex
+   * res0: cats.data.NonEmptyList[(String, Int)] = NonEmptyList((a,0), (b,1), (c,2))
+   * }}}
+   */
+  def zipWithIndex: NonEmptyList[(A, Int)] = {
+    val bldr = List.newBuilder[(A, Int)]
+    var idx = 1
+    val it = tail.iterator
+    while (it.hasNext) {
+      bldr += ((it.next, idx))
+      idx += 1
+    }
+    NonEmptyList((head, 0), bldr.result)
+  }
+
 }
 
 object NonEmptyList extends NonEmptyListInstances {

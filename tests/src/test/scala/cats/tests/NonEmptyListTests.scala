@@ -218,6 +218,12 @@ class NonEmptyListTests extends CatsSuite {
       nel.reverse.toList should === (nel.toList.reverse)
     }
   }
+
+  test("NonEmptyList#zipWithIndex is consistent with List#zipWithIndex") {
+    forAll { nel: NonEmptyList[Int] =>
+      nel.zipWithIndex.toList should === (nel.toList.zipWithIndex)
+    }
+  }
 }
 
 class ReducibleNonEmptyListCheck extends ReducibleCheck[NonEmptyList]("NonEmptyList") {
