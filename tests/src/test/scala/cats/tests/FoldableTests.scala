@@ -6,7 +6,7 @@ import org.scalacheck.Arbitrary
 
 import cats.instances.all._
 
-abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite with PropertyChecks {
+abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends CatsSuite with PropertyChecks {
 
   def iterator[T](fa: F[T]): Iterator[T]
 
@@ -69,10 +69,8 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   }
 
   test("intercalate") {
-    forAll { (fa: F[Int], a: Int) =>
-      val list = fa.toList
-      val sum = list.sum + (math.max(list.length - 1, 0) * a)
-      fa.intercalate(a) should === (sum)
+    forAll { (fa: F[String], a: String) =>
+      fa.intercalate(a) should === (fa.toList.mkString(a))
     }
   }
 }

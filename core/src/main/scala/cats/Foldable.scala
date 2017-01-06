@@ -393,8 +393,12 @@ import simulacrum.typeclass
    * scala> import cats.implicits._
    * scala> Foldable[List].intercalate(List("a","b","c"), "-")
    * res0: String = a-b-c
+   * scala> Foldable[List].intercalate(List("a"), "-")
+   * res1: String = a
+   * scala> Foldable[List].intercalate(List.empty[String], "-")
+   * res2: String = ""
    * scala> Foldable[Vector].intercalate(Vector(1,2,3), 1)
-   * res1: Int = 8
+   * res3: Int = 8
    * }}}
    */
   def intercalate[A](fa: F[A], a: A)(implicit A: Monoid[A]): A =

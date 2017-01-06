@@ -166,6 +166,8 @@ import simulacrum.typeclass
    * scala> val nel = NonEmptyList.of("a", "b", "c")
    * scala> Reducible[NonEmptyList].intercalate1(nel, "-")
    * res0: String = a-b-c
+   * scala> Reducible[NonEmptyList].intercalate1(NonEmptyList.of("a"), "-")
+   * res1: String = a
    * }}}
    */
   def intercalate1[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =

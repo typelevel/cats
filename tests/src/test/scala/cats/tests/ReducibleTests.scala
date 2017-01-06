@@ -62,7 +62,7 @@ class ReducibleTestsAdditional extends CatsSuite {
 
 }
 
-abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends FoldableCheck[F](name) {
+abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends FoldableCheck[F](name) {
   def range(start: Long, endInclusive: Long): F[Long]
 
   test(s"Reducible[$name].reduceLeftM stack safety") {
@@ -78,6 +78,12 @@ abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: A
   test(s"Reducible[$name].toNonEmptyList/toList consistency") {
     forAll { fa: F[Int] =>
       fa.toList.toNel should === (Some(fa.toNonEmptyList))
+    }
+  }
+
+  test(s"Reducible[$name].intercalate1") {
+    forAll { (fa: F[String], a: String) =>
+      fa.intercalate1(a) === (fa.toList.mkString(a))
     }
   }
 }
