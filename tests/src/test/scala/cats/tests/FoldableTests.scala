@@ -67,6 +67,14 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
       fa.reduceRightOption((x, ly) => ly.map(x - _)).value should === (list.reduceRightOption(_ - _))
     }
   }
+
+  test("intercalate") {
+    forAll { (fa: F[Int], a: Int) =>
+      val list = fa.toList
+      val sum = list.sum + (math.max(list.length - 1, 0) * a)
+      fa.intercalate(a) should === (sum)
+    }
+  }
 }
 
 class FoldableTestsAdditional extends CatsSuite {
