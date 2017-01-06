@@ -2,7 +2,7 @@ package cats
 
 package object data {
   type NonEmptyStream[A] = OneAnd[Stream, A]
-  type ValidatedNel[E, A] = Validated[NonEmptyList[E], A]
+  type ValidatedNel[+E, +A] = Validated[NonEmptyList[E], A]
 
   def NonEmptyStream[A](head: A, tail: Stream[A] = Stream.empty): NonEmptyStream[A] =
     OneAnd(head, tail)

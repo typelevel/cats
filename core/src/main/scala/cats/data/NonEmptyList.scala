@@ -12,7 +12,7 @@ import scala.collection.mutable.ListBuffer
  * A data type which represents a non empty list of A, with
  * single element (head) and optional structure (tail).
  */
-final case class NonEmptyList[A](head: A, tail: List[A]) {
+final case class NonEmptyList[+A](head: A, tail: List[A]) {
 
   /**
    * Return the head and tail into a single list
@@ -25,13 +25,14 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
   def map[B](f: A => B): NonEmptyList[B] =
     NonEmptyList(f(head), tail.map(f))
 
-  def ++(l: List[A]): NonEmptyList[A] =
+  def ++[AA >: A](l: List[AA]): NonEmptyList[AA] =
     NonEmptyList(head, tail ++ l)
 
   def flatMap[B](f: A => NonEmptyList[B]): NonEmptyList[B] =
     f(head) ++ tail.flatMap(f andThen (_.toList))
 
-  def ::(a: A): NonEmptyList[A] = NonEmptyList(a, head :: tail)
+  def ::[AA >: A](a: AA): NonEmptyList[AA] =
+    NonEmptyList(a, head :: tail)
 
   /**
    * Remove elements not matching the predicate
@@ -68,7 +69,7 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
   /**
    * Append another NonEmptyList
    */
-  def concat(other: NonEmptyList[A]): NonEmptyList[A] =
+  def concat[AA >: A](other: NonEmptyList[AA]): NonEmptyList[AA] =
     NonEmptyList(head, tail ::: other.toList)
 
   /**
@@ -105,8 +106,8 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
   /**
    * Left-associative reduce using f.
    */
-  def reduceLeft(f: (A, A) => A): A =
-    tail.foldLeft(head)(f)
+  def reduceLeft[AA >: A](f: (AA, AA) => AA): AA =
+    tail.foldLeft[AA](head)(f)
 
   def traverse[G[_], B](f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
     G.map2Eval(f(head), Always(Traverse[List].traverse(tail)(f)))(NonEmptyList(_, _)).value
@@ -123,23 +124,23 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
     NonEmptyList(f(this), consume(tail))
   }
 
-  def ===(o: NonEmptyList[A])(implicit A: Eq[A]): Boolean =
-    (this.head === o.head) && this.tail === o.tail
+  def ===[AA >: A](o: NonEmptyList[AA])(implicit AA: Eq[AA]): Boolean =
+    ((this.head: AA) === o.head) && (this.tail: List[AA]) === o.tail
 
-  def show(implicit A: Show[A]): String =
-    toList.iterator.map(A.show).mkString("NonEmptyList(", ", ", ")")
+  def show[AA >: A](implicit AA: Show[AA]): String =
+    toList.iterator.map(AA.show).mkString("NonEmptyList(", ", ", ")")
 
   override def toString: String = s"NonEmpty$toList"
 
   /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
    */
-  def distinct(implicit O: Order[A]): NonEmptyList[A] = {
+  def distinct[AA >: A](implicit O: Order[AA]): NonEmptyList[AA] = {
     implicit val ord = O.toOrdering
 
-    val buf = ListBuffer.empty[A]
-    tail.foldLeft(TreeSet(head)) { (elementsSoFar, a) =>
-      if (elementsSoFar(a)) elementsSoFar else { buf += a; elementsSoFar + a }
+    val buf = ListBuffer.empty[AA]
+    tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, b) =>
+      if (elementsSoFar(b)) elementsSoFar else { buf += b; elementsSoFar + b }
     }
 
     NonEmptyList(head, buf.toList)
