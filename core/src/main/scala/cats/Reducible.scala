@@ -156,6 +156,23 @@ import simulacrum.typeclass
 
   def maximum[A](fa: F[A])(implicit A: Order[A]): A =
     reduceLeft(fa)(A.max)
+
+  /**
+   * Intercalate/insert an element between the existing elements while reducing.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of("a", "b", "c")
+   * scala> Reducible[NonEmptyList].intercalate1(nel, "-")
+   * res0: String = a-b-c
+   * }}}
+   */
+  def intercalate1[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =
+    reduceLeft(fa)((acc, aa) => A.combine(acc, A.combine(a, aa)))
+
+  override def intercalate[A](fa: F[A], a: A)(implicit A: Monoid[A]): A =
+    intercalate1(fa, a)
 }
 
 /**
