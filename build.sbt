@@ -182,6 +182,7 @@ lazy val cats = project.in(file("."))
 lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
+  .settings(noSourcesSettings)
   .settings(commonJvmSettings)
   .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM, jvm, docs, bench)
   .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
@@ -189,6 +190,7 @@ lazy val catsJVM = project.in(file(".catsJVM"))
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(catsSettings)
+  .settings(noSourcesSettings)
   .settings(commonJsSettings)
   .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS, js)
   .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS % "test-internal -> test", js)
@@ -407,6 +409,13 @@ lazy val publishSettings = Seq(
     </developers>
   )
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
+
+lazy val noSourcesSettings = Seq(
+  // disable automatic dependency on the Scala library
+  autoScalaLibrary := false,
+  publishArtifact in Compile := false,
+  sources in Compile := Seq.empty
+)
 
 // These aliases serialise the build for the benefit of Travis-CI.
 addCommandAlias("buildJVM", "catsJVM/test")
