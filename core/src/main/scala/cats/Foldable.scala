@@ -386,6 +386,26 @@ import simulacrum.typeclass
   def nonEmpty[A](fa: F[A]): Boolean =
     !isEmpty(fa)
 
+  /**
+   * Intercalate/insert an element between the existing elements while folding.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> Foldable[List].intercalate(List("a","b","c"), "-")
+   * res0: String = a-b-c
+   * scala> Foldable[List].intercalate(List("a"), "-")
+   * res1: String = a
+   * scala> Foldable[List].intercalate(List.empty[String], "-")
+   * res2: String = ""
+   * scala> Foldable[Vector].intercalate(Vector(1,2,3), 1)
+   * res3: Int = 8
+   * }}}
+   */
+  def intercalate[A](fa: F[A], a: A)(implicit A: Monoid[A]): A =
+    reduceLeftOption(fa){ (acc, aa) =>
+      A.combine(acc, A.combine(a, aa))
+    }.getOrElse(A.empty)
+
   def compose[G[_]: Foldable]: Foldable[λ[α => F[G[α]]]] =
     new ComposedFoldable[F, G] {
       val F = self
