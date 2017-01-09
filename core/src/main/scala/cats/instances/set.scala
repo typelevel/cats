@@ -30,6 +30,8 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
 
       override def foldM[G[_], A, B](fa: Set[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         Foldable.iteratorFoldM(fa.toIterator, z)(f)
+
+      override def toList[A](fa: Set[A]): List[A] = fa.toList
     }
 
   implicit def catsStdShowForSet[A:Show]: Show[Set[A]] = new Show[Set[A]] {

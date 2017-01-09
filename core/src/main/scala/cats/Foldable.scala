@@ -402,9 +402,20 @@ import simulacrum.typeclass
    * }}}
    */
   def intercalate[A](fa: F[A], a: A)(implicit A: Monoid[A]): A =
-    reduceLeftOption(fa){ (acc, aa) =>
-      A.combine(acc, A.combine(a, aa))
-    }.getOrElse(A.empty)
+    A.combineAll(intersperseList(toList(fa), a))
+
+  protected def intersperseList[A](xs: List[A], x: A): List[A] = {
+    val bld = List.newBuilder[A]
+    val it = xs.iterator
+    if (it.hasNext) {
+      bld += it.next
+      while(it.hasNext) {
+        bld += x
+        bld += it.next
+      }
+    }
+    bld.result
+  }
 
   def compose[G[_]: Foldable]: Foldable[λ[α => F[G[α]]]] =
     new ComposedFoldable[F, G] {

@@ -82,6 +82,8 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def foldM[G[_], A, B](fa: List[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         Foldable.iteratorFoldM(fa.toIterator, z)(f)
+
+      override def toList[A](fa: List[A]): List[A] = fa
     }
 
   implicit def catsStdShowForList[A:Show]: Show[List[A]] =
