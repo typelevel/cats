@@ -110,6 +110,8 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       override def foldM[G[_], A, B](fa: Stream[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         Foldable.iteratorFoldM(fa.toIterator, z)(f)
 
+      override def fold[A](fa: Stream[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
+
       override def toList[A](fa: Stream[A]): List[A] = fa.toList
     }
 

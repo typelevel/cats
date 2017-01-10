@@ -109,6 +109,12 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   def reduceLeft[AA >: A](f: (AA, AA) => AA): AA =
     tail.foldLeft[AA](head)(f)
 
+  /**
+   * Reduce using the `Semigroup` of `AA`.
+   */
+  def reduce[AA >: A](implicit S: Semigroup[AA]): AA =
+    S.combineAllOption(toList).get
+
   def traverse[G[_], B](f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
     G.map2Eval(f(head), Always(Traverse[List].traverse(tail)(f)))(NonEmptyList(_, _)).value
 
@@ -238,6 +244,9 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
 
       override def reduceLeft[A](fa: NonEmptyList[A])(f: (A, A) => A): A =
         fa.reduceLeft(f)
+
+      override def reduce[A](fa: NonEmptyList[A])(implicit A: Semigroup[A]): A =
+        fa.reduce
 
       override def map[A, B](fa: NonEmptyList[A])(f: A => B): NonEmptyList[B] =
         fa map f

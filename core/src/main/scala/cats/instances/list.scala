@@ -83,6 +83,8 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def foldM[G[_], A, B](fa: List[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         Foldable.iteratorFoldM(fa.toIterator, z)(f)
 
+      override def fold[A](fa: List[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
+
       override def toList[A](fa: List[A]): List[A] = fa
     }
 
