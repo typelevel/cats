@@ -26,6 +26,7 @@ This code now works equivalently on all supported Scala versions.
 
 Changes:
 
+ * [#1424](https://github.com/typelevel/cats/pull/1424): `NonEmptyList` and `NonEmptyVector` are now covariant
  * [#1506](https://github.com/typelevel/cats/pull/1506): `flatMap` provided by `Either` syntax matches 2.12's `Either#flatMap`
  * [#1466](https://github.com/typelevel/cats/pull/1466): Improved stack safety for `StateT`
  * [#1510](https://github.com/typelevel/cats/pull/1510): `catchNonFatal` for `Future` is now asynchronous
@@ -43,12 +44,14 @@ New type class instances:
 Other additions:
 
  * [#1446](https://github.com/typelevel/cats/pull/1446): `Cofree` comonad
+ * [#1520](https://github.com/typelevel/cats/pull/1520) and [#1522](https://github.com/typelevel/cats/pull/1522): `intercalate` for `Foldable` (and `intercalate1` for `Reducible`)
  * [#1454](https://github.com/typelevel/cats/pull/1454): `asLeft` and `asRight` syntax methods for creating `Either` values
  * [#1468](https://github.com/typelevel/cats/pull/1468): `tupleLeft` and `tupleRight` for `Functor`
  * [#1500](https://github.com/typelevel/cats/pull/1500): `putLeft`, `putRight`, `mergeLeft`, and `mergeRight` methods for `Ior`
  * [#1495](https://github.com/typelevel/cats/pull/1495): `show` string interpolator
  * [#1448](https://github.com/typelevel/cats/pull/1448): `Validated#findValid` (like `orElse` but error accumulating)
  * [#1455](https://github.com/typelevel/cats/pull/1455): `reverse` for `NonEmptyList`
+ * [#1517](https://github.com/typelevel/cats/pull/1517): `zipWithIndex` for `NonEmptyList`
  * [#1512](https://github.com/typelevel/cats/pull/1512) and [#1514](https://github.com/typelevel/cats/pull/1514): `filterNot` for `NonEmptyList` and `NonEmptyVector`
  * [#1480](https://github.com/typelevel/cats/pull/1480): `FunctionK#and`
  * [#1481](https://github.com/typelevel/cats/pull/1481): `EitherT.cond`
