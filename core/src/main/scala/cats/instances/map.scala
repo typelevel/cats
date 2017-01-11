@@ -81,6 +81,11 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
 
       override def foldM[G[_], A, B](fa: Map[K, A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         Foldable.iteratorFoldM(fa.valuesIterator, z)(f)
+
+      override def fold[A](fa: Map[K, A])(implicit A: Monoid[A]): A =
+        A.combineAll(fa.values)
+
+      override def toList[A](fa: Map[K, A]): List[A] = fa.values.toList
     }
   // scalastyle:on method.length
 }

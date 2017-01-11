@@ -171,10 +171,11 @@ import simulacrum.typeclass
    * }}}
    */
   def intercalate1[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =
-    reduceLeft(fa)((acc, aa) => A.combine(acc, A.combine(a, aa)))
-
-  override def intercalate[A](fa: F[A], a: A)(implicit A: Monoid[A]): A =
-    intercalate1(fa, a)
+    toNonEmptyList(fa) match {
+      case NonEmptyList(hd, Nil) => hd
+      case NonEmptyList(hd, tl) =>
+        Reducible[NonEmptyList].reduce(NonEmptyList(hd, a :: intersperseList(tl, a)))
+    }
 }
 
 /**

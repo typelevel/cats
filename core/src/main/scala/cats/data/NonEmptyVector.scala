@@ -250,6 +250,11 @@ private[data] sealed trait NonEmptyVectorInstances {
         go(f(a))
         NonEmptyVector.fromVectorUnsafe(buf.result())
       }
+
+      override def toList[A](fa: NonEmptyVector[A]): List[A] = fa.toVector.toList
+
+      override def toNonEmptyList[A](fa: NonEmptyVector[A]): NonEmptyList[A] =
+        NonEmptyList(fa.head, fa.tail.toList)
     }
 
   implicit def catsDataEqForNonEmptyVector[A](implicit A: Eq[A]): Eq[NonEmptyVector[A]] =
