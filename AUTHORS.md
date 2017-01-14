@@ -14,6 +14,7 @@ possible:
 
  * 3rdLaw
  * Aaron Levin
+ * Adam Fisher
  * Adelbert Chang
  * Aldo Stracquadanio
  * Alejandro Gómez
@@ -46,6 +47,7 @@ possible:
  * Dale Wijnand
  * Daniel Spiewak
  * Daniel Urban
+ * Daniela Sfregola
  * Dave Gurnell
  * Dave Rostron
  * David Allsopp
@@ -59,6 +61,7 @@ possible:
  * Erik Osheim
  * Eugene Burmako
  * Eugene Yokota
+ * Fabian Schmitthenner
  * Feynman Liang
  * Frank S. Thomas
  * Giulio De Luise
@@ -84,6 +87,7 @@ possible:
  * Luke Wyman
  * Madder
  * Marc Siegel
+ * Marcin Rzeźnicki
  * Mark de Jong
  * Markus Hauck
  * mathhun
@@ -128,6 +132,7 @@ possible:
  * Tomas Mikula
  * Travis Brown
  * Wedens
+ * Xavier Fernández Salas
  * Yosef Fertel
  * yilinwei
  * Zach Abbott
