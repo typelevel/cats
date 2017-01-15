@@ -1,6 +1,6 @@
 ## Version 0.9.0
 
-> 2017 January 3
+> 2017 January 15
 
 The biggest user-facing change in this release is to the behavior of the `flatMap` (and related methods) provided by `EitherOps` for the standard library's `Either` for Scala 2.10 and 2.11. These methods now match the behavior of the `flatMap` on `Either` in Scala 2.12 in that they don't require the left-hand side types to match.
 
@@ -38,7 +38,6 @@ Bug fixes:
 New type class instances:
 
  * [#1475](https://github.com/typelevel/cats/pull/1475): `Reducible` instances for `Eval` and `Id`
- * [#1496](https://github.com/typelevel/cats/pull/1496): `Choice` instance for `Kleisli`
  * [#1484](https://github.com/typelevel/cats/pull/1484): `Show` instance for `Symbol`
 
 Other additions:
@@ -58,6 +57,7 @@ Other additions:
 
 Miscellaneous improvements (syntax, documentation, tests):
 
+ * [#1513](https://github.com/typelevel/cats/pull/1513): Improved documentation for `Functor`, `Applicative`, and `Traverse`
  * [#1440](https://github.com/typelevel/cats/pull/1440): Improved type class documentation
  * [#1442](https://github.com/typelevel/cats/pull/1442): Improved documentation for `Semigroup` and `Monoid`
  * [#1479](https://github.com/typelevel/cats/pull/1479): Some instance traits are now package-private
@@ -65,6 +65,7 @@ Miscellaneous improvements (syntax, documentation, tests):
  * [#1477](https://github.com/typelevel/cats/pull/1477): Use new kind-projector syntax for polymorphic lambdas
  * [#1483](https://github.com/typelevel/cats/pull/1483): Binary compatibility checking is now part of the build for cats-kernel
  * [#1469](https://github.com/typelevel/cats/pull/1469): More consistent instance names
+ * [#1496](https://github.com/typelevel/cats/pull/1496): Simpler creation of some `SemigroupK` and `MonoidK` instances
  * [#1490](https://github.com/typelevel/cats/pull/1490): Avoid some duplication in build via sbt-travisci
  * [#1497](https://github.com/typelevel/cats/pull/1497): Site list clean-up
 
