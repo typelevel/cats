@@ -10,8 +10,7 @@ The name is a playful shortening of the word *category*.
 <div class="msg warn"> <p><strong> Cats is a new project under active
   development</strong>. Feedback and contributions are welcomed as we look
   to improve it. This project is evolving quickly and we are making no
-  guarantees about stability until a 1.0 release is made (current est.
-  around Q3 2016).</p> </div>
+  guarantees about stability until a 1.0 release is made.</p></div>
 
 
 ### <a name="getting-started" href="#getting-started"></a>Getting Started
@@ -21,7 +20,7 @@ Cats is currently available for Scala 2.10, 2.11 and 2.12.
 
 To get started with SBT, simply add the following to your build.sbt file:
 
-    libraryDependencies += "org.typelevel" %% "cats" % "0.8.1"
+    libraryDependencies += "org.typelevel" %% "cats" % "0.9.0"
 
 This will pull in all of Cats' modules. If you only require some
 functionality, you can pick-and-choose from amongst these modules
@@ -80,20 +79,6 @@ are attempting to do our best at keeping our library as efficient as
 we can without making unnecessary sacrifices of purity and
 usability. Where sacrifices have to be made, we will strive to make
 these obvious, and will keep them well documented.
-
-
-### <a name="project-structure" href="#project-structure"></a>Project Structure
-
-
-In an attempt to be more modular, Cats is broken up into a number of sub-projects:
-
-* *core* - contains type class definitions (e.g. Functor, Applicative, Monad), essential datatypes, and
-  type class instances for those datatypes and standard library types
-* *laws* - laws for the type classes, used to validate type class instances
-* *cats-free* - free structures such as the free monad, and supporting type classes.
-* *tests* - tests that check type class instances with laws from *laws*
-* *docs* - The source for this website
-
 
 ### <a name="copyright" href="#copyright"></a>Copyright and License
 
