@@ -248,10 +248,9 @@ values and do service things. Glancing at the types, it looks like <code class="
 </code></pre>
 </div>
 
-<p>If you’re on Scala 2.12, this line will compile and work as expected, but if you’re on an earlier
-version of Scala it won’t! This difference is related to the right-biasing of <code class="highlighter-rouge">Either</code> in Scala 2.12
-that was mentioned above. In Scala 2.12 the <code class="highlighter-rouge">flatMap</code> we get here is a method on <code class="highlighter-rouge">Either</code> with this
-signature:</p>
+<p>This line will compile and work as expected, no matter if you’re on 2.12 or an earlier
+version of Scala.  The <code class="highlighter-rouge">flatMap</code> we get here (either provided by Cats’s <code class="highlighter-rouge">Either</code> syntax for
+Scala 2.10 and 2.11, or, in Scala 2.12, a method on <code class="highlighter-rouge">Either</code>) has this signature:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">AA</span> <span class="k">&gt;:</span> <span class="kt">A</span>, <span class="kt">Y</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">B</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Either</span><span class="o">[</span><span class="kt">AA</span>, <span class="kt">Y</span><span class="o">])</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">AA</span>, <span class="kt">Y</span><span class="o">]</span>
 </code></pre>
@@ -262,16 +261,11 @@ has two type parameters, with the extra <code class="highlighter-rouge">AA</code
 with a different type on the left side.</p>
 
 <p>This behavior is consistent with the covariance of <code class="highlighter-rouge">Either</code>, and in some cases it can be convenient,
-but it also makes it easy to run into nasty variance issues (such as <code class="highlighter-rouge">Object</code> being inferred as the
-type of the left side, as it is in this case).</p>
-
-<p>For this reason the <code class="highlighter-rouge">flatMap</code> provided by Cats’s <code class="highlighter-rouge">Either</code> syntax (which is the one you’ll get for
-Scala 2.10 and 2.11) does not include this extra type parameter. Instead the left sides have to
-match, which means our <code class="highlighter-rouge">doApp</code> definition above will not compile on versions of Scala before 2.12.</p>
+but it also makes it easy to run into nasty variance issues - such as <code class="highlighter-rouge">Object</code> being inferred as the
+type of the left side, as it is in this case.</p>
 
 <h3 id="solution-1-application-wide-errors">Solution 1: Application-wide errors</h3>
-<p>So clearly in order for us to easily compose <code class="highlighter-rouge">Either</code> values, the left type parameter must be the same.
-We may then be tempted to make our entire application share an error data type.</p>
+<p>We may then be tempted to make our entire application share an error data type.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">AppError</span>
 <span class="k">final</span> <span class="k">case</span> <span class="k">object</span> <span class="nc">DatabaseError1</span> <span class="k">extends</span> <span class="nc">AppError</span>

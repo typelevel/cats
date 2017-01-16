@@ -601,7 +601,7 @@ from what their type classes are looking for.">
       <span class="symbol">
         <a title="" href="Alternative.html">
               <span class="name">Alternative</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Alternative.F">F</span>] with <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.Alternative.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Alternative.F">F</span>] with <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.Alternative.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -641,7 +641,7 @@ caching must be avoided. Generally, prefer Later.
       <span class="symbol">
         <a title="Applicative functor." href="Applicative.html">
               <span class="name">Applicative</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Applicative.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Applicative.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Applicative functor.</p><div class="fullcomment"><div class="comment cmt"><p>Applicative functor.</p><p>Allows application of a function in an Applicative context to a value in an Applicative context</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
@@ -680,7 +680,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
       <span class="symbol">
         <a title="Weaker version of Applicative[F]; has apply but not pure." href="Apply.html">
               <span class="name">Apply</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Weaker version of Applicative[F]; has apply but not pure.</p><div class="fullcomment"><div class="comment cmt"><p>Weaker version of Applicative[F]; has apply but not pure.</p><p>Must obey the laws defined in cats.laws.ApplyLaws.
@@ -717,7 +717,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
       <span class="symbol">
         <a title="A type class abstracting over types that give rise to two independent cats.Foldables." href="Bifoldable.html">
               <span class="name">Bifoldable</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">A type class abstracting over types that give rise to two independent <a href="Foldable.html" class="extype" name="cats.Foldable">cats.Foldable</a>s.</p>
@@ -735,7 +735,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
       <span class="symbol">
         <a title="" href="Bimonad.html">
               <span class="name">Bimonad</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Bimonad.F">F</span>] with <a href="Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.Bimonad.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Bimonad.F">F</span>] with <a href="Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.Bimonad.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -753,7 +753,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
       <span class="symbol">
         <a title=" A type class abstracting over types that give rise to two independent cats.Traverses." href="Bitraverse.html">
               <span class="name">Bitraverse</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt"> A type class abstracting over types that give rise to two independent <a href="Traverse.html" class="extype" name="cats.Traverse">cats.Traverse</a>s.</p>
@@ -771,7 +771,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
       <span class="symbol">
         <a title="Cartesian captures the idea of composing independent effectful values." href="Cartesian.html">
               <span class="name">Cartesian</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt"><a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a> captures the idea of composing independent effectful values.</p><div class="fullcomment"><div class="comment cmt"><p><a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a> captures the idea of composing independent effectful values.
@@ -813,7 +813,7 @@ independent effectful values.</p><p>That same idea is also manifested in the for
       <span class="symbol">
         <a title="CoflatMap is the dual of FlatMap." href="CoflatMap.html">
               <span class="name">CoflatMap</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.CoflatMap.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.CoflatMap.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt"><code>CoflatMap</code> is the dual of <code>FlatMap</code>.</p><div class="fullcomment"><div class="comment cmt"><p><code>CoflatMap</code> is the dual of <code>FlatMap</code>.</p><p>Must obey the laws in cats.laws.CoflatMapLaws
@@ -832,7 +832,7 @@ independent effectful values.</p><p>That same idea is also manifested in the for
       <span class="symbol">
         <a title="Comonad" href="Comonad.html">
               <span class="name">Comonad</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.Comonad.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.Comonad.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Comonad</p><div class="fullcomment"><div class="comment cmt"><p>Comonad</p><p>Comonad is the dual of Monad. Whereas Monads allow for the composition of effectful functions,
@@ -853,7 +853,7 @@ Comonads allow for composition of functions that extract the value from their co
         <a title="ContravariantCartesian is nothing more than something both contravariant
 and Cartesian." href="ContravariantCartesian.html">
               <span class="name">ContravariantCartesian</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a>[<span class="extype" name="cats.ContravariantCartesian.F">F</span>] with <a href="functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.ContravariantCartesian.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a>[<span class="extype" name="cats.ContravariantCartesian.F">F</span>] with <a href="functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.ContravariantCartesian.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt"><a href="ContravariantCartesian.html" class="extype" name="cats.ContravariantCartesian">ContravariantCartesian</a> is nothing more than something both contravariant
@@ -890,7 +890,7 @@ and Cartesian. It comes up enough to be useful, and composes well
       <span class="symbol">
         <a title="Eval is a monad which controls evaluation." href="Eval.html">
               <span class="name">Eval</span>
-            </a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Eval is a monad which controls evaluation.</p><div class="fullcomment"><div class="comment cmt"><p>Eval is a monad which controls evaluation.</p><p>This type wraps a value (or a computation that produces a value)
@@ -978,7 +978,7 @@ overflows.
 in a context (F[A]) and then feed that into a function that takes
 a normal value and returns a value in a context (A =&gt; F[B])." href="FlatMap.html">
               <span class="name">FlatMap</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.FlatMap.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.FlatMap.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">FlatMap type class gives us flatMap, which allows us to have a value
@@ -1006,7 +1006,7 @@ Must obey the laws defined in cats.laws.FlatMapLaws.</p></span></dd></dl></div>
       <span class="symbol">
         <a title="Data structures that can be folded to a summary value." href="Foldable.html">
               <span class="name">Foldable</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Data structures that can be folded to a summary value.</p><div class="fullcomment"><div class="comment cmt"><p>Data structures that can be folded to a summary value.</p><p>In the case of a collection (such as <code>List</code> or <code>Set</code>), these
@@ -1030,7 +1030,7 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
       <span class="symbol">
         <a title="Functor." href="Functor.html">
               <span class="name">Functor</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Functor.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.Functor.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Functor.</p><div class="fullcomment"><div class="comment cmt"><p>Functor.</p><p>The name is short for &quot;covariant functor&quot;.</p><p>Must obey the laws defined in cats.laws.FunctorLaws.
@@ -1049,7 +1049,7 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
       <span class="symbol">
         <a title="" href="FunctorFilter.html">
               <span class="name">FunctorFilter</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.FunctorFilter.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.FunctorFilter.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1109,7 +1109,7 @@ encodes pure unary function application.
       <span class="symbol">
         <a title="Invariant version of a Monoidal." href="InvariantMonoidal.html">
               <span class="name">InvariantMonoidal</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.InvariantMonoidal.F">F</span>] with <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a>[<span class="extype" name="cats.InvariantMonoidal.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="functor/Invariant.html" class="extype" name="cats.functor.Invariant">Invariant</a>[<span class="extype" name="cats.InvariantMonoidal.F">F</span>] with <a href="Cartesian.html" class="extype" name="cats.Cartesian">Cartesian</a>[<span class="extype" name="cats.InvariantMonoidal.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Invariant version of a Monoidal.</p><div class="fullcomment"><div class="comment cmt"><p>Invariant version of a Monoidal.</p><p>Must obey the laws defined in cats.laws.InvariantMonoidalLaws.
@@ -1152,7 +1152,7 @@ garbage collection.
       <span class="symbol">
         <a title="Monad." href="Monad.html">
               <span class="name">Monad</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Monad.F">F</span>] with <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Monad.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Monad.F">F</span>] with <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Monad.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Monad.</p><div class="fullcomment"><div class="comment cmt"><p>Monad.</p><p>Allows composition of dependent effectful functions.</p><p>See: <a href="http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf" target="_blank">Monads for functional programming</a></p><p>Must obey the laws defined in cats.laws.MonadLaws.
@@ -1172,7 +1172,7 @@ garbage collection.
         <a title="The combination of a Monad with a MonoidK
 " href="MonadCombine.html">
               <span class="name">MonadCombine</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="MonadFilter.html" class="extype" name="cats.MonadFilter">MonadFilter</a>[<span class="extype" name="cats.MonadCombine.F">F</span>] with <a href="Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.MonadCombine.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="MonadFilter.html" class="extype" name="cats.MonadFilter">MonadFilter</a>[<span class="extype" name="cats.MonadCombine.F">F</span>] with <a href="Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.MonadCombine.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">The combination of a Monad with a MonoidK
@@ -1212,7 +1212,7 @@ garbage collection.
 create an &quot;empty&quot; value for the Monad (for whatever &quot;empty&quot; makes
 sense for that particular monad)." href="MonadFilter.html">
               <span class="name">MonadFilter</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.MonadFilter.F">F</span>] with <a href="FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.MonadFilter.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.MonadFilter.F">F</span>] with <a href="FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.MonadFilter.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">a Monad equipped with an additional method which allows us to
@@ -1315,7 +1315,7 @@ dealing with large monad transformer stacks. For instance:</p><pre><span class="
       <span class="symbol">
         <a title="MonoidK is a universal monoid which operates on kinds." href="MonoidK.html">
               <span class="name">MonoidK</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.MonoidK.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.MonoidK.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">MonoidK is a universal monoid which operates on kinds.</p><div class="fullcomment"><div class="comment cmt"><p>MonoidK is a universal monoid which operates on kinds.</p><p>This type class is useful when its type parameter F[_] has a
@@ -1391,7 +1391,7 @@ is an early example of such a trick being used in a similar way to prevent a
       <span class="symbol">
         <a title="Construct an eager Eval[A] instance." href="Now.html">
               <span class="name">Now</span>
-            </a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.Now.A">A</span></span>)</span><span class="result"> extends <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Now.A">A</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.Now.A">A</span></span>)</span><span class="result"> extends <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Now.A">A</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Construct an eager Eval[A] instance.</p><div class="fullcomment"><div class="comment cmt"><p>Construct an eager Eval[A] instance.</p><p>In some sense it is equivalent to using a val.</p><p>This type should be used when an A value is already in hand, or
@@ -1443,7 +1443,7 @@ when the computation to produce an A value is pure and very fast.
       <span class="symbol">
         <a title="Data structures that can be reduced to a summary value." href="Reducible.html">
               <span class="name">Reducible</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Reducible.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Reducible.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Data structures that can be reduced to a summary value.</p><div class="fullcomment"><div class="comment cmt"><p>Data structures that can be reduced to a summary value.</p><p><code>Reducible</code> is like a non-empty <code>Foldable</code>. In addition to the fold
@@ -1481,7 +1481,7 @@ implemented in terms of two methods:</p><ul><li><code>reduceLeftTo(fa)(f)(g)</co
       <span class="symbol">
         <a title="SemigroupK is a universal semigroup which operates on kinds." href="SemigroupK.html">
               <span class="name">SemigroupK</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">SemigroupK is a universal semigroup which operates on kinds.</p><div class="fullcomment"><div class="comment cmt"><p>SemigroupK is a universal semigroup which operates on kinds.</p><p>This type class is useful when its type parameter F[_] has a
@@ -1505,7 +1505,7 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
       <span class="symbol">
         <a title="A type class to provide textual representation." href="Show.html">
               <span class="name">Show</span>
-            </a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">A type class to provide textual representation.</p><div class="fullcomment"><div class="comment cmt"><p>A type class to provide textual representation. It is meant to be a
@@ -1550,7 +1550,7 @@ MonadTransformer
       <span class="symbol">
         <a title="Traverse, also known as Traversable." href="Traverse.html">
               <span class="name">Traverse</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Traverse, also known as Traversable.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse, also known as Traversable.</p><p>Traversal over a structure with an effect.</p><p>Traversing with the <a href="#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a> effect is equivalent to <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
@@ -1573,7 +1573,7 @@ a <a href="#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">c
 that can essentially have a traverse and a filter applied as a single
 combined operation (traverseFilter)." href="TraverseFilter.html">
               <span class="name">TraverseFilter</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>] with <a href="FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>] with <a href="FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt"><code>TraverseFilter</code>, also known as <code>Witherable</code>, represents list-like structures
@@ -1622,7 +1622,7 @@ instance for a type constructor, you should use <code>Trivial.PH1</code>).
 find type class instances for types which have shapes which differ
 from what their type classes are looking for." href="Unapply.html">
               <span class="name">Unapply</span>
-            </a><span class="tparams">[<span name="TC">TC<span class="tparams">[<span name="_">_<span class="tparams">[<span name="_">_</span>]</span></span>]</span></span>, <span name="MA">MA</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="TC">TC<span class="tparams">[<span name="_">_<span class="tparams">[<span name="_">_</span>]</span></span>]</span></span>, <span name="MA">MA</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">A type class that is used to help guide Scala's type inference to
@@ -1790,9 +1790,9 @@ however the Scala compiler will not find them without some coercing.
       
       
     </li><li name="cats#catsInstancesForId" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsInstancesForId:cats.Bimonad[cats.package.Id]withcats.Monad[cats.package.Id]withcats.Traverse[cats.package.Id]"></a><a id="catsInstancesForId:Bimonad[Id]withMonad[Id]withTraverse[Id]"></a>
+      <a id="catsInstancesForId:cats.Bimonad[cats.package.Id]withcats.Monad[cats.package.Id]withcats.Traverse[cats.package.Id]withcats.Reducible[cats.package.Id]"></a><a id="catsInstancesForId:Bimonad[Id]withMonad[Id]withTraverse[Id]withReducible[Id]"></a>
       <span class="permalink">
-      <a href="../cats/index.html#catsInstancesForId:cats.Bimonad[cats.package.Id]withcats.Monad[cats.package.Id]withcats.Traverse[cats.package.Id]" title="Permalink">
+      <a href="../cats/index.html#catsInstancesForId:cats.Bimonad[cats.package.Id]withcats.Monad[cats.package.Id]withcats.Traverse[cats.package.Id]withcats.Reducible[cats.package.Id]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1801,7 +1801,7 @@ however the Scala compiler will not find them without some coercing.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">catsInstancesForId</span><span class="result">: <a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>]</span>
+        <span class="name">catsInstancesForId</span><span class="result">: <a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[<a href="#Id[A]=A" class="extmbr" name="cats.Id">Id</a>]</span>
       </span>
       
       
@@ -1819,7 +1819,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Alternative$.html">
               <span class="name">Alternative</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1837,7 +1837,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Always$.html">
               <span class="name">Always</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1855,7 +1855,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Applicative$.html">
               <span class="name">Applicative</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1873,7 +1873,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="ApplicativeError$.html">
               <span class="name">ApplicativeError</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1891,7 +1891,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Apply$.html">
               <span class="name">Apply</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1909,7 +1909,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Bifoldable$.html">
               <span class="name">Bifoldable</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1927,7 +1927,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Bimonad$.html">
               <span class="name">Bimonad</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1945,7 +1945,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Bitraverse$.html">
               <span class="name">Bitraverse</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1963,7 +1963,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Cartesian$.html">
               <span class="name">Cartesian</span>
-            </a><span class="result"> extends <a href="CartesianArityFunctions.html" class="extype" name="cats.CartesianArityFunctions">CartesianArityFunctions</a> with <span class="extype" name="cats.KernelCartesianInstances">KernelCartesianInstances</span> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="CartesianArityFunctions.html" class="extype" name="cats.CartesianArityFunctions">CartesianArityFunctions</a> with <span class="extype" name="cats.KernelCartesianInstances">KernelCartesianInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1981,7 +1981,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="CoflatMap$.html">
               <span class="name">CoflatMap</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1999,7 +1999,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Comonad$.html">
               <span class="name">Comonad</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2017,7 +2017,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="ContravariantCartesian$.html">
               <span class="name">ContravariantCartesian</span>
-            </a><span class="result"> extends <span class="extype" name="cats.KernelContravariantCartesianInstances">KernelContravariantCartesianInstances</span> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <span class="extype" name="cats.KernelContravariantCartesianInstances">KernelContravariantCartesianInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2035,7 +2035,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Eval$.html">
               <span class="name">Eval</span>
-            </a><span class="result"> extends <span class="extype" name="cats.EvalInstances">EvalInstances</span> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <span class="extype" name="cats.EvalInstances">EvalInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2053,7 +2053,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="FlatMap$.html">
               <span class="name">FlatMap</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2071,7 +2071,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Foldable$.html">
               <span class="name">Foldable</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2089,7 +2089,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Functor$.html">
               <span class="name">Functor</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2107,7 +2107,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="FunctorFilter$.html">
               <span class="name">FunctorFilter</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2125,7 +2125,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="InvariantMonoidal$.html">
               <span class="name">InvariantMonoidal</span>
-            </a><span class="result"> extends <span class="extype" name="cats.KernelInvariantMonoidalInstances">KernelInvariantMonoidalInstances</span> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <span class="extype" name="cats.KernelInvariantMonoidalInstances">KernelInvariantMonoidalInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2143,7 +2143,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Later$.html">
               <span class="name">Later</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2161,7 +2161,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Monad$.html">
               <span class="name">Monad</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2179,7 +2179,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="MonadCombine$.html">
               <span class="name">MonadCombine</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2197,7 +2197,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="MonadError$.html">
               <span class="name">MonadError</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2215,7 +2215,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="MonadFilter$.html">
               <span class="name">MonadFilter</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2233,7 +2233,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="MonadReader$.html">
               <span class="name">MonadReader</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2251,7 +2251,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="MonadState$.html">
               <span class="name">MonadState</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2269,7 +2269,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="MonadWriter$.html">
               <span class="name">MonadWriter</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2287,7 +2287,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="MonoidK$.html">
               <span class="name">MonoidK</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2323,7 +2323,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Reducible$.html">
               <span class="name">Reducible</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2341,7 +2341,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="SemigroupK$.html">
               <span class="name">SemigroupK</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2359,7 +2359,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Show$.html">
               <span class="name">Show</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2395,7 +2395,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Traverse$.html">
               <span class="name">Traverse</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2413,7 +2413,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="TraverseFilter$.html">
               <span class="name">TraverseFilter</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -2449,7 +2449,7 @@ however the Scala compiler will not find them without some coercing.
       <span class="symbol">
         <a title="" href="Unapply$.html">
               <span class="name">Unapply</span>
-            </a><span class="result"> extends <span class="extype" name="cats.Unapply2Instances">Unapply2Instances</span> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <span class="extype" name="cats.Unapply2Instances">Unapply2Instances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       

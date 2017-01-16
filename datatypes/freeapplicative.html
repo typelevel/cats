@@ -64,7 +64,7 @@ at this point. To make our program useful we need to interpret it.</p>
 </div>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">validator</span> <span class="k">=</span> <span class="n">prog</span><span class="o">.</span><span class="n">foldMap</span><span class="o">[</span><span class="kt">FromString</span><span class="o">](</span><span class="n">compiler</span><span class="o">)</span>
-<span class="c1">// validator: FromString[Boolean] = scala.Function1$$Lambda$3069/2012160550@3162a52e
+<span class="c1">// validator: FromString[Boolean] = scala.Function1$$Lambda$2762/129285275@2ae22201
 </span>
 <span class="n">validator</span><span class="o">(</span><span class="s">"1234"</span><span class="o">)</span>
 <span class="c1">// res7: Boolean = false
@@ -156,23 +156,13 @@ we could also do it in one go - this would avoid multiple traversals of the same
 case for monads.</p>
 
 <p>Therefore, we can write an interpreter that uses the product of the <code class="highlighter-rouge">ParValidator</code> and <code class="highlighter-rouge">Log</code> <code class="highlighter-rouge">Applicative</code>s
-to interpret our program in one go.</p>
+to interpret our program in one go. We can create this interpreter easily by using <code class="highlighter-rouge">FunctionK#and</code>.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Prod</span>
 
 <span class="k">type</span> <span class="kt">ValidateAndLog</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Prod</span><span class="o">[</span><span class="kt">ParValidator</span>, <span class="kt">Log</span>, <span class="kt">A</span><span class="o">]</span>
 
-<span class="k">val</span> <span class="n">prodCompiler</span> <span class="k">=</span>
-  <span class="n">λ</span><span class="o">[</span><span class="kt">FunctionK</span><span class="o">[</span><span class="kt">ValidationOp</span>, <span class="kt">ValidateAndLog</span><span class="o">]]</span> <span class="o">{</span>
-    <span class="k">case</span> <span class="nc">Size</span><span class="o">(</span><span class="n">size</span><span class="o">)</span> <span class="k">=&gt;</span>
-      <span class="k">val</span> <span class="n">f</span><span class="k">:</span> <span class="kt">ParValidator</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Kleisli</span><span class="o">(</span><span class="n">str</span> <span class="k">=&gt;</span> <span class="nc">Future</span> <span class="o">{</span> <span class="n">str</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;=</span> <span class="n">size</span> <span class="o">})</span>
-      <span class="k">val</span> <span class="n">l</span><span class="k">:</span> <span class="kt">Log</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Const</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="n">s</span><span class="s">"size &gt; $size"</span><span class="o">))</span>
-      <span class="nc">Prod</span><span class="o">[</span><span class="kt">ParValidator</span>, <span class="kt">Log</span>, <span class="kt">Boolean</span><span class="o">](</span><span class="n">f</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span>
-    <span class="k">case</span> <span class="nc">HasNumber</span>  <span class="k">=&gt;</span>
-      <span class="k">val</span> <span class="n">f</span><span class="k">:</span> <span class="kt">ParValidator</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Kleisli</span><span class="o">(</span><span class="n">str</span> <span class="k">=&gt;</span> <span class="nc">Future</span><span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="n">exists</span><span class="o">(</span><span class="n">c</span> <span class="k">=&gt;</span> <span class="s">"0123456789"</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span><span class="n">c</span><span class="o">))))</span>
-      <span class="k">val</span> <span class="n">l</span><span class="k">:</span> <span class="kt">Log</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Const</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="s">"has number"</span><span class="o">))</span>
-      <span class="nc">Prod</span><span class="o">[</span><span class="kt">ParValidator</span>, <span class="kt">Log</span>, <span class="kt">Boolean</span><span class="o">](</span><span class="n">f</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span>
-  <span class="o">}</span>
+<span class="k">val</span> <span class="n">prodCompiler</span><span class="k">:</span> <span class="kt">FunctionK</span><span class="o">[</span><span class="kt">ValidationOp</span>, <span class="kt">ValidateAndLog</span><span class="o">]</span> <span class="k">=</span> <span class="n">parCompiler</span> <span class="n">and</span> <span class="n">logCompiler</span>
 
 <span class="k">val</span> <span class="n">prodValidation</span> <span class="k">=</span> <span class="n">prog</span><span class="o">.</span><span class="n">foldMap</span><span class="o">[</span><span class="kt">ValidateAndLog</span><span class="o">](</span><span class="n">prodCompiler</span><span class="o">)</span>
 </code></pre>

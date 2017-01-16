@@ -1,123 +1,216 @@
-<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper" style="background:url('/cats/img/sidebar_brand.png') no-repeat"><span>Cats</span></div></a></li> <li><a href="/cats/typeclasses.html" class="">Type Classes</a></li> <li><a href="/cats/typeclasses/semigroup.html" class="">Semigroups and Monoids</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/semigroup.html" class=" active ">Semigroup</a></li> <li><a href="/cats/typeclasses/monoid.html" class="">Monoid</a></li></ul></li> <li><a href="/cats/typeclasses/functor.html" class="">Applicative and Traversable Functors</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li> <li><a href="/cats/typeclasses/apply.html" class="">Apply</a></li> <li><a href="/cats/typeclasses/applicative.html" class="">Applicative</a></li> <li><a href="/cats/typeclasses/traverse.html" class="">Traverse</a></li></ul></li> <li><a href="/cats/typeclasses/functor.html" class="">Monads</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li> <li><a href="/cats/typeclasses/apply.html" class="">Apply</a></li> <li><a href="/cats/typeclasses/applicative.html" class="">Applicative</a></li> <li><a href="/cats/typeclasses/monad.html" class="">Monad</a></li></ul></li> <li><a href="/cats/typeclasses/functor.html" class="">Variance and Functors</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li> <li><a href="/cats/typeclasses/contravariant.html" class="">Contravariant</a></li> <li><a href="/cats/typeclasses/invariant.html" class="">Invariant</a></li></ul></li> <li><a href="/cats/typeclasses/foldable.html" class="">Foldable</a></li> <li><a href="/cats/typeclasses/monadcombine.html" class="">MonadCombine</a></li> <li><a href="/cats/typeclasses/monadfilter.html" class="">MonadFilter</a></li> <li><a href="/cats/typeclasses/monoidk.html" class="">MonoidK</a></li> <li><a href="/cats/typeclasses/semigroupk.html" class="">SemigroupK</a></li> <li><a href="/cats/typeclasses/show.html" class="">Show</a></li>          </ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="semigroup">Semigroup</h1>
+<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper" style="background:url('/cats/img/sidebar_brand.png') no-repeat"><span>Cats</span></div></a></li> <li><a href="/cats/typeclasses.html" class="">Type Classes</a></li> <li><a href="/cats/typeclasses/semigroup.html" class="">Semigroups and Monoids</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/semigroup.html" class=" active ">Semigroup</a></li> <li><a href="/cats/typeclasses/monoid.html" class="">Monoid</a></li></ul></li> <li><a href="/cats/typeclasses/applicativetraverse.html" class="">Applicative and Traversable Functors</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li> <li><a href="/cats/typeclasses/applicative.html" class="">Applicative</a></li> <li><a href="/cats/typeclasses/traverse.html" class="">Traverse</a></li></ul></li> <li><a href="/cats/typeclasses/functor.html" class="">Monads</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li> <li><a href="/cats/typeclasses/apply.html" class="">Apply</a></li> <li><a href="/cats/typeclasses/applicative.html" class="">Applicative</a></li> <li><a href="/cats/typeclasses/monad.html" class="">Monad</a></li></ul></li> <li><a href="/cats/typeclasses/functor.html" class="">Variance and Functors</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li> <li><a href="/cats/typeclasses/contravariant.html" class="">Contravariant</a></li> <li><a href="/cats/typeclasses/invariant.html" class="">Invariant</a></li></ul></li> <li><a href="/cats/typeclasses/foldable.html" class="">Foldable</a></li> <li><a href="/cats/typeclasses/monadcombine.html" class="">MonadCombine</a></li> <li><a href="/cats/typeclasses/monadfilter.html" class="">MonadFilter</a></li> <li><a href="/cats/typeclasses/monoidk.html" class="">MonoidK</a></li> <li><a href="/cats/typeclasses/semigroupk.html" class="">SemigroupK</a></li> <li><a href="/cats/typeclasses/show.html" class="">Show</a></li>          </ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="semigroup">Semigroup</h1>
 
-<p>A semigroup for some given type A has a single operation
-(which we will call <code class="highlighter-rouge">combine</code>), which takes two values of type A, and
-returns a value of type A. This operation must be guaranteed to be
-associative. That is to say that:</p>
+<p>If a type <code class="highlighter-rouge">A</code> can form a <code class="highlighter-rouge">Semigroup</code> it has an <strong>associative</strong> binary operation.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="o">((</span><span class="n">a</span> <span class="n">combine</span> <span class="n">b</span><span class="o">)</span> <span class="n">combine</span> <span class="n">c</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span>
+<span class="o">}</span>
 </code></pre>
 </div>
 
-<p>must be the same as</p>
+<p>Associativity means the following equality must hold for any choice of <code class="highlighter-rouge">x</code>, <code class="highlighter-rouge">y</code>, and
+<code class="highlighter-rouge">z</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="o">(</span><span class="n">a</span> <span class="n">combine</span> <span class="o">(</span><span class="n">b</span> <span class="n">combine</span> <span class="n">c</span><span class="o">))</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>combine(x, combine(y, z)) = combine(combine(x, y), z)
 </code></pre>
 </div>
 
-<p>for all possible values of a,b,c.</p>
+<p>A common example of a semigroup is the type <code class="highlighter-rouge">Int</code> with the operation <code class="highlighter-rouge">+</code>.</p>
 
-<p>There are instances of <code class="highlighter-rouge">Semigroup</code> defined for many types found in the
-scala common library:</p>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Semigroup</span>
 
-<p>First some imports.</p>
+<span class="k">implicit</span> <span class="k">val</span> <span class="n">intAdditionSemigroup</span><span class="k">:</span> <span class="kt">Semigroup</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="o">}</span>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
-<span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="k">val</span> <span class="n">x</span> <span class="k">=</span> <span class="mi">1</span>
+<span class="k">val</span> <span class="n">y</span> <span class="k">=</span> <span class="mi">2</span>
+<span class="k">val</span> <span class="n">z</span> <span class="k">=</span> <span class="mi">3</span>
 </code></pre>
 </div>
 
-<p>Examples.</p>
-
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
-<span class="c1">// res0: Int = 3
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span>
+<span class="c1">// res2: Int = 3
 </span>
-<span class="nc">Semigroup</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]].</span><span class="n">combine</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">))</span>
-<span class="c1">// res1: List[Int] = List(1, 2, 3, 4, 5, 6)
+<span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="n">y</span><span class="o">,</span> <span class="n">z</span><span class="o">))</span>
+<span class="c1">// res3: Int = 6
 </span>
-<span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]].</span><span class="n">combine</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
-<span class="c1">// res2: Option[Int] = Some(3)
-</span>
-<span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]].</span><span class="n">combine</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
-<span class="c1">// res3: Option[Int] = Some(1)
-</span>
-<span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Int</span> <span class="k">=&gt;</span> <span class="kt">Int</span><span class="o">].</span><span class="n">combine</span><span class="o">({(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="o">},{(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span><span class="o">}).</span><span class="n">apply</span><span class="o">(</span><span class="mi">6</span><span class="o">)</span>
-<span class="c1">// res4: Int = 67
+<span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">),</span> <span class="n">z</span><span class="o">)</span>
+<span class="c1">// res4: Int = 6
 </span></code></pre>
 </div>
 
-<p>Many of these types have methods defined directly on them,
-which allow for such combining, e.g. <code class="highlighter-rouge">++</code> on List, but the
-value of having a <code class="highlighter-rouge">Semigroup</code> type class available is that these
-compose, so for instance, we can say</p>
+<p>Infix syntax is also available for types that have a <code class="highlighter-rouge">Semigroup</code> instance.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Map</span><span class="o">(</span><span class="s">"foo"</span> <span class="o">-&gt;</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"bar"</span> <span class="o">-&gt;</span> <span class="mi">5</span><span class="o">)).</span><span class="n">combine</span><span class="o">(</span><span class="nc">Map</span><span class="o">(</span><span class="s">"foo"</span> <span class="o">-&gt;</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"bar"</span> <span class="o">-&gt;</span> <span class="mi">6</span><span class="o">),</span> <span class="s">"baz"</span> <span class="o">-&gt;</span> <span class="nc">Map</span><span class="o">()))</span>
-<span class="c1">// res5: Map[String,scala.collection.immutable.Map[String,Int]] = Map(foo -&gt; Map(bar -&gt; 11), baz -&gt; Map())
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.semigroup._</span>
+<span class="c1">// import cats.syntax.semigroup._
 </span>
-<span class="nc">Map</span><span class="o">(</span><span class="s">"foo"</span> <span class="o">-&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">)).</span><span class="n">combine</span><span class="o">(</span><span class="nc">Map</span><span class="o">(</span><span class="s">"foo"</span> <span class="o">-&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">),</span> <span class="s">"bar"</span> <span class="o">-&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">42</span><span class="o">)))</span>
-<span class="c1">// res6: Map[String,List[Int]] = Map(foo -&gt; List(1, 2, 3, 4), bar -&gt; List(42))
+<span class="mi">1</span> <span class="o">|+|</span> <span class="mi">2</span>
+<span class="c1">// res5: Int = 3
 </span></code></pre>
 </div>
 
-<p>which is far more likely to be useful than</p>
+<p>A more compelling example which we’ll see later in this tutorial is the <code class="highlighter-rouge">Semigroup</code>
+for <code class="highlighter-rouge">Map</code>s.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Map</span><span class="o">(</span><span class="s">"foo"</span> <span class="o">-&gt;</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"bar"</span> <span class="o">-&gt;</span> <span class="mi">5</span><span class="o">))</span> <span class="o">++</span>  <span class="nc">Map</span><span class="o">(</span><span class="s">"foo"</span> <span class="o">-&gt;</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"bar"</span> <span class="o">-&gt;</span> <span class="mi">6</span><span class="o">),</span> <span class="s">"baz"</span> <span class="o">-&gt;</span> <span class="nc">Map</span><span class="o">())</span>
-<span class="c1">// res7: scala.collection.immutable.Map[String,scala.collection.immutable.Map[_ &lt;: String, Int]] = Map(foo -&gt; Map(bar -&gt; 6), baz -&gt; Map())
-</span>
-<span class="nc">Map</span><span class="o">(</span><span class="s">"foo"</span> <span class="o">-&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">))</span> <span class="o">++</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"foo"</span> <span class="o">-&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">),</span> <span class="s">"bar"</span> <span class="o">-&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">42</span><span class="o">))</span>
-<span class="c1">// res8: scala.collection.immutable.Map[String,List[Int]] = Map(foo -&gt; List(3, 4), bar -&gt; List(42))
-</span></code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.map._</span>
 
-<p>There is inline syntax available for <code class="highlighter-rouge">Semigroup</code>. Here we are 
-following the convention from scalaz, that <code class="highlighter-rouge">|+|</code> is the 
-operator from <code class="highlighter-rouge">Semigroup</code>.</p>
-
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
-
-<span class="k">val</span> <span class="n">one</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
-<span class="k">val</span> <span class="n">two</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
-<span class="k">val</span> <span class="n">n</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
+<span class="k">val</span> <span class="n">map1</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"hello"</span> <span class="o">-&gt;</span> <span class="mi">0</span><span class="o">,</span> <span class="s">"world"</span> <span class="o">-&gt;</span> <span class="mi">1</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">map2</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"hello"</span> <span class="o">-&gt;</span> <span class="mi">2</span><span class="o">,</span> <span class="s">"cats"</span>  <span class="o">-&gt;</span> <span class="mi">3</span><span class="o">)</span>
 </code></pre>
 </div>
 
-<p>Thus.</p>
-
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">one</span> <span class="o">|+|</span> <span class="n">two</span>
-<span class="c1">// res10: Option[Int] = Some(3)
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]].</span><span class="n">combine</span><span class="o">(</span><span class="n">map1</span><span class="o">,</span> <span class="n">map2</span><span class="o">)</span>
+<span class="c1">// res7: Map[String,Int] = Map(hello -&gt; 2, cats -&gt; 3, world -&gt; 1)
 </span>
-<span class="n">n</span> <span class="o">|+|</span> <span class="n">two</span>
-<span class="c1">// res11: Option[Int] = Some(2)
-</span>
-<span class="n">n</span> <span class="o">|+|</span> <span class="n">n</span>
-<span class="c1">// res12: Option[Int] = None
-</span>
-<span class="n">two</span> <span class="o">|+|</span> <span class="n">n</span>
-<span class="c1">// res13: Option[Int] = Some(2)
+<span class="n">map1</span> <span class="o">|+|</span> <span class="n">map2</span>
+<span class="c1">// res8: Map[String,Int] = Map(hello -&gt; 2, cats -&gt; 3, world -&gt; 1)
 </span></code></pre>
 </div>
 
-<p>You’ll notice that instead of declaring <code class="highlighter-rouge">one</code> as <code class="highlighter-rouge">Some(1)</code>, I chose
-<code class="highlighter-rouge">Option(1)</code>, and I added an explicit type declaration for <code class="highlighter-rouge">n</code>. This is
-because there aren’t type class instances for <code class="highlighter-rouge">Some</code> or <code class="highlighter-rouge">None</code>, but for
-<code class="highlighter-rouge">Option</code>. If we try to use <code class="highlighter-rouge">Some</code> and <code class="highlighter-rouge">None</code>, we’ll get errors:</p>
+<h1 id="example-instances">Example instances</h1>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">|+|</span> <span class="nc">None</span>
-<span class="o">&lt;</span><span class="n">console</span><span class="k">&gt;:</span><span class="mi">22</span><span class="k">:</span> <span class="kt">error:</span> <span class="kt">value</span> <span class="kt">|+|</span> <span class="kt">is</span> <span class="kt">not</span> <span class="kt">a</span> <span class="kt">member</span> <span class="kt">of</span> <span class="kt">Some</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
-       <span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">|+|</span> <span class="nc">None</span>
-               <span class="o">^</span>
+<p>Cats provides many <code class="highlighter-rouge">Semigroup</code> instances out of the box such as <code class="highlighter-rouge">Int</code> (<code class="highlighter-rouge">+</code>) and <code class="highlighter-rouge">String</code> (<code class="highlighter-rouge">++</code>)…</p>
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">None</span> <span class="o">|+|</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
-<span class="o">&lt;</span><span class="n">console</span><span class="k">&gt;:</span><span class="mi">22</span><span class="k">:</span> <span class="kt">error:</span> <span class="kt">value</span> <span class="kt">|+|</span> <span class="kt">is</span> <span class="kt">not</span> <span class="kt">a</span> <span class="kt">member</span> <span class="kt">of</span> <span class="kt">object</span> <span class="kt">None</span>
-       <span class="nc">None</span> <span class="o">|+|</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
-            <span class="o">^</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Semigroup</span>
+<span class="k">import</span> <span class="nn">cats.instances.all._</span>
 </code></pre>
 </div>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
+<span class="c1">// res0: cats.kernel.Semigroup[Int] = cats.kernel.instances.IntGroup@300e2e5f
+</span>
+<span class="nc">Semigroup</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
+<span class="c1">// res1: cats.kernel.Semigroup[String] = cats.kernel.instances.StringMonoid@408171e6
+</span></code></pre>
+</div>
+
+<p>Instances for type constructors regardless of their type parameter such as <code class="highlighter-rouge">List</code> (<code class="highlighter-rouge">++</code>)
+and <code class="highlighter-rouge">Set</code> (<code class="highlighter-rouge">union</code>)…</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Byte</span><span class="o">]]</span>
+<span class="c1">// res2: cats.kernel.Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@2fdc763c
+</span>
+<span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Set</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span>
+<span class="c1">// res3: cats.kernel.Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@17e23672
+</span>
+<span class="k">trait</span> <span class="nc">Foo</span>
+<span class="c1">// defined trait Foo
+</span>
+<span class="nc">Semigroup</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]]</span>
+<span class="c1">// res4: cats.kernel.Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@61b0faff
+</span></code></pre>
+</div>
+
+<p>And instances for type constructors that depend on (one of) their type parameters having instances such
+as tuples (pointwise <code class="highlighter-rouge">combine</code>).</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[(</span><span class="kt">List</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]</span>, <span class="kt">Int</span><span class="o">)]</span>
+<span class="c1">// res5: cats.kernel.Semigroup[(List[Foo], Int)] = cats.kernel.instances.TupleInstances$$anon$71@8ed433
+</span></code></pre>
+</div>
+
+<h1 id="example-usage-merging-maps">Example usage: Merging maps</h1>
+
+<p>Consider a function that merges two <code class="highlighter-rouge">Map</code>s that combines values if they share
+the same key. It is straightforward to write these for <code class="highlighter-rouge">Map</code>s with values of
+type say, <code class="highlighter-rouge">Int</code> or <code class="highlighter-rouge">List[String]</code>, but we can write it once and for all for
+any type with a <code class="highlighter-rouge">Semigroup</code> instance.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.all._</span>
+<span class="k">import</span> <span class="nn">cats.syntax.semigroup._</span>
+
+<span class="k">def</span> <span class="n">optionCombine</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Semigroup</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">opt</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span>
+  <span class="n">opt</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">a</span> <span class="o">|+|</span> <span class="k">_</span><span class="o">).</span><span class="n">getOrElse</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>
+
+<span class="k">def</span> <span class="n">mergeMap</span><span class="o">[</span><span class="kt">K</span>, <span class="kt">V:</span> <span class="kt">Semigroup</span><span class="o">](</span><span class="n">lhs</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">K</span>, <span class="kt">V</span><span class="o">],</span> <span class="n">rhs</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">K</span>, <span class="kt">V</span><span class="o">])</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">K</span>, <span class="kt">V</span><span class="o">]</span> <span class="k">=</span>
+  <span class="n">lhs</span><span class="o">.</span><span class="n">foldLeft</span><span class="o">(</span><span class="n">rhs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="o">(</span><span class="n">acc</span><span class="o">,</span> <span class="o">(</span><span class="n">k</span><span class="o">,</span> <span class="n">v</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="n">acc</span><span class="o">.</span><span class="n">updated</span><span class="o">(</span><span class="n">k</span><span class="o">,</span> <span class="n">optionCombine</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">acc</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">k</span><span class="o">)))</span>
+  <span class="o">}</span>
+</code></pre>
+</div>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">xm1</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="sc">'a'</span> <span class="o">-&gt;</span> <span class="mi">1</span><span class="o">,</span> <span class="sc">'b'</span> <span class="o">-&gt;</span> <span class="mi">2</span><span class="o">)</span>
+<span class="c1">// xm1: scala.collection.immutable.Map[Char,Int] = Map(a -&gt; 1, b -&gt; 2)
+</span>
+<span class="k">val</span> <span class="n">xm2</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="sc">'b'</span> <span class="o">-&gt;</span> <span class="mi">3</span><span class="o">,</span> <span class="sc">'c'</span> <span class="o">-&gt;</span> <span class="mi">4</span><span class="o">)</span>
+<span class="c1">// xm2: scala.collection.immutable.Map[Char,Int] = Map(b -&gt; 3, c -&gt; 4)
+</span>
+<span class="k">val</span> <span class="n">x</span> <span class="k">=</span> <span class="n">mergeMap</span><span class="o">(</span><span class="n">xm1</span><span class="o">,</span> <span class="n">xm2</span><span class="o">)</span>
+<span class="c1">// x: Map[Char,Int] = Map(b -&gt; 5, c -&gt; 4, a -&gt; 1)
+</span>
+<span class="k">val</span> <span class="n">ym1</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="s">"hello"</span><span class="o">))</span>
+<span class="c1">// ym1: scala.collection.immutable.Map[Int,List[String]] = Map(1 -&gt; List(hello))
+</span>
+<span class="k">val</span> <span class="n">ym2</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="s">"cats"</span><span class="o">),</span> <span class="mi">1</span> <span class="o">-&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="s">"world"</span><span class="o">))</span>
+<span class="c1">// ym2: scala.collection.immutable.Map[Int,List[String]] = Map(2 -&gt; List(cats), 1 -&gt; List(world))
+</span>
+<span class="k">val</span> <span class="n">y</span> <span class="k">=</span> <span class="n">mergeMap</span><span class="o">(</span><span class="n">ym1</span><span class="o">,</span> <span class="n">ym2</span><span class="o">)</span>
+<span class="c1">// y: Map[Int,List[String]] = Map(2 -&gt; List(cats), 1 -&gt; List(hello, world))
+</span></code></pre>
+</div>
+
+<p>It is interesting to note that the type of <code class="highlighter-rouge">mergeMap</code> satisfies the type of <code class="highlighter-rouge">Semigroup</code>
+specialized to <code class="highlighter-rouge">Map[K, ?]</code> and is associative - indeed the <code class="highlighter-rouge">Semigroup</code> instance for <code class="highlighter-rouge">Map</code>
+uses the same function for its <code class="highlighter-rouge">combine</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Map</span><span class="o">[</span><span class="kt">Char</span>, <span class="kt">Int</span><span class="o">]].</span><span class="n">combine</span><span class="o">(</span><span class="n">xm1</span><span class="o">,</span> <span class="n">xm2</span><span class="o">)</span> <span class="o">==</span> <span class="n">x</span>
+<span class="c1">// res8: Boolean = true
+</span>
+<span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Map</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]]].</span><span class="n">combine</span><span class="o">(</span><span class="n">ym1</span><span class="o">,</span> <span class="n">ym2</span><span class="o">)</span> <span class="o">==</span> <span class="n">y</span>
+<span class="c1">// res9: Boolean = true
+</span></code></pre>
+</div>
+
+<h1 id="exploiting-laws-associativity">Exploiting laws: associativity</h1>
+
+<p>Since we know <code class="highlighter-rouge">Semigroup#combine</code> must be associative, we can exploit this when writing
+code against <code class="highlighter-rouge">Semigroup</code>. For instance, to sum a <code class="highlighter-rouge">List[Int]</code> we can choose to either
+<code class="highlighter-rouge">foldLeft</code> or <code class="highlighter-rouge">foldRight</code> since all that changes is associativity.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">leftwards</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">).</span><span class="n">foldLeft</span><span class="o">(</span><span class="mi">0</span><span class="o">)(</span><span class="k">_</span> <span class="o">|+|</span> <span class="k">_</span><span class="o">)</span>
+<span class="c1">// leftwards: Int = 6
+</span>
+<span class="k">val</span> <span class="n">rightwards</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">).</span><span class="n">foldRight</span><span class="o">(</span><span class="mi">0</span><span class="o">)(</span><span class="k">_</span> <span class="o">|+|</span> <span class="k">_</span><span class="o">)</span>
+<span class="c1">// rightwards: Int = 6
+</span></code></pre>
+</div>
+
+<p>Associativity also allows us to split a list apart and sum the parts in parallel, gathering the results in
+the end.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">list</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
+<span class="k">val</span> <span class="o">(</span><span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">)</span> <span class="k">=</span> <span class="n">list</span><span class="o">.</span><span class="n">splitAt</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">sumLeft</span> <span class="k">=</span> <span class="n">left</span><span class="o">.</span><span class="n">foldLeft</span><span class="o">(</span><span class="mi">0</span><span class="o">)(</span><span class="k">_</span> <span class="o">|+|</span> <span class="k">_</span><span class="o">)</span>
+<span class="c1">// sumLeft: Int = 3
+</span>
+<span class="k">val</span> <span class="n">sumRight</span> <span class="k">=</span> <span class="n">right</span><span class="o">.</span><span class="n">foldLeft</span><span class="o">(</span><span class="mi">0</span><span class="o">)(</span><span class="k">_</span> <span class="o">|+|</span> <span class="k">_</span><span class="o">)</span>
+<span class="c1">// sumRight: Int = 12
+</span>
+<span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">sumLeft</span> <span class="o">|+|</span> <span class="n">sumRight</span>
+<span class="c1">// result: Int = 15
+</span></code></pre>
+</div>
+
+<p>However, given just <code class="highlighter-rouge">Semigroup</code> we cannot write the above expressions generically. For instance, we quickly
+run into issues if we try to write a generic <code class="highlighter-rouge">combineAll</code> function.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">combineAll</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Semigroup</span><span class="o">](</span><span class="n">as</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span>
+  <span class="n">as</span><span class="o">.</span><span class="n">foldLeft</span><span class="o">(</span><span class="cm">/* ?? what goes here ?? */</span><span class="o">)(</span><span class="k">_</span> <span class="o">|+|</span> <span class="k">_</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">Semigroup</code> isn’t powerful enough for us to implement this function - namely, it doesn’t give us an identity
+or fallback value if the list is empty. We need a power expressive abstraction, which we can find in the
+<code class="highlighter-rouge">Monoid</code> type class.</p>
 
 <p>N.B.
-Cats defines the <code class="highlighter-rouge">Semigroup</code> type class in cats-kernel. The <a href="https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala"><code class="highlighter-rouge">cats</code> package object</a>
-defines type aliases to the <code class="highlighter-rouge">Semigroup</code> from cats-kernel, so that you can
-<code class="highlighter-rouge">import cats.Semigroup</code>.</p>
+Cats defines the <code class="highlighter-rouge">Semigroup</code> type class in cats-kernel. The
+<a href="https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala"><code class="highlighter-rouge">cats</code> package object</a>
+defines type aliases to the <code class="highlighter-rouge">Semigroup</code> from cats-kernel, so that you can simply import <code class="highlighter-rouge">cats.Semigroup</code>.</p>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

@@ -143,6 +143,12 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
     </li><li class="current-entities indented2">
+                        <a class="object" href="Cofree$.html" title=""></a>
+                        <a class="class" href="Cofree.html" title="A free comonad for some branching functor S."></a>
+                        <a href="Cofree.html" title="A free comonad for some branching functor S.">
+                          Cofree
+                        </a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Coyoneda$.html" title=""></a>
                         <a class="class" href="Coyoneda.html" title="The dual view of the Yoneda lemma."></a>
                         <a href="Coyoneda.html" title="The dual view of the Yoneda lemma.">
@@ -376,6 +382,30 @@
       </span>
       
       <p class="shortcomment cmt"><a href="Inject.html" class="extype" name="cats.free.Inject">cats.free.Inject</a>[F, G]</p>
+    </li><li name="cats.free.Cofree" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Cofree[S[_],A]extendsProductwithSerializable"></a><a id="Cofree[S[_],A]:Cofree[S,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/index.html#Cofree[S[_],A]extendsProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A free comonad for some branching functor S." href="Cofree.html">
+              <span class="name">Cofree</span>
+            </a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="head">head: <span class="extype" name="cats.free.Cofree.A">A</span></span>, <span name="tail">tail: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.free.Cofree.S">S</span>[<a href="Cofree.html" class="extype" name="cats.free.Cofree">Cofree</a>[<span class="extype" name="cats.free.Cofree.S">S</span>, <span class="extype" name="cats.free.Cofree.A">A</span>]]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A free comonad for some branching functor <code>S</code>.</p><div class="fullcomment"><div class="comment cmt"><p>A free comonad for some branching functor <code>S</code>. Branching is done lazily using <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>.
+A tree with data at the branches, as opposed to <a href="Free.html" class="extype" name="cats.free.Free">Free</a> which is a tree with data at the leaves.
+Not an instruction set functor made into a program monad as in <a href="Free.html" class="extype" name="cats.free.Free">Free</a>, but an instruction set's outputs as a
+functor made into a tree of the possible worlds reachable using the instruction set.</p><p>This Scala implementation of <code>Cofree</code> and its usages are derived from
+<a href="https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Cofree.scala" target="_blank">Scalaz's Cofree</a>,
+originally written by Rúnar Bjarnason.
+</p></div></div>
     </li><li name="cats.free.Coyoneda" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Coyoneda[F[_],A]extendsSerializable"></a><a id="Coyoneda[F[_],A]:Coyoneda[F,A]"></a>
       <span class="permalink">
@@ -390,7 +420,7 @@
       <span class="symbol">
         <a title="The dual view of the Yoneda lemma." href="Coyoneda.html">
               <span class="name">Coyoneda</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">The dual view of the Yoneda lemma.</p><div class="fullcomment"><div class="comment cmt"><p>The dual view of the Yoneda lemma. Also a free functor on <code>F</code>.
@@ -412,7 +442,7 @@ The homomorphism from <code>F[A]</code> to <code>Coyoneda[F,A]</code> exists eve
       <span class="symbol">
         <a title="A free operational monad for some functor S." href="Free.html">
               <span class="name">Free</span>
-            </a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">A free operational monad for some functor <code>S</code>.</p><div class="fullcomment"><div class="comment cmt"><p>A free operational monad for some functor <code>S</code>. Binding is done
@@ -433,7 +463,7 @@ elimination.
       <span class="symbol">
         <a title="Applicative Functor for Free" href="FreeApplicative.html">
               <span class="name">FreeApplicative</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Applicative Functor for Free</p>
@@ -452,7 +482,7 @@ elimination.
         <a title="Invariant Monoidal for Free
 " href="FreeInvariantMonoidal.html">
               <span class="name">FreeInvariantMonoidal</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Invariant Monoidal for Free
@@ -471,7 +501,7 @@ elimination.
       <span class="symbol">
         <a title="FreeT is a monad transformer for Free monads over a Functor S" href="FreeT.html">
               <span class="name">FreeT</span>
-            </a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">FreeT is a monad transformer for Free monads over a Functor S</p><div class="fullcomment"><div class="comment cmt"><p>FreeT is a monad transformer for Free monads over a Functor S</p><p>Stack safety for <code>Free</code> and <code>FreeT</code> is based on the paper
@@ -510,7 +540,7 @@ originally written by Brian McKenna.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Trampoline</span><span class="tparams">[<span name="A">A</span>]</span><span class="result alias"> = <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Function0" class="extype" target="_top">Function0</a>, <span class="extype" name="cats.free.Trampoline.A">A</span>]</span>
+        <span class="name">Trampoline</span><span class="tparams">[<span name="A">A</span>]</span><span class="result alias"> = <a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Function0" class="extype" target="_top">Function0</a>, <span class="extype" name="cats.free.Trampoline.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Alias for the free monad over the <code>Function0</code> functor.</p>
@@ -528,7 +558,7 @@ originally written by Brian McKenna.
       <span class="symbol">
         <a title="The free functor generated by F." href="Yoneda.html">
               <span class="name">Yoneda</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">The free functor generated by <code>F</code>.</p><div class="fullcomment"><div class="comment cmt"><p>The free functor generated by <code>F</code>. The Yoneda lemma says that
@@ -545,7 +575,25 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
         <div class="values members">
               <h3>Value Members</h3>
               <ol>
-                <li name="cats.free.Coyoneda" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+                <li name="cats.free.Cofree" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Cofree"></a><a id="Cofree:Cofree"></a>
+      <span class="permalink">
+      <a href="../../cats/free/index.html#Cofree" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Cofree$.html">
+              <span class="name">Cofree</span>
+            </a><span class="result"> extends <span class="extype" name="cats.free.CofreeInstances">CofreeInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.free.Coyoneda" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Coyoneda"></a><a id="Coyoneda:Coyoneda"></a>
       <span class="permalink">
       <a href="../../cats/free/index.html#Coyoneda" title="Permalink">
@@ -559,7 +607,7 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
       <span class="symbol">
         <a title="" href="Coyoneda$.html">
               <span class="name">Coyoneda</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -577,7 +625,7 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
       <span class="symbol">
         <a title="" href="Free$.html">
               <span class="name">Free</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -595,7 +643,7 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
       <span class="symbol">
         <a title="" href="FreeApplicative$.html">
               <span class="name">FreeApplicative</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -613,7 +661,7 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
       <span class="symbol">
         <a title="" href="FreeInvariantMonoidal$.html">
               <span class="name">FreeInvariantMonoidal</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -631,7 +679,7 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
       <span class="symbol">
         <a title="" href="FreeT$.html">
               <span class="name">FreeT</span>
-            </a><span class="result"> extends <span class="extype" name="cats.free.FreeTInstances">FreeTInstances</span> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <span class="extype" name="cats.free.FreeTInstances">FreeTInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -667,7 +715,7 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
       <span class="symbol">
         <a title="" href="package$$Trampoline$.html">
               <span class="name">Trampoline</span>
-            </a><span class="result"> extends <span class="extype" name="cats.free.TrampolineFunctions">TrampolineFunctions</span> with <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <span class="extype" name="cats.free.TrampolineFunctions">TrampolineFunctions</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -685,7 +733,7 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
       <span class="symbol">
         <a title="" href="Yoneda$.html">
               <span class="name">Yoneda</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.0/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       

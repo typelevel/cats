@@ -5,8 +5,7 @@ The name is a playful shortening of the word <em>category</em>.</p>
 <div class="msg warn"> <p><strong> Cats is a new project under active
   development</strong>. Feedback and contributions are welcomed as we look
   to improve it. This project is evolving quickly and we are making no
-  guarantees about stability until a 1.0 release is made (current est.
-  around Q3 2016).</p> </div>
+  guarantees about stability until a 1.0 release is made.</p></div>
 
 <h3 id="a-namegetting-started-hrefgetting-startedagetting-started"><a name="getting-started" href="#getting-started"></a>Getting Started</h3>
 
@@ -14,7 +13,7 @@ The name is a playful shortening of the word <em>category</em>.</p>
 
 <p>To get started with SBT, simply add the following to your build.sbt file:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>libraryDependencies += "org.typelevel" %% "cats" % "0.8.1"
+<div class="highlighter-rouge"><pre class="highlight"><code>libraryDependencies += "org.typelevel" %% "cats" % "0.9.0"
 </code></pre>
 </div>
 
@@ -75,19 +74,6 @@ are attempting to do our best at keeping our library as efficient as
 we can without making unnecessary sacrifices of purity and
 usability. Where sacrifices have to be made, we will strive to make
 these obvious, and will keep them well documented.</p>
-
-<h3 id="a-nameproject-structure-hrefproject-structureaproject-structure"><a name="project-structure" href="#project-structure"></a>Project Structure</h3>
-
-<p>In an attempt to be more modular, Cats is broken up into a number of sub-projects:</p>
-
-<ul>
-  <li><em>core</em> - contains type class definitions (e.g. Functor, Applicative, Monad), essential datatypes, and
-type class instances for those datatypes and standard library types</li>
-  <li><em>laws</em> - laws for the type classes, used to validate type class instances</li>
-  <li><em>cats-free</em> - free structures such as the free monad, and supporting type classes.</li>
-  <li><em>tests</em> - tests that check type class instances with laws from <em>laws</em></li>
-  <li><em>docs</em> - The source for this website</li>
-</ul>
 
 <h3 id="a-namecopyright-hrefcopyrightacopyright-and-license"><a name="copyright" href="#copyright"></a>Copyright and License</h3>
 
