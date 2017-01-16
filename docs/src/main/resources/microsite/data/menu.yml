@@ -48,8 +48,6 @@ options:
      - title: Functor
        url: typeclasses/functor.html
        menu_section: monads
-     - title: Apply
-       url: typeclasses/apply.html
        menu_section: monads
      - title: Applicative
        url: typeclasses/applicative.html
