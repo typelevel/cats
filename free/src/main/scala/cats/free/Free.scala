@@ -145,8 +145,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Lift into `G` (typically a `Coproduct`) given `Inject`. Analogous
    * to `Free.inject` but lifts programs rather than constructors.
    */
-  final def inject[G[_]](implicit ev: Inject[F, G]): Free[G, A] =
-    compile(λ[F ~> G](ev.inj(_)))
+  final def inject[G[_]](implicit ev: Inject[S, G]): Free[G, A] =
+    compile(λ[S ~> G](ev.inj(_)))
 
   override def toString: String =
     "Free(...)"
