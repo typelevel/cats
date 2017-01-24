@@ -144,6 +144,12 @@ object KernelBoiler {
         -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
         -    }
         -
+        -  implicit def catsKernelStdCommutativeMonoidForTuple${arity}[${`A..N`}](implicit ${constraints("CommutativeMonoid")}): CommutativeMonoid[${`(A..N)`}] =
+        -    new CommutativeMonoid[${`(A..N)`}] {
+        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+        -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
+        -    }
+        -
         -  implicit def catsKernelStdOrderForTuple${arity}[${`A..N`}](implicit ${constraints("Order")}): Order[${`(A..N)`}] =
         -    new Order[${`(A..N)`}] {
         -      def compare(x: ${`(A..N)`}, y: ${`(A..N)`}): Int =
