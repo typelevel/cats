@@ -144,6 +144,17 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   /**
    * Lift into `G` (typically a `Coproduct`) given `Inject`. Analogous
    * to `Free.inject` but lifts programs rather than constructors.
+   *
+   *{{{
+   *scala> type Lo[A] = cats.data.Coproduct[List, Option, A]
+   *defined type alias Lo
+   *
+   *scala> val fo = Free.liftF(Option("foo"))
+   *fo: cats.free.Free[Option,String] = Free(...)
+   *
+   *scala> fo.inject[Lo]
+   *res4: cats.free.Free[Lo,String] = Free(...)
+   *}}}
    */
   final def inject[G[_]](implicit ev: Inject[S, G]): Free[G, A] =
     compile(λ[S ~> G](ev.inj(_)))
