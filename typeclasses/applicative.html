@@ -100,11 +100,11 @@ and compose them. From there we can generalize to working with any N number of i
 </div>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">int</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">i</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">c</span><span class="k">:</span> <span class="kt">Char</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">f</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">c</span><span class="o">))</span> <span class="c1">// what now?
-// res3: Option[Char =&gt; Double] = Some($$Lambda$2542/2051408629@5028b987)
+// res3: Option[Char =&gt; Double] = Some($$Lambda$2751/1113069537@3f09635d)
 </span></code></pre>
 </div>
 
-<p>We have an <code class="highlighter-rouge">Option[Char =&gt; Double]</code> and an <code class="highlighter-rouge">Option[Double]</code> to which we want to apply the function to,
+<p>We have an <code class="highlighter-rouge">Option[Char =&gt; Double]</code> and an <code class="highlighter-rouge">Option[Char]</code> to which we want to apply the function to,
 but <code class="highlighter-rouge">map</code> doesn’t give us enough power to do that. Hence, <code class="highlighter-rouge">ap</code>.</p>
 
 <h2 id="applicatives-compose">Applicatives compose</h2>
