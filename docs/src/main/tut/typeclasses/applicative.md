@@ -99,7 +99,7 @@ val char: Option[Char] = Some('a')
 int.map(i => (c: Char) => f(i, c)) // what now?
 ```
 
-We have an `Option[Char => Double]` and an `Option[Double]` to which we want to apply the function to,
+We have an `Option[Char => Double]` and an `Option[Char]` to which we want to apply the function to,
 but `map` doesn't give us enough power to do that. Hence, `ap`.
 
 ## Applicatives compose
