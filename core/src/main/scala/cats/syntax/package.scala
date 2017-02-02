@@ -24,6 +24,7 @@ package object syntax {
   object invariant extends InvariantSyntax
   object list extends ListSyntax
   object monadCombine extends MonadCombineSyntax
+  object monadError extends MonadErrorSyntax
   object monadFilter extends MonadFilterSyntax
   object monoid extends MonoidSyntax
   object option extends OptionSyntax
