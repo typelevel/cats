@@ -3,8 +3,11 @@ package tests
 
 import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
+import scala.util.Try
 
 import cats.instances.all._
+import cats.data.Validated
+import cats.laws.discipline.arbitrary._
 
 abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends CatsSuite with PropertyChecks {
 
@@ -71,6 +74,12 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   test("intercalate") {
     forAll { (fa: F[String], a: String) =>
       fa.intercalate(a) should === (fa.toList.mkString(a))
+    }
+  }
+
+  test("toList") {
+    forAll { (fa: F[Int]) =>
+      fa.toList should === (iterator(fa).toList)
     }
   }
 }
@@ -198,4 +207,20 @@ class FoldableStreamCheck extends FoldableCheck[Stream]("stream") {
 
 class FoldableMapCheck extends FoldableCheck[Map[Int, ?]]("map") {
   def iterator[T](map: Map[Int, T]): Iterator[T] = map.iterator.map(_._2)
+}
+
+class FoldableOptionCheck extends FoldableCheck[Option]("option") {
+  def iterator[T](option: Option[T]): Iterator[T] = option.iterator
+}
+
+class FoldableEitherCheck extends FoldableCheck[Either[Int, ?]]("either") {
+  def iterator[T](either: Either[Int, T]): Iterator[T] = either.right.toOption.iterator
+}
+
+class FoldableValidatedCheck extends FoldableCheck[Validated[String, ?]]("validated") {
+  def iterator[T](validated: Validated[String, T]): Iterator[T] = validated.toOption.iterator
+}
+
+class FoldableTryCheck extends FoldableCheck[Try]("try") {
+  def iterator[T](tryt: Try[T]): Iterator[T] = tryt.toOption.iterator
 }

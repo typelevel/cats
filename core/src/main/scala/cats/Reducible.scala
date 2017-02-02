@@ -114,7 +114,7 @@ import simulacrum.typeclass
    * Traverse `F[A]` using `Apply[G]`.
    *
    * `A` values will be mapped into `G[B]` and combined using
-   * `Applicative#map2`.
+   * `Apply#map2`.
    *
    * This method is similar to [[Foldable.traverse_]]. There are two
    * main differences:
@@ -176,6 +176,16 @@ import simulacrum.typeclass
       case NonEmptyList(hd, tl) =>
         Reducible[NonEmptyList].reduce(NonEmptyList(hd, a :: intersperseList(tl, a)))
     }
+
+  override def isEmpty[A](fa: F[A]): Boolean = false
+
+  override def nonEmpty[A](fa: F[A]): Boolean = true
+
+  override def minimumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+    Some(minimum(fa))
+
+  override def maximumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+    Some(maximum(fa))
 }
 
 /**
@@ -210,4 +220,55 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
         case None => Later(f(a))
       }
     }
+
+  override def size[A](fa: F[A]): Long = {
+    val (_, tail) = split(fa)
+    1 + G.size(tail)
+  }
+
+  override def fold[A](fa: F[A])(implicit A: Monoid[A]): A = {
+    val (a, ga) = split(fa)
+    A.combine(a, G.fold(ga))
+  }
+
+  override def find[A](fa: F[A])(f: A => Boolean): Option[A] = {
+    val (a, ga) = split(fa)
+    if (f(a)) Some(a) else G.find(ga)(f)
+  }
+
+  override def exists[A](fa: F[A])(p: A => Boolean): Boolean = {
+    val (a, ga) = split(fa)
+    p(a) || G.exists(ga)(p)
+  }
+
+  override def forall[A](fa: F[A])(p: A => Boolean): Boolean = {
+    val (a, ga) = split(fa)
+    p(a) && G.forall(ga)(p)
+  }
+
+  override def toList[A](fa: F[A]): List[A] = {
+    val (a, ga) = split(fa)
+    a :: G.toList(ga)
+  }
+
+  override def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] = {
+    val (a, ga) = split(fa)
+    NonEmptyList(a, G.toList(ga))
+  }
+
+  override def filter_[A](fa: F[A])(p: A => Boolean): List[A] = {
+    val (a, ga) = split(fa)
+    val filteredTail = G.filter_(ga)(p)
+    if (p(a)) a :: filteredTail else filteredTail
+  }
+
+  override def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] = {
+    val (a, ga) = split(fa)
+    if (p(a)) a :: G.takeWhile_(ga)(p) else Nil
+  }
+
+  override def dropWhile_[A](fa: F[A])(p: A => Boolean): List[A] = {
+    val (a, ga) = split(fa)
+    if (p(a)) G.dropWhile_(ga)(p) else a :: G.toList(ga)
+  }
 }
