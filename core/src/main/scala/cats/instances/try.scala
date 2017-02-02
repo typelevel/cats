@@ -92,7 +92,7 @@ trait TryInstances extends TryInstances1 {
       override def size[A](fa: Try[A]): Long =
         fa match {
           case Failure(_) => 0L
-          case Success(a) => 1L
+          case Success(_) => 1L
         }
 
       override def find[A](fa: Try[A])(f: A => Boolean): Option[A] =

@@ -30,7 +30,6 @@ class TupleTests extends CatsSuite {
   checkAll("Tuple2[String, Int]", ReducibleTests[(String, ?)].reducible[Option, Int, Int])
   checkAll("Reducible[(String, ?)]", SerializableTests.serializable(Reducible[(String, ?)]))
 
-
   test("Cartesian composition") {
     val cart = ContravariantCartesian[Eq].composeFunctor[(Int, ?)]
     val eq = cart.product(Eq[(Int, String)], Eq[(Int, Int)])

@@ -3,6 +3,7 @@ package tests
 
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
+import cats.instances.stream._
 import cats.data.{NonEmptyStream, OneAnd}
 import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
@@ -172,5 +173,17 @@ class OneAndTests extends CatsSuite {
       }
       got should === (expected)
     }
+  }
+}
+
+class ReducibleNonEmptyStreamCheck extends ReducibleCheck[NonEmptyStream]("NonEmptyStream") {
+  def iterator[T](nes: NonEmptyStream[T]): Iterator[T] =
+    (nes.head #:: nes.tail).iterator
+
+  def range(start: Long, endInclusive: Long): NonEmptyStream[Long] = {
+    // if we inline this we get a bewildering implicit numeric widening
+    // error message in Scala 2.10
+    val tailStart: Long = start + 1L
+    NonEmptyStream(start, (tailStart).to(endInclusive).toStream)
   }
 }

@@ -13,6 +13,7 @@ trait FoldableTests[F[_]] extends Laws {
     ArbFA: Arbitrary[F[A]],
     B: Monoid[B],
     CogenA: Cogen[A],
+    CogenB: Cogen[B],
     EqB: Eq[B]
   ): RuleSet = {
     new DefaultRuleSet(
@@ -24,7 +25,8 @@ trait FoldableTests[F[_]] extends Laws {
       "forall consistent with exists" -> forAll(laws.forallConsistentWithExists[A] _),
       "forall true if empty" -> forAll(laws.forallEmpty[A] _),
       "exists is lazy" -> forAll(laws.existsLazy[A] _),
-      "forall is lazy" -> forAll(laws.forallLazy[A] _)
+      "forall is lazy" -> forAll(laws.forallLazy[A] _),
+      "foldM identity" -> forAll(laws.foldMIdentity[A, B] _)
     )
   }
 }

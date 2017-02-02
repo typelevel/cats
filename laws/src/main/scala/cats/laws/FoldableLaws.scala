@@ -74,6 +74,17 @@ trait FoldableLaws[F[_]] {
   ): Boolean = {
     !F.isEmpty(fa) || F.forall(fa)(p)
   }
+
+  /**
+   * Monadic folding with identity monad is analogous to `foldLeft`.
+   */
+  def foldMIdentity[A, B](
+    fa: F[A],
+    b: B,
+    f: (B, A) => B
+  ): IsEq[B] = {
+    F.foldM[Id, A, B](fa, b)(f) <-> F.foldLeft(fa, b)(f)
+  }
 }
 
 object FoldableLaws {

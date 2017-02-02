@@ -231,6 +231,11 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
     A.combine(a, G.fold(ga))
   }
 
+  override def foldM[H[_], A, B](fa: F[A], z: B)(f: (B, A) => H[B])(implicit H: Monad[H]): H[B] = {
+    val (a, ga) = split(fa)
+    H.flatMap(f(z, a))(G.foldM(ga, _)(f))
+  }
+
   override def find[A](fa: F[A])(f: A => Boolean): Option[A] = {
     val (a, ga) = split(fa)
     if (f(a)) Some(a) else G.find(ga)(f)

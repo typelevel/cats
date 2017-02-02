@@ -6,20 +6,20 @@ import org.scalacheck.Arbitrary
 import scala.util.Try
 
 import cats.instances.all._
-import cats.data.Validated
+import cats.data.{NonEmptyList, NonEmptyStream, NonEmptyVector, Validated}
 import cats.laws.discipline.arbitrary._
 
 abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends CatsSuite with PropertyChecks {
 
   def iterator[T](fa: F[T]): Iterator[T]
 
-  test("size") {
+  test(s"Foldable[$name].size") {
     forAll { (fa: F[Int]) =>
       fa.size should === (iterator(fa).size.toLong)
     }
   }
 
-  test("summation") {
+  test(s"Foldable[$name] summation") {
     forAll { (fa: F[Int]) =>
       val total = iterator(fa).sum
       fa.foldLeft(0)(_ + _) should === (total)
@@ -29,7 +29,7 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test("find/exists/forall/filter_/dropWhile_") {
+  test(s"Foldable[$name].find/exists/forall/filter_/dropWhile_") {
     forAll { (fa: F[Int], n: Int) =>
       fa.find(_ > n)   should === (iterator(fa).find(_ > n))
       fa.exists(_ > n) should === (iterator(fa).exists(_ > n))
@@ -40,7 +40,7 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test("toList/isEmpty/nonEmpty") {
+  test(s"Foldable[$name].toList/isEmpty/nonEmpty") {
     forAll { (fa: F[Int]) =>
       fa.toList should === (iterator(fa).toList)
       fa.isEmpty should === (iterator(fa).isEmpty)
@@ -48,7 +48,7 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test("maximum/minimum") {
+  test(s"Foldable[$name].maximum/minimum") {
     forAll { (fa: F[Int]) =>
       val maxOpt = fa.maximumOption
       val minOpt = fa.minimumOption
@@ -63,7 +63,7 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test("reduceLeftOption/reduceRightOption") {
+  test(s"Foldable[$name].reduceLeftOption/reduceRightOption") {
     forAll { (fa: F[Int]) =>
       val list = fa.toList
       fa.reduceLeftOption(_ - _) should === (list.reduceLeftOption(_ - _))
@@ -71,13 +71,13 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test("intercalate") {
+  test(s"Foldable[$name].intercalate") {
     forAll { (fa: F[String], a: String) =>
       fa.intercalate(a) should === (fa.toList.mkString(a))
     }
   }
 
-  test("toList") {
+  test(s"Foldable[$name].toList") {
     forAll { (fa: F[Int]) =>
       fa.toList should === (iterator(fa).toList)
     }
@@ -91,7 +91,6 @@ class FoldableTestsAdditional extends CatsSuite {
     as.foldRight(Now(false)) { (a, lb) =>
       if (a === goal) Now(true) else lb
     }
-
 
   test("Foldable[List]") {
     val F = Foldable[List]
@@ -157,6 +156,18 @@ class FoldableTestsAdditional extends CatsSuite {
 
   test("Foldable[Map[String, ?]].foldM stack safety") {
     checkFoldMStackSafety[Map[String, ?]](_.map(x => x.toString -> x).toMap)
+  }
+
+  test("Foldable[NonEmptyList].foldM stack safety") {
+    checkFoldMStackSafety[NonEmptyList](xs => NonEmptyList.fromListUnsafe(xs.toList))
+  }
+
+  test("Foldable[NonEmptyVector].foldM stack safety") {
+    checkFoldMStackSafety[NonEmptyVector](xs => NonEmptyVector.fromVectorUnsafe(xs.toVector))
+  }
+
+  test("Foldable[NonEmptyStream].foldM stack safety") {
+    checkFoldMStackSafety[NonEmptyStream](xs => NonEmptyStream(xs.head, xs.tail: _*))
   }
 
   test("Foldable[Stream]") {

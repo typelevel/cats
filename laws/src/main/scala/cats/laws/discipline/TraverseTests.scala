@@ -17,6 +17,7 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] {
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     CogenC: Cogen[C],
+    CogenM: Cogen[M],
     M: Monoid[M],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]],

@@ -18,6 +18,7 @@ trait TraverseFilterTests[F[_]] extends TraverseTests[F] with FunctorFilterTests
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     CogenC: Cogen[C],
+    CogenM: Cogen[M],
     M: Monoid[M],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]],
