@@ -24,7 +24,8 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] {
     EqM: Eq[M],
     EqXYFC: Eq[X[Y[F[C]]]],
     EqXFB: Eq[X[F[B]]],
-    EqYFB: Eq[Y[F[B]]]
+    EqYFB: Eq[Y[F[B]]],
+    EqOptionA: Eq[Option[A]]
   ): RuleSet = {
     implicit def EqXFBYFB : Eq[(X[F[B]], Y[F[B]])] = new Eq[(X[F[B]], Y[F[B]])] {
       override def eqv(x: (X[F[B]], Y[F[B]]), y: (X[F[B]], Y[F[B]])): Boolean =

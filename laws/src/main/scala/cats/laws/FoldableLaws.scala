@@ -85,6 +85,27 @@ trait FoldableLaws[F[_]] {
   ): IsEq[B] = {
     F.foldM[Id, A, B](fa, b)(f) <-> F.foldLeft(fa, b)(f)
   }
+
+  /**
+   * `reduceLeftOption` consistent with `reduceLeftToOption`
+   */
+  def reduceLeftOptionConsistentWithReduceLeftToOption[A](
+    fa: F[A],
+    f: (A, A) => A
+  ): IsEq[Option[A]] = {
+    F.reduceLeftOption(fa)(f) <-> F.reduceLeftToOption(fa)(identity)(f)
+  }
+
+  /**
+   * `reduceRightOption` consistent with `reduceRightToOption`
+   */
+  def reduceRightOptionConsistentWithReduceRightToOption[A](
+    fa: F[A],
+    f: (A, A) => A
+  ): IsEq[Option[A]] = {
+    val g: (A, Eval[A]) => Eval[A] = (a, ea) => ea.map(f(a, _))
+    F.reduceRightOption(fa)(g).value <-> F.reduceRightToOption(fa)(identity)(g).value
+  }
 }
 
 object FoldableLaws {

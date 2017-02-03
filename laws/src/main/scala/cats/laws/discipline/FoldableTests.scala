@@ -14,7 +14,8 @@ trait FoldableTests[F[_]] extends Laws {
     B: Monoid[B],
     CogenA: Cogen[A],
     CogenB: Cogen[B],
-    EqB: Eq[B]
+    EqB: Eq[B],
+    EqOptionA: Eq[Option[A]]
   ): RuleSet = {
     new DefaultRuleSet(
       name = "foldable",
@@ -26,7 +27,11 @@ trait FoldableTests[F[_]] extends Laws {
       "forall true if empty" -> forAll(laws.forallEmpty[A] _),
       "exists is lazy" -> forAll(laws.existsLazy[A] _),
       "forall is lazy" -> forAll(laws.forallLazy[A] _),
-      "foldM identity" -> forAll(laws.foldMIdentity[A, B] _)
+      "foldM identity" -> forAll(laws.foldMIdentity[A, B] _),
+      "reduceLeftOption consistent with reduceLeftToOption" ->
+        forAll(laws.reduceLeftOptionConsistentWithReduceLeftToOption[A] _),
+      "reduceRightOption consistent with reduceRightToOption" ->
+        forAll(laws.reduceRightOptionConsistentWithReduceRightToOption[A] _)
     )
   }
 }
