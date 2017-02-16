@@ -21,6 +21,9 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
   def followedByConsistency[A, B](fa: F[A], fb: F[B]): IsEq[F[B]] =
     F.followedBy(fa)(fb) <-> F.flatMap(fa)(_ => fb)
 
+  def forEffectConsistency[A, B](fa: F[A], fb: F[B]): IsEq[F[A]] =
+    F.forEffect(fa)(fb) <-> F.flatMap(fa)(a => fb.map(_ => a))
+
   /**
    * The composition of `cats.data.Kleisli` arrows is associative. This is
    * analogous to [[flatMapAssociativity]].
