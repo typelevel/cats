@@ -80,13 +80,15 @@ import simulacrum.typeclass
    * {{{
    * scala> import cats.Eval
    * scala> import cats.implicits._
+   * scala> var count = 0
    * scala> val fa: Option[Int] = Some(3)
-   * scala> def fb: Option[Unit] = Some(println("effect!"))
+   * scala> def fb: Option[Unit] = Some(count += 1)
    * scala> fa.forEffectEval(Eval.later(fb))
-   * effect!
    * res0: Option[Int] = Some(3)
+   * scala> assert(count == 1)
    * scala> None.forEffectEval(Eval.later(fb))
    * res1: Option[Nothing] = None
+   * scala> assert(count == 1)
    * }}}
    */
   def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => map(fb.value)(_ => a))
