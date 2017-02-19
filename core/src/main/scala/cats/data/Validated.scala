@@ -76,6 +76,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def toOption: Option[A] = fold(_ => None, Some.apply)
 
   /**
+    * Returns Valid values wrapped in Ior.Right, and None for Ior.Left values
+    */
+  def toIor: Ior[E, A] = fold(Ior.left, Ior.right)
+
+  /**
    * Convert this value to a single element List if it is Valid,
    * otherwise return an empty List
    */
@@ -405,4 +410,9 @@ private[data] trait ValidatedFunctions {
    * the invalid of the `Validated` when the specified `Option` is `None`.
    */
   def fromOption[A, B](o: Option[B], ifNone: => A): Validated[A, B] = o.fold(invalid[A, B](ifNone))(valid)
+
+  /**
+    * Converts an `Ior[A, B]` to an `Validated[A, B]`.
+    */
+  def fromIor[A, B](ior: Ior[A, B]): Validated[A, B] = ior.fold(invalid, valid, (_, b) => valid(b))
 }
