@@ -50,8 +50,6 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
 
   final def toEither: Either[A, B] = fold(Left(_), Right(_), (_, b) => Right(b))
   final def toValidated: Validated[A, B] = fold(Invalid(_), Valid(_), (_, b) => Valid(b))
-  final def toValidatedNel: ValidatedNel[A, B] = fold(Validated.invalidNel, Valid(_), (_, b) => Valid(b))
-  final def toValidatedNel[C](implicit ev: A <:< NonEmptyList[C]): ValidatedNel[C, B] = fold(Invalid(_), Valid(_), (_, b) => Valid(b))
   final def toOption: Option[B] = right
   final def toList: List[B] = right.toList
 
