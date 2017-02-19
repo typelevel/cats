@@ -4,7 +4,7 @@ import cats.data.{Ior, IorNel}
 
 trait IorSyntax {
   implicit def catsSyntaxIorId[A](a: A): IorIdOps[A] = new IorIdOps(a)
-  implicit def catsSyntaxIorId[A, B](list: List[IorNel[A, B]]): IorNelListOps[A, B] =
+  implicit def catsSyntaxListIorNel[A, B](list: List[IorNel[A, B]]): IorNelListOps[A, B] =
     new IorNelListOps(list)
 }
 
