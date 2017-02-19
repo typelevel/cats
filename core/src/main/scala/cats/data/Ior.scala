@@ -1,7 +1,9 @@
 package cats
 package data
 
+import cats.data.Validated.{Invalid, Valid}
 import cats.functor.Bifunctor
+
 import scala.annotation.tailrec
 
 /** Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
@@ -47,6 +49,9 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def unwrap: Either[Either[A, B], (A, B)] = fold(a => Left(Left(a)), b => Left(Right(b)), (a, b) => Right((a, b)))
 
   final def toEither: Either[A, B] = fold(Left(_), Right(_), (_, b) => Right(b))
+  final def toValidated: Validated[A, B] = fold(Invalid(_), Valid(_), (_, b) => Valid(b))
+  final def toValidatedNel: ValidatedNel[A, B] = fold(Validated.invalidNel, Valid(_), (_, b) => Valid(b))
+  final def toValidatedNel[C](implicit ev: A <:< NonEmptyList[C]): ValidatedNel[C, B] = fold(Invalid(_), Valid(_), (_, b) => Valid(b))
   final def toOption: Option[B] = right
   final def toList: List[B] = right.toList
 
@@ -198,6 +203,9 @@ private[data] sealed trait IorFunctions {
   def left[A, B](a: A): A Ior B = Ior.Left(a)
   def right[A, B](b: B): A Ior B = Ior.Right(b)
   def both[A, B](a: A, b: B): A Ior B = Ior.Both(a, b)
+  def rightNel[A, B](b: B): IorNel[A, B] = right(NonEmptyList.of(b))
+  def leftNel[A, B](a: A): IorNel[A, B] = left(NonEmptyList.of(a))
+  def bothNel[A, B](a: A, b: B): IorNel[A, B] = Ior.Both(NonEmptyList.of(a), NonEmptyList.of(b))
 
   /**
    * Create an `Ior` from two Options if at least one of them is defined.
