@@ -3,8 +3,8 @@ package tests
 
 import cats.data.Ior
 import cats.kernel.laws.GroupLaws
-import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadTests, SerializableTests, TraverseTests}
 import org.scalacheck.Arbitrary._
 
 class IorTests extends CatsSuite {
@@ -195,6 +195,12 @@ class IorTests extends CatsSuite {
   test("toEither consistent with right") {
     forAll { (x: Int Ior String) =>
       x.toEither.toOption should === (x.right)
+    }
+  }
+
+  test("toValidated consistent with right") {
+    forAll { (x: Int Ior String) =>
+      x.toValidated.toOption should === (x.right)
     }
   }
 
