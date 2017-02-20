@@ -193,6 +193,12 @@ class ValidatedTests extends CatsSuite {
     }
   }
 
+  test("toIor then fromEither is identity") {
+    forAll { (v: Validated[String, Int]) =>
+      Validated.fromIor(v.toIor) should === (v)
+    }
+  }
+
   test("isValid after combine, iff both are valid") {
     forAll { (lhs: Validated[Int, String], rhs: Validated[Int, String]) =>
       lhs.combine(rhs).isValid should === (lhs.isValid && rhs.isValid)

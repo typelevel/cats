@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.Ior
+import cats.data.{Ior, NonEmptyList}
 import cats.kernel.laws.GroupLaws
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadTests, SerializableTests, TraverseTests}
@@ -201,6 +201,24 @@ class IorTests extends CatsSuite {
   test("toValidated consistent with right") {
     forAll { (x: Int Ior String) =>
       x.toValidated.toOption should === (x.right)
+    }
+  }
+
+  test("rightNel") {
+    forAll { (x: Int) =>
+      Ior.rightNel(x).right should === (Some(NonEmptyList.of(x)))
+    }
+  }
+
+  test("leftNel") {
+    forAll { (x: String) =>
+      Ior.leftNel(x).left should === (Some(NonEmptyList.of(x)))
+    }
+  }
+
+  test("bothNel") {
+    forAll { (x: Int, y: String) =>
+      Ior.bothNel(y, x).onlyBoth should === (Some((NonEmptyList.of(y), NonEmptyList.of(x))))
     }
   }
 
