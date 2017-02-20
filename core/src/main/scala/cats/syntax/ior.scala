@@ -73,11 +73,11 @@ final class IorIdOps[A](val a: A) extends AnyVal {
     * scala> import cats.data.IorNel
     * scala> import cats.implicits._
     *
-    * scala> "hello".rightNelIor[String]
+    * scala> "hello".rightIorNel[String]
     * res0: IorNel[String, String] = Right(NonEmptyList(hello))
     * }}}
     */
-  def rightNelIor[B]: IorNel[B, A] = Ior.rightNel(a)
+  def rightIorNel[B]: IorNel[B, A] = Ior.rightNel(a)
 
   /**
     * Wrap a value in a NonEmptyList in `Ior.Left`.
@@ -87,11 +87,11 @@ final class IorIdOps[A](val a: A) extends AnyVal {
     * scala> import cats.data.IorNel
     * scala> import cats.implicits._
     *
-    * scala> "error".leftNelIor[String]
+    * scala> "error".leftIorNel[String]
     * res0: IorNel[String, String] = Left(NonEmptyList(error))
     * }}}
     */
-  def leftNelIor[B]: IorNel[A, B] = Ior.leftNel(a)
+  def leftIorNel[B]: IorNel[A, B] = Ior.leftNel(a)
 
   /**
     * Wrap a value in a NonEmptyList in the right side of `Ior.Both`.
@@ -101,11 +101,11 @@ final class IorIdOps[A](val a: A) extends AnyVal {
     * scala> import cats.data.IorNel
     * scala> import cats.implicits._
     *
-    * scala> "hello".putRightNelIor[String]("error")
+    * scala> "hello".putRightIorNel[String]("error")
     * res0: IorNel[String, String] = Both(NonEmptyList(error),NonEmptyList(hello))
     * }}}
     */
-  def putRightNelIor[B](left: B): IorNel[B, A] = Ior.bothNel(left, a)
+  def putRightIorNel[B](left: B): IorNel[B, A] = Ior.bothNel(left, a)
 
   /**
     * Wrap a value in a NonEmptyList in the left side of `Ior.Both`.
@@ -115,11 +115,11 @@ final class IorIdOps[A](val a: A) extends AnyVal {
     * scala> import cats.data.IorNel
     * scala> import cats.implicits._
     *
-    * scala> "I got it wrong".putLeftNelIor[String]("hello")
+    * scala> "I got it wrong".putLeftIorNel[String]("hello")
     * res0: IorNel[String, String] = Both(NonEmptyList(I got it wrong),NonEmptyList(hello))
     * }}}
     */
-  def putLeftNelIor[B](right: B): IorNel[A, B] = Ior.bothNel(a, right)
+  def putLeftIorNel[B](right: B): IorNel[A, B] = Ior.bothNel(a, right)
 }
 
 
@@ -133,7 +133,7 @@ final class IorNelListOps[A, B](val list: List[IorNel[A, B]]) extends AnyVal {
     * scala> import cats.data.IorNel
     * scala> import cats.implicits._
     *
-    * scala> List("hello".rightNelIor[String], "error".leftNelIor[String]).reduceToIorNel
+    * scala> List("hello".rightIorNel[String], "error".leftIorNel[String]).reduceToIorNel
     * res0: IorNel[String, String] = Both(NonEmptyList(error),NonEmptyList(hello))
     * }}}
     */
@@ -147,7 +147,7 @@ final class IorNelListOps[A, B](val list: List[IorNel[A, B]]) extends AnyVal {
     * scala> import cats.data.IorNel
     * scala> import cats.implicits._
     *
-    * scala> List("hello".rightNelIor[String], "error".leftNelIor[String]).reduceToOptionIorNel
+    * scala> List("hello".rightIorNel[String], "error".leftIorNel[String]).reduceToOptionIorNel
     * res0: Option[IorNel[String, String]] = Some(Both(NonEmptyList(error),NonEmptyList(hello)))
     *
     * scala> List.empty[IorNel[String, String]].reduceToOptionIorNel
