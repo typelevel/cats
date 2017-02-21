@@ -38,7 +38,7 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.10.0",
     "org.typelevel" %%% "machinist" % "0.6.1",
-    compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
+    compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")
   ),
   fork in test := true,
@@ -453,7 +453,7 @@ lazy val scalaMacroDependencies: Seq[Setting[_]] = Seq(
       // in Scala 2.10, quasiquotes are provided by macro paradise
       case Some((2, 10)) =>
         Seq(
-          compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
+          compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
               "org.scalamacros" %% "quasiquotes" % "2.1.0" cross CrossVersion.binary
         )
     }
