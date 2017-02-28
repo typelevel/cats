@@ -48,6 +48,7 @@ package object cats {
         f(a, lb)
       def traverse[G[_], A, B](a: A)(f: A => G[B])(implicit G: Applicative[G]): G[B] =
         f(a)
+      override def foldMap[A, B](fa: Id[A])(f: A => B)(implicit B: Monoid[B]): B = f(fa)
       override def reduce[A](fa: Id[A])(implicit A: Semigroup[A]): A =
         fa
       def reduceLeftTo[A, B](fa: Id[A])(f: A => B)(g: (B, A) => B): B =
@@ -64,6 +65,7 @@ package object cats {
         Now(Some(f(fa)))
       override def reduceMap[A, B](fa: Id[A])(f: A => B)(implicit B: Semigroup[B]): B = f(fa)
       override def size[A](fa: Id[A]): Long = 1L
+      override def isEmpty[A](fa: Id[A]): Boolean = false
   }
 
   type Eq[A] = cats.kernel.Eq[A]

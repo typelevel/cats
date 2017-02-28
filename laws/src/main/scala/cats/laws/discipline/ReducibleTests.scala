@@ -17,9 +17,11 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
     ArbFGA: Arbitrary[F[G[A]]],
     ArbGB: Arbitrary[G[B]],
     CogenA: Cogen[A],
+    CogenB: Cogen[B],
     EqG: Eq[G[Unit]],
     EqA: Eq[A],
     EqB: Eq[B],
+    EqOptionA: Eq[Option[A]],
     MonoidB: Monoid[B]
   ): RuleSet =
     new DefaultRuleSet(

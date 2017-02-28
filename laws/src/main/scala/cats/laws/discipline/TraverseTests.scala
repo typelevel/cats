@@ -17,13 +17,15 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] {
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     CogenC: Cogen[C],
+    CogenM: Cogen[M],
     M: Monoid[M],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]],
     EqM: Eq[M],
     EqXYFC: Eq[X[Y[F[C]]]],
     EqXFB: Eq[X[F[B]]],
-    EqYFB: Eq[Y[F[B]]]
+    EqYFB: Eq[Y[F[B]]],
+    EqOptionA: Eq[Option[A]]
   ): RuleSet = {
     implicit def EqXFBYFB : Eq[(X[F[B]], Y[F[B]])] = new Eq[(X[F[B]], Y[F[B]])] {
       override def eqv(x: (X[F[B]], Y[F[B]]), y: (X[F[B]], Y[F[B]])): Boolean =

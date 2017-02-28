@@ -294,6 +294,7 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
         fab.leftMap(f)
     }
 
+  // scalastyle:off method.length
   implicit def catsDataInstancesForValidated[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =
     new Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] {
       def traverse[F[_]: Applicative, A, B](fa: Validated[E, A])(f: A => F[B]): F[Validated[E, B]] =
@@ -323,7 +324,40 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
           case v @ Validated.Valid(_) => v
         }
       def raiseError[A](e: E): Validated[E, A] = Validated.Invalid(e)
+
+      override def reduceLeftToOption[A, B](fa: Validated[E, A])(f: A => B)(g: (B, A) => B): Option[B] =
+        fa.map(f).toOption
+
+      override def reduceRightToOption[A, B](fa: Validated[E, A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+        Now(fa.map(f).toOption)
+
+      override def reduceLeftOption[A](fa: Validated[E, A])(f: (A, A) => A): Option[A] =
+        fa.toOption
+
+      override def reduceRightOption[A](fa: Validated[E, A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] =
+        Now(fa.toOption)
+
+      override def size[A](fa: Validated[E, A]): Long =
+        fa.fold(_ => 0L, _ => 1L)
+
+      override def foldMap[A, B](fa: Validated[E, A])(f: A => B)(implicit B: Monoid[B]): B =
+        fa.fold(_ => B.empty, f)
+
+      override def find[A](fa: Validated[E, A])(f: A => Boolean): Option[A] =
+        fa.toOption.filter(f)
+
+      override def exists[A](fa: Validated[E, A])(p: A => Boolean): Boolean =
+        fa.exists(p)
+
+      override def forall[A](fa: Validated[E, A])(p: A => Boolean): Boolean =
+        fa.forall(p)
+
+      override def toList[A](fa: Validated[E, A]): List[A] =
+        fa.fold(_ => Nil, _ :: Nil)
+
+      override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
     }
+    // scalastyle:on method.length
 }
 
 private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
