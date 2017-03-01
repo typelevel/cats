@@ -206,15 +206,43 @@ object Eval extends EvalInstances {
     new Eval.Call[A](a _) {}
 
   /**
-   * Static Eval instances for some common values.
+   * Static Eval instance for common value `Unit`.
    *
-   * These can be useful in cases where the same values may be needed
+   * This can be useful in cases where the same value may be needed
    * many times.
    */
   val Unit: Eval[Unit] = Now(())
+
+  /**
+   * Static Eval instance for common value `true`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val True: Eval[Boolean] = Now(true)
+
+  /**
+   * Static Eval instance for common value `false`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val False: Eval[Boolean] = Now(false)
+
+  /**
+   * Static Eval instance for common value `0`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val Zero: Eval[Int] = Now(0)
+
+  /**
+   * Static Eval instance for common value `1`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val One: Eval[Int] = Now(1)
 
   /**
