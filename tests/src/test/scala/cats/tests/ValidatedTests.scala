@@ -188,7 +188,7 @@ class ValidatedTests extends CatsSuite {
   }
 
   test("fromIor consistent with Ior.toValidated"){
-    forAll { (i: Ior[String, Int], s: String) =>
+    forAll { (i: Ior[String, Int]) =>
       Validated.fromIor(i) should === (i.toValidated)
     }
   }

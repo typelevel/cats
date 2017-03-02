@@ -401,18 +401,18 @@ private[data] trait ValidatedFunctions {
   }
 
   /**
-   * Converts an `Either[A, B]` to an `Validated[A, B]`.
+   * Converts an `Either[A, B]` to a `Validated[A, B]`.
    */
   def fromEither[A, B](e: Either[A, B]): Validated[A, B] = e.fold(invalid, valid)
 
   /**
-   * Converts an `Option[B]` to an `Validated[A, B]`, where the provided `ifNone` values is returned on
+   * Converts an `Option[B]` to a `Validated[A, B]`, where the provided `ifNone` values is returned on
    * the invalid of the `Validated` when the specified `Option` is `None`.
    */
   def fromOption[A, B](o: Option[B], ifNone: => A): Validated[A, B] = o.fold(invalid[A, B](ifNone))(valid)
 
   /**
-    * Converts an `Ior[A, B]` to an `Validated[A, B]`.
+    * Converts an `Ior[A, B]` to a `Validated[A, B]`.
     */
   def fromIor[A, B](ior: Ior[A, B]): Validated[A, B] = ior.fold(invalid, valid, (_, b) => valid(b))
 }

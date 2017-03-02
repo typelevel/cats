@@ -1,6 +1,6 @@
 package cats.syntax
 
-import cats.data.{Ior, IorNel}
+import cats.data.{Ior, IorNel, NonEmptyList}
 
 trait IorSyntax {
   implicit def catsSyntaxIorId[A](a: A): IorIdOps[A] = new IorIdOps(a)
@@ -74,7 +74,7 @@ final class IorIdOps[A](val a: A) extends AnyVal {
     * scala> import cats.implicits._
     *
     * scala> "hello".rightIorNel[String]
-    * res0: IorNel[String, String] = Right(NonEmptyList(hello))
+    * res0: IorNel[String, String] = Right(hello)
     * }}}
     */
   def rightIorNel[B]: IorNel[B, A] = Ior.rightNel(a)
@@ -102,7 +102,7 @@ final class IorIdOps[A](val a: A) extends AnyVal {
     * scala> import cats.implicits._
     *
     * scala> "hello".putRightIorNel[String]("error")
-    * res0: IorNel[String, String] = Both(NonEmptyList(error),NonEmptyList(hello))
+    * res0: IorNel[String, String] = Both(NonEmptyList(error),hello)
     * }}}
     */
   def putRightIorNel[B](left: B): IorNel[B, A] = Ior.bothNel(left, a)
@@ -116,7 +116,7 @@ final class IorIdOps[A](val a: A) extends AnyVal {
     * scala> import cats.implicits._
     *
     * scala> "I got it wrong".putLeftIorNel[String]("hello")
-    * res0: IorNel[String, String] = Both(NonEmptyList(I got it wrong),NonEmptyList(hello))
+    * res0: IorNel[String, String] = Both(NonEmptyList(I got it wrong),hello)
     * }}}
     */
   def putLeftIorNel[B](right: B): IorNel[A, B] = Ior.bothNel(a, right)
@@ -126,33 +126,38 @@ final class IorIdOps[A](val a: A) extends AnyVal {
 final class IorNelListOps[A, B](val list: List[IorNel[A, B]]) extends AnyVal {
 
   /**
-    * Returns single combined IorNel by reducing a list of IorNel
+    * Returns single combined Ior by reducing a list of IorNel
     *
     * Example:
     * {{{
-    * scala> import cats.data.IorNel
+    * scala> import cats.data.Ior
+    * scala> import cats.data.NonEmptyList
     * scala> import cats.implicits._
     *
-    * scala> List("hello".rightIorNel[String], "error".leftIorNel[String]).reduceToIorNel
-    * res0: IorNel[String, String] = Both(NonEmptyList(error),NonEmptyList(hello))
+    * scala> List("hello".rightIorNel[String], "error".leftIorNel[String]).reduceToIor
+    * res0: Ior[NonEmptyList[String], NonEmptyList[String]] = Both(NonEmptyList(error),NonEmptyList(hello))
     * }}}
     */
-  def reduceToIorNel: IorNel[A, B] = list reduce (_ append _)
+  def reduceToIor: Ior[NonEmptyList[A], NonEmptyList[B]] =
+    list.map(_.map(NonEmptyList(_, Nil))).reduce(_ combine _)
 
   /**
-    * Returns an Option of a single combined IorNel by reducing a list of IorNel
+    * Returns an Option of a single combined Ior by reducing a list of IorNel
     *
     * Example:
     * {{{
+    * scala> import cats.data.Ior
     * scala> import cats.data.IorNel
+    * scala> import cats.data.NonEmptyList
     * scala> import cats.implicits._
     *
-    * scala> List("hello".rightIorNel[String], "error".leftIorNel[String]).reduceToOptionIorNel
-    * res0: Option[IorNel[String, String]] = Some(Both(NonEmptyList(error),NonEmptyList(hello)))
+    * scala> List("hello".rightIorNel[String], "error".leftIorNel[String]).reduceToOptionIor
+    * res0: Option[Ior[NonEmptyList[String], NonEmptyList[String]]] = Some(Both(NonEmptyList(error),NonEmptyList(hello)))
     *
-    * scala> List.empty[IorNel[String, String]].reduceToOptionIorNel
-    * res1: Option[IorNel[String, String]] = None
+    * scala> List.empty[IorNel[String, String]].reduceToOptionIor
+    * res1: Option[Ior[NonEmptyList[String], NonEmptyList[String]]] = None
     * }}}
     */
-  def reduceToOptionIorNel: Option[IorNel[A, B]] = list reduceOption (_ append _)
+  def reduceToOptionIor: Option[Ior[NonEmptyList[A], NonEmptyList[B]]] =
+    list.map(_.map(NonEmptyList(_, Nil))) reduceOption (_ combine _)
 }

@@ -37,36 +37,16 @@ final class ListOps[A](val la: List[A]) extends AnyVal {
     * scala> import cats.data.IorNel
     * scala> import cats.implicits._
     *
-    * scala> val result1: List[Int] = List(1, 2)
-    * scala> result1.toRightIorNel("error!")
-    * res0: IorNel[String, Int] = Right(NonEmptyList(1, 2))
-    *
-    * scala> val result2: List[Int] = List.empty[Int]
-    * scala> result2.toRightIorNel("error!")
-    * res1: IorNel[String, Int] = Left(NonEmptyList(error!))
-    * }}}
-    */
-  def toRightIorNel[B](ifEmpty: => B): IorNel[B, A] =
-    toNel.fold[IorNel[B, A]](Ior.leftNel(ifEmpty))(Ior.right)
-
-  /**
-    * Returns a IorNel from a List
-    *
-    * Example:
-    * {{{
-    * scala> import cats.data.IorNel
-    * scala> import cats.implicits._
-    *
     * scala> val result1: List[String] = List("error 1", "error 2")
-    * scala> result1.toLeftIorNel(1)
+    * scala> result1.toIorNel(1)
     * res0: IorNel[String, Int] = Left(NonEmptyList(error 1, error 2))
     *
     * scala> val result2: List[String] = List.empty[String]
-    * scala> result2.toLeftIorNel(1)
-    * res1: IorNel[String, Int] = Right(NonEmptyList(1))
+    * scala> result2.toIorNel(1)
+    * res1: IorNel[String, Int] = Right(1)
     * }}}
     */
-  def toLeftIorNel[B](ifEmpty: => B): IorNel[A, B] =
+  def toIorNel[B](ifEmpty: => B): IorNel[A, B] =
     toNel.fold[IorNel[A, B]](Ior.rightNel(ifEmpty))(Ior.left)
 
   /**

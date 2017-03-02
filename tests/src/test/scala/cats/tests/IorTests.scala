@@ -155,13 +155,13 @@ class IorTests extends CatsSuite {
 
   test("append left") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
-      i.append(j).left should === (i.left.map(_ + j.left.getOrElse(0)).orElse(j.left))
+      i.combine(j).left should === (i.left.map(_ + j.left.getOrElse(0)).orElse(j.left))
     }
   }
 
   test("append right") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
-      i.append(j).right should === (i.right.map(_ + j.right.getOrElse("")).orElse(j.right))
+      i.combine(j).right should === (i.right.map(_ + j.right.getOrElse("")).orElse(j.right))
     }
   }
 
@@ -206,7 +206,7 @@ class IorTests extends CatsSuite {
 
   test("rightNel") {
     forAll { (x: Int) =>
-      Ior.rightNel(x).right should === (Some(NonEmptyList.of(x)))
+      Ior.rightNel(x).right should === (Some(x))
     }
   }
 
@@ -218,7 +218,7 @@ class IorTests extends CatsSuite {
 
   test("bothNel") {
     forAll { (x: Int, y: String) =>
-      Ior.bothNel(y, x).onlyBoth should === (Some((NonEmptyList.of(y), NonEmptyList.of(x))))
+      Ior.bothNel(y, x).onlyBoth should === (Some((NonEmptyList.of(y), x)))
     }
   }
 
