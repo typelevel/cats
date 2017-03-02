@@ -153,13 +153,13 @@ class IorTests extends CatsSuite {
     }
   }
 
-  test("append left") {
+  test("combine left") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
       i.combine(j).left should === (i.left.map(_ + j.left.getOrElse(0)).orElse(j.left))
     }
   }
 
-  test("append right") {
+  test("combine right") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
       i.combine(j).right should === (i.right.map(_ + j.right.getOrElse("")).orElse(j.right))
     }
