@@ -229,7 +229,6 @@ private[data] sealed trait NonEmptyVectorInstances {
       def traverse[G[_], A, B](fa: NonEmptyVector[A])(f: (A) => G[B])(implicit G: Applicative[G]): G[NonEmptyVector[B]] =
         G.map2Eval(f(fa.head), Always(Traverse[Vector].traverse(fa.tail)(f)))(NonEmptyVector(_, _)).value
 
-
       override def foldLeft[A, B](fa: NonEmptyVector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
@@ -250,6 +249,21 @@ private[data] sealed trait NonEmptyVectorInstances {
         go(f(a))
         NonEmptyVector.fromVectorUnsafe(buf.result())
       }
+
+      override def fold[A](fa: NonEmptyVector[A])(implicit A: Monoid[A]): A =
+        fa.reduce
+
+      override def foldM[G[_], A, B](fa: NonEmptyVector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
+        Foldable.iteratorFoldM(fa.toVector.toIterator, z)(f)
+
+      override def find[A](fa: NonEmptyVector[A])(f: A => Boolean): Option[A] =
+        fa.find(f)
+
+      override def forall[A](fa: NonEmptyVector[A])(p: A => Boolean): Boolean =
+        fa.forall(p)
+
+      override def exists[A](fa: NonEmptyVector[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
 
       override def toList[A](fa: NonEmptyVector[A]): List[A] = fa.toVector.toList
 
