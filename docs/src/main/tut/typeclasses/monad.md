@@ -111,7 +111,7 @@ statement into the monadic context.
 ```tut:book
 import cats.implicits._
 
-Monad[List].ifM(List(true, false, true))(List(1, 2), List(3, 4))
+Monad[List].ifM(List(true, false, true))(ifTrue = List(1, 2), ifFalse = List(3, 4))
 ```
 
 ### Composition
