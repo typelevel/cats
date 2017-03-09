@@ -221,9 +221,7 @@ val result = Monoid[Int].combine(sumLeft, sumRight)
 Cats provides laws for type classes via the `kernel-laws` and `laws` modules which makes law checking
 type class instances easy.
 
-## Further reading
-* [Returning the "Current" Type in Scala][fbounds]
-
+## Typeclass Hierarchy
 ![Typeclass hierarchy](http://g.gravizo.com/g?
   digraph G {
     size ="6,6";
@@ -243,10 +241,15 @@ type class instances easy.
     CoflatMap [group=g5]
     Comonad [group=g5]
     Bimonad [group=g5]
+    MonadError [group=g6]
+    ApplicativeError [group=g6]
     Functor -> Apply -> Applicative -> Monad -> MonadFilter -> MonadCombine
     Applicative -> Alternative -> MonadCombine
     MonoidK -> Alternative
     Functor -> CoflatMap
+    ApplicativeError -> MonadError
+    Monad -> MonadError
+    Applicative -> ApplicativeError
     subgraph cluster_s3{
       Invariant -> Contravariant
       graph[style=dotted,label="functor"]
@@ -267,6 +270,11 @@ type class instances easy.
     Foldable -> Reducible
   }
 )
+
+## Further reading
+* [Returning the "Current" Type in Scala][fbounds]
+
+
 
 [fbounds]: http://tpolecat.github.io/2015/04/29/f-bounds.html "Returning the "Current" Type in Scala"
 [simulacrum]: https://github.com/mpilquist/simulacrum "First class syntax support for type classes in Scala"
