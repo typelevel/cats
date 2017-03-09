@@ -28,7 +28,7 @@ trait ApplicativeEvalTests[F[_]] extends ApplicativeTests[F] {
       name = "applicativeEval",
       parent = Some(applicative[A, B, C]),
       "eval consistent with pure" -> forAll(laws.evalEquivalenceWithPure[A] _),
-      "eval consistent with pure mapped" -> forAll(laws.evalConsistentWithPureMapped[A,B] _)
+      "eval consistent with pure mapped" -> forAll(laws.evalConsistentWithPureMapped[A, B] _)
     )
   }
 

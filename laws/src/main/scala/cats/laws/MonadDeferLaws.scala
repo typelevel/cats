@@ -29,16 +29,16 @@ trait MonadDeferLaws[F[_]] extends ApplicativeEvalLaws[F] with MonadLaws[F] {
     lh.flatMap(_ => lh) <-> rh.flatMap(_ => rh)
   }
 
-  def evalRepeatsSideEffects[A,B](a: A, b: B, f: (A, B) => A): IsEq[F[A]] = {
+  def evalRepeatsSideEffects[A, B](a: A, b: B, f: (A, B) => A): IsEq[F[A]] = {
     val state = new StatefulBox(a)
     val fa = F.delay(state.transform(a => f(a, b)))
-    fa.flatMap(_ => fa) <-> F.pure(f(f(a,b), b))
+    fa.flatMap(_ => fa) <-> F.pure(f(f(a, b), b))
   }
 
-  def deferRepeatsSideEffects[A,B](a: A, b: B, f: (A, B) => A): IsEq[F[A]] = {
+  def deferRepeatsSideEffects[A, B](a: A, b: B, f: (A, B) => A): IsEq[F[A]] = {
     val state = new StatefulBox(a)
-    val fa = F.defer(F.pure(state.transform(a => f(a,b))))
-    fa.flatMap(_ => fa) <-> F.pure(f(f(a,b), b))
+    val fa = F.defer(F.pure(state.transform(a => f(a, b))))
+    fa.flatMap(_ => fa) <-> F.pure(f(f(a, b), b))
   }
 }
 
