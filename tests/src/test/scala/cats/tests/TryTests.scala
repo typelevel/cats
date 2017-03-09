@@ -4,7 +4,6 @@ package tests
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-
 import scala.util.{Success, Try}
 
 class TryTests extends CatsSuite {
@@ -24,6 +23,9 @@ class TryTests extends CatsSuite {
 
   checkAll("Try", MonadTests[Try].monad[Int, Int, Int])
   checkAll("Monad[Try]", SerializableTests.serializable(Monad[Try]))
+
+  checkAll("Try[Int]", ApplicativeEvalTests[Try].applicativeEvalWithError[Int, Int, Int])
+  checkAll("ApplicativeEval[Try]", SerializableTests.serializable(ApplicativeEval[Try]))
 
   test("show") {
     forAll { fs: Try[String] =>

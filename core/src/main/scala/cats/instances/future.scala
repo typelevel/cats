@@ -6,9 +6,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait FutureInstances extends FutureInstances1 {
 
-  implicit def catsStdInstancesForFuture(implicit ec: ExecutionContext): MonadError[Future, Throwable] with CoflatMap[Future] with Monad[Future] =
-    new FutureCoflatMap with MonadError[Future, Throwable] with Monad[Future] {
+  implicit def catsStdInstancesForFuture(implicit ec: ExecutionContext): MonadError[Future, Throwable] with CoflatMap[Future] with Monad[Future] with ApplicativeEval[Future] =
+    new FutureCoflatMap with MonadError[Future, Throwable] with Monad[Future] with ApplicativeEval[Future] {
       def pure[A](x: A): Future[A] = Future.successful(x)
+      def eval[A](a: Eval[A]): Future[A] = Future(a.value)
 
       def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
 

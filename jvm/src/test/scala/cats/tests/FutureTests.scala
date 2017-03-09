@@ -36,4 +36,5 @@ class FutureTests extends CatsSuite {
 
   checkAll("Future with Throwable", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
+  checkAll("Future", ApplicativeEvalTests[Future].applicativeEvalWithError[Int, Int, Int])
 }
