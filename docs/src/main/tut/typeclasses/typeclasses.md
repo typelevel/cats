@@ -247,9 +247,8 @@ type class instances easy.
     Applicative -> Alternative -> MonadCombine
     MonoidK -> Alternative
     Functor -> CoflatMap
-    ApplicativeError -> MonadError
+    Applicative -> ApplicativeError -> MonadError
     Monad -> MonadError
-    Applicative -> ApplicativeError
     subgraph cluster_s3{
       Invariant -> Contravariant
       graph[style=dotted,label="functor"]
