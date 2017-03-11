@@ -204,12 +204,6 @@ class IorTests extends CatsSuite {
     }
   }
 
-  test("rightNel") {
-    forAll { (x: Int) =>
-      Ior.rightNel(x).right should === (Some(x))
-    }
-  }
-
   test("leftNel") {
     forAll { (x: String) =>
       Ior.leftNel(x).left should === (Some(NonEmptyList.of(x)))
