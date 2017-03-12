@@ -60,11 +60,11 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def second[C](implicit F: Functor[F]): Kleisli[F, (C, A), (C, B)] =
     Kleisli{ case (c, a) => F.map(run(a))(c -> _)}
 
-  def left[C](implicit F: Applicative[F]): Kleisli[F, A Xor C, B Xor C] =
-    Kleisli(_.fold(a => F.map(run(a))(Xor.left[B, C]), c => F.pure(Xor.right(c))))
+  def left[C](implicit F: Applicative[F]): Kleisli[F, Either[A, C], Either[B, C]] =
+    Kleisli(_.fold(a => F.map(run(a))(Left(_)), c => F.pure(Right(c))))
 
-  def right[C](implicit F: Applicative[F]): Kleisli[F, C Xor A, C Xor B] =
-    Kleisli(_.fold(c => F.pure(Xor.left(c)), a => F.map(run(a))(Xor.right[C, B])))
+  def right[C](implicit F: Applicative[F]): Kleisli[F, Either[C, A], Either[C, B]] =
+    Kleisli(_.fold(c => F.pure(Left(c)), a => F.map(run(a))(Right(_))))
 
   def apply(a: A): F[B] = run(a)
 }
@@ -245,10 +245,10 @@ private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] with KleisliP
 private trait KleisliProChoice[F[_]] extends ProChoice[Kleisli[F, ?, ?]] with KleisliProFunctor[F] {
   implicit def F: Applicative[F]
 
-  override def left[A, B, C](fab: Kleisli[F, A, B]): Kleisli[F, A Xor C, B Xor C] =
+  override def left[A, B, C](fab: Kleisli[F, A, B]): Kleisli[F, Either[A, C], Either[B, C]] =
     fab.left
 
-  override def right[A, B, C](fab: Kleisli[F, A, B]): Kleisli[F, C Xor A, C Xor B] =
+  override def right[A, B, C](fab: Kleisli[F, A, B]): Kleisli[F, Either[C, A], Either[C, B]] =
     fab.right
 }
 

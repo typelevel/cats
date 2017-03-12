@@ -1,6 +1,5 @@
 package cats.syntax
 
-import cats.data.Xor
 import cats.functor.ProChoice
 
 trait ProChoiceSyntax {
@@ -10,6 +9,6 @@ trait ProChoiceSyntax {
 }
 
 class ProChoiceOps[F[_, _], A, B](fab: F[A, B])(implicit F: ProChoice[F]) {
-  def left[C] : F[A Xor C, B Xor C] = F.left(fab)
-  def right[C]: F[C Xor A, C Xor B] = F.right(fab)
+  def left[C] : F[Either[A, C], Either[B, C]] = F.left(fab)
+  def right[C]: F[Either[C, A], Either[C, B]] = F.right(fab)
 }

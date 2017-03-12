@@ -1,11 +1,9 @@
 package cats.functor
 
-import cats.data.Xor
-
 
 trait ProChoice[F[_, _]] extends Profunctor[F] {
-  def left[A, B, C]( fab: F[A, B]): F[A Xor C, B Xor C]
-  def right[A, B, C](fab: F[A, B]): F[C Xor A, C Xor B]
+  def left[A, B, C](fab: F[A, B]): F[Either[A, C], Either[B, C]]
+  def right[A, B, C](fab: F[A, B]): F[Either[C, A], Either[C, B]]
 }
 
 object ProChoice {
