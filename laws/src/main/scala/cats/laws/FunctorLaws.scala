@@ -4,7 +4,7 @@ package laws
 import cats.syntax.functor._
 
 /**
- * Laws that must be obeyed by any [[Functor]].
+ * Laws that must be obeyed by any `Functor`.
  */
 trait FunctorLaws[F[_]] extends InvariantLaws[F] {
   implicit override def F: Functor[F]

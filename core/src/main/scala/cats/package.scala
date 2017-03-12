@@ -1,10 +1,11 @@
+import scala.annotation.tailrec
+
 /**
  * Symbolic aliases for various types are defined here.
  */
 package object cats {
 
-  type ~>[F[_], G[_]] = arrow.NaturalTransformation[F, G]
-  type <~[F[_], G[_]] = arrow.NaturalTransformation[G, F]
+  type ~>[F[_], G[_]] = arrow.FunctionK[F, G]
 
   type ⊥ = Nothing
   type ⊤ = Any
@@ -26,29 +27,58 @@ package object cats {
  * encodes pure unary function application.
  */
   type Id[A] = A
-  implicit val Id: Bimonad[Id] =
-    new Bimonad[Id] {
+  implicit val catsInstancesForId: Bimonad[Id] with Monad[Id] with Traverse[Id] with Reducible[Id] =
+    new Bimonad[Id] with Monad[Id] with Traverse[Id] with Reducible[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
       def coflatMap[A, B](a: A)(f: A => B): B = f(a)
+      @tailrec def tailRecM[A, B](a: A)(f: A => Either[A, B]): B = f(a) match {
+        case Left(a1) => tailRecM(a1)(f)
+        case Right(b) => b
+      }
       override def map[A, B](fa: A)(f: A => B): B = f(fa)
-      override def ap[A, B](fa: A)(ff: A => B): B = ff(fa)
+      override def ap[A, B](ff: A => B)(fa: A): B = ff(fa)
       override def flatten[A](ffa: A): A = ffa
       override def map2[A, B, Z](fa: A, fb: B)(f: (A, B) => Z): Z = f(fa, fb)
       override def lift[A, B](f: A => B): A => B = f
       override def imap[A, B](fa: A)(f: A => B)(fi: B => A): B = f(fa)
+      def foldLeft[A, B](a: A, b: B)(f: (B, A) => B) = f(b, a)
+      def foldRight[A, B](a: A, lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        f(a, lb)
+      def traverse[G[_], A, B](a: A)(f: A => G[B])(implicit G: Applicative[G]): G[B] =
+        f(a)
+      override def foldMap[A, B](fa: Id[A])(f: A => B)(implicit B: Monoid[B]): B = f(fa)
+      override def reduce[A](fa: Id[A])(implicit A: Semigroup[A]): A =
+        fa
+      def reduceLeftTo[A, B](fa: Id[A])(f: A => B)(g: (B, A) => B): B =
+        f(fa)
+      override def reduceLeft[A](fa: Id[A])(f: (A, A) => A): A =
+        fa
+      override def reduceLeftToOption[A, B](fa: Id[A])(f: A => B)(g: (B, A) => B): Option[B] =
+        Some(f(fa))
+      override def reduceRight[A](fa: Id[A])(f: (A, Eval[A]) => Eval[A]): Eval[A] =
+        Now(fa)
+      def reduceRightTo[A, B](fa: Id[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Now(f(fa))
+      override def reduceRightToOption[A, B](fa: Id[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+        Now(Some(f(fa)))
+      override def reduceMap[A, B](fa: Id[A])(f: A => B)(implicit B: Semigroup[B]): B = f(fa)
+      override def size[A](fa: Id[A]): Long = 1L
+      override def isEmpty[A](fa: Id[A]): Boolean = false
   }
 
-  type Eq[A] = algebra.Eq[A]
-  type PartialOrder[A] = algebra.PartialOrder[A]
-  type Order[A] = algebra.Order[A]
-  type Semigroup[A] = algebra.Semigroup[A]
-  type Monoid[A] = algebra.Monoid[A]
+  type Eq[A] = cats.kernel.Eq[A]
+  type PartialOrder[A] = cats.kernel.PartialOrder[A]
+  type Order[A] = cats.kernel.Order[A]
+  type Semigroup[A] = cats.kernel.Semigroup[A]
+  type Monoid[A] = cats.kernel.Monoid[A]
+  type Group[A] = cats.kernel.Group[A]
 
-  val Eq = algebra.Eq
-  val PartialOrder = algebra.PartialOrder
-  val Order = algebra.Order
-  val Semigroup = algebra.Semigroup
-  val Monoid = algebra.Monoid
+  val Eq = cats.kernel.Eq
+  val PartialOrder = cats.kernel.PartialOrder
+  val Order = cats.kernel.Order
+  val Semigroup = cats.kernel.Semigroup
+  val Monoid = cats.kernel.Monoid
+  val Group = cats.kernel.Group
 }

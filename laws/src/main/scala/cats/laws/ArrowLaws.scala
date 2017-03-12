@@ -2,13 +2,13 @@ package cats
 package laws
 
 import cats.arrow.Arrow
-import cats.std.function._
+import cats.instances.function._
 import cats.syntax.compose._
 import cats.syntax.split._
 import cats.syntax.strong._
 
 /**
- * Laws that must be obeyed by any [[cats.arrow.Arrow]].
+ * Laws that must be obeyed by any `cats.arrow.Arrow`.
  */
 trait ArrowLaws[F[_, _]] extends CategoryLaws[F] with SplitLaws[F] with StrongLaws[F] {
   implicit override def F: Arrow[F]

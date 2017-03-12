@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum._
+import simulacrum.typeclass
 
 /**
  * MonoidK is a universal monoid which operates on kinds.
@@ -35,6 +35,11 @@ import simulacrum._
   override def algebra[A]: Monoid[F[A]] =
     new Monoid[F[A]] {
       def empty: F[A] = self.empty
-      def combine(x: F[A], y: F[A]): F[A] = self.combine(x, y)
+      def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
+    }
+
+  override def compose[G[_]]: MonoidK[λ[α => F[G[α]]]] =
+    new ComposedMonoidK[F, G] {
+      val F = self
     }
 }

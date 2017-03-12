@@ -1,152 +1,83 @@
 ## Cats
 
+[![Build Status](https://api.travis-ci.org/typelevel/cats.svg)](https://travis-ci.org/typelevel/cats)
+[![Workflow](https://badge.waffle.io/typelevel/cats.svg?label=ready&title=Ready)](https://waffle.io/typelevel/cats)
+[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
+[![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
+[![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange)](https://index.scala-lang.org/typelevel/cats/cats-core)
+[![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.8.svg)](http://scala-js.org)
+
 ### Overview
 
-Cats is a proof-of-concept library intended to provide abstractions
-for functional programming in Scala.
+Cats is a library which provides abstractions for functional programming in Scala.
 
 The name is a playful shortening of the word *category*.
 
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
+#### Why?
+
+Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
+standard library. Cats augments the standard library with tools that further enable functional programming such as
+`Validated`, `Monad`, and `Traverse`. A broader goal of Cats is to provide a foundation for an
+[ecosystem of pure, typeful libraries](http://typelevel.org/projects/).
+
 ### Getting Started
 
-Cats is not currently published, so you'll need to check out this
-repository to try it out.
+Cats is currently available for Scala 2.10, 2.11 and 2.12, and [Scala.js](http://www.scala-js.org/).
 
-To build Cats you should have [sbt](http://www.scala-sbt.org/0.13/tutorial/Setup.html)
-installed. Run `sbt`, and then use any of the following commands:
+To get started with SBT, simply add the following to your `build.sbt`
+file:
 
- * `compile`: compile the code
- * `console`: launch a REPL
- * `test`: run the tests
- * `unidoc`: generate the documentation
- * `scalastyle`: run the style-checker on the code
- * `validate`: run tests, style-checker, and doc generation
+```scala
+libraryDependencies += "org.typelevel" %% "cats" % "0.9.0"
+```
 
-[![Build Status](https://api.travis-ci.org/non/cats.png)](https://travis-ci.org/non/cats)
-[![Workflow](https://badge.waffle.io/non/cats.png?label=ready&title=Ready)](https://waffle.io/non/cats)
-[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/cats)
+This will pull in all of Cats' modules. If you only require some
+functionality, you can pick-and-choose from amongst these modules
+(used in place of `"cats"`):
 
-### Design
+ * `cats-macros`: Macros used by Cats syntax (*required*).
+ * `cats-kernel`: Small set of basic type classes (*required*).
+ * `cats-core`: Most core type classes and functionality (*required*).
+ * `cats-laws`: Laws for testing type class instances.
+ * `cats-free`: Free structures such as the free monad, and supporting type classes.
 
-The goal is to provide a lightweight, modular, and extensible library
-that is approachable and powerful. We will also provide useful
-documentation and examples which are type-checked by the compiler to
-ensure correctness.
+Release notes for Cats are available in [CHANGES.md](CHANGES.md).
 
-Cats will be designed to use modern *best practices*:
+*Cats is still under active development. While we don't anticipate any
+ major redesigns, changes that are neither source nor binary
+ compatible are to be expected in upcoming cats releases. We will
+ update the minor version of cats accordingly for such changes. Once
+ cats 1.0 is released (ETA: Q3 2016), there will be an increased focus
+ on making changes in compatible ways.*
 
- * [simulacrum](https://github.com/mpilquist/simulacrum) for minimizing typeclass boilerplate
- * [machinist](https://github.com/typelevel/machinist) for optimizing implicit operators
- * [scalacheck](http://scalacheck.org) for property-based testing
- * [discipline](https://github.com/typelevel/discipline) for encoding and testing laws
- * [kind-projector](https://github.com/non/kind-projector) for type lambda syntax
- * [algebra](https://github.com/non/algebra) for shared algebraic structures
- * ...and of course a pure functional subset of the Scala language.
+### Documentation
 
-(We also plan to support [Miniboxing](http://scala-miniboxing.org) in a branch.)
+Cats information and documentation is available on the
+[website](http://typelevel.org/cats).
 
-Currently Cats is experimenting with providing laziness via a type
-constructor (`Lazy[_]`), rather than via ad-hoc by-name
-parameters.This design may change if it ends up being impractical.
+We also have a Scaladoc [index](http://typelevel.org/cats/api/#package).
 
-The goal is to make Cats as efficient as possible for both strict and
-lazy evaluation. There are also issues around by-name parameters that
-mean they are not well-suited to all situations where laziness is
-desirable.
+Finally, we have a list of
+[frequently-asked questions](docs/src/main/tut/faq.md).
 
-### Modules
-
-Cats will be split into modules, both to keep the size of the
-artifacts down and also to avoid unnecessarily tight coupling between
-type classes and data types.
-
-Initially Cats will support the following modules:
-
- * `core`: Definitions for widely-used type classes and data types
- * `std`: Standard type class instances and other useful data types.
- * `laws`: The encoded laws for type classes, exported to assist third-party testing.
- * `tests`: Verifies the laws, and runs any other tests. Not published.
-
-As the type class families grow, it's possible that additional modules
-will be added as well. Modules which depend on other libraries
-(e.g. Shapeless-based type class derivation) may be added as well.
+Our goal is to have clear and comprehensive documentation. If you
+notice problems, omissions, or errors, please
+[let us know](CONTRIBUTING.md).
 
 ### How can I contribute to Cats?
 
-There are many ways to support Cats' development:
+We welcome contributions to Cats and would love for you to help build
+Cats. See our [contributor guide](CONTRIBUTING.md) for more
+information about how you can get involed.
 
- * Fix bugs: Despite using static types, law-checking, and
-   property-based testing bugs can happen. Reporting problems you
-   encounter (with the documentation, code, or anything else) helps us
-   to improve. Look for issues labelled "ready" as good targets, but 
-   **please add a comment to the issue** if you start working on one. 
-   We want to avoid any duplicated effort.
-
- * Write ScalaDoc comments: One of our goals is to have ScalaDoc
-   comments for all types in Cats. The documentation should describe
-   the type and give a basic usage (it may also link to relevant
-   papers).
-   
- * Write tutorials and examples: In addition to inline ScalaDoc
-   comments, we hope to provide Markdown-based tutorials which can
-   demonstrate how to use all the provided types. These should be
-   *literate programs* i.e. narrative text interspersed with code.
-
- * Improve the laws and tests: Cats' type classes rely on laws (and
-   law-checking) to make type classes useful and reliable. If you
-   notice laws or tests which are missing (or could be improved)
-   you can open an issue (or send a pull request).
-
- * Help with code review: Most of our design decisions are made
-   through conversations on issues and pull requests. You can
-   participate in these conversations to help guide the future of
-   Cats.
-   
-   We will be using the **meta** label for large design decisions, and
-   your input on these is especially appreciated.
-
- * Contribute new code: Cats is growing! If there are type classes (or
-   concrete data types) which you need, feel free to contribute! You
-   can open an issue to discuss your idea, or start hacking and submit
-   a pull request. One advantage of opening an issue is that it may
-   save you time to get other opinions on your approach.
-   
- * Ask questions: we are hoping to make Cats (and functional
-   programming in Scala) accessible to the largest number of
-   people. If you have questions it is likely many other people do as
-   well, and as a community this is how we can grow and improve.
-
-### Maintainers
-
-The current maintainers (people who can merge pull requests) are:
-
- * [ceedubs](https://github.com/ceedubs) Cody Allen
- * [rossabaker](https://github.com/rossabaker) Ross Baker
- * [travisbrown](https://github.com/travisbrown) Travis Brown
- * [tpolecat](https://github.com/tpolecat) Rob Norris
- * [stew](https://github.com/stew) Mike O'Connor
- * [non](https://github.com/non) Erik Osheim
- * [mpilquist](https://github.com/mpilquist) Michael Pilquist
- * [milessabin](https://github.com/milessabin) Miles Sabin
- * [fthomas](https://github.com/fthomas) Frank Thomas
- * [julien-truffaut](https://github.com/julien-truffaut) Julien Truffaut
-
-We are currently following a practice of requiring at least two
-sign-offs to merge PRs (and for large or contentious issues we may
-wait for more).
-
-### Contributing
+### Community
 
 Discussion around Cats is currently happening in the
-[Gitter channel](https://gitter.im/non/cats) as well as on Github
+[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
 issue and PR pages. You can get an overview of who is working on what
-via [Waffle.io](https://waffle.io/non/cats).
-
-Feel free to open an issue if you notice a bug, have an idea for a
-feature, or have a question about the code. Pull requests are also
-gladly accepted. For more information, check out the [contributor guide](CONTRIBUTING.md).
+via [Waffle.io](https://waffle.io/typelevel/cats).
 
 People are expected to follow the
 [Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
@@ -163,23 +94,48 @@ into larger problems.
 If you are being harassed, please contact one of [us](#maintainers)
 immediately so that we can support you.
 
+### Maintainers
+
+The current maintainers (people who can merge pull requests) are:
+
+ * [ceedubs](https://github.com/ceedubs) Cody Allen
+ * [rossabaker](https://github.com/rossabaker) Ross Baker
+ * [johnynek](https://github.com/johnynek) P. Oscar Boykin
+ * [travisbrown](https://github.com/travisbrown) Travis Brown
+ * [adelbertc](https://github.com/adelbertc) Adelbert Chang
+ * [peterneyens](https://github.com/peterneyens) Peter Neyens
+ * [tpolecat](https://github.com/tpolecat) Rob Norris
+ * [stew](https://github.com/stew) Mike O'Connor
+ * [non](https://github.com/non) Erik Osheim
+ * [mpilquist](https://github.com/mpilquist) Michael Pilquist
+ * [milessabin](https://github.com/milessabin) Miles Sabin
+ * [fthomas](https://github.com/fthomas) Frank Thomas
+ * [julien-truffaut](https://github.com/julien-truffaut) Julien Truffaut
+ * [kailuowang](https://github.com/kailuowang) Kailuo Wang
+
+We are currently following a practice of requiring at least two
+sign-offs to merge PRs (and for large or contentious issues we may
+wait for more). For typos or other small fixes to documentation we
+relax this to a single sign-off.
+
 ### Related Projects
 
-Cats is closely-related to [Structures](https://github.com/mpilquist/Structures);
-both projects are descended from [Scalaz](https://github.com/scalaz/scalaz).
+There are many projects that integrate with Cats:
 
-There are many related Haskell libraries, for example:
-
- * [semigroupoids](https://hackage.haskell.org/package/semigroupoids)
- * [profunctors](https://github.com/ekmett/profunctors)
- * [contravariant](https://github.com/ekmett/contravariant)
- * ...and so on.
+ * [Circe](https://github.com/travisbrown/circe): pure functional JSON library.
+ * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
+ * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources.
+ * [Frameless](https://github.com/adelbertc/frameless): Expressive types for Spark.
+ * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
+ * [Kittens](https://github.com/milessabin/kittens): automatically derived type class instances.
+ * [Monix](https://github.com/monixio/monix): high-performance library for composing asynchronous and event-based programs.
+ * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers).
 
 ### Copyright and License
 
 All code is available to you under the MIT license, available at
 http://opensource.org/licenses/mit-license.php and also in the
 [COPYING](COPYING) file. The design is informed by many other
-projects, in particular Scalaz.
+projects, in particular [Scalaz](https://github.com/scalaz/scalaz).
 
-Copyright the maintainers, 2015.
+Copyright the maintainers, 2015-2016.

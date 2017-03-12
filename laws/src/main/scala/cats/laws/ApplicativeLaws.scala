@@ -5,22 +5,22 @@ import cats.syntax.apply._
 import cats.syntax.functor._
 
 /**
- * Laws that must be obeyed by any [[Applicative]].
+ * Laws that must be obeyed by any `Applicative`.
  */
 trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
   implicit override def F: Applicative[F]
 
   def applicativeIdentity[A](fa: F[A]): IsEq[F[A]] =
-    fa.ap(F.pure((a: A) => a)) <-> fa
+    F.pure((a: A) => a).ap(fa) <-> fa
 
   def applicativeHomomorphism[A, B](a: A, f: A => B): IsEq[F[B]] =
-    F.pure(a).ap(F.pure(f)) <-> F.pure(f(a))
+    F.pure(f).ap(F.pure(a)) <-> F.pure(f(a))
 
   def applicativeInterchange[A, B](a: A, ff: F[A => B]): IsEq[F[B]] =
-    F.pure(a).ap(ff) <-> ff.ap(F.pure(f => f(a)))
+    ff.ap(F.pure(a)) <-> F.pure((f: A => B) => f(a)).ap(ff)
 
   def applicativeMap[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
-    fa.map(f) <-> fa.ap(F.pure(f))
+    fa.map(f) <-> F.pure(f).ap(fa)
 
   /**
    * This law is [[applyComposition]] stated in terms of `pure`. It is a
@@ -29,8 +29,20 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
    */
   def applicativeComposition[A, B, C](fa: F[A], fab: F[A => B], fbc: F[B => C]): IsEq[F[C]] = {
     val compose: (B => C) => (A => B) => (A => C) = _.compose
-    fa.ap(fab.ap(fbc.ap(F.pure(compose)))) <-> fa.ap(fab).ap(fbc)
+    F.pure(compose).ap(fbc).ap(fab).ap(fa) <-> fbc.ap(fab.ap(fa))
   }
+
+  def apProductConsistent[A, B](fa: F[A], f: F[A => B]): IsEq[F[B]] =
+    F.ap(f)(fa) <-> F.map(F.product(f, fa)) { case (f, a) => f(a) }
+
+  // The following are the lax monoidal functor identity laws - the associativity law is covered by
+  // Cartesian's associativity law.
+
+  def monoidalLeftIdentity[A](fa: F[A]): (F[(Unit, A)], F[A]) =
+    (F.product(F.pure(()), fa), fa)
+
+  def monoidalRightIdentity[A](fa: F[A]): (F[(A, Unit)], F[A]) =
+    (F.product(fa, F.pure(())), fa)
 }
 
 object ApplicativeLaws {

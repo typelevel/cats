@@ -1,16 +1,95 @@
 package cats
 package tests
 
-class FoldableTests extends CatsSuite {
-  import Fold.{Continue, Return, Pass}
+import org.scalatest.prop.PropertyChecks
+import org.scalacheck.Arbitrary
+import scala.util.Try
 
-  // disable scalatest ===
-  override def convertToEqualizer[T](left: T): Equalizer[T] = ???
+import cats.instances.all._
+import cats.data.{NonEmptyList, NonEmptyStream, NonEmptyVector, Validated}
+import cats.laws.discipline.arbitrary._
+
+abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends CatsSuite with PropertyChecks {
+
+  def iterator[T](fa: F[T]): Iterator[T]
+
+  test(s"Foldable[$name].size") {
+    forAll { (fa: F[Int]) =>
+      fa.size should === (iterator(fa).size.toLong)
+    }
+  }
+
+  test(s"Foldable[$name] summation") {
+    forAll { (fa: F[Int]) =>
+      val total = iterator(fa).sum
+      fa.foldLeft(0)(_ + _) should === (total)
+      fa.foldRight(Now(0))((x, ly) => ly.map(x + _)).value should === (total)
+      fa.fold should === (total)
+      fa.foldMap(identity) should === (total)
+    }
+  }
+
+  test(s"Foldable[$name].find/exists/forall/filter_/dropWhile_") {
+    forAll { (fa: F[Int], n: Int) =>
+      fa.find(_ > n)   should === (iterator(fa).find(_ > n))
+      fa.exists(_ > n) should === (iterator(fa).exists(_ > n))
+      fa.forall(_ > n) should === (iterator(fa).forall(_ > n))
+      fa.filter_(_ > n) should === (iterator(fa).filter(_ > n).toList)
+      fa.dropWhile_(_ > n) should === (iterator(fa).dropWhile(_ > n).toList)
+      fa.takeWhile_(_ > n) should === (iterator(fa).takeWhile(_ > n).toList)
+    }
+  }
+
+  test(s"Foldable[$name].toList/isEmpty/nonEmpty") {
+    forAll { (fa: F[Int]) =>
+      fa.toList should === (iterator(fa).toList)
+      fa.isEmpty should === (iterator(fa).isEmpty)
+      fa.nonEmpty should === (iterator(fa).nonEmpty)
+    }
+  }
+
+  test(s"Foldable[$name].maximum/minimum") {
+    forAll { (fa: F[Int]) =>
+      val maxOpt = fa.maximumOption
+      val minOpt = fa.minimumOption
+      val list = fa.toList
+      val nelOpt = list.toNel
+      maxOpt should === (nelOpt.map(_.maximum))
+      maxOpt should === (nelOpt.map(_.toList.max))
+      minOpt should === (nelOpt.map(_.minimum))
+      minOpt should === (nelOpt.map(_.toList.min))
+      maxOpt.forall(i => fa.forall(_ <= i)) should === (true)
+      minOpt.forall(i => fa.forall(_ >= i)) should === (true)
+    }
+  }
+
+  test(s"Foldable[$name].reduceLeftOption/reduceRightOption") {
+    forAll { (fa: F[Int]) =>
+      val list = fa.toList
+      fa.reduceLeftOption(_ - _) should === (list.reduceLeftOption(_ - _))
+      fa.reduceRightOption((x, ly) => ly.map(x - _)).value should === (list.reduceRightOption(_ - _))
+    }
+  }
+
+  test(s"Foldable[$name].intercalate") {
+    forAll { (fa: F[String], a: String) =>
+      fa.intercalate(a) should === (fa.toList.mkString(a))
+    }
+  }
+
+  test(s"Foldable[$name].toList") {
+    forAll { (fa: F[Int]) =>
+      fa.toList should === (iterator(fa).toList)
+    }
+  }
+}
+
+class FoldableTestsAdditional extends CatsSuite {
 
   // exists method written in terms of foldRight
-  def exists[F[_]: Foldable, A: Eq](as: F[A], goal: A): Lazy[Boolean] =
-    Foldable[F].foldRight(as, Lazy(false)) { a =>
-      if (a === goal) Return(true) else Pass
+  def contains[F[_]: Foldable, A: Eq](as: F[A], goal: A): Eval[Boolean] =
+    as.foldRight(Now(false)) { (a, lb) =>
+      if (a === goal) Now(true) else lb
     }
 
   test("Foldable[List]") {
@@ -19,21 +98,76 @@ class FoldableTests extends CatsSuite {
     // some basic sanity checks
     val ns = (1 to 10).toList
     val total = ns.sum
-    assert(F.foldLeft(ns, 0)(_ + _) == total)
-    assert(F.foldRight(ns, Lazy(0))(x => Continue(x + _)).value == total)
-    assert(F.fold(ns) == total)
+    F.foldLeft(ns, 0)(_ + _) should === (total)
+    F.foldRight(ns, Now(0))((x, ly) => ly.map(x + _)).value should === (total)
+    F.fold(ns) should === (total)
 
     // more basic checks
     val names = List("Aaron", "Betty", "Calvin", "Deirdra")
-    assert(F.foldMap(names)(_.length) == names.map(_.length).sum)
+    F.foldMap(names)(_.length) should === (names.map(_.length).sum)
+    val sumM = F.foldM(names, "") { (acc, x) => (Some(acc + x): Option[String]) }
+    assert(sumM == Some("AaronBettyCalvinDeirdra"))
+    val sumMapM = F.foldMapM(names) { x => (Some(x): Option[String]) }
+    assert(sumMapM == Some("AaronBettyCalvinDeirdra"))
+    val isNotCalvin: String => Option[String] =
+      x => if (x == "Calvin") None else Some(x)
+    val notCalvin = F.foldM(names, "") { (acc, x) =>
+      isNotCalvin(x).map(acc + _)
+    }
+    assert(notCalvin == None)
+    val notCalvinMapM = F.foldMapM(names)(isNotCalvin)
+    assert(notCalvinMapM == None)
 
     // test trampolining
     val large = (1 to 10000).toList
-    assert(exists(large, 10000).value)
+    assert(contains(large, 10000).value)
 
     // safely build large lists
-    val larger = F.foldRight(large, Lazy(List.empty[Int]))(x => Continue((x + 1) :: _))
-    assert(larger.value == large.map(_ + 1))
+    val larger = F.foldRight(large, Now(List.empty[Int]))((x, lxs) => lxs.map((x + 1) :: _))
+    larger.value should === (large.map(_ + 1))
+  }
+
+  def checkFoldMStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Foldable[F]): Unit = {
+    def nonzero(acc: Long, x: Int): Option[Long] =
+      if (x == 0) None else Some(acc + x)
+
+    val n = 100000
+    val expected = n.toLong*(n.toLong+1)/2
+    val foldMResult = F.foldM(fromRange(1 to n), 0L)(nonzero)
+    assert(foldMResult.get == expected)
+    ()
+  }
+
+  test("Foldable[List].foldM stack safety") {
+    checkFoldMStackSafety[List](_.toList)
+  }
+
+  test("Foldable[Stream].foldM stack safety") {
+    checkFoldMStackSafety[Stream](_.toStream)
+  }
+
+  test("Foldable[Vector].foldM stack safety") {
+    checkFoldMStackSafety[Vector](_.toVector)
+  }
+
+  test("Foldable[Set].foldM stack safety") {
+    checkFoldMStackSafety[Set](_.toSet)
+  }
+
+  test("Foldable[Map[String, ?]].foldM stack safety") {
+    checkFoldMStackSafety[Map[String, ?]](_.map(x => x.toString -> x).toMap)
+  }
+
+  test("Foldable[NonEmptyList].foldM stack safety") {
+    checkFoldMStackSafety[NonEmptyList](xs => NonEmptyList.fromListUnsafe(xs.toList))
+  }
+
+  test("Foldable[NonEmptyVector].foldM stack safety") {
+    checkFoldMStackSafety[NonEmptyVector](xs => NonEmptyVector.fromVectorUnsafe(xs.toVector))
+  }
+
+  test("Foldable[NonEmptyStream].foldM stack safety") {
+    checkFoldMStackSafety[NonEmptyStream](xs => NonEmptyStream(xs.head, xs.tail: _*))
   }
 
   test("Foldable[Stream]") {
@@ -43,18 +177,61 @@ class FoldableTests extends CatsSuite {
     val dangerous = 0 #:: 1 #:: 2 #:: bomb[Stream[Int]]
 
     // doesn't blow up - this also ensures it works for infinite streams.
-    assert(exists(dangerous, 2).value)
+    assert(contains(dangerous, 2).value)
 
     // lazy results don't blow up unless you call .value on them.
-    val doom: Lazy[Boolean] = exists(dangerous, -1)
+    val doom: Eval[Boolean] = contains(dangerous, -1)
 
     // ensure that the Lazy[B] param to foldRight is actually being
     // handled lazily. it only needs to be evaluated if we reach the
     // "end" of the fold.
-    val trap = Lazy(bomb[Boolean])
-    val result = F.foldRight(1 #:: 2 #:: Stream.Empty, trap) { n =>
-      if (n == 2) Return(true) else Pass
+    val trap = Eval.later(bomb[Boolean])
+    val result = F.foldRight(1 #:: 2 #:: Stream.empty, trap) { (n, lb) =>
+      if (n == 2) Now(true) else lb
     }
     assert(result.value)
+
+    // test trampolining
+    val large = Stream((1 to 10000): _*)
+    assert(contains(large, 10000).value)
+
+    // test laziness of foldM
+    dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should === (None)
   }
+}
+
+class FoldableListCheck extends FoldableCheck[List]("list") {
+  def iterator[T](list: List[T]): Iterator[T] = list.iterator
+}
+
+class FoldableVectorCheck extends FoldableCheck[Vector]("vector") {
+  def iterator[T](vector: Vector[T]): Iterator[T] = vector.iterator
+}
+
+class FoldableSetCheck extends FoldableCheck[Set]("set") {
+  def iterator[T](set: Set[T]): Iterator[T] = set.iterator
+}
+
+class FoldableStreamCheck extends FoldableCheck[Stream]("stream") {
+  def iterator[T](stream: Stream[T]): Iterator[T] = stream.iterator
+}
+
+class FoldableMapCheck extends FoldableCheck[Map[Int, ?]]("map") {
+  def iterator[T](map: Map[Int, T]): Iterator[T] = map.iterator.map(_._2)
+}
+
+class FoldableOptionCheck extends FoldableCheck[Option]("option") {
+  def iterator[T](option: Option[T]): Iterator[T] = option.iterator
+}
+
+class FoldableEitherCheck extends FoldableCheck[Either[Int, ?]]("either") {
+  def iterator[T](either: Either[Int, T]): Iterator[T] = either.right.toOption.iterator
+}
+
+class FoldableValidatedCheck extends FoldableCheck[Validated[String, ?]]("validated") {
+  def iterator[T](validated: Validated[String, T]): Iterator[T] = validated.toOption.iterator
+}
+
+class FoldableTryCheck extends FoldableCheck[Try]("try") {
+  def iterator[T](tryt: Try[T]): Iterator[T] = tryt.toOption.iterator
 }

@@ -1,29 +1,31 @@
 package cats
 
 package object data {
-  type NonEmptyList[A] = OneAnd[A, List]
-  type NonEmptyVector[A] = OneAnd[A, Vector]
-  type NonEmptyStream[A] = OneAnd[A, Stream]
-
-  def NonEmptyList[A](head: A, tail: List[A] = Nil): NonEmptyList[A] =
-    OneAnd(head, tail)
-  def NonEmptyList[A](head: A, tail: A*): NonEmptyList[A] =
-    OneAnd[A, List](head, tail.toList)
-
-  def NonEmptyVector[A](head: A, tail: Vector[A] = Vector.empty): NonEmptyVector[A] =
-    OneAnd(head, tail)
-  def NonEmptyVector[A](head: A, tail: A*): NonEmptyVector[A] =
-    OneAnd(head, tail.toVector)
+  type NonEmptyStream[A] = OneAnd[Stream, A]
+  type ValidatedNel[+E, +A] = Validated[NonEmptyList[E], A]
 
   def NonEmptyStream[A](head: A, tail: Stream[A] = Stream.empty): NonEmptyStream[A] =
     OneAnd(head, tail)
   def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
     OneAnd(head, tail.toStream)
 
-  object NonEmptyList {
-    def fromReducible[F[_], A](fa: F[A])(implicit F: Reducible[F]): Lazy[NonEmptyList[A]] =
-      F.reduceRightTo(fa)(a => NonEmptyList(a, Nil)) { a =>
-        Fold.Continue { case OneAnd(h, t) => OneAnd(a, h :: t) }
-      }
+  type ReaderT[F[_], A, B] = Kleisli[F, A, B]
+  val ReaderT = Kleisli
+
+  type Reader[A, B] = ReaderT[Id, A, B]
+  object Reader {
+    def apply[A, B](f: A => B): Reader[A, B] = ReaderT[Id, A, B](f)
   }
+
+  type Writer[L, V] = WriterT[Id, L, V]
+  object Writer {
+    def apply[L, V](l: L, v: V): WriterT[Id, L, V] = WriterT[Id, L, V]((l, v))
+
+    def value[L:Monoid, V](v: V): Writer[L, V] = WriterT.value(v)
+
+    def tell[L](l: L): Writer[L, Unit] = WriterT.tell(l)
+  }
+
+  type State[S, A] = StateT[Eval, S, A]
+  object State extends StateFunctions
 }

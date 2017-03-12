@@ -1,6 +1,8 @@
 package cats
 package free
 
+import cats.arrow.FunctionK
+
 /**
  * The dual view of the Yoneda lemma. Also a free functor on `F`.
  * This is isomorphic to `F` as long as `F` itself is a functor.
@@ -36,35 +38,20 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
   final def map[B](f: A => B): Aux[F, B, Pivot] =
     apply(fi)(f compose k)
 
-  final def transform[G[_]](f: F ~> G): Aux[G, A, Pivot] =
+  final def transform[G[_]](f: FunctionK[F, G]): Aux[G, A, Pivot] =
     apply(f(fi))(k)
 
 }
 
 object Coyoneda {
+
   /** Lift the `Pivot` type member to a parameter. It is usually more
-    * convenient to use `Aux` than a structural type.
-    */
+   * convenient to use `Aux` than a structural type.
+   */
   type Aux[F[_], A, B] = Coyoneda[F, A] { type Pivot = B }
 
   /** `F[A]` converts to `Coyoneda[F,A]` for any `F` */
   def lift[F[_], A](fa: F[A]): Coyoneda[F, A] = apply(fa)(identity[A])
-
-  /**
-   * Represents a partially-built Coyoneda instance. Used in the `by` method.
-   */
-  final class By[F[_]] {
-    def apply[A, B](k: A => B)(implicit F: F[A]): Aux[F, B, A] = Coyoneda(F)(k)
-  }
-
-  /**
-   * Partial application of type parameters to `apply`.
-   *
-   * It can be nicer to say `Coyoneda.by[F]{ x: X => ... }`
-   *
-   * ...instead of `Coyoneda[...](...){ x => ... }`.
-   */
-  def by[F[_]]: By[F] = new By[F]
 
   /** Like `lift(fa).map(_k)`. */
   def apply[F[_], A, B](fa: F[A])(k0: A => B): Aux[F, B, A] =
@@ -77,7 +64,7 @@ object Coyoneda {
   /**
    * As the free functor, `Coyoneda[F, ?]` provides a functor for any `F`.
    */
-  implicit def coyonedaFunctor[F[_]]: Functor[Coyoneda[F, ?]] =
+  implicit def catsFreeFunctorForCoyoneda[F[_]]: Functor[Coyoneda[F, ?]] =
     new Functor[Coyoneda[F, ?]] {
       def map[A, B](cfa: Coyoneda[F, A])(f: A => B): Coyoneda[F, B] = cfa map f
     }
