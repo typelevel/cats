@@ -276,7 +276,8 @@ state in an immutable map, avoiding mutation altogether.
 import cats.data.State
 
 type KVStoreState[A] = State[Map[String, Any], A]
-val pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
+
+def pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
   def apply[A](fa: KVStoreA[A]): KVStoreState[A] =
     fa match {
       case Put(key, value) => State.modify(_.updated(key, value))
