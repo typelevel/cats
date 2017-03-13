@@ -305,8 +305,8 @@ Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct`
 
 ```tut:silent
 import cats.data.Coproduct
-import cats.free.{Inject, Free}
-import cats.{Id, ~>}
+import cats.free.Free
+import cats.{Id, Inject, ~>}
 import scala.collection.mutable.ListBuffer
 ```
 

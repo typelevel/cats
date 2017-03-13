@@ -1,6 +1,5 @@
 package cats
 
-// import cats.arrow.FunctionK
 import cats.data.Coproduct
 import cats.tests.CatsSuite
 import org.scalacheck._
