@@ -86,7 +86,7 @@ class EvalTests extends CatsSuite {
     checkAll("Eval[Int]", MonadTests[Eval].monad[Int, Int, Int])
   }
   checkAll("Bimonad[Eval]", SerializableTests.serializable(Bimonad[Eval]))
-  checkAll("Monad[Eval]", SerializableTests.serializable(Monad[Eval]))
+  checkAll("MonadError[Eval, Throwable]", SerializableTests.serializable(MonadError[Eval, Throwable]))
 
   checkAll("Eval[Int]", ReducibleTests[Eval].reducible[Option, Int, Int])
   checkAll("Reducible[Eval]", SerializableTests.serializable(Reducible[Eval]))
