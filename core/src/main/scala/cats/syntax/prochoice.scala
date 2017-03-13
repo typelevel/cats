@@ -1,6 +1,6 @@
 package cats.syntax
 
-import cats.functor.ProChoice
+import cats.arrow.ProChoice
 
 trait ProChoiceSyntax {
   // TODO: use simulacrum instances eventually

@@ -1,5 +1,6 @@
-package cats.functor
+package cats.arrow
 
+import cats.functor.Profunctor
 
 trait ProChoice[F[_, _]] extends Profunctor[F] {
   def left[A, B, C](fab: F[A, B]): F[Either[A, C], Either[B, C]]

@@ -1,8 +1,8 @@
 package cats
 package tests
 
-import cats.arrow.{Arrow, Choice}
-import cats.functor.{Contravariant,ProChoice}
+import cats.arrow.{Arrow, Choice, ProChoice}
+import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._

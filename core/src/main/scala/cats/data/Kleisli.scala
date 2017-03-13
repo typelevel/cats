@@ -1,8 +1,8 @@
 package cats
 package data
 
-import cats.arrow.{Arrow, Category, Choice, Compose, Split, FunctionK}
-import cats.functor.{Contravariant, ProChoice, Profunctor, Strong}
+import cats.arrow.{Arrow, Category, Choice, ProChoice, Compose, Split, FunctionK}
+import cats.functor.{Contravariant, Profunctor, Strong}
 
 /**
  * Represents a function `A => F[B]`.
