@@ -1,5 +1,5 @@
 package cats
 
-import simulacrum._
+import simulacrum.typeclass
 
 @typeclass trait Bimonad[F[_]] extends Monad[F] with Comonad[F]

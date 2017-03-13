@@ -2,9 +2,8 @@ package cats
 package laws
 package discipline
 
-import cats.data.Xor
-import cats.functor.ProChoice
-import org.scalacheck.Arbitrary
+import cats.arrow.ProChoice
+import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 
 trait ProChoiceTests[F[_, _]] extends ProfunctorTests[F] {
@@ -14,10 +13,17 @@ trait ProChoiceTests[F[_, _]] extends ProfunctorTests[F] {
     ArbFAB: Arbitrary[F[A, B]],
     ArbFBC: Arbitrary[F[B, C]],
     ArbFCD: Arbitrary[F[C, D]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    CogenD: Cogen[D],
+    CogenE: Cogen[E],
+    CogenG: Cogen[G],
     EqFAB: Eq[F[A, B]],
     EqFAG: Eq[F[A, G]],
-    EqFAEDE: Eq[F[A Xor E, D Xor E]],
-    EqFEAED: Eq[F[E Xor A, E Xor D]]
+    EqFAD: Eq[F[A, D]],
+    EqFAEDE: Eq[F[Either[A, E], Either[D, E]]],
+    EqFEAED: Eq[F[Either[E, A], Either[E, D]]]
   ): RuleSet =
     new DefaultRuleSet(
       name = "prochoice",

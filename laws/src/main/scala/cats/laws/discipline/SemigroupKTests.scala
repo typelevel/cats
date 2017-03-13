@@ -10,20 +10,13 @@ trait SemigroupKTests[F[_]] extends Laws {
   def laws: SemigroupKLaws[F]
 
   def semigroupK[A: Arbitrary](implicit
-    ArbF: ArbitraryK[F],
+    ArbFA: Arbitrary[F[A]],
     EqFA: Eq[F[A]]
-  ): RuleSet = {
-    implicit def ArbFA: Arbitrary[F[A]] = ArbF.synthesize[A]
-
-    new RuleSet {
-      val name = "semigroupK"
-      val bases = Nil
-      val parents = Nil
-      val props = Seq(
-        "semigroupK associative" -> forAll(laws.semigroupKAssociative[A] _)
-      )
-    }
-  }
+  ): RuleSet =
+    new DefaultRuleSet(
+      "semigroupK",
+      None,
+      "semigroupK associative" -> forAll(laws.semigroupKAssociative[A] _))
 }
 
 object SemigroupKTests {

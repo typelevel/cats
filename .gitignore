@@ -2,6 +2,7 @@ project/boot
 target
 .ensime
 .ensime_lucene
+.ensime_cache
 TAGS
 \#*#
 *~
@@ -13,3 +14,9 @@ TAGS
 .idea/*
 .idea_modules
 .DS_Store
+.sbtrc
+*.sublime-project
+*.sublime-workspace
+tests.iml
+# Auto-copied by sbt-microsites
+docs/src/main/tut/contributing.md

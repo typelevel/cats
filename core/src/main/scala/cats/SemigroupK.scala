@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum._
+import simulacrum.typeclass
 
 /**
  * SemigroupK is a universal semigroup which operates on kinds.
@@ -20,27 +20,24 @@ import simulacrum._
  *    The combination operation just depends on the structure of F,
  *    but not the structure of A.
  */
-@typeclass trait SemigroupK[F[_]] extends Serializable { self =>
+@typeclass trait SemigroupK[F[_]] { self =>
 
   /**
    * Combine two F[A] values.
    */
-  @op("<+>", alias=true)
-  def combine[A](x: F[A], y: F[A]): F[A]
-
-  /**
-   * Compose two SemigroupK intsances.
-   */
-  def composedWith[G[_]: SemigroupK]: SemigroupK[λ[α => F[G[α]]]] =
-    new SemigroupK[λ[α => F[G[α]]]] {
-      def combine[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = combine(x, y)
-    }
+  @simulacrum.op("<+>", alias = true)
+  def combineK[A](x: F[A], y: F[A]): F[A]
 
   /**
    * Given a type A, create a concrete Semigroup[F[A]].
    */
   def algebra[A]: Semigroup[F[A]] =
     new Semigroup[F[A]] {
-      def combine(x: F[A], y: F[A]): F[A] = self.combine(x, y)
+      def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
+    }
+
+  def compose[G[_]]: SemigroupK[λ[α => F[G[α]]]] =
+    new ComposedSemigroupK[F, G] {
+      val F = self
     }
 }

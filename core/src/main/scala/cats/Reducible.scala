@@ -1,8 +1,8 @@
 package cats
 
-import simulacrum._
+import cats.data.NonEmptyList
 
-import Fold.{Return, Pass, Continue}
+import simulacrum.typeclass
 
 /**
  * Data structures that can be reduced to a summary value.
@@ -30,7 +30,7 @@ import Fold.{Return, Pass, Continue}
   /**
    * Right-associative reduction on `F` using the function `f`.
    */
-  def reduceRight[A](fa: F[A])(f: A => Fold[A]): Lazy[A] =
+  def reduceRight[A](fa: F[A])(f: (A, Eval[A]) => Eval[A]): Eval[A] =
     reduceRightTo(fa)(identity)(f)
 
   /**
@@ -62,7 +62,38 @@ import Fold.{Return, Pass, Continue}
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B
 
   /**
-   * Overriden from Foldable[_] for efficiency.
+   *  Monadic variant of [[reduceLeftTo]]
+   */
+  def reduceLeftM[G[_], A, B](fa: F[A])(f: A => G[B])(g: (B, A) => G[B])(implicit G: FlatMap[G]): G[B] =
+    reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
+
+  /**
+   * Monadic reducing by mapping the `A` values to `G[B]`. combining
+   * the `B` values using the given `Semigroup[B]` instance.
+   *
+   * Similar to [[reduceLeftM]], but using a `Semigroup[B]`.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val evenOpt: Int => Option[Int] =
+   *      |   i => if (i % 2 == 0) Some(i) else None
+   * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
+   * allEven: cats.data.NonEmptyList[Int] = NonEmptyList(2, 4, 6, 8, 10)
+   * scala> val notAllEven = allEven ++ List(11)
+   * notAllEven: cats.data.NonEmptyList[Int] = NonEmptyList(2, 4, 6, 8, 10, 11)
+   * scala> Reducible[NonEmptyList].reduceMapM(allEven)(evenOpt)
+   * res0: Option[Int] = Some(30)
+   * scala> Reducible[NonEmptyList].reduceMapM(notAllEven)(evenOpt)
+   * res1: Option[Int] = None
+   * }}}
+   */
+  def reduceMapM[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: FlatMap[G], B: Semigroup[B]): G[B] =
+    reduceLeftM(fa)(f)((b, a) => G.map(f(a))(B.combine(b, _)))
+
+  /**
+   * Overriden from [[Foldable]] for efficiency.
    */
   override def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
     Some(reduceLeftTo(fa)(f)(g))
@@ -71,23 +102,30 @@ import Fold.{Return, Pass, Continue}
    * Apply `f` to the "initial element" of `fa` and lazily combine it
    * with every other value using the given function `g`.
    */
-  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[B]
+  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B]
 
   /**
-   * Overriden from `Foldable[_]` for efficiency.
+   * Overriden from [[Foldable]] for efficiency.
    */
-  override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[Option[B]] =
-    Lazy(Some(reduceRightTo(fa)(f)(g).value))
+  override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+    reduceRightTo(fa)(f)(g).map(Some(_))
 
   /**
    * Traverse `F[A]` using `Apply[G]`.
    *
    * `A` values will be mapped into `G[B]` and combined using
-   * `Applicative#map2`.
+   * `Apply#map2`.
    *
-   * This method does the same thing as `Foldable#traverse_`.  The
-   * difference is that we only need `Apply[G]` here, since we don't
-   * need to call `Applicative#pure` for a starting value.
+   * This method is similar to [[Foldable.traverse_]]. There are two
+   * main differences:
+   *
+   * 1. We only need an [[Apply]] instance for `G` here, since we
+   * don't need to call [[Applicative.pure]] for a starting value.
+   * 2. This performs a strict left-associative traversal and thus
+   * must always traverse the entire data structure. Prefer
+   * [[Foldable.traverse_]] if you have an [[Applicative]] instance
+   * available for `G` and want to take advantage of short-circuiting
+   * the traversal.
    */
   def traverse1_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
     G.map(reduceLeftTo(fa)(f)((x, y) => G.map2(x, f(y))((_, b) => b)))(_ => ())
@@ -95,55 +133,64 @@ import Fold.{Return, Pass, Continue}
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.
    *
-   * This method is similar to `Foldable#sequence_`. The difference is
-   * that we only need `Apply[G]` here, since we don't need to call
-   * `Applicative#pure` for a starting value.
+   * This method is similar to [[Foldable.sequence_]] but requires only
+   * an [[Apply]] instance for `G` instead of [[Applicative]]. See the
+   * [[traverse1_]] documentation for a description of the differences.
    */
-  def sequence1_[G[_], A, B](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
+  def sequence1_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
     G.map(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))(_ => ())
 
+  def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] =
+    reduceRightTo(fa)(a => NonEmptyList(a, Nil)) { (a, lnel) =>
+      lnel.map { case NonEmptyList(h, t) => NonEmptyList(a, h :: t) }
+    }.value
+
+  def compose[G[_]: Reducible]: Reducible[λ[α => F[G[α]]]] =
+    new ComposedReducible[F, G] {
+      val F = self
+      val G = Reducible[G]
+    }
+
+  def minimum[A](fa: F[A])(implicit A: Order[A]): A =
+    reduceLeft(fa)(A.min)
+
+  def maximum[A](fa: F[A])(implicit A: Order[A]): A =
+    reduceLeft(fa)(A.max)
+
   /**
-   * Compose two `Reducible` instances into a new one.
+   * Intercalate/insert an element between the existing elements while reducing.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of("a", "b", "c")
+   * scala> Reducible[NonEmptyList].intercalate1(nel, "-")
+   * res0: String = a-b-c
+   * scala> Reducible[NonEmptyList].intercalate1(NonEmptyList.of("a"), "-")
+   * res1: String = a
+   * }}}
    */
-  def compose[G[_]](implicit GG: Reducible[G]): Reducible[λ[α => F[G[α]]]] =
-    new CompositeReducible[F, G] {
-      implicit def F: Reducible[F] = self
-      implicit def G: Reducible[G] = GG
+  def intercalate1[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =
+    toNonEmptyList(fa) match {
+      case NonEmptyList(hd, Nil) => hd
+      case NonEmptyList(hd, tl) =>
+        Reducible[NonEmptyList].reduce(NonEmptyList(hd, a :: intersperseList(tl, a)))
     }
+
+  override def isEmpty[A](fa: F[A]): Boolean = false
+
+  override def nonEmpty[A](fa: F[A]): Boolean = true
+
+  override def minimumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+    Some(minimum(fa))
+
+  override def maximumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+    Some(maximum(fa))
 }
-
-
-/**
- * This class composes two `Reducible` instances to provide an
- * instance for the nested types.
- *
- * In other words, given a `Reducible[F]` instance (which can reduce
- * `F[A]`) and a `Reducible[G]` instance (which can reduce `G[A]`
- * values), this class is able to reduce `F[G[A]]` values.
- */
-trait CompositeReducible[F[_], G[_]] extends Reducible[λ[α => F[G[α]]]] with CompositeFoldable[F, G] {
-  implicit def F: Reducible[F]
-  implicit def G: Reducible[G]
-
-  override def reduceLeftTo[A, B](fga: F[G[A]])(f: A => B)(g: (B, A) => B): B = {
-    def toB(ga: G[A]): B = G.reduceLeftTo(ga)(f)(g)
-    F.reduceLeftTo(fga)(toB) { (b, ga) =>
-      G.foldLeft(ga, b)(g)
-    }
-  }
-
-  override def reduceRightTo[A, B](fga: F[G[A]])(f: A => B)(g: A => Fold[B]): Lazy[B] = {
-    def toB(ga: G[A]): B = G.reduceRightTo(ga)(f)(g).value
-    F.reduceRightTo(fga)(toB) { ga =>
-      Fold.Continue(b => G.foldRight(ga, Lazy(b))(g).value)
-    }
-  }
-}
-
 
 /**
  * This class defines a `Reducible[F]` in terms of a `Foldable[G]`
- * together with a `split method, `F[A]` => `(A, G[A])`.
+ * together with a `split` method, `F[A]` => `(A, G[A])`.
  *
  * This class can be used on any type where the first value (`A`) and
  * the "rest" of the values (`G[A]`) can be easily found.
@@ -156,28 +203,77 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
     G.foldLeft(ga, f(b, a))(f)
   }
 
-  def partialFold[A, B](fa: F[A])(f: A => Fold[B]): Fold[B] = {
-    val (a, ga) = split(fa)
-    def right: Fold[B] = G.partialFold(ga)(f)
-    f(a) match {
-      case Return(b) => Return(b)
-      case Continue(g) => right compose g
-      case _ => right
+  def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    Always(split(fa)).flatMap { case (a, ga) =>
+      f(a, G.foldRight(ga, lb)(f))
     }
-  }
 
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B = {
     val (a, ga) = split(fa)
     G.foldLeft(ga, f(a))((b, a) => g(b, a))
   }
 
-  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: A => Fold[B]): Lazy[B] = {
-    val (a, ga) = split(fa)
-    Lazy {
-      G.reduceRightToOption(ga)(f)(g).value match {
-        case None => f(a)
-        case Some(b) => g(a).complete(Lazy.eager(b))
+  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+    Always(split(fa)).flatMap { case (a, ga) =>
+      G.reduceRightToOption(ga)(f)(g).flatMap {
+        case Some(b) => g(a, Now(b))
+        case None => Later(f(a))
       }
     }
+
+  override def size[A](fa: F[A]): Long = {
+    val (_, tail) = split(fa)
+    1 + G.size(tail)
+  }
+
+  override def fold[A](fa: F[A])(implicit A: Monoid[A]): A = {
+    val (a, ga) = split(fa)
+    A.combine(a, G.fold(ga))
+  }
+
+  override def foldM[H[_], A, B](fa: F[A], z: B)(f: (B, A) => H[B])(implicit H: Monad[H]): H[B] = {
+    val (a, ga) = split(fa)
+    H.flatMap(f(z, a))(G.foldM(ga, _)(f))
+  }
+
+  override def find[A](fa: F[A])(f: A => Boolean): Option[A] = {
+    val (a, ga) = split(fa)
+    if (f(a)) Some(a) else G.find(ga)(f)
+  }
+
+  override def exists[A](fa: F[A])(p: A => Boolean): Boolean = {
+    val (a, ga) = split(fa)
+    p(a) || G.exists(ga)(p)
+  }
+
+  override def forall[A](fa: F[A])(p: A => Boolean): Boolean = {
+    val (a, ga) = split(fa)
+    p(a) && G.forall(ga)(p)
+  }
+
+  override def toList[A](fa: F[A]): List[A] = {
+    val (a, ga) = split(fa)
+    a :: G.toList(ga)
+  }
+
+  override def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] = {
+    val (a, ga) = split(fa)
+    NonEmptyList(a, G.toList(ga))
+  }
+
+  override def filter_[A](fa: F[A])(p: A => Boolean): List[A] = {
+    val (a, ga) = split(fa)
+    val filteredTail = G.filter_(ga)(p)
+    if (p(a)) a :: filteredTail else filteredTail
+  }
+
+  override def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] = {
+    val (a, ga) = split(fa)
+    if (p(a)) a :: G.takeWhile_(ga)(p) else Nil
+  }
+
+  override def dropWhile_[A](fa: F[A])(p: A => Boolean): List[A] = {
+    val (a, ga) = split(fa)
+    if (p(a)) G.dropWhile_(ga)(p) else a :: G.toList(ga)
   }
 }

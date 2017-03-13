@@ -6,7 +6,7 @@ import cats.syntax.compose._
 import cats.syntax.split._
 
 /**
- * Laws that must be obeyed by any [[cats.arrow.Split]].
+ * Laws that must be obeyed by any `cats.arrow.Split`.
  */
 trait SplitLaws[F[_, _]] extends ComposeLaws[F] {
   implicit override def F: Split[F]

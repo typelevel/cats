@@ -3,8 +3,7 @@ package laws
 package discipline
 
 import cats.functor.Invariant
-import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 import org.typelevel.discipline.Laws
 
@@ -13,10 +12,12 @@ trait InvariantTests[F[_]] extends Laws {
 
   def invariant[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]]
   ): RuleSet = {
-
     new DefaultRuleSet(
       name = "invariant",
       parent = None,
