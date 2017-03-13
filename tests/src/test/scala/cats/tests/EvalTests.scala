@@ -2,12 +2,15 @@ package cats
 package tests
 
 import scala.math.min
+import scala.util.Try
 import cats.laws.ComonadLaws
-import cats.laws.discipline.{BimonadTests, CartesianTests, MonadTests, ReducibleTests, SerializableTests}
+import cats.laws.discipline.{BimonadTests, CartesianTests, MonadErrorTests, ReducibleTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 class EvalTests extends CatsSuite {
+  implicit val eqThrow: Eq[Throwable] = Eq.allEqual
+
   /**
    * This method creates a Eval[A] instance (along with a
    * corresponding Spooky instance) from an initial `value` using the
@@ -83,7 +86,15 @@ class EvalTests extends CatsSuite {
   {
     implicit val iso = CartesianTests.Isomorphisms.invariant[Eval]
     checkAll("Eval[Int]", BimonadTests[Eval].bimonad[Int, Int, Int])
-    checkAll("Eval[Int]", MonadTests[Eval].monad[Int, Int, Int])
+
+    {
+      // we need exceptions which occur during .value calls to be
+      // equal to each other (equivalent behavior).
+      implicit def eqWithTry[A: Eq]: Eq[Eval[A]] =
+        Eq[Try[A]].on((e: Eval[A]) => Try(e.value))
+
+      checkAll("Eval[Int]", MonadErrorTests[Eval, Throwable].monadError[Int, Int, Int])
+    }
   }
   checkAll("Bimonad[Eval]", SerializableTests.serializable(Bimonad[Eval]))
   checkAll("MonadError[Eval, Throwable]", SerializableTests.serializable(MonadError[Eval, Throwable]))
