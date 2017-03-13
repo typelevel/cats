@@ -1,5 +1,7 @@
 package cats
 
+import data.Xor
+import scala.reflect.ClassTag
 import scala.annotation.tailrec
 import cats.syntax.all._
 
@@ -107,6 +109,20 @@ sealed abstract class Eval[+A] extends Serializable { self =>
    * Later[A] with an equivalent computation will be returned.
    */
   def memoize: Eval[A]
+
+  /**
+   * Returns a new Eval which will catch any non-fatal exception
+   * thrown by the running of the computation.
+   */
+  def catchNonFatal: Eval[Throwable Xor A] =
+    Eval.always(Xor.catchNonFatal(value)) 
+
+  /**
+   * Returns a new Eval catch some subset of the exceptions that might
+   * be thrown by the running of the computation.
+   */
+  def catchOnly[T >: Null <: Throwable: ClassTag]: Eval[T Xor A] =
+    Eval.always(Xor.catchOnly[T](value))
 }
 
 
