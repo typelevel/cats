@@ -89,16 +89,9 @@ class EvalTests extends CatsSuite {
       else if (i % 100 == 0) loop(i - 1, e.map(n => n).handleErrorWith(_ => Now(-999)))
       else loop(i - 1, e.map(n => n))
 
-    // we expect to use 1k stack frames of error handling
+    // we expect to use ~1k stack frames of error handling, which
+    // should be safe.
     loop(100000, Now(6)).value should === (6)
-
-    // we expect to use at least 100k stack frames and fail
-    try {
-      loop(10000000, Now(7)).value
-      fail("we expected a StackOverflowError but didn't get one")
-    } catch { case t: StackOverflowError =>
-      succeed
-    }
   }
 
   test("Eval.raise(t).handleErrorWith(f) = f(t)") {
