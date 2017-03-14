@@ -92,9 +92,9 @@ class EvalTests extends CatsSuite {
     // we expect to use 1k stack frames of error handling
     loop(100000, Now(6)).value should === (6)
 
-    // we expect to use 10k stack frames of error handling and fail
+    // we expect to use at least 100k stack frames and fail
     try {
-      loop(1000000, Now(7)).value
+      loop(10000000, Now(7)).value
       fail("we expected a StackOverflowError but didn't get one")
     } catch { case t: StackOverflowError =>
       succeed
