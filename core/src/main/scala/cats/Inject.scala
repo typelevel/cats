@@ -2,7 +2,6 @@ package cats
 
 import cats.arrow.FunctionK
 import cats.data.Coproduct
-import cats.syntax.either._
 
 /**
  * Inject type class as described in "Data types a la carte" (Swierstra 2008).
