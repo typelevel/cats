@@ -1,6 +1,8 @@
 package cats
 
 import scala.annotation.tailrec
+import scala.util.control.NonFatal
+
 import cats.syntax.all._
 
 /**
@@ -116,17 +118,19 @@ sealed abstract class Eval[+A] extends Serializable { self =>
    * an Eval instance (e.g. `Now(sys.error("die"))`), but will help
    * with exceptions which are deferred (e.g. `Later(sys.error("die"))`).
    *
-   * The `recovery` method should re-raise exceptions (if necessary)
-   * using the `Eval.raise` method, *not* via `throw` directly. Since
-   * exceptions "at-rest" are not represented with `Eval`, your only
-   * options for dealing with exceptions are this method, or wrapping
-   * your `.value` calls with `try { ... } catch { ... }` or `Try`.
+   * Unlike many other methods on `Eval`, this method does consume one
+   * stack frame during the eventual `.value` call. This means that
+   * it's not necessarily safe to nest recursive calls to
+   * `.handleErrorWith`.
+   *
+   * The `recovery` method can re-raise exceptions (if necessary)
+   * using the `Eval.raise` method, or via `throw` directly.
+   * Exceptions "at-rest" are not represented with `Eval`, your only
+   * options for catching and dealing with exceptions are this method,
+   * or wrapping your `.value` calls with something like `Try()`.
    */
-  final def handleErrorWith[A1 >: A](recovery: Throwable => Eval[A1]): Eval[A1] = {
-    @tailrec def go(e: Eval[A1]): Eval[A1] =
-      try { Now(e.value) } catch { case t: Throwable => go(recovery(t)) }
-    Eval.defer(go(this))
-  }
+  final def handleErrorWith[A1 >: A](recovery: Throwable => Eval[A1]): Eval[A1] =
+    Eval.defer(try Now(value) catch { case NonFatal(t) => recovery(t) })
 
   /**
    * Recover from exceptions thrown within Eval (i.e. when `.value` is
@@ -245,7 +249,7 @@ object Eval extends EvalInstances {
    * encode exception handling within an `Eval` context.
    */
   def raise(t: Throwable): Eval[Nothing] =
-    Eval.Unit.map(_ => throw t)
+    Eval.defer(throw t)
 
   /**
    * Static Eval instance for common value `Unit`.

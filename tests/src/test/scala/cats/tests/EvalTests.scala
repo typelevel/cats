@@ -83,6 +83,52 @@ class EvalTests extends CatsSuite {
     }
   }
 
+  test("handleErrorWith is semi-stacksafe") {
+    def loop(i: Int, e: Eval[Int]): Eval[Int] =
+      if (i <= 0) e
+      else if (i % 100 == 0) loop(i - 1, e.map(n => n).handleErrorWith(_ => Now(-999)))
+      else loop(i - 1, e.map(n => n))
+
+    // we expect to use 1k stack frames of error handling
+    loop(100000, Now(6)).value should === (6)
+
+    // we expect to use 10k stack frames of error handling and fail
+    try {
+      loop(1000000, Now(7)).value
+      fail("we expected a StackOverflowError but didn't get one")
+    } catch { case t: StackOverflowError =>
+      succeed
+    }
+  }
+
+  test("Eval.raise(t).handleErrorWith(f) = f(t)") {
+    forAll { (t: Throwable, f: Throwable => Eval[Int]) =>
+      Eval.raise(t).handleErrorWith(f) should === (f(t))
+    }
+  }
+
+  test(".recoverWith and .handleErrorWith are equivalent") {
+    forAll { (e0: Eval[Int], f: Throwable => Eval[Int], p: PartialFunction[Throwable, Eval[Int]]) =>
+
+      // should be an error at least 1/3 of the time.
+      val e = e0.map { n => if (n % 3 == 0) n / 0 else n / 2 }
+
+      // test with a total recovery function
+      val x1 = Try(e.handleErrorWith(f))
+      val y1 = Try(e.recoverWith { case e => f(e) })
+      x1 should === (y1)
+
+      // test with a partial recovery function
+      val x2 = Try(e.recoverWith(p).value)
+      val y2 = Try(e.handleErrorWith(t => if (p.isDefinedAt(t)) p(t) else Eval.raise(t)).value)
+      x2 should === (y2)
+
+      // ensure that this works if we throw directly
+      val z2 = Try(e.handleErrorWith(t => if (p.isDefinedAt(t)) p(t) else throw t).value)
+      x2 should === (z2)
+    }
+  }
+
   {
     implicit val iso = CartesianTests.Isomorphisms.invariant[Eval]
     checkAll("Eval[Int]", BimonadTests[Eval].bimonad[Int, Int, Int])
