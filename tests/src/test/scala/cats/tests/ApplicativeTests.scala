@@ -13,4 +13,14 @@ class ApplicativeCheck extends CatsSuite {
     A.replicateA(5, fa) should === (Some(List(1,1,1,1,1)))
 
   }
+
+  test("optional") {
+    val error  : Either[String, Int] = Left("error")
+    val success: Either[String, Int] = Right(42)
+
+    val A = Applicative[Either[String, ?]]
+
+    A.optional(error)   should === (Right(None))
+    A.optional(success) should === (Right(Some(42)))
+  }
 }
