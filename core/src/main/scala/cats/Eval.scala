@@ -79,11 +79,11 @@ sealed abstract class Eval[+A] extends Serializable { self =>
           // See https://issues.scala-lang.org/browse/SI-9931 for an explanation
           // of why the type annotations are necessary in these two lines on
           // Scala 2.12.0.
-          val start: () => Eval[Start] = c.start
+          val start: Thunk[Eval[Start]] = c.start
           val run: Start => Eval[B] = (s: c.Start) =>
             new Eval.Compute[B] {
               type Start = A
-              val start = () => c.run(s)
+              val start = Thunk(c.run(s))
               val run = f
             }
         }
@@ -96,7 +96,7 @@ sealed abstract class Eval[+A] extends Serializable { self =>
       case _ =>
         new Eval.Compute[B] {
           type Start = A
-          val start = () => self
+          val start = Thunk(self)
           val run = f
         }
     }
@@ -173,8 +173,8 @@ final case class Now[A](value: A) extends Eval[A] {
  * by the closure) will not be retained, and will be available for
  * garbage collection.
  */
-final class Later[A](f: () => A) extends Eval[A] {
-  private[this] var thunk: () => A = f
+final class Later[A](f: Thunk[A]) extends Eval[A] {
+  private[this] var thunk: Thunk[A] = f
 
   // The idea here is that `f` may have captured very large
   // structures, but produce a very small result. In this case, once
@@ -206,7 +206,7 @@ object Later {
  * required. It should be avoided except when laziness is required and
  * caching must be avoided. Generally, prefer Later.
  */
-final class Always[A](f: () => A) extends Eval[A] {
+final class Always[A](f: Thunk[A]) extends Eval[A] {
   def value: A = f()
   def memoize: Eval[A] = new Later(f)
 }
@@ -298,7 +298,7 @@ object Eval extends EvalInstances {
    * Users should not instantiate Call instances themselves. Instead,
    * they will be automatically created when needed.
    */
-  sealed abstract class Call[A](val thunk: () => Eval[A]) extends Eval[A] {
+  sealed abstract class Call[A](val thunk: Thunk[Eval[A]]) extends Eval[A] {
     def memoize: Eval[A] = new Later(() => value)
     def value: A = Call.loop(this).value
   }
@@ -314,7 +314,7 @@ object Eval extends EvalInstances {
       case compute: Eval.Compute[A] =>
         new Eval.Compute[A] {
           type Start = compute.Start
-          val start: () => Eval[Start] = () => compute.start()
+          val start: Thunk[Eval[Start]] = Thunk(compute.start())
           val run: Start => Eval[A] = s => loop1(compute.run(s))
         }
       case other => other
@@ -342,7 +342,7 @@ object Eval extends EvalInstances {
    */
   sealed abstract class Compute[A] extends Eval[A] {
     type Start
-    val start: () => Eval[Start]
+    val start: Thunk[Eval[Start]]
     val run: Start => Eval[A]
 
     def memoize: Eval[A] = Later(value)

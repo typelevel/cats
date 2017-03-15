@@ -10,6 +10,12 @@ package object cats {
   type ⊥ = Nothing
   type ⊤ = Any
 
+  type Thunk[A] = Function0[A]
+
+  object Thunk {
+    def apply[A](a: => A): Thunk[A] = () => a
+  }
+
 
 /**
  * Identity, encoded as `type Id[A] = A`, a convenient alias to make
