@@ -30,14 +30,14 @@ private[cats] sealed abstract class InjectInstances {
     new Inject[F, Coproduct[F, G, ?]] {
       val inj = λ[FunctionK[F, Coproduct[F, G, ?]]](Coproduct.leftc(_))
 
-      val prj = λ[FunctionK[Coproduct[F, G, ?], λ[α => Option[F[α]]]]](_.run.swap.toOption)
+      val prj = λ[FunctionK[Coproduct[F, G, ?], λ[α => Option[F[α]]]]](_.run.left.toOption)
     }
 
   implicit def catsRightInjectInstance[F[_], G[_], H[_]](implicit I: Inject[F, G]): Inject[F, Coproduct[H, G, ?]] =
     new Inject[F, Coproduct[H, G, ?]] {
       val inj = λ[FunctionK[G, Coproduct[H, G, ?]]](Coproduct.rightc(_)) compose I.inj
 
-      val prj = λ[FunctionK[Coproduct[H, G, ?], λ[α => Option[F[α]]]]](_.run.toOption.flatMap(I.prj(_)))
+      val prj = λ[FunctionK[Coproduct[H, G, ?], λ[α => Option[F[α]]]]](_.run.right.toOption.flatMap(I.prj(_)))
     }
 }
 
