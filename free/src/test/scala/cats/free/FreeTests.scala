@@ -5,9 +5,9 @@ import cats.tests.CatsSuite
 import cats.arrow.FunctionK
 import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
-
-import org.scalacheck.{Arbitrary, Gen, Cogen}
+import org.scalacheck.{Arbitrary, Cogen, Gen}
 import Arbitrary.arbFunction1
+import cats.data.EitherT
 
 class FreeTests extends CatsSuite {
   import FreeTests._
@@ -107,6 +107,66 @@ class FreeTests extends CatsSuite {
     }
     assert(res == Either.left(100000))
   }
+
+  locally { // cata/cataM
+
+    test(".cata") {
+      val r: Free[Option, Int] = Free.roll(Some(Free.roll(Some(Free.pure(1)))))
+      val non: Free[Option, Int] = Free.roll[Option, Int](None)
+      val f: Either[Option[String], Int] => Eval[String] = {
+        case Right(b) => Eval.now(b.toString)
+        case Left(fa) => Eval.now(fa.toString)
+      }
+      val resr: String = Free.cata[Option, Int, String](r)(f).value
+      val resnon: String = Free.cata[Option, Int, String](non)(f).value
+      assert(resr == "Some(Some(1))")
+      assert(resnon == "None")
+    }
+
+    def rollSome(size: Int, acc: Free[Option, Int]): Free[Option, Int] =
+      if (size == 0) acc else rollSome(size - 1, Free.roll(Some(acc)))
+
+    val threeThousandSomeOne: Free[Option, Int] = rollSome(3000, Free.pure(1))
+    val threeThousandPlussesOne: String = String.valueOf(Array.fill(3000)('+')) + "1"
+
+    test(".cata stack-safety") {
+
+      val plusForSomeOrZeroStrForNone: Either[Option[String], Int] => Eval[String] = {
+        case Right(b) => Eval.now(b.toString)
+        case Left(fa) => Eval.now(fa.fold("0")("+" + _))
+      }
+
+      assert(Free.cata[Option, Int, String](threeThousandSomeOne)(plusForSomeOrZeroStrForNone).value == threeThousandPlussesOne)
+    }
+
+    type EitherEvalInt[A] = EitherT[Eval, Int, A]
+
+    val plusForSomeOrZeroForNone: Either[Option[String], Int] => EitherEvalInt[String] = {
+      case Right(b) => EitherT.fromEither[Eval].apply(Right(b.toString))
+      case Left(fa) => EitherT.fromEither[Eval].apply(fa.fold[Either[Int, String]](Left(0))(s => Right("+" + s)))
+    }
+    val inclusion = new (Eval ~> EitherEvalInt) {
+      override def apply[A](fa: Eval[A]): EitherEvalInt[A] = EitherT.right(fa)
+    }
+
+    test(".cataM") {
+      val r: Free[Option, Int] = Free.roll(Some(Free.roll(Some(Free.pure(1)))))
+      val non: Free[Option, Int] = Free.roll[Option, Int](None)
+      val resr = Free.cataM[Option, EitherEvalInt, Int, String](r)(plusForSomeOrZeroForNone)(inclusion).value.value
+      val resnon = Free.cataM[Option, EitherEvalInt, Int, String](non)(plusForSomeOrZeroForNone)(inclusion).value.value
+      assert(resr == Right("++1"))
+      assert(resnon == Left(0))
+    }
+
+    test(".cataM stack-safety") {
+      val resr =
+        Free.cataM[Option, EitherEvalInt, Int, String](threeThousandSomeOne)(plusForSomeOrZeroForNone)(inclusion)
+          .value.value
+      assert(resr == Right(threeThousandPlussesOne))
+    }
+
+  }
+
 }
 
 object FreeTests extends FreeTestsInstances {
