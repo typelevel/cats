@@ -59,6 +59,25 @@ class InjectTests extends CatsSuite {
     }
   }
 
+  test("apply & unapply") {
+    def distr[F[_], A](f1: F[A], f2: F[A])
+                      (implicit
+                       F: Functor[F],
+                       I0: Test1Algebra :<: F,
+                       I1: Test2Algebra :<: F): Option[Int] =
+      for {
+        Test1(x, _) <- I0.unapply(f1)
+        Test2(y, _) <- I1.unapply(f2)
+      } yield x + y
+
+    forAll { (x: Int, y: Int) =>
+      val expr1: T[Int] = Inject[Test1Algebra, T].apply(Test1(x, _ + 1))
+      val expr2: T[Int] = Inject[Test2Algebra, T].apply(Test2(y, _ * 2))
+      val res = distr[T, Int](expr1, expr2)
+      res should ===(Some(x + y))
+    }
+  }
+
   test("apply in left") {
     forAll { (y: Test1Algebra[Int]) =>
       Inject[Test1Algebra, T].inj(y) == Coproduct(Left(y)) should ===(true)
