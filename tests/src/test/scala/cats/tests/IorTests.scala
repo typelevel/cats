@@ -1,9 +1,9 @@
 package cats
 package tests
 
-import cats.data.Ior
+import cats.data.{EitherT, Ior}
 import cats.kernel.laws.GroupLaws
-import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadErrorTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
 
@@ -14,7 +14,9 @@ class IorTests extends CatsSuite {
   checkAll("Ior[String, Int]", CartesianTests[Ior[String, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[String Ior ?]]", SerializableTests.serializable(Cartesian[String Ior ?]))
 
-  checkAll("Ior[String, Int]", MonadTests[String Ior ?].monad[Int, Int, Int])
+  implicit val eq0 = EitherT.catsDataEqForEitherT[Ior[String, ?], String, Int]
+
+  checkAll("Ior[String, Int]", MonadErrorTests[String Ior ?, String].monadError[Int, Int, Int])
   checkAll("MonadError[String Ior ?]", SerializableTests.serializable(MonadError[String Ior ?, String]))
 
   checkAll("Ior[String, Int] with Option", TraverseTests[String Ior ?].traverse[Int, Int, Int, Int, Option, Option])
