@@ -88,7 +88,7 @@ case class Delete(key: String) extends KVStoreA[Unit]
 
 ### Free your ADT
 
-There are six basic steps to "freeing" the ADT:
+There are five basic steps to "freeing" the ADT:
 
 1. Create a type based on `Free[_]` and `KVStoreA[_]`.
 2. Create smart constructors for `KVStore[_]` using `liftF`.
@@ -265,7 +265,7 @@ never overflow your stack.  Trampolining is heap-intensive but
 stack-safety provides the reliability required to use `Free[_]` for
 data-intensive tasks, as well as infinite processes such as streams.
 
-#### 7. Use a pure compiler (optional)
+#### 6. Use a pure compiler (optional)
 
 The previous examples used an effectful natural transformation. This
 works, but you might prefer folding your `Free` in a "purer" way. The
