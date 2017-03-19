@@ -65,7 +65,7 @@ object As extends AsInstances {
   /**
    * We can witness the relationship by using it to make a substitution *
    */
-  implicit def witness[A, B](lt: A <~< B): A => B = 
+  implicit def witness[A, B](lt: A <~< B): A => B =
     lt.substitute[-? => B](identity)
 
   /**
