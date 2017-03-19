@@ -1,7 +1,18 @@
 package cats
 
 package object evidence {
-  type Leibniz[A, B] = cats.evidence.Is[A, B]
+  /**
+   * A convenient type alias for Is, which declares that A is the same
+   * type as B.
+   */
+  type ===[A, B] = A Is B
+
+  /**
+   * This type level equality represented by `Is` is referred to as
+   * "Leibniz equality", and it had the name "Leibniz" in the scalaz
+   *  https://en.wikipedia.org/wiki/Gottfried_Wilhelm_Leibniz
+   */
+  type Leibniz[A, B] = A Is B
 
   /**
    * A convenient type alias for As, this declares that A is a
