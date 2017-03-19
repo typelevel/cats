@@ -295,8 +295,16 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
     }
 
   // scalastyle:off method.length
-  implicit def catsDataApplicativeErrorForValidated[E](implicit E: Semigroup[E]): ApplicativeError[Validated[E, ?], E] =
-    new ApplicativeError[Validated[E, ?], E] {
+  implicit def catsDataInstancesForValidated[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =
+    new Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] {
+      def traverse[F[_]: Applicative, A, B](fa: Validated[E, A])(f: A => F[B]): F[Validated[E, B]] =
+        fa.traverse(f)
+
+      def foldLeft[A, B](fa: Validated[E, A], b: B)(f: (B, A) => B): B =
+        fa.foldLeft(b)(f)
+
+      def foldRight[A, B](fa: Validated[E, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa.foldRight(lb)(f)
 
       def pure[A](a: A): Validated[E, A] =
         Validated.valid(a)
@@ -316,45 +324,6 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
           case v @ Validated.Valid(_) => v
         }
       def raiseError[A](e: E): Validated[E, A] = Validated.Invalid(e)
-    }
-    // scalastyle:on method.length
-}
-
-private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
-
-  implicit def catsDataSemigroupForValidated[A, B](implicit A: Semigroup[A], B: Semigroup[B]): Semigroup[Validated[A, B]] =
-    new Semigroup[Validated[A, B]] {
-      def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x combine y
-    }
-
-  implicit def catsDataPartialOrderForValidated[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A, B]] =
-    new PartialOrder[Validated[A, B]] {
-      def partialCompare(x: Validated[A, B], y: Validated[A, B]): Double = x partialCompare y
-      override def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
-    }
-}
-
-private[data] sealed abstract class ValidatedInstances2 {
-  implicit def catsDataEqForValidated[A: Eq, B: Eq]: Eq[Validated[A, B]] =
-    new Eq[Validated[A, B]] {
-      def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
-    }
-
-  // scalastyle:off method.length
-  implicit def catsDataTraverseFunctorForValidated[E]: Traverse[Validated[E, ?]] =
-    new Traverse[Validated[E, ?]] {
-
-      override def traverse[G[_] : Applicative, A, B](fa: Validated[E, A])(f: (A) => G[B]): G[Validated[E, B]] =
-        fa.traverse(f)
-
-      override def foldLeft[A, B](fa: Validated[E, A], b: B)(f: (B, A) => B): B =
-        fa.foldLeft(b)(f)
-
-      override def foldRight[A, B](fa: Validated[E, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        fa.foldRight(lb)(f)
-
-      override def map[A, B](fa: Validated[E, A])(f: (A) => B): Validated[E, B] =
-        fa.map(f)
 
       override def reduceLeftToOption[A, B](fa: Validated[E, A])(f: A => B)(g: (B, A) => B): Option[B] =
         fa.map(f).toOption
@@ -387,6 +356,28 @@ private[data] sealed abstract class ValidatedInstances2 {
         fa.fold(_ => Nil, _ :: Nil)
 
       override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
+    }
+    // scalastyle:on method.length
+}
+
+private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
+
+  implicit def catsDataSemigroupForValidated[A, B](implicit A: Semigroup[A], B: Semigroup[B]): Semigroup[Validated[A, B]] =
+    new Semigroup[Validated[A, B]] {
+      def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x combine y
+    }
+
+  implicit def catsDataPartialOrderForValidated[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A, B]] =
+    new PartialOrder[Validated[A, B]] {
+      def partialCompare(x: Validated[A, B], y: Validated[A, B]): Double = x partialCompare y
+      override def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
+    }
+}
+
+private[data] sealed abstract class ValidatedInstances2 {
+  implicit def catsDataEqForValidated[A: Eq, B: Eq]: Eq[Validated[A, B]] =
+    new Eq[Validated[A, B]] {
+      def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
     }
 }
 
