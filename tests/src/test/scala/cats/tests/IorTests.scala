@@ -15,7 +15,7 @@ class IorTests extends CatsSuite {
   checkAll("Cartesian[String Ior ?]]", SerializableTests.serializable(Cartesian[String Ior ?]))
 
   checkAll("Ior[String, Int]", MonadTests[String Ior ?].monad[Int, Int, Int])
-  checkAll("Monad[String Ior ?]]", SerializableTests.serializable(Monad[String Ior ?]))
+  checkAll("MonadError[String Ior ?]", SerializableTests.serializable(MonadError[String Ior ?, String]))
 
   checkAll("Ior[String, Int] with Option", TraverseTests[String Ior ?].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[String Ior ?]", SerializableTests.serializable(Traverse[String Ior ?]))
