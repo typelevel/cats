@@ -18,7 +18,7 @@ class AsTests extends CatsSuite {
     trait A
     case class Foo(x: Int) extends A
 
-    val lifted: Foo <~< A = As.isa[Foo,A]
+    val lifted: Foo <~< A = As.unsafeFromPredef[Foo,A]
     toMap(List("String" -> Foo(1)))(As.co2_2(lifted))
   }
 }
