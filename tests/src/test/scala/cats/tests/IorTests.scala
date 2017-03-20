@@ -65,6 +65,12 @@ class IorTests extends CatsSuite {
     }
   }
 
+  test("valueOr consistent with leftMap") {
+    forAll { (i: Int Ior String, f: Int => String) =>
+      i.valueOr(f) should === (i.leftMap(f).fold(identity, identity, _ + _))
+    }
+  }
+
   test("isLeft consistent with toOption") {
     forAll { (i: Int Ior String) =>
       i.isLeft should === (i.toOption.isEmpty)
