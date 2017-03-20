@@ -285,7 +285,7 @@ Originally from [@alexknvl](https://gist.github.com/alexknvl/d63508ddb6a728015ac
 | Stream[A]       | ✔             | ✔                 | ✔           | ✔     | ✔       | ✗               | ✔       |
 | Map[K, A]       | ✔             | ✔                 | ✗           | ✗     | ✔       | ✗               | ✗       |
 | Validated[E, A] | ✔             | ✔ (`E: Semigroup`)| ✔           | ✗     | ✗       | ✗               | ✗       |
-| Reader[E, A]    | ✔             | ✔                 | ✔           | ✔     | ✗       | ✗               | ✔       |
+| Reader[E, A]    | ✔             | ✔                 | ✔           | ✔     | ✗       | ✗               | ✗       |
 | Writer[E, A]    | ✔             | ✔ (`E:Monoid`)    | ✔           | ✔     | ✗       | ✗               | ✗       |
 
 
