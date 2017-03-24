@@ -36,7 +36,7 @@ import syntax.either._
    * returns `true`. The condition is evaluated before the loop body.
    * Discards results.
    */
-  def whileM_[A](p: F[Boolean], body: => F[A]): F[Unit] = {
+  def whileM_[A](p: F[Boolean])(body: => F[A]): F[Unit] = {
     val continue: Either[Unit, Unit] = Left(())
     val stop: F[Either[Unit, Unit]] = pure(Right(()))
     tailRecM(())(_ => ifM(p)(

@@ -12,13 +12,13 @@ class MonadTest extends CatsSuite {
 
   test("whileM_") {
     forAll(smallInteger) { (max: Int) =>
-      val (result, _) = whileM_(inspect(i => !(i > max)), modify(i => i + 1)).run(0).value
+      val (result, _) = whileM_(inspect(i => !(i > max)))(modify(i => i + 1)).run(0).value
       result should ===(max + 1)
     }
   }
 
   test("whileM") {
-    forAll(smallInteger) { (max: Int) =>
+    forAll(Gen.posNum[Int]) { (max: Int) =>
       val (result,aggregation) = whileM[List, Unit](inspect(i => !(i > max)))(modify(i => i + 1)).run(0).value
       result should ===(max + 1)
       aggregation.size should ===(max + 1)
@@ -27,7 +27,7 @@ class MonadTest extends CatsSuite {
   }
 
   test("whileM_ stack safety") {
-    val (result, _) = whileM_(inspect(i => !(i > 1000000)), modify(i => i + 1)).run(0).value
+    val (result, _) = whileM_(inspect(i => !(i > 1000000)))(modify(i => i + 1)).run(0).value
     result should ===(1000001)
   }
 
