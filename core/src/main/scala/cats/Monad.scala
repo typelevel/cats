@@ -24,8 +24,8 @@ import syntax.either._
     val b = Eval.later(body)
     tailRecM[G[A], G[A]](G.empty)(xs => ifM(p)(
       ifTrue = {
-        map(b.value) { b =>
-          Left(G.combineK(G.pure(b), xs))
+        map(b.value) { bv =>
+          Left(G.combineK(G.pure(bv), xs))
         }
       },
       ifFalse = pure(xs.asRight[G[A]])
