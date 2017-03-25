@@ -21,9 +21,10 @@ import syntax.either._
    * Collects the results into an arbitrary `MonadCombine` value, such as a `List`.
   */
   def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: MonadCombine[G]): F[G[A]] = {
+    val b = Eval.later(body)
     tailRecM[G[A], G[A]](G.empty)(xs => ifM(p)(
       ifTrue = {
-        map(body) { b =>
+        map(b.value) { b =>
           Left(G.combineK(G.pure(b), xs))
         }
       },
@@ -39,9 +40,10 @@ import syntax.either._
   def whileM_[A](p: F[Boolean])(body: => F[A]): F[Unit] = {
     val continue: Either[Unit, Unit] = Left(())
     val stop: F[Either[Unit, Unit]] = pure(Right(()))
+    val b = Eval.later(body)
     tailRecM(())(_ => ifM(p)(
       ifTrue = {
-        map(body)(_ => continue)
+        map(b.value)(_ => continue)
       },
       ifFalse = stop
     ))
