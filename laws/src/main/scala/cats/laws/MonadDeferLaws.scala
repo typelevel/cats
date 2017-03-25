@@ -25,7 +25,6 @@ trait MonadDeferLaws[F[_]] extends MonadLaws[F] {
     fa.flatMap(_ => fa) <-> F.pure(f(f(a, b), b))
   }
 
-
   lazy val flatMapStackSafety: IsEq[F[Int]] = {
     // tailRecM expressed with flatMap
     def loop[A, B](a: A)(f: A => F[Either[A, B]]): F[B] =
