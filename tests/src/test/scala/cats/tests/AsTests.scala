@@ -21,4 +21,12 @@ class AsTests extends CatsSuite {
     val lifted: Foo <~< A = As.unsafeFromPredef[Foo,A]
     toMap(List("String" -> Foo(1)))(As.co2_2(lifted))
   }
+
+  test("check expected relationships") {
+    // scala's GenTraversableOnce#toMap has a similar <:< constraint
+    implicitly[Int <~< Any]
+    implicitly[String <~< Any]
+    implicitly[String <~< AnyRef]
+    implicitly[scala.collection.immutable.List[String] <~< scala.collection.Seq[Any]]
+  }
 }

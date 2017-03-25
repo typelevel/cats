@@ -21,8 +21,8 @@ package object evidence {
    */
   type <~<[-A, +B] = A As B
 
-  /** 
-   * A flipped alias, for those used to their arrows running left to right 
+  /**
+   * A flipped alias, for those used to their arrows running left to right
    */
   type >~>[+B, -A] = A As B
 

@@ -77,8 +77,7 @@ object As extends AsInstances {
   /**
    * Lift Scala's subtyping relationship
    */
-  @inline def unsafeFromPredef[A, B >: A]: (A As B) =
-    reflAny.asInstanceOf[A As B]
+  @inline def unsafeFromPredef[A, B >: A]: (A As B) = refl
 
   /**
    * We can lift subtyping into any covariant type constructor
