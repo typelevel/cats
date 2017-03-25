@@ -185,6 +185,12 @@ object Free {
   def liftF[F[_], A](value: F[A]): Free[F, A] = Suspend(value)
 
   /**
+   * Absorb a step into the free monad.
+   */
+  def roll[F[_], A](value: F[Free[F, A]]): Free[F, A] =
+    liftF(value).flatMap(identity)
+
+  /**
    * Suspend the creation of a `Free[F, A]` value.
    */
   def suspend[F[_], A](value: => Free[F, A]): Free[F, A] =
@@ -220,6 +226,12 @@ object Free {
     def apply[A](fa: F[A])(implicit I: Inject[F, G]): Free[G, A] =
       Free.liftF(I.inj(fa))
   }
+
+  def injectRoll[F[_], G[_], A](ga: G[Free[F, A]])(implicit I: Inject[G, F]): Free[F, A] =
+    Free.roll(I.inj(ga))
+
+  def match_[F[_], G[_], A](fa: Free[F, A])(implicit F: Functor[F], I: Inject[G, F]): Option[G[Free[F, A]]] =
+    fa.resume.fold(I.prj(_), _ => None)
 
   /**
    * `Free[S, ?]` has a monad for any type constructor `S[_]`.

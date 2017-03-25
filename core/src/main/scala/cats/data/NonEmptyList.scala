@@ -67,6 +67,30 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   }
 
   /**
+    * Builds a new `List` by applying a partial function to
+    * all the elements from this `NonEmptyList` on which the function is defined
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+    * scala> nel.collect { case v if v < 3 => v }
+    * res0: scala.collection.immutable.List[Int] = List(1, 2)
+    * scala> nel.collect {
+    *      |  case v if v % 2 == 0 => "even"
+    *      |  case _ => "odd"
+    *      | }
+    * res1: scala.collection.immutable.List[String] = List(odd, even, odd, even, odd)
+    * }}}
+    */
+  def collect[B](pf: PartialFunction[A, B]) : List[B] = {
+    if (pf.isDefinedAt(head)) {
+      pf.apply(head) :: tail.collect(pf)
+    } else {
+      tail.collect(pf)
+    }
+  }
+
+  /**
    * Append another NonEmptyList
    */
   def concat[AA >: A](other: NonEmptyList[AA]): NonEmptyList[AA] =
