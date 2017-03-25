@@ -24,9 +24,6 @@ class TryTests extends CatsSuite {
   checkAll("Try", MonadTests[Try].monad[Int, Int, Int])
   checkAll("Monad[Try]", SerializableTests.serializable(Monad[Try]))
 
-  checkAll("Try[Int]", ApplicativeEvalTests[Try].applicativeEvalWithError[Int, Int, Int])
-  checkAll("ApplicativeEval[Try]", SerializableTests.serializable(ApplicativeEval[Try]))
-
   test("show") {
     forAll { fs: Try[String] =>
       fs.show should === (fs.toString)

@@ -2,11 +2,12 @@ package cats
 package laws
 package discipline
 
+import catalysts.Platform
 import cats.laws.discipline.CartesianTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop.forAll
 
-trait MonadDeferTests[F[_]] extends ApplicativeEvalTests[F] with MonadTests[F] {
+trait MonadDeferTests[F[_]] extends MonadTests[F] {
   def laws: MonadDeferLaws[F]
 
   def monadDefer[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
@@ -28,18 +29,17 @@ trait MonadDeferTests[F[_]] extends ApplicativeEvalTests[F] with MonadTests[F] {
     new RuleSet {
       def name: String = "monadDefer"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(monad[A, B, C], applicativeEval[A, B, C])
+      def parents: Seq[RuleSet] = Seq(monad[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
-        "eval sequence consistent with pure.map" -> forAll(laws.evalSequenceConsistentWithPureMap[A, B] _),
-        "eval repeats side effects" -> forAll(laws.evalRepeatsSideEffects[A, B] _),
-        "defer sequence consistent with pure.flatMap" -> forAll(laws.deferSequenceConsistentWithPureFlatMap[A, B] _),
+        "delay equivalence with pure" -> forAll(laws.delayEquivalenceWithPure[A] _),
+        "delay repeats side effects" -> forAll(laws.delayRepeatsSideEffects[A, B] _),
         "defer repeats side effects" -> forAll(laws.deferRepeatsSideEffects[A, B] _)
-      )
+      ) ++ (if (Platform.isJvm) Seq[(String, Prop)]("flatMap stack safety" -> Prop.lzy(laws.flatMapStackSafety)) else Seq.empty)
     }
   }
 
   /**
-   * In addition to the tests specified by [[monadDefer]], it adds
+   * In addition to the tests specified by [[MonadDefer]], it adds
    * an extra `ApplicativeError[F,Throwable]` restriction, which
    * enables extra laws.
    */
@@ -63,8 +63,11 @@ trait MonadDeferTests[F[_]] extends ApplicativeEvalTests[F] with MonadTests[F] {
     new RuleSet {
       def name: String = "monadDeferWithError"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(monadDefer[A, B, C], applicativeEvalWithError[A, B, C])
-      def props: Seq[(String, Prop)] = Seq.empty
+      def parents: Seq[RuleSet] = Seq(monadDefer[A, B, C])
+      def props: Seq[(String, Prop)] = Seq(
+        "delay captures exceptions" -> forAll(laws.delayCapturesExceptions[A] _),
+        "defer captures exceptions" -> forAll(laws.deferCapturesExceptions[A] _)
+      )
     }
   }
 }
