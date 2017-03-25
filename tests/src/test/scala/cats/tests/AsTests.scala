@@ -27,6 +27,8 @@ class AsTests extends CatsSuite {
     implicitly[Int <~< Any]
     implicitly[String <~< Any]
     implicitly[String <~< AnyRef]
+    implicitly[String <~< AnyRef]
+    implicitly[(String,Int) <~< (AnyRef,Any)]
     implicitly[scala.collection.immutable.List[String] <~< scala.collection.Seq[Any]]
   }
 }
