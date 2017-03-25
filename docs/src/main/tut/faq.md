@@ -19,6 +19,7 @@ position: 4
  * [What do types like `?` and `λ` mean?](#kind-projector)
  * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
  * [What is `tailRecM`?](#tailrecm)
+ * [What does this symbol mean?](#symbol)
  * [How can I help?](#contributing)
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
@@ -190,6 +191,37 @@ The downside is that how you write a lawful `tailRecM` for your type constructor
 If you're having trouble figuring out how to implement `tailRecM` lawfully, you can try to find an instance in Cats itself for a type that is semantically similar to yours (all of the `FlatMap` instances provided by Cats have lawful, stack-safe `tailRecM` implementations).
 
 In some cases you may decide that providing a lawful `tailRecM` may be impractical or even impossible (if so we'd like to hear about it). For these cases we provide a way of testing all of the monad laws _except_ for the stack safety of `tailRecM`: just replace `MonadTests[F].monad[A, B, C]` in your tests with `MonadTests[F].stackUnsafeMonad[A, B, C]`.
+
+
+## <a id="symbol" href="#symbol"></a>What does this symbol mean?
+
+Below is a list of symbols used in cats.
+
+The `~>`, `⊥` and `⊤` symbols can be imported with `import cats._`.
+
+All other symbols can be imported with `import cats.implicits._`
+
+| Symbol     | Name                   | Type Class              | Signature                              |
+| ---------- | ---------------------- | --------------------    |--------------------------------------- |
+| `fa |@| fb`| Cartesian builder      | `Cartesian[F[_]]`       | `|@|(fa: F[A])(fb: F[B]): F[(A, B)]`   |
+| `fa *> fb` | right apply            | `Cartesian[F[_]]`       | `*>(fa: F[A])(fb: F[B]): F[A]`         |
+| `fa <* fb` | left apply             | `Cartesian[F[_]]`       | `<*(fa: F[A])(fb: F[B]): F[B]`         |
+| `x === y`  | equals                 | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`             |
+| `x =!= y`  | not equals             | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`            |
+| `fa >>= f` | flatMap                | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`|
+| `fa >> fb` | followed by            | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]` |
+| `x |-| y`  | remove                 | `Group[A]`              | `remove(x: A, y: A): A`                |
+| `x > y`    | greater than           | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`              |
+| `x >= y`   | greater than or equal  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`            |
+| `x < y`    | less than              | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`              |
+| `x <= y`   | less than or equal     | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`            |
+| `x |+| y`  | Semigroup combine      | `Semigroup[A]`          | `combine(x: A, y: A): A`               |
+| `x <+> y`  | SemigroupK combine     | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`     |
+| `F ~> G`   | natural transformation | `FunctionK[F[_], G[_]]` | `FunctionK` alias                      |
+| `F :<: G`  | inject                 | `Inject[F[_], G[_]]`    | `Inject` alias                         |
+| `F :≺: G`  | inject                 | `Inject[F[_], G[_]]`    | `Inject` alias                         |
+| `⊥`        | bottom                 | N/A                     | `Nothing`                              |
+| `⊤`        | top                    | N/A                     | `Any`                                  |
 
 ## <a id="contributing" href="#contributing"></a>How can I help?
 
