@@ -32,42 +32,10 @@ trait MonadDeferTests[F[_]] extends MonadTests[F] {
       def parents: Seq[RuleSet] = Seq(monad[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
         "delay equivalence with pure" -> forAll(laws.delayEquivalenceWithPure[A] _),
+        "delay equivalence with defer" -> forAll(laws.delayEquivalenceWithDefer[A, B] _),
         "delay repeats side effects" -> forAll(laws.delayRepeatsSideEffects[A, B] _),
         "defer repeats side effects" -> forAll(laws.deferRepeatsSideEffects[A, B] _)
       ) ++ (if (Platform.isJvm) Seq[(String, Prop)]("flatMap stack safety" -> Prop.lzy(laws.flatMapStackSafety)) else Seq.empty)
-    }
-  }
-
-  /**
-   * In addition to the tests specified by [[MonadDefer]], it adds
-   * an extra `ApplicativeError[F,Throwable]` restriction, which
-   * enables extra laws.
-   */
-  def monadDeferWithError[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
-    ArbFA: Arbitrary[F[A]],
-    ArbFB: Arbitrary[F[B]],
-    ArbFC: Arbitrary[F[C]],
-    ArbFAtoB: Arbitrary[F[A => B]],
-    ArbFBtoC: Arbitrary[F[B => C]],
-    CogenA: Cogen[A],
-    CogenB: Cogen[B],
-    CogenC: Cogen[C],
-    EqFA: Eq[F[A]],
-    EqFB: Eq[F[B]],
-    EqFC: Eq[F[C]],
-    EqFABC: Eq[F[(A, B, C)]],
-    EqFInt: Eq[F[Int]],
-    iso: Isomorphisms[F],
-    apErr: ApplicativeError[F, Throwable]
-  ): RuleSet = {
-    new RuleSet {
-      def name: String = "monadDeferWithError"
-      def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(monadDefer[A, B, C])
-      def props: Seq[(String, Prop)] = Seq(
-        "delay captures exceptions" -> forAll(laws.delayCapturesExceptions[A] _),
-        "defer captures exceptions" -> forAll(laws.deferCapturesExceptions[A] _)
-      )
     }
   }
 }

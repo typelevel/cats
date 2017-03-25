@@ -40,16 +40,6 @@ trait MonadDeferLaws[F[_]] extends MonadLaws[F] {
     val res = loop(0)(i => F.pure(if (i < n) Either.left(i + 1) else Either.right(i)))
     res <-> F.pure(n)
   }
-
-  /** Optional law for `ApplicativeError`. */
-  def delayCapturesExceptions[A](ex: Throwable)
-    (implicit A: ApplicativeError[F, Throwable]): IsEq[F[A]] =
-    F.delay[A](throw ex) <-> A.raiseError[A](ex)
-
-  /** Optional law for `ApplicativeError`. */
-  def deferCapturesExceptions[A](ex: Throwable)
-    (implicit A: ApplicativeError[F, Throwable]): IsEq[F[A]] =
-    F.defer[A](throw ex) <-> A.raiseError[A](ex)
 }
 
 object MonadDeferLaws {
