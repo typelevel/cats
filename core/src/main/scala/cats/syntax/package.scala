@@ -23,6 +23,7 @@ package object syntax {
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
   object list extends ListSyntax
+  object monad extends MonadSyntax
   object monadCombine extends MonadCombineSyntax
   object monadError extends MonadErrorSyntax
   object monadFilter extends MonadFilterSyntax

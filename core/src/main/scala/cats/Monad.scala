@@ -17,10 +17,10 @@ import syntax.either._
 
   /**
    * Execute an action repeatedly as long as the given `Boolean` expression
-   * returns `true`. The condition is evalated before the loop body.
-   * Collects the results into an arbitrary `MonadCombine` value, such as a `List`.
+   * returns `true`. The condition is evaluated before the loop body.
+   * Collects the results into an arbitrary `Alternative` value, such as a `Vector`.
   */
-  def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: MonadCombine[G]): F[G[A]] = {
+  def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: Alternative[G]): F[G[A]] = {
     val b = Eval.later(body)
     tailRecM[G[A], G[A]](G.empty)(xs => ifM(p)(
       ifTrue = {
@@ -52,9 +52,9 @@ import syntax.either._
   /**
    * Execute an action repeatedly until the `Boolean` condition returns `true`.
    * The condition is evaluated after the loop body. Collects results into an
-   * arbitrary `MonadCombine` value, such as a `List`.
+   * arbitrary `Alternative` value, such as a `Vector`.
    */
-  def untilM[G[_], A](f: F[A])(cond: => F[Boolean])(implicit G: MonadCombine[G]): F[G[A]] = {
+  def untilM[G[_], A](f: F[A])(cond: => F[Boolean])(implicit G: Alternative[G]): F[G[A]] = {
     val p = Eval.later(cond)
     flatMap(f)(x => map(whileM(map(p.value)(!_))(f))(xs => G.combineK(G.pure(x), xs)))
   }
