@@ -25,7 +25,7 @@ import syntax.either._
     tailRecM[G[A], G[A]](G.empty)(xs => ifM(p)(
       ifTrue = {
         map(b.value) { bv =>
-          Left(G.combineK(G.pure(bv), xs))
+          Left(G.combineK(xs, G.pure(bv)))
         }
       },
       ifFalse = pure(xs.asRight[G[A]])
@@ -48,4 +48,52 @@ import syntax.either._
       ifFalse = stop
     ))
   }
+
+  /**
+   * Execute an action repeatedly until the `Boolean` condition returns `true`.
+   * The condition is evaluated after the loop body. Collects results into an
+   * arbitrary `MonadCombine` value, such as a `List`.
+   */
+  def untilM[G[_], A](f: F[A])(cond: => F[Boolean])(implicit G: MonadCombine[G]): F[G[A]] = {
+    val p = Eval.later(cond)
+    flatMap(f)(x => map(whileM(map(p.value)(!_))(f))(xs => G.combineK(G.pure(x), xs)))
+  }
+
+  /**
+   * Execute an action repeatedly until the `Boolean` condition returns `true`.
+   * The condition is evaluated after the loop body. Discards results.
+   */
+  def untilM_[A](f: F[A])(cond: => F[Boolean]): F[Unit] = {
+    val p = Eval.later(cond)
+    flatMap(f)(_ => whileM_(map(p.value)(!_))(f))
+  }
+
+  /**
+   * Execute an action repeatedly until its result fails to satisfy the given predicate
+   * and return that result, discarding all others.
+   */
+  def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] = {
+    flatMap(f) { i =>
+      tailRecM(i) { a =>
+        if(p(a))
+          map(f)(_.asLeft[A])
+        else pure(a.asRight[A])
+      }
+    }
+  }
+
+  /**
+   * Execute an action repeatedly until its result satisfies the given predicate
+   * and return that result, discarding all others.
+   */
+  def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] = {
+    flatMap(f) { i =>
+      tailRecM(i) { a =>
+        if(p(a))
+          pure(a.asRight[A])
+        else map(f)(_.asLeft[A])
+      }
+    }
+  }
+
 }
