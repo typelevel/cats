@@ -19,6 +19,8 @@ import syntax.either._
    * Execute an action repeatedly as long as the given `Boolean` expression
    * returns `true`. The condition is evaluated before the loop body.
    * Collects the results into an arbitrary `Alternative` value, such as a `Vector`.
+   * This implementation uses append on each evaluation result,
+   * so avoid data structures with non-constant append performance, e.g. `List`.
   */
   def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: Alternative[G]): F[G[A]] = {
     val b = Eval.later(body)
@@ -53,6 +55,8 @@ import syntax.either._
    * Execute an action repeatedly until the `Boolean` condition returns `true`.
    * The condition is evaluated after the loop body. Collects results into an
    * arbitrary `Alternative` value, such as a `Vector`.
+   * This implementation uses append on each evaluation result,
+   * so avoid data structures with non-constant append performance, e.g. `List`.
    */
   def untilM[G[_], A](f: F[A])(cond: => F[Boolean])(implicit G: Alternative[G]): F[G[A]] = {
     val p = Eval.later(cond)
@@ -75,7 +79,7 @@ import syntax.either._
   def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] = {
     flatMap(f) { i =>
       tailRecM(i) { a =>
-        if(p(a))
+        if (p(a))
           map(f)(_.asLeft[A])
         else pure(a.asRight[A])
       }
@@ -89,7 +93,7 @@ import syntax.either._
   def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] = {
     flatMap(f) { i =>
       tailRecM(i) { a =>
-        if(p(a))
+        if (p(a))
           pure(a.asRight[A])
         else map(f)(_.asLeft[A])
       }
