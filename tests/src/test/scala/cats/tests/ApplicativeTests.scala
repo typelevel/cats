@@ -10,7 +10,7 @@ class ApplicativeTests extends CatsSuite {
 
     val A = Applicative[Option]
     val fa = A.pure(1)
-    A.replicateA(5, fa) should === (Some(List(1,1,1,1,1)))
+    fa.replicateA(5) should === (Some(List(1,1,1,1,1)))
 
   }
 
