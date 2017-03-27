@@ -139,6 +139,19 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val gunit: G[F[A]] = fga.sequence
   }
 
+
+  def testTraverse1[F[_]: Traverse1: FlatMap, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
+    val fa = mock[F[A]]
+    val f1 = mock[A => G[B]]
+    val gfb: G[F[B]] = fa.traverse1(f1)
+
+    val f2 = mock[A => G[F[B]]]
+    val gfb2: G[F[B]] = fa.flatTraverse1(f2)
+
+    val fga = mock[F[G[A]]]
+    val gunit: G[F[A]] = fga.sequence1
+  }
+
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
     val fa = mock[F[A]]
     val f1 = mock[(A, A) => A]

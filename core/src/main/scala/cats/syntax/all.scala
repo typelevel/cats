@@ -40,6 +40,7 @@ trait AllSyntax
     with TransLiftSyntax
     with TraverseFilterSyntax
     with TraverseSyntax
+    with Traverse1Syntax
     with TupleSyntax
     with ValidatedSyntax
     with VectorSyntax

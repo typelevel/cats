@@ -267,6 +267,8 @@ type class instances easy.
     Foldable -> Traverse
     Functor -> Traverse
     Foldable -> Reducible
+    Reducible -> Traverse1
+    Traverse -> Traverse1
   }
 )
 
