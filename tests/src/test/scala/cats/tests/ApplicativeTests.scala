@@ -4,7 +4,7 @@ package tests
 import cats.Applicative
 
 
-class ApplicativeCheck extends CatsSuite {
+class ApplicativeTests extends CatsSuite {
 
   test("replicateA creates a List of 'n' copies of given Applicative 'fa'") {
 
@@ -13,4 +13,29 @@ class ApplicativeCheck extends CatsSuite {
     A.replicateA(5, fa) should === (Some(List(1,1,1,1,1)))
 
   }
+
+  test("whenA return given argument when cond is true") {
+    forAll { (l: List[Int]) =>
+      l.whenA(true) should === (List.fill(l.length)(()))
+    }
+  }
+
+  test("whenA lift Unit to F when cond is false") {
+    forAll { (l: List[Int]) =>
+      l.whenA(false) should === (List(()))
+    }
+  }
+
+  test("unlessA return given argument when cond is false") {
+    forAll { (l: List[Int]) =>
+      l.unlessA(false) should === (List.fill(l.length)(()))
+    }
+  }
+
+  test("unlessA lift Unit to F when cond is true") {
+    forAll { (l: List[Int]) =>
+      l.unlessA(true) should === (List(()))
+    }
+  }
+
 }
