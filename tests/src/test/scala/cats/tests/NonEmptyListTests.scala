@@ -244,6 +244,12 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
+  test("NonEmptyList#sortBy is consistent with List#sortBy") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
+      nel.sortBy(f).toList should === (nel.toList.sortBy(f))
+    }
+  }
+
 
   test("NonEmptyList#groupBy is consistent with List#groupBy") {
     forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
