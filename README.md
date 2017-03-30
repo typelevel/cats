@@ -104,6 +104,7 @@ The current maintainers (people who can merge pull requests) are:
  * [travisbrown](https://github.com/travisbrown) Travis Brown
  * [adelbertc](https://github.com/adelbertc) Adelbert Chang
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
+ * [edmundnoble](https://github.com/edmundnoble) Edmund Noble
  * [tpolecat](https://github.com/tpolecat) Rob Norris
  * [stew](https://github.com/stew) Mike O'Connor
  * [non](https://github.com/non) Erik Osheim
@@ -112,7 +113,6 @@ The current maintainers (people who can merge pull requests) are:
  * [fthomas](https://github.com/fthomas) Frank Thomas
  * [julien-truffaut](https://github.com/julien-truffaut) Julien Truffaut
  * [kailuowang](https://github.com/kailuowang) Kailuo Wang
- * [edmundnoble](https://github.com/edmundnoble) Edmund Noble
 
 We are currently following a practice of requiring at least two
 sign-offs to merge PRs (and for large or contentious issues we may
