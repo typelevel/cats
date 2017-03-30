@@ -42,6 +42,18 @@ import simulacrum.typeclass
       val F = self
       val G = Applicative[G]
     }
+
+  /**
+   * Returns the given argument if `cond` is `false`, otherwise, unit lifted into F.
+   */
+  def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] =
+    if (cond) pure(()) else void(f)
+
+  /**
+   * Returns the given argument if `cond` is `true`, otherwise, unit lifted into F.
+   */
+  def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
+    if (cond) void(f) else pure(())
 }
 
 object Applicative {
