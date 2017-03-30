@@ -144,6 +144,13 @@ class EvalTests extends CatsSuite {
   checkAll("Eval[Int]", GroupLaws[Eval[Int]].group)
 
   {
+    implicit val M = Monad[Eval].composeTraverseMonad[Option]
+    type EvalOption[T] = Eval[Option[T]]
+    implicit val iso = CartesianTests.Isomorphisms.invariant[EvalOption]
+    checkAll("Eval[Option[Int]]", MonadTests[EvalOption].monad[Int, Int, Int])
+    checkAll("Monad[EvalOption]", SerializableTests.serializable(M))
+  }
+  {
     implicit val A = ListWrapper.monoid[Int]
     checkAll("Eval[ListWrapper[Int]]", GroupLaws[Eval[ListWrapper[Int]]].monoid)
   }
