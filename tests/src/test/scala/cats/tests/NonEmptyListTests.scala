@@ -231,6 +231,12 @@ class NonEmptyListTests extends CatsSuite {
       nel.zipWithIndex.toList should === (nel.toList.zipWithIndex)
     }
   }
+
+  test("NonEmptyList#groupBy is consistent with List#groupBy") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
+      nel.groupBy(f).mapValues(_.toList) should === (nel.toList.groupBy(f))
+    }
+  }
 }
 
 class ReducibleNonEmptyListCheck extends ReducibleCheck[NonEmptyList]("NonEmptyList") {

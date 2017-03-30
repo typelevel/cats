@@ -7,6 +7,7 @@ import cats.syntax.order._
 import scala.annotation.tailrec
 import scala.collection.immutable.TreeSet
 import scala.collection.mutable.ListBuffer
+import scala.collection.{immutable, mutable}
 
 /**
  * A data type which represents a non empty list of A, with
@@ -215,6 +216,29 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
       idx += 1
     }
     NonEmptyList((head, 0), bldr.result)
+  }
+
+  /**
+    * Groups elements inside of this `NonEmptyList` using a mapping function
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
+    * scala> nel.groupBy(_ >= 0)
+    * res0: Map[Boolean, cats.data.NonEmptyList[Int]] = Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3))
+    * }}}
+    */
+  def groupBy[B](f: A => B): Map[B, NonEmptyList[A]] = {
+    val m = mutable.Map.empty[B, mutable.Builder[A, List[A]]]
+    for { elem <- toList } {
+      m.getOrElseUpdate(f(elem), List.newBuilder[A]) += elem
+    }
+    val b = immutable.Map.newBuilder[B, NonEmptyList[A]]
+    for { (k, v) <- m } {
+      val head :: tail = v.result // we only create non empty list inside of the map `m`
+      b += ((k, NonEmptyList(head, tail)))
+    }
+    b.result
   }
 
 }
