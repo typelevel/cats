@@ -20,7 +20,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
    */
   def toList: List[A] = head :: tail
 
-  def last: A = tail.lastOption.getOrElse(head)
+  def last: A = tail.lastOption match {
+    case None    => head
+    case Some(a) => a
+  }
 
   /**
    *  Applies f to all the elements of the structure
