@@ -20,6 +20,11 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
    */
   def toList: List[A] = head :: tail
 
+  def last: A = tail.lastOption match {
+    case None    => head
+    case Some(a) => a
+  }
+
   /**
    *  Applies f to all the elements of the structure
    */
@@ -217,6 +222,40 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     }
     NonEmptyList((head, 0), bldr.result)
   }
+
+  /**
+    * Sorts this `NonEmptyList` according to an `Order` on transformed `B` from `A`
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> import cats.instances.int._
+    * scala> val nel = NonEmptyList.of(('a', 4), ('z', 1), ('e', 22))
+    * scala> nel.sortBy(_._2)
+    * res0: cats.data.NonEmptyList[(Char, Int)] = NonEmptyList((z,1), (a,4), (e,22))
+    * }}}
+    */
+  def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyList[A] =
+    toList.sortBy(f)(B.toOrdering) match {
+      case x :: xs => NonEmptyList(x, xs)
+      case Nil     => sys.error("unreachable: sorting a NonEmptyList cannot produce an empty List")
+    }
+
+  /**
+    * Sorts this `NonEmptyList` according to an `Order`
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> import cats.instances.int._
+    * scala> val nel = NonEmptyList.of(12, 4, 3, 9)
+    * scala> nel.sorted
+    * res0: cats.data.NonEmptyList[Int] = NonEmptyList(3, 4, 9, 12)
+    * }}}
+    */
+  def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyList[AA] =
+    toList.sorted(AA.toOrdering) match {
+      case x :: xs => NonEmptyList(x, xs)
+      case Nil     => sys.error("unreachable: sorting a NonEmptyList cannot produce an empty List")
+    }
 
   /**
     * Groups elements inside of this `NonEmptyList` using a mapping function
