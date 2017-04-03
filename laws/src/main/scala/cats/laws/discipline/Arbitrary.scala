@@ -157,9 +157,16 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit def catsLawsArbitraryForNested[F[_], G[_], A](implicit FG: Arbitrary[F[G[A]]]): Arbitrary[Nested[F, G, A]] =
     Arbitrary(FG.arbitrary.map(Nested(_)))
+
+  implicit def catsLawArbitraryForState[S: Arbitrary: Cogen, A: Arbitrary]: Arbitrary[State[S, A]] =
+    catsLawArbitraryForStateT[Eval, S, A]
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {
+
+  implicit def catsLawArbitraryForStateT[F[_]: Applicative, S, A](implicit F: Arbitrary[S => F[(S, A)]]): Arbitrary[StateT[F, S, A]] =
+    Arbitrary(F.arbitrary.map(f => StateT(f)))
+
   implicit def catsLawsArbitraryForWriterT[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
     Arbitrary(F.arbitrary.map(WriterT(_)))
 
