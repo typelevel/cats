@@ -22,6 +22,14 @@ import simulacrum.typeclass
    */
   def pure[A](x: A): F[A]
 
+  /**
+   * Returns an `F[Unit]` value, equivalent with `pure(())`.
+   *
+   * A useful shorthand, also allowing implementations to optimize the
+   * returned reference (e.g. it can be a `val`).
+   */
+  def unit: F[Unit] = pure(())
+
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     ap(pure(f))(fa)
 
