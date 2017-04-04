@@ -31,6 +31,7 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
       "applicative homomorphism" -> forAll(laws.applicativeHomomorphism[A, B] _),
       "applicative interchange" -> forAll(laws.applicativeInterchange[A, B] _),
       "applicative map" -> forAll(laws.applicativeMap[A, B] _),
+      "applicative unit" -> forAll(laws.applicativeUnit[A] _),
       "ap consistent with product + map" -> forAll(laws.apProductConsistent[A, B] _),
       "monoidal left identity" -> forAll((fa: F[A]) => iso.leftIdentity(laws.monoidalLeftIdentity(fa))),
       "monoidal right identity" -> forAll((fa: F[A]) => iso.rightIdentity(laws.monoidalRightIdentity(fa))))
