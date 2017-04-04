@@ -22,6 +22,7 @@ package object syntax {
   object functorFilter extends FunctorFilterSyntax
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
+  object ior extends IorSyntax
   object list extends ListSyntax
   object monad extends MonadSyntax
   object monadCombine extends MonadCombineSyntax
