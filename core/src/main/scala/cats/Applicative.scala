@@ -23,7 +23,7 @@ import simulacrum.typeclass
   def pure[A](x: A): F[A]
 
   /**
-   * Returns an `F[Unit]` instance, equivalent with `pure(())`.
+   * Returns an `F[Unit]` value, equivalent with `pure(())`.
    *
    * A useful shorthand, also allowing implementations to optimize the
    * returned reference (e.g. it can be a `val`).
