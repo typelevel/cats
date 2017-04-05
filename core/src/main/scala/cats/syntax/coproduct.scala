@@ -1,43 +1,43 @@
 package cats
 package syntax
 
-import cats.data.Coproduct
+import cats.data.EitherK
 
-trait CoproductSyntax {
-  implicit def catsSyntaxCoproduct[F[_], A](a: F[A]): CoproductOps[F, A] = new CoproductOps(a)
+trait EitherKSyntax {
+  implicit def catsSyntaxEitherK[F[_], A](a: F[A]): EitherKOps[F, A] = new EitherKOps(a)
 }
 
-final class CoproductOps[F[_], A](val fa: F[A]) extends AnyVal {
+final class EitherKOps[F[_], A](val fa: F[A]) extends AnyVal {
 
   /**
-   * Lift an `F[A]` into a `Coproduct[F, G, A]` for any type constructor `G[_]`.
+   * Lift an `F[A]` into a `EitherK[F, G, A]` for any type constructor `G[_]`.
    *
    * @see [[rightc]] to swap the order of `F` and `G` in the result type.
    *
    * Example:
    * {{{
-   * scala> import cats.data.Coproduct
+   * scala> import cats.data.EitherK
    * scala> import cats.Eval
    * scala> import cats.implicits._
    * scala> List(1, 2, 3).leftc[Eval]
-   * res0: Coproduct[List, Eval, Int] = Coproduct(Left(List(1, 2, 3)))
+   * res0: EitherK[List, Eval, Int] = EitherK(Left(List(1, 2, 3)))
    * }}}
    */
-  def leftc[G[_]]: Coproduct[F, G, A] = Coproduct.leftc(fa)
+  def leftc[G[_]]: EitherK[F, G, A] = EitherK.leftc(fa)
 
   /**
-   * Lift an `F[A]` into a `Coproduct[G, F, A]` for any type constructor `G[_]`.
+   * Lift an `F[A]` into a `EitherK[G, F, A]` for any type constructor `G[_]`.
    *
    * @see [[leftc]] to swap the order of `F` and `G` in the result type.
    *
    * Example:
    * {{{
-   * scala> import cats.data.Coproduct
+   * scala> import cats.data.EitherK
    * scala> import cats.Eval
    * scala> import cats.implicits._
    * scala> List(1, 2, 3).rightc[Eval]
-   * res0: Coproduct[Eval, List, Int] = Coproduct(Right(List(1, 2, 3)))
+   * res0: EitherK[Eval, List, Int] = EitherK(Right(List(1, 2, 3)))
    * }}}
    */
-  def rightc[G[_]]: Coproduct[G, F, A] = Coproduct.rightc(fa)
+  def rightc[G[_]]: EitherK[G, F, A] = EitherK.rightc(fa)
 }

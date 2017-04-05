@@ -103,8 +103,8 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForEval[A: Cogen]: Cogen[Eval[A]] =
     Cogen[A].contramap(_.value)
 
-  implicit def catsLawsArbitraryForProd[F[_], G[_], A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]]): Arbitrary[Prod[F, G, A]] =
-    Arbitrary(F.arbitrary.flatMap(fa => G.arbitrary.map(ga => Prod[F, G, A](fa, ga))))
+  implicit def catsLawsArbitraryForTuple2K[F[_], G[_], A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]]): Arbitrary[Tuple2K[F, G, A]] =
+    Arbitrary(F.arbitrary.flatMap(fa => G.arbitrary.map(ga => Tuple2K[F, G, A](fa, ga))))
 
   implicit def catsLawsArbitraryForFunc[F[_], A, B](implicit F: Arbitrary[F[B]]): Arbitrary[Func[F, A, B]] =
     Arbitrary(F.arbitrary.map(fb => Func.func[F, A, B](_ => fb)))
@@ -122,15 +122,15 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForPartialFunction[A, B](implicit F: Arbitrary[A => Option[B]]): Arbitrary[PartialFunction[A, B]] =
     Arbitrary(F.arbitrary.map(Function.unlift))
 
-  implicit def catsLawsArbitraryForCoproduct[F[_], G[_], A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]]): Arbitrary[Coproduct[F, G, A]] =
+  implicit def catsLawsArbitraryForEitherK[F[_], G[_], A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]]): Arbitrary[EitherK[F, G, A]] =
     Arbitrary(Gen.oneOf(
-      F.arbitrary.map(Coproduct.leftc[F, G, A]),
-      G.arbitrary.map(Coproduct.rightc[F, G, A])))
+      F.arbitrary.map(EitherK.leftc[F, G, A]),
+      G.arbitrary.map(EitherK.rightc[F, G, A])))
 
-  implicit def catsLawsCogenForCoproduct[F[_], G[_], A](implicit F: Cogen[F[A]], G: Cogen[G[A]]): Cogen[Coproduct[F, G, A]] =
+  implicit def catsLawsCogenForEitherK[F[_], G[_], A](implicit F: Cogen[F[A]], G: Cogen[G[A]]): Cogen[EitherK[F, G, A]] =
     Cogen((seed, x) => x.run.fold(F.perturb(seed, _), G.perturb(seed, _)))
 
-  implicit def catLawsCogenForProd[F[_], G[_], A](implicit F: Cogen[F[A]], G: Cogen[G[A]]): Cogen[Prod[F, G, A]] =
+  implicit def catLawsCogenForTuple2K[F[_], G[_], A](implicit F: Cogen[F[A]], G: Cogen[G[A]]): Cogen[Tuple2K[F, G, A]] =
     Cogen((seed, t) => F.perturb(G.perturb(seed, t.second), t.first))
 
   implicit def catsLawsArbitraryForShow[A: Arbitrary]: Arbitrary[Show[A]] =

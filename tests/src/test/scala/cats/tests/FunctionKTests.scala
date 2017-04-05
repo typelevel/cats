@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.arrow.FunctionK
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.data.NonEmptyList
 import cats.laws.discipline.arbitrary._
 
@@ -50,8 +50,8 @@ class FunctionKTests extends CatsSuite {
   test("or") {
     val combinedInterpreter = Test1FK or Test2FK
     forAll { (a : Int, b : Int) =>
-      combinedInterpreter(Coproduct.left(Test1(a))) should === (a)
-      combinedInterpreter(Coproduct.right(Test2(b))) should === (b)
+      combinedInterpreter(EitherK.left(Test1(a))) should === (a)
+      combinedInterpreter(EitherK.right(Test2(b))) should === (b)
     }
   }
 

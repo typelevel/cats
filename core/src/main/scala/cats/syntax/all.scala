@@ -13,7 +13,7 @@ trait AllSyntax
     with ComonadSyntax
     with ComposeSyntax
     with ContravariantSyntax
-    with CoproductSyntax
+    with EitherKSyntax
     with EitherSyntax
     with EqSyntax
     with FlatMapSyntax

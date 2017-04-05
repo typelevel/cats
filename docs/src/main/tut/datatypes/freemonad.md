@@ -301,10 +301,10 @@ Real world applications often time combine different algebras.
 The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf)
 lets us compose different algebras in the context of `Free`.
 
-Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.
+Let's see a trivial example of unrelated ADT's getting composed as a `EitherK` that can form a more complex program.
 
 ```tut:silent
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.free.Free
 import cats.{Id, Inject, ~>}
 import scala.collection.mutable.ListBuffer
@@ -322,10 +322,10 @@ case class AddCat(a: String) extends DataOp[Unit]
 case class GetAllCats() extends DataOp[List[String]]
 ```
 
-Once the ADTs are defined we can formally state that a `Free` program is the Coproduct of it's Algebras.
+Once the ADTs are defined we can formally state that a `Free` program is the EitherK of it's Algebras.
 
 ```tut:silent
-type CatsApp[A] = Coproduct[DataOp, Interact, A]
+type CatsApp[A] = EitherK[DataOp, Interact, A]
 ```
 
 In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the `Free` context.
@@ -366,7 +366,7 @@ def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]): Free[Cats
 }
 ```
 
-Finally we write one interpreter per ADT and combine them with a `FunctionK` to `Coproduct` so they can be
+Finally we write one interpreter per ADT and combine them with a `FunctionK` to `EitherK` so they can be
 compiled and applied to our `Free` program.
 
 ```tut:invisible
