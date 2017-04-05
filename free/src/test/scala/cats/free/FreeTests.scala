@@ -2,7 +2,7 @@ package cats
 package free
 
 import cats.arrow.FunctionK
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 import cats.tests.CatsSuite
@@ -141,7 +141,7 @@ class FreeTests extends CatsSuite {
       Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test2(s, f))
   }
 
-  type T[A] = Coproduct[Test1Algebra, Test2Algebra, A]
+  type T[A] = EitherK[Test1Algebra, Test2Algebra, A]
 
   object Test1Interpreter extends FunctionK[Test1Algebra,Id] {
     override def apply[A](fa: Test1Algebra[A]): Id[A] = fa match {
@@ -155,7 +155,7 @@ class FreeTests extends CatsSuite {
     }
   }
 
-  val coProductInterpreter: FunctionK[T,Id] = Test1Interpreter or Test2Interpreter
+  val eitherKInterpreter: FunctionK[T,Id] = Test1Interpreter or Test2Interpreter
 
   test(".inject") {
     forAll { (x: Int, y: Int) =>
@@ -167,7 +167,7 @@ class FreeTests extends CatsSuite {
             b <- Free.inject[Test2Algebra, F](Test2(y, identity))
           } yield a + b
         }
-      (res[T] foldMap coProductInterpreter) == (x + y) should ===(true)
+      (res[T] foldMap eitherKInterpreter) == (x + y) should ===(true)
     }
   }
 

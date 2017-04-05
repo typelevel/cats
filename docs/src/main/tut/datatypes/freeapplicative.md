@@ -156,9 +156,9 @@ Therefore, we can write an interpreter that uses the product of the `ParValidato
 to interpret our program in one go. We can create this interpreter easily by using `FunctionK#and`.
 
 ```tut:silent
-import cats.data.Prod
+import cats.data.Tuple2K
 
-type ValidateAndLog[A] = Prod[ParValidator, Log, A]
+type ValidateAndLog[A] = Tuple2K[ParValidator, Log, A]
 
 val prodCompiler: FunctionK[ValidationOp, ValidateAndLog] = parCompiler and logCompiler
 

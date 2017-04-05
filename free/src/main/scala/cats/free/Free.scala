@@ -140,11 +140,11 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     }(Free.catsFreeMonadForFree)
 
   /**
-   * Lift into `G` (typically a `Coproduct`) given `Inject`. Analogous
+   * Lift into `G` (typically a `EitherK`) given `Inject`. Analogous
    * to `Free.inject` but lifts programs rather than constructors.
    *
    *{{{
-   *scala> type Lo[A] = cats.data.Coproduct[List, Option, A]
+   *scala> type Lo[A] = cats.data.EitherK[List, Option, A]
    *defined type alias Lo
    *
    *scala> val fo = Free.liftF(Option("foo"))

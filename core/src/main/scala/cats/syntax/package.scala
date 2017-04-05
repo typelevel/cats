@@ -10,7 +10,7 @@ package object syntax {
   object bitraverse extends BitraverseSyntax
   object cartesian extends CartesianSyntax
   object coflatMap extends CoflatMapSyntax
-  object coproduct extends CoproductSyntax
+  object eitherK extends EitherKSyntax
   object comonad extends ComonadSyntax
   object compose extends ComposeSyntax
   object contravariant extends ContravariantSyntax
