@@ -29,6 +29,12 @@ class ListTests extends CatsSuite {
     List.empty[Int].toNel should === (None)
   }
 
+  test("groupByNel should be consistent with groupBy")(
+    forAll { (fa: List[Int], f: Int => Int) =>
+      fa.groupByNel(f).mapValues(_.toList) should === (fa.groupBy(f))
+    }
+  )
+
   test("show"){
     List(1, 2, 3).show should === ("List(1, 2, 3)")
     (Nil: List[Int]).show should === ("List()")

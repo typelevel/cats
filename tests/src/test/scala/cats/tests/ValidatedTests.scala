@@ -1,13 +1,13 @@
 package cats
 package tests
 
-import cats.data.{EitherT, NonEmptyList, Validated, ValidatedNel}
-import cats.data.Validated.{Valid, Invalid}
-import cats.laws.discipline.{BitraverseTests, TraverseTests, ApplicativeErrorTests, SerializableTests, CartesianTests}
+import cats.data._
+import cats.data.Validated.{Invalid, Valid}
+import cats.laws.discipline.{ApplicativeErrorTests, BitraverseTests, CartesianTests, SerializableTests, TraverseTests}
 import org.scalacheck.Arbitrary._
-import cats.laws.discipline.{SemigroupKTests}
+import cats.laws.discipline.SemigroupKTests
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.{OrderLaws, GroupLaws}
+import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import scala.util.Try
 
@@ -184,6 +184,18 @@ class ValidatedTests extends CatsSuite {
   test("fromOption consistent with toOption"){
     forAll { (o: Option[Int], s: String) =>
       Validated.fromOption(o, s).toOption should === (o)
+    }
+  }
+
+  test("fromIor consistent with Ior.toValidated"){
+    forAll { (i: Ior[String, Int]) =>
+      Validated.fromIor(i) should === (i.toValidated)
+    }
+  }
+
+  test("toIor then fromEither is identity") {
+    forAll { (v: Validated[String, Int]) =>
+      Validated.fromIor(v.toIor) should === (v)
     }
   }
 

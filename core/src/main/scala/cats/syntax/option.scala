@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-import cats.data.{Validated, ValidatedNel}
+import cats.data.{Ior, Validated, ValidatedNel}
 
 trait OptionSyntax {
   final def none[A]: Option[A] = Option.empty[A]
@@ -111,6 +111,46 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    * }}}
    */
   def toValidNel[B](b: => B): ValidatedNel[B, A] = oa.fold[ValidatedNel[B, A]](Validated.invalidNel(b))(Validated.Valid(_))
+
+  /**
+    * If the `Option` is a `Some`, return its value in a [[cats.data.Ior.Right]].
+    * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.Ior.Left]]
+    *
+    * Example:
+    * {{{
+    * scala> import cats.data.Ior
+    * scala> import cats.implicits._
+    *
+    * scala> val result1: Option[Int] = Some(3)
+    * scala> result1.toRightIor("error!")
+    * res0: Ior[String, Int] = Right(3)
+    *
+    * scala> val result2: Option[Int] = None
+    * scala> result2.toRightIor("error!")
+    * res1: Ior[String, Int] = Left(error!)
+    * }}}
+    */
+  def toRightIor[B](b: => B): Ior[B, A] = oa.fold[Ior[B, A]](Ior.Left(b))(Ior.Right(_))
+
+  /**
+    * If the `Option` is a `Some`, return its value in a [[cats.data.Ior.Left]].
+    * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.Ior.Right]]
+    *
+    * Example:
+    * {{{
+    * scala> import cats.data.Ior
+    * scala> import cats.implicits._
+    *
+    * scala> val result1: Option[String] = Some("error!")
+    * scala> result1.toLeftIor(3)
+    * res0: Ior[String, Int] = Left(error!)
+    *
+    * scala> val result2: Option[String] = None
+    * scala> result2.toLeftIor(3)
+    * res1: Ior[String, Int] = Right(3)
+    * }}}
+    */
+  def toLeftIor[B](b: => B): Ior[A, B] = oa.fold[Ior[A, B]](Ior.Right(b))(Ior.Left(_))
 
   /**
    * If the `Option` is a `Some`, return its value. If the `Option` is `None`,

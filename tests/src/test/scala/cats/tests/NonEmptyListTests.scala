@@ -231,6 +231,31 @@ class NonEmptyListTests extends CatsSuite {
       nel.zipWithIndex.toList should === (nel.toList.zipWithIndex)
     }
   }
+
+  test("NonEmptyList#last is consistent with List#last") {
+    forAll { nel: NonEmptyList[Int] =>
+      nel.last should === (nel.toList.last)
+    }
+  }
+
+  test("NonEmptyList#sorted is consistent with List#sorted") {
+    forAll { nel: NonEmptyList[Int] =>
+      nel.sorted.toList should === (nel.toList.sorted)
+    }
+  }
+
+  test("NonEmptyList#sortBy is consistent with List#sortBy") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
+      nel.sortBy(f).toList should === (nel.toList.sortBy(f))
+    }
+  }
+
+
+  test("NonEmptyList#groupBy is consistent with List#groupBy") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
+      nel.groupBy(f).mapValues(_.toList) should === (nel.toList.groupBy(f))
+    }
+  }
 }
 
 class ReducibleNonEmptyListCheck extends ReducibleCheck[NonEmptyList]("NonEmptyList") {

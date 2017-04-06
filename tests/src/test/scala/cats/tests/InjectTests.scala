@@ -1,6 +1,6 @@
 package cats
 
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.tests.CatsSuite
 import org.scalacheck._
 
@@ -38,7 +38,7 @@ class InjectTests extends CatsSuite {
       Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test2(s, f))
   }
 
-  type T[A] = Coproduct[Test1Algebra, Test2Algebra, A]
+  type T[A] = EitherK[Test1Algebra, Test2Algebra, A]
 
   test("inj & prj") {
     def distr[F[_], A](f1: F[A], f2: F[A])
@@ -80,13 +80,13 @@ class InjectTests extends CatsSuite {
 
   test("apply in left") {
     forAll { (y: Test1Algebra[Int]) =>
-      Inject[Test1Algebra, T].inj(y) == Coproduct(Left(y)) should ===(true)
+      Inject[Test1Algebra, T].inj(y) == EitherK(Left(y)) should ===(true)
     }
   }
 
   test("apply in right") {
     forAll { (y: Test2Algebra[Int]) =>
-      Inject[Test2Algebra, T].inj(y) == Coproduct(Right(y)) should ===(true)
+      Inject[Test2Algebra, T].inj(y) == EitherK(Right(y)) should ===(true)
     }
   }
 

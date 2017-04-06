@@ -1,7 +1,9 @@
 package cats
 package data
 
+import cats.data.Validated.{Invalid, Valid}
 import cats.functor.Bifunctor
+
 import scala.annotation.tailrec
 
 /** Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
@@ -47,6 +49,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def unwrap: Either[Either[A, B], (A, B)] = fold(a => Left(Left(a)), b => Left(Right(b)), (a, b) => Right((a, b)))
 
   final def toEither: Either[A, B] = fold(Left(_), Right(_), (_, b) => Right(b))
+  final def toValidated: Validated[A, B] = fold(Invalid(_), Valid(_), (_, b) => Valid(b))
   final def toOption: Option[B] = right
   final def toList: List[B] = right.toList
 
@@ -102,7 +105,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     fold(identity, ev, (_, b) => ev(b))
 
   // scalastyle:off cyclomatic.complexity
-  final def append[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Ior BB = this match {
+  final def combine[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Ior BB = this match {
     case Ior.Left(a1) => that match {
       case Ior.Left(a2) => Ior.Left(AA.combine(a1, a2))
       case Ior.Right(b2) => Ior.Both(a1, b2)
@@ -150,7 +153,7 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
   }
 
   implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] = new Semigroup[Ior[A, B]] {
-    def combine(x: Ior[A, B], y: Ior[A, B]) = x.append(y)
+    def combine(x: Ior[A, B], y: Ior[A, B]) = x.combine(y)
   }
 
   implicit def catsDataMonadForIor[A: Semigroup]: Monad[A Ior ?] = new Monad[A Ior ?] {
@@ -198,6 +201,8 @@ private[data] sealed trait IorFunctions {
   def left[A, B](a: A): A Ior B = Ior.Left(a)
   def right[A, B](b: B): A Ior B = Ior.Right(b)
   def both[A, B](a: A, b: B): A Ior B = Ior.Both(a, b)
+  def leftNel[A, B](a: A): IorNel[A, B] = left(NonEmptyList.of(a))
+  def bothNel[A, B](a: A, b: B): IorNel[A, B] = both(NonEmptyList.of(a), b)
 
   /**
    * Create an `Ior` from two Options if at least one of them is defined.
