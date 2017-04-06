@@ -66,6 +66,13 @@ class Tuple2KTests extends CatsSuite {
   }
 
   {
+    implicit val alternative = ListWrapper.alternative
+    implicit val iso = CartesianTests.Isomorphisms.invariant[Tuple2K[ListWrapper, ListWrapper, ?]]
+    checkAll("Tuple2K[ListWrapper, ListWrapper, ?]", AlternativeTests[Tuple2K[ListWrapper, ListWrapper, ?]].alternative[Int, Int, Int])
+    checkAll("Alternative[Tuple2K[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Alternative[Tuple2K[ListWrapper, ListWrapper, ?]]))
+  }
+
+  {
     implicit val monadCombine = ListWrapper.monadCombine
     implicit val iso = CartesianTests.Isomorphisms.invariant[Tuple2K[ListWrapper, ListWrapper, ?]]
     checkAll("Tuple2K[ListWrapper, ListWrapper, ?]", MonadCombineTests[Tuple2K[ListWrapper, ListWrapper, ?]].monadCombine[Int, Int, Int])

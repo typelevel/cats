@@ -91,6 +91,13 @@ class NestedTests extends CatsSuite {
   }
 
   {
+    // Apply composition
+    implicit val instance = ListWrapper.applyInstance
+    checkAll("Nested[List, ListWrapper, ?]", ApplyTests[Nested[List, ListWrapper, ?]].apply[Int, Int, Int])
+    checkAll("Apply[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(Apply[Nested[List, ListWrapper, ?]]))
+  }
+
+  {
     // Applicative composition
     implicit val instance = ListWrapper.applicative
     checkAll("Nested[List, ListWrapper, ?]", ApplicativeTests[Nested[List, ListWrapper, ?]].applicative[Int, Int, Int])
