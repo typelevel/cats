@@ -8,7 +8,6 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
-import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
 
 class CokleisliTests extends SlowCatsSuite {
 
@@ -21,16 +20,16 @@ class CokleisliTests extends SlowCatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[Cokleisli[Option, Int, ?]]
 
   checkAll("Cokleisli[Option, Int, Int]", CartesianTests[Cokleisli[Option, Int, ?]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Cokleisli[Option, Int, ?]", SerializableTests.serializable(Cartesian[Cokleisli[Option, Int, ?]]))
+  checkAll("Cartesian[Cokleisli[Option, Int, ?]]", SerializableTests.serializable(Cartesian[Cokleisli[Option, Int, ?]]))
 
-  checkAll("Cokleisli[Option, Int, Int]", ApplicativeTests[Cokleisli[Option, Int, ?]].applicative[Int, Int, Int])
-  checkAll("Applicative[Cokleisli[Option, Int, ?]", SerializableTests.serializable(Applicative[Cokleisli[Option, Int, ?]]))
+  checkAll("Cokleisli[Option, Int, Int]", MonadTests[Cokleisli[Option, Int, ?]].monad[Int, Int, Int])
+  checkAll("Monad[Cokleisli[Option, Int, ?]]", SerializableTests.serializable(Monad[Cokleisli[Option, Int, ?]]))
 
   checkAll("Cokleisli[Option, Int, Int]", ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[Int, Int, Int, Int, Int, Int])
-  checkAll("Profunctor[Cokleisli[Option, ?, ?]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
+  checkAll("Profunctor[Cokleisli[Option, ?, ?]]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
 
   checkAll("Cokleisli[Option, Int, Int]", SplitTests[Cokleisli[Option, ?, ?]].split[Int, Int, Int, Int, Int, Int])
-  checkAll("Split[Cokleisli[Option, ?, ?]", SerializableTests.serializable(Split[Cokleisli[Option, ?, ?]]))
+  checkAll("Split[Cokleisli[Option, ?, ?]]", SerializableTests.serializable(Split[Cokleisli[Option, ?, ?]]))
 
   checkAll("Cokleisli[Option, Int, Int]", ContravariantTests[Cokleisli[Option, ?, Int]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Cokleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Cokleisli[Option, ?, Int]]))
