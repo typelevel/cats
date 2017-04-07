@@ -30,4 +30,7 @@ package object data {
 
   type State[S, A] = StateT[Eval, S, A]
   object State extends StateFunctions
+
+  type RWS[E, S, L, A] = RWST[Eval, E, S, L, A]
+  object RWS extends RWSFunctions
 }

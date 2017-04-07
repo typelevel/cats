@@ -24,6 +24,22 @@ object eq {
     }
   }
 
+  /**
+    * Create an approximation of Eq[(A, B) => C] by generating 100 values for A and B
+    * and comparing the application of the two functions.
+    */
+  implicit def catsLawsEqForFn2[A, B, C](implicit A: Arbitrary[A], B: Arbitrary[B], C: Eq[C]): Eq[(A, B) => C] = new Eq[(A, B) => C] {
+    val sampleCnt: Int = if (Platform.isJvm) 50 else 5
+
+    def eqv(f: (A, B) => C, g: (A, B) => C): Boolean = {
+      val samples = List.fill(sampleCnt)((A.arbitrary.sample, B.arbitrary.sample)).collect{
+        case (Some(a), Some(b)) => (a, b)
+        case _ => sys.error("Could not generate arbitrary values to compare two functions")
+      }
+      samples.forall { case (a, b) => C.eqv(f(a, b), g(a, b)) }
+    }
+  }
+
   /** Create an approximation of Eq[Show[A]] by using catsLawsEqForFn1[A, String] */
   implicit def catsLawsEqForShow[A: Arbitrary]: Eq[Show[A]] = {
     Eq.by[Show[A], A => String] { showInstance =>
