@@ -6,7 +6,6 @@ import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadErrorTests, Se
 import cats.data.{Ior, NonEmptyList, EitherT}
 import cats.kernel.laws.GroupLaws
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadTests, SerializableTests, TraverseTests}
 import org.scalacheck.Arbitrary._
 
 class IorTests extends CatsSuite {

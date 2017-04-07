@@ -299,7 +299,6 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
         fab.leftMap(f)
     }
 
-  // scalastyle:off method.length
   implicit def catsDataApplicativeErrorForValidated[E](implicit E: Semigroup[E]): ApplicativeError[Validated[E, ?], E] =
     new ApplicativeError[Validated[E, ?], E] {
 
@@ -322,7 +321,6 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
         }
       def raiseError[A](e: E): Validated[E, A] = Validated.Invalid(e)
     }
-    // scalastyle:on method.length
 }
 
 private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstances2 {
@@ -393,6 +391,7 @@ private[data] sealed abstract class ValidatedInstances2 {
 
       override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
     }
+  // scalastyle:off method.length
 }
 
 private[data] trait ValidatedFunctions {
