@@ -86,8 +86,8 @@ import simulacrum.typeclass
    * scala> fa.forEffectEval(Eval.later(fb))
    * res0: Option[Int] = Some(3)
    * scala> assert(count == 1)
-   * scala> None.forEffectEval(Eval.later(fb))
-   * res1: Option[Nothing] = None
+   * scala> none[Int].forEffectEval(Eval.later(fb))
+   * res1: Option[Int] = None
    * scala> assert(count == 1)
    * }}}
    */
