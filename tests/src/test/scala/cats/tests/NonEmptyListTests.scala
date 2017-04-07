@@ -88,6 +88,13 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
+  test("NonEmptyList#collect is consistent with List#collect") {
+    forAll { (nel: NonEmptyList[Int], pf: PartialFunction[Int, String]) =>
+      val list = nel.toList
+      nel.collect(pf) should === (list.collect(pf))
+    }
+  }
+
   test("NonEmptyList#find is consistent with List#find") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.toList
@@ -222,6 +229,31 @@ class NonEmptyListTests extends CatsSuite {
   test("NonEmptyList#zipWithIndex is consistent with List#zipWithIndex") {
     forAll { nel: NonEmptyList[Int] =>
       nel.zipWithIndex.toList should === (nel.toList.zipWithIndex)
+    }
+  }
+
+  test("NonEmptyList#last is consistent with List#last") {
+    forAll { nel: NonEmptyList[Int] =>
+      nel.last should === (nel.toList.last)
+    }
+  }
+
+  test("NonEmptyList#sorted is consistent with List#sorted") {
+    forAll { nel: NonEmptyList[Int] =>
+      nel.sorted.toList should === (nel.toList.sorted)
+    }
+  }
+
+  test("NonEmptyList#sortBy is consistent with List#sortBy") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
+      nel.sortBy(f).toList should === (nel.toList.sortBy(f))
+    }
+  }
+
+
+  test("NonEmptyList#groupBy is consistent with List#groupBy") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
+      nel.groupBy(f).mapValues(_.toList) should === (nel.toList.groupBy(f))
     }
   }
 }

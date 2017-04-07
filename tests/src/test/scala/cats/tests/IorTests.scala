@@ -1,10 +1,12 @@
 package cats
 package tests
 
-import cats.data.{EitherT, Ior}
 import cats.kernel.laws.GroupLaws
 import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadErrorTests, SerializableTests, TraverseTests}
+import cats.data.{Ior, NonEmptyList, EitherT}
+import cats.kernel.laws.GroupLaws
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadTests, SerializableTests, TraverseTests}
 import org.scalacheck.Arbitrary._
 
 class IorTests extends CatsSuite {
@@ -161,15 +163,15 @@ class IorTests extends CatsSuite {
     }
   }
 
-  test("append left") {
+  test("combine left") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
-      i.append(j).left should === (i.left.map(_ + j.left.getOrElse(0)).orElse(j.left))
+      i.combine(j).left should === (i.left.map(_ + j.left.getOrElse(0)).orElse(j.left))
     }
   }
 
-  test("append right") {
+  test("combine right") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
-      i.append(j).right should === (i.right.map(_ + j.right.getOrElse("")).orElse(j.right))
+      i.combine(j).right should === (i.right.map(_ + j.right.getOrElse("")).orElse(j.right))
     }
   }
 
@@ -203,6 +205,24 @@ class IorTests extends CatsSuite {
   test("toEither consistent with right") {
     forAll { (x: Int Ior String) =>
       x.toEither.toOption should === (x.right)
+    }
+  }
+
+  test("toValidated consistent with right") {
+    forAll { (x: Int Ior String) =>
+      x.toValidated.toOption should === (x.right)
+    }
+  }
+
+  test("leftNel") {
+    forAll { (x: String) =>
+      Ior.leftNel(x).left should === (Some(NonEmptyList.of(x)))
+    }
+  }
+
+  test("bothNel") {
+    forAll { (x: Int, y: String) =>
+      Ior.bothNel(y, x).onlyBoth should === (Some((NonEmptyList.of(y), x)))
     }
   }
 

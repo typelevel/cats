@@ -22,7 +22,9 @@ trait AllSyntax
     with FunctorFilterSyntax
     with GroupSyntax
     with InvariantSyntax
+    with IorSyntax
     with ListSyntax
+    with MonadSyntax
     with MonadCombineSyntax
     with MonadErrorSyntax
     with MonadFilterSyntax
