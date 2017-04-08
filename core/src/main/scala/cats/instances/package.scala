@@ -9,6 +9,7 @@ package object instances {
   object list       extends ListInstances
   object option     extends OptionInstances
   object set        extends SetInstances
+  object bitSet     extends BitSetInstances
   object stream     extends StreamInstances
   object vector     extends VectorInstances
   object map        extends MapInstances
