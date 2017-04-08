@@ -4,7 +4,6 @@ package tests
 import cats.kernel.laws.GroupLaws
 import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadErrorTests, SerializableTests, TraverseTests}
 import cats.data.{Ior, NonEmptyList, EitherT}
-import cats.kernel.laws.GroupLaws
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
 
