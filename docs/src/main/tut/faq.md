@@ -197,7 +197,7 @@ In some cases you may decide that providing a lawful `tailRecM` may be impractic
 
 Below is a list of symbols used in cats.
 
-The `~>`, `⊥` and `⊤` symbols can be imported with `import cats._`.
+The `~>`, `⊥`, `⊤`, `:<:` and `:≺:` symbols can be imported with `import cats._`.
 
 All other symbols can be imported with `import cats.implicits._`
 
