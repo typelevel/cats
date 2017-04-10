@@ -60,14 +60,14 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def second[C](implicit F: Functor[F]): Kleisli[F, (C, A), (C, B)] =
     Kleisli{ case (c, a) => F.map(run(a))(c -> _)}
 
-  def recover[C](pf: PartialFunction[C, B])(implicit ae: ApplicativeError[F, C]): Kleisli[F, A, B] =
-    Kleisli( a => ae.recover(run(a))(pf))
+  def recover[E](pf: PartialFunction[E, B])(implicit aek: ApplicativeError[Kleisli[F, A, ?], E]): Kleisli[F, A, B] =
+    aek.recover[B](this)(pf)
 
-  def recoverWith[C](pf: PartialFunction[C, Kleisli[F, A, B]])(implicit ae: ApplicativeError[F, C]): Kleisli[F, A, B] =
-    Kleisli( a => ae.recoverWith(run(a))(pf andThen(_.run(a))))
+  def recoverWith[E](pf: PartialFunction[E, Kleisli[F, A, B]])(implicit aek: ApplicativeError[Kleisli[F, A, ?], E]): Kleisli[F, A, B] =
+    aek.recoverWith[B](this)(pf)
 
-  def recoverWithF[C](pf: PartialFunction[C, F[B]])(implicit ae: ApplicativeError[F, C]): Kleisli[F, A, B] =
-    Kleisli( a => ae.recoverWith(run(a))(pf) )
+  def recoverWithF[E](pf: PartialFunction[E, F[B]])(implicit aek: ApplicativeError[Kleisli[F, A, ?], E]): Kleisli[F, A, B] =
+    aek.recoverWith[B](this)(pf andThen Kleisli.lift[F, A, B])
 
   def apply(a: A): F[B] = run(a)
 }
