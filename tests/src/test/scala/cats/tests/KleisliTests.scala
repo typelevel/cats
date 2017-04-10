@@ -19,6 +19,10 @@ class KleisliTests extends CatsSuite {
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
 
+  implicit val kleisliEitherAppError = Kleisli.catsDataApplicativeErrorForKleisli[Either[String, ?], Int, String]
+
+  implicit val kleisliValidatedAppError = Kleisli.catsDataApplicativeErrorForKleisli[Validated[String, ?], Int, String]
+
   checkAll("Kleisli[Option, Int, Int] with Unit", ApplicativeErrorTests[Kleisli[Option, Int, ?], Unit].applicativeError[Int, Int, Int])
   checkAll("ApplicativeError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(ApplicativeError[Kleisli[Option, Int, ?], Unit]))
 
