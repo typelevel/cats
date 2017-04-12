@@ -34,6 +34,7 @@ trait FlatMapTests[F[_]] extends ApplyTests[F] {
       "flatMap associativity" -> forAll(laws.flatMapAssociativity[A, B, C] _),
       "flatMap consistent apply" -> forAll(laws.flatMapConsistentApply[A, B] _),
       "followedBy consistent flatMap" -> forAll(laws.followedByConsistency[A, B] _),
+      "forEffect consistent flatMap" -> forAll(laws.forEffectConsistency[A, B] _),
       "mproduct consistent flatMap" -> forAll(laws.mproductConsistency[A, B] _),
       "tailRecM consistent flatMap" -> forAll(laws.tailRecMConsistentFlatMap[A] _))
   }
