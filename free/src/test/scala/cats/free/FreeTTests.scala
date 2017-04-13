@@ -141,11 +141,6 @@ class FreeTTests extends CatsSuite {
     result.toString.length should be > 0
   }
 
-  private[free] def liftTUCompilationTests() = {
-    val a: Either[String, Int]= Right(42)
-    val b: FreeT[Option, Either[String, ?], Int] = FreeT.liftTU(a)
-  }
-
 }
 
 object FreeTTests extends FreeTTestsInstances {
@@ -153,7 +148,6 @@ object FreeTTests extends FreeTTestsInstances {
   import Arbitrary._
   import org.scalacheck.Arbitrary
 
-  implicit def freeTIntStateArb[A: Arbitrary]: Arbitrary[FreeTState[A]] = freeTArb[IntState, IntState, A]
 
   implicit def freeTArb[F[_], G[_]: Applicative, A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Arbitrary[FreeT[F, G, A]] =
     Arbitrary(freeTGen[F, G, A](4))

@@ -1,15 +1,7 @@
 package cats
 package syntax
 
-private[syntax] trait FoldableSyntax1 {
-  implicit final def catsSyntaxUFoldable[FA](fa: FA)(implicit U: Unapply[Foldable, FA]): Foldable.Ops[U.M, U.A] =
-    new Foldable.Ops[U.M, U.A] {
-      val self = U.subst(fa)
-      val typeClassInstance = U.TC
-      }
-}
-
-trait FoldableSyntax extends Foldable.ToFoldableOps with FoldableSyntax1 {
+trait FoldableSyntax extends Foldable.ToFoldableOps {
   implicit final def catsSyntaxNestedFoldable[F[_]: Foldable, G[_], A](fga: F[G[A]]): NestedFoldableOps[F, G, A] =
     new NestedFoldableOps[F, G, A](fga)
 }

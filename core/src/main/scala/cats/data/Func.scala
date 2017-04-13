@@ -28,9 +28,6 @@ object Func extends FuncInstances {
       def run: A => F[B] = run0
     }
 
-  /** applicative function using [[Unapply]]. */
-  def appFuncU[A, R](f: A => R)(implicit RR: Unapply[Applicative, R]): AppFunc[RR.M, A, RR.A] =
-    appFunc({ a: A => RR.subst(f(a)) })(RR.TC)
 }
 
 private[data] abstract class FuncInstances extends FuncInstances0 {

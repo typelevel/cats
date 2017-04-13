@@ -6,15 +6,16 @@ import cats.functor.Contravariant
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
  * [[Const]] can be seen as a type level version of `Function.const[A, B]: A => B => A`
+ * B is set covariant to help type inference.
  */
-final case class Const[A, B](getConst: A) {
+final case class Const[A, +B](getConst: A) {
   /**
    * changes the type of the second type parameter
    */
   def retag[C]: Const[A, C] =
     this.asInstanceOf[Const[A, C]]
 
-  def combine(that: Const[A, B])(implicit A: Semigroup[A]): Const[A, B] =
+  def combine[BB >: B](that: Const[A, BB])(implicit A: Semigroup[A]): Const[A, BB] =
     Const(A.combine(getConst, that.getConst))
 
   def traverseFilter[F[_], C](f: B => F[Option[C]])(implicit F: Applicative[F]): F[Const[A, C]] =
@@ -23,13 +24,13 @@ final case class Const[A, B](getConst: A) {
   def traverse[F[_], C](f: B => F[C])(implicit F: Applicative[F]): F[Const[A, C]] =
     F.pure(retag[C])
 
-  def ===(that: Const[A, B])(implicit A: Eq[A]): Boolean =
+  def ===[BB >: B](that: Const[A, BB])(implicit A: Eq[A]): Boolean =
     A.eqv(getConst, that.getConst)
 
-  def partialCompare(that: Const[A, B])(implicit A: PartialOrder[A]): Double =
+  def partialCompare[BB >: B](that: Const[A, BB])(implicit A: PartialOrder[A]): Double =
     A.partialCompare(getConst, that.getConst)
 
-  def compare(that: Const[A, B])(implicit A: Order[A]): Int =
+  def compare[BB >: B](that: Const[A, BB])(implicit A: Order[A]): Int =
     A.compare(getConst, that.getConst)
 
   def show(implicit A: Show[A]): String =

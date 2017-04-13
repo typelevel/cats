@@ -106,7 +106,7 @@ nested.map(_ + 1)
 ```
 
 The `Nested` approach, being a distinct type from its constituents, will resolve the usual way modulo
-possible [SI-2712][si2712] issues, but requires syntactic and runtime overhead from wrapping and
+possible [SI-F2712][si2712] issues, but requires syntactic and runtime overhead from wrapping and
 unwrapping.
 
 [si2712]: https://issues.scala-lang.org/browse/SI-2712 "SI-2712: implement higher-order unification for type constructor inference"

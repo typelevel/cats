@@ -210,10 +210,7 @@ class KleisliTests extends CatsSuite {
     FlatMap[IntReader]
     Semigroup[IntReader[String]]
 
-    // ApplicativeError and MonadError (some SI-2712 workarounds are needed)
-    type UnitValidated[A] = cats.data.Validated[Unit, A]
-    type KleisliUV[A] = Kleisli[UnitValidated, Int, A]
-    ApplicativeError[KleisliUV, Unit]
+    ApplicativeError[Kleisli[cats.data.Validated[Unit, ?], Int, ?], Unit]
     ApplicativeError[Kleisli[Option, Int, ?], Unit]
     MonadError[Kleisli[Option, Int, ?], Unit]
   }

@@ -195,17 +195,13 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *      |   EitherT(List(Either.right(_.toString), Either.left("error")))
    * scala> val fa: EitherT[List, String, Int] =
    *      |   EitherT(List(Either.right(1), Either.right(2)))
-   * scala> type ErrorOr[A] = Either[String, A]
-   * scala> type ListErrorOr[A] = Nested[List, ErrorOr, A]
+   * scala> type ListErrorOr[A] = Nested[List, Either[String, ?], A]
    * scala> ff.ap(fa)
    * res0: EitherT[List,String,String] = EitherT(List(Right(1), Right(2), Left(error)))
    * scala> EitherT((ff.toNested: ListErrorOr[Int => String]).ap(fa.toNested: ListErrorOr[Int]).value)
    * res1: EitherT[List,String,String] = EitherT(List(Right(1), Right(2), Left(error), Left(error)))
    * }}}
    *
-   * Note that we need the `ErrorOr` type alias above because otherwise we can't use the
-   * syntax function `ap` on `Nested[List, Either[A, ?], B]`. This won't be needed after cats has
-   * decided [[https://github.com/typelevel/cats/issues/1073 how to handle the SI-2712 fix]].
    */
   def toNested: Nested[F, Either[A, ?], B] = Nested[F, Either[A, ?], B](value)
 

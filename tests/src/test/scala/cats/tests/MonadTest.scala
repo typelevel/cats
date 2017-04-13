@@ -8,10 +8,8 @@ class MonadTest extends CatsSuite {
   implicit val testInstance: MonadState[StateT[Id, Int, ?], Int] = StateT.catsDataMonadStateForStateT[Id, Int]
   import testInstance._
 
-  type StateIdInt[T] = StateT[Id, Int, T] //workaround for SI-2712
-
-  val increment: StateIdInt[Unit] = modify(_ + 1)
-  val incrementAndGet: StateIdInt[Int] = increment >> get
+  val increment: StateT[Id, Int, Unit] = modify(_ + 1)
+  val incrementAndGet: StateT[Id, Int, Int] = increment >> get
 
   test("whileM_") {
     forAll(Gen.posNum[Int]) { (max: Int) =>
