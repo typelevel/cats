@@ -3,7 +3,7 @@ package cats.syntax
 import cats.data.Ior
 
 trait IorSyntax {
-  implicit def catsSyntaxIorId[A](a: A): IorIdOps[A] = new IorIdOps(a)
+  implicit final def catsSyntaxIorId[A](a: A): IorIdOps[A] = new IorIdOps(a)
 }
 
 final class IorIdOps[A](val a: A) extends AnyVal {

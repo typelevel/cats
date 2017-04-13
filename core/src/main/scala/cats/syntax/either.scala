@@ -6,15 +6,15 @@ import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
 trait EitherSyntax {
-  implicit def catsSyntaxEither[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)
+  implicit final def catsSyntaxEither[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)
 
-  implicit def catsSyntaxEitherObject(either: Either.type): EitherObjectOps = new EitherObjectOps(either) // scalastyle:off ensure.single.space.after.token
+  implicit final def catsSyntaxEitherObject(either: Either.type): EitherObjectOps = new EitherObjectOps(either) // scalastyle:off ensure.single.space.after.token
 
-  implicit def catsSyntaxLeft[A, B](left: Left[A, B]): LeftOps[A, B] = new LeftOps(left)
+  implicit final def catsSyntaxLeft[A, B](left: Left[A, B]): LeftOps[A, B] = new LeftOps(left)
 
-  implicit def catsSyntaxRight[A, B](right: Right[A, B]): RightOps[A, B] = new RightOps(right)
+  implicit final def catsSyntaxRight[A, B](right: Right[A, B]): RightOps[A, B] = new RightOps(right)
 
-  implicit def catsSyntaxEitherId[A](a: A): EitherIdOps[A] = new EitherIdOps(a)
+  implicit final def catsSyntaxEitherId[A](a: A): EitherIdOps[A] = new EitherIdOps(a)
 }
 
 final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {

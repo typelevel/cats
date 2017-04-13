@@ -4,7 +4,7 @@ package syntax
 import cats.data.EitherK
 
 trait EitherKSyntax {
-  implicit def catsSyntaxEitherK[F[_], A](a: F[A]): EitherKOps[F, A] = new EitherKOps(a)
+  implicit final def catsSyntaxEitherK[F[_], A](a: F[A]): EitherKOps[F, A] = new EitherKOps(a)
 }
 
 final class EitherKOps[F[_], A](val fa: F[A]) extends AnyVal {

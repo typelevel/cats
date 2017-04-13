@@ -4,7 +4,7 @@ package syntax
 import cats.data.{ Validated, ValidatedNel }
 
 trait ValidatedSyntax {
-  implicit def catsSyntaxValidatedId[A](a: A): ValidatedIdSyntax[A] = new ValidatedIdSyntax(a)
+  implicit final def catsSyntaxValidatedId[A](a: A): ValidatedIdSyntax[A] = new ValidatedIdSyntax(a)
 }
 
 final class ValidatedIdSyntax[A](val a: A) extends AnyVal {
