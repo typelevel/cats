@@ -167,49 +167,4 @@ object As extends AsInstances {
 
   def contra3_3[T[_, _, -_], Z, A, B, C](a: C As Z): (T[A, B, Z] As T[A, B, C]) =
     a.substitute[λ[`-α` => T[A, B, Z] As T[A, B, α]]](refl)
-
-  /**
-   *  Lift subtyping into a Function1-like type
-   *  liftF1(a,r) = contra1_2(a) compose co2_2(b)
-   */
-  def liftF1[F[-_, +_], A, A2, R, R2](
-    a: A As A2,
-    r: R As R2
-  ): (F[A2, R] As F[A, R2]) = {
-    type a[-X] = F[A2, R2] As F[X, R2]
-    type r[-X] = F[A2, X] As F[A, R2]
-    r.substitute[r](a.substitute[a](refl))
-  }
-
-  /**
-   * Lift subtyping into a function
-   */
-  def liftF2[F[-_, -_, +_], A, A2, B, B2, R, R2](
-    a: A As A2,
-    b: B As B2,
-    r: R As R2
-  ): (F[A2, B2, R] As F[A, B, R2]) = {
-    type a[-X] = F[A2, B2, R2] As F[X, B2, R2]
-    type b[-X] = F[A2, B2, R2] As F[A, X, R2]
-    type r[-X] = F[A2, B2, X] As F[A, B, R2]
-    r.substitute[r](b.substitute[b](a.substitute[a](refl)))
-  }
-
-  /**
-   * Lift subtyping into a function
-   * liftF3(a,b,c,r) = contra1_4(a) compose contra2_4(b) compose contra3_4(c) compose co3_4(d)
-   */
-  def liftF3[F[-_, -_, -_, +_], A, A2, B, B2, C, C2, R, R2](
-     a: A As A2,
-     b: B As B2,
-     c: C As C2,
-     r: R As R2
-  ): (F[A2, B2, C2, R] As F[A, B, C, R2]) = {
-    type a[-X] = F[A2, B2, C2, R2] As F[X, B2, C2, R2]
-    type b[-X] = F[A2, B2, C2, R2] As F[A, X, C2, R2]
-    type c[-X] = F[A2, B2, C2, R2] As F[A, B, X, R2]
-    type r[-X] = F[A2, B2, C2, X] As F[A, B, C, R2]
-    r.substitute[r](c.substitute[c](b.substitute[b](a.substitute[a](refl))))
-  }
-
 }
