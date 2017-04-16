@@ -80,7 +80,7 @@ object As extends AsInstances {
   @inline def reify[A, B >: A]: (A As B) = refl
 
   /**
-    * It can be convenient to convert a [[<:<]] value into a `<~<` value.
+    * It can be convenient to convert a <:< value into a `<~<` value.
     * This is not strictly valid as while it is almost certainly true that
     * `A <:< B` implies `A <~< B` it is not the case that you can create
     * evidence of `A <~< B` except via a coercion. Use responsibly.
