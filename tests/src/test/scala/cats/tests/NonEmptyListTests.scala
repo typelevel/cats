@@ -256,6 +256,12 @@ class NonEmptyListTests extends CatsSuite {
       nel.groupBy(f).mapValues(_.toList) should === (nel.toList.groupBy(f))
     }
   }
+
+  test("NonEmptyList#fromFoldabale is consistent with NonEmptyList#fromList") {
+    forAll { (xs: List[Int]) =>
+      NonEmptyList.fromList(xs) should === (NonEmptyList.fromFoldable(xs))
+    }
+  }
 }
 
 class ReducibleNonEmptyListCheck extends ReducibleCheck[NonEmptyList]("NonEmptyList") {

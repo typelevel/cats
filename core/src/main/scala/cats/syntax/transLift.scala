@@ -2,7 +2,8 @@ package cats
 package syntax
 
 trait TransLiftSyntax {
-  implicit def catsSyntaxTransLift[E](ma: E)(implicit U: Unapply[Trivial.PH1, E]): TransLiftOps[U.M, U.A] = new TransLiftOps(U.subst(ma))
+  implicit final def catsSyntaxTransLift[E](ma: E)(implicit U: Unapply[Trivial.PH1, E]): TransLiftOps[U.M, U.A] =
+    new TransLiftOps(U.subst(ma))
 }
 
 final class TransLiftOps[M0[_], A](val ma: M0[A]) extends AnyVal {

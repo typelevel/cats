@@ -243,6 +243,12 @@ class EitherTTests extends CatsSuite {
     }
   }
 
+  test("flatMap and flatMapF consistent") {
+    forAll { (eithert: EitherT[List, String, Int], f: Int => EitherT[List, String, Int])  =>
+      eithert.flatMap(f) should === (eithert.flatMapF(f(_).value))
+    }
+  }
+
   test("fold with Id consistent with Either fold") {
     forAll { (eithert: EitherT[Id, String, Int], f: String => Long, g: Int => Long) =>
       eithert.fold(f, g) should === (eithert.value.fold(f, g))

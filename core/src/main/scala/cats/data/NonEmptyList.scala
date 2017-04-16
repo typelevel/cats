@@ -313,6 +313,9 @@ object NonEmptyList extends NonEmptyListInstances {
       case h :: t => NonEmptyList(h, t)
     }
 
+  def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Option[NonEmptyList[A]] =
+    fromList(F.toList(fa))
+
   def fromReducible[F[_], A](fa: F[A])(implicit F: Reducible[F]): NonEmptyList[A] =
     F.toNonEmptyList(fa)
 }

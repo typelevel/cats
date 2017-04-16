@@ -2,10 +2,11 @@ package cats
 package js
 package tests
 
+import cats.kernel.laws.GroupLaws
 import cats.laws.discipline._
 import cats.js.instances.Await
 import cats.js.instances.future.futureComonad
-import cats.tests.CatsSuite
+import cats.tests.{CatsSuite, ListWrapper}
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -54,4 +55,11 @@ class FutureTests extends CatsSuite {
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
+
+  {
+    implicit val F = ListWrapper.semigroup[Int]
+    checkAll("Future[ListWrapper[Int]]", GroupLaws[Future[ListWrapper[Int]]].semigroup)
+  }
+
+  checkAll("Future[Int]", GroupLaws[Future[Int]].monoid)
 }
