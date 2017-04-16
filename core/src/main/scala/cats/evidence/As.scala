@@ -65,19 +65,28 @@ object As extends AsInstances {
   /**
    * We can witness the relationship by using it to make a substitution *
    */
-  implicit def witness[A, B](lt: A <~< B): A => B =
+  implicit def witness[A, B](lt: A As B): A => B =
     lt.substitute[-? => B](identity)
 
   /**
    * Subtyping is transitive
    */
-  def compose[A, B, C](f: B <~< C, g: A <~< B): A <~< C =
-    g.substitute[λ[`-α` => α <~< C]](f)
+  def compose[A, B, C](f: B As C, g: A As B): A As C =
+    g.substitute[λ[`-α` => α As C]](f)
 
   /**
-   * Lift Scala's subtyping relationship
+   * reify a subtype relationship as a Liskov relaationship
    */
-  @inline def unsafeFromPredef[A, B >: A]: (A As B) = refl
+  @inline def reify[A, B >: A]: (A As B) = refl
+
+  /**
+    * It can be convenient to convert a [[<:<]] value into a `<~<` value.
+    * This is not strictly valid as while it is almost certainly true that
+    * `A <:< B` implies `A <~< B` it is not the case that you can create
+    * evidence of `A <~< B` except via a coercion. Use responsibly.
+    */
+  def fromPredef[A, B](eq: A <:< B): A As B =
+    reflAny.asInstanceOf[A As B]
 
   /**
    * We can lift subtyping into any covariant type constructor
@@ -101,6 +110,12 @@ object As extends AsInstances {
 
   def co3[T[+_, _, _], Z, A, B, C](a: A As Z): T[A, B, C] As T[Z, B, C] =
     a.substitute[λ[`-α` => T[α, B, C] As T[Z, B, C]]](refl)
+
+  def co3_2[T[_, +_, _], Z, A, B, C](a: B As Z): T[A, B, C] As T[A, Z, C] =
+    a.substitute[λ[`-α` => T[A, α, C] As T[A, Z, C]]](refl)
+
+  def co3_3[T[+_, _, +_], Z, A, B, C](a: C As Z): T[A, B, C] As T[A, B, Z] =
+    a.substitute[λ[`-α` => T[A, B, α] As T[A, B, Z]]](refl)
 
   /**
    * Use this relationship to widen the output type of a Function1
