@@ -16,7 +16,7 @@ class KleisliTests extends CatsSuite {
     Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
   implicit def readerEq[A, B](implicit A: Arbitrary[A], FB: Eq[Id[B]]): Eq[Reader[A, B]] =
-    Eq.by[Reader[A, B], A => Id[B]](_.run)
+    kleisliEq
 
   implicit val eitherTEq = EitherT.catsDataEqForEitherT[Kleisli[Option, Int, ?], Unit, Int]
 
