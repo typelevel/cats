@@ -8,14 +8,14 @@ import cats.functor.Contravariant
  * [[Const]] can be seen as a type level version of `Function.const[A, B]: A => B => A`
  * B is set covariant to help type inference.
  */
-final case class Const[A, +B](getConst: A) {
+final case class Const[A, B](getConst: A) {
   /**
    * changes the type of the second type parameter
    */
   def retag[C]: Const[A, C] =
     this.asInstanceOf[Const[A, C]]
 
-  def combine[BB >: B](that: Const[A, BB])(implicit A: Semigroup[A]): Const[A, BB] =
+  def combine(that: Const[A, B])(implicit A: Semigroup[A]): Const[A, B] =
     Const(A.combine(getConst, that.getConst))
 
   def traverseFilter[F[_], C](f: B => F[Option[C]])(implicit F: Applicative[F]): F[Const[A, C]] =
@@ -24,13 +24,13 @@ final case class Const[A, +B](getConst: A) {
   def traverse[F[_], C](f: B => F[C])(implicit F: Applicative[F]): F[Const[A, C]] =
     F.pure(retag[C])
 
-  def ===[BB >: B](that: Const[A, BB])(implicit A: Eq[A]): Boolean =
+  def ===(that: Const[A, B])(implicit A: Eq[A]): Boolean =
     A.eqv(getConst, that.getConst)
 
-  def partialCompare[BB >: B](that: Const[A, BB])(implicit A: PartialOrder[A]): Double =
+  def partialCompare(that: Const[A, B])(implicit A: PartialOrder[A]): Double =
     A.partialCompare(getConst, that.getConst)
 
-  def compare[BB >: B](that: Const[A, BB])(implicit A: Order[A]): Int =
+  def compare(that: Const[A, B])(implicit A: Order[A]): Int =
     A.compare(getConst, that.getConst)
 
   def show(implicit A: Show[A]): String =
@@ -40,6 +40,20 @@ final case class Const[A, +B](getConst: A) {
 object Const extends ConstInstances {
   def empty[A, B](implicit A: Monoid[A]): Const[A, B] =
     Const(A.empty)
+
+  final class OfPartiallyApplied[B] {
+    def apply[A](a: A): Const[A, B] = Const(a)
+  }
+
+  /**
+   * Convenient syntax for creating a Const[A, B] from an `A`
+   * {{{
+   * scala> import cats.data._
+   * scala> Const.of[Int]("a")
+   * res0: Const[String, Int] = Const(a)
+   * }}}
+   */
+  def of[B]: OfPartiallyApplied[B] = new OfPartiallyApplied
 }
 
 private[data] sealed abstract class ConstInstances extends ConstInstances0 {

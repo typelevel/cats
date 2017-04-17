@@ -141,6 +141,11 @@ class FreeTTests extends CatsSuite {
     result.toString.length should be > 0
   }
 
+  private[free] def liftTCompilationTests() = {
+    val a: Either[String, Int]= Right(42)
+    val b: FreeT[Option, Either[String, ?], Int] = FreeT.liftT(a)
+  }
+
 }
 
 object FreeTTests extends FreeTTestsInstances {
