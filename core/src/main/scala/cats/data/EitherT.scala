@@ -89,7 +89,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = bimap(identity, f)
 
   def semiflatMap[D](f: B => F[D])(implicit F: Monad[F]): EitherT[F, A, D] =
-    flatMap(b => EitherT.right[F, A, D](f(b)))
+    flatMap(b => EitherT.right(f(b)))
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): EitherT[F, C, B] = bimap(f, identity)
 
@@ -236,11 +236,78 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 object EitherT extends EitherTInstances with EitherTFunctions
 
 private[data] trait EitherTFunctions {
-  final def left[F[_], A, B](fa: F[A])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fa)(Either.left))
 
-  final def right[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fb)(Either.right))
+  final class LeftPartiallyApplied[B] private[EitherTFunctions] {
+    def apply[F[_], A](fa: F[A])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fa)(Either.left))
+  }
 
-  final def pure[F[_], A, B](b: B)(implicit F: Applicative[F]): EitherT[F, A, B] = right(F.pure(b))
+  /**
+   * Creates a left version of `EitherT[F, A, B]` from a `F[A]`
+   * {{{
+   * scala> import cats.data.EitherT
+   * scala> import cats.implicits._
+   * scala> EitherT.left[Int](Option("err"))
+   * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Left(err)))
+   * }}}
+   */
+  final def left[B]: LeftPartiallyApplied[B] = new LeftPartiallyApplied[B]
+
+  final class LeftTPartiallyApplied[F[_], B] private[EitherTFunctions] {
+    def apply[A](a: A)(implicit F: Applicative[F]): EitherT[F, A, B] = EitherT(F.pure(Either.left(a)))
+  }
+
+  /**
+   * Creates a left version of `EitherT[F, A, B]` from a `A`
+   * {{{
+   * scala> import cats.data.EitherT
+   * scala> import cats.implicits._
+   * scala> EitherT.leftT[Option, Int]("err")
+   * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Left(err)))
+   * }}}
+   */
+  final def leftT[F[_], B]: LeftTPartiallyApplied[F, B] = new LeftTPartiallyApplied[F, B]
+
+  final class RightPartiallyApplied[A] private[EitherTFunctions] {
+    def apply[F[_], B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fb)(Either.right))
+  }
+
+  /**
+   * Creates a right version of `EitherT[F, A, B]` from a `F[B]`
+   * {{{
+   * scala> import cats.data.EitherT
+   * scala> import cats.implicits._
+   * scala> EitherT.right[String](Option(3))
+   * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(3)))
+   * }}}
+   */
+  final def right[A]: RightPartiallyApplied[A] = new RightPartiallyApplied[A]
+
+  final class PurePartiallyApplied[F[_], A] private[EitherTFunctions] {
+    def apply[B](b: B)(implicit F: Applicative[F]): EitherT[F, A, B] = right(F.pure(b))
+  }
+
+  /**
+   * Creates a new `EitherT[F, A, B]` from a `B`
+   * {{{
+   * scala> import cats.data.EitherT
+   * scala> import cats.implicits._
+   * scala> EitherT.pure[Option, String](3)
+   * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(3)))
+   * }}}
+   */
+  final def pure[F[_], A]: PurePartiallyApplied[F, A] = new PurePartiallyApplied[F, A]
+
+  /**
+   * Alias for [[pure]]
+   * {{{
+   * scala> import cats.data.EitherT
+   * scala> import cats.implicits._
+   * scala> EitherT.rightT[Option, String](3)
+   * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(3)))
+   * }}}
+   */
+  final def rightT[F[_], A]: PurePartiallyApplied[F, A] = pure
+
 
   /**
    * Alias for [[right]]
