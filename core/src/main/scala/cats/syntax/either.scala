@@ -63,6 +63,11 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     case Right(b) => if (f(b)) eab else Left(onFailure)
   }
 
+  def ensureWith[AA >: A](onFailure: B => AA)(f: B => Boolean): Either[AA, B] = eab match {
+    case Left(_)  => eab
+    case Right(b) => if (f(b)) eab else Left(onFailure(b))
+  }
+
   def toIor: A Ior B = eab match {
     case Left(a)  => Ior.left(a)
     case Right(b) => Ior.right(b)

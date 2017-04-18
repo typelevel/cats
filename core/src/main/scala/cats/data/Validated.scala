@@ -237,6 +237,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    */
   def ensure[EE >: E](onFailure: => EE)(f: A => Boolean): Validated[EE, A] =
     fold(_ => this, a => if (f(a)) this else Validated.invalid(onFailure))
+
+  /**
+    * Ensure that a successful result passes the given predicate,
+    * falling back to the an Invalid of the result of `onFailure` if the predicate
+    * returns false.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.valid("ab").ensureWith(s => new IllegalArgumentException(s"Must be longer than 3, provided '$s'"))(_.length > 3)
+    * res0: Validated[IllegalArgumentException, String] = Invalid(java.lang.IllegalArgumentException: Must be longer than 3, provided 'ab')
+    * }}}
+    */
+  def ensureWith[EE >: E](onFailure: A => EE)(f: A => Boolean): Validated[EE, A] =
+    fold(_ => this, a => if (f(a)) this else Validated.invalid(onFailure(a)))
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions{
