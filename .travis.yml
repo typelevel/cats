@@ -23,7 +23,7 @@ before_install:
  - export PATH=${PATH}:./vendor/bundle
 
 script:
-  - scripts/travis-publish.sh
+  - travis_wait scripts/travis-publish.sh
 
 # http://austinpray.com/ops/2015/09/20/change-travis-node-version.html
 install:
