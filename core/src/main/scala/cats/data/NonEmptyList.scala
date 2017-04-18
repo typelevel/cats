@@ -3,6 +3,8 @@ package data
 
 import cats.instances.list._
 import cats.syntax.order._
+import cats.syntax.semigroup._
+import cats.syntax.cartesian._
 
 import scala.annotation.tailrec
 import scala.collection.immutable.TreeSet
@@ -233,9 +235,9 @@ object NonEmptyList extends NonEmptyListInstances {
 private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 {
 
   implicit val catsDataInstancesForNonEmptyList: SemigroupK[NonEmptyList] with Reducible[NonEmptyList]
-      with Comonad[NonEmptyList] with Traverse[NonEmptyList] with Monad[NonEmptyList] =
+      with Comonad[NonEmptyList] with Traverse1[NonEmptyList] with Monad[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList] with Comonad[NonEmptyList]
-      with Traverse[NonEmptyList] with Monad[NonEmptyList] {
+      with Traverse1[NonEmptyList] with Monad[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a concat b
@@ -262,7 +264,12 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
 
       def extract[A](fa: NonEmptyList[A]): A = fa.head
 
-      def traverse[G[_], A, B](fa: NonEmptyList[A])(f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
+      def traverse1[G[_] : Apply, A, B](as: NonEmptyList[A])(f: A => G[B]): G[NonEmptyList[B]] = {
+        as.map(a => Apply[G].map(f(a))(NonEmptyList.of(_)))
+          .reduceLeft((acc, a) => (acc |@| a).map( _ |+| _ ))
+      }
+
+      override def traverse[G[_], A, B](fa: NonEmptyList[A])(f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
         fa traverse f
 
       override def foldLeft[A, B](fa: NonEmptyList[A], b: B)(f: (B, A) => B): B =

@@ -9,11 +9,4 @@ private[syntax] trait ReducibleSyntax1 {
     }
 }
 
-trait ReducibleSyntax extends Reducible.ToReducibleOps with ReducibleSyntax1 {
-  implicit def catsSyntaxNestedReducible[F[_]: Reducible, G[_], A](fga: F[G[A]]): NestedReducibleOps[F, G, A] =
-    new NestedReducibleOps[F, G, A](fga)
-}
-
-final class NestedReducibleOps[F[_], G[_], A](fga: F[G[A]])(implicit F: Reducible[F]) {
-  def reduceK(implicit G: SemigroupK[G]): G[A] = F.reduceK(fga)
-}
+trait ReducibleSyntax extends Reducible.ToReducibleOps with ReducibleSyntax1

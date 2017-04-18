@@ -54,6 +54,10 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
   def forall(p: A => Boolean)(implicit F: Foldable[F]): Boolean =
     p(head) && F.forall(tail)(p)
 
+
+  def reduceLeft(f: (A, A) => A)(implicit F: Foldable[F]): A =
+    F.foldLeft(tail, head)(f)
+
   /**
    * Left-associative fold on the structure using f.
    */
@@ -202,10 +206,22 @@ private[data] trait OneAndLowPriority1 extends OneAndLowPriority0 {
 }
 
 private[data] trait OneAndLowPriority2 extends OneAndLowPriority1 {
-  implicit def catsDataTraverseForOneAnd[F[_]](implicit F: Traverse[F]): Traverse[OneAnd[F, ?]] =
-    new Traverse[OneAnd[F, ?]] {
-      def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {
-        G.map2Eval(f(fa.head), Always(F.traverse(fa.tail)(f)))(OneAnd(_, _)).value
+  implicit def catsDataTraverseForOneAnd[F[_]](implicit F: Traverse[F], F2: MonadCombine[F]): Traverse1[OneAnd[F, ?]] =
+    new Traverse1[OneAnd[F, ?]] {
+
+      override def traverse1[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
+        import cats.syntax.cartesian._
+
+         fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)
+           .reduceLeft(((acc, a) => (acc |@| a).map((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
+      }
+
+      def reduceLeftTo[A, B](fa: OneAnd[F, A])(f: A => B)(g: (B, A) => B): B = {
+        fa.foldLeft(f(fa.head))(g)
+      }
+
+      def reduceRightTo[A, B](fa: OneAnd[F, A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
+        fa.foldRight(Always(f(fa.head)))(g)
       }
 
       def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B = {
