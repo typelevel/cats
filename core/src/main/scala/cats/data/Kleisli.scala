@@ -1,8 +1,8 @@
 package cats
 package data
 
-import cats.arrow.{Arrow, Category, Choice, Compose, Split, FunctionK}
-import cats.functor.{Contravariant, Strong}
+import cats.arrow.{Arrow, Category, Choice, ProChoice, Compose, Split, FunctionK}
+import cats.functor.{Contravariant, Profunctor, Strong}
 
 /**
  * Represents a function `A => F[B]`.
@@ -59,6 +59,12 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
 
   def second[C](implicit F: Functor[F]): Kleisli[F, (C, A), (C, B)] =
     Kleisli{ case (c, a) => F.map(run(a))(c -> _)}
+
+  def left[C](implicit F: Applicative[F]): Kleisli[F, Either[A, C], Either[B, C]] =
+    Kleisli(_.fold(a => F.map(run(a))(Left(_)), c => F.pure(Right(c))))
+
+  def right[C](implicit F: Applicative[F]): Kleisli[F, Either[C, A], Either[C, B]] =
+    Kleisli(_.fold(c => F.pure(Left(c)), a => F.map(run(a))(Right(_))))
 
   def apply(a: A): F[B] = run(a)
 }
@@ -161,6 +167,9 @@ private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 
   implicit def catsDataStrongForKleisli[F[_]](implicit ev: Functor[F]): Strong[Kleisli[F, ?, ?]] =
     new KleisliStrong[F] { def F: Functor[F] = ev }
 
+  implicit def kleisliProChoice[F[_]](implicit ev: Applicative[F]): ProChoice[Kleisli[F, ?, ?]] =
+    new KleisliProChoice[F] { def F: Applicative[F] = ev }
+
   implicit def catsDataFlatMapForKleisli[F[_], A](implicit ev: FlatMap[F]): FlatMap[Kleisli[F, A, ?]] =
     new KleisliFlatMap[F, A] { def FM: FlatMap[F] = ev }
 
@@ -223,7 +232,27 @@ private trait KleisliSplit[F[_]] extends Split[Kleisli[F, ?, ?]] {
     f.compose(g)
 }
 
-private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] {
+private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] with KleisliProFunctor[F] {
+  implicit def F: Functor[F]
+
+  override def first[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (A, C), (B, C)] =
+    fa.first[C]
+
+  override def second[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (C, A), (C, B)] =
+    fa.second[C]
+}
+
+private trait KleisliProChoice[F[_]] extends ProChoice[Kleisli[F, ?, ?]] with KleisliProFunctor[F] {
+  implicit def F: Applicative[F]
+
+  override def left[A, B, C](fab: Kleisli[F, A, B]): Kleisli[F, Either[A, C], Either[B, C]] =
+    fab.left
+
+  override def right[A, B, C](fab: Kleisli[F, A, B]): Kleisli[F, Either[C, A], Either[C, B]] =
+    fab.right
+}
+
+private trait KleisliProFunctor[F[_]] extends Profunctor[Kleisli[F, ?, ?]] {
   implicit def F: Functor[F]
 
   override def lmap[A, B, C](fab: Kleisli[F, A, B])(f: C => A): Kleisli[F, C, B] =
@@ -234,12 +263,6 @@ private trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] {
 
   override def dimap[A, B, C, D](fab: Kleisli[F, A, B])(f: C => A)(g: B => D): Kleisli[F, C, D] =
     fab.dimap(f)(g)
-
-  def first[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (A, C), (B, C)] =
-    fa.first[C]
-
-  def second[A, B, C](fa: Kleisli[F, A, B]): Kleisli[F, (C, A), (C, B)] =
-    fa.second[C]
 }
 
 private trait KleisliSemigroup[F[_], A, B] extends Semigroup[Kleisli[F, A, B]] {

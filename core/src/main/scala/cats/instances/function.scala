@@ -1,7 +1,7 @@
 package cats
 package instances
 
-import cats.arrow.{Arrow, Category, Choice}
+import cats.arrow.{Arrow, Category, Choice, ProChoice}
 import cats.functor.Contravariant
 import annotation.tailrec
 
@@ -35,7 +35,18 @@ private[instances] sealed trait Function0Instances {
     }
 }
 
-private[instances] sealed trait Function1Instances {
+private[instances] sealed trait Function1Instances0 {
+  implicit val function1ProChoice: ProChoice[Function1] = new ProChoice[Function1] {
+    override def left[A, B, C](fab: A => B): Either[A, C] => Either[B, C] =
+      _.left.map(fab)
+    override def right[A, B, C](fab: A => B): Either[C, A] => Either[C, B] =
+      _.right.map(fab)
+    override def dimap[A, B, C, D](fab: A => B)(f: C => A)(g: B => D): C => D =
+      g compose fab compose f
+  }
+}
+
+private[instances] sealed trait Function1Instances extends Function1Instances0 {
   implicit def catsStdContravariantForFunction1[R]: Contravariant[? => R] =
     new Contravariant[? => R] {
       def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =

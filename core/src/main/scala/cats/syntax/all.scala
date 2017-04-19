@@ -32,6 +32,7 @@ trait AllSyntax
     with OptionSyntax
     with OrderSyntax
     with PartialOrderSyntax
+    with ProChoiceSyntax
     with ProfunctorSyntax
     with ReducibleSyntax
     with SemigroupSyntax

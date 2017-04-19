@@ -33,6 +33,7 @@ package object syntax {
   object order extends OrderSyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
+  object prochoice extends ProChoiceSyntax
   object reducible extends ReducibleSyntax
   object semigroup extends SemigroupSyntax
   object semigroupk extends SemigroupKSyntax

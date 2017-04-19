@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.arrow.{Arrow, Choice, Split, FunctionK}
+import cats.arrow.{Arrow, Choice, Split, FunctionK, ProChoice}
 import cats.data.{EitherT, Kleisli, Reader}
 import cats.functor.{Contravariant, Strong}
 import cats.laws.discipline._
@@ -22,10 +22,10 @@ class KleisliTests extends CatsSuite {
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
 
-  checkAll("Kleisli[Option, Int, Int] with Unit", ApplicativeErrorTests[Kleisli[Option, Int, ?], Unit].applicativeError[Int, Int, Int])
   checkAll("ApplicativeError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(ApplicativeError[Kleisli[Option, Int, ?], Unit]))
 
   checkAll("Kleisli[Option, Int, Int] with Unit", MonadErrorTests[Kleisli[Option, Int, ?], Unit].monadError[Int, Int, Int])
+  checkAll("ProChoice[Kleisli[Option, ?, ?]]", SerializableTests.serializable(ProChoice[Kleisli[Option, ?, ?]]))
   checkAll("MonadError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(MonadError[Kleisli[Option, Int, ?], Unit]))
 
   checkAll("Kleisli[Option, Int, Int]", CartesianTests[Kleisli[Option, Int, ?]].cartesian[Int, Int, Int])
