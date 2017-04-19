@@ -7,7 +7,7 @@ import cats.data._
 import cats.laws.discipline._
 import cats.tests.CatsSuite
 import cats.instances.option._
-
+import cats.laws.discipline.arbitrary.catsLawArbitraryForState
 import org.scalacheck.{Arbitrary, Gen, Cogen}
 
 class FreeTTests extends CatsSuite {
@@ -209,7 +209,7 @@ trait FreeTTestsInstances {
 
   implicit def intStateEq[A: Eq]: Eq[IntState[A]] = stateEq[Int, A]
 
-  implicit def intStateArb[A: Arbitrary]: Arbitrary[IntState[A]] = stateArbitrary[Int, A]
+  implicit def intStateArb[A: Arbitrary]: Arbitrary[IntState[A]] = catsLawArbitraryForState[Int, A]
 
   implicit def freeTOptionEq[A](implicit A: Eq[A], OM: Monad[Option]): Eq[FreeTOption[A]] = new Eq[FreeTOption[A]] {
     def eqv(a: FreeTOption[A], b: FreeTOption[A]) = Eq[Option[A]].eqv(a.runM(identity), b.runM(identity))
