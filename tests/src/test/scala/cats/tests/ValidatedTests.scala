@@ -248,4 +248,20 @@ class ValidatedTests extends CatsSuite {
       }
     }
   }
+
+  test("ensureWith on Invalid is identity") {
+    forAll { (x: Validated[Int,String], f: String => Int, p: String => Boolean) =>
+      if (x.isInvalid) {
+        x.ensureWith(f)(p) should === (x)
+      }
+    }
+  }
+
+  test("ensureWith should fail if predicate not satisfied") {
+    forAll { (x: Validated[String, Int], f: Int => String, p: Int => Boolean) =>
+      if (x.exists(!p(_))) {
+        x.ensureWith(f)(p).isInvalid shouldBe true
+      }
+    }
+  }
 }

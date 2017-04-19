@@ -378,4 +378,28 @@ class EitherTTests extends CatsSuite {
       }
     }
   }
+
+  test("ensureWith on left is identity") {
+    forAll { (x: EitherT[Id, String, Int], f: Int => String, p: Int => Boolean) =>
+      if (x.isLeft) {
+        x.ensureWith(f)(p) should === (x)
+      }
+    }
+  }
+
+  test("ensureWith on right is identity if predicate satisfied") {
+    forAll { (x: EitherT[Id, String, Int], f: Int => String, p: Int => Boolean) =>
+      if (x.isRight && p(x getOrElse 0)) {
+        x.ensureWith(f)(p) should === (x)
+      }
+    }
+  }
+
+  test("ensureWith should fail if predicate not satisfied") {
+    forAll { (x: EitherT[Id, String, Int], f: Int => String, p: Int => Boolean) =>
+      if (x.isRight && !p(x getOrElse 0)) {
+        x.ensureWith(f)(p).isLeft shouldBe true
+      }
+    }
+  }
 }
