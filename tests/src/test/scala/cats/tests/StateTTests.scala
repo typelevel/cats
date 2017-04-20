@@ -6,7 +6,7 @@ import cats.kernel.instances.tuple._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import org.scalacheck.{Arbitrary, Cogen}
+import org.scalacheck.Arbitrary
 
 class StateTTests extends CatsSuite {
   import StateTTests._
@@ -294,15 +294,10 @@ object StateTTests extends StateTTestsInstances {
   implicit def stateEq[S:Eq:Arbitrary, A:Eq]: Eq[State[S, A]] =
     stateTEq[Eval, S, A]
 
-  implicit def stateArbitrary[S: Arbitrary: Cogen, A: Arbitrary]: Arbitrary[State[S, A]] =
-    stateTArbitrary[Eval, S, A]
-
   val add1: State[Int, Int] = State(n => (n + 1, n))
 }
 
 sealed trait StateTTestsInstances {
-  implicit def stateTArbitrary[F[_]: Applicative, S, A](implicit F: Arbitrary[S => F[(S, A)]]): Arbitrary[StateT[F, S, A]] =
-    Arbitrary(F.arbitrary.map(f => StateT(f)))
 
   implicit def stateTEq[F[_], S, A](implicit S: Arbitrary[S], FSA: Eq[F[(S, A)]], F: FlatMap[F]): Eq[StateT[F, S, A]] =
     Eq.by[StateT[F, S, A], S => F[(S, A)]](state =>

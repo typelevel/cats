@@ -1,7 +1,7 @@
 ---
 layout: docs
 title:  "Id"
-section: "typeclasses"
+section: "data"
 source: "core/src/main/scala/cats/package.scala"
 scaladoc: "#cats.Id$"
 ---
