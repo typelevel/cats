@@ -11,7 +11,7 @@ position: 4
 
  * [What imports do I need?](#what-imports)
  * [Where is right-biased `Either`?](#either)
- * [Why is the compiler having trouble with types with more than one type parameters?](#si-2712)
+ * [Why is the compiler having trouble with types with more than one type parameter?](#si-2712)
  * [Why can't the compiler find implicit instances for Future?](#future-instances)
  * [Why is some example code not compiling for me?](#example-compile)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
@@ -49,7 +49,7 @@ There are a few minor mismatches between `Xor` and `Either`. For example, in som
 
 Similarly, `cats.data.XorT` has been replaced with `cats.data.EitherT`, although since this is a type defined in Cats, you don't need to import syntax or instances for it (although you may need imports for the underlying monad).
 
-## <a id="si-2712" href="#si-2712"></a>Why is the compiler having trouble with types with more than one type parameters?
+## <a id="si-2712" href="#si-2712"></a>Why is the compiler having trouble with types with more than one type parameter?
 
 When you encounter a situation where the same code works fine with a type with one type parameter, e.g. List[A], but doesn't work with types with more than one, e.g. Either[A, B], you probably hit [SI-2712](https://issues.scala-lang.org/browse/SI-2712). Without going into the details, it's highly recommended to enable a partial SI-2712 fix in your project. The easiest way to achieve that is through this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification).
 Cats used to provide mitigation to this issue semi-transparently, but given the fact that the fix is now mainstream, we decided to drop that mitigation machinery in favor of reducing the complexity. See this [issue](https://github.com/typelevel/cats/issues/1073) for details.
