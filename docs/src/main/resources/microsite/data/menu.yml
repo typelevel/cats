@@ -121,6 +121,10 @@ options:
     url: datatypes/freemonad.html
     menu_type: data
 
+  - title: FunctionK
+    url: datatypes/functionk.html
+    menu_type: data
+
   - title: Kleisli
     url: datatypes/kleisli.html
     menu_type: data
