@@ -124,6 +124,10 @@ options:
     url: datatypes/freemonad.html
     menu_type: data
 
+  - title: FunctionK
+    url: datatypes/functionk.html
+    menu_type: data
+
   - title: Id
     url: datatypes/id.html
     menu_type: data
