@@ -362,6 +362,19 @@ private[data] trait EitherTFunctions {
       EitherT(F.pure(Either.fromOption(opt, ifNone)))
   }
 
+  /** Transforms an `F[Option]` into an `EitherT`, using the second argument if the `Option` is a `None`.
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val o: Option[Int] = None
+   * scala> EitherT.fromOptionF(List(o), "Answer not known.")
+   * res0: EitherT[List, String, Int]  = EitherT(List(Left(Answer not known.)))
+   * scala> EitherT.fromOptionF(List(Option(42)), "Answer not known.")
+   * res1: EitherT[List, String, Int] = EitherT(List(Right(42)))
+   * }}}
+   */
+  final def fromOptionF[F[_], E, A](fopt: F[Option[A]], ifNone: => E)(implicit F: Functor[F]): EitherT[F, E, A] =
+    EitherT(F.map(fopt)(opt => Either.fromOption(opt, ifNone)))
+
   /**  If the condition is satisfied, return the given `A` in `Right`
     *  lifted into the specified `Applicative`, otherwise, return the
     *  given `E` in `Left` lifted into the specified `Applicative`.
