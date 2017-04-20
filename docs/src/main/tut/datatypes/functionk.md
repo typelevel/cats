@@ -6,8 +6,11 @@ source: "core/src/main/scala/cats/arrow/FunctionK.scala"
 scaladoc: "#cats.arrow.FunctionK"
 ---
 # FunctionK
-`FunctionK` is a universal function which operates on kinds. This statement may be easier to understand
-if we first step back and talk about ordinary functions.
+A `FunctionK` transforms values from one first-order-kinded type (a type that takes a single type
+parameter, such as `List` or `Option`) into another first-order-kinded type. This transformation is
+universal, meaning that a `FunctionK[List, Option]` will translate all `List[A]` values into an
+`Option[A]` value for all possible types of `A`. This explanation may be easier to understand if we
+first step back and talk about ordinary functions.
 
 ## Ordinary Functions
 Consider the following scala method:
@@ -94,6 +97,27 @@ After adding the plugin to your project, you could write the `first` example as:
 val first: FunctionK[List, Option] = λ[FunctionK[List, Option]](_.headOption)
 ```
 
+Cats also provides a `~>` type alias for `FunctionK`, so an even more concise version would be:
+
+```tut:silent
+import cats.~>
+
+val first: List ~> Option = λ[List ~> Option](_.headOption)
+```
+
+Being able to use `~>` as an alias for `FunctionK` parallels being able to use `=>` as an alias for `Function1`.
+
 ## Use-cases
 
 `FunctionK` tends to show up when there is abstraction over higher-kinds. For example, interpreters for [free monads](freemonad.html) and [free applicatives](freeapplicative.html) are represented as `FunctionK` instances.
+
+## Types with more than one type parameter
+
+Earlier it was mentioned that `FunctionK` operates on first-order-kinded types (types that take a single type parameter such as `List` or `Option`). It's still possible to use `FunctionK` with types that would normally take more than one type parameter (such as `Either`) if we fix all of the type parameters except for one. For example:
+
+```tut:silent
+type ErrorOr[A] = Either[String, A]
+
+val errorOrFirst: FunctionK[List, ErrorOr] =
+  λ[FunctionK[List, ErrorOr]](_.headOption.toRight("ERROR: the list was empty!"))
+```
