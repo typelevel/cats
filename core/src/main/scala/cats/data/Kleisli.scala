@@ -82,6 +82,10 @@ private[data] sealed trait KleisliFunctions {
 
 private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
 
+  implicit def catsDataFunctorKForKleisli[A, B]: FunctorK[Kleisli[?[_], A, B]] = new FunctorK[Kleisli[?[_], A, B]]{
+    def mapK[G[_], H[_]](fg: Kleisli[G, A, B])(f: G ~> H): Kleisli[H, A, B] = fg.transform(f)
+  }
+
   implicit def catsDataMonoidForKleisli[F[_], A, B](implicit FB0: Monoid[F[B]]): Monoid[Kleisli[F, A, B]] =
     new KleisliMonoid[F, A, B] { def FB: Monoid[F[B]] = FB0 }
 

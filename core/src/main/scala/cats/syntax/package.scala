@@ -19,6 +19,7 @@ package object syntax {
   object flatMap extends FlatMapSyntax
   object foldable extends FoldableSyntax
   object functor extends FunctorSyntax
+  object functorK extends FunctorKSyntax
   object functorFilter extends FunctorFilterSyntax
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
