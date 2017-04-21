@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{ Func, AppFunc, Const }
-import Func.{ appFunc, appFuncU }
+import Func.appFunc
 
 /*
  * This an example of applicative function composition.
@@ -29,7 +29,7 @@ class WordCountTest extends CatsSuite {
 
     // To count words, we need to detect transitions from whitespace to non-whitespace.
     val countWord =
-      appFuncU { (c: Char) =>
+      appFunc { (c: Char) =>
         for {
           x <- get[Boolean]
           y = !isSpace(c)

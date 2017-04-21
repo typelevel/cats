@@ -1,15 +1,7 @@
 package cats
 package syntax
 
-private[syntax] trait CartesianSyntax1 {
-  implicit final def catsSyntaxUCartesian[FA](fa: FA)(implicit U: Unapply[Cartesian, FA]): CartesianOps[U.M, U.A] =
-    new CartesianOps[U.M, U.A] {
-      val self = U.subst(fa)
-      val typeClassInstance = U.TC
-    }
-}
-
-trait CartesianSyntax extends CartesianSyntax1 {
+trait CartesianSyntax {
   implicit final def catsSyntaxCartesian[F[_], A](fa: F[A])(implicit F: Cartesian[F]): CartesianOps[F, A] =
     new CartesianOps[F, A] {
       val self = fa

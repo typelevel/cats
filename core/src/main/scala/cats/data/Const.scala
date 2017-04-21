@@ -39,6 +39,20 @@ final case class Const[A, B](getConst: A) {
 object Const extends ConstInstances {
   def empty[A, B](implicit A: Monoid[A]): Const[A, B] =
     Const(A.empty)
+
+  final class OfPartiallyApplied[B] {
+    def apply[A](a: A): Const[A, B] = Const(a)
+  }
+
+  /**
+   * Convenient syntax for creating a Const[A, B] from an `A`
+   * {{{
+   * scala> import cats.data._
+   * scala> Const.of[Int]("a")
+   * res0: Const[String, Int] = Const(a)
+   * }}}
+   */
+  def of[B]: OfPartiallyApplied[B] = new OfPartiallyApplied
 }
 
 private[data] sealed abstract class ConstInstances extends ConstInstances0 {

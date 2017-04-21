@@ -8,24 +8,26 @@ import cats.laws.discipline.SerializableTests
 // important is that this stuff compiles at all.
 class UnapplyTests extends CatsSuite {
 
-  test("Unapply works for stuff already the right kind") {
-    val x = Traverse[List].traverseU(List(1,2,3))(Option(_))
-    x should === (Some(List(1,2,3)))
+
+  test("Unapply works for F[_] ") {
+
+    val u = implicitly[Unapply.Aux1[Functor, Option[Int], Option, Int]]
+
+    u.TC.map(u.subst(Option(1)))(_ + 1) should ===(Option(2))
   }
 
-  test("Unapply works for F[_,_] with the left fixed") {
-    val x = Traverse[List].traverseU(List(1,2,3))(Either.right(_))
-    (x: Either[String, List[Int]]) should === (Either.right(List(1,2,3)))
+  test("Unapply works for F[_, _] with left fixed ") {
+
+    val u = implicitly[Unapply.Aux1[Functor, Either[String, Int], Either[String, ?], Int]]
+
+    u.TC.map(u.subst(1.asRight[String]))(_ + 1) should ===(2.asRight[String])
   }
 
   test("Unapply works for F[_[_],_] with the left fixed") {
-    val x: OptionT[List, Int] = OptionT(List(Option(1), Option(2)))
-    val y: OptionT[List, Int] = OptionT(List(Option(3), Option(4)))
 
-    val z: List[Option[(Int,Int)]] = (x |@| y).tupled.value
+    val u = implicitly[Unapply.Aux1[Functor, OptionT[List, Int], OptionT[List, ?], Int]]
 
-    z should be (List(Option((1,3)), Option((1,4)),
-                      Option((2,3)), Option((2,4))))
+    u.TC.map(u.subst(OptionT(List(Option(1)))))(_ + 1) should ===(OptionT(List(Option(2))))
   }
 
   checkAll("Unapply[Functor, Option[String]]", SerializableTests.serializable(Unapply[Functor, Option[String]]))
@@ -34,6 +36,8 @@ class UnapplyTests extends CatsSuite {
     val x: List[Option[Int]] = List(Option(1), Option(2))
     val y: Nested[List, Option, Int] = Nested(x)
 
-    y.map(_ + 1).value should === (x.map(_.map(_ + 1)))
+    val u = implicitly[Unapply.Aux1[Functor, Nested[List, Option, Int], Nested[List, Option, ?], Int]]
+
+    u.TC.map(u.subst(y))(_ + 1).value should ===(x.map(_.map(_ + 1)))
   }
 }

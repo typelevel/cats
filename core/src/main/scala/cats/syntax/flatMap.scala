@@ -1,15 +1,7 @@
 package cats
 package syntax
 
-private[syntax] trait FlatMapSyntax1 {
-  implicit final def catsSyntaxUFlatMap[FA](fa: FA)(implicit U: Unapply[FlatMap, FA]): FlatMap.Ops[U.M, U.A] =
-    new FlatMap.Ops[U.M, U.A]{
-      val self = U.subst(fa)
-      val typeClassInstance = U.TC
-    }
-}
-
-trait FlatMapSyntax extends FlatMap.ToFlatMapOps with FlatMapSyntax1 {
+trait FlatMapSyntax extends FlatMap.ToFlatMapOps {
 
   implicit final def catsSyntaxFlatten[F[_]: FlatMap, A](ffa: F[F[A]]): FlattenOps[F, A] =
     new FlattenOps[F, A](ffa)
