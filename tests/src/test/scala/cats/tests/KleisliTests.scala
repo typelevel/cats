@@ -19,8 +19,10 @@ class KleisliTests extends CatsSuite {
     kleisliEq
 
   implicit val eitherTEq = EitherT.catsDataEqForEitherT[Kleisli[Option, Int, ?], Unit, Int]
+  implicit val eitherTEq2 = EitherT.catsDataEqForEitherT[Reader[Int, ?], Unit, Int]
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
+  implicit val iso2 = CartesianTests.Isomorphisms.invariant[Reader[Int, ?]]
 
   checkAll("Kleisli[Option, Int, Int] with Unit", ApplicativeErrorTests[Kleisli[Option, Int, ?], Unit].applicativeError[Int, Int, Int])
   checkAll("ApplicativeError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(ApplicativeError[Kleisli[Option, Int, ?], Unit]))
@@ -47,6 +49,12 @@ class KleisliTests extends CatsSuite {
     implicit val catsDataMonadReaderForKleisli = Kleisli.catsDataMonadReaderForKleisli[Option, Int]
     checkAll("Kleisli[Option, Int, Int]", MonadReaderTests[Kleisli[Option, Int, ?], Int].monadReader[Int, Int, Int])
     checkAll("MonadReader[Kleisli[Option, ?, ?], Int]", SerializableTests.serializable(MonadReader[Kleisli[Option, Int, ?], Int]))
+  }
+
+  {
+    implicit val catsDataMonadReaderForReader = Kleisli.catsDataMonadReaderForKleisliId[Int]
+    checkAll("Reader[Int, Int]", MonadReaderTests[Reader[Int, ?], Int].monadReader[Int, Int, Int])
+    checkAll("MonadReader[Reader[?, ?], Int]", SerializableTests.serializable(MonadReader[Reader[Int, ?], Int]))
   }
 
   {
