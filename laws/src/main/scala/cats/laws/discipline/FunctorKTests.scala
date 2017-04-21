@@ -11,17 +11,17 @@ trait FunctorKTests[F[_[_]]] extends Laws {
   def laws: FunctorKLaws[F]
 
   def functorK[G[_], H[_], I[_], A: Arbitrary](implicit
-                                                        ArbFA: Arbitrary[F[G]],
-                                                        ArbitraryG: Arbitrary[G[A]],
-                                                        ArbitraryH: Arbitrary[H[A]],
-                                                        ArbitraryI: Arbitrary[I[A]],
-                                                        ArbitraryFK: Arbitrary[FunctionK[G, H]],
-                                                        ArbitraryFK2: Arbitrary[FunctionK[H, I]],
-                                                        EqFA: Eq[F[G]],
-                                                        EqFC: Eq[F[I]]
-                                                       ): RuleSet = {
+    ArbFA: Arbitrary[F[G]],
+    ArbitraryG: Arbitrary[G[A]],
+    ArbitraryH: Arbitrary[H[A]],
+    ArbitraryI: Arbitrary[I[A]],
+    ArbitraryFK: Arbitrary[FunctionK[G, H]],
+    ArbitraryFK2: Arbitrary[FunctionK[H, I]],
+    EqFA: Eq[F[G]],
+    EqFC: Eq[F[I]]
+  ): RuleSet = {
     new DefaultRuleSet(
-      name =  "functorK",
+      name = "functorK",
       parent = None,
       "covariant identity" -> forAll(laws.covariantIdentity[G] _),
       "covariant composition" -> forAll(laws.covariantComposition[G, H, I] _))
