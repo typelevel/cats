@@ -342,11 +342,9 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
       val F0: Traverse[F] = F
     }
 
-  implicit def catsDataTransLiftForEitherT[E]: TransLift.Aux[EitherT[?[_], E, ?], Functor] =
-    new TransLift[EitherT[?[_], E, ?]] {
-      type TC[M[_]] = Functor[M]
-
-      def liftT[M[_]: Functor, A](ma: M[A]): EitherT[M, E, A] =
+  implicit def catsDataMonadTransForEitherT[E]: MonadTrans[EitherT[?[_], E, ?]] =
+    new MonadTrans[EitherT[?[_], E, ?]] {
+      def liftT[M[_]: Monad, A](ma: M[A]): EitherT[M, E, A] =
         EitherT.liftT(ma)
     }
 

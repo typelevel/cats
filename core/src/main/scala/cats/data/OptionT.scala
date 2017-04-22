@@ -208,11 +208,9 @@ private[data] sealed trait OptionTInstances0 extends OptionTInstances1 {
 
 private[data] sealed trait OptionTInstances1 extends OptionTInstances2 {
   // do NOT change this to val! I know it looks like it should work, and really I agree, but it doesn't (for... reasons)
-  implicit def catsDataTransLiftForOptionT: TransLift.Aux[OptionT, Functor] =
-    new TransLift[OptionT] {
-      type TC[M[_]] = Functor[M]
-
-      def liftT[M[_]: Functor, A](ma: M[A]): OptionT[M, A] = OptionT.liftF(ma)
+  implicit def catsDataMonadTransForOptionT: MonadTrans[OptionT] =
+    new MonadTrans[OptionT] {
+      def liftT[M[_]: Monad, A](ma: M[A]): OptionT[M, A] = OptionT.liftF(ma)
     }
 
   implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, ?]] =

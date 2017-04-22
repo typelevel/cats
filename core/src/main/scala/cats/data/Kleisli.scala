@@ -106,11 +106,9 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
         fa.local(f)
     }
 
-  implicit def catsDataTransLiftForKleisli[A]: TransLift.AuxId[Kleisli[?[_], A, ?]] =
-    new TransLift[Kleisli[?[_], A, ?]] {
-      type TC[M[_]] = Trivial
-
-      def liftT[M[_], B](ma: M[B])(implicit ev: Trivial): Kleisli[M, A, B] = Kleisli.lift(ma)
+  implicit def catsDataMonadTransForKleisli[A]: MonadTrans[Kleisli[?[_], A, ?]] =
+    new MonadTrans[Kleisli[?[_], A, ?]] {
+      def liftT[M[_]: Monad, B](ma: M[B]): Kleisli[M, A, B] = Kleisli.lift(ma)
     }
 
   implicit def catsDataApplicativeErrorForKleisli[F[_], A, E](implicit AE: ApplicativeError[F, E]): ApplicativeError[Kleisli[F, A, ?], E] =

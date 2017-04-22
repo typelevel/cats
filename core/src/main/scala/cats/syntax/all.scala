@@ -39,7 +39,7 @@ trait AllSyntax
     with ShowSyntax
     with SplitSyntax
     with StrongSyntax
-    with TransLiftSyntax
+    with MonadTransSyntax
     with TraverseFilterSyntax
     with TraverseSyntax
     with TupleSyntax
