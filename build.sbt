@@ -91,8 +91,8 @@ lazy val includeGeneratedSrc: Setting[_] = {
 lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
 lazy val scalaCheckVersion = "1.13.4"
-lazy val scalaTestVersion = "3.0.0"
-lazy val disciplineVersion = "0.7.2"
+lazy val scalaTestVersion = "3.0.1"
+lazy val disciplineVersion = "0.7.3"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
