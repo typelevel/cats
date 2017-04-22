@@ -9,6 +9,7 @@ import cats.syntax.cartesian._
 import scala.annotation.tailrec
 import scala.collection.immutable.TreeSet
 import scala.collection.mutable.ListBuffer
+import scala.collection.{immutable, mutable}
 
 /**
  * A data type which represents a non empty list of A, with
@@ -20,6 +21,11 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
    * Return the head and tail into a single list
    */
   def toList: List[A] = head :: tail
+
+  def last: A = tail.lastOption match {
+    case None    => head
+    case Some(a) => a
+  }
 
   /**
    *  Applies f to all the elements of the structure
@@ -66,6 +72,30 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     val ftail = tail.filterNot(p)
     if (p(head)) ftail
     else head :: ftail
+  }
+
+  /**
+    * Builds a new `List` by applying a partial function to
+    * all the elements from this `NonEmptyList` on which the function is defined
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+    * scala> nel.collect { case v if v < 3 => v }
+    * res0: scala.collection.immutable.List[Int] = List(1, 2)
+    * scala> nel.collect {
+    *      |  case v if v % 2 == 0 => "even"
+    *      |  case _ => "odd"
+    *      | }
+    * res1: scala.collection.immutable.List[String] = List(odd, even, odd, even, odd)
+    * }}}
+    */
+  def collect[B](pf: PartialFunction[A, B]) : List[B] = {
+    if (pf.isDefinedAt(head)) {
+      pf.apply(head) :: tail.collect(pf)
+    } else {
+      tail.collect(pf)
+    }
   }
 
   /**
@@ -195,6 +225,63 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     NonEmptyList((head, 0), bldr.result)
   }
 
+  /**
+    * Sorts this `NonEmptyList` according to an `Order` on transformed `B` from `A`
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> import cats.instances.int._
+    * scala> val nel = NonEmptyList.of(('a', 4), ('z', 1), ('e', 22))
+    * scala> nel.sortBy(_._2)
+    * res0: cats.data.NonEmptyList[(Char, Int)] = NonEmptyList((z,1), (a,4), (e,22))
+    * }}}
+    */
+  def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyList[A] =
+    toList.sortBy(f)(B.toOrdering) match {
+      case x :: xs => NonEmptyList(x, xs)
+      case Nil     => sys.error("unreachable: sorting a NonEmptyList cannot produce an empty List")
+    }
+
+  /**
+    * Sorts this `NonEmptyList` according to an `Order`
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> import cats.instances.int._
+    * scala> val nel = NonEmptyList.of(12, 4, 3, 9)
+    * scala> nel.sorted
+    * res0: cats.data.NonEmptyList[Int] = NonEmptyList(3, 4, 9, 12)
+    * }}}
+    */
+  def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyList[AA] =
+    toList.sorted(AA.toOrdering) match {
+      case x :: xs => NonEmptyList(x, xs)
+      case Nil     => sys.error("unreachable: sorting a NonEmptyList cannot produce an empty List")
+    }
+
+  /**
+    * Groups elements inside of this `NonEmptyList` using a mapping function
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
+    * scala> nel.groupBy(_ >= 0)
+    * res0: Map[Boolean, cats.data.NonEmptyList[Int]] = Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3))
+    * }}}
+    */
+  def groupBy[B](f: A => B): Map[B, NonEmptyList[A]] = {
+    val m = mutable.Map.empty[B, mutable.Builder[A, List[A]]]
+    for { elem <- toList } {
+      m.getOrElseUpdate(f(elem), List.newBuilder[A]) += elem
+    }
+    val b = immutable.Map.newBuilder[B, NonEmptyList[A]]
+    for { (k, v) <- m } {
+      val head :: tail = v.result // we only create non empty list inside of the map `m`
+      b += ((k, NonEmptyList(head, tail)))
+    }
+    b.result
+  }
+
 }
 
 object NonEmptyList extends NonEmptyListInstances {
@@ -227,6 +314,9 @@ object NonEmptyList extends NonEmptyListInstances {
       case Nil => throw new IllegalArgumentException("Cannot create NonEmptyList from empty list")
       case h :: t => NonEmptyList(h, t)
     }
+
+  def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Option[NonEmptyList[A]] =
+    fromList(F.toList(fa))
 
   def fromReducible[F[_], A](fa: F[A])(implicit F: Reducible[F]): NonEmptyList[A] =
     F.toNonEmptyList(fa)

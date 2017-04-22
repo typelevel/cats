@@ -17,7 +17,7 @@ trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
   /**
    * Remove the element `b` from `a`.
    *
-   * Equivalent to `combine(a, inverse(a))`
+   * Equivalent to `combine(a, inverse(b))`
    */
   def remove(a: A, b: A): A = combine(a, inverse(b))
 

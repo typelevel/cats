@@ -22,6 +22,14 @@ import simulacrum.typeclass
    */
   def pure[A](x: A): F[A]
 
+  /**
+   * Returns an `F[Unit]` value, equivalent with `pure(())`.
+   *
+   * A useful shorthand, also allowing implementations to optimize the
+   * returned reference (e.g. it can be a `val`).
+   */
+  def unit: F[Unit] = pure(())
+
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     ap(pure(f))(fa)
 
@@ -42,6 +50,18 @@ import simulacrum.typeclass
       val F = self
       val G = Applicative[G]
     }
+
+  /**
+   * Returns the given argument if `cond` is `false`, otherwise, unit lifted into F.
+   */
+  def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] =
+    if (cond) pure(()) else void(f)
+
+  /**
+   * Returns the given argument if `cond` is `true`, otherwise, unit lifted into F.
+   */
+  def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
+    if (cond) void(f) else pure(())
 }
 
 object Applicative {

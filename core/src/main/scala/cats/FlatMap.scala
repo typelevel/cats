@@ -66,6 +66,33 @@ import simulacrum.typeclass
    */
   def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
 
+  /** Sequentially compose two actions, discarding any value produced by the second. */
+  def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] = flatMap(fa)(a => map(fb)(_ => a))
+
+  /** Alias for [[forEffect]]. */
+  @inline final def <<[A, B](fa: F[A])(fb: F[B]): F[A] = forEffect(fa)(fb)
+
+  /**
+   * Sequentially compose two actions, discarding any value produced by the second. This variant of
+   * [[forEffect]] also lets you define the evaluation strategy of the second action. For instance
+   * you can evaluate it only ''after'' the first action has finished:
+   *
+   * {{{
+   * scala> import cats.Eval
+   * scala> import cats.implicits._
+   * scala> var count = 0
+   * scala> val fa: Option[Int] = Some(3)
+   * scala> def fb: Option[Unit] = Some(count += 1)
+   * scala> fa.forEffectEval(Eval.later(fb))
+   * res0: Option[Int] = Some(3)
+   * scala> assert(count == 1)
+   * scala> none[Int].forEffectEval(Eval.later(fb))
+   * res1: Option[Int] = None
+   * scala> assert(count == 1)
+   * }}}
+   */
+  def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => map(fb.value)(_ => a))
+
   override def ap[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     flatMap(ff)(f => map(fa)(f))
 

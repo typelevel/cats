@@ -140,11 +140,11 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     }(Free.catsFreeMonadForFree)
 
   /**
-   * Lift into `G` (typically a `Coproduct`) given `Inject`. Analogous
+   * Lift into `G` (typically a `EitherK`) given `InjectK`. Analogous
    * to `Free.inject` but lifts programs rather than constructors.
    *
    *{{{
-   *scala> type Lo[A] = cats.data.Coproduct[List, Option, A]
+   *scala> type Lo[A] = cats.data.EitherK[List, Option, A]
    *defined type alias Lo
    *
    *scala> val fo = Free.liftF(Option("foo"))
@@ -154,7 +154,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    *res4: cats.free.Free[Lo,String] = Free(...)
    *}}}
    */
-  final def inject[G[_]](implicit ev: Inject[S, G]): Free[G, A] =
+  final def inject[G[_]](implicit ev: InjectK[S, G]): Free[G, A] =
     compile(λ[S ~> G](ev.inj(_)))
 
   override def toString: String =
@@ -209,28 +209,28 @@ object Free {
     λ[FunctionK[Free[F, ?], M]](f => f.foldMap(fk))
 
   /**
-   * This method is used to defer the application of an Inject[F, G]
+   * This method is used to defer the application of an InjectK[F, G]
    * instance. The actual work happens in
-   * `FreeInjectPartiallyApplied#apply`.
+   * `FreeInjectKPartiallyApplied#apply`.
    *
    * This method exists to allow the `F` and `G` parameters to be
    * bound independently of the `A` parameter below.
    */
-  def inject[F[_], G[_]]: FreeInjectPartiallyApplied[F, G] =
-    new FreeInjectPartiallyApplied
+  def inject[F[_], G[_]]: FreeInjectKPartiallyApplied[F, G] =
+    new FreeInjectKPartiallyApplied
 
   /**
    * Pre-application of an injection to a `F[A]` value.
    */
-  final class FreeInjectPartiallyApplied[F[_], G[_]] private[free] {
-    def apply[A](fa: F[A])(implicit I: Inject[F, G]): Free[G, A] =
+  final class FreeInjectKPartiallyApplied[F[_], G[_]] private[free] {
+    def apply[A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
       Free.liftF(I.inj(fa))
   }
 
-  def injectRoll[F[_], G[_], A](ga: G[Free[F, A]])(implicit I: Inject[G, F]): Free[F, A] =
+  def injectRoll[F[_], G[_], A](ga: G[Free[F, A]])(implicit I: InjectK[G, F]): Free[F, A] =
     Free.roll(I.inj(ga))
 
-  def match_[F[_], G[_], A](fa: Free[F, A])(implicit F: Functor[F], I: Inject[G, F]): Option[G[Free[F, A]]] =
+  def match_[F[_], G[_], A](fa: Free[F, A])(implicit F: Functor[F], I: InjectK[G, F]): Option[G[Free[F, A]]] =
     fa.resume.fold(I.prj(_), _ => None)
 
   /**

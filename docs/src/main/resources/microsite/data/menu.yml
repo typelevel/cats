@@ -72,6 +72,9 @@ options:
      - title: Invariant
        url: typeclasses/invariant.html
        menu_section: variance
+     - title: InvariantMonoidal
+       url: typeclasses/invariantmonoidal.html
+       menu_section: variance
 
   - title: Foldable
     url: typeclasses/foldable.html
@@ -119,6 +122,14 @@ options:
 
   - title: FreeMonads
     url: datatypes/freemonad.html
+    menu_type: data
+
+  - title: FunctionK
+    url: datatypes/functionk.html
+    menu_type: data
+
+  - title: Id
+    url: datatypes/id.html
     menu_type: data
 
   - title: Kleisli

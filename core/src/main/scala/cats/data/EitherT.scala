@@ -195,17 +195,13 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *      |   EitherT(List(Either.right(_.toString), Either.left("error")))
    * scala> val fa: EitherT[List, String, Int] =
    *      |   EitherT(List(Either.right(1), Either.right(2)))
-   * scala> type ErrorOr[A] = Either[String, A]
-   * scala> type ListErrorOr[A] = Nested[List, ErrorOr, A]
+   * scala> type ListErrorOr[A] = Nested[List, Either[String, ?], A]
    * scala> ff.ap(fa)
    * res0: EitherT[List,String,String] = EitherT(List(Right(1), Right(2), Left(error)))
    * scala> EitherT((ff.toNested: ListErrorOr[Int => String]).ap(fa.toNested: ListErrorOr[Int]).value)
    * res1: EitherT[List,String,String] = EitherT(List(Right(1), Right(2), Left(error), Left(error)))
    * }}}
    *
-   * Note that we need the `ErrorOr` type alias above because otherwise we can't use the
-   * syntax function `ap` on `Nested[List, Either[A, ?], B]`. This won't be needed after cats has
-   * decided [[https://github.com/typelevel/cats/issues/1073 how to handle the SI-2712 fix]].
    */
   def toNested: Nested[F, Either[A, ?], B] = Nested[F, Either[A, ?], B](value)
 
@@ -432,7 +428,7 @@ private[data] trait EitherTFunctor[F[_], L] extends Functor[EitherT[F, L, ?]] {
 
 private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, ?]] with EitherTFunctor[F, L] {
   implicit val F: Monad[F]
-  def pure[A](a: A): EitherT[F, L, A] = EitherT(F.pure(Either.right(a)))
+  def pure[A](a: A): EitherT[F, L, A] = EitherT.pure(a)
   def flatMap[A, B](fa: EitherT[F, L, A])(f: A => EitherT[F, L, B]): EitherT[F, L, B] = fa flatMap f
   def tailRecM[A, B](a: A)(f: A => EitherT[F, L, Either[A, B]]): EitherT[F, L, B] =
     EitherT(F.tailRecM(a)(a0 => F.map(f(a0).value) {
@@ -461,11 +457,13 @@ private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, 
     fla.recoverWith(pf)
 }
 
+/* TODO violates monadFilter right empty law -- re-enable when MonadFilter laws are split in to weak/strong
 private[data] trait EitherTMonadFilter[F[_], L] extends MonadFilter[EitherT[F, L, ?]] with EitherTMonadError[F, L] {
   implicit val F: Monad[F]
   implicit val L: Monoid[L]
   def empty[A]: EitherT[F, L, A] = EitherT(F.pure(Either.left(L.empty)))
 }
+*/
 
 /* TODO violates right absorbtion, right distributivity, and left distributivity -- re-enable when MonadCombine laws are split in to weak/strong
 private[data] trait EitherTMonadCombine[F[_], L] extends MonadCombine[EitherT[F, L, ?]] with EitherTMonadFilter[F, L] with EitherTSemigroupK[F, L] {
