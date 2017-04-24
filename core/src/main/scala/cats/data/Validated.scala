@@ -260,6 +260,9 @@ object Validated extends ValidatedInstances with ValidatedFunctions{
    */
   def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
 
+  /**
+   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   */
   private[data] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean = true ) extends AnyVal{
     def apply[A](f: => A)(implicit T: ClassTag[T], NT: NotNull[T]): Validated[T, A] =
       try {

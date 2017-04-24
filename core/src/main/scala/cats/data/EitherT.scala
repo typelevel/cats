@@ -231,6 +231,9 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
 object EitherT extends EitherTInstances {
 
+  /**
+   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   */
   private[data] final class LeftPartiallyApplied[B](val dummy: Boolean = true ) extends AnyVal {
     def apply[F[_], A](fa: F[A])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fa)(Either.left))
   }
@@ -246,6 +249,9 @@ object EitherT extends EitherTInstances {
    */
   final def left[B]: LeftPartiallyApplied[B] = new LeftPartiallyApplied[B]
 
+  /**
+   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   */
   private[data] final class LeftTPartiallyApplied[F[_], B](val dummy: Boolean = true ) extends AnyVal {
     def apply[A](a: A)(implicit F: Applicative[F]): EitherT[F, A, B] = EitherT(F.pure(Either.left(a)))
   }
@@ -261,6 +267,9 @@ object EitherT extends EitherTInstances {
    */
   final def leftT[F[_], B]: LeftTPartiallyApplied[F, B] = new LeftTPartiallyApplied[F, B]
 
+  /**
+   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   */
   private[data] final class RightPartiallyApplied[A](val dummy: Boolean = true ) extends AnyVal {
     def apply[F[_], B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fb)(Either.right))
   }
@@ -276,6 +285,9 @@ object EitherT extends EitherTInstances {
    */
   final def right[A]: RightPartiallyApplied[A] = new RightPartiallyApplied[A]
 
+  /**
+   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   */
   private[data] final class PurePartiallyApplied[F[_], A](val dummy: Boolean = true ) extends AnyVal {
     def apply[B](b: B)(implicit F: Applicative[F]): EitherT[F, A, B] = right(F.pure(b))
   }
@@ -333,6 +345,9 @@ object EitherT extends EitherTInstances {
    */
   final def fromEither[F[_]]: FromEitherPartiallyApplied[F] = new FromEitherPartiallyApplied
 
+  /**
+   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   */
   private[data] final class FromEitherPartiallyApplied[F[_]](val dummy: Boolean = true ) extends AnyVal {
     def apply[E, A](either: Either[E, A])(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(either))
@@ -351,6 +366,9 @@ object EitherT extends EitherTInstances {
    */
   final def fromOption[F[_]]: FromOptionPartiallyApplied[F] = new FromOptionPartiallyApplied
 
+  /**
+   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   */
   private[data] final class FromOptionPartiallyApplied[F[_]](val dummy: Boolean = true ) extends AnyVal {
     def apply[E, A](opt: Option[A], ifNone: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(Either.fromOption(opt, ifNone)))
@@ -386,6 +404,9 @@ object EitherT extends EitherTInstances {
     */
   final def cond[F[_]]: CondPartiallyApplied[F] = new CondPartiallyApplied
 
+  /**
+   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   */
   private[data] final class CondPartiallyApplied[F[_]](val dummy: Boolean = true ) extends AnyVal {
     def apply[E, A](test: Boolean, right: => A, left: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(Either.cond(test, right, left)))

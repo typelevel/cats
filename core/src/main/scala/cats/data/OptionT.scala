@@ -164,6 +164,9 @@ object OptionT extends OptionTInstances {
    */
   def fromOption[F[_]]: FromOptionPartiallyApplied[F] = new FromOptionPartiallyApplied
 
+  /**
+   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   */
   private[data] final class FromOptionPartiallyApplied[F[_]](val dummy: Boolean = true ) extends AnyVal {
     def apply[A](value: Option[A])(implicit F: Applicative[F]): OptionT[F, A] =
       OptionT(F.pure(value))

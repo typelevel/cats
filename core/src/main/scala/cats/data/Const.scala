@@ -40,6 +40,9 @@ object Const extends ConstInstances {
   def empty[A, B](implicit A: Monoid[A]): Const[A, B] =
     Const(A.empty)
 
+  /**
+   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   */
   private[data] final class OfPartiallyApplied[B](val dummy: Boolean = true ) extends AnyVal {
     def apply[A](a: A): Const[A, B] = Const(a)
   }
