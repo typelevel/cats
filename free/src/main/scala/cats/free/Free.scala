@@ -217,12 +217,12 @@ object Free {
    * bound independently of the `A` parameter below.
    */
   def inject[F[_], G[_]]: FreeInjectKPartiallyApplied[F, G] =
-    new FreeInjectKPartiallyApplied
+    new FreeInjectKPartiallyApplied(true)
 
   /**
    * Pre-application of an injection to a `F[A]` value.
    */
-  final class FreeInjectKPartiallyApplied[F[_], G[_]] private[free] {
+  private[free] final class FreeInjectKPartiallyApplied[F[_], G[_]](val dummy: Boolean) extends AnyVal {
     def apply[A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
       Free.liftF(I.inj(fa))
   }

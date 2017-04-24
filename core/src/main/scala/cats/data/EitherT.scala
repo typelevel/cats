@@ -229,11 +229,9 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     Nested[F, ValidatedNel[A, ?], B](F.map(value)(_.toValidatedNel))
 }
 
-object EitherT extends EitherTInstances with EitherTFunctions
+object EitherT extends EitherTInstances {
 
-private[data] trait EitherTFunctions {
-
-  final class LeftPartiallyApplied[B] private[EitherTFunctions] {
+  private[data] final class LeftPartiallyApplied[B](val dummy: Boolean) extends AnyVal {
     def apply[F[_], A](fa: F[A])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fa)(Either.left))
   }
 
@@ -246,9 +244,9 @@ private[data] trait EitherTFunctions {
    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Left(err)))
    * }}}
    */
-  final def left[B]: LeftPartiallyApplied[B] = new LeftPartiallyApplied[B]
+  final def left[B]: LeftPartiallyApplied[B] = new LeftPartiallyApplied[B](true)
 
-  final class LeftTPartiallyApplied[F[_], B] private[EitherTFunctions] {
+  private[data] final class LeftTPartiallyApplied[F[_], B](val dummy: Boolean) extends AnyVal {
     def apply[A](a: A)(implicit F: Applicative[F]): EitherT[F, A, B] = EitherT(F.pure(Either.left(a)))
   }
 
@@ -261,9 +259,9 @@ private[data] trait EitherTFunctions {
    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Left(err)))
    * }}}
    */
-  final def leftT[F[_], B]: LeftTPartiallyApplied[F, B] = new LeftTPartiallyApplied[F, B]
+  final def leftT[F[_], B]: LeftTPartiallyApplied[F, B] = new LeftTPartiallyApplied[F, B](true)
 
-  final class RightPartiallyApplied[A] private[EitherTFunctions] {
+  private[data] final class RightPartiallyApplied[A](val dummy: Boolean) extends AnyVal {
     def apply[F[_], B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fb)(Either.right))
   }
 
@@ -276,9 +274,9 @@ private[data] trait EitherTFunctions {
    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(3)))
    * }}}
    */
-  final def right[A]: RightPartiallyApplied[A] = new RightPartiallyApplied[A]
+  final def right[A]: RightPartiallyApplied[A] = new RightPartiallyApplied[A](true)
 
-  final class PurePartiallyApplied[F[_], A] private[EitherTFunctions] {
+  private[data] final class PurePartiallyApplied[F[_], A](val dummy: Boolean) extends AnyVal {
     def apply[B](b: B)(implicit F: Applicative[F]): EitherT[F, A, B] = right(F.pure(b))
   }
 
@@ -291,7 +289,7 @@ private[data] trait EitherTFunctions {
    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(3)))
    * }}}
    */
-  final def pure[F[_], A]: PurePartiallyApplied[F, A] = new PurePartiallyApplied[F, A]
+  final def pure[F[_], A]: PurePartiallyApplied[F, A] = new PurePartiallyApplied[F, A](true)
 
   /**
    * Alias for [[pure]]
@@ -333,9 +331,9 @@ private[data] trait EitherTFunctions {
    *
    * The reason for the indirection is to emulate currying type parameters.
    */
-  final def fromEither[F[_]]: FromEitherPartiallyApplied[F] = new FromEitherPartiallyApplied
+  final def fromEither[F[_]]: FromEitherPartiallyApplied[F] = new FromEitherPartiallyApplied(true)
 
-  final class FromEitherPartiallyApplied[F[_]] private[EitherTFunctions] {
+  private[data] final class FromEitherPartiallyApplied[F[_]](val dummy: Boolean) extends AnyVal {
     def apply[E, A](either: Either[E, A])(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(either))
   }
@@ -351,9 +349,9 @@ private[data] trait EitherTFunctions {
    * res1: EitherT[List, String, Int] = EitherT(List(Right(42)))
    * }}}
    */
-  final def fromOption[F[_]]: FromOptionPartiallyApplied[F] = new FromOptionPartiallyApplied
+  final def fromOption[F[_]]: FromOptionPartiallyApplied[F] = new FromOptionPartiallyApplied(true)
 
-  final class FromOptionPartiallyApplied[F[_]] private[EitherTFunctions] {
+  private[data] final class FromOptionPartiallyApplied[F[_]](val dummy: Boolean) extends AnyVal {
     def apply[E, A](opt: Option[A], ifNone: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(Either.fromOption(opt, ifNone)))
   }
@@ -386,9 +384,9 @@ private[data] trait EitherTFunctions {
     * res0: EitherT[Id, String, String] = EitherT(Left(The input does not look like a phone number))
     * }}}
     */
-  final def cond[F[_]]: CondPartiallyApplied[F] = new CondPartiallyApplied
+  final def cond[F[_]]: CondPartiallyApplied[F] = new CondPartiallyApplied(true)
 
-  final class CondPartiallyApplied[F[_]] private[EitherTFunctions] {
+  private[data] final class CondPartiallyApplied[F[_]](val dummy: Boolean) extends AnyVal {
     def apply[E, A](test: Boolean, right: => A, left: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(Either.cond(test, right, left)))
   }

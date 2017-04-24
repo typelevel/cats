@@ -242,6 +242,33 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 object Validated extends ValidatedInstances with ValidatedFunctions{
   final case class Valid[+A](a: A) extends Validated[Nothing, A]
   final case class Invalid[+E](e: E) extends Validated[E, Nothing]
+
+
+  /**
+   * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
+   * the resulting `Validated`. Uncaught exceptions are propagated.
+   *
+   * For example:
+   * {{{
+   * scala> Validated.catchOnly[NumberFormatException] { "foo".toInt }
+   * res0: Validated[NumberFormatException, Int] = Invalid(java.lang.NumberFormatException: For input string: "foo")
+   * }}}
+   *
+   * This method and its usage of [[NotNull]] are inspired by and derived from
+   * the `fromTryCatchThrowable` method [[https://github.com/scalaz/scalaz/pull/746/files contributed]]
+   * to Scalaz by Brian McKenna.
+   */
+  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T](true)
+
+  private[data] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean) extends AnyVal{
+    def apply[A](f: => A)(implicit T: ClassTag[T], NT: NotNull[T]): Validated[T, A] =
+      try {
+        valid(f)
+      } catch {
+        case t if T.runtimeClass.isInstance(t) =>
+          invalid(t.asInstanceOf[T])
+      }
+  }
 }
 
 private[data] sealed abstract class ValidatedInstances extends ValidatedInstances1 {
@@ -401,31 +428,6 @@ private[data] trait ValidatedFunctions {
 
   def valid[A, B](b: B): Validated[A, B] = Validated.Valid(b)
 
-  /**
-   * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
-   * the resulting `Validated`. Uncaught exceptions are propagated.
-   *
-   * For example:
-   * {{{
-   * scala> Validated.catchOnly[NumberFormatException] { "foo".toInt }
-   * res0: Validated[NumberFormatException, Int] = Invalid(java.lang.NumberFormatException: For input string: "foo")
-   * }}}
-   *
-   * This method and its usage of [[NotNull]] are inspired by and derived from
-   * the `fromTryCatchThrowable` method [[https://github.com/scalaz/scalaz/pull/746/files contributed]]
-   * to Scalaz by Brian McKenna.
-   */
-  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
-
-  final class CatchOnlyPartiallyApplied[T] private[ValidatedFunctions] {
-    def apply[A](f: => A)(implicit T: ClassTag[T], NT: NotNull[T]): Validated[T, A] =
-      try {
-        valid(f)
-      } catch {
-        case t if T.runtimeClass.isInstance(t) =>
-          invalid(t.asInstanceOf[T])
-      }
-  }
 
   def catchNonFatal[A](f: => A): Validated[Throwable, A] =
     try {

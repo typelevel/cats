@@ -40,7 +40,7 @@ object Const extends ConstInstances {
   def empty[A, B](implicit A: Monoid[A]): Const[A, B] =
     Const(A.empty)
 
-  final class OfPartiallyApplied[B] {
+  private[data] final class OfPartiallyApplied[B](val dummy: Boolean) extends AnyVal {
     def apply[A](a: A): Const[A, B] = Const(a)
   }
 
@@ -52,7 +52,7 @@ object Const extends ConstInstances {
    * res0: Const[String, Int] = Const(a)
    * }}}
    */
-  def of[B]: OfPartiallyApplied[B] = new OfPartiallyApplied
+  def of[B]: OfPartiallyApplied[B] = new OfPartiallyApplied(true)
 }
 
 private[data] sealed abstract class ConstInstances extends ConstInstances0 {

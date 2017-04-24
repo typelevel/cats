@@ -162,9 +162,9 @@ object OptionT extends OptionTInstances {
    *
    * The reason for the indirection is to emulate currying type parameters.
    */
-  def fromOption[F[_]]: FromOptionPartiallyApplied[F] = new FromOptionPartiallyApplied
+  def fromOption[F[_]]: FromOptionPartiallyApplied[F] = new FromOptionPartiallyApplied(true)
 
-  final class FromOptionPartiallyApplied[F[_]] private[OptionT] {
+  private[data] final class FromOptionPartiallyApplied[F[_]](val dummy: Boolean) extends AnyVal {
     def apply[A](value: Option[A])(implicit F: Applicative[F]): OptionT[F, A] =
       OptionT(F.pure(value))
   }
