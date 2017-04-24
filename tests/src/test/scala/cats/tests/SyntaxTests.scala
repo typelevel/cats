@@ -244,6 +244,11 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val fa = a.pure[F]
   }
 
+  def testMonadTrans[MT[_[_], _], M[_], A](implicit MT: MonadTrans[MT], M: Monad[M]): Unit = {
+    val fa = mock[M[A]]
+    val mtf = fa.liftT[MT]
+  }
+
   def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, ?], E]): Unit = {
     type G[X] = F[E, X]
 
