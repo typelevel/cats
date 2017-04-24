@@ -395,7 +395,7 @@ class EitherTTests extends CatsSuite {
 
     for {
       s1 <- EitherT(either1)
-      s2 <- EitherT.right[Id, AppError, String]("1".pure[Id])
+      s2 <- EitherT.pure[Id, AppError, String]("1")
     } yield s1 ++ s2
   }
 }
