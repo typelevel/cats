@@ -260,7 +260,7 @@ final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalast
    * }}}
    */
   def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] =
-    new CatchOnlyPartiallyApplied[T](true)
+    new CatchOnlyPartiallyApplied[T]
 
   def catchNonFatal[A](f: => A): Either[Throwable, A] =
     try {
@@ -288,7 +288,7 @@ final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalast
   }
 }
 
-private[syntax] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean) extends AnyVal {
+private[syntax] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean = true ) extends AnyVal {
   def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): Either[T, A] =
     try {
       Right(f)

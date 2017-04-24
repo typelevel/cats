@@ -258,9 +258,9 @@ object Validated extends ValidatedInstances with ValidatedFunctions{
    * the `fromTryCatchThrowable` method [[https://github.com/scalaz/scalaz/pull/746/files contributed]]
    * to Scalaz by Brian McKenna.
    */
-  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T](true)
+  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
 
-  private[data] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean) extends AnyVal{
+  private[data] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean = true ) extends AnyVal{
     def apply[A](f: => A)(implicit T: ClassTag[T], NT: NotNull[T]): Validated[T, A] =
       try {
         valid(f)
