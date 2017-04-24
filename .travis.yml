@@ -9,14 +9,14 @@ git:
 
 scala:
   - 2.10.6
-  - 2.11.8
+  - 2.11.11
 
 jdk:
   - oraclejdk7
 
 matrix:
   include:
-  - scala: 2.12.1
+  - scala: 2.12.2
     jdk: oraclejdk8
 
 before_install:
