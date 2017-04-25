@@ -124,6 +124,24 @@
       </span>
       
       
+    </li><li name="cats.evidence" visbl="pub" class="indented2 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="evidence"></a><a id="evidence:evidence"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#evidence" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="evidence/index.html">
+              <span class="name">evidence</span>
+            </a>
+      </span>
+      
+      
     </li><li name="cats.free" visbl="pub" class="indented2 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="free"></a><a id="free:free"></a>
       <span class="permalink">
@@ -351,6 +369,14 @@ a normal value and returns a value in a context (A =&gt; F[B]).">
                         <a class="trait" href="FunctorFilter.html" title=""></a>
                         <a href="FunctorFilter.html" title="">
                           FunctorFilter
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="InjectK$.html" title=""></a>
+                        <a class="class" href="InjectK.html" title="The injection type class as described in &quot;Data types a la carte&quot;
+(Swierstra 2008)."></a>
+                        <a href="InjectK.html" title="The injection type class as described in &quot;Data types a la carte&quot;
+(Swierstra 2008).">
+                          InjectK
                         </a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="InvariantMonoidal$.html" title=""></a>
@@ -587,7 +613,39 @@ from what their type classes are looking for.">
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.Alternative" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="cats.:&lt;:" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id=":&lt;:[F[_],G[_]]=cats.InjectK[F,G]"></a><a id=":&lt;:[F[_],G[_]]::&lt;:[F,G]"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#:&lt;:[F[_],G[_]]=cats.InjectK[F,G]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $colon$less$colon" class="name">:&lt;:</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result alias"> = <a href="InjectK.html" class="extype" name="cats.InjectK">InjectK</a>[<span class="extype" name="cats.:&lt;:.F">F</span>, <span class="extype" name="cats.:&lt;:.G">G</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt"><a href="InjectK.html" class="extype" name="cats.InjectK">cats.InjectK</a>[F, G]</p>
+    </li><li name="cats.:≺:" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id=":≺:[F[_],G[_]]=cats.InjectK[F,G]"></a><a id=":≺:[F[_],G[_]]::≺:[F,G]"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#:≺:[F[_],G[_]]=cats.InjectK[F,G]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $colon$u227A$colon" class="name">:≺:</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result alias"> = <a href="InjectK.html" class="extype" name="cats.InjectK">InjectK</a>[<span class="extype" name="cats.:≺:.F">F</span>, <span class="extype" name="cats.:≺:.G">G</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt"><a href="InjectK.html" class="extype" name="cats.InjectK">cats.InjectK</a>[F, G]</p>
+    </li><li name="cats.Alternative" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Alternative[F[_]]extendsApplicative[F]withMonoidK[F]withSerializable"></a><a id="Alternative[F[_]]:Alternative[F]"></a>
       <span class="permalink">
       <a href="../cats/index.html#Alternative[F[_]]extendsApplicative[F]withMonoidK[F]withSerializable" title="Permalink">
@@ -1095,6 +1153,28 @@ is applying a pure function of type <code>A =&gt; B</code> to a pure value  of
 type <code>A</code> to get a pure value of type <code>B</code>. That is, the instance
 encodes pure unary function application.
 </p></div></div>
+    </li><li name="cats.InjectK" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="InjectK[F[_],G[_]]extendsAnyRef"></a><a id="InjectK[F[_],G[_]]:InjectK[F,G]"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#InjectK[F[_],G[_]]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="The injection type class as described in &quot;Data types a la carte&quot;
+(Swierstra 2008)." href="InjectK.html">
+              <span class="name">InjectK</span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">The injection type class as described in &quot;Data types a la carte&quot;
+(Swierstra 2008).</p><div class="fullcomment"><div class="comment cmt"><p>The injection type class as described in &quot;Data types a la carte&quot;
+(Swierstra 2008).
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf" target="_blank">http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf</a></p></span></dd></dl></div>
     </li><li name="cats.InvariantMonoidal" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="InvariantMonoidal[F[_]]extendsInvariant[F]withCartesian[F]withSerializable"></a><a id="InvariantMonoidal[F[_]]:InvariantMonoidal[F]"></a>
       <span class="permalink">
@@ -2108,6 +2188,24 @@ however the Scala compiler will not find them without some coercing.
         <a title="" href="FunctorFilter$.html">
               <span class="name">FunctorFilter</span>
             </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.InjectK" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InjectK"></a><a id="InjectK:InjectK"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#InjectK" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="InjectK$.html">
+              <span class="name">InjectK</span>
+            </a><span class="result"> extends <span class="extype" name="cats.InjectKInstances">InjectKInstances</span></span>
       </span>
       
       

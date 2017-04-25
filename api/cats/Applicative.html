@@ -126,6 +126,24 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.evidence" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="evidence"></a><a id="evidence:evidence"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#evidence" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="evidence/index.html">
+              <span class="name">evidence</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
     </li><li name="cats.free" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="free"></a><a id="free:free"></a>
       <span class="permalink">
@@ -353,6 +371,14 @@ a normal value and returns a value in a context (A =&gt; F[B]).">
                         <a class="trait" href="FunctorFilter.html" title=""></a>
                         <a href="FunctorFilter.html" title="">
                           FunctorFilter
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="InjectK$.html" title=""></a>
+                        <a class="class" href="InjectK.html" title="The injection type class as described in &quot;Data types a la carte&quot;
+(Swierstra 2008)."></a>
+                        <a href="InjectK.html" title="The injection type class as described in &quot;Data types a la carte&quot;
+(Swierstra 2008).">
+                          InjectK
                         </a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="InvariantMonoidal$.html" title=""></a>
@@ -2244,6 +2270,40 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
       
       <p class="shortcomment cmt">Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the right.</p><div class="fullcomment"><div class="comment cmt"><p>Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the right.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+    </li><li name="cats.Applicative#unit" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unit:F[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Applicative.html#unit:F[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unit</span><span class="result">: <span class="extype" name="cats.Applicative.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns an <code>F[Unit]</code> value, equivalent with <code>pure(())</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an <code>F[Unit]</code> value, equivalent with <code>pure(())</code>.</p><p>A useful shorthand, also allowing implementations to optimize the
+returned reference (e.g. it can be a <code>val</code>).
+</p></div></div>
+    </li><li name="cats.Applicative#unlessA" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="unlessA[A](cond:Boolean)(f:=&gt;F[A]):F[Unit]"></a><a id="unlessA[A](Boolean)(⇒F[A]):F[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Applicative.html#unlessA[A](cond:Boolean)(f:=&gt;F[A]):F[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unlessA</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span name="f">f: ⇒ <span class="extype" name="cats.Applicative.F">F</span>[<span class="extype" name="cats.Applicative.unlessA.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Applicative.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns the given argument if <code>cond</code> is <code>false</code>, otherwise, unit lifted into F.</p>
     </li><li name="cats.Functor#void" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="void[A](fa:F[A]):F[Unit]"></a><a id="void[A](F[A]):F[Unit]"></a>
       <span class="permalink">
@@ -2328,6 +2388,22 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.Applicative#whenA" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="whenA[A](cond:Boolean)(f:=&gt;F[A]):F[Unit]"></a><a id="whenA[A](Boolean)(⇒F[A]):F[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Applicative.html#whenA[A](cond:Boolean)(f:=&gt;F[A]):F[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">whenA</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span name="f">f: ⇒ <span class="extype" name="cats.Applicative.F">F</span>[<span class="extype" name="cats.Applicative.whenA.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Applicative.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns the given argument if <code>cond</code> is <code>true</code>, otherwise, unit lifted into F.</p>
     </li><li name="cats.Functor#widen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="widen[A,B&gt;:A](fa:F[A]):F[B]"></a><a id="widen[A,B&gt;:A](F[A]):F[B]"></a>
       <span class="permalink">

@@ -131,10 +131,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
                           Const
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Coproduct$.html" title=""></a>
-                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
-                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
-                          Coproduct
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="EitherK.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="EitherK.html" title="F on the left and G on the right of scala.util.Either.">
+                          EitherK
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="EitherT$.html" title=""></a>
@@ -170,8 +170,8 @@ fail-fast effect of Either.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
-                        <a class="class" href="Nested.html" title="Similar to cats.data.Prod, but for nested composition."></a>
-                        <a href="Nested.html" title="Similar to cats.data.Prod, but for nested composition.">
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">
                           Nested
                         </a>
                       </li><li class="current-entities indented2">
@@ -205,12 +205,6 @@ convenient methods for working with this nested structure.">
                           OptionT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Prod$.html" title=""></a>
-                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
-                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
-                          Prod
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Reader$.html" title=""></a>
                         <a href="package$$Reader$.html" title="">
@@ -229,6 +223,12 @@ argument and produces an A value wrapped in F."></a>
                         <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
 argument and produces an A value wrapped in F.">
                           StateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Tuple2K$.html" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">
+                          Tuple2K
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Validated$.html" title=""></a>
@@ -472,6 +472,22 @@ argument and produces an A value wrapped in F.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorFunctions</dd></dl></div>
+    </li><li name="cats.data.IorFunctions#bothNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bothNel[A,B](a:A,b:B):cats.data.IorNel[A,B]"></a><a id="bothNel[A,B](A,B):IorNel[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Ior$.html#bothNel[A,B](a:A,b:B):cats.data.IorNel[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bothNel</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.IorFunctions.bothNel.A">A</span></span>, <span name="b">b: <span class="extype" name="cats.data.IorFunctions.bothNel.B">B</span></span>)</span><span class="result">: <a href="index.html#IorNel[+B,+A]=cats.data.Ior[cats.data.NonEmptyList[B],A]" class="extmbr" name="cats.data.IorNel">IorNel</a>[<span class="extype" name="cats.data.IorFunctions.bothNel.A">A</span>, <span class="extype" name="cats.data.IorFunctions.bothNel.B">B</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorFunctions</dd></dl></div>
     </li><li name="cats.data.IorInstances#catsDataBifunctorForIor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsDataBifunctorForIor:cats.functor.Bifunctor[cats.data.Ior]"></a><a id="catsDataBifunctorForIor:Bifunctor[Ior]"></a>
       <span class="permalink">
@@ -504,10 +520,10 @@ argument and produces an A value wrapped in F.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorInstances</dd></dl></div>
-    </li><li name="cats.data.IorInstances#catsDataMonadForIor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadForIor[A](implicitevidence$7:cats.Semigroup[A]):cats.Monad[[β$0$]cats.data.Ior[A,β$0$]]"></a><a id="catsDataMonadForIor[A](Semigroup[A]):Monad[[β$0$]Ior[A,β$0$]]"></a>
+    </li><li name="cats.data.IorInstances#catsDataMonadErrorForIor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadErrorForIor[A](implicitevidence$7:cats.Semigroup[A]):cats.MonadError[[β$0$]cats.data.Ior[A,β$0$],A]"></a><a id="catsDataMonadErrorForIor[A](Semigroup[A]):MonadError[[β$0$]Ior[A,β$0$],A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Ior$.html#catsDataMonadForIor[A](implicitevidence$7:cats.Semigroup[A]):cats.Monad[[β$0$]cats.data.Ior[A,β$0$]]" title="Permalink">
+      <a href="../../cats/data/Ior$.html#catsDataMonadErrorForIor[A](implicitevidence$7:cats.Semigroup[A]):cats.MonadError[[β$0$]cats.data.Ior[A,β$0$],A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -516,7 +532,7 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadForIor</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.IorInstances.catsDataMonadForIor.A">A</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β$0$]<a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.IorInstances.catsDataMonadForIor.A">A</span>, <span class="extype" name="cats.data.IorInstances.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>]]</span>
+        <span class="name">catsDataMonadErrorForIor</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.IorInstances.catsDataMonadErrorForIor.A">A</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[β$0$]<a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.IorInstances.catsDataMonadErrorForIor.A">A</span>, <span class="extype" name="cats.data.IorInstances.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>], <span class="extype" name="cats.data.IorInstances.catsDataMonadErrorForIor.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorInstances</dd></dl></div>
@@ -553,9 +569,9 @@ argument and produces an A value wrapped in F.">
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorInstances</dd></dl></div>
     </li><li name="cats.data.IorInstances0#catsDataTraverseFunctorForIor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataTraverseFunctorForIor[A]:cats.Traverse[[β$2$]cats.data.Ior[A,β$2$]]withcats.Functor[[β$3$]cats.data.Ior[A,β$3$]]"></a><a id="catsDataTraverseFunctorForIor[A]:Traverse[[β$2$]Ior[A,β$2$]]withFunctor[[β$3$]Ior[A,β$3$]]"></a>
+      <a id="catsDataTraverseFunctorForIor[A]:cats.Traverse[[β$2$]cats.data.Ior[A,β$2$]]"></a><a id="catsDataTraverseFunctorForIor[A]:Traverse[[β$2$]Ior[A,β$2$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Ior$.html#catsDataTraverseFunctorForIor[A]:cats.Traverse[[β$2$]cats.data.Ior[A,β$2$]]withcats.Functor[[β$3$]cats.data.Ior[A,β$3$]]" title="Permalink">
+      <a href="../../cats/data/Ior$.html#catsDataTraverseFunctorForIor[A]:cats.Traverse[[β$2$]cats.data.Ior[A,β$2$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -564,7 +580,7 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataTraverseFunctorForIor</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$2$]<a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.IorInstances0.catsDataTraverseFunctorForIor.A">A</span>, <span class="extype" name="cats.data.IorInstances0.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>]] with <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[β$3$]<a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.IorInstances0.catsDataTraverseFunctorForIor.A">A</span>, <span class="extype" name="cats.data.IorInstances0.&lt;refinement&gt;.Λ$.β$3$">β$3$</span>]]</span>
+        <span class="name">catsDataTraverseFunctorForIor</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$2$]<a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.IorInstances0.catsDataTraverseFunctorForIor.A">A</span>, <span class="extype" name="cats.data.IorInstances0.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorInstances0</dd></dl></div>
@@ -724,6 +740,22 @@ defined (respectively).</p></dd></dl><dl class="attributes block"> <dt>Definitio
       </span>
       <span class="symbol">
         <span class="name">left</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.IorFunctions.left.A">A</span></span>)</span><span class="result">: <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.IorFunctions.left.A">A</span>, <span class="extype" name="cats.data.IorFunctions.left.B">B</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorFunctions</dd></dl></div>
+    </li><li name="cats.data.IorFunctions#leftNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="leftNel[A,B](a:A):cats.data.IorNel[A,B]"></a><a id="leftNel[A,B](A):IorNel[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Ior$.html#leftNel[A,B](a:A):cats.data.IorNel[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftNel</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.IorFunctions.leftNel.A">A</span></span>)</span><span class="result">: <a href="index.html#IorNel[+B,+A]=cats.data.Ior[cats.data.NonEmptyList[B],A]" class="extmbr" name="cats.data.IorNel">IorNel</a>[<span class="extype" name="cats.data.IorFunctions.leftNel.A">A</span>, <span class="extype" name="cats.data.IorFunctions.leftNel.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorFunctions</dd></dl></div>

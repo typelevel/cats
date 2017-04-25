@@ -131,10 +131,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
                           Const
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Coproduct$.html" title=""></a>
-                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
-                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
-                          Coproduct
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="EitherK.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="EitherK.html" title="F on the left and G on the right of scala.util.Either.">
+                          EitherK
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="" title=""></a>
@@ -170,8 +170,8 @@ fail-fast effect of Either.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
-                        <a class="class" href="Nested.html" title="Similar to cats.data.Prod, but for nested composition."></a>
-                        <a href="Nested.html" title="Similar to cats.data.Prod, but for nested composition.">
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">
                           Nested
                         </a>
                       </li><li class="current-entities indented2">
@@ -205,12 +205,6 @@ convenient methods for working with this nested structure.">
                           OptionT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Prod$.html" title=""></a>
-                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
-                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
-                          Prod
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Reader$.html" title=""></a>
                         <a href="package$$Reader$.html" title="">
@@ -229,6 +223,12 @@ argument and produces an A value wrapped in F."></a>
                         <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
 argument and produces an A value wrapped in F.">
                           StateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Tuple2K$.html" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">
+                          Tuple2K
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Validated$.html" title=""></a>
@@ -375,6 +375,70 @@ argument and produces an A value wrapped in F.">
       </span>
       <span class="symbol">
         <span class="name">FromOptionPartiallyApplied</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
+    </li><li name="cats.data.EitherTFunctions.LeftPartiallyApplied" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LeftPartiallyApplied[B]extendsAnyRef"></a><a id="LeftPartiallyApplied[B]:LeftPartiallyApplied[B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#LeftPartiallyApplied[B]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">LeftPartiallyApplied</span><span class="tparams">[<span name="B">B</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
+    </li><li name="cats.data.EitherTFunctions.LeftTPartiallyApplied" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LeftTPartiallyApplied[F[_],B]extendsAnyRef"></a><a id="LeftTPartiallyApplied[F[_],B]:LeftTPartiallyApplied[F,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#LeftTPartiallyApplied[F[_],B]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">LeftTPartiallyApplied</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
+    </li><li name="cats.data.EitherTFunctions.PurePartiallyApplied" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PurePartiallyApplied[F[_],A]extendsAnyRef"></a><a id="PurePartiallyApplied[F[_],A]:PurePartiallyApplied[F,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#PurePartiallyApplied[F[_],A]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">PurePartiallyApplied</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
+    </li><li name="cats.data.EitherTFunctions.RightPartiallyApplied" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RightPartiallyApplied[A]extendsAnyRef"></a><a id="RightPartiallyApplied[A]:RightPartiallyApplied[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#RightPartiallyApplied[A]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">RightPartiallyApplied</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
@@ -821,6 +885,27 @@ scala&gt; EitherT.fromOption[<span class="std">List</span>](o, <span class="lit"
 res0: EitherT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span>]  = EitherT(<span class="std">List</span>(Left(Answer not known.)))
 scala&gt; EitherT.fromOption[<span class="std">List</span>](<span class="std">Some</span>(<span class="num">42</span>), <span class="lit">"Answer not known."</span>)
 res1: EitherT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">List</span>(Right(<span class="num">42</span>)))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
+    </li><li name="cats.data.EitherTFunctions#fromOptionF" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromOptionF[F[_],E,A](fopt:F[Option[A]],ifNone:=&gt;E)(implicitF:cats.Functor[F]):cats.data.EitherT[F,E,A]"></a><a id="fromOptionF[F[_],E,A](F[Option[A]],⇒E)(Functor[F]):EitherT[F,E,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#fromOptionF[F[_],E,A](fopt:F[Option[A]],ifNone:=&gt;E)(implicitF:cats.Functor[F]):cats.data.EitherT[F,E,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromOptionF</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="A">A</span>]</span><span class="params">(<span name="fopt">fopt: <span class="extype" name="cats.data.EitherTFunctions.fromOptionF.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.EitherTFunctions.fromOptionF.A">A</span>]]</span>, <span name="ifNone">ifNone: ⇒ <span class="extype" name="cats.data.EitherTFunctions.fromOptionF.E">E</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherTFunctions.fromOptionF.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTFunctions.fromOptionF.F">F</span>, <span class="extype" name="cats.data.EitherTFunctions.fromOptionF.E">E</span>, <span class="extype" name="cats.data.EitherTFunctions.fromOptionF.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Transforms an <code>F[Option]</code> into an <code>EitherT</code>, using the second argument if the <code>Option</code> is a <code>None</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transforms an <code>F[Option]</code> into an <code>EitherT</code>, using the second argument if the <code>Option</code> is a <code>None</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> o: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
+scala&gt; EitherT.fromOptionF(<span class="std">List</span>(o), <span class="lit">"Answer not known."</span>)
+res0: EitherT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span>]  = EitherT(<span class="std">List</span>(Left(Answer not known.)))
+scala&gt; EitherT.fromOptionF(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">42</span>)), <span class="lit">"Answer not known."</span>)
+res1: EitherT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">List</span>(Right(<span class="num">42</span>)))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -870,9 +955,9 @@ res1: EitherT[<span class="std">List</span>, <span class="std">String</span>, <s
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="cats.data.EitherTFunctions#left" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="left[F[_],A,B](fa:F[A])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]"></a><a id="left[F[_],A,B](F[A])(Functor[F]):EitherT[F,A,B]"></a>
+      <a id="left[B]:EitherTFunctions.this.LeftPartiallyApplied[B]"></a><a id="left[B]:LeftPartiallyApplied[B]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#left[F[_],A,B](fa:F[A])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#left[B]:EitherTFunctions.this.LeftPartiallyApplied[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -881,10 +966,32 @@ res1: EitherT[<span class="std">List</span>, <span class="std">String</span>, <s
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">left</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.data.EitherTFunctions.left.F">F</span>[<span class="extype" name="cats.data.EitherTFunctions.left.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherTFunctions.left.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTFunctions.left.F">F</span>, <span class="extype" name="cats.data.EitherTFunctions.left.A">A</span>, <span class="extype" name="cats.data.EitherTFunctions.left.B">B</span>]</span>
+        <span class="name">left</span><span class="tparams">[<span name="B">B</span>]</span><span class="result">: <a href="#LeftPartiallyApplied[B]extendsAnyRef" class="extmbr" name="cats.data.EitherT.LeftPartiallyApplied">LeftPartiallyApplied</a>[<span class="extype" name="cats.data.EitherTFunctions.left.B">B</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
+      <p class="shortcomment cmt">Creates a left version of <code>EitherT[F, A, B]</code> from a <code>F[A]</code></p><div class="fullcomment"><div class="comment cmt"><p>Creates a left version of <code>EitherT[F, A, B]</code> from a <code>F[A]</code></p><pre>scala&gt; <span class="kw">import</span> cats.data.EitherT
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; EitherT.left[<span class="std">Int</span>](<span class="std">Option</span>(<span class="lit">"err"</span>))
+res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Left(err)))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
+    </li><li name="cats.data.EitherTFunctions#leftT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="leftT[F[_],B]:EitherTFunctions.this.LeftTPartiallyApplied[F,B]"></a><a id="leftT[F[_],B]:LeftTPartiallyApplied[F,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#leftT[F[_],B]:EitherTFunctions.this.LeftTPartiallyApplied[F,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="result">: <a href="#LeftTPartiallyApplied[F[_],B]extendsAnyRef" class="extmbr" name="cats.data.EitherT.LeftTPartiallyApplied">LeftTPartiallyApplied</a>[<span class="extype" name="cats.data.EitherTFunctions.leftT.F">F</span>, <span class="extype" name="cats.data.EitherTFunctions.leftT.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Creates a left version of <code>EitherT[F, A, B]</code> from a <code>A</code></p><div class="fullcomment"><div class="comment cmt"><p>Creates a left version of <code>EitherT[F, A, B]</code> from a <code>A</code></p><pre>scala&gt; <span class="kw">import</span> cats.data.EitherT
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; EitherT.leftT[<span class="std">Option</span>, <span class="std">Int</span>](<span class="lit">"err"</span>)
+res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Left(err)))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
     </li><li name="cats.data.EitherTFunctions#liftT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="liftT[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]"></a><a id="liftT[F[_],A,B](F[B])(Functor[F]):EitherT[F,A,B]"></a>
       <span class="permalink">
@@ -900,7 +1007,7 @@ res1: EitherT[<span class="std">List</span>, <span class="std">String</span>, <s
         <span class="name">liftT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.data.EitherTFunctions.liftT.F">F</span>[<span class="extype" name="cats.data.EitherTFunctions.liftT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherTFunctions.liftT.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTFunctions.liftT.F">F</span>, <span class="extype" name="cats.data.EitherTFunctions.liftT.A">A</span>, <span class="extype" name="cats.data.EitherTFunctions.liftT.B">B</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Alias for <a href="#right[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]" class="extmbr" name="cats.data.EitherT#right">right</a></p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="#right[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]" class="extmbr" name="cats.data.EitherT#right">right</a></p><pre>scala&gt; <span class="kw">import</span> cats.data.EitherT
+      <p class="shortcomment cmt">Alias for <a href="#right[A]:EitherTFunctions.this.RightPartiallyApplied[A]" class="extmbr" name="cats.data.EitherT#right">right</a></p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="#right[A]:EitherTFunctions.this.RightPartiallyApplied[A]" class="extmbr" name="cats.data.EitherT#right">right</a></p><pre>scala&gt; <span class="kw">import</span> cats.data.EitherT
 scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> o: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)
 scala&gt; <span class="kw">val</span> n: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
@@ -957,9 +1064,9 @@ res1: cats.data.EitherT[<span class="std">Option</span>,<span class="std">Nothin
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.data.EitherTFunctions#pure" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="pure[F[_],A,B](b:B)(implicitF:cats.Applicative[F]):cats.data.EitherT[F,A,B]"></a><a id="pure[F[_],A,B](B)(Applicative[F]):EitherT[F,A,B]"></a>
+      <a id="pure[F[_],A]:EitherTFunctions.this.PurePartiallyApplied[F,A]"></a><a id="pure[F[_],A]:PurePartiallyApplied[F,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#pure[F[_],A,B](b:B)(implicitF:cats.Applicative[F]):cats.data.EitherT[F,A,B]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#pure[F[_],A]:EitherTFunctions.this.PurePartiallyApplied[F,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -968,14 +1075,17 @@ res1: cats.data.EitherT[<span class="std">Option</span>,<span class="std">Nothin
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pure</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.EitherTFunctions.pure.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.EitherTFunctions.pure.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTFunctions.pure.F">F</span>, <span class="extype" name="cats.data.EitherTFunctions.pure.A">A</span>, <span class="extype" name="cats.data.EitherTFunctions.pure.B">B</span>]</span>
+        <span class="name">pure</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result">: <a href="#PurePartiallyApplied[F[_],A]extendsAnyRef" class="extmbr" name="cats.data.EitherT.PurePartiallyApplied">PurePartiallyApplied</a>[<span class="extype" name="cats.data.EitherTFunctions.pure.F">F</span>, <span class="extype" name="cats.data.EitherTFunctions.pure.A">A</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
+      <p class="shortcomment cmt">Creates a new <code>EitherT[F, A, B]</code> from a <code>B</code></p><div class="fullcomment"><div class="comment cmt"><p>Creates a new <code>EitherT[F, A, B]</code> from a <code>B</code></p><pre>scala&gt; <span class="kw">import</span> cats.data.EitherT
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; EitherT.pure[<span class="std">Option</span>, <span class="std">String</span>](<span class="num">3</span>)
+res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Right(<span class="num">3</span>)))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
     </li><li name="cats.data.EitherTFunctions#right" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="right[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]"></a><a id="right[F[_],A,B](F[B])(Functor[F]):EitherT[F,A,B]"></a>
+      <a id="right[A]:EitherTFunctions.this.RightPartiallyApplied[A]"></a><a id="right[A]:RightPartiallyApplied[A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#right[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#right[A]:EitherTFunctions.this.RightPartiallyApplied[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -984,10 +1094,32 @@ res1: cats.data.EitherT[<span class="std">Option</span>,<span class="std">Nothin
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">right</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.data.EitherTFunctions.right.F">F</span>[<span class="extype" name="cats.data.EitherTFunctions.right.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherTFunctions.right.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTFunctions.right.F">F</span>, <span class="extype" name="cats.data.EitherTFunctions.right.A">A</span>, <span class="extype" name="cats.data.EitherTFunctions.right.B">B</span>]</span>
+        <span class="name">right</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="#RightPartiallyApplied[A]extendsAnyRef" class="extmbr" name="cats.data.EitherT.RightPartiallyApplied">RightPartiallyApplied</a>[<span class="extype" name="cats.data.EitherTFunctions.right.A">A</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
+      <p class="shortcomment cmt">Creates a right version of <code>EitherT[F, A, B]</code> from a <code>F[B]</code></p><div class="fullcomment"><div class="comment cmt"><p>Creates a right version of <code>EitherT[F, A, B]</code> from a <code>F[B]</code></p><pre>scala&gt; <span class="kw">import</span> cats.data.EitherT
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; EitherT.right[<span class="std">String</span>](<span class="std">Option</span>(<span class="num">3</span>))
+res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Right(<span class="num">3</span>)))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
+    </li><li name="cats.data.EitherTFunctions#rightT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rightT[F[_],A]:EitherTFunctions.this.PurePartiallyApplied[F,A]"></a><a id="rightT[F[_],A]:PurePartiallyApplied[F,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#rightT[F[_],A]:EitherTFunctions.this.PurePartiallyApplied[F,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rightT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result">: <a href="#PurePartiallyApplied[F[_],A]extendsAnyRef" class="extmbr" name="cats.data.EitherT.PurePartiallyApplied">PurePartiallyApplied</a>[<span class="extype" name="cats.data.EitherTFunctions.rightT.F">F</span>, <span class="extype" name="cats.data.EitherTFunctions.rightT.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Alias for <a href="#pure[F[_],A]:EitherTFunctions.this.PurePartiallyApplied[F,A]" class="extmbr" name="cats.data.EitherT#pure">pure</a></p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="#pure[F[_],A]:EitherTFunctions.this.PurePartiallyApplied[F,A]" class="extmbr" name="cats.data.EitherT#pure">pure</a></p><pre>scala&gt; <span class="kw">import</span> cats.data.EitherT
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; EitherT.rightT[<span class="std">Option</span>, <span class="std">String</span>](<span class="num">3</span>)
+res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Right(<span class="num">3</span>)))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTFunctions</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

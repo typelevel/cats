@@ -131,10 +131,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
                           Const
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="" title=""></a>
-                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
-                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
-                          Coproduct
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="" title="F on the left and G on the right of scala.util.Either.">
+                          EitherK
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="EitherT$.html" title=""></a>
@@ -170,8 +170,8 @@ fail-fast effect of Either.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
-                        <a class="class" href="Nested.html" title="Similar to cats.data.Prod, but for nested composition."></a>
-                        <a href="Nested.html" title="Similar to cats.data.Prod, but for nested composition.">
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">
                           Nested
                         </a>
                       </li><li class="current-entities indented2">
@@ -205,12 +205,6 @@ convenient methods for working with this nested structure.">
                           OptionT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Prod$.html" title=""></a>
-                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
-                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
-                          Prod
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Reader$.html" title=""></a>
                         <a href="package$$Reader$.html" title="">
@@ -229,6 +223,12 @@ argument and produces an A value wrapped in F."></a>
                         <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
 argument and produces an A value wrapped in F.">
                           StateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Tuple2K$.html" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">
+                          Tuple2K
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Validated$.html" title=""></a>
@@ -253,36 +253,37 @@ argument and produces an A value wrapped in F.">
             </div>
           </div>
           <div id="content">
-            <body class="object value">
+            <body class="class type">
       <div id="definition">
-        <a href="Coproduct.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
+        <a href="EitherK$.html" title="See companion object"><div class="big-circle class-companion-object">c</div></a>
         <p id="owner"><a href="../index.html" class="extype" name="cats">cats</a>.<a href="index.html" class="extype" name="cats.data">data</a></p>
-        <h1><a href="Coproduct.html" title="See companion class">Coproduct</a><span class="permalink">
-      <a href="../../cats/data/Coproduct$.html" title="Permalink">
+        <h1><a href="EitherK$.html" title="See companion object">EitherK</a><span class="permalink">
+      <a href="../../cats/data/EitherK.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
         <h3><span class="morelinks"><div>
-            Companion <a href="Coproduct.html" title="See companion class">class Coproduct</a>
+            Companion <a href="EitherK$.html" title="See companion object">object EitherK</a>
           </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Coproduct</span><span class="result"> extends <span class="extype" name="cats.data.CoproductInstances">CoproductInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">EitherK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="run">run: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherK.F">F</span>[<span class="extype" name="cats.data.EitherK.A">A</span>], <span class="extype" name="cats.data.EitherK.G">G</span>[<span class="extype" name="cats.data.EitherK.A">A</span>]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Coproduct.scala" target="_blank">Coproduct.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><code>F</code> on the left and <code>G</code> on the right of <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a>.
+</p></div><dl class="paramcmts block"><dt class="param">run</dt><dd class="cmt"><p>The underlying <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a>.</p></dd></dl><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/EitherK.scala" target="_blank">EitherK.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.CoproductInstances">CoproductInstances</span>, <span class="extype" name="cats.data.CoproductInstances0">CoproductInstances0</span>, <span class="extype" name="cats.data.CoproductInstances1">CoproductInstances1</span>, <span class="extype" name="cats.data.CoproductInstances2">CoproductInstances2</span>, <span class="extype" name="cats.data.CoproductInstances3">CoproductInstances3</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -308,7 +309,7 @@ argument and produces an A value wrapped in F.">
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.data.Coproduct"><span>Coproduct</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.CoproductInstances"><span>CoproductInstances</span></li><li class="in" name="cats.data.CoproductInstances0"><span>CoproductInstances0</span></li><li class="in" name="cats.data.CoproductInstances1"><span>CoproductInstances1</span></li><li class="in" name="cats.data.CoproductInstances2"><span>CoproductInstances2</span></li><li class="in" name="cats.data.CoproductInstances3"><span>CoproductInstances3</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.data.EitherK"><span>EitherK</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -326,48 +327,28 @@ argument and produces an A value wrapped in F.">
 
       <div id="template">
         <div id="allMembers">
-        
-
-        <div id="types" class="types members">
-              <h3>Type Members</h3>
-              <ol><li name="cats.data.Coproduct.CoproductLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CoproductLeft[G[_]]extendsAnyRef"></a><a id="CoproductLeft[G[_]]:CoproductLeft[G]"></a>
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="cats.data.EitherK#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(run:Either[F[A],G[A]]):cats.data.EitherK[F,G,A]"></a><a id="&lt;init&gt;:EitherK[F,G,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#CoproductLeft[G[_]]extendsAnyRef" title="Permalink">
+      <a href="../../cats/data/EitherK.html#&lt;init&gt;(run:Either[F[A],G[A]]):cats.data.EitherK[F,G,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <a title="" href="Coproduct$$CoproductLeft.html">
-              <span class="name">CoproductLeft</span>
-            </a><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">EitherK</span><span class="params">(<span name="run">run: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherK.F">F</span>[<span class="extype" name="cats.data.EitherK.A">A</span>], <span class="extype" name="cats.data.EitherK.G">G</span>[<span class="extype" name="cats.data.EitherK.A">A</span>]]</span>)</span>
       </span>
       
-      
-    </li><li name="cats.data.Coproduct.CoproductRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CoproductRight[F[_]]extendsAnyRef"></a><a id="CoproductRight[F[_]]:CoproductRight[F]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#CoproductRight[F[_]]extendsAnyRef" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="Coproduct$$CoproductRight.html">
-              <span class="name">CoproductRight</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">run</dt><dd class="cmt"><p>The underlying <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a>.</p></dd></dl></div>
     </li></ol>
             </div>
+
+        
 
         
 
@@ -377,7 +358,7 @@ argument and produces an A value wrapped in F.">
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../cats/data/EitherK.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -393,7 +374,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html###():Int" title="Permalink">
+      <a href="../../cats/data/EitherK.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -409,7 +390,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../cats/data/EitherK.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -425,7 +406,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../cats/data/EitherK.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -438,122 +419,10 @@ argument and produces an A value wrapped in F.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.data.CoproductInstances1#catsDataCoflatMapForCoproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataCoflatMapForCoproduct[F[_],G[_]](implicitF0:cats.CoflatMap[F],implicitG0:cats.CoflatMap[G]):cats.CoflatMap[[γ$3$]cats.data.Coproduct[F,G,γ$3$]]"></a><a id="catsDataCoflatMapForCoproduct[F[_],G[_]](CoflatMap[F],CoflatMap[G]):CoflatMap[[γ$3$]Coproduct[F,G,γ$3$]]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#catsDataCoflatMapForCoproduct[F[_],G[_]](implicitF0:cats.CoflatMap[F],implicitG0:cats.CoflatMap[G]):cats.CoflatMap[[γ$3$]cats.data.Coproduct[F,G,γ$3$]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsDataCoflatMapForCoproduct</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.data.CoproductInstances1.catsDataCoflatMapForCoproduct.F">F</span>]</span>, <span name="G0">G0: <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.data.CoproductInstances1.catsDataCoflatMapForCoproduct.G">G</span>]</span>)</span><span class="result">: <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[[γ$3$]<a href="Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a>[<span class="extype" name="cats.data.CoproductInstances1.catsDataCoflatMapForCoproduct.F">F</span>, <span class="extype" name="cats.data.CoproductInstances1.catsDataCoflatMapForCoproduct.G">G</span>, <span class="extype" name="cats.data.CoproductInstances1.&lt;refinement&gt;.Λ$.γ$3$">γ$3$</span>]]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>CoproductInstances1</dd></dl></div>
-    </li><li name="cats.data.CoproductInstances#catsDataComonadForCoproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataComonadForCoproduct[F[_],G[_]](implicitF0:cats.Comonad[F],implicitG0:cats.Comonad[G]):cats.Comonad[[γ$5$]cats.data.Coproduct[F,G,γ$5$]]"></a><a id="catsDataComonadForCoproduct[F[_],G[_]](Comonad[F],Comonad[G]):Comonad[[γ$5$]Coproduct[F,G,γ$5$]]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#catsDataComonadForCoproduct[F[_],G[_]](implicitF0:cats.Comonad[F],implicitG0:cats.Comonad[G]):cats.Comonad[[γ$5$]cats.data.Coproduct[F,G,γ$5$]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsDataComonadForCoproduct</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.data.CoproductInstances.catsDataComonadForCoproduct.F">F</span>]</span>, <span name="G0">G0: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.data.CoproductInstances.catsDataComonadForCoproduct.G">G</span>]</span>)</span><span class="result">: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[[γ$5$]<a href="Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a>[<span class="extype" name="cats.data.CoproductInstances.catsDataComonadForCoproduct.F">F</span>, <span class="extype" name="cats.data.CoproductInstances.catsDataComonadForCoproduct.G">G</span>, <span class="extype" name="cats.data.CoproductInstances.&lt;refinement&gt;.Λ$.γ$5$">γ$5$</span>]]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>CoproductInstances</dd></dl></div>
-    </li><li name="cats.data.CoproductInstances2#catsDataContravariantForCoproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataContravariantForCoproduct[F[_],G[_]](implicitF0:cats.functor.Contravariant[F],implicitG0:cats.functor.Contravariant[G]):cats.functor.Contravariant[[γ$2$]cats.data.Coproduct[F,G,γ$2$]]"></a><a id="catsDataContravariantForCoproduct[F[_],G[_]](Contravariant[F],Contravariant[G]):Contravariant[[γ$2$]Coproduct[F,G,γ$2$]]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#catsDataContravariantForCoproduct[F[_],G[_]](implicitF0:cats.functor.Contravariant[F],implicitG0:cats.functor.Contravariant[G]):cats.functor.Contravariant[[γ$2$]cats.data.Coproduct[F,G,γ$2$]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsDataContravariantForCoproduct</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.data.CoproductInstances2.catsDataContravariantForCoproduct.F">F</span>]</span>, <span name="G0">G0: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.data.CoproductInstances2.catsDataContravariantForCoproduct.G">G</span>]</span>)</span><span class="result">: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[γ$2$]<a href="Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a>[<span class="extype" name="cats.data.CoproductInstances2.catsDataContravariantForCoproduct.F">F</span>, <span class="extype" name="cats.data.CoproductInstances2.catsDataContravariantForCoproduct.G">G</span>, <span class="extype" name="cats.data.CoproductInstances2.&lt;refinement&gt;.Λ$.γ$2$">γ$2$</span>]]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>CoproductInstances2</dd></dl></div>
-    </li><li name="cats.data.CoproductInstances3#catsDataEqForCoproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataEqForCoproduct[F[_],G[_],A](implicitE:cats.Eq[Either[F[A],G[A]]]):cats.Eq[cats.data.Coproduct[F,G,A]]"></a><a id="catsDataEqForCoproduct[F[_],G[_],A](Eq[Either[F[A],G[A]]]):Eq[Coproduct[F,G,A]]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#catsDataEqForCoproduct[F[_],G[_],A](implicitE:cats.Eq[Either[F[A],G[A]]]):cats.Eq[cats.data.Coproduct[F,G,A]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsDataEqForCoproduct</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="E">E: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.CoproductInstances3.catsDataEqForCoproduct.F">F</span>[<span class="extype" name="cats.data.CoproductInstances3.catsDataEqForCoproduct.A">A</span>], <span class="extype" name="cats.data.CoproductInstances3.catsDataEqForCoproduct.G">G</span>[<span class="extype" name="cats.data.CoproductInstances3.catsDataEqForCoproduct.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a>[<span class="extype" name="cats.data.CoproductInstances3.catsDataEqForCoproduct.F">F</span>, <span class="extype" name="cats.data.CoproductInstances3.catsDataEqForCoproduct.G">G</span>, <span class="extype" name="cats.data.CoproductInstances3.catsDataEqForCoproduct.A">A</span>]]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>CoproductInstances3</dd></dl></div>
-    </li><li name="cats.data.CoproductInstances3#catsDataFoldableForCoproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFoldableForCoproduct[F[_],G[_]](implicitF0:cats.Foldable[F],implicitG0:cats.Foldable[G]):cats.Foldable[[γ$1$]cats.data.Coproduct[F,G,γ$1$]]"></a><a id="catsDataFoldableForCoproduct[F[_],G[_]](Foldable[F],Foldable[G]):Foldable[[γ$1$]Coproduct[F,G,γ$1$]]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#catsDataFoldableForCoproduct[F[_],G[_]](implicitF0:cats.Foldable[F],implicitG0:cats.Foldable[G]):cats.Foldable[[γ$1$]cats.data.Coproduct[F,G,γ$1$]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsDataFoldableForCoproduct</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.CoproductInstances3.catsDataFoldableForCoproduct.F">F</span>]</span>, <span name="G0">G0: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.CoproductInstances3.catsDataFoldableForCoproduct.G">G</span>]</span>)</span><span class="result">: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[γ$1$]<a href="Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a>[<span class="extype" name="cats.data.CoproductInstances3.catsDataFoldableForCoproduct.F">F</span>, <span class="extype" name="cats.data.CoproductInstances3.catsDataFoldableForCoproduct.G">G</span>, <span class="extype" name="cats.data.CoproductInstances3.&lt;refinement&gt;.Λ$.γ$1$">γ$1$</span>]]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>CoproductInstances3</dd></dl></div>
-    </li><li name="cats.data.CoproductInstances3#catsDataFunctorForCoproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFunctorForCoproduct[F[_],G[_]](implicitF0:cats.Functor[F],implicitG0:cats.Functor[G]):cats.Functor[[γ$0$]cats.data.Coproduct[F,G,γ$0$]]"></a><a id="catsDataFunctorForCoproduct[F[_],G[_]](Functor[F],Functor[G]):Functor[[γ$0$]Coproduct[F,G,γ$0$]]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#catsDataFunctorForCoproduct[F[_],G[_]](implicitF0:cats.Functor[F],implicitG0:cats.Functor[G]):cats.Functor[[γ$0$]cats.data.Coproduct[F,G,γ$0$]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsDataFunctorForCoproduct</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.CoproductInstances3.catsDataFunctorForCoproduct.F">F</span>]</span>, <span name="G0">G0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.CoproductInstances3.catsDataFunctorForCoproduct.G">G</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[γ$0$]<a href="Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a>[<span class="extype" name="cats.data.CoproductInstances3.catsDataFunctorForCoproduct.F">F</span>, <span class="extype" name="cats.data.CoproductInstances3.catsDataFunctorForCoproduct.G">G</span>, <span class="extype" name="cats.data.CoproductInstances3.&lt;refinement&gt;.Λ$.γ$0$">γ$0$</span>]]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>CoproductInstances3</dd></dl></div>
-    </li><li name="cats.data.CoproductInstances0#catsDataTraverseForCoproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataTraverseForCoproduct[F[_],G[_]](implicitF0:cats.Traverse[F],implicitG0:cats.Traverse[G]):cats.Traverse[[γ$4$]cats.data.Coproduct[F,G,γ$4$]]"></a><a id="catsDataTraverseForCoproduct[F[_],G[_]](Traverse[F],Traverse[G]):Traverse[[γ$4$]Coproduct[F,G,γ$4$]]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#catsDataTraverseForCoproduct[F[_],G[_]](implicitF0:cats.Traverse[F],implicitG0:cats.Traverse[G]):cats.Traverse[[γ$4$]cats.data.Coproduct[F,G,γ$4$]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsDataTraverseForCoproduct</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.CoproductInstances0.catsDataTraverseForCoproduct.F">F</span>]</span>, <span name="G0">G0: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.CoproductInstances0.catsDataTraverseForCoproduct.G">G</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[γ$4$]<a href="Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a>[<span class="extype" name="cats.data.CoproductInstances0.catsDataTraverseForCoproduct.F">F</span>, <span class="extype" name="cats.data.CoproductInstances0.catsDataTraverseForCoproduct.G">G</span>, <span class="extype" name="cats.data.CoproductInstances0.&lt;refinement&gt;.Λ$.γ$4$">γ$4$</span>]]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>CoproductInstances0</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#clone():Object" title="Permalink">
+      <a href="../../cats/data/EitherK.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -572,10 +441,58 @@ argument and produces an A value wrapped in F.">
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.EitherK#coflatMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="coflatMap[B](f:cats.data.EitherK[F,G,A]=&gt;B)(implicitF:cats.CoflatMap[F],implicitG:cats.CoflatMap[G]):cats.data.EitherK[F,G,B]"></a><a id="coflatMap[B]((EitherK[F,G,A])⇒B)(CoflatMap[F],CoflatMap[G]):EitherK[F,G,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherK.html#coflatMap[B](f:cats.data.EitherK[F,G,A]=&gt;B)(implicitF:cats.CoflatMap[F],implicitG:cats.CoflatMap[G]):cats.data.EitherK[F,G,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">coflatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<a href="" class="extype" name="cats.data.EitherK">EitherK</a>[<span class="extype" name="cats.data.EitherK.F">F</span>, <span class="extype" name="cats.data.EitherK.G">G</span>, <span class="extype" name="cats.data.EitherK.A">A</span>]) ⇒ <span class="extype" name="cats.data.EitherK.coflatMap.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.data.EitherK.F">F</span>]</span>, <span name="G">G: <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.data.EitherK.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherK">EitherK</a>[<span class="extype" name="cats.data.EitherK.F">F</span>, <span class="extype" name="cats.data.EitherK.G">G</span>, <span class="extype" name="cats.data.EitherK.coflatMap.B">B</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.data.EitherK#coflatten" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="coflatten(implicitF:cats.CoflatMap[F],implicitG:cats.CoflatMap[G]):cats.data.EitherK[F,G,cats.data.EitherK[F,G,A]]"></a><a id="coflatten(CoflatMap[F],CoflatMap[G]):EitherK[F,G,EitherK[F,G,A]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherK.html#coflatten(implicitF:cats.CoflatMap[F],implicitG:cats.CoflatMap[G]):cats.data.EitherK[F,G,cats.data.EitherK[F,G,A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">coflatten</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.data.EitherK.F">F</span>]</span>, <span name="G">G: <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.data.EitherK.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherK">EitherK</a>[<span class="extype" name="cats.data.EitherK.F">F</span>, <span class="extype" name="cats.data.EitherK.G">G</span>, <a href="" class="extype" name="cats.data.EitherK">EitherK</a>[<span class="extype" name="cats.data.EitherK.F">F</span>, <span class="extype" name="cats.data.EitherK.G">G</span>, <span class="extype" name="cats.data.EitherK.A">A</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.data.EitherK#contramap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="contramap[B](f:B=&gt;A)(implicitF:cats.functor.Contravariant[F],implicitG:cats.functor.Contravariant[G]):cats.data.EitherK[F,G,B]"></a><a id="contramap[B]((B)⇒A)(Contravariant[F],Contravariant[G]):EitherK[F,G,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherK.html#contramap[B](f:B=&gt;A)(implicitF:cats.functor.Contravariant[F],implicitG:cats.functor.Contravariant[G]):cats.data.EitherK[F,G,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">contramap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherK.contramap.B">B</span>) ⇒ <span class="extype" name="cats.data.EitherK.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.data.EitherK.F">F</span>]</span>, <span name="G">G: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.data.EitherK.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherK">EitherK</a>[<span class="extype" name="cats.data.EitherK.F">F</span>, <span class="extype" name="cats.data.EitherK.G">G</span>, <span class="extype" name="cats.data.EitherK.contramap.B">B</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../cats/data/EitherK.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -588,10 +505,10 @@ argument and produces an A value wrapped in F.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+    </li><li name="cats.data.EitherK#extract" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="extract(implicitF:cats.Comonad[F],implicitG:cats.Comonad[G]):A"></a><a id="extract(Comonad[F],Comonad[G]):A"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../cats/data/EitherK.html#extract(implicitF:cats.Comonad[F],implicitG:cats.Comonad[G]):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -600,14 +517,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">extract</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.data.EitherK.F">F</span>]</span>, <span name="G">G: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.data.EitherK.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherK.A">A</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#finalize():Unit" title="Permalink">
+      <a href="../../cats/data/EitherK.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -626,10 +543,83 @@ argument and produces an A value wrapped in F.">
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.EitherK#fold" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fold[H[_]](f:cats.arrow.FunctionK[F,H],g:cats.arrow.FunctionK[G,H]):H[A]"></a><a id="fold[H[_]](FunctionK[F,H],FunctionK[G,H]):H[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherK.html#fold[H[_]](f:cats.arrow.FunctionK[F,H],g:cats.arrow.FunctionK[G,H]):H[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fold</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.data.EitherK.F">F</span>, <span class="extype" name="cats.data.EitherK.fold.H">H</span>]</span>, <span name="g">g: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.data.EitherK.G">G</span>, <span class="extype" name="cats.data.EitherK.fold.H">H</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherK.fold.H">H</span>[<span class="extype" name="cats.data.EitherK.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Fold this eitherK into a new type constructor using two natural transformations.</p><div class="fullcomment"><div class="comment cmt"><p>Fold this eitherK into a new type constructor using two natural transformations.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.arrow.FunctionK
+scala&gt; <span class="kw">import</span> cats.data.EitherK
+scala&gt; <span class="kw">val</span> listToOption = λ[FunctionK[<span class="std">List</span>, <span class="std">Option</span>]](_.headOption)
+scala&gt; <span class="kw">val</span> optionToOption = FunctionK.id[<span class="std">Option</span>]
+scala&gt; <span class="kw">val</span> cp1: EitherK[<span class="std">List</span>, <span class="std">Option</span>, <span class="std">Int</span>] = EitherK.leftc(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>))
+scala&gt; <span class="kw">val</span> cp2: EitherK[<span class="std">List</span>, <span class="std">Option</span>, <span class="std">Int</span>] = EitherK.rightc(<span class="std">Some</span>(<span class="num">4</span>))
+scala&gt; cp1.fold(listToOption, optionToOption)
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)
+scala&gt; cp2.fold(listToOption, optionToOption)
+res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">4</span>)</pre></div></div>
+    </li><li name="cats.data.EitherK#foldLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foldLeft[B](z:B)(f:(B,A)=&gt;B)(implicitF:cats.Foldable[F],implicitG:cats.Foldable[G]):B"></a><a id="foldLeft[B](B)((B,A)⇒B)(Foldable[F],Foldable[G]):B"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherK.html#foldLeft[B](z:B)(f:(B,A)=&gt;B)(implicitF:cats.Foldable[F],implicitG:cats.Foldable[G]):B" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="z">z: <span class="extype" name="cats.data.EitherK.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherK.foldLeft.B">B</span>, <span class="extype" name="cats.data.EitherK.A">A</span>) ⇒ <span class="extype" name="cats.data.EitherK.foldLeft.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.EitherK.F">F</span>]</span>, <span name="G">G: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.EitherK.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherK.foldLeft.B">B</span></span>
+      </span>
+      
+      
+    </li><li name="cats.data.EitherK#foldMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foldMap[B](f:A=&gt;B)(implicitF:cats.Foldable[F],implicitG:cats.Foldable[G],implicitM:cats.Monoid[B]):B"></a><a id="foldMap[B]((A)⇒B)(Foldable[F],Foldable[G],Monoid[B]):B"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherK.html#foldMap[B](f:A=&gt;B)(implicitF:cats.Foldable[F],implicitG:cats.Foldable[G],implicitM:cats.Monoid[B]):B" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherK.A">A</span>) ⇒ <span class="extype" name="cats.data.EitherK.foldMap.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.EitherK.F">F</span>]</span>, <span name="G">G: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.EitherK.G">G</span>]</span>, <span name="M">M: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.EitherK.foldMap.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherK.foldMap.B">B</span></span>
+      </span>
+      
+      
+    </li><li name="cats.data.EitherK#foldRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foldRight[B](z:cats.Eval[B])(f:(A,cats.Eval[B])=&gt;cats.Eval[B])(implicitF:cats.Foldable[F],implicitG:cats.Foldable[G]):cats.Eval[B]"></a><a id="foldRight[B](Eval[B])((A,Eval[B])⇒Eval[B])(Foldable[F],Foldable[G]):Eval[B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherK.html#foldRight[B](z:cats.Eval[B])(f:(A,cats.Eval[B])=&gt;cats.Eval[B])(implicitF:cats.Foldable[F],implicitG:cats.Foldable[G]):cats.Eval[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldRight</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="z">z: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.EitherK.foldRight.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherK.A">A</span>, <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.EitherK.foldRight.B">B</span>]) ⇒ <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.EitherK.foldRight.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.EitherK.F">F</span>]</span>, <span name="G">G: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.EitherK.G">G</span>]</span>)</span><span class="result">: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.EitherK.foldRight.B">B</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#getClass():Class[_]" title="Permalink">
+      <a href="../../cats/data/EitherK.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -642,26 +632,10 @@ argument and produces an A value wrapped in F.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#hashCode():Int" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../cats/data/EitherK.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -674,10 +648,10 @@ argument and produces an A value wrapped in F.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.data.Coproduct#left" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="left[G[_]]:cats.data.Coproduct.CoproductLeft[G]"></a><a id="left[G[_]]:CoproductLeft[G]"></a>
+    </li><li name="cats.data.EitherK#isLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isLeft:Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#left[G[_]]:cats.data.Coproduct.CoproductLeft[G]" title="Permalink">
+      <a href="../../cats/data/EitherK.html#isLeft:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -686,14 +660,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">left</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="Coproduct$$CoproductLeft.html" class="extype" name="cats.data.Coproduct.CoproductLeft">CoproductLeft</a>[<span class="extype" name="cats.data.Coproduct.left.G">G</span>]</span>
+        <span class="name">isLeft</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       
       
-    </li><li name="cats.data.Coproduct#leftc" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="leftc[F[_],G[_],A](x:F[A]):cats.data.Coproduct[F,G,A]"></a><a id="leftc[F[_],G[_],A](F[A]):Coproduct[F,G,A]"></a>
+    </li><li name="cats.data.EitherK#isRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isRight:Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#leftc[F[_],G[_],A](x:F[A]):cats.data.Coproduct[F,G,A]" title="Permalink">
+      <a href="../../cats/data/EitherK.html#isRight:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -702,14 +676,30 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">leftc</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.data.Coproduct.leftc.F">F</span>[<span class="extype" name="cats.data.Coproduct.leftc.A">A</span>]</span>)</span><span class="result">: <a href="Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a>[<span class="extype" name="cats.data.Coproduct.leftc.F">F</span>, <span class="extype" name="cats.data.Coproduct.leftc.G">G</span>, <span class="extype" name="cats.data.Coproduct.leftc.A">A</span>]</span>
+        <span class="name">isRight</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      
+      
+    </li><li name="cats.data.EitherK#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="map[B](f:A=&gt;B)(implicitF:cats.Functor[F],implicitG:cats.Functor[G]):cats.data.EitherK[F,G,B]"></a><a id="map[B]((A)⇒B)(Functor[F],Functor[G]):EitherK[F,G,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherK.html#map[B](f:A=&gt;B)(implicitF:cats.Functor[F],implicitG:cats.Functor[G]):cats.data.EitherK[F,G,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherK.A">A</span>) ⇒ <span class="extype" name="cats.data.EitherK.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherK.F">F</span>]</span>, <span name="G">G: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherK.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherK">EitherK</a>[<span class="extype" name="cats.data.EitherK.F">F</span>, <span class="extype" name="cats.data.EitherK.G">G</span>, <span class="extype" name="cats.data.EitherK.map.B">B</span>]</span>
       </span>
       
       
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../cats/data/EitherK.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -725,7 +715,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#notify():Unit" title="Permalink">
+      <a href="../../cats/data/EitherK.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -741,7 +731,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#notifyAll():Unit" title="Permalink">
+      <a href="../../cats/data/EitherK.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -754,10 +744,26 @@ argument and produces an A value wrapped in F.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.data.Coproduct#right" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="right[F[_]]:cats.data.Coproduct.CoproductRight[F]"></a><a id="right[F[_]]:CoproductRight[F]"></a>
+    </li><li name="cats.data.EitherK#run" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="run:Either[F[A],G[A]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#right[F[_]]:cats.data.Coproduct.CoproductRight[F]" title="Permalink">
+      <a href="../../cats/data/EitherK.html#run:Either[F[A],G[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">run</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherK.F">F</span>[<span class="extype" name="cats.data.EitherK.A">A</span>], <span class="extype" name="cats.data.EitherK.G">G</span>[<span class="extype" name="cats.data.EitherK.A">A</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.data.EitherK#swap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="swap:cats.data.EitherK[G,F,A]"></a><a id="swap:EitherK[G,F,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherK.html#swap:cats.data.EitherK[G,F,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -766,30 +772,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">right</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="Coproduct$$CoproductRight.html" class="extype" name="cats.data.Coproduct.CoproductRight">CoproductRight</a>[<span class="extype" name="cats.data.Coproduct.right.F">F</span>]</span>
-      </span>
-      
-      
-    </li><li name="cats.data.Coproduct#rightc" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="rightc[F[_],G[_],A](x:G[A]):cats.data.Coproduct[F,G,A]"></a><a id="rightc[F[_],G[_],A](G[A]):Coproduct[F,G,A]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#rightc[F[_],G[_],A](x:G[A]):cats.data.Coproduct[F,G,A]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">rightc</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.data.Coproduct.rightc.G">G</span>[<span class="extype" name="cats.data.Coproduct.rightc.A">A</span>]</span>)</span><span class="result">: <a href="Coproduct.html" class="extype" name="cats.data.Coproduct">Coproduct</a>[<span class="extype" name="cats.data.Coproduct.rightc.F">F</span>, <span class="extype" name="cats.data.Coproduct.rightc.G">G</span>, <span class="extype" name="cats.data.Coproduct.rightc.A">A</span>]</span>
+        <span class="name">swap</span><span class="result">: <a href="" class="extype" name="cats.data.EitherK">EitherK</a>[<span class="extype" name="cats.data.EitherK.G">G</span>, <span class="extype" name="cats.data.EitherK.F">F</span>, <span class="extype" name="cats.data.EitherK.A">A</span>]</span>
       </span>
       
       
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../cats/data/EitherK.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -802,10 +792,10 @@ argument and produces an A value wrapped in F.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
+    </li><li name="cats.data.EitherK#toValidated" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toValidated:cats.data.Validated[F[A],G[A]]"></a><a id="toValidated:Validated[F[A],G[A]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#toString():String" title="Permalink">
+      <a href="../../cats/data/EitherK.html#toValidated:cats.data.Validated[F[A],G[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -814,14 +804,30 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">toValidated</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherK.F">F</span>[<span class="extype" name="cats.data.EitherK.A">A</span>], <span class="extype" name="cats.data.EitherK.G">G</span>[<span class="extype" name="cats.data.EitherK.A">A</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      
+    </li><li name="cats.data.EitherK#traverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="traverse[X[_],B](g:A=&gt;X[B])(implicitF:cats.Traverse[F],implicitG:cats.Traverse[G],implicitA:cats.Applicative[X]):X[cats.data.EitherK[F,G,B]]"></a><a id="traverse[X[_],B]((A)⇒X[B])(Traverse[F],Traverse[G],Applicative[X]):X[EitherK[F,G,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherK.html#traverse[X[_],B](g:A=&gt;X[B])(implicitF:cats.Traverse[F],implicitG:cats.Traverse[G],implicitA:cats.Applicative[X]):X[cats.data.EitherK[F,G,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="tparams">[<span name="X">X<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.data.EitherK.A">A</span>) ⇒ <span class="extype" name="cats.data.EitherK.traverse.X">X</span>[<span class="extype" name="cats.data.EitherK.traverse.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.EitherK.F">F</span>]</span>, <span name="G">G: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.EitherK.G">G</span>]</span>, <span name="A">A: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.EitherK.traverse.X">X</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherK.traverse.X">X</span>[<a href="" class="extype" name="cats.data.EitherK">EitherK</a>[<span class="extype" name="cats.data.EitherK.F">F</span>, <span class="extype" name="cats.data.EitherK.G">G</span>, <span class="extype" name="cats.data.EitherK.traverse.B">B</span>]]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#wait():Unit" title="Permalink">
+      <a href="../../cats/data/EitherK.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -843,7 +849,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../cats/data/EitherK.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -865,7 +871,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Coproduct$.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../cats/data/EitherK.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -898,16 +904,10 @@ argument and produces an A value wrapped in F.">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="cats.data.CoproductInstances">
-              <h3>Inherited from <span class="extype" name="cats.data.CoproductInstances">CoproductInstances</span></h3>
-            </div><div class="parent" name="cats.data.CoproductInstances0">
-              <h3>Inherited from <span class="extype" name="cats.data.CoproductInstances0">CoproductInstances0</span></h3>
-            </div><div class="parent" name="cats.data.CoproductInstances1">
-              <h3>Inherited from <span class="extype" name="cats.data.CoproductInstances1">CoproductInstances1</span></h3>
-            </div><div class="parent" name="cats.data.CoproductInstances2">
-              <h3>Inherited from <span class="extype" name="cats.data.CoproductInstances2">CoproductInstances2</span></h3>
-            </div><div class="parent" name="cats.data.CoproductInstances3">
-              <h3>Inherited from <span class="extype" name="cats.data.CoproductInstances3">CoproductInstances3</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

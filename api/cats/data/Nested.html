@@ -131,10 +131,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
                           Const
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Coproduct$.html" title=""></a>
-                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
-                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
-                          Coproduct
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="EitherK.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="EitherK.html" title="F on the left and G on the right of scala.util.Either.">
+                          EitherK
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="EitherT$.html" title=""></a>
@@ -170,8 +170,8 @@ fail-fast effect of Either.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
-                        <a class="class" href="" title="Similar to cats.data.Prod, but for nested composition."></a>
-                        <a href="" title="Similar to cats.data.Prod, but for nested composition.">
+                        <a class="class" href="" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="" title="Similar to cats.data.Tuple2K, but for nested composition.">
                           Nested
                         </a>
                       </li><li class="current-entities indented2">
@@ -205,12 +205,6 @@ convenient methods for working with this nested structure.">
                           OptionT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Prod$.html" title=""></a>
-                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
-                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
-                          Prod
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Reader$.html" title=""></a>
                         <a href="package$$Reader$.html" title="">
@@ -229,6 +223,12 @@ argument and produces an A value wrapped in F."></a>
                         <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
 argument and produces an A value wrapped in F.">
                           StateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Tuple2K$.html" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">
+                          Tuple2K
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Validated$.html" title=""></a>
@@ -278,7 +278,7 @@ argument and produces an A value wrapped in F.">
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Similar to <a href="Prod.html" class="extype" name="cats.data.Prod">cats.data.Prod</a>, but for nested composition.</p><p>For instance, since both <code>List</code> and <code>Option</code> have a <code>Functor</code>, then so does
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Similar to <a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">cats.data.Tuple2K</a>, but for nested composition.</p><p>For instance, since both <code>List</code> and <code>Option</code> have a <code>Functor</code>, then so does
 <code>List[Option[_]]</code>. This is represented by this data type via the instantiation
 <code>Nested[List, Option, ?]</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.Functor
 scala&gt; <span class="kw">import</span> cats.data.Nested

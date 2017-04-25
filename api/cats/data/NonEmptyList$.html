@@ -131,10 +131,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
                           Const
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Coproduct$.html" title=""></a>
-                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
-                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
-                          Coproduct
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="EitherK.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="EitherK.html" title="F on the left and G on the right of scala.util.Either.">
+                          EitherK
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="EitherT$.html" title=""></a>
@@ -170,8 +170,8 @@ fail-fast effect of Either.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
-                        <a class="class" href="Nested.html" title="Similar to cats.data.Prod, but for nested composition."></a>
-                        <a href="Nested.html" title="Similar to cats.data.Prod, but for nested composition.">
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">
                           Nested
                         </a>
                       </li><li class="current-entities indented2">
@@ -205,12 +205,6 @@ convenient methods for working with this nested structure.">
                           OptionT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Prod$.html" title=""></a>
-                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
-                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
-                          Prod
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Reader$.html" title=""></a>
                         <a href="package$$Reader$.html" title="">
@@ -229,6 +223,12 @@ argument and produces an A value wrapped in F."></a>
                         <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
 argument and produces an A value wrapped in F.">
                           StateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Tuple2K$.html" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">
+                          Tuple2K
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Validated$.html" title=""></a>
@@ -571,6 +571,22 @@ argument and produces an A value wrapped in F.">
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.NonEmptyList#fromFoldable" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fromFoldable[F[_],A](fa:F[A])(implicitF:cats.Foldable[F]):Option[cats.data.NonEmptyList[A]]"></a><a id="fromFoldable[F[_],A](F[A])(Foldable[F]):Option[NonEmptyList[A]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyList$.html#fromFoldable[F[_],A](fa:F[A])(implicitF:cats.Foldable[F]):Option[cats.data.NonEmptyList[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromFoldable</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.data.NonEmptyList.fromFoldable.F">F</span>[<span class="extype" name="cats.data.NonEmptyList.fromFoldable.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.NonEmptyList.fromFoldable.F">F</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.fromFoldable.A">A</span>]]</span>
+      </span>
+      
+      
     </li><li name="cats.data.NonEmptyList#fromList" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fromList[A](l:List[A]):Option[cats.data.NonEmptyList[A]]"></a><a id="fromList[A](List[A]):Option[NonEmptyList[A]]"></a>
       <span class="permalink">

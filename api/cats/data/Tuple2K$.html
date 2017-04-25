@@ -131,10 +131,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
                           Const
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Coproduct$.html" title=""></a>
-                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
-                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
-                          Coproduct
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="EitherK.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="EitherK.html" title="F on the left and G on the right of scala.util.Either.">
+                          EitherK
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="EitherT$.html" title=""></a>
@@ -170,8 +170,8 @@ fail-fast effect of Either.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
-                        <a class="class" href="Nested.html" title="Similar to cats.data.Prod, but for nested composition."></a>
-                        <a href="Nested.html" title="Similar to cats.data.Prod, but for nested composition.">
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">
                           Nested
                         </a>
                       </li><li class="current-entities indented2">
@@ -205,12 +205,6 @@ convenient methods for working with this nested structure.">
                           OptionT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="" title=""></a>
-                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
-                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
-                          Prod
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Reader$.html" title=""></a>
                         <a href="package$$Reader$.html" title="">
@@ -229,6 +223,12 @@ argument and produces an A value wrapped in F."></a>
                         <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
 argument and produces an A value wrapped in F.">
                           StateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">
+                          Tuple2K
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Validated$.html" title=""></a>
@@ -255,15 +255,15 @@ argument and produces an A value wrapped in F.">
           <div id="content">
             <body class="object value">
       <div id="definition">
-        <a href="Prod.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
+        <a href="Tuple2K.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
         <p id="owner"><a href="../index.html" class="extype" name="cats">cats</a>.<a href="index.html" class="extype" name="cats.data">data</a></p>
-        <h1><a href="Prod.html" title="See companion class">Prod</a><span class="permalink">
-      <a href="../../cats/data/Prod$.html" title="Permalink">
+        <h1><a href="Tuple2K.html" title="See companion class">Tuple2K</a><span class="permalink">
+      <a href="../../cats/data/Tuple2K$.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
         <h3><span class="morelinks"><div>
-            Companion <a href="Prod.html" title="See companion class">class Prod</a>
+            Companion <a href="Tuple2K.html" title="See companion class">class Tuple2K</a>
           </div></span></h3>
       </div>
 
@@ -273,16 +273,16 @@ argument and produces an A value wrapped in F.">
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Prod</span><span class="result"> extends <span class="extype" name="cats.data.ProdInstances">ProdInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Tuple2K</span><span class="result"> extends <span class="extype" name="cats.data.Tuple2KInstances">Tuple2KInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Prod.scala" target="_blank">Prod.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Tuple2K.scala" target="_blank">Tuple2K.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.ProdInstances">ProdInstances</span>, <span class="extype" name="cats.data.ProdInstances0">ProdInstances0</span>, <span class="extype" name="cats.data.ProdInstances1">ProdInstances1</span>, <span class="extype" name="cats.data.ProdInstances2">ProdInstances2</span>, <span class="extype" name="cats.data.ProdInstances3">ProdInstances3</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.Tuple2KInstances">Tuple2KInstances</span>, <span class="extype" name="cats.data.Tuple2KInstances0">Tuple2KInstances0</span>, <span class="extype" name="cats.data.Tuple2KInstances1">Tuple2KInstances1</span>, <span class="extype" name="cats.data.Tuple2KInstances2">Tuple2KInstances2</span>, <span class="extype" name="cats.data.Tuple2KInstances3">Tuple2KInstances3</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -308,7 +308,7 @@ argument and produces an A value wrapped in F.">
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.data.Prod"><span>Prod</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.ProdInstances"><span>ProdInstances</span></li><li class="in" name="cats.data.ProdInstances0"><span>ProdInstances0</span></li><li class="in" name="cats.data.ProdInstances1"><span>ProdInstances1</span></li><li class="in" name="cats.data.ProdInstances2"><span>ProdInstances2</span></li><li class="in" name="cats.data.ProdInstances3"><span>ProdInstances3</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.data.Tuple2K"><span>Tuple2K</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.Tuple2KInstances"><span>Tuple2KInstances</span></li><li class="in" name="cats.data.Tuple2KInstances0"><span>Tuple2KInstances0</span></li><li class="in" name="cats.data.Tuple2KInstances1"><span>Tuple2KInstances1</span></li><li class="in" name="cats.data.Tuple2KInstances2"><span>Tuple2KInstances2</span></li><li class="in" name="cats.data.Tuple2KInstances3"><span>Tuple2KInstances3</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -338,7 +338,7 @@ argument and produces an A value wrapped in F.">
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -354,7 +354,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html###():Int" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -370,7 +370,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -386,7 +386,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -399,10 +399,10 @@ argument and produces an A value wrapped in F.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.data.ProdInstances0#catsDataAlternativeForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataAlternativeForProd[F[_],G[_]](implicitFF:cats.Alternative[F],implicitGG:cats.Alternative[G]):cats.Alternative[[α]cats.data.Prod[F,G,α]]"></a><a id="catsDataAlternativeForProd[F[_],G[_]](Alternative[F],Alternative[G]):Alternative[[α]Prod[F,G,α]]"></a>
+    </li><li name="cats.data.Tuple2KInstances0#catsDataAlternativeForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataAlternativeForTuple2K[F[_],G[_]](implicitFF:cats.Alternative[F],implicitGG:cats.Alternative[G]):cats.Alternative[[α]cats.data.Tuple2K[F,G,α]]"></a><a id="catsDataAlternativeForTuple2K[F[_],G[_]](Alternative[F],Alternative[G]):Alternative[[α]Tuple2K[F,G,α]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataAlternativeForProd[F[_],G[_]](implicitFF:cats.Alternative[F],implicitGG:cats.Alternative[G]):cats.Alternative[[α]cats.data.Prod[F,G,α]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataAlternativeForTuple2K[F[_],G[_]](implicitFF:cats.Alternative[F],implicitGG:cats.Alternative[G]):cats.Alternative[[α]cats.data.Tuple2K[F,G,α]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -411,14 +411,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataAlternativeForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataAlternativeForProd.F">F</span>]</span>, <span name="GG">GG: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataAlternativeForProd.G">G</span>]</span>)</span><span class="result">: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataAlternativeForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances0.catsDataAlternativeForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances0.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+        <span class="name">catsDataAlternativeForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataAlternativeForTuple2K.F">F</span>]</span>, <span name="GG">GG: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataAlternativeForTuple2K.G">G</span>]</span>)</span><span class="result">: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[[α]<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataAlternativeForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances0.catsDataAlternativeForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances0.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances0</dd></dl></div>
-    </li><li name="cats.data.ProdInstances1#catsDataApplicativeForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataApplicativeForProd[F[_],G[_]](implicitFF:cats.Applicative[F],implicitGG:cats.Applicative[G]):cats.Applicative[[α]cats.data.Prod[F,G,α]]"></a><a id="catsDataApplicativeForProd[F[_],G[_]](Applicative[F],Applicative[G]):Applicative[[α]Prod[F,G,α]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances0</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances1#catsDataApplicativeForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataApplicativeForTuple2K[F[_],G[_]](implicitFF:cats.Applicative[F],implicitGG:cats.Applicative[G]):cats.Applicative[[α]cats.data.Tuple2K[F,G,α]]"></a><a id="catsDataApplicativeForTuple2K[F[_],G[_]](Applicative[F],Applicative[G]):Applicative[[α]Tuple2K[F,G,α]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataApplicativeForProd[F[_],G[_]](implicitFF:cats.Applicative[F],implicitGG:cats.Applicative[G]):cats.Applicative[[α]cats.data.Prod[F,G,α]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataApplicativeForTuple2K[F[_],G[_]](implicitFF:cats.Applicative[F],implicitGG:cats.Applicative[G]):cats.Applicative[[α]cats.data.Tuple2K[F,G,α]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -427,14 +427,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataApplicativeForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.ProdInstances1.catsDataApplicativeForProd.F">F</span>]</span>, <span name="GG">GG: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.ProdInstances1.catsDataApplicativeForProd.G">G</span>]</span>)</span><span class="result">: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances1.catsDataApplicativeForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances1.catsDataApplicativeForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances1.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+        <span class="name">catsDataApplicativeForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.Tuple2KInstances1.catsDataApplicativeForTuple2K.F">F</span>]</span>, <span name="GG">GG: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.Tuple2KInstances1.catsDataApplicativeForTuple2K.G">G</span>]</span>)</span><span class="result">: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[α]<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances1.catsDataApplicativeForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances1.catsDataApplicativeForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances1.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances1</dd></dl></div>
-    </li><li name="cats.data.ProdInstances2#catsDataApplyForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataApplyForProd[F[_],G[_]](implicitFF:cats.Apply[F],implicitGG:cats.Apply[G]):cats.Apply[[α]cats.data.Prod[F,G,α]]"></a><a id="catsDataApplyForProd[F[_],G[_]](Apply[F],Apply[G]):Apply[[α]Prod[F,G,α]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances1</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances2#catsDataApplyForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataApplyForTuple2K[F[_],G[_]](implicitFF:cats.Apply[F],implicitGG:cats.Apply[G]):cats.Apply[[α]cats.data.Tuple2K[F,G,α]]"></a><a id="catsDataApplyForTuple2K[F[_],G[_]](Apply[F],Apply[G]):Apply[[α]Tuple2K[F,G,α]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataApplyForProd[F[_],G[_]](implicitFF:cats.Apply[F],implicitGG:cats.Apply[G]):cats.Apply[[α]cats.data.Prod[F,G,α]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataApplyForTuple2K[F[_],G[_]](implicitFF:cats.Apply[F],implicitGG:cats.Apply[G]):cats.Apply[[α]cats.data.Tuple2K[F,G,α]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -443,14 +443,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataApplyForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.data.ProdInstances2.catsDataApplyForProd.F">F</span>]</span>, <span name="GG">GG: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.data.ProdInstances2.catsDataApplyForProd.G">G</span>]</span>)</span><span class="result">: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances2.catsDataApplyForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances2.catsDataApplyForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances2.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+        <span class="name">catsDataApplyForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.data.Tuple2KInstances2.catsDataApplyForTuple2K.F">F</span>]</span>, <span name="GG">GG: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.data.Tuple2KInstances2.catsDataApplyForTuple2K.G">G</span>]</span>)</span><span class="result">: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[α]<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances2.catsDataApplyForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances2.catsDataApplyForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances2.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances2</dd></dl></div>
-    </li><li name="cats.data.ProdInstances#catsDataContravariantForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataContravariantForProd[F[_],G[_]](implicitFC:cats.functor.Contravariant[F],implicitGC:cats.functor.Contravariant[G]):cats.functor.Contravariant[[α]cats.data.Prod[F,G,α]]"></a><a id="catsDataContravariantForProd[F[_],G[_]](Contravariant[F],Contravariant[G]):Contravariant[[α]Prod[F,G,α]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances2</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances#catsDataContravariantForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataContravariantForTuple2K[F[_],G[_]](implicitFC:cats.functor.Contravariant[F],implicitGC:cats.functor.Contravariant[G]):cats.functor.Contravariant[[α]cats.data.Tuple2K[F,G,α]]"></a><a id="catsDataContravariantForTuple2K[F[_],G[_]](Contravariant[F],Contravariant[G]):Contravariant[[α]Tuple2K[F,G,α]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataContravariantForProd[F[_],G[_]](implicitFC:cats.functor.Contravariant[F],implicitGC:cats.functor.Contravariant[G]):cats.functor.Contravariant[[α]cats.data.Prod[F,G,α]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataContravariantForTuple2K[F[_],G[_]](implicitFC:cats.functor.Contravariant[F],implicitGC:cats.functor.Contravariant[G]):cats.functor.Contravariant[[α]cats.data.Tuple2K[F,G,α]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -459,14 +459,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataContravariantForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FC">FC: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.data.ProdInstances.catsDataContravariantForProd.F">F</span>]</span>, <span name="GC">GC: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.data.ProdInstances.catsDataContravariantForProd.G">G</span>]</span>)</span><span class="result">: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances.catsDataContravariantForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances.catsDataContravariantForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+        <span class="name">catsDataContravariantForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FC">FC: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataContravariantForTuple2K.F">F</span>]</span>, <span name="GC">GC: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataContravariantForTuple2K.G">G</span>]</span>)</span><span class="result">: <a href="../functor/Contravariant.html" class="extype" name="cats.functor.Contravariant">Contravariant</a>[[α]<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataContravariantForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances.catsDataContravariantForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances</dd></dl></div>
-    </li><li name="cats.data.ProdInstances0#catsDataEqForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataEqForProd[F[_],G[_],A](implicitFF:cats.Eq[F[A]],implicitGG:cats.Eq[G[A]]):cats.Eq[cats.data.Prod[F,G,A]]"></a><a id="catsDataEqForProd[F[_],G[_],A](Eq[F[A]],Eq[G[A]]):Eq[Prod[F,G,A]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances0#catsDataEqForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataEqForTuple2K[F[_],G[_],A](implicitFF:cats.Eq[F[A]],implicitGG:cats.Eq[G[A]]):cats.Eq[cats.data.Tuple2K[F,G,A]]"></a><a id="catsDataEqForTuple2K[F[_],G[_],A](Eq[F[A]],Eq[G[A]]):Eq[Tuple2K[F,G,A]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataEqForProd[F[_],G[_],A](implicitFF:cats.Eq[F[A]],implicitGG:cats.Eq[G[A]]):cats.Eq[cats.data.Prod[F,G,A]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataEqForTuple2K[F[_],G[_],A](implicitFF:cats.Eq[F[A]],implicitGG:cats.Eq[G[A]]):cats.Eq[cats.data.Tuple2K[F,G,A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -475,14 +475,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataEqForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataEqForProd.F">F</span>[<span class="extype" name="cats.data.ProdInstances0.catsDataEqForProd.A">A</span>]]</span>, <span name="GG">GG: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataEqForProd.G">G</span>[<span class="extype" name="cats.data.ProdInstances0.catsDataEqForProd.A">A</span>]]</span>)</span><span class="result">: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataEqForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances0.catsDataEqForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances0.catsDataEqForProd.A">A</span>]]</span>
+        <span class="name">catsDataEqForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataEqForTuple2K.F">F</span>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataEqForTuple2K.A">A</span>]]</span>, <span name="GG">GG: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataEqForTuple2K.G">G</span>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataEqForTuple2K.A">A</span>]]</span>)</span><span class="result">: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataEqForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances0.catsDataEqForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances0.catsDataEqForTuple2K.A">A</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances0</dd></dl></div>
-    </li><li name="cats.data.ProdInstances1#catsDataFoldableForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFoldableForProd[F[_],G[_]](implicitFF:cats.Foldable[F],implicitGF:cats.Foldable[G]):cats.Foldable[[α]cats.data.Prod[F,G,α]]"></a><a id="catsDataFoldableForProd[F[_],G[_]](Foldable[F],Foldable[G]):Foldable[[α]Prod[F,G,α]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances0</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances1#catsDataFoldableForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataFoldableForTuple2K[F[_],G[_]](implicitFF:cats.Foldable[F],implicitGF:cats.Foldable[G]):cats.Foldable[[α]cats.data.Tuple2K[F,G,α]]"></a><a id="catsDataFoldableForTuple2K[F[_],G[_]](Foldable[F],Foldable[G]):Foldable[[α]Tuple2K[F,G,α]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataFoldableForProd[F[_],G[_]](implicitFF:cats.Foldable[F],implicitGF:cats.Foldable[G]):cats.Foldable[[α]cats.data.Prod[F,G,α]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataFoldableForTuple2K[F[_],G[_]](implicitFF:cats.Foldable[F],implicitGF:cats.Foldable[G]):cats.Foldable[[α]cats.data.Tuple2K[F,G,α]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -491,14 +491,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataFoldableForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.ProdInstances1.catsDataFoldableForProd.F">F</span>]</span>, <span name="GF">GF: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.ProdInstances1.catsDataFoldableForProd.G">G</span>]</span>)</span><span class="result">: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances1.catsDataFoldableForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances1.catsDataFoldableForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances1.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+        <span class="name">catsDataFoldableForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.Tuple2KInstances1.catsDataFoldableForTuple2K.F">F</span>]</span>, <span name="GF">GF: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.Tuple2KInstances1.catsDataFoldableForTuple2K.G">G</span>]</span>)</span><span class="result">: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[α]<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances1.catsDataFoldableForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances1.catsDataFoldableForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances1.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances1</dd></dl></div>
-    </li><li name="cats.data.ProdInstances3#catsDataFunctorForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFunctorForProd[F[_],G[_]](implicitFF:cats.Functor[F],implicitGG:cats.Functor[G]):cats.Functor[[α]cats.data.Prod[F,G,α]]"></a><a id="catsDataFunctorForProd[F[_],G[_]](Functor[F],Functor[G]):Functor[[α]Prod[F,G,α]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances1</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances3#catsDataFunctorForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataFunctorForTuple2K[F[_],G[_]](implicitFF:cats.Functor[F],implicitGG:cats.Functor[G]):cats.Functor[[α]cats.data.Tuple2K[F,G,α]]"></a><a id="catsDataFunctorForTuple2K[F[_],G[_]](Functor[F],Functor[G]):Functor[[α]Tuple2K[F,G,α]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataFunctorForProd[F[_],G[_]](implicitFF:cats.Functor[F],implicitGG:cats.Functor[G]):cats.Functor[[α]cats.data.Prod[F,G,α]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataFunctorForTuple2K[F[_],G[_]](implicitFF:cats.Functor[F],implicitGG:cats.Functor[G]):cats.Functor[[α]cats.data.Tuple2K[F,G,α]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -507,14 +507,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataFunctorForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.ProdInstances3.catsDataFunctorForProd.F">F</span>]</span>, <span name="GG">GG: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.ProdInstances3.catsDataFunctorForProd.G">G</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances3.catsDataFunctorForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances3.catsDataFunctorForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances3.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+        <span class="name">catsDataFunctorForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.Tuple2KInstances3.catsDataFunctorForTuple2K.F">F</span>]</span>, <span name="GG">GG: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.Tuple2KInstances3.catsDataFunctorForTuple2K.G">G</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[α]<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances3.catsDataFunctorForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances3.catsDataFunctorForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances3.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances3</dd></dl></div>
-    </li><li name="cats.data.ProdInstances#catsDataMonadCombineForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadCombineForProd[F[_],G[_]](implicitFF:cats.MonadCombine[F],implicitGF:cats.MonadCombine[G]):cats.MonadCombine[[α]cats.data.Prod[F,G,α]]"></a><a id="catsDataMonadCombineForProd[F[_],G[_]](MonadCombine[F],MonadCombine[G]):MonadCombine[[α]Prod[F,G,α]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances3</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances#catsDataMonadCombineForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadCombineForTuple2K[F[_],G[_]](implicitFF:cats.MonadCombine[F],implicitGF:cats.MonadCombine[G]):cats.MonadCombine[[α]cats.data.Tuple2K[F,G,α]]"></a><a id="catsDataMonadCombineForTuple2K[F[_],G[_]](MonadCombine[F],MonadCombine[G]):MonadCombine[[α]Tuple2K[F,G,α]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataMonadCombineForProd[F[_],G[_]](implicitFF:cats.MonadCombine[F],implicitGF:cats.MonadCombine[G]):cats.MonadCombine[[α]cats.data.Prod[F,G,α]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataMonadCombineForTuple2K[F[_],G[_]](implicitFF:cats.MonadCombine[F],implicitGF:cats.MonadCombine[G]):cats.MonadCombine[[α]cats.data.Tuple2K[F,G,α]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -523,14 +523,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadCombineForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.ProdInstances.catsDataMonadCombineForProd.F">F</span>]</span>, <span name="GF">GF: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.ProdInstances.catsDataMonadCombineForProd.G">G</span>]</span>)</span><span class="result">: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances.catsDataMonadCombineForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances.catsDataMonadCombineForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+        <span class="name">catsDataMonadCombineForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataMonadCombineForTuple2K.F">F</span>]</span>, <span name="GF">GF: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataMonadCombineForTuple2K.G">G</span>]</span>)</span><span class="result">: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[[α]<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataMonadCombineForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances.catsDataMonadCombineForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances</dd></dl></div>
-    </li><li name="cats.data.ProdInstances0#catsDataMonadForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadForProd[F[_],G[_]](implicitFM:cats.Monad[F],implicitGM:cats.Monad[G]):cats.Monad[[α]cats.data.Prod[F,G,α]]"></a><a id="catsDataMonadForProd[F[_],G[_]](Monad[F],Monad[G]):Monad[[α]Prod[F,G,α]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances0#catsDataMonadForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadForTuple2K[F[_],G[_]](implicitFM:cats.Monad[F],implicitGM:cats.Monad[G]):cats.Monad[[α]cats.data.Tuple2K[F,G,α]]"></a><a id="catsDataMonadForTuple2K[F[_],G[_]](Monad[F],Monad[G]):Monad[[α]Tuple2K[F,G,α]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataMonadForProd[F[_],G[_]](implicitFM:cats.Monad[F],implicitGM:cats.Monad[G]):cats.Monad[[α]cats.data.Prod[F,G,α]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataMonadForTuple2K[F[_],G[_]](implicitFM:cats.Monad[F],implicitGM:cats.Monad[G]):cats.Monad[[α]cats.data.Tuple2K[F,G,α]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -539,14 +539,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FM">FM: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataMonadForProd.F">F</span>]</span>, <span name="GM">GM: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataMonadForProd.G">G</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataMonadForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances0.catsDataMonadForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances0.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+        <span class="name">catsDataMonadForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FM">FM: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataMonadForTuple2K.F">F</span>]</span>, <span name="GM">GM: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataMonadForTuple2K.G">G</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[α]<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataMonadForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances0.catsDataMonadForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances0.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances0</dd></dl></div>
-    </li><li name="cats.data.ProdInstances1#catsDataMonoidKForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonoidKForProd[F[_],G[_]](implicitFF:cats.MonoidK[F],implicitGG:cats.MonoidK[G]):cats.MonoidK[[α]cats.data.Prod[F,G,α]]"></a><a id="catsDataMonoidKForProd[F[_],G[_]](MonoidK[F],MonoidK[G]):MonoidK[[α]Prod[F,G,α]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances0</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances1#catsDataMonoidKForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonoidKForTuple2K[F[_],G[_]](implicitFF:cats.MonoidK[F],implicitGG:cats.MonoidK[G]):cats.MonoidK[[α]cats.data.Tuple2K[F,G,α]]"></a><a id="catsDataMonoidKForTuple2K[F[_],G[_]](MonoidK[F],MonoidK[G]):MonoidK[[α]Tuple2K[F,G,α]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataMonoidKForProd[F[_],G[_]](implicitFF:cats.MonoidK[F],implicitGG:cats.MonoidK[G]):cats.MonoidK[[α]cats.data.Prod[F,G,α]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataMonoidKForTuple2K[F[_],G[_]](implicitFF:cats.MonoidK[F],implicitGG:cats.MonoidK[G]):cats.MonoidK[[α]cats.data.Tuple2K[F,G,α]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -555,14 +555,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonoidKForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.data.ProdInstances1.catsDataMonoidKForProd.F">F</span>]</span>, <span name="GG">GG: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.data.ProdInstances1.catsDataMonoidKForProd.G">G</span>]</span>)</span><span class="result">: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances1.catsDataMonoidKForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances1.catsDataMonoidKForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances1.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+        <span class="name">catsDataMonoidKForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.data.Tuple2KInstances1.catsDataMonoidKForTuple2K.F">F</span>]</span>, <span name="GG">GG: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.data.Tuple2KInstances1.catsDataMonoidKForTuple2K.G">G</span>]</span>)</span><span class="result">: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[α]<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances1.catsDataMonoidKForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances1.catsDataMonoidKForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances1.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances1</dd></dl></div>
-    </li><li name="cats.data.ProdInstances#catsDataOrderForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataOrderForProd[F[_],G[_],A](implicitFF:cats.Order[F[A]],implicitGF:cats.Order[G[A]]):cats.Order[cats.data.Prod[F,G,A]]"></a><a id="catsDataOrderForProd[F[_],G[_],A](Order[F[A]],Order[G[A]]):Order[Prod[F,G,A]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances1</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances#catsDataOrderForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataOrderForTuple2K[F[_],G[_],A](implicitFF:cats.Order[F[A]],implicitGF:cats.Order[G[A]]):cats.Order[cats.data.Tuple2K[F,G,A]]"></a><a id="catsDataOrderForTuple2K[F[_],G[_],A](Order[F[A]],Order[G[A]]):Order[Tuple2K[F,G,A]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataOrderForProd[F[_],G[_],A](implicitFF:cats.Order[F[A]],implicitGF:cats.Order[G[A]]):cats.Order[cats.data.Prod[F,G,A]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataOrderForTuple2K[F[_],G[_],A](implicitFF:cats.Order[F[A]],implicitGF:cats.Order[G[A]]):cats.Order[cats.data.Tuple2K[F,G,A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -571,14 +571,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataOrderForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.ProdInstances.catsDataOrderForProd.F">F</span>[<span class="extype" name="cats.data.ProdInstances.catsDataOrderForProd.A">A</span>]]</span>, <span name="GF">GF: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.ProdInstances.catsDataOrderForProd.G">G</span>[<span class="extype" name="cats.data.ProdInstances.catsDataOrderForProd.A">A</span>]]</span>)</span><span class="result">: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances.catsDataOrderForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances.catsDataOrderForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances.catsDataOrderForProd.A">A</span>]]</span>
+        <span class="name">catsDataOrderForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataOrderForTuple2K.F">F</span>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataOrderForTuple2K.A">A</span>]]</span>, <span name="GF">GF: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataOrderForTuple2K.G">G</span>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataOrderForTuple2K.A">A</span>]]</span>)</span><span class="result">: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataOrderForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances.catsDataOrderForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances.catsDataOrderForTuple2K.A">A</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances</dd></dl></div>
-    </li><li name="cats.data.ProdInstances2#catsDataSemigroupKForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataSemigroupKForProd[F[_],G[_]](implicitFF:cats.SemigroupK[F],implicitGG:cats.SemigroupK[G]):cats.SemigroupK[[α]cats.data.Prod[F,G,α]]"></a><a id="catsDataSemigroupKForProd[F[_],G[_]](SemigroupK[F],SemigroupK[G]):SemigroupK[[α]Prod[F,G,α]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances2#catsDataSemigroupKForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataSemigroupKForTuple2K[F[_],G[_]](implicitFF:cats.SemigroupK[F],implicitGG:cats.SemigroupK[G]):cats.SemigroupK[[α]cats.data.Tuple2K[F,G,α]]"></a><a id="catsDataSemigroupKForTuple2K[F[_],G[_]](SemigroupK[F],SemigroupK[G]):SemigroupK[[α]Tuple2K[F,G,α]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataSemigroupKForProd[F[_],G[_]](implicitFF:cats.SemigroupK[F],implicitGG:cats.SemigroupK[G]):cats.SemigroupK[[α]cats.data.Prod[F,G,α]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataSemigroupKForTuple2K[F[_],G[_]](implicitFF:cats.SemigroupK[F],implicitGG:cats.SemigroupK[G]):cats.SemigroupK[[α]cats.data.Tuple2K[F,G,α]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -587,14 +587,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataSemigroupKForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.data.ProdInstances2.catsDataSemigroupKForProd.F">F</span>]</span>, <span name="GG">GG: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.data.ProdInstances2.catsDataSemigroupKForProd.G">G</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances2.catsDataSemigroupKForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances2.catsDataSemigroupKForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances2.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+        <span class="name">catsDataSemigroupKForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.data.Tuple2KInstances2.catsDataSemigroupKForTuple2K.F">F</span>]</span>, <span name="GG">GG: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.data.Tuple2KInstances2.catsDataSemigroupKForTuple2K.G">G</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[α]<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances2.catsDataSemigroupKForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances2.catsDataSemigroupKForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances2.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances2</dd></dl></div>
-    </li><li name="cats.data.ProdInstances#catsDataShowForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataShowForProd[F[_],G[_],A](implicitFF:cats.Show[F[A]],implicitGF:cats.Show[G[A]]):cats.Show[cats.data.Prod[F,G,A]]"></a><a id="catsDataShowForProd[F[_],G[_],A](Show[F[A]],Show[G[A]]):Show[Prod[F,G,A]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances2</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances#catsDataShowForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataShowForTuple2K[F[_],G[_],A](implicitFF:cats.Show[F[A]],implicitGF:cats.Show[G[A]]):cats.Show[cats.data.Tuple2K[F,G,A]]"></a><a id="catsDataShowForTuple2K[F[_],G[_],A](Show[F[A]],Show[G[A]]):Show[Tuple2K[F,G,A]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataShowForProd[F[_],G[_],A](implicitFF:cats.Show[F[A]],implicitGF:cats.Show[G[A]]):cats.Show[cats.data.Prod[F,G,A]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataShowForTuple2K[F[_],G[_],A](implicitFF:cats.Show[F[A]],implicitGF:cats.Show[G[A]]):cats.Show[cats.data.Tuple2K[F,G,A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -603,14 +603,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataShowForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.ProdInstances.catsDataShowForProd.F">F</span>[<span class="extype" name="cats.data.ProdInstances.catsDataShowForProd.A">A</span>]]</span>, <span name="GF">GF: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.ProdInstances.catsDataShowForProd.G">G</span>[<span class="extype" name="cats.data.ProdInstances.catsDataShowForProd.A">A</span>]]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances.catsDataShowForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances.catsDataShowForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances.catsDataShowForProd.A">A</span>]]</span>
+        <span class="name">catsDataShowForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataShowForTuple2K.F">F</span>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataShowForTuple2K.A">A</span>]]</span>, <span name="GF">GF: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataShowForTuple2K.G">G</span>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataShowForTuple2K.A">A</span>]]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances.catsDataShowForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances.catsDataShowForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances.catsDataShowForTuple2K.A">A</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances</dd></dl></div>
-    </li><li name="cats.data.ProdInstances0#catsDataTraverseForProd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataTraverseForProd[F[_],G[_]](implicitFF:cats.Traverse[F],implicitGF:cats.Traverse[G]):cats.Traverse[[α]cats.data.Prod[F,G,α]]"></a><a id="catsDataTraverseForProd[F[_],G[_]](Traverse[F],Traverse[G]):Traverse[[α]Prod[F,G,α]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances</dd></dl></div>
+    </li><li name="cats.data.Tuple2KInstances0#catsDataTraverseForTuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataTraverseForTuple2K[F[_],G[_]](implicitFF:cats.Traverse[F],implicitGF:cats.Traverse[G]):cats.Traverse[[α]cats.data.Tuple2K[F,G,α]]"></a><a id="catsDataTraverseForTuple2K[F[_],G[_]](Traverse[F],Traverse[G]):Traverse[[α]Tuple2K[F,G,α]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#catsDataTraverseForProd[F[_],G[_]](implicitFF:cats.Traverse[F],implicitGF:cats.Traverse[G]):cats.Traverse[[α]cats.data.Prod[F,G,α]]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#catsDataTraverseForTuple2K[F[_],G[_]](implicitFF:cats.Traverse[F],implicitGF:cats.Traverse[G]):cats.Traverse[[α]cats.data.Tuple2K[F,G,α]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -619,14 +619,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataTraverseForProd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataTraverseForProd.F">F</span>]</span>, <span name="GF">GF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataTraverseForProd.G">G</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[α]<a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a>[<span class="extype" name="cats.data.ProdInstances0.catsDataTraverseForProd.F">F</span>, <span class="extype" name="cats.data.ProdInstances0.catsDataTraverseForProd.G">G</span>, <span class="extype" name="cats.data.ProdInstances0.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
+        <span class="name">catsDataTraverseForTuple2K</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataTraverseForTuple2K.F">F</span>]</span>, <span name="GF">GF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataTraverseForTuple2K.G">G</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[α]<a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a>[<span class="extype" name="cats.data.Tuple2KInstances0.catsDataTraverseForTuple2K.F">F</span>, <span class="extype" name="cats.data.Tuple2KInstances0.catsDataTraverseForTuple2K.G">G</span>, <span class="extype" name="cats.data.Tuple2KInstances0.&lt;refinement&gt;.Λ$.α">α</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProdInstances0</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Tuple2KInstances0</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#clone():Object" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -648,7 +648,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -664,7 +664,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -680,7 +680,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#finalize():Unit" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -702,7 +702,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#getClass():Class[_]" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -718,7 +718,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#hashCode():Int" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -734,7 +734,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -750,7 +750,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -766,7 +766,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#notify():Unit" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -782,7 +782,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#notifyAll():Unit" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -798,7 +798,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -814,7 +814,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#toString():String" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -830,7 +830,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#wait():Unit" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -852,7 +852,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -874,7 +874,7 @@ argument and produces an A value wrapped in F.">
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../cats/data/Prod$.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../cats/data/Tuple2K$.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -907,16 +907,16 @@ argument and produces an A value wrapped in F.">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="cats.data.ProdInstances">
-              <h3>Inherited from <span class="extype" name="cats.data.ProdInstances">ProdInstances</span></h3>
-            </div><div class="parent" name="cats.data.ProdInstances0">
-              <h3>Inherited from <span class="extype" name="cats.data.ProdInstances0">ProdInstances0</span></h3>
-            </div><div class="parent" name="cats.data.ProdInstances1">
-              <h3>Inherited from <span class="extype" name="cats.data.ProdInstances1">ProdInstances1</span></h3>
-            </div><div class="parent" name="cats.data.ProdInstances2">
-              <h3>Inherited from <span class="extype" name="cats.data.ProdInstances2">ProdInstances2</span></h3>
-            </div><div class="parent" name="cats.data.ProdInstances3">
-              <h3>Inherited from <span class="extype" name="cats.data.ProdInstances3">ProdInstances3</span></h3>
+            </div><div class="parent" name="cats.data.Tuple2KInstances">
+              <h3>Inherited from <span class="extype" name="cats.data.Tuple2KInstances">Tuple2KInstances</span></h3>
+            </div><div class="parent" name="cats.data.Tuple2KInstances0">
+              <h3>Inherited from <span class="extype" name="cats.data.Tuple2KInstances0">Tuple2KInstances0</span></h3>
+            </div><div class="parent" name="cats.data.Tuple2KInstances1">
+              <h3>Inherited from <span class="extype" name="cats.data.Tuple2KInstances1">Tuple2KInstances1</span></h3>
+            </div><div class="parent" name="cats.data.Tuple2KInstances2">
+              <h3>Inherited from <span class="extype" name="cats.data.Tuple2KInstances2">Tuple2KInstances2</span></h3>
+            </div><div class="parent" name="cats.data.Tuple2KInstances3">
+              <h3>Inherited from <span class="extype" name="cats.data.Tuple2KInstances3">Tuple2KInstances3</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

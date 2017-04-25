@@ -131,10 +131,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
                           Const
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Coproduct$.html" title=""></a>
-                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
-                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
-                          Coproduct
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="EitherK.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="EitherK.html" title="F on the left and G on the right of scala.util.Either.">
+                          EitherK
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="EitherT$.html" title=""></a>
@@ -170,8 +170,8 @@ fail-fast effect of Either.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
-                        <a class="class" href="Nested.html" title="Similar to cats.data.Prod, but for nested composition."></a>
-                        <a href="Nested.html" title="Similar to cats.data.Prod, but for nested composition.">
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">
                           Nested
                         </a>
                       </li><li class="current-entities indented2">
@@ -205,12 +205,6 @@ convenient methods for working with this nested structure.">
                           OptionT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Prod$.html" title=""></a>
-                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
-                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
-                          Prod
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Reader$.html" title=""></a>
                         <a href="package$$Reader$.html" title="">
@@ -229,6 +223,12 @@ argument and produces an A value wrapped in F."></a>
                         <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
 argument and produces an A value wrapped in F.">
                           StateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Tuple2K$.html" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">
+                          Tuple2K
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Validated$.html" title=""></a>
@@ -480,9 +480,9 @@ argument and produces an A value wrapped in F.">
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
     </li><li name="cats.data.OneAndInstances#catsDataSemigroupForOneAnd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataSemigroupForOneAnd[F[_],A](implicitevidence$2:cats.MonadCombine[F]):cats.Semigroup[cats.data.OneAnd[F,A]]"></a><a id="catsDataSemigroupForOneAnd[F[_],A](MonadCombine[F]):Semigroup[OneAnd[F,A]]"></a>
+      <a id="catsDataSemigroupForOneAnd[F[_],A](implicitevidence$2:cats.Alternative[F]):cats.Semigroup[cats.data.OneAnd[F,A]]"></a><a id="catsDataSemigroupForOneAnd[F[_],A](Alternative[F]):Semigroup[OneAnd[F,A]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OneAnd$.html#catsDataSemigroupForOneAnd[F[_],A](implicitevidence$2:cats.MonadCombine[F]):cats.Semigroup[cats.data.OneAnd[F,A]]" title="Permalink">
+      <a href="../../cats/data/OneAnd$.html#catsDataSemigroupForOneAnd[F[_],A](implicitevidence$2:cats.Alternative[F]):cats.Semigroup[cats.data.OneAnd[F,A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -491,14 +491,14 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataSemigroupForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupForOneAnd.A">A</span>]]</span>
+        <span class="name">catsDataSemigroupForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupForOneAnd.A">A</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
     </li><li name="cats.data.OneAndInstances#catsDataSemigroupKForOneAnd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataSemigroupKForOneAnd[F[_]](implicitevidence$1:cats.MonadCombine[F]):cats.SemigroupK[[β$0$]cats.data.OneAnd[F,β$0$]]"></a><a id="catsDataSemigroupKForOneAnd[F[_]](MonadCombine[F]):SemigroupK[[β$0$]OneAnd[F,β$0$]]"></a>
+      <a id="catsDataSemigroupKForOneAnd[F[_]](implicitevidence$1:cats.Alternative[F]):cats.SemigroupK[[β$0$]cats.data.OneAnd[F,β$0$]]"></a><a id="catsDataSemigroupKForOneAnd[F[_]](Alternative[F]):SemigroupK[[β$0$]OneAnd[F,β$0$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OneAnd$.html#catsDataSemigroupKForOneAnd[F[_]](implicitevidence$1:cats.MonadCombine[F]):cats.SemigroupK[[β$0$]cats.data.OneAnd[F,β$0$]]" title="Permalink">
+      <a href="../../cats/data/OneAnd$.html#catsDataSemigroupKForOneAnd[F[_]](implicitevidence$1:cats.Alternative[F]):cats.SemigroupK[[β$0$]cats.data.OneAnd[F,β$0$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -507,7 +507,7 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataSemigroupKForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupKForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[β$0$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupKForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>]]</span>
+        <span class="name">catsDataSemigroupKForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupKForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[β$0$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupKForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>

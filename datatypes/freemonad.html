@@ -1,4 +1,4 @@
-<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper" style="background:url('/cats/img/sidebar_brand.png') no-repeat"><span>Cats</span></div></a></li>            <li><a href="/cats/datatypes.html" class="">Data Types</a></li> <li><a href="/cats/datatypes/const.html" class="">Const</a></li> <li><a href="/cats/datatypes/either.html" class="">Either</a></li> <li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li> <li><a href="/cats/datatypes/freemonad.html" class=" active ">FreeMonads</a></li> <li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li> <li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li> <li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li> <li><a href="/cats/datatypes/state.html" class="">State</a></li> <li><a href="/cats/datatypes/validated.html" class="">Validated</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="free-monad">Free Monad</h1>
+<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper" style="background:url('/cats/img/sidebar_brand.png') no-repeat"><span>Cats</span></div></a></li>            <li><a href="/cats/datatypes.html" class="">Data Types</a></li> <li><a href="/cats/datatypes/const.html" class="">Const</a></li> <li><a href="/cats/datatypes/either.html" class="">Either</a></li> <li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li> <li><a href="/cats/datatypes/freemonad.html" class=" active ">FreeMonads</a></li> <li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li> <li><a href="/cats/datatypes/id.html" class="">Id</a></li> <li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li> <li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li> <li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li> <li><a href="/cats/datatypes/state.html" class="">State</a></li> <li><a href="/cats/datatypes/validated.html" class="">Validated</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="free-monad">Free Monad</h1>
 
 <h2 id="what-is-it">What is it?</h2>
 
@@ -90,7 +90,7 @@ recursive values.</p>
 
 <h3 id="free-your-adt">Free your ADT</h3>
 
-<p>There are six basic steps to “freeing” the ADT:</p>
+<p>There are five basic steps to “freeing” the ADT:</p>
 
 <ol>
   <li>Create a type based on <code class="highlighter-rouge">Free[_]</code> and <code class="highlighter-rouge">KVStoreA[_]</code>.</li>
@@ -280,7 +280,7 @@ never overflow your stack.  Trampolining is heap-intensive but
 stack-safety provides the reliability required to use <code class="highlighter-rouge">Free[_]</code> for
 data-intensive tasks, as well as infinite processes such as streams.</p>
 
-<h4 id="use-a-pure-compiler-optional">7. Use a pure compiler (optional)</h4>
+<h4 id="use-a-pure-compiler-optional">6. Use a pure compiler (optional)</h4>
 
 <p>The previous examples used an effectful natural transformation. This
 works, but you might prefer folding your <code class="highlighter-rouge">Free</code> in a “purer” way. The
@@ -314,14 +314,14 @@ it’s not too hard to get around.)</p>
 <h2 id="composing-free-monads-adts">Composing Free monads ADTs.</h2>
 
 <p>Real world applications often time combine different algebras.
-The <code class="highlighter-rouge">Inject</code> type class described by Swierstra in <a href="http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf">Data types à la carte</a>
+The injection type class described by Swierstra in <a href="http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf">Data types à la carte</a>
 lets us compose different algebras in the context of <code class="highlighter-rouge">Free</code>.</p>
 
-<p>Let’s see a trivial example of unrelated ADT’s getting composed as a <code class="highlighter-rouge">Coproduct</code> that can form a more complex program.</p>
+<p>Let’s see a trivial example of unrelated ADT’s getting composed as a <code class="highlighter-rouge">EitherK</code> that can form a more complex program.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Coproduct</span>
-<span class="k">import</span> <span class="nn">cats.free.</span><span class="o">{</span><span class="nc">Inject</span><span class="o">,</span> <span class="nc">Free</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Id</span><span class="o">,</span> <span class="o">~&gt;}</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.EitherK</span>
+<span class="k">import</span> <span class="nn">cats.free.Free</span>
+<span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Id</span><span class="o">,</span> <span class="nc">InjectK</span><span class="o">,</span> <span class="o">~&gt;}</span>
 <span class="k">import</span> <span class="nn">scala.collection.mutable.ListBuffer</span>
 </code></pre>
 </div>
@@ -338,30 +338,30 @@ lets us compose different algebras in the context of <code class="highlighter-ro
 </code></pre>
 </div>
 
-<p>Once the ADTs are defined we can formally state that a <code class="highlighter-rouge">Free</code> program is the Coproduct of it’s Algebras.</p>
+<p>Once the ADTs are defined we can formally state that a <code class="highlighter-rouge">Free</code> program is the EitherK of it’s Algebras.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">type</span> <span class="kt">CatsApp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Coproduct</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">Interact</span>, <span class="kt">A</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">type</span> <span class="kt">CatsApp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">Interact</span>, <span class="kt">A</span><span class="o">]</span>
 </code></pre>
 </div>
 
 <p>In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the <code class="highlighter-rouge">Free</code> context.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">Inject</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">tell</span><span class="o">(</span><span class="n">msg</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">.</span><span class="n">inject</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">](</span><span class="nc">Tell</span><span class="o">(</span><span class="n">msg</span><span class="o">))</span>
   <span class="k">def</span> <span class="n">ask</span><span class="o">(</span><span class="n">prompt</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">.</span><span class="n">inject</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">](</span><span class="nc">Ask</span><span class="o">(</span><span class="n">prompt</span><span class="o">))</span>
 <span class="o">}</span>
 
 <span class="k">object</span> <span class="nc">Interacts</span> <span class="o">{</span>
-  <span class="k">implicit</span> <span class="k">def</span> <span class="n">interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">Inject</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
+  <span class="k">implicit</span> <span class="k">def</span> <span class="n">interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
 <span class="o">}</span>
 
-<span class="k">class</span> <span class="nc">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">Inject</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
+<span class="k">class</span> <span class="nc">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">addCat</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">.</span><span class="n">inject</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">](</span><span class="nc">AddCat</span><span class="o">(</span><span class="n">a</span><span class="o">))</span>
   <span class="k">def</span> <span class="n">getAllCats</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">.</span><span class="n">inject</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">](</span><span class="nc">GetAllCats</span><span class="o">())</span>
 <span class="o">}</span>
 
 <span class="k">object</span> <span class="nc">DataSource</span> <span class="o">{</span>
-  <span class="k">implicit</span> <span class="k">def</span> <span class="n">dataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">Inject</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
+  <span class="k">implicit</span> <span class="k">def</span> <span class="n">dataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
 <span class="o">}</span>
 </code></pre>
 </div>
@@ -382,7 +382,7 @@ lets us compose different algebras in the context of <code class="highlighter-ro
 </code></pre>
 </div>
 
-<p>Finally we write one interpreter per ADT and combine them with a <code class="highlighter-rouge">FunctionK</code> to <code class="highlighter-rouge">Coproduct</code> so they can be
+<p>Finally we write one interpreter per ADT and combine them with a <code class="highlighter-rouge">FunctionK</code> to <code class="highlighter-rouge">EitherK</code> so they can be
 compiled and applied to our <code class="highlighter-rouge">Free</code> program.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">ConsoleCatsInterpreter</span> <span class="k">extends</span> <span class="o">(</span><span class="nc">Interact</span> <span class="o">~&gt;</span> <span class="nc">Id</span><span class="o">)</span> <span class="o">{</span>
@@ -518,9 +518,9 @@ right-associated structure not subject to quadratic complexity.</p>
 
 <h2 id="freet">FreeT</h2>
 
-<p>Often times we want to interleave the syntax tree when building a Free monad 
-with some other effect not declared as part of the ADT. 
-FreeT solves this problem by allowing us to mix building steps of the AST 
+<p>Often times we want to interleave the syntax tree when building a Free monad
+with some other effect not declared as part of the ADT.
+FreeT solves this problem by allowing us to mix building steps of the AST
 with calling action in other base monad.</p>
 
 <p>In the following example a basic console application is shown.
@@ -556,7 +556,7 @@ monad with stronger equational guarantees than if we were emulating the <code cl
 <span class="c1">// defined type alias Log
 </span>
 <span class="cm">/** Smart constructors, notice we are abstracting over any MonadState instance
- *  to potentially support other types beside State 
+ *  to potentially support other types beside State
  */</span>
 <span class="k">class</span> <span class="nc">TeletypeOps</span><span class="o">[</span><span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="nc">MS</span> <span class="k">:</span> <span class="kt">MonadState</span><span class="o">[</span><span class="kt">M</span>, <span class="kt">Log</span><span class="o">])</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">writeLine</span><span class="o">(</span><span class="n">line</span> <span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="kt">TeletypeT</span><span class="o">[</span><span class="kt">M</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span>
@@ -583,12 +583,12 @@ monad with stronger equational guarantees than if we were emulating the <code cl
 	<span class="n">userSaid</span> <span class="k">&lt;-</span> <span class="nc">TO</span><span class="o">.</span><span class="n">readLine</span><span class="o">(</span><span class="s">"what's up?!"</span><span class="o">)</span>
 	<span class="k">_</span> <span class="k">&lt;-</span> <span class="nc">TO</span><span class="o">.</span><span class="n">log</span><span class="o">(</span><span class="n">s</span><span class="s">"user said : $userSaid"</span><span class="o">)</span>
 	<span class="k">_</span> <span class="k">&lt;-</span> <span class="nc">TO</span><span class="o">.</span><span class="n">writeLine</span><span class="o">(</span><span class="s">"thanks, see you soon!"</span><span class="o">)</span>
-  <span class="o">}</span> <span class="k">yield</span> <span class="o">()</span> 
+  <span class="o">}</span> <span class="k">yield</span> <span class="o">()</span>
 <span class="o">}</span>
 <span class="c1">// program: (implicit TO: TeletypeOps[TeletypeState])TeletypeT[TeletypeState,Unit]
 </span>
 <span class="k">def</span> <span class="n">interpreter</span> <span class="k">=</span> <span class="k">new</span> <span class="o">(</span><span class="nc">Teletype</span> <span class="o">~&gt;</span> <span class="nc">TeletypeState</span><span class="o">)</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span> <span class="k">:</span> <span class="kt">Teletype</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="k">:</span> <span class="kt">TeletypeState</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>  
+  <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span> <span class="k">:</span> <span class="kt">Teletype</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="k">:</span> <span class="kt">TeletypeState</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
 	<span class="n">fa</span> <span class="k">match</span> <span class="o">{</span>
 	  <span class="k">case</span> <span class="nc">ReadLine</span><span class="o">(</span><span class="n">prompt</span><span class="o">)</span> <span class="k">=&gt;</span>
 		<span class="n">println</span><span class="o">(</span><span class="n">prompt</span><span class="o">)</span>
@@ -605,7 +605,7 @@ monad with stronger equational guarantees than if we were emulating the <code cl
 <span class="c1">// import TeletypeOps._
 </span>
 <span class="k">val</span> <span class="n">state</span> <span class="k">=</span> <span class="n">program</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="n">interpreter</span><span class="o">)</span>
-<span class="c1">// state: TeletypeState[Unit] = cats.data.StateT@ed1ee86
+<span class="c1">// state: TeletypeState[Unit] = cats.data.StateT@2e3d13d
 </span>
 <span class="k">val</span> <span class="n">initialState</span> <span class="k">=</span> <span class="nc">Nil</span>
 <span class="c1">// initialState: scala.collection.immutable.Nil.type = List()

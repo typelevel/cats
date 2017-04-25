@@ -131,10 +131,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
                           Const
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Coproduct$.html" title=""></a>
-                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
-                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
-                          Coproduct
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="EitherK.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="EitherK.html" title="F on the left and G on the right of scala.util.Either.">
+                          EitherK
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="EitherT$.html" title=""></a>
@@ -170,8 +170,8 @@ fail-fast effect of Either.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
-                        <a class="class" href="Nested.html" title="Similar to cats.data.Prod, but for nested composition."></a>
-                        <a href="Nested.html" title="Similar to cats.data.Prod, but for nested composition.">
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">
                           Nested
                         </a>
                       </li><li class="current-entities indented2">
@@ -205,12 +205,6 @@ convenient methods for working with this nested structure.">
                           OptionT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Prod$.html" title=""></a>
-                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
-                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
-                          Prod
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Reader$.html" title=""></a>
                         <a href="package$$Reader$.html" title="">
@@ -229,6 +223,12 @@ argument and produces an A value wrapped in F."></a>
                         <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
 argument and produces an A value wrapped in F.">
                           StateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Tuple2K$.html" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">
+                          Tuple2K
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Validated$.html" title=""></a>
@@ -280,7 +280,7 @@ argument and produces an A value wrapped in F.">
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A data type which represents a single element (head) and some other
 structure (tail). As we have done in package.scala, this can be
-used to represent a List which is guaranteed to not be empty:</p><pre><span class="kw">type</span> NonEmptyList[A] = OneAnd[<span class="std">List</span>, A]</pre></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/OneAnd.scala" target="_blank">OneAnd.scala</a></dd></dl><div class="toggleContainer block">
+used to represent a Stream which is guaranteed to not be empty:</p><pre><span class="kw">type</span> NonEmptyStream[A] = OneAnd[Stream, A]</pre></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/OneAnd.scala" target="_blank">OneAnd.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -463,9 +463,9 @@ universal equality provided by .equals.
               
         </dd></dl></div>
     </li><li name="cats.data.OneAnd#combine" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="combine(other:cats.data.OneAnd[F,A])(implicitF:cats.MonadCombine[F]):cats.data.OneAnd[F,A]"></a><a id="combine(OneAnd[F,A])(MonadCombine[F]):OneAnd[F,A]"></a>
+      <a id="combine(other:cats.data.OneAnd[F,A])(implicitF:cats.Alternative[F]):cats.data.OneAnd[F,A]"></a><a id="combine(OneAnd[F,A])(Alternative[F]):OneAnd[F,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OneAnd.html#combine(other:cats.data.OneAnd[F,A])(implicitF:cats.MonadCombine[F]):cats.data.OneAnd[F,A]" title="Permalink">
+      <a href="../../cats/data/OneAnd.html#combine(other:cats.data.OneAnd[F,A])(implicitF:cats.Alternative[F]):cats.data.OneAnd[F,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -474,7 +474,7 @@ universal equality provided by .equals.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">combine</span><span class="params">(<span name="other">other: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>, <span class="extype" name="cats.data.OneAnd.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>, <span class="extype" name="cats.data.OneAnd.A">A</span>]</span>
+        <span class="name">combine</span><span class="params">(<span name="other">other: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>, <span class="extype" name="cats.data.OneAnd.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>, <span class="extype" name="cats.data.OneAnd.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Append another OneAnd to this
@@ -780,9 +780,9 @@ universal .toString method.
       
       
     </li><li name="cats.data.OneAnd#unwrap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="unwrap(implicitF:cats.MonadCombine[F]):F[A]"></a><a id="unwrap(MonadCombine[F]):F[A]"></a>
+      <a id="unwrap(implicitF:cats.Alternative[F]):F[A]"></a><a id="unwrap(Alternative[F]):F[A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OneAnd.html#unwrap(implicitF:cats.MonadCombine[F]):F[A]" title="Permalink">
+      <a href="../../cats/data/OneAnd.html#unwrap(implicitF:cats.Alternative[F]):F[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -791,7 +791,7 @@ universal .toString method.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unwrap</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../MonadCombine.html" class="extype" name="cats.MonadCombine">MonadCombine</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>
+        <span class="name">unwrap</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAnd.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OneAnd.F">F</span>[<span class="extype" name="cats.data.OneAnd.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Combine the head and tail into a single <code>F[A]</code> value.</p>

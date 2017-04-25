@@ -147,12 +147,6 @@
                           FreeT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Inject$.html" title=""></a>
-                        <a class="class" href="Inject.html" title="Inject type class as described in &quot;Data types a la carte&quot; (Swierstra 2008)."></a>
-                        <a href="Inject.html" title="Inject type class as described in &quot;Data types a la carte&quot; (Swierstra 2008).">
-                          Inject
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Trampoline$.html" title=""></a>
                         <a href="package$$Trampoline$.html" title="">
@@ -569,9 +563,9 @@ from its suspension functor.</p>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.free.Free#inject" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="inject[G[_]](implicitev:cats.free.Inject[S,G]):cats.free.Free[G,A]"></a><a id="inject[G[_]](Inject[S,G]):Free[G,A]"></a>
+      <a id="inject[G[_]](implicitev:cats.InjectK[S,G]):cats.free.Free[G,A]"></a><a id="inject[G[_]](InjectK[S,G]):Free[G,A]"></a>
       <span class="permalink">
-      <a href="../../cats/free/Free.html#inject[G[_]](implicitev:cats.free.Inject[S,G]):cats.free.Free[G,A]" title="Permalink">
+      <a href="../../cats/free/Free.html#inject[G[_]](implicitev:cats.InjectK[S,G]):cats.free.Free[G,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -580,11 +574,11 @@ from its suspension functor.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">inject</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Inject.html" class="extype" name="cats.free.Inject">Inject</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.inject.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.inject.G">G</span>, <span class="extype" name="cats.free.Free.A">A</span>]</span>
+        <span class="name">inject</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../InjectK.html" class="extype" name="cats.InjectK">InjectK</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.inject.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.inject.G">G</span>, <span class="extype" name="cats.free.Free.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Lift into <code>G</code> (typically a <code>Coproduct</code>) given <code>Inject</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Lift into <code>G</code> (typically a <code>Coproduct</code>) given <code>Inject</code>. Analogous
-to <code>Free.inject</code> but lifts programs rather than constructors.</p><pre>scala&gt; <span class="kw">type</span> Lo[A] = cats.data.Coproduct[<span class="std">List</span>, <span class="std">Option</span>, A]
+      <p class="shortcomment cmt">Lift into <code>G</code> (typically a <code>EitherK</code>) given <code>InjectK</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Lift into <code>G</code> (typically a <code>EitherK</code>) given <code>InjectK</code>. Analogous
+to <code>Free.inject</code> but lifts programs rather than constructors.</p><pre>scala&gt; <span class="kw">type</span> Lo[A] = cats.data.EitherK[<span class="std">List</span>, <span class="std">Option</span>, A]
 defined <span class="kw">type</span> alias Lo
 
 scala&gt; <span class="kw">val</span> fo = Free.liftF(<span class="std">Option</span>(<span class="lit">"foo"</span>))

@@ -126,6 +126,24 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.evidence" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="evidence"></a><a id="evidence:evidence"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#evidence" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="evidence/index.html">
+              <span class="name">evidence</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
     </li><li name="cats.free" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="free"></a><a id="free:free"></a>
       <span class="permalink">
@@ -353,6 +371,14 @@ a normal value and returns a value in a context (A =&gt; F[B]).">
                         <a class="trait" href="FunctorFilter.html" title=""></a>
                         <a href="FunctorFilter.html" title="">
                           FunctorFilter
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="InjectK$.html" title=""></a>
+                        <a class="class" href="InjectK.html" title="The injection type class as described in &quot;Data types a la carte&quot;
+(Swierstra 2008)."></a>
+                        <a href="InjectK.html" title="The injection type class as described in &quot;Data types a la carte&quot;
+(Swierstra 2008).">
+                          InjectK
                         </a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="InvariantMonoidal$.html" title=""></a>
@@ -1704,58 +1730,6 @@ scala&gt; x.sequence
 res0: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">Some</span>(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>))
 scala&gt; y.sequence
 res1: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a></dd></dl></div>
-    </li><li name="cats.Traverse#sequenceU" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="sequenceU[GA](fga:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[F[U.A]]"></a><a id="sequenceU[GA](F[GA])(Unapply[Applicative,GA]):M[F[A]]"></a>
-      <span class="permalink">
-      <a href="../cats/TraverseFilter.html#sequenceU[GA](fga:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[F[U.A]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">sequenceU</span><span class="tparams">[<span name="GA">GA</span>]</span><span class="params">(<span name="fga">fga: <span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Traverse.sequenceU.GA">GA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.Traverse.sequenceU.GA">GA</span>]</span>)</span><span class="result">: <a href="Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>[<a href="Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Behaves just like sequence, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
-Applicative instance for G.</p><div class="fullcomment"><div class="comment cmt"><p>Behaves just like sequence, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
-Applicative instance for G.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.{Validated, ValidatedNel}
-scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">val</span> x: <span class="std">List</span>[ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">List</span>(Validated.valid(<span class="num">1</span>), Validated.invalid(<span class="lit">"a"</span>), Validated.invalid(<span class="lit">"b"</span>)).map(_.toValidatedNel)
-scala&gt; x.sequenceU
-res0: cats.data.ValidatedNel[<span class="std">String</span>,<span class="std">List</span>[<span class="std">Int</span>]] = Invalid(NonEmptyList(a, b))
-scala&gt; x.sequence[ValidatedNel[<span class="std">String</span>, ?], <span class="std">Int</span>]
-res1: cats.data.ValidatedNel[<span class="std">String</span>,<span class="std">List</span>[<span class="std">Int</span>]] = Invalid(NonEmptyList(a, b))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a></dd></dl></div>
-    </li><li name="cats.Foldable#sequenceU_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="sequenceU_[GA](fa:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[Unit]"></a><a id="sequenceU_[GA](F[GA])(Unapply[Applicative,GA]):M[Unit]"></a>
-      <span class="permalink">
-      <a href="../cats/TraverseFilter.html#sequenceU_[GA](fa:F[GA])(implicitU:cats.Unapply[cats.Applicative,GA]):U.M[Unit]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">sequenceU_</span><span class="tparams">[<span name="GA">GA</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Foldable.sequenceU_.GA">GA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.Foldable.sequenceU_.GA">GA</span>]</span>)</span><span class="result">: <a href="Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
-<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like sequence_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
-<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a></p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
-scala&gt; F.sequenceU_(<span class="std">List</span>(Either.right[<span class="std">String</span>, <span class="std">Int</span>](<span class="num">333</span>), Right(<span class="num">444</span>)))
-res0: Either[<span class="std">String</span>, <span class="std">Unit</span>] = Right(())
-scala&gt; F.sequenceU_(<span class="std">List</span>(Either.right[<span class="std">String</span>, <span class="std">Int</span>](<span class="num">333</span>), Left(<span class="lit">"boo"</span>)))
-res1: Either[<span class="std">String</span>, <span class="std">Unit</span>] = Left(boo)</pre><p>Note that using <code>sequence_</code> instead of <code>sequenceU_</code> would not compile without
-explicitly passing in the type parameters - the type checker has trouble
-inferring the appropriate instance.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#sequence_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sequence_[G[_],A](fga:F[G[A]])(implicitevidence$2:cats.Applicative[G]):G[Unit]"></a><a id="sequence_[G[_],A](F[G[A]])(Applicative[G]):G[Unit]"></a>
       <span class="permalink">
@@ -1889,61 +1863,6 @@ scala&gt; <span class="std">List</span>(<span class="lit">"1"</span>, <span clas
 res0: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">Some</span>(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>))
 scala&gt; <span class="std">List</span>(<span class="lit">"1"</span>, <span class="lit">"two"</span>, <span class="lit">"3"</span>).traverse(parseInt)
 res1: <span class="std">Option</span>[<span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.TraverseFilter">TraverseFilter</a> → <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a></dd></dl></div>
-    </li><li name="cats.Traverse#traverseU" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="traverseU[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[F[U.A]]"></a><a id="traverseU[A,GB](F[A])((A)⇒GB)(Unapply[Applicative,GB]):M[F[A]]"></a>
-      <span class="permalink">
-      <a href="../cats/TraverseFilter.html#traverseU[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[F[U.A]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">traverseU</span><span class="tparams">[<span name="A">A</span>, <span name="GB">GB</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Traverse.traverseU.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.traverseU.A">A</span>) ⇒ <span class="extype" name="cats.Traverse.traverseU.GB">GB</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.Traverse.traverseU.GB">GB</span>]</span>)</span><span class="result">: <a href="Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>[<a href="Unapply.html#A" class="extmbr" name="cats.Unapply.A">A</a>]]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Behaves just like traverse, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
-Applicative instance for G.</p><div class="fullcomment"><div class="comment cmt"><p>Behaves just like traverse, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
-Applicative instance for G.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): Either[<span class="std">String</span>, <span class="std">Int</span>] = Either.catchOnly[NumberFormatException](s.toInt).leftMap(_ <span class="kw">=&gt;</span> <span class="lit">"no number"</span>)
-scala&gt; <span class="kw">val</span> ns = <span class="std">List</span>(<span class="lit">"1"</span>, <span class="lit">"2"</span>, <span class="lit">"3"</span>)
-scala&gt; ns.traverseU(parseInt)
-res0: Either[<span class="std">String</span>, <span class="std">List</span>[<span class="std">Int</span>]] = Right(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>))
-scala&gt; ns.traverse[Either[<span class="std">String</span>, ?], <span class="std">Int</span>](parseInt)
-res1: Either[<span class="std">String</span>, <span class="std">List</span>[<span class="std">Int</span>]] = Right(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a></dd></dl></div>
-    </li><li name="cats.Foldable#traverseU_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="traverseU_[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[Unit]"></a><a id="traverseU_[A,GB](F[A])((A)⇒GB)(Unapply[Applicative,GB]):M[Unit]"></a>
-      <span class="permalink">
-      <a href="../cats/TraverseFilter.html#traverseU_[A,GB](fa:F[A])(f:A=&gt;GB)(implicitU:cats.Unapply[cats.Applicative,GB]):U.M[Unit]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">traverseU_</span><span class="tparams">[<span name="A">A</span>, <span name="GB">GB</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.TraverseFilter.F">F</span>[<span class="extype" name="cats.Foldable.traverseU_.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.traverseU_.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.traverseU_.GB">GB</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="U">U: <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a>[<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>, <span class="extype" name="cats.Foldable.traverseU_.GB">GB</span>]</span>)</span><span class="result">: <a href="Unapply.html#M[_]" class="extmbr" name="cats.Unapply.M">M</a>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
-<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a></p><div class="fullcomment"><div class="comment cmt"><p>Behaves like traverse_, but uses <a href="Unapply.html" class="extype" name="cats.Unapply">Unapply</a> to find the
-<a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>G</code> - used when <code>G</code> is a
-type constructor with two or more parameters such as <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a></p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">def</span> parseInt(s: <span class="std">String</span>): Either[<span class="std">String</span>, <span class="std">Int</span>] =
-     |   <span class="kw">try</span> { Right(s.toInt) }
-     |   <span class="kw">catch</span> { <span class="kw">case</span> _: NumberFormatException <span class="kw">=&gt;</span> Left(<span class="lit">"boo"</span>) }
-scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
-scala&gt; F.traverseU_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"444"</span>))(parseInt)
-res0: Either[<span class="std">String</span>, <span class="std">Unit</span>] = Right(())
-scala&gt; F.traverseU_(<span class="std">List</span>(<span class="lit">"333"</span>, <span class="lit">"zzz"</span>))(parseInt)
-res1: Either[<span class="std">String</span>, <span class="std">Unit</span>] = Left(boo)</pre><p>Note that using <code>traverse_</code> instead of <code>traverseU_</code> would not compile without
-explicitly passing in the type parameters - the type checker has trouble
-inferring the appropriate instance.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#traverse_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverse_[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitG:cats.Applicative[G]):G[Unit]"></a><a id="traverse_[G[_],A,B](F[A])((A)⇒G[B])(Applicative[G]):G[Unit]"></a>
       <span class="permalink">

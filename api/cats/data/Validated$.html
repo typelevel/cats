@@ -131,10 +131,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
                           Const
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Coproduct$.html" title=""></a>
-                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
-                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
-                          Coproduct
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="EitherK.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="EitherK.html" title="F on the left and G on the right of scala.util.Either.">
+                          EitherK
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="EitherT$.html" title=""></a>
@@ -170,8 +170,8 @@ fail-fast effect of Either.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
-                        <a class="class" href="Nested.html" title="Similar to cats.data.Prod, but for nested composition."></a>
-                        <a href="Nested.html" title="Similar to cats.data.Prod, but for nested composition.">
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">
                           Nested
                         </a>
                       </li><li class="current-entities indented2">
@@ -205,12 +205,6 @@ convenient methods for working with this nested structure.">
                           OptionT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Prod$.html" title=""></a>
-                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
-                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
-                          Prod
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Reader$.html" title=""></a>
                         <a href="package$$Reader$.html" title="">
@@ -229,6 +223,12 @@ argument and produces an A value wrapped in F."></a>
                         <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
 argument and produces an A value wrapped in F.">
                           StateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Tuple2K$.html" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">
+                          Tuple2K
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="" title=""></a>
@@ -492,6 +492,22 @@ res0: Validated[NumberFormatException, <span class="std">Int</span>] = Invalid(j
 the <code>fromTryCatchThrowable</code> method <a href="https://github.com/scalaz/scalaz/pull/746/files" target="_blank">contributed</a>
 to Scalaz by Brian McKenna.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctions</dd></dl></div>
+    </li><li name="cats.data.ValidatedInstances#catsDataApplicativeErrorForValidated" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataApplicativeErrorForValidated[E](implicitE:cats.Semigroup[E]):cats.ApplicativeError[[β$2$]cats.data.Validated[E,β$2$],E]"></a><a id="catsDataApplicativeErrorForValidated[E](Semigroup[E]):ApplicativeError[[β$2$]Validated[E,β$2$],E]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$.html#catsDataApplicativeErrorForValidated[E](implicitE:cats.Semigroup[E]):cats.ApplicativeError[[β$2$]cats.data.Validated[E,β$2$],E]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataApplicativeErrorForValidated</span><span class="tparams">[<span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="E">E: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.ValidatedInstances.catsDataApplicativeErrorForValidated.E">E</span>]</span>)</span><span class="result">: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[[β$2$]<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedInstances.catsDataApplicativeErrorForValidated.E">E</span>, <span class="extype" name="cats.data.ValidatedInstances.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>], <span class="extype" name="cats.data.ValidatedInstances.catsDataApplicativeErrorForValidated.E">E</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedInstances</dd></dl></div>
     </li><li name="cats.data.ValidatedInstances#catsDataBitraverseForValidated" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsDataBitraverseForValidated:cats.Bitraverse[cats.data.Validated]"></a><a id="catsDataBitraverseForValidated:Bitraverse[Validated]"></a>
       <span class="permalink">
@@ -509,9 +525,9 @@ to Scalaz by Brian McKenna.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedInstances</dd></dl></div>
     </li><li name="cats.data.ValidatedInstances2#catsDataEqForValidated" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataEqForValidated[A,B](implicitevidence$6:cats.Eq[A],implicitevidence$7:cats.Eq[B]):cats.Eq[cats.data.Validated[A,B]]"></a><a id="catsDataEqForValidated[A,B](Eq[A],Eq[B]):Eq[Validated[A,B]]"></a>
+      <a id="catsDataEqForValidated[A,B](implicitevidence$5:cats.Eq[A],implicitevidence$6:cats.Eq[B]):cats.Eq[cats.data.Validated[A,B]]"></a><a id="catsDataEqForValidated[A,B](Eq[A],Eq[B]):Eq[Validated[A,B]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Validated$.html#catsDataEqForValidated[A,B](implicitevidence$6:cats.Eq[A],implicitevidence$7:cats.Eq[B]):cats.Eq[cats.data.Validated[A,B]]" title="Permalink">
+      <a href="../../cats/data/Validated$.html#catsDataEqForValidated[A,B](implicitevidence$5:cats.Eq[A],implicitevidence$6:cats.Eq[B]):cats.Eq[cats.data.Validated[A,B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -524,22 +540,6 @@ to Scalaz by Brian McKenna.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedInstances2</dd></dl></div>
-    </li><li name="cats.data.ValidatedInstances#catsDataInstancesForValidated" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataInstancesForValidated[E](implicitE:cats.Semigroup[E]):cats.Traverse[[β$2$]cats.data.Validated[E,β$2$]]withcats.ApplicativeError[[β$3$]cats.data.Validated[E,β$3$],E]"></a><a id="catsDataInstancesForValidated[E](Semigroup[E]):Traverse[[β$2$]Validated[E,β$2$]]withApplicativeError[[β$3$]Validated[E,β$3$],E]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Validated$.html#catsDataInstancesForValidated[E](implicitE:cats.Semigroup[E]):cats.Traverse[[β$2$]cats.data.Validated[E,β$2$]]withcats.ApplicativeError[[β$3$]cats.data.Validated[E,β$3$],E]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsDataInstancesForValidated</span><span class="tparams">[<span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="E">E: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.ValidatedInstances.catsDataInstancesForValidated.E">E</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$2$]<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedInstances.catsDataInstancesForValidated.E">E</span>, <span class="extype" name="cats.data.ValidatedInstances.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>]] with <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[[β$3$]<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedInstances.catsDataInstancesForValidated.E">E</span>, <span class="extype" name="cats.data.ValidatedInstances.&lt;refinement&gt;.Λ$.β$3$">β$3$</span>], <span class="extype" name="cats.data.ValidatedInstances.catsDataInstancesForValidated.E">E</span>]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedInstances</dd></dl></div>
     </li><li name="cats.data.ValidatedInstances#catsDataMonoidForValidated" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsDataMonoidForValidated[A,B](implicitA:cats.Semigroup[A],implicitB:cats.Monoid[B]):cats.Monoid[cats.data.Validated[A,B]]"></a><a id="catsDataMonoidForValidated[A,B](Semigroup[A],Monoid[B]):Monoid[Validated[A,B]]"></a>
       <span class="permalink">
@@ -573,9 +573,9 @@ to Scalaz by Brian McKenna.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedInstances</dd></dl></div>
     </li><li name="cats.data.ValidatedInstances1#catsDataPartialOrderForValidated" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataPartialOrderForValidated[A,B](implicitevidence$4:cats.PartialOrder[A],implicitevidence$5:cats.PartialOrder[B]):cats.PartialOrder[cats.data.Validated[A,B]]"></a><a id="catsDataPartialOrderForValidated[A,B](PartialOrder[A],PartialOrder[B]):PartialOrder[Validated[A,B]]"></a>
+      <a id="catsDataPartialOrderForValidated[A,B](implicitevidence$3:cats.PartialOrder[A],implicitevidence$4:cats.PartialOrder[B]):cats.PartialOrder[cats.data.Validated[A,B]]"></a><a id="catsDataPartialOrderForValidated[A,B](PartialOrder[A],PartialOrder[B]):PartialOrder[Validated[A,B]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Validated$.html#catsDataPartialOrderForValidated[A,B](implicitevidence$4:cats.PartialOrder[A],implicitevidence$5:cats.PartialOrder[B]):cats.PartialOrder[cats.data.Validated[A,B]]" title="Permalink">
+      <a href="../../cats/data/Validated$.html#catsDataPartialOrderForValidated[A,B](implicitevidence$3:cats.PartialOrder[A],implicitevidence$4:cats.PartialOrder[B]):cats.PartialOrder[cats.data.Validated[A,B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -636,6 +636,22 @@ to Scalaz by Brian McKenna.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedInstances</dd></dl></div>
+    </li><li name="cats.data.ValidatedInstances2#catsDataTraverseFunctorForValidated" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataTraverseFunctorForValidated[E]:cats.Traverse[[β$4$]cats.data.Validated[E,β$4$]]"></a><a id="catsDataTraverseFunctorForValidated[E]:Traverse[[β$4$]Validated[E,β$4$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$.html#catsDataTraverseFunctorForValidated[E]:cats.Traverse[[β$4$]cats.data.Validated[E,β$4$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataTraverseFunctorForValidated</span><span class="tparams">[<span name="E">E</span>]</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$4$]<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedInstances2.catsDataTraverseFunctorForValidated.E">E</span>, <span class="extype" name="cats.data.ValidatedInstances2.&lt;refinement&gt;.Λ$.β$4$">β$4$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedInstances2</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -727,7 +743,24 @@ to Scalaz by Brian McKenna.
         <span class="name">fromEither</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="e">e: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.ValidatedFunctions.fromEither.A">A</span>, <span class="extype" name="cats.data.ValidatedFunctions.fromEither.B">B</span>]</span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedFunctions.fromEither.A">A</span>, <span class="extype" name="cats.data.ValidatedFunctions.fromEither.B">B</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Converts an <code>Either[A, B]</code> to an <code>Validated[A, B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts an <code>Either[A, B]</code> to an <code>Validated[A, B]</code>.
+      <p class="shortcomment cmt">Converts an <code>Either[A, B]</code> to a <code>Validated[A, B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts an <code>Either[A, B]</code> to a <code>Validated[A, B]</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctions</dd></dl></div>
+    </li><li name="cats.data.ValidatedFunctions#fromIor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromIor[A,B](ior:cats.data.Ior[A,B]):cats.data.Validated[A,B]"></a><a id="fromIor[A,B](Ior[A,B]):Validated[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$.html#fromIor[A,B](ior:cats.data.Ior[A,B]):cats.data.Validated[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromIor</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="ior">ior: <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.ValidatedFunctions.fromIor.A">A</span>, <span class="extype" name="cats.data.ValidatedFunctions.fromIor.B">B</span>]</span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedFunctions.fromIor.A">A</span>, <span class="extype" name="cats.data.ValidatedFunctions.fromIor.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Converts an <code>Ior[A, B]</code> to a <code>Validated[A, B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts an <code>Ior[A, B]</code> to a <code>Validated[A, B]</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctions</dd></dl></div>
     </li><li name="cats.data.ValidatedFunctions#fromOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fromOption[A,B](o:Option[B],ifNone:=&gt;A):cats.data.Validated[A,B]"></a><a id="fromOption[A,B](Option[B],⇒A):Validated[A,B]"></a>
@@ -744,8 +777,8 @@ to Scalaz by Brian McKenna.
         <span class="name">fromOption</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="o">o: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.data.ValidatedFunctions.fromOption.B">B</span>]</span>, <span name="ifNone">ifNone: ⇒ <span class="extype" name="cats.data.ValidatedFunctions.fromOption.A">A</span></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedFunctions.fromOption.A">A</span>, <span class="extype" name="cats.data.ValidatedFunctions.fromOption.B">B</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Converts an <code>Option[B]</code> to an <code>Validated[A, B]</code>, where the provided <code>ifNone</code> values is returned on
-the invalid of the <code>Validated</code> when the specified <code>Option</code> is <code>None</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts an <code>Option[B]</code> to an <code>Validated[A, B]</code>, where the provided <code>ifNone</code> values is returned on
+      <p class="shortcomment cmt">Converts an <code>Option[B]</code> to a <code>Validated[A, B]</code>, where the provided <code>ifNone</code> values is returned on
+the invalid of the <code>Validated</code> when the specified <code>Option</code> is <code>None</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts an <code>Option[B]</code> to a <code>Validated[A, B]</code>, where the provided <code>ifNone</code> values is returned on
 the invalid of the <code>Validated</code> when the specified <code>Option</code> is <code>None</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctions</dd></dl></div>
     </li><li name="cats.data.ValidatedFunctions#fromTry" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">

@@ -131,10 +131,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
                           Const
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Coproduct$.html" title=""></a>
-                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
-                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
-                          Coproduct
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="EitherK.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="EitherK.html" title="F on the left and G on the right of scala.util.Either.">
+                          EitherK
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="EitherT$.html" title=""></a>
@@ -170,8 +170,8 @@ fail-fast effect of Either.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
-                        <a class="class" href="Nested.html" title="Similar to cats.data.Prod, but for nested composition."></a>
-                        <a href="Nested.html" title="Similar to cats.data.Prod, but for nested composition.">
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">
                           Nested
                         </a>
                       </li><li class="current-entities indented2">
@@ -205,12 +205,6 @@ convenient methods for working with this nested structure.">
                           OptionT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Prod$.html" title=""></a>
-                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
-                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
-                          Prod
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Reader$.html" title=""></a>
                         <a href="package$$Reader$.html" title="">
@@ -229,6 +223,12 @@ argument and produces an A value wrapped in F."></a>
                         <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
 argument and produces an A value wrapped in F.">
                           StateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Tuple2K$.html" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">
+                          Tuple2K
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Validated$.html" title=""></a>
@@ -461,22 +461,6 @@ The isomorphic <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.ut
       </span>
       
       
-    </li><li name="cats.data.Ior#append" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="append[AA&gt;:A,BB&gt;:B](that:cats.data.Ior[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Ior[AA,BB]"></a><a id="append[AA&gt;:A,BB&gt;:B](Ior[AA,BB])(Semigroup[AA],Semigroup[BB]):Ior[AA,BB]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Ior.html#append[AA&gt;:A,BB&gt;:B](that:cats.data.Ior[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Ior[AA,BB]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">append</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Ior.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Ior.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.Ior.append.AA">AA</span>, <span class="extype" name="cats.data.Ior.append.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Ior.append.AA">AA</span>]</span>, <span name="BB">BB: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Ior.append.BB">BB</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.Ior.append.AA">AA</span>, <span class="extype" name="cats.data.Ior.append.BB">BB</span>]</span>
-      </span>
-      
-      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -531,6 +515,22 @@ The isomorphic <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.ut
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.Ior#combine" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="combine[AA&gt;:A,BB&gt;:B](that:cats.data.Ior[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Ior[AA,BB]"></a><a id="combine[AA&gt;:A,BB&gt;:B](Ior[AA,BB])(Semigroup[AA],Semigroup[BB]):Ior[AA,BB]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Ior.html#combine[AA&gt;:A,BB&gt;:B](that:cats.data.Ior[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Ior[AA,BB]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">combine</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Ior.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Ior.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.Ior.combine.AA">AA</span>, <span class="extype" name="cats.data.Ior.combine.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Ior.combine.AA">AA</span>]</span>, <span name="BB">BB: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Ior.combine.BB">BB</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.Ior.combine.AA">AA</span>, <span class="extype" name="cats.data.Ior.combine.BB">BB</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -1241,6 +1241,22 @@ The isomorphic <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.ut
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.Ior#toValidated" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toValidated:cats.data.Validated[A,B]"></a><a id="toValidated:Validated[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Ior.html#toValidated:cats.data.Validated[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toValidated</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Ior.A">A</span>, <span class="extype" name="cats.data.Ior.B">B</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.data.Ior#traverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="traverse[F[_],AA&gt;:A,D](g:B=&gt;F[D])(implicitF:cats.Applicative[F]):F[cats.data.Ior[AA,D]]"></a><a id="traverse[F[_],AA&gt;:A,D]((B)⇒F[D])(Applicative[F]):F[Ior[AA,D]]"></a>
       <span class="permalink">

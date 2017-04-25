@@ -147,10 +147,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
                           Const
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Coproduct$.html" title=""></a>
-                        <a class="class" href="Coproduct.html" title="F on the left and G on the right of scala.util.Either."></a>
-                        <a href="Coproduct.html" title="F on the left and G on the right of scala.util.Either.">
-                          Coproduct
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="EitherK.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="EitherK.html" title="F on the left and G on the right of scala.util.Either.">
+                          EitherK
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="EitherT$.html" title=""></a>
@@ -186,8 +186,8 @@ fail-fast effect of Either.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
-                        <a class="class" href="Nested.html" title="Similar to cats.data.Prod, but for nested composition."></a>
-                        <a href="Nested.html" title="Similar to cats.data.Prod, but for nested composition.">
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">
                           Nested
                         </a>
                       </li><li class="current-entities indented2">
@@ -221,12 +221,6 @@ convenient methods for working with this nested structure.">
                           OptionT
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="Prod$.html" title=""></a>
-                        <a class="class" href="Prod.html" title="Prod is a product to two independent functor values."></a>
-                        <a href="Prod.html" title="Prod is a product to two independent functor values.">
-                          Prod
-                        </a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$Reader$.html" title=""></a>
                         <a href="package$$Reader$.html" title="">
@@ -247,6 +241,12 @@ argument and produces an A value wrapped in F.">
                           StateT
                         </a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="Tuple2K$.html" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">
+                          Tuple2K
+                        </a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Validated$.html" title=""></a>
                         <a class="class" href="Validated.html" title=""></a>
                         <a href="Validated.html" title="">
@@ -264,7 +264,25 @@ argument and produces an A value wrapped in F.">
                         <a href="WriterT.html" title="">
                           WriterT
                         </a>
-                      </li><li name="cats.free" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+                      </li><li name="cats.evidence" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="evidence"></a><a id="evidence:evidence"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#evidence" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../evidence/index.html">
+              <span class="name">evidence</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.free" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="free"></a><a id="free:free"></a>
       <span class="permalink">
       <a href="../cats/index.html#free" title="Permalink">
@@ -492,10 +510,10 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
       <p class="shortcomment cmt"><a href="Const.html" class="extype" name="cats.data.Const">Const</a> is a phantom type, it does not contain a value of its second type parameter <code>B</code>
 <a href="Const.html" class="extype" name="cats.data.Const">Const</a> can be seen as a type level version of <code>Function.const[A, B]: A =&gt; B =&gt; A</code>
 </p>
-    </li><li name="cats.data.Coproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Coproduct[F[_],G[_],A]extendsProductwithSerializable"></a><a id="Coproduct[F[_],G[_],A]:Coproduct[F,G,A]"></a>
+    </li><li name="cats.data.EitherK" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="EitherK[F[_],G[_],A]extendsProductwithSerializable"></a><a id="EitherK[F[_],G[_],A]:EitherK[F,G,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/index.html#Coproduct[F[_],G[_],A]extendsProductwithSerializable" title="Permalink">
+      <a href="../../cats/data/index.html#EitherK[F[_],G[_],A]extendsProductwithSerializable" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -504,9 +522,9 @@ Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&g
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="F on the left and G on the right of scala.util.Either." href="Coproduct.html">
-              <span class="name">Coproduct</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="run">run: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Coproduct.F">F</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>], <span class="extype" name="cats.data.Coproduct.G">G</span>[<span class="extype" name="cats.data.Coproduct.A">A</span>]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a title="F on the left and G on the right of scala.util.Either." href="EitherK.html">
+              <span class="name">EitherK</span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="run">run: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.EitherK.F">F</span>[<span class="extype" name="cats.data.EitherK.A">A</span>], <span class="extype" name="cats.data.EitherK.G">G</span>[<span class="extype" name="cats.data.EitherK.A">A</span>]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt"><code>F</code> on the left and <code>G</code> on the right of <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a>.</p><div class="fullcomment"><div class="comment cmt"><p><code>F</code> on the left and <code>G</code> on the right of <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a>.
@@ -595,6 +613,22 @@ an <code>A</code> and a <code>B</code>. It is right-biased so methods such as <c
 values, regardless of whether the <code>B</code> values appear in a <a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a> or a <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>.
 The isomorphic <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.util.Either" class="extype" target="_top">scala.util.Either</a> form can be accessed via the <a href="Ior.html#unwrap:Either[Either[A,B],(A,B)]" class="extmbr" name="cats.data.Ior#unwrap">unwrap</a> method.
 </p></div></div>
+    </li><li name="cats.data.IorNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IorNel[+B,+A]=cats.data.Ior[cats.data.NonEmptyList[B],A]"></a><a id="IorNel[+B,+A]:IorNel[B,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#IorNel[+B,+A]=cats.data.Ior[cats.data.NonEmptyList[B],A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">IorNel</span><span class="tparams">[<span name="B">+B</span>, <span name="A">+A</span>]</span><span class="result alias"> = <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<a href="NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.IorNel.B">B</span>], <span class="extype" name="cats.data.IorNel.A">A</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.data.Kleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Kleisli[F[_],A,B]extendsProductwithSerializable"></a><a id="Kleisli[F[_],A,B]:Kleisli[F,A,B]"></a>
       <span class="permalink">
@@ -625,12 +659,12 @@ The isomorphic <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.ut
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="Similar to cats.data.Prod, but for nested composition." href="Nested.html">
+        <a title="Similar to cats.data.Tuple2K, but for nested composition." href="Nested.html">
               <span class="name">Nested</span>
             </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.data.Nested.F">F</span>[<span class="extype" name="cats.data.Nested.G">G</span>[<span class="extype" name="cats.data.Nested.A">A</span>]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
-      <p class="shortcomment cmt">Similar to <a href="Prod.html" class="extype" name="cats.data.Prod">cats.data.Prod</a>, but for nested composition.</p><div class="fullcomment"><div class="comment cmt"><p>Similar to <a href="Prod.html" class="extype" name="cats.data.Prod">cats.data.Prod</a>, but for nested composition.</p><p>For instance, since both <code>List</code> and <code>Option</code> have a <code>Functor</code>, then so does
+      <p class="shortcomment cmt">Similar to <a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">cats.data.Tuple2K</a>, but for nested composition.</p><div class="fullcomment"><div class="comment cmt"><p>Similar to <a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">cats.data.Tuple2K</a>, but for nested composition.</p><p>For instance, since both <code>List</code> and <code>Option</code> have a <code>Functor</code>, then so does
 <code>List[Option[_]]</code>. This is represented by this data type via the instantiation
 <code>Nested[List, Option, ?]</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.Functor
 scala&gt; <span class="kw">import</span> cats.data.Nested
@@ -723,7 +757,7 @@ structure (tail)." href="OneAnd.html">
       <p class="shortcomment cmt">A data type which represents a single element (head) and some other
 structure (tail).</p><div class="fullcomment"><div class="comment cmt"><p>A data type which represents a single element (head) and some other
 structure (tail). As we have done in package.scala, this can be
-used to represent a List which is guaranteed to not be empty:</p><pre><span class="kw">type</span> NonEmptyList[A] = OneAnd[<span class="std">List</span>, A]</pre></div></div>
+used to represent a Stream which is guaranteed to not be empty:</p><pre><span class="kw">type</span> NonEmptyStream[A] = OneAnd[Stream, A]</pre></div></div>
     </li><li name="cats.data.OptionT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="OptionT[F[_],A]extendsProductwithSerializable"></a><a id="OptionT[F[_],A]:OptionT[F,A]"></a>
       <span class="permalink">
@@ -745,25 +779,6 @@ convenient methods for working with this nested structure." href="OptionT.html">
       <p class="shortcomment cmt"><code>OptionT[F[_], A]</code> is a light wrapper on an <code>F[Option[A]]</code> with some
 convenient methods for working with this nested structure.</p><div class="fullcomment"><div class="comment cmt"><p><code>OptionT[F[_], A]</code> is a light wrapper on an <code>F[Option[A]]</code> with some
 convenient methods for working with this nested structure.</p><p>It may also be said that <code>OptionT</code> is a monad transformer for <code>Option</code>.</p><p>For more information, see the <a href="http://typelevel.org/cats/datatypes/optiont.html" target="_blank">documentation</a>.
-</p></div></div>
-    </li><li name="cats.data.Prod" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Prod[F[_],G[_],A]extendsProductwithSerializable"></a><a id="Prod[F[_],G[_],A]:Prod[F,G,A]"></a>
-      <span class="permalink">
-      <a href="../../cats/data/index.html#Prod[F[_],G[_],A]extendsProductwithSerializable" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a title="Prod is a product to two independent functor values." href="Prod.html">
-              <span class="name">Prod</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="first">first: <span class="extype" name="cats.data.Prod.F">F</span>[<span class="extype" name="cats.data.Prod.A">A</span>]</span>, <span name="second">second: <span class="extype" name="cats.data.Prod.G">G</span>[<span class="extype" name="cats.data.Prod.A">A</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      
-      <p class="shortcomment cmt"><a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a> is a product to two independent functor values.</p><div class="fullcomment"><div class="comment cmt"><p><a href="Prod.html" class="extype" name="cats.data.Prod">Prod</a> is a product to two independent functor values.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
 </p></div></div>
     </li><li name="cats.data.Reader" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Reader[A,B]=cats.data.package.ReaderT[cats.Id,A,B]"></a><a id="Reader[A,B]:Reader[A,B]"></a>
@@ -836,6 +851,25 @@ argument and produces an <code>A</code> value wrapped in <code>F</code>.</p><div
 argument and produces an <code>A</code> value wrapped in <code>F</code>. However, it also produces
 an <code>S</code> value representing the updated state (which is wrapped in the <code>F</code>
 context along with the <code>A</code> value.
+</p></div></div>
+    </li><li name="cats.data.Tuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Tuple2K[F[_],G[_],A]extendsProductwithSerializable"></a><a id="Tuple2K[F[_],G[_],A]:Tuple2K[F,G,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#Tuple2K[F[_],G[_],A]extendsProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="Tuple2K is a product to two independent functor values." href="Tuple2K.html">
+              <span class="name">Tuple2K</span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="first">first: <span class="extype" name="cats.data.Tuple2K.F">F</span>[<span class="extype" name="cats.data.Tuple2K.A">A</span>]</span>, <span name="second">second: <span class="extype" name="cats.data.Tuple2K.G">G</span>[<span class="extype" name="cats.data.Tuple2K.A">A</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt"><a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a> is a product to two independent functor values.</p><div class="fullcomment"><div class="comment cmt"><p><a href="Tuple2K.html" class="extype" name="cats.data.Tuple2K">Tuple2K</a> is a product to two independent functor values.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
 </p></div></div>
     </li><li name="cats.data.Validated" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Validated[+E,+A]extendsProductwithSerializable"></a><a id="Validated[+E,+A]:Validated[E,A]"></a>
@@ -1015,10 +1049,10 @@ context along with the <code>A</code> value.
       </span>
       
       
-    </li><li name="cats.data.Coproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Coproduct"></a><a id="Coproduct:Coproduct"></a>
+    </li><li name="cats.data.EitherK" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EitherK"></a><a id="EitherK:EitherK"></a>
       <span class="permalink">
-      <a href="../../cats/data/index.html#Coproduct" title="Permalink">
+      <a href="../../cats/data/index.html#EitherK" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1027,9 +1061,9 @@ context along with the <code>A</code> value.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="Coproduct$.html">
-              <span class="name">Coproduct</span>
-            </a><span class="result"> extends <span class="extype" name="cats.data.CoproductInstances">CoproductInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a title="" href="EitherK$.html">
+              <span class="name">EitherK</span>
+            </a><span class="result"> extends <span class="extype" name="cats.data.EitherKInstances">EitherKInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       
@@ -1213,24 +1247,6 @@ context along with the <code>A</code> value.
       </span>
       
       
-    </li><li name="cats.data.Prod" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Prod"></a><a id="Prod:Prod"></a>
-      <span class="permalink">
-      <a href="../../cats/data/index.html#Prod" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="Prod$.html">
-              <span class="name">Prod</span>
-            </a><span class="result"> extends <span class="extype" name="cats.data.ProdInstances">ProdInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      
-      
     </li><li name="cats.data.Reader" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Reader"></a><a id="Reader:Reader"></a>
       <span class="permalink">
@@ -1282,6 +1298,24 @@ context along with the <code>A</code> value.
         <a title="" href="StateT$.html">
               <span class="name">StateT</span>
             </a><span class="result"> extends <span class="extype" name="cats.data.StateTInstances">StateTInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.data.Tuple2K" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Tuple2K"></a><a id="Tuple2K:Tuple2K"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#Tuple2K" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Tuple2K$.html">
+              <span class="name">Tuple2K</span>
+            </a><span class="result"> extends <span class="extype" name="cats.data.Tuple2KInstances">Tuple2KInstances</span> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       
       

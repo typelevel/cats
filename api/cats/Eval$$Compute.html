@@ -449,6 +449,33 @@ eager (Now) instance.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.Eval#handleErrorWith" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="handleErrorWith[A1&gt;:A](recovery:Throwable=&gt;cats.Eval[A1]):cats.Eval[A1]"></a><a id="handleErrorWith[A1&gt;:A]((Throwable)⇒Eval[A1]):Eval[A1]"></a>
+      <span class="permalink">
+      <a href="../cats/Eval$$Compute.html#handleErrorWith[A1&gt;:A](recovery:Throwable=&gt;cats.Eval[A1]):cats.Eval[A1]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">handleErrorWith</span><span class="tparams">[<span name="A1">A1 &gt;: <span class="extype" name="cats.Eval.Compute.A">A</span></span>]</span><span class="params">(<span name="recovery">recovery: (<span class="extype" name="scala.Throwable">Throwable</span>) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Eval.handleErrorWith.A1">A1</span>]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Eval.handleErrorWith.A1">A1</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Recover from exceptions thrown within Eval (i.e.</p><div class="fullcomment"><div class="comment cmt"><p>Recover from exceptions thrown within Eval (i.e. when <code>.value</code> is
+called).</p><p>Note that this will not help for exceptions thrown while building
+an Eval instance (e.g. <code>Now(sys.error(&quot;die&quot;))</code>), but will help
+with exceptions which are deferred (e.g. <code>Later(sys.error(&quot;die&quot;))</code>).</p><p>Unlike many other methods on <code>Eval</code>, this method does consume one
+stack frame during the eventual <code>.value</code> call. This means that
+it's not necessarily safe to nest recursive calls to
+<code>.handleErrorWith</code>.</p><p>The <code>recovery</code> method can re-raise exceptions (if necessary)
+using the <code>Eval.raise</code> method, or via <code>throw</code> directly.
+Exceptions &quot;at-rest&quot; are not represented with <code>Eval</code>, your only
+options for catching and dealing with exceptions are this method,
+or wrapping your <code>.value</code> calls with something like <code>Try()</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Eval.html" class="extype" name="cats.Eval">Eval</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
@@ -570,6 +597,27 @@ Later[A] with an equivalent computation will be returned.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Eval#recoverWith" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="recoverWith[A1&gt;:A](f:PartialFunction[Throwable,cats.Eval[A1]]):cats.Eval[A1]"></a><a id="recoverWith[A1&gt;:A](PartialFunction[Throwable,Eval[A1]]):Eval[A1]"></a>
+      <span class="permalink">
+      <a href="../cats/Eval$$Compute.html#recoverWith[A1&gt;:A](f:PartialFunction[Throwable,cats.Eval[A1]]):cats.Eval[A1]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recoverWith</span><span class="tparams">[<span name="A1">A1 &gt;: <span class="extype" name="cats.Eval.Compute.A">A</span></span>]</span><span class="params">(<span name="f">f: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="scala.Throwable">Throwable</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Eval.recoverWith.A1">A1</span>]]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Eval.recoverWith.A1">A1</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Recover from exceptions thrown within Eval (i.e.</p><div class="fullcomment"><div class="comment cmt"><p>Recover from exceptions thrown within Eval (i.e. when <code>.value</code> is
+called).</p><p>This method only differs from <code>handleErrorWith</code> in that it takes
+a partial function. See that method's documentation for a more
+complete description of the (very limited) exception-handling
+capabilities of <code>Eval</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Eval.html" class="extype" name="cats.Eval">Eval</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

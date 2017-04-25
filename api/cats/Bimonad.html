@@ -126,6 +126,24 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.evidence" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="evidence"></a><a id="evidence:evidence"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#evidence" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="evidence/index.html">
+              <span class="name">evidence</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
     </li><li name="cats.free" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="free"></a><a id="free:free"></a>
       <span class="permalink">
@@ -353,6 +371,14 @@ a normal value and returns a value in a context (A =&gt; F[B]).">
                         <a class="trait" href="FunctorFilter.html" title=""></a>
                         <a href="FunctorFilter.html" title="">
                           FunctorFilter
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="InjectK$.html" title=""></a>
+                        <a class="class" href="InjectK.html" title="The injection type class as described in &quot;Data types a la carte&quot;
+(Swierstra 2008)."></a>
+                        <a href="InjectK.html" title="The injection type class as described in &quot;Data types a la carte&quot;
+(Swierstra 2008).">
+                          InjectK
                         </a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="InvariantMonoidal$.html" title=""></a>
@@ -728,6 +754,25 @@ res0: cats.Id[<span class="std">Int</span>] = <span class="num">3</span></pre></
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.FlatMap#&lt;&lt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;&lt;[A,B](fa:F[A])(fb:F[B]):F[A]"></a><a id="&lt;&lt;[A,B](F[A])(F[B]):F[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#&lt;&lt;[A,B](fa:F[A])(fb:F[B]):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less$less" class="name">&lt;&lt;</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.FlatMap.&lt;&lt;.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.FlatMap.&lt;&lt;.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.FlatMap.&lt;&lt;.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Alias for <a href="FlatMap.html#forEffect[A,B](fa:F[A])(fb:F[B]):F[A]" class="extmbr" name="cats.FlatMap#forEffect">forEffect</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="FlatMap.html#forEffect[A,B](fa:F[A])(fb:F[B]):F[A]" class="extmbr" name="cats.FlatMap#forEffect">forEffect</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@inline</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
@@ -1440,6 +1485,50 @@ scala&gt; <span class="kw">val</span> fa: <span class="std">Option</span>[<span 
 scala&gt; <span class="kw">def</span> fb: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">Some</span>(<span class="lit">"foo"</span>)
 scala&gt; fa.followedByEval(Eval.later(fb))
 res0: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">Some</span>(foo)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a></dd></dl></div>
+    </li><li name="cats.FlatMap#forEffect" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="forEffect[A,B](fa:F[A])(fb:F[B]):F[A]"></a><a id="forEffect[A,B](F[A])(F[B]):F[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#forEffect[A,B](fa:F[A])(fb:F[B]):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">forEffect</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.FlatMap.forEffect.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.FlatMap.forEffect.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.FlatMap.forEffect.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Sequentially compose two actions, discarding any value produced by the second.</p><div class="fullcomment"><div class="comment cmt"><p>Sequentially compose two actions, discarding any value produced by the second.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a></dd></dl></div>
+    </li><li name="cats.FlatMap#forEffectEval" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="forEffectEval[A,B](fa:F[A])(fb:cats.Eval[F[B]]):F[A]"></a><a id="forEffectEval[A,B](F[A])(Eval[F[B]]):F[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#forEffectEval[A,B](fa:F[A])(fb:cats.Eval[F[B]]):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">forEffectEval</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.FlatMap.forEffectEval.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.FlatMap.forEffectEval.B">B</span>]]</span>)</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.FlatMap.forEffectEval.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Sequentially compose two actions, discarding any value produced by the second.</p><div class="fullcomment"><div class="comment cmt"><p>Sequentially compose two actions, discarding any value produced by the second. This variant of
+<a href="FlatMap.html#forEffect[A,B](fa:F[A])(fb:F[B]):F[A]" class="extmbr" name="cats.FlatMap#forEffect">forEffect</a> also lets you define the evaluation strategy of the second action. For instance
+you can evaluate it only <i>after</i> the first action has finished:</p><pre>scala&gt; <span class="kw">import</span> cats.Eval
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">var</span> count = <span class="num">0</span>
+scala&gt; <span class="kw">val</span> fa: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)
+scala&gt; <span class="kw">def</span> fb: <span class="std">Option</span>[<span class="std">Unit</span>] = <span class="std">Some</span>(count += <span class="num">1</span>)
+scala&gt; fa.forEffectEval(Eval.later(fb))
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)
+scala&gt; assert(count == <span class="num">1</span>)
+scala&gt; none[<span class="std">Int</span>].forEffectEval(Eval.later(fb))
+res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
+scala&gt; assert(count == <span class="num">1</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a></dd></dl></div>
     </li><li name="cats.Functor#fproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fproduct[A,B](fa:F[A])(f:A=&gt;B):F[(A,B)]"></a><a id="fproduct[A,B](F[A])((A)⇒B):F[(A,B)]"></a>
       <span class="permalink">
@@ -1541,6 +1630,44 @@ with the value
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.Monad#iterateUntil" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iterateUntil[A](f:F[A])(p:A=&gt;Boolean):F[A]"></a><a id="iterateUntil[A](F[A])((A)⇒Boolean):F[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#iterateUntil[A](f:F[A])(p:A=&gt;Boolean):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iterateUntil</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Monad.iterateUntil.A">A</span>]</span>)</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Monad.iterateUntil.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Monad.iterateUntil.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Execute an action repeatedly until its result satisfies the given predicate
+and return that result, discarding all others.</p><div class="fullcomment"><div class="comment cmt"><p>Execute an action repeatedly until its result satisfies the given predicate
+and return that result, discarding all others.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monad.html" class="extype" name="cats.Monad">Monad</a></dd></dl></div>
+    </li><li name="cats.Monad#iterateWhile" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iterateWhile[A](f:F[A])(p:A=&gt;Boolean):F[A]"></a><a id="iterateWhile[A](F[A])((A)⇒Boolean):F[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#iterateWhile[A](f:F[A])(p:A=&gt;Boolean):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iterateWhile</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Monad.iterateWhile.A">A</span>]</span>)</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Monad.iterateWhile.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Monad.iterateWhile.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Execute an action repeatedly until its result fails to satisfy the given predicate
+and return that result, discarding all others.</p><div class="fullcomment"><div class="comment cmt"><p>Execute an action repeatedly until its result fails to satisfy the given predicate
+and return that result, discarding all others.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monad.html" class="extype" name="cats.Monad">Monad</a></dd></dl></div>
     </li><li name="cats.Functor#lift" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="lift[A,B](f:A=&gt;B):F[A]=&gt;F[B]"></a><a id="lift[A,B]((A)⇒B):(F[A])⇒F[B]"></a>
       <span class="permalink">
@@ -2473,6 +2600,80 @@ res0: <span class="std">List</span>[(<span class="std">String</span>, <span clas
       
       <p class="shortcomment cmt">Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the right.</p><div class="fullcomment"><div class="comment cmt"><p>Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the right.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+    </li><li name="cats.Applicative#unit" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unit:F[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#unit:F[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unit</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns an <code>F[Unit]</code> value, equivalent with <code>pure(())</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an <code>F[Unit]</code> value, equivalent with <code>pure(())</code>.</p><p>A useful shorthand, also allowing implementations to optimize the
+returned reference (e.g. it can be a <code>val</code>).
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a></dd></dl></div>
+    </li><li name="cats.Applicative#unlessA" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unlessA[A](cond:Boolean)(f:=&gt;F[A]):F[Unit]"></a><a id="unlessA[A](Boolean)(⇒F[A]):F[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#unlessA[A](cond:Boolean)(f:=&gt;F[A]):F[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unlessA</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span name="f">f: ⇒ <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Applicative.unlessA.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns the given argument if <code>cond</code> is <code>false</code>, otherwise, unit lifted into F.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the given argument if <code>cond</code> is <code>false</code>, otherwise, unit lifted into F.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a></dd></dl></div>
+    </li><li name="cats.Monad#untilM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="untilM[G[_],A](f:F[A])(cond:=&gt;F[Boolean])(implicitG:cats.Alternative[G]):F[G[A]]"></a><a id="untilM[G[_],A](F[A])(⇒F[Boolean])(Alternative[G]):F[G[A]]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#untilM[G[_],A](f:F[A])(cond:=&gt;F[Boolean])(implicitG:cats.Alternative[G]):F[G[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">untilM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Monad.untilM.A">A</span>]</span>)</span><span class="params">(<span name="cond">cond: ⇒ <span class="extype" name="cats.Bimonad.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.Monad.untilM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Monad.untilM.G">G</span>[<span class="extype" name="cats.Monad.untilM.A">A</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Execute an action repeatedly until the <code>Boolean</code> condition returns <code>true</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Execute an action repeatedly until the <code>Boolean</code> condition returns <code>true</code>.
+The condition is evaluated after the loop body. Collects results into an
+arbitrary <code>Alternative</code> value, such as a <code>Vector</code>.
+This implementation uses append on each evaluation result,
+so avoid data structures with non-constant append performance, e.g. <code>List</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monad.html" class="extype" name="cats.Monad">Monad</a></dd></dl></div>
+    </li><li name="cats.Monad#untilM_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="untilM_[A](f:F[A])(cond:=&gt;F[Boolean]):F[Unit]"></a><a id="untilM_[A](F[A])(⇒F[Boolean]):F[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#untilM_[A](f:F[A])(cond:=&gt;F[Boolean]):F[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">untilM_</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Monad.untilM_.A">A</span>]</span>)</span><span class="params">(<span name="cond">cond: ⇒ <span class="extype" name="cats.Bimonad.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>)</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Execute an action repeatedly until the <code>Boolean</code> condition returns <code>true</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Execute an action repeatedly until the <code>Boolean</code> condition returns <code>true</code>.
+The condition is evaluated after the loop body. Discards results.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monad.html" class="extype" name="cats.Monad">Monad</a></dd></dl></div>
     </li><li name="cats.Functor#void" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="void[A](fa:F[A]):F[Unit]"></a><a id="void[A](F[A]):F[Unit]"></a>
       <span class="permalink">
@@ -2557,6 +2758,65 @@ res0: <span class="std">List</span>[(<span class="std">String</span>, <span clas
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.Applicative#whenA" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="whenA[A](cond:Boolean)(f:=&gt;F[A]):F[Unit]"></a><a id="whenA[A](Boolean)(⇒F[A]):F[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#whenA[A](cond:Boolean)(f:=&gt;F[A]):F[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">whenA</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span name="f">f: ⇒ <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Applicative.whenA.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns the given argument if <code>cond</code> is <code>true</code>, otherwise, unit lifted into F.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the given argument if <code>cond</code> is <code>true</code>, otherwise, unit lifted into F.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a></dd></dl></div>
+    </li><li name="cats.Monad#whileM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="whileM[G[_],A](p:F[Boolean])(body:=&gt;F[A])(implicitG:cats.Alternative[G]):F[G[A]]"></a><a id="whileM[G[_],A](F[Boolean])(⇒F[A])(Alternative[G]):F[G[A]]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#whileM[G[_],A](p:F[Boolean])(body:=&gt;F[A])(implicitG:cats.Alternative[G]):F[G[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">whileM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="p">p: <span class="extype" name="cats.Bimonad.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>)</span><span class="params">(<span name="body">body: ⇒ <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Monad.whileM.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.Monad.whileM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Monad.whileM.G">G</span>[<span class="extype" name="cats.Monad.whileM.A">A</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Execute an action repeatedly as long as the given <code>Boolean</code> expression
+returns <code>true</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Execute an action repeatedly as long as the given <code>Boolean</code> expression
+returns <code>true</code>. The condition is evaluated before the loop body.
+Collects the results into an arbitrary <code>Alternative</code> value, such as a <code>Vector</code>.
+This implementation uses append on each evaluation result,
+so avoid data structures with non-constant append performance, e.g. <code>List</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monad.html" class="extype" name="cats.Monad">Monad</a></dd></dl></div>
+    </li><li name="cats.Monad#whileM_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="whileM_[A](p:F[Boolean])(body:=&gt;F[A]):F[Unit]"></a><a id="whileM_[A](F[Boolean])(⇒F[A]):F[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Bimonad.html#whileM_[A](p:F[Boolean])(body:=&gt;F[A]):F[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">whileM_</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="p">p: <span class="extype" name="cats.Bimonad.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>)</span><span class="params">(<span name="body">body: ⇒ <span class="extype" name="cats.Bimonad.F">F</span>[<span class="extype" name="cats.Monad.whileM_.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bimonad.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Execute an action repeatedly as long as the given <code>Boolean</code> expression
+returns <code>true</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Execute an action repeatedly as long as the given <code>Boolean</code> expression
+returns <code>true</code>. The condition is evaluated before the loop body.
+Discards results.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monad.html" class="extype" name="cats.Monad">Monad</a></dd></dl></div>
     </li><li name="cats.Functor#widen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="widen[A,B&gt;:A](fa:F[A]):F[B]"></a><a id="widen[A,B&gt;:A](F[A]):F[B]"></a>
       <span class="permalink">
