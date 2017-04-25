@@ -124,7 +124,7 @@ sealed abstract class Eval[+A] extends Serializable { self =>
    * `.handleErrorWith`.
    *
    * The `recovery` method can re-raise exceptions (if necessary)
-   * using the `Eval.raise` method, or via `throw` directly.
+   * using the `Eval.raiseError` method, or via `throw` directly.
    * Exceptions "at-rest" are not represented with `Eval`, your only
    * options for catching and dealing with exceptions are this method,
    * or wrapping your `.value` calls with something like `Try()`.
@@ -142,7 +142,7 @@ sealed abstract class Eval[+A] extends Serializable { self =>
    * capabilities of `Eval`.
    */
   final def recoverWith[A1 >: A](f: PartialFunction[Throwable, Eval[A1]]): Eval[A1] =
-    handleErrorWith(t => if (f.isDefinedAt(t)) f(t) else Eval.raise(t))
+    handleErrorWith(e => if (f.isDefinedAt(e)) f(e) else Eval.raiseError(e))
 }
 
 
@@ -248,8 +248,8 @@ object Eval extends EvalInstances {
    * This method can be paired with the `.recoverWith` method to
    * encode exception handling within an `Eval` context.
    */
-  def raise(t: Throwable): Eval[Nothing] =
-    Eval.defer(throw t)
+  def raiseError[A](e: Throwable): Eval[A] =
+    Eval.defer(throw e)
 
   /**
    * Static Eval instance for common value `Unit`.
@@ -388,7 +388,7 @@ private[cats] trait EvalInstances extends EvalInstances0 {
       def handleErrorWith[A](fa: Eval[A])(f: Throwable => Eval[A]): Eval[A] =
         fa.handleErrorWith(f)
       def raiseError[A](e: Throwable): Eval[A] =
-        Eval.raise(e)
+        Eval.raiseError(e)
     }
 
   implicit val catsReducibleForEval: Reducible[Eval] =

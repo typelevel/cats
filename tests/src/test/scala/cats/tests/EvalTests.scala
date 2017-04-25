@@ -94,9 +94,9 @@ class EvalTests extends CatsSuite {
     loop(100000, Now(6)).value should === (6)
   }
 
-  test("Eval.raise(t).handleErrorWith(f) = f(t)") {
-    forAll { (t: Throwable, f: Throwable => Eval[Int]) =>
-      Eval.raise(t).handleErrorWith(f) should === (f(t))
+  test("Eval.raiseError(e).handleErrorWith(f) = f(e)") {
+    forAll { (e: Throwable, f: Throwable => Eval[Int]) =>
+      Eval.raiseError(e).handleErrorWith(f) should === (f(e))
     }
   }
 
@@ -113,7 +113,7 @@ class EvalTests extends CatsSuite {
 
       // test with a partial recovery function
       val x2 = Try(e.recoverWith(p).value)
-      val y2 = Try(e.handleErrorWith(t => if (p.isDefinedAt(t)) p(t) else Eval.raise(t)).value)
+      val y2 = Try(e.handleErrorWith(e => if (p.isDefinedAt(e)) p(e) else Eval.raiseError(e)).value)
       x2 should === (y2)
 
       // ensure that this works if we throw directly
