@@ -392,10 +392,19 @@ class EitherTTests extends CatsSuite {
       s2 <- EitherT[Id, AppError, String](either2)
     } yield s1 ++ s2
 
+    for {
+      s1 <- EitherT(either1)
+      s2 <- EitherT.right[AppError]("1".pure[Id])
+    } yield s1 ++ s2
 
     for {
       s1 <- EitherT(either1)
-      s2 <- EitherT.pure[Id, AppError, String]("1")
+      s2 <- EitherT.left[String](Error1.pure[Id])
+    } yield s1 ++ s2
+
+    for {
+      s1 <- EitherT(either1)
+      s2 <- EitherT.pure[Id, AppError]("1")
     } yield s1 ++ s2
   }
 }
