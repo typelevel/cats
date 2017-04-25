@@ -4,6 +4,7 @@ package syntax
 import cats.data.{EitherT, Ior, Validated, ValidatedNel}
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
+import EitherSyntax._
 
 trait EitherSyntax {
   implicit final def catsSyntaxEither[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)
@@ -15,6 +16,21 @@ trait EitherSyntax {
   implicit final def catsSyntaxRight[A, B](right: Right[A, B]): RightOps[A, B] = new RightOps(right)
 
   implicit final def catsSyntaxEitherId[A](a: A): EitherIdOps[A] = new EitherIdOps(a)
+}
+
+object EitherSyntax {
+  /**
+   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   */
+  private[syntax] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean = true ) extends AnyVal {
+    def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): Either[T, A] =
+      try {
+        Right(f)
+      } catch {
+        case t if CT.runtimeClass.isInstance(t) =>
+          Left(t.asInstanceOf[T])
+      }
+  }
 }
 
 final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
@@ -288,18 +304,7 @@ final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalast
   }
 }
 
-/**
- * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
- */
-private[syntax] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean = true ) extends AnyVal {
-  def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): Either[T, A] =
-    try {
-      Right(f)
-    } catch {
-      case t if CT.runtimeClass.isInstance(t) =>
-        Left(t.asInstanceOf[T])
-    }
-}
+
 
 final class LeftOps[A, B](val left: Left[A, B]) extends AnyVal {
   /** Cast the right type parameter of the `Left`. */
