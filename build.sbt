@@ -575,7 +575,7 @@ lazy val xlint = Seq(
   scalacOptions += {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, 12)) => "-Xlint:-unused,_"
-      case _ => "Xlint"
+      case _ => "-Xlint"
     }
   }
 )
