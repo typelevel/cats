@@ -19,9 +19,7 @@ trait EitherSyntax {
 }
 
 object EitherSyntax {
-  /**
-   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
-   */
+  /** Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type Partially Applied Type technique]] for ergonomics. */
   private[syntax] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean = true ) extends AnyVal {
     def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): Either[T, A] =
       try {
