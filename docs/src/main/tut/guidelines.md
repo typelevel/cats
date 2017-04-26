@@ -23,10 +23,10 @@ Ops classes should be marked final and extend AnyVal, to take full advantage of 
 The most notable exception is the case where all of the ops in the class are provided by zero-cost macros anyway,
 for example with Simulacrum.
 
-### <a id="partially-applied-type" href="#partially-applied-type"></a> Partially-Applied Type
+### <a id="partially-applied-type-params" href="#partially-applied-type-params"></a> Partially-Applied Type
 
 In Scala, when there are multiple type parameters in a function, either scalac infers all type parameters or the user has to
-specify all of them. Often we have functions where there are one or more types that are inferable but not all of them. For example, there is helper function in `OptionT` that creates an `OptionT[A]` from an `A`. It could be written as:
+specify all of them. Often we have functions where there are one or more types that are inferable but not all of them. For example, there is helper function in `OptionT` that creates an `OptionT[F, A]` from an `A`. It could be written as:
 
 ```tut:silent
 import cats._
@@ -41,7 +41,7 @@ def pure[F[_], A](a: A)(implicit F: Applicative[F]): OptionT[F, A] =
 pure[List, Int](1)
 ```
 
-Note that the type `A` should've been given by the `a: A` argument, but since scalac cannot infer `F[_]`, user still have to specify all type params.
+Note that the type `A` should've been given by the `a: A` argument, but since scalac cannot infer `F[_]`, the user still has to specify all type params.
 In cats, we use a technique described in
  Rob Norris’s [Kinda-Curried Type Parameters](https://tpolecat.github.io/2015/07/30/infer.html) to overcome this restriction of scala inference. Here is a version of the `pure` using this technique in cats.
 
