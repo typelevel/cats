@@ -245,7 +245,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     *
     * For example:
     * {{{
-    * scala> Validated.valid("ab").ensureWith(s => new IllegalArgumentException(s"Must be longer than 3, provided '$s'"))(_.length > 3)
+    * scala> Validated.valid("ab").ensureWith(s => new IllegalArgumentException("Must be longer than 3, provided '" + s + "'"))(_.length > 3)
     * res0: Validated[IllegalArgumentException, String] = Invalid(java.lang.IllegalArgumentException: Must be longer than 3, provided 'ab')
     * }}}
     */
