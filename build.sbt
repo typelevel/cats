@@ -36,7 +36,7 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.10.0",
+    "com.github.mpilquist" %%% "simulacrum" % "0.10.0" % "compile-time",
     "org.typelevel" %%% "machinist" % "0.6.1",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")
@@ -45,8 +45,11 @@ lazy val commonSettings = Seq(
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
   // workaround for https://github.com/scalastyle/scalastyle-sbt-plugin/issues/47
-  scalastyleSources in Compile ++= (unmanagedSourceDirectories in Compile).value
+  scalastyleSources in Compile ++= (unmanagedSourceDirectories in Compile).value,
+  ivyConfigurations += config("compile-time").hide,
+  unmanagedClasspath in Compile ++= update.value.select(configurationFilter("compile-time"))
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
+
 
 lazy val tagName = Def.setting{
  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
@@ -91,8 +94,8 @@ lazy val includeGeneratedSrc: Setting[_] = {
 lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
 lazy val scalaCheckVersion = "1.13.4"
-lazy val scalaTestVersion = "3.0.0"
-lazy val disciplineVersion = "0.7.2"
+lazy val scalaTestVersion = "3.0.1"
+lazy val disciplineVersion = "0.7.3"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
