@@ -19,7 +19,10 @@ trait EitherSyntax {
 }
 
 object EitherSyntax {
-  /** Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics. */
+
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
   private[syntax] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean = true ) extends AnyVal {
     def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): Either[T, A] =
       try {

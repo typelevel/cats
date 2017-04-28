@@ -220,8 +220,7 @@ object Free {
     new FreeInjectKPartiallyApplied
 
   /**
-   * Pre-application of an injection to a `F[A]` value.
-   * @param dummy is introduced solely for the sake of making this a value class and thus zero allocation cost.
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
   private[free] final class FreeInjectKPartiallyApplied[F[_], G[_]](val dummy: Boolean = true ) extends AnyVal {
     def apply[A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
