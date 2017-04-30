@@ -9,14 +9,14 @@ import cats.data.EitherK
  *
  * @see [[http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf]]
  */
-sealed abstract class InjectK[F[_], G[_]] {
+abstract class InjectK[F[_], G[_]] {
   def inj: FunctionK[F, G]
 
   def prj: FunctionK[G, λ[α => Option[F[α]]]]
 
-  def apply[A](fa: F[A]): G[A] = inj(fa)
+  final def apply[A](fa: F[A]): G[A] = inj(fa)
 
-  def unapply[A](ga: G[A]): Option[F[A]] = prj(ga)
+  final def unapply[A](ga: G[A]): Option[F[A]] = prj(ga)
 }
 
 private[cats] sealed abstract class InjectKInstances {
