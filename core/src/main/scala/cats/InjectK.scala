@@ -22,7 +22,7 @@ sealed abstract class InjectK[F[_], G[_]] {
 private[cats] sealed abstract class InjectKInstances {
   implicit def catsReflexiveInjectKInstance[F[_]]: InjectK[F, F] =
     new InjectK[F, F] {
-      val inj = λ[FunctionK[F, F]](identity(_))
+      val inj = FunctionK.id[F]
 
       val prj = λ[FunctionK[F, λ[α => Option[F[α]]]]](Some(_))
     }
