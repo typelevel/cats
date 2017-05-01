@@ -218,17 +218,6 @@ class EitherTTests extends CatsSuite {
     eithert.recoverWith { case "noteithert" => EitherT.pure[Id, String](5) } should === (eithert)
   }
 
-  test("recoverF recovers handled values in a Future") {
-    import scala.concurrent.ExecutionContext.Implicits.global
-    import scala.concurrent.duration._
-    import scala.concurrent.{Await, Future}
-
-    val et: EitherT[Future, String, Int] = EitherT.right[String](Future.failed(new Exception("error")))
-    Await.result(et.recoverF[Throwable] {
-      case ex => Either.right(5)
-    }.value, 10.seconds) should === (Right(5))
-  }
-
   test("recoverF recovers handled values") {
     val et: EitherT[Option, String, Int] = EitherT.right[String](Option.empty[Int])
     et.recoverF[Unit] { case u => Right(5) }.value.get should === (Right(5))
@@ -242,17 +231,6 @@ class EitherTTests extends CatsSuite {
   test("recoverF ignores unhandled values") {
     val et: EitherT[Validated[String, ?], String, Int] = EitherT.right[String](Validated.invalid("error"))
     et.recoverF[String] { case "other" => Either.left("another") } should === (et)
-  }
-
-  test("recoverFWith recovers handled values in a Future") {
-    import scala.concurrent.ExecutionContext.Implicits.global
-    import scala.concurrent.duration._
-    import scala.concurrent.{Await, Future}
-
-    val et: EitherT[Future, String, Int] = EitherT.right[String](Future.failed(new Exception("error")))
-    Await.result(et.recoverFWith[Throwable] {
-      case ex => Future.successful(Right(5))
-    }.value, 10.seconds) should === (Right(5))
   }
 
   test("recoverFWith recovers handled values") {
