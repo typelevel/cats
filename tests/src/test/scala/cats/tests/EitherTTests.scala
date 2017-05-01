@@ -1,12 +1,13 @@
 package cats
 package tests
 
-import cats.data.EitherT
+import cats.data.{EitherT, Validated}
 import cats.functor.Bifunctor
 import cats.functor._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.{OrderLaws, GroupLaws}
+import cats.kernel.laws.{GroupLaws, OrderLaws}
+
 
 class EitherTTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[EitherT[ListWrapper, String, ?]](EitherT.catsDataFunctorForEitherT(ListWrapper.functor))
@@ -217,9 +218,68 @@ class EitherTTests extends CatsSuite {
     eithert.recoverWith { case "noteithert" => EitherT.pure[Id, String](5) } should === (eithert)
   }
 
-  test("recoverWith ignores the right side") {
-    val eithert = EitherT.pure[Id, String](10)
-    eithert.recoverWith { case "eithert" => EitherT.pure[Id, String](5) } should === (eithert)
+  test("recoverF recovers handled values in a Future") {
+    import scala.concurrent.ExecutionContext.Implicits.global
+    import scala.concurrent.duration._
+    import scala.concurrent.{Await, Future}
+
+    val et: EitherT[Future, String, Int] = EitherT.right[String](Future.failed(new Exception("error")))
+    Await.result(et.recoverF[Throwable] {
+      case ex => Either.right(5)
+    }.value, 10.seconds) should === (Right(5))
+  }
+
+  test("recoverF recovers handled values") {
+    val et: EitherT[Option, String, Int] = EitherT.right[String](Option.empty[Int])
+    et.recoverF[Unit] { case u => Right(5) }.value.get should === (Right(5))
+  }
+
+  test("recoverF ignores the non error in F") {
+    val et: EitherT[Option, String, Int] = EitherT.right[String](Some(1))
+    et.recoverFWith[Unit] { case u => Some(Right(5)) }.value.get should === (Right(1))
+  }
+
+  test("recoverF ignores unhandled values") {
+    val et: EitherT[Validated[String, ?], String, Int] = EitherT.right[String](Validated.invalid("error"))
+    et.recoverF[String] { case "other" => Either.left("another") } should === (et)
+  }
+
+  test("recoverFWith recovers handled values in a Future") {
+    import scala.concurrent.ExecutionContext.Implicits.global
+    import scala.concurrent.duration._
+    import scala.concurrent.{Await, Future}
+
+    val et: EitherT[Future, String, Int] = EitherT.right[String](Future.failed(new Exception("error")))
+    Await.result(et.recoverFWith[Throwable] {
+      case ex => Future.successful(Right(5))
+    }.value, 10.seconds) should === (Right(5))
+  }
+
+  test("recoverFWith recovers handled values") {
+    val et: EitherT[Option, String, Int] = EitherT.right[String](Option.empty[Int])
+    et.recoverFWith[Unit] { case u => Some(Right(5)) }.value.get should === (Right(5))
+  }
+
+  test("recoverFWith ignores the non error in F") {
+    val et: EitherT[Option, String, Int] = EitherT.right[String](Some(1))
+    et.recoverFWith[Unit] { case u => Some(Right(5)) }.value.get should === (Right(1))
+  }
+
+  test("recoverFWith ignores unhandled values") {
+    val et: EitherT[Validated[String, ?], String, Int] = EitherT.right[String](Validated.invalid("error"))
+    et.recoverFWith[String] { case "other" => Validated.valid(Either.left("another")) } should === (et)
+  }
+
+  test("mapF consistent with mapping value") {
+    forAll { (eithert: EitherT[List, String, Int], f: List[Either[String, Int]] => Option[Either[String, String]])  =>
+      eithert.mapF(f).value should === (f(eithert.value))
+    }
+  }
+
+  test("leftMapF consistent with mapping value") {
+    forAll { (eithert: EitherT[List, String, Int], f: List[Either[String, Int]] => Option[Either[Int, Int]])  =>
+      eithert.leftMapF(f).value should === (f(eithert.value))
+    }
   }
 
   test("transform consistent with value.map") {

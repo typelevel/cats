@@ -88,7 +88,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = bimap(identity, f)
 
-  def mapF[D](fe: F[Either[A, B]] => F[Either[A, D]]): EitherT[F, A, D] = EitherT(fe(value))
+  def mapF[N[_], D](fe: F[Either[A, B]] => N[Either[A, D]]): EitherT[N, A, D] = EitherT(fe(value))
 
   def recoverF[E](pf: PartialFunction[E, Either[A, B]])(implicit ae: ApplicativeError[F, E]): EitherT[F, A, B] =
     EitherT(ae.recover(value)(pf))
@@ -101,7 +101,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): EitherT[F, C, B] = bimap(f, identity)
 
-  def leftMapF[C](fe: F[Either[A, B]] => F[Either[C, B]]): EitherT[F, C, B] =
+  def leftMapF[N[_], C](fe: F[Either[A, B]] => N[Either[C, B]]): EitherT[N, C, B] =
     EitherT(fe(value))
 
   def compare(that: EitherT[F, A, B])(implicit o: Order[F[Either[A, B]]]): Int =
