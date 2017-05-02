@@ -5,6 +5,8 @@ import scala.util.control.NonFatal
 
 import cats.syntax.all._
 
+import java.io.{ Externalizable, ObjectOutput, ObjectInput }
+
 /**
  * Eval is a monad which controls evaluation.
  *
@@ -173,23 +175,57 @@ final case class Now[A](value: A) extends Eval[A] {
  * by the closure) will not be retained, and will be available for
  * garbage collection.
  */
-final class Later[A](f: () => A) extends Eval[A] {
-  private[this] var thunk: () => A = f
+final class Later[A](f: () => A) extends Eval[A] with Externalizable {
 
-  // The idea here is that `f` may have captured very large
-  // structures, but produce a very small result. In this case, once
-  // we've calculated a value, we would prefer to be able to free
-  // everything else.
-  //
-  // (For situations where `f` is small, but the output will be very
-  // expensive to store, consider using `Always`.)
-  lazy val value: A = {
-    val result = thunk()
-    thunk = null // scalastyle:off
-    result
-  }
+  // we use lock to prevent possible problems with someone else
+  // synchronizing on 'this'.
+  private[this] val lock = new Object()
+  @volatile private[this] var thunk: Function0[A] = f
+  private[this] var result: A = _
+
+  final def value: A =
+    if (thunk == null) {
+      result
+    } else lock.synchronized {
+      if (thunk == null) result else {
+        result = thunk()
+        thunk = null
+        result
+      }
+    }
 
   def memoize: Eval[A] = this
+
+  // everything below here is necessary to convince java to serialize
+  // these things.
+
+  def this() =
+    this(() => null.asInstanceOf[A])
+
+  def writeExternal(out: ObjectOutput): Unit =
+    thunk match {
+      case null =>
+        out.writeObject(new Integer(1))
+        out.writeObject(result)
+      case t =>
+        out.writeObject(new Integer(0))
+        out.writeObject(t)
+    }
+
+  def readExternal(in: ObjectInput): Unit =
+    in.readObject() match {
+      case n: Integer =>
+        n.intValue match {
+          case 0 =>
+            thunk = in.readObject().asInstanceOf[Function0[A]]
+            result = null.asInstanceOf[A]
+          case 1 =>
+            thunk = null
+            result = in.readObject().asInstanceOf[A]
+        }
+      case x =>
+        throw new RuntimeException(s"expected integer, got $x")
+    }
 }
 
 object Later {

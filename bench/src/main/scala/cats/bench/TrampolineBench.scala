@@ -30,8 +30,9 @@ class TrampolineBench {
       y <- Trampoline.suspend(trampolineFib(n - 2))
     } yield x + y
 
-  // TailRec[A] only has .flatMap in 2.11.
-
+  // // TailRec[A] only has .flatMap in 2.11.
+  // import scala.util.control.TailCalls
+  //
   // @Benchmark
   // def stdlib(): Int = stdlibFib(N).result
   //
