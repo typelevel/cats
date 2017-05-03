@@ -212,27 +212,27 @@ The `~>`, `⊥`, `⊤`, `:<:` and `:≺:` symbols can be imported with `import c
 
 All other symbols can be imported with `import cats.implicits._`
 
-| Symbol     | Name                   | Type Class              | Signature                              |
-| ---------- | ---------------------- | --------------------    |--------------------------------------- |
-| `fa |@| fb`| Cartesian builder      | `Cartesian[F[_]]`       | `|@|(fa: F[A])(fb: F[B]): F[(A, B)]`   |
-| `fa *> fb` | right apply            | `Cartesian[F[_]]`       | `*>(fa: F[A])(fb: F[B]): F[A]`         |
-| `fa <* fb` | left apply             | `Cartesian[F[_]]`       | `<*(fa: F[A])(fb: F[B]): F[B]`         |
-| `x === y`  | equals                 | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`             |
-| `x =!= y`  | not equals             | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`            |
-| `fa >>= f` | flatMap                | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`|
-| `fa >> fb` | followed by            | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]` |
-| `x |-| y`  | remove                 | `Group[A]`              | `remove(x: A, y: A): A`                |
-| `x > y`    | greater than           | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`              |
-| `x >= y`   | greater than or equal  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`            |
-| `x < y`    | less than              | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`              |
-| `x <= y`   | less than or equal     | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`            |
-| `x |+| y`  | Semigroup combine      | `Semigroup[A]`          | `combine(x: A, y: A): A`               |
-| `x <+> y`  | SemigroupK combine     | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`     |
-| `F ~> G`   | natural transformation | `FunctionK[F[_], G[_]]` | `FunctionK` alias                      |
-| `F :<: G`  | inject                 | `Inject[F[_], G[_]]`    | `Inject` alias                         |
-| `F :≺: G`  | inject                 | `Inject[F[_], G[_]]`    | `Inject` alias                         |
-| `⊥`        | bottom                 | N/A                     | `Nothing`                              |
-| `⊤`        | top                    | N/A                     | `Any`                                  |
+| Symbol     | Name                   | Nickname         | Type Class              | Signature                              |
+| ---------- | ---------------------- | ---------------- | ----------------------- | -------------------------------------- |
+| `fa |@| fb`| Cartesian builder      | Cinnabon, scream | `Cartesian[F[_]]`       | `|@|(fa: F[A])(fb: F[B]): F[(A, B)]`   |
+| `fa *> fb` | right apply            |                  | `Cartesian[F[_]]`       | `*>(fa: F[A])(fb: F[B]): F[A]`         |
+| `fa <* fb` | left apply             |                  | `Cartesian[F[_]]`       | `<*(fa: F[A])(fb: F[B]): F[B]`         |
+| `x === y`  | equals                 |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`             |
+| `x =!= y`  | not equals             |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`            |
+| `fa >>= f` | flatMap                |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`|
+| `fa >> fb` | followed by            |                  | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]` |
+| `x |-| y`  | remove                 |                  | `Group[A]`              | `remove(x: A, y: A): A`                |
+| `x > y`    | greater than           |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`              |
+| `x >= y`   | greater than or equal  |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`            |
+| `x < y`    | less than              |                  | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`              |
+| `x <= y`   | less than or equal     |                  | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`            |
+| `x |+| y`  | Semigroup combine      |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`               |
+| `x <+> y`  | SemigroupK combine     |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`     |
+| `F ~> G`   | natural transformation |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                      |
+| `F :<: G`  | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                        |
+| `F :≺: G`  | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                        |
+| `⊥`        | bottom                 |                  | N/A                     | `Nothing`                              |
+| `⊤`        | top                    |                  | N/A                     | `Any`                                  |
 
 ## <a id="contributing" href="#contributing"></a>How can I help?
 
