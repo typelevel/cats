@@ -127,6 +127,7 @@ There are many projects that integrate with Cats:
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
  * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources.
  * [Frameless](https://github.com/adelbertc/frameless): Expressive types for Spark.
+ * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs.
  * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
  * [Kittens](https://github.com/milessabin/kittens): automatically derived type class instances.
  * [Monix](https://github.com/monixio/monix): high-performance library for composing asynchronous and event-based programs.
