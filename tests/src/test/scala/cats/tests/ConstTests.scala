@@ -48,6 +48,9 @@ class ConstTests extends CatsSuite {
   checkAll("Const[?, ?]", BifoldableTests[Const].bifoldable[Int, Int, Int])
   checkAll("Bifoldable[Const]", SerializableTests.serializable(Bifoldable[Const]))
 
+  checkAll("InvariantMonoidal[Const[String, ?]]", InvariantMonoidalTests[Const[String, ?]].invariantMonoidal[Int, Int, Int])
+  checkAll("InvariantMonoidal[Const[String, ?]]", SerializableTests.serializable(InvariantMonoidal[Const[String, ?]]))
+
   test("show") {
 
     Const(1).show should === ("Const(1)")

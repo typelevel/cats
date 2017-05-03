@@ -232,30 +232,6 @@ import simulacrum.typeclass
     }.value
 
   /**
-   * Behaves like traverse_, but uses [[Unapply]] to find the
-   * [[Applicative]] instance for `G` - used when `G` is a
-   * type constructor with two or more parameters such as [[scala.util.Either]]
-   *
-   * {{{
-   * scala> import cats.implicits._
-   * scala> def parseInt(s: String): Either[String, Int] =
-   *      |   try { Right(s.toInt) }
-   *      |   catch { case _: NumberFormatException => Left("boo") }
-   * scala> val F = Foldable[List]
-   * scala> F.traverseU_(List("333", "444"))(parseInt)
-   * res0: Either[String, Unit] = Right(())
-   * scala> F.traverseU_(List("333", "zzz"))(parseInt)
-   * res1: Either[String, Unit] = Left(boo)
-   * }}}
-   *
-   * Note that using `traverse_` instead of `traverseU_` would not compile without
-   * explicitly passing in the type parameters - the type checker has trouble
-   * inferring the appropriate instance.
-   */
-  def traverseU_[A, GB](fa: F[A])(f: A => GB)(implicit U: Unapply[Applicative, GB]): U.M[Unit] =
-    traverse_(fa)(f.andThen(U.subst))(U.TC)
-
-  /**
    * Sequence `F[G[A]]` using `Applicative[G]`.
    *
    * This is similar to `traverse_` except it operates on `F[G[A]]`
@@ -274,27 +250,6 @@ import simulacrum.typeclass
    */
   def sequence_[G[_]: Applicative, A](fga: F[G[A]]): G[Unit] =
     traverse_(fga)(identity)
-
-  /**
-   * Behaves like sequence_, but uses [[Unapply]] to find the
-   * [[Applicative]] instance for `G` - used when `G` is a
-   * type constructor with two or more parameters such as [[scala.util.Either]]
-   *
-   * {{{
-   * scala> import cats.implicits._
-   * scala> val F = Foldable[List]
-   * scala> F.sequenceU_(List(Either.right[String, Int](333), Right(444)))
-   * res0: Either[String, Unit] = Right(())
-   * scala> F.sequenceU_(List(Either.right[String, Int](333), Left("boo")))
-   * res1: Either[String, Unit] = Left(boo)
-   * }}}
-   *
-   * Note that using `sequence_` instead of `sequenceU_` would not compile without
-   * explicitly passing in the type parameters - the type checker has trouble
-   * inferring the appropriate instance.
-   */
-  def sequenceU_[GA](fa: F[GA])(implicit U: Unapply[Applicative, GA]): U.M[Unit] =
-    traverseU_(fa)(identity)
 
   /**
    * Fold implemented using the given `MonoidK[G]` instance.

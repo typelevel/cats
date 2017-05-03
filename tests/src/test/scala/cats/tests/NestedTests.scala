@@ -1,6 +1,7 @@
 package cats
 package tests
 
+import cats.Functor
 import cats.data._
 import cats.functor._
 import cats.laws.discipline._
@@ -14,11 +15,6 @@ class NestedTests extends CatsSuite {
   // issues.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
-
-  implicit val iso = {
-    implicit val instance = ListWrapper.functor
-    invariant[Nested[List, ListWrapper, ?]]
-  }
 
   {
     // Invariant composition
@@ -76,18 +72,21 @@ class NestedTests extends CatsSuite {
   {
     // Contravariant + Contravariant = Functor
     type ConstInt[A] = Const[Int, A]
-    // SI-2712
-    implicit val instance = Nested.catsDataContravariantForNested[ConstInt, Show]
-    implicit val arbitrary = catsLawsArbitraryForNested[ConstInt, Show, Int]
-    implicit val eqv = Nested.catsDataEqForNested[ConstInt, Show, Int]
     checkAll("Nested[Const[Int, ?], Show, ?]", FunctorTests[Nested[ConstInt, Show, ?]].functor[Int, Int, Int])
-    checkAll("Functor[Nested[Const[Int, ?], Show, ?]]", SerializableTests.serializable(instance))
+    checkAll("Functor[Nested[Const[Int, ?], Show, ?]]", SerializableTests.serializable(Functor[Nested[ConstInt, Show, ?]]))
   }
 
   {
     // Contravariant + Functor = Contravariant
     checkAll("Nested[Show, Option, ?]", ContravariantTests[Nested[Show, Option, ?]].contravariant[Int, Int, Int])
     checkAll("Contravariant[Nested[Show, Option, ?]]", SerializableTests.serializable(Contravariant[Nested[Show, Option, ?]]))
+  }
+
+  {
+    // Apply composition
+    implicit val instance = ListWrapper.applyInstance
+    checkAll("Nested[List, ListWrapper, ?]", ApplyTests[Nested[List, ListWrapper, ?]].apply[Int, Int, Int])
+    checkAll("Apply[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(Apply[Nested[List, ListWrapper, ?]]))
   }
 
   {

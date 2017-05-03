@@ -193,33 +193,33 @@ class EitherTTests extends CatsSuite {
   }
 
   test("recover recovers handled values") {
-    val eithert = EitherT.left[Id, String, Int]("eithert")
+    val eithert = EitherT.leftT[Id, Int]("eithert")
     eithert.recover { case "eithert" => 5 }.isRight should === (true)
   }
 
   test("recover ignores unhandled values") {
-    val eithert = EitherT.left[Id, String, Int]("eithert")
+    val eithert = EitherT.leftT[Id, Int]("eithert")
     eithert.recover { case "noteithert" => 5 } should === (eithert)
   }
 
   test("recover ignores the right side") {
-    val eithert = EitherT.right[Id, String, Int](10)
+    val eithert = EitherT.pure[Id, String](10)
     eithert.recover { case "eithert" => 5 } should === (eithert)
   }
 
   test("recoverWith recovers handled values") {
-    val eithert = EitherT.left[Id, String, Int]("eithert")
-    eithert.recoverWith { case "eithert" => EitherT.right[Id, String, Int](5) }.isRight should === (true)
+    val eithert = EitherT.leftT[Id, Int]("eithert")
+    eithert.recoverWith { case "eithert" => EitherT.pure[Id, String](5) }.isRight should === (true)
   }
 
   test("recoverWith ignores unhandled values") {
-    val eithert = EitherT.left[Id, String, Int]("eithert")
-    eithert.recoverWith { case "noteithert" => EitherT.right[Id, String, Int](5) } should === (eithert)
+    val eithert = EitherT.leftT[Id, Int]("eithert")
+    eithert.recoverWith { case "noteithert" => EitherT.pure[Id, String](5) } should === (eithert)
   }
 
   test("recoverWith ignores the right side") {
-    val eithert = EitherT.right[Id, String, Int](10)
-    eithert.recoverWith { case "eithert" => EitherT.right[Id, String, Int](5) } should === (eithert)
+    val eithert = EitherT.pure[Id, String](10)
+    eithert.recoverWith { case "eithert" => EitherT.pure[Id, String](5) } should === (eithert)
   }
 
   test("transform consistent with value.map") {
@@ -240,6 +240,12 @@ class EitherTTests extends CatsSuite {
   test("subflatMap consistent with value.map+flatMap") {
     forAll { (eithert: EitherT[List, String, Int], f: Int => Either[String, Double]) =>
       eithert.subflatMap(f) should === (EitherT(eithert.value.map(_.flatMap(f))))
+    }
+  }
+
+  test("flatMap and flatMapF consistent") {
+    forAll { (eithert: EitherT[List, String, Int], f: Int => EitherT[List, String, Int])  =>
+      eithert.flatMap(f) should === (eithert.flatMapF(f(_).value))
     }
   }
 
@@ -368,7 +374,7 @@ class EitherTTests extends CatsSuite {
   test("ensure should fail if predicate not satisfied") {
     forAll { (x: EitherT[Id, String, Int], s: String, p: Int => Boolean) =>
       if (x.isRight && !p(x getOrElse 0)) {
-        x.ensure(s)(p) should === (EitherT.left[Id, String, Int](s))
+        x.ensure(s)(p) should === (EitherT.leftT[Id, Int](s))
       }
     }
   }

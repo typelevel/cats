@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{EitherT, OptionT}
+import cats.data.OptionT
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -72,19 +72,6 @@ class OptionTTests extends CatsSuite {
 
     implicit val monadError = OptionT.catsDataMonadErrorForOptionT[SEither, String]
 
-    import org.scalacheck.Arbitrary
-    implicit val arb1 = implicitly[Arbitrary[OptionT[SEither, Int]]]
-    implicit val arb2 = implicitly[Arbitrary[OptionT[SEither, Int => Int]]]
-
-    implicit val eq0 = OptionT.catsDataEqForOptionT[SEither, Option[Int]]
-    implicit val eq1 = OptionT.catsDataEqForOptionT[SEither, Int]
-    implicit val eq2 = OptionT.catsDataEqForOptionT[SEither, Unit]
-    implicit val eq3 = OptionT.catsDataEqForOptionT[SEither, SEither[Unit]]
-    implicit val eq4 = OptionT.catsDataEqForOptionT[SEither, SEither[Int]]
-    implicit val eq5 = EitherT.catsDataEqForEitherT[OptionT[SEither, ?], String, Int]
-    implicit val eq6 = OptionT.catsDataEqForOptionT[SEither, (Int, Int, Int)]
-
-    implicit val iso = CartesianTests.Isomorphisms.invariant[OptionT[SEither, ?]]
 
     checkAll("OptionT[Either[String, ?], Int]", MonadErrorTests[OptionT[SEither, ?], String].monadError[Int, Int, Int])
     checkAll("MonadError[OptionT[Either[String, ?], ?]]", SerializableTests.serializable(monadError))

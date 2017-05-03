@@ -28,9 +28,6 @@ object Func extends FuncInstances {
       def run: A => F[B] = run0
     }
 
-  /** applicative function using [[Unapply]]. */
-  def appFuncU[A, R](f: A => R)(implicit RR: Unapply[Applicative, R]): AppFunc[RR.M, A, RR.A] =
-    appFunc({ a: A => RR.subst(f(a)) })(RR.TC)
 }
 
 private[data] abstract class FuncInstances extends FuncInstances0 {
@@ -91,12 +88,12 @@ private[data] sealed trait FuncApplicative[F[_], C] extends Applicative[λ[α =>
 sealed abstract class AppFunc[F[_], A, B] extends Func[F, A, B] { self =>
   def F: Applicative[F]
 
-  def product[G[_]](g: AppFunc[G, A, B]): AppFunc[λ[α => Prod[F, G, α]], A, B] =
+  def product[G[_]](g: AppFunc[G, A, B]): AppFunc[λ[α => Tuple2K[F, G, α]], A, B] =
     {
       implicit val FF: Applicative[F] = self.F
       implicit val GG: Applicative[G] = g.F
-      Func.appFunc[λ[α => Prod[F, G, α]], A, B]{
-        a: A => Prod(self.run(a), g.run(a))
+      Func.appFunc[λ[α => Tuple2K[F, G, α]], A, B]{
+        a: A => Tuple2K(self.run(a), g.run(a))
       }
     }
 

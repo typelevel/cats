@@ -1,7 +1,9 @@
 package cats
 package data
 
+import cats.data.Validated.{Invalid, Valid}
 import cats.functor.Bifunctor
+
 import scala.annotation.tailrec
 
 /** Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
@@ -47,6 +49,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def unwrap: Either[Either[A, B], (A, B)] = fold(a => Left(Left(a)), b => Left(Right(b)), (a, b) => Right((a, b)))
 
   final def toEither: Either[A, B] = fold(Left(_), Right(_), (_, b) => Right(b))
+  final def toValidated: Validated[A, B] = fold(Invalid(_), Valid(_), (_, b) => Valid(b))
   final def toOption: Option[B] = right
   final def toList: List[B] = right.toList
 
@@ -102,7 +105,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     fold(identity, ev, (_, b) => ev(b))
 
   // scalastyle:off cyclomatic.complexity
-  final def append[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Ior BB = this match {
+  final def combine[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Ior BB = this match {
     case Ior.Left(a1) => that match {
       case Ior.Left(a2) => Ior.Left(AA.combine(a1, a2))
       case Ior.Right(b2) => Ior.Both(a1, b2)
@@ -150,29 +153,45 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
   }
 
   implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] = new Semigroup[Ior[A, B]] {
-    def combine(x: Ior[A, B], y: Ior[A, B]) = x.append(y)
+    def combine(x: Ior[A, B], y: Ior[A, B]) = x.combine(y)
   }
 
-  implicit def catsDataMonadForIor[A: Semigroup]: Monad[A Ior ?] = new Monad[A Ior ?] {
-    def pure[B](b: B): A Ior B = Ior.right(b)
-    def flatMap[B, C](fa: A Ior B)(f: B => A Ior C): A Ior C = fa.flatMap(f)
-    def tailRecM[B, C](b: B)(fn: B => Ior[A, Either[B, C]]): A Ior C = {
-      @tailrec
-      def loop(v: Ior[A, Either[B, C]]): A Ior C = v match {
-        case Ior.Left(a) => Ior.left(a)
-        case Ior.Right(Right(c)) => Ior.right(c)
-        case Ior.Both(a, Right(c)) => Ior.both(a, c)
-        case Ior.Right(Left(b)) => loop(fn(b))
-        case Ior.Both(a, Left(b)) =>
-          fn(b) match {
-            case Ior.Left(aa) => Ior.left(Semigroup[A].combine(a, aa))
-            case Ior.Both(aa, x) => loop(Ior.both(Semigroup[A].combine(a, aa), x))
-            case Ior.Right(x) => loop(Ior.both(a, x))
-          }
+  implicit def catsDataMonadErrorForIor[A: Semigroup]: MonadError[Ior[A, ?], A] =
+    new MonadError[Ior[A, ?], A] {
+
+      def raiseError[B](e: A): Ior[A, B] = Ior.left(e)
+
+      def handleErrorWith[B](fa: Ior[A, B])(f: (A) => Ior[A, B]): Ior[A, B] =
+        fa match {
+          case Ior.Left(e) => f(e)
+          case r @ Ior.Right(_) => r
+          case Ior.Both(e, _) => f(e)
+        }
+
+      def flatMap[B, C](fa: Ior[A, B])(f: B => Ior[A, C]): Ior[A, C] = fa.flatMap(f)
+
+      def tailRecM[B, C](b: B)(fn: B => Ior[A, Either[B, C]]): A Ior C = {
+        @tailrec
+        def loop(v: Ior[A, Either[B, C]]): A Ior C = v match {
+          case Ior.Left(a) => Ior.left(a)
+          case Ior.Right(Right(c)) => Ior.right(c)
+          case Ior.Both(a, Right(c)) => Ior.both(a, c)
+          case Ior.Right(Left(b)) => loop(fn(b))
+          case Ior.Both(a, Left(b)) =>
+            fn(b) match {
+              case Ior.Left(aa) => Ior.left(Semigroup[A].combine(a, aa))
+              case Ior.Both(aa, x) => loop(Ior.both(Semigroup[A].combine(a, aa), x))
+              case Ior.Right(x) => loop(Ior.both(a, x))
+            }
+        }
+        loop(fn(b))
       }
-      loop(fn(b))
+
+      override def pure[B](x: B): Ior[A, B] = Ior.right(x)
+
+      override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
+        fa.map(f)
     }
-  }
 
   implicit def catsDataBifunctorForIor: Bifunctor[Ior] =
     new Bifunctor[Ior] {
@@ -182,13 +201,18 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
 
 private[data] sealed abstract class IorInstances0 {
 
-  implicit def catsDataTraverseFunctorForIor[A]: Traverse[A Ior ?] with Functor[A Ior ?] = new Traverse[A Ior ?] with Functor[A Ior ?] {
+  implicit def catsDataTraverseFunctorForIor[A]: Traverse[A Ior ?] = new Traverse[A Ior ?] {
     def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =
       fa.traverse(f)
     def foldLeft[B, C](fa: A Ior B, b: C)(f: (C, B) => C): C =
       fa.foldLeft(b)(f)
     def foldRight[B, C](fa: A Ior B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
       fa.foldRight(lc)(f)
+
+    override def forall[B](fa: Ior[A, B])(p: (B) => Boolean): Boolean = fa.forall(p)
+
+    override def exists[B](fa: Ior[A, B])(p: (B) => Boolean): Boolean = fa.exists(p)
+
     override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
       fa.map(f)
   }
@@ -198,6 +222,8 @@ private[data] sealed trait IorFunctions {
   def left[A, B](a: A): A Ior B = Ior.Left(a)
   def right[A, B](b: B): A Ior B = Ior.Right(b)
   def both[A, B](a: A, b: B): A Ior B = Ior.Both(a, b)
+  def leftNel[A, B](a: A): IorNel[A, B] = left(NonEmptyList.of(a))
+  def bothNel[A, B](a: A, b: B): IorNel[A, B] = both(NonEmptyList.of(a), b)
 
   /**
    * Create an `Ior` from two Options if at least one of them is defined.

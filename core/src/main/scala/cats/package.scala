@@ -10,11 +10,11 @@ package object cats {
   type ⊥ = Nothing
   type ⊤ = Any
 
-  /** [[cats.Inject]][F, G] */
-  type :<:[F[_], G[_]] = Inject[F, G]
+  /** [[cats.InjectK]][F, G] */
+  type :<:[F[_], G[_]] = InjectK[F, G]
 
-  /** [[cats.Inject]][F, G] */
-  type :≺:[F[_], G[_]] = Inject[F, G]
+  /** [[cats.InjectK]][F, G] */
+  type :≺:[F[_], G[_]] = InjectK[F, G]
 
 /**
  * Identity, encoded as `type Id[A] = A`, a convenient alias to make

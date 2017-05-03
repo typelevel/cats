@@ -1,10 +1,10 @@
 package cats
 
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.tests.CatsSuite
 import org.scalacheck._
 
-class InjectTests extends CatsSuite {
+class InjectKTests extends CatsSuite {
 
   sealed trait Test1Algebra[A]
 
@@ -38,7 +38,7 @@ class InjectTests extends CatsSuite {
       Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test2(s, f))
   }
 
-  type T[A] = Coproduct[Test1Algebra, Test2Algebra, A]
+  type T[A] = EitherK[Test1Algebra, Test2Algebra, A]
 
   test("inj & prj") {
     def distr[F[_], A](f1: F[A], f2: F[A])
@@ -52,8 +52,8 @@ class InjectTests extends CatsSuite {
       } yield x + y
 
     forAll { (x: Int, y: Int) =>
-      val expr1: T[Int] = Inject[Test1Algebra, T].inj(Test1(x, _ + 1))
-      val expr2: T[Int] = Inject[Test2Algebra, T].inj(Test2(y, _ * 2))
+      val expr1: T[Int] = InjectK[Test1Algebra, T].inj(Test1(x, _ + 1))
+      val expr2: T[Int] = InjectK[Test2Algebra, T].inj(Test2(y, _ * 2))
       val res = distr[T, Int](expr1, expr2)
       res should ===(Some(x + y))
     }
@@ -71,8 +71,8 @@ class InjectTests extends CatsSuite {
       } yield x + y
 
     forAll { (x: Int, y: Int) =>
-      val expr1: T[Int] = Inject[Test1Algebra, T].apply(Test1(x, _ + 1))
-      val expr2: T[Int] = Inject[Test2Algebra, T].apply(Test2(y, _ * 2))
+      val expr1: T[Int] = InjectK[Test1Algebra, T].apply(Test1(x, _ + 1))
+      val expr2: T[Int] = InjectK[Test2Algebra, T].apply(Test2(y, _ * 2))
       val res = distr[T, Int](expr1, expr2)
       res should ===(Some(x + y))
     }
@@ -80,20 +80,20 @@ class InjectTests extends CatsSuite {
 
   test("apply in left") {
     forAll { (y: Test1Algebra[Int]) =>
-      Inject[Test1Algebra, T].inj(y) == Coproduct(Left(y)) should ===(true)
+      InjectK[Test1Algebra, T].inj(y) == EitherK(Left(y)) should ===(true)
     }
   }
 
   test("apply in right") {
     forAll { (y: Test2Algebra[Int]) =>
-      Inject[Test2Algebra, T].inj(y) == Coproduct(Right(y)) should ===(true)
+      InjectK[Test2Algebra, T].inj(y) == EitherK(Right(y)) should ===(true)
     }
   }
 
   test("null identity") {
     val listIntNull = null.asInstanceOf[List[Int]]
-    Inject.catsReflexiveInjectInstance[List].inj[Int](listIntNull) should ===(listIntNull)
-    Inject.catsReflexiveInjectInstance[List].prj[Int](listIntNull) should ===(Some(listIntNull))
+    InjectK.catsReflexiveInjectKInstance[List].inj[Int](listIntNull) should ===(listIntNull)
+    InjectK.catsReflexiveInjectKInstance[List].prj[Int](listIntNull) should ===(Some(listIntNull))
   }
 
 }

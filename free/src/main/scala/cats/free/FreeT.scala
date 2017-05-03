@@ -164,10 +164,6 @@ object FreeT extends FreeTInstances {
   def liftT[S[_], M[_], A](value: M[A])(implicit M: Functor[M]): FreeT[S, M, A] =
     Suspend(M.map(value)(Right(_)))
 
-  /** A version of `liftT` that infers the nested type constructor. */
-  def liftTU[S[_], MA](value: MA)(implicit M: Unapply[Functor, MA]): FreeT[S, M.M, M.A] =
-    liftT[S, M.M, M.A](M.subst(value))(M.TC)
-
   /** Suspends a value within a functor in a single step. Monadic unit for a higher-order monad. */
   def liftF[S[_], M[_], A](value: S[A])(implicit M: Applicative[M]): FreeT[S, M, A] =
     Suspend(M.pure(Left(value)))

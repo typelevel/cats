@@ -75,6 +75,8 @@ universe.reify(
 ).tree
 ```
 
+### tailRecM
+
 In addition to requiring `flatMap` and `pure`, Cats has chosen to require
 `tailRecM` which encodes stack safe monadic recursion, as described in
 [Stack Safety for Free](http://functorial.com/stack-safety-for-free/index.pdf) by
@@ -102,6 +104,7 @@ implicit val optionMonad = new Monad[Option] {
 }
 ```
 
+More discussion about `tailRecM` can be found in the [FAQ](../faq.html#tailrecm).
 
 
 ### ifM
