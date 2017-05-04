@@ -221,74 +221,12 @@ val result = Monoid[Int].combine(sumLeft, sumRight)
 Cats provides laws for type classes via the `kernel-laws` and `laws` modules which makes law checking
 type class instances easy.
 
-## Typeclass Hierarchy
-![Typeclass hierarchy](http://g.gravizo.com/g?
-  digraph G {
-    size ="6,6";
-    edge [dir=back]
-    node [shape=box,style="rounded"]
-    FunctorFilter [group=g8]
-    TraverseFilter [group=g8]
-    Traverse [group=g8]
-    Foldable [group=g9]
-    Reducible [group=g9]
-    Functor [group=g2]
-    Apply [group=g2]
-    Applicative [group=g2]
-    Monad [group=g2]
-    SemigroupK [group=g3]
-    MonoidK [group=g3]
-    Invariant [group=g4]
-    Contravariant [group=g4]
-    CoflatMap [group=g5]
-    Comonad [group=g5]
-    MonadError [group=g6]
-    ApplicativeError [group=g6]
-    Bitraverse [group=g7]
-    Bifoldable [group=g7]
-    Bifunctor [group=g7]
-    Functor -> Apply -> Applicative -> Monad -> MonadFilter -> MonadCombine
-    subgraph cluster_s4 {
-      Bifoldable -> Bitraverse
-      Bifunctor -> Bitraverse
-      graph[style=dotted]
-    }
-    subgraph cluster_s5 {
-      ApplicativeError -> MonadError
-      graph[style=dotted]
-    }
-    Applicative -> Alternative -> MonadCombine
-    MonoidK -> Alternative
-    Functor -> CoflatMap
-    Applicative -> ApplicativeError
-    Monad -> MonadError
-    subgraph cluster_s3{
-      Invariant -> Contravariant
-      graph[style=dotted,label="functor"]
-    }
-    Invariant -> Functor
-    subgraph cluster_s2{
-      SemigroupK -> MonoidK
-      graph[style=dotted]
-    }
-    subgraph cluster_s1{
-      CoflatMap -> Comonad
-      graph[style=dotted]
-    }
-    Comonad -> Bimonad
-    Monad -> Bimonad
-    Apply -> FlatMap -> Monad
-    Foldable -> Traverse
-    Functor -> Traverse
-    Traverse -> TraverseFilter
-    FunctorFilter -> TraverseFilter
-    FunctorFilter -> MonadFilter
-    Functor -> FunctorFilter
-    Foldable -> Reducible
-  }
-)
+## Type classes in cats
 
-## Typeclass Instances
+![infographic](./img/typeclass-infographic.svg)
+
+
+## Incomplete type class instances in cats
 
 Originally from [@alexknvl](https://gist.github.com/alexknvl/d63508ddb6a728015ace53cb70a1fd5d)
 
