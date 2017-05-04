@@ -55,8 +55,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def ensure[AA >: A](onFailure: => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] =
     EitherT(F.map(value)(_.ensure(onFailure)(f)))
 
-  def ensureWith[AA >: A](onFailure: B => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] =
-    EitherT(F.map(value)(_.ensureWith(onFailure)(f)))
+  def ensureOr[AA >: A](onFailure: B => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] =
+    EitherT(F.map(value)(_.ensureOr(onFailure)(f)))
 
   def toOption(implicit F: Functor[F]): OptionT[F, B] = OptionT(F.map(value)(_.toOption))
 
