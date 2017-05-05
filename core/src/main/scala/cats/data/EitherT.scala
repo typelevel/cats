@@ -392,7 +392,14 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
 
 private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
   implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
-    new EitherTMonadError[F, L] { implicit val F = F0 }
+    new EitherTMonadError[F, L] {
+      implicit val F = F0
+      override def ensure[A](fa: EitherT[F, L, A])(error: => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
+        fa.ensure(error)(predicate)(F)
+
+      override def ensureOr[A](fa: EitherT[F, L, A])(error: (A) => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
+        fa.ensureOr(error)(predicate)(F)
+    }
 
   implicit def catsDataSemigroupKForEitherT[F[_], L](implicit F0: Monad[F]): SemigroupK[EitherT[F, L, ?]] =
     new EitherTSemigroupK[F, L] { implicit val F = F0 }

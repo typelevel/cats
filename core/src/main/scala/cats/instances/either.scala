@@ -93,6 +93,9 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       override def ensure[B](fab: Either[A, B])(error: => A)(predicate: B => Boolean): Either[A, B] =
         fab.ensure(error)(predicate)
 
+      override def ensureOr[B](fab: Either[A, B])(error: B => A)(predicate: B => Boolean): Either[A, B] =
+        fab.ensureOr(error)(predicate)
+
       override def reduceLeftToOption[B, C](fab: Either[A, B])(f: B => C)(g: (C, B) => C): Option[C] =
         fab.right.map(f).toOption
 
