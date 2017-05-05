@@ -10,11 +10,16 @@ import cats.functor.Contravariant
  * made a toString method, a Show instance will only exist if someone
  * explicitly provided one.
  */
-@typeclass trait Show[T] {
+@typeclass trait Show[T] extends Show.ContravariantShow[T] {
+  // duplicated so simulacrum knows it requires an instance of this trait
   def show(t: T): String
 }
 
 object Show {
+  trait ContravariantShow[-T] {
+    def show(t: T): String
+  }
+
   /** creates an instance of [[Show]] using the provided function */
   def show[A](f: A => String): Show[A] = new Show[A] {
     def show(a: A): String = f(a)
@@ -27,7 +32,7 @@ object Show {
 
   final case class Shown(override val toString: String) extends AnyVal
   object Shown {
-    implicit def mat[A](x: A)(implicit z: Show[A]): Shown = Shown(z show x)
+    implicit def mat[A](x: A)(implicit z: ContravariantShow[A]): Shown = Shown(z show x)
   }
 
   final case class ShowInterpolator(_sc: StringContext) extends AnyVal {
