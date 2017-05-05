@@ -298,7 +298,7 @@ val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(
 ## Composing Free monads ADTs.
 
 Real world applications often time combine different algebras.
-The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf)
+The injection type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf)
 lets us compose different algebras in the context of `Free`.
 
 Let's see a trivial example of unrelated ADT's getting composed as a `EitherK` that can form a more complex program.
@@ -306,7 +306,7 @@ Let's see a trivial example of unrelated ADT's getting composed as a `EitherK` t
 ```tut:silent
 import cats.data.EitherK
 import cats.free.Free
-import cats.{Id, Inject, ~>}
+import cats.{Id, InjectK, ~>}
 import scala.collection.mutable.ListBuffer
 ```
 
@@ -331,22 +331,22 @@ type CatsApp[A] = EitherK[DataOp, Interact, A]
 In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the `Free` context.
 
 ```tut:silent
-class Interacts[F[_]](implicit I: Inject[Interact, F]) {
+class Interacts[F[_]](implicit I: InjectK[Interact, F]) {
   def tell(msg: String): Free[F, Unit] = Free.inject[Interact, F](Tell(msg))
   def ask(prompt: String): Free[F, String] = Free.inject[Interact, F](Ask(prompt))
 }
 
 object Interacts {
-  implicit def interacts[F[_]](implicit I: Inject[Interact, F]): Interacts[F] = new Interacts[F]
+  implicit def interacts[F[_]](implicit I: InjectK[Interact, F]): Interacts[F] = new Interacts[F]
 }
 
-class DataSource[F[_]](implicit I: Inject[DataOp, F]) {
+class DataSource[F[_]](implicit I: InjectK[DataOp, F]) {
   def addCat(a: String): Free[F, Unit] = Free.inject[DataOp, F](AddCat(a))
   def getAllCats: Free[F, List[String]] = Free.inject[DataOp, F](GetAllCats())
 }
 
 object DataSource {
-  implicit def dataSource[F[_]](implicit I: Inject[DataOp, F]): DataSource[F] = new DataSource[F]
+  implicit def dataSource[F[_]](implicit I: InjectK[DataOp, F]): DataSource[F] = new DataSource[F]
 }
 ```
 
@@ -495,9 +495,9 @@ right-associated structure not subject to quadratic complexity.
 
 ## FreeT
 
-Often times we want to interleave the syntax tree when building a Free monad 
-with some other effect not declared as part of the ADT. 
-FreeT solves this problem by allowing us to mix building steps of the AST 
+Often times we want to interleave the syntax tree when building a Free monad
+with some other effect not declared as part of the ADT.
+FreeT solves this problem by allowing us to mix building steps of the AST
 with calling action in other base monad.
 
 In the following example a basic console application is shown.
@@ -521,7 +521,7 @@ type TeletypeT[M[_], A] = FreeT[Teletype, M, A]
 type Log = List[String]
 
 /** Smart constructors, notice we are abstracting over any MonadState instance
- *  to potentially support other types beside State 
+ *  to potentially support other types beside State
  */
 class TeletypeOps[M[_]](implicit MS : MonadState[M, Log]) {
   def writeLine(line : String) : TeletypeT[M, Unit] =
@@ -543,11 +543,11 @@ def program(implicit TO : TeletypeOps[TeletypeState]) : TeletypeT[TeletypeState,
 	userSaid <- TO.readLine("what's up?!")
 	_ <- TO.log(s"user said : $userSaid")
 	_ <- TO.writeLine("thanks, see you soon!")
-  } yield () 
+  } yield ()
 }
 
 def interpreter = new (Teletype ~> TeletypeState) {
-  def apply[A](fa : Teletype[A]) : TeletypeState[A] = {  
+  def apply[A](fa : Teletype[A]) : TeletypeState[A] = {
 	fa match {
 	  case ReadLine(prompt) =>
 		println(prompt)

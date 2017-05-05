@@ -238,6 +238,18 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
+  test("NonEmptyList#init is consistent with List#init") {
+    forAll { nel: NonEmptyList[Int] =>
+      nel.init should === (nel.toList.init)
+    }
+  }
+
+  test("NonEmptyList#size is consistent with List#size") {
+    forAll { nel: NonEmptyList[Int] =>
+      nel.size should === (nel.toList.size)
+    }
+  }
+
   test("NonEmptyList#sorted is consistent with List#sorted") {
     forAll { nel: NonEmptyList[Int] =>
       nel.sorted.toList should === (nel.toList.sorted)

@@ -1,6 +1,6 @@
 #Symbols
 
-Below is a list of symbols used in cats.  
+Below is a list of symbols used in cats.
 
 The `~>`, `⊥` and `⊤` symbols can be imported with `import cats._`.
 
@@ -25,7 +25,7 @@ A scaladoc generated list is also available on the [Scaladoc symbols page](http:
 | `x |+| y`  | Semigroup combine      | [`Semigroup[A]`]({{ site.sources }}/kernel/src/main/scala/cats/kernel/Semigroup.scala)      | `combine(x: A, y: A): A`               |
 | `x <+> y`  | SemigroupK combine     | [`SemigroupK[F[_]]`]({{ site.sources }}/core/src/main/scala/cats/SemigroupK.scala)          | `combineK(x: F[A], y: F[A]): F[A]`     |
 | `F ~> G`   | natural transformation | [`FunctionK[F[_], G[_]]`]({{ site.sources }}/core/src/main/scala/cats/arrow/FunctionK.scala)| `FunctionK` alias                      |
-| `F :<: G`  | inject                 | [`Inject[F[_], G[_]]`]({{ site.sources }}/free/src/main/scala/cats/free/package.scala)      | `Inject` alias                         |
-| `F :≺: G`  | inject                 | [`Inject[F[_], G[_]]`]({{ site.sources }}/free/src/main/scala/cats/free/package.scala)      | `Inject` alias                         |
+| `F :<: G`  | inject                 | [`InjectK[F[_], G[_]]`]({{ site.sources }}/free/src/main/scala/cats/free/package.scala)     | `InjectK` alias                         |
+| `F :≺: G`  | inject                 | [`InjectK[F[_], G[_]]`]({{ site.sources }}/free/src/main/scala/cats/free/package.scala)     | `InjectK` alias                         |
 | `⊥`        | bottom                 | [N/A]({{ site.sources }}/core/src/main/scala/cats/package.scala)                            | `Nothing`                              |
 | `⊤`        | top                    | [N/A]({{ site.sources }}/core/src/main/scala/cats/package.scala)                            | `Any`                                  |

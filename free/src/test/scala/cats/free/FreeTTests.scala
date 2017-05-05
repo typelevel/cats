@@ -7,7 +7,7 @@ import cats.data._
 import cats.laws.discipline._
 import cats.tests.CatsSuite
 import cats.instances.option._
-
+import cats.laws.discipline.arbitrary.catsLawArbitraryForState
 import org.scalacheck.{Arbitrary, Gen, Cogen}
 
 class FreeTTests extends CatsSuite {
@@ -141,9 +141,9 @@ class FreeTTests extends CatsSuite {
     result.toString.length should be > 0
   }
 
-  private[free] def liftTUCompilationTests() = {
+  private[free] def liftTCompilationTests() = {
     val a: Either[String, Int]= Right(42)
-    val b: FreeT[Option, Either[String, ?], Int] = FreeT.liftTU(a)
+    val b: FreeT[Option, Either[String, ?], Int] = FreeT.liftT(a)
   }
 
 }
@@ -153,7 +153,6 @@ object FreeTTests extends FreeTTestsInstances {
   import Arbitrary._
   import org.scalacheck.Arbitrary
 
-  implicit def freeTIntStateArb[A: Arbitrary]: Arbitrary[FreeTState[A]] = freeTArb[IntState, IntState, A]
 
   implicit def freeTArb[F[_], G[_]: Applicative, A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Arbitrary[FreeT[F, G, A]] =
     Arbitrary(freeTGen[F, G, A](4))
@@ -209,7 +208,7 @@ trait FreeTTestsInstances {
 
   implicit def intStateEq[A: Eq]: Eq[IntState[A]] = stateEq[Int, A]
 
-  implicit def intStateArb[A: Arbitrary]: Arbitrary[IntState[A]] = stateArbitrary[Int, A]
+  implicit def intStateArb[A: Arbitrary]: Arbitrary[IntState[A]] = catsLawArbitraryForState[Int, A]
 
   implicit def freeTOptionEq[A](implicit A: Eq[A], OM: Monad[Option]): Eq[FreeTOption[A]] = new Eq[FreeTOption[A]] {
     def eqv(a: FreeTOption[A], b: FreeTOption[A]) = Eq[Option[A]].eqv(a.runM(identity), b.runM(identity))
