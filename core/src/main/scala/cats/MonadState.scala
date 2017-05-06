@@ -17,6 +17,9 @@ package cats
  * }}}
  */
 trait MonadState[F[_], S] extends Monad[F] {
+  def apply[A](f: S => (S, A)): F[A] =
+    flatMap(get)(s => f(s) match { case (s, a) => inspect(_ => a)})
+
   def get: F[S]
 
   def set(s: S): F[Unit]
