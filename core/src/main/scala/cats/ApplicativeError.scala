@@ -104,6 +104,12 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
       case Success(a) => pure(a)
       case Failure(e) => raiseError(e)
     }
+
+  /**
+    * Convert from scala.Either
+    */
+  def fromEither[A](x: E Either A): F[A] =
+    x.fold(raiseError, pure)
 }
 
 object ApplicativeError {
