@@ -106,8 +106,20 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
     }
 
   /**
-    * Convert from scala.Either
-    */
+   * Convert from scala.Either
+   *
+   * Example:
+   * {{{
+   * scala> import cats.ApplicativeError
+   * scala> import cats.instances.option._
+   *
+   * scala> ApplicativeError[Option, Unit].fromEither(Right(1))
+   * res0: scala.Option[Int] = Some(1)
+   *
+   * scala> ApplicativeError[Option, Unit].fromEither(Left(()))
+   * res1: scala.Option[Nothing] = None
+   * }}}
+   */
   def fromEither[A](x: E Either A): F[A] =
     x.fold(raiseError, pure)
 }
