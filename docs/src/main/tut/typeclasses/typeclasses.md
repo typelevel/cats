@@ -223,9 +223,8 @@ type class instances easy.
 
 ## Type classes in cats
 
-Created by [@tpolecat](https://github.com/tpolecat/cats-infographic). 
-
-![infographic](./img/typeclass-infographic.svg)
+![infographic](https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg)
+From [cats-infographic by @tpolecat](https://github.com/tpolecat/cats-infographic).
 
 
 ## Incomplete type class instances in cats
