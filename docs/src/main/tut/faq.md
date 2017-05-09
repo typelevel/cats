@@ -221,6 +221,7 @@ All other symbols can be imported with `import cats.implicits._`
 | `x =!= y`                        | not equals             |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                               |
 | `fa >>= f`                       | flatMap                |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                   |
 | `fa >> fb`                       | followed by            |                  | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]`                    |
+| `fa << fb`                       | for effect             |                  | `FlatMap[F[_]]`         | `forEffect(fa: F[A])(fb: F[B]): F[A]`                     |
 | <code>x &#124;-&#124; y</code>   | remove                 |                  | `Group[A]`              | `remove(x: A, y: A): A`                                   |
 | `x > y`                          | greater than           |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                 |
 | `x >= y`                         | greater than or equal  |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                               |
@@ -228,6 +229,8 @@ All other symbols can be imported with `import cats.implicits._`
 | `x <= y`                         | less than or equal     |                  | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`                               |
 | <code>x &#124;+&#124; y</code>   | Semigroup combine      |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`                                  |
 | `x <+> y`                        | SemigroupK combine     |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`                        |
+| `f <<< g`                        | Arrow compose          |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                |
+| `f >>> g`                        | Arrow andThen          |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                |
 | `F ~> G`                         | natural transformation |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                         |
 | `F :<: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
 | `F :≺: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
