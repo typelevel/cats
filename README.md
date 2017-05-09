@@ -123,7 +123,7 @@ relax this to a single sign-off.
 
 There are many projects that integrate with Cats:
 
- * [Circe](https://github.com/travisbrown/circe): pure functional JSON library.
+ * [Circe](https://github.com/circe/circe): pure functional JSON library.
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
  * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources.
  * [Frameless](https://github.com/adelbertc/frameless): Expressive types for Spark.
