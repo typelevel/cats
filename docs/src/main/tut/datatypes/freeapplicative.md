@@ -111,7 +111,7 @@ val parCompiler =
     }
   }
 
-val parValidation = prog.foldMap[ParValidator](parCompiler)
+val parValidator = prog.foldMap[ParValidator](parCompiler)
 ```
 
 ### Logging
