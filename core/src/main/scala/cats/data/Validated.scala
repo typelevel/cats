@@ -431,6 +431,7 @@ private[data] trait ValidatedFunctions {
 
   def valid[A, B](b: B): Validated[A, B] = Validated.Valid(b)
 
+  def validNel[A, B](b: B): ValidatedNel[A, B] = Validated.Valid(b)
 
   def catchNonFatal[A](f: => A): Validated[Throwable, A] =
     try {
