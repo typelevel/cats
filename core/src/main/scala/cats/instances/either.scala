@@ -40,6 +40,7 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
           case Left(e) => f(e)
           case r @ Right(_) => r
         }
+
       def raiseError[B](e: A): Either[A, B] = Left(e)
 
       override def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
@@ -89,6 +90,9 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
 
       override def recoverWith[B](fab: Either[A, B])(pf: PartialFunction[A, Either[A, B]]): Either[A, B] =
         fab recoverWith pf
+
+      override def fromEither[B](fab: Either[A, B]): Either[A, B] =
+        fab
 
       override def ensure[B](fab: Either[A, B])(error: => A)(predicate: B => Boolean): Either[A, B] =
         fab.ensure(error)(predicate)
