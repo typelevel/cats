@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import cats.instances.all._
+import cats.instances.eq._
 
 import cats.laws.discipline.CartesianTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}

@@ -4,7 +4,12 @@ package object instances {
   object all      extends AllInstances
 
   object either extends EitherInstances
+  object eq extends EqInstances
   object function extends FunctionInstances
+  object order extends OrderInstances
+  object partialOrder extends PartialOrderInstances
+  object monoid extends MonoidInstances
+  object semigroup extends SemigroupInstances
 
   object list       extends ListInstances
   object option     extends OptionInstances
