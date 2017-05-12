@@ -5,16 +5,16 @@ import cats.functor.{ Contravariant, Bifunctor, Profunctor }
 import cats.syntax.either._
 
 /**
-  * Represents a stateful computation in a context `F[_]`, over state `S`, with an initial environment `E`, an accumulated log `L` and a result `A`.
-  *
-  * In other words, it is a pre-baked stack of `[[ReaderT]][F, E, A]`, `[[WriterT]][F, L, A]`
-  * and `[[StateT]][F, S, A]`.
-  */
+ * Represents a stateful computation in a context `F[_]`, over state `S`, with an initial environment `E`, an accumulated log `L` and a result `A`.
+ *
+ * In other words, it is a pre-baked stack of `[[ReaderT]][F, E, A]`, `[[WriterT]][F, L, A]`
+ * and `[[StateT]][F, S, A]`.
+ */
 final class RWST[F[_], E, S, L, A](val runF: F[(E, S) => F[(L, S, A)]]) extends Serializable {
 
   /**
-    * Modify the initial environment using `f`.
-    */
+   * Modify the initial environment using `f`.
+   */
   def contramap[E0](f: E0 => E)(implicit F: Functor[F]): RWST[F, E0, S, L, A] =
     RWST.applyF {
       F.map(runF) { rwsa =>
@@ -23,27 +23,27 @@ final class RWST[F[_], E, S, L, A](val runF: F[(E, S) => F[(L, S, A)]]) extends 
     }
 
   /**
-    * Alias for [[contramap]].
-    */
+   * Alias for [[contramap]].
+   */
   def local[EE](f: EE => E)(implicit F: Functor[F]): RWST[F, EE, S, L, A] =
     contramap(f)
 
   /**
-    * Modify the result of the computation using `f`.
-    */
+   * Modify the result of the computation using `f`.
+   */
   def map[B](f: A => B)(implicit F: Functor[F]): RWST[F, E, S, L, B] =
     transform { (l, s, a) => (l, s, f(a)) }
 
   /**
-    * Modify the written log value using `f`.
-    */
+   * Modify the written log value using `f`.
+   */
   def mapWritten[LL](f: L => LL)(implicit F: Functor[F]): RWST[F, E, S, LL, A] =
     transform { (l, s, a) => (f(l), s, a) }
 
   /**
-    * Combine this computation with `rwsb` using `fn`. The state will be be threaded
-    * through the computations and the log values will be combined.
-    */
+   * Combine this computation with `rwsb` using `fn`. The state will be be threaded
+   * through the computations and the log values will be combined.
+   */
   def map2[B, Z](rwsb: RWST[F, E, S, L, B])(fn: (A, B) => Z)(implicit F: FlatMap[F], L: Semigroup[L]): RWST[F, E, S, L, Z] =
     RWST.applyF {
       F.map2(runF, rwsb.runF) { (rwsfa, rwsfb) =>
@@ -57,8 +57,8 @@ final class RWST[F[_], E, S, L, A](val runF: F[(E, S) => F[(L, S, A)]]) extends 
     }
 
   /**
-    * Like [[map2]], but allows controlling the evaluation strategy.
-    */
+   * Like [[map2]], but allows controlling the evaluation strategy.
+   */
   def map2Eval[B, Z](fb: Eval[RWST[F, E, S, L, B]])(fn: (A, B) => Z)(implicit F: FlatMap[F], L: Semigroup[L]): Eval[RWST[F, E, S, L, Z]] =
     F.map2Eval(runF, fb.map(_.runF)) { (rwsfa, rwsfb) =>
       (e: E, s0: S) =>
@@ -70,9 +70,9 @@ final class RWST[F[_], E, S, L, A](val runF: F[(E, S) => F[(L, S, A)]]) extends 
     }.map(RWST.applyF(_))
 
   /**
-    * Modify the result of the computation by feeding it into `f`, threading the state
-    * through the resulting computation and combining the log values.
-    */
+   * Modify the result of the computation by feeding it into `f`, threading the state
+   * through the resulting computation and combining the log values.
+   */
   def flatMap[B](f: A => RWST[F, E, S, L, B])(implicit F: FlatMap[F], L: Semigroup[L]): RWST[F, E, S, L, B] =
     RWST.applyF {
       F.map(runF) { rwsfa =>
@@ -88,8 +88,8 @@ final class RWST[F[_], E, S, L, A](val runF: F[(E, S) => F[(L, S, A)]]) extends 
     }
 
   /**
-    * Like [[map]], but allows the mapping function to return an effectful value.
-    */
+   * Like [[map]], but allows the mapping function to return an effectful value.
+   */
   def flatMapF[B](faf: A => F[B])(implicit F: FlatMap[F]): RWST[F, E, S, L, B] =
     RWST.applyF {
       F.map(runF) { rwsfa =>
@@ -101,8 +101,8 @@ final class RWST[F[_], E, S, L, A](val runF: F[(E, S) => F[(L, S, A)]]) extends 
     }
 
   /**
-    * Transform the resulting log, state and value using `f`.
-    */
+   * Transform the resulting log, state and value using `f`.
+   */
   def transform[LL, B](f: (L, S, A) => (LL, S, B))(implicit F: Functor[F]): RWST[F, E, S, LL, B] =
     RWST.applyF {
       F.map(runF) { rwsfa =>
@@ -114,232 +114,232 @@ final class RWST[F[_], E, S, L, A](val runF: F[(E, S) => F[(L, S, A)]]) extends 
     }
 
   /**
-    * Like [[transform]], but allows the context to change from `F` to `G`.
-    */
+   * Like [[transform]], but allows the context to change from `F` to `G`.
+   */
   def transformF[G[_], LL, B](f: F[(L, S, A)] => G[(LL, S, B)])(implicit F: Monad[F], G: Applicative[G]): RWST[G, E, S, LL, B] =
     RWST.apply((e, s) => f(run(e, s)))
 
 
   /**
-    * Modify the resulting state.
-    */
+   * Modify the resulting state.
+   */
   def modify(f: S => S)(implicit F: Functor[F]): RWST[F, E, S, L, A] =
     transform { (l, s, a) => (l, f(s), a) }
 
   /**
-    * Inspect a value from the input state, without modifying the state.
-    */
+   * Inspect a value from the input state, without modifying the state.
+   */
   def inspect[B](f: S => B)(implicit F: Functor[F]): RWST[F, E, S, L, B] =
     transform { (l, s, a) => (l, s, f(s)) }
 
   /**
-    * Get the input state, without modifying it.
-    */
+   * Get the input state, without modifying it.
+   */
   def get(implicit F: Functor[F]): RWST[F, E, S, L, S] =
     inspect(identity)
 
   /**
-    * Add a value to the log.
-    */
+   * Add a value to the log.
+   */
   def tell(l: L)(implicit F: Functor[F], L: Semigroup[L]): RWST[F, E, S, L, A] =
     mapWritten(L.combine(_, l))
 
   /**
-    * Retrieve the value written to the log.
-    */
+   * Retrieve the value written to the log.
+   */
   def written(implicit F: Functor[F]): RWST[F, E, S, L, L] =
     transform { (l, s, a) => (l, s, l) }
 
   /**
-    * Clear the log.
-    */
+   * Clear the log.
+   */
   def reset(implicit F: Functor[F], L: Monoid[L]): RWST[F, E, S, L, A] =
     mapWritten(_ => L.empty)
 
   /**
-    * Run the computation using the provided initial environment and state.
-    */
+   * Run the computation using the provided initial environment and state.
+   */
   def run(env: E, initial: S)(implicit F: Monad[F]): F[(L, S, A)] =
     F.flatMap(runF)(_.apply(env, initial))
 
   /**
-    * Run the computation using the provided environment and an empty state.
-    */
+   * Run the computation using the provided environment and an empty state.
+   */
   def runEmpty(env: E)(implicit F: Monad[F], S: Monoid[S]): F[(L, S, A)] =
     run(env, S.empty)
 
   /**
-    * Like [[run]], but discards the final state and log.
-    */
+   * Like [[run]], but discards the final state and log.
+   */
   def runA(env: E, initial: S)(implicit F: Monad[F]): F[A] =
     F.map(run(env, initial))(_._3)
 
   /**
-    * Like [[run]], but discards the final value and log.
-    */
+   * Like [[run]], but discards the final value and log.
+   */
   def runS(env: E, initial: S)(implicit F: Monad[F]): F[S] =
     F.map(run(env, initial))(_._2)
 
   /**
-    * Like [[run]], but discards the final state and value.
-    */
+   * Like [[run]], but discards the final state and value.
+   */
   def runL(env: E, initial: S)(implicit F: Monad[F]): F[L] =
     F.map(run(env, initial))(_._1)
 
   /**
-    * Like [[runEmpty]], but discards the final state and log.
-    */
+   * Like [[runEmpty]], but discards the final state and log.
+   */
   def runEmptyA(env: E)(implicit F: Monad[F], S: Monoid[S]): F[A] =
     runA(env, S.empty)
 
   /**
-    * Like [[runEmpty]], but discards the final value and log.
-    */
+   * Like [[runEmpty]], but discards the final value and log.
+   */
   def runEmptyS(env: E)(implicit F: Monad[F], S: Monoid[S]): F[S] =
     runS(env, S.empty)
 
   /**
-    * Like [[runEmpty]], but discards the final state and value.
-    */
+   * Like [[runEmpty]], but discards the final state and value.
+   */
   def runEmptyL(env: E)(implicit F: Monad[F], S: Monoid[S]): F[L] =
     runL(env, S.empty)
 }
 
 object RWST extends RWSTInstances {
   /**
-    * Construct a new computation using the provided function.
-    */
+   * Construct a new computation using the provided function.
+   */
   def apply[F[_], E, S, L, A](runF: (E, S) => F[(L, S, A)])(implicit F: Applicative[F]): RWST[F, E, S, L, A] =
     new RWST(F.pure(runF))
 
   /**
-    * Like [[apply]], but using a function in a context `F`.
-    */
+   * Like [[apply]], but using a function in a context `F`.
+   */
   def applyF[F[_], E, S, L, A](runF: F[(E, S) => F[(L, S, A)]]): RWST[F, E, S, L, A] =
     new RWST(runF)
 
   /**
-    * Return `a` and an empty log without modifying the input state.
-    */
+   * Return `a` and an empty log without modifying the input state.
+   */
   def pure[F[_], E, S, L, A](a: A)(implicit F: Applicative[F], L: Monoid[L]): RWST[F, E, S, L, A] =
     RWST((_, s) => F.pure((L.empty, s, a)))
 
   /**
-    * Return an effectful `a` and an empty log without modifying the input state.
-    */
+   * Return an effectful `a` and an empty log without modifying the input state.
+   */
   def lift[F[_], E, S, L, A](fa: F[A])(implicit F: Applicative[F], L: Monoid[L]): RWST[F, E, S, L, A] =
     RWST((_, s) => F.map(fa)((L.empty, s, _)))
 
   /**
-    * Inspect a value from the input state, without modifying the state.
-    */
+   * Inspect a value from the input state, without modifying the state.
+   */
   def inspect[F[_], E, S, L, A](f: S => A)(implicit F: Applicative[F], L: Monoid[L]): RWST[F, E, S, L, A] =
     RWST((_, s) => F.pure((L.empty, s, f(s))))
 
   /**
-    * Like [[inspect]], but using an effectful function.
-    */
+   * Like [[inspect]], but using an effectful function.
+   */
   def inspectF[F[_], E, S, L, A](f: S => F[A])(implicit F: Applicative[F], L: Monoid[L]): RWST[F, E, S, L, A] =
     RWST((_, s) => F.map(f(s))((L.empty, s, _)))
 
   /**
-    * Modify the input state using `f`.
-    */
+   * Modify the input state using `f`.
+   */
   def modify[F[_], E, S, L](f: S => S)(implicit F: Applicative[F], L: Monoid[L]): RWST[F, E, S, L, Unit] =
     RWST((_, s) => F.pure((L.empty, f(s), ())))
 
   /**
-    * Like [[modify]], but using an effectful function.
-    */
+   * Like [[modify]], but using an effectful function.
+   */
   def modifyF[F[_], E, S, L](f: S => F[S])(implicit F: Applicative[F], L: Monoid[L]): RWST[F, E, S, L, Unit] =
     RWST((_, s) => F.map(f(s))((L.empty, _, ())))
 
   /**
-    * Return the input state without modifying it.
-    */
+   * Return the input state without modifying it.
+   */
   def get[F[_], E, S, L](implicit F: Applicative[F], L: Monoid[L]): RWST[F, E, S, L, S] =
     RWST((_, s) => F.pure((L.empty, s, s)))
 
   /**
-    * Set the state to `s`.
-    */
+   * Set the state to `s`.
+   */
   def set[F[_], E, S, L](s: S)(implicit F: Applicative[F], L: Monoid[L]): RWST[F, E, S, L, Unit] =
     RWST((_, _) => F.pure((L.empty, s, ())))
 
   /**
-    * Like [[set]], but using an effectful `S` value.
-    */
+   * Like [[set]], but using an effectful `S` value.
+   */
   def setF[F[_], E, S, L](fs: F[S])(implicit F: Applicative[F], L: Monoid[L]): RWST[F, E, S, L, Unit] =
     RWST((_, _) => F.map(fs)((L.empty, _, ())))
 
   /**
-    * Get the provided environment, without modifying the input state.
-    */
+   * Get the provided environment, without modifying the input state.
+   */
   def ask[F[_], E, S, L](implicit F: Applicative[F], L: Monoid[L]): RWST[F, E, S, L, E] =
     RWST((e, s) => F.pure((L.empty, s, e)))
 
   /**
-    * Add a value to the log, without modifying the input state.
-    */
+   * Add a value to the log, without modifying the input state.
+   */
   def tell[F[_], E, S, L](l: L)(implicit F: Applicative[F]): RWST[F, E, S, L, Unit] =
     RWST((_, s) => F.pure((l, s, ())))
 
   /**
-    * Like [[tell]], but using an effectful `L` value.
-    */
+   * Like [[tell]], but using an effectful `L` value.
+   */
   def tellF[F[_], E, S, L](fl: F[L])(implicit F: Applicative[F]): RWST[F, E, S, L, Unit] =
     RWST((_, s) => F.map(fl)((_, s, ())))
 }
 
 /**
-  * Convenience functions for RWS.
-  */
+ * Convenience functions for RWS.
+ */
 private[data] abstract class RWSFunctions {
   /**
-    * Return `a` and an empty log without modifying the input state.
-    */
+   * Return `a` and an empty log without modifying the input state.
+   */
   def apply[E, S, L: Monoid, A](f: (E, S) => (L, S, A)): RWS[E, S, L, A] =
     RWST.applyF(Now((e, s) => Now(f(e, s))))
 
   /**
-    * Return `a` and an empty log without modifying the input state.
-    */
+   * Return `a` and an empty log without modifying the input state.
+   */
   def pure[E, S, L: Monoid, A](a: A): RWS[E, S, L, A] =
     RWST.pure(a)
 
   /**
-    * Modify the input state using `f`.
-    */
+   * Modify the input state using `f`.
+   */
   def modify[E, S, L: Monoid](f: S => S): RWS[E, S, L, Unit] =
     RWST.modify(f)
 
   /**
-    * Inspect a value from the input state, without modifying the state.
-    */
+   * Inspect a value from the input state, without modifying the state.
+   */
   def inspect[E, S, L: Monoid, T](f: S => T): RWS[E, S, L, T] =
     RWST.inspect(f)
 
   /**
-    * Return the input state without modifying it.
-    */
+   * Return the input state without modifying it.
+   */
   def get[E, S, L: Monoid]: RWS[E, S, L, S] =
     RWST.get
 
   /**
-    * Set the state to `s`.
-    */
+   * Set the state to `s`.
+   */
   def set[E, S, L: Monoid](s: S): RWS[E, S, L, Unit] =
     RWST.set(s)
 
   /**
-    * Get the provided environment, without modifying the input state.
-    */
+   * Get the provided environment, without modifying the input state.
+   */
   def ask[E, S, L](implicit L: Monoid[L]): RWS[E, S, L, E] =
     RWST.ask
 
   /**
-    * Add a value to the log, without modifying the input state.
-    */
+   * Add a value to the log, without modifying the input state.
+   */
   def tell[E, S, L](l: L): RWS[E, S, L, Unit] =
     RWST.tell(l)
 }

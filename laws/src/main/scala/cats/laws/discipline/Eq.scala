@@ -25,9 +25,9 @@ object eq {
   }
 
   /**
-    * Create an approximation of Eq[(A, B) => C] by generating 100 values for A and B
-    * and comparing the application of the two functions.
-    */
+   * Create an approximation of Eq[(A, B) => C] by generating 100 values for A and B
+   * and comparing the application of the two functions.
+   */
   implicit def catsLawsEqForFn2[A, B, C](implicit A: Arbitrary[A], B: Arbitrary[B], C: Eq[C]): Eq[(A, B) => C] = new Eq[(A, B) => C] {
     val sampleCnt: Int = if (Platform.isJvm) 50 else 5
 
