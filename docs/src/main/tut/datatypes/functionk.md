@@ -128,7 +128,7 @@ In category theory, a [Natural Transformation](https://en.wikipedia.org/wiki/Nat
 
 If we have two `Functor`s: `F` and `G`, then, being parametric polymorphic, `FunctionK[F, G]` is automatically a Natural Transformation between them. That is, if we have a `fk: F ~> G`, then for any combination of `A`, `B` and function `f: A => B`, the following two functions are equivalent:
 ```Scala
-(fa:F[A]) => fK(F.map(fa)(f))
+(fa:F[A]) => fk(F.map(fa)(f))
 ```
 and
 ```Scala
