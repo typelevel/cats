@@ -47,30 +47,11 @@ final class ReaderWriterStateT[F[_], E, S, L, A](val runF: F[(E, S) => F[(L, S, 
    */
   def map2[B, Z](rwsb: ReaderWriterStateT[F, E, S, L, B])(fn: (A, B) => Z)(
     implicit F: FlatMap[F], L: Semigroup[L]): ReaderWriterStateT[F, E, S, L, Z] =
-    ReaderWriterStateT.applyF {
-      F.map2(runF, rwsb.runF) { (rwsfa, rwsfb) =>
-        (e: E, s0: S) =>
-          F.flatMap(rwsfa(e, s0)) { case (la, sa, a) =>
-            F.map(rwsfb(e, sa)) { case (lb, sb, b) =>
-              (L.combine(la, lb), sb, fn(a, b))
-            }
-          }
+    flatMap { a =>
+      rwsb.map { b =>
+        fn(a, b)
       }
     }
-
-  /**
-   * Like [[map2]], but allows controlling the evaluation strategy.
-   */
-  def map2Eval[B, Z](fb: Eval[ReaderWriterStateT[F, E, S, L, B]])(fn: (A, B) => Z)(
-    implicit F: FlatMap[F], L: Semigroup[L]): Eval[ReaderWriterStateT[F, E, S, L, Z]] =
-    F.map2Eval(runF, fb.map(_.runF)) { (rwsfa, rwsfb) =>
-      (e: E, s0: S) =>
-      F.flatMap(rwsfa(e, s0)) { case (la, sa, a) =>
-        F.map(rwsfb(e, sa)) { case (lb, sb, b) =>
-          (L.combine(la, lb), sb, fn(a, b))
-        }
-      }
-    }.map(ReaderWriterStateT.applyF(_))
 
   /**
    * Modify the result of the computation by feeding it into `f`, threading the state
@@ -496,10 +477,6 @@ private[data] sealed trait RWSTMonad[F[_], E, S, L] extends Monad[ReaderWriterSt
   override def map2[A, B, Z](fa: ReaderWriterStateT[F, E, S, L, A],
     fb: ReaderWriterStateT[F, E, S, L, B])(f: (A, B) => Z): ReaderWriterStateT[F, E, S, L, Z] =
     fa.map2(fb)(f)
-
-  override def map2Eval[A, B, Z](fa: ReaderWriterStateT[F, E, S, L, A],
-    fb: Eval[ReaderWriterStateT[F, E, S, L, B]])(f: (A, B) => Z): Eval[ReaderWriterStateT[F, E, S, L, Z]] =
-    fa.map2Eval(fb)(f)
 }
 
 private[data] sealed trait RWSTMonadState[F[_], E, S, L]
