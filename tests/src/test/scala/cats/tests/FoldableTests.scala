@@ -13,9 +13,15 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
 
   def iterator[T](fa: F[T]): Iterator[T]
 
-  test(s"Foldable[$name].size") {
-    forAll { (fa: F[Int]) =>
-      fa.size should === (iterator(fa).size.toLong)
+  test(s"Foldable[$name].size/get") {
+    forAll { (fa: F[Int], n: Int) =>
+      val s = fa.size
+      s should === (iterator(fa).size.toLong)
+      if (n < s && n >= 0) {
+        fa.get(n.toLong) === Some(iterator(fa).take(n + 1).toList.last)
+      } else {
+        fa.get(n.toLong) === None
+      }
     }
   }
 

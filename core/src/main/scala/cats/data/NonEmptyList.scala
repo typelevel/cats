@@ -436,6 +436,9 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
       override def toList[A](fa: NonEmptyList[A]): List[A] = fa.toList
 
       override def toNonEmptyList[A](fa: NonEmptyList[A]): NonEmptyList[A] = fa
+
+      override def get[A](fa: NonEmptyList[A])(idx: Long): Option[A] =
+        if (idx == 0) Some(fa.head) else Foldable[List].get(fa.tail)(idx - 1)
     }
 
   implicit def catsDataShowForNonEmptyList[A](implicit A: Show[A]): Show[NonEmptyList[A]] =

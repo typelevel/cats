@@ -70,6 +70,16 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
           G.map2Eval(f(a), lglb)(_ :: _)
         }.value
 
+      @tailrec
+      override def get[A](fa: List[A])(idx: Long): Option[A] =
+        fa match {
+          case Nil => None
+          case h :: tail =>
+            if (idx < 0) None
+            else if (idx == 0) Some(h)
+            else get(tail)(idx - 1)
+        }
+
       override def exists[A](fa: List[A])(p: A => Boolean): Boolean =
         fa.exists(p)
 
