@@ -4,7 +4,7 @@ package tests
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{Const, NonEmptyList}
-import cats.functor.Contravariant
+import cats.functor.Phantom
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
@@ -24,7 +24,7 @@ class ConstTests extends CatsSuite {
   // Get Apply[Const[C : Semigroup, ?]], not Applicative[Const[C : Monoid, ?]]
   {
     implicit def nonEmptyListSemigroup[A]: Semigroup[NonEmptyList[A]] = SemigroupK[NonEmptyList].algebra
-    implicit val iso = CartesianTests.Isomorphisms.invariant[Const[NonEmptyList[String], ?]](Const.catsDataContravariantForConst)
+    implicit val iso = CartesianTests.Isomorphisms.invariant[Const[NonEmptyList[String], ?]](Const.catsDataPhantomForConst)
     checkAll("Apply[Const[NonEmptyList[String], Int]]", ApplyTests[Const[NonEmptyList[String], ?]].apply[Int, Int, Int])
     checkAll("Apply[Const[NonEmptyList[String], ?]]", SerializableTests.serializable(Apply[Const[NonEmptyList[String], ?]]))
   }
@@ -42,8 +42,8 @@ class ConstTests extends CatsSuite {
   checkAll("PartialOrder[Const[Set[Int], String]]", OrderLaws[Const[Set[Int], String]].partialOrder)
   checkAll("Order[Const[Int, String]]", OrderLaws[Const[Int, String]].order)
 
-  checkAll("Const[String, Int]", ContravariantTests[Const[String, ?]].contravariant[Int, Int, Int])
-  checkAll("Contravariant[Const[String, ?]]", SerializableTests.serializable(Contravariant[Const[String, ?]]))
+  checkAll("Const[String, Int]", PhantomTests[Const[String, ?]].phantom[Int, Int, Int])
+  checkAll("Phantom[Const[String, ?]]", SerializableTests.serializable(Phantom[Const[String, ?]]))
 
   checkAll("Const[?, ?]", BifoldableTests[Const].bifoldable[Int, Int, Int])
   checkAll("Bifoldable[Const]", SerializableTests.serializable(Bifoldable[Const]))

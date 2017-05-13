@@ -25,7 +25,7 @@ final case class Const[A, B](getConst: A)
 
 The `Const` data type takes two type parameters, but only ever stores a value of the first type parameter.
 Because the second type parameter is not used in the data type, the type parameter is referred to as a
-"phantom type".
+"phantom type". This is also the reason `Const` is a `Phantom` functor in its second type parameter.
 
 ## Why do we care?
 It would seem `Const` gives us no benefit over a data type that would simply not have the second type parameter.
