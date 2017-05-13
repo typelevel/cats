@@ -63,7 +63,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def apply(a: A): F[B] = run(a)
 }
 
-object Kleisli extends KleisliInstances with KleisliFunctions
+object Kleisli extends KleisliInstances with KleisliFunctions with KleisliExplicitInstances
 
 private[data] sealed trait KleisliFunctions {
 
@@ -80,6 +80,14 @@ private[data] sealed trait KleisliFunctions {
     Kleisli(f andThen fa.run)
 }
 
+private[data] sealed trait KleisliExplicitInstances {
+  def catsDataSemigroupKForKleisliAB[F[_], A](implicit S: SemigroupK[F]): SemigroupK[Kleisli[F, A, ?]] =
+    new KleisliABSemigroupK[F, A] { def F: SemigroupK[F] = S }
+
+  def catsDataMonoidKForKleisliAB[F[_], A](implicit M: MonoidK[F]): MonoidK[Kleisli[F, A, ?]] =
+    new KleisliABMonoidK[F, A] { def F: MonoidK[F] = M }
+}
+
 private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
 
   implicit def catsDataMonoidForKleisli[F[_], A, B](implicit FB0: Monoid[F[B]]): Monoid[Kleisli[F, A, B]] =
@@ -90,9 +98,6 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
 
   implicit val catsDataMonoidKForKleisliId: MonoidK[λ[α => Kleisli[Id, α, α]]] =
     catsDataMonoidKForKleisli[Id]
-
-  implicit def catsDataMonoidKForKleisliAB[F[_], A](implicit M: MonoidK[F]): MonoidK[Kleisli[F, A, ?]] =
-    new KleisliABMonoidK[F, A] { def F: MonoidK[F] = M }
 
   implicit def catsDataArrowForKleisli[F[_]](implicit M: Monad[F]): Arrow[Kleisli[F, ?, ?]] =
     new KleisliArrow[F] { def F: Monad[F] = M }
@@ -151,9 +156,6 @@ private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 
 
   implicit def catsDataSemigroupKForKleisli[F[_]](implicit FM: FlatMap[F]): SemigroupK[λ[α => Kleisli[F, α, α]]] =
     Compose[Kleisli[F, ?, ?]].algebraK
-
-  implicit def catsDataSemigroupKForKleisliAB[F[_], A](implicit S: SemigroupK[F]): SemigroupK[Kleisli[F, A, ?]] =
-    new KleisliABSemigroupK[F, A] { def F: SemigroupK[F] = S }
 }
 
 private[data] sealed abstract class KleisliInstances3 extends KleisliInstances4 {
