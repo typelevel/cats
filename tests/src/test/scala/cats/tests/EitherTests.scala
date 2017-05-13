@@ -255,4 +255,29 @@ class EitherTests extends CatsSuite {
       x.to[Option] should === (x.toOption)
     }
   }
+
+  test("partialCompare consistent with PartialOrder") {
+    forAll { (x: Either[Int, String], y: Either[Int, String])  =>
+      x.partialCompare(y) should === (partialOrder.partialCompare(x, y))
+    }
+  }
+
+  test("show Right") {
+    val either = Either.right[String, Int](10)
+    either.show should === ("Right(10)")
+  }
+
+  test("show Left") {
+    val either = Either.left[String, Int]("string")
+    either.show should === ("Left(string)")
+  }
+
+  test("ap consistent with Applicative") {
+    val fab = implicitly[Applicative[Either[String, ?]]]
+    forAll { (fa: Either[String, Int],
+              f: Int => String) =>
+      fa.ap(Either.right(f)) should === (fab.map(fa)(f))
+    }
+  }
+
 }

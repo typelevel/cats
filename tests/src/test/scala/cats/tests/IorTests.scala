@@ -1,9 +1,9 @@
 package cats
 package tests
 
-import cats.data.Ior
 import cats.kernel.laws.GroupLaws
-import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadErrorTests, SerializableTests, TraverseTests}
+import cats.data.{Ior, NonEmptyList, EitherT}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
 
@@ -14,8 +14,10 @@ class IorTests extends CatsSuite {
   checkAll("Ior[String, Int]", CartesianTests[Ior[String, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[String Ior ?]]", SerializableTests.serializable(Cartesian[String Ior ?]))
 
-  checkAll("Ior[String, Int]", MonadTests[String Ior ?].monad[Int, Int, Int])
-  checkAll("Monad[String Ior ?]]", SerializableTests.serializable(Monad[String Ior ?]))
+  implicit val eq0 = EitherT.catsDataEqForEitherT[Ior[String, ?], String, Int]
+
+  checkAll("Ior[String, Int]", MonadErrorTests[String Ior ?, String].monadError[Int, Int, Int])
+  checkAll("MonadError[String Ior ?]", SerializableTests.serializable(MonadError[String Ior ?, String]))
 
   checkAll("Ior[String, Int] with Option", TraverseTests[String Ior ?].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[String Ior ?]", SerializableTests.serializable(Traverse[String Ior ?]))
@@ -60,6 +62,12 @@ class IorTests extends CatsSuite {
   test("unwrap consistent with isBoth") {
     forAll { (i: Int Ior String) =>
       i.unwrap.isRight should === (i.isBoth)
+    }
+  }
+
+  test("valueOr consistent with leftMap") {
+    forAll { (i: Int Ior String, f: Int => String) =>
+      i.valueOr(f) should === (i.leftMap(f).fold(identity, identity, _ + _))
     }
   }
 
@@ -112,15 +120,56 @@ class IorTests extends CatsSuite {
     }
   }
 
-  test("append left") {
-    forAll { (i: Int Ior String, j: Int Ior String) =>
-      i.append(j).left should === (i.left.map(_ + j.left.getOrElse(0)).orElse(j.left))
+
+  test("merge") {
+    forAll { (i: Int Ior Int) =>
+        i.merge should === (i.left.getOrElse(0) + i.right.getOrElse(0))
     }
   }
 
-  test("append right") {
+  test("mergeLeft") {
+    forAll { (i: Int Ior Int) =>
+      i.mergeLeft should === (i.left.orElse(i.right).get)
+    }
+  }
+
+  test("mergeRight") {
+    forAll { (i: Int Ior Int) =>
+      i.mergeRight should === (i.right.orElse(i.left).get)
+    }
+  }
+
+  test("putLeft") {
+    forAll { (i: Int Ior Int) =>
+      val expectedResult =
+      if (i.isLeft)
+        Ior.left(2)
+      else
+        Ior.both(2, i.right.get)
+      i.putLeft(2) should === (expectedResult)
+    }
+  }
+
+  test("putRight") {
+    forAll { (i: Int Ior Int) =>
+      val expectedResult =
+      if (i.isRight)
+        Ior.right(2)
+      else
+        Ior.both(i.left.get, 2)
+      i.putRight(2) should === (expectedResult)
+    }
+  }
+
+  test("combine left") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
-      i.append(j).right should === (i.right.map(_ + j.right.getOrElse("")).orElse(j.right))
+      i.combine(j).left should === (i.left.map(_ + j.left.getOrElse(0)).orElse(j.left))
+    }
+  }
+
+  test("combine right") {
+    forAll { (i: Int Ior String, j: Int Ior String) =>
+      i.combine(j).right should === (i.right.map(_ + j.right.getOrElse("")).orElse(j.right))
     }
   }
 
@@ -154,6 +203,24 @@ class IorTests extends CatsSuite {
   test("toEither consistent with right") {
     forAll { (x: Int Ior String) =>
       x.toEither.toOption should === (x.right)
+    }
+  }
+
+  test("toValidated consistent with right") {
+    forAll { (x: Int Ior String) =>
+      x.toValidated.toOption should === (x.right)
+    }
+  }
+
+  test("leftNel") {
+    forAll { (x: String) =>
+      Ior.leftNel(x).left should === (Some(NonEmptyList.of(x)))
+    }
+  }
+
+  test("bothNel") {
+    forAll { (x: Int, y: String) =>
+      Ior.bothNel(y, x).onlyBoth should === (Some((NonEmptyList.of(y), x)))
     }
   }
 

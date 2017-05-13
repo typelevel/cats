@@ -3,9 +3,7 @@ package tests
 
 import data.NonEmptyList
 
-import cats.laws.discipline.{
-  BitraverseTests, ComonadTests, SerializableTests, TraverseTests, MonadTests, FlatMapTests, CartesianTests
-}
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
 class TupleTests extends CatsSuite {
@@ -28,6 +26,9 @@ class TupleTests extends CatsSuite {
 
   checkAll("Monad[(String, ?)]", MonadTests[(String, ?)].monad[Int, Int, String])
   checkAll("Monad[(String, ?)] serializable", SerializableTests.serializable(Monad[(String, ?)]))
+
+  checkAll("Tuple2[String, Int]", ReducibleTests[(String, ?)].reducible[Option, Int, Int])
+  checkAll("Reducible[(String, ?)]", SerializableTests.serializable(Reducible[(String, ?)]))
 
   test("Cartesian composition") {
     val cart = ContravariantCartesian[Eq].composeFunctor[(Int, ?)]

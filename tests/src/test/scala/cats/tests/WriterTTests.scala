@@ -6,7 +6,6 @@ import cats.functor.{Bifunctor, Contravariant}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import org.scalacheck.Arbitrary
 
 import cats.kernel.laws.OrderLaws
 
@@ -358,8 +357,6 @@ class WriterTTests extends CatsSuite {
       WriterT.catsDataEqForWriterT[Validated[String, ?], ListWrapper[Int], A]
     implicit val eq2: Eq[EitherT[WriterT[Validated[String, ?], ListWrapper[Int], ?], String, Int]] =
       EitherT.catsDataEqForEitherT[WriterT[Validated[String, ?], ListWrapper[Int], ?], String, Int]
-    implicit def arb0[A:Arbitrary]: Arbitrary[WriterT[Validated[String, ?], ListWrapper[Int], A]] =
-      arbitrary.catsLawsArbitraryForWriterT[Validated[String, ?], ListWrapper[Int], A]
 
     Functor[WriterT[Validated[String, ?], ListWrapper[Int], ?]]
     Apply[WriterT[Validated[String, ?], ListWrapper[Int], ?]]

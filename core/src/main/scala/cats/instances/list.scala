@@ -82,6 +82,23 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def foldM[G[_], A, B](fa: List[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         Foldable.iteratorFoldM(fa.toIterator, z)(f)
+
+      override def fold[A](fa: List[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
+
+      override def toList[A](fa: List[A]): List[A] = fa
+
+      override def reduceLeftOption[A](fa: List[A])(f: (A, A) => A): Option[A] =
+        fa.reduceLeftOption(f)
+
+      override def find[A](fa: List[A])(f: A => Boolean): Option[A] = fa.find(f)
+
+      override def filter_[A](fa: List[A])(p: A => Boolean): List[A] = fa.filter(p)
+
+      override def takeWhile_[A](fa: List[A])(p: A => Boolean): List[A] = fa.takeWhile(p)
+
+      override def dropWhile_[A](fa: List[A])(p: A => Boolean): List[A] = fa.dropWhile(p)
+
+      override def algebra[A]: Monoid[List[A]] = new kernel.instances.ListMonoid[A]
     }
 
   implicit def catsStdShowForList[A:Show]: Show[List[A]] =

@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.arrow.{Arrow, Split}
+import cats.arrow.{Arrow, Category, Compose, Split}
 import cats.functor.{Contravariant, Profunctor}
 import cats.{CoflatMap, Comonad, Functor, Monad}
 import scala.annotation.tailrec
@@ -70,7 +70,7 @@ private[data] sealed abstract class CokleisliInstances extends CokleisliInstance
   }
 
   implicit def catsDataMonoidKForCokleisli[F[_]](implicit ev: Comonad[F]): MonoidK[λ[α => Cokleisli[F, α, α]]] =
-    new CokleisliMonoidK[F] { def F: Comonad[F] = ev }
+    Category[Cokleisli[F, ?, ?]].algebraK
 }
 
 private[data] sealed abstract class CokleisliInstances0 {
@@ -81,7 +81,7 @@ private[data] sealed abstract class CokleisliInstances0 {
     new CokleisliProfunctor[F] { def F: Functor[F] = ev }
 
   implicit def catsDataSemigroupKForCokleisli[F[_]](implicit ev: CoflatMap[F]): SemigroupK[λ[α => Cokleisli[F, α, α]]] =
-    new CokleisliSemigroupK[F] { def F: CoflatMap[F] = ev }
+    Compose[Cokleisli[F, ?, ?]].algebraK
 
   implicit def catsDataContravariantForCokleisli[F[_]: Functor, A]: Contravariant[Cokleisli[F, ?, A]] =
     new Contravariant[Cokleisli[F, ?, A]] {
@@ -132,16 +132,4 @@ private trait CokleisliProfunctor[F[_]] extends Profunctor[Cokleisli[F, ?, ?]] {
 
   override def rmap[A, B, C](fab: Cokleisli[F, A, B])(f: B => C): Cokleisli[F, A, C] =
     fab.map(f)
-}
-
-private trait CokleisliSemigroupK[F[_]] extends SemigroupK[λ[α => Cokleisli[F, α, α]]] {
-  implicit def F: CoflatMap[F]
-
-  def combineK[A](a: Cokleisli[F, A, A], b: Cokleisli[F, A, A]): Cokleisli[F, A, A] = a compose b
-}
-
-private trait CokleisliMonoidK[F[_]] extends MonoidK[λ[α => Cokleisli[F, α, α]]] with CokleisliSemigroupK[F] {
-  implicit def F: Comonad[F]
-
-  def empty[A]: Cokleisli[F, A, A] = Cokleisli(F.extract[A])
 }

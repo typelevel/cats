@@ -85,7 +85,7 @@ class RegressionTests extends CatsSuite {
 
   test("#500: foldMap - traverse consistency") {
     assert(
-      List(1,2,3).traverseU(i => Const(List(i))).getConst == List(1,2,3).foldMap(List(_))
+      List(1,2,3).traverse(i => Const.of[List[Int]](List(i))).getConst == List(1,2,3).foldMap(List(_))
     )
   }
 
@@ -101,31 +101,31 @@ class RegressionTests extends CatsSuite {
       count = 0
     }
 
-    List(1,2,6,8).traverseU(validate) should === (Either.left("6 is greater than 5"))
+    List(1,2,6,8).traverse(validate) should === (Either.left("6 is greater than 5"))
     // shouldn't have ever evaluted validate(8)
     checkAndResetCount(3)
 
-    Stream(1,2,6,8).traverseU(validate) should === (Either.left("6 is greater than 5"))
+    Stream(1,2,6,8).traverse(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
     type StringMap[A] = Map[String, A]
     val intMap: StringMap[Int] = Map("one" -> 1, "two" -> 2, "six" -> 6, "eight" -> 8)
-    intMap.traverseU(validate) should === (Either.left("6 is greater than 5"))
+    intMap.traverse(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList.of(1,2,6,8).traverseU(validate) should === (Either.left("6 is greater than 5"))
+    NonEmptyList.of(1,2,6,8).traverse(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList.of(6,8).traverseU(validate) should === (Either.left("6 is greater than 5"))
+    NonEmptyList.of(6,8).traverse(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(1)
 
-    List(1,2,6,8).traverseU_(validate) should === (Either.left("6 is greater than 5"))
+    List(1,2,6,8).traverse_(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList.of(1,2,6,7,8).traverseU_(validate) should === (Either.left("6 is greater than 5"))
+    NonEmptyList.of(1,2,6,7,8).traverse_(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    NonEmptyList.of(6,7,8).traverseU_(validate) should === (Either.left("6 is greater than 5"))
+    NonEmptyList.of(6,7,8).traverse_(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(1)
   }
 }

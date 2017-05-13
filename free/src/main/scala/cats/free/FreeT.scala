@@ -164,10 +164,6 @@ object FreeT extends FreeTInstances {
   def liftT[S[_], M[_], A](value: M[A])(implicit M: Functor[M]): FreeT[S, M, A] =
     Suspend(M.map(value)(Right(_)))
 
-  /** A version of `liftT` that infers the nested type constructor. */
-  def liftTU[S[_], MA](value: MA)(implicit M: Unapply[Functor, MA]): FreeT[S, M.M, M.A] =
-    liftT[S, M.M, M.A](M.subst(value))(M.TC)
-
   /** Suspends a value within a functor in a single step. Monadic unit for a higher-order monad. */
   def liftF[S[_], M[_], A](value: S[A])(implicit M: Applicative[M]): FreeT[S, M, A] =
     Suspend(M.pure(Left(value)))
@@ -176,14 +172,10 @@ object FreeT extends FreeTInstances {
     liftF[S, M, FreeT[S, M, A]](value).flatMap(identity)
 
   def compile[S[_], T[_], M[_]: Functor](st: FunctionK[S, T]): FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]] =
-    new FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]] {
-     def apply[A](f: FreeT[S, M, A]) = f.compile(st)
-    }
+    λ[FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]]](f => f.compile(st))
 
   def foldMap[S[_], M[_]: Monad](fk: FunctionK[S, M]): FunctionK[FreeT[S, M, ?], M] =
-    new FunctionK[FreeT[S, M, ?], M] {
-     def apply[A](f: FreeT[S, M, A]) = f.foldMap(fk)
-    }
+    λ[FunctionK[FreeT[S, M, ?], M]](f => f.foldMap(fk))
 }
 
 private[free] sealed trait FreeTInstances3 {

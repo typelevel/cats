@@ -33,24 +33,6 @@ import simulacrum.typeclass
   def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
 
   /**
-   * Behaves just like traverse, but uses [[Unapply]] to find the
-   * Applicative instance for G.
-   *
-   * Example:
-   * {{{
-   * scala> import cats.implicits._
-   * scala> def parseInt(s: String): Either[String, Int] = Either.catchOnly[NumberFormatException](s.toInt).leftMap(_ => "no number")
-   * scala> val ns = List("1", "2", "3")
-   * scala> ns.traverseU(parseInt)
-   * res0: Either[String, List[Int]] = Right(List(1, 2, 3))
-   * scala> ns.traverse[Either[String, ?], Int](parseInt)
-   * res1: Either[String, List[Int]] = Right(List(1, 2, 3))
-   * }}}
-   */
-  def traverseU[A, GB](fa: F[A])(f: A => GB)(implicit U: Unapply[Applicative, GB]): U.M[F[U.A]] =
-    U.TC.traverse(fa)(a => U.subst(f(a)))(this)
-
-  /**
    * A traverse followed by flattening the inner result.
    *
    * Example:
@@ -100,24 +82,6 @@ import simulacrum.typeclass
    */
   def flatSequence[G[_], A](fgfa: F[G[F[A]]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[A]] =
     G.map(sequence(fgfa))(F.flatten)
-
-  /**
-   * Behaves just like sequence, but uses [[Unapply]] to find the
-   * Applicative instance for G.
-   *
-   * Example:
-   * {{{
-   * scala> import cats.data.{Validated, ValidatedNel}
-   * scala> import cats.implicits._
-   * scala> val x: List[ValidatedNel[String, Int]] = List(Validated.valid(1), Validated.invalid("a"), Validated.invalid("b")).map(_.toValidatedNel)
-   * scala> x.sequenceU
-   * res0: cats.data.ValidatedNel[String,List[Int]] = Invalid(NonEmptyList(a, b))
-   * scala> x.sequence[ValidatedNel[String, ?], Int]
-   * res1: cats.data.ValidatedNel[String,List[Int]] = Invalid(NonEmptyList(a, b))
-   * }}}
-   */
-  def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative, GA]): U.M[F[U.A]] =
-    traverse(fga)(U.subst)(U.TC)
 
   def compose[G[_]: Traverse]: Traverse[λ[α => F[G[α]]]] =
     new ComposedTraverse[F, G] {

@@ -42,23 +42,19 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   /** Interpret this algebra into another FreeApplicative */
   final def compile[G[_]](f: FunctionK[F, G]): FA[G, A] =
     foldMap[FA[G, ?]] {
-      new FunctionK[F, FA[G, ?]] {
-        def apply[B](fa: F[B]): FA[G, B] = lift(f(fa))
-      }
+      λ[FunctionK[F, FA[G, ?]]](fa => lift(f(fa)))
     }
 
   /** Interpret this algebra into a Monoid */
   final def analyze[M:Monoid](f: FunctionK[F, λ[α => M]]): M =
-    foldMap[Const[M, ?]](new (FunctionK[F, Const[M, ?]]) {
-      def apply[X](x: F[X]): Const[M, X] = Const(f(x))
-    }).getConst
+    foldMap[Const[M, ?]](
+      λ[FunctionK[F, Const[M, ?]]](x => Const(f(x)))
+    ).getConst
 
   /** Compile this FreeApplicative algebra into a Free algebra. */
   final def monad: Free[F, A] =
     foldMap[Free[F, ?]] {
-      new FunctionK[F, Free[F, ?]] {
-        def apply[B](fa: F[B]): Free[F, B] = Free.liftF(fa)
-      }
+      λ[FunctionK[F, Free[F, ?]]](fa => Free.liftF(fa))
     }
 
   override def toString: String = "FreeApplicative(...)"

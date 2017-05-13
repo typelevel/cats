@@ -18,6 +18,17 @@ class FunctorTest extends CatsSuite {
     }
   }
 
+  test("tupleLeft and tupleRight tuple values with a constant value preserving structure") {
+    forAll { (l: List[Int], o: Option[Int], m: Map[String, Int], i: Int) =>
+      l.tupleLeft(i) should === (List.tabulate(l.length)(in => (i, l(in))))
+      o.tupleLeft(i) should === (if (o.nonEmpty) Some((i, o.get)) else None)
+      m.tupleLeft(i) should === (m.map { case (k, v) => (k, (i, v)) }.toMap)
+      l.tupleRight(i) should === (List.tabulate(l.length)(in => (l(in), i)))
+      o.tupleRight(i) should === (if (o.nonEmpty) Some((o.get, i)) else None)
+      m.tupleRight(i) should === (m.map { case (k, v) => (k, (v, i)) }.toMap)
+    }
+  }
+
   test("widen equals map(identity)") {
     forAll { (i: Int) =>
       val list: List[Some[Int]] = List(Some(i))

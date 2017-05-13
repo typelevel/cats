@@ -109,7 +109,7 @@ val parCompiler = new FunctionK[ValidationOp, ParValidator] {
   }
 }
 
-val parValidation = prog.foldMap[ParValidator](parCompiler)
+val parValidator = prog.foldMap[ParValidator](parCompiler)
 ```
 
 ### Logging
@@ -152,27 +152,14 @@ Another useful property `Applicative`s have over `Monad`s is that given two `App
 case for monads.
 
 Therefore, we can write an interpreter that uses the product of the `ParValidator` and `Log` `Applicative`s
-to interpret our program in one go.
+to interpret our program in one go. We can create this interpreter easily by using `FunctionK#and`.
 
 ```tut:silent
-import cats.data.Prod
+import cats.data.Tuple2K
 
-type ValidateAndLog[A] = Prod[ParValidator, Log, A]
+type ValidateAndLog[A] = Tuple2K[ParValidator, Log, A]
 
-val prodCompiler = new FunctionK[ValidationOp, ValidateAndLog] {
-  def apply[A](fa: ValidationOp[A]): ValidateAndLog[A] = fa match {
-    case Size(size) =>
-      val f: ParValidator[Boolean] = Kleisli(str =>
-        Future { str.size >= size })
-      val l: Log[Boolean] = Const(List(s"size > $size"))
-      Prod[ParValidator, Log, Boolean](f, l)
-    case HasNumber =>
-      val f: ParValidator[Boolean] = Kleisli(str =>
-        Future(str.exists(c => "0123456789".contains(c))))
-      val l: Log[Boolean] = Const(List("has number"))
-      Prod[ParValidator, Log, Boolean](f, l)
-  }
-}
+val prodCompiler: FunctionK[ValidationOp, ValidateAndLog] = parCompiler and logCompiler
 
 val prodValidation = prog.foldMap[ValidateAndLog](prodCompiler)
 ```

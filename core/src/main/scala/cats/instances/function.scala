@@ -1,7 +1,7 @@
 package cats
 package instances
 
-import cats.arrow.{Arrow, Choice}
+import cats.arrow.{Arrow, Category, Choice}
 import cats.functor.Contravariant
 import annotation.tailrec
 
@@ -90,8 +90,5 @@ private[instances] sealed trait Function1Instances {
     }
 
   implicit val catsStdMonoidKForFunction1: MonoidK[λ[α => Function1[α, α]]] =
-    new MonoidK[λ[α => Function1[α, α]]] {
-      def empty[A]: A => A = identity[A]
-      def combineK[A](x: A => A, y: A => A): A => A = x compose y
-    }
+    Category[Function1].algebraK
 }

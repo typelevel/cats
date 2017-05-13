@@ -6,137 +6,108 @@ source: "core/src/main/scala/cats/Functor.scala"
 scaladoc: "#cats.Functor"
 ---
 # Functor
+`Functor` is a type class that abstracts over type constructors that can be `map`'ed over. Examples of such
+type constructors are `List`, `Option`, and `Future`.
 
-A `Functor` is a ubiquitous type class involving types that have one
-"hole", i.e. types which have the shape `F[?]`, such as `Option`,
-`List` and `Future`. (This is in contrast to a type like `Int` which has
-no hole, or `Tuple2` which has two holes (`Tuple2[?,?]`)).
-
-The `Functor` category involves a single operation, named `map`:
-
-```scala
-def map[A, B](fa: F[A])(f: A => B): F[B]
-```
-
-This method takes a function `A => B` and turns an `F[A]` into an
-`F[B]`.  The name of the method `map` should remind you of the `map`
-method that exists on many classes in the Scala standard library, for
-example:
-
-```tut:book
-Option(1).map(_ + 1)
-List(1,2,3).map(_ + 1)
-Vector(1,2,3).map(_.toString)
-```
-
-## Creating Functor instances
-
-We can trivially create a `Functor` instance for a type which has a well
-behaved `map` method:
-
-```tut:silent
-import cats._
-
-implicit val optionFunctor: Functor[Option] = new Functor[Option] {
-  def map[A,B](fa: Option[A])(f: A => B) = fa map f
+```tut:book:silent
+trait Functor[F[_]] {
+  def map[A, B](fa: F[A])(f: A => B): F[B]
 }
 
-implicit val listFunctor: Functor[List] = new Functor[List] {
-  def map[A,B](fa: List[A])(f: A => B) = fa map f
-}
-```
-
-However, functors can also be created for types which don't have a `map`
-method. For example, if we create a `Functor` for `Function1[In, ?]`
-we can use `andThen` to implement `map`:
-
-```tut:silent
-implicit def function1Functor[In]: Functor[Function1[In, ?]] =
-  new Functor[Function1[In, ?]] {
-    def map[A,B](fa: In => A)(f: A => B): Function1[In,B] = fa andThen f
+// Example implementation for Option
+implicit val functorForOption: Functor[Option] = new Functor[Option] {
+  def map[A, B](fa: Option[A])(f: A => B): Option[B] = fa match {
+    case None    => None
+    case Some(a) => Some(f(a))
   }
+}
 ```
 
-This example demonstrates the use of the
-[kind-projector compiler plugin](https://github.com/non/kind-projector).
-This compiler plugin can help us when we need to change the number of type
-holes. In the example above, we took a type which normally has two type holes, 
-`Function1[?,?]` and constrained one of the holes to be the `In` type, 
-leaving just one hole for the return type, resulting in `Function1[In,?]`. 
-Without kind-projector, we'd have to write this as something like 
-`({type F[A] = Function1[In,A]})#F`, which is much harder to read and understand.
+A `Functor` instance must obey two laws:
 
-## Using Functor
+* Composition: Mapping with `f` and then again with `g` is the same as mapping once with the composition of `f` and `g`
+    * `fa.map(f).map(g) = fa.map(f.andThen(g))`
 
-### map
+* Identity: Mapping with the identity function is a no-op
+    * `fa.map(x => x) = fa`
 
-`List` is a functor which applies the function to each element of the list:
+## A different view
 
-```tut:book
-val len: String => Int = _.length
-Functor[List].map(List("qwer", "adsfg"))(len)
+Another way of viewing a `Functor[F]` is that `F` allows the lifting of a pure function `A => B` into the effectful
+function `F[A] => F[B]`. We can see this if we re-order the `map` signature above.
+
+```tut:book:silent
+trait Functor[F[_]] {
+  def map[A, B](fa: F[A])(f: A => B): F[B]
+
+  def lift[A, B](f: A => B): F[A] => F[B] =
+    fa => map(fa)(f)
+}
 ```
 
-`Option` is a functor which only applies the function when the `Option` value 
-is a `Some`:
+## Functors for effect management
 
-```tut:book
-Functor[Option].map(Some("adsf"))(len) // Some(x) case: function is applied to x; result is wrapped in Some
-Functor[Option].map(None)(len) // None case: simply returns None (function is not applied)
+The `F` in `Functor` is often referred to as an "effect" or "computational context." Different effects will
+abstract away different behaviors with respect to fundamental functions like `map`. For instance, `Option`'s effect
+abstracts away potentially missing values, where `map` applies the function only in the `Some` case but
+otherwise threads the `None` through.
+
+Taking this view, we can view `Functor` as the ability to work with a **single** effect - we can apply a pure
+function to a single effectful value without needing to "leave" the effect.
+
+## Functors compose
+
+If you're ever found yourself working with nested data types such as `Option[List[A]]` or a
+`List[Either[String, Future[A]]]` and tried to `map` over it, you've most likely found yourself doing something
+like `_.map(_.map(_.map(f)))`. As it turns out, `Functor`s compose, which means if `F` and `G` have
+`Functor` instances, then so does `F[G[_]]`.
+
+Such composition can be achieved via the `Functor#compose` method.
+
+```tut:reset:book:silent
+import cats.Functor
+import cats.instances.list._
+import cats.instances.option._
 ```
 
-## Derived methods
-
-### lift
-
-We can use `Functor` to "lift" a function from `A => B` to `F[A] => F[B]`:
-
 ```tut:book
-val lenOption: Option[String] => Option[Int] = Functor[Option].lift(len)
-lenOption(Some("abcd"))
+val listOption = List(Some(1), None, Some(2))
+
+// Through Functor#compose
+Functor[List].compose[Option].map(listOption)(_ + 1)
 ```
 
-### fproduct
+This approach will allow us to use composition without wrapping the value in question, but can
+introduce complications in more complex use cases. For example, if we need to call another function which
+requires a `Functor` and we want to use the composed `Functor`, we would have to explicitly pass in the
+composed instance during the function call or create a local implicit.
 
-`Functor` provides an `fproduct` function which pairs a value with the
-result of applying a function to that value.
+```tut:book:silent
+def needsFunctor[F[_]: Functor, A](fa: F[A]): F[Unit] = Functor[F].map(fa)(_ => ())
 
-```tut:book
-val source = List("a", "aa", "b", "ccccc")
-Functor[List].fproduct(source)(len).toMap
+def foo: List[Option[Unit]] = {
+  val listOptionFunctor = Functor[List].compose[Option]
+  type ListOption[A] = List[Option[A]]
+  needsFunctor[ListOption, Int](listOption)(listOptionFunctor)
+}
 ```
 
-### compose
+We can make this nicer at the cost of boxing with the `Nested` data type.
 
-Functors compose! Given any functor `F[_]` and any functor `G[_]` we can
-create a new functor `F[G[_]]` by composing them via the `Nested` data type:
-
-```tut:book
+```tut:book:silent
 import cats.data.Nested
-val listOpt = Nested[List, Option, Int](List(Some(1), None, Some(3)))
-Functor[Nested[List, Option, ?]].map(listOpt)(_ + 1)
-
-val optList = Nested[Option, List, Int](Some(List(1, 2, 3)))
-Functor[Nested[Option, List, ?]].map(optList)(_ + 1)
+import cats.syntax.functor._
 ```
-
-## Subtyping
-
-Functors have a natural relationship with subtyping:
 
 ```tut:book
-class A
-class B extends A
-val b: B = new B
-val a: A = b
-val listB: List[B] = List(new B)
-val listA1: List[A] = listB.map(b => b: A)
-val listA2: List[A] = listB.map(identity[A])
-val listA3: List[A] = Functor[List].widen[B, A](listB)
+val nested: Nested[List, Option, Int] = Nested(listOption)
+
+nested.map(_ + 1)
 ```
 
-Subtyping relationships are "lifted" by functors, such that if `F` is a
-lawful functor and `A <: B` then `F[A] <: F[B]` - almost. Almost, because to
-convert an `F[B]` to an `F[A]` a call to `map(identity[A])` is needed
-(provided as `widen` for convenience). The functor laws guarantee that
-`fa map identity == fa`, however.
+The `Nested` approach, being a distinct type from its constituents, will resolve the usual way modulo
+possible [SI-2712][si2712] issues (which can be addressed through [partial unification][partial-unification]), 
+but requires syntactic and runtime overhead from wrapping and unwrapping.
+
+[partial-unification]: https://github.com/fiadliel/sbt-partial-unification "A sbt plugin for enabling partial unification"
+[si2712]: https://issues.scala-lang.org/browse/SI-2712 "SI-2712: implement higher-order unification for type constructor inference"

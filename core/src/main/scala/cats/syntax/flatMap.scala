@@ -1,24 +1,16 @@
 package cats
 package syntax
 
-private[syntax] trait FlatMapSyntax1 {
-  implicit def catsSyntaxUFlatMap[FA](fa: FA)(implicit U: Unapply[FlatMap, FA]): FlatMap.Ops[U.M, U.A] =
-    new FlatMap.Ops[U.M, U.A]{
-      val self = U.subst(fa)
-      val typeClassInstance = U.TC
-    }
-}
+trait FlatMapSyntax extends FlatMap.ToFlatMapOps {
 
-trait FlatMapSyntax extends FlatMap.ToFlatMapOps with FlatMapSyntax1 {
-
-  implicit def catsSyntaxFlatten[F[_]: FlatMap, A](ffa: F[F[A]]): FlattenOps[F, A] =
+  implicit final def catsSyntaxFlatten[F[_]: FlatMap, A](ffa: F[F[A]]): FlattenOps[F, A] =
     new FlattenOps[F, A](ffa)
 
-  implicit def catsSyntaxIfM[F[_]: FlatMap](fa: F[Boolean]): IfMOps[F] =
+  implicit final def catsSyntaxIfM[F[_]: FlatMap](fa: F[Boolean]): IfMOps[F] =
     new IfMOps[F](fa)
 }
 
-final class FlattenOps[F[_], A](ffa: F[F[A]])(implicit F: FlatMap[F]) {
+final class FlattenOps[F[_], A](val ffa: F[F[A]]) extends AnyVal {
 
   /**
    * Flatten nested `F` values.
@@ -32,10 +24,10 @@ final class FlattenOps[F[_], A](ffa: F[F[A]])(implicit F: FlatMap[F]) {
    * res0: ErrorOr[Int] = Right(3)
    * }}}
    */
-  def flatten: F[A] = F.flatten(ffa)
+  def flatten(implicit F: FlatMap[F]): F[A] = F.flatten(ffa)
 }
 
-final class IfMOps[F[_]](fa: F[Boolean])(implicit F: FlatMap[F]) {
+final class IfMOps[F[_]](val fa: F[Boolean]) extends AnyVal {
 
   /**
    * A conditional lifted into the `F` context.
@@ -56,5 +48,5 @@ final class IfMOps[F[_]](fa: F[Boolean])(implicit F: FlatMap[F]) {
    * res1: Int = 0
    * }}}
    */
-  def ifM[B](ifTrue: => F[B], ifFalse: => F[B]): F[B] = F.ifM(fa)(ifTrue, ifFalse)
+  def ifM[B](ifTrue: => F[B], ifFalse: => F[B])(implicit F: FlatMap[F]): F[B] = F.ifM(fa)(ifTrue, ifFalse)
 }

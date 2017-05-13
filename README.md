@@ -5,7 +5,7 @@
 [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
 [![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange)](https://index.scala-lang.org/typelevel/cats/cats-core)
-[![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.8.svg)](http://scala-js.org)
+[![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.14.svg)](http://scala-js.org)
 
 ### Overview
 
@@ -30,7 +30,7 @@ To get started with SBT, simply add the following to your `build.sbt`
 file:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats" % "0.8.1"
+libraryDependencies += "org.typelevel" %% "cats" % "0.9.0"
 ```
 
 This will pull in all of Cats' modules. If you only require some
@@ -104,6 +104,7 @@ The current maintainers (people who can merge pull requests) are:
  * [travisbrown](https://github.com/travisbrown) Travis Brown
  * [adelbertc](https://github.com/adelbertc) Adelbert Chang
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
+ * [edmundnoble](https://github.com/edmundnoble) Edmund Noble
  * [tpolecat](https://github.com/tpolecat) Rob Norris
  * [stew](https://github.com/stew) Mike O'Connor
  * [non](https://github.com/non) Erik Osheim
@@ -122,14 +123,15 @@ relax this to a single sign-off.
 
 There are many projects that integrate with Cats:
 
- * [Circe](https://github.com/travisbrown/circe): pure functional JSON library.
+ * [Circe](https://github.com/circe/circe): pure functional JSON library.
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
  * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources.
  * [Frameless](https://github.com/adelbertc/frameless): Expressive types for Spark.
+ * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs.
  * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
  * [Kittens](https://github.com/milessabin/kittens): automatically derived type class instances.
  * [Monix](https://github.com/monixio/monix): high-performance library for composing asynchronous and event-based programs.
- * [eff-cats](https://github.com/atnos-org/eff-cats): functional effects and effect handlers (alternative to monad transformers).
+ * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers).
 
 ### Copyright and License
 

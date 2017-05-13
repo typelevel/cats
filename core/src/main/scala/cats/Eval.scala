@@ -1,6 +1,8 @@
 package cats
 
 import scala.annotation.tailrec
+import scala.util.control.NonFatal
+
 import cats.syntax.all._
 
 /**
@@ -107,6 +109,40 @@ sealed abstract class Eval[+A] extends Serializable { self =>
    * Later[A] with an equivalent computation will be returned.
    */
   def memoize: Eval[A]
+
+  /**
+   * Recover from exceptions thrown within Eval (i.e. when `.value` is
+   * called).
+   *
+   * Note that this will not help for exceptions thrown while building
+   * an Eval instance (e.g. `Now(sys.error("die"))`), but will help
+   * with exceptions which are deferred (e.g. `Later(sys.error("die"))`).
+   *
+   * Unlike many other methods on `Eval`, this method does consume one
+   * stack frame during the eventual `.value` call. This means that
+   * it's not necessarily safe to nest recursive calls to
+   * `.handleErrorWith`.
+   *
+   * The `recovery` method can re-raise exceptions (if necessary)
+   * using the `Eval.raise` method, or via `throw` directly.
+   * Exceptions "at-rest" are not represented with `Eval`, your only
+   * options for catching and dealing with exceptions are this method,
+   * or wrapping your `.value` calls with something like `Try()`.
+   */
+  final def handleErrorWith[A1 >: A](recovery: Throwable => Eval[A1]): Eval[A1] =
+    Eval.defer(try Now(value) catch { case NonFatal(t) => recovery(t) })
+
+  /**
+   * Recover from exceptions thrown within Eval (i.e. when `.value` is
+   * called).
+   *
+   * This method only differs from `handleErrorWith` in that it takes
+   * a partial function. See that method's documentation for a more
+   * complete description of the (very limited) exception-handling
+   * capabilities of `Eval`.
+   */
+  final def recoverWith[A1 >: A](f: PartialFunction[Throwable, Eval[A1]]): Eval[A1] =
+    handleErrorWith(t => if (f.isDefinedAt(t)) f(t) else Eval.raise(t))
 }
 
 
@@ -206,15 +242,53 @@ object Eval extends EvalInstances {
     new Eval.Call[A](a _) {}
 
   /**
-   * Static Eval instances for some common values.
+   * Create an Eval instance which will throw the given exception when
+   * evaluated.
    *
-   * These can be useful in cases where the same values may be needed
+   * This method can be paired with the `.recoverWith` method to
+   * encode exception handling within an `Eval` context.
+   */
+  def raise(t: Throwable): Eval[Nothing] =
+    Eval.defer(throw t)
+
+  /**
+   * Static Eval instance for common value `Unit`.
+   *
+   * This can be useful in cases where the same value may be needed
    * many times.
    */
   val Unit: Eval[Unit] = Now(())
+
+  /**
+   * Static Eval instance for common value `true`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val True: Eval[Boolean] = Now(true)
+
+  /**
+   * Static Eval instance for common value `false`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val False: Eval[Boolean] = Now(false)
+
+  /**
+   * Static Eval instance for common value `0`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val Zero: Eval[Int] = Now(0)
+
+  /**
+   * Static Eval instance for common value `1`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val One: Eval[Int] = Now(1)
 
   /**
@@ -230,7 +304,10 @@ object Eval extends EvalInstances {
   }
 
   object Call {
-    /** Collapse the call stack for eager evaluations */
+
+    /**
+     * Collapse the call stack for eager evaluations.
+     */
     @tailrec private def loop[A](fa: Eval[A]): Eval[A] = fa match {
       case call: Eval.Call[A] =>
         loop(call.thunk())
@@ -297,8 +374,8 @@ object Eval extends EvalInstances {
 
 private[cats] trait EvalInstances extends EvalInstances0 {
 
-  implicit val catsBimonadForEval: Bimonad[Eval] with Monad[Eval] =
-    new Bimonad[Eval] with Monad[Eval] {
+  implicit val catsBimonadForEval: Bimonad[Eval] with MonadError[Eval, Throwable] =
+    new Bimonad[Eval] with MonadError[Eval, Throwable] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
       def pure[A](a: A): Eval[A] = Now(a)
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
@@ -308,6 +385,34 @@ private[cats] trait EvalInstances extends EvalInstances0 {
         case Left(nextA) => tailRecM(nextA)(f)
         case Right(b)    => pure(b)
       }
+      def handleErrorWith[A](fa: Eval[A])(f: Throwable => Eval[A]): Eval[A] =
+        fa.handleErrorWith(f)
+      def raiseError[A](e: Throwable): Eval[A] =
+        Eval.raise(e)
+    }
+
+  implicit val catsReducibleForEval: Reducible[Eval] =
+    new Reducible[Eval] {
+      def foldLeft[A, B](fa: Eval[A], b: B)(f: (B, A) => B): B =
+        f(b, fa.value)
+      def foldRight[A, B](fa: Eval[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa.flatMap(f(_, lb))
+
+      override def reduce[A](fa: Eval[A])(implicit A: Semigroup[A]): A =
+        fa.value
+      override def reduceLeft[A](fa: Eval[A])(f: (A, A) => A): A =
+        fa.value
+      def reduceLeftTo[A, B](fa: Eval[A])(f: A => B)(g: (B, A) => B): B =
+        f(fa.value)
+      override def reduceRight[A](fa: Eval[A])(f: (A, Eval[A]) => Eval[A]): Eval[A] =
+        fa
+      def reduceRightTo[A, B](fa: Eval[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa.map(f)
+      override def reduceRightOption[A](fa: Eval[A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] =
+        fa.map(Some(_))
+      override def reduceRightToOption[A, B](fa: Eval[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+        fa.map { a => Some(f(a)) }
+      override def size[A](f: Eval[A]): Long = 1L
     }
 
   implicit def catsOrderForEval[A: Order]: Order[Eval[A]] =

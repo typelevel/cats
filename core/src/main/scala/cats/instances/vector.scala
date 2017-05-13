@@ -74,9 +74,9 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def size[A](fa: Vector[A]): Long = fa.size.toLong
 
       override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
-      foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
-        G.map2Eval(f(a), lgvb)(_ +: _)
-      }.value
+        foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
+          G.map2Eval(f(a), lgvb)(_ +: _)
+        }.value
 
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)
@@ -89,6 +89,17 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         Foldable.iteratorFoldM(fa.toIterator, z)(f)
+
+      override def fold[A](fa: Vector[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
+
+      override def toList[A](fa: Vector[A]): List[A] = fa.toList
+
+      override def reduceLeftOption[A](fa: Vector[A])(f: (A, A) => A): Option[A] =
+        fa.reduceLeftOption(f)
+
+      override def find[A](fa: Vector[A])(f: A => Boolean): Option[A] = fa.find(f)
+
+      override def algebra[A]: Monoid[Vector[A]] = new kernel.instances.VectorMonoid[A]
     }
 
   implicit def catsStdShowForVector[A:Show]: Show[Vector[A]] =

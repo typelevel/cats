@@ -30,6 +30,15 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
 
       override def foldM[G[_], A, B](fa: Set[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         Foldable.iteratorFoldM(fa.toIterator, z)(f)
+
+      override def fold[A](fa: Set[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
+
+      override def toList[A](fa: Set[A]): List[A] = fa.toList
+
+      override def reduceLeftOption[A](fa: Set[A])(f: (A, A) => A): Option[A] =
+        fa.reduceLeftOption(f)
+
+      override def find[A](fa: Set[A])(f: A => Boolean): Option[A] = fa.find(f)
     }
 
   implicit def catsStdShowForSet[A:Show]: Show[Set[A]] = new Show[Set[A]] {

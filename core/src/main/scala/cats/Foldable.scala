@@ -184,6 +184,27 @@ import simulacrum.typeclass
     foldLeft(fa, G.pure(z))((gb, a) => G.flatMap(gb)(f(_, a)))
 
   /**
+   * Monadic folding on `F` by mapping `A` values to `G[B]`, combining the `B`
+   * values using the given `Monoid[B]` instance.
+   *
+   * Similar to [[foldM]], but using a `Monoid[B]`.
+   *
+   * {{{
+   * scala> import cats.Foldable
+   * scala> import cats.implicits._
+   * scala> val evenNumbers = List(2,4,6,8,10)
+   * scala> val evenOpt: Int => Option[Int] =
+   *      |   i => if (i % 2 == 0) Some(i) else None
+   * scala> Foldable[List].foldMapM(evenNumbers)(evenOpt)
+   * res0: Option[Int] = Some(30)
+   * scala> Foldable[List].foldMapM(evenNumbers :+ 11)(evenOpt)
+   * res1: Option[Int] = None
+   * }}}
+   */
+  def foldMapM[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Monad[G], B: Monoid[B]): G[B] =
+    foldM(fa, B.empty)((b, a) => G.map(f(a))(B.combine(b, _)))
+
+  /**
    * Traverse `F[A]` using `Applicative[G]`.
    *
    * `A` values will be mapped into `G[B]` and combined using
@@ -211,30 +232,6 @@ import simulacrum.typeclass
     }.value
 
   /**
-   * Behaves like traverse_, but uses [[Unapply]] to find the
-   * [[Applicative]] instance for `G` - used when `G` is a
-   * type constructor with two or more parameters such as [[scala.util.Either]]
-   *
-   * {{{
-   * scala> import cats.implicits._
-   * scala> def parseInt(s: String): Either[String, Int] =
-   *      |   try { Right(s.toInt) }
-   *      |   catch { case _: NumberFormatException => Left("boo") }
-   * scala> val F = Foldable[List]
-   * scala> F.traverseU_(List("333", "444"))(parseInt)
-   * res0: Either[String, Unit] = Right(())
-   * scala> F.traverseU_(List("333", "zzz"))(parseInt)
-   * res1: Either[String, Unit] = Left(boo)
-   * }}}
-   *
-   * Note that using `traverse_` instead of `traverseU_` would not compile without
-   * explicitly passing in the type parameters - the type checker has trouble
-   * inferring the appropriate instance.
-   */
-  def traverseU_[A, GB](fa: F[A])(f: A => GB)(implicit U: Unapply[Applicative, GB]): U.M[Unit] =
-    traverse_(fa)(f.andThen(U.subst))(U.TC)
-
-  /**
    * Sequence `F[G[A]]` using `Applicative[G]`.
    *
    * This is similar to `traverse_` except it operates on `F[G[A]]`
@@ -255,27 +252,6 @@ import simulacrum.typeclass
     traverse_(fga)(identity)
 
   /**
-   * Behaves like sequence_, but uses [[Unapply]] to find the
-   * [[Applicative]] instance for `G` - used when `G` is a
-   * type constructor with two or more parameters such as [[scala.util.Either]]
-   *
-   * {{{
-   * scala> import cats.implicits._
-   * scala> val F = Foldable[List]
-   * scala> F.sequenceU_(List(Either.right[String, Int](333), Right(444)))
-   * res0: Either[String, Unit] = Right(())
-   * scala> F.sequenceU_(List(Either.right[String, Int](333), Left("boo")))
-   * res1: Either[String, Unit] = Left(boo)
-   * }}}
-   *
-   * Note that using `sequence_` instead of `sequenceU_` would not compile without
-   * explicitly passing in the type parameters - the type checker has trouble
-   * inferring the appropriate instance.
-   */
-  def sequenceU_[GA](fa: F[GA])(implicit U: Unapply[Applicative, GA]): U.M[Unit] =
-    traverseU_(fa)(identity)
-
-  /**
    * Fold implemented using the given `MonoidK[G]` instance.
    *
    * This method is identical to fold, except that we use the universal monoid (`MonoidK[G]`)
@@ -292,7 +268,6 @@ import simulacrum.typeclass
    */
   def foldK[G[_], A](fga: F[G[A]])(implicit G: MonoidK[G]): G[A] =
     fold(fga)(G.algebra)
-
 
   /**
    * Find the first element matching the predicate, if one exists.
@@ -364,6 +339,37 @@ import simulacrum.typeclass
 
   def nonEmpty[A](fa: F[A]): Boolean =
     !isEmpty(fa)
+
+  /**
+   * Intercalate/insert an element between the existing elements while folding.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> Foldable[List].intercalate(List("a","b","c"), "-")
+   * res0: String = a-b-c
+   * scala> Foldable[List].intercalate(List("a"), "-")
+   * res1: String = a
+   * scala> Foldable[List].intercalate(List.empty[String], "-")
+   * res2: String = ""
+   * scala> Foldable[Vector].intercalate(Vector(1,2,3), 1)
+   * res3: Int = 8
+   * }}}
+   */
+  def intercalate[A](fa: F[A], a: A)(implicit A: Monoid[A]): A =
+    A.combineAll(intersperseList(toList(fa), a))
+
+  protected def intersperseList[A](xs: List[A], x: A): List[A] = {
+    val bld = List.newBuilder[A]
+    val it = xs.iterator
+    if (it.hasNext) {
+      bld += it.next
+      while(it.hasNext) {
+        bld += x
+        bld += it.next
+      }
+    }
+    bld.result
+  }
 
   def compose[G[_]: Foldable]: Foldable[λ[α => F[G[α]]]] =
     new ComposedFoldable[F, G] {

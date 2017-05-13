@@ -11,11 +11,7 @@ lazy val scoverageSettings = Seq(
   coverageFailOnMinimum := false
 )
 
-lazy val buildSettings = Seq(
-  organization := "org.typelevel",
-  scalaVersion := "2.12.0",
-  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0")
-)
+organization in ThisBuild := "org.typelevel"
 
 lazy val catsDoctestSettings = Seq(
   doctestWithDependencies := false
@@ -29,7 +25,7 @@ lazy val kernelSettings = Seq(
     Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
-) ++ warnUnusedImport ++ update2_12
+) ++ warnUnusedImport ++ update2_12 ++ xlint
 
 lazy val commonSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
@@ -40,17 +36,20 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.10.0",
+    "com.github.mpilquist" %%% "simulacrum" % "0.10.0" % "compile-time",
     "org.typelevel" %%% "machinist" % "0.6.1",
-    compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
+    compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")
   ),
   fork in test := true,
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
   // workaround for https://github.com/scalastyle/scalastyle-sbt-plugin/issues/47
-  scalastyleSources in Compile ++= (unmanagedSourceDirectories in Compile).value
-) ++ warnUnusedImport ++ update2_12
+  scalastyleSources in Compile ++= (unmanagedSourceDirectories in Compile).value,
+  ivyConfigurations += config("compile-time").hide,
+  unmanagedClasspath in Compile ++= update.value.select(configurationFilter("compile-time"))
+) ++ warnUnusedImport ++ update2_12 ++ xlint
+
 
 lazy val tagName = Def.setting{
  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
@@ -92,11 +91,11 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-lazy val catsSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
+lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
 lazy val scalaCheckVersion = "1.13.4"
-lazy val scalaTestVersion = "3.0.0"
-lazy val disciplineVersion = "0.7.2"
+lazy val scalaTestVersion = "3.0.1"
+lazy val disciplineVersion = "0.7.3"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
@@ -161,7 +160,8 @@ lazy val docSettings = Seq(
     "-diagrams"
   ),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
-  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
+  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
+  includeFilter in Jekyll := (includeFilter in makeSite).value
 )
 
 lazy val docs = project
@@ -211,17 +211,24 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
+val binaryCompatibleVersion = "0.8.0"
+
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
   .settings(kernelSettings: _*)
-  .settings(buildSettings: _*)
   .settings(publishSettings: _*)
   .settings(scoverageSettings: _*)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings:_*)
-  .jvmSettings((commonJvmSettings ++ (mimaPreviousArtifacts := Set("org.typelevel" %% "cats-kernel" % "0.7.0"))):_*)
+  .jvmSettings((commonJvmSettings ++
+    (mimaPreviousArtifacts := {
+      if (scalaVersion.value startsWith "2.12")
+        Set()
+      else
+        Set("org.typelevel" %% "cats-kernel" % binaryCompatibleVersion)
+    })):_*)
 
 lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js
@@ -230,7 +237,6 @@ lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
   .in(file("kernel-laws"))
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
   .settings(kernelSettings: _*)
-  .settings(buildSettings: _*)
   .settings(publishSettings: _*)
   .settings(scoverageSettings: _*)
   .settings(disciplineDependencies: _*)
@@ -409,7 +415,7 @@ lazy val publishSettings = Seq(
 // These aliases serialise the build for the benefit of Travis-CI.
 addCommandAlias("buildJVM", "catsJVM/test")
 
-addCommandAlias("validateJVM", ";scalastyle;buildJVM;makeMicrosite")
+addCommandAlias("validateJVM", ";scalastyle;buildJVM;mimaReportBinaryIssues;makeMicrosite")
 
 addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 
@@ -443,7 +449,7 @@ lazy val crossVersionSharedSources: Seq[Setting[_]] =
   }
 
 lazy val scalaMacroDependencies: Seq[Setting[_]] = Seq(
-  libraryDependencies += "org.scala-lang" %%% "scala-reflect" % scalaVersion.value % "provided",
+  libraryDependencies += scalaOrganization.value %%% "scala-reflect" % scalaVersion.value % "provided",
   libraryDependencies ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       // if scala 2.11+ is used, quasiquotes are merged into scala-reflect
@@ -451,7 +457,7 @@ lazy val scalaMacroDependencies: Seq[Setting[_]] = Seq(
       // in Scala 2.10, quasiquotes are provided by macro paradise
       case Some((2, 10)) =>
         Seq(
-          compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
+          compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
               "org.scalamacros" %% "quasiquotes" % "2.1.0" cross CrossVersion.binary
         )
     }
@@ -468,7 +474,6 @@ lazy val commonScalacOptions = Seq(
   "-language:experimental.macros",
   "-unchecked",
   "-Xfatal-warnings",
-  "-Xlint",
   "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
@@ -570,3 +575,11 @@ lazy val update2_12 = Seq(
   }
 )
 
+lazy val xlint = Seq(
+  scalacOptions += {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 12)) => "-Xlint:-unused,_"
+      case _ => "-Xlint"
+    }
+  }
+)

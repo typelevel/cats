@@ -76,6 +76,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def toOption: Option[A] = fold(_ => None, Some.apply)
 
   /**
+    * Returns Valid values wrapped in Ior.Right, and None for Ior.Left values
+    */
+  def toIor: Ior[E, A] = fold(Ior.left, Ior.right)
+
+  /**
    * Convert this value to a single element List if it is Valid,
    * otherwise return an empty List
    */
@@ -237,6 +242,36 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 object Validated extends ValidatedInstances with ValidatedFunctions{
   final case class Valid[+A](a: A) extends Validated[Nothing, A]
   final case class Invalid[+E](e: E) extends Validated[E, Nothing]
+
+
+  /**
+   * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
+   * the resulting `Validated`. Uncaught exceptions are propagated.
+   *
+   * For example:
+   * {{{
+   * scala> Validated.catchOnly[NumberFormatException] { "foo".toInt }
+   * res0: Validated[NumberFormatException, Int] = Invalid(java.lang.NumberFormatException: For input string: "foo")
+   * }}}
+   *
+   * This method and its usage of [[NotNull]] are inspired by and derived from
+   * the `fromTryCatchThrowable` method [[https://github.com/scalaz/scalaz/pull/746/files contributed]]
+   * to Scalaz by Brian McKenna.
+   */
+  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
+
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  private[data] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean = true ) extends AnyVal{
+    def apply[A](f: => A)(implicit T: ClassTag[T], NT: NotNull[T]): Validated[T, A] =
+      try {
+        valid(f)
+      } catch {
+        case t if T.runtimeClass.isInstance(t) =>
+          invalid(t.asInstanceOf[T])
+      }
+  }
 }
 
 private[data] sealed abstract class ValidatedInstances extends ValidatedInstances1 {
@@ -294,16 +329,8 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
         fab.leftMap(f)
     }
 
-  implicit def catsDataInstancesForValidated[E](implicit E: Semigroup[E]): Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] =
-    new Traverse[Validated[E, ?]] with ApplicativeError[Validated[E, ?], E] {
-      def traverse[F[_]: Applicative, A, B](fa: Validated[E, A])(f: A => F[B]): F[Validated[E, B]] =
-        fa.traverse(f)
-
-      def foldLeft[A, B](fa: Validated[E, A], b: B)(f: (B, A) => B): B =
-        fa.foldLeft(b)(f)
-
-      def foldRight[A, B](fa: Validated[E, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        fa.foldRight(lb)(f)
+  implicit def catsDataApplicativeErrorForValidated[E](implicit E: Semigroup[E]): ApplicativeError[Validated[E, ?], E] =
+    new ApplicativeError[Validated[E, ?], E] {
 
       def pure[A](a: A): Validated[E, A] =
         Validated.valid(a)
@@ -345,40 +372,102 @@ private[data] sealed abstract class ValidatedInstances2 {
     new Eq[Validated[A, B]] {
       def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
     }
+
+  // scalastyle:off method.length
+  implicit def catsDataTraverseFunctorForValidated[E]: Traverse[Validated[E, ?]] =
+    new Traverse[Validated[E, ?]] {
+
+      override def traverse[G[_] : Applicative, A, B](fa: Validated[E, A])(f: (A) => G[B]): G[Validated[E, B]] =
+        fa.traverse(f)
+
+      override def foldLeft[A, B](fa: Validated[E, A], b: B)(f: (B, A) => B): B =
+        fa.foldLeft(b)(f)
+
+      override def foldRight[A, B](fa: Validated[E, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa.foldRight(lb)(f)
+
+      override def map[A, B](fa: Validated[E, A])(f: (A) => B): Validated[E, B] =
+        fa.map(f)
+
+      override def reduceLeftToOption[A, B](fa: Validated[E, A])(f: A => B)(g: (B, A) => B): Option[B] =
+        fa.map(f).toOption
+
+      override def reduceRightToOption[A, B](fa: Validated[E, A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+        Now(fa.map(f).toOption)
+
+      override def reduceLeftOption[A](fa: Validated[E, A])(f: (A, A) => A): Option[A] =
+        fa.toOption
+
+      override def reduceRightOption[A](fa: Validated[E, A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] =
+        Now(fa.toOption)
+
+      override def size[A](fa: Validated[E, A]): Long =
+        fa.fold(_ => 0L, _ => 1L)
+
+      override def foldMap[A, B](fa: Validated[E, A])(f: A => B)(implicit B: Monoid[B]): B =
+        fa.fold(_ => B.empty, f)
+
+      override def find[A](fa: Validated[E, A])(f: A => Boolean): Option[A] =
+        fa.toOption.filter(f)
+
+      override def exists[A](fa: Validated[E, A])(p: A => Boolean): Boolean =
+        fa.exists(p)
+
+      override def forall[A](fa: Validated[E, A])(p: A => Boolean): Boolean =
+        fa.forall(p)
+
+      override def toList[A](fa: Validated[E, A]): List[A] =
+        fa.fold(_ => Nil, _ :: Nil)
+
+      override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
+    }
+  // scalastyle:off method.length
 }
 
-trait ValidatedFunctions {
+private[data] trait ValidatedFunctions {
+  /**
+    * Converts an `A` to a `Validated[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.invalid[IllegalArgumentException, String](new IllegalArgumentException("Argument is nonzero"))
+    * res0: Validated[IllegalArgumentException, String] = Invalid(java.lang.IllegalArgumentException: Argument is nonzero)
+    * }}}
+    */
   def invalid[A, B](a: A): Validated[A, B] = Validated.Invalid(a)
 
+  /**
+    * Converts an `A` to a `ValidatedNel[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.invalidNel[IllegalArgumentException, String](new IllegalArgumentException("Argument is nonzero"))
+    * res0: ValidatedNel[IllegalArgumentException, String] = Invalid(NonEmptyList(java.lang.IllegalArgumentException: Argument is nonzero))
+    * }}}
+    */
   def invalidNel[A, B](a: A): ValidatedNel[A, B] = Validated.Invalid(NonEmptyList(a, Nil))
 
+  /**
+    * Converts a `B` to a `Validated[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.valid[IllegalArgumentException, String]("Hello world")
+    * res0: Validated[IllegalArgumentException, String] = Valid(Hello world)
+    * }}}
+    */
   def valid[A, B](b: B): Validated[A, B] = Validated.Valid(b)
 
   /**
-   * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
-   * the resulting `Validated`. Uncaught exceptions are propagated.
-   *
-   * For example:
-   * {{{
-   * scala> Validated.catchOnly[NumberFormatException] { "foo".toInt }
-   * res0: Validated[NumberFormatException, Int] = Invalid(java.lang.NumberFormatException: For input string: "foo")
-   * }}}
-   *
-   * This method and its usage of [[NotNull]] are inspired by and derived from
-   * the `fromTryCatchThrowable` method [[https://github.com/scalaz/scalaz/pull/746/files contributed]]
-   * to Scalaz by Brian McKenna.
-   */
-  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
-
-  final class CatchOnlyPartiallyApplied[T] private[ValidatedFunctions] {
-    def apply[A](f: => A)(implicit T: ClassTag[T], NT: NotNull[T]): Validated[T, A] =
-      try {
-        valid(f)
-      } catch {
-        case t if T.runtimeClass.isInstance(t) =>
-          invalid(t.asInstanceOf[T])
-      }
-  }
+    * Converts a `B` to a `ValidatedNel[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.validNel[IllegalArgumentException, String]("Hello world")
+    * res0: ValidatedNel[IllegalArgumentException, String] = Valid(Hello world)
+    * }}}
+    */
+  def validNel[A, B](b: B): ValidatedNel[A, B] = Validated.Valid(b)
 
   def catchNonFatal[A](f: => A): Validated[Throwable, A] =
     try {
@@ -396,13 +485,18 @@ trait ValidatedFunctions {
   }
 
   /**
-   * Converts an `Either[A, B]` to an `Validated[A, B]`.
+   * Converts an `Either[A, B]` to a `Validated[A, B]`.
    */
   def fromEither[A, B](e: Either[A, B]): Validated[A, B] = e.fold(invalid, valid)
 
   /**
-   * Converts an `Option[B]` to an `Validated[A, B]`, where the provided `ifNone` values is returned on
+   * Converts an `Option[B]` to a `Validated[A, B]`, where the provided `ifNone` values is returned on
    * the invalid of the `Validated` when the specified `Option` is `None`.
    */
   def fromOption[A, B](o: Option[B], ifNone: => A): Validated[A, B] = o.fold(invalid[A, B](ifNone))(valid)
+
+  /**
+    * Converts an `Ior[A, B]` to a `Validated[A, B]`.
+    */
+  def fromIor[A, B](ior: Ior[A, B]): Validated[A, B] = ior.fold(invalid, valid, (_, b) => valid(b))
 }

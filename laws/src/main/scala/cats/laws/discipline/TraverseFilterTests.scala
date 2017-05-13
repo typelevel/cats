@@ -18,6 +18,7 @@ trait TraverseFilterTests[F[_]] extends TraverseTests[F] with FunctorFilterTests
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     CogenC: Cogen[C],
+    CogenM: Cogen[M],
     M: Monoid[M],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]],
@@ -25,7 +26,8 @@ trait TraverseFilterTests[F[_]] extends TraverseTests[F] with FunctorFilterTests
     EqXYFC: Eq[X[Y[F[C]]]],
     EqXFA: Eq[X[F[A]]],
     EqXFB: Eq[X[F[B]]],
-    EqYFB: Eq[Y[F[B]]]
+    EqYFB: Eq[Y[F[B]]],
+    EqOptionA: Eq[Option[A]]
   ): RuleSet = {
     new RuleSet {
       def name: String = "traverseFilter"

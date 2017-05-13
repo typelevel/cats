@@ -11,7 +11,7 @@ import cats.functor.Contravariant
  * explicitly provided one.
  */
 @typeclass trait Show[T] {
-  def show(f: T): String
+  def show(t: T): String
 }
 
 object Show {
@@ -23,6 +23,15 @@ object Show {
   /** creates an instance of [[Show]] using object toString */
   def fromToString[A]: Show[A] = new Show[A] {
     def show(a: A): String = a.toString
+  }
+
+  final case class Shown(override val toString: String) extends AnyVal
+  object Shown {
+    implicit def mat[A](x: A)(implicit z: Show[A]): Shown = Shown(z show x)
+  }
+
+  final case class ShowInterpolator(_sc: StringContext) extends AnyVal {
+    def show(args: Shown*): String = _sc s (args: _*)
   }
 
   implicit val catsContravariantForShow: Contravariant[Show] = new Contravariant[Show] {

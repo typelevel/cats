@@ -11,7 +11,9 @@ position: 4
 
  * [What imports do I need?](#what-imports)
  * [Where is right-biased `Either`?](#either)
+ * [Why is the compiler having trouble with types with more than one type parameter?](#si-2712)
  * [Why can't the compiler find implicit instances for Future?](#future-instances)
+ * [Why is some example code not compiling for me?](#example-compile)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
  * [Where is `ListT`?](#listt)
  * [Where is `IO`/`Task`?](#task)
@@ -19,6 +21,7 @@ position: 4
  * [What do types like `?` and `λ` mean?](#kind-projector)
  * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
  * [What is `tailRecM`?](#tailrecm)
+ * [What does this symbol mean?](#symbol)
  * [How can I help?](#contributing)
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
@@ -47,13 +50,22 @@ There are a few minor mismatches between `Xor` and `Either`. For example, in som
 
 Similarly, `cats.data.XorT` has been replaced with `cats.data.EitherT`, although since this is a type defined in Cats, you don't need to import syntax or instances for it (although you may need imports for the underlying monad).
 
+## <a id="si-2712" href="#si-2712"></a>Why is the compiler having trouble with types with more than one type parameter?
+
+When you encounter a situation where the same code works fine with a type with one type parameter, e.g. List[A], but doesn't work with types with more than one, e.g. Either[A, B], you probably hit [SI-2712](https://issues.scala-lang.org/browse/SI-2712). Without going into the details, it's highly recommended to enable a partial SI-2712 fix in your project. The easiest way to achieve that is through this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification).
+Cats used to provide mitigation to this issue semi-transparently, but given the fact that the fix is now mainstream, we decided to drop that mitigation machinery in favor of reducing the complexity. See this [issue](https://github.com/typelevel/cats/issues/1073) for details.
+
+## <a id="example-compile" href="#example-compile"></a>Why is some example code not compiling for me?
+
+A portion of example code requires either the [Kind-projector](https://github.com/non/kind-projector) compiler plugin or partial unification turned on in scalac. The easiest way to turn partial unification on is through this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification).
+
 ## <a id="future-instances" href="#future-instances"></a>Why can't the compiler find implicit instances for Future?
 
 If you have already followed the [imports advice](#what-imports) but are still getting error messages like `could not find implicit value for parameter e: cats.Monad[scala.concurrent.Future]` or `value |+| is not a member of scala.concurrent.Future[Int]`, then make sure that you have an implicit `scala.concurrent.ExecutionContext` in scope. The easiest way to do this is to `import scala.concurrent.ExecutionContext.Implicits.global`, but note that you may want to use a different execution context for your production application.
 
 ## <a id="traverse" href="#traverse"></a>How can I turn my List of `<something>` into a `<something>` of a list?
 
-It's really common to have a `List` of values with types like `Option`, `Either`, or `Validated` that you would like to turn "inside out" into an `Option` (or `Either` or `Validated`) of a `List`. The `sequence`, `sequenceU`, `traverse`, and `traverseU` methods are _really_ handy for this. You can read more about them in the [Traverse documentation]({{ site.baseurl }}/typeclasses/traverse.html).
+It's really common to have a `List` of values with types like `Option`, `Either`, or `Validated` that you would like to turn "inside out" into an `Option` (or `Either` or `Validated`) of a `List`. The `sequence` and `traverse` methods are _really_ handy for this. You can read more about them in the [Traverse documentation]({{ site.baseurl }}/typeclasses/traverse.html).
 
 ## <a id="listt" href="#listt"></a>Where is ListT?
 
@@ -190,6 +202,40 @@ The downside is that how you write a lawful `tailRecM` for your type constructor
 If you're having trouble figuring out how to implement `tailRecM` lawfully, you can try to find an instance in Cats itself for a type that is semantically similar to yours (all of the `FlatMap` instances provided by Cats have lawful, stack-safe `tailRecM` implementations).
 
 In some cases you may decide that providing a lawful `tailRecM` may be impractical or even impossible (if so we'd like to hear about it). For these cases we provide a way of testing all of the monad laws _except_ for the stack safety of `tailRecM`: just replace `MonadTests[F].monad[A, B, C]` in your tests with `MonadTests[F].stackUnsafeMonad[A, B, C]`.
+
+
+## <a id="symbol" href="#symbol"></a>What does this symbol mean?
+
+Below is a list of symbols used in cats.
+
+The `~>`, `⊥`, `⊤`, `:<:` and `:≺:` symbols can be imported with `import cats._`.
+
+All other symbols can be imported with `import cats.implicits._`
+
+| Symbol                           | Name                   | Nickname         | Type Class              | Signature                                                 |
+| -------------------------------- | ---------------------- | ---------------- | ----------------------- | --------------------------------------------------------- |
+| <code>fa &#124;@&#124; fb</code> | Cartesian builder      | Cinnabon, scream | `Cartesian[F[_]]`       | <code>&#124;@&#124;(fa: F[A])(fb: F[B]): F[(A, B)]</code> |
+| `fa *> fb`                       | right apply            |                  | `Cartesian[F[_]]`       | `*>(fa: F[A])(fb: F[B]): F[A]`                            |
+| `fa <* fb`                       | left apply             |                  | `Cartesian[F[_]]`       | `<*(fa: F[A])(fb: F[B]): F[B]`                            |
+| `x === y`                        | equals                 |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                |
+| `x =!= y`                        | not equals             |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                               |
+| `fa >>= f`                       | flatMap                |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                   |
+| `fa >> fb`                       | followed by            |                  | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]`                    |
+| `fa << fb`                       | for effect             |                  | `FlatMap[F[_]]`         | `forEffect(fa: F[A])(fb: F[B]): F[A]`                     |
+| <code>x &#124;-&#124; y</code>   | remove                 |                  | `Group[A]`              | `remove(x: A, y: A): A`                                   |
+| `x > y`                          | greater than           |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                 |
+| `x >= y`                         | greater than or equal  |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                               |
+| `x < y`                          | less than              |                  | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`                                 |
+| `x <= y`                         | less than or equal     |                  | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`                               |
+| <code>x &#124;+&#124; y</code>   | Semigroup combine      |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`                                  |
+| `x <+> y`                        | SemigroupK combine     |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`                        |
+| `f <<< g`                        | Arrow compose          |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                |
+| `f >>> g`                        | Arrow andThen          |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                |
+| `F ~> G`                         | natural transformation |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                         |
+| `F :<: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
+| `F :≺: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
+| `⊥`                              | bottom                 |                  | N/A                     | `Nothing`                                                 |
+| `⊤`                              | top                    |                  | N/A                     | `Any`                                                     |
 
 ## <a id="contributing" href="#contributing"></a>How can I help?
 

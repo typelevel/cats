@@ -10,7 +10,7 @@ package object syntax {
   object bitraverse extends BitraverseSyntax
   object cartesian extends CartesianSyntax
   object coflatMap extends CoflatMapSyntax
-  object coproduct extends CoproductSyntax
+  object eitherK extends EitherKSyntax
   object comonad extends ComonadSyntax
   object compose extends ComposeSyntax
   object contravariant extends ContravariantSyntax
@@ -22,8 +22,11 @@ package object syntax {
   object functorFilter extends FunctorFilterSyntax
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
+  object ior extends IorSyntax
   object list extends ListSyntax
+  object monad extends MonadSyntax
   object monadCombine extends MonadCombineSyntax
+  object monadError extends MonadErrorSyntax
   object monadFilter extends MonadFilterSyntax
   object monoid extends MonoidSyntax
   object option extends OptionSyntax

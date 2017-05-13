@@ -13,7 +13,7 @@ trait AllSyntax
     with ComonadSyntax
     with ComposeSyntax
     with ContravariantSyntax
-    with CoproductSyntax
+    with EitherKSyntax
     with EitherSyntax
     with EqSyntax
     with FlatMapSyntax
@@ -22,7 +22,9 @@ trait AllSyntax
     with FunctorFilterSyntax
     with GroupSyntax
     with InvariantSyntax
+    with IorSyntax
     with ListSyntax
+    with MonadSyntax
     with MonadCombineSyntax
     with MonadErrorSyntax
     with MonadFilterSyntax
@@ -34,7 +36,7 @@ trait AllSyntax
     with ReducibleSyntax
     with SemigroupSyntax
     with SemigroupKSyntax
-    with Show.ToShowOps
+    with ShowSyntax
     with SplitSyntax
     with StrongSyntax
     with TransLiftSyntax

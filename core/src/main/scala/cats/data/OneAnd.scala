@@ -8,10 +8,10 @@ import cats.instances.stream._
 /**
  * A data type which represents a single element (head) and some other
  * structure (tail). As we have done in package.scala, this can be
- * used to represent a List which is guaranteed to not be empty:
+ * used to represent a Stream which is guaranteed to not be empty:
  *
  * {{{
- * type NonEmptyList[A] = OneAnd[List, A]
+ * type NonEmptyStream[A] = OneAnd[Stream, A]
  * }}}
  */
 final case class OneAnd[F[_], A](head: A, tail: F[A]) {
@@ -19,7 +19,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
   /**
    * Combine the head and tail into a single `F[A]` value.
    */
-  def unwrap(implicit F: MonadCombine[F]): F[A] =
+  def unwrap(implicit F: Alternative[F]): F[A] =
     F.combineK(F.pure(head), tail)
 
   /**
@@ -33,7 +33,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
   /**
    * Append another OneAnd to this
    */
-  def combine(other: OneAnd[F, A])(implicit F: MonadCombine[F]): OneAnd[F, A] =
+  def combine(other: OneAnd[F, A])(implicit F: Alternative[F]): OneAnd[F, A] =
     OneAnd(head, F.combineK(tail, F.combineK(F.pure(other.head), other.tail)))
 
   /**
@@ -104,13 +104,13 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
   implicit def catsDataShowForOneAnd[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[F, A]] =
     Show.show[OneAnd[F, A]](_.show)
 
-  implicit def catsDataSemigroupKForOneAnd[F[_]: MonadCombine]: SemigroupK[OneAnd[F, ?]] =
+  implicit def catsDataSemigroupKForOneAnd[F[_]: Alternative]: SemigroupK[OneAnd[F, ?]] =
     new SemigroupK[OneAnd[F, ?]] {
       def combineK[A](a: OneAnd[F, A], b: OneAnd[F, A]): OneAnd[F, A] =
         a combine b
     }
 
-  implicit def catsDataSemigroupForOneAnd[F[_]: MonadCombine, A]: Semigroup[OneAnd[F, A]] =
+  implicit def catsDataSemigroupForOneAnd[F[_]: Alternative, A]: Semigroup[OneAnd[F, A]] =
     catsDataSemigroupKForOneAnd[F].algebra
 
   implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
