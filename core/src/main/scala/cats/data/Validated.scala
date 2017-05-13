@@ -425,12 +425,49 @@ private[data] sealed abstract class ValidatedInstances2 {
 }
 
 private[data] trait ValidatedFunctions {
+  /**
+    * Converts an `A` to a `Validated[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.invalid[IllegalArgumentException, String](new IllegalArgumentException("Argument is nonzero"))
+    * res0: Validated[IllegalArgumentException, String] = Invalid(java.lang.IllegalArgumentException: Argument is nonzero)
+    * }}}
+    */
   def invalid[A, B](a: A): Validated[A, B] = Validated.Invalid(a)
 
+  /**
+    * Converts an `A` to a `ValidatedNel[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.invalidNel[IllegalArgumentException, String](new IllegalArgumentException("Argument is nonzero"))
+    * res0: ValidatedNel[IllegalArgumentException, String] = Invalid(NonEmptyList(java.lang.IllegalArgumentException: Argument is nonzero))
+    * }}}
+    */
   def invalidNel[A, B](a: A): ValidatedNel[A, B] = Validated.Invalid(NonEmptyList(a, Nil))
 
+  /**
+    * Converts a `B` to a `Validated[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.valid[IllegalArgumentException, String]("Hello world")
+    * res0: Validated[IllegalArgumentException, String] = Valid(Hello world)
+    * }}}
+    */
   def valid[A, B](b: B): Validated[A, B] = Validated.Valid(b)
 
+  /**
+    * Converts a `B` to a `ValidatedNel[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.validNel[IllegalArgumentException, String]("Hello world")
+    * res0: ValidatedNel[IllegalArgumentException, String] = Valid(Hello world)
+    * }}}
+    */
+  def validNel[A, B](b: B): ValidatedNel[A, B] = Validated.Valid(b)
 
   def catchNonFatal[A](f: => A): Validated[Throwable, A] =
     try {
