@@ -6,6 +6,7 @@ import scala.annotation.tailrec
 package object cats {
 
   type ~>[F[_], G[_]] = arrow.FunctionK[F, G]
+  val ~> = arrow.FunctionK
 
   type ⊥ = Nothing
   type ⊤ = Any
