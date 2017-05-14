@@ -3,7 +3,7 @@ package instances
 
 import cats.functor.Contravariant
 
-trait OrderInstances {
+trait OrderInstances extends cats.kernel.OrderToOrderingConversion {
 
   implicit val catsFunctorContravariantForOrder: Contravariant[Order] =
     new Contravariant[Order] {
@@ -14,3 +14,4 @@ trait OrderInstances {
       def contramap[A, B](fa: Order[A])(f: B => A): Order[B] = fa.on(f)
     }
 }
+
