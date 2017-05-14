@@ -2,7 +2,7 @@ package cats
 package syntax
 
 trait ReducibleSyntax extends Reducible.ToReducibleOps {
-  implicit final def catsSyntaxNestedReducible[F[_]: Reducible, G[_], A](fga: F[G[A]]): NestedReducibleOps[F, G, A] =
+  implicit final def catsSyntaxNestedReducible[F[_], G[_], A](fga: F[G[A]]): NestedReducibleOps[F, G, A] =
     new NestedReducibleOps[F, G, A](fga)
 }
 

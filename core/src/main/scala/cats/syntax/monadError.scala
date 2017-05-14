@@ -2,7 +2,7 @@ package cats
 package syntax
 
 trait MonadErrorSyntax {
-  implicit final def catsSyntaxMonadError[F[_], E, A](fa: F[A])(implicit F: MonadError[F, E]): MonadErrorOps[F, E, A] =
+  implicit final def catsSyntaxMonadError[F[_], E, A](fa: F[A]): MonadErrorOps[F, E, A] =
     new MonadErrorOps(fa)
 }
 
