@@ -77,6 +77,19 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
 
       override def size[A](fa: Map[K, A]): Long = fa.size.toLong
 
+      override def get[A](fa: Map[K, A])(idx: Long): Option[A] = {
+        @tailrec
+        def go(idx: Int, it: Iterator[A]): Option[A] = {
+          if ( it.hasNext ) {
+            if (idx == 0) Some(it.next) else {
+              it.next
+              go(idx - 1, it)
+            }
+          } else None
+        }
+        if (idx > 0L && idx < fa.size && idx < Int.MaxValue) go(idx.toInt, fa.valuesIterator) else None
+      }
+
       override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
 
       override def foldM[G[_], A, B](fa: Map[K, A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =

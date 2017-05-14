@@ -91,6 +91,13 @@ trait TryInstances extends TryInstances1 {
       override def reduceRightOption[A](fa: Try[A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] =
         Now(fa.toOption)
 
+      override def get[A](fa: Try[A])(idx: Long): Option[A] =
+        fa match {
+          case Failure(_) => None
+          case Success(a) =>
+            if (idx == 0L) Some(a) else None
+        }
+
       override def size[A](fa: Try[A]): Long =
         fa match {
           case Failure(_) => 0L

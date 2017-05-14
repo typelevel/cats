@@ -404,6 +404,9 @@ private[data] sealed abstract class ValidatedInstances2 {
       override def size[A](fa: Validated[E, A]): Long =
         fa.fold(_ => 0L, _ => 1L)
 
+      override def get[A](fa: Validated[E, A])(idx: Long): Option[A] =
+        if (idx == 0L) fa.fold(_ => None, Some(_)) else None
+
       override def foldMap[A, B](fa: Validated[E, A])(f: A => B)(implicit B: Monoid[B]): B =
         fa.fold(_ => B.empty, f)
 

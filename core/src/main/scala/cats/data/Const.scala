@@ -81,6 +81,10 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
 
     def foldRight[A, B](fa: Const[C, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = lb
 
+    override def size[A](fa: Const[C, A]): Long = 0L
+
+    override def get[A](fa: Const[C, A])(idx: Long): Option[A] = None
+
     override def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
       fa.traverse(f)
   }
