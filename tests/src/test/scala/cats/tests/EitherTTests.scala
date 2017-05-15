@@ -378,4 +378,11 @@ class EitherTTests extends CatsSuite {
       }
     }
   }
+  test("inference works in for-comprehension") {
+    val either: Id[Either[String, Int]] = 0.asRight.pure[Id]
+    for {
+      a <- EitherT(either)
+      b <- EitherT.right(1.pure[Id])
+    } yield (a + b)
+  }
 }
