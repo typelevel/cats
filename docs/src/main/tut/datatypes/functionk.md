@@ -124,20 +124,16 @@ val errorOrFirst: FunctionK[List, ErrorOr] =
 
 ## Natural Transformation
 
-In category theory, a [Natural Transformation](https://en.wikipedia.org/wiki/Natural_transformation) provides a morphism between Functors while preserving the internal structure. It's one of the most fundamental notions of category theory.
+In category theory, a [natural transformation](https://ncatlab.org/nlab/show/natural+transformation) provides a morphism between Functors while preserving the internal structure. It's one of the most fundamental notions of category theory.
 
-If we have two `Functor`s: `F` and `G`, then, being parametric polymorphic, `FunctionK[F, G]` is automatically a Natural Transformation between them. That is, if we have a `fk: F ~> G`, then for any combination of `A`, `B` and function `f: A => B`, the following two functions are equivalent:
+If we have two Functors `F` and `G`, `FunctionK[F, G]` is a natural transformation via parametricity. That is, given `fk: FunctionK[F, G]`, for all functions `A => B` and all `fa: F[A]` the following are equivalent:
 ```Scala
-(fa:F[A]) => fk(F.map(fa)(f))
+fk(F.map(fa)(f)) <-> G.map(fk(fa))(f)
 ```
-and
-```Scala
-(fa: F[A]) => G.map(fk(fa))(f)
-````
 
-We don't need to write a law to test the implementation of the `fk` for the above to be true. It's automatically given by its parametric polymorphism.
+We don't need to write a law to test the implementation of the `fk` for the above to be true. It's automatically given by parametricity.
 
-This is why a parametric polymorphic function `FunctionK[F, G]` is sometimes referred as a Natural Transformation. However, they are two different concepts.
+Thus natural transformation can be implemented in terms of `FunctionK`. This is why a parametric polymorphic function `FunctionK[F, G]` is sometimes referred as a natural transformation. However, they are two different concepts that are not isomorphic. 
 
 For more details, Bartosz Milewski has written a great blog post titled
 ["Parametricity: Money for Nothing and Theorems for Free"](https://bartoszmilewski.com/2014/09/22/parametricity-money-for-nothing-and-theorems-for-free/).
