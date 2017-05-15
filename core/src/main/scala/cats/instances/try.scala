@@ -75,6 +75,8 @@ trait TryInstances extends TryInstances1 {
 
       override def recoverWith[A](ta: Try[A])(pf: PartialFunction[Throwable, Try[A]]): Try[A] = ta.recoverWith(pf)
 
+      override def fromTry[A](t: Try[A])(implicit ev: Throwable <:< Throwable): Try[A] = t
+
       override def map[A, B](ta: Try[A])(f: A => B): Try[B] = ta.map(f)
 
       override def reduceLeftToOption[A, B](fa: Try[A])(f: A => B)(g: (B, A) => B): Option[B] =

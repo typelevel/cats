@@ -21,6 +21,7 @@ position: 4
  * [What do types like `?` and `λ` mean?](#kind-projector)
  * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
  * [What is `tailRecM`?](#tailrecm)
+ * [What does this symbol mean?](#symbol)
  * [How can I help?](#contributing)
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
@@ -201,6 +202,40 @@ The downside is that how you write a lawful `tailRecM` for your type constructor
 If you're having trouble figuring out how to implement `tailRecM` lawfully, you can try to find an instance in Cats itself for a type that is semantically similar to yours (all of the `FlatMap` instances provided by Cats have lawful, stack-safe `tailRecM` implementations).
 
 In some cases you may decide that providing a lawful `tailRecM` may be impractical or even impossible (if so we'd like to hear about it). For these cases we provide a way of testing all of the monad laws _except_ for the stack safety of `tailRecM`: just replace `MonadTests[F].monad[A, B, C]` in your tests with `MonadTests[F].stackUnsafeMonad[A, B, C]`.
+
+
+## <a id="symbol" href="#symbol"></a>What does this symbol mean?
+
+Below is a list of symbols used in cats.
+
+The `~>`, `⊥`, `⊤`, `:<:` and `:≺:` symbols can be imported with `import cats._`.
+
+All other symbols can be imported with `import cats.implicits._`
+
+| Symbol                           | Name                   | Nickname         | Type Class              | Signature                                                 |
+| -------------------------------- | ---------------------- | ---------------- | ----------------------- | --------------------------------------------------------- |
+| <code>fa &#124;@&#124; fb</code> | Cartesian builder      | Cinnabon, scream | `Cartesian[F[_]]`       | <code>&#124;@&#124;(fa: F[A])(fb: F[B]): F[(A, B)]</code> |
+| `fa *> fb`                       | right apply            |                  | `Cartesian[F[_]]`       | `*>(fa: F[A])(fb: F[B]): F[A]`                            |
+| `fa <* fb`                       | left apply             |                  | `Cartesian[F[_]]`       | `<*(fa: F[A])(fb: F[B]): F[B]`                            |
+| `x === y`                        | equals                 |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                |
+| `x =!= y`                        | not equals             |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                               |
+| `fa >>= f`                       | flatMap                |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                   |
+| `fa >> fb`                       | followed by            |                  | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]`                    |
+| `fa << fb`                       | for effect             |                  | `FlatMap[F[_]]`         | `forEffect(fa: F[A])(fb: F[B]): F[A]`                     |
+| <code>x &#124;-&#124; y</code>   | remove                 |                  | `Group[A]`              | `remove(x: A, y: A): A`                                   |
+| `x > y`                          | greater than           |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                 |
+| `x >= y`                         | greater than or equal  |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                               |
+| `x < y`                          | less than              |                  | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`                                 |
+| `x <= y`                         | less than or equal     |                  | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`                               |
+| <code>x &#124;+&#124; y</code>   | Semigroup combine      |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`                                  |
+| `x <+> y`                        | SemigroupK combine     |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`                        |
+| `f <<< g`                        | Arrow compose          |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                |
+| `f >>> g`                        | Arrow andThen          |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                |
+| `F ~> G`                         | natural transformation |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                         |
+| `F :<: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
+| `F :≺: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
+| `⊥`                              | bottom                 |                  | N/A                     | `Nothing`                                                 |
+| `⊤`                              | top                    |                  | N/A                     | `Any`                                                     |
 
 ## <a id="contributing" href="#contributing"></a>How can I help?
 

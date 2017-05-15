@@ -25,7 +25,7 @@ lazy val kernelSettings = Seq(
     Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
-) ++ warnUnusedImport ++ update2_12
+) ++ warnUnusedImport ++ update2_12 ++ xlint
 
 lazy val commonSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
@@ -48,7 +48,8 @@ lazy val commonSettings = Seq(
   scalastyleSources in Compile ++= (unmanagedSourceDirectories in Compile).value,
   ivyConfigurations += config("compile-time").hide,
   unmanagedClasspath in Compile ++= update.value.select(configurationFilter("compile-time"))
-) ++ warnUnusedImport ++ update2_12
+) ++ warnUnusedImport ++ update2_12 ++ xlint
+
 
 lazy val tagName = Def.setting{
  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
@@ -159,7 +160,8 @@ lazy val docSettings = Seq(
     "-diagrams"
   ),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
-  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
+  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
+  includeFilter in Jekyll := (includeFilter in makeSite).value
 )
 
 lazy val docs = project
@@ -472,7 +474,6 @@ lazy val commonScalacOptions = Seq(
   "-language:experimental.macros",
   "-unchecked",
   "-Xfatal-warnings",
-  "-Xlint",
   "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
@@ -570,6 +571,15 @@ lazy val update2_12 = Seq(
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, 12)) => "-Yinline-warnings"
       case _ => ""
+    }
+  }
+)
+
+lazy val xlint = Seq(
+  scalacOptions += {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 12)) => "-Xlint:-unused,_"
+      case _ => "-Xlint"
     }
   }
 )
