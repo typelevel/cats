@@ -407,4 +407,5 @@ class EitherTTests extends CatsSuite {
       s2 <- EitherT.pure[Id, AppError]("1")
     } yield s1 ++ s2
   }
+
 }

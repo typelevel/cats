@@ -55,6 +55,9 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def ensure[AA >: A](onFailure: => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] =
     EitherT(F.map(value)(_.ensure(onFailure)(f)))
 
+  def ensureOr[AA >: A](onFailure: B => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] =
+    EitherT(F.map(value)(_.ensureOr(onFailure)(f)))
+
   def toOption(implicit F: Functor[F]): OptionT[F, B] = OptionT(F.map(value)(_.toOption))
 
   def to[G[_]](implicit F: Functor[F], G: Alternative[G]): F[G[B]] =
@@ -484,7 +487,14 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
 
 private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
   implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
-    new EitherTMonadError[F, L] { implicit val F = F0 }
+    new EitherTMonadError[F, L] {
+      implicit val F = F0
+      override def ensure[A](fa: EitherT[F, L, A])(error: => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
+        fa.ensure(error)(predicate)(F)
+
+      override def ensureOr[A](fa: EitherT[F, L, A])(error: (A) => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
+        fa.ensureOr(error)(predicate)(F)
+    }
 
   implicit def catsDataSemigroupKForEitherT[F[_], L](implicit F0: Monad[F]): SemigroupK[EitherT[F, L, ?]] =
     new EitherTSemigroupK[F, L] { implicit val F = F0 }
