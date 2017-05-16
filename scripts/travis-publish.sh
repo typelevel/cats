@@ -20,7 +20,7 @@ export publish_cmd="publishLocal"
 if [[ $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_BRANCH == "master" && $(cat version.sbt) =~ "-SNAPSHOT" ]]; then
   export publish_cmd="publish gitSnapshots publish"
   # temporarily disable to stabilize travis
-  #if [[ $TRAVIS_SCALA_VERSION = "2.11.11" ]]; then
+  #if [[ $TRAVIS_SCALA_VERSION =~ ^2\.11\. ]]; then
   #  export publish_cmd="publishMicrosite"
   #fi
 fi
