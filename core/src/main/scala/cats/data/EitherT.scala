@@ -318,21 +318,6 @@ object EitherT extends EitherTInstances {
   final def rightT[F[_], A]: PurePartiallyApplied[F, A] = pure
 
 
-  /**
-   * Alias for [[right]]
-   * {{{
-   * scala> import cats.data.EitherT
-   * scala> import cats.implicits._
-   * scala> val o: Option[Int] = Some(3)
-   * scala> val n: Option[Int] = None
-   * scala> EitherT.liftT(o)
-   * res0: cats.data.EitherT[Option,Nothing,Int] = EitherT(Some(Right(3)))
-   * scala> EitherT.liftT(n)
-   * res1: cats.data.EitherT[Option,Nothing,Int] = EitherT(None)
-   * }}}
-   */
-  final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
-
   /** Transforms an `Either` into an `EitherT`, lifted into the specified `Applicative`.
    *
    * Note: The return type is a FromEitherPartiallyApplied[F], which has an apply method
@@ -449,7 +434,7 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
       type TC[M[_]] = Functor[M]
 
       def liftT[M[_]: Functor, A](ma: M[A]): EitherT[M, E, A] =
-        EitherT.liftT(ma)
+        EitherT(Functor[M].map(ma)(Either.right))
     }
 
   implicit def catsMonoidForEitherT[F[_], L, A](implicit F: Monoid[F[Either[L, A]]]): Monoid[EitherT[F, L, A]] =
