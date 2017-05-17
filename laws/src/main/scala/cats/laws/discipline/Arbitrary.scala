@@ -76,9 +76,8 @@ object arbitrary extends ArbitraryInstances0 {
       B.perturb(seed, _),
       (a, b) => A.perturb(B.perturb(seed, b), a)))
 
-
-  implicit def catsLawsArbitraryForCokleisli[F[_], A, B](implicit B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
-    Arbitrary(B.arbitrary.map(b => Cokleisli[F, A, B](_ => b)))
+  implicit def catsLawsArbitraryForCokleisli[F[_], A, B](implicit AFA: Arbitrary[F[A]], CFA: Cogen[F[A]], B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
+    Arbitrary(Arbitrary.arbitrary[F[A] => B].map(Cokleisli(_)))
 
   implicit def catsLawsArbitraryForOptionT[F[_], A](implicit F: Arbitrary[F[Option[A]]]): Arbitrary[OptionT[F, A]] =
     Arbitrary(F.arbitrary.map(OptionT.apply))
@@ -104,11 +103,11 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForTuple2K[F[_], G[_], A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]]): Arbitrary[Tuple2K[F, G, A]] =
     Arbitrary(F.arbitrary.flatMap(fa => G.arbitrary.map(ga => Tuple2K[F, G, A](fa, ga))))
 
-  implicit def catsLawsArbitraryForFunc[F[_], A, B](implicit F: Arbitrary[F[B]]): Arbitrary[Func[F, A, B]] =
-    Arbitrary(F.arbitrary.map(fb => Func.func[F, A, B](_ => fb)))
+  implicit def catsLawsArbitraryForFunc[F[_], A, B](implicit AA: Arbitrary[A], CA: Cogen[A], F: Arbitrary[F[B]]): Arbitrary[Func[F, A, B]] =
+    Arbitrary(Arbitrary.arbitrary[A => F[B]].map(Func.func))
 
-  implicit def catsLawsArbitraryForAppFunc[F[_], A, B](implicit F: Arbitrary[F[B]], FF: Applicative[F]): Arbitrary[AppFunc[F, A, B]] =
-    Arbitrary(F.arbitrary.map(fb => Func.appFunc[F, A, B](_ => fb)))
+  implicit def catsLawsArbitraryForAppFunc[F[_], A, B](implicit AA: Arbitrary[A], CA: Cogen[A], F: Arbitrary[F[B]], FF: Applicative[F]): Arbitrary[AppFunc[F, A, B]] =
+    Arbitrary(Arbitrary.arbitrary[A => F[B]].map(Func.appFunc(_)))
 
   implicit def catsLawsArbitraryForWriter[L:Arbitrary, V:Arbitrary]: Arbitrary[Writer[L, V]] =
     catsLawsArbitraryForWriterT[Id, L, V]
@@ -159,14 +158,14 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawArbitraryForState[S: Arbitrary: Cogen, A: Arbitrary]: Arbitrary[State[S, A]] =
     catsLawArbitraryForStateT[Eval, S, A]
 
-  implicit def catsLawArbitraryForReader[A: Arbitrary, B: Arbitrary]: Arbitrary[Reader[A, B]] =
+  implicit def catsLawArbitraryForReader[A: Arbitrary: Cogen, B: Arbitrary]: Arbitrary[Reader[A, B]] =
     catsLawsArbitraryForKleisli[Id, A, B]
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {
 
-  implicit def catsLawArbitraryForStateT[F[_]: Applicative, S, A](implicit F: Arbitrary[S => F[(S, A)]]): Arbitrary[StateT[F, S, A]] =
-    Arbitrary(F.arbitrary.map(f => StateT(f)))
+  implicit def catsLawArbitraryForStateT[F[_]: Applicative, S, A](implicit AS: Arbitrary[S], CS: Cogen[S], F: Arbitrary[F[(S, A)]]): Arbitrary[StateT[F, S, A]] =
+    Arbitrary(Arbitrary.arbitrary[S => F[(S, A)]].map(StateT(_)))
 
   implicit def catsLawsArbitraryForWriterT[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
     Arbitrary(F.arbitrary.map(WriterT(_)))
@@ -174,7 +173,7 @@ private[discipline] sealed trait ArbitraryInstances0 {
   implicit def catsLawsCogenForWriterT[F[_], L, V](implicit F: Cogen[F[(L, V)]]): Cogen[WriterT[F, L, V]] =
     F.contramap(_.run)
 
-  implicit def catsLawsArbitraryForKleisli[F[_], A, B](implicit F: Arbitrary[F[B]]): Arbitrary[Kleisli[F, A, B]] =
-    Arbitrary(F.arbitrary.map(fb => Kleisli[F, A, B](_ => fb)))
+  implicit def catsLawsArbitraryForKleisli[F[_], A, B](implicit AA: Arbitrary[A], CA: Cogen[A], F: Arbitrary[F[B]]): Arbitrary[Kleisli[F, A, B]] =
+    Arbitrary(Arbitrary.arbitrary[A => F[B]].map(Kleisli(_)))
 
 }

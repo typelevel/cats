@@ -17,6 +17,27 @@ package cats
  * }}}
  */
 trait MonadState[F[_], S] extends Monad[F] {
+
+  /**
+   * Embed a state action into the monad.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.MonadState
+   * scala> import cats.data.StateT
+   * scala> import cats.instances.list._
+   *
+   * scala> val M = MonadState[StateT[List, Int, ?], Int]
+   * scala> import M._
+   *
+   * scala> val st: StateT[List, Int, Int] = state(s => (s + 1, s * 100))
+   * scala> st.run(1)
+   * res0: List[(Int, Int)] = List((2,100))
+   * }}}
+   */
+  def state[A](f: S => (S, A)): F[A] =
+    flatMap(get)(s => f(s) match { case (s, a) => map(set(s))(_ => a) })
+
   def get: F[S]
 
   def set(s: S): F[Unit]

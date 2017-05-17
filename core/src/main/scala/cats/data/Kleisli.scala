@@ -226,7 +226,7 @@ private trait KleisliSemigroup[F[_], A, B] extends Semigroup[Kleisli[F, A, B]] {
 private trait KleisliMonoid[F[_], A, B] extends Monoid[Kleisli[F, A, B]] with KleisliSemigroup[F, A, B] {
   implicit def FB: Monoid[F[B]]
 
-  override def empty: Kleisli[F, A, B] = Kleisli[F, A, B](a => FB.empty)
+  override def empty: Kleisli[F, A, B] = Kleisli[F, A, B](_ => FB.empty)
 }
 
 private trait KleisliMonadError[F[_], A, E] extends MonadError[Kleisli[F, A, ?], E] with KleisliApplicativeError[F, A, E] with KleisliMonadReader[F, A] {

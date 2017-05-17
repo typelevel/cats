@@ -110,6 +110,7 @@ The current maintainers (people who can merge pull requests) are:
  * [non](https://github.com/non) Erik Osheim
  * [mpilquist](https://github.com/mpilquist) Michael Pilquist
  * [milessabin](https://github.com/milessabin) Miles Sabin
+ * [djspiewak](https://github.com/djspiewak) Daniel Spiewak
  * [fthomas](https://github.com/fthomas) Frank Thomas
  * [julien-truffaut](https://github.com/julien-truffaut) Julien Truffaut
  * [kailuowang](https://github.com/kailuowang) Kailuo Wang
@@ -123,10 +124,11 @@ relax this to a single sign-off.
 
 There are many projects that integrate with Cats:
 
- * [Circe](https://github.com/travisbrown/circe): pure functional JSON library.
+ * [Circe](https://github.com/circe/circe): pure functional JSON library.
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
  * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources.
  * [Frameless](https://github.com/adelbertc/frameless): Expressive types for Spark.
+ * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs.
  * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
  * [Kittens](https://github.com/milessabin/kittens): automatically derived type class instances.
  * [Monix](https://github.com/monixio/monix): high-performance library for composing asynchronous and event-based programs.

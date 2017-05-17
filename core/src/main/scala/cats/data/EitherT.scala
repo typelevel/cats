@@ -55,6 +55,9 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def ensure[AA >: A](onFailure: => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] =
     EitherT(F.map(value)(_.ensure(onFailure)(f)))
 
+  def ensureOr[AA >: A](onFailure: B => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] =
+    EitherT(F.map(value)(_.ensureOr(onFailure)(f)))
+
   def toOption(implicit F: Functor[F]): OptionT[F, B] = OptionT(F.map(value)(_.toOption))
 
   def to[G[_]](implicit F: Functor[F], G: Alternative[G]): F[G[B]] =
@@ -229,11 +232,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     Nested[F, ValidatedNel[A, ?], B](F.map(value)(_.toValidatedNel))
 }
 
-object EitherT extends EitherTInstances with EitherTFunctions
+object EitherT extends EitherTInstances {
 
-private[data] trait EitherTFunctions {
-
-  final class LeftPartiallyApplied[B] private[EitherTFunctions] {
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  private[data] final class LeftPartiallyApplied[B](val dummy: Boolean = true ) extends AnyVal {
     def apply[F[_], A](fa: F[A])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fa)(Either.left))
   }
 
@@ -248,7 +252,10 @@ private[data] trait EitherTFunctions {
    */
   final def left[B]: LeftPartiallyApplied[B] = new LeftPartiallyApplied[B]
 
-  final class LeftTPartiallyApplied[F[_], B] private[EitherTFunctions] {
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  private[data] final class LeftTPartiallyApplied[F[_], B](val dummy: Boolean = true ) extends AnyVal {
     def apply[A](a: A)(implicit F: Applicative[F]): EitherT[F, A, B] = EitherT(F.pure(Either.left(a)))
   }
 
@@ -263,7 +270,10 @@ private[data] trait EitherTFunctions {
    */
   final def leftT[F[_], B]: LeftTPartiallyApplied[F, B] = new LeftTPartiallyApplied[F, B]
 
-  final class RightPartiallyApplied[A] private[EitherTFunctions] {
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  private[data] final class RightPartiallyApplied[A](val dummy: Boolean = true ) extends AnyVal {
     def apply[F[_], B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fb)(Either.right))
   }
 
@@ -278,7 +288,10 @@ private[data] trait EitherTFunctions {
    */
   final def right[A]: RightPartiallyApplied[A] = new RightPartiallyApplied[A]
 
-  final class PurePartiallyApplied[F[_], A] private[EitherTFunctions] {
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  private[data] final class PurePartiallyApplied[F[_], A](val dummy: Boolean = true ) extends AnyVal {
     def apply[B](b: B)(implicit F: Applicative[F]): EitherT[F, A, B] = right(F.pure(b))
   }
 
@@ -335,7 +348,10 @@ private[data] trait EitherTFunctions {
    */
   final def fromEither[F[_]]: FromEitherPartiallyApplied[F] = new FromEitherPartiallyApplied
 
-  final class FromEitherPartiallyApplied[F[_]] private[EitherTFunctions] {
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  private[data] final class FromEitherPartiallyApplied[F[_]](val dummy: Boolean = true ) extends AnyVal {
     def apply[E, A](either: Either[E, A])(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(either))
   }
@@ -353,7 +369,10 @@ private[data] trait EitherTFunctions {
    */
   final def fromOption[F[_]]: FromOptionPartiallyApplied[F] = new FromOptionPartiallyApplied
 
-  final class FromOptionPartiallyApplied[F[_]] private[EitherTFunctions] {
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  private[data] final class FromOptionPartiallyApplied[F[_]](val dummy: Boolean = true ) extends AnyVal {
     def apply[E, A](opt: Option[A], ifNone: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(Either.fromOption(opt, ifNone)))
   }
@@ -388,7 +407,10 @@ private[data] trait EitherTFunctions {
     */
   final def cond[F[_]]: CondPartiallyApplied[F] = new CondPartiallyApplied
 
-  final class CondPartiallyApplied[F[_]] private[EitherTFunctions] {
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  private[data] final class CondPartiallyApplied[F[_]](val dummy: Boolean = true ) extends AnyVal {
     def apply[E, A](test: Boolean, right: => A, left: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(Either.cond(test, right, left)))
   }
@@ -465,7 +487,14 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
 
 private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
   implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
-    new EitherTMonadError[F, L] { implicit val F = F0 }
+    new EitherTMonadError[F, L] {
+      implicit val F = F0
+      override def ensure[A](fa: EitherT[F, L, A])(error: => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
+        fa.ensure(error)(predicate)(F)
+
+      override def ensureOr[A](fa: EitherT[F, L, A])(error: (A) => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
+        fa.ensureOr(error)(predicate)(F)
+    }
 
   implicit def catsDataSemigroupKForEitherT[F[_], L](implicit F0: Monad[F]): SemigroupK[EitherT[F, L, ?]] =
     new EitherTSemigroupK[F, L] { implicit val F = F0 }
