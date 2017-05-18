@@ -207,29 +207,15 @@ private[data] trait OneAndLowPriority1 extends OneAndLowPriority0 {
 
 private[data] trait OneAndLowPriority2 extends OneAndLowPriority1 {
   implicit def catsDataTraverse1ForOneAnd[F[_]](implicit F: Traverse[F], F2: MonadCombine[F]): Traverse1[OneAnd[F, ?]] =
-    new Traverse1[OneAnd[F, ?]] {
-      override def traverse1[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
-        import cats.syntax.cartesian._
+    new NonEmptyTraverse1[OneAnd[F, ?], F] {
+      def traverse1[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
+          import cats.syntax.cartesian._
 
-         fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)
-           .reduceLeft(((acc, a) => (acc |@| a).map((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
-      }
+          fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)
+            .reduceLeft(((acc, a) => (acc |@| a).map((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
+        }
 
-      def reduceLeftTo[A, B](fa: OneAnd[F, A])(f: A => B)(g: (B, A) => B): B = {
-        fa.foldLeft(f(fa.head))(g)
-      }
-
-      def reduceRightTo[A, B](fa: OneAnd[F, A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
-        fa.foldRight(Always(f(fa.head)))(g)
-      }
-
-      def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B = {
-        fa.foldLeft(b)(f)
-      }
-
-      def foldRight[A, B](fa: OneAnd[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
-        fa.foldRight(lb)(f)
-      }
+      def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
     }
 }
 

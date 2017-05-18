@@ -37,13 +37,13 @@ import simulacrum.typeclass
 }
 
 /**
-  * This class defines a `Traverse1[F]` in terms of a `Foldable[G] with Traverse[G]`
+  * This class defines a `Traverse1[F]` in terms of a `Traverse[G]`
   * together with a `split` method, `F[A]` => `(A, G[A])`.
   *
   * This class can be used on any type where the first value (`A`) and
   * the "rest" of the values (`G[A]`) can be easily found.
   */
-abstract class NonEmptyTraverse1[F[_], G[_]](implicit G: Foldable[G] with Traverse[G]) extends Traverse1[F] {
+abstract class NonEmptyTraverse1[F[_], G[_]](implicit G: Traverse[G]) extends Traverse1[F] {
   def split[A](fa: F[A]): (A, G[A])
 
   def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B = {
