@@ -39,7 +39,7 @@ package object syntax {
   object show extends Show.ToShowOps
   object split extends SplitSyntax
   object strong extends StrongSyntax
-  object transLift extends TransLiftSyntax
+  object monadTrans extends MonadTransSyntax
   object traverse extends TraverseSyntax
   object traverseFilter extends TraverseFilterSyntax
   object tuple extends TupleSyntax

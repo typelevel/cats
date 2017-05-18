@@ -13,6 +13,12 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
   def ensure[A](fa: F[A])(error: => E)(predicate: A => Boolean): F[A] =
     flatMap(fa)(a => if (predicate(a)) pure(a) else raiseError(error))
 
+  /**
+    * Turns a successful value into an error specified by the `error` function if it does not satisfy a given predicate.
+    */
+  def ensureOr[A](fa: F[A])(error: A => E)(predicate: A => Boolean): F[A] =
+    flatMap(fa)(a => if (predicate(a)) pure(a) else raiseError(error(a)))
+
 }
 
 object MonadError {

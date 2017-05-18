@@ -74,9 +74,18 @@ information about how you can get involed.
 
 ### Community
 
-Discussion around Cats is currently happening in the
-[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
-issue and PR pages. You can get an overview of who is working on what
+Discussion around Cats is currently happening on Github issue and PR pages
+as well as in two Gitter channels: 
+
+[Gitter channel cats](https://gitter.im/typelevel/cats) is for general user 
+questions and discussions, and 
+
+[Gitter channel cats-contrib](https://gitter.im/typelevel/cats-contrib)
+is dedicated for cats development related discussions. For people who wants to 
+follow closely and/or to participate in the decisions in cats development, 
+this is the room to join. 
+
+You can get an overview of who is working on what
 via [Waffle.io](https://waffle.io/typelevel/cats).
 
 People are expected to follow the
@@ -110,6 +119,7 @@ The current maintainers (people who can merge pull requests) are:
  * [non](https://github.com/non) Erik Osheim
  * [mpilquist](https://github.com/mpilquist) Michael Pilquist
  * [milessabin](https://github.com/milessabin) Miles Sabin
+ * [djspiewak](https://github.com/djspiewak) Daniel Spiewak
  * [fthomas](https://github.com/fthomas) Frank Thomas
  * [julien-truffaut](https://github.com/julien-truffaut) Julien Truffaut
  * [kailuowang](https://github.com/kailuowang) Kailuo Wang
