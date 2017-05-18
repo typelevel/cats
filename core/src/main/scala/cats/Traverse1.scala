@@ -3,6 +3,12 @@ package cats
 import cats.data.NonEmptyList
 import simulacrum.typeclass
 
+/**
+  * Traverse1, also known as Traversable1.
+  *
+  * `Traverse1` is like a non-empty `Traverse`. In addition to the traverse and sequence
+  * methods it provides traverse1 and sequence1 methods which require an `Apply` instance instead of `Applicative`.
+  */
 @typeclass trait Traverse1[F[_]] extends Traverse[F] with Reducible[F] {
 
   def traverse1[G[_]: Apply, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
