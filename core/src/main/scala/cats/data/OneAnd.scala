@@ -98,7 +98,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
-private[data] sealed trait OneAndInstances {
+private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
 
   implicit def catsDataEqForOneAnd[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
     new Eq[OneAnd[F, A]]{
@@ -117,31 +117,11 @@ private[data] sealed trait OneAndInstances {
   implicit def catsDataSemigroupForOneAnd[F[_]: Alternative, A]: Semigroup[OneAnd[F, A]] =
     catsDataSemigroupKForOneAnd[F].algebra
 
-  implicit def catsDataTraverseForOneAnd[F[_]](implicit F: Traverse[F], F2: MonadCombine[F]): Traverse1[OneAnd[F, ?]] =
-    new Traverse1[OneAnd[F, ?]] {
+  implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
+    new NonEmptyReducible[OneAnd[F, ?], F] {
+      override def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
 
-      override def traverse1[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
-        import cats.syntax.cartesian._
-
-        fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)
-          .reduceLeft(((acc, a) => (acc |@| a).map((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
-      }
-
-      def reduceLeftTo[A, B](fa: OneAnd[F, A])(f: A => B)(g: (B, A) => B): B = {
-        fa.foldLeft(f(fa.head))(g)
-      }
-
-      def reduceRightTo[A, B](fa: OneAnd[F, A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
-        fa.foldRight(Always(f(fa.head)))(g)
-      }
-
-      def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B = {
-        fa.foldLeft(b)(f)
-      }
-
-      def foldRight[A, B](fa: OneAnd[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
-        fa.foldRight(lb)(f)
-      }
+      override def size[A](fa: OneAnd[F, A]): Long = 1 + F.size(fa.tail)
     }
 
   implicit def catsDataMonadForOneAnd[F[_]](implicit monad: MonadCombine[F]): Monad[OneAnd[F, ?]] =
@@ -223,6 +203,34 @@ private[data] trait OneAndLowPriority1 extends OneAndLowPriority0 {
         fa map f
     }
 
+}
+
+private[data] trait OneAndLowPriority2 extends OneAndLowPriority1 {
+  implicit def catsDataTraverse1ForOneAnd[F[_]](implicit F: Traverse[F], F2: MonadCombine[F]): Traverse1[OneAnd[F, ?]] =
+    new Traverse1[OneAnd[F, ?]] {
+      override def traverse1[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
+        import cats.syntax.cartesian._
+
+         fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)
+           .reduceLeft(((acc, a) => (acc |@| a).map((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
+      }
+
+      def reduceLeftTo[A, B](fa: OneAnd[F, A])(f: A => B)(g: (B, A) => B): B = {
+        fa.foldLeft(f(fa.head))(g)
+      }
+
+      def reduceRightTo[A, B](fa: OneAnd[F, A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
+        fa.foldRight(Always(f(fa.head)))(g)
+      }
+
+      def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B = {
+        fa.foldLeft(b)(f)
+      }
+
+      def foldRight[A, B](fa: OneAnd[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+        fa.foldRight(lb)(f)
+      }
+    }
 }
 
 object OneAnd extends OneAndInstances

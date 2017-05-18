@@ -22,13 +22,11 @@ import simulacrum.typeclass
   def flatSequence[G[_], A](fgfa: F[G[F[A]]])(implicit G: Apply[G], F: FlatMap[F]): G[F[A]] =
     G.map(traverse1(fgfa)(identity))(F.flatten)
 
-
   override def traverse[G[_] : Applicative, A, B](fa: F[A])(f: (A) => G[B]): G[F[B]] =
     traverse1(fa)(f)
 
   override def sequence[G[_] : Applicative, A](fga: F[G[A]]): G[F[A]] =
     traverse1(fga)(identity)
-
 
   override def reduceMap[A, B](fa: F[A])(f: (A) => B)(implicit B: Semigroup[B]): B =
     reduceLeft(traverse1[Id, A, B](fa)(f))(B.combine)
