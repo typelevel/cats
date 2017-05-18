@@ -188,8 +188,8 @@ private[data] sealed trait StateTInstances extends StateTInstances1 {
   implicit def catsDataMonadStateForStateT[F[_], S](implicit F0: Monad[F]): MonadState[StateT[F, S, ?], S] =
     new StateTMonadState[F, S] { implicit def F = F0 }
 
-  implicit def catsDataLiftForStateT[S]: TransLift.Aux[StateT[?[_], S, ?], Applicative] =
-    new StateTTransLift[S] {}
+  implicit def catsDataMonadTransForStateT[S]: MonadTrans[StateT[?[_], S, ?]] =
+    new StateTMonadTrans[S] {}
 }
 
 private[data] sealed trait StateTInstances1 extends StateTInstances2 {
@@ -289,10 +289,8 @@ private[data] sealed trait StateTMonadState[F[_], S] extends MonadState[StateT[F
   def set(s: S): StateT[F, S, Unit] = StateT(_ => F.pure((s, ())))
 }
 
-private[data] sealed trait StateTTransLift[S] extends TransLift[StateT[?[_], S, ?]] {
-  type TC[M[_]] = Applicative[M]
-
-  def liftT[M[_]: Applicative, A](ma: M[A]): StateT[M, S, A] = StateT(s => Applicative[M].map(ma)(s -> _))
+private[data] sealed trait StateTMonadTrans[S] extends MonadTrans[StateT[?[_], S, ?]] {
+  def liftT[M[_]: Monad, A](ma: M[A]): StateT[M, S, A] = StateT(s => Applicative[M].map(ma)(s -> _))
 }
 
 private[data] sealed trait StateTSemigroupK[F[_], S] extends SemigroupK[StateT[F, S, ?]] {
@@ -303,7 +301,7 @@ private[data] sealed trait StateTSemigroupK[F[_], S] extends SemigroupK[StateT[F
     StateT(s => G.combineK(x.run(s), y.run(s)))
 }
 
-private[data] sealed trait StateTMonadCombine[F[_], S] extends MonadCombine[StateT[F, S, ?]] with StateTMonad[F, S] with StateTSemigroupK[F, S] with StateTTransLift[S] {
+private[data] sealed trait StateTMonadCombine[F[_], S] extends MonadCombine[StateT[F, S, ?]] with StateTMonad[F, S] with StateTSemigroupK[F, S] with StateTMonadTrans[S] {
   implicit def F: MonadCombine[F]
   override def G: MonadCombine[F] = F
 

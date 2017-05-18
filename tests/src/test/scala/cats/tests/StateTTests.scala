@@ -235,12 +235,15 @@ class StateTTests extends CatsSuite {
 
     checkAll("StateT[ListWrapper, Int, Int]", MonadTests[StateT[ListWrapper, Int, ?]].monad[Int, Int, Int])
     checkAll("Monad[StateT[ListWrapper, Int, ?]]", SerializableTests.serializable(Monad[StateT[ListWrapper, Int, ?]]))
+    checkAll("MonadTrans[EitherT[?[_], String, ?]]", MonadTransTests[EitherT[?[_], String, ?]].monadTrans[ListWrapper, Int, Int])
 
     Monad[StateT[ListWrapper, Int, ?]]
     FlatMap[StateT[ListWrapper, Int, ?]]
     Applicative[StateT[ListWrapper, Int, ?]]
     Apply[StateT[ListWrapper, Int, ?]]
     Functor[StateT[ListWrapper, Int, ?]]
+
+    MonadTrans[StateT[?[_], Int, ?]]
   }
 
   {

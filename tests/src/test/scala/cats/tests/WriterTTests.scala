@@ -257,12 +257,15 @@ class WriterTTests extends CatsSuite {
     checkAll("WriterT[ListWrapper, ListWrapper[Int], ?]", MonadWriterTests[WriterT[ListWrapper, ListWrapper[Int], ?], ListWrapper[Int]].monadWriter[Int, Int, Int])
     checkAll("MonadWriter[WriterT[ListWrapper, ListWrapper[Int], ?], List[String]]", SerializableTests.serializable(MonadWriter[WriterT[ListWrapper, ListWrapper[Int], ?], ListWrapper[Int]]))
 
+    checkAll("MonadTrans[WriterT[?[_], ListWrapper[Int], ?]]", MonadTransTests[WriterT[?[_], ListWrapper[Int], ?]].monadTrans[ListWrapper, Int, Int])
+
     Functor[WriterT[Id, ListWrapper[Int], ?]]
     Apply[WriterT[Id, ListWrapper[Int], ?]]
     Applicative[WriterT[Id, ListWrapper[Int], ?]]
     FlatMap[WriterT[Id, ListWrapper[Int], ?]]
     CoflatMap[WriterT[Id, ListWrapper[Int], ?]]
     Monad[WriterT[Id, ListWrapper[Int], ?]]
+    MonadTrans[WriterT[?[_], ListWrapper[Int], ?]]
 
     Functor[Writer[ListWrapper[Int], ?]]
     Apply[Writer[ListWrapper[Int], ?]]
