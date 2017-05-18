@@ -4,6 +4,8 @@ package data
 import scala.annotation.tailrec
 import scala.collection.immutable.{TreeSet, VectorBuilder}
 import cats.instances.vector._
+import cats.syntax.cartesian._
+import cats.syntax.semigroup._
 
 /**
  * A data type which represents a `Vector` guaranteed to contain at least one element.
@@ -190,8 +192,8 @@ private[data] sealed trait NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector] with Reducible[NonEmptyVector]
     with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with Monad[NonEmptyVector] =
-    new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector] with Comonad[NonEmptyVector]
-      with Traverse[NonEmptyVector] with Monad[NonEmptyVector] {
+    new NonEmptyTraverse1[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector] with Comonad[NonEmptyVector]
+      with Monad[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
         a concatNev b
@@ -226,8 +228,10 @@ private[data] sealed trait NonEmptyVectorInstances {
 
       def extract[A](fa: NonEmptyVector[A]): A = fa.head
 
-      def traverse[G[_], A, B](fa: NonEmptyVector[A])(f: (A) => G[B])(implicit G: Applicative[G]): G[NonEmptyVector[B]] =
-        G.map2Eval(f(fa.head), Always(Traverse[Vector].traverse(fa.tail)(f)))(NonEmptyVector(_, _)).value
+      def traverse1[G[_] : Apply, A, B](as: NonEmptyVector[A])(f: A => G[B]): G[NonEmptyVector[B]] = {
+        as.map(a => Apply[G].map(f(a))(NonEmptyVector.of(_)))
+          .reduceLeft((acc, a) => (acc |@| a).map( _ |+| _ ))
+      }
 
       override def foldLeft[A, B](fa: NonEmptyVector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)

@@ -326,8 +326,8 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
 
   implicit val catsDataInstancesForNonEmptyList: SemigroupK[NonEmptyList] with Reducible[NonEmptyList]
       with Comonad[NonEmptyList] with Traverse1[NonEmptyList] with Monad[NonEmptyList] =
-    new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList] with Comonad[NonEmptyList]
-      with Traverse1[NonEmptyList] with Monad[NonEmptyList] {
+    new NonEmptyTraverse1[NonEmptyList, List] with SemigroupK[NonEmptyList] with Comonad[NonEmptyList]
+      with Monad[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a concat b

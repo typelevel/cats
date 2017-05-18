@@ -40,7 +40,7 @@ import simulacrum.typeclass
 }
 
 /**
-  * This class defines a `Reducible[F]` in terms of a `Foldable[G]`
+  * This class defines a `Traverse1[F]` in terms of a `Foldable[G] with Traverse[G]`
   * together with a `split` method, `F[A]` => `(A, G[A])`.
   *
   * This class can be used on any type where the first value (`A`) and
