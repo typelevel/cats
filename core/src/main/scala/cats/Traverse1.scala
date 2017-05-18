@@ -30,13 +30,6 @@ import simulacrum.typeclass
     traverse1(fga)(identity)
 
 
-
-  def traverse1U[A, GB](fa: F[A])(f: A => GB)(implicit G: Unapply[Apply, GB]): G.M[F[G.A]] =
-    traverse1(fa)(G.subst.compose(f))(G.TC)
-
-  def sequenceU1[GA](fga: F[GA])(implicit U: Unapply[Apply, GA]): U.M[F[U.A]] =
-    traverse1(fga)(U.subst)(U.TC)
-
   override def reduceMap[A, B](fa: F[A])(f: (A) => B)(implicit B: Semigroup[B]): B =
     reduceLeft(traverse1[Id, A, B](fa)(f))(B.combine)
 
