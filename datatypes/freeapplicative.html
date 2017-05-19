@@ -158,9 +158,9 @@ case for monads.</p>
 <p>Therefore, we can write an interpreter that uses the product of the <code class="highlighter-rouge">ParValidator</code> and <code class="highlighter-rouge">Log</code> <code class="highlighter-rouge">Applicative</code>s
 to interpret our program in one go. We can create this interpreter easily by using <code class="highlighter-rouge">FunctionK#and</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Tuple2K</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Prod</span>
 
-<span class="k">type</span> <span class="kt">ValidateAndLog</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Tuple2K</span><span class="o">[</span><span class="kt">ParValidator</span>, <span class="kt">Log</span>, <span class="kt">A</span><span class="o">]</span>
+<span class="k">type</span> <span class="kt">ValidateAndLog</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Prod</span><span class="o">[</span><span class="kt">ParValidator</span>, <span class="kt">Log</span>, <span class="kt">A</span><span class="o">]</span>
 
 <span class="k">val</span> <span class="n">prodCompiler</span><span class="k">:</span> <span class="kt">FunctionK</span><span class="o">[</span><span class="kt">ValidationOp</span>, <span class="kt">ValidateAndLog</span><span class="o">]</span> <span class="k">=</span> <span class="n">parCompiler</span> <span class="n">and</span> <span class="n">logCompiler</span>
 
