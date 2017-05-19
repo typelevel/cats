@@ -212,7 +212,7 @@ private[data] sealed abstract class IorInstances0 {
     override def size[B](fa: A Ior B): Long = fa.fold(_ => 0L, _ => 1L, (_, _) => 1L)
 
     override def get[B](fa: A Ior B)(idx: Long): Option[B] =
-      if (idx == 0L) fa.fold(_ => None, Some(_), (_, b) => Some(b)) else None
+      if (idx == 0L) fa.toOption else None
 
     override def forall[B](fa: Ior[A, B])(p: (B) => Boolean): Boolean = fa.forall(p)
 

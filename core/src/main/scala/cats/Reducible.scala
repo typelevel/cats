@@ -226,6 +226,9 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
     1 + G.size(tail)
   }
 
+  override def get[A](fa: F[A])(idx: Long): Option[A] =
+    if (idx == 0L) Some(split(fa)._1) else G.get(split(fa)._2)(idx)
+
   override def fold[A](fa: F[A])(implicit A: Monoid[A]): A = {
     val (a, ga) = split(fa)
     A.combine(a, G.fold(ga))

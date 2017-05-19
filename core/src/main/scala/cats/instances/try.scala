@@ -92,11 +92,7 @@ trait TryInstances extends TryInstances1 {
         Now(fa.toOption)
 
       override def get[A](fa: Try[A])(idx: Long): Option[A] =
-        fa match {
-          case Failure(_) => None
-          case Success(a) =>
-            if (idx == 0L) Some(a) else None
-        }
+        if (idx == 0L) fa.toOption else None
 
       override def size[A](fa: Try[A]): Long =
         fa match {

@@ -271,14 +271,8 @@ class FoldableOneAndCheck extends FoldableCheck[OneAnd[List, ?]]("oneAnd") {
   def iterator[T](oneAnd: OneAnd[List, T]) = (oneAnd.head :: oneAnd.tail).iterator
 }
 
-object FoldableComposedCheck {
-  implicit val composedListOptionFoldable: Foldable[λ[α => List[Option[α]]]] = Foldable[List].compose[Option]
-}
-
-import FoldableComposedCheck._
-
-class FoldableComposedCheck extends FoldableCheck[λ[α => List[Option[α]]]]("composed") {
-  def iterator[T](composed: List[Option[T]]) = composed.collect {
+class FoldableComposedCheck extends FoldableCheck[Nested[List, Option, ?]]("nested") {
+  def iterator[T](nested: Nested[List, Option, T]) = nested.value.collect {
     case Some(t) => t
   }.iterator
 }
