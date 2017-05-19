@@ -317,11 +317,11 @@ it’s not too hard to get around.)</p>
 The injection type class described by Swierstra in <a href="http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf">Data types à la carte</a>
 lets us compose different algebras in the context of <code class="highlighter-rouge">Free</code>.</p>
 
-<p>Let’s see a trivial example of unrelated ADT’s getting composed as a <code class="highlighter-rouge">EitherK</code> that can form a more complex program.</p>
+<p>Let’s see a trivial example of unrelated ADT’s getting composed as a <code class="highlighter-rouge">Coproduct</code> that can form a more complex program.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.EitherK</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Coproduct</span>
 <span class="k">import</span> <span class="nn">cats.free.Free</span>
-<span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Id</span><span class="o">,</span> <span class="nc">InjectK</span><span class="o">,</span> <span class="o">~&gt;}</span>
+<span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Id</span><span class="o">,</span> <span class="nc">Inject</span><span class="o">,</span> <span class="o">~&gt;}</span>
 <span class="k">import</span> <span class="nn">scala.collection.mutable.ListBuffer</span>
 </code></pre>
 </div>
@@ -338,30 +338,30 @@ lets us compose different algebras in the context of <code class="highlighter-ro
 </code></pre>
 </div>
 
-<p>Once the ADTs are defined we can formally state that a <code class="highlighter-rouge">Free</code> program is the EitherK of it’s Algebras.</p>
+<p>Once the ADTs are defined we can formally state that a <code class="highlighter-rouge">Free</code> program is the Coproduct of it’s Algebras.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">type</span> <span class="kt">CatsApp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">Interact</span>, <span class="kt">A</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">type</span> <span class="kt">CatsApp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Coproduct</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">Interact</span>, <span class="kt">A</span><span class="o">]</span>
 </code></pre>
 </div>
 
 <p>In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the <code class="highlighter-rouge">Free</code> context.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">Inject</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">tell</span><span class="o">(</span><span class="n">msg</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">.</span><span class="n">inject</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">](</span><span class="nc">Tell</span><span class="o">(</span><span class="n">msg</span><span class="o">))</span>
   <span class="k">def</span> <span class="n">ask</span><span class="o">(</span><span class="n">prompt</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">.</span><span class="n">inject</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">](</span><span class="nc">Ask</span><span class="o">(</span><span class="n">prompt</span><span class="o">))</span>
 <span class="o">}</span>
 
 <span class="k">object</span> <span class="nc">Interacts</span> <span class="o">{</span>
-  <span class="k">implicit</span> <span class="k">def</span> <span class="n">interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
+  <span class="k">implicit</span> <span class="k">def</span> <span class="n">interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">Inject</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
 <span class="o">}</span>
 
-<span class="k">class</span> <span class="nc">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
+<span class="k">class</span> <span class="nc">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">Inject</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">addCat</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">.</span><span class="n">inject</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">](</span><span class="nc">AddCat</span><span class="o">(</span><span class="n">a</span><span class="o">))</span>
   <span class="k">def</span> <span class="n">getAllCats</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">.</span><span class="n">inject</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">](</span><span class="nc">GetAllCats</span><span class="o">())</span>
 <span class="o">}</span>
 
 <span class="k">object</span> <span class="nc">DataSource</span> <span class="o">{</span>
-  <span class="k">implicit</span> <span class="k">def</span> <span class="n">dataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
+  <span class="k">implicit</span> <span class="k">def</span> <span class="n">dataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">Inject</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
 <span class="o">}</span>
 </code></pre>
 </div>
@@ -382,7 +382,7 @@ lets us compose different algebras in the context of <code class="highlighter-ro
 </code></pre>
 </div>
 
-<p>Finally we write one interpreter per ADT and combine them with a <code class="highlighter-rouge">FunctionK</code> to <code class="highlighter-rouge">EitherK</code> so they can be
+<p>Finally we write one interpreter per ADT and combine them with a <code class="highlighter-rouge">FunctionK</code> to <code class="highlighter-rouge">Coproduct</code> so they can be
 compiled and applied to our <code class="highlighter-rouge">Free</code> program.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">ConsoleCatsInterpreter</span> <span class="k">extends</span> <span class="o">(</span><span class="nc">Interact</span> <span class="o">~&gt;</span> <span class="nc">Id</span><span class="o">)</span> <span class="o">{</span>
