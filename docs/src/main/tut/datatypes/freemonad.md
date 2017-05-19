@@ -302,6 +302,7 @@ The injection type class described by Swierstra in [Data types à la carte](http
 lets us compose different algebras in the context of `Free`.
 
 Let's see a trivial example of unrelated ADT's getting composed as a `EitherK` that can form a more complex program.
+Note that `EitherK` was renamed from `Coproduct` and `InjectK` was renamed from `Inject` after 0.9.0.
 
 ```tut:silent
 import cats.data.EitherK
