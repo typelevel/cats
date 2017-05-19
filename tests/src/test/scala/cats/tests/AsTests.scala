@@ -4,8 +4,12 @@ package tests
 class AsTests extends CatsSuite {
   import evidence._
 
-  def toMap[A, B, X](fa: List[X])(implicit ev: X <~< (A,B)): Map[A,B] =
-    fa.foldLeft(Map.empty[A,B])(As.contra2_3(ev)(_ + _))
+  def toMap[A, B, X](fa: List[X])(implicit ev: X <~< (A,B)): Map[A,B] = {
+    type RequiredFunc = (Map[A, B], X) => Map[A, B]
+    type GivenFunc = (Map[A, B], (A, B)) => Map[A, B]
+    val subst: GivenFunc <~< RequiredFunc = As.contra2_3(ev) //introduced because inference failed on scalajs on 2.10.6
+    fa.foldLeft(Map.empty[A,B])(subst(_ + _))
+  }
 
   test("narrow an input of a function2") {
     // scala's GenTraversableOnce#toMap has a similar <:< constraint
