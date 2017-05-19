@@ -101,6 +101,17 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       override def forall[A](fa: Stream[A])(p: A => Boolean): Boolean =
         fa.forall(p)
 
+      override def get[A](fa: Stream[A])(idx: Long): Option[A] = {
+        @tailrec
+        def go(idx: Long, s: Stream[A]): Option[A] =
+          s match {
+            case h #:: tail =>
+              if (idx == 0L) Some(h) else go(idx - 1L, tail)
+            case _ => None
+          }
+        if (idx < 0L) None else go(idx, fa)
+      }
+
       override def isEmpty[A](fa: Stream[A]): Boolean = fa.isEmpty
 
       override def filter[A](fa: Stream[A])(f: A => Boolean): Stream[A] = fa.filter(f)

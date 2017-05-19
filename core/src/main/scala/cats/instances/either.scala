@@ -115,6 +115,9 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       override def size[B](fab: Either[A, B]): Long =
         fab.fold(_ => 0L, _ => 1L)
 
+      override def get[B](fab: Either[A, B])(idx: Long): Option[B] =
+        if (idx == 0L) fab.fold(_ => None, Some(_)) else None
+
       override def foldMap[B, C](fab: Either[A, B])(f: B => C)(implicit C: Monoid[C]): C =
         fab.fold(_ => C.empty, f)
 
