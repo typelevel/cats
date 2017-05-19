@@ -374,10 +374,12 @@ object Eval extends EvalInstances {
 
 private[cats] trait EvalInstances extends EvalInstances0 {
 
-  implicit val catsBimonadForEval: Bimonad[Eval] with MonadError[Eval, Throwable] =
-    new Bimonad[Eval] with MonadError[Eval, Throwable] {
+  implicit val catsBimonadForEval: Bimonad[Eval] with MonadError[Eval, Throwable] with MonadDefer[Eval] =
+    new Bimonad[Eval] with MonadError[Eval, Throwable] with MonadDefer[Eval] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
       def pure[A](a: A): Eval[A] = Now(a)
+      override def delay[A](a: => A): Eval[A] = Always(a)
+      override def defer[A](fa: => Eval[A]): Eval[A] = Eval.defer(fa)
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
       def extract[A](la: Eval[A]): A = la.value
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
