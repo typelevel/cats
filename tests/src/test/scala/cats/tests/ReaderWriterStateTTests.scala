@@ -377,7 +377,7 @@ class ReaderWriterStateTTests extends CatsSuite {
   {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
-    checkAll("ReaderWriterStateT[?[_], String, Int, String, ?]",
+    checkAll("ReaderWriterStateT[ListWrapper, String, Int, String, Int]]",
       MonadTransTests[ReaderWriterStateT[?[_], String, Int, String, ?]].monadTrans[ListWrapper, Int, Int])
     checkAll("MonadTrans[ReaderWriterStateT[?[_], String, Int, String, ?]]",
       SerializableTests.serializable(MonadTrans[ReaderWriterStateT[?[_], String, Int, String, ?]]))
