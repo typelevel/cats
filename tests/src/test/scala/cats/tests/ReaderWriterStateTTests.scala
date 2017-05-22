@@ -338,11 +338,20 @@ class ReaderWriterStateTTests extends CatsSuite {
   }
 
   {
-    implicit def F = ListWrapper.monad
-    implicit def S = ListWrapper.semigroupK
+    implicit val F = ListWrapper.monad
+    implicit val S = ListWrapper.semigroupK
 
     checkAll("ReaderWriterStateT[ListWrapper, String, Int, String, Int]",
       SemigroupKTests[ReaderWriterStateT[ListWrapper, String, Int, String, ?]].semigroupK[Int])
+  }
+
+  {
+    implicit val F = ListWrapper.monad
+
+    checkAll("MonadTrans[ReaderWriterStateT[?[_], String, Int, String, ?]]",
+      MonadTransTests[ReaderWriterStateT[?[_], String, Int, String, ?]].monadTrans[ListWrapper, Int, Int])
+    checkAll("MonadTrans[ReaderWriterStateT[?[_], String, Int, String, ?]]",
+      SerializableTests.serializable(MonadTrans[ReaderWriterStateT[?[_], String, Int, String, ?]]))
   }
 }
 

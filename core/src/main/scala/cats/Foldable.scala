@@ -1,6 +1,7 @@
 package cats
 
 import scala.collection.mutable
+import cats.instances.either._
 import cats.instances.long._
 import simulacrum.typeclass
 
@@ -150,6 +151,19 @@ import simulacrum.typeclass
    * Note: will not terminate for infinite-sized collections.
    */
   def size[A](fa: F[A]): Long = foldMap(fa)(_ => 1)
+
+  /**
+    * Get the element at the index of the `Foldable`.
+    */
+  def get[A](fa: F[A])(idx: Long): Option[A] =
+    if (idx < 0L) None
+    else
+      foldM[Either[A, ?], A, Long](fa, 0L) { (i, a) =>
+        if (i == idx) Left(a) else Right(i + 1L)
+      } match {
+        case Left(a) => Some(a)
+        case Right(_) => None
+      }
 
   /**
    * Fold implemented using the given Monoid[A] instance.

@@ -338,9 +338,9 @@ private[data] sealed trait RWSTInstances extends RWSTInstances1 {
       implicit def L: Monoid[L] = L0
     }
 
-  implicit def catsDataLiftForRWST[E, S, L](
-    implicit L0: Monoid[L]): TransLift.Aux[ReaderWriterStateT[?[_], E, S, L, ?], Applicative] =
-    new RWSTTransLift[E, S, L] {
+  implicit def catsDataMonadTransForRWST[E, S, L](
+    implicit L0: Monoid[L]): MonadTrans[ReaderWriterStateT[?[_], E, S, L, ?]] =
+    new RWSTMonadTrans[E, S, L] {
       implicit def L: Monoid[L] = L0
     }
 }
@@ -487,12 +487,10 @@ private[data] sealed trait RWSTMonadState[F[_], E, S, L]
   def set(s: S): ReaderWriterStateT[F, E, S, L, Unit] = ReaderWriterStateT.set(s)
 }
 
-private[data] sealed trait RWSTTransLift[E, S, L] extends TransLift[ReaderWriterStateT[?[_], E, S, L, ?]] {
+private[data] sealed trait RWSTMonadTrans[E, S, L] extends MonadTrans[ReaderWriterStateT[?[_], E, S, L, ?]] {
   implicit def L: Monoid[L]
-  type TC[F[_]] = Applicative[F]
-
-  def liftT[F[_], A](fa: F[A])(implicit F: Applicative[F]): ReaderWriterStateT[F, E, S, L, A] =
-    ReaderWriterStateT.lift(fa)
+  def liftT[M[_]: Monad, A](ma: M[A]): ReaderWriterStateT[M, E, S, L, A] =
+    ReaderWriterStateT.lift(ma)
 }
 
 private[data] sealed trait RWSTSemigroupK[F[_], E, S, L] extends SemigroupK[ReaderWriterStateT[F, E, S, L, ?]] {
@@ -507,7 +505,7 @@ private[data] sealed trait RWSTSemigroupK[F[_], E, S, L] extends SemigroupK[Read
 
 private[data] sealed trait RWSTMonadCombine[F[_], E, S, L]
     extends MonadCombine[ReaderWriterStateT[F, E, S, L, ?]] with RWSTMonad[F, E, S, L]
-    with RWSTSemigroupK[F, E, S, L] with RWSTTransLift[E, S, L] {
+    with RWSTSemigroupK[F, E, S, L] with RWSTMonadTrans[E, S, L] {
 
   implicit def F: MonadCombine[F]
   override def G: MonadCombine[F] = F
