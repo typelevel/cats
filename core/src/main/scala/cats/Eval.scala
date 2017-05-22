@@ -1,7 +1,6 @@
 package cats
 
 import scala.annotation.tailrec
-import scala.util.control.NonFatal
 
 import cats.syntax.all._
 
@@ -109,42 +108,7 @@ sealed abstract class Eval[+A] extends Serializable { self =>
    * Later[A] with an equivalent computation will be returned.
    */
   def memoize: Eval[A]
-
-  /**
-   * Recover from exceptions thrown within Eval (i.e. when `.value` is
-   * called).
-   *
-   * Note that this will not help for exceptions thrown while building
-   * an Eval instance (e.g. `Now(sys.error("die"))`), but will help
-   * with exceptions which are deferred (e.g. `Later(sys.error("die"))`).
-   *
-   * Unlike many other methods on `Eval`, this method does consume one
-   * stack frame during the eventual `.value` call. This means that
-   * it's not necessarily safe to nest recursive calls to
-   * `.handleErrorWith`.
-   *
-   * The `recovery` method can re-raise exceptions (if necessary)
-   * using the `Eval.raiseError` method, or via `throw` directly.
-   * Exceptions "at-rest" are not represented with `Eval`, your only
-   * options for catching and dealing with exceptions are this method,
-   * or wrapping your `.value` calls with something like `Try()`.
-   */
-  final def handleErrorWith[A1 >: A](recovery: Throwable => Eval[A1]): Eval[A1] =
-    Eval.defer(try Now(value) catch { case NonFatal(t) => recovery(t) })
-
-  /**
-   * Recover from exceptions thrown within Eval (i.e. when `.value` is
-   * called).
-   *
-   * This method only differs from `handleErrorWith` in that it takes
-   * a partial function. See that method's documentation for a more
-   * complete description of the (very limited) exception-handling
-   * capabilities of `Eval`.
-   */
-  final def recoverWith[A1 >: A](f: PartialFunction[Throwable, Eval[A1]]): Eval[A1] =
-    handleErrorWith(e => if (f.isDefinedAt(e)) f(e) else Eval.raiseError(e))
 }
-
 
 /**
  * Construct an eager Eval[A] instance.
@@ -240,16 +204,6 @@ object Eval extends EvalInstances {
    */
   def defer[A](a: => Eval[A]): Eval[A] =
     new Eval.Call[A](a _) {}
-
-  /**
-   * Create an Eval instance which will throw the given exception when
-   * evaluated.
-   *
-   * This method can be paired with the `.recoverWith` method to
-   * encode exception handling within an `Eval` context.
-   */
-  def raiseError[A](e: Throwable): Eval[A] =
-    Eval.defer(throw e)
 
   /**
    * Static Eval instance for common value `Unit`.
@@ -374,8 +328,8 @@ object Eval extends EvalInstances {
 
 private[cats] trait EvalInstances extends EvalInstances0 {
 
-  implicit val catsBimonadForEval: Bimonad[Eval] with MonadError[Eval, Throwable] =
-    new Bimonad[Eval] with MonadError[Eval, Throwable] {
+  implicit val catsBimonadForEval: Bimonad[Eval] =
+    new Bimonad[Eval] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
       def pure[A](a: A): Eval[A] = Now(a)
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
@@ -385,10 +339,6 @@ private[cats] trait EvalInstances extends EvalInstances0 {
         case Left(nextA) => tailRecM(nextA)(f)
         case Right(b)    => pure(b)
       }
-      def handleErrorWith[A](fa: Eval[A])(f: Throwable => Eval[A]): Eval[A] =
-        fa.handleErrorWith(f)
-      def raiseError[A](e: Throwable): Eval[A] =
-        Eval.raiseError(e)
     }
 
   implicit val catsReducibleForEval: Reducible[Eval] =
