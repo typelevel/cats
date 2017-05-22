@@ -49,7 +49,7 @@ Release notes for Cats are available in [CHANGES.md](CHANGES.md).
  major redesigns, changes that are neither source nor binary
  compatible are to be expected in upcoming cats releases. We will
  update the minor version of cats accordingly for such changes. Once
- cats 1.0 is released (ETA: Q3 2016), there will be an increased focus
+ cats 1.0 is released (ETA: Q4 2017), there will be an increased focus
  on making changes in compatible ways.*
 
 ### Documentation
