@@ -17,3 +17,12 @@ position: 3
    offers multiple online exercises to learn about the type classes and 
    datatypes included in Cats.
    
+# Videos
+ * [Functional Structures in Scala](https://www.youtube.com/playlist?list=PLFrwDVdSrYE6dy14XCmUtRAJuhCxuzJp0) 
+   by [Michael Pilquist](https://github.com/MPilquist) offers a serias
+   of lectures about basic functional structures. 
+ * [Category Theory for Programmers](https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_) 
+   by [Bartosz Milewski](https://github.com/BartoszMilewski) is a wonder
+   serias of category theory lectures oriented towards programmers. The
+   sample code is in 
+   
