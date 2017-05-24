@@ -52,6 +52,10 @@ Release notes for Cats are available in [CHANGES.md](CHANGES.md).
  cats 1.0 is released (ETA: Q4 2017), there will be an increased focus
  on making changes in compatible ways.*
 
+#### Enhancing type inference
+
+To use cats you'll need sometimes support for improved type inference. To enable it for any supported Scalac version, use this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification).
+
 ### Documentation
 
 Cats information and documentation is available on the
