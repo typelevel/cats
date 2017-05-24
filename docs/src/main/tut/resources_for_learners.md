@@ -19,11 +19,11 @@ position: 3
    
 # Videos
  * [Functional Structures in Scala](https://www.youtube.com/playlist?list=PLFrwDVdSrYE6dy14XCmUtRAJuhCxuzJp0) 
-   by [Michael Pilquist](https://github.com/MPilquist) offers a serias
+   by [Michael Pilquist](https://github.com/MPilquist) offers a series
    of lectures about basic functional structures. 
  * [Category Theory for Programmers](https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_) 
    by [Bartosz Milewski](https://github.com/BartoszMilewski) is a wonder
-   serias of category theory lectures oriented towards programmers. The
+   series of category theory lectures oriented towards programmers. The
    sample code is in Haskell. However only very basic Haskell syntax was 
    used and thus should be easy for non-Haskell programmers to follow. 
    
