@@ -4,7 +4,7 @@ package tests
 import cats.laws.discipline.eq.catsLawsEqForFn1
 import cats.laws.discipline.{InvariantMonoidalTests, SerializableTests}
 import cats.instances.all._
-import cats.syntax.cartesian._
+import cats.syntax.apply._
 import cats.Eq
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -42,7 +42,7 @@ object CsvCodecInvariantMonoidalTests {
           def read(s: CSV): (Option[(A, B)], CSV) = {
             val (a1, s1) = fa.read(s)
             val (a2, s2) = fb.read(s1)
-            ((a1 |@| a2).map(_ -> _), s2)
+            ((a1,  a2).mapN(_ -> _), s2)
           }
 
           def write(a: (A, B)): CSV =

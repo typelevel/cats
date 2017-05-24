@@ -42,7 +42,6 @@ trait AllSyntax
     with StrongSyntax
     with TraverseFilterSyntax
     with TraverseSyntax
-    with TupleSyntax
     with ValidatedSyntax
     with VectorSyntax
     with WriterSyntax
