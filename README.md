@@ -80,7 +80,7 @@ as well as in two Gitter channels:
 [Gitter channel cats](https://gitter.im/typelevel/cats) is for general user 
 questions and discussions, and 
 
-[Gitter channel cats-contrib](https://gitter.im/typelevel/cats-contrib)
+[Gitter channel cats-dev](https://gitter.im/typelevel/cats-dev)
 is dedicated for cats development related discussions. For people who wants to 
 follow closely and/or to participate in the decisions in cats development, 
 this is the room to join. 
