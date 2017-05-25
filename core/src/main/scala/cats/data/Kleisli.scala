@@ -106,11 +106,9 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
         fa.local(f)
     }
 
-  implicit def catsDataTransLiftForKleisli[A]: TransLift.AuxId[Kleisli[?[_], A, ?]] =
-    new TransLift[Kleisli[?[_], A, ?]] {
-      type TC[M[_]] = Trivial
-
-      def liftT[M[_], B](ma: M[B])(implicit ev: Trivial): Kleisli[M, A, B] = Kleisli.lift(ma)
+  implicit def catsDataMonadTransForKleisli[A]: MonadTrans[Kleisli[?[_], A, ?]] =
+    new MonadTrans[Kleisli[?[_], A, ?]] {
+      def liftT[M[_]: Monad, B](ma: M[B]): Kleisli[M, A, B] = Kleisli.lift(ma)
     }
 
   implicit def catsDataApplicativeErrorForKleisli[F[_], A, E](implicit AE: ApplicativeError[F, E]): ApplicativeError[Kleisli[F, A, ?], E] =
@@ -226,7 +224,7 @@ private trait KleisliSemigroup[F[_], A, B] extends Semigroup[Kleisli[F, A, B]] {
 private trait KleisliMonoid[F[_], A, B] extends Monoid[Kleisli[F, A, B]] with KleisliSemigroup[F, A, B] {
   implicit def FB: Monoid[F[B]]
 
-  override def empty: Kleisli[F, A, B] = Kleisli[F, A, B](a => FB.empty)
+  override def empty: Kleisli[F, A, B] = Kleisli[F, A, B](_ => FB.empty)
 }
 
 private trait KleisliMonadError[F[_], A, E] extends MonadError[Kleisli[F, A, ?], E] with KleisliApplicativeError[F, A, E] with KleisliMonadReader[F, A] {

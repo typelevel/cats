@@ -189,6 +189,12 @@ private[data] trait EitherKFoldable[F[_], G[_]] extends Foldable[EitherK[F, G, ?
   def foldLeft[A, B](fa: EitherK[F, G, A], z: B)(f: (B, A) => B): B =
     fa.foldLeft(z)(f)
 
+  override def size[A](fa: EitherK[F, G, A]): Long =
+    fa.run.fold(F.size, G.size)
+
+  override def get[A](fa: EitherK[F, G, A])(idx: Long): Option[A] =
+    fa.run.fold(F.get(_)(idx), G.get(_)(idx))
+
   override def foldMap[A, B](fa: EitherK[F, G, A])(f: A => B)(implicit M: Monoid[B]): B =
     fa foldMap f
 }

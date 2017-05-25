@@ -6,16 +6,22 @@ import org.scalacheck.Arbitrary
 import scala.util.Try
 
 import cats.instances.all._
-import cats.data.{NonEmptyList, NonEmptyStream, NonEmptyVector, Validated}
+import cats.data._
 import cats.laws.discipline.arbitrary._
 
 abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends CatsSuite with PropertyChecks {
 
   def iterator[T](fa: F[T]): Iterator[T]
 
-  test(s"Foldable[$name].size") {
-    forAll { (fa: F[Int]) =>
-      fa.size should === (iterator(fa).size.toLong)
+  test(s"Foldable[$name].size/get") {
+    forAll { (fa: F[Int], n: Int) =>
+      val s = fa.size
+      s should === (iterator(fa).size.toLong)
+      if (n < s && n >= 0) {
+        fa.get(n.toLong) === Some(iterator(fa).take(n + 1).toList.last)
+      } else {
+        fa.get(n.toLong) === None
+      }
     }
   }
 
@@ -217,7 +223,7 @@ class FoldableStreamCheck extends FoldableCheck[Stream]("stream") {
 }
 
 class FoldableMapCheck extends FoldableCheck[Map[Int, ?]]("map") {
-  def iterator[T](map: Map[Int, T]): Iterator[T] = map.iterator.map(_._2)
+  def iterator[T](map: Map[Int, T]): Iterator[T] = map.valuesIterator
 }
 
 class FoldableOptionCheck extends FoldableCheck[Option]("option") {
@@ -234,4 +240,39 @@ class FoldableValidatedCheck extends FoldableCheck[Validated[String, ?]]("valida
 
 class FoldableTryCheck extends FoldableCheck[Try]("try") {
   def iterator[T](tryt: Try[T]): Iterator[T] = tryt.toOption.iterator
+}
+
+class FoldableEitherKCheck extends FoldableCheck[EitherK[Option, Option, ?]]("eitherK") {
+  def iterator[T](eitherK: EitherK[Option, Option, T]) = eitherK.run.bimap(_.iterator, _.iterator).merge
+}
+
+class FoldableIorCheck extends FoldableCheck[Int Ior ?]("ior") {
+  def iterator[T](ior: Int Ior T) =
+    ior.fold(_ => None.iterator, b => Some(b).iterator, (_, b) => Some(b).iterator)
+}
+
+class FoldableIdCheck extends FoldableCheck[Id[?]]("id") {
+  def iterator[T](id: Id[T]) = Some(id).iterator
+}
+
+class FoldableIdTCheck extends FoldableCheck[IdT[Option, ?]]("idT") {
+  def iterator[T](idT: IdT[Option, T]) = idT.value.iterator
+}
+
+class FoldableConstCheck extends FoldableCheck[Const[Int, ?]]("const") {
+  def iterator[T](const: Const[Int, T]) = None.iterator
+}
+
+class FoldableTuple2Check extends FoldableCheck[(Int, ?)]("tuple2") {
+  def iterator[T](tuple: (Int, T)) = Some(tuple._2).iterator
+}
+
+class FoldableOneAndCheck extends FoldableCheck[OneAnd[List, ?]]("oneAnd") {
+  def iterator[T](oneAnd: OneAnd[List, T]) = (oneAnd.head :: oneAnd.tail).iterator
+}
+
+class FoldableComposedCheck extends FoldableCheck[Nested[List, Option, ?]]("nested") {
+  def iterator[T](nested: Nested[List, Option, T]) = nested.value.collect {
+    case Some(t) => t
+  }.iterator
 }

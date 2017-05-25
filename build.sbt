@@ -160,7 +160,8 @@ lazy val docSettings = Seq(
     "-diagrams"
   ),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
-  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
+  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
+  includeFilter in Jekyll := (includeFilter in makeSite).value
 )
 
 lazy val docs = project
@@ -368,6 +369,11 @@ lazy val publishSettings = Seq(
         <url>https://github.com/peterneyens/</url>
       </developer>
       <developer>
+        <id>edmundnoble</id>
+        <name>Edmund Noble</name>
+        <url>https://github.com/edmundnoble/</url>
+      </developer>
+      <developer>
         <id>tpolecat</id>
         <name>Rob Norris</name>
         <url>https://github.com/tpolecat/</url>
@@ -391,6 +397,11 @@ lazy val publishSettings = Seq(
         <id>milessabin</id>
         <name>Miles Sabin</name>
         <url>https://github.com/milessabin/</url>
+      </developer>
+      <developer>
+        <id>djspiewak</id>
+        <name>Daniel Spiewak</name>
+        <url>https://github.com/djspiewak/</url>
       </developer>
       <developer>
         <id>fthomas</id>

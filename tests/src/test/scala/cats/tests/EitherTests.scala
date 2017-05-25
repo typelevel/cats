@@ -200,14 +200,6 @@ class EitherTests extends CatsSuite {
     }
   }
 
-  test("ensure on left is identity") {
-    forAll { (x: Either[Int, String], i: Int, p: String => Boolean) =>
-      if (x.isLeft) {
-        x.ensure(i)(p) should === (x)
-      }
-    }
-  }
-
   test("toIor then toEither is identity") {
     forAll { (x: Either[Int, String]) =>
       x.toIor.toEither should === (x)

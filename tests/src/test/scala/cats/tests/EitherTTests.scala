@@ -53,9 +53,11 @@ class EitherTTests extends CatsSuite {
     Functor[EitherT[ListWrapper, String, ?]]
     Applicative[EitherT[ListWrapper, String, ?]]
     Monad[EitherT[ListWrapper, String, ?]]
+    MonadTrans[EitherT[?[_], String, ?]]
 
     checkAll("EitherT[ListWrapper, String, Int]", MonadErrorTests[EitherT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
     checkAll("MonadError[EitherT[List, ?, ?]]", SerializableTests.serializable(MonadError[EitherT[ListWrapper, String, ?], String]))
+    checkAll("MonadTrans[EitherT[?[_], String, ?]]", MonadTransTests[EitherT[?[_], String, ?]].monadTrans[ListWrapper, Int, Int])
   }
 
   {
@@ -378,4 +380,34 @@ class EitherTTests extends CatsSuite {
       }
     }
   }
+
+  test("inference works in for-comprehension") {
+    sealed abstract class AppError
+    case object Error1 extends AppError
+    case object Error2 extends AppError
+
+    val either1: Id[Either[Error1.type , String]] = Right("hi").pure[Id]
+    val either2: Id[Either[Error2.type , String]] = Right("bye").pure[Id]
+
+    for {
+      s1 <- EitherT(either1)
+      s2 <- EitherT[Id, AppError, String](either2)
+    } yield s1 ++ s2
+
+    for {
+      s1 <- EitherT(either1)
+      s2 <- EitherT.right[AppError]("1".pure[Id])
+    } yield s1 ++ s2
+
+    for {
+      s1 <- EitherT(either1)
+      s2 <- EitherT.left[String](Error1.pure[Id])
+    } yield s1 ++ s2
+
+    for {
+      s1 <- EitherT(either1)
+      s2 <- EitherT.pure[Id, AppError]("1")
+    } yield s1 ++ s2
+  }
+
 }

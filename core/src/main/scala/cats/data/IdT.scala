@@ -63,6 +63,12 @@ private[data] sealed trait IdTFoldable[F[_]] extends Foldable[IdT[F, ?]] {
 
   def foldRight[A, B](fa: IdT[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
     fa.foldRight(lb)(f)
+
+  override def size[A](fa: IdT[F, A]): Long =
+    F0.size(fa.value)
+
+  override def get[A](fa: IdT[F, A])(idx: Long): Option[A] =
+    F0.get(fa.value)(idx)
 }
 
 private[data] sealed trait IdTTraverse[F[_]] extends Traverse[IdT[F, ?]] with IdTFoldable[F] {
