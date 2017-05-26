@@ -167,7 +167,29 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
   def show[AA >: A](implicit AA: Show[AA]): String =
     s"NonEmpty${Show[Vector[AA]].show(toVector)}"
 
+  /**
+    * Counts the number of elements in the collection.
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyVector
+    * scala> val nev = NonEmptyVector.of(1, 2, 3, 4, 5)
+    * scala> nev.length
+    * res0: Int = 5
+    * }}}
+    */
   def length: Int = toVector.length
+
+  /**
+    * Counts the number of elements in the collection.
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyVector
+    * scala> val nev = NonEmptyVector.of(1, 2, 3, 4, 5)
+    * scala> nev.size
+    * res0: Int = 5
+    * }}}
+    */
+  def size: Int = toVector.size
 
   override def toString: String = s"NonEmpty${toVector.toString}"
 
