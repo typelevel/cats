@@ -89,7 +89,7 @@ private[data] sealed trait KleisliExplicitInstances {
    * scala> import cats.implicits._
    * scala> implicit val sgk = Kleisli.semigroupKF[Option, Int]
    * scala> def divBy(divisor: Int): Kleisli[Option, Int, String] =
-   *      |   Kleisli(n => if (n % divisor == 0) Some(s"divisible by $divisor") else None)
+   *      |   Kleisli(n => if (n % divisor == 0) Some("divisible by " + divisor) else None)
    * scala> val div2or3: Kleisli[Option, Int, String] = divBy(2) <+> divBy(3)
    * scala> div2or3(2)
    * res0: Option[String] = Some(divisible by 2)
