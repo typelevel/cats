@@ -81,10 +81,41 @@ private[data] sealed trait KleisliFunctions {
 }
 
 private[data] sealed trait KleisliExplicitInstances {
-  def catsDataSemigroupKForKleisliAB[F[_], A](implicit S: SemigroupK[F]): SemigroupK[Kleisli[F, A, ?]] =
+  /**
+   * Create a `SemigroupK` instance for `Kleisli` using a `SemigroupK[F]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> implicit val sgk = Kleisli.semigroupKF[Option, Int]
+   * scala> def divBy(divisor: Int): Kleisli[Option, Int, String] =
+   *      |   Kleisli(n => if (n % divisor == 0) Some(s"divisible by $divisor") else None)
+   * scala> val div2or3: Kleisli[Option, Int, String] = divBy(2) <+> divBy(3)
+   * scala> div2or3(2)
+   * res0: Option[String] = Some(divisible by 2)
+   * scala> div2or3(3)
+   * res1: Option[String] = Some(divisible by 3)
+   * scala> div2or3(5)
+   * res2: Option[String] = None
+   * scala> div2or3(6)
+   * res3: Option[String] = Some(divisible by 2)
+   * }}}
+   */
+  def semigroupKF[F[_], A](implicit S: SemigroupK[F]): SemigroupK[Kleisli[F, A, ?]] =
     new KleisliABSemigroupK[F, A] { def F: SemigroupK[F] = S }
 
-  def catsDataMonoidKForKleisliAB[F[_], A](implicit M: MonoidK[F]): MonoidK[Kleisli[F, A, ?]] =
+  /**
+   * Create a `MonoidK` instance for `Kleisli` using a `MonoidK[F]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val kl: Kleisli[List, Int, String] = Kleisli.monoidKF[List, Int].empty[String]
+   * scala> kl(1)
+   * res0: List[String] = List()
+   * }}}
+   */
+  def monoidKF[F[_], A](implicit M: MonoidK[F]): MonoidK[Kleisli[F, A, ?]] =
     new KleisliABMonoidK[F, A] { def F: MonoidK[F] = M }
 }
 
