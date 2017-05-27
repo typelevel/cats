@@ -149,7 +149,11 @@ object FreeT extends FreeTInstances {
   /** Return the given value in the free monad. */
   def pure[S[_], M[_], A](value: A)(implicit M: Applicative[M]): FreeT[S, M, A] = Suspend(M.pure(Right(value)))
 
+  @deprecated("Use FreeT.defer.", "1.0.0-MF")
   def suspend[S[_], M[_], A](a: M[Either[A, S[FreeT[S, M, A]]]])(implicit M: Applicative[M]): FreeT[S, M, A] =
+    defer(a)
+
+  def defer[S[_], M[_], A](a: M[Either[A, S[FreeT[S, M, A]]]])(implicit M: Applicative[M]): FreeT[S, M, A] =
     liftT(a).flatMap({
       case Left(a) => pure(a)
       case Right(s) => roll(s)
