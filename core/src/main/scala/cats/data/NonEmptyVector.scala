@@ -234,6 +234,9 @@ private[data] sealed trait NonEmptyVectorInstances {
           case Some(gtail) => G.map2(f(nel.head), gtail)(NonEmptyVector(_, _))
         }.value
 
+      override def traverse[G[_], A, B](fa: NonEmptyVector[A])(f: (A) => G[B])(implicit G: Applicative[G]): G[NonEmptyVector[B]] =
+        G.map2Eval(f(fa.head), Always(Traverse[Vector].traverse(fa.tail)(f)))(NonEmptyVector(_, _)).value
+
       override def foldLeft[A, B](fa: NonEmptyVector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
