@@ -4,8 +4,6 @@ package data
 import scala.annotation.tailrec
 import scala.collection.immutable.{TreeSet, VectorBuilder}
 import cats.instances.vector._
-import cats.syntax.cartesian._
-import cats.syntax.semigroup._
 
 /**
  * A data type which represents a `Vector` guaranteed to contain at least one element.
@@ -228,10 +226,13 @@ private[data] sealed trait NonEmptyVectorInstances {
 
       def extract[A](fa: NonEmptyVector[A]): A = fa.head
 
-      def traverse1[G[_] : Apply, A, B](as: NonEmptyVector[A])(f: A => G[B]): G[NonEmptyVector[B]] = {
-        as.map(a => Apply[G].map(f(a))(NonEmptyVector.of(_)))
-          .reduceLeft((acc, a) => (acc |@| a).map( _ |+| _ ))
-      }
+      def traverse1[G[_], A, B](nel: NonEmptyVector[A])(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyVector[B]] =
+        Foldable[Vector].reduceRightToOption[A, G[Vector[B]]](nel.tail)(a => G.map(f(a))(_ +: Vector.empty)) { (a, lglb) =>
+          G.map2Eval(f(a), lglb)(_ +: _)
+        }.map {
+          case None => G.map(f(nel.head))(NonEmptyVector(_, Vector.empty))
+          case Some(gtail) => G.map2(f(nel.head), gtail)(NonEmptyVector(_, _))
+        }.value
 
       override def foldLeft[A, B](fa: NonEmptyVector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)

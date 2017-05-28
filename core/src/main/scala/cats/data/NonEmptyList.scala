@@ -3,8 +3,6 @@ package data
 
 import cats.instances.list._
 import cats.syntax.order._
-import cats.syntax.semigroup._
-import cats.syntax.cartesian._
 
 import scala.annotation.tailrec
 import scala.collection.immutable.TreeSet
@@ -354,10 +352,13 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
 
       def extract[A](fa: NonEmptyList[A]): A = fa.head
 
-      def traverse1[G[_] : Apply, A, B](as: NonEmptyList[A])(f: A => G[B]): G[NonEmptyList[B]] = {
-        as.map(a => Apply[G].map(f(a))(NonEmptyList.of(_)))
-          .reduceLeft((acc, a) => (acc |@| a).map( _ |+| _ ))
-      }
+      def traverse1[G[_], A, B](nel: NonEmptyList[A])(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyList[B]] =
+        Foldable[List].reduceRightToOption[A, G[List[B]]](nel.tail)(a => G.map(f(a))(_ :: Nil)) { (a, lglb) =>
+          G.map2Eval(f(a), lglb)(_ :: _)
+        }.map {
+          case None => G.map(f(nel.head))(NonEmptyList(_, Nil))
+          case Some(gtail) => G.map2(f(nel.head), gtail)(NonEmptyList(_, _))
+        }.value
 
       override def traverse[G[_], A, B](fa: NonEmptyList[A])(f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
         fa traverse f
