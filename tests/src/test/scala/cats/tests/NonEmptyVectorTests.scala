@@ -6,7 +6,7 @@ import catalysts.Platform
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, TraverseTests, ReducibleTests, MonadTests}
+import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, TraverseTests, Traverse1Tests, ReducibleTests, MonadTests}
 import cats.laws.discipline.arbitrary._
 
 import scala.util.Properties
@@ -19,6 +19,7 @@ class NonEmptyVectorTests extends CatsSuite {
   checkAll("NonEmptyVector[Int]", OrderLaws[NonEmptyVector[Int]].eqv)
 
   checkAll("NonEmptyVector[Int] with Option", TraverseTests[NonEmptyVector].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("NonEmptyVector[Int] with Option", Traverse1Tests[NonEmptyVector].traverse1[Option, Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[NonEmptyVector[A]]", SerializableTests.serializable(Traverse[NonEmptyVector]))
 
   checkAll("NonEmptyVector[Int]", ReducibleTests[NonEmptyVector].reducible[Option, Int, Int])
