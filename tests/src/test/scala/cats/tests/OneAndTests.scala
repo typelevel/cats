@@ -5,7 +5,7 @@ import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.instances.stream._
 import cats.data.{NonEmptyStream, OneAnd}
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests}
+import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, Traverse1Tests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
 
 class OneAndTests extends CatsSuite {
@@ -16,6 +16,7 @@ class OneAndTests extends CatsSuite {
   checkAll("OneAnd[Stream, Int]", OrderLaws[OneAnd[Stream, Int]].eqv)
 
   checkAll("OneAnd[Stream, Int] with Option", TraverseTests[OneAnd[Stream, ?]].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("OneAnd[Stream, Int] with Option", Traverse1Tests[OneAnd[Stream, ?]].traverse1[Option, Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[OneAnd[Stream, A]]", SerializableTests.serializable(Traverse[OneAnd[Stream, ?]]))
 
   checkAll("OneAnd[Stream, Int]", ReducibleTests[OneAnd[Stream, ?]].reducible[Option, Int, Int])
