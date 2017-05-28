@@ -207,7 +207,7 @@ private[data] trait OneAndLowPriority1 extends OneAndLowPriority0 {
 
 private[data] trait OneAndLowPriority2 extends OneAndLowPriority1 {
   implicit def catsDataTraverse1ForOneAnd[F[_]](implicit F: Traverse[F], F2: MonadCombine[F]): Traverse1[OneAnd[F, ?]] =
-    new NonEmptyTraverse1[OneAnd[F, ?], F] {
+    new NonEmptyReducible[OneAnd[F, ?], F] with Traverse1[OneAnd[F, ?]] {
       def traverse1[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
           import cats.syntax.cartesian._
 
