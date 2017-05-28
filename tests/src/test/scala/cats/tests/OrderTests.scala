@@ -8,13 +8,13 @@ import org.scalatest._
 class OrderTests extends FunSuite {
   {
     import cats.implicits._
-    implicitly[Invariant[Order]]
-    implicitly[Contravariant[Order]]
+    Invariant[Order]
+    Contravariant[Order]
   }
 
   {
     import cats.instances.order._
-    implicitly[Invariant[Order]]
-    implicitly[Contravariant[Order]]
+    Invariant[Order]
+    Contravariant[Order]
   }
 }

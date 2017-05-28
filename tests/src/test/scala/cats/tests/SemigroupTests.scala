@@ -8,15 +8,15 @@ import cats.functor._
 class SemigroupTests extends FunSuite {
   {
     import cats.implicits._
-    implicitly[Invariant[Semigroup]]
-    implicitly[Cartesian[Semigroup]]
-    implicitly[InvariantMonoidal[Semigroup]]
+    Invariant[Semigroup]
+    Cartesian[Semigroup]
+    InvariantMonoidal[Semigroup]
   }
 
   {
     import cats.instances.semigroup._
-    implicitly[Invariant[Semigroup]]
-    implicitly[Cartesian[Semigroup]]
-    implicitly[InvariantMonoidal[Semigroup]]
+    Invariant[Semigroup]
+    Cartesian[Semigroup]
+    InvariantMonoidal[Semigroup]
   }
 }
