@@ -19,7 +19,7 @@ import simulacrum.typeclass
   def flatTraverse1[G[_], A, B](fa: F[A])(f: A => G[F[B]])(implicit G: Apply[G], F: FlatMap[F]): G[F[B]] =
     G.map(traverse1(fa)(f))(F.flatten)
 
-  def flatSequence[G[_], A](fgfa: F[G[F[A]]])(implicit G: Apply[G], F: FlatMap[F]): G[F[A]] =
+  def flatSequence1[G[_], A](fgfa: F[G[F[A]]])(implicit G: Apply[G], F: FlatMap[F]): G[F[A]] =
     G.map(traverse1(fgfa)(identity))(F.flatten)
 
   override def traverse[G[_] : Applicative, A, B](fa: F[A])(f: (A) => G[B]): G[F[B]] =
