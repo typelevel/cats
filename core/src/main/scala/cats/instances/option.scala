@@ -86,6 +86,9 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       override def maximumOption[A](fa: Option[A])(implicit A: Order[A]): Option[A] = fa
 
+      override def get[A](fa: Option[A])(idx: Long): Option[A] =
+        if (idx == 0L) fa else None
+
       override def size[A](fa: Option[A]): Long = fa.fold(0L)(_ => 1L)
 
       override def foldMap[A, B](fa: Option[A])(f: A => B)(implicit B: Monoid[B]): B =

@@ -237,11 +237,55 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    */
   def ensure[EE >: E](onFailure: => EE)(f: A => Boolean): Validated[EE, A] =
     fold(_ => this, a => if (f(a)) this else Validated.invalid(onFailure))
+
+  /**
+    * Ensure that a successful result passes the given predicate,
+    * falling back to the an Invalid of the result of `onFailure` if the predicate
+    * returns false.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.valid("ab").ensureOr(s => new IllegalArgumentException("Must be longer than 3, provided '" + s + "'"))(_.length > 3)
+    * res0: Validated[IllegalArgumentException, String] = Invalid(java.lang.IllegalArgumentException: Must be longer than 3, provided 'ab')
+    * }}}
+    */
+  def ensureOr[EE >: E](onFailure: A => EE)(f: A => Boolean): Validated[EE, A] =
+    fold(_ => this, a => if (f(a)) this else Validated.invalid(onFailure(a)))
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions{
   final case class Valid[+A](a: A) extends Validated[Nothing, A]
   final case class Invalid[+E](e: E) extends Validated[E, Nothing]
+
+
+  /**
+   * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
+   * the resulting `Validated`. Uncaught exceptions are propagated.
+   *
+   * For example:
+   * {{{
+   * scala> Validated.catchOnly[NumberFormatException] { "foo".toInt }
+   * res0: Validated[NumberFormatException, Int] = Invalid(java.lang.NumberFormatException: For input string: "foo")
+   * }}}
+   *
+   * This method and its usage of [[NotNull]] are inspired by and derived from
+   * the `fromTryCatchThrowable` method [[https://github.com/scalaz/scalaz/pull/746/files contributed]]
+   * to Scalaz by Brian McKenna.
+   */
+  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
+
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  private[data] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean = true ) extends AnyVal{
+    def apply[A](f: => A)(implicit T: ClassTag[T], NT: NotNull[T]): Validated[T, A] =
+      try {
+        valid(f)
+      } catch {
+        case t if T.runtimeClass.isInstance(t) =>
+          invalid(t.asInstanceOf[T])
+      }
+  }
 }
 
 private[data] sealed abstract class ValidatedInstances extends ValidatedInstances1 {
@@ -374,6 +418,9 @@ private[data] sealed abstract class ValidatedInstances2 {
       override def size[A](fa: Validated[E, A]): Long =
         fa.fold(_ => 0L, _ => 1L)
 
+      override def get[A](fa: Validated[E, A])(idx: Long): Option[A] =
+        if (idx == 0L) fa.toOption else None
+
       override def foldMap[A, B](fa: Validated[E, A])(f: A => B)(implicit B: Monoid[B]): B =
         fa.fold(_ => B.empty, f)
 
@@ -395,37 +442,49 @@ private[data] sealed abstract class ValidatedInstances2 {
 }
 
 private[data] trait ValidatedFunctions {
+  /**
+    * Converts an `A` to a `Validated[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.invalid[IllegalArgumentException, String](new IllegalArgumentException("Argument is nonzero"))
+    * res0: Validated[IllegalArgumentException, String] = Invalid(java.lang.IllegalArgumentException: Argument is nonzero)
+    * }}}
+    */
   def invalid[A, B](a: A): Validated[A, B] = Validated.Invalid(a)
 
+  /**
+    * Converts an `A` to a `ValidatedNel[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.invalidNel[IllegalArgumentException, String](new IllegalArgumentException("Argument is nonzero"))
+    * res0: ValidatedNel[IllegalArgumentException, String] = Invalid(NonEmptyList(java.lang.IllegalArgumentException: Argument is nonzero))
+    * }}}
+    */
   def invalidNel[A, B](a: A): ValidatedNel[A, B] = Validated.Invalid(NonEmptyList(a, Nil))
 
+  /**
+    * Converts a `B` to a `Validated[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.valid[IllegalArgumentException, String]("Hello world")
+    * res0: Validated[IllegalArgumentException, String] = Valid(Hello world)
+    * }}}
+    */
   def valid[A, B](b: B): Validated[A, B] = Validated.Valid(b)
 
   /**
-   * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
-   * the resulting `Validated`. Uncaught exceptions are propagated.
-   *
-   * For example:
-   * {{{
-   * scala> Validated.catchOnly[NumberFormatException] { "foo".toInt }
-   * res0: Validated[NumberFormatException, Int] = Invalid(java.lang.NumberFormatException: For input string: "foo")
-   * }}}
-   *
-   * This method and its usage of [[NotNull]] are inspired by and derived from
-   * the `fromTryCatchThrowable` method [[https://github.com/scalaz/scalaz/pull/746/files contributed]]
-   * to Scalaz by Brian McKenna.
-   */
-  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
-
-  final class CatchOnlyPartiallyApplied[T] private[ValidatedFunctions] {
-    def apply[A](f: => A)(implicit T: ClassTag[T], NT: NotNull[T]): Validated[T, A] =
-      try {
-        valid(f)
-      } catch {
-        case t if T.runtimeClass.isInstance(t) =>
-          invalid(t.asInstanceOf[T])
-      }
-  }
+    * Converts a `B` to a `ValidatedNel[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.validNel[IllegalArgumentException, String]("Hello world")
+    * res0: ValidatedNel[IllegalArgumentException, String] = Valid(Hello world)
+    * }}}
+    */
+  def validNel[A, B](b: B): ValidatedNel[A, B] = Validated.Valid(b)
 
   def catchNonFatal[A](f: => A): Validated[Throwable, A] =
     try {

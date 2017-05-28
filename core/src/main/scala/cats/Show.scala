@@ -11,7 +11,7 @@ import cats.functor.Contravariant
  * explicitly provided one.
  */
 @typeclass trait Show[T] {
-  def show(f: T): String
+  def show(t: T): String
 }
 
 object Show {

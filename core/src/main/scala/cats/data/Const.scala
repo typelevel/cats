@@ -40,7 +40,10 @@ object Const extends ConstInstances {
   def empty[A, B](implicit A: Monoid[A]): Const[A, B] =
     Const(A.empty)
 
-  final class OfPartiallyApplied[B] {
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  private[data] final class OfPartiallyApplied[B](val dummy: Boolean = true ) extends AnyVal {
     def apply[A](a: A): Const[A, B] = Const(a)
   }
 
@@ -77,6 +80,10 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
     def foldLeft[A, B](fa: Const[C, A], b: B)(f: (B, A) => B): B = b
 
     def foldRight[A, B](fa: Const[C, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = lb
+
+    override def size[A](fa: Const[C, A]): Long = 0L
+
+    override def get[A](fa: Const[C, A])(idx: Long): Option[A] = None
 
     override def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
       fa.traverse(f)

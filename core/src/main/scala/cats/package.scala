@@ -70,6 +70,8 @@ package object cats {
         Now(Some(f(fa)))
       override def reduceMap[A, B](fa: Id[A])(f: A => B)(implicit B: Semigroup[B]): B = f(fa)
       override def size[A](fa: Id[A]): Long = 1L
+      override def get[A](fa: Id[A])(idx: Long): Option[A] =
+        if (idx == 0L) Some(fa) else None
       override def isEmpty[A](fa: Id[A]): Boolean = false
   }
 

@@ -17,13 +17,55 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
 
   /**
    * Return the head and tail into a single list
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.toList
+   * res0: scala.collection.immutable.List[Int] = List(1, 2, 3, 4, 5)
+   * }}}
    */
   def toList: List[A] = head :: tail
 
+  /**
+   * Selects the last element
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.last
+   * res0: Int = 5
+   * }}}
+   */
   def last: A = tail.lastOption match {
     case None    => head
     case Some(a) => a
   }
+
+  /**
+   * Selects all elements except the last
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.init
+   * res0: scala.collection.immutable.List[Int] = List(1, 2, 3, 4)
+   * }}}
+   */
+  def init: List[A] = tail match {
+    case Nil => List.empty
+    case t => head :: t.init
+  }
+
+  /**
+   * The size of this NonEmptyList
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.size
+   * res0: Int = 5
+   * }}}
+   */
+  def size: Int = 1 + tail.size
 
   /**
    *  Applies f to all the elements of the structure
@@ -402,6 +444,9 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
       override def toList[A](fa: NonEmptyList[A]): List[A] = fa.toList
 
       override def toNonEmptyList[A](fa: NonEmptyList[A]): NonEmptyList[A] = fa
+
+      override def get[A](fa: NonEmptyList[A])(idx: Long): Option[A] =
+        if (idx == 0) Some(fa.head) else Foldable[List].get(fa.tail)(idx - 1)
     }
 
   implicit def catsDataShowForNonEmptyList[A](implicit A: Show[A]): Show[NonEmptyList[A]] =
