@@ -98,7 +98,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
-private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
+private[data] sealed trait OneAndInstances extends OneAndLowPriority3 {
 
   implicit def catsDataEqForOneAnd[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
     new Eq[OneAnd[F, A]]{
