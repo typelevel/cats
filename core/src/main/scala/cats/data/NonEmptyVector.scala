@@ -189,7 +189,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
 private[data] sealed trait NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector] with Reducible[NonEmptyVector]
-    with Comonad[NonEmptyVector] with Traverse[NonEmptyVector] with Monad[NonEmptyVector] =
+    with Comonad[NonEmptyVector] with Traverse1[NonEmptyVector] with Monad[NonEmptyVector] =
     new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector] with Comonad[NonEmptyVector]
       with Monad[NonEmptyVector] with Traverse1[NonEmptyVector] {
 
