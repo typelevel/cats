@@ -235,6 +235,10 @@ private[data] trait OneAndLowPriority3 extends OneAndLowPriority2 {
           .reduceLeft(((acc, a) => (acc |@| a).map((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
       }
 
+      override def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {
+        G.map2Eval(f(fa.head), Always(F.traverse(fa.tail)(f)))(OneAnd(_, _)).value
+      }
+
       def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
     }
 }
