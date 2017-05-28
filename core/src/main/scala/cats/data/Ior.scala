@@ -227,8 +227,8 @@ private[data] sealed trait IorFunctions {
   def left[A, B](a: A): A Ior B = Ior.Left(a)
   def right[A, B](b: B): A Ior B = Ior.Right(b)
   def both[A, B](a: A, b: B): A Ior B = Ior.Both(a, b)
-  def leftNel[A, B](a: A): IorNel[A, B] = left(NonEmptyList.of(a))
-  def bothNel[A, B](a: A, b: B): IorNel[A, B] = both(NonEmptyList.of(a), b)
+  def leftNel[A, B](a: A): IorNel[A, B] = left(NonEmptyList.one(a))
+  def bothNel[A, B](a: A, b: B): IorNel[A, B] = both(NonEmptyList.one(a), b)
 
   /**
    * Create an `Ior` from two Options if at least one of them is defined.

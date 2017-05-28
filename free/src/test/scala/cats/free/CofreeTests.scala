@@ -67,10 +67,8 @@ class CofreeTests extends CatsSuite {
 
   test("Cofree.mapBranchingRoot") {
     val unfoldedHundred: CofreeNel[Int] = Cofree.unfold[Option, Int](0)(i => if (i == 100) None else Some(i + 1))
-    val withNoneRoot = unfoldedHundred.mapBranchingRoot(new (Option ~> Option) {
-      override def apply[A](opt: Option[A]): Option[A] = None
-    })
-    val nelUnfoldedOne: NonEmptyList[Int] = NonEmptyList.of(0)
+    val withNoneRoot = unfoldedHundred.mapBranchingRoot(λ[Option ~> Option](_ => None))
+    val nelUnfoldedOne: NonEmptyList[Int] = NonEmptyList.one(0)
     cofNelToNel(withNoneRoot) should ===(nelUnfoldedOne)
   }
 

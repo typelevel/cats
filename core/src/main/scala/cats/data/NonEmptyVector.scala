@@ -210,7 +210,7 @@ private[data] sealed trait NonEmptyVectorInstances {
         fa map f
 
       def pure[A](x: A): NonEmptyVector[A] =
-        NonEmptyVector(x, Vector.empty)
+        NonEmptyVector.one(x)
 
       def flatMap[A, B](fa: NonEmptyVector[A])(f: A => NonEmptyVector[B]): NonEmptyVector[B] =
         fa flatMap f
@@ -298,6 +298,8 @@ object NonEmptyVector extends NonEmptyVectorInstances {
     tail.foreach(buf += _)
     new NonEmptyVector(buf.result)
   }
+
+  def one[A](head: A): NonEmptyVector[A] = apply(head, Vector.empty[A])
 
   def unapply[A](nev: NonEmptyVector[A]): Some[(A, Vector[A])] = Some((nev.head, nev.tail))
 
