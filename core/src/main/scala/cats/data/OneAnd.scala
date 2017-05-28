@@ -209,14 +209,31 @@ private[data] trait OneAndLowPriority1 extends OneAndLowPriority0 {
 }
 
 private[data] trait OneAndLowPriority2 extends OneAndLowPriority1 {
+  implicit def catsDataTraverseForOneAnd[F[_]](implicit F: Traverse[F]): Traverse[OneAnd[F, ?]] =
+    new Traverse[OneAnd[F, ?]] {
+      def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {
+        G.map2Eval(f(fa.head), Always(F.traverse(fa.tail)(f)))(OneAnd(_, _)).value
+      }
+
+      def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B = {
+        fa.foldLeft(b)(f)
+      }
+
+      def foldRight[A, B](fa: OneAnd[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+        fa.foldRight(lb)(f)
+      }
+    }
+}
+
+private[data] trait OneAndLowPriority3 extends OneAndLowPriority2 {
   implicit def catsDataTraverse1ForOneAnd[F[_]](implicit F: Traverse[F], F2: MonadCombine[F]): Traverse1[OneAnd[F, ?]] =
     new NonEmptyReducible[OneAnd[F, ?], F] with Traverse1[OneAnd[F, ?]] {
       def traverse1[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
-          import cats.syntax.cartesian._
+        import cats.syntax.cartesian._
 
-          fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)
-            .reduceLeft(((acc, a) => (acc |@| a).map((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
-        }
+        fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)
+          .reduceLeft(((acc, a) => (acc |@| a).map((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
+      }
 
       def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
     }
