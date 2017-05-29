@@ -5,11 +5,38 @@ import scala.collection.mutable
 
 package object map extends MapInstances
 
-trait MapInstances {
+trait MapInstances extends MapInstances1 {
+  implicit def catsKernelStdHashForMap[K: Hash, V: Hash]: Hash[Map[K, V]] =
+    new MapHash[K, V]
+}
+
+trait MapInstances1 {
   implicit def catsKernelStdEqForMap[K, V: Eq]: Eq[Map[K, V]] =
     new MapEq[K, V]
   implicit def catsKernelStdMonoidForMap[K, V: Semigroup]: Monoid[Map[K, V]] =
     new MapMonoid[K, V]
+}
+
+class MapHash[K, V](implicit K: Hash[K], V: Hash[V]) extends MapEq[K, V]()(V) with Hash[Map[K, V]] {
+  // adapted from [[scala.util.hashing.MurmurHash3]],
+  // but modified standard `Any#hashCode` to `ev.hash`.
+  import scala.util.hashing.MurmurHash3
+  def hash(x: Map[K, V]): Int = {
+    var a, b, n = 0
+    var c = 1
+    x foreach { case (k, v) =>
+      val h = (K hash k, V hash v).##
+      a += h
+      b ^= h
+      if (h != 0) c *= h
+      n += 1
+    }
+    var h = MurmurHash3.mapSeed
+    h = MurmurHash3.mix(h, a)
+    h = MurmurHash3.mix(h, b)
+    h = MurmurHash3.mixLast(h, c)
+    MurmurHash3.finalizeHash(h, n)
+  }
 }
 
 class MapEq[K, V](implicit V: Eq[V]) extends Eq[Map[K, V]] {
