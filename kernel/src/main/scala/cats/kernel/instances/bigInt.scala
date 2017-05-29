@@ -5,7 +5,7 @@ package object bigInt extends BigIntInstances // scalastyle:ignore package.objec
 
 trait BigIntInstances {
   implicit val catsKernelStdEqForBigInt: Order[BigInt] with Hash[BigInt] =
-    new BigIntOrder
+    new BigIntEq
   implicit val catsKernelStdGroupForBigInt: CommutativeGroup[BigInt] =
     new BigIntGroup
 }

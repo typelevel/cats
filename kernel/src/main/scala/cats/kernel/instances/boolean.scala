@@ -4,7 +4,7 @@ package instances
 package object boolean extends BooleanInstances
 
 trait BooleanInstances {
-  implicit val catsKernelStdEqForBoolean: Order[Boolean] with Hash[Eq] =
+  implicit val catsKernelStdEqForBoolean: Order[Boolean] with Hash[Boolean] =
     new BooleanEq
 }
 
