@@ -4,7 +4,7 @@ package instances
 package object int extends IntInstances
 
 trait IntInstances {
-  implicit val catsKernelStdEqForInt: Order[Int] with Eq[Int] = new IntEq
+  implicit val catsKernelStdEqForInt: Order[Int] with Hash[Int] = new IntEq
   implicit val catsKernelStdGroupForInt: CommutativeGroup[Int] = new IntGroup
 }
 
