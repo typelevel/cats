@@ -22,7 +22,7 @@ object KernelBoiler {
   }
 
   val templates: Seq[Template] = Seq(
-    GenTupleInstances
+    GenTupleInstances, GenTupleInstances1, GenTupleInstances2
   )
 
   val header = "// auto-generated boilerplate"
@@ -80,7 +80,7 @@ object KernelBoiler {
   object GenTupleInstances extends Template {
     override def range: IndexedSeq[Int] = 1 to maxArity
 
-    def filename(root: File): File = root / "cats" / "kernel" / "instances" / "TupleAlgebra.scala"
+    def filename(root: File): File = root / "cats" / "kernel" / "instances" / "TupleInstances.scala"
 
     def content(tv: TemplateVals): String = {
       import tv._
@@ -95,15 +95,6 @@ object KernelBoiler {
         if (a == 1) "Tuple1(" ++ r ++ ")"
         else s"(${r})"
       }
-
-      def unaryMethod(name: String) =
-        synTypes.zipWithIndex.iterator.map {
-          case (tpe, i) =>
-            val j = i + 1
-            s"${tpe}.${name}(x._$j)"
-        }
-
-      def tupleNHeader = s"Tuple${synTypes.size}"
 
       def binMethod(name: String) =
         synTypes.zipWithIndex.iterator.map {
@@ -129,7 +120,7 @@ object KernelBoiler {
         |package cats.kernel
         |package instances
         |
-        |trait TupleInstances {
+        |trait TupleInstances extends TupleInstances1 {
         -  implicit def catsKernelStdBandForTuple${arity}[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =
         -    new Band[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
@@ -142,17 +133,6 @@ object KernelBoiler {
         -      def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
         -    }
         -
-        -  implicit def catsKernelStdEqForTuple${arity}[${`A..N`}](implicit ${constraints("Eq")}): Eq[${`(A..N)`}] =
-        -    new Eq[${`(A..N)`}] {
-        -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
-        -    }
-        -
-        -  implicit def catsKernelStdHashForTuple${arity}[${`A..N`}](implicit ${constraints("Hash")}): Hash[${`(A..N)`}] =
-        -    new Hash[${`(A..N)`}] {
-        -      def hash(x: ${`(A..N)`}): Int = ${unaryMethod("hash").mkString(s"$tupleNHeader(", ", ", ")")}.##
-        -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
-        -    }
-        -
         -  implicit def catsKernelStdMonoidForTuple${arity}[${`A..N`}](implicit ${constraints("Monoid")}): Monoid[${`(A..N)`}] =
         -    new Monoid[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
@@ -163,12 +143,6 @@ object KernelBoiler {
         -    new Order[${`(A..N)`}] {
         -      def compare(x: ${`(A..N)`}, y: ${`(A..N)`}): Int =
         -        ${binMethod("compare").mkString("Array(", ", ", ")")}.find(_ != 0).getOrElse(0)
-        -    }
-        -
-        -  implicit def catsKernelStdPartialOrderForTuple${arity}[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
-        -    new PartialOrder[${`(A..N)`}] {
-        -      def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
-        -        ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
         -    }
         -
         -  implicit def catsKernelStdSemigroupForTuple${arity}[${`A..N`}](implicit ${constraints("Semigroup")}): Semigroup[${`(A..N)`}] =
@@ -184,4 +158,127 @@ object KernelBoiler {
       """
     }
   }
+
+
+  object GenTupleInstances1 extends Template {
+    override def range: IndexedSeq[Int] = 1 to maxArity
+
+    def filename(root: File): File = root / "cats" / "kernel" / "instances" / "TupleInstances1.scala"
+
+    def content(tv: TemplateVals): String = {
+      import tv._
+
+      def constraints(constraint: String) =
+        synTypes.map(tpe => s"${tpe}: ${constraint}[${tpe}]").mkString(", ")
+
+      def tuple(results: TraversableOnce[String]) = {
+        val resultsVec = results.toVector
+        val a = synTypes.size
+        val r =  s"${0.until(a).map(i => resultsVec(i)).mkString(", ")}"
+        if (a == 1) "Tuple1(" ++ r ++ ")"
+        else s"(${r})"
+      }
+
+      def tupleNHeader = s"Tuple${synTypes.size}"
+
+      def binMethod(name: String) =
+        synTypes.zipWithIndex.iterator.map {
+          case (tpe, i) =>
+            val j = i + 1
+            s"${tpe}.${name}(x._${j}, y._${j})"
+        }
+
+      def unaryMethod(name: String) =
+        synTypes.zipWithIndex.iterator.map { case (tpe, i) =>
+            s"$tpe.$name(x._${i + 1})"
+        }
+
+      def binTuple(name: String) =
+        tuple(binMethod(name))
+
+      def unaryTuple(name: String) = {
+        val m = synTypes.zipWithIndex.map { case (tpe, i) => s"${tpe}.${name}(x._${i + 1})" }
+        tuple(m)
+      }
+
+      def nullaryTuple(name: String) = {
+        val m = synTypes.map(tpe => s"${tpe}.${name}")
+        tuple(m)
+      }
+
+      block"""
+        |package cats.kernel
+        |package instances
+        |
+        |trait TupleInstances1 extends TupleInstances2 {
+        -  implicit def catsKernelStdHashForTuple${arity}[${`A..N`}](implicit ${constraints("Hash")}): Hash[${`(A..N)`}] =
+        -    new Hash[${`(A..N)`}] {
+        -      def hash(x: ${`(A..N)`}): Int = ${unaryMethod("hash").mkString(s"$tupleNHeader(", ", ", ")")}.##
+        -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
+        -    }
+        -
+        -  implicit def catsKernelStdPartialOrderForTuple${arity}[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
+        -    new PartialOrder[${`(A..N)`}] {
+        -      def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
+        -        ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
+        -    }
+        |}
+      """
+    }
+  }
+
+
+  object GenTupleInstances2 extends Template {
+    override def range: IndexedSeq[Int] = 1 to maxArity
+
+    def filename(root: File): File = root / "cats" / "kernel" / "instances" / "TupleInstances2.scala"
+
+    def content(tv: TemplateVals): String = {
+      import tv._
+
+      def constraints(constraint: String) =
+        synTypes.map(tpe => s"${tpe}: ${constraint}[${tpe}]").mkString(", ")
+
+      def tuple(results: TraversableOnce[String]) = {
+        val resultsVec = results.toVector
+        val a = synTypes.size
+        val r = s"${0.until(a).map(i => resultsVec(i)).mkString(", ")}"
+        if (a == 1) "Tuple1(" ++ r ++ ")"
+        else s"(${r})"
+      }
+
+      def binMethod(name: String) =
+        synTypes.zipWithIndex.iterator.map {
+          case (tpe, i) =>
+            val j = i + 1
+            s"${tpe}.${name}(x._${j}, y._${j})"
+        }
+
+      def binTuple(name: String) =
+        tuple(binMethod(name))
+
+      def unaryTuple(name: String) = {
+        val m = synTypes.zipWithIndex.map { case (tpe, i) => s"${tpe}.${name}(x._${i + 1})" }
+        tuple(m)
+      }
+
+      def nullaryTuple(name: String) = {
+        val m = synTypes.map(tpe => s"${tpe}.${name}")
+        tuple(m)
+      }
+
+      block"""
+        |package cats.kernel
+        |package instances
+        |
+        |trait TupleInstances2 {
+        -  implicit def catsKernelStdEqForTuple${arity}[${`A..N`}](implicit ${constraints("Eq")}): Eq[${`(A..N)`}] =
+        -    new Eq[${`(A..N)`}] {
+        -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
+        -    }
+        |}
+      """
+    }
+  }
+
 }
