@@ -63,21 +63,35 @@ trait EitherInstances0 extends EitherInstances1 {
           }
         }
     }
+
+  implicit def catsStdHashForEither[A, B](implicit A: Hash[A], B: Hash[B]): Hash[Either[A, B]] =
+    new EitherEq[A, B](A, B) with Hash[Either[A, B]] {
+      def hash(x: Either[A, B]): Int = {
+        x match {
+          case Left(xx) => Left(A.hash(xx)).##
+          case Right(xx) => Right(B.hash(xx)).##
+        }
+      }
+    }
 }
 
 trait EitherInstances1 {
-  implicit def catsStdEqForEither[A, B](implicit A: Eq[A], B: Eq[B]): Eq[Either[A, B]] =
-    new Eq[Either[A, B]] {
-      def eqv(x: Either[A, B], y: Either[A, B]): Boolean =
-        x match {
-          case Left(xx) => y match {
-            case Left(yy) => A.eqv(xx, yy)
-            case Right(_) => false
-          }
-          case Right(xx) => y match {
-            case Left(_) => false
-            case Right(yy) => B.eqv(xx, yy)
-          }
+
+  // isolated class for inheritance
+  private[cats] class EitherEq[A, B](A: Eq[A], B: Eq[B]) extends Eq[Either[A, B]] {
+    def eqv(x: Either[A, B], y: Either[A, B]): Boolean =
+      x match {
+        case Left(xx) => y match {
+          case Left(yy) => A.eqv(xx, yy)
+          case Right(_) => false
         }
-    }
+        case Right(xx) => y match {
+          case Left(_) => false
+          case Right(yy) => B.eqv(xx, yy)
+        }
+      }
+  }
+
+  implicit def catsStdEqForEither[A, B](implicit A: Eq[A], B: Eq[B]): Eq[Either[A, B]] = new EitherEq(A, B)
+
 }

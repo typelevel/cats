@@ -4,7 +4,7 @@ package instances
 package object int extends IntInstances
 
 trait IntInstances {
-  implicit val catsKernelStdOrderForInt: Order[Int] = new IntOrder
+  implicit val catsKernelStdEqForInt: Order[Int] with Eq[Int] = new IntEq
   implicit val catsKernelStdGroupForInt: CommutativeGroup[Int] = new IntGroup
 }
 
@@ -15,8 +15,8 @@ class IntGroup extends CommutativeGroup[Int] {
   override def remove(x: Int, y: Int): Int = x - y
 }
 
-class IntOrder extends Order[Int] {
-
+class IntEq extends Order[Int] with Hash[Int] {
+  def hash(x: Int): Int = x.##
   def compare(x: Int, y: Int): Int =
     if (x < y) -1 else if (x > y) 1 else 0
 

@@ -1,12 +1,10 @@
 package cats.kernel
 package instances
 
-import java.lang.Math
-
 package object double extends DoubleInstances
 
 trait DoubleInstances {
-  implicit val catsKernelStdOrderForDouble: Order[Double] = new DoubleOrder
+  implicit val catsKernelStdEqForDouble: Order[Double] with Hash[Double] = new DoubleEq
   implicit val catsKernelStdGroupForDouble: CommutativeGroup[Double] = new DoubleGroup
 }
 
@@ -17,8 +15,9 @@ class DoubleGroup extends CommutativeGroup[Double] {
   override def remove(x: Double, y: Double): Double = x - y
 }
 
-class DoubleOrder extends Order[Double] {
+class DoubleEq extends Order[Double] with Hash[Double] {
 
+  def hash(x: Double): Int = x.##
   def compare(x: Double, y: Double): Int =
     java.lang.Double.compare(x, y)
 

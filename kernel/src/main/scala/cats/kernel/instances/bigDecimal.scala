@@ -4,8 +4,8 @@ package instances
 package object bigDecimal extends BigDecimalInstances // scalastyle:ignore package.object.name
 
 trait BigDecimalInstances {
-  implicit val catsKernelStdOrderForBigDecimal: Order[BigDecimal] =
-    new BigDecimalOrder
+  implicit val catsKernelStdEqForBigDecimal: Order[BigDecimal] with Hash[BigDecimal] =
+    new BigDecimalEq
   implicit val catsKernelStdGroupForBigDecimal: CommutativeGroup[BigDecimal] =
     new BigDecimalGroup
 }
@@ -17,7 +17,9 @@ class BigDecimalGroup extends CommutativeGroup[BigDecimal] {
   override def remove(x: BigDecimal, y: BigDecimal): BigDecimal = x - y
 }
 
-class BigDecimalOrder extends Order[BigDecimal] {
+class BigDecimalEq extends Order[BigDecimal] with Hash[BigDecimal] {
+
+  def hash(x: BigDecimal): Int = x.hashCode()
 
   def compare(x: BigDecimal, y: BigDecimal): Int = x compare y
 

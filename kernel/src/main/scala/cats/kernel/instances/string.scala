@@ -4,11 +4,14 @@ package instances
 package object string extends StringInstances
 
 trait StringInstances {
-  implicit val catsKernelStdOrderForString: Order[String] = new StringOrder
+  implicit val catsKernelStdEqForString: Order[String] with Hash[String] = new StringEq
   implicit val catsKernelStdMonoidForString: Monoid[String] = new StringMonoid
 }
 
-class StringOrder extends Order[String] {
+class StringEq extends Order[String] with Hash[String] {
+
+  def hash(x: String): Int = x.##
+
   override def eqv(x: String, y: String): Boolean =
     x == y
   def compare(x: String, y: String): Int =
