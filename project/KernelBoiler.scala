@@ -96,6 +96,15 @@ object KernelBoiler {
         else s"(${r})"
       }
 
+      def unaryMethod(name: String) =
+        synTypes.zipWithIndex.iterator.map {
+          case (tpe, i) =>
+            val j = i + 1
+            s"${tpe}.${name}(x._$j)"
+        }
+
+      def tupleNHeader = s"Tuple${synTypes.size}"
+
       def binMethod(name: String) =
         synTypes.zipWithIndex.iterator.map {
           case (tpe, i) =>
@@ -135,6 +144,12 @@ object KernelBoiler {
         -
         -  implicit def catsKernelStdEqForTuple${arity}[${`A..N`}](implicit ${constraints("Eq")}): Eq[${`(A..N)`}] =
         -    new Eq[${`(A..N)`}] {
+        -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
+        -    }
+        -
+        -  implicit def catsKernelStdHashForTuple${arity}[${`A..N`}](implicit ${constraints("Hash")}): Hash[${`(A..N)`}] =
+        -    new Hash[${`(A..N)`}] {
+        -      def hash(x: ${`(A..N)`}): Int = ${unaryMethod("hash").mkString(s"$tupleNHeader(", ", ", ")")}.##
         -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
         -    }
         -
