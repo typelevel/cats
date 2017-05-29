@@ -35,6 +35,11 @@ private[data] sealed abstract class NestedInstances extends NestedInstances0 {
     new NestedTraverseFilter[F, G] {
       val FG: TraverseFilter[λ[α => F[G[α]]]] = Traverse[F].composeFilter[G]
     }
+
+  implicit def catsDataTraverse1ForNested[F[_]: Traverse1, G[_]: Traverse1]: Traverse1[Nested[F, G, ?]] =
+    new NestedTraverse1[F, G] {
+      val FG: Traverse1[λ[α => F[G[α]]]] = Traverse1[F].compose[G]
+    }
 }
 
 private[data] sealed abstract class NestedInstances0 extends NestedInstances1 {
@@ -133,17 +138,10 @@ private[data] sealed abstract class NestedInstances9 extends NestedInstances10 {
     }
 }
 
-private[data] sealed abstract class NestedInstances10 extends NestedInstances11 {
+private[data] sealed abstract class NestedInstances10 {
   implicit def catsDataInvariantForNestedContravariant[F[_]: Invariant, G[_]: Contravariant]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].composeContravariant[G]
-    }
-}
-
-private[data] sealed abstract class NestedInstances11 {
-  implicit def catsDataTraverse1ForNested[F[_]: Traverse1, G[_]: Traverse1]: Traverse1[Nested[F, G, ?]] =
-    new NestedTraverse1[F, G] {
-      val FG: Traverse1[λ[α => F[G[α]]]] = Traverse1[F].compose[G]
     }
 }
 
