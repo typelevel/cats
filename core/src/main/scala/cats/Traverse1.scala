@@ -8,7 +8,7 @@ import simulacrum.typeclass
   * `Traverse1` is like a non-empty `Traverse`. In addition to the traverse and sequence
   * methods it provides traverse1 and sequence1 methods which require an `Apply` instance instead of `Applicative`.
   */
-@typeclass trait Traverse1[F[_]] extends Traverse[F] with Reducible[F] {
+@typeclass trait Traverse1[F[_]] extends Traverse[F] with Reducible[F] { self =>
 
   /**
     * Given a function which returns a G effect, thread this effect
@@ -84,6 +84,11 @@ import simulacrum.typeclass
   override def traverse[G[_] : Applicative, A, B](fa: F[A])(f: (A) => G[B]): G[F[B]] =
     traverse1(fa)(f)
 
+  def compose[G[_]: Traverse1]: Traverse1[λ[α => F[G[α]]]] =
+    new ComposedTraverse1[F, G] {
+      val F = self
+      val G = Traverse1[G]
+    }
 
 
 }
