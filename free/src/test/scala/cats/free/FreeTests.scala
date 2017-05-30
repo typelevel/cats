@@ -32,16 +32,16 @@ class FreeTests extends CatsSuite {
     }
   }
 
-  test("suspend doesn't change value"){
+  test("defer doesn't change value"){
     forAll { x: Free[List, Int] =>
-      Free.suspend(x) should === (x)
+      Free.defer(x) should === (x)
     }
   }
 
-  test("suspend is lazy"){
+  test("defer is lazy"){
     def yikes[F[_], A]: Free[F, A] = throw new RuntimeException("blargh")
     // this shouldn't throw an exception unless we try to run it
-    val _ = Free.suspend(yikes[Option, Int])
+    val _ = Free.defer(yikes[Option, Int])
   }
 
   test("compile consistent with foldMap"){
