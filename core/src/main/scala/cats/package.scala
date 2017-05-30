@@ -78,6 +78,7 @@ package object cats {
   type Eq[A] = cats.kernel.Eq[A]
   type PartialOrder[A] = cats.kernel.PartialOrder[A]
   type Order[A] = cats.kernel.Order[A]
+  type Hash[A] = cats.kernel.Hash[A]
   type Semigroup[A] = cats.kernel.Semigroup[A]
   type Monoid[A] = cats.kernel.Monoid[A]
   type Group[A] = cats.kernel.Group[A]
@@ -85,6 +86,7 @@ package object cats {
   val Eq = cats.kernel.Eq
   val PartialOrder = cats.kernel.PartialOrder
   val Order = cats.kernel.Order
+  val Hash = cats.kernel.Hash
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group
