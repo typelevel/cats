@@ -11,6 +11,7 @@ trait AllInstances
   with    EquivInstances
   with    FunctionInstances
   with    FutureInstances
+  with    HashInstances
   with    ListInstances
   with    MapInstances
   with    MonoidInstances
