@@ -327,6 +327,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
 object NonEmptyList extends NonEmptyListInstances {
   def of[A](head: A, tail: A*): NonEmptyList[A] = NonEmptyList(head, tail.toList)
 
+  def one[A](head: A): NonEmptyList[A] = NonEmptyList(head, Nil)
+
   /**
    * Create a `NonEmptyList` from a `List`.
    *
@@ -384,7 +386,7 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
         fa map f
 
       def pure[A](x: A): NonEmptyList[A] =
-        NonEmptyList(x, List.empty)
+        NonEmptyList.one(x)
 
       def flatMap[A, B](fa: NonEmptyList[A])(f: A => NonEmptyList[B]): NonEmptyList[B] =
         fa flatMap f

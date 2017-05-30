@@ -214,13 +214,13 @@ class IorTests extends CatsSuite {
 
   test("leftNel") {
     forAll { (x: String) =>
-      Ior.leftNel(x).left should === (Some(NonEmptyList.of(x)))
+      Ior.leftNel(x).left should === (Some(NonEmptyList.one(x)))
     }
   }
 
   test("bothNel") {
     forAll { (x: Int, y: String) =>
-      Ior.bothNel(y, x).onlyBoth should === (Some((NonEmptyList.of(y), x)))
+      Ior.bothNel(y, x).onlyBoth should === (Some((NonEmptyList.one(y), x)))
     }
   }
 

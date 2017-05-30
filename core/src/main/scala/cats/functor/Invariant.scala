@@ -27,14 +27,3 @@ import simulacrum.typeclass
       val G = Contravariant[G]
     }
 }
-
-object Invariant extends KernelInvariantInstances
-
-/**
- * Invariant instances for types that are housed in cats.kernel and therefore
- * can't have instances for this type class in their companion objects.
- */
-private[functor] sealed trait KernelInvariantInstances {
-  implicit val catsFunctorInvariantForSemigroup: Invariant[Semigroup] = InvariantMonoidal.catsInvariantMonoidalSemigroup
-  implicit val catsFunctorInvariantForMonoid: Invariant[Monoid] = InvariantMonoidal.catsInvariantMonoidalMonoid
-}
