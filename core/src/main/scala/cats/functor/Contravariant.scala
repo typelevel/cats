@@ -32,7 +32,7 @@ import simulacrum.typeclass
 object Contravariant extends KernelContravariantInstances
 
 /**
- * Convariant instances for types that are housed in cats.kernel and therefore
+ * Contravariant instances for types that are housed in cats.kernel and therefore
  * can't have instances for this type class in their companion objects.
  */
 private[functor] sealed trait KernelContravariantInstances {
@@ -56,4 +56,14 @@ private[functor] sealed trait KernelContravariantInstances {
        */
       def contramap[A, B](fa: Order[A])(f: B => A): Order[B] = fa.on(f)
     }
+
+  implicit val catsFunctorContravariantForHash: Contravariant[Hash] =
+    new Contravariant[Hash] {
+      /** Derive an `Hash` for `B` given an `Hash[A]` and a function `B => A`.
+       *
+       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
+       */
+      def contramap[A, B](fa: Hash[A])(f: B => A): Hash[B] = Hash.by(f)(fa)
+    }
+
 }
