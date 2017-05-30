@@ -25,3 +25,4 @@ trait AllInstances
   with    TupleInstances
   with    UUIDInstances
   with    SymbolInstances
+  with    HashInstances
