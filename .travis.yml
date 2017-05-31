@@ -36,6 +36,7 @@ install:
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
   - pip install --user codecov
   - gem install jekyll -v 2.5
+  - mkdir ~/.sbt/0.13/plugins/ && echo 'addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0-RC1")' >> ~/.sbt/0.13/plugins/build.sbt
 
 notifications:
   webhooks:
@@ -61,6 +62,10 @@ cache:
   - $HOME/.sbt/launchers
   - $HOME/.ivy2/cache
   - $HOME/.nvm
+  - $HOME/.cache/pip
+  - $HOME/.gem
+  - $HOME/.rvm
+  - vendor/bundle
 
 before_cache:
   - du -h -d 1 $HOME/.ivy2/cache
