@@ -7,6 +7,8 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 
+import org.scalacheck.{Arbitrary, Gen}
+
 import cats.kernel.laws.OrderLaws
 
 class WriterTTests extends CatsSuite {
@@ -387,5 +389,15 @@ class WriterTTests extends CatsSuite {
 
     checkAll("WriterT[Option, ListWrapper[Int], ?]", MonadErrorTests[WriterT[Option, ListWrapper[Int], ?], Unit].monadError[Int, Int, Int])
     checkAll("MonadError[WriterT[Option, ListWrapper[Int], ?], Unit]", SerializableTests.serializable(MonadError[WriterT[Option, ListWrapper[Int], ?], Unit]))
+  }
+
+
+  {
+
+    implicit val catsDataArbitraryOptionList: Arbitrary[Option ~> List] = Arbitrary(Gen.const(λ[Option ~> List](_.toList)))
+    implicit val catsDataArbitraryListVector: Arbitrary[List ~> Vector] = Arbitrary(Gen.const(λ[List ~> Vector](_.toVector)))
+
+    checkAll("WriterT[Option, Int, Int]", FunctorKTests[WriterT[?[_], Int, Int]].functorK[Option, List, Vector, Int])
+    checkAll("FunctorK[WriterT[?[_], Int, Int]", SerializableTests.serializable(FunctorK[WriterT[?[_], Int, Int]]))
   }
 }

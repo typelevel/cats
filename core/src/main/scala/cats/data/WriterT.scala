@@ -66,6 +66,10 @@ object WriterT extends WriterTInstances with WriterTFunctions {
 }
 
 private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
+  implicit def catsDataFunctorKForWriterT[L, V]: FunctorK[WriterT[?[_], L, V]] = new FunctorK[WriterT[?[_], L, V]]{
+    def mapK[G[_], H[_]](fg: WriterT[G, L, V])(f: G ~> H): WriterT[H, L, V] = WriterT(f(fg.run))
+  }
+
 
   implicit def catsDataMonadForWriterTId[L:Monoid]: Monad[WriterT[Id, L, ?]] =
     catsDataMonadWriterForWriterT[Id, L]

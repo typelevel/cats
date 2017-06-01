@@ -7,7 +7,7 @@ import cats.functor.{Contravariant, Strong}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Gen}
 import cats.kernel.laws.GroupLaws
 import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
 
@@ -115,6 +115,15 @@ class KleisliTests extends CatsSuite {
     implicit val catsDataSemigroupKForKleisli = Kleisli.catsDataSemigroupKForKleisli[Option]
     checkAll("Kleisli[Option, Int, Int]", SemigroupKTests[λ[α => Kleisli[Option, α, α]]].semigroupK[Int])
     checkAll("SemigroupK[λ[α => Kleisli[Option, α, α]]]", SerializableTests.serializable(catsDataSemigroupKForKleisli))
+  }
+
+  {
+
+    implicit val catsDataArbitraryOptionList: Arbitrary[FunctionK[Option, List]] = Arbitrary(Gen.const(λ[FunctionK[Option, List]](_.toList)))
+    implicit val catsDataArbitraryListVector: Arbitrary[FunctionK[List, Vector]] = Arbitrary(Gen.const(λ[FunctionK[List, Vector]](_.toVector)))
+
+    checkAll("Kleisli[Option, Int, Int]", FunctorKTests[Kleisli[?[_], Int, Int]].functorK[Option, List, Vector, Int])
+    checkAll("FunctorK[Kleisli[?[_], Int, Int]", SerializableTests.serializable(FunctorK[Kleisli[?[_], Int, Int]]))
   }
 
   checkAll("Reader[Int, Int]", FunctorTests[Reader[Int, ?]].functor[Int, Int, Int])
