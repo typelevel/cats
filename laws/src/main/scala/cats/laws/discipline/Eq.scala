@@ -13,7 +13,7 @@ object eq {
    * and comparing the application of the two functions.
    */
   implicit def catsLawsEqForFn1[A, B](implicit A: Arbitrary[A], B: Eq[B]): Eq[A => B] = new Eq[A => B] {
-    val sampleCnt: Int = if (Platform.isJvm) 50 else 30
+    val sampleCnt: Int = if (Platform.isJvm) 50 else 10
 
     def eqv(f: A => B, g: A => B): Boolean = {
       val samples = List.fill(sampleCnt)(A.arbitrary.sample).collect{
