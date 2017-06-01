@@ -199,7 +199,7 @@ class StateTTests extends CatsSuite {
 
   {
     // F has a Functor
-    implicit val F: Functor[ListWrapper] = ListWrapper.monad
+    implicit val F: Functor[ListWrapper] = ListWrapper.functor
     // We only need a Functor on F to find a Functor on StateT
     Functor[StateT[ListWrapper, Int, ?]]
   }
@@ -235,7 +235,7 @@ class StateTTests extends CatsSuite {
 
     checkAll("StateT[ListWrapper, Int, Int]", MonadTests[StateT[ListWrapper, Int, ?]].monad[Int, Int, Int])
     checkAll("Monad[StateT[ListWrapper, Int, ?]]", SerializableTests.serializable(Monad[StateT[ListWrapper, Int, ?]]))
-    checkAll("MonadTrans[StateT[?[_], Int, ?]]", MonadTransTests[StateT[?[_], String, ?]].monadTrans[ListWrapper, Int, Int])
+    checkAll("StateT[ListWrapper, Int, Int]", MonadTransTests[StateT[?[_], String, ?]].monadTrans[ListWrapper, Int, Int])
     checkAll("MonadTrans[StateT[?[_], Int, ?]]", SerializableTests.serializable(MonadTrans[StateT[?[_], Int, ?]]))
 
     Monad[StateT[ListWrapper, Int, ?]]

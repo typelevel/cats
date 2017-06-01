@@ -2,10 +2,11 @@ package cats
 package tests
 
 import cats.data.{ ReaderWriterStateT, ReaderWriterState, EitherT }
+import cats.functor.{ Bifunctor, Contravariant, Profunctor }
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import org.scalacheck.{ Arbitrary }
+import org.scalacheck.Arbitrary
 
 class ReaderWriterStateTTests extends CatsSuite {
   import ReaderWriterStateTTests._
@@ -279,18 +280,30 @@ class ReaderWriterStateTTests extends CatsSuite {
   }
 
   implicit val iso = CartesianTests.Isomorphisms
-    .invariant[ReaderWriterStateT[ListWrapper, String, Int, String, ?]](ReaderWriterStateT.catsDataFunctorForRWST(ListWrapper.monad))
+    .invariant[ReaderWriterStateT[ListWrapper, String, Int, String, ?]](ReaderWriterStateT.catsDataFunctorForRWST(ListWrapper.functor))
 
   {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
+
     checkAll("ReaderWriterStateT[ListWrapper, String, Int, String, Int]",
       FunctorTests[ReaderWriterStateT[ListWrapper, String, Int, String, ?]].functor[Int, Int, Int])
+    checkAll("Functor[ReaderWriterStateT[ListWrapper, String, Int, String, ?]]",
+      SerializableTests.serializable(Functor[ReaderWriterStateT[ListWrapper, String, Int, String, ?]]))
+
     checkAll("ReaderWriterStateT[ListWrapper, String, Int, String, Int]",
       ContravariantTests[ReaderWriterStateT[ListWrapper, ?, Int, String, Int]].contravariant[String, String, String])
+    checkAll("Contravariant[ReaderWriterStateT[ListWrapper, ?, Int, String, Int]]",
+      SerializableTests.serializable(Contravariant[ReaderWriterStateT[ListWrapper, ?, Int, String, Int]]))
+
     checkAll("ReaderWriterStateT[ListWrapper, Int, Int, String, Int]",
       ProfunctorTests[ReaderWriterStateT[ListWrapper, ?, Int, String, ?]].profunctor[Int, Int, Int, Int, Int, Int])
+    checkAll("Profunctor[ReaderWriterStateT[ListWrapper, ?, Int, String, ?]]",
+      SerializableTests.serializable(Profunctor[ReaderWriterStateT[ListWrapper, ?, Int, String, ?]]))
+
     checkAll("ReaderWriterStateT[ListWrapper, Int, Int, Int, Int]",
       BifunctorTests[ReaderWriterStateT[ListWrapper, String, Int, ?, ?]].bifunctor[Int, Int, Int, Int, Int, Int])
+    checkAll("Bifunctor[ReaderWriterStateT[ListWrapper, String, Int, ?, ?]]",
+      SerializableTests.serializable(Bifunctor[ReaderWriterStateT[ListWrapper, String, Int, ?, ?]]))
   }
 
   {
@@ -298,6 +311,8 @@ class ReaderWriterStateTTests extends CatsSuite {
 
     checkAll("ReaderWriterStateT[ListWrapper, String, Int, String, Int]",
       MonadTests[ReaderWriterStateT[ListWrapper, String, Int, String, ?]].monad[Int, Int, Int])
+    checkAll("Monad[ReaderWriterStateT[ListWrapper, String, Int, String, ?]]",
+      SerializableTests.serializable(Monad[ReaderWriterStateT[ListWrapper, String, Int, String, ?]]))
   }
 
   {
@@ -305,6 +320,8 @@ class ReaderWriterStateTTests extends CatsSuite {
 
     checkAll("ReaderWriterStateT[ListWrapper, String, Int, String, Int]",
       MonadStateTests[ReaderWriterStateT[ListWrapper, String, Int, String, ?], Int].monadState[Int, Int, Int])
+    checkAll("MonadState[ReaderWriterStateT[ListWrapper, String, Int, String, ?]. Int]",
+      SerializableTests.serializable(MonadState[ReaderWriterStateT[ListWrapper, String, Int, String, ?], Int]))
   }
 
   {
@@ -312,6 +329,8 @@ class ReaderWriterStateTTests extends CatsSuite {
 
     checkAll("ReaderWriterStateT[ListWrapper, String, Int, String, Int]",
       MonadCombineTests[ReaderWriterStateT[ListWrapper, String, Int, String, ?]].monadCombine[Int, Int, Int])
+    checkAll("MonadCombine[ReaderWriterStateT[ListWrapper, String, Int, String, ?]]",
+      SerializableTests.serializable(MonadCombine[ReaderWriterStateT[ListWrapper, String, Int, String, ?]]))
   }
 
   {
@@ -319,6 +338,10 @@ class ReaderWriterStateTTests extends CatsSuite {
 
     checkAll("ReaderWriterStateT[ListWrapper, String, Int, String, Int]",
       MonadReaderTests[ReaderWriterStateT[ListWrapper, String, Int, String, ?], String].monadReader[String, String, String])
+
+    // check serializable using Option
+    checkAll("MonadReader[ReaderWriterStateT[Option, String, Int, String, ?], String]",
+      SerializableTests.serializable(MonadReader[ReaderWriterStateT[Option, String, Int, String, ?], String]))
   }
 
   {
@@ -326,6 +349,8 @@ class ReaderWriterStateTTests extends CatsSuite {
 
     checkAll("ReaderWriterStateT[ListWrapper, String, Int, String, Int]",
       MonadWriterTests[ReaderWriterStateT[ListWrapper, String, Int, String, ?], String].monadWriter[String, String, String])
+    checkAll("MonadWriter[ReaderWriterStateT[ListWrapper, String, Int, String, ?], String]",
+      SerializableTests.serializable(MonadWriter[ReaderWriterStateT[ListWrapper, String, Int, String, ?], String]))
   }
 
   {
@@ -335,24 +360,29 @@ class ReaderWriterStateTTests extends CatsSuite {
 
     checkAll("ReaderWriterStateT[Option, String, Int, String, Int]",
       MonadErrorTests[ReaderWriterStateT[Option, String, Int, String, ?], Unit].monadError[Int, Int, Int])
+    checkAll("MonadError[ReaderWriterStateT[Option, String, Int, String, ?], Unit]",
+      SerializableTests.serializable(MonadError[ReaderWriterStateT[Option, String, Int, String, ?], Unit]))
   }
 
   {
-    implicit val F = ListWrapper.monad
-    implicit val S = ListWrapper.semigroupK
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
+    implicit val S: SemigroupK[ListWrapper] = ListWrapper.semigroupK
 
     checkAll("ReaderWriterStateT[ListWrapper, String, Int, String, Int]",
       SemigroupKTests[ReaderWriterStateT[ListWrapper, String, Int, String, ?]].semigroupK[Int])
+    checkAll("SemigroupK[ReaderWriterStateT[ListWrapper, String, Int, String, ?]]",
+      SerializableTests.serializable(SemigroupK[ReaderWriterStateT[ListWrapper, String, Int, String, ?]]))
   }
 
   {
-    implicit val F = ListWrapper.monad
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
-    checkAll("MonadTrans[ReaderWriterStateT[?[_], String, Int, String, ?]]",
+    checkAll("ReaderWriterStateT[?[_], String, Int, String, ?]",
       MonadTransTests[ReaderWriterStateT[?[_], String, Int, String, ?]].monadTrans[ListWrapper, Int, Int])
     checkAll("MonadTrans[ReaderWriterStateT[?[_], String, Int, String, ?]]",
       SerializableTests.serializable(MonadTrans[ReaderWriterStateT[?[_], String, Int, String, ?]]))
   }
+
 }
 
 object ReaderWriterStateTTests {
@@ -363,10 +393,6 @@ object ReaderWriterStateTTests {
       (Vector(s"${context}: Added ${i}"), state + i, state + i)
     }
   }
-
-  implicit def RWSTArbitrary[F[_]: Applicative, E, S, L, A](
-    implicit F: Arbitrary[(E, S) => F[(L, S, A)]]): Arbitrary[ReaderWriterStateT[F, E, S, L, A]] =
-    Arbitrary(F.arbitrary.map(ReaderWriterStateT(_)))
 
   implicit def RWSTEq[F[_], E, S, L, A](implicit S: Arbitrary[S], E: Arbitrary[E], FLSA: Eq[F[(L, S, A)]],
     F: Monad[F]): Eq[ReaderWriterStateT[F, E, S, L, A]] =

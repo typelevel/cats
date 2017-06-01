@@ -42,18 +42,6 @@ final class ReaderWriterStateT[F[_], E, S, L, A](val runF: F[(E, S) => F[(L, S, 
     transform { (l, s, a) => (f(l), s, a) }
 
   /**
-   * Combine this computation with `rwsb` using `fn`. The state will be be threaded
-   * through the computations and the log values will be combined.
-   */
-  def map2[B, Z](rwsb: ReaderWriterStateT[F, E, S, L, B])(fn: (A, B) => Z)(
-    implicit F: FlatMap[F], L: Semigroup[L]): ReaderWriterStateT[F, E, S, L, Z] =
-    flatMap { a =>
-      rwsb.map { b =>
-        fn(a, b)
-      }
-    }
-
-  /**
    * Modify the result of the computation by feeding it into `f`, threading the state
    * through the resulting computation and combining the log values.
    */
@@ -343,6 +331,21 @@ private[data] sealed trait RWSTInstances extends RWSTInstances1 {
     new RWSTMonadTrans[E, S, L] {
       implicit def L: Monoid[L] = L0
     }
+
+  implicit def catsDataProfunctorForRWST[F[_], S, L](implicit F0: Functor[F]): Profunctor[ReaderWriterStateT[F, ?, S, L, ?]] =
+    new RWSTProfunctor[F, S, L] {
+      implicit def F: Functor[F] = F0
+    }
+
+  implicit def catsDataBifunctorForRWST[F[_], E, S](implicit F0: Functor[F]): Bifunctor[ReaderWriterStateT[F, E, S, ?, ?]] =
+    new RWSTBifunctor[F, E, S] {
+      implicit def F: Functor[F] = F0
+    }
+
+  implicit def catsDataContravariantForRWST[F[_], S, L, A](implicit F0: Functor[F]): Contravariant[ReaderWriterStateT[F, ?, S, L, A]] =
+    new RWSTContravariant[F, S, L, A] {
+      implicit def F: Functor[F] = F0
+    }
 }
 
 private[data] sealed trait RWSTInstances1 extends RWSTInstances2 {
@@ -396,30 +399,9 @@ private[data] sealed trait RWSTInstances5 extends RWSTInstances6 {
     }
 }
 
-private[data] sealed trait RWSTInstances6 extends RWSTInstances7 {
+private[data] sealed trait RWSTInstances6 {
   implicit def catsDataFunctorForRWST[F[_], E, S, L](implicit F0: Functor[F]): Functor[ReaderWriterStateT[F, E, S, L, ?]] =
     new RWSTFunctor[F, E, S, L] {
-      implicit def F: Functor[F] = F0
-    }
-}
-
-private[data] sealed trait RWSTInstances7 extends RWSTInstances8 {
-  implicit def catsDataContravariantForRWST[F[_], S, L, A](implicit F0: Functor[F]): Contravariant[ReaderWriterStateT[F, ?, S, L, A]] =
-    new RWSTContravariant[F, S, L, A] {
-      implicit def F: Functor[F] = F0
-    }
-}
-
-private[data] sealed trait RWSTInstances8 extends RWSTInstances9 {
-  implicit def catsDataBifunctorForRWST[F[_], E, S](implicit F0: Functor[F]): Bifunctor[ReaderWriterStateT[F, E, S, ?, ?]] =
-    new RWSTBifunctor[F, E, S] {
-      implicit def F: Functor[F] = F0
-    }
-}
-
-private[data] sealed trait RWSTInstances9 {
-  implicit def catsDataProfunctorForRWST[F[_], S, L](implicit F0: Functor[F]): Profunctor[ReaderWriterStateT[F, ?, S, L, ?]] =
-    new RWSTProfunctor[F, S, L] {
       implicit def F: Functor[F] = F0
     }
 }
@@ -427,7 +409,7 @@ private[data] sealed trait RWSTInstances9 {
 private[data] sealed trait RWSTFunctor[F[_], E, S, L] extends Functor[ReaderWriterStateT[F, E, S, L, ?]] {
   implicit def F: Functor[F]
 
-  def map[A, B](fa: ReaderWriterStateT[F, E, S, L, A])(f: A => B): ReaderWriterStateT[F, E, S, L, B] =
+  override def map[A, B](fa: ReaderWriterStateT[F, E, S, L, A])(f: A => B): ReaderWriterStateT[F, E, S, L, B] =
     fa.map(f)
 }
 
@@ -452,7 +434,7 @@ private[data] sealed trait RWSTProfunctor[F[_], S, L] extends Profunctor[ReaderW
     fab.contramap(f).map(g)
 }
 
-private[data] sealed trait RWSTMonad[F[_], E, S, L] extends Monad[ReaderWriterStateT[F, E, S, L, ?]] {
+private[data] sealed trait RWSTMonad[F[_], E, S, L] extends Monad[ReaderWriterStateT[F, E, S, L, ?]] with RWSTFunctor[F, E, S, L] {
   implicit def F: Monad[F]
   implicit def L: Monoid[L]
 
@@ -470,13 +452,6 @@ private[data] sealed trait RWSTMonad[F[_], E, S, L] extends Monad[ReaderWriterSt
         }
       }
     }
-
-  override def map[A, B](fa: ReaderWriterStateT[F, E, S, L, A])(f: A => B): ReaderWriterStateT[F, E, S, L, B] =
-    fa.map(f)
-
-  override def map2[A, B, Z](fa: ReaderWriterStateT[F, E, S, L, A],
-    fb: ReaderWriterStateT[F, E, S, L, B])(f: (A, B) => Z): ReaderWriterStateT[F, E, S, L, Z] =
-    fa.map2(fb)(f)
 }
 
 private[data] sealed trait RWSTMonadState[F[_], E, S, L]
