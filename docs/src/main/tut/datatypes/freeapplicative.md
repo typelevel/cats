@@ -153,6 +153,8 @@ case for monads.
 
 Therefore, we can write an interpreter that uses the product of the `ParValidator` and `Log` `Applicative`s
 to interpret our program in one go. We can create this interpreter easily by using `FunctionK#and`.
+Note that this `product` is a higher kinded one, hence the name `Tuple2K`. It was renamed from `Prod` after
+0.9.0.
 
 ```tut:silent
 import cats.data.Tuple2K
