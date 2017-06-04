@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.arrow.{Arrow, Category, Choice, Compose, FunctionK}
+import cats.arrow.{Arrow, Category, Choice, CommutativeArrow, Compose, FunctionK}
 import cats.functor.{Contravariant, Strong}
 
 /**
@@ -91,11 +91,11 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
   implicit val catsDataMonoidKForKleisliId: MonoidK[λ[α => Kleisli[Id, α, α]]] =
     catsDataMonoidKForKleisli[Id]
 
-  implicit def catsDataArrowForKleisli[F[_]](implicit M: Monad[F]): Arrow[Kleisli[F, ?, ?]] =
-    new KleisliArrow[F] { def F: Monad[F] = M }
+  implicit def catsDataCommutativeArrowForKleisli[F[_]](implicit M: CommutativeMonad[F]): CommutativeArrow[Kleisli[F, ?, ?]] =
+    new KleisliCommutativeArrow[F] {def F: CommutativeMonad[F] = M }
 
-  implicit val catsDataArrowForKleisliId: Arrow[Kleisli[Id, ?, ?]] =
-    catsDataArrowForKleisli[Id]
+  implicit val catsDataCommutativeArrowForKleisliId: CommutativeArrow[Kleisli[Id, ?, ?]] =
+    catsDataCommutativeArrowForKleisli[Id]
 
   implicit def catsDataMonadReaderForKleisliId[A]: MonadReader[Kleisli[Id, A, ?], A] =
     catsDataMonadReaderForKleisli[Id, A]
@@ -116,6 +116,9 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
 }
 
 private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 {
+  implicit def catsDataArrowForKleisli[F[_]](implicit M: Monad[F]): Arrow[Kleisli[F, ?, ?]] =
+    new KleisliArrow[F] { def F: Monad[F] = M }
+
   implicit def catsDataMonadErrorForKleisli[F[_], A, E](implicit ME: MonadError[F, E]): MonadError[Kleisli[F, A, ?], E] =
     new KleisliMonadError[F, A, E] { def F: MonadError[F, E] = ME }
 }
@@ -161,6 +164,10 @@ private[data] sealed abstract class KleisliInstances4 extends KleisliInstances5 
 private[data] sealed abstract class KleisliInstances5 {
   implicit def catsDataFunctorForKleisli[F[_], A](implicit F0: Functor[F]): Functor[Kleisli[F, A, ?]] =
     new KleisliFunctor[F, A] { def F: Functor[F] = F0 }
+}
+
+private trait KleisliCommutativeArrow[F[_]] extends CommutativeArrow[Kleisli[F, ?, ?]] with KleisliArrow[F] {
+  implicit def F: CommutativeMonad[F]
 }
 
 private trait KleisliArrow[F[_]] extends Arrow[Kleisli[F, ?, ?]] with KleisliCategory[F] with KleisliStrong[F]  {
