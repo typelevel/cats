@@ -93,10 +93,10 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def mapF[N[_], D](fe: F[Either[A, B]] => N[Either[A, D]]): EitherT[N, A, D] = EitherT(fe(value))
 
-  def recoverF[E](pf: PartialFunction[E, Either[A, B]])(implicit ae: ApplicativeError[F, E]): EitherT[F, A, B] =
-    EitherT(ae.recover(value)(pf))
+  def recoverF[E](pf: PartialFunction[E, B])(implicit ae: MonadError[F, E]): EitherT[F, A, B] =
+    EitherT(ae.recover(value)(pf.andThen(b => Right(b))))
 
-  def recoverFWith[E](pf: PartialFunction[E, F[Either[A, B]]])(implicit ae: ApplicativeError[F, E]): EitherT[F, A, B] =
+  def recoverFWith[E](pf: PartialFunction[E, F[Either[A, B]]])(implicit ae: MonadError[F, E]): EitherT[F, A, B] =
     EitherT(ae.recoverWith(value)(pf))
 
   def semiflatMap[D](f: B => F[D])(implicit F: Monad[F]): EitherT[F, A, D] =
@@ -497,6 +497,9 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
 }
 
 private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
+  implicit def catsDataMonadErrorFForEitherT[F[_], E, L](implicit FE0: MonadError[F, E]): MonadError[EitherT[F, L, ?], E] =
+    new EitherTMonadErrorF[F, E, L] { implicit val F = FE0 }
+
   implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
     new EitherTMonadError[F, L] {
       implicit val F = F0
@@ -556,6 +559,24 @@ private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, ?]] with E
       case Right(Left(a1)) => Left(a1)
       case Right(Right(b)) => Right(Right(b))
     }))
+}
+
+private[data] trait EitherTMonadErrorF[F[_], E, L] extends MonadError[EitherT[F, L, ?], E] with EitherTMonad[F, L] {
+  implicit val F: MonadError[F, E]
+
+  def handleErrorWith[A](fea: EitherT[F, L, A])(f: E => EitherT[F, L, A]): EitherT[F, L, A] =
+    EitherT(F.handleErrorWith(fea.value)(f(_).value))
+
+  override def handleError[A](fea: EitherT[F, L, A])(f: E => A): EitherT[F, L, A] =
+    EitherT(F.handleError(fea.value)(f andThen(Right(_))))
+
+  def raiseError[A](e: E): EitherT[F, L, A] = EitherT.left(F.raiseError(e))
+
+  override def recover[A](fla: EitherT[F, L, A])(pf: PartialFunction[E, A]): EitherT[F, L, A] =
+    fla.recoverF(pf)
+
+  override def recoverWith[A](fla: EitherT[F, L, A])(pf: PartialFunction[E, EitherT[F, L, A]]): EitherT[F, L, A] =
+    fla.recoverFWith(pf.andThen(_.value))
 }
 
 private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, ?], L] with EitherTMonad[F, L] {
