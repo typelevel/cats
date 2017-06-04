@@ -210,7 +210,7 @@ private[data] sealed trait NonEmptyVectorInstances {
         fa map f
 
       def pure[A](x: A): NonEmptyVector[A] =
-        NonEmptyVector(x, Vector.empty)
+        NonEmptyVector.one(x)
 
       def flatMap[A, B](fa: NonEmptyVector[A])(f: A => NonEmptyVector[B]): NonEmptyVector[B] =
         fa flatMap f
@@ -234,6 +234,9 @@ private[data] sealed trait NonEmptyVectorInstances {
 
       override def foldRight[A, B](fa: NonEmptyVector[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         fa.foldRight(lb)(f)
+
+      override def get[A](fa: NonEmptyVector[A])(idx: Long): Option[A] =
+        if (idx < Int.MaxValue) fa.get(idx.toInt) else None
 
       def tailRecM[A, B](a: A)(f: A => NonEmptyVector[Either[A, B]]): NonEmptyVector[B] = {
         val buf = new VectorBuilder[B]
@@ -295,6 +298,8 @@ object NonEmptyVector extends NonEmptyVectorInstances {
     tail.foreach(buf += _)
     new NonEmptyVector(buf.result)
   }
+
+  def one[A](head: A): NonEmptyVector[A] = apply(head, Vector.empty[A])
 
   def unapply[A](nev: NonEmptyVector[A]): Some[(A, Vector[A])] = Some((nev.head, nev.tail))
 

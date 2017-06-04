@@ -327,6 +327,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
 object NonEmptyList extends NonEmptyListInstances {
   def of[A](head: A, tail: A*): NonEmptyList[A] = NonEmptyList(head, tail.toList)
 
+  def one[A](head: A): NonEmptyList[A] = NonEmptyList(head, Nil)
+
   /**
    * Create a `NonEmptyList` from a `List`.
    *
@@ -384,7 +386,7 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
         fa map f
 
       def pure[A](x: A): NonEmptyList[A] =
-        NonEmptyList(x, List.empty)
+        NonEmptyList.one(x)
 
       def flatMap[A, B](fa: NonEmptyList[A])(f: A => NonEmptyList[B]): NonEmptyList[B] =
         fa flatMap f
@@ -436,6 +438,9 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
       override def toList[A](fa: NonEmptyList[A]): List[A] = fa.toList
 
       override def toNonEmptyList[A](fa: NonEmptyList[A]): NonEmptyList[A] = fa
+
+      override def get[A](fa: NonEmptyList[A])(idx: Long): Option[A] =
+        if (idx == 0) Some(fa.head) else Foldable[List].get(fa.tail)(idx - 1)
     }
 
   implicit def catsDataShowForNonEmptyList[A](implicit A: Show[A]): Show[NonEmptyList[A]] =

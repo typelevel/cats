@@ -209,6 +209,11 @@ private[data] sealed abstract class IorInstances0 {
     def foldRight[B, C](fa: A Ior B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
       fa.foldRight(lc)(f)
 
+    override def size[B](fa: A Ior B): Long = fa.fold(_ => 0L, _ => 1L, (_, _) => 1L)
+
+    override def get[B](fa: A Ior B)(idx: Long): Option[B] =
+      if (idx == 0L) fa.toOption else None
+
     override def forall[B](fa: Ior[A, B])(p: (B) => Boolean): Boolean = fa.forall(p)
 
     override def exists[B](fa: Ior[A, B])(p: (B) => Boolean): Boolean = fa.exists(p)
@@ -222,8 +227,8 @@ private[data] sealed trait IorFunctions {
   def left[A, B](a: A): A Ior B = Ior.Left(a)
   def right[A, B](b: B): A Ior B = Ior.Right(b)
   def both[A, B](a: A, b: B): A Ior B = Ior.Both(a, b)
-  def leftNel[A, B](a: A): IorNel[A, B] = left(NonEmptyList.of(a))
-  def bothNel[A, B](a: A, b: B): IorNel[A, B] = both(NonEmptyList.of(a), b)
+  def leftNel[A, B](a: A): IorNel[A, B] = left(NonEmptyList.one(a))
+  def bothNel[A, B](a: A, b: B): IorNel[A, B] = both(NonEmptyList.one(a), b)
 
   /**
    * Create an `Ior` from two Options if at least one of them is defined.

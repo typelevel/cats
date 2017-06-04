@@ -9,4 +9,7 @@ trait MonadErrorSyntax {
 final class MonadErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
   def ensure(error: => E)(predicate: A => Boolean)(implicit F: MonadError[F, E]): F[A] =
     F.ensure(fa)(error)(predicate)
+
+  def ensureOr(error: A => E)(predicate: A => Boolean)(implicit F: MonadError[F, E]): F[A] =
+    F.ensureOr(fa)(error)(predicate)
 }

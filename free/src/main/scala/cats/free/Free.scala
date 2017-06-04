@@ -193,7 +193,14 @@ object Free {
   /**
    * Suspend the creation of a `Free[F, A]` value.
    */
+  @deprecated("Use Free.defer.", "1.0.0-MF")
   def suspend[F[_], A](value: => Free[F, A]): Free[F, A] =
+    defer(value)
+
+  /**
+   * Defer the creation of a `Free[F, A]` value.
+   */
+  def defer[F[_], A](value: => Free[F, A]): Free[F, A] =
     pure(()).flatMap(_ => value)
 
   /**
@@ -220,9 +227,9 @@ object Free {
     new FreeInjectKPartiallyApplied
 
   /**
-   * Pre-application of an injection to a `F[A]` value.
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final class FreeInjectKPartiallyApplied[F[_], G[_]] private[free] {
+  private[free] final class FreeInjectKPartiallyApplied[F[_], G[_]](val dummy: Boolean = true ) extends AnyVal {
     def apply[A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
       Free.liftF(I.inj(fa))
   }

@@ -37,7 +37,9 @@ trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTes
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(applicativeError[A, B, C], monad[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
-        "monadError left zero" -> forAll(laws.monadErrorLeftZero[A, B] _)
+        "monadError left zero" -> forAll(laws.monadErrorLeftZero[A, B] _),
+        "monadError ensure consistency" -> forAll(laws.monadErrorEnsureConsistency[A] _),
+        "monadError ensureOr consistency" -> forAll(laws.monadErrorEnsureOrConsistency[A] _)
       )
     }
   }

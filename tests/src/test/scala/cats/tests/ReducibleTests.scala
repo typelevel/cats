@@ -23,6 +23,15 @@ class ReducibleTestsAdditional extends CatsSuite {
       if (a === goal) Now(true) else lb
     }
 
+  test("Reducible[NonEmptyList] default get/size implementation") {
+    val R = new NonEmptyReducible[NonEmptyList, List] {
+      def split[A](nel: NonEmptyList[A]): (A, List[A]) = (nel.head, nel.tail)
+    }
+    val nel = NonEmptyList.of(1, 2, 3)
+    R.get(nel)(1L) should === (nel.get(1L))
+    R.size(nel) should === (nel.size.toLong)
+    R.get(nel)(4L) should === (None)
+  }
 
   test("Reducible[NonEmptyList]") {
     val R = Reducible[NonEmptyList]

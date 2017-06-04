@@ -117,6 +117,9 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority2 {
     new NonEmptyReducible[OneAnd[F, ?], F] {
       override def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
 
+      override def get[A](fa: OneAnd[F, A])(idx: Long): Option[A] =
+        if (idx == 0L) Some(fa.head) else F.get(fa.tail)(idx - 1L)
+
       override def size[A](fa: OneAnd[F, A]): Long = 1 + F.size(fa.tail)
     }
 
