@@ -1,6 +1,7 @@
 package cats
 package data
 
+import cats.arrow.FunctionK
 import cats.functor.Bifunctor
 import cats.instances.either._
 import cats.syntax.either._
@@ -91,7 +92,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = bimap(identity, f)
 
-  def mapF[N[_], D](fe: F[Either[A, B]] => N[Either[A, D]]): EitherT[N, A, D] = EitherT(fe(value))
+  def transformF[G[_]](fe: FunctionK[F, G]): EitherT[G, A, B] = EitherT(fe(value))
 
   def recoverF[E](pf: PartialFunction[E, B])(implicit ae: MonadError[F, E]): EitherT[F, A, B] =
     EitherT(ae.recover(value)(pf.andThen(b => Right(b))))
@@ -103,9 +104,6 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     flatMap(b => EitherT.right(f(b)))
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): EitherT[F, C, B] = bimap(f, identity)
-
-  def leftMapF[N[_], C](fe: F[Either[A, B]] => N[Either[C, B]]): EitherT[N, C, B] =
-    EitherT(fe(value))
 
   def compare(that: EitherT[F, A, B])(implicit o: Order[F[Either[A, B]]]): Int =
     o.compare(value, that.value)

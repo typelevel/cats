@@ -1,7 +1,8 @@
 package cats
 package tests
 
-import cats.data.{EitherT, Validated}
+import cats.arrow.FunctionK
+import cats.data.EitherT
 import cats.functor.Bifunctor
 import cats.functor._
 import cats.laws.discipline._
@@ -222,17 +223,12 @@ class EitherTTests extends CatsSuite {
 
   test("recoverF recovers handled values") {
     val et: EitherT[Option, String, Int] = EitherT.right[String](Option.empty[Int])
-    et.recoverF[Unit] { case u => Right(5) }.value.get should === (Right(5))
+    et.recoverF[Unit] { case u => 5 }.value.get should === (Right(5))
   }
 
   test("recoverF ignores the non error in F") {
     val et: EitherT[Option, String, Int] = EitherT.right[String](Some(1))
     et.recoverFWith[Unit] { case u => Some(Right(5)) }.value.get should === (Right(1))
-  }
-
-  test("recoverF ignores unhandled values") {
-    val et: EitherT[Validated[String, ?], String, Int] = EitherT.right[String](Validated.invalid("error"))
-    et.recoverF[String] { case "other" => Either.left("another") } should === (et)
   }
 
   test("recoverFWith recovers handled values") {
@@ -245,20 +241,12 @@ class EitherTTests extends CatsSuite {
     et.recoverFWith[Unit] { case u => Some(Right(5)) }.value.get should === (Right(1))
   }
 
-  test("recoverFWith ignores unhandled values") {
-    val et: EitherT[Validated[String, ?], String, Int] = EitherT.right[String](Validated.invalid("error"))
-    et.recoverFWith[String] { case "other" => Validated.valid(Either.left("another")) } should === (et)
-  }
-
-  test("mapF consistent with mapping value") {
-    forAll { (eithert: EitherT[List, String, Int], f: List[Either[String, Int]] => Option[Either[String, String]])  =>
-      eithert.mapF(f).value should === (f(eithert.value))
+  test("transformF consistent with transforming value") {
+    val toOptionK: FunctionK[List, Option] = new FunctionK[List, Option] {
+      def apply[A](fa: List[A]): Option[A] = fa.headOption
     }
-  }
-
-  test("leftMapF consistent with mapping value") {
-    forAll { (eithert: EitherT[List, String, Int], f: List[Either[String, Int]] => Option[Either[Int, Int]])  =>
-      eithert.leftMapF(f).value should === (f(eithert.value))
+    forAll { (eithert: EitherT[List, String, Int])  =>
+      eithert.transformF(toOptionK).value should === (toOptionK(eithert.value))
     }
   }
 
