@@ -193,7 +193,14 @@ object Free {
   /**
    * Suspend the creation of a `Free[F, A]` value.
    */
+  @deprecated("Use Free.defer.", "1.0.0-MF")
   def suspend[F[_], A](value: => Free[F, A]): Free[F, A] =
+    defer(value)
+
+  /**
+   * Defer the creation of a `Free[F, A]` value.
+   */
+  def defer[F[_], A](value: => Free[F, A]): Free[F, A] =
     pure(()).flatMap(_ => value)
 
   /**

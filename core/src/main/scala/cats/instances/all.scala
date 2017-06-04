@@ -5,8 +5,13 @@ trait AllInstances
   extends FunctionInstances
   with    StringInstances
   with    EitherInstances
+  with    EqInstances
   with    ListInstances
   with    OptionInstances
+  with    OrderInstances
+  with    MonoidInstances
+  with    PartialOrderInstances
+  with    SemigroupInstances
   with    SetInstances
   with    StreamInstances
   with    VectorInstances

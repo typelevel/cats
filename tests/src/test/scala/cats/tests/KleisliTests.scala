@@ -121,7 +121,10 @@ class KleisliTests extends CatsSuite {
 
   checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Kleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Kleisli[Option, ?, Int]]))
-  checkAll("MonadTrans[Kleisli[?[_], Int, ?]]", MonadTransTests[Kleisli[?[_], Int, ?]].monadTrans[Option, Int, Int])
+
+  checkAll("Kleisli[Option, Int, ?]]", MonadTransTests[Kleisli[?[_], Int, ?]].monadTrans[Option, Int, Int])
+  checkAll("MonadTrans[Kleisli[?[_], Int, ?]]", SerializableTests.serializable(MonadTrans[Kleisli[?[_], Int, ?]]))
+
 
   test("local composes functions") {
     forAll { (f: Int => Option[String], g: Int => Int, i: Int) =>
