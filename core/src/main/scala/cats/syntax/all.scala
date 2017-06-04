@@ -5,6 +5,7 @@ trait AllSyntax
     extends ApplicativeSyntax
     with ApplicativeErrorSyntax
     with ApplySyntax
+    with ArrowSyntax
     with BifunctorSyntax
     with BifoldableSyntax
     with BitraverseSyntax
@@ -38,7 +39,6 @@ trait AllSyntax
     with SemigroupSyntax
     with SemigroupKSyntax
     with ShowSyntax
-    with SplitSyntax
     with StrongSyntax
     with TraverseFilterSyntax
     with TraverseSyntax

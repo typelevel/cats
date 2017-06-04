@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.arrow.{Arrow, Split}
+import cats.arrow.Arrow
 import cats.data.{Cokleisli, NonEmptyList}
 import cats.functor.{Contravariant, Profunctor}
 import cats.laws.discipline._
@@ -32,9 +32,6 @@ class CokleisliTests extends SlowCatsSuite {
 
   checkAll("Cokleisli[Option, Int, Int]", ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[Int, Int, Int, Int, Int, Int])
   checkAll("Profunctor[Cokleisli[Option, ?, ?]]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
-
-  checkAll("Cokleisli[Option, Int, Int]", SplitTests[Cokleisli[Option, ?, ?]].split[Int, Int, Int, Int, Int, Int])
-  checkAll("Split[Cokleisli[Option, ?, ?]]", SerializableTests.serializable(Split[Cokleisli[Option, ?, ?]]))
 
   checkAll("Cokleisli[Option, Int, Int]", ContravariantTests[Cokleisli[Option, ?, Int]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Cokleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Cokleisli[Option, ?, Int]]))

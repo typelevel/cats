@@ -6,7 +6,7 @@ import cats.arrow.Arrow
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
-trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with StrongTests[F] {
+trait ArrowTests[F[_, _]] extends CategoryTests[F] with StrongTests[F] {
   def laws: ArrowLaws[F]
 
   def arrow[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
@@ -39,7 +39,6 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with Stron
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(
         category[A, B, C, D],
-        split[A, B, C, D, E, G],
         strong[A, B, C, D, E, G]
       )
       def props: Seq[(String, Prop)] = Seq(
