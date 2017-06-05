@@ -70,5 +70,12 @@ You probably noticed that there is a `val dummy: Boolean` in the `PurePartiallyA
 to make this intermediate class a [Value Class](http://docs.scala-lang.org/overviews/core/value-classes.html) so that there is no cost of allocation, i.e. at runtime, it doesn't create an instance of `PurePartiallyApplied`. We also hide this partially applied class by making it package private and placing it inside an object.
 
 
+## Type class
+
+### Type classes that ONLY define laws.
+
+We can introduce new type classes for the sake of adding laws that don't apply to the parent type class, e.g. `CommutativeSemigroup` and 
+`CommutativeArrow`.
+
 #### TODO: 
 Once we drop 2.10 support, AnyVal-extending class constructor parameters can be marked as private.
