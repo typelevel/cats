@@ -1,15 +1,15 @@
 package cats
 package tests
 
-import cats.arrow.{Arrow, Choice, Split, FunctionK}
-import cats.data.{EitherT, Kleisli, Reader}
+import cats.arrow.{Arrow, Choice, FunctionK, Split}
+import cats.data.{EitherT, Kleisli, Reader, Validated}
 import cats.functor.{Contravariant, Strong}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import cats.kernel.laws.GroupLaws
-import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
+import cats.laws.discipline.{MonoidKTests, SemigroupKTests}
 
 class KleisliTests extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
@@ -23,6 +23,10 @@ class KleisliTests extends CatsSuite {
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
   implicit val iso2 = CartesianTests.Isomorphisms.invariant[Reader[Int, ?]]
+
+  implicit val kleisliEitherAppError = Kleisli.catsDataApplicativeErrorForKleisli[Either[String, ?], Int, String]
+
+  implicit val kleisliValidatedAppError = Kleisli.catsDataApplicativeErrorForKleisli[Validated[String, ?], Int, String]
 
   checkAll("Kleisli[Option, Int, Int] with Unit", ApplicativeErrorTests[Kleisli[Option, Int, ?], Unit].applicativeError[Int, Int, Int])
   checkAll("ApplicativeError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(ApplicativeError[Kleisli[Option, Int, ?], Unit]))
@@ -162,6 +166,30 @@ class KleisliTests extends CatsSuite {
 
     val config = Config(0, "cats")
     kconfig1.run(config) should === (kconfig2.run(config))
+  }
+
+  test("recover for validated") {
+    val kEither = Kleisli.lift[Validated[String, ?], Int, Int ](Validated.invalid[String, Int]("Error"))
+    val recovered = kEither.recover[String] { case s => 100 }
+    recovered.run(1) should === (Validated.Valid(100))
+  }
+
+  test("recover for either") {
+    val kEither = Kleisli.lift[Either[String, ?], Int, Int ]("Error".asLeft[Int])
+    val recovered = kEither.recover[String] { case s => 100 }
+    recovered.run(1) should === (Right(100))
+  }
+
+  test("recoverWith for either") {
+    val kEither = Kleisli.lift[Either[String, ?], Int, Int ]("Error".asLeft[Int])
+    val recovered = kEither.recoverWith[String] { case s => Kleisli.lift[Either[String, ?], Int, Int](Right(100)) }
+    recovered.run(1) should === (Right(100))
+  }
+
+  test("recoverWithF for either") {
+    val kEither = Kleisli.lift[Either[String, ?], Int, Int ]("Error".asLeft[Int])
+    val recovered = kEither.recoverWithF[String] { case s => 100.asRight[String] }
+    recovered.run(1) should === (Right(100))
   }
 
   /**
