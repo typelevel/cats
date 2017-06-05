@@ -365,6 +365,17 @@ class EitherTTests extends CatsSuite {
     }
   }
 
+  test("collectRight with Id consistent with Either foldRight") {
+    val et: EitherT[Option, String, Int] = EitherT.pure(1)
+    et.collectRight should === (Some(1))
+  }
+
+  test("applyAlt with Id consistent with EitherT map") {
+    forAll { (et: EitherT[Id, String, Int], f: Int => String) =>
+      et.applyAlt(EitherT.pure(f)) should === (et.map(f))
+    }
+  }
+
   test("merge with Id consistent with Either merge") {
     forAll { (x: EitherT[Id, Int, Int]) =>
       x.merge should === (x.value.merge)
