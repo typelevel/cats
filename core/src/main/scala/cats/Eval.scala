@@ -73,30 +73,46 @@ sealed abstract class Eval[+A] extends Serializable { self =>
   def flatMap[B](f: A => Eval[B]): Eval[B] =
     this match {
       case c: Eval.Compute[A] =>
-        new Eval.Compute[B] {
-          type Start = c.Start
-          // See https://issues.scala-lang.org/browse/SI-9931 for an explanation
-          // of why the type annotations are necessary in these two lines on
-          // Scala 2.12.0.
-          val start: () => Eval[Start] = c.start
-          val run: Start => Eval[B] = (s: c.Start) =>
-            new Eval.Compute[B] {
-              type Start = A
-              val start = () => c.run(s)
-              val run = f
-            }
+        // magic constant
+        if (c.count < 75) {
+          // pay a stack frame
+          new Eval.Compute[B] {
+            // See https://issues.scala-lang.org/browse/SI-9931 for an explanation
+            // of why the type annotations are necessary in these two lines on
+            // Scala 2.12.0.
+            type Start = c.Start
+            val start: () => Eval[Start] = c.start
+            val run: Start => Eval[B] = f.compose(c.run(_).value)
+            override private[cats] val count = c.count + 1
+          }
+        } else {
+          // pay a trampoline jump
+          new Eval.Compute[B] {
+            type Start = c.Start
+            val start: () => Eval[Start] = c.start
+            val run: Start => Eval[B] = (s: c.Start) =>
+              new Eval.Compute[B] {
+                type Start = A
+                val start = () => c.run(s)
+                val run = f
+                override private[cats] val count = 0
+              }
+            override private[cats] val count = 0
+          }
         }
       case c: Eval.Call[A] =>
         new Eval.Compute[B] {
           type Start = A
           val start = c.thunk
           val run = f
+          override private[cats] val count = 0
         }
       case _ =>
         new Eval.Compute[B] {
           type Start = A
           val start = () => self
           val run = f
+          override private[cats] val count = 0
         }
     }
 
@@ -270,6 +286,7 @@ object Eval extends EvalInstances {
           type Start = compute.Start
           val start: () => Eval[Start] = () => compute.start()
           val run: Start => Eval[A] = s => loop1(compute.run(s))
+          override private[cats] val count = 0
         }
       case other => other
     }
@@ -297,6 +314,7 @@ object Eval extends EvalInstances {
   sealed abstract class Compute[A] extends Eval[A] {
     type Start
     val start: () => Eval[Start]
+    private[cats] val count: Int
     val run: Start => Eval[A]
 
     def memoize: Eval[A] = Later(value)
