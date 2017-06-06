@@ -8,6 +8,10 @@ import cats.functor._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.{GroupLaws, OrderLaws}
+import org.scalacheck.Arbitrary
+import org.scalacheck.Arbitrary.arbitrary
+
+import scala.concurrent.{Await, Future}
 
 
 class EitherTTests extends CatsSuite {
@@ -48,9 +52,25 @@ class EitherTTests extends CatsSuite {
 
   {
     //if a Monad is defined
+    import scala.concurrent.ExecutionContext.Implicits.global
+    import scala.concurrent.duration._
+    import cats.instances.future
+
+    def futureEither[A](f: Future[A]): Future[Either[Throwable, A]] =
+      f.map(Either.right[Throwable, A]).recover { case t => Either.left(t) }
+    implicit def throwableEq: Eq[Throwable] = Eq[String].on(_.toString)
+    implicit def nonFatalArbitrary: Arbitrary[Throwable] = Arbitrary(arbitrary[Exception].map(identity))
+    implicit def eqfa[A: Eq]: Eq[Future[A]] = (fx: Future[A], fy: Future[A]) => {
+      val fz = futureEither(fx) zip futureEither(fy)
+      Await.result(fz.map { case (tx, ty) => tx === ty }, 3.seconds)
+    }
+
     implicit val F = ListWrapper.monad
     implicit val eq0 = EitherT.catsDataEqForEitherT[ListWrapper, String, Either[String, Int]]
     implicit val eq1 = EitherT.catsDataEqForEitherT[EitherT[ListWrapper, String, ?], String, Int](eq0)
+    implicit val eq2 = EitherT.catsDataEqForEitherT[Future, String, Either[String, Int]]
+    implicit val eq3 = EitherT.catsDataEqForEitherT[EitherT[Future, String, ?], String, Int](eq2)
+    implicit val me = EitherT.catsDataMonadErrorFForEitherT[Future, Throwable, String](future.catsStdInstancesForFuture)
 
     Functor[EitherT[ListWrapper, String, ?]]
     Applicative[EitherT[ListWrapper, String, ?]]
@@ -58,6 +78,7 @@ class EitherTTests extends CatsSuite {
     MonadTrans[EitherT[?[_], String, ?]]
 
     checkAll("EitherT[ListWrapper, String, Int]", MonadErrorTests[EitherT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
+    checkAll("EitherT[ListWrapper, String, Int] for Exceptions", MonadErrorTests[EitherT[Future, String, ?], Throwable].monadError[Int, Int, Int])
     checkAll("MonadError[EitherT[List, ?, ?]]", SerializableTests.serializable(MonadError[EitherT[ListWrapper, String, ?], String]))
     checkAll("MonadTrans[EitherT[?[_], String, ?]]", MonadTransTests[EitherT[?[_], String, ?]].monadTrans[ListWrapper, Int, Int])
   }

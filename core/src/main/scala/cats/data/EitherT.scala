@@ -492,11 +492,12 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
     new EitherTBitraverse[F] {
       val F0: Traverse[F] = F
     }
+
+  implicit def catsDataMonadErrorFForEitherT[F[_], E, L](implicit FE0: MonadError[F, E]): MonadError[EitherT[F, L, ?], E] =
+    new EitherTMonadErrorF[F, E, L] { implicit val F = FE0 }
 }
 
 private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
-  implicit def catsDataMonadErrorFForEitherT[F[_], E, L](implicit FE0: MonadError[F, E]): MonadError[EitherT[F, L, ?], E] =
-    new EitherTMonadErrorF[F, E, L] { implicit val F = FE0 }
 
   implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
     new EitherTMonadError[F, L] {
