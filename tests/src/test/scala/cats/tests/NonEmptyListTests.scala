@@ -123,6 +123,30 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
+  test("NonEmptyList#mkString is consistent with List#mkString") {
+    forAll { (nel: NonEmptyList[Int]) =>
+      // Implicitly using a Show[Int] implementation doing `Int.toString` internally
+      val list = nel.toList
+      nel.mkString should ===(list.mkString)
+    }
+  }
+
+  test("NonEmptyList#mkString(String) is consistent with List#mkString(String)") {
+    forAll { (nel: NonEmptyList[Int], sep: String) =>
+      // Implicitly using a Show[Int] implementation doing `Int.toString` internally
+      val list = nel.toList
+      nel.mkString(sep) should ===(list.mkString(sep))
+    }
+  }
+
+  test("NonEmptyList#mkString(String, String, String) is consistent with List#mkString(String, String, String)") {
+    forAll { (nel: NonEmptyList[Int], start: String, separator: String, end: String) =>
+      // Implicitly using a Show[Int] implementation doing `Int.toString` internally
+      val list = nel.toList
+      nel.mkString(start, separator, end) should ===(list.mkString(start, separator, end))
+    }
+  }
+
   test("reduceLeft consistent with foldLeft") {
     forAll { (nel: NonEmptyList[Int], f: (Int, Int) => Int) =>
       nel.reduceLeft(f) should === (nel.tail.foldLeft(nel.head)(f))
