@@ -4,7 +4,7 @@ package instances
 package object float extends FloatInstances
 
 trait FloatInstances {
-  implicit val catsKernelStdEqForFloat: Order[Float] with Hash[Float] = new FloatEq
+  implicit val catsKernelStdOrderForFloat: Order[Float] with Hash[Float] = new FloatOrder
   implicit val catsKernelStdGroupForFloat: CommutativeGroup[Float] = new FloatGroup
 }
 
@@ -26,7 +26,7 @@ class FloatGroup extends CommutativeGroup[Float] {
  * If you would prefer an absolutely lawful fractional value, you'll
  * need to investigate rational numbers or more exotic types.
  */
-class FloatEq extends Order[Float] with Hash[Float] {
+class FloatOrder extends Order[Float] with Hash[Float] {
 
   def hash(x: Float): Int = x.##
 

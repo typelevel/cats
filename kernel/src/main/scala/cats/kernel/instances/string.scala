@@ -4,11 +4,11 @@ package instances
 package object string extends StringInstances
 
 trait StringInstances {
-  implicit val catsKernelStdEqForString: Order[String] with Hash[String] = new StringEq
+  implicit val catsKernelStdOrderForString: Order[String] with Hash[String] = new StringOrder
   implicit val catsKernelStdMonoidForString: Monoid[String] = new StringMonoid
 }
 
-class StringEq extends Order[String] with Hash[String] {
+class StringOrder extends Order[String] with Hash[String] {
 
   def hash(x: String): Int = x.##
 

@@ -6,14 +6,14 @@ import scala.collection.immutable.BitSet
 package object bitSet extends BitSetInstances
 
 trait BitSetInstances {
-  implicit val catsKernelStdEqForBitSet: PartialOrder[BitSet] with Hash[BitSet] =
-    new BitSetPartialEq
+  implicit val catsKernelStdOrderForBitSet: PartialOrder[BitSet] with Hash[BitSet] =
+    new BitSetPartialOrder
 
   implicit val catsKernelStdSemilatticeForBitSet: BoundedSemilattice[BitSet] =
     new BitSetSemilattice
 }
 
-class BitSetPartialEq extends PartialOrder[BitSet] with Hash[BitSet] {
+class BitSetPartialOrder extends PartialOrder[BitSet] with Hash[BitSet] {
   def hash(x: BitSet): Int = x.hashCode()
 
   def partialCompare(x: BitSet, y: BitSet): Double =
