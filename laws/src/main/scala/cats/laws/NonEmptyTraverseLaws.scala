@@ -1,19 +1,19 @@
 package cats.laws
 
 
-import cats.{Apply, Id, Semigroup, Traverse1}
+import cats.{Apply, Id, Semigroup, NonEmptyTraverse}
 import cats.data.{Const, Nested}
-import cats.syntax.traverse1._
+import cats.syntax.nonEmptyTraverse._
 import cats.syntax.reducible._
 
-trait Traverse1Laws[F[_]] extends TraverseLaws[F] with ReducibleLaws[F] {
-  implicit override def F: Traverse1[F]
+trait NonEmptyTraverseLaws[F[_]] extends TraverseLaws[F] with ReducibleLaws[F] {
+  implicit override def F: NonEmptyTraverse[F]
 
-  def traverse1Identity[A, B](fa: F[A], f: A => B): IsEq[F[B]] = {
-    fa.traverse1[Id, B](f) <-> F.map(fa)(f)
+  def nonEmptyTraverseIdentity[A, B](fa: F[A], f: A => B): IsEq[F[B]] = {
+    fa.nonEmptyTraverse[Id, B](f) <-> F.map(fa)(f)
   }
 
-  def traverse1SequentialComposition[A, B, C, M[_], N[_]](
+  def nonEmptyTraverseSequentialComposition[A, B, C, M[_], N[_]](
                                                           fa: F[A],
                                                           f: A => M[B],
                                                           g: B => N[C]
@@ -22,12 +22,12 @@ trait Traverse1Laws[F[_]] extends TraverseLaws[F] with ReducibleLaws[F] {
                                                           M: Apply[M]
                                                         ): IsEq[Nested[M, N, F[C]]] = {
 
-    val lhs = Nested(M.map(fa.traverse1(f))(fb => fb.traverse1(g)))
-    val rhs = fa.traverse1[Nested[M, N, ?], C](a => Nested(M.map(f(a))(g)))
+    val lhs = Nested(M.map(fa.nonEmptyTraverse(f))(fb => fb.nonEmptyTraverse(g)))
+    val rhs = fa.nonEmptyTraverse[Nested[M, N, ?], C](a => Nested(M.map(f(a))(g)))
     lhs <-> rhs
   }
 
-  def traverse1ParallelComposition[A, B, M[_], N[_]](
+  def nonEmptyTraverseParallelComposition[A, B, M[_], N[_]](
                                                      fa: F[A],
                                                      f: A => M[B],
                                                      g: A => N[B]
@@ -52,8 +52,8 @@ trait Traverse1Laws[F[_]] extends TraverseLaws[F] with ReducibleLaws[F] {
         (M.product(mx, my), N.product(nx, ny))
       }
     }
-    val lhs: MN[F[B]] = fa.traverse1[MN, B](a => (f(a), g(a)))
-    val rhs: MN[F[B]] = (fa.traverse1(f), fa.traverse1(g))
+    val lhs: MN[F[B]] = fa.nonEmptyTraverse[MN, B](a => (f(a), g(a)))
+    val rhs: MN[F[B]] = (fa.nonEmptyTraverse(f), fa.nonEmptyTraverse(g))
     lhs <-> rhs
   }
 
@@ -61,13 +61,13 @@ trait Traverse1Laws[F[_]] extends TraverseLaws[F] with ReducibleLaws[F] {
                             fa: F[A],
                             f: A => B
                           )(implicit B: Semigroup[B]): IsEq[B] = {
-    val lhs: B = fa.traverse1[Const[B, ?], B](a => Const(f(a))).getConst
+    val lhs: B = fa.nonEmptyTraverse[Const[B, ?], B](a => Const(f(a))).getConst
     val rhs: B = fa.reduceMap(f)
     lhs <-> rhs
   }
 }
 
-object Traverse1Laws {
-  def apply[F[_]](implicit ev: Traverse1[F]): Traverse1Laws[F] =
-    new Traverse1Laws[F] { def F: Traverse1[F] = ev }
+object NonEmptyTraverseLaws {
+  def apply[F[_]](implicit ev: NonEmptyTraverse[F]): NonEmptyTraverseLaws[F] =
+    new NonEmptyTraverseLaws[F] { def F: NonEmptyTraverse[F] = ev }
 }

@@ -189,9 +189,9 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
 private[data] sealed trait NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector] with Reducible[NonEmptyVector]
-    with Comonad[NonEmptyVector] with Traverse1[NonEmptyVector] with Monad[NonEmptyVector] =
+    with Comonad[NonEmptyVector] with NonEmptyTraverse[NonEmptyVector] with Monad[NonEmptyVector] =
     new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector] with Comonad[NonEmptyVector]
-      with Monad[NonEmptyVector] with Traverse1[NonEmptyVector] {
+      with Monad[NonEmptyVector] with NonEmptyTraverse[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
         a concatNev b
@@ -226,7 +226,7 @@ private[data] sealed trait NonEmptyVectorInstances {
 
       def extract[A](fa: NonEmptyVector[A]): A = fa.head
 
-      def traverse1[G[_], A, B](nel: NonEmptyVector[A])(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyVector[B]] =
+      def nonEmptyTraverse[G[_], A, B](nel: NonEmptyVector[A])(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyVector[B]] =
         Foldable[Vector].reduceRightToOption[A, G[Vector[B]]](nel.tail)(a => G.map(f(a))(_ +: Vector.empty)) { (a, lglb) =>
           G.map2Eval(f(a), lglb)(_ +: _)
         }.map {

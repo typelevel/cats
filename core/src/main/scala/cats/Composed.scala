@@ -71,12 +71,12 @@ private[cats] trait ComposedTraverse[F[_], G[_]] extends Traverse[λ[α => F[G[�
     F.traverse(fga)(ga => G.traverse(ga)(f))
 }
 
-private[cats] trait ComposedTraverse1[F[_], G[_]] extends Traverse1[λ[α => F[G[α]]]] with ComposedTraverse[F, G] with ComposedReducible[F, G] {
-  def F: Traverse1[F]
-  def G: Traverse1[G]
+private[cats] trait ComposedNonEmptyTraverse[F[_], G[_]] extends NonEmptyTraverse[λ[α => F[G[α]]]] with ComposedTraverse[F, G] with ComposedReducible[F, G] {
+  def F: NonEmptyTraverse[F]
+  def G: NonEmptyTraverse[G]
 
-  override def traverse1[H[_]: Apply, A, B](fga: F[G[A]])(f: A => H[B]): H[F[G[B]]] =
-    F.traverse1(fga)(ga => G.traverse1(ga)(f))
+  override def nonEmptyTraverse[H[_]: Apply, A, B](fga: F[G[A]])(f: A => H[B]): H[F[G[B]]] =
+    F.nonEmptyTraverse(fga)(ga => G.nonEmptyTraverse(ga)(f))
 }
 
 private[cats] trait ComposedTraverseFilter[F[_], G[_]] extends TraverseFilter[λ[α => F[G[α]]]] with ComposedTraverse[F, G] {

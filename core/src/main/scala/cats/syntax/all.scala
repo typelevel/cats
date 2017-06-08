@@ -42,7 +42,7 @@ trait AllSyntax
     with StrongSyntax
     with TraverseFilterSyntax
     with TraverseSyntax
-    with Traverse1Syntax
+    with NonEmptyTraverseSyntax
     with TupleSyntax
     with ValidatedSyntax
     with VectorSyntax

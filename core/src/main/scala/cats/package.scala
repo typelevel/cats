@@ -32,8 +32,8 @@ package object cats {
  * encodes pure unary function application.
  */
   type Id[A] = A
-  implicit val catsInstancesForId: Bimonad[Id] with Monad[Id] with Traverse1[Id] =
-    new Bimonad[Id] with Monad[Id] with Traverse1[Id] {
+  implicit val catsInstancesForId: Bimonad[Id] with Monad[Id] with NonEmptyTraverse[Id] =
+    new Bimonad[Id] with Monad[Id] with NonEmptyTraverse[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
@@ -51,7 +51,7 @@ package object cats {
       def foldLeft[A, B](a: A, b: B)(f: (B, A) => B) = f(b, a)
       def foldRight[A, B](a: A, lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         f(a, lb)
-      def traverse1[G[_], A, B](a: A)(f: A => G[B])(implicit G: Apply[G]): G[B] =
+      def nonEmptyTraverse[G[_], A, B](a: A)(f: A => G[B])(implicit G: Apply[G]): G[B] =
         f(a)
       override def foldMap[A, B](fa: Id[A])(f: A => B)(implicit B: Monoid[B]): B = f(fa)
       override def reduce[A](fa: Id[A])(implicit A: Semigroup[A]): A =

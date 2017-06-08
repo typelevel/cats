@@ -365,9 +365,9 @@ object NonEmptyList extends NonEmptyListInstances {
 private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 {
 
   implicit val catsDataInstancesForNonEmptyList: SemigroupK[NonEmptyList] with Reducible[NonEmptyList]
-      with Comonad[NonEmptyList] with Traverse1[NonEmptyList] with Monad[NonEmptyList] =
+      with Comonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Monad[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList] with Comonad[NonEmptyList]
-      with Monad[NonEmptyList] with Traverse1[NonEmptyList] {
+      with Monad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a concat b
@@ -394,7 +394,7 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
 
       def extract[A](fa: NonEmptyList[A]): A = fa.head
 
-      def traverse1[G[_], A, B](nel: NonEmptyList[A])(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyList[B]] =
+      def nonEmptyTraverse[G[_], A, B](nel: NonEmptyList[A])(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyList[B]] =
         Foldable[List].reduceRightToOption[A, G[List[B]]](nel.tail)(a => G.map(f(a))(_ :: Nil)) { (a, lglb) =>
           G.map2Eval(f(a), lglb)(_ :: _)
         }.map {

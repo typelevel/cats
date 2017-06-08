@@ -131,9 +131,9 @@ class NestedTests extends CatsSuite {
   }
 
   {
-    //Traverse1 composition
-    checkAll("Nested[NonEmptyList, NonEmptyVector, ?]", Traverse1Tests[Nested[NonEmptyList, NonEmptyVector, ?]].traverse1[Option, Int, Int, Int, Int, Option, Option])
-    checkAll("Traverse1[Nested[NonEmptyList, NonEmptyVector, ?]]", SerializableTests.serializable(Traverse1[Nested[NonEmptyList, NonEmptyVector, ?]]))
+    //NonEmptyTraverse composition
+    checkAll("Nested[NonEmptyList, NonEmptyVector, ?]", NonEmptyTraverseTests[Nested[NonEmptyList, NonEmptyVector, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+    checkAll("NonEmptyTraverse[Nested[NonEmptyList, NonEmptyVector, ?]]", SerializableTests.serializable(NonEmptyTraverse[Nested[NonEmptyList, NonEmptyVector, ?]]))
 
   }
 

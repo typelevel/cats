@@ -3,14 +3,14 @@ package cats.laws.discipline
 
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop.forAll
-import cats.{Applicative, Eq, Monoid, Traverse1}
-import cats.laws.Traverse1Laws
+import cats.{Applicative, Eq, Monoid, NonEmptyTraverse}
+import cats.laws.NonEmptyTraverseLaws
 
 
-trait Traverse1Tests[F[_]] extends TraverseTests[F] with ReducibleTests[F] {
-  def laws: Traverse1Laws[F]
+trait NonEmptyTraverseTests[F[_]] extends TraverseTests[F] with ReducibleTests[F] {
+  def laws: NonEmptyTraverseLaws[F]
 
-  def traverse1[G[_]: Applicative, A: Arbitrary, B: Arbitrary, C: Arbitrary, M: Arbitrary, X[_]: Applicative, Y[_]: Applicative](implicit
+  def nonEmptyTraverse[G[_]: Applicative, A: Arbitrary, B: Arbitrary, C: Arbitrary, M: Arbitrary, X[_]: Applicative, Y[_]: Applicative](implicit
     ArbFA: Arbitrary[F[A]],
     ArbXB: Arbitrary[X[B]],
     ArbYB: Arbitrary[Y[B]],
@@ -40,20 +40,20 @@ trait Traverse1Tests[F[_]] extends TraverseTests[F] with ReducibleTests[F] {
         EqXFB.eqv(x._1, y._1) && EqYFB.eqv(x._2, y._2)
     }
     new RuleSet {
-      def name: String = "traverse1"
+      def name: String = "nonEmptyTraverse"
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(traverse[A, B, C, M, X, Y], reducible[G, A, B])
       def props: Seq[(String, Prop)] = Seq(
-        "traverse1 identity" -> forAll(laws.traverse1Identity[A, C] _),
-        "traverse1 sequential composition" -> forAll(laws.traverse1SequentialComposition[A, B, C, X, Y] _),
-        "traverse1 parallel composition" -> forAll(laws.traverse1ParallelComposition[A, B, X, Y] _),
-        "traverse1 derive reduceMap" -> forAll(laws.reduceMapDerived[A, M] _)
+        "nonEmptyTraverse identity" -> forAll(laws.nonEmptyTraverseIdentity[A, C] _),
+        "nonEmptyTraverse sequential composition" -> forAll(laws.nonEmptyTraverseSequentialComposition[A, B, C, X, Y] _),
+        "nonEmptyTraverse parallel composition" -> forAll(laws.nonEmptyTraverseParallelComposition[A, B, X, Y] _),
+        "nonEmptyTraverse derive reduceMap" -> forAll(laws.reduceMapDerived[A, M] _)
       )
     }
   }
 }
 
-object Traverse1Tests {
-  def apply[F[_]: Traverse1]: Traverse1Tests[F] =
-    new Traverse1Tests[F] { def laws: Traverse1Laws[F] = Traverse1Laws[F] }
+object NonEmptyTraverseTests {
+  def apply[F[_]: NonEmptyTraverse]: NonEmptyTraverseTests[F] =
+    new NonEmptyTraverseTests[F] { def laws: NonEmptyTraverseLaws[F] = NonEmptyTraverseLaws[F] }
 }
