@@ -4,7 +4,7 @@ package instances
 package object byte extends ByteInstances
 
 trait ByteInstances {
-  implicit val catsKernelStdEqForByte: Order[Byte] with Hash[Byte] = new ByteEq
+  implicit val catsKernelStdOrderForByte: Order[Byte] with Hash[Byte] = new ByteOrder
   implicit val catsKernelStdGroupForByte: CommutativeGroup[Byte] = new ByteGroup
 }
 
@@ -15,7 +15,7 @@ class ByteGroup extends CommutativeGroup[Byte] {
   override def remove(x: Byte, y: Byte): Byte = (x - y).toByte
 }
 
-class ByteEq extends Order[Byte] with Hash[Byte] {
+class ByteOrder extends Order[Byte] with Hash[Byte] {
 
   def hash(x: Byte): Int = x.##
 

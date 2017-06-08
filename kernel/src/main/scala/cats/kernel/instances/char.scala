@@ -4,10 +4,10 @@ package instances
 package object char extends CharInstances
 
 trait CharInstances {
-  implicit val catsKernelStdEqForChar: Order[Char] with Hash[Char] = new CharEq
+  implicit val catsKernelStdOrderForChar: Order[Char] with Hash[Char] = new CharOrder
 }
 
-class CharEq extends Order[Char] with Hash[Char] {
+class CharOrder extends Order[Char] with Hash[Char] {
   def hash(x: Char): Int = x.##
   def compare(x: Char, y: Char): Int =
     if (x < y) -1 else if (x > y) 1 else 0

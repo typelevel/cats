@@ -4,14 +4,14 @@ package instances
 package object unit extends UnitInstances
 
 trait UnitInstances {
-  implicit val catsKernelStdEqForUnit: Order[Unit] with Hash[Unit] =
-    new UnitEq
+  implicit val catsKernelStdOrderForUnit: Order[Unit] with Hash[Unit] =
+    new UnitOrder
 
   implicit val catsKernelStdAlgebraForUnit: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =
     new UnitAlgebra
 }
 
-class UnitEq extends Order[Unit] with Hash[Unit] {
+class UnitOrder extends Order[Unit] with Hash[Unit] {
   def compare(x: Unit, y: Unit): Int = 0
 
   def hash(x: Unit): Int = 0
