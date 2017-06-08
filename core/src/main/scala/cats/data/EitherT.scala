@@ -566,16 +566,7 @@ private[data] trait EitherTMonadErrorF[F[_], E, L] extends MonadError[EitherT[F,
   def handleErrorWith[A](fea: EitherT[F, L, A])(f: E => EitherT[F, L, A]): EitherT[F, L, A] =
     EitherT(F.handleErrorWith(fea.value)(f(_).value))
 
-  override def handleError[A](fea: EitherT[F, L, A])(f: E => A): EitherT[F, L, A] =
-    EitherT(F.handleError(fea.value)(f andThen(Right(_))))
-
   def raiseError[A](e: E): EitherT[F, L, A] = EitherT.left(F.raiseError(e))
-
-  override def recover[A](fla: EitherT[F, L, A])(pf: PartialFunction[E, A]): EitherT[F, L, A] =
-    fla.recoverF(pf)
-
-  override def recoverWith[A](fla: EitherT[F, L, A])(pf: PartialFunction[E, EitherT[F, L, A]]): EitherT[F, L, A] =
-    fla.recoverFWith(pf.andThen(_.value))
 }
 
 private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, ?], L] with EitherTMonad[F, L] {
