@@ -53,8 +53,8 @@ class EitherTTests extends CatsSuite {
     implicit val F = ListWrapper.monad
     implicit val eq0 = EitherT.catsDataEqForEitherT[ListWrapper, String, Either[String, Int]]
     implicit val eq1 = EitherT.catsDataEqForEitherT[EitherT[ListWrapper, String, ?], String, Int](eq0)
-    implicit val eq2 = EitherT.catsDataEqForEitherT[Option, String, Either[String, Int]]
-    implicit val eq3 = EitherT.catsDataEqForEitherT[EitherT[Option, String, ?], String, Int](eq2)
+    implicit val eq2 = EitherT.catsDataEqForEitherT[Option, String, Either[String, String]]
+    implicit val eq3 = EitherT.catsDataEqForEitherT[EitherT[Option, String, ?], String, String](eq2)
     implicit val me = EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String](option.catsStdInstancesForOption)
 
     Functor[EitherT[ListWrapper, String, ?]]
@@ -63,7 +63,7 @@ class EitherTTests extends CatsSuite {
     MonadTrans[EitherT[?[_], String, ?]]
 
     checkAll("EitherT[ListWrapper, String, Int]", MonadErrorTests[EitherT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
-    checkAll("EitherT[Option, String, Int]", MonadErrorTests[EitherT[Option, String, ?], Unit].monadError[Int, Int, Int])
+    checkAll("EitherT[Option, String, String]", MonadErrorTests[EitherT[Option, String, ?], Unit].monadError[String, String, String])
     checkAll("MonadError[EitherT[List, ?, ?]]", SerializableTests.serializable(MonadError[EitherT[ListWrapper, String, ?], String]))
     checkAll("MonadError[EitherT[Option, ?, ?]]", SerializableTests.serializable(MonadError[EitherT[Option, String, ?], Unit]))
     checkAll("MonadTrans[EitherT[?[_], String, ?]]", MonadTransTests[EitherT[?[_], String, ?]].monadTrans[ListWrapper, Int, Int])
