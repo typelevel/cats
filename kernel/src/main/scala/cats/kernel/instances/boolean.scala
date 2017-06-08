@@ -4,11 +4,11 @@ package instances
 package object boolean extends BooleanInstances
 
 trait BooleanInstances {
-  implicit val catsKernelStdEqForBoolean: Order[Boolean] with Hash[Boolean] =
-    new BooleanEq
+  implicit val catsKernelStdOrderForBoolean: Order[Boolean] with Hash[Boolean] =
+    new BooleanOrder
 }
 
-class BooleanEq extends Order[Boolean] with Hash[Boolean] {
+class BooleanOrder extends Order[Boolean] with Hash[Boolean] {
 
   def hash(x: Boolean): Int = x.##
   def compare(x: Boolean, y: Boolean): Int =

@@ -4,7 +4,7 @@ package instances
 package object short extends ShortInstances
 
 trait ShortInstances {
-  implicit val catsKernelStdEqForShort: Order[Short] with Hash[Short] = new ShortEq
+  implicit val catsKernelStdOrderForShort: Order[Short] with Hash[Short] = new ShortOrder
   implicit val catsKernelStdGroupForShort: CommutativeGroup[Short] = new ShortGroup
 }
 
@@ -15,7 +15,7 @@ class ShortGroup extends CommutativeGroup[Short] {
   override def remove(x: Short, y: Short): Short = (x - y).toShort
 }
 
-class ShortEq extends Order[Short] with Hash[Short] {
+class ShortOrder extends Order[Short] with Hash[Short] {
 
   def hash(x: Short): Int = x.##
   // use java.lang.Short.compare if we can rely on java >= 1.7

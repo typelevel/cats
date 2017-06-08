@@ -4,7 +4,7 @@ package instances
 package object long extends LongInstances
 
 trait LongInstances {
-  implicit val catsKernelStdEqForLong: Order[Long] with Hash[Long] = new LongEq
+  implicit val catsKernelStdOrderForLong: Order[Long] with Hash[Long] = new LongOrder
   implicit val catsKernelStdGroupForLong: CommutativeGroup[Long] = new LongGroup
 }
 
@@ -15,7 +15,7 @@ class LongGroup extends CommutativeGroup[Long] {
   override def remove(x: Long, y: Long): Long = x - y
 }
 
-class LongEq extends Order[Long] with Hash[Long] {
+class LongOrder extends Order[Long] with Hash[Long] {
 
   def hash(x: Long): Int = x.##
 

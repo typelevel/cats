@@ -4,10 +4,10 @@ package instances
 package object symbol extends SymbolInstances
 
 trait SymbolInstances {
-  implicit val catsKernelStdEqForSymbol: Order[Symbol] with Hash[Symbol] = new SymbolEq
+  implicit val catsKernelStdOrderForSymbol: Order[Symbol] with Hash[Symbol] = new SymbolOrder
 }
 
-class SymbolEq extends Order[Symbol] with Hash[Symbol] {
+class SymbolOrder extends Order[Symbol] with Hash[Symbol] {
 
   def hash(x: Symbol): Int = x.##
 
