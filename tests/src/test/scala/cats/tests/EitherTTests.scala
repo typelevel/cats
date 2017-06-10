@@ -248,15 +248,6 @@ class EitherTTests extends CatsSuite {
     et.recoverFWith[Unit] { case u => Some(Right(5)) }.value.get should === (Right(1))
   }
 
-  test("transformF consistent with transforming value") {
-    val toOptionK: FunctionK[List, Option] = new FunctionK[List, Option] {
-      def apply[A](fa: List[A]): Option[A] = fa.headOption
-    }
-    forAll { (eithert: EitherT[List, String, Int])  =>
-      eithert.transformF(toOptionK).value should === (toOptionK(eithert.value))
-    }
-  }
-
   test("transform consistent with value.map") {
     forAll { (eithert: EitherT[List, String, Int], f: Either[String, Int] => Either[Long, Double]) =>
       eithert.transform(f) should === (EitherT(eithert.value.map(f)))

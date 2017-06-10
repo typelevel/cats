@@ -92,8 +92,6 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = bimap(identity, f)
 
-  def transformF[G[_]](fe: FunctionK[F, G]): EitherT[G, A, B] = EitherT(fe(value))
-
   def recoverF[E](pf: PartialFunction[E, B])(implicit me: MonadError[F, E]): EitherT[F, A, B] =
     EitherT(me.recover(value)(pf.andThen(b => Right(b))))
 
