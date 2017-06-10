@@ -1,9 +1,7 @@
 package cats
 package data
 
-import cats.arrow.FunctionK
 import cats.functor.Bifunctor
-import cats.instances.either._
 import cats.syntax.either._
 
 /**
