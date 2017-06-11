@@ -4,9 +4,8 @@ package discipline
 
 import cats.laws.discipline.CartesianTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
 
-trait CommutativeMonadTests[F[_]] extends MonadTests[F] {
+trait CommutativeMonadTests[F[_]] extends MonadTests[F] with CommutativeFlatMapTests[F] {
   def laws: CommutativeMonadLaws[F]
 
   def commutativeMonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
@@ -28,10 +27,8 @@ trait CommutativeMonadTests[F[_]] extends MonadTests[F] {
     new RuleSet {
       def name: String = "commutative monad"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(monad[A, B, C])
-      def props: Seq[(String, Prop)] = Seq(
-        "monad commutativity" -> forAll(laws.monadCommutative[A, B, C] _)
-      )
+      def parents: Seq[RuleSet] = Seq(monad[A, B, C], commutativeFlatMap[A, B, C])
+      def props: Seq[(String, Prop)] = Nil
     }
   }
 

@@ -4,13 +4,8 @@ package laws
 /**
  * Laws that must be obeyed by any `CommutativeMonad`.
  */
-trait CommutativeMonadLaws[F[_]] extends MonadLaws[F] {
+trait CommutativeMonadLaws[F[_]] extends MonadLaws[F] with CommutativeFlatMapLaws[F] {
   implicit override def F: CommutativeMonad[F]
-
-  def monadCommutative[A, B, C](fa: F[A], fb: F[B], g: (A, B) => F[C]): IsEq[F[C]] =
-    F.flatMap(fa)( a => F.flatMap(fb)( b => g(a, b))) <->
-    F.flatMap(fb)( b => F.flatMap(fa)( a => g(a, b)))
-
 }
 
 object CommutativeMonadLaws {
