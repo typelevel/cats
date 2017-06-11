@@ -33,6 +33,9 @@ class CokleisliTests extends SlowCatsSuite {
   checkAll("Cokleisli[Option, Int, Int]", ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[Int, Int, Int, Int, Int, Int])
   checkAll("Profunctor[Cokleisli[Option, ?, ?]]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
 
+  checkAll("Cokleisli[Id, Int, Int]", CommutativeArrowTests[Cokleisli[Id, ?, ?]].commutativeArrow[Int, Int, Int, Int, Int, Int])
+  checkAll("CommutativeArrow[Cokleisli[Id, ?, ?]]", SerializableTests.serializable(CommutativeArrow[Cokleisli[Id, ?, ?]]))
+
   checkAll("Cokleisli[Option, Int, Int]", ContravariantTests[Cokleisli[Option, ?, Int]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Cokleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Cokleisli[Option, ?, Int]]))
 
