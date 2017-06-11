@@ -488,8 +488,7 @@ lazy val commonScalacOptions = Seq(
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
-  "-Xfuture",
-  "-Xlog-implicits"
+  "-Xfuture"
 )
 
 lazy val sharedPublishSettings = Seq(

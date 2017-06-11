@@ -2,6 +2,7 @@ package cats
 package data
 
 import cats.functor.Bifunctor
+import cats.instances.either._
 import cats.syntax.either._
 
 /**
@@ -562,7 +563,7 @@ private[data] trait EitherTMonadErrorF[F[_], E, L] extends MonadError[EitherT[F,
   def handleErrorWith[A](fea: EitherT[F, L, A])(f: E => EitherT[F, L, A]): EitherT[F, L, A] =
     EitherT(F.handleErrorWith(fea.value)(f(_).value))
 
-  def raiseError[A](e: E): EitherT[F, L, A] = EitherT.left(F.raiseError(e))
+  def raiseError[A](e: E): EitherT[F, L, A] = EitherT(F.raiseError(e))
 }
 
 private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, ?], L] with EitherTMonad[F, L] {

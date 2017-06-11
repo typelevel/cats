@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats.arrow.FunctionK
 import cats.data.EitherT
 import cats.functor.Bifunctor
 import cats.functor._
@@ -53,8 +52,8 @@ class EitherTTests extends CatsSuite {
     implicit val F = ListWrapper.monad
     implicit val eq0 = EitherT.catsDataEqForEitherT[ListWrapper, String, Either[String, Int]]
     implicit val eq1 = EitherT.catsDataEqForEitherT[EitherT[ListWrapper, String, ?], String, Int](eq0)
-    implicit val eq2 = EitherT.catsDataEqForEitherT[Option, String, Either[String, String]]
-    implicit val eq3 = EitherT.catsDataEqForEitherT[EitherT[Option, String, ?], String, String](eq2)
+    implicit val eq2 = EitherT.catsDataEqForEitherT[Option, String, Either[Unit, String]]
+    implicit val eq3 = EitherT.catsDataEqForEitherT[EitherT[Option, String, ?], Unit, String](eq2)
     implicit val me = EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String](option.catsStdInstancesForOption)
 
     Functor[EitherT[ListWrapper, String, ?]]
