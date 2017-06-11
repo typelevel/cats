@@ -10,6 +10,11 @@ position: 3
    specifically cover Cats, it is a great introduction to functional
    programming in Scala in general and covers some of the abstractions
    that can be found in Cats.
+ * [Advanced Scala with Cats](http://underscore.io/books/advanced-scala/) 
+   by Noel Welsh and Dave Gurnell - The aims of this book are two-fold: 
+   to introduce monads, functors, and other functional programming patterns
+   as a way to structure program design, and to explain how these 
+   concepts are implemented in Cats.
 
 # Tutorials
  * [herding cats](http://eed3si9n.com/herding-cats/) by Eugene Yokota
