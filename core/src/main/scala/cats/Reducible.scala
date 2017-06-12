@@ -164,13 +164,13 @@ import simulacrum.typeclass
    * scala> import cats.implicits._
    * scala> import cats.data.NonEmptyList
    * scala> val nel = NonEmptyList.of("a", "b", "c")
-   * scala> Reducible[NonEmptyList].intercalate1(nel, "-")
+   * scala> Reducible[NonEmptyList].nonEmptyIntercalate(nel, "-")
    * res0: String = a-b-c
-   * scala> Reducible[NonEmptyList].intercalate1(NonEmptyList.of("a"), "-")
+   * scala> Reducible[NonEmptyList].nonEmptyIntercalate(NonEmptyList.of("a"), "-")
    * res1: String = a
    * }}}
    */
-  def intercalate1[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =
+  def nonEmptyIntercalate[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =
     toNonEmptyList(fa) match {
       case NonEmptyList(hd, Nil) => hd
       case NonEmptyList(hd, tl) =>
