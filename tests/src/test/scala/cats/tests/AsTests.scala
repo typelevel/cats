@@ -51,7 +51,6 @@ class AsTests extends CatsSuite {
     val two: Bottom As Top = bAsA compose cAsB 
   }
 
-
   test("we can use As to coerce a value") {
     val cAsA: Bottom As Top = implicitly
 
@@ -89,13 +88,21 @@ class AsTests extends CatsSuite {
     val contra3_3: EatF33[Unit, Unit, Top] As EatF33[Unit, Unit, Bottom] = As.contra3_3(cAsA)
   }
 
-  test("we can widen a function1") {
+  test("we can widen the output of a function1") {
     val f: Any => Bottom = _ => Bottom()
     val cAsA: Bottom As Top = implicitly
     val f2: Any => Top = As.onF(cAsA)(f)
   }
 
-  test("we can simultaneously narrow the input and widen the ouptut of a Function1") {
+  test("we can narrow the input of a function1") {
+    val f: Top => Any = (t: Top) => t
+    val cAsA: Bottom As Top = implicitly
+    val f2: Bottom => Any = As.conF(cAsA)(f)
+  }
 
+  test("we can simultaneously narrow the input and widen the ouptut of a Function1") {
+    val f: Top => Bottom = _ => Bottom()
+    val cAsA: Bottom As Top = implicitly
+    val f2: Bottom => Top = As.invF(cAsA, cAsA)(f)
   }
 }

@@ -151,14 +151,12 @@ object As extends AsInstances {
   // parameter. Here we provide the proof for what we expect to be the
   // most common shapes.
 
-  // binary
   def contra1_2[T[-_, _], Z, A, B](a: A As Z): (T[Z, B] As T[A, B]) =
     a.substitute[λ[`-α` => T[Z, B] As T[α, B]]](refl)
 
   def contra2_2[T[_, -_], Z, A, B](a: B As Z): (T[A, Z] As T[A, B]) =
     a.substitute[λ[`-α` => T[A, Z] As T[A, α]]](refl)
 
-  // ternary
   def contra1_3[T[-_, _, _], Z, A, B, C](a: A As Z): (T[Z, B, C] As T[A, B, C]) =
     a.substitute[λ[`-α` => T[Z, B, C] As T[α, B, C]]](refl)
 
@@ -167,4 +165,16 @@ object As extends AsInstances {
 
   def contra3_3[T[_, _, -_], Z, A, B, C](a: C As Z): (T[A, B, Z] As T[A, B, C]) =
     a.substitute[λ[`-α` => T[A, B, Z] As T[A, B, α]]](refl)
+
+  /**
+   * Use this relationship to narrow the input type of a Function1
+   */
+  def conF[A, B, C](ev: B As A)(fa: A => C): B => C =
+    contra1_2[Function1, A, B, C](ev).coerce(fa)
+
+  /**
+   * Use this relationship to widen the output type and narrow the input type of a Function1
+   */
+  def invF[C, D, A, B](ev1: D As C, ev2: A As B)(fa: C => A): D => B =
+    conF(ev1)(onF(ev2)(fa))
 }
