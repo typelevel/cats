@@ -1,6 +1,9 @@
 package cats
 package tests
 
+import cats.laws.discipline.{CategoryTests, SerializableTests}
+import org.scalacheck.{Arbitrary, Gen}
+import cats.arrow.Category
 class AsTests extends CatsSuite {
   import evidence._
 
@@ -10,6 +13,11 @@ class AsTests extends CatsSuite {
     val subst: GivenFunc <~< RequiredFunc = As.contra2_3(ev) //introduced because inference failed on scalajs on 2.10.6
     fa.foldLeft(Map.empty[A,B])(subst(_ + _))
   }
+
+  implicit def arbAs[A, B](implicit ev: A <~< B) = Arbitrary(Gen.const(ev))
+  implicit def eq[A, B]: Eq[As[A, B]] = Eq.fromUniversalEquals
+
+
 
   test("narrow an input of a function2") {
     // scala's GenTraversableOnce#toMap has a similar <:< constraint
@@ -41,6 +49,9 @@ class AsTests extends CatsSuite {
   }
   trait Middle extends Top
   case class Bottom() extends Middle
+
+  checkAll("As[Bottom, Middle]", CategoryTests[As].category[Bottom, Middle, Top, Any])
+  checkAll("Category[As]", SerializableTests.serializable(Category[As]))
 
   test("subtyping relationships compose") {
 
