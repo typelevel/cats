@@ -18,7 +18,8 @@ import cats.laws.discipline.arbitrary._
 // https://issues.scala-lang.org/browse/SI-7934
 @deprecated("", "")
 class DeprecatedForwarder {
-  implicit def runNow = scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
+  implicit def runNow =
+    scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
 }
 object DeprecatedForwarder extends DeprecatedForwarder
 import DeprecatedForwarder.runNow
@@ -52,13 +53,15 @@ class FutureTests extends CatsSuite {
   implicit def cogenForFuture[A]: Cogen[Future[A]] =
     Cogen[Unit].contramap(_ => ())
 
-  checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
+  checkAll("Future[Int]",
+           MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
 
   {
     implicit val F = ListWrapper.semigroup[Int]
-    checkAll("Future[ListWrapper[Int]]", GroupLaws[Future[ListWrapper[Int]]].semigroup)
+    checkAll("Future[ListWrapper[Int]]",
+             GroupLaws[Future[ListWrapper[Int]]].semigroup)
   }
 
   checkAll("Future[Int]", GroupLaws[Future[Int]].monoid)
