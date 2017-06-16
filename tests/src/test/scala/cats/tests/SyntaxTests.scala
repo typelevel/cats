@@ -249,6 +249,12 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val mtf = fa.liftT[MT]
   }
 
+  def testFlatMap[F[_] : FlatMap, A, B]: Unit = {
+    val a = mock[A]
+    val returnValue = mock[F[Either[A, B]]]
+    val done = a.tailRecM[F, B](a => returnValue)
+  }
+
   def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, ?], E]): Unit = {
     type G[X] = F[E, X]
 
