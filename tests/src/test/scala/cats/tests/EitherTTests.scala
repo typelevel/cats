@@ -47,14 +47,13 @@ class EitherTTests extends CatsSuite {
 
   {
     //if a Monad is defined
-    import cats.instances.option
 
     implicit val F = ListWrapper.monad
     implicit val eq0 = EitherT.catsDataEqForEitherT[ListWrapper, String, Either[String, Int]]
     implicit val eq1 = EitherT.catsDataEqForEitherT[EitherT[ListWrapper, String, ?], String, Int](eq0)
     implicit val eq2 = EitherT.catsDataEqForEitherT[Option, String, Either[Unit, String]]
     implicit val eq3 = EitherT.catsDataEqForEitherT[EitherT[Option, String, ?], Unit, String](eq2)
-    implicit val me = EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String](option.catsStdInstancesForOption)
+    implicit val me = EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String](catsStdInstancesForOption)
 
     Functor[EitherT[ListWrapper, String, ?]]
     Applicative[EitherT[ListWrapper, String, ?]]
