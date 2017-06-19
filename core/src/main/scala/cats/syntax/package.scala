@@ -41,6 +41,7 @@ package object syntax {
   object strong extends StrongSyntax
   object monadTrans extends MonadTransSyntax
   object traverse extends TraverseSyntax
+  object nonEmptyTraverse extends NonEmptyTraverseSyntax
   object traverseFilter extends TraverseFilterSyntax
   object tuple extends TupleSyntax
   object validated extends ValidatedSyntax
