@@ -244,15 +244,10 @@ object Free {
    * `Free[S, ?]` has a monad for any type constructor `S[_]`.
    */
   implicit def catsFreeMonadForFree[S[_]]: Monad[Free[S, ?]] =
-    new Monad[Free[S, ?]] {
+    new Monad[Free[S, ?]] with StackSafeMonad[Free[S, ?]] {
       def pure[A](a: A): Free[S, A] = Free.pure(a)
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
-      def tailRecM[A, B](a: A)(f: A => Free[S, Either[A, B]]): Free[S, B] =
-        f(a).flatMap {
-          case Left(a1) => tailRecM(a1)(f) // recursion OK here, since Free is lazy
-          case Right(b) => pure(b)
-        }
     }
 
   /**
