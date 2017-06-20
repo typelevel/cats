@@ -139,6 +139,19 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val gunit: G[F[A]] = fga.sequence
   }
 
+
+  def testNonEmptyTraverse[F[_]: NonEmptyTraverse: FlatMap, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
+    val fa = mock[F[A]]
+    val f1 = mock[A => G[B]]
+    val gfb: G[F[B]] = fa.nonEmptyTraverse(f1)
+
+    val f2 = mock[A => G[F[B]]]
+    val gfb2: G[F[B]] = fa.nonEmptyFlatTraverse(f2)
+
+    val fga = mock[F[G[A]]]
+    val gunit: G[F[A]] = fga.nonEmptySequence
+  }
+
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
     val fa = mock[F[A]]
     val f1 = mock[(A, A) => A]
@@ -164,9 +177,9 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val lb: Eval[B] = fa.reduceRightTo(f4)(f6)
 
     val f7 = mock[A => G[B]]
-    val gu1: G[Unit] = fa.traverse1_(f7)
+    val gu1: G[Unit] = fa.nonEmptyTraverse_(f7)
 
-    val gu2: G[Unit] = fga.sequence1_
+    val gu2: G[Unit] = fga.nonEmptySequence_
   }
 
   def testFunctor[F[_]: Functor, A, B]: Unit = {
@@ -247,6 +260,12 @@ object SyntaxTests extends AllInstances with AllSyntax {
   def testMonadTrans[MT[_[_], _], M[_], A](implicit MT: MonadTrans[MT], M: Monad[M]): Unit = {
     val fa = mock[M[A]]
     val mtf = fa.liftT[MT]
+  }
+
+  def testFlatMap[F[_] : FlatMap, A, B]: Unit = {
+    val a = mock[A]
+    val returnValue = mock[F[Either[A, B]]]
+    val done = a.tailRecM[F, B](a => returnValue)
   }
 
   def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, ?], E]): Unit = {

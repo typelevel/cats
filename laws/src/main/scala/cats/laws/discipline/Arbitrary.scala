@@ -160,6 +160,9 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit def catsLawArbitraryForReader[A: Arbitrary: Cogen, B: Arbitrary]: Arbitrary[Reader[A, B]] =
     catsLawsArbitraryForKleisli[Id, A, B]
+
+  implicit def catsLawsAribtraryForReaderWriterStateT[F[_]: Applicative, E, S, L, A](implicit F: Arbitrary[(E, S) => F[(L, S, A)]]): Arbitrary[ReaderWriterStateT[F, E, S, L, A]] =
+    Arbitrary(F.arbitrary.map(ReaderWriterStateT(_)))
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {
