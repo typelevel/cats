@@ -186,16 +186,31 @@ import simulacrum.typeclass
     foldLeft(fa, B.empty)((b, a) => B.combine(b, f(a)))
 
   /**
-   * Left associative monadic folding on `F`.
+   * Perform a stack-safe monadic left fold from the source context `F`
+   * into the target monad `G`.
    *
-   * The default implementation of this is based on `foldLeft`, and thus will
-   * always fold across the entire structure. Certain structures are able to
-   * implement this in such a way that folds can be short-circuited (not
-   * traverse the entirety of the structure), depending on the `G` result
-   * produced at a given step.
+   * This method can express short-circuiting semantics. Even when
+   * `fa` is an infinite structure, this method can potentially
+   * terminate if the `foldRight` implementation for `F` and the
+   * `tailRecM` implementation for `G` are sufficiently lazy.
+   *
+   * Instances for concrete structures (e.g. `List`) will often
+   * have a more efficient implementation than the default one
+   * in terms of `foldRight`.
    */
-  def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-    foldLeft(fa, G.pure(z))((gb, a) => G.flatMap(gb)(f(_, a)))
+  def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
+    val src = Foldable.Source.fromFoldable(fa)(self)
+    G.tailRecM((z, src)) { case (b, src) => src.uncons match {
+      case Some((a, src)) => G.map(f(b, a))(b => Left((b, src)))
+      case None => G.pure(Right(b))
+    }}
+  }
+
+  /**
+   * Alias for [[foldM]].
+   */
+  final def foldLeftM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
+    foldM(fa, z)(f)
 
   /**
    * Monadic folding on `F` by mapping `A` values to `G[B]`, combining the `B`
@@ -432,5 +447,35 @@ object Foldable {
       else M.pure(Right(b))
     }
     M.tailRecM(z)(go)
+  }
+
+
+  /**
+   * Isomorphic to
+   *
+   *     type Source[+A] = () => Option[(A, Source[A])]
+   *
+   * (except that recursive type aliases are not allowed).
+   *
+   * It could be made a value class after
+   * https://github.com/scala/bug/issues/9600 is resolved.
+   */
+  private sealed abstract class Source[+A] {
+    def uncons: Option[(A, Source[A])]
+  }
+
+  private object Source {
+    val Empty: Source[Nothing] = new Source[Nothing] {
+      def uncons = None
+    }
+
+    def cons[A](a: A, src: Eval[Source[A]]): Source[A] = new Source[A] {
+      def uncons = Some((a, src.value))
+    }
+
+    def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Source[A] =
+      F.foldRight[A, Source[A]](fa, Now(Empty))((a, evalSrc) =>
+        Later(cons(a, evalSrc))
+      ).value
   }
 }

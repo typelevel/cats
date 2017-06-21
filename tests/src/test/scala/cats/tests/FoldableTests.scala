@@ -204,6 +204,28 @@ class FoldableTestsAdditional extends CatsSuite {
     // test laziness of foldM
     dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should === (None)
   }
+
+  test(".foldLeftM short-circuiting") {
+    val ns = Stream.continually(1)
+    val res = Foldable[Stream].foldLeftM[Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+      if (sum >= 100000) Left(sum) else Right(sum + n)
+    }
+    assert(res == Left(100000))
+  }
+
+  test(".foldLeftM short-circuiting optimality") {
+    // test that no more elements are evaluated than absolutely necessary
+
+    def concatUntil(ss: Stream[String], stop: String): Either[String, String] =
+      Foldable[Stream].foldLeftM[Either[String, ?], String, String](ss, "") { (acc, s) =>
+        if (s == stop) Left(acc) else Right(acc + s)
+      }
+
+    def boom: Stream[String] = sys.error("boom")
+    assert(concatUntil("STOP" #:: boom, "STOP") == Left(""))
+    assert(concatUntil("Zero" #:: "STOP" #:: boom, "STOP") == Left("Zero"))
+    assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: boom, "STOP") == Left("ZeroOne"))
+  }
 }
 
 class FoldableListCheck extends FoldableCheck[List]("list") {
