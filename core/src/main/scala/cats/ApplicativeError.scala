@@ -76,6 +76,16 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def recoverWith[A](fa: F[A])(pf: PartialFunction[E, F[A]]): F[A] =
     handleErrorWith(fa)(e =>
       pf applyOrElse(e, raiseError))
+
+  /**
+   * Execute a callback on certain errors, then rethrow them.
+   *
+   * Any non matching error is rethrown as well.
+   */
+  def onError[A](fa: F[A])(pf: PartialFunction[E, F[Unit]]): F[A] =
+    handleErrorWith(fa)(e =>
+      (pf andThen (map2(_, raiseError[A](e))((_, b) => b))) applyOrElse(e, raiseError))
+
   /**
    * Often E is Throwable. Here we try to call pure or catch
    * and raise.
