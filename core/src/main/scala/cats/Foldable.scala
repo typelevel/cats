@@ -201,7 +201,7 @@ import simulacrum.typeclass
   def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
     val src = Foldable.Source.fromFoldable(fa)(self)
     G.tailRecM((z, src)) { case (b, src) => src.uncons match {
-      case Some((a, src)) => G.map(f(b, a))(b => Left((b, src)))
+      case Some((a, src)) => G.map(f(b, a))(b => Left((b, src.value)))
       case None => G.pure(Right(b))
     }}
   }
@@ -426,7 +426,7 @@ object Foldable {
    * https://github.com/scala/bug/issues/9600 is resolved.
    */
   private sealed abstract class Source[+A] {
-    def uncons: Option[(A, Source[A])]
+    def uncons: Option[(A, Eval[Source[A]])]
   }
 
   private object Source {
@@ -435,7 +435,7 @@ object Foldable {
     }
 
     def cons[A](a: A, src: Eval[Source[A]]): Source[A] = new Source[A] {
-      def uncons = Some((a, src.value))
+      def uncons = Some((a, src))
     }
 
     def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Source[A] =

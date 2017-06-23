@@ -217,9 +217,9 @@ class FoldableTestsAdditional extends CatsSuite {
       }
 
     def boom: Stream[String] = sys.error("boom")
-    assert(concatUntil("STOP" #:: "AFTER" #:: boom, "STOP") == Left(""))
-    assert(concatUntil("Zero" #:: "STOP" #:: "AFTER" #:: boom, "STOP") == Left("Zero"))
-    assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: "AFTER" #:: boom, "STOP") == Left("ZeroOne"))
+    assert(concatUntil("STOP" #:: boom, "STOP") == Left(""))
+    assert(concatUntil("Zero" #:: "STOP" #:: boom, "STOP") == Left("Zero"))
+    assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: boom, "STOP") == Left("ZeroOne"))
   }
 
   test("Foldable[List] doesn't break substitution") {
