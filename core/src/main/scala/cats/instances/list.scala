@@ -92,6 +92,15 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def fold[A](fa: List[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
+      override def foldM[G[_], A, B](fa: List[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
+        def step(in: (List[A], B)): G[Either[(List[A], B), B]] = in match {
+          case (Nil, b) => G.pure(Right(b))
+          case (a :: tail, b) => G.map(f(b, a)) { bnext => Left((tail, bnext)) }
+        }
+
+        G.tailRecM((fa, z))(step)
+      }
+
       override def toList[A](fa: List[A]): List[A] = fa
 
       override def reduceLeftOption[A](fa: List[A])(f: (A, A) => A): Option[A] =

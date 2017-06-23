@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.syntax.show._
+
 import scala.annotation.tailrec
 
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
@@ -119,6 +120,18 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       override def collect[A, B](fa: Stream[A])(f: PartialFunction[A, B]): Stream[B] = fa.collect(f)
 
       override def fold[A](fa: Stream[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
+
+      override def foldM[G[_], A, B](fa: Stream[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
+        def step(in: (Stream[A], B)): G[Either[(Stream[A], B), B]] = {
+          val (s, b)  = in
+          if(s.isEmpty)
+            G.pure(Right(b))
+          else
+            G.map(f(b, s.head)) { bnext => Left((s.tail, bnext)) }
+        }
+
+        G.tailRecM((fa, z))(step)
+      }
 
       override def toList[A](fa: Stream[A]): List[A] = fa.toList
 
