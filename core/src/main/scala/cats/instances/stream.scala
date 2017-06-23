@@ -122,7 +122,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       override def foldM[G[_], A, B](fa: Stream[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
         def step(in: (Stream[A], B)): G[Either[(Stream[A], B), B]] = {
           val (s, b)  = in
-          if(s.isEmpty)
+          if (s.isEmpty)
             G.pure(Right(b))
           else
             G.map(f(b, s.head)) { bnext => Left((s.tail, bnext)) }
