@@ -209,7 +209,7 @@ class FoldableTestsAdditional extends CatsSuite {
   }
 
   test(".foldLeftM short-circuiting optimality") {
-    // test that no more than 1 elements are evaluated than absolutely necessary
+    // test that no more elements are evaluated than absolutely necessary
 
     def concatUntil(ss: Stream[String], stop: String): Either[String, String] =
       Foldable[Stream].foldLeftM[Either[String, ?], String, String](ss, "") { (acc, s) =>
