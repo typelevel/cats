@@ -197,12 +197,7 @@ class FoldableTestsAdditional extends CatsSuite {
     }
     assert(result.value)
 
-    // test trampolining
-    val large = Stream((1 to 10000): _*)
-    assert(contains(large, 10000).value)
 
-    // test laziness of foldM
-    dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should === (None)
   }
 
   test(".foldLeftM short-circuiting") {
@@ -214,7 +209,7 @@ class FoldableTestsAdditional extends CatsSuite {
   }
 
   test(".foldLeftM short-circuiting optimality") {
-    // test that no more elements are evaluated than absolutely necessary
+    // test that no more than 1 elements are evaluated than absolutely necessary
 
     def concatUntil(ss: Stream[String], stop: String): Either[String, String] =
       Foldable[Stream].foldLeftM[Either[String, ?], String, String](ss, "") { (acc, s) =>
@@ -222,9 +217,15 @@ class FoldableTestsAdditional extends CatsSuite {
       }
 
     def boom: Stream[String] = sys.error("boom")
-    assert(concatUntil("STOP" #:: boom, "STOP") == Left(""))
-    assert(concatUntil("Zero" #:: "STOP" #:: boom, "STOP") == Left("Zero"))
-    assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: boom, "STOP") == Left("ZeroOne"))
+    assert(concatUntil("STOP" #:: "AFTER" #:: boom, "STOP") == Left(""))
+    assert(concatUntil("Zero" #:: "STOP" #:: "AFTER" #:: boom, "STOP") == Left("Zero"))
+    assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: "AFTER" #:: boom, "STOP") == Left("ZeroOne"))
+  }
+
+  test("Foldable[List] doesn't break substitution") {
+    val result  = List.range(0,10).foldM(List.empty[Int])((accum, elt) => Eval.always(elt :: accum))
+
+    assert(result.value == result.value)
   }
 }
 
