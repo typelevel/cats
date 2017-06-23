@@ -119,8 +119,6 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
       override def collect[A, B](fa: Stream[A])(f: PartialFunction[A, B]): Stream[B] = fa.collect(f)
 
-      override def fold[A](fa: Stream[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
-
       override def foldM[G[_], A, B](fa: Stream[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
         def step(in: (Stream[A], B)): G[Either[(Stream[A], B), B]] = {
           val (s, b)  = in
@@ -132,6 +130,8 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
         G.tailRecM((fa, z))(step)
       }
+
+      override def fold[A](fa: Stream[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
       override def toList[A](fa: Stream[A]): List[A] = fa.toList
 
