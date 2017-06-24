@@ -91,12 +91,6 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = bimap(identity, f)
 
-  def recoverF[E](pf: PartialFunction[E, B])(implicit me: MonadError[F, E]): EitherT[F, A, B] =
-    EitherT(me.recover(value)(pf.andThen(b => Right(b))))
-
-  def recoverFWith[E](pf: PartialFunction[E, F[Either[A, B]]])(implicit me: MonadError[F, E]): EitherT[F, A, B] =
-    EitherT(me.recoverWith(value)(pf))
-
   def semiflatMap[D](f: B => F[D])(implicit F: Monad[F]): EitherT[F, A, D] =
     flatMap(b => EitherT.right(f(b)))
 
