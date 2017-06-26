@@ -431,9 +431,6 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
       override def fold[A](fa: NonEmptyList[A])(implicit A: Monoid[A]): A =
         fa.reduce
 
-      override def foldM[G[_], A, B](fa: NonEmptyList[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable.iteratorFoldM(fa.toList.toIterator, z)(f)
-
       override def find[A](fa: NonEmptyList[A])(f: A => Boolean): Option[A] =
         fa find f
 

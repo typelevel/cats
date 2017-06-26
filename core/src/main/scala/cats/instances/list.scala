@@ -90,8 +90,14 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def filter[A](fa: List[A])(f: A => Boolean): List[A] = fa.filter(f)
 
-      override def foldM[G[_], A, B](fa: List[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable.iteratorFoldM(fa.toIterator, z)(f)
+      override def foldM[G[_], A, B](fa: List[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
+        def step(in: (List[A], B)): G[Either[(List[A], B), B]] = in match {
+          case (Nil, b) => G.pure(Right(b))
+          case (a :: tail, b) => G.map(f(b, a)) { bnext => Left((tail, bnext)) }
+        }
+
+        G.tailRecM((fa, z))(step)
+      }
 
       override def fold[A](fa: List[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 

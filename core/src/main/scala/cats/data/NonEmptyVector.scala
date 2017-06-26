@@ -264,9 +264,6 @@ private[data] sealed trait NonEmptyVectorInstances {
       override def fold[A](fa: NonEmptyVector[A])(implicit A: Monoid[A]): A =
         fa.reduce
 
-      override def foldM[G[_], A, B](fa: NonEmptyVector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable.iteratorFoldM(fa.toVector.toIterator, z)(f)
-
       override def find[A](fa: NonEmptyVector[A])(f: A => Boolean): Option[A] =
         fa.find(f)
 

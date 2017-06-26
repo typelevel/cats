@@ -5,6 +5,7 @@ import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
+import list._
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
   implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
@@ -91,7 +92,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def collect[A, B](fa: Vector[A])(f: PartialFunction[A, B]): Vector[B] = fa.collect(f)
 
       override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable.iteratorFoldM(fa.toIterator, z)(f)
+        Foldable[List].foldM(fa.toList, z)(f)
 
       override def fold[A](fa: Vector[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 

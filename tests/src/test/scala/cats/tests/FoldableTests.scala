@@ -203,21 +203,33 @@ class FoldableTestsAdditional extends CatsSuite {
 
     // test laziness of foldM
     dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should === (None)
+
+  }
+
+  def foldableStreamWithDefaultImpl = new Foldable[Stream] {
+    def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
+      instances.stream.catsStdInstancesForStream.foldLeft(fa, b)(f)
+
+    def foldRight[A, B](fa: Stream[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+      instances.stream.catsStdInstancesForStream.foldRight(fa, lb)(f)
   }
 
   test(".foldLeftM short-circuiting") {
+    implicit val F = foldableStreamWithDefaultImpl
     val ns = Stream.continually(1)
-    val res = Foldable[Stream].foldLeftM[Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+    val res = F.foldLeftM[Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
       if (sum >= 100000) Left(sum) else Right(sum + n)
     }
     assert(res == Left(100000))
   }
 
   test(".foldLeftM short-circuiting optimality") {
+    implicit val F = foldableStreamWithDefaultImpl
+
     // test that no more elements are evaluated than absolutely necessary
 
     def concatUntil(ss: Stream[String], stop: String): Either[String, String] =
-      Foldable[Stream].foldLeftM[Either[String, ?], String, String](ss, "") { (acc, s) =>
+      F.foldLeftM[Either[String, ?], String, String](ss, "") { (acc, s) =>
         if (s == stop) Left(acc) else Right(acc + s)
       }
 
@@ -225,6 +237,12 @@ class FoldableTestsAdditional extends CatsSuite {
     assert(concatUntil("STOP" #:: boom, "STOP") == Left(""))
     assert(concatUntil("Zero" #:: "STOP" #:: boom, "STOP") == Left("Zero"))
     assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: boom, "STOP") == Left("ZeroOne"))
+  }
+
+  test("Foldable[List] doesn't break substitution") {
+    val result  = List.range(0,10).foldM(List.empty[Int])((accum, elt) => Eval.always(elt :: accum))
+
+    assert(result.value == result.value)
   }
 }
 
