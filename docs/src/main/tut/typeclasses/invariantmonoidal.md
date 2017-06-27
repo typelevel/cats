@@ -52,8 +52,8 @@ import cats.implicits._
 case class Foo(a: String, c: List[Double])
 
 implicit val fooSemigroup: Semigroup[Foo] = (
-  (implicitly[Semigroup[String]] |@| implicitly[Semigroup[List[Double]]])
-    .imap(Foo.apply)(Function.unlift(Foo.unapply))
+  (implicitly[Semigroup[String]], implicitly[Semigroup[List[Double]]])
+    .imapN(Foo.apply)(Function.unlift(Foo.unapply))
 )
 ```
 
@@ -164,14 +164,14 @@ case class BinDec(binary: Int, decimal: Int)
 
 val binDecCodec: CsvCodec[BinDec] = (
   (numericSystemCodec(2), numericSystemCodec(10))
-    .imap(BinDec.apply)(Function.unlift(BinDec.unapply))
+    .imapN(BinDec.apply)(Function.unlift(BinDec.unapply))
 )
 
 case class Foo(name: String, bd1: BinDec, bd2: BinDec)
 
 val fooCodec: CsvCodec[Foo] = (
   (stringCodec, binDecCodec, binDecCodec)
-    .imap(Foo.apply)(Function.unlift(Foo.unapply))
+    .imapN(Foo.apply)(Function.unlift(Foo.unapply))
 )
 ```
 

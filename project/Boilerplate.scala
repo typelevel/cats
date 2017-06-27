@@ -136,7 +136,7 @@ object Boilerplate {
         |
         |import cats.functor.{Contravariant, Invariant}
         |
-        |@deprecated("replaced by tuple cartesian syntax", "1.0.0-MF")
+        |@deprecated("replaced by apply syntax", "1.0.0-MF")
         |private[syntax] final class CartesianBuilder[F[_]] {
         |  def |@|[A](a: F[A]) = new CartesianBuilder1(a)
         |

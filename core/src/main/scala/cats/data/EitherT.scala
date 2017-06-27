@@ -175,7 +175,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * scala> val v1: Validated[NonEmptyList[Error], Int] = Validated.invalidNel("error 1")
    * scala> val v2: Validated[NonEmptyList[Error], Int] = Validated.invalidNel("error 2")
    * scala> val eithert: EitherT[Option, Error, Int] = EitherT.leftT[Option, Int]("error 3")
-   * scala> eithert.withValidated { v3 => (v1, v2, v3.leftMap(NonEmptyList.of(_))).mapN { case (i, j, k) => i + j + k } }
+   * scala> eithert.withValidated { v3 => (v1, v2, v3.toValidatedNel).mapN { case (i, j, k) => i + j + k } }
    * res0: EitherT[Option, NonEmptyList[Error], Int] = EitherT(Some(Left(NonEmptyList(error 1, error 2, error 3))))
    * }}}
    */
