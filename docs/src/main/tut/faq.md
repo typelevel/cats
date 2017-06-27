@@ -203,7 +203,6 @@ All other symbols can be imported with `import cats.implicits._`
 
 | Symbol                           | Name                   | Nickname         | Type Class              | Signature                                                 |
 | -------------------------------- | ---------------------- | ---------------- | ----------------------- | --------------------------------------------------------- |
-| <code>fa &#124;@&#124; fb</code> | Cartesian builder      | Cinnabon, scream | `Cartesian[F[_]]`       | <code>&#124;@&#124;(fa: F[A])(fb: F[B]): F[(A, B)]</code> |
 | `fa *> fb`                       | right apply            |                  | `Cartesian[F[_]]`       | `*>(fa: F[A])(fb: F[B]): F[A]`                            |
 | `fa <* fb`                       | left apply             |                  | `Cartesian[F[_]]`       | `<*(fa: F[A])(fb: F[B]): F[B]`                            |
 | `x === y`                        | equals                 |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                |

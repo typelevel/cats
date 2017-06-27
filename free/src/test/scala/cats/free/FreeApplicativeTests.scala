@@ -73,7 +73,7 @@ class FreeApplicativeTests extends CatsSuite {
     // fixed by #568
     val fli1 = FreeApplicative.lift[List, Int](List(1, 3, 5, 7))
     val fli2 = FreeApplicative.lift[List, Int](List(1, 3, 5, 7))
-    (fli1 |@| fli2).map(_ + _)
+    (fli1, fli2).mapN(_ + _)
   }
 
   test("FreeApplicative#analyze") {

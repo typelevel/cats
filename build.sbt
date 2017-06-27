@@ -67,7 +67,7 @@ lazy val commonJsSettings = Seq(
   scalaJSStage in Global := FastOptStage,
   parallelExecution := false,
   requiresDOM := false,
-  jsEnv := NodeJSEnv().value,
+  jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // Only used for scala.js for now
   botBuild := scala.sys.env.get("TRAVIS").isDefined,
   // batch mode decreases the amount of memory needed to compile scala.js code

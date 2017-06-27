@@ -43,7 +43,6 @@ trait AllSyntax
     with TraverseFilterSyntax
     with TraverseSyntax
     with NonEmptyTraverseSyntax
-    with TupleSyntax
     with ValidatedSyntax
     with VectorSyntax
     with WriterSyntax
