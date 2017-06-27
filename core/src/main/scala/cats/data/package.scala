@@ -4,6 +4,7 @@ package object data {
   type NonEmptyStream[A] = OneAnd[Stream, A]
   type ValidatedNel[+E, +A] = Validated[NonEmptyList[E], A]
   type IorNel[+B, +A] = Ior[NonEmptyList[B], A]
+  type EitherNel[+E, +A] = Either[NonEmptyList[E], A]
 
   def NonEmptyStream[A](head: A, tail: Stream[A] = Stream.empty): NonEmptyStream[A] =
     OneAnd(head, tail)
