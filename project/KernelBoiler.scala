@@ -133,6 +133,13 @@ object KernelBoiler {
         -      def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
         -    }
         -
+        -  implicit def catsKernelStdCommutativeGroupForTuple${arity}[${`A..N`}](implicit ${constraints("CommutativeGroup")}): CommutativeGroup[${`(A..N)`}] =
+        -    new CommutativeGroup[${`(A..N)`}] {
+        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+        -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
+        -      def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
+        -    }
+        -
         -  implicit def catsKernelStdEqForTuple${arity}[${`A..N`}](implicit ${constraints("Eq")}): Eq[${`(A..N)`}] =
         -    new Eq[${`(A..N)`}] {
         -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
@@ -148,6 +155,11 @@ object KernelBoiler {
         -    new CommutativeMonoid[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
         -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
+        -    }
+        -
+        -  implicit def catsKernelStdCommutativeSemigroupForTuple${arity}[${`A..N`}](implicit ${constraints("CommutativeSemigroup")}): CommutativeSemigroup[${`(A..N)`}] =
+        -    new CommutativeSemigroup[${`(A..N)`}] {
+        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
         -    }
         -
         -  implicit def catsKernelStdOrderForTuple${arity}[${`A..N`}](implicit ${constraints("Order")}): Order[${`(A..N)`}] =
@@ -170,6 +182,12 @@ object KernelBoiler {
         -  implicit def catsKernelStdSemilatticeForTuple${arity}[${`A..N`}](implicit ${constraints("Semilattice")}): Semilattice[${`(A..N)`}] =
         -    new Semilattice[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+        -    }
+        -
+        -  implicit def catsKernelStdBoundedSemilatticeForTuple${arity}[${`A..N`}](implicit ${constraints("BoundedSemilattice")}): BoundedSemilattice[${`(A..N)`}] =
+        -    new BoundedSemilattice[${`(A..N)`}] {
+        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+        -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
         -    }
         |}
       """
