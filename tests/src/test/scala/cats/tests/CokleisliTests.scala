@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.arrow.Arrow
+import cats.arrow.{ CommutativeArrow }
 import cats.data.{Cokleisli, NonEmptyList}
 import cats.functor.{Contravariant, Profunctor}
 import cats.laws.discipline._
@@ -28,9 +28,6 @@ class CokleisliTests extends SlowCatsSuite {
   checkAll("Cokleisli[Option, Int, Int]", ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[Int, Int, Int, Int, Int, Int])
   checkAll("Profunctor[Cokleisli[Option, ?, ?]]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
 
-  checkAll("Cokleisli[Id, Int, Int]", CommutativeArrowTests[Cokleisli[Id, ?, ?]].commutativeArrow[Int, Int, Int, Int, Int, Int])
-  checkAll("CommutativeArrow[Cokleisli[Id, ?, ?]]", SerializableTests.serializable(CommutativeArrow[Cokleisli[Id, ?, ?]]))
-
   checkAll("Cokleisli[Option, Int, Int]", ContravariantTests[Cokleisli[Option, ?, Int]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Cokleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Cokleisli[Option, ?, Int]]))
 
@@ -38,8 +35,8 @@ class CokleisliTests extends SlowCatsSuite {
     // Ceremony to help scalac to do the right thing, see also #267.
     type CokleisliNEL[A, B] = Cokleisli[NonEmptyList, A, B]
 
-    checkAll("Cokleisli[NonEmptyList, Int, Int]", ArrowTests[CokleisliNEL].arrow[Int, Int, Int, Int, Int, Int])
-    checkAll("Arrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(Arrow[CokleisliNEL]))
+    checkAll("Cokleisli[NonEmptyList, Int, Int]", CommutativeArrowTests[CokleisliNEL].commutativeArrow[Int, Int, Int, Int, Int, Int])
+    checkAll("CommutativeArrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(CommutativeArrow[CokleisliNEL]))
   }
 
   {

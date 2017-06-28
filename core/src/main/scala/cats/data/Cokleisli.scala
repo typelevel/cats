@@ -48,6 +48,9 @@ private[data] sealed abstract class CokleisliInstances extends CokleisliInstance
   implicit def catsDataCommutativeArrowForCokleisli[F[_]](implicit ev: CommutativeComonad[F]): CommutativeArrow[Cokleisli[F, ?, ?]] =
     new CokleisliCommutativeArrow[F] { def F: CommutativeComonad[F] = ev }
 
+  implicit val catsDataCommutativeArrowForCokleisliId: CommutativeArrow[Cokleisli[Id, ?, ?]] =
+    catsDataCommutativeArrowForCokleisli[Id]
+
   implicit def catsDataMonadForCokleisli[F[_], A]: Monad[Cokleisli[F, A, ?]] =
     new CokleisliMonad[F, A]
 
