@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.arrow.Arrow
+import cats.arrow.{ CommutativeArrow }
 import cats.data.{Cokleisli, NonEmptyList}
 import cats.functor.{Contravariant, Profunctor}
 import cats.laws.discipline._
@@ -33,14 +33,11 @@ class CokleisliTests extends SlowCatsSuite {
   checkAll("Cokleisli[Option, Int, Int]", ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[Int, Int, Int, Int, Int, Int])
   checkAll("Profunctor[Cokleisli[Option, ?, ?]]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
 
-  checkAll("Cokleisli[Id, Int, Int]", CommutativeArrowTests[Cokleisli[Id, ?, ?]].commutativeArrow[Int, Int, Int, Int, Int, Int])
-  checkAll("CommutativeArrow[Cokleisli[Id, ?, ?]]", SerializableTests.serializable(CommutativeArrow[Cokleisli[Id, ?, ?]]))
-
   checkAll("Cokleisli[Option, Int, Int]", ContravariantTests[Cokleisli[Option, ?, Int]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Cokleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Cokleisli[Option, ?, Int]]))
 
-  checkAll("Cokleisli[NonEmptyList, Int, Int]", ArrowTests[Cokleisli[NonEmptyList, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
-  checkAll("Arrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(Arrow[Cokleisli[NonEmptyList, ?, ?]]))
+  checkAll("Cokleisli[NonEmptyList, Int, Int]", CommutativeArrowTests[Cokleisli[NonEmptyList, ?, ?]].commutativeArrow[Int, Int, Int, Int, Int, Int])
+  checkAll("Arrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(CommutativeArrow[Cokleisli[NonEmptyList, ?, ?]]))
 
   checkAll("Cokleisli[NonEmptyList, Int, Int]", MonoidKTests[λ[α => Cokleisli[NonEmptyList, α, α]]].monoidK[Int])
   checkAll("MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]", SerializableTests.serializable(MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]))

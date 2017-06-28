@@ -2,8 +2,9 @@ package cats
 package tests
 
 import cats.kernel.laws.{GroupLaws, OrderLaws}
+
 import cats.data.{NonEmptyList, NonEmptyVector}
-import cats.laws.discipline.{ComonadTests, MonadTests, NonEmptyTraverseTests, ReducibleTests, SemigroupKTests, SerializableTests}
+import cats.laws.discipline.{CommutativeComonadTests, SemigroupKTests, MonadTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyListTests extends CatsSuite {
@@ -28,8 +29,8 @@ class NonEmptyListTests extends CatsSuite {
   checkAll("NonEmptyList[Int]", GroupLaws[NonEmptyList[Int]].semigroup)
   checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[NonEmptyList[Int]]))
 
-  checkAll("NonEmptyList[Int]", ComonadTests[NonEmptyList].comonad[Int, Int, Int])
-  checkAll("Comonad[NonEmptyList]", SerializableTests.serializable(Comonad[NonEmptyList]))
+  checkAll("NonEmptyList[Int]", CommutativeComonadTests[NonEmptyList].commutativeComonad[Int, Int, Int])
+  checkAll("CommutativeComonad[NonEmptyList]", SerializableTests.serializable(CommutativeComonad[NonEmptyList]))
 
   checkAll("NonEmptyList[ListWrapper[Int]]", OrderLaws[NonEmptyList[ListWrapper[Int]]].eqv)
   checkAll("Eq[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptyList[ListWrapper[Int]]]))
