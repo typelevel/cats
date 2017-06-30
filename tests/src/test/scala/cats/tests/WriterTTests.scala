@@ -335,11 +335,10 @@ class WriterTTests extends CatsSuite {
     implicit val FLV: Monoid[ListWrapper[(Int, Int)]] = ListWrapper.monoid[(Int, Int)]
 
     Monoid[WriterT[ListWrapper, Int, Int]]
-    Semigroup[WriterT[ListWrapper, Int, Int]]
     checkAll("WriterT[ListWrapper, Int, Int]", kernel.laws.GroupLaws[WriterT[ListWrapper, Int, Int]].monoid)
 
-    Monoid[WriterT[Id, Int, Int]]
-    Semigroup[WriterT[Id, Int, Int]]
+    Monoid[Writer[Int, Int]]
+    checkAll("Writer[Int, Int]", kernel.laws.GroupLaws[Writer[Int, Int]].monoid)
   }
 
   {
@@ -349,7 +348,8 @@ class WriterTTests extends CatsSuite {
     Semigroup[WriterT[ListWrapper, Int, Int]]
     checkAll("WriterT[ListWrapper, Int, Int]", kernel.laws.GroupLaws[WriterT[ListWrapper, Int, Int]].semigroup)
 
-    Semigroup[WriterT[Id, Int, Int]]
+    Semigroup[Writer[Int, Int]]
+    checkAll("Writer[Int, Int]", kernel.laws.GroupLaws[Writer[Int, Int]].semigroup)
   }
 
   {

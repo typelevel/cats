@@ -5,8 +5,6 @@ import scala.reflect.NameTransformer
 
 object Ops extends machinist.Ops {
 
-  def uesc(c: Char): String = "$u%04X".format(c.toInt)
-
   val operatorNames: Map[String, String] =
     List(
       ("===", "eqv"),

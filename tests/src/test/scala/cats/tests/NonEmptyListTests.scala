@@ -2,9 +2,8 @@ package cats
 package tests
 
 import cats.kernel.laws.{GroupLaws, OrderLaws}
-
-import cats.data.NonEmptyList
-import cats.laws.discipline.{ComonadTests, SemigroupKTests, MonadTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests}
+import cats.data.{NonEmptyList, NonEmptyVector}
+import cats.laws.discipline.{ComonadTests, MonadTests, NonEmptyTraverseTests, ReducibleTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyListTests extends CatsSuite {
@@ -272,6 +271,12 @@ class NonEmptyListTests extends CatsSuite {
   test("NonEmptyList#fromFoldabale is consistent with NonEmptyList#fromList") {
     forAll { (xs: List[Int]) =>
       NonEmptyList.fromList(xs) should === (NonEmptyList.fromFoldable(xs))
+    }
+  }
+
+  test("NonEmptyList#fromReducible is consistent with Reducible#toNonEmptyList") {
+    forAll { (xs: NonEmptyVector[Int]) =>
+      NonEmptyList.fromReducible(xs) should === (Reducible[NonEmptyVector].toNonEmptyList(xs))
     }
   }
 }

@@ -6,12 +6,15 @@ import cats.Applicative
 
 class ApplicativeTests extends CatsSuite {
 
-  test("replicateA creates a List of 'n' copies of given Applicative 'fa'") {
+  test("Applicative#traverse is equivalent to Traverse#traverse") {
+    val f: (Int) => Option[Int] = x => Some(x + 1)
+    Applicative[Option].traverse(List(1, 2))(f) should ===(Traverse[List].traverse(List(1, 2))(f))
+  }
 
+  test("replicateA creates a List of 'n' copies of given Applicative 'fa'") {
     val A = Applicative[Option]
     val fa = A.pure(1)
     fa.replicateA(5) should === (Some(List(1,1,1,1,1)))
-
   }
 
   test("whenA return given argument when cond is true") {

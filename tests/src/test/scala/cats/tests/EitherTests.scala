@@ -10,6 +10,7 @@ class EitherTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[Either[Int, ?]]
 
   checkAll("Either[String, Int]", GroupLaws[Either[String, Int]].monoid)
+  checkAll("Semigroup[Either[String, Int]]", SerializableTests.serializable(Semigroup[Either[String, Int]]))
 
   checkAll("Either[Int, Int]", CartesianTests[Either[Int, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Either[Int, ?]]", SerializableTests.serializable(Cartesian[Either[Int, ?]]))
@@ -27,6 +28,9 @@ class EitherTests extends CatsSuite {
 
   checkAll("Either[ListWrapper[String], ?]", SemigroupKTests[Either[ListWrapper[String], ?]].semigroupK[Int])
   checkAll("SemigroupK[Either[ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[Either[ListWrapper[String], ?]]))
+
+  checkAll("Either[ListWrapper[String], Int]", GroupLaws[Either[ListWrapper[String], Int]].semigroup)
+  checkAll("Semigroup[Either[ListWrapper[String], Int]]", SerializableTests.serializable(Semigroup[Either[ListWrapper[String], Int]]))
 
   val partialOrder = catsStdPartialOrderForEither[Int, String]
   val order = implicitly[Order[Either[Int, String]]]

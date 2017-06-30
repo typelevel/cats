@@ -90,6 +90,14 @@ class FreeTests extends CatsSuite {
     assert(res == List(112358))
   }
 
+  test(".run") {
+    val r = Free.pure[Id, Int](12358)
+    def recurse(r: Free[Id, Int], n: Int): Free[Id, Int] =
+      if (n > 0) recurse(r.flatMap(x => Free.pure(x + 1)), n - 1) else r
+    val res = recurse(r, 100000).run
+    assert(res == 112358)
+  }
+
   sealed trait Test1Algebra[A]
 
   case class Test1[A](value : Int, f: Int => A) extends Test1Algebra[A]
