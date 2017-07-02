@@ -3,10 +3,12 @@ package instances
 
 import scala.annotation.tailrec
 
+import cats.data.Ior
+
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
-  implicit val catsStdInstancesForOption: TraverseFilter[Option] with MonadError[Option, Unit] with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] =
-    new TraverseFilter[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] {
+  implicit val catsStdInstancesForOption: TraverseFilter[Option] with MonadError[Option, Unit] with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] with Align[Option] =
+    new TraverseFilter[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] with Align[Option] {
 
       def empty[A]: Option[A] = None
 
@@ -116,6 +118,16 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       override def isEmpty[A](fa: Option[A]): Boolean =
         fa.isEmpty
+
+      override def nil[A]: Option[A] = None
+
+      override def align[A, B](fa: Option[A], fb: Option[B]): Option[A Ior B] =
+        (fa, fb) match {
+          case (None, None) => None
+          case (Some(a), None) => Some(Ior.left(a))
+          case (None, Some(b)) => Some(Ior.right(b))
+          case (Some(a), Some(b)) => Some(Ior.both(a, b))
+        }
     }
 
   implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =

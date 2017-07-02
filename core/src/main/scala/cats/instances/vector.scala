@@ -2,14 +2,15 @@ package cats
 package instances
 
 import cats.syntax.show._
+import cats.data.Ior
 import scala.annotation.tailrec
 import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
 import list._
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
-  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
-    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] {
+  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with Align[Vector] =
+    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] with Align[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 
@@ -104,6 +105,17 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def find[A](fa: Vector[A])(f: A => Boolean): Option[A] = fa.find(f)
 
       override def algebra[A]: Monoid[Vector[A]] = new kernel.instances.VectorMonoid[A]
+
+      override def nil[A]: Vector[A] = Vector.empty[A]
+
+      override def align[A, B](fa: Vector[A], fb: Vector[B]): Vector[A Ior B] = {
+        val aLarger = fa.size >= fb.size
+        if (aLarger) {
+          (fa, fb).zipped.map(Ior.both) ++ fa.drop(fb.size).map(Ior.left)
+        } else {
+          (fa, fb).zipped.map(Ior.both) ++ fb.drop(fa.size).map(Ior.right)
+        }
+      }
     }
 
   implicit def catsStdShowForVector[A:Show]: Show[Vector[A]] =

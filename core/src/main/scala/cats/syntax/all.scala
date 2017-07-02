@@ -2,7 +2,8 @@ package cats
 package syntax
 
 trait AllSyntax
-    extends ApplicativeSyntax
+    extends AlignSyntax
+    with ApplicativeSyntax
     with ApplicativeErrorSyntax
     with ApplySyntax
     with BifunctorSyntax

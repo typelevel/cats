@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{MonadCombineTests, CoflatMapTests, SerializableTests, TraverseFilterTests, CartesianTests}
+import cats.laws.discipline.{AlignTests, MonadCombineTests, CoflatMapTests, SerializableTests, TraverseFilterTests, CartesianTests}
 import cats.laws.discipline.arbitrary._
 
 class VectorTests extends CatsSuite {
@@ -17,6 +17,9 @@ class VectorTests extends CatsSuite {
 
   checkAll("Vector[Int] with Option", TraverseFilterTests[Vector].traverseFilter[Int, Int, Int, List[Int], Option, Option])
   checkAll("TraverseFilter[Vector]", SerializableTests.serializable(TraverseFilter[Vector]))
+
+  checkAll("Vector[Int]", AlignTests[Vector].align[Int, Int, Int, Int])
+  checkAll("Align[Vector]", SerializableTests.serializable(Align[Vector]))
 
   test("show") {
     Vector(1, 2, 3).show should === ("Vector(1, 2, 3)")

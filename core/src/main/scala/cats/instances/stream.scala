@@ -2,12 +2,13 @@ package cats
 package instances
 
 import cats.syntax.show._
+import cats.data.Ior
 
 import scala.annotation.tailrec
 
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
-  implicit val catsStdInstancesForStream: TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] =
-    new TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] {
+  implicit val catsStdInstancesForStream: TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with Align[Stream] =
+    new TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] with Align[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
 
@@ -141,6 +142,17 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       override def find[A](fa: Stream[A])(f: A => Boolean): Option[A] = fa.find(f)
 
       override def algebra[A]: Monoid[Stream[A]] = new kernel.instances.StreamMonoid[A]
+
+      override def nil[A]: Stream[A] = Stream.Empty
+
+      override def align[A, B](fa: Stream[A], fb: Stream[B]): Stream[A Ior B] =
+        (fa, fb) match {
+          case ((a #:: atail), (b #:: btail)) => Ior.both(a, b) #:: align(atail, btail)
+          case (Stream.Empty, Stream.Empty) => Stream.Empty
+          case (arest, Stream.Empty) => arest.map(Ior.left)
+          case (Stream.Empty, brest) => brest.map(Ior.right)
+        }
+
     }
 
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =

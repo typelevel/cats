@@ -325,6 +325,23 @@ object SyntaxTests extends AllInstances with AllSyntax {
     thabcde.imap5(f5)(g5)
     (ha, hb, hc, hd, he).imap5(f5)(g5)
   }
+
+  def testAlign[F[_] : Align, A, B, C]: Unit = {
+    import cats.data.Ior
+    val fa = mock[F[A]]
+    val fb = mock[F[B]]
+    val f = mock[A Ior B => C]
+    val f2 = mock[(Option[A], Option[B]) => C]
+
+    val fab = fa.align(fb)
+    val fc = fa.alignWith(fb)(f)
+
+    val padZipped = fa.padZip(fb)
+    val padZippedWith = fa.padZipWith(fb)(f2)
+
+    implicit val sa = mock[Semigroup[A]]
+    val fa2 = fa.salign(fa)
+  }
 }
 
 /**

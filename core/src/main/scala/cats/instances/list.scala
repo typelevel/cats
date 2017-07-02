@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.data.Ior
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -8,8 +9,8 @@ import scala.collection.mutable.ListBuffer
 
 trait ListInstances extends cats.kernel.instances.ListInstances {
 
-  implicit val catsStdInstancesForList: TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] =
-    new TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] {
+  implicit val catsStdInstancesForList: TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] with Align[List] =
+    new TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] with Align[List] {
       def empty[A]: List[A] = Nil
 
       def combineK[A](x: List[A], y: List[A]): List[A] = x ++ y
@@ -115,6 +116,19 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def dropWhile_[A](fa: List[A])(p: A => Boolean): List[A] = fa.dropWhile(p)
 
       override def algebra[A]: Monoid[List[A]] = new kernel.instances.ListMonoid[A]
+
+      def nil[A]: List[A] = Nil
+
+      def align[A, B](fa: List[A], fb: List[B]): List[A Ior B] = {
+        @tailrec def loop(buf: ListBuffer[Ior[A, B]], as: List[A], bs: List[B]): List[A Ior B] =
+          (as, bs) match {
+            case (a :: atail, b :: btail) => loop(buf += Ior.Both(a, b), atail, btail)
+            case (Nil, Nil) => buf.toList
+            case (arest, Nil) => (buf ++= arest.map(Ior.left)).toList
+            case (Nil, brest) => (buf ++= brest.map(Ior.right)).toList
+          }
+        loop(ListBuffer.empty[Ior[A, B]], fa, fb)
+      }
     }
 
   implicit def catsStdShowForList[A:Show]: Show[List[A]] =

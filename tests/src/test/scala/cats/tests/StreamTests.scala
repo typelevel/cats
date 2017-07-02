@@ -1,7 +1,8 @@
 package cats
 package tests
 
-import cats.laws.discipline.{CoflatMapTests, MonadCombineTests, SerializableTests, TraverseFilterTests, CartesianTests}
+import cats.laws.discipline.{AlignTests, CoflatMapTests, MonadCombineTests, SerializableTests, TraverseFilterTests, CartesianTests}
+import cats.laws.discipline.arbitrary._
 
 class StreamTests extends CatsSuite {
   checkAll("Stream[Int]", CartesianTests[Stream].cartesian[Int, Int, Int])
@@ -15,6 +16,9 @@ class StreamTests extends CatsSuite {
 
   checkAll("Stream[Int] with Option", TraverseFilterTests[Stream].traverseFilter[Int, Int, Int, List[Int], Option, Option])
   checkAll("TraverseFilter[Stream]", SerializableTests.serializable(TraverseFilter[Stream]))
+
+  checkAll("Stream[Int]", AlignTests[Stream].align[Int, Int, Int, Int])
+  checkAll("Align[Stream]", SerializableTests.serializable(Align[Stream]))
 
   test("show") {
     Stream(1, 2, 3).show should === ("Stream(1, ?)")

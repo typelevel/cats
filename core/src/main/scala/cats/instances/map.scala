@@ -3,6 +3,8 @@ package instances
 
 import scala.annotation.tailrec
 
+import cats.data.Ior
+
 trait MapInstances extends cats.kernel.instances.MapInstances {
 
   implicit def catsStdShowForMap[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =
@@ -14,8 +16,8 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
     }
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForMap[K]: TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] =
-    new TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] {
+  implicit def catsStdInstancesForMap[K]: TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] with Align[Map[K, ?]] =
+    new TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] with Align[Map[K, ?]] {
 
       override def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
@@ -89,6 +91,22 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
         A.combineAll(fa.values)
 
       override def toList[A](fa: Map[K, A]): List[A] = fa.values.toList
+
+      override def nil[A]: Map[K, A] = Map.empty[K, A]
+
+      override def align[A, B](fa: Map[K, A], fb: Map[K, B]): Map[K, A Ior B] = {
+        val keys = fa.keySet ++ fb.keySet
+        val builder = new collection.mutable.MapBuilder[K, A Ior B, Map[K, A Ior B]](Map.empty[K, A Ior B])
+        builder.sizeHint(keys.size)
+        keys.foldLeft(builder) { (builder, k) =>
+          (fa.get(k), fb.get(k)) match {
+            case (Some(a), Some(b)) => builder += k -> Ior.both(a, b)
+            case (Some(a), None) => builder += k -> Ior.left(a)
+            case (None, Some(b)) => builder += k -> Ior.right(b)
+            case (None, None) => ??? // should not happen
+          }
+        }.result()
+      }
     }
   // scalastyle:on method.length
 }
