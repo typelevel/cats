@@ -229,10 +229,10 @@ private[data] trait OneAndLowPriority3 extends OneAndLowPriority2 {
   implicit def catsDataNonEmptyTraverseForOneAnd[F[_]](implicit F: Traverse[F], F2: MonadCombine[F]): NonEmptyTraverse[OneAnd[F, ?]] =
     new NonEmptyReducible[OneAnd[F, ?], F] with NonEmptyTraverse[OneAnd[F, ?]] {
       def nonEmptyTraverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
-        import cats.syntax.cartesian._
+        import cats.syntax.apply._
 
         fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)
-          .reduceLeft(((acc, a) => (acc |@| a).map((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
+          .reduceLeft(((acc, a) => (acc, a).mapN((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
       }
 
 

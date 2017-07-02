@@ -204,7 +204,7 @@ class ReaderWriterStateTTests extends CatsSuite {
 
   test("runEmpty, runEmptyS, runEmptyA and runEmptyL are consistent") {
     forAll { (f: ReaderWriterStateT[Option, String, String, String, Int], c: String) =>
-      (f.runEmptyL(c) |@| f.runEmptyS(c) |@| f.runEmptyA(c)).tupled should === (f.runEmpty(c))
+      (f.runEmptyL(c), f.runEmptyS(c), f.runEmptyA(c)).tupled should === (f.runEmpty(c))
     }
   }
 

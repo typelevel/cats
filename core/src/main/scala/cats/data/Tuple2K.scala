@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.functor.Contravariant
-import cats.syntax.cartesian._
 
 /**
  * [[Tuple2K]] is a product to two independent functor values.
@@ -159,8 +158,8 @@ private[data] sealed trait Tuple2KTraverse[F[_], G[_]] extends Traverse[λ[α =>
   def F: Traverse[F]
   def G: Traverse[G]
 
-  override def traverse[H[_]: Applicative, A, B](fa: Tuple2K[F, G, A])(f: A => H[B]): H[Tuple2K[F, G, B]] =
-    (F.traverse(fa.first)(f) |@| G.traverse(fa.second)(f)).map(Tuple2K(_, _))
+  override def traverse[H[_], A, B](fa: Tuple2K[F, G, A])(f: A => H[B])(implicit H: Applicative[H]): H[Tuple2K[F, G, B]] =
+    H.map2(F.traverse(fa.first)(f), G.traverse(fa.second)(f))(Tuple2K(_, _))
 }
 
 private[data] sealed trait Tuple2KMonadCombine[F[_], G[_]] extends MonadCombine[λ[α => Tuple2K[F, G, α]]]

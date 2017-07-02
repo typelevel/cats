@@ -52,8 +52,8 @@ import cats.implicits._
 case class Foo(a: String, c: List[Double])
 
 implicit val fooSemigroup: Semigroup[Foo] = (
-  (implicitly[Semigroup[String]] |@| implicitly[Semigroup[List[Double]]])
-    .imap(Foo.apply)(Function.unlift(Foo.unapply))
+  (implicitly[Semigroup[String]], implicitly[Semigroup[List[Double]]])
+    .imapN(Foo.apply)(Function.unlift(Foo.unapply))
 )
 ```
 
@@ -105,7 +105,7 @@ trait CCProduct {
       def read(s: CSV): (Option[(A, B)], CSV) = {
         val (a1, s1) = fa.read(s)
         val (a2, s2) = fb.read(s1)
-        ((a1 |@| a2).map(_ -> _), s2)
+        ((a1, a2).mapN(_ -> _), s2)
       }
 
       def write(a: (A, B)): CSV =
@@ -163,15 +163,15 @@ def numericSystemCodec(base: Int): CsvCodec[Int] =
 case class BinDec(binary: Int, decimal: Int)
 
 val binDecCodec: CsvCodec[BinDec] = (
-  (numericSystemCodec(2) |@| numericSystemCodec(10))
-    .imap(BinDec.apply)(Function.unlift(BinDec.unapply))
+  (numericSystemCodec(2), numericSystemCodec(10))
+    .imapN(BinDec.apply)(Function.unlift(BinDec.unapply))
 )
 
 case class Foo(name: String, bd1: BinDec, bd2: BinDec)
 
 val fooCodec: CsvCodec[Foo] = (
-  (stringCodec |@| binDecCodec |@| binDecCodec)
-    .imap(Foo.apply)(Function.unlift(Foo.unapply))
+  (stringCodec, binDecCodec, binDecCodec)
+    .imapN(Foo.apply)(Function.unlift(Foo.unapply))
 )
 ```
 

@@ -46,7 +46,7 @@ of a for-comprehension. We can however still use `Applicative` syntax provided b
 ```tut:silent
 import cats.implicits._
 
-val prog: Validation[Boolean] = (size(5) |@| hasNumber).map { case (l, r) => l && r}
+val prog: Validation[Boolean] = (size(5), hasNumber).mapN { case (l, r) => l && r}
 ```
 
 As it stands, our program is just an instance of a data structure - nothing has happened
@@ -139,7 +139,7 @@ def logValidation[A](validation: Validation[A]): List[String] =
 ```tut:book
 logValidation(prog)
 logValidation(size(5) *> hasNumber *> size(10))
-logValidation((hasNumber |@| size(3)).map(_ || _))
+logValidation((hasNumber, size(3)).mapN(_ || _))
 ```
 
 ### Why not both?
