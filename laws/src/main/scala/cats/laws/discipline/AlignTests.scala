@@ -32,8 +32,12 @@ trait AlignTests[F[_]] extends FunctorTests[F] {
     "nil left identity" -> forAll(laws.nilLeftIdentity[A, B] _),
     "nil right identity" -> forAll(laws.nilRightIdentity[A, B] _),
     "align self both" -> forAll(laws.alignSelfBoth[A] _),
-    "align homomorphism" -> forAll(laws.alignHomomorphism[A, B, C, D](_, _, _, _)),
-    "alignWith consistent" -> forAll(laws.alignWithConsistent[A, B, C](_, _, _)))
+    "align homomorphism" -> forAll { (fa: F[A], fb: F[B], f: A => C, g: B => D) =>
+      laws.alignHomomorphism[A, B, C, D](fa, fb, f, g)
+    },
+    "alignWith consistent" -> forAll { (fa: F[A], fb: F[B], f: A Ior B => C) =>
+      laws.alignWithConsistent[A, B, C](fa, fb, f)
+    })
 }
 
 object AlignTests {
