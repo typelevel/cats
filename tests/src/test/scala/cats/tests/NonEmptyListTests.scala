@@ -4,7 +4,7 @@ package tests
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.NonEmptyList
-import cats.laws.discipline.{ComonadTests, SemigroupKTests, MonadTests, SerializableTests, TraverseTests, ReducibleTests}
+import cats.laws.discipline.{ComonadTests, SemigroupKTests, MonadTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyListTests extends CatsSuite {
@@ -14,8 +14,8 @@ class NonEmptyListTests extends CatsSuite {
 
   checkAll("NonEmptyList[Int]", OrderLaws[NonEmptyList[Int]].order)
 
-  checkAll("NonEmptyList[Int] with Option", TraverseTests[NonEmptyList].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[NonEmptyList[A]]", SerializableTests.serializable(Traverse[NonEmptyList]))
+  checkAll("NonEmptyList[Int] with Option", NonEmptyTraverseTests[NonEmptyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+  checkAll("NonEmptyTraverse[NonEmptyList[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyList]))
 
   checkAll("NonEmptyList[Int]", ReducibleTests[NonEmptyList].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyList]", SerializableTests.serializable(Reducible[NonEmptyList]))

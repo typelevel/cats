@@ -90,25 +90,6 @@ class FreeTests extends CatsSuite {
     assert(res == List(112358))
   }
 
-  test(".foldLeftM") {
-    // you can see .foldLeftM traversing the entire structure by
-    // changing the constant argument to .take and observing the time
-    // this test takes.
-    val ns = Stream.from(1).take(1000)
-    val res = Free.foldLeftM[Stream, Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
-      if (sum >= 2) Either.left(sum) else Either.right(sum + n)
-    }
-    assert(res == Either.left(3))
-  }
-
-  test(".foldLeftM short-circuiting") {
-    val ns = Stream.continually(1)
-    val res = Free.foldLeftM[Stream, Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
-      if (sum >= 100000) Either.left(sum) else Either.right(sum + n)
-    }
-    assert(res == Either.left(100000))
-  }
-
   sealed trait Test1Algebra[A]
 
   case class Test1[A](value : Int, f: Int => A) extends Test1Algebra[A]

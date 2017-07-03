@@ -8,6 +8,7 @@ import cats.arrow.FunctionK
  * This is isomorphic to `F` as long as `F` itself is a functor.
  * The homomorphism from `F[A]` to `Coyoneda[F,A]` exists even when
  * `F` is not a functor.
+ * Implemented using a List of functions for stack-safety.
  */
 sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
 
@@ -17,10 +18,13 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
   /** The underlying value. */
   val fi: F[Pivot]
 
-  /** The transformer function, to be lifted into `F` by `run`. */
-  val k: Pivot => A
+  /** The list of transformer functions, to be composed and lifted into `F` by `run`. */
+  private[cats] val ks: List[Any => Any]
 
-  import Coyoneda.{Aux, apply}
+  /** The list of transformer functions composed into a single function, to be lifted into `F` by `run`. */
+  final def k: Pivot => A = Function.chain(ks.reverse)(_).asInstanceOf[A]
+
+  import Coyoneda.{Aux, unsafeApply}
 
   /** Converts to `F[A]` given that `F` is a functor */
   final def run(implicit F: Functor[F]): F[A] = F.map(fi)(k)
@@ -36,10 +40,10 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
    * the underlying `F`.
    */
   final def map[B](f: A => B): Aux[F, B, Pivot] =
-    apply(fi)(f compose k)
+    unsafeApply(fi)(f.asInstanceOf[Any => Any] :: ks)
 
   final def transform[G[_]](f: FunctionK[F, G]): Aux[G, A, Pivot] =
-    apply(f(fi))(k)
+    unsafeApply(f(fi))(ks)
 
 }
 
@@ -53,11 +57,17 @@ object Coyoneda {
   /** `F[A]` converts to `Coyoneda[F,A]` for any `F` */
   def lift[F[_], A](fa: F[A]): Coyoneda[F, A] = apply(fa)(identity[A])
 
-  /** Like `lift(fa).map(_k)`. */
+  /** Like `lift(fa).map(k0)`. */
   def apply[F[_], A, B](fa: F[A])(k0: A => B): Aux[F, B, A] =
+    unsafeApply(fa)(k0.asInstanceOf[Any => Any] :: Nil)
+
+  /** Creates a `Coyoneda[F, A]` for any `F`, taking an `F[A]`
+   * and a list of [[Functor.map]]ped functions to apply later
+   */
+  private[cats] def unsafeApply[F[_], A, B](fa: F[A])(ks0: List[Any => Any]): Aux[F, B, A] =
     new Coyoneda[F, B] {
       type Pivot = A
-      val k = k0
+      val ks = ks0
       val fi = fa
     }
 

@@ -35,8 +35,8 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
         forAll(laws.reduceRightConsistentWithReduceRightOption[A] _),
       "reduce consistent with reduceLeft" ->
         forAll(laws.reduceReduceLeftConsistent[B] _),
-      "traverse1_ consistent with traverse_" -> forAll(laws.traverseConsistent[G, A, B] _),
-      "sequence1_ consistent with sequence_" -> forAll(laws.sequenceConsistent[G, A] _),
+      "nonEmptyTraverse_ consistent with traverse_" -> forAll(laws.traverseConsistent[G, A, B] _),
+      "nonEmptySequence_ consistent with sequence_" -> forAll(laws.sequenceConsistent[G, A] _),
       "size consistent with reduceMap" -> forAll(laws.sizeConsistent[A] _)
     )
 }

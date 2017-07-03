@@ -59,12 +59,15 @@ class EitherTTests extends CatsSuite {
     Applicative[EitherT[ListWrapper, String, ?]]
     Monad[EitherT[ListWrapper, String, ?]]
     MonadTrans[EitherT[?[_], String, ?]]
-
+    // Tests for catsDataMonadErrorForEitherT, for recovery on errors on Either.
     checkAll("EitherT[ListWrapper, String, Int]", MonadErrorTests[EitherT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
-    checkAll("EitherT[Option, String, String]", MonadErrorTests[EitherT[Option, String, ?], Unit].monadError[String, String, String])
     checkAll("MonadError[EitherT[List, ?, ?]]", SerializableTests.serializable(MonadError[EitherT[ListWrapper, String, ?], String]))
+    // Tests for catsDataMonadErrorFForEitherT instance, for recovery on errors of F.
+    checkAll("EitherT[Option, String, String]", MonadErrorTests[EitherT[Option, String, ?], Unit].monadError[String, String, String])
     checkAll("MonadError[EitherT[Option, ?, ?]]", SerializableTests.serializable(MonadError[EitherT[Option, String, ?], Unit]))
-    checkAll("MonadTrans[EitherT[?[_], String, ?]]", MonadTransTests[EitherT[?[_], String, ?]].monadTrans[ListWrapper, Int, Int])
+    // Tests for MonadTrans instance.
+    checkAll("EitherT[ListWrapper, String, Int]]", MonadTransTests[EitherT[?[_], String, ?]].monadTrans[ListWrapper, Int, Int])
+    checkAll("MonadTrans[EitherT[?[_], String, ?]]", SerializableTests.serializable(MonadTrans[EitherT[?[_], String, ?]]))
   }
 
   {

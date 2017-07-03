@@ -5,7 +5,7 @@ import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.instances.stream._
 import cats.data.{NonEmptyStream, OneAnd}
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests}
+import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, NonEmptyTraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
 
 class OneAndTests extends CatsSuite {
@@ -15,8 +15,14 @@ class OneAndTests extends CatsSuite {
 
   checkAll("OneAnd[Stream, Int]", OrderLaws[OneAnd[Stream, Int]].eqv)
 
-  checkAll("OneAnd[Stream, Int] with Option", TraverseTests[OneAnd[Stream, ?]].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[OneAnd[Stream, A]]", SerializableTests.serializable(Traverse[OneAnd[Stream, ?]]))
+  checkAll("OneAnd[Stream, Int] with Option", NonEmptyTraverseTests[OneAnd[Stream, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+  checkAll("NonEmptyTraverse[OneAnd[Stream, A]]", SerializableTests.serializable(NonEmptyTraverse[OneAnd[Stream, ?]]))
+
+  {
+    implicit val traverse = ListWrapper.traverse
+    checkAll("OneAnd[ListWrapper, Int] with Option", TraverseTests[OneAnd[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Traverse[OneAnd[ListWrapper, ?]]))
+  }
 
   checkAll("OneAnd[Stream, Int]", ReducibleTests[OneAnd[Stream, ?]].reducible[Option, Int, Int])
   checkAll("Reducible[OneAnd[Stream, ?]]", SerializableTests.serializable(Reducible[OneAnd[Stream, ?]]))

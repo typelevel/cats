@@ -35,6 +35,11 @@ private[data] sealed abstract class NestedInstances extends NestedInstances0 {
     new NestedTraverseFilter[F, G] {
       val FG: TraverseFilter[λ[α => F[G[α]]]] = Traverse[F].composeFilter[G]
     }
+
+  implicit def catsDataNonEmptyTraverseForNested[F[_]: NonEmptyTraverse, G[_]: NonEmptyTraverse]: NonEmptyTraverse[Nested[F, G, ?]] =
+    new NestedNonEmptyTraverse[F, G] {
+      val FG: NonEmptyTraverse[λ[α => F[G[α]]]] = NonEmptyTraverse[F].compose[G]
+    }
 }
 
 private[data] sealed abstract class NestedInstances0 extends NestedInstances1 {
@@ -231,6 +236,13 @@ private[data] trait NestedReducible[F[_], G[_]] extends Reducible[Nested[F, G, ?
 
   def reduceRightTo[A, B](fga: Nested[F, G, A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
     FG.reduceRightTo(fga.value)(f)(g)
+}
+
+private[data] trait NestedNonEmptyTraverse[F[_], G[_]] extends NonEmptyTraverse[Nested[F, G, ?]] with NestedTraverse[F, G] with NestedReducible[F, G] {
+  def FG: NonEmptyTraverse[λ[α => F[G[α]]]]
+
+  override def nonEmptyTraverse[H[_]: Apply, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
+    Apply[H].map(FG.nonEmptyTraverse(fga.value)(f))(Nested(_))
 }
 
 private[data] trait NestedContravariant[F[_], G[_]] extends Contravariant[Nested[F, G, ?]] {

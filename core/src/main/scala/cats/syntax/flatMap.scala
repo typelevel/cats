@@ -8,6 +8,9 @@ trait FlatMapSyntax extends FlatMap.ToFlatMapOps {
 
   implicit final def catsSyntaxIfM[F[_]: FlatMap](fa: F[Boolean]): IfMOps[F] =
     new IfMOps[F](fa)
+
+  implicit final def catsSyntaxFlatMapIdOps[A](a: A): FlatMapIdOps[A] =
+    new FlatMapIdOps[A](a)
 }
 
 final class FlattenOps[F[_], A](val ffa: F[F[A]]) extends AnyVal {
@@ -49,4 +52,21 @@ final class IfMOps[F[_]](val fa: F[Boolean]) extends AnyVal {
    * }}}
    */
   def ifM[B](ifTrue: => F[B], ifFalse: => F[B])(implicit F: FlatMap[F]): F[B] = F.ifM(fa)(ifTrue, ifFalse)
+}
+
+
+final class FlatMapIdOps[A](val a: A) extends AnyVal {
+
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val a: Int = 10
+   * scala> a.tailRecM[Option,String](i => if (i == 20) Some(Right("done")) else Some(Left(i+1)))
+   * res0: Option[String] = Some(done)
+   *
+   *}}}
+   */
+  def tailRecM[F[_], B](f: A => F[Either[A, B]])(implicit F: FlatMap[F]): F[B] = F.tailRecM(a)(f)
 }

@@ -47,11 +47,12 @@ class FreeTTests extends CatsSuite {
   {
     import StateT._
     checkAll("FreeT[State[Int, ?], State[Int, ?], Int]", MonadStateTests[FreeTState, Int].monadState[Int, Int, Int])
-    checkAll("MonadState[FreeT[State[Int, ?],State[Int, ?], ?], Int]", SerializableTests.serializable(MonadState[FreeTState, Int]))
+    checkAll("MonadState[FreeT[State[Int, ?], State[Int, ?], ?], Int]", SerializableTests.serializable(MonadState[FreeTState, Int]))
   }
 
   {
-    checkAll("MonadTrans[FreeT[Option, ?[_], ?]]", MonadTransTests[FreeT[Option, ?[_], ?]].monadTrans[Option, Int, Int])
+    checkAll("FreeT[Option, Option, Int]]", MonadTransTests[FreeT[Option, ?[_], ?]].monadTrans[Option, Int, Int])
+    checkAll("MonadTrans[FreeT[Option, ?[_], Int, ?]]", SerializableTests.serializable(MonadTrans[FreeT[Option, ?[_], ?]]))
   }
 
   test("FlatMap stack safety tested with 50k flatMaps") {

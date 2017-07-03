@@ -204,7 +204,7 @@ class ReaderWriterStateTTests extends CatsSuite {
 
   test("runEmpty, runEmptyS, runEmptyA and runEmptyL are consistent") {
     forAll { (f: ReaderWriterStateT[Option, String, String, String, Int], c: String) =>
-      (f.runEmptyL(c) |@| f.runEmptyS(c) |@| f.runEmptyA(c)).tupled should === (f.runEmpty(c))
+      (f.runEmptyL(c), f.runEmptyS(c), f.runEmptyA(c)).tupled should === (f.runEmpty(c))
     }
   }
 
@@ -377,7 +377,7 @@ class ReaderWriterStateTTests extends CatsSuite {
   {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
-    checkAll("ReaderWriterStateT[?[_], String, Int, String, ?]",
+    checkAll("ReaderWriterStateT[ListWrapper, String, Int, String, Int]]",
       MonadTransTests[ReaderWriterStateT[?[_], String, Int, String, ?]].monadTrans[ListWrapper, Int, Int])
     checkAll("MonadTrans[ReaderWriterStateT[?[_], String, Int, String, ?]]",
       SerializableTests.serializable(MonadTrans[ReaderWriterStateT[?[_], String, Int, String, ?]]))

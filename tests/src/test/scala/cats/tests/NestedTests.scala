@@ -124,8 +124,19 @@ class NestedTests extends CatsSuite {
     checkAll("TraverseFilter[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(TraverseFilter[Nested[List, ListWrapper, ?]]))
   }
 
-  checkAll("Nested[NonEmptyList, NonEmptyVector, ?]", ReducibleTests[Nested[NonEmptyList, NonEmptyVector, ?]].reducible[Option, Int, Int])
-  checkAll("Reducible[Nested[NonEmptyList, NonEmptyVector, ?]]", SerializableTests.serializable(Reducible[Nested[NonEmptyList, NonEmptyVector, ?]]))
+  {
+    implicit val foldable = ListWrapper.foldable
+    checkAll("Nested[NonEmptyList, OneAnd[ListWrapper, ?], ?]", ReducibleTests[Nested[NonEmptyList, OneAnd[ListWrapper, ?], ?]].reducible[Option, Int, Int])
+    checkAll("Reducible[Nested[NonEmptyList, OneAnd[ListWrapper, ?], ?]]", SerializableTests.serializable(Reducible[Nested[NonEmptyList, OneAnd[ListWrapper, ?], ?]]))
+  }
+
+  {
+    //NonEmptyTraverse composition
+    checkAll("Nested[NonEmptyList, NonEmptyVector, ?]", NonEmptyTraverseTests[Nested[NonEmptyList, NonEmptyVector, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+    checkAll("NonEmptyTraverse[Nested[NonEmptyList, NonEmptyVector, ?]]", SerializableTests.serializable(NonEmptyTraverse[Nested[NonEmptyList, NonEmptyVector, ?]]))
+
+  }
+
 
   {
     // SemigroupK composition
