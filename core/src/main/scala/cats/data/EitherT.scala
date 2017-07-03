@@ -484,6 +484,20 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
       val F0: Traverse[F] = F
     }
 
+  /**  Monad error instance for recovering errors in F instead of
+    *  the underlying Either.
+    *
+    * {{{
+    * scala> import cats.data.EitherT
+    * scala> import cats.MonadError
+    * scala> import cats.instances.option._
+    * scala> val noInt: Option[Either[String, Int]] = None
+    * scala> val et = EitherT[Option, String, Int](noInt)
+    * scala> val me = MonadError[EitherT[Option, String, ?], Unit]
+    * scala> me.recover(et) { case () => 1 }
+    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(1)))
+    * }}}
+    */
   implicit def catsDataMonadErrorFForEitherT[F[_], E, L](implicit FE0: MonadError[F, E]): MonadError[EitherT[F, L, ?], E] =
     new EitherTMonadErrorF[F, E, L] { implicit val F = FE0 }
 }
