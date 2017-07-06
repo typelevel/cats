@@ -5,6 +5,7 @@ package object syntax {
   object applicative extends ApplicativeSyntax
   object applicativeError extends ApplicativeErrorSyntax
   object apply extends ApplySyntax
+  object arrow extends ArrowSyntax
   object bifunctor extends BifunctorSyntax
   object bifoldable extends BifoldableSyntax
   object bitraverse extends BitraverseSyntax
@@ -37,7 +38,6 @@ package object syntax {
   object semigroup extends SemigroupSyntax
   object semigroupk extends SemigroupKSyntax
   object show extends Show.ToShowOps
-  object split extends SplitSyntax
   object strong extends StrongSyntax
   object monadTrans extends MonadTransSyntax
   object traverse extends TraverseSyntax

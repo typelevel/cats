@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.arrow.{Arrow, Choice, Split, FunctionK}
+import cats.arrow.{Arrow, Choice, CommutativeArrow, FunctionK}
 import cats.data.{EitherT, Kleisli, Reader}
 import cats.functor.{Contravariant, Strong}
 import cats.laws.discipline._
@@ -34,9 +34,15 @@ class KleisliTests extends CatsSuite {
   checkAll("Cartesian[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Cartesian[Kleisli[Option, Int, ?]]))
 
   {
-    implicit val catsDataArrowForKleisli = Kleisli.catsDataArrowForKleisli[Option]
-    checkAll("Kleisli[Option, Int, Int]", ArrowTests[Kleisli[Option, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
-    checkAll("Arrow[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Arrow[Kleisli[Option, ?, ?]]))
+    implicit val catsDataArrowForKleisli = Kleisli.catsDataArrowForKleisli[List]
+    checkAll("Kleisli[List, Int, Int]", ArrowTests[Kleisli[List, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
+    checkAll("Arrow[Kleisli[List, ?, ?]]", SerializableTests.serializable(Arrow[Kleisli[List, ?, ?]]))
+  }
+
+  {
+    implicit val catsDataCommutativeArrowForKleisli = Kleisli.catsDataCommutativeArrowForKleisli[Option]
+    checkAll("Kleisli[Option, Int, Int]", CommutativeArrowTests[Kleisli[Option, ?, ?]].commutativeArrow[Int, Int, Int, Int, Int, Int])
+    checkAll("CommutativeArrow[Kleisli[Option, ?, ?]]", SerializableTests.serializable(CommutativeArrow[Kleisli[Option, ?, ?]]))
   }
 
   {
@@ -55,12 +61,6 @@ class KleisliTests extends CatsSuite {
     implicit val catsDataMonadReaderForReader = Kleisli.catsDataMonadReaderForKleisliId[Int]
     checkAll("Reader[Int, Int]", MonadReaderTests[Reader[Int, ?], Int].monadReader[Int, Int, Int])
     checkAll("MonadReader[Reader[?, ?], Int]", SerializableTests.serializable(MonadReader[Reader[Int, ?], Int]))
-  }
-
-  {
-    implicit val kleisliSplit = Kleisli.catsDataSplitForKleisli[Option]
-    checkAll("Kleisli[Option, Int, Int]", SplitTests[Kleisli[Option, ?, ?]].split[Int, Int, Int, Int, Int, Int])
-    checkAll("Split[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Split[Kleisli[Option, ?, ?]]))
   }
 
   {
@@ -178,7 +178,6 @@ class KleisliTests extends CatsSuite {
     MonoidK[λ[α => Kleisli[List, α, α]]]
     Arrow[Kleisli[List, ?, ?]]
     Choice[Kleisli[List, ?, ?]]
-    Split[Kleisli[List, ?, ?]]
     Strong[Kleisli[List, ?, ?]]
     FlatMap[Kleisli[List, Int, ?]]
     Semigroup[Kleisli[List, Int, String]]
@@ -192,9 +191,23 @@ class KleisliTests extends CatsSuite {
     MonadReader[Kleisli[Id, Int, ?], Int]
     Monoid[Kleisli[Id, Int, String]]
     MonoidK[λ[α => Kleisli[Id, α, α]]]
+    CommutativeArrow[Kleisli[Id, ?, ?]]
+    Choice[Kleisli[Id, ?, ?]]
+    Strong[Kleisli[Id, ?, ?]]
+    FlatMap[Kleisli[Id, Int, ?]]
+    Semigroup[Kleisli[Id, Int, String]]
+    SemigroupK[λ[α => Kleisli[Id, α, α]]]
+
+    //F is List: not commutative
+    Functor[Kleisli[Id, Int, ?]]
+    Apply[Kleisli[Id, Int, ?]]
+    Applicative[Kleisli[Id, Int, ?]]
+    Monad[Kleisli[Id, Int, ?]]
+    MonadReader[Kleisli[Id, Int, ?], Int]
+    Monoid[Kleisli[Id, Int, String]]
+    MonoidK[λ[α => Kleisli[Id, α, α]]]
     Arrow[Kleisli[Id, ?, ?]]
     Choice[Kleisli[Id, ?, ?]]
-    Split[Kleisli[Id, ?, ?]]
     Strong[Kleisli[Id, ?, ?]]
     FlatMap[Kleisli[Id, Int, ?]]
     Semigroup[Kleisli[Id, Int, String]]
@@ -208,9 +221,8 @@ class KleisliTests extends CatsSuite {
     MonadReader[Reader[Int, ?], Int]
     Monoid[Reader[Int, String]]
     MonoidK[λ[α => Reader[α, α]]]
-    Arrow[Reader[?, ?]]
+    CommutativeArrow[Reader[?, ?]]
     Choice[Reader[?, ?]]
-    Split[Reader[?, ?]]
     Strong[Reader[?, ?]]
     FlatMap[Reader[Int, ?]]
     Semigroup[Reader[Int, String]]
