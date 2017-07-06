@@ -96,14 +96,15 @@ lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings +
 lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.1"
 lazy val disciplineVersion = "0.7.3"
+lazy val catalystsVersion = "0.0.5"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
   libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion)
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.5",
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.5" % "test",
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion,
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
 
 
@@ -185,19 +186,20 @@ lazy val cats = project.in(file("."))
 
 lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
+  .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
+  .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS, js)
-  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS, js)
+  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
-
 
 
 lazy val macros = crossProject.crossType(CrossType.Pure)
@@ -289,17 +291,29 @@ lazy val freeJVM = free.jvm
 lazy val freeJS = free.js
 
 lazy val tests = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core, laws)
+  .dependsOn(testkit % "test")
   .settings(moduleName := "cats-tests")
   .settings(catsSettings:_*)
-  .settings(disciplineDependencies:_*)
   .settings(noPublishSettings:_*)
-  .settings(testingDependencies: _*)
   .jsSettings(commonJsSettings:_*)
   .jvmSettings(commonJvmSettings:_*)
 
 lazy val testsJVM = tests.jvm
 lazy val testsJS = tests.js
+
+
+lazy val testkit = crossProject.crossType(CrossType.Pure)
+  .dependsOn(macros, core, laws)
+  .settings(moduleName := "cats-testkit")
+  .settings(catsSettings:_*)
+  .settings(disciplineDependencies:_*)
+  .settings(
+    libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion)
+  .jsSettings(commonJsSettings:_*)
+  .jvmSettings(commonJvmSettings:_*)
+
+lazy val testkitJVM = testkit.jvm
+lazy val testkitJS = testkit.js
 
 // bench is currently JVM-only
 
