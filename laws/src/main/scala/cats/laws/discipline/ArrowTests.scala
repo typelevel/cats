@@ -48,7 +48,8 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with StrongTests[F] {
         "arrow functor" -> forAll(laws.arrowFunctor[A, B, C, D] _),
         "arrow exchange" -> forAll(laws.arrowExchange[A, B, C, D] _),
         "arrow unit" -> forAll(laws.arrowUnit[A, B, C] _),
-        "arrow association" -> forAll(laws.arrowAssociation[A, B, C, D] _)
+        "arrow association" -> forAll(laws.arrowAssociation[A, B, C, D] _),
+        "split consistent with andThen" -> forAll(laws.splitConsistentWithAndThen[A, B, C, D] _)
       )
     }
 }

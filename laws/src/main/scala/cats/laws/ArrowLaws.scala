@@ -34,6 +34,9 @@ trait ArrowLaws[F[_, _]] extends CategoryLaws[F] with StrongLaws[F] {
   def arrowAssociation[A, B, C, D](f: F[A, B]): IsEq[F[((A, C), D), (B, (C, D))]] =
     (f.first[C].first[D] andThen F.lift(assoc[B, C, D])) <-> (F.lift(assoc[A, C, D]) andThen f.first[(C, D)])
 
+  def splitConsistentWithAndThen[A, B, C, D](f: F[A, B], g: F[C, D]): IsEq[F[(A, C), (B, D)]] =
+    F.split(f, g) <-> (f.first andThen g.second)
+
   private def fst[A, B](p: (A, B)): A = p._1
 
   private def assoc[A, B, C](p: ((A, B), C)): (A, (B, C)) = (p._1._1, (p._1._2, p._2))

@@ -36,11 +36,17 @@ class CokleisliTests extends SlowCatsSuite {
   checkAll("Cokleisli[Option, Int, Int]", ContravariantTests[Cokleisli[Option, ?, Int]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Cokleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Cokleisli[Option, ?, Int]]))
 
-  checkAll("Cokleisli[NonEmptyList, Int, Int]", CommutativeArrowTests[Cokleisli[NonEmptyList, ?, ?]].commutativeArrow[Int, Int, Int, Int, Int, Int])
-  checkAll("Arrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(CommutativeArrow[Cokleisli[NonEmptyList, ?, ?]]))
 
   checkAll("Cokleisli[NonEmptyList, Int, Int]", MonoidKTests[λ[α => Cokleisli[NonEmptyList, α, α]]].monoidK[Int])
   checkAll("MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]", SerializableTests.serializable(MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]))
+  {
+    implicit def cokleisliIdEq[A, B](implicit A: Arbitrary[A], FB: Eq[B]): Eq[Cokleisli[Id, A, B]] =
+      Eq.by[Cokleisli[Id, A, B], A => B](_.run)
+
+    checkAll("Cokleisli[Id, Int, Int]", CommutativeArrowTests[Cokleisli[Id, ?, ?]].commutativeArrow[Int, Int, Int, Int, Int, Int])
+    checkAll("CommutativeArrow[Cokleisli[Id, ?, ?]]", SerializableTests.serializable(CommutativeArrow[Cokleisli[Id, ?, ?]]))
+  }
+
 
   checkAll("Cokleisli[List, Int, Int]", SemigroupKTests[λ[α => Cokleisli[List, α, α]]].semigroupK[Int])
   checkAll("SemigroupK[λ[α => Cokleisli[List, α, α]]]", SerializableTests.serializable(SemigroupK[λ[α => Cokleisli[List, α, α]]]))
