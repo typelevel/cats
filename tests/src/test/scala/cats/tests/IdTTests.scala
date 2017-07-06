@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats.{Foldable, Functor, Monad, NonEmptyTraverse, Traverse}
 import cats.data.{IdT, NonEmptyList}
 import cats.kernel.laws.OrderLaws
 import cats.laws.discipline._
