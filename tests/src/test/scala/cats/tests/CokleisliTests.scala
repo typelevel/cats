@@ -12,7 +12,9 @@ import org.scalacheck.Arbitrary
 class CokleisliTests extends SlowCatsSuite {
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    slowCheckConfiguration.copy(sizeRange = slowCheckConfiguration.sizeRange.min(5))
+    slowCheckConfiguration.copy(
+      sizeRange = slowCheckConfiguration.sizeRange.min(5),
+      minSuccessful = slowCheckConfiguration.minSuccessful.min(20))
 
   implicit def cokleisliEq[F[_], A, B](implicit A: Arbitrary[F[A]], FB: Eq[B]): Eq[Cokleisli[F, A, B]] =
     Eq.by[Cokleisli[F, A, B], F[A] => B](_.run)
