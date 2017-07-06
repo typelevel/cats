@@ -9,6 +9,10 @@ import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 
 class StateTTests extends CatsSuite {
+
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    checkConfiguration.copy(sizeRange = 5)
+
   import StateTTests._
 
   test("basic state usage"){

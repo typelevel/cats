@@ -23,7 +23,7 @@ class ReaderWriterStateTTests extends CatsSuite {
 
   test("Traversing with ReaderWriterState is stack-safe") {
     val ns = (0 to 100000).toList
-    val rws = ns.traverse(_ => addAndLog(1))
+    val rws = ns.traverse(_ => addLogUnit(1))
 
     rws.runS("context", 0).value should === (100001)
   }
@@ -392,6 +392,12 @@ object ReaderWriterStateTTests {
     ReaderWriterState { (context, state) =>
       (Vector(s"${context}: Added ${i}"), state + i, state + i)
     }
+  }
+
+  def addLogUnit(i: Int): ReaderWriterState[String, Int, Unit, Int] = {
+    import cats.kernel.instances.unit._
+
+    ReaderWriterState { (context, state) => ((), state + i, state + i) }
   }
 
   implicit def RWSTEq[F[_], E, S, L, A](implicit S: Arbitrary[S], E: Arbitrary[E], FLSA: Eq[F[(L, S, A)]],
