@@ -50,7 +50,7 @@ import cats.syntax.semigroup._
 ```
 The first import pulls the `Semigroup` instance for String into the scope, while the second import adds the `|+|` syntax.
 
-You can also import all syntax or all instances by importing `cats.instances.all._` or `cats.syntax.all._` respectively.
+You can also import all syntax or all instances by importing `cats.syntax.all._` or `cats.instances.all._` respectively.
 
 **Note**: Beware that if you import a type class instance or its syntax twice, you will receive conflicting implicits with a less than helpful error message.
 This usually happens when importing different type classes in the same hierarchy or when importing syntax enrichment for all type classes using `cats.syntax.all._` or `cats.implicits._` together with a more specific import like `cats.syntax.option._` or `cats.instances.either._`.
