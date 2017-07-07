@@ -11,6 +11,11 @@ import org.scalacheck.Arbitrary
 
 class CokleisliTests extends SlowCatsSuite {
 
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    slowCheckConfiguration.copy(
+      sizeRange = slowCheckConfiguration.sizeRange.min(5),
+      minSuccessful = slowCheckConfiguration.minSuccessful.min(20))
+
   implicit def cokleisliEq[F[_], A, B](implicit A: Arbitrary[F[A]], FB: Eq[B]): Eq[Cokleisli[F, A, B]] =
     Eq.by[Cokleisli[F, A, B], F[A] => B](_.run)
 
@@ -34,30 +39,14 @@ class CokleisliTests extends SlowCatsSuite {
   checkAll("Cokleisli[Option, Int, Int]", ContravariantTests[Cokleisli[Option, ?, Int]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Cokleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Cokleisli[Option, ?, Int]]))
 
-  {
-    // Ceremony to help scalac to do the right thing, see also #267.
-    type CokleisliNEL[A, B] = Cokleisli[NonEmptyList, A, B]
+  checkAll("Cokleisli[NonEmptyList, Int, Int]", ArrowTests[Cokleisli[NonEmptyList, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
+  checkAll("Arrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(Arrow[Cokleisli[NonEmptyList, ?, ?]]))
 
-    checkAll("Cokleisli[NonEmptyList, Int, Int]", ArrowTests[CokleisliNEL].arrow[Int, Int, Int, Int, Int, Int])
-    checkAll("Arrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(Arrow[CokleisliNEL]))
-  }
+  checkAll("Cokleisli[NonEmptyList, Int, Int]", MonoidKTests[λ[α => Cokleisli[NonEmptyList, α, α]]].monoidK[Int])
+  checkAll("MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]", SerializableTests.serializable(MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]))
 
-  {
-    // More ceremony, see above
-    type CokleisliNELE[A] = Cokleisli[NonEmptyList, A, A]
-
-    {
-      implicit val cokleisliMonoidK = Cokleisli.catsDataMonoidKForCokleisli[NonEmptyList]
-      checkAll("Cokleisli[NonEmptyList, Int, Int]", MonoidKTests[CokleisliNELE].monoidK[Int])
-      checkAll("MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]", SerializableTests.serializable(cokleisliMonoidK))
-    }
-
-    {
-      implicit val cokleisliSemigroupK = Cokleisli.catsDataSemigroupKForCokleisli[NonEmptyList]
-      checkAll("Cokleisli[NonEmptyList, Int, Int]", SemigroupKTests[CokleisliNELE].semigroupK[Int])
-      checkAll("SemigroupK[λ[α => Cokleisli[NonEmptyList, α, α]]]", SerializableTests.serializable(cokleisliSemigroupK))
-    }
-  }
+  checkAll("Cokleisli[List, Int, Int]", SemigroupKTests[λ[α => Cokleisli[List, α, α]]].semigroupK[Int])
+  checkAll("SemigroupK[λ[α => Cokleisli[List, α, α]]]", SerializableTests.serializable(SemigroupK[λ[α => Cokleisli[List, α, α]]]))
 
   test("contramapValue with Id consistent with lmap"){
     forAll { (c: Cokleisli[Id, Int, Long], f: Char => Int) =>
