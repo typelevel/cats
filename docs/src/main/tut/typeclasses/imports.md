@@ -52,6 +52,17 @@ The first import pulls the `Semigroup` instance for String into the scope, while
 
 You can also import all syntax or all instances by importing `cats.syntax.all._` or `cats.instances.all._` respectively.
 
+For data types included in cats (i.e. data structure from the `cats.data` package), all type class instances are bundled with their implementation and therefore do not need to be imported separately.
+For example, if we wanted to import `NonEmptyList` from the `cats.data` package and use it's `SemigroupK` instance, we would not need to specifically import the instance:
+
+```tut:book
+import cats.data.NonEmptyList
+import cats.syntax.semigroupk._
+
+NonEmptyList.of(1,2) <+> NonEmptyList.of(3,4)
+```
+
+
 **Note**: Beware that if you import a type class instance or its syntax twice, you will receive conflicting implicits with a less than helpful error message.
 This usually happens when importing different type classes in the same hierarchy or when importing syntax enrichment for all type classes using `cats.syntax.all._` or `cats.implicits._` together with a more specific import like `cats.syntax.option._` or `cats.instances.either._`.
 Below is an example of this phenomenon:
