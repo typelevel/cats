@@ -8,7 +8,14 @@ lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev 
 
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
-  coverageFailOnMinimum := false
+  coverageFailOnMinimum := false,
+  //https://github.com/scoverage/sbt-scoverage/issues/72
+  coverageHighlighting := {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 10)) => false
+      case _ => true
+    }
+  }
 )
 
 organization in ThisBuild := "org.typelevel"
