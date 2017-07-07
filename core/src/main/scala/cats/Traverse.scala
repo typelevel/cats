@@ -108,5 +108,11 @@ import simulacrum.typeclass
    * `zipWithIndex` for collections such as `List`.
    */
   def indexed[A](fa: F[A]): F[(A, Int)] =
-    traverse(fa)(a => State((s: Int) => (s + 1, (a, s)))).runA(0).value
+    mapWithIndex(fa)((a, i) => (a, i))
+
+  /**
+   * Akin to [[map]], but also provides the value's index in structure `F`.
+   */
+  def mapWithIndex[A, B](fa: F[A])(f: (A, Int) => B): F[B] =
+    traverse(fa)(a => State((s: Int) => (s + 1, f(a, s)))).runA(0).value
 }

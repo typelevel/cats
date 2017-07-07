@@ -14,6 +14,12 @@ abstract class TraverseCheck[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test(s"Traverse[$name].mapWithIndex") {
+    forAll { (fa: F[Int]) =>
+      fa.mapWithIndex((a, i) => (a, i)).toList should === (fa.toList.zipWithIndex)
+    }
+  }
+
 }
 
 class TraverseListCheck extends TraverseCheck[List]("list")
