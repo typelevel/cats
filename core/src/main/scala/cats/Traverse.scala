@@ -1,5 +1,7 @@
 package cats
 
+import cats.data.State
+
 import simulacrum.typeclass
 
 /**
@@ -97,4 +99,14 @@ import simulacrum.typeclass
 
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     traverse[Id, A, B](fa)(f)
+
+  /**
+   * Traverses through the structure F, pairing the values with
+   * assigned indices.
+   *
+   * The behavior is consistent with the Scala collection library's
+   * `zipWithIndex` for collections such as `List`.
+   */
+  def indexed[A](fa: F[A]): F[(A, Int)] =
+    traverse(fa)(a => State((s: Int) => (s + 1, (a, s)))).runA(0).value
 }
