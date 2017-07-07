@@ -23,7 +23,7 @@ class TraverseVectorCheck extends TraverseCheck[Vector]("vector")
 class TraverseTestsAdditional extends CatsSuite {
 
   def checkIndexedStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Traverse[F]): Unit = {
-    F.indexed(fromRange(1 to 500000))
+    F.indexed(fromRange(1 to 70000))
     ()
   }
 
