@@ -22,10 +22,10 @@ class ReaderWriterStateTTests extends CatsSuite {
   }
 
   test("Traversing with ReaderWriterState is stack-safe") {
-    val ns = (0 to 100000).toList
+    val ns = (0 to 70000).toList
     val rws = ns.traverse(_ => addLogUnit(1))
 
-    rws.runS("context", 0).value should === (100001)
+    rws.runS("context", 0).value should === (70001)
   }
 
   test("map2 combines logs") {

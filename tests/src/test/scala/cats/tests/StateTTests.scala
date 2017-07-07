@@ -20,9 +20,9 @@ class StateTTests extends CatsSuite {
   }
 
   test("traversing state is stack-safe"){
-    val ns = (0 to 100000).toList
+    val ns = (0 to 70000).toList
     val x = ns.traverse(_ => add1)
-    x.runS(0).value should === (100001)
+    x.runS(0).value should === (70001)
   }
 
   test("State.pure and StateT.pure are consistent"){
