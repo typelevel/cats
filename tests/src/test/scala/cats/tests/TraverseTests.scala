@@ -30,9 +30,30 @@ abstract class TraverseCheck[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
 
 }
 
-class TraverseListCheck extends TraverseCheck[List]("list")
-class TraverseStreamCheck extends TraverseCheck[Stream]("stream")
-class TraverseVectorCheck extends TraverseCheck[Vector]("vector")
+object TraverseCheck {
+  // forces testing of the underlying implementation (avoids overridden methods)
+  abstract class Underlying[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]])
+      extends TraverseCheck(s"$name (underlying)")(proxyTraverse[F], ArbFInt)
+
+  // proxies a traverse instance so we can test default implementations
+  // to achieve coverage using default datatype instances
+  private def proxyTraverse[F[_]: Traverse]: Traverse[F] = new Traverse[F] {
+    def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B =
+      Traverse[F].foldLeft(fa, b)(f)
+    def foldRight[A, B](fa: F[A], lb: cats.Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+      Traverse[F].foldRight(fa, lb)(f)
+    def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]] =
+      Traverse[F].traverse(fa)(f)
+  }
+}
+
+class TraverseListCheck   extends TraverseCheck[List]("List")
+class TraverseStreamCheck extends TraverseCheck[Stream]("Stream")
+class TraverseVectorCheck extends TraverseCheck[Vector]("Vector")
+
+class TraverseListCheckUnderlying   extends TraverseCheck.Underlying[List]("List")
+class TraverseStreamCheckUnderlying extends TraverseCheck.Underlying[Stream]("Stream")
+class TraverseVectorCheckUnderlying extends TraverseCheck.Underlying[Vector]("Vector")
 
 class TraverseTestsAdditional extends CatsSuite {
 
