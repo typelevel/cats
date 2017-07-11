@@ -82,6 +82,12 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
           G.map2Eval(f(a), lgvb)(_ +: _)
         }.value
 
+      override def mapWithIndex[A, B](fa: Vector[A])(f: (A, Int) => B): Vector[B] =
+        fa.view.zipWithIndex.map(ai => f(ai._1, ai._2)).toVector
+
+      override def zipWithIndex[A](fa: Vector[A]): Vector[(A, Int)] =
+        fa.zipWithIndex
+
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)
 

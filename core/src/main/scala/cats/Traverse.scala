@@ -102,16 +102,6 @@ import simulacrum.typeclass
     traverse[Id, A, B](fa)(f)
 
   /**
-   * Traverses through the structure F, pairing the values with
-   * assigned indices.
-   *
-   * The behavior is consistent with the Scala collection library's
-   * `zipWithIndex` for collections such as `List`.
-   */
-  def indexed[A](fa: F[A]): F[(A, Int)] =
-    mapWithIndex(fa)((a, i) => (a, i))
-
-  /**
    * Akin to [[map]], but also provides the value's index in structure
    * F when calling the function.
    */
@@ -126,4 +116,14 @@ import simulacrum.typeclass
   def traverseWithIndex[G[_], A, B](fa: F[A])(f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
     traverse(fa)(a =>
       StateT((s: Int) => G.map(f(a, s))(b => (s + 1, b)))).runA(0)
+
+  /**
+   * Traverses through the structure F, pairing the values with
+   * assigned indices.
+   *
+   * The behavior is consistent with the Scala collection library's
+   * `zipWithIndex` for collections such as `List`.
+   */
+  def zipWithIndex[A](fa: F[A]): F[(A, Int)] =
+    mapWithIndex(fa)((a, i) => (a, i))
 }

@@ -55,6 +55,12 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
         }.value
       }
 
+      override def mapWithIndex[A, B](fa: Stream[A])(f: (A, Int) => B): Stream[B] =
+        fa.zipWithIndex.map(ai => f(ai._1, ai._2))
+
+      override def zipWithIndex[A](fa: Stream[A]): Stream[(A, Int)] =
+        fa.zipWithIndex
+
       def tailRecM[A, B](a: A)(fn: A => Stream[Either[A, B]]): Stream[B] = {
         val it: Iterator[B] = new Iterator[B] {
           var stack: Stream[Either[A, B]] = fn(a)
