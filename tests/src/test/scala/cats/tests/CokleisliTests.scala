@@ -39,7 +39,7 @@ class CokleisliTests extends SlowCatsSuite {
 
   checkAll("Cokleisli[NonEmptyList, Int, Int]", MonoidKTests[λ[α => Cokleisli[NonEmptyList, α, α]]].monoidK[Int])
   checkAll("MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]", SerializableTests.serializable(MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]))
-  {
+  locally {
     implicit def cokleisliIdEq[A, B](implicit A: Arbitrary[A], FB: Eq[B]): Eq[Cokleisli[Id, A, B]] =
       Eq.by[Cokleisli[Id, A, B], A => B](_.run)
 
