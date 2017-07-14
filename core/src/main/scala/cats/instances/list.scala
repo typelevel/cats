@@ -71,7 +71,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         }.value
 
       override def mapWithIndex[A, B](fa: List[A])(f: (A, Int) => B): List[B] =
-        fa.view.zipWithIndex.map(ai => f(ai._1, ai._2)).toList
+        fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toList
 
       override def zipWithIndex[A](fa: List[A]): List[(A, Int)] =
         fa.zipWithIndex

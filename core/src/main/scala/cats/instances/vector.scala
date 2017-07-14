@@ -83,7 +83,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         }.value
 
       override def mapWithIndex[A, B](fa: Vector[A])(f: (A, Int) => B): Vector[B] =
-        fa.view.zipWithIndex.map(ai => f(ai._1, ai._2)).toVector
+        fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toVector
 
       override def zipWithIndex[A](fa: Vector[A]): Vector[(A, Int)] =
         fa.zipWithIndex

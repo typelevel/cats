@@ -20,9 +20,9 @@ abstract class TraverseCheck[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test(s"Traverse[$name].traverseWithIndex") {
+  test(s"Traverse[$name].traverseWithIndexM") {
     forAll { (fa: F[Int], fn: ((Int, Int)) => (Int, Int)) =>
-      val left = fa.traverseWithIndex((a, i) => fn((a, i))).map(_.toList)
+      val left = fa.traverseWithIndexM((a, i) => fn((a, i))).map(_.toList)
       val (xs, values) = fa.toList.zipWithIndex.map(fn).unzip
       left should === ((xs.combineAll, values))
     }

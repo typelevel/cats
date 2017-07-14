@@ -112,8 +112,12 @@ import simulacrum.typeclass
   /**
    * Akin to [[traverse]], but also provides the value's index in
    * structure F when calling the function.
+   *
+   * This performs the traversal in a single pass but requires that
+   * effect G is monadic. An applicative traveral can be performed in
+   * two passes using [[zipWithIndex]] followed by [[traverse]].
    */
-  def traverseWithIndex[G[_], A, B](fa: F[A])(f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
+  def traverseWithIndexM[G[_], A, B](fa: F[A])(f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
     traverse(fa)(a =>
       StateT((s: Int) => G.map(f(a, s))(b => (s + 1, b)))).runA(0)
 
