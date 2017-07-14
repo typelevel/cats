@@ -10,14 +10,16 @@ class PartialOrderTests extends CatsSuite {
   }
 
   test("companion object syntax") {
-    PartialOrder.partialCompare(1, 2) should ===(catsKernelStdOrderForInt.partialCompare(1, 2))
-    PartialOrder.tryCompare(1, 2) should ===(catsKernelStdOrderForInt.tryCompare(1, 2))
-    PartialOrder.pmin(1, 2) should ===(catsKernelStdOrderForInt.pmin(1, 2))
-    PartialOrder.pmax(1, 2) should ===(catsKernelStdOrderForInt.pmax(1, 2))
-    PartialOrder.lteqv(1, 2) should ===(catsKernelStdOrderForInt.lteqv(1, 2))
-    PartialOrder.lt(1, 2) should ===(catsKernelStdOrderForInt.lt(1, 2))
-    PartialOrder.gteqv(1, 2) should ===(catsKernelStdOrderForInt.gteqv(1, 2))
-    PartialOrder.gt(1, 2) should ===(catsKernelStdOrderForInt.gt(1, 2))
+    forAll { (i: Int, j: Int) =>
+      PartialOrder.partialCompare(i, j) should ===(catsKernelStdOrderForInt.partialCompare(i, j))
+      PartialOrder.tryCompare(i, j) should ===(catsKernelStdOrderForInt.tryCompare(i, j))
+      PartialOrder.pmin(i, j) should ===(catsKernelStdOrderForInt.pmin(i, j))
+      PartialOrder.pmax(i, j) should ===(catsKernelStdOrderForInt.pmax(i, j))
+      PartialOrder.lteqv(i, j) should ===(catsKernelStdOrderForInt.lteqv(i, j))
+      PartialOrder.lt(i, j) should ===(catsKernelStdOrderForInt.lt(i, j))
+      PartialOrder.gteqv(i, j) should ===(catsKernelStdOrderForInt.gteqv(i, j))
+      PartialOrder.gt(i, j) should ===(catsKernelStdOrderForInt.gt(i, j))
+    }
   }
 }
 
