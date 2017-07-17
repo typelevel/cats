@@ -81,7 +81,13 @@ private[data] sealed trait KleisliFunctions {
 }
 
 private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
+  implicit def catsDataCommutativeMonadForKleisli[F[_], A, B](implicit F0: CommutativeMonad[F]): CommutativeMonad[Kleisli[F, A, ?]] =
+    new KleisliMonad[F, A] with CommutativeMonad[Kleisli[F, A, ?]] {
+      implicit def F: Monad[F] = F0
+    }
+}
 
+private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 {
   implicit def catsDataMonoidForKleisli[F[_], A, B](implicit FB0: Monoid[F[B]]): Monoid[Kleisli[F, A, B]] =
     new KleisliMonoid[F, A, B] { def FB: Monoid[F[B]] = FB0 }
 
@@ -115,7 +121,7 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
     new KleisliApplicativeError[F, A, E] { def F: ApplicativeError[F, E] = AE }
 }
 
-private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 {
+private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 {
   implicit def catsDataArrowForKleisli[F[_]](implicit M: Monad[F]): Arrow[Kleisli[F, ?, ?]] =
     new KleisliArrow[F] { def F: Monad[F] = M }
 
@@ -123,12 +129,12 @@ private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 
     new KleisliMonadError[F, A, E] { def F: MonadError[F, E] = ME }
 }
 
-private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 {
+private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 {
   implicit def catsDataMonadReaderForKleisli[F[_], A](implicit M: Monad[F]): MonadReader[Kleisli[F, A, ?], A] =
     new KleisliMonadReader[F, A] { def F: Monad[F] = M }
 }
 
-private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 {
+private[data] sealed abstract class KleisliInstances3 extends KleisliInstances4 {
   implicit def catsDataChoiceForKleisli[F[_]](implicit M: Monad[F]): Choice[Kleisli[F, ?, ?]] =
     new KleisliChoice[F] { def F: Monad[F] = M }
 
@@ -151,17 +157,17 @@ private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 
     Compose[Kleisli[F, ?, ?]].algebraK
 }
 
-private[data] sealed abstract class KleisliInstances3 extends KleisliInstances4 {
+private[data] sealed abstract class KleisliInstances4 extends KleisliInstances5 {
   implicit def catsDataApplicativeForKleisli[F[_], A](implicit A: Applicative[F]): Applicative[Kleisli[F, A, ?]] =
     new KleisliApplicative[F, A] { def F: Applicative[F] = A }
 }
 
-private[data] sealed abstract class KleisliInstances4 extends KleisliInstances5 {
+private[data] sealed abstract class KleisliInstances5 extends KleisliInstances6 {
   implicit def catsDataApplyForKleisli[F[_], A](implicit A: Apply[F]): Apply[Kleisli[F, A, ?]] =
     new KleisliApply[F, A] { def F: Apply[F] = A }
 }
 
-private[data] sealed abstract class KleisliInstances5 {
+private[data] sealed abstract class KleisliInstances6 {
   implicit def catsDataFunctorForKleisli[F[_], A](implicit F0: Functor[F]): Functor[Kleisli[F, A, ?]] =
     new KleisliFunctor[F, A] { def F: Functor[F] = F0 }
 }

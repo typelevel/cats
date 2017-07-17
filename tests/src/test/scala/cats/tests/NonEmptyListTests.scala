@@ -3,7 +3,7 @@ package tests
 
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
-import cats.data.NonEmptyList
+import cats.data.{NonEmptyList, NonEmptyVector}
 import cats.laws.discipline.{CommutativeComonadTests, SemigroupKTests, MonadTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests, ComonadTests}
 import cats.laws.discipline.arbitrary._
 
