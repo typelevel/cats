@@ -138,6 +138,36 @@ class KleisliTests extends CatsSuite {
     }
   }
 
+  test("mapF") {
+    forAll { (f: Kleisli[List, Int, Int], t: List[Int] => List[Int], i: Int) =>
+      t(f.run(i)) should === (f.mapF(t).run(i))
+    }
+  }
+
+  test("flatMapF") {
+    forAll { (f: Kleisli[List, Int, Int], t: Int => List[Int], i: Int) =>
+      f.run(i).flatMap(t) should === (f.flatMapF(t).run(i))
+    }
+  }
+
+  test("lower") {
+    forAll { (f: Kleisli[List, Int, Int], i: Int) =>
+      f.run(i) should === (f.lower.run(i).flatten)
+    }
+  }
+
+  test("apply") {
+    forAll { (f: Kleisli[List, Int, Int], i: Int) =>
+      f.run(i) should === (f(i))
+    }
+  }
+
+  test("traverse") {
+    forAll { (f: Kleisli[List, Int, Int], i: Int) =>
+      f.traverse(Some(i): Option[Int]) should === ((Some(i): Option[Int]).traverse(f(_)))
+    }
+  }
+
   test("lift") {
     val f = Kleisli { (x: Int) => (Some(x + 1): Option[Int]) }
     val l = f.lift[List]

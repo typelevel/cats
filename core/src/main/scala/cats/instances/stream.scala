@@ -21,9 +21,6 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       def flatMap[A, B](fa: Stream[A])(f: A => Stream[B]): Stream[B] =
         fa.flatMap(f)
 
-      override def map2[A, B, Z](fa: Stream[A], fb: Stream[B])(f: (A, B) => Z): Stream[Z] =
-        fa.flatMap(a => fb.map(b => f(a, b)))
-
       def coflatMap[A, B](fa: Stream[A])(f: Stream[A] => B): Stream[B] =
         fa.tails.toStream.init.map(f)
 

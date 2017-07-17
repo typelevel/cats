@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.IdT
+import cats.data.{IdT, NonEmptyList}
 import cats.kernel.laws.OrderLaws
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -74,6 +74,13 @@ class IdTTests extends CatsSuite {
 
     checkAll("IdT[ListWrapper, Int] with Option", TraverseTests[IdT[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
     checkAll("Traverse[IdT[ListWrapper, ?]]", SerializableTests.serializable(Traverse[IdT[ListWrapper, ?]]))
+  }
+
+  {
+    implicit val F = NonEmptyList.catsDataInstancesForNonEmptyList
+
+    checkAll("IdT[NonEmptyList, Int]", NonEmptyTraverseTests[IdT[NonEmptyList, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+    checkAll("NonEmptyTraverse[IdT[NonEmptyList, ?]]", SerializableTests.serializable(NonEmptyTraverse[IdT[NonEmptyList, ?]]))
   }
 
 

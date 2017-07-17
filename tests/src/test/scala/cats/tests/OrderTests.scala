@@ -2,20 +2,26 @@ package cats
 package tests
 
 import cats.functor._
+import cats.kernel.laws.OrderLaws
 
-import org.scalatest._
-
-class OrderTests extends FunSuite {
+class OrderTests extends CatsSuite {
   {
-    import cats.implicits._
     Invariant[Order]
     Contravariant[Order]
   }
 
-  {
+  checkAll("Int", OrderLaws[Int].order)
+  checkAll("Double", OrderLaws[Double].order)
+  checkAll("Float", OrderLaws[Float].order)
+  checkAll("Long", OrderLaws[Long].order)
+}
+
+object OrderTests {
+  def summonInstance(): Unit = {
     import cats.instances.order._
     Invariant[Order]
     Contravariant[Order]
+    ()
   }
 
   // ambiguity test:

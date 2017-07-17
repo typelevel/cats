@@ -276,11 +276,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     * res0: cats.data.NonEmptyList[(Char, Int)] = NonEmptyList((z,1), (a,4), (e,22))
     * }}}
     */
-  def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyList[A] =
-    toList.sortBy(f)(B.toOrdering) match {
-      case x :: xs => NonEmptyList(x, xs)
-      case Nil     => sys.error("unreachable: sorting a NonEmptyList cannot produce an empty List")
-    }
+  def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyList[A] = {
+    // safe: sorting a NonEmptyList cannot produce an empty List
+    NonEmptyList.fromListUnsafe(toList.sortBy(f)(B.toOrdering))
+  }
 
   /**
     * Sorts this `NonEmptyList` according to an `Order`
@@ -293,11 +292,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     * res0: cats.data.NonEmptyList[Int] = NonEmptyList(3, 4, 9, 12)
     * }}}
     */
-  def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyList[AA] =
-    toList.sorted(AA.toOrdering) match {
-      case x :: xs => NonEmptyList(x, xs)
-      case Nil     => sys.error("unreachable: sorting a NonEmptyList cannot produce an empty List")
-    }
+  def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyList[AA] = {
+    // safe: sorting a NonEmptyList cannot produce an empty List
+    NonEmptyList.fromListUnsafe(toList.sorted(AA.toOrdering))
+  }
 
   /**
     * Groups elements inside of this `NonEmptyList` using a mapping function

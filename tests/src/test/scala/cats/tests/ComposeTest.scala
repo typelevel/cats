@@ -16,4 +16,9 @@ class ComposeTest extends CatsSuite {
 
   val functionAlgebra = functionCompose.algebra[Int]
   checkAll("Compose[Function1].algebra[Int]", GroupLaws[Endo[Int]].semigroup(functionAlgebra))
+
+  test("syntax") {
+    (((_: Int) + 1) <<< ((_: Int) / 2))(2) should be(2)
+    (((_: Int) + 1) >>> ((_: Int) / 2))(5) should be(3)
+  }
 }
