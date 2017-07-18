@@ -4,8 +4,8 @@ package tests
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.{NonEmptyList, NonEmptyVector}
-import cats.laws.discipline.{SemigroupKTests, MonadTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests, ComonadTests}
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.{ComonadTests, NonEmptyTraverseTests, MonadTests, ReducibleTests, SemigroupKTests, SerializableTests}
 
 class NonEmptyListTests extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
