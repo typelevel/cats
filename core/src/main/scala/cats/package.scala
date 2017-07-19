@@ -32,8 +32,8 @@ package object cats {
  * encodes pure unary function application.
  */
   type Id[A] = A
-  implicit val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with CommutativeComonad[Id] with NonEmptyTraverse[Id] =
-    new Bimonad[Id] with CommutativeMonad[Id] with CommutativeComonad[Id] with NonEmptyTraverse[Id] {
+  implicit val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] =
+    new Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)

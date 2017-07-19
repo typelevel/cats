@@ -3,7 +3,7 @@ package data
 
 import cats.arrow.{Arrow, Category, CommutativeArrow, Compose}
 import cats.functor.{Contravariant, Profunctor}
-import cats.{CoflatMap, Comonad, CommutativeComonad, Functor, Monad}
+import cats.{CoflatMap, Comonad, Functor, Monad}
 import scala.annotation.tailrec
 
 /**
@@ -45,11 +45,11 @@ object Cokleisli extends CokleisliInstances {
 }
 
 private[data] sealed abstract class CokleisliInstances extends CokleisliInstances0 {
-  implicit def catsDataCommutativeArrowForCokleisli[F[_]](implicit ev: CommutativeComonad[F]): CommutativeArrow[Cokleisli[F, ?, ?]] =
-    new CokleisliCommutativeArrow[F] { def F: CommutativeComonad[F] = ev }
 
   implicit val catsDataCommutativeArrowForCokleisliId: CommutativeArrow[Cokleisli[Id, ?, ?]] =
-    catsDataCommutativeArrowForCokleisli[Id]
+    new CokleisliArrow[Id] with CommutativeArrow[Cokleisli[Id, ?, ?]] {
+      def F: Comonad[Id] = Comonad[Id]
+  }
 
   implicit def catsDataMonadForCokleisli[F[_], A]: Monad[Cokleisli[F, A, ?]] =
     new CokleisliMonad[F, A]
@@ -79,9 +79,7 @@ private[data] sealed abstract class CokleisliInstances1 {
     }
 }
 
-private[data] trait CokleisliCommutativeArrow[F[_]] extends CommutativeArrow[Cokleisli[F, ?, ?]] with CokleisliArrow[F] {
-  implicit def F: CommutativeComonad[F]
-}
+
 
 private[data] class CokleisliMonad[F[_], A] extends Monad[Cokleisli[F, A, ?]] {
 
