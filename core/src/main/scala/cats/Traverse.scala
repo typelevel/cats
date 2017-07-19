@@ -1,5 +1,8 @@
 package cats
 
+import cats.data.State
+import cats.data.StateT
+
 import simulacrum.typeclass
 
 /**
@@ -97,4 +100,34 @@ import simulacrum.typeclass
 
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     traverse[Id, A, B](fa)(f)
+
+  /**
+   * Akin to [[map]], but also provides the value's index in structure
+   * F when calling the function.
+   */
+  def mapWithIndex[A, B](fa: F[A])(f: (A, Int) => B): F[B] =
+    traverse(fa)(a =>
+      State((s: Int) => (s + 1, f(a, s)))).runA(0).value
+
+  /**
+   * Akin to [[traverse]], but also provides the value's index in
+   * structure F when calling the function.
+   *
+   * This performs the traversal in a single pass but requires that
+   * effect G is monadic. An applicative traveral can be performed in
+   * two passes using [[zipWithIndex]] followed by [[traverse]].
+   */
+  def traverseWithIndexM[G[_], A, B](fa: F[A])(f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
+    traverse(fa)(a =>
+      StateT((s: Int) => G.map(f(a, s))(b => (s + 1, b)))).runA(0)
+
+  /**
+   * Traverses through the structure F, pairing the values with
+   * assigned indices.
+   *
+   * The behavior is consistent with the Scala collection library's
+   * `zipWithIndex` for collections such as `List`.
+   */
+  def zipWithIndex[A](fa: F[A]): F[(A, Int)] =
+    mapWithIndex(fa)((a, i) => (a, i))
 }
