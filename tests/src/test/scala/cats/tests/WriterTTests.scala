@@ -391,4 +391,7 @@ class WriterTTests extends CatsSuite {
     checkAll("WriterT[Option, ListWrapper[Int], ?]", MonadErrorTests[WriterT[Option, ListWrapper[Int], ?], Unit].monadError[Int, Int, Int])
     checkAll("MonadError[WriterT[Option, ListWrapper[Int], ?], Unit]", SerializableTests.serializable(MonadError[WriterT[Option, ListWrapper[Int], ?], Unit]))
   }
+
+  checkAll("WriterT[Option, Int, ?]", CommutativeMonadTests[WriterT[Option, Int, ?]].commutativeMonad[Int, Int, Int])
+  checkAll("CommutativeMonad[WriterT[Option, Int, ?]]",SerializableTests.serializable(CommutativeMonad[WriterT[Option, Int, ?]]))
 }
