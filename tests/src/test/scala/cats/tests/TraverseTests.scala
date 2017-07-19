@@ -28,6 +28,25 @@ abstract class TraverseCheck[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test(s"Traverse[$name].traverseWithStateM") {
+    forAll { (fa: F[Int]) =>
+      val left = fa.traverseWithStateM(Set.empty[Int])(
+        (a, s) => if (s.contains(a)) Eval.now("duplicate") else Eval.later(a.toString))(
+        (a, s, _) => s + a)
+      val fal = fa.toList
+      left.value.map(_.toList.filterNot(_ == "duplicate")) should === (fal.toSet -> fal.distinct.map(_.toString))
+    }
+  }
+
+  test(s"Traverse[$name].traverseWithStateMA") {
+    forAll { (fa: F[Int]) =>
+      val left = fa.traverseWithStateMA(Set.empty[Int])(
+        (a, s) => if (s.contains(a)) Eval.now("duplicate") else Eval.later(a.toString))(
+        (a, s, _) => s + a)
+      left.value.toList.filterNot(_ == "duplicate") should === (fa.toList.distinct.map(_.toString))
+    }
+  }
+
 }
 
 object TraverseCheck {
