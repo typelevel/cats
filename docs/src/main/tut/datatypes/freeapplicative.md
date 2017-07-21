@@ -164,5 +164,24 @@ val prodCompiler: FunctionK[ValidationOp, ValidateAndLog] = parCompiler and logC
 val prodValidation = prog.foldMap[ValidateAndLog](prodCompiler)
 ```
 
+### The way FreeApplicative#foldMap works
+Despite being an imperative loop, there is a functional intuition behind `FreeApplicative#foldMap`.
+
+The new `FreeAp`'s `foldMap` is a sort of mutually-recursive function that operates on an argument stack and a 
+function stack, where the argument stack has type `List[FreeAp[F, _]]` and the functions have type `List[Fn[G, _, _]]`.
+`Fn[G[_, _]]` contains a function to be `Ap`'d that has already been translated to the target `Applicative`,
+as well as the number of functions that were `Ap`'d immediately subsequently to it.
+
+#### Main re-association loop
+Pull an argument out of the stack, eagerly remove right-associated `Ap` nodes, by looping on the right and 
+adding the `Ap` nodes' arguments on the left to the argument stack; at the end, pushes a single function to the 
+function stack of the applied functions, the rest of which will be pushed in this loop in later iterations. 
+Once all of the Ap nodes on the right are removed, the loop resets to deal with the ones on the left.
+
+#### Function application loop
+Then it has a loop which pulls functions from the stack until it reaches a curried function, 
+in which case it applies a single argument, pushes its continuation on to the function stack, 
+and returns to the main loop.
+
 ## References
 Deeper explanations can be found in this paper [Free Applicative Functors by Paolo Capriotti](http://www.paolocapriotti.com/assets/applicative.pdf)
