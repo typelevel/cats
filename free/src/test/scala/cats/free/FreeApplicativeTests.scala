@@ -4,7 +4,6 @@ package free
 import cats.tests.CatsSuite
 import cats.arrow.FunctionK
 import cats.laws.discipline.{CartesianTests, ApplicativeTests, SerializableTests}
-import cats.laws.discipline.arbitrary._
 import cats.data.State
 
 import org.scalacheck.{Arbitrary, Gen}
@@ -160,5 +159,14 @@ object FreeApplicativeTests {
         SA.eqv(a.fold, b.fold)
       }
     }
+
+  implicit def catsLawsArbitraryForListNatTrans: Arbitrary[List ~> List] =
+    Arbitrary(Gen.oneOf(
+      FunctionK.id[List],
+      new (List ~> List) {
+        def apply[A](fa: List[A]): List[A] = {
+          fa ++ fa
+        }
+      }))
 
 }
