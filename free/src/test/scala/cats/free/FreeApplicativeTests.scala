@@ -151,7 +151,7 @@ object FreeApplicativeTests {
   }
 
   implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], FF: Arbitrary[(A, A) => A], A: Arbitrary[A]): Arbitrary[FreeApplicative[F, A]] =
-    Arbitrary(freeGen[F, A](2))
+    Arbitrary(freeGen[F, A](4))
 
   implicit def freeApplicativeEq[S[_]: Applicative, A](implicit SA: Eq[S[A]]): Eq[FreeApplicative[S, A]] =
     new Eq[FreeApplicative[S, A]] {
