@@ -167,8 +167,8 @@ val prodValidation = prog.foldMap[ValidateAndLog](prodCompiler)
 ### The way FreeApplicative#foldMap works
 Despite being an imperative loop, there is a functional intuition behind `FreeApplicative#foldMap`.
 
-The new `FreeAp`'s `foldMap` is a sort of mutually-recursive function that operates on an argument stack and a 
-function stack, where the argument stack has type `List[FreeAp[F, _]]` and the functions have type `List[Fn[G, _, _]]`.
+The new `FreeApplicative`'s `foldMap` is a sort of mutually-recursive function that operates on an argument stack and a 
+function stack, where the argument stack has type `List[FreeApplicative[F, _]]` and the functions have type `List[Fn[G, _, _]]`.
 `Fn[G[_, _]]` contains a function to be `Ap`'d that has already been translated to the target `Applicative`,
 as well as the number of functions that were `Ap`'d immediately subsequently to it.
 
