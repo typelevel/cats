@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{MonadCombineTests, CoflatMapTests, SerializableTests, TraverseFilterTests, CartesianTests}
+import cats.laws.discipline.{AlternativeTests, CoflatMapTests, SerializableTests, TraverseTests, CartesianTests}
 import cats.laws.discipline.arbitrary._
 
 class VectorTests extends CatsSuite {
@@ -12,11 +12,11 @@ class VectorTests extends CatsSuite {
   checkAll("Vector[Int]", CoflatMapTests[Vector].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[Vector]", SerializableTests.serializable(CoflatMap[Vector]))
 
-  checkAll("Vector[Int]", MonadCombineTests[Vector].monadCombine[Int, Int, Int])
-  checkAll("MonadCombine[Vector]", SerializableTests.serializable(MonadCombine[Vector]))
+  checkAll("Vector[Int]", AlternativeTests[Vector].alternative[Int, Int, Int])
+  checkAll("Alternative[Vector]", SerializableTests.serializable(Alternative[Vector]))
 
-  checkAll("Vector[Int] with Option", TraverseFilterTests[Vector].traverseFilter[Int, Int, Int, List[Int], Option, Option])
-  checkAll("TraverseFilter[Vector]", SerializableTests.serializable(TraverseFilter[Vector]))
+  checkAll("Vector[Int] with Option", TraverseTests[Vector].traverse[Int, Int, Int, List[Int], Option, Option])
+  checkAll("Traverse[Vector]", SerializableTests.serializable(Traverse[Vector]))
 
   test("show") {
     Vector(1, 2, 3).show should === ("Vector(1, 2, 3)")
@@ -25,12 +25,6 @@ class VectorTests extends CatsSuite {
 
     forAll { vec: Vector[String] =>
       vec.show should === (vec.toString)
-    }
-  }
-
-  test("collect consistency") {
-    forAll { vec: Vector[Int] =>
-      FunctorFilter[Vector].collect(vec)(evenPf) should === (vec.collect(evenPf))
     }
   }
 

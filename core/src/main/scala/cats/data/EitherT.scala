@@ -63,8 +63,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def to[G[_]](implicit F: Functor[F], G: Alternative[G]): F[G[B]] =
     F.map(value)(_.to[G])
 
-  def collectRight(implicit F: MonadCombine[F]): F[B] =
-    F.flatMap(value)(_.to[F])
+  def collectRight(implicit FA: Alternative[F], FM: Monad[F]): F[B] =
+    FM.flatMap(value)(_.to[F])
 
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): EitherT[F, C, D] = EitherT(F.map(value)(_.bimap(fa, fb)))
 
@@ -444,12 +444,6 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
   implicit def catsDataTraverseForEitherT[F[_], L](implicit F: Traverse[F]): Traverse[EitherT[F, L, ?]] =
     new EitherTTraverse[F, L] {
       val F0: Traverse[F] = F
-    }
-
-  implicit def catsDataMonadTransForEitherT[E]: MonadTrans[EitherT[?[_], E, ?]] =
-    new MonadTrans[EitherT[?[_], E, ?]] {
-      def liftT[M[_]: Monad, A](ma: M[A]): EitherT[M, E, A] =
-        EitherT.liftT(ma)
     }
 
   implicit def catsMonoidForEitherT[F[_], L, A](implicit F: Monoid[F[Either[L, A]]]): Monoid[EitherT[F, L, A]] =
