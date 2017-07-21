@@ -95,7 +95,7 @@ class KleisliTests extends CatsSuite {
     checkAll("Kleisli[Option, Int, Int]", FunctorTests[Kleisli[Option, Int, ?]].functor[Int, Int, Int])
     checkAll("Functor[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Functor[Kleisli[Option, Int, ?]]))
   }
-  
+
   {
     implicit val catsDataMonoidForKleisli = Kleisli.catsDataMonoidForKleisli[Option, Int, String]
     checkAll("Kleisli[Option, Int, String]", GroupLaws[Kleisli[Option, Int, String]].monoid)
@@ -156,6 +156,18 @@ class KleisliTests extends CatsSuite {
   test("lower") {
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
       f.run(i) should === (f.lower.run(i).flatten)
+    }
+  }
+
+  test("tap") {
+    forAll { (f: Kleisli[List, Int, String], i: Int) =>
+      f.run(i).as(i) should === (f.tap.run(i))
+    }
+  }
+
+  test("tapWith") {
+    forAll { (f: Kleisli[List, Int, String], g: (Int, String) => Boolean, i: Int) =>
+      f.run(i).map(s => g(i, s)) should === (f.tapWith(g).run(i))
     }
   }
 
