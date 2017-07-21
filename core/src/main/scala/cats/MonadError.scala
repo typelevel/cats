@@ -21,8 +21,23 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
 
   /**
    * Transform certain errors using `pf` and rethrow them.
+   * Non matching errors and successful values are not affected by this function.
    *
-   * Non matching errors and successful values are not affected by this function
+   * Example:
+   * {{{
+   * scala> import cats._, implicits._
+   *
+   * scala> def pf: PartialFunction[String, String] = { case "error" => "ERROR" }
+   *
+   * scala> "error".asLeft[Int].adaptError(pf)
+   * res0: Either[String,Int] = Left(ERROR)
+   *
+   * scala> "err".asLeft[Int].adaptError(pf)
+   * res1: Either[String,Int] = Left(err)
+   *
+   * scala> 1.asRight[String].adaptError(pf)
+   * res2: Either[String,Int] = Right(1)
+   * }}}
    */
   def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
     flatMap(attempt(fa))(_.fold(e => raiseError(pf.applyOrElse[E, E](e, _ => e)), pure))
