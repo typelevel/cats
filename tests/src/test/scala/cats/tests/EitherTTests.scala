@@ -65,7 +65,7 @@ class EitherTTests extends CatsSuite {
   }
 
   {
-    //if a Monad is defined
+    // if a MonadError is defined
     // Tests for catsDataMonadErrorFForEitherT instance, for recovery on errors of F.
 
     implicit val eq1 = EitherT.catsDataEqForEitherT[Option, String, Either[Unit, String]]
