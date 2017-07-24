@@ -3,10 +3,10 @@ package syntax
 
 trait MonadCombineSyntax {
   // TODO: use simulacrum instances eventually
-  implicit final def catsSyntaxMonadCombine[F[_]: MonadCombine, G[_], A](fga: F[G[A]]): MonadCombineOps[F, G, A] =
+  implicit final def catsSyntaxMonadCombine[F[_], G[_], A](fga: F[G[A]]): MonadCombineOps[F, G, A] =
     new MonadCombineOps[F, G, A](fga)
 
-  implicit final def catsSyntaxMonadCombineSeparate[F[_]: MonadCombine, G[_, _], A, B](fgab: F[G[A, B]]): SeparateOps[F, G, A, B] =
+  implicit final def catsSyntaxMonadCombineSeparate[F[_], G[_, _], A, B](fgab: F[G[A, B]]): SeparateOps[F, G, A, B] =
     new SeparateOps[F, G, A, B](fgab)
 }
 

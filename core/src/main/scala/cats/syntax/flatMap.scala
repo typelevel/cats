@@ -3,10 +3,10 @@ package syntax
 
 trait FlatMapSyntax extends FlatMap.ToFlatMapOps {
 
-  implicit final def catsSyntaxFlatten[F[_]: FlatMap, A](ffa: F[F[A]]): FlattenOps[F, A] =
+  implicit final def catsSyntaxFlatten[F[_], A](ffa: F[F[A]]): FlattenOps[F, A] =
     new FlattenOps[F, A](ffa)
 
-  implicit final def catsSyntaxIfM[F[_]: FlatMap](fa: F[Boolean]): IfMOps[F] =
+  implicit final def catsSyntaxIfM[F[_]](fa: F[Boolean]): IfMOps[F] =
     new IfMOps[F](fa)
 
   implicit final def catsSyntaxFlatMapIdOps[A](a: A): FlatMapIdOps[A] =
