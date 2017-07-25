@@ -29,7 +29,7 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
   /** Converts to `F[A]` given that `F` is a functor */
   final def run(implicit F: Functor[F]): F[A] = F.map(fi)(k)
 
-  /** Converts to `F[A]` given that `F` is a functor */
+  /** Converts to `G[A]` given that `G` is a functor */
   final def foldMap[G[_]](trans: F ~> G)(implicit G: Functor[G]): G[A] =
     G.map(trans(fi))(k)
 

@@ -6,7 +6,8 @@ import cats.functor.Bifunctor
 import cats.functor._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.{OrderLaws, GroupLaws}
+import cats.kernel.laws.{GroupLaws, OrderLaws}
+
 
 class EitherTTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[EitherT[ListWrapper, String, ?]](EitherT.catsDataFunctorForEitherT(ListWrapper.functor))
@@ -46,6 +47,7 @@ class EitherTTests extends CatsSuite {
 
   {
     //if a Monad is defined
+
     implicit val F = ListWrapper.monad
     implicit val eq0 = EitherT.catsDataEqForEitherT[ListWrapper, String, Either[String, Int]]
     implicit val eq1 = EitherT.catsDataEqForEitherT[EitherT[ListWrapper, String, ?], String, Int](eq0)
@@ -56,6 +58,23 @@ class EitherTTests extends CatsSuite {
 
     checkAll("EitherT[ListWrapper, String, Int]", MonadErrorTests[EitherT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
     checkAll("MonadError[EitherT[List, ?, ?]]", SerializableTests.serializable(MonadError[EitherT[ListWrapper, String, ?], String]))
+
+  }
+
+  {
+    // if a MonadError is defined
+    // Tests for catsDataMonadErrorFForEitherT instance, for recovery on errors of F.
+
+    implicit val eq1 = EitherT.catsDataEqForEitherT[Option, String, Either[Unit, String]]
+    implicit val eq2 = EitherT.catsDataEqForEitherT[EitherT[Option, String, ?], Unit, String](eq1)
+    implicit val me = EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String](catsStdInstancesForOption)
+
+    Functor[EitherT[Option, String, ?]]
+    Applicative[EitherT[Option, String, ?]]
+    Monad[EitherT[Option, String, ?]]
+
+    checkAll("EitherT[Option, String, String]", MonadErrorTests[EitherT[Option, String, ?], Unit].monadError[String, String, String])
+    checkAll("MonadError[EitherT[Option, ?, ?]]", SerializableTests.serializable(MonadError[EitherT[Option, String, ?], Unit]))
   }
 
   {
@@ -217,11 +236,6 @@ class EitherTTests extends CatsSuite {
     eithert.recoverWith { case "noteithert" => EitherT.pure[Id, String](5) } should === (eithert)
   }
 
-  test("recoverWith ignores the right side") {
-    val eithert = EitherT.pure[Id, String](10)
-    eithert.recoverWith { case "eithert" => EitherT.pure[Id, String](5) } should === (eithert)
-  }
-
   test("transform consistent with value.map") {
     forAll { (eithert: EitherT[List, String, Int], f: Either[String, Int] => Either[Long, Double]) =>
       eithert.transform(f) should === (EitherT(eithert.value.map(f)))
@@ -334,6 +348,18 @@ class EitherTTests extends CatsSuite {
   test("foldRight with Id consistent with Either foldRight") {
     forAll { (x: EitherT[Id, String, Int], l: Eval[Long], f: (Int, Eval[Long]) => Eval[Long]) =>
       x.foldRight(l)(f) should === (x.value.foldRight(l)(f))
+    }
+  }
+
+  test("collectRight with Option consistent with flattening a to[Option]") {
+    forAll { (et: EitherT[Option, String, Int]) =>
+      et.collectRight should === (et.to[Option].flatten)
+    }
+  }
+
+  test("applyAlt with Id consistent with EitherT map") {
+    forAll { (et: EitherT[Id, String, Int], f: Int => String) =>
+      et.applyAlt(EitherT.pure(f)) should === (et.map(f))
     }
   }
 
