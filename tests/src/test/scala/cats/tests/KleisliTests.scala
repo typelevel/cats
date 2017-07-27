@@ -24,8 +24,11 @@ class KleisliTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
   implicit val iso2 = CartesianTests.Isomorphisms.invariant[Reader[Int, ?]]
 
-  checkAll("Kleisli[Option, Int, Int] with Unit", ApplicativeErrorTests[Kleisli[Option, Int, ?], Unit].applicativeError[Int, Int, Int])
-  checkAll("ApplicativeError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(ApplicativeError[Kleisli[Option, Int, ?], Unit]))
+  {
+    implicit val instance: ApplicativeError[Kleisli[Option, Int, ?], Unit] = Kleisli.catsDataApplicativeErrorForKleisli[Option, Unit, Int](cats.instances.option.catsStdInstancesForOption)
+    checkAll("Kleisli[Option, Int, Int] with Unit", ApplicativeErrorTests[Kleisli[Option, Int, ?], Unit](instance).applicativeError[Int, Int, Int])
+    checkAll("ApplicativeError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(instance))
+  }
 
   checkAll("Kleisli[Option, Int, Int] with Unit", MonadErrorTests[Kleisli[Option, Int, ?], Unit].monadError[Int, Int, Int])
   checkAll("MonadError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(MonadError[Kleisli[Option, Int, ?], Unit]))
@@ -55,15 +58,15 @@ class KleisliTests extends CatsSuite {
   }
 
   {
-    implicit val catsDataMonadReaderForKleisli = Kleisli.catsDataMonadReaderForKleisli[Option, Int]
-    checkAll("Kleisli[Option, Int, Int]", MonadReaderTests[Kleisli[Option, Int, ?], Int].monadReader[Int, Int, Int])
-    checkAll("MonadReader[Kleisli[Option, ?, ?], Int]", SerializableTests.serializable(MonadReader[Kleisli[Option, Int, ?], Int]))
+    implicit val catsDataMonadForKleisli = Kleisli.catsDataMonadForKleisli[Option, Int]
+    checkAll("Kleisli[Option, Int, Int]", MonadTests[Kleisli[Option, Int, ?]].monad[Int, Int, Int])
+    checkAll("Monad[Kleisli[Option, ?, ?], Int]", SerializableTests.serializable(Monad[Kleisli[Option, Int, ?]]))
   }
 
   {
-    implicit val catsDataMonadReaderForReader = Kleisli.catsDataMonadReaderForKleisliId[Int]
-    checkAll("Reader[Int, Int]", MonadReaderTests[Reader[Int, ?], Int].monadReader[Int, Int, Int])
-    checkAll("MonadReader[Reader[?, ?], Int]", SerializableTests.serializable(MonadReader[Reader[Int, ?], Int]))
+    implicit val catsDataMonadForReader = Kleisli.catsDataMonadForKleisliId[Int]
+    checkAll("Reader[Int, Int]", MonadTests[Reader[Int, ?]].monad[Int, Int, Int])
+    checkAll("Monad[Reader[?, ?], Int]", SerializableTests.serializable(Monad[Reader[Int, ?]]))
   }
 
   {
@@ -76,6 +79,12 @@ class KleisliTests extends CatsSuite {
     implicit val catsDataFlatMapForKleisli = Kleisli.catsDataFlatMapForKleisli[Option, Int]
     checkAll("Kleisli[Option, Int, Int]", FlatMapTests[Kleisli[Option, Int, ?]].flatMap[Int, Int, Int])
     checkAll("FlatMap[Kleisli[Option, Int, ?]]", SerializableTests.serializable(FlatMap[Kleisli[Option, Int, ?]]))
+  }
+
+  {
+    implicit val catsDataAlternativeForKleisli = Kleisli.catsDataAlternativeForKleisli[Option, Int]
+    checkAll("Kleisli[Option, Int, Int]", AlternativeTests[Kleisli[Option, Int, ?]].alternative[Int, Int, Int])
+    checkAll("Alternative[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Alternative[Kleisli[Option, Int, ?]]))
   }
 
   {
@@ -124,10 +133,6 @@ class KleisliTests extends CatsSuite {
 
   checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Kleisli[Option, ?, Int]]", SerializableTests.serializable(Contravariant[Kleisli[Option, ?, Int]]))
-
-  checkAll("Kleisli[Option, Int, ?]]", MonadTransTests[Kleisli[?[_], Int, ?]].monadTrans[Option, Int, Int])
-  checkAll("MonadTrans[Kleisli[?[_], Int, ?]]", SerializableTests.serializable(MonadTrans[Kleisli[?[_], Int, ?]]))
-
 
   test("local composes functions") {
     forAll { (f: Int => Option[String], g: Int => Int, i: Int) =>
@@ -218,7 +223,6 @@ class KleisliTests extends CatsSuite {
     Apply[Kleisli[List, Int, ?]]
     Applicative[Kleisli[List, Int, ?]]
     Monad[Kleisli[List, Int, ?]]
-    MonadReader[Kleisli[List, Int, ?], Int]
     Monoid[Kleisli[List, Int, String]]
     MonoidK[λ[α => Kleisli[List, α, α]]]
     Arrow[Kleisli[List, ?, ?]]
@@ -233,7 +237,6 @@ class KleisliTests extends CatsSuite {
     Apply[Kleisli[Id, Int, ?]]
     Applicative[Kleisli[Id, Int, ?]]
     Monad[Kleisli[Id, Int, ?]]
-    MonadReader[Kleisli[Id, Int, ?], Int]
     Monoid[Kleisli[Id, Int, String]]
     MonoidK[λ[α => Kleisli[Id, α, α]]]
     Arrow[Kleisli[Id, ?, ?]]
@@ -249,7 +252,6 @@ class KleisliTests extends CatsSuite {
     Apply[Reader[Int, ?]]
     Applicative[Reader[Int, ?]]
     Monad[Reader[Int, ?]]
-    MonadReader[Reader[Int, ?], Int]
     Monoid[Reader[Int, String]]
     MonoidK[λ[α => Reader[α, α]]]
     Arrow[Reader[?, ?]]
@@ -266,7 +268,6 @@ class KleisliTests extends CatsSuite {
     Apply[IntReader]
     Applicative[IntReader]
     Monad[IntReader]
-    MonadReader[IntReader, Int]
     Monoid[IntReader[String]]
     FlatMap[IntReader]
     Semigroup[IntReader[String]]
@@ -274,7 +275,5 @@ class KleisliTests extends CatsSuite {
     ApplicativeError[Kleisli[cats.data.Validated[Unit, ?], Int, ?], Unit]
     ApplicativeError[Kleisli[Option, Int, ?], Unit]
     MonadError[Kleisli[Option, Int, ?], Unit]
-
-    MonadTrans[Kleisli[?[_], Int, ?]]
   }
 }

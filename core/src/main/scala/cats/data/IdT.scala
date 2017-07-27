@@ -161,8 +161,4 @@ private[data] sealed abstract class IdTInstances extends IdTInstances0 {
   implicit def catsDataShowForIdT[F[_], A](implicit F: Show[F[A]]): Show[IdT[F, A]] =
     functor.Contravariant[Show].contramap(F)(_.value)
 
-  implicit def catsDataMonadTransForIdT: MonadTrans[IdT] =
-    new MonadTrans[IdT] {
-      def liftT[M[_]: Monad, A](ma: M[A]): IdT[M, A] = IdT(ma)
-    }
 }

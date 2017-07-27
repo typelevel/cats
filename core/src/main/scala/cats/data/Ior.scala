@@ -13,14 +13,14 @@ import scala.annotation.tailrec
  *  - `[[Ior.Right Right]][B]`
  *  - `[[Ior.Both Both]][A, B]`
  *
- * `A [[Ior]] B` is similar to `Either[A, B]`, except that it can represent the simultaneous presence of
+ * `A [[Ior]] B` is similar to `scala.util.Either[A, B]`, except that it can represent the simultaneous presence of
  * an `A` and a `B`. It is right-biased so methods such as `map` and `flatMap` operate on the
  * `B` value. Some methods, like `flatMap`, handle the presence of two [[Ior.Both Both]] values using a
  * `[[Semigroup]][A]`, while other methods, like [[toEither]], ignore the `A` value in a [[Ior.Both Both]].
  *
  * `A [[Ior]] B` is isomorphic to `Either[Either[A, B], (A, B)]`, but provides methods biased toward `B`
  * values, regardless of whether the `B` values appear in a [[Ior.Right Right]] or a [[Ior.Both Both]].
- * The isomorphic [[scala.util.Either]] form can be accessed via the [[unwrap]] method.
+ * The isomorphic `scala.util.Either` form can be accessed via the [[unwrap]] method.
  */
 sealed abstract class Ior[+A, +B] extends Product with Serializable {
 

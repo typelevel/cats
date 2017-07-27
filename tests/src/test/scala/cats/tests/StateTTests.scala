@@ -223,32 +223,14 @@ class StateTTests extends CatsSuite {
     // F has a Monad
     implicit val F = ListWrapper.monad
 
-    checkAll("StateT[ListWrapper, Int, Int]", MonadStateTests[StateT[ListWrapper, Int, ?], Int].monadState[Int, Int, Int])
-    checkAll("MonadState[StateT[ListWrapper, Int, ?], Int]", SerializableTests.serializable(MonadState[StateT[ListWrapper, Int, ?], Int]))
-
-    Monad[StateT[ListWrapper, Int, ?]]
-    FlatMap[StateT[ListWrapper, Int, ?]]
-    Applicative[StateT[ListWrapper, Int, ?]]
-    Apply[StateT[ListWrapper, Int, ?]]
-    Functor[StateT[ListWrapper, Int, ?]]
-  }
-
-  {
-    // F has a Monad
-    implicit val F = ListWrapper.monad
-
     checkAll("StateT[ListWrapper, Int, Int]", MonadTests[StateT[ListWrapper, Int, ?]].monad[Int, Int, Int])
     checkAll("Monad[StateT[ListWrapper, Int, ?]]", SerializableTests.serializable(Monad[StateT[ListWrapper, Int, ?]]))
-    checkAll("StateT[ListWrapper, Int, Int]", MonadTransTests[StateT[?[_], String, ?]].monadTrans[ListWrapper, Int, Int])
-    checkAll("MonadTrans[StateT[?[_], Int, ?]]", SerializableTests.serializable(MonadTrans[StateT[?[_], Int, ?]]))
 
     Monad[StateT[ListWrapper, Int, ?]]
     FlatMap[StateT[ListWrapper, Int, ?]]
     Applicative[StateT[ListWrapper, Int, ?]]
     Apply[StateT[ListWrapper, Int, ?]]
     Functor[StateT[ListWrapper, Int, ?]]
-
-    MonadTrans[StateT[?[_], Int, ?]]
   }
 
   {
@@ -261,11 +243,12 @@ class StateTTests extends CatsSuite {
   }
 
   {
-    // F has a MonadCombine
-    implicit val F = ListWrapper.monadCombine
-
-    checkAll("StateT[ListWrapper, Int, Int]", MonadCombineTests[StateT[ListWrapper, Int, ?]].monadCombine[Int, Int, Int])
-    checkAll("MonadCombine[StateT[ListWrapper, Int, ?]]", SerializableTests.serializable(MonadCombine[StateT[ListWrapper, Int, ?]]))
+    // F has an Alternative
+    implicit val G = ListWrapper.monad
+    implicit val F = ListWrapper.alternative
+    val SA = StateT.catsDataAlternativeForStateT[ListWrapper, Int](ListWrapper.monad, ListWrapper.alternative)
+    checkAll("StateT[ListWrapper, Int, Int]", AlternativeTests[StateT[ListWrapper, Int, ?]](SA).monoidK[Int])
+    checkAll("Alternative[StateT[ListWrapper, Int, ?]]", SerializableTests.serializable(SA))
 
     Monad[StateT[ListWrapper, Int, ?]]
     FlatMap[StateT[ListWrapper, Int, ?]]
@@ -280,9 +263,6 @@ class StateTTests extends CatsSuite {
   {
     implicit val iso = CartesianTests.Isomorphisms.invariant[State[Long, ?]]
 
-    checkAll("State[Long, ?]", MonadStateTests[State[Long, ?], Long].monadState[Int, Int, Int])
-    checkAll("MonadState[State[Long, ?], Long]", SerializableTests.serializable(MonadState[State[Long, ?], Long]))
-
     checkAll("State[Long, ?]", MonadTests[State[Long, ?]].monad[Int, Int, Int])
     checkAll("Monad[State[Long, ?]]", SerializableTests.serializable(Monad[State[Long, ?]]))
   }
@@ -292,8 +272,8 @@ class StateTTests extends CatsSuite {
     implicit val iso = CartesianTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
     implicit val eqEitherTFA: Eq[EitherT[StateT[Option, Int , ?], Unit, Int]] = EitherT.catsDataEqForEitherT[StateT[Option, Int , ?], Unit, Int]
 
-    checkAll("StateT[Option, Int, Int]", MonadErrorTests[StateT[Option, Int , ?], Unit].monadError[Int, Int, Int])
-    checkAll("MonadError[StateT[Option, Int , ?], Unit]", SerializableTests.serializable(MonadError[StateT[Option, Int , ?], Unit]))
+    checkAll("StateT[Option, Int, Int]", MonadErrorTests[StateT[Option, Int, ?], Unit].monadError[Int, Int, Int])
+    checkAll("MonadError[StateT[Option, Int, ?], Unit]", SerializableTests.serializable(MonadError[StateT[Option, Int , ?], Unit]))
   }
 
 }

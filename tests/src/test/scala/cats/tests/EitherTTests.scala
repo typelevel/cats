@@ -55,13 +55,10 @@ class EitherTTests extends CatsSuite {
     Functor[EitherT[ListWrapper, String, ?]]
     Applicative[EitherT[ListWrapper, String, ?]]
     Monad[EitherT[ListWrapper, String, ?]]
-    MonadTrans[EitherT[?[_], String, ?]]
-    // Tests for catsDataMonadErrorForEitherT, for recovery on errors on Either.
+
     checkAll("EitherT[ListWrapper, String, Int]", MonadErrorTests[EitherT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
     checkAll("MonadError[EitherT[List, ?, ?]]", SerializableTests.serializable(MonadError[EitherT[ListWrapper, String, ?], String]))
-    // Tests for MonadTrans instance.
-    checkAll("EitherT[ListWrapper, String, Int]]", MonadTransTests[EitherT[?[_], String, ?]].monadTrans[ListWrapper, Int, Int])
-    checkAll("MonadTrans[EitherT[?[_], String, ?]]", SerializableTests.serializable(MonadTrans[EitherT[?[_], String, ?]]))
+
   }
 
   {

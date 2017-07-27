@@ -182,38 +182,14 @@ object FreeT extends FreeTInstances {
     λ[FunctionK[FreeT[S, M, ?], M]](f => f.foldMap(fk))
 }
 
-private[free] sealed trait FreeTInstances3 {
-  implicit def catsFreeMonadStateForFreeT[S[_], M[_], E](implicit M1: MonadState[M, E]): MonadState[FreeT[S, M, ?], E] =
-    new MonadState[FreeT[S, M, ?], E] with FreeTMonad[S, M] {
-      override def M = implicitly
-      override def get =
-        FreeT.liftT(M1.get)
-      override def set(s: E) =
-        FreeT.liftT(M1.set(s))
-    }
-}
-
-private[free] sealed trait FreeTInstances2 extends FreeTInstances3 {
+private[free] sealed trait FreeTInstances extends FreeTInstances0 {
   implicit def catsFreeMonadErrorForFreeT[S[_], M[_], E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, ?], E] =
     new MonadError[FreeT[S, M, ?], E] with FreeTMonad[S, M] {
-      override def M = implicitly
+      override def M = E
       override def handleErrorWith[A](fa: FreeT[S, M, A])(f: E => FreeT[S, M, A]) =
         FreeT.liftT[S, M, FreeT[S, M, A]](E.handleErrorWith(fa.toM)(f.andThen(_.toM)))(M).flatMap(identity)
       override def raiseError[A](e: E) =
         FreeT.liftT(E.raiseError[A](e))(M)
-    }
-}
-
-private[free] sealed trait FreeTInstances1 extends FreeTInstances2 {
-  implicit def catsFreeFlatMapForFreeT[S[_], M[_]](implicit M0: Applicative[M]): FlatMap[FreeT[S, M, ?]] =
-    new FreeTFlatMap[S, M] {
-      implicit def M: Applicative[M] = M0
-    }
-
-  implicit def catsFreeMonadTransForFreeT[S[_]]: MonadTrans[FreeT[S, ?[_], ?]] =
-    new MonadTrans[FreeT[S, ?[_], ?]] {
-      override def liftT[M[_]: Monad, A](ma: M[A]): FreeT[S, M, A] =
-        FreeT.liftT(ma)
     }
 }
 
@@ -222,21 +198,28 @@ private[free] sealed trait FreeTInstances0 extends FreeTInstances1 {
     new FreeTMonad[S, M] {
       def M = M0
     }
+}
 
-  implicit def catsFreeCombineForFreeT[S[_], M[_]: Applicative: SemigroupK]: SemigroupK[FreeT[S, M, ?]] =
-    new FreeTCombine[S, M] {
-      override def M = implicitly
-      override def M1 = implicitly
+private[free] sealed trait FreeTInstances1 extends FreeTInstances2 {
+  implicit def catsFreeFlatMapForFreeT[S[_], M[_]](implicit M0: Applicative[M]): FlatMap[FreeT[S, M, ?]] =
+    new FreeTFlatMap[S, M] {
+      implicit def M: Applicative[M] = M0
     }
 }
 
-private[free] sealed trait FreeTInstances extends FreeTInstances0 {
-  implicit def catsFreeMonadCombineForFreeT[S[_], M[_]: Alternative]: MonadCombine[FreeT[S, M, ?]] =
-    new MonadCombine[FreeT[S, M, ?]] with FreeTCombine[S, M] with FreeTMonad[S, M] {
-      override def M = implicitly
-      override def M1 = implicitly
+private[free] sealed trait FreeTInstances2 extends FreeTInstances3 {
+  implicit def catsFreeAlternativeForFreeT[S[_], M[_]: Alternative: Monad]: Alternative[FreeT[S, M, ?]] =
+    new Alternative[FreeT[S, M, ?]] with FreeTMonad[S, M] with FreeTMonoidK[S, M] {
+      override def M = Alternative[M]
+      override def M1 = Alternative[M]
+    }
+}
 
-      override def empty[A] = FreeT.liftT[S, M, A](MonoidK[M].empty[A])(M)
+private[free] sealed trait FreeTInstances3 {
+  implicit def catsFreeSemigroupKForFreeT[S[_], M[_]: Applicative: SemigroupK]: SemigroupK[FreeT[S, M, ?]] =
+    new FreeTSemigroupK[S, M] {
+      override def M = Applicative[M]
+      override def M1 = SemigroupK[M]
     }
 }
 
@@ -256,9 +239,16 @@ private[free] sealed trait FreeTMonad[S[_], M[_]] extends Monad[FreeT[S, M, ?]] 
     FreeT.pure[S, M, A](a)
 }
 
-private[free] sealed trait FreeTCombine[S[_], M[_]] extends SemigroupK[FreeT[S, M, ?]] {
+private[free] sealed trait FreeTMonoidK[S[_], M[_]] extends MonoidK[FreeT[S, M, ?]] with FreeTSemigroupK[S, M] {
+  implicit def M: Applicative[M]
+  def M1: MonoidK[M]
+  override final def empty[A]: FreeT[S, M, A] = FreeT.liftT[S, M, A](M1.empty[A])(M)
+}
+
+private[free] sealed trait FreeTSemigroupK[S[_], M[_]] extends SemigroupK[FreeT[S, M, ?]] {
   implicit def M: Applicative[M]
   def M1: SemigroupK[M]
   override final def combineK[A](a: FreeT[S, M, A], b: FreeT[S, M, A]): FreeT[S, M, A] =
     FreeT.liftT(M1.combineK(a.toM, b.toM))(M).flatMap(identity)
 }
+

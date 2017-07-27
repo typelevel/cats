@@ -57,9 +57,6 @@ class IdTTests extends CatsSuite {
 
     checkAll("IdT[ListWrapper, Int]", MonadTests[IdT[ListWrapper, ?]].monad[Int, Int, Int])
     checkAll("Monad[IdT[ListWrapper, ?]]", SerializableTests.serializable(Monad[IdT[ListWrapper, ?]]))
-
-    checkAll("IdT[ListWrapper, Int]", MonadTransTests[IdT].monadTrans[ListWrapper, Int, Int])
-    checkAll("MonadTrans[IdT]", SerializableTests.serializable(MonadTrans[IdT]))
   }
 
   {

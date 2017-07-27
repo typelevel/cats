@@ -5,9 +5,9 @@ import cats.arrow.FunctionK
 import cats.functor.Contravariant
 import cats.syntax.either._
 
-/** `F` on the left and `G` on the right of [[scala.util.Either]].
+/** `F` on the left and `G` on the right of `scala.util.Either`.
  *
- * @param run The underlying [[scala.util.Either]].
+ * @param run The underlying `scala.util.Either`.
  */
 final case class EitherK[F[_], G[_], A](run: Either[F[A], G[A]]) {
 

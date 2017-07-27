@@ -92,12 +92,6 @@ import simulacrum.typeclass
       val G = Traverse[G]
     }
 
-  def composeFilter[G[_]: TraverseFilter]: TraverseFilter[λ[α => F[G[α]]]] =
-    new ComposedTraverseFilter[F, G] {
-      val F = self
-      val G = TraverseFilter[G]
-    }
-
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     traverse[Id, A, B](fa)(f)
 

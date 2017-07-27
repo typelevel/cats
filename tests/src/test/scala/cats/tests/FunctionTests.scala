@@ -24,8 +24,8 @@ class FunctionTests extends CatsSuite {
   checkAll("Function1[Int, Int]", CartesianTests[Function1[Int, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Function1[Int, ?]]", SerializableTests.serializable(Cartesian[Function1[Int, ?]]))
 
-  checkAll("Function1[Int, Int]", MonadReaderTests[Int => ?, Int].monadReader[Int, Int, Int])
-  checkAll("MonadReader[Int => ?, Int]", SerializableTests.serializable(MonadReader[Int => ?, Int]))
+  checkAll("Function1[Int, Int]", MonadTests[Int => ?].monad[Int, Int, Int])
+  checkAll("Monad[Int => ?]", SerializableTests.serializable(Monad[Int => ?]))
 
   checkAll("Function1[Int, Int]", CommutativeArrowTests[Function1].commutativeArrow[Int, Int, Int, Int, Int, Int])
   checkAll("Arrow[Function1]", SerializableTests.serializable(CommutativeArrow[Function1]))

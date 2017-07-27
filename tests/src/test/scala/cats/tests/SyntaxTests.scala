@@ -253,7 +253,7 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val gfab = fgagb.bisequence
   }
 
-  def testMonadCombine[F[_]: MonadCombine, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+  def testAlternativeMonad[F[_]: Alternative: Monad, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
     val fga = mock[F[G[A]]]
     val fa = fga.unite
 
@@ -264,11 +264,6 @@ object SyntaxTests extends AllInstances with AllSyntax {
   def testApplicative[F[_]: Applicative, A]: Unit = {
     val a = mock[A]
     val fa = a.pure[F]
-  }
-
-  def testMonadTrans[MT[_[_], _], M[_], A](implicit MT: MonadTrans[MT], M: Monad[M]): Unit = {
-    val fa = mock[M[A]]
-    val mtf = fa.liftT[MT]
   }
 
   def testFlatMap[F[_] : FlatMap, A, B]: Unit = {
@@ -304,25 +299,3 @@ object SyntaxTests extends AllInstances with AllSyntax {
 
 }
 
-/**
- * Similar to [[SyntaxTests]] but doesn't automatically include all
- * instances/syntax, so that piecemeal imports can be tested.
- */
-object AdHocSyntaxTests {
-  import SyntaxTests.mock
-
-  def testFunctorFilterSyntax[F[_]:FunctorFilter, A]: Unit = {
-    import cats.syntax.functorFilter._
-
-    val fa = mock[F[A]]
-    val filtered = fa.mapFilter(_ => None)
-  }
-
-  def testTraverseFilterSyntax[F[_]:TraverseFilter, G[_]: Applicative, A, B]: Unit = {
-    import cats.syntax.traverseFilter._
-
-    val fa = mock[F[A]]
-    val f = mock[A => G[Option[B]]]
-    val filtered = fa.traverseFilter(f)
-  }
-}
