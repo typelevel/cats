@@ -2,8 +2,7 @@ package cats
 package laws
 package discipline
 
-import scala.util.{Try, Success, Failure}
-
+import scala.util.{Failure, Success, Try}
 import cats.data._
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
@@ -164,6 +163,7 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit def catsLawsArbitraryForReaderWriterStateT[F[_]: Applicative, E, L, S, A](implicit F: Arbitrary[(E, S) => F[(L, S, A)]]): Arbitrary[ReaderWriterStateT[F, E, L, S, A]] =
     Arbitrary(F.arbitrary.map(ReaderWriterStateT(_)))
+
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {
