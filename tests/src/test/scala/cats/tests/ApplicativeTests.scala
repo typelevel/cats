@@ -4,7 +4,7 @@ package tests
 import cats.Applicative
 
 
-class ApplicativeTests extends CatsSuite {
+class ApplicativeCheck extends CatsSuite {
 
   test("Applicative#traverse is equivalent to Traverse#traverse") {
     val f: (Int) => Option[Int] = x => Some(x + 1)

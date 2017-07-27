@@ -35,9 +35,9 @@ package object data {
   type RWST[F[_], E, S, L, A] = ReaderWriterStateT[F, E, S, L, A]
   val RWST = ReaderWriterStateT
 
-  type ReaderWriterState[E, S, L, A] = ReaderWriterStateT[Eval, E, S, L, A]
+  type ReaderWriterState[E, L, S, A] = ReaderWriterStateT[Eval, E, L, S, A]
   object ReaderWriterState extends RWSFunctions
 
-  type RWS[E, S, L, A] = ReaderWriterState[E, S, L, A]
+  type RWS[E, L, S, A] = ReaderWriterState[E, L, S, A]
   val RWS = ReaderWriterState
 }

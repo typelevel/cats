@@ -6,8 +6,8 @@ import cats.syntax.show._
 import scala.annotation.tailrec
 
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
-  implicit val catsStdInstancesForStream: TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] =
-    new TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] {
+  implicit val catsStdInstancesForStream: Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
+    new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
 
@@ -34,16 +34,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
           if (s.isEmpty) lb else f(s.head, Eval.defer(foldRight(s.tail, lb)(f)))
         }
 
-      def traverseFilter[G[_], A, B](fa: Stream[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] = {
-        // We use foldRight to avoid possible stack overflows. Since
-        // we don't want to return a Eval[_] instance, we call .value
-        // at the end.
-        foldRight(fa, Always(G.pure(Stream.empty[B]))){ (a, lgsb) =>
-          G.map2Eval(f(a), lgsb)((ob, s) => ob.fold(s)(_ #:: s))
-        }.value
-      }
-
-      override def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] = {
+      def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] = {
         // We use foldRight to avoid possible stack overflows. Since
         // we don't want to return a Eval[_] instance, we call .value
         // at the end.
@@ -117,10 +108,6 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       }
 
       override def isEmpty[A](fa: Stream[A]): Boolean = fa.isEmpty
-
-      override def filter[A](fa: Stream[A])(f: A => Boolean): Stream[A] = fa.filter(f)
-
-      override def collect[A, B](fa: Stream[A])(f: PartialFunction[A, B]): Stream[B] = fa.collect(f)
 
       override def foldM[G[_], A, B](fa: Stream[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
         def step(in: (Stream[A], B)): G[Either[(Stream[A], B), B]] = {

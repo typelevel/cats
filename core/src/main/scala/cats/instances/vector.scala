@@ -8,8 +8,8 @@ import scala.collection.immutable.VectorBuilder
 import list._
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
-  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
-    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] {
+  implicit val catsStdInstancesForVector: Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] =
+    new Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 
@@ -22,9 +22,6 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       def flatMap[A, B](fa: Vector[A])(f: A => Vector[B]): Vector[B] =
         fa.flatMap(f)
-
-      override def map2[A, B, Z](fa: Vector[A], fb: Vector[B])(f: (A, B) => Z): Vector[Z] =
-        fa.flatMap(a => fb.map(b => f(a, b)))
 
       def coflatMap[A, B](fa: Vector[A])(f: Vector[A] => B): Vector[B] = {
         @tailrec def loop(builder: VectorBuilder[B], as: Vector[A]): Vector[B] =
@@ -43,11 +40,6 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
           if (i < fa.length) f(fa(i), Eval.defer(loop(i + 1))) else lb
         Eval.defer(loop(0))
       }
-
-      def traverseFilter[G[_], A, B](fa: Vector[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
-        foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
-          G.map2Eval(f(a), lgvb)((ob, v) => ob.fold(v)(_ +: v))
-        }.value
 
       def tailRecM[A, B](a: A)(fn: A => Vector[Either[A, B]]): Vector[B] = {
         val buf = Vector.newBuilder[B]
@@ -92,10 +84,6 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         fa.exists(p)
 
       override def isEmpty[A](fa: Vector[A]): Boolean = fa.isEmpty
-
-      override def filter[A](fa: Vector[A])(f: A => Boolean): Vector[A] = fa.filter(f)
-
-      override def collect[A, B](fa: Vector[A])(f: PartialFunction[A, B]): Vector[B] = fa.collect(f)
 
       override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         Foldable[List].foldM(fa.toList, z)(f)

@@ -136,6 +136,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
       λ[FunctionK[F, FA[G, ?]]](fa => lift(f(fa)))
     }
 
+
   /**
     * Interpret this algebra into a FreeApplicative over another algebra.
     * Stack-safe.
@@ -143,9 +144,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   def flatCompile[G[_]](f: F ~> FA[G, ?]): FA[G, A] =
     foldMap(f)
 
-  /**
-    * Interpret this algebra into a Monoid
-    */
+  /** Interpret this algebra into a Monoid. */
   final def analyze[M: Monoid](f: FunctionK[F, λ[α => M]]): M =
     foldMap[Const[M, ?]](
       λ[FunctionK[F, Const[M, ?]]](x => Const(f(x)))
@@ -205,4 +204,5 @@ object FreeApplicative {
       def pure[A](a: A): FA[S, A] = Pure(a)
     }
   }
+
 }

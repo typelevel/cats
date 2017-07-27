@@ -3,7 +3,7 @@ package tests
 
 import cats.data._
 import cats.data.Validated.{Invalid, Valid}
-import cats.laws.discipline.{ApplicativeErrorTests, BitraverseTests, CartesianTests, SerializableTests, TraverseTests}
+import cats.laws.discipline._
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.SemigroupKTests
 import cats.laws.discipline.arbitrary._
