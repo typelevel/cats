@@ -1,11 +1,11 @@
 package cats
 package tests
 
-import cats.data.{StateT}
+import cats.data.{IndexedStateT, StateT}
 import org.scalacheck.Gen
 
 class MonadTest extends CatsSuite {
-  implicit val testInstance: Monad[StateT[Id, Int, ?]] = StateT.catsDataMonadForStateT[Id, Int]
+  implicit val testInstance: Monad[StateT[Id, Int, ?]] = IndexedStateT.catsDataMonadForIndexedStateT[Id, Int]
 
   val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
   val incrementAndGet: StateT[Id, Int, Int] = increment >> StateT.get

@@ -29,6 +29,9 @@ package object data {
     def tell[L](l: L): Writer[L, Unit] = WriterT.tell(l)
   }
 
+  type StateT[F[_], S, A] = IndexedStateT[F, S, S, A]
+  object StateT extends StateTFunctions
+
   type State[S, A] = StateT[Eval, S, A]
   object State extends StateFunctions
 
