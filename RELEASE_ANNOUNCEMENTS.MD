@@ -70,7 +70,6 @@ Last but not least, many thanks to the contributors that make this release possi
 * @takayuky
 * @tel
 * @TomasMikula
-* @toplecat
 * @tpolecat
 * @wedens
 * @xavier-fernandez
