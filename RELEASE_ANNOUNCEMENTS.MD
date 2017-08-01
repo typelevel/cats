@@ -1,6 +1,6 @@
-The cats maintainer team is proud to announce the cats 1.0.0-MF release. 
+The cats maintainer team is proud to announce the **cats 1.0.0-MF** release. 
 
-`MF` stands for milestone final,
+**MF** stands for *milestone final*,
 this will be the last release before cats 1.0.0-RC1 which will be followed by cats 1.0 shortly. 
 
 The main purpose/focus of this release is to offer a relatively stable API to work with prior to the official 1.0.
