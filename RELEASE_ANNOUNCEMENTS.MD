@@ -5,11 +5,10 @@ this will be the last release before cats 1.0.0-RC1 which will be followed by ca
 
 The main purpose/focus of this release is to offer a relatively stable API to work with prior to the official 1.0.
 It can be deemed as a proposal for the final cats 1.0 API. Please help test it and report any improvements/fixes
-needed. Post cats 1.0, we will keep API stable and maintain strong binary compatibility. 
+needed either in the [cats-dev gitter channel](https://gitter.im/typelevel/cats-dev) or as [github issues](https://github.com/typelevel/cats/issues/new). 
+Post cats 1.0, we will keep API stable and maintain strong binary compatibility. 
 
-1.0.0-MF has over 120 merged pull requests from 44 contributors, 21 of them for the first time.  
-
-Highlights of the new features include but not limit to:
+Highlights of the major new features include but not limit to:
 
 * [#1117](https://github.com/typelevel/cats/pull/1117): Stack safe `foldLeftM` without `Free`, by @TomasMikula 
 * [#1598](https://github.com/typelevel/cats/pull/1598): A `ReaderWriterStateT` data type, by @iravid
@@ -19,14 +18,12 @@ Highlights of the new features include but not limit to:
 * [#1178](https://github.com/typelevel/cats/pull/1178): `Is` constructor for Leibniz equality, by @tel
 * [#1748](https://github.com/typelevel/cats/pull/1748): Stack-safe `FreeAppplicative`, by @edmundnoble
 
-Overall there are  
-
-For the complete change list please go to our [release note][release note]. 
+Overall 1.0.0-MF has over 120 merged pull requests of API additions, bug fixes, documentation and misc
+improvements from 44 contributors. For the complete change list please go to the [release notes][release notes]. 
 
 ### Migration
-There are more breaking changes in this release - we want to include as many necessary API breaking changes as possible in this release 
-to reach stability. 
-Please follow the [migration guide][migration guide] from 0.9.0 in the  [release note][release note]. 
+There are more breaking changes in this release - we want to include as many necessary breaking changes as possible in this release 
+to reach stability. Please follow the [migration guide][migration guide] from 0.9.0 in the  [release notes][release notes]. 
 
 
 
@@ -89,4 +86,4 @@ Last but not least, many thanks to the contributors that make this release possi
 
 
 [migration guide]: 
-[release note]:
+[release notes]:
