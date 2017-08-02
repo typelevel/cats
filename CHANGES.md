@@ -65,6 +65,7 @@ as many breaking changes as possible in this release before we lock down the API
  * [#1598](https://github.com/typelevel/cats/pull/1598): Implement a `ReaderWriterStateT` data type . by @iravid
  * [#1706](https://github.com/typelevel/cats/pull/1706): Clean up `ReaderWriterStateT`. by @peterneyens
  * [#1594](https://github.com/typelevel/cats/pull/1594): Add `NonEmptyList#fromFoldable`. by @markus1189
+ * [#1611](https://github.com/typelevel/cats/pull/1611): Added `NonEmptyTraverse`. by @LukaJCB
  * [#1592](https://github.com/typelevel/cats/pull/1592): added instances of `BitSet` to `allInstances`. by @kailuowang
  * [#1586](https://github.com/typelevel/cats/pull/1586): Add `Applicative.unit`. by @alexandru
  * [#1584](https://github.com/typelevel/cats/pull/1584): Move arbitrary instance of `StateT` to laws. by @kailuowang
