@@ -1,4 +1,4 @@
-The cats maintainer team is proud to announce the **cats 1.0.0-MF** release. 
+The [cats](https://github.com/typelevel/cats) maintainer team is proud to announce the **cats 1.0.0-MF** release. 
 
 **MF** stands for *milestone final*,
 this will be the last release before cats 1.0.0-RC1 which will be followed by cats 1.0 shortly. 
@@ -8,7 +8,7 @@ It can be deemed as a proposal for the final cats 1.0 API. Please help test it a
 needed either in the [cats-dev gitter channel](https://gitter.im/typelevel/cats-dev) or as [github issues](https://github.com/typelevel/cats/issues/new). 
 Post cats 1.0, we will keep API stable and maintain strong binary compatibility. 
 
-Highlights of the major new features include but not limit to:
+Highlights of the major new features include but not limited to:
 
 * [#1117](https://github.com/typelevel/cats/pull/1117): Stack safe `foldLeftM` without `Free`, by @TomasMikula 
 * [#1598](https://github.com/typelevel/cats/pull/1598): A `ReaderWriterStateT` data type, by @iravid
@@ -31,7 +31,7 @@ to reach stability. Please follow the [migration guide][migration guide] from 0.
 
 Although we made many improvements to the documentation in this release, it's still by and large a WIP.
 The next release 1.0.0-RC1 will focus documentation and API refinement based on community feedback. 
-RC1 is scheduled to release in September. Unless the amount of bug fixes warrants a RC2, it's likely that
+RC1 is scheduled to be released in September. Unless the amount of bug fixes warrants a RC2, it's likely that
 we'll release cats 1.0.0 within a couple weeks after RC1. 
 
 
