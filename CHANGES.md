@@ -10,10 +10,10 @@
  
 ### To migrate from 0.9.0
 
-Apology for the number of breaking changes in this release. We are trying to include
-as many breaking changes in this release before we lock down the API. 
+We apologize for the number of breaking changes in this release. We are trying to include
+as many breaking changes as possible in this release before we lock down the API. 
   
- * `cats` no longer publish the all inclusive bundle package `"org.typelevel" % "cats"`, use `cats-core`, `cats-free`, or `cats-law` 
+ * `cats` no longer publish the all-inclusive bundle package `"org.typelevel" % "cats"`, use `cats-core`, `cats-free`, or `cats-law` 
    accordingly instead. If you need `cats.free`, use `"org.typelevel" % "cats-free"`, if you need `cats-laws` use 
    `"org.typelevel" % "cats-laws"`, if neither, use `"org.typelevel" % "cats-core"`.
  * `cats.free.Inject` is moved from `cats-free` to `cats-core` and renamed to `cats.InjectK`;
@@ -23,17 +23,17 @@ as many breaking changes in this release before we lock down the API.
    enabled syntax ops are also removed. Please use the partial unification SI-2712 fix
    instead. The easiest way might be this [sbt-plugin](https://github.com/fiadliel/sbt-partial-unification).
  *  `FunctorFilter`, `MonadCombine`, `MonadFilter`, `MonadReader`, `MonadState`, `MonadTrans`, `MonadWriter` and `TraverseFilter` are no longer in `cats`, the functionalities they provided are inhereted by the new [cats-mtl](https://github.com/edmundnoble/cats-mtl) project. Please check [here](https://github.com/edmundnoble/cats-mtl#migration-guide) for migration guide. 
- * `CartesianBuilder` (i.e. `|@|`) syntax is deprecated, use the apply syntanx on tuples instead. E.g. `(x |@| y |@| z).map(...)` should be replaced by `(x, y, z).mapN(...)`
- * The creation methods (`left`, `right`, `apply`, `pure`, etc.) in `EitherT` is improved to take less
+ * `CartesianBuilder` (i.e. `|@|`) syntax is deprecated, use the apply syntax on tuples instead. E.g. `(x |@| y |@| z).map(...)` should be replaced by `(x, y, z).mapN(...)`
+ * The creation methods (`left`, `right`, `apply`, `pure`, etc.) in `EitherT` were improved to take less
    type arguments.
- * Several `cats-core` type class instances for `cats.kernel` were moved from their compainion objects to separate traits
+ * Several `cats-core` type class instances for `cats.kernel` were moved from their companion objects to separate traits
    and thus require imports from `cats.instances.xxx._` (or the recommended `import cats.implicits._`) now. See #1659 for more details. 
  * `Free.suspend` is renamed to `Free.defer` for consistency. 
  * `traverse1_`, `intercalate1` and `sequence1_` in `Reducible` were renamed to `nonEmptyTraverse_`, `nonEmptyIntercalate` and `nonEmptySequence_` respectively. 
  * `foldLeftM` is removed from `Free`, use `foldM` on `Foldable` instead, see #1117 for detail. 
  * `iteratorFoldM` was removed from `Foldable` due to #1716
  * Apply syntax on tuple (e.g. `(x, y, z).map3(...)`)  was moved from `cats.syntax.tuple._` to `cats.syntax.apply._` and renamed to `mapN`, `contramapN` and `imapN` respectively.
- * `Split` is removed, the method `split` is moved to `Arrow`. Note that only under `CommutativeArrow` does it guarantee the non-interference between the effects. see #1567
+ * `Split` is removed, and the method `split` is moved to `Arrow`. Note that only under `CommutativeArrow` does it guarantee the non-interference between the effects. see #1567
 
  
 ### Breaking Changes:
@@ -121,7 +121,7 @@ as many breaking changes in this release before we lock down the API.
  * [#1691](https://github.com/typelevel/cats/pull/1691): Build JVM before JS on travis. by @peterneyens
  * [#1677](https://github.com/typelevel/cats/pull/1677): Update readme with the new dev channel.. by @kailuowang
  * [#1673](https://github.com/typelevel/cats/pull/1673): Use 2 workers in JVM build. by @ceedubs
- * [#1671](https://github.com/typelevel/cats/pull/1671): Fixing `Eq[Function1]` in testsJS; break JS build to separate matrix build.. by @kailuowang
+ * [#1671](https://github.com/typelevel/cats/pull/1671): Fixing `Eq[Function1]` in testsJS; break JS build to separate matrix build. by @kailuowang
  * [#1666](https://github.com/typelevel/cats/pull/1666): Use `Cogen` for arbitrary instances. by @ceedubs
  * [#1654](https://github.com/typelevel/cats/pull/1654): Update Circe URL. by @n4to4
  * [#1653](https://github.com/typelevel/cats/pull/1653): Fix typo in `FreeApplicative` doc.. by @takayuky
@@ -137,13 +137,13 @@ as many breaking changes in this release before we lock down the API.
  * [#1591](https://github.com/typelevel/cats/pull/1591): Improve test coverage. by @peterneyens
  * [#1590](https://github.com/typelevel/cats/pull/1590): Check monad laws for `Cokleisli`. by @peterneyens
  * [#1588](https://github.com/typelevel/cats/pull/1588): Docs/Tutorial -- Simplify `Kleisli` example. by @RawToast
- * [#1581](https://github.com/typelevel/cats/pull/1581): restore the alphabetical order of maintainers list.. by @kailuowang
+ * [#1581](https://github.com/typelevel/cats/pull/1581): restore the alphabetical order of maintainers list. by @kailuowang
  * [#1575](https://github.com/typelevel/cats/pull/1575): minor improvements to `tailRecM` doc. by @kailuowang
  * [#1570](https://github.com/typelevel/cats/pull/1570): fixed a paragraph order. by @kailuowang
  * [#1566](https://github.com/typelevel/cats/pull/1566): Fix mistake in documentation of `Group.remove`. by @LukaJCB
  * [#1563](https://github.com/typelevel/cats/pull/1563): Remove references of the NEL `OneAnd` alias. by @peterneyens
  * [#1561](https://github.com/typelevel/cats/pull/1561): Fix incorrect numbering in `FreeMonads` doc. by @cb372
- * [#1555](https://github.com/typelevel/cats/pull/1555): by fix scala.js badge version @xuwei-k
+ * [#1555](https://github.com/typelevel/cats/pull/1555): fix scala.js badge version. by @xuwei-k
  * [#1551](https://github.com/typelevel/cats/pull/1551): added `MonadError` and `ApplicativeError` to hierarchy diagram. by @kailuowang
  * [#1547](https://github.com/typelevel/cats/pull/1547): fix ref to non-existent dir in contributing. by @sullivan-
  * [#1546](https://github.com/typelevel/cats/pull/1546): add to `Monad` `ifM` example. by @sullivan-
