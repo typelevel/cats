@@ -17,6 +17,7 @@ Highlights of the major new features include but not limited to:
 * [#1728](https://github.com/typelevel/cats/pull/1728): `As` class which represents subtyping relationships (`Liskov`), by @stew
 * [#1178](https://github.com/typelevel/cats/pull/1178): `Is` constructor for Leibniz equality, by @tel
 * [#1748](https://github.com/typelevel/cats/pull/1748): Stack-safe `FreeAppplicative`, by @edmundnoble
+* [#1611](https://github.com/typelevel/cats/pull/1611): `NonEmptyTraverse`. by @LukaJCB
 
 Overall 1.0.0-MF has over 120 merged pull requests of API additions, bug fixes, documentation and misc
 improvements from 44 contributors. For the complete change list please go to the [release notes][release notes]. 
