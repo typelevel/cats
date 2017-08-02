@@ -38,9 +38,10 @@ functionality, you can pick-and-choose from amongst these modules
  There are several other cats modules that are in separate repos so that they can 
  maintain independent release cycles. 
  
- * [`cats-effect`](https://github.com/typelevel/cats-effect): `IO`, `Sync`, `Async` and `Effect` type classes for the cats ecosystem
+ * [`cats-effect`](https://github.com/typelevel/cats-effect): standard `IO` type together with `Sync`, `Async` and `Effect` type classes 
  * [`cats-mtl`](https://github.com/edmundnoble/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
- * [`alleycats`](https://github.com/non/alleycats): Cats instances and classes which are outlaws, miscreants, and ne'er-do-wells.
+ * [`alleycats`](https://github.com/non/alleycats): cats instances and classes which are not lawful.
+ * [`mouse`](https://github.com/benhutchison/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
  
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
