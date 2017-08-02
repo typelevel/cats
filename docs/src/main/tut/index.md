@@ -34,6 +34,13 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-laws`: Laws for testing type class instances.
  * `cats-free`: Free structures such as the free monad, and supporting type classes.
  * `cats-testkit`: lib for writing tests for typeclass instances using laws. 
+
+ There are several other cats modules that are in separate repos so that they can 
+ maintain independent release cycles. 
+ 
+ * [cats-effect](https://github.com/typelevel/cats-effect): `IO`, `Sync`, `Async` and `Effect` type classes for the cats ecosystem
+ * [cats-mtl](https://github.com/edmundnoble/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
+ * [alleycats](https://github.com/non/alleycats): Cats instances and classes which are outlaws, miscreants, and ne'er-do-wells.
  
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
@@ -92,10 +99,7 @@ language", and integrate with each other with ease.
 
 #### Generic libraries to support pure functional programming
 
- * [cats-effect](https://github.com/typelevel/cats-effect): `IO`, `Sync`, `Async` and `Effect` type classes for the cats ecosystem
- * [cats-mtl](https://github.com/edmundnoble/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
  * [Mouse](https://github.com/benhutchison/mouse): a small companion to cats that provides convenient syntax (aka extension methods)
- * [alleycats](https://github.com/non/alleycats): Cats instances and classes which are outlaws, miscreants, and ne'er-do-wells.
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
  * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers).
