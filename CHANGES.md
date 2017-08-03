@@ -167,6 +167,9 @@ as many breaking changes as possible in this release before we lock down the API
  * [#1565](https://github.com/typelevel/cats/pull/1565): added instance table to docs, enhanced typeclass diagram. by @kailuowang
  * [#1573](https://github.com/typelevel/cats/pull/1573): Add symbols to FAQ. by @zainab-ali 
  
+ 
+## Version 0.9.0
+
 > 2017 January 15
 
 The biggest user-facing change in this release is to the behavior of the `flatMap` (and related methods) provided by `EitherOps` for the standard library's `Either` for Scala 2.10 and 2.11. These methods now match the behavior of the `flatMap` on `Either` in Scala 2.12 in that they don't require the left-hand side types to match.
