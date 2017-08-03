@@ -1,6 +1,6 @@
 ## Version 1.0.0-MF
 
-> 2017 June 3
+> 2017 Aug 3
 
 `MF` stands for milestone final. This is the last non-RC release before 1.0.0.
  The main purpose/focus of this release is to offer a relatively stable API to
