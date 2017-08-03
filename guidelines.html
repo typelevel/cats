@@ -1,20 +1,68 @@
-<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body><header id="site-header"><div class="navbar-wrapper navbar-inverse"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/cats/" class="brand"><div class="icon-wrapper" style="background:url('/cats/img/navbar_brand.png') no-repeat"><span>Cats</span></div></a></div><nav class="text-right"><ul class=""><li><a href="https://github.com/typelevel/cats"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li><li><a href="api"><i class="fa fa-file-text"></i><span class="hidden-xs">Documentation</span></a></li></ul></nav></div></div><div class="jumbotron" style="background-image:url('/cats/img/jumbotron_pattern.png')"></div><div><ul class="horizontalNav">                                                               <li><a class="" href="/cats/typeclasses.html">Type Classes</a></li>  <li><a class="" href="/cats/datatypes.html">Data Types</a></li>  <li><a class="" href="/cats/resources_for_learners.html">Resources for Learners</a></li>  <li><a class="" href="/cats/faq.html">FAQ</a></li>  <li><a class="" href="/cats/contributing.html">Contributing</a></li>  <li><a class="" href="/cats/colophon.html">Colophon</a></li>  <li><a class=" active " href="/cats/guidelines.html">Guidelines</a></li> </ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><h1 id="guidelines">Guidelines</h1>
+<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>Cats</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="author" content="Typelevel contributors" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body><header id="site-header"><div class="navbar-wrapper navbar-inverse"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/cats/" class="brand"><div class="icon-wrapper" style="background:url('/cats/img/navbar_brand.png') no-repeat"><span>Cats</span></div></a></div><nav class="text-right"><ul class=""><li><a href="https://github.com/typelevel/cats"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li><li><a href="api"><i class="fa fa-file-text"></i><span class="hidden-xs">Documentation</span></a></li></ul></nav></div></div><div class="jumbotron" style="background-image:url('/cats/img/jumbotron_pattern.png')"></div><div><ul class="horizontalNav">                                                           <li><a class="" href="/cats/typeclasses.html">Type Classes</a></li>  <li><a class="" href="/cats/datatypes.html">Data Types</a></li>  <li><a class="" href="/cats/resources_for_learners.html">Resources for Learners</a></li>  <li><a class="" href="/cats/faq.html">FAQ</a></li>  <li><a class="" href="/cats/contributing.html">Contributing</a></li>  <li><a class="" href="/cats/colophon.html">Colophon</a></li>  <li><a class=" active " href="/cats/guidelines.html">Guidelines</a></li> </ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><h1 id="guidelines">Guidelines</h1>
 
 <p>All guidelines in cats should have clear justifications. There is no room for tribal wisdom in a simple library.</p>
 
 <h2 id="syntax">Syntax</h2>
 
-<h3 id="composing-implicit-conversions-in-traits">Composing Implicit Conversions in Traits</h3>
+<h3 id="a-idimplicit-syntax-conversions-hrefimplicit-syntax-conversionsa-composing-implicit-conversions-in-traits"><a id="implicit-syntax-conversions" href="#implicit-syntax-conversions"></a> Composing Implicit Conversions in Traits</h3>
 
 <p>Implicit syntax conversions provided in publicly-exposed traits should be marked final 
 so that any composition of the traits provides conversions that can all be inlined.</p>
 
-<h3 id="ops-classes">Ops Classes</h3>
+<h3 id="a-idops-classes-hrefops-classesa-ops-classes"><a id="ops-classes" href="#ops-classes"></a> Ops Classes</h3>
 
 <p>Ops classes should be marked final and extend AnyVal, to take full advantage of inlining and prevent unnecessary allocations.</p>
 
 <p>The most notable exception is the case where all of the ops in the class are provided by zero-cost macros anyway,
 for example with Simulacrum.</p>
+
+<h3 id="a-idpartially-applied-type-params-hrefpartially-applied-type-paramsa-partially-applied-type"><a id="partially-applied-type-params" href="#partially-applied-type-params"></a> Partially-Applied Type</h3>
+
+<p>In Scala, when there are multiple type parameters in a function, either scalac infers all type parameters or the user has to
+specify all of them. Often we have functions where there are one or more types that are inferable but not all of them. For example, there is helper function in <code class="highlighter-rouge">OptionT</code> that creates an <code class="highlighter-rouge">OptionT[F, A]</code> from an <code class="highlighter-rouge">A</code>. It could be written as:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="k">import</span> <span class="nn">cats.data.OptionT</span>
+</code></pre>
+</div>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">F</span><span class="k">:</span> <span class="kt">Applicative</span><span class="o">[</span><span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nc">OptionT</span><span class="o">(</span><span class="n">F</span><span class="o">.</span><span class="n">pure</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">a</span><span class="o">)))</span>
+<span class="c1">// pure: [F[_], A](a: A)(implicit F: cats.Applicative[F])cats.data.OptionT[F,A]
+</span>
+<span class="n">pure</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">Int</span><span class="o">](</span><span class="mi">1</span><span class="o">)</span>
+<span class="c1">// res0: cats.data.OptionT[List,Int] = OptionT(List(Some(1)))
+</span></code></pre>
+</div>
+
+<p>Note that the type <code class="highlighter-rouge">A</code> should’ve been given by the <code class="highlighter-rouge">a: A</code> argument, but since scalac cannot infer <code class="highlighter-rouge">F[_]</code>, the user still has to specify all type params.
+In cats, we use a technique described in
+ Rob Norris’s <a href="https://tpolecat.github.io/2015/07/30/infer.html">Kinda-Curried Type Parameters</a> to overcome this restriction of scala inference. Here is a version of the <code class="highlighter-rouge">pure</code> using this technique in cats.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">package</span> <span class="nn">cats.data</span>
+
+<span class="k">object</span> <span class="nc">OptionT</span> <span class="o">{</span>
+
+  <span class="k">private</span><span class="o">[</span><span class="kt">data</span><span class="o">]</span> <span class="k">final</span> <span class="k">class</span> <span class="nc">PurePartiallyApplied</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">val</span> <span class="n">dummy</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="k">extends</span> <span class="nc">AnyVal</span> <span class="o">{</span>
+    <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">value</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">F</span><span class="k">:</span> <span class="kt">Applicative</span><span class="o">[</span><span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
+      <span class="nc">OptionT</span><span class="o">(</span><span class="n">F</span><span class="o">.</span><span class="n">pure</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">value</span><span class="o">)))</span>
+  <span class="o">}</span>
+
+  <span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span><span class="k">:</span> <span class="kt">PurePartiallyApplied</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">PurePartiallyApplied</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>We introduced an intermediate or, as the name suggested, type parameter partially applied type <code class="highlighter-rouge">PurePartiallyApplied</code> to divide the function into two steps: the first step is a construction of the partially applied type, for which the type <code class="highlighter-rouge">F[_]</code> is given by the user; the second step is the <code class="highlighter-rouge">apply</code> method inside partially applied type, for which the <code class="highlighter-rouge">A</code> can be inferred from the argument. Now we can write:</p>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">OptionT</span><span class="o">.</span><span class="n">pure</span><span class="o">[</span><span class="kt">List</span><span class="o">](</span><span class="mi">1</span><span class="o">)</span>
+<span class="c1">// res1: cats.data.OptionT[List,Int] = OptionT(List(Some(1)))
+</span></code></pre>
+</div>
+
+<p>The user doesn’t need to specify the type <code class="highlighter-rouge">A</code> which is given by the parameter.</p>
+
+<p>You probably noticed that there is a <code class="highlighter-rouge">val dummy: Boolean</code> in the <code class="highlighter-rouge">PurePartiallyApplied</code> class. This is a trick we used
+to make this intermediate class a <a href="http://docs.scala-lang.org/overviews/core/value-classes.html">Value Class</a> so that there is no cost of allocation, i.e. at runtime, it doesn’t create an instance of <code class="highlighter-rouge">PurePartiallyApplied</code>. We also hide this partially applied class by making it package private and placing it inside an object.</p>
 
 <h4 id="todo">TODO:</h4>
 <p>Once we drop 2.10 support, AnyVal-extending class constructor parameters can be marked as private.</p>

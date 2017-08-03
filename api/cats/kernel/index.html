@@ -323,6 +323,12 @@ type.">
                           OrderFunctions
                         </a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="OrderToOrderingConversion.html" title=""></a>
+                        <a href="OrderToOrderingConversion.html" title="">
+                          OrderToOrderingConversion
+                        </a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="PartialOrder$.html" title=""></a>
                         <a class="trait" href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A."></a>
                         <a href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A.">
@@ -553,7 +559,7 @@ whose combine operation is commutative.</p>
       <span class="symbol">
         <a title="ADT encoding the possible results of a comparison" href="Comparison.html">
               <span class="name">Comparison</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">ADT encoding the possible results of a comparison</p>
@@ -572,7 +578,7 @@ whose combine operation is commutative.</p>
         <a title="A type class used to determine equality between 2 instances of the same
 type." href="Eq.html">
               <span class="name">Eq</span>
-            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">A type class used to determine equality between 2 instances of the same
@@ -717,6 +723,24 @@ false     true        &gt; 0     (corresponds to x &gt; y)</p><p>By the totality
       </span>
       
       
+    </li><li name="cats.kernel.OrderToOrderingConversion" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="OrderToOrderingConversionextendsAnyRef"></a><a id="OrderToOrderingConversion:OrderToOrderingConversion"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/index.html#OrderToOrderingConversionextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="OrderToOrderingConversion.html">
+              <span class="name">OrderToOrderingConversion</span>
+            </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      
     </li><li name="cats.kernel.PartialOrder" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="PartialOrder[A]extendsAnywithEq[A]"></a><a id="PartialOrder[A]:PartialOrder[A]"></a>
       <span class="permalink">
@@ -776,7 +800,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="A semigroup is any set A with an associative operation (combine)." href="Semigroup.html">
               <span class="name">Semigroup</span>
-            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">A semigroup is any set <code>A</code> with an associative operation (<code>combine</code>).</p>
@@ -860,7 +884,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="Band$.html">
               <span class="name">Band</span>
-            </a><span class="result"> extends <a href="SemigroupFunctions.html" class="extype" name="cats.kernel.SemigroupFunctions">SemigroupFunctions</a>[<a href="Band.html" class="extype" name="cats.kernel.Band">Band</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="SemigroupFunctions.html" class="extype" name="cats.kernel.SemigroupFunctions">SemigroupFunctions</a>[<a href="Band.html" class="extype" name="cats.kernel.Band">Band</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -878,7 +902,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="BoundedSemilattice$.html">
               <span class="name">BoundedSemilattice</span>
-            </a><span class="result"> extends <a href="SemilatticeFunctions.html" class="extype" name="cats.kernel.SemilatticeFunctions">SemilatticeFunctions</a>[<a href="BoundedSemilattice.html" class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="SemilatticeFunctions.html" class="extype" name="cats.kernel.SemilatticeFunctions">SemilatticeFunctions</a>[<a href="BoundedSemilattice.html" class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -896,7 +920,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="CommutativeGroup$.html">
               <span class="name">CommutativeGroup</span>
-            </a><span class="result"> extends <a href="GroupFunctions.html" class="extype" name="cats.kernel.GroupFunctions">GroupFunctions</a>[<a href="CommutativeGroup.html" class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="GroupFunctions.html" class="extype" name="cats.kernel.GroupFunctions">GroupFunctions</a>[<a href="CommutativeGroup.html" class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -914,7 +938,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="CommutativeMonoid$.html">
               <span class="name">CommutativeMonoid</span>
-            </a><span class="result"> extends <a href="MonoidFunctions.html" class="extype" name="cats.kernel.MonoidFunctions">MonoidFunctions</a>[<a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="MonoidFunctions.html" class="extype" name="cats.kernel.MonoidFunctions">MonoidFunctions</a>[<a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -932,7 +956,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="CommutativeSemigroup$.html">
               <span class="name">CommutativeSemigroup</span>
-            </a><span class="result"> extends <a href="SemigroupFunctions.html" class="extype" name="cats.kernel.SemigroupFunctions">SemigroupFunctions</a>[<a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="SemigroupFunctions.html" class="extype" name="cats.kernel.SemigroupFunctions">SemigroupFunctions</a>[<a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -950,7 +974,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="Comparison$.html">
               <span class="name">Comparison</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -968,7 +992,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="Eq$.html">
               <span class="name">Eq</span>
-            </a><span class="result"> extends <a href="EqFunctions.html" class="extype" name="cats.kernel.EqFunctions">EqFunctions</a>[<a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="EqFunctions.html" class="extype" name="cats.kernel.EqFunctions">EqFunctions</a>[<a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -986,7 +1010,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="Group$.html">
               <span class="name">Group</span>
-            </a><span class="result"> extends <a href="GroupFunctions.html" class="extype" name="cats.kernel.GroupFunctions">GroupFunctions</a>[<a href="Group.html" class="extype" name="cats.kernel.Group">Group</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="GroupFunctions.html" class="extype" name="cats.kernel.GroupFunctions">GroupFunctions</a>[<a href="Group.html" class="extype" name="cats.kernel.Group">Group</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -1004,7 +1028,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="Monoid$.html">
               <span class="name">Monoid</span>
-            </a><span class="result"> extends <a href="MonoidFunctions.html" class="extype" name="cats.kernel.MonoidFunctions">MonoidFunctions</a>[<a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="MonoidFunctions.html" class="extype" name="cats.kernel.MonoidFunctions">MonoidFunctions</a>[<a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -1022,7 +1046,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="Order$.html">
               <span class="name">Order</span>
-            </a><span class="result"> extends <a href="OrderFunctions.html" class="extype" name="cats.kernel.OrderFunctions">OrderFunctions</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="OrderFunctions.html" class="extype" name="cats.kernel.OrderFunctions">OrderFunctions</a>[<a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -1040,7 +1064,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="PartialOrder$.html">
               <span class="name">PartialOrder</span>
-            </a><span class="result"> extends <a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a>[<a href="PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a>[<a href="PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -1058,7 +1082,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="Semigroup$.html">
               <span class="name">Semigroup</span>
-            </a><span class="result"> extends <a href="SemigroupFunctions.html" class="extype" name="cats.kernel.SemigroupFunctions">SemigroupFunctions</a>[<a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="SemigroupFunctions.html" class="extype" name="cats.kernel.SemigroupFunctions">SemigroupFunctions</a>[<a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -1076,7 +1100,7 @@ false     true        = 1.0     (corresponds to x &gt; y)
       <span class="symbol">
         <a title="" href="Semilattice$.html">
               <span class="name">Semilattice</span>
-            </a><span class="result"> extends <a href="SemilatticeFunctions.html" class="extype" name="cats.kernel.SemilatticeFunctions">SemilatticeFunctions</a>[<a href="Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="SemilatticeFunctions.html" class="extype" name="cats.kernel.SemilatticeFunctions">SemilatticeFunctions</a>[<a href="Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

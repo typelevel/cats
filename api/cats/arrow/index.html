@@ -108,8 +108,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
     </li><li class="current-entities indented2">
                         <a class="object" href="Arrow$.html" title=""></a>
-                        <a class="trait" href="Arrow.html" title=""></a>
-                        <a href="Arrow.html" title="">
+                        <a class="trait" href="Arrow.html" title="Must obey the laws defined in cats.laws.ArrowLaws."></a>
+                        <a href="Arrow.html" title="Must obey the laws defined in cats.laws.ArrowLaws.">
                           Arrow
                         </a>
                       </li><li class="current-entities indented2">
@@ -123,6 +123,14 @@
                         <a class="trait" href="Choice.html" title=""></a>
                         <a href="Choice.html" title="">
                           Choice
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="CommutativeArrow$.html" title=""></a>
+                        <a class="trait" href="CommutativeArrow.html" title="In a Commutative Arrow F[_, _], the split operation (or ***) is commutative,
+which means that there is non-interference between the effect of the paired arrows."></a>
+                        <a href="CommutativeArrow.html" title="In a Commutative Arrow F[_, _], the split operation (or ***) is commutative,
+which means that there is non-interference between the effect of the paired arrows.">
+                          CommutativeArrow
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Compose$.html" title=""></a>
@@ -139,12 +147,6 @@ of type A to B."></a>
 in the same manner that function A =&gt; B is a morphism from values
 of type A to B.">
                           FunctionK
-                        </a>
-                      </li><li class="current-entities indented2">
-                        <a class="object" href="Split$.html" title=""></a>
-                        <a class="trait" href="Split.html" title=""></a>
-                        <a href="Split.html" title="">
-                          Split
                         </a>
                       </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="data"></a><a id="data:data"></a>
@@ -336,9 +338,9 @@ of type A to B.">
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="cats.arrow.Arrow" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Arrow[F[_,_]]extendsSplit[F]withStrong[F]withCategory[F]withSerializable"></a><a id="Arrow[F[_,_]]:Arrow[F]"></a>
+      <a id="Arrow[F[_,_]]extendsCategory[F]withStrong[F]withSerializable"></a><a id="Arrow[F[_,_]]:Arrow[F]"></a>
       <span class="permalink">
-      <a href="../../cats/arrow/index.html#Arrow[F[_,_]]extendsSplit[F]withStrong[F]withCategory[F]withSerializable" title="Permalink">
+      <a href="../../cats/arrow/index.html#Arrow[F[_,_]]extendsCategory[F]withStrong[F]withSerializable" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -347,12 +349,12 @@ of type A to B.">
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="Arrow.html">
+        <a title="Must obey the laws defined in cats.laws.ArrowLaws." href="Arrow.html">
               <span class="name">Arrow</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Split.html" class="extype" name="cats.arrow.Split">Split</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Must obey the laws defined in cats.laws.ArrowLaws.</p>
     </li><li name="cats.arrow.Category" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Category[F[_,_]]extendsCompose[F]withSerializable"></a><a id="Category[F[_,_]]:Category[F]"></a>
       <span class="permalink">
@@ -367,7 +369,7 @@ of type A to B.">
       <span class="symbol">
         <a title="Must obey the laws defined in cats.laws.CategoryLaws." href="Category.html">
               <span class="name">Category</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Category.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Category.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Must obey the laws defined in cats.laws.CategoryLaws.</p>
@@ -385,10 +387,32 @@ of type A to B.">
       <span class="symbol">
         <a title="" href="Choice.html">
               <span class="name">Choice</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Choice.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Choice.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
+    </li><li name="cats.arrow.CommutativeArrow" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="CommutativeArrow[F[_,_]]extendsArrow[F]withSerializable"></a><a id="CommutativeArrow[F[_,_]]:CommutativeArrow[F]"></a>
+      <span class="permalink">
+      <a href="../../cats/arrow/index.html#CommutativeArrow[F[_,_]]extendsArrow[F]withSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="In a Commutative Arrow F[_, _], the split operation (or ***) is commutative,
+which means that there is non-interference between the effect of the paired arrows." href="CommutativeArrow.html">
+              <span class="name">CommutativeArrow</span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">In a Commutative Arrow F[_, _], the split operation (or <code>***</code>) is commutative,
+which means that there is non-interference between the effect of the paired arrows.</p><div class="fullcomment"><div class="comment cmt"><p>In a Commutative Arrow F[_, _], the split operation (or <code>***</code>) is commutative,
+which means that there is non-interference between the effect of the paired arrows.</p><p>Must obey the laws in CommutativeArrowLaws
+</p></div></div>
     </li><li name="cats.arrow.Compose" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Compose[F[_,_]]extendsAnywithSerializable"></a><a id="Compose[F[_,_]]:Compose[F]"></a>
       <span class="permalink">
@@ -403,7 +427,7 @@ of type A to B.">
       <span class="symbol">
         <a title="Must obey the laws defined in cats.laws.ComposeLaws." href="Compose.html">
               <span class="name">Compose</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Must obey the laws defined in cats.laws.ComposeLaws.</p>
@@ -423,7 +447,7 @@ of type A to B.">
 in the same manner that function A =&gt; B is a morphism from values
 of type A to B." href="FunctionK.html">
               <span class="name">FunctionK</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt"><code>FunctionK[F[_], G[_]]</code> is a functor transformation from <code>F</code> to <code>G</code>
@@ -433,24 +457,6 @@ in the same manner that function <code>A =&gt; B</code> is a morphism from value
 of type <code>A</code> to <code>B</code>.
 An easy way to create a FunctionK instance is to use the Polymorphic
 lambdas provided by non/kind-projector v0.9+. E.g.</p><pre><span class="kw">val</span> listToOption = λ[FunctionK[<span class="std">List</span>, <span class="std">Option</span>]](_.headOption)</pre></div></div>
-    </li><li name="cats.arrow.Split" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Split[F[_,_]]extendsCompose[F]withSerializable"></a><a id="Split[F[_,_]]:Split[F]"></a>
-      <span class="permalink">
-      <a href="../../cats/arrow/index.html#Split[F[_,_]]extendsCompose[F]withSerializable" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="Split.html">
-              <span class="name">Split</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Split.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      
-      
     </li></ol>
             </div>
 
@@ -473,7 +479,7 @@ lambdas provided by non/kind-projector v0.9+. E.g.</p><pre><span class="kw">val<
       <span class="symbol">
         <a title="" href="Arrow$.html">
               <span class="name">Arrow</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -491,7 +497,7 @@ lambdas provided by non/kind-projector v0.9+. E.g.</p><pre><span class="kw">val<
       <span class="symbol">
         <a title="" href="Category$.html">
               <span class="name">Category</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -509,7 +515,25 @@ lambdas provided by non/kind-projector v0.9+. E.g.</p><pre><span class="kw">val<
       <span class="symbol">
         <a title="" href="Choice$.html">
               <span class="name">Choice</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.arrow.CommutativeArrow" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CommutativeArrow"></a><a id="CommutativeArrow:CommutativeArrow"></a>
+      <span class="permalink">
+      <a href="../../cats/arrow/index.html#CommutativeArrow" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="CommutativeArrow$.html">
+              <span class="name">CommutativeArrow</span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -527,7 +551,7 @@ lambdas provided by non/kind-projector v0.9+. E.g.</p><pre><span class="kw">val<
       <span class="symbol">
         <a title="" href="Compose$.html">
               <span class="name">Compose</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -545,25 +569,7 @@ lambdas provided by non/kind-projector v0.9+. E.g.</p><pre><span class="kw">val<
       <span class="symbol">
         <a title="" href="FunctionK$.html">
               <span class="name">FunctionK</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      
-      
-    </li><li name="cats.arrow.Split" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Split"></a><a id="Split:Split"></a>
-      <span class="permalink">
-      <a href="../../cats/arrow/index.html#Split" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="Split$.html">
-              <span class="name">Split</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

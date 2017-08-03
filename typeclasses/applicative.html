@@ -100,7 +100,7 @@ and compose them. From there we can generalize to working with any N number of i
 </div>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">int</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">i</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">c</span><span class="k">:</span> <span class="kt">Char</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">f</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">c</span><span class="o">))</span> <span class="c1">// what now?
-// res3: Option[Char =&gt; Double] = Some($$Lambda$3101/1355509365@4414cb6d)
+// res3: Option[Char =&gt; Double] = Some($$Lambda$3440/1701008852@20a6bf2b)
 </span></code></pre>
 </div>
 
@@ -274,10 +274,10 @@ function is applied to compose them.</p>
 </code></pre>
 </div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="o">(</span><span class="n">o1</span> <span class="o">|@|</span> <span class="n">o2</span><span class="o">).</span><span class="n">map</span><span class="o">((</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">i</span><span class="o">.</span><span class="n">toString</span> <span class="o">++</span> <span class="n">s</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="o">(</span><span class="n">o1</span><span class="o">,</span> <span class="n">o2</span><span class="o">).</span><span class="n">mapN</span><span class="o">((</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">i</span><span class="o">.</span><span class="n">toString</span> <span class="o">++</span> <span class="n">s</span><span class="o">)</span>
 <span class="c1">// res16: Option[String] = Some(42hello)
 </span>
-<span class="o">(</span><span class="n">o1</span> <span class="o">|@|</span> <span class="n">o2</span><span class="o">).</span><span class="n">tupled</span>
+<span class="o">(</span><span class="n">o1</span><span class="o">,</span> <span class="n">o2</span><span class="o">).</span><span class="n">tupled</span>
 <span class="c1">// res17: Option[(Int, String)] = Some((42,hello))
 </span></code></pre>
 </div>
@@ -285,7 +285,7 @@ function is applied to compose them.</p>
 <p>The second expects the effects in a tuple and works by enriching syntax on top of the existing
 <code class="highlighter-rouge">TupleN</code> types.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="o">(</span><span class="n">o1</span><span class="o">,</span> <span class="n">o2</span><span class="o">).</span><span class="n">map2</span><span class="o">((</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">i</span><span class="o">.</span><span class="n">toString</span> <span class="o">++</span> <span class="n">s</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="o">(</span><span class="n">o1</span><span class="o">,</span> <span class="n">o2</span><span class="o">).</span><span class="n">mapN</span><span class="o">((</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">i</span><span class="o">.</span><span class="n">toString</span> <span class="o">++</span> <span class="n">s</span><span class="o">)</span>
 <span class="c1">// res18: Option[String] = Some(42hello)
 </span></code></pre>
 </div>

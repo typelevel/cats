@@ -114,6 +114,22 @@ After adding the plugin to your project, you could write the <code class="highli
   <span class="n">λ</span><span class="o">[</span><span class="kt">FunctionK</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">ErrorOr</span><span class="o">]](</span><span class="k">_</span><span class="o">.</span><span class="n">headOption</span><span class="o">.</span><span class="n">toRight</span><span class="o">(</span><span class="s">"ERROR: the list was empty!"</span><span class="o">))</span>
 </code></pre>
 </div>
+
+<h2 id="natural-transformation">Natural Transformation</h2>
+
+<p>In category theory, a <a href="https://ncatlab.org/nlab/show/natural+transformation">natural transformation</a> provides a morphism between Functors while preserving the internal structure. It’s one of the most fundamental notions of category theory.</p>
+
+<p>If we have two Functors <code class="highlighter-rouge">F</code> and <code class="highlighter-rouge">G</code>, <code class="highlighter-rouge">FunctionK[F, G]</code> is a natural transformation via parametricity. That is, given <code class="highlighter-rouge">fk: FunctionK[F, G]</code>, for all functions <code class="highlighter-rouge">A =&gt; B</code> and all <code class="highlighter-rouge">fa: F[A]</code> the following are equivalent:</p>
+<pre><code class="language-Scala">fk(F.map(fa)(f)) &lt;-&gt; G.map(fk(fa))(f)
+</code></pre>
+
+<p>We don’t need to write a law to test the implementation of the <code class="highlighter-rouge">fk</code> for the above to be true. It’s automatically given by parametricity.</p>
+
+<p>Thus natural transformation can be implemented in terms of <code class="highlighter-rouge">FunctionK</code>. This is why a parametric polymorphic function <code class="highlighter-rouge">FunctionK[F, G]</code> is sometimes referred as a natural transformation. However, they are two different concepts that are not isomorphic.</p>
+
+<p>For more details, Bartosz Milewski has written a great blog post titled
+<a href="https://bartoszmilewski.com/2014/09/22/parametricity-money-for-nothing-and-theorems-for-free/">“Parametricity: Money for Nothing and Theorems for Free”</a>.</p>
+
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

@@ -237,53 +237,177 @@ lists and collapse in parallel, such as</p>
 <p>Cats provides laws for type classes via the <code class="highlighter-rouge">kernel-laws</code> and <code class="highlighter-rouge">laws</code> modules which makes law checking
 type class instances easy.</p>
 
-<h2 id="typeclass-hierarchy">Typeclass Hierarchy</h2>
-<p><img src="http://g.gravizo.com/g?
-  digraph G {
-    size =&quot;6,6&quot;;
-    edge [dir=back]
-    node [shape=box,style=&quot;rounded&quot;]
-    Functor [group=g2]
-    Apply [group=g2]
-    Applicative [group=g2]
-    Monad [group=g2]
-    SemigroupK [group=g1]
-    MonoidK [group=g1]
-    Alternative [group=g1]
-    MonadFilter [group=g1]
-    MonadCombine [group=g1]
-    Invariant [group=g4]
-    Contravariant [group=g4]
-    CoflatMap [group=g5]
-    Comonad [group=g5]
-    Bimonad [group=g5]
-    MonadError [group=g6]
-    ApplicativeError [group=g6]
-    Functor -&gt; Apply -&gt; Applicative -&gt; Monad -&gt; MonadFilter -&gt; MonadCombine
-    Applicative -&gt; Alternative -&gt; MonadCombine
-    MonoidK -&gt; Alternative
-    Functor -&gt; CoflatMap
-    Applicative -&gt; ApplicativeError -&gt; MonadError
-    Monad -&gt; MonadError
-    subgraph cluster_s3{
-      Invariant -&gt; Contravariant
-      graph[style=dotted,label=&quot;functor&quot;]
-    }
-    Invariant -&gt; Functor
-    subgraph cluster_s2{
-      SemigroupK -&gt; MonoidK
-      graph[style=dotted]
-    }
-    subgraph cluster_s1{
-      CoflatMap -&gt; Comonad -&gt; Bimonad
-      graph[style=dotted]
-    }
-    Monad -&gt; Bimonad
-    Apply -&gt; FlatMap -&gt; Monad
-    Foldable -&gt; Traverse
-    Functor -&gt; Traverse
-    Foldable -&gt; Reducible
-  }" alt="Typeclass hierarchy" /></p>
+<h2 id="type-classes-in-cats">Type classes in cats</h2>
+
+<p><img src="https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg" alt="infographic" />
+From <a href="https://github.com/tpolecat/cats-infographic">cats-infographic by @tpolecat</a>.</p>
+
+<h2 id="incomplete-type-class-instances-in-cats">Incomplete type class instances in cats</h2>
+
+<p>Originally from <a href="https://gist.github.com/alexknvl/d63508ddb6a728015ace53cb70a1fd5d">@alexknvl</a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th style="text-align: center">Functor</th>
+      <th style="text-align: center">Apply</th>
+      <th style="text-align: center">Applicative</th>
+      <th style="text-align: center">Monad</th>
+      <th style="text-align: center">MonoidK</th>
+      <th style="text-align: center">ApplicativeError</th>
+      <th style="text-align: center">MonadError</th>
+      <th style="text-align: center">CoflatMap</th>
+      <th style="text-align: center">Comonad</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Id[A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+    </tr>
+    <tr>
+      <td>Eval[A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+    </tr>
+    <tr>
+      <td>Option[A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+    </tr>
+    <tr>
+      <td>Const[K, A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔ (<code class="highlighter-rouge">K:Monoid</code>)</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+    </tr>
+    <tr>
+      <td>Either[E, A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+    </tr>
+    <tr>
+      <td>List[A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+    </tr>
+    <tr>
+      <td>NonEmptyList[A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+    </tr>
+    <tr>
+      <td>Stream[A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+    </tr>
+    <tr>
+      <td>Map[K, A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+    </tr>
+    <tr>
+      <td>Validated[E, A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔ (<code class="highlighter-rouge">E: Semigroup</code>)</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✔ (<code class="highlighter-rouge">E: Semigroup</code>)</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+    </tr>
+    <tr>
+      <td>Reader[E, A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+    </tr>
+    <tr>
+      <td>Writer[E, A]</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔ (<code class="highlighter-rouge">E:Monoid</code>)</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✗</td>
+      <td style="text-align: center">✔</td>
+      <td style="text-align: center">✗</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="further-reading">Further reading</h2>
 <ul>

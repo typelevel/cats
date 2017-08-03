@@ -143,6 +143,18 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
     </li><li class="current-entities indented2">
+                        <a class="object" href="As$.html" title=""></a>
+                        <a class="class" href="As.html" title="As substitutability: A better &lt;:&lt;"></a>
+                        <a href="As.html" title="As substitutability: A better &lt;:&lt;">
+                          As
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="AsInstances.html" title=""></a>
+                        <a href="AsInstances.html" title="">
+                          AsInstances
+                        </a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Is$.html" title=""></a>
                         <a class="class" href="Is.html" title="A value of A Is B is proof that the types A and B are the same."></a>
                         <a href="Is.html" title="A value of A Is B is proof that the types A and B are the same.">
@@ -318,7 +330,101 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.evidence.Is" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="cats.evidence.&lt;~&lt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;~&lt;[-A,+B]=cats.evidence.As[A,B]"></a><a id="&lt;~&lt;[-A,+B]:&lt;~&lt;[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#&lt;~&lt;[-A,+B]=cats.evidence.As[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less$tilde$less" class="name">&lt;~&lt;</span><span class="tparams">[<span name="A">-A</span>, <span name="B">+B</span>]</span><span class="result alias"> = <a href="As.html" class="extype" name="cats.evidence.As">As</a>[<span class="extype" name="cats.evidence.&lt;~&lt;.A">A</span>, <span class="extype" name="cats.evidence.&lt;~&lt;.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A convenient type alias for As, this declares that A is a
+subtype of B, and should be able to be  a B is
+expected.</p>
+    </li><li name="cats.evidence.===" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="===[A,B]=cats.evidence.Is[A,B]"></a><a id="===[A,B]:===[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#===[A,B]=cats.evidence.Is[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result alias"> = <a href="Is.html" class="extype" name="cats.evidence.Is">Is</a>[<span class="extype" name="cats.evidence.===.A">A</span>, <span class="extype" name="cats.evidence.===.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A convenient type alias for Is, which declares that A is the same
+type as B.</p>
+    </li><li name="cats.evidence.&gt;~&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&gt;~&gt;[+B,-A]=cats.evidence.As[A,B]"></a><a id="&gt;~&gt;[+B,-A]:&gt;~&gt;[B,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#&gt;~&gt;[+B,-A]=cats.evidence.As[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater$tilde$greater" class="name">&gt;~&gt;</span><span class="tparams">[<span name="B">+B</span>, <span name="A">-A</span>]</span><span class="result alias"> = <a href="As.html" class="extype" name="cats.evidence.As">As</a>[<span class="extype" name="cats.evidence.&gt;~&gt;.A">A</span>, <span class="extype" name="cats.evidence.&gt;~&gt;.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A flipped alias, for those used to their arrows running left to right
+</p>
+    </li><li name="cats.evidence.As" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="As[-A,+B]extendsSerializable"></a><a id="As[-A,+B]:As[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#As[-A,+B]extendsSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="As substitutability: A better &lt;:&lt;" href="As.html">
+              <span class="name">As</span>
+            </a><span class="tparams">[<span name="A">-A</span>, <span name="B">+B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">As substitutability: A better <code>&lt;:&lt;</code></p><div class="fullcomment"><div class="comment cmt"><p>As substitutability: A better <code>&lt;:&lt;</code></p><p>This class exists to aid in the capture proof of subtyping
+relationships, which can be applied in other context to widen other
+type</p><p><code>A As B</code> holds whenever <code>A</code> could be used in any negative context
+that expects a <code>B</code>.  (e.g. if you could pass an <code>A</code> into any
+function that expects a <code>B</code> as input.)</p><p>This code was ported directly from scalaz to cats using this version from scalaz:
+https://github.com/scalaz/scalaz/blob/a89b6d63/core/src/main/scala/scalaz/As.scala</p><p> The original contribution to scalaz came from Jason Zaugg
+</p></div></div>
+    </li><li name="cats.evidence.AsInstances" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AsInstancesextendsAnyRef"></a><a id="AsInstances:AsInstances"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#AsInstancesextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="AsInstances.html">
+              <span class="name">AsInstances</span>
+            </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      
+    </li><li name="cats.evidence.Is" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Is[A,B]extendsSerializable"></a><a id="Is[A,B]:Is[A,B]"></a>
       <span class="permalink">
       <a href="../../cats/evidence/index.html#Is[A,B]extendsSerializable" title="Permalink">
@@ -332,7 +438,7 @@
       <span class="symbol">
         <a title="A value of A Is B is proof that the types A and B are the same." href="Is.html">
               <span class="name">Is</span>
-            </a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">A value of <code>A Is B</code> is proof that the types <code>A</code> and <code>B</code> are the same.</p><div class="fullcomment"><div class="comment cmt"><p>A value of <code>A Is B</code> is proof that the types <code>A</code> and <code>B</code> are the same. More
@@ -356,7 +462,30 @@ erroneous) coercions.</p><p><code>A Is B</code> is also known as Leibniz equalit
         <span class="name">Leibniz</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result alias"> = <a href="Is.html" class="extype" name="cats.evidence.Is">Is</a>[<span class="extype" name="cats.evidence.Leibniz.A">A</span>, <span class="extype" name="cats.evidence.Leibniz.B">B</span>]</span>
       </span>
       
+      <p class="shortcomment cmt">This type level equality represented by <code>Is</code> is referred to as
+&quot;Leibniz equality&quot;, and it had the name &quot;Leibniz&quot; in the scalaz
+ https://en.wikipedia.org/wiki/Gottfried_Wilhelm_Leibniz
+</p>
+    </li><li name="cats.evidence.Liskov" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Liskov[-A,+B]=cats.evidence.As[A,B]"></a><a id="Liskov[-A,+B]:Liskov[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#Liskov[-A,+B]=cats.evidence.As[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Liskov</span><span class="tparams">[<span name="A">-A</span>, <span name="B">+B</span>]</span><span class="result alias"> = <a href="As.html" class="extype" name="cats.evidence.As">As</a>[<span class="extype" name="cats.evidence.Liskov.A">A</span>, <span class="extype" name="cats.evidence.Liskov.B">B</span>]</span>
+      </span>
       
+      <p class="shortcomment cmt">The property that a value of type A can be used in a context
+expecting a B if A &lt;~&lt; B is refered to as the &quot;Liskov
+Substitution Principal&quot;, which is named for Barbara Liskov:
+https://en.wikipedia.org/wiki/Barbara_Liskov
+</p>
     </li></ol>
             </div>
 
@@ -365,7 +494,25 @@ erroneous) coercions.</p><p><code>A Is B</code> is also known as Leibniz equalit
         <div class="values members">
               <h3>Value Members</h3>
               <ol>
-                <li name="cats.evidence.Is" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+                <li name="cats.evidence.As" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="As"></a><a id="As:As"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#As" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="As$.html">
+              <span class="name">As</span>
+            </a><span class="result"> extends <a href="AsInstances.html" class="extype" name="cats.evidence.AsInstances">AsInstances</a> with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.evidence.Is" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Is"></a><a id="Is:Is"></a>
       <span class="permalink">
       <a href="../../cats/evidence/index.html#Is" title="Permalink">
@@ -379,7 +526,7 @@ erroneous) coercions.</p><p><code>A Is B</code> is also known as Leibniz equalit
       <span class="symbol">
         <a title="" href="Is$.html">
               <span class="name">Is</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
