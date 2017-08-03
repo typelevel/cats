@@ -86,5 +86,5 @@ Last but not least, many thanks to the contributors that make this release possi
 
 
 
-[migration guide]: 
-[release notes]:
+[migration guide]: https://github.com/typelevel/cats/blob/master/CHANGES.md#to-migrate-from-090 
+[release notes]: https://github.com/typelevel/cats/releases/tag/v1.0.0-MF
