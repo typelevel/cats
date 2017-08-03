@@ -13,7 +13,7 @@
 We apologize for the number of breaking changes in this release. We are trying to include
 as many breaking changes as possible in this release before we lock down the API. 
   
- * `cats` no longer publish the all-inclusive bundle package `"org.typelevel" % "cats"`, use `cats-core`, `cats-free`, or `cats-law` 
+ * `cats` no longer publishes the all-inclusive bundle package `"org.typelevel" % "cats"`, use `cats-core`, `cats-free`, or `cats-law` 
    accordingly instead. If you need `cats.free`, use `"org.typelevel" % "cats-free"`, if you need `cats-laws` use 
    `"org.typelevel" % "cats-laws"`, if neither, use `"org.typelevel" % "cats-core"`.
  * `cats.free.Inject` is moved from `cats-free` to `cats-core` and renamed to `cats.InjectK`;
@@ -24,6 +24,7 @@ as many breaking changes as possible in this release before we lock down the API
    instead. The easiest way might be this [sbt-plugin](https://github.com/fiadliel/sbt-partial-unification).
  *  `FunctorFilter`, `MonadCombine`, `MonadFilter`, `MonadReader`, `MonadState`, `MonadTrans`, `MonadWriter` and `TraverseFilter` are no longer in `cats`, the functionalities they provided are inhereted by the new [cats-mtl](https://github.com/edmundnoble/cats-mtl) project. Please check [here](https://github.com/edmundnoble/cats-mtl#migration-guide) for migration guide. 
  * `CartesianBuilder` (i.e. `|@|`) syntax is deprecated, use the apply syntax on tuples instead. E.g. `(x |@| y |@| z).map(...)` should be replaced by `(x, y, z).mapN(...)`
+ * Apply syntax on tuple (e.g. `(x, y, z).map3(...)`)  was moved from `cats.syntax.tuple._` to `cats.syntax.apply._` and renamed to `mapN`, `contramapN` and `imapN` respectively.
  * The creation methods (`left`, `right`, `apply`, `pure`, etc.) in `EitherT` were improved to take less
    type arguments.
  * Several `cats-core` type class instances for `cats.kernel` were moved from their companion objects to separate traits
@@ -32,7 +33,6 @@ as many breaking changes as possible in this release before we lock down the API
  * `traverse1_`, `intercalate1` and `sequence1_` in `Reducible` were renamed to `nonEmptyTraverse_`, `nonEmptyIntercalate` and `nonEmptySequence_` respectively. 
  * `foldLeftM` is removed from `Free`, use `foldM` on `Foldable` instead, see #1117 for detail. 
  * `iteratorFoldM` was removed from `Foldable` due to #1716
- * Apply syntax on tuple (e.g. `(x, y, z).map3(...)`)  was moved from `cats.syntax.tuple._` to `cats.syntax.apply._` and renamed to `mapN`, `contramapN` and `imapN` respectively.
  * `Split` is removed, and the method `split` is moved to `Arrow`. Note that only under `CommutativeArrow` does it guarantee the non-interference between the effects. see #1567
 
  
@@ -59,7 +59,7 @@ as many breaking changes as possible in this release before we lock down the API
  * [#1707](https://github.com/typelevel/cats/pull/1707): Add NEL/NEV one. by @peterneyens 
  * [#1680](https://github.com/typelevel/cats/pull/1680): ~~`MonadTrans` instance for RWST and make `MonadTrans` serializable.~~ by @wedens
  * [#1658](https://github.com/typelevel/cats/pull/1658): Add `Validated.validNel`. by @edmundnoble
- * [#1651](https://github.com/typelevel/cats/pull/1651): Add state method to `MonadState`. by @oskoi
+ * [#1651](https://github.com/typelevel/cats/pull/1651): ~~Add state method to `MonadState`.~~ by @oskoi
  * [#1628](https://github.com/typelevel/cats/pull/1628): add init and size methods to `NonEmptyList`. by @jtjeferreira
  * [#1612](https://github.com/typelevel/cats/pull/1612): Add ensureWith to `Validated` and `Either` (#1550). by @LukaJCB
  * [#1598](https://github.com/typelevel/cats/pull/1598): Implement a `ReaderWriterStateT` data type . by @iravid
