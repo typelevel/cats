@@ -323,7 +323,9 @@ class IndexedStateTTests extends CatsSuite {
     implicit val G = ListWrapper.monad
     implicit val F = ListWrapper.alternative
     val SA = IndexedStateT.catsDataAlternativeForIndexedStateT[ListWrapper, Int](ListWrapper.monad, ListWrapper.alternative)
+
     checkAll("IndexedStateT[ListWrapper, Int, Int, Int]", AlternativeTests[IndexedStateT[ListWrapper, Int, Int, ?]](SA).monoidK[Int])
+    checkAll("IndexedStateT[ListWrapper, Int, Int, Int]", ApplicativeTests[IndexedStateT[ListWrapper, Int, Int, ?]](SA).applicative[Int, Int, Int])
     checkAll("Alternative[IndexedStateT[ListWrapper, Int, Int, ?]]", SerializableTests.serializable(SA))
 
     Monad[IndexedStateT[ListWrapper, Int, Int, ?]]
