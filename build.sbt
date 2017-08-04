@@ -44,7 +44,7 @@ lazy val commonSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.10.0" % "compile-time",
-    "org.typelevel" %%% "machinist" % "0.6.1",
+    "org.typelevel" %%% "machinist" % "0.6.2",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")
   ),
