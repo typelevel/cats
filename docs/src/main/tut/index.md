@@ -100,7 +100,6 @@ language", and integrate with each other with ease.
 
 #### General purpose libraries to support pure functional programming
 
- * [Mouse](https://github.com/benhutchison/mouse): a small companion to cats that provides convenient syntax (aka extension methods)
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
  * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers).
