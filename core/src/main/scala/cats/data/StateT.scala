@@ -155,13 +155,7 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
     inspect(identity)
 }
 
-object IndexedStateT extends IndexedStateTInstances {
-  def apply[F[_], SA, SB, A](f: SA => F[(SB, A)])(implicit F: Applicative[F]): IndexedStateT[F, SA, SB, A] =
-    new IndexedStateT(F.pure(f))
-
-  def applyF[F[_], SA, SB, A](runF: F[SA => F[(SB, A)]]): IndexedStateT[F, SA, SB, A] =
-    new IndexedStateT(runF)
-
+private[data] trait CommonStateTConstructors {
   def pure[F[_], S, A](a: A)(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.pure((s, a)))
 
@@ -174,14 +168,22 @@ object IndexedStateT extends IndexedStateTInstances {
   def inspectF[F[_], S, A](f: S => F[A])(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.map(f(s))(a => (s, a)))
 
+  def get[F[_], S](implicit F: Applicative[F]): IndexedStateT[F, S, S, S] =
+    IndexedStateT(s => F.pure((s, s)))
+}
+
+object IndexedStateT extends CommonStateTConstructors with IndexedStateTInstances {
+  def apply[F[_], SA, SB, A](f: SA => F[(SB, A)])(implicit F: Applicative[F]): IndexedStateT[F, SA, SB, A] =
+    new IndexedStateT(F.pure(f))
+
+  def applyF[F[_], SA, SB, A](runF: F[SA => F[(SB, A)]]): IndexedStateT[F, SA, SB, A] =
+    new IndexedStateT(runF)
+
   def modify[F[_], SA, SB](f: SA => SB)(implicit F: Applicative[F]): IndexedStateT[F, SA, SB, Unit] =
     IndexedStateT(sa => F.pure((f(sa), ())))
 
   def modifyF[F[_], SA, SB](f: SA => F[SB])(implicit F: Applicative[F]): IndexedStateT[F, SA, SB, Unit] =
     IndexedStateT(s => F.map(f(s))(s => (s, ())))
-
-  def get[F[_], S](implicit F: Applicative[F]): IndexedStateT[F, S, S, S] =
-    IndexedStateT(s => F.pure((s, s)))
 
   def set[F[_], SA, SB](sb: SB)(implicit F: Applicative[F]): IndexedStateT[F, SA, SB, Unit] =
     IndexedStateT(_ => F.pure((sb, ())))
@@ -190,33 +192,18 @@ object IndexedStateT extends IndexedStateTInstances {
     IndexedStateT(_ => F.map(fsb)(s => (s, ())))
 }
 
-private[data] abstract class StateTFunctions {
+private[data] abstract class StateTFunctions extends CommonStateTConstructors {
   def apply[F[_], S, A](f: S => F[(S, A)])(implicit F: Applicative[F]): StateT[F, S, A] =
     IndexedStateT(f)
 
   def applyF[F[_], S, A](runF: F[S => F[(S, A)]]): StateT[F, S, A] =
     IndexedStateT.applyF(runF)
 
-  def pure[F[_], S, A](a: A)(implicit F: Applicative[F]): StateT[F, S, A] =
-    apply(s => F.pure((s, a)))
-
-  def lift[F[_], S, A](fa: F[A])(implicit F: Applicative[F]): StateT[F, S, A] =
-    apply(s => F.map(fa)(a => (s, a)))
-
-  def inspect[F[_], S, A](f: S => A)(implicit F: Applicative[F]): StateT[F, S, A] =
-    apply(s => F.pure((s, f(s))))
-
-  def inspectF[F[_], S, A](f: S => F[A])(implicit F: Applicative[F]): StateT[F, S, A] =
-    apply(s => F.map(f(s))(a => (s, a)))
-
   def modify[F[_], S](f: S => S)(implicit F: Applicative[F]): StateT[F, S, Unit] =
     apply(sa => F.pure((f(sa), ())))
 
   def modifyF[F[_], S](f: S => F[S])(implicit F: Applicative[F]): StateT[F, S, Unit] =
     apply(s => F.map(f(s))(s => (s, ())))
-
-  def get[F[_], S](implicit F: Applicative[F]): StateT[F, S, S] =
-    apply(s => F.pure((s, s)))
 
   def set[F[_], S](s: S)(implicit F: Applicative[F]): StateT[F, S, Unit] =
     apply(_ => F.pure((s, ())))
