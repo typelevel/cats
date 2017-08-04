@@ -86,7 +86,7 @@ Many projects integrate with cats. By sharing the same set of
 type classes, instances and data types, projects can speak the same "cats
 language", and integrate with each other with ease.
 
-#### Generic libraries to support pure functional programming
+#### General purpose libraries to support pure functional programming
 
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
  * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
