@@ -93,6 +93,18 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
 
   /**
    * Like [[transform]], but allows the context to change from `F` to `G`.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> type ErrorOr[A] = Either[String, A]
+   * scala> val xError: IndexedStateT[ErrorOr, Int, Int, Int] = IndexedStateT.get
+   * scala> val xOpt: IndexedStateT[Option, Int, Int, Int] = xError.transformF(_.toOption)
+   * scala> val input = 5
+   * scala> xError.run(input)
+   * res0: ErrorOr[(Int, Int)] = Right((5,5))
+   * scala> xOpt.run(5)
+   * res1: Option[(Int, Int)] = Some((5,5))
+   * }}}
    */
   def transformF[G[_], B, SC](f: F[(SB, A)] => G[(SC, B)])(implicit F: FlatMap[F], G: Applicative[G]): IndexedStateT[G, SA, SC, B] =
     IndexedStateT(s => f(run(s)))
