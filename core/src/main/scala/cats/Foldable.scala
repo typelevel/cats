@@ -327,6 +327,56 @@ import simulacrum.typeclass
     }.value
 
   /**
+    * Check whether at least one element satisfies the predicate.
+    *
+    * If there are no elements, the result is `false`.
+    *
+    * All effects are sequenced, i.e. later effects aren't skipped even if a `true` is encountered.
+    *
+    * For example:
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val F = Foldable[List]
+    * scala> F.existsM(List(1,2,3,4))(n => Option(n <= 4))
+    * res0: Option[Boolean] = Some(true)
+    *
+    * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) Option(true) else Option(false))
+    * res1: Option[Boolean] = Some(true)
+    *
+    * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) Option(true) else None)
+    * res2: Option[Boolean] = None
+    * }}}
+    */
+  def existsM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] =
+    foldM(fa, false)((z, a) => G.map(p(a))(b => b || z))
+
+  /**
+    * Check whether all elements satisfy the predicate.
+    *
+    * If there are no elements, the result is `true`.
+    *
+    * All effects are sequenced, i.e. later effects aren't skipped even if a `false` is encountered.
+    *
+    * For example:
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val F = Foldable[List]
+    * scala> F.forallM(List(1,2,3,4))(n => Option(n <= 4))
+    * res0: Option[Boolean] = Some(true)
+    *
+    * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) Option(true) else Option(false))
+    * res1: Option[Boolean] = Some(false)
+    *
+    * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) Option(false) else None)
+    * res2: Option[Boolean] = None
+    * }}}
+    */
+  def forallM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] =
+    foldM(fa, true)((z, a) => G.map(p(a))(b => b && z))
+
+  /**
    * Convert F[A] to a List[A].
    */
   def toList[A](fa: F[A]): List[A] =
