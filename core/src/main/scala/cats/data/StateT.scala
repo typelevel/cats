@@ -214,7 +214,12 @@ private[data] abstract class StateTFunctions extends CommonStateTConstructors {
 
 private[data] sealed trait IndexedStateTInstances extends IndexedStateTInstances1 {
   implicit def catsDataAlternativeForIndexedStateT[F[_], S](implicit FM: Monad[F], FA: Alternative[F]): Alternative[StateT[F, S, ?]] =
-    new IndexedStateTAlternative[F, S] { implicit def F = FM; implicit def G = FA }
+    new IndexedStateTAlternative[F, S] with IndexedStateTMonad[F, S] {
+      implicit def F = FM
+      implicit def G = FA
+
+      override def pure[A](a: A): IndexedStateT[F, S, S, A] = super[IndexedStateTMonad].pure(a)
+    }
 }
 
 private[data] sealed trait IndexedStateTInstances1 extends IndexedStateTInstances2 {
@@ -299,13 +304,13 @@ private[data] sealed trait IndexedStateTMonad[F[_], S] extends Monad[IndexedStat
     with IndexedStateTFunctor[F, S, S] {
   implicit def F: Monad[F]
 
-  def pure[A](a: A): StateT[F, S, A] =
+  def pure[A](a: A): IndexedStateT[F, S, S, A] =
     IndexedStateT.pure(a)
 
-  def flatMap[A, B](fa: StateT[F, S, A])(f: A => StateT[F, S, B]): StateT[F, S, B] =
+  def flatMap[A, B](fa: IndexedStateT[F, S, S, A])(f: A => IndexedStateT[F, S, S, B]): IndexedStateT[F, S, S, B] =
     fa.flatMap(f)
 
-  def tailRecM[A, B](a: A)(f: A => StateT[F, S, Either[A, B]]): StateT[F, S, B] =
+  def tailRecM[A, B](a: A)(f: A => IndexedStateT[F, S, S, Either[A, B]]): IndexedStateT[F, S, S, B] =
     IndexedStateT[F, S, S, B](s => F.tailRecM[(S, A), (S, B)]((s, a)) {
       case (s, a) => F.map(f(a).run(s)) { case (s, ab) => ab.bimap((s, _), (s, _)) }
     })
@@ -331,14 +336,6 @@ private[data] sealed trait IndexedStateTAlternative[F[_], S] extends Alternative
 
   def empty[A]: IndexedStateT[F, S, S, A] =
     IndexedStateT.lift[F, S, A](G.empty[A])(G)
-
-  override def ap[A, B](ff: IndexedStateT[F, S, S, A => B])(fa: IndexedStateT[F, S, S, A]): IndexedStateT[F, S, S, B] =
-    IndexedStateT[F, S, S, B]((s: S) =>
-      F.flatMap(ff.run(s)) { sab =>
-        val (sn, f) = sab
-        F.map(fa.run(sn)) { case (snn, a) => (snn, f(a)) }
-      }
-    )
 }
 
 private[data] sealed trait IndexedStateTMonadError[F[_], S, E] extends IndexedStateTMonad[F, S]
