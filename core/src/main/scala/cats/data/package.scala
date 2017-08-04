@@ -29,6 +29,12 @@ package object data {
     def tell[L](l: L): Writer[L, Unit] = WriterT.tell(l)
   }
 
+  /**
+   * `StateT[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S`
+   * argument and produces an `A` value wrapped in `F`. However, it also produces
+   * an `S` value representing the updated state (which is wrapped in the `F`
+   * context along with the `A` value.
+   */
   type StateT[F[_], S, A] = IndexedStateT[F, S, S, A]
   object StateT extends StateTFunctions
 
