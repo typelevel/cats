@@ -39,7 +39,7 @@ functionality, you can pick-and-choose from amongst these modules
  maintain independent release cycles. 
  
  * [`cats-effect`](https://github.com/typelevel/cats-effect): standard `IO` type together with `Sync`, `Async` and `Effect` type classes 
- * [`cats-mtl`](https://github.com/edmundnoble/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
+ * [`cats-mtl`](https://github.com/typelevel/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
  * [`alleycats`](https://github.com/non/alleycats): cats instances and classes which are not lawful.
  * [`mouse`](https://github.com/benhutchison/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
  
