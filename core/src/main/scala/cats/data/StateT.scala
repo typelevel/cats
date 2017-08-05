@@ -214,12 +214,7 @@ private[data] abstract class StateTFunctions extends CommonStateTConstructors {
 
 private[data] sealed trait IndexedStateTInstances extends IndexedStateTInstances1 {
   implicit def catsDataAlternativeForIndexedStateT[F[_], S](implicit FM: Monad[F], FA: Alternative[F]): Alternative[StateT[F, S, ?]] =
-    new IndexedStateTAlternative[F, S] with IndexedStateTMonad[F, S] {
-      implicit def F = FM
-      implicit def G = FA
-
-      override def pure[A](a: A): IndexedStateT[F, S, S, A] = super[IndexedStateTMonad].pure(a)
-    }
+    new IndexedStateTAlternative[F, S] { implicit def F = FM; implicit def G = FA }
 }
 
 private[data] sealed trait IndexedStateTInstances1 extends IndexedStateTInstances2 {
@@ -324,15 +319,11 @@ private[data] sealed trait IndexedStateTSemigroupK[F[_], SA, SB] extends Semigro
     IndexedStateT(s => G.combineK(x.run(s), y.run(s)))
 }
 
-private[data] sealed trait IndexedStateTAlternative[F[_], S] extends Alternative[IndexedStateT[F, S, S, ?]] with IndexedStateTFunctor[F, S, S] {
-  implicit def F: Monad[F]
+private[data] sealed trait IndexedStateTAlternative[F[_], S] extends Alternative[IndexedStateT[F, S, S, ?]] with IndexedStateTMonad[F, S] {
   def G: Alternative[F]
 
   def combineK[A](x: IndexedStateT[F, S, S, A], y: IndexedStateT[F, S, S, A]): IndexedStateT[F, S, S, A] =
     IndexedStateT[F, S, S, A](s => G.combineK(x.run(s), y.run(s)))(G)
-
-  def pure[A](a: A): IndexedStateT[F, S, S, A] =
-    IndexedStateT.pure[F, S, A](a)(G)
 
   def empty[A]: IndexedStateT[F, S, S, A] =
     IndexedStateT.lift[F, S, A](G.empty[A])(G)
