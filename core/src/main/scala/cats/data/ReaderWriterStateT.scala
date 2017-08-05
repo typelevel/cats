@@ -1,59 +1,84 @@
 package cats
 package data
 
-import cats.functor.{ Contravariant, Profunctor }
+import cats.functor.{ Bifunctor, Contravariant, Profunctor }
 import cats.syntax.either._
 
 /**
- * Represents a stateful computation in a context `F[_]`, over state `S`, with an initial environment `E`,
- * an accumulated log `L` and a result `A`.
+ * Represents a stateful computation in a context `F[_]`, from state `SA` to state `SB`,
+ *  with an initial environment `E`, an accumulated log `L` and a result `A`.
  *
  * In other words, it is a pre-baked stack of `[[ReaderT]][F, E, A]`, `[[WriterT]][F, L, A]`
- * and `[[StateT]][F, S, A]`.
+ * and `[[IndexedStateT]][F, SA, SB, A]`.
  */
-final class ReaderWriterStateT[F[_], E, L, S, A](val runF: F[(E, S) => F[(L, S, A)]]) extends Serializable {
+final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA) => F[(L, SB, A)]]) extends Serializable {
 
   /**
-   * Modify the initial environment using `f`.
+   * Modify the initial state using `f`.
    */
-  def contramap[E0](f: E0 => E)(implicit F: Functor[F]): ReaderWriterStateT[F, E0, L, S, A] =
-    ReaderWriterStateT.applyF {
-      F.map(runF) { rwsa =>
-        (e0: E0, s: S) => rwsa(f(e0), s)
+  def contramap[S0](f: S0 => SA)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, S0, SB, A] =
+    IndexedReaderWriterStateT.applyF {
+      F.map(runF) { rwsfa =>
+        (e: E, s0: S0) => rwsfa(e, f(s0))
       }
     }
 
   /**
-   * Alias for [[contramap]].
+   * Modify the initial environment using `f`.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> type Env = String
+   * scala> type GlobalEnv = (Int, Env)
+   * scala> type Log = List[String]
+   * scala> val xLocal: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, Int] = IndexedReaderWriterStateT.get
+   * scala> val xGlobal: IndexedReaderWriterStateT[Option, GlobalEnv, Log, Int, Int, Int] = xLocal.local(_._2)
+   * }}}
    */
-  def local[EE](f: EE => E)(implicit F: Functor[F]): ReaderWriterStateT[F, EE, L, S, A] =
-    contramap(f)
+  def local[EE](f: EE => E)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, EE, L, SA, SB, A] =
+    IndexedReaderWriterStateT.applyF {
+      F.map(runF) { rwsa =>
+        (ee: EE, sa: SA) => rwsa(f(ee), sa)
+      }
+    }
 
   /**
    * Modify the result of the computation using `f`.
    */
-  def map[B](f: A => B)(implicit F: Functor[F]): ReaderWriterStateT[F, E, L, S, B] =
+  def map[B](f: A => B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
     transform { (l, s, a) => (l, s, f(a)) }
+
+  /**
+   * Modify the resulting state using `f` and the resulting value using `g`.
+   */
+  def bimap[SC, B](f: SB => SC, g: A => B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SC, B] =
+    transform { (l, s, a) => (l, f(s), g(a)) }
+
+  /**
+   * Modify the initial state using `f` and the resulting state using `g`.
+   */
+  def dimap[S0, S1](f: S0 => SA)(g: SB => S1)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, S0, S1, A] =
+    contramap(f).modify(g)
 
   /**
    * Modify the written log value using `f`.
    */
-  def mapWritten[LL](f: L => LL)(implicit F: Functor[F]): ReaderWriterStateT[F, E, LL, S, A] =
+  def mapWritten[LL](f: L => LL)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, LL, SA, SB, A] =
     transform { (l, s, a) => (f(l), s, a) }
 
   /**
    * Modify the result of the computation by feeding it into `f`, threading the state
    * through the resulting computation and combining the log values.
    */
-  def flatMap[B](f: A => ReaderWriterStateT[F, E, L, S, B])(
-    implicit F: FlatMap[F], L: Semigroup[L]): ReaderWriterStateT[F, E, L, S, B] =
-    ReaderWriterStateT.applyF {
+  def flatMap[SC, B](f: A => IndexedReaderWriterStateT[F, E, L, SB, SC, B])(
+    implicit F: FlatMap[F], L: Semigroup[L]): IndexedReaderWriterStateT[F, E, L, SA, SC, B] =
+    IndexedReaderWriterStateT.applyF {
       F.map(runF) { rwsfa =>
-        (e: E, s0: S) =>
-          F.flatMap(rwsfa(e, s0)) { case (la, sa, a) =>
+        (e: E, sa: SA) =>
+          F.flatMap(rwsfa(e, sa)) { case (la, sb, a) =>
             F.flatMap(f(a).runF) { rwsfb =>
-              F.map(rwsfb(e, sa)) { case (lb, sb, b) =>
-                (L.combine(la, lb), sb, b)
+              F.map(rwsfb(e, sb)) { case (lb, sc, b) =>
+                (L.combine(la, lb), sc, b)
               }
             }
           }
@@ -63,12 +88,12 @@ final class ReaderWriterStateT[F[_], E, L, S, A](val runF: F[(E, S) => F[(L, S, 
   /**
    * Like [[map]], but allows the mapping function to return an effectful value.
    */
-  def flatMapF[B](faf: A => F[B])(implicit F: FlatMap[F]): ReaderWriterStateT[F, E, L, S, B] =
-    ReaderWriterStateT.applyF {
+  def flatMapF[B](faf: A => F[B])(implicit F: FlatMap[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
+    IndexedReaderWriterStateT.applyF {
       F.map(runF) { rwsfa =>
-        (e: E, s: S) =>
-          F.flatMap(rwsfa(e, s)) { case (l, s, a) =>
-            F.map(faf(a))((l, s, _))
+        (e: E, sa: SA) =>
+          F.flatMap(rwsfa(e, sa)) { case (l, sb, a) =>
+            F.map(faf(a))((l, sb, _))
           }
       }
     }
@@ -76,145 +101,223 @@ final class ReaderWriterStateT[F[_], E, L, S, A](val runF: F[(E, S) => F[(L, S, 
   /**
    * Transform the resulting log, state and value using `f`.
    */
-  def transform[LL, B](f: (L, S, A) => (LL, S, B))(implicit F: Functor[F]): ReaderWriterStateT[F, E, LL, S, B] =
-    ReaderWriterStateT.applyF {
+  def transform[LL, SC, B](f: (L, SB, A) => (LL, SC, B))(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, LL, SA, SC, B] =
+    IndexedReaderWriterStateT.applyF {
       F.map(runF) { rwsfa =>
-        (e: E, s: S) => F.map(rwsfa(e, s)) { case (l, s, a) =>
-          val (ll, sb, b) = f(l, s, a)
-          (ll, sb, b)
+        (e: E, s: SA) => F.map(rwsfa(e, s)) { case (l, sb, a) =>
+          val (ll, sc, b) = f(l, sb, a)
+          (ll, sc, b)
         }
       }
     }
 
   /**
    * Like [[transform]], but allows the context to change from `F` to `G`.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> type ErrorOr[A] = Either[String, A]
+   * scala> type Env = String
+   * scala> type Log = List[String]
+   * scala> val xError: IndexedReaderWriterStateT[ErrorOr, Env, Log, Int, Int, Int] = IndexedReaderWriterStateT.get
+   * scala> val xOpt: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, Int] = xError.transformF(_.toOption)
+   * scala> val input = 5
+   * scala> xError.run("env", input)
+   * res0: ErrorOr[(Log, Int, Int)] = Right((List(),5,5))
+   * scala> xOpt.run("env", 5)
+   * res1: Option[(Log, Int, Int)] = Some((List(),5,5))
+   * }}}
    */
-  def transformF[G[_], LL, B](f: F[(L, S, A)] => G[(LL, S, B)])(
-    implicit F: Monad[F], G: Applicative[G]): ReaderWriterStateT[G, E, LL, S, B] =
-    ReaderWriterStateT.apply((e, s) => f(run(e, s)))
+  def transformF[G[_], LL, SC, B](f: F[(L, SB, A)] => G[(LL, SC, B)])(
+    implicit F: Monad[F], G: Applicative[G]): IndexedReaderWriterStateT[G, E, LL, SA, SC, B] =
+    IndexedReaderWriterStateT.apply((e, s) => f(run(e, s)))
 
 
   /**
    * Modify the resulting state.
    */
-  def modify(f: S => S)(implicit F: Functor[F]): ReaderWriterStateT[F, E, L, S, A] =
-    transform { (l, s, a) => (l, f(s), a) }
+  def modify[SC](f: SB => SC)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SC, A] =
+    transform { (l, sb, a) => (l, f(sb), a) }
 
   /**
    * Inspect a value from the input state, without modifying the state.
    */
-  def inspect[B](f: S => B)(implicit F: Functor[F]): ReaderWriterStateT[F, E, L, S, B] =
-    transform { (l, s, a) => (l, s, f(s)) }
+  def inspect[B](f: SB => B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
+    transform { (l, sb, a) => (l, sb, f(sb)) }
 
   /**
    * Get the input state, without modifying it.
    */
-  def get(implicit F: Functor[F]): ReaderWriterStateT[F, E, L, S, S] =
+  def get(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, SB] =
     inspect(identity)
 
   /**
    * Add a value to the log.
    */
-  def tell(l: L)(implicit F: Functor[F], L: Semigroup[L]): ReaderWriterStateT[F, E, L, S, A] =
+  def tell(l: L)(implicit F: Functor[F], L: Semigroup[L]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
     mapWritten(L.combine(_, l))
 
   /**
    * Retrieve the value written to the log.
    */
-  def written(implicit F: Functor[F]): ReaderWriterStateT[F, E, L, S, L] =
-    transform { (l, s, a) => (l, s, l) }
+  def written(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, L] =
+    transform { (l, sb, a) => (l, sb, l) }
 
   /**
    * Clear the log.
    */
-  def reset(implicit F: Functor[F], L: Monoid[L]): ReaderWriterStateT[F, E, L, S, A] =
+  def reset(implicit F: Functor[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
     mapWritten(_ => L.empty)
 
   /**
    * Run the computation using the provided initial environment and state.
    */
-  def run(env: E, initial: S)(implicit F: Monad[F]): F[(L, S, A)] =
+  def run(env: E, initial: SA)(implicit F: Monad[F]): F[(L, SB, A)] =
     F.flatMap(runF)(_.apply(env, initial))
 
   /**
    * Run the computation using the provided environment and an empty state.
    */
-  def runEmpty(env: E)(implicit F: Monad[F], S: Monoid[S]): F[(L, S, A)] =
-    run(env, S.empty)
+  def runEmpty(env: E)(implicit F: Monad[F], SA: Monoid[SA]): F[(L, SB, A)] =
+    run(env, SA.empty)
 
   /**
    * Like [[run]], but discards the final state and log.
    */
-  def runA(env: E, initial: S)(implicit F: Monad[F]): F[A] =
+  def runA(env: E, initial: SA)(implicit F: Monad[F]): F[A] =
     F.map(run(env, initial))(_._3)
 
   /**
    * Like [[run]], but discards the final value and log.
    */
-  def runS(env: E, initial: S)(implicit F: Monad[F]): F[S] =
+  def runS(env: E, initial: SA)(implicit F: Monad[F]): F[SB] =
     F.map(run(env, initial))(_._2)
 
   /**
    * Like [[run]], but discards the final state and value.
    */
-  def runL(env: E, initial: S)(implicit F: Monad[F]): F[L] =
+  def runL(env: E, initial: SA)(implicit F: Monad[F]): F[L] =
     F.map(run(env, initial))(_._1)
 
   /**
    * Like [[runEmpty]], but discards the final state and log.
    */
-  def runEmptyA(env: E)(implicit F: Monad[F], S: Monoid[S]): F[A] =
-    runA(env, S.empty)
+  def runEmptyA(env: E)(implicit F: Monad[F], SA: Monoid[SA]): F[A] =
+    runA(env, SA.empty)
 
   /**
    * Like [[runEmpty]], but discards the final value and log.
    */
-  def runEmptyS(env: E)(implicit F: Monad[F], S: Monoid[S]): F[S] =
-    runS(env, S.empty)
+  def runEmptyS(env: E)(implicit F: Monad[F], SA: Monoid[SA]): F[SB] =
+    runS(env, SA.empty)
 
   /**
    * Like [[runEmpty]], but discards the final state and value.
    */
-  def runEmptyL(env: E)(implicit F: Monad[F], S: Monoid[S]): F[L] =
-    runL(env, S.empty)
+  def runEmptyL(env: E)(implicit F: Monad[F], SA: Monoid[SA]): F[L] =
+    runL(env, SA.empty)
 }
 
-object ReaderWriterStateT extends RWSTInstances {
+private[data] sealed trait CommonIRWSTConstructors {
+  /**
+   * Return `a` and an empty log without modifying the input state.
+   */
+  def pure[F[_], E, L, S, A](a: A)(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
+    IndexedReaderWriterStateT((_, s) => F.pure((L.empty, s, a)))
+
+  /**
+   * Return an effectful `a` and an empty log without modifying the input state.
+   */
+  def lift[F[_], E, L, S, A](fa: F[A])(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
+    IndexedReaderWriterStateT((_, s) => F.map(fa)((L.empty, s, _)))
+
+  /**
+   * Inspect a value from the input state, without modifying the state.
+   */
+  def inspect[F[_], E, L, S, A](f: S => A)(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
+    IndexedReaderWriterStateT((_, s) => F.pure((L.empty, s, f(s))))
+
+  /**
+   * Like [[inspect]], but using an effectful function.
+   */
+  def inspectF[F[_], E, L, S, A](f: S => F[A])(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
+    IndexedReaderWriterStateT((_, s) => F.map(f(s))((L.empty, s, _)))
+
+  /**
+   * Set the state to `s`.
+   */
+  def set[F[_], E, L, S](s: S)(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, Unit] =
+    IndexedReaderWriterStateT((_, _) => F.pure((L.empty, s, ())))
+
+  /**
+   * Like [[set]], but using an effectful `S` value.
+   */
+  def setF[F[_], E, L, S](fs: F[S])(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, Unit] =
+    IndexedReaderWriterStateT((_, _) => F.map(fs)((L.empty, _, ())))
+
+  /**
+   * Get the provided environment, without modifying the input state.
+   */
+  def ask[F[_], E, L, S](implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, E] =
+    IndexedReaderWriterStateT((e, s) => F.pure((L.empty, s, e)))
+
+  /**
+   * Add a value to the log, without modifying the input state.
+   */
+  def tell[F[_], E, L, S](l: L)(implicit F: Applicative[F]): IndexedReaderWriterStateT[F, E, L, S, S, Unit] =
+    IndexedReaderWriterStateT((_, s) => F.pure((l, s, ())))
+
+  /**
+   * Like [[tell]], but using an effectful `L` value.
+   */
+  def tellF[F[_], E, L, S](fl: F[L])(implicit F: Applicative[F]): IndexedReaderWriterStateT[F, E, L, S, S, Unit] =
+    IndexedReaderWriterStateT((_, s) => F.map(fl)((_, s, ())))
+
+  /**
+   * Return the input state without modifying it.
+   */
+  def get[F[_], E, L, S](implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, S] =
+    IndexedReaderWriterStateT((_, s) => F.pure((L.empty, s, s)))
+}
+
+object IndexedReaderWriterStateT extends IRWSTInstances with CommonIRWSTConstructors {
+  /**
+   * Construct a new computation using the provided function.
+   */
+  def apply[F[_], E, L, SA, SB, A](runF: (E, SA) => F[(L, SB, A)])(implicit F: Applicative[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
+    new IndexedReaderWriterStateT(F.pure(runF))
+
+  /**
+   * Like [[apply]], but using a function in a context `F`.
+   */
+  def applyF[F[_], E, L, SA, SB, A](runF: F[(E, SA) => F[(L, SB, A)]]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
+    new IndexedReaderWriterStateT(runF)
+
+  /**
+   * Modify the input state using `f`.
+   */
+  def modify[F[_], E, L, SA, SB](f: SA => SB)(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, SA, SB, Unit] =
+    IndexedReaderWriterStateT((_, s) => F.pure((L.empty, f(s), ())))
+
+  /**
+   * Like [[modify]], but using an effectful function.
+   */
+  def modifyF[F[_], E, L, SA, SB](f: SA => F[SB])(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, SA, SB, Unit] =
+    IndexedReaderWriterStateT((_, s) => F.map(f(s))((L.empty, _, ())))
+}
+
+private[data] abstract class RWSTFunctions extends CommonIRWSTConstructors {
   /**
    * Construct a new computation using the provided function.
    */
   def apply[F[_], E, L, S, A](runF: (E, S) => F[(L, S, A)])(implicit F: Applicative[F]): ReaderWriterStateT[F, E, L, S, A] =
-    new ReaderWriterStateT(F.pure(runF))
+    new IndexedReaderWriterStateT(F.pure(runF))
 
   /**
    * Like [[apply]], but using a function in a context `F`.
    */
   def applyF[F[_], E, L, S, A](runF: F[(E, S) => F[(L, S, A)]]): ReaderWriterStateT[F, E, L, S, A] =
-    new ReaderWriterStateT(runF)
-
-  /**
-   * Return `a` and an empty log without modifying the input state.
-   */
-  def pure[F[_], E, L, S, A](a: A)(implicit F: Applicative[F], L: Monoid[L]): ReaderWriterStateT[F, E, L, S, A] =
-    ReaderWriterStateT((_, s) => F.pure((L.empty, s, a)))
-
-  /**
-   * Return an effectful `a` and an empty log without modifying the input state.
-   */
-  def lift[F[_], E, L, S, A](fa: F[A])(implicit F: Applicative[F], L: Monoid[L]): ReaderWriterStateT[F, E, L, S, A] =
-    ReaderWriterStateT((_, s) => F.map(fa)((L.empty, s, _)))
-
-  /**
-   * Inspect a value from the input state, without modifying the state.
-   */
-  def inspect[F[_], E, L, S, A](f: S => A)(implicit F: Applicative[F], L: Monoid[L]): ReaderWriterStateT[F, E, L, S, A] =
-    ReaderWriterStateT((_, s) => F.pure((L.empty, s, f(s))))
-
-  /**
-   * Like [[inspect]], but using an effectful function.
-   */
-  def inspectF[F[_], E, L, S, A](f: S => F[A])(implicit F: Applicative[F], L: Monoid[L]): ReaderWriterStateT[F, E, L, S, A] =
-    ReaderWriterStateT((_, s) => F.map(f(s))((L.empty, s, _)))
+    new IndexedReaderWriterStateT(runF)
 
   /**
    * Modify the input state using `f`.
@@ -227,42 +330,6 @@ object ReaderWriterStateT extends RWSTInstances {
    */
   def modifyF[F[_], E, L, S](f: S => F[S])(implicit F: Applicative[F], L: Monoid[L]): ReaderWriterStateT[F, E, L, S, Unit] =
     ReaderWriterStateT((_, s) => F.map(f(s))((L.empty, _, ())))
-
-  /**
-   * Return the input state without modifying it.
-   */
-  def get[F[_], E, L, S](implicit F: Applicative[F], L: Monoid[L]): ReaderWriterStateT[F, E, L, S, S] =
-    ReaderWriterStateT((_, s) => F.pure((L.empty, s, s)))
-
-  /**
-   * Set the state to `s`.
-   */
-  def set[F[_], E, L, S](s: S)(implicit F: Applicative[F], L: Monoid[L]): ReaderWriterStateT[F, E, L, S, Unit] =
-    ReaderWriterStateT((_, _) => F.pure((L.empty, s, ())))
-
-  /**
-   * Like [[set]], but using an effectful `S` value.
-   */
-  def setF[F[_], E, L, S](fs: F[S])(implicit F: Applicative[F], L: Monoid[L]): ReaderWriterStateT[F, E, L, S, Unit] =
-    ReaderWriterStateT((_, _) => F.map(fs)((L.empty, _, ())))
-
-  /**
-   * Get the provided environment, without modifying the input state.
-   */
-  def ask[F[_], E, L, S](implicit F: Applicative[F], L: Monoid[L]): ReaderWriterStateT[F, E, L, S, E] =
-    ReaderWriterStateT((e, s) => F.pure((L.empty, s, e)))
-
-  /**
-   * Add a value to the log, without modifying the input state.
-   */
-  def tell[F[_], E, L, S](l: L)(implicit F: Applicative[F]): ReaderWriterStateT[F, E, L, S, Unit] =
-    ReaderWriterStateT((_, s) => F.pure((l, s, ())))
-
-  /**
-   * Like [[tell]], but using an effectful `L` value.
-   */
-  def tellF[F[_], E, L, S](fl: F[L])(implicit F: Applicative[F]): ReaderWriterStateT[F, E, L, S, Unit] =
-    ReaderWriterStateT((_, s) => F.map(fl)((_, s, ())))
 }
 
 /**
@@ -318,18 +385,23 @@ private[data] abstract class RWSFunctions {
     ReaderWriterStateT.tell(l)
 }
 
-private[data] sealed trait RWSTInstances extends RWSTInstances1 {
-  implicit def catsDataProfunctorForRWST[F[_], L, S](implicit F0: Functor[F]): Profunctor[ReaderWriterStateT[F, ?, L, S, ?]] =
-    new RWSTProfunctor[F, L, S] {
+private[data] sealed trait IRWSTInstances extends IRWSTInstances1 {
+  implicit def catsDataProfunctorForIRWST[F[_], E, L, T](implicit F0: Functor[F]): Profunctor[IndexedReaderWriterStateT[F, E, L, ?, ?, T]] =
+    new IRWSTProfunctor[F, E, L, T] {
       implicit def F: Functor[F] = F0
     }
 
-  implicit def catsDataContravariantForRWST[F[_], L, S, A](implicit F0: Functor[F]): Contravariant[ReaderWriterStateT[F, ?, L, S, A]] =
-    new RWSTContravariant[F, L, S, A] {
+  implicit def catsDataBifunctorForIRWST[F[_], E, L, SA](implicit F0: Functor[F]): Bifunctor[IndexedReaderWriterStateT[F, E, L, SA, ?, ?]] =
+    new IRWSTBifunctor[F, E, L, SA] {
       implicit def F: Functor[F] = F0
     }
 
-  implicit def catsDataMonadErrorForRWST[F[_], E, L, S, R](implicit F0: MonadError[F, R], L0: Monoid[L]): MonadError[ReaderWriterStateT[F, E, L, S, ?], R] =
+  implicit def catsDataContravariantForIRWST[F[_], E, L, SB, T](implicit F0: Functor[F]): Contravariant[IndexedReaderWriterStateT[F, E, L, ?, SB, T]] =
+    new IRWSTContravariant[F, E, L, SB, T] {
+      implicit def F: Functor[F] = F0
+    }
+
+  implicit def catsDataMonadErrorForIRWST[F[_], E, L, S, R](implicit F0: MonadError[F, R], L0: Monoid[L]): MonadError[IndexedReaderWriterStateT[F, E, L, S, S, ?], R] =
     new RWSTMonadError[F, E, L, S, R] {
       implicit def F: MonadError[F, R] = F0
       implicit def L: Monoid[L] = L0
@@ -337,7 +409,7 @@ private[data] sealed trait RWSTInstances extends RWSTInstances1 {
 
 }
 
-private[data] sealed trait RWSTInstances1 extends RWSTInstances2 {
+private[data] sealed trait IRWSTInstances1 extends IRWSTInstances2 {
   implicit def catsDataMonadForRWST[F[_], E, L, S](implicit F0: Monad[F], L0: Monoid[L]): Monad[ReaderWriterStateT[F, E, L, S, ?]] =
     new RWSTMonad[F, E, L, S] {
       implicit def F: Monad[F] = F0
@@ -345,9 +417,9 @@ private[data] sealed trait RWSTInstances1 extends RWSTInstances2 {
     }
 }
 
-private[data] sealed trait RWSTInstances2 extends RWSTInstances3 {
-  implicit def catsDataAlternativeForRWST[F[_], E, L, S](
-                                                          implicit FM: Monad[F], FA: Alternative[F], L0: Monoid[L]): Alternative[ReaderWriterStateT[F, E, L, S, ?]] =
+private[data] sealed trait IRWSTInstances2 extends IRWSTInstances3 {
+  implicit def catsDataAlternativeForIRWST[F[_], E, L, S](implicit FM: Monad[F], FA: Alternative[F],
+    L0: Monoid[L]): Alternative[IndexedReaderWriterStateT[F, E, L, S, S, ?]] =
     new RWSTAlternative[F, E, L, S] {
       implicit def G: Alternative[F] = FA
       implicit def F: Monad[F] = FM
@@ -355,41 +427,49 @@ private[data] sealed trait RWSTInstances2 extends RWSTInstances3 {
     }
 }
 
-private[data] sealed trait RWSTInstances3 {
-  implicit def catsDataSemigroupKForRWST[F[_], E, L, S](
-                                                         implicit F0: Monad[F], G0: SemigroupK[F]): SemigroupK[ReaderWriterStateT[F, E, L, S, ?]] =
-    new RWSTSemigroupK[F, E, L, S] {
+private[data] sealed trait IRWSTInstances3 {
+  implicit def catsDataSemigroupKForIRWST[F[_], E, L, SA, SB](implicit F0: Monad[F],
+    G0: SemigroupK[F]): SemigroupK[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] =
+    new IRWSTSemigroupK[F, E, L, SA, SB] {
       implicit def F: Monad[F] = F0
       implicit def G: SemigroupK[F] = G0
     }
-  implicit def catsDataFunctorForRWST[F[_], E, L, S](implicit F0: Functor[F]): Functor[ReaderWriterStateT[F, E, L, S, ?]] =
-    new RWSTFunctor[F, E, L, S] {
+
+  implicit def catsDataFunctorForIRWST[F[_], E, L, SA, SB](implicit F0: Functor[F]): Functor[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] =
+    new IRWSTFunctor[F, E, L, SA, SB] {
       implicit def F: Functor[F] = F0
     }
 }
 
-private[data] sealed trait RWSTFunctor[F[_], E, L, S] extends Functor[ReaderWriterStateT[F, E, L, S, ?]] {
+private[data] sealed trait IRWSTFunctor[F[_], E, L, SA, SB] extends Functor[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] {
   implicit def F: Functor[F]
 
-  override def map[A, B](fa: ReaderWriterStateT[F, E, L, S, A])(f: A => B): ReaderWriterStateT[F, E, L, S, B] =
+  override def map[A, B](fa: IndexedReaderWriterStateT[F, E, L, SA, SB, A])(f: A => B): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
     fa.map(f)
 }
 
-private[data] sealed trait RWSTContravariant[F[_], L, S, T] extends Contravariant[ReaderWriterStateT[F, ?, L, S, T]] {
+private[data] sealed trait IRWSTContravariant[F[_], E, L, SB, T] extends Contravariant[IndexedReaderWriterStateT[F, E, L, ?, SB, T]] {
   implicit def F: Functor[F]
 
-  override def contramap[A, B](fa: ReaderWriterStateT[F, A, L, S, T])(f: B => A): ReaderWriterStateT[F, B, L, S, T] =
+  override def contramap[A, B](fa: IndexedReaderWriterStateT[F, E, L, A, SB, T])(f: B => A): IndexedReaderWriterStateT[F, E, L, B, SB, T] =
     fa.contramap(f)
 }
 
-private[data] sealed trait RWSTProfunctor[F[_], L, S] extends Profunctor[ReaderWriterStateT[F, ?, L, S, ?]] {
+private[data] sealed trait IRWSTProfunctor[F[_], E, L, T] extends Profunctor[IndexedReaderWriterStateT[F, E, L, ?, ?, T]] {
   implicit def F: Functor[F]
 
-  override def dimap[A, B, C, D](fab: ReaderWriterStateT[F, A, L, S, B])(f: C => A)(g: B => D): ReaderWriterStateT[F, C, L, S, D] =
-    fab.contramap(f).map(g)
+  override def dimap[A, B, C, D](fab: IndexedReaderWriterStateT[F, E, L, A, B, T])(f: C => A)(g: B => D): IndexedReaderWriterStateT[F, E, L, C, D, T] =
+    fab.dimap(f)(g)
 }
 
-private[data] sealed trait RWSTMonad[F[_], E, L, S] extends Monad[ReaderWriterStateT[F, E, L, S, ?]] with RWSTFunctor[F, E, L, S] {
+private[data] sealed trait IRWSTBifunctor[F[_], E, L, SA] extends Bifunctor[IndexedReaderWriterStateT[F, E, L, SA, ?, ?]] {
+  implicit def F: Functor[F]
+
+  override def bimap[A, B, C, D](fab: IndexedReaderWriterStateT[F, E, L, SA, A, B])(f: A => C, g: B => D): IndexedReaderWriterStateT[F, E, L, SA, C, D] =
+    fab.bimap(f, g)
+}
+
+private[data] sealed trait RWSTMonad[F[_], E, L, S] extends Monad[ReaderWriterStateT[F, E, L, S, ?]] with IRWSTFunctor[F, E, L, S, S] {
   implicit def F: Monad[F]
   implicit def L: Monoid[L]
 
@@ -409,19 +489,20 @@ private[data] sealed trait RWSTMonad[F[_], E, L, S] extends Monad[ReaderWriterSt
     }
 }
 
-private[data] sealed trait RWSTSemigroupK[F[_], E, L, S] extends SemigroupK[ReaderWriterStateT[F, E, L, S, ?]] {
+private[data] sealed trait IRWSTSemigroupK[F[_], E, L, SA, SB] extends SemigroupK[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] {
   implicit def F: Monad[F]
   implicit def G: SemigroupK[F]
 
-  def combineK[A](x: ReaderWriterStateT[F, E, L, S, A], y: ReaderWriterStateT[F, E, L, S, A]): ReaderWriterStateT[F, E, L, S, A] =
-    ReaderWriterStateT { (e, s) =>
-      G.combineK(x.run(e, s), y.run(e, s))
+  def combineK[A](x: IndexedReaderWriterStateT[F, E, L, SA, SB, A],
+    y: IndexedReaderWriterStateT[F, E, L, SA, SB, A]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
+    IndexedReaderWriterStateT { (e, sa) =>
+      G.combineK(x.run(e, sa), y.run(e, sa))
     }
 }
 
 private[data] sealed trait RWSTAlternative[F[_], E, L, S]
-  extends Alternative[ReaderWriterStateT[F, E, L, S, ?]] with RWSTFunctor[F, E, L, S]
-    with RWSTSemigroupK[F, E, L, S] {
+  extends Alternative[ReaderWriterStateT[F, E, L, S, ?]] with IRWSTFunctor[F, E, L, S, S]
+    with IRWSTSemigroupK[F, E, L, S, S] {
 
   implicit def F: Monad[F]
   override def G: Alternative[F]
