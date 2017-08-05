@@ -48,10 +48,11 @@ functionality, you can pick-and-choose from amongst these modules
  maintain independent release cycles. 
  
  * [`cats-effect`](https://github.com/typelevel/cats-effect): standard `IO` type together with `Sync`, `Async` and `Effect` type classes 
- * [`cats-mtl`](https://github.com/edmundnoble/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
+ * [`cats-mtl`](https://github.com/typelevel/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
  * [`alleycats`](https://github.com/non/alleycats): cats instances and classes which are not lawful.
  * [`mouse`](https://github.com/benhutchison/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
  
+
 Release notes for Cats are available in [CHANGES.md](CHANGES.md).
 
 *Cats is still under active development. While we don't anticipate any
@@ -79,11 +80,41 @@ Our goal is to have clear and comprehensive documentation. If you
 notice problems, omissions, or errors, please
 [let us know](CONTRIBUTING.md).
 
+### The cats ecosystem
+
+Many projects integrate with cats. By sharing the same set of
+type classes, instances and data types, projects can speak the same "cats
+language", and integrate with each other with ease.
+
+#### General purpose libraries to support pure functional programming
+
+ * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
+ * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
+ * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers).
+ * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs.
+ * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
+ * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
+
+#### Libraries with more specific uses
+
+ * [Circe](https://github.com/circe/circe): pure functional JSON library.
+ * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources.
+ * [Frameless](https://github.com/adelbertc/frameless): Expressive types for Spark.
+ * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
+ * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
+ * [Monix](https://github.com/monixio/monix): high-performance library for composing asynchronous and event-based programs.
+ * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
+ * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
+ * [atto](https://github.com/tpolecat/atto): friendly little text parsers
+
+*Feel free to submit a PR if you want a project you maintain to be added to this list.*
+
+
 ### How can I contribute to Cats?
 
 We welcome contributions to Cats and would love for you to help build
 Cats. See our [contributor guide](CONTRIBUTING.md) for more
-information about how you can get involed.
+information about how you can get involved.
 
 ### Community
 
@@ -142,31 +173,6 @@ sign-offs to merge PRs (and for large or contentious issues we may
 wait for more). For typos or other small fixes to documentation we
 relax this to a single sign-off.
 
-### The cats ecosystem
-Many projects integrate with cats. By sharing the same set of 
-type classes, instances and data types, projects can speak the same "cats
-language", and integrate with each other with ease. 
-
-#### Generic libraries to support pure functional programming
-
- * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
- * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
- * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers).
- * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs.
- * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
- * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
-  
-#### Libraries with more specific uses
-
- * [Circe](https://github.com/circe/circe): pure functional JSON library.
- * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources.
- * [Frameless](https://github.com/adelbertc/frameless): Expressive types for Spark.
- * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
- * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
- * [Monix](https://github.com/monixio/monix): high-performance library for composing asynchronous and event-based programs.
- * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
- * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
- * [atto](https://github.com/tpolecat/atto): friendly little text parsers
 
 ### Copyright and License
 
