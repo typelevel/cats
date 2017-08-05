@@ -38,4 +38,4 @@ def fromToString[A]: Show[A]
 ```
 
 This still may not seem useful to you, because case classes already automatically implement `toString`, while `show` would have to be implemented manually for each case class.
-Thankfully with the help of a small library called `kittens` a lot of type class instances including `Show` can be derived automatically!
+Thankfully with the help of a small library called [kittens](https://github.com/milessabin/kittens) a lot of type class instances including `Show` can be derived automatically!
