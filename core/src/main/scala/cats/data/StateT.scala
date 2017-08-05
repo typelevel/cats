@@ -35,10 +35,14 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
   def map[B](f: A => B)(implicit F: Functor[F]): IndexedStateT[F, SA, SB, B] =
     transform { case (s, a) => (s, f(a)) }
 
-  def contramap[S0](f: S0 => SA)(implicit F: Applicative[F]): IndexedStateT[F, S0, SB, A] =
-    IndexedStateT.applyF(F.map2(F.pure(f), runF)(_ andThen _))
+  def contramap[S0](f: S0 => SA)(implicit F: Functor[F]): IndexedStateT[F, S0, SB, A] =
+    IndexedStateT.applyF {
+      F.map(runF) { safsba =>
+        (s0: S0) => safsba(f(s0))
+      }
+    }
 
-  def dimap[S0, S1](f: S0 => SA)(g: SB => S1)(implicit F: Applicative[F]): IndexedStateT[F, S0, S1, A] =
+  def dimap[S0, S1](f: S0 => SA)(g: SB => S1)(implicit F: Functor[F]): IndexedStateT[F, S0, S1, A] =
     contramap(f).modify(g)
 
   /**
@@ -230,10 +234,10 @@ private[data] sealed trait IndexedStateTInstances3 {
   implicit def catsDataFunctorForIndexedStateT[F[_], SA, SB](implicit F0: Functor[F]): Functor[IndexedStateT[F, SA, SB, ?]] =
     new IndexedStateTFunctor[F, SA, SB] { implicit def F = F0 }
 
-  implicit def catsDataContravariantForIndexedStateT[F[_], SB, V](implicit F0: Applicative[F]): Contravariant[IndexedStateT[F, ?, SB, V]] =
+  implicit def catsDataContravariantForIndexedStateT[F[_], SB, V](implicit F0: Functor[F]): Contravariant[IndexedStateT[F, ?, SB, V]] =
     new IndexedStateTContravariant[F, SB, V] { implicit def F = F0 }
 
-  implicit def catsDataProfunctorForIndexedStateT[F[_], V](implicit F0: Applicative[F]): Profunctor[IndexedStateT[F, ?, ?, V]] =
+  implicit def catsDataProfunctorForIndexedStateT[F[_], V](implicit F0: Functor[F]): Profunctor[IndexedStateT[F, ?, ?, V]] =
     new IndexedStateTProfunctor[F, V] { implicit def F = F0 }
 }
 
@@ -278,14 +282,14 @@ private[data] sealed trait IndexedStateTFunctor[F[_], SA, SB] extends Functor[In
 }
 
 private[data] sealed trait IndexedStateTContravariant[F[_], SB, V] extends Contravariant[IndexedStateT[F, ?, SB, V]] {
-  implicit def F: Applicative[F]
+  implicit def F: Functor[F]
 
   override def contramap[A, B](fa: IndexedStateT[F, A, SB, V])(f: B => A): IndexedStateT[F, B, SB, V] =
     fa.contramap(f)
 }
 
 private[data] sealed trait IndexedStateTProfunctor[F[_], V] extends Profunctor[IndexedStateT[F, ?, ?, V]] {
-  implicit def F: Applicative[F]
+  implicit def F: Functor[F]
 
   def dimap[A, B, C, D](fab: IndexedStateT[F, A, B, V])(f: C => A)(g: B => D): IndexedStateT[F, C, D, V] =
     fab.dimap(f)(g)
