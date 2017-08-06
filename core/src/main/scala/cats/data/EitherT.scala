@@ -96,6 +96,18 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): EitherT[F, C, B] = bimap(f, identity)
 
+  def leftFlatMap[BB >: B, D](f: A => EitherT[F, D, BB])(implicit F: Monad[F]): EitherT[F, D, BB] =
+    EitherT(F.flatMap(value) {
+      case Left(a) => f(a).value
+      case r@Right(_) => F.pure(r.leftCast)
+    })
+
+  def leftSemiflatMap[D](f: A => F[D])(implicit F: Monad[F]): EitherT[F, D, B] =
+    EitherT(F.flatMap(value) {
+      case Left(a) => F.map(f(a)) { d => Left(d) }
+      case r@Right(_) => F.pure(r.leftCast)
+    })
+
   def compare(that: EitherT[F, A, B])(implicit o: Order[F[Either[A, B]]]): Int =
     o.compare(value, that.value)
 
