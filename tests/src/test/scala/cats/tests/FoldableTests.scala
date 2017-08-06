@@ -241,6 +241,13 @@ class FoldableTestsAdditional extends CatsSuite {
     assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: boom, "STOP") == Left("ZeroOne"))
   }
 
+  test(".existsM/.forallM short-circuiting") {
+    implicit val F = foldableStreamWithDefaultImpl
+    def boom: Stream[Boolean] = sys.error("boom")
+    assert(F.existsM[Id, Boolean](true #:: boom)(identity) == true)
+    assert(F.forallM[Id, Boolean](false #:: boom)(identity) == false)
+  }
+
   test("Foldable[List] doesn't break substitution") {
     val result  = List.range(0,10).foldM(List.empty[Int])((accum, elt) => Eval.always(elt :: accum))
 
