@@ -9,6 +9,7 @@ case class All(mirror: Mirror) extends SemanticRewrite(mirror) {
   def rewrite(ctx: RewriteCtx): Patch =
     Seq(
       RemoveUnapply(mirror),
-      RemoveCartesianBuilder(mirror)
+      RemoveCartesianBuilder(mirror),
+      RenameFreeSuspend(mirror)
     ).reduce(Rewrite.merge).rewrite(ctx)
 }

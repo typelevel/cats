@@ -18,7 +18,7 @@
 
 - [ ] Several cats-core type class instances for cats.kernel were moved from their companion objects to separate traits and thus require imports from cats.instances.xxx._ (or the recommended import cats.implicits._) now. See #1659 for more details.
 
-- [ ] Free.suspend is renamed to Free.defer for consistency.
+- [x] Free.suspend is renamed to Free.defer for consistency.
 
 - [ ] traverse1_, intercalate1 and sequence1_ in Reducible were renamed to nonEmptyTraverse_, nonEmptyIntercalate and nonEmptySequence_ respectively.
 
