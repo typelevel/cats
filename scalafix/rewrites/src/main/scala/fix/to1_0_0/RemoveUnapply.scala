@@ -31,10 +31,7 @@ case class RemoveUnapply(mirror: Mirror) extends SemanticRewrite(mirror) {
       importee: Importee,
       fixes: Map[String, String]): Patch =
     fixes.collect {
-      case (target, _)
-          if importeeName(importee)
-            .flatMap(_.symbolOpt)
-            .exists(_.normalized.syntax == target) =>
+      case (target, _) if importeeName(importee).isSymbol(target) =>
         ctx.removeImportee(importee)
     }.asPatch
 
