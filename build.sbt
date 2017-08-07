@@ -102,7 +102,7 @@ lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings +
 
 lazy val scalaCheckVersion = "1.13.5"
 lazy val scalaTestVersion = "3.0.3"
-lazy val disciplineVersion = "0.7.3"
+lazy val disciplineVersion = "0.8"
 lazy val catalystsVersion = "0.0.5"
 
 lazy val disciplineDependencies = Seq(
