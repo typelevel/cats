@@ -20,7 +20,7 @@
 
 - [x] Free.suspend is renamed to Free.defer for consistency.
 
-- [ ] traverse1_, intercalate1 and sequence1_ in Reducible were renamed to nonEmptyTraverse_, nonEmptyIntercalate and nonEmptySequence_ respectively.
+- [x] traverse1_, intercalate1 and sequence1_ in Reducible were renamed to nonEmptyTraverse_, nonEmptyIntercalate and nonEmptySequence_ respectively.
 
 - [ ] foldLeftM is removed from Free, use foldM on Foldable instead, see #1117 for detail.
 
