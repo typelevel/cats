@@ -9,9 +9,6 @@ import scala.meta.{Symbol => _, _}
 case class RemoveCartesianBuilder(mirror: Mirror)
     extends SemanticRewrite(mirror) {
 
-  private[this] val cartesianImport =
-    "cats."
-
   private[this] val cartesianBuilders =
     (1 to 22)
       .map(arity =>
