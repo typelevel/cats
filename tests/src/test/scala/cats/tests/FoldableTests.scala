@@ -35,11 +35,13 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test(s"Foldable[$name].find/exists/forall/filter_/dropWhile_") {
+  test(s"Foldable[$name].find/exists/forall/existsM/forallM/filter_/dropWhile_") {
     forAll { (fa: F[Int], n: Int) =>
       fa.find(_ > n)   should === (iterator(fa).find(_ > n))
       fa.exists(_ > n) should === (iterator(fa).exists(_ > n))
       fa.forall(_ > n) should === (iterator(fa).forall(_ > n))
+      fa.existsM(k => Option(k > n)) should === (Option(iterator(fa).exists(_ > n)))
+      fa.forallM(k => Option(k > n)) should === (Option(iterator(fa).forall(_ > n)))
       fa.filter_(_ > n) should === (iterator(fa).filter(_ > n).toList)
       fa.dropWhile_(_ > n) should === (iterator(fa).dropWhile(_ > n).toList)
       fa.takeWhile_(_ > n) should === (iterator(fa).takeWhile(_ > n).toList)
@@ -237,6 +239,13 @@ class FoldableTestsAdditional extends CatsSuite {
     assert(concatUntil("STOP" #:: boom, "STOP") == Left(""))
     assert(concatUntil("Zero" #:: "STOP" #:: boom, "STOP") == Left("Zero"))
     assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: boom, "STOP") == Left("ZeroOne"))
+  }
+
+  test(".existsM/.forallM short-circuiting") {
+    implicit val F = foldableStreamWithDefaultImpl
+    def boom: Stream[Boolean] = sys.error("boom")
+    assert(F.existsM[Id, Boolean](true #:: boom)(identity) == true)
+    assert(F.forallM[Id, Boolean](false #:: boom)(identity) == false)
   }
 
   test("Foldable[List] doesn't break substitution") {

@@ -327,6 +327,78 @@ import simulacrum.typeclass
     }.value
 
   /**
+    * Check whether at least one element satisfies the effectful predicate.
+    *
+    * If there are no elements, the result is `false`.  `existsM` short-circuits,
+    * i.e. once a `true` result is encountered, no further effects are produced.
+    *
+    * For example:
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val F = Foldable[List]
+    * scala> F.existsM(List(1,2,3,4))(n => Option(n <= 4))
+    * res0: Option[Boolean] = Some(true)
+    *
+    * scala> F.existsM(List(1,2,3,4))(n => Option(n > 4))
+    * res1: Option[Boolean] = Some(false)
+    *
+    * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) Option(true) else Option(false))
+    * res2: Option[Boolean] = Some(true)
+    *
+    * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) Option(true) else None)
+    * res3: Option[Boolean] = Some(true)
+    *
+    * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) None else Option(true))
+    * res4: Option[Boolean] = None
+    * }}}
+    */
+  def existsM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] = {
+    G.tailRecM(Foldable.Source.fromFoldable(fa)(self)) {
+      src => src.uncons match {
+        case Some((a, src)) => G.map(p(a))(bb => if (bb) Right(true) else Left(src.value))
+        case None => G.pure(Right(false))
+      }
+    }
+  }
+
+  /**
+    * Check whether all elements satisfy the effectful predicate.
+    *
+    * If there are no elements, the result is `true`.  `forallM` short-circuits,
+    * i.e. once a `false` result is encountered, no further effects are produced.
+    *
+    * For example:
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val F = Foldable[List]
+    * scala> F.forallM(List(1,2,3,4))(n => Option(n <= 4))
+    * res0: Option[Boolean] = Some(true)
+    *
+    * scala> F.forallM(List(1,2,3,4))(n => Option(n <= 1))
+    * res1: Option[Boolean] = Some(false)
+    *
+    * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) Option(true) else Option(false))
+    * res2: Option[Boolean] = Some(false)
+    *
+    * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) Option(false) else None)
+    * res3: Option[Boolean] = Some(false)
+    *
+    * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) None else Option(false))
+    * res4: Option[Boolean] = None
+    * }}}
+    */
+  def forallM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] = {
+    G.tailRecM(Foldable.Source.fromFoldable(fa)(self)) {
+      src => src.uncons match {
+        case Some((a, src)) => G.map(p(a))(bb => if (!bb) Right(false) else Left(src.value))
+        case None => G.pure(Right(true))
+      }
+    }
+  }
+
+  /**
    * Convert F[A] to a List[A].
    */
   def toList[A](fa: F[A]): List[A] =
