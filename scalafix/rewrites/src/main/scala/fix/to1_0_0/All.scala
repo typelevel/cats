@@ -10,6 +10,8 @@ case class All(mirror: Mirror) extends SemanticRewrite(mirror) {
     Seq(
       RemoveUnapply(mirror),
       RemoveCartesianBuilder(mirror),
-      RenameFreeSuspend(mirror)
+      RenameFreeSuspend(mirror),
+      RenameReducibleMethods(mirror),
+      SimplifyEitherTLift(mirror)
     ).reduce(Rewrite.merge).rewrite(ctx)
 }
