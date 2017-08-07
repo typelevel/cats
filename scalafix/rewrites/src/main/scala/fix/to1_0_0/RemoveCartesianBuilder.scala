@@ -19,7 +19,7 @@ case class RemoveCartesianBuilder(mirror: Mirror)
       .toSet +
       "_root_.cats.syntax.CartesianOps.`|@|`."
 
-  private[this] val cartesianFixes: Map[String, String] =
+  private[this] val renames: Map[String, String] =
     (1 to 22)
       .map { arity =>
         Seq(
@@ -30,16 +30,6 @@ case class RemoveCartesianBuilder(mirror: Mirror)
       }
       .flatten
       .toMap
-
-  private[this] def replace(
-      ctx: RewriteCtx,
-      t: Term.Name,
-      fixes: Map[String, String]): Patch = {
-    fixes.collect {
-      case (target, fix) if t.symbolOpt.exists(_.normalized.syntax == target) =>
-        ctx.replaceTree(t, fix)
-    }.asPatch
-  }
 
   // Hackish to work around duplicate fixes due to recursion
   val alreadyFixedOps = collection.mutable.Set.empty[Term.Name]
@@ -70,7 +60,7 @@ case class RemoveCartesianBuilder(mirror: Mirror)
   def rewrite(ctx: RewriteCtx): Patch = {
     ctx.tree.collect {
       case t: Term.ApplyInfix => removeCartesianBuilderOp(ctx, t)
-      case Term.Select(_, fun) => replace(ctx, fun, cartesianFixes)
+      case t: Term.Name => rename(ctx, t, renames)
       case t @ q"import cats.syntax.cartesian._" =>
         ctx.replaceTree(t, "import cats.syntax.apply._")
     }.asPatch

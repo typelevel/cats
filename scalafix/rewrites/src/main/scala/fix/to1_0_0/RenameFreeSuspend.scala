@@ -7,24 +7,16 @@ import scala.meta.{Symbol => _, _}
 
 // ref: https://github.com/typelevel/cats/pull/1709
 case class RenameFreeSuspend(mirror: Mirror) extends SemanticRewrite(mirror) {
-  private[this] val fixes = Map(
+
+  private[this] val renames = Map(
     "_root_.cats.free.Free.suspend." -> "defer",
     "_root_.cats.free.TrampolineFunctions.suspend." -> "defer"
   )
 
-  private[this] def replace(
-      ctx: RewriteCtx,
-      t: Term.Name,
-      fixes: Map[String, String]): Patch = {
-    fixes.collect {
-      case (target, fix) if t.symbolOpt.exists(_.normalized.syntax == target) =>
-        ctx.replaceTree(t, fix)
+  def rewrite(ctx: RewriteCtx): Patch = {
+    ctx.tree.collect {
+      case t: Term.Name => rename(ctx, t, renames)
     }.asPatch
   }
 
-  def rewrite(ctx: RewriteCtx): Patch = {
-    ctx.tree.collect {
-      case t: Term.Name => replace(ctx, t, fixes)
-    }.asPatch
-  }
 }
