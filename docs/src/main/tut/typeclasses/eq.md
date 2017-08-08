@@ -48,4 +48,23 @@ import cats.implicits._
 ```
 
 Implementing `Eq` instances yourself for every data type might seem like huge drawback compared to only slight gains of typesafety.
-Fortunately for us, there is a small library called [kittens](https://github.com/milessabin/kittens), which can derive a lot of type class instances for our data types including `Eq`.
+Fortunately for us, we have two great options. One option is to use inbuilt helper functions.
+Another option is to use a small library called [kittens](https://github.com/milessabin/kittens), which can derive a lot of type class instances for our data types including `Eq`.
+
+The first option using `Eq.fromUniversalEquals` only defers to `==` and works like this:
+
+```tut:book
+import cats.kernel.Eq
+import cats.implicits._
+
+
+case class Foo(a: Int, b: String)
+
+
+implicit val eqFoo: Eq[Foo] = Eq.fromUniversalEquals
+
+
+Foo(10, "") === Foo(10, "")
+```
+
+For an example using Kittens check out the [kittens repo](https://github.com/milessabin/kittens).
