@@ -43,10 +43,12 @@ import simulacrum.typeclass
    * sequence, it does not construct the result by starting with the last element
    * and working back towards the head of the sequence (as a regular right fold would).
    * Instead, it starts with the head and works towards the last element the way a
-   * foldLeft would. It terminates either when it reaches the end of the sequence or
-   * when it reaches an element for which an instance of Eval[Option[B]] is returned
-   * that is not a created by mapping from `b`.
-   * Examples would be
+   * left fold would. It terminates either when it reaches the end of the sequence or
+   * when it reaches an element for which `f` returns an instance of Eval[Option[B]]
+   * not created by mapping from parameter `lb`.
+   * An example of an instance returned by mapping from `b` is
+   *  - `lb.map(opt => opt.map(n+1))`
+   * Examples of instances that result in termination are
    *  - `Eval.now(None)`
    *  - `Eval.later(Some(constant of type B))`
    *  - `Eval.later(Some(value of type B, derived from parameter a))`
@@ -55,8 +57,8 @@ import simulacrum.typeclass
    *
    * It constucts and chains the Eval[Option[B]] instances in such a way that when
    * `.value` is called on the result of the fold, it returns a value identical to
-   * a right fold performed on the seq. i.e. it does do a right fold, but only when
-   * .value is called.
+   * a right fold performed on the sequence from the head up to the terminal element.
+   * i.e. this method does result in a right fold, but only when `.value` is called.
    *
    * Any call to `b.value` inside the body of `f` typically results in an undesirable
    * pattern of method calls that "plays the scales", repeatedly iterating to the last
