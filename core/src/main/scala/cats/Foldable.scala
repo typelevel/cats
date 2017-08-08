@@ -39,6 +39,30 @@ import simulacrum.typeclass
    * Eval[B]` to support laziness in a stack-safe way. Chained
    * computation should be performed via .map and .flatMap.
    *
+   * Because this fold is designed to handle a potentially infinite
+   * sequence, it does not construct the result by starting with the last element
+   * and working back towards the head of the sequence (as a regular right fold would).
+   * Instead, it starts with the head and works towards the last element the way a
+   * foldLeft would. It terminates either when it reaches the end of the sequence or
+   * when it reaches an element for which an instance of Eval[Option[B]] is returned
+   * that is not a created by mapping from `b`.
+   * Examples would be
+   *  - `Eval.now(None)`
+   *  - `Eval.later(Some(constant of type B))`
+   *  - `Eval.later(Some(value of type B, derived from parameter a))`
+   *  - `Eval.defer(Eval.always(None)) // valid but not sensible`
+   *  etc.
+   *
+   * It constucts and chains the Eval[Option[B]] instances in such a way that when
+   * `.value` is called on the result of the fold, it returns a value identical to
+   * a right fold performed on the seq. i.e. it does do a right fold, but only when
+   * .value is called.
+   *
+   * Any call to `b.value` inside the body of `f` typically results in an undesirable
+   * pattern of method calls that "plays the scales", repeatedly iterating to the last
+   * element of the sequence (if it has one) and back again, constructing chains of
+   * `Eval` instances each time.
+   *
    * For more detailed information about how this method works see the
    * documentation for `Eval[_]`.
    */
