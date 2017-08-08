@@ -132,6 +132,33 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
     implicit F: Monad[F], G: Applicative[G]): IndexedReaderWriterStateT[G, E, LL, SA, SC, B] =
     IndexedReaderWriterStateT.apply((e, s) => f(run(e, s)))
 
+  /**
+   * Transform the state used. See [[StateT]] for more details.
+   *
+   * {{{
+   * scala> import cats.implicits._ // needed for StateT.apply
+   * scala> type Env = String
+   * scala> type Log = List[String]
+   * scala> type S[SA, SB, A] = IndexedReaderWriterStateT[Option, Env, Log, SA, SB, A]
+   * scala> type GlobalEnv = (Int, String)
+   * scala> val x: S[Int, Int, Double] = IndexedReaderWriterStateT((env: Env, x: Int) => Option(("Addition" :: Nil, x + 1, x.toDouble)))
+   * scala> val xt: S[GlobalEnv, GlobalEnv, Double] = x.transformS[GlobalEnv](_._1, (t, i) => (i, t._2))
+   * scala> val input = 5
+   * scala> x.run("env", input)
+   * res0: Option[(Log, Int, Double)] = Some((List(Addition),6,5.0))
+   * scala> xt.run("env", (input, "hello"))
+   * res1: Option[(Log, GlobalEnv, Double)] = Some((List(Addition),(6,hello),5.0))
+   * }}}
+   */
+  def transformS[R](f: R => SA, g: (R, SB) => R)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, R, R, A] =
+    IndexedReaderWriterStateT.applyF {
+      F.map(runF) { rwsfa =>
+        (e: E, r: R) => F.map(rwsfa(e, f(r))) { case (l, sb, a) =>
+          (l, g(r, sb), a)
+        }
+      }
+    }
+
 
   /**
    * Modify the resulting state.
