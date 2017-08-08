@@ -213,7 +213,8 @@ private[data] abstract class StateTFunctions extends CommonStateTConstructors {
 }
 
 private[data] sealed trait IndexedStateTInstances extends IndexedStateTInstances1 {
-  implicit def catsDataAlternativeForIndexedStateT[F[_], S](implicit FM: Monad[F], FA: Alternative[F]): Alternative[StateT[F, S, ?]] =
+  implicit def catsDataAlternativeForIndexedStateT[F[_], S](implicit FM: Monad[F],
+    FA: Alternative[F]): Alternative[IndexedStateT[F, S, S, ?]] with Monad[IndexedStateT[F, S, S, ?]] =
     new IndexedStateTAlternative[F, S] { implicit def F = FM; implicit def G = FA }
 }
 
