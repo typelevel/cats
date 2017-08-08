@@ -46,7 +46,7 @@ import simulacrum.typeclass
    * left fold would. It terminates either when it reaches the end of the sequence or
    * when it reaches an element for which `f` returns an instance of Eval[Option[B]]
    * not created by mapping from parameter `lb`.
-   * An example of an instance returned by mapping from `b` is
+   * An example of an instance returned by mapping from `lb` is
    *  - `lb.map(opt => opt.map(n+1))`
    * Examples of instances that result in termination are
    *  - `Eval.now(None)`
