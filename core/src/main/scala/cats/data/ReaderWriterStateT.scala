@@ -9,7 +9,7 @@ import cats.syntax.either._
  *  with an initial environment `E`, an accumulated log `L` and a result `A`.
  *
  * In other words, it is a pre-baked stack of `[[ReaderT]][F, E, A]`, `[[WriterT]][F, L, A]`
- * and `[[IndexedStateT]][F, SA, SB, A]`.
+ * and `IndexedStateT[F, SA, SB, A]`.
  */
 final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA) => F[(L, SB, A)]]) extends Serializable {
 
