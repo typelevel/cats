@@ -14,7 +14,7 @@
 
 - [ ] Apply syntax on tuple (e.g. (x, y, z).map3(...)) was moved from cats.syntax.tuple._ to cats.syntax.apply._ and renamed to mapN, contramapN and imapN respectively.
 
-- [ ] The creation methods (left, right, apply, pure, etc.) in EitherT were improved to take less type arguments.
+- [x] The creation methods (left, right, apply, pure, etc.) in EitherT were improved to take less type arguments.
 
 - [ ] Several cats-core type class instances for cats.kernel were moved from their companion objects to separate traits and thus require imports from cats.instances.xxx._ (or the recommended import cats.implicits._) now. See #1659 for more details.
 
