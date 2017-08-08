@@ -118,6 +118,7 @@ language", and integrate with each other with ease.
  * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
+ * [decline](https://github.com/bkirwi/decline): A composable command-line parser
 
 
 ## <a name="copyright" href="#copyright"></a>Copyright and License
