@@ -1,5 +1,5 @@
 /* 
-rewrite = "scala:fix.to1_0_0.RenameReducibleMethods"
+rewrite = "scala:fix.v1_0_0.RenameReducibleMethods"
  */
 package fix
 package to1_0_0
