@@ -7,13 +7,16 @@ package to1_0_0
 object RemoveCartesianBuilderTests {
   {
     import cats.instances.option._
+    import cats.instances.int._
     import cats.syntax.cartesian._
+    import cats.syntax.semigroup._
     val o1: Option[Int] = Some(42)
     val o2: Option[String] = Some("hello")
     val o3: Option[Int] = Some(2)
     (o1 |@| o2).map((i: Int, s: String) => i.toString ++ s)
     (o1 |@| o2).tupled
     (o1 |@| o2 |@| o3).map(_ + _ + _)
+    (o1 |+| o1 |@| o3).map(_ + _)
   }
 
   {
