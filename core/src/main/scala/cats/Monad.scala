@@ -76,29 +76,19 @@ import simulacrum.typeclass
    * Execute an action repeatedly until its result fails to satisfy the given predicate
    * and return that result, discarding all others.
    */
-  def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] = {
+  def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] =
     flatMap(f) { i =>
-      tailRecM(i) { a =>
-        if (p(a))
-          map(f)(Left(_))
-        else pure(Right(a))
-      }
+      iterateWhileM(i)(_ => f)(p)
     }
-  }
 
   /**
    * Execute an action repeatedly until its result satisfies the given predicate
    * and return that result, discarding all others.
    */
-  def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] = {
+  def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] =
     flatMap(f) { i =>
-      tailRecM(i) { a =>
-        if (p(a))
-          pure(Right(a))
-        else map(f)(Left(_))
-      }
+      iterateUntilM(i)(_ => f)(p)
     }
-  }
 
   /**
     * Apply a monadic function iteratively until its result fails
