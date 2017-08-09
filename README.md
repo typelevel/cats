@@ -109,7 +109,8 @@ language", and integrate with each other with ease.
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
  * [libisabelle](https://github.com/larsrh/libisabelle): A Scala library which talks to Isabelle
  * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services 
- 
+ * [grafter](https://github.com/zalando/grafter): dependency injection back to the fundamentals.
+
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
 
