@@ -76,4 +76,28 @@ class MonadTest extends CatsSuite {
     result should ===(50000)
   }
 
+  test("iterateWhileM") {
+    forAll(smallPosInt) { (max: Int) =>
+      val (n, sum) = 0.iterateWhileM(s => incrementAndGet map (_ + s))(_ < max).run(0)
+      sum should ===(n * (n + 1) / 2)
+    }
+  }
+
+  test("iterateWhileM is stack safe") {
+    val (n, sum) = 0.iterateWhileM(s => incrementAndGet map (_ + s))(_ < 50000000).run(0)
+    sum should ===(n * (n + 1) / 2)
+  }
+
+  test("iterateUntilM") {
+    forAll(smallPosInt) { (max: Int) =>
+      val (n, sum) = 0.iterateUntilM(s => incrementAndGet map (_ + s))(_ > max).run(0)
+      sum should ===(n * (n + 1) / 2)
+    }
+  }
+
+  test("iterateUntilM is stack safe") {
+    val (n, sum) = 0.iterateUntilM(s => incrementAndGet map (_ + s))(_ > 50000000).run(0)
+    sum should ===(n * (n + 1) / 2)
+  }
+
 }

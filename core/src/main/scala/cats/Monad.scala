@@ -100,4 +100,23 @@ import simulacrum.typeclass
     }
   }
 
+  /**
+    * Apply a monadic function iteratively until its result fails
+    * to satisfy the given predicate and return that result.
+    */
+  def iterateWhileM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
+    tailRecM(init) { a =>
+      if (p(a))
+        map(f(a))(Left(_))
+      else
+        pure(Right(a))
+    }
+
+  /**
+    * Apply a monadic function iteratively until its result satisfies
+    * the given predicate and return that result.
+    */
+  def iterateUntilM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
+    iterateWhileM(init)(f)(!p(_))
+
 }
