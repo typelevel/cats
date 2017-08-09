@@ -33,7 +33,6 @@ object Utils {
 }
 import Utils._
 
-
 // ref: https://github.com/typelevel/cats/pull/1745
 case class RemoveCartesianBuilder(mirror: Mirror)
     extends SemanticRewrite(mirror) {
@@ -81,16 +80,26 @@ case class RemoveCartesianBuilder(mirror: Mirror)
     }
   }
 
+  private[this] def wrapInParensIfNeeded(ctx: RewriteCtx, t: Term): Patch = {
+    if (t.tokens.head.is[Token.LeftParen] && t.tokens.last.is[Token.RightParen]) {
+      Patch.empty
+    } else {
+      ctx.addLeft(t.tokens.head, "(") + ctx.addRight(t.tokens.last, ")")
+    }
+  }
+
   def rewrite(ctx: RewriteCtx): Patch = {
     ctx.tree.collect {
-      case t: Term.ApplyInfix => removeCartesianBuilderOp(ctx, t)
+      case t: Term.ApplyInfix if t.op.isOneOfSymbols(cartesianBuilders) =>
+        removeCartesianBuilderOp(ctx, t)
+      case t: Term.ApplyInfix if t.op.isOneOfSymbols(renames.keys.toSet) =>
+        wrapInParensIfNeeded(ctx, t.lhs)
       case t: Term.Name => rename(ctx, t, renames)
       case t @ q"import cats.syntax.cartesian._" =>
         ctx.replaceTree(t, "import cats.syntax.apply._")
     }.asPatch
   }
 }
-
 
 // ref: https://github.com/typelevel/cats/pull/1583
 case class RemoveUnapply(mirror: Mirror) extends SemanticRewrite(mirror) {
@@ -130,7 +139,6 @@ case class RemoveUnapply(mirror: Mirror) extends SemanticRewrite(mirror) {
   }
 }
 
-
 // ref: https://github.com/typelevel/cats/pull/1709
 case class RenameFreeSuspend(mirror: Mirror) extends SemanticRewrite(mirror) {
 
@@ -146,7 +154,6 @@ case class RenameFreeSuspend(mirror: Mirror) extends SemanticRewrite(mirror) {
   }
 
 }
-
 
 // ref: https://github.com/typelevel/cats/pull/1611
 case class RenameReducibleMethods(mirror: Mirror)
@@ -168,7 +175,6 @@ case class RenameReducibleMethods(mirror: Mirror)
   }
 
 }
-
 
 // ref: https://github.com/typelevel/cats/pull/1614
 case class SimplifyEitherTLift(mirror: Mirror) extends SemanticRewrite(mirror) {
