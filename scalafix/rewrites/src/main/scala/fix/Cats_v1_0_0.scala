@@ -20,6 +20,9 @@ object Utils {
   implicit class TermNameOps(t: Name) {
     def isSymbol(s: String)(implicit mirror: Mirror): Boolean =
       t.symbolOpt.exists(_.normalized.syntax == s)
+
+    def isOneOfSymbols(symbols: Set[String])(implicit mirror: Mirror): Boolean =
+      t.symbolOpt.exists(s => symbols.contains(s.normalized.syntax))
   }
 
   implicit class OptionTermNameOps(t: Option[Name]) {
@@ -57,9 +60,7 @@ case class RemoveCartesianBuilder(mirror: Mirror)
   // Hackish way to work around duplicate fixes due to recursion
   val alreadyFixedOps = collection.mutable.Set.empty[Term.Name]
   private[this] def replaceOpWithComma(ctx: RewriteCtx, op: Term.Name): Patch =
-    if (op.symbolOpt.exists(s =>
-        cartesianBuilders.contains(s.normalized.syntax)) && !alreadyFixedOps
-        .contains(op)) {
+    if (op.isOneOfSymbols(cartesianBuilders) && !alreadyFixedOps.contains(op)) {
       alreadyFixedOps += op
       // remove the space before |@|
       ctx.removeToken(ctx.tokenList.prev(op.tokens.head)) +
