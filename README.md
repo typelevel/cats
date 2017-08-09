@@ -20,7 +20,7 @@ The name is a playful shortening of the word *category*.
 Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
 standard library. Cats augments the standard library with tools that further enable functional programming such as
 `Validated`, `Monad`, and `Traverse`. A broader goal of Cats is to provide a foundation for an
-[ecosystem of pure, typeful libraries](http://typelevel.org/projects/).
+[ecosystem of pure, typeful libraries](https://github.com/typelevel/cats#the-cats-ecosystem).
 
 ### Getting Started
 
