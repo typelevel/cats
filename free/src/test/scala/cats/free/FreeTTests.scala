@@ -13,6 +13,15 @@ import org.scalacheck.{Arbitrary, Gen, Cogen}
 class FreeTTests extends CatsSuite {
 
   import FreeTTests._
+  {
+    implicit val freeOptionListEq:  Eq[FreeT[Option, List, Int]] = new Eq[FreeT[Option, List, Int]]{
+      val ol = λ[Option ~> List](_.toList)
+      def eqv(a: FreeT[Option, List, Int], b: FreeT[Option, List, Int]) = a.runM(o => ol(o)) === b.runM(o => ol(o))
+    }
+
+    checkAll("FreeT[Option, ?[_], ?]", TFunctorTests[FreeT[Option, ?[_], ?]].tfunctor[List, Vector, Option, Int])
+    checkAll("TFunctor[FreeT[Option, ?[_], ?]]", SerializableTests.serializable(TFunctor[FreeT[Option, ?[_], ?]]))
+  }
 
   {
     implicit val freeTFlatMap: FlatMap[FreeTOption] = FreeT.catsFreeFlatMapForFreeT[Option, Option]
@@ -199,7 +208,7 @@ trait FreeTTestsInstances {
 
   implicit def intStateArb[A: Arbitrary]: Arbitrary[IntState[A]] = catsLawArbitraryForState[Int, A]
 
-  implicit def freeTOptionEq[A](implicit A: Eq[A], OM: Monad[Option]): Eq[FreeTOption[A]] = new Eq[FreeTOption[A]] {
+  implicit def freeTOptionEq[A](implicit A: Eq[A]): Eq[FreeTOption[A]] = new Eq[FreeTOption[A]] {
     def eqv(a: FreeTOption[A], b: FreeTOption[A]) = Eq[Option[A]].eqv(a.runM(identity), b.runM(identity))
   }
 
@@ -207,3 +216,4 @@ trait FreeTTestsInstances {
     def eqv(a: FreeTState[A], b: FreeTState[A]) = Eq[IntState[A]].eqv(a.runM(identity)(SM, SM), b.runM(identity)(SM, SM))
   }
 }
+

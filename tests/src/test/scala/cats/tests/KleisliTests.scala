@@ -9,7 +9,7 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import cats.kernel.laws.GroupLaws
-import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
+import cats.laws.discipline.{MonoidKTests, SemigroupKTests}
 
 class KleisliTests extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
@@ -23,6 +23,9 @@ class KleisliTests extends CatsSuite {
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
   implicit val iso2 = CartesianTests.Isomorphisms.invariant[Reader[Int, ?]]
+  
+  checkAll("Kleisli[?[_], String, ?]", TFunctorTests[Kleisli[?[_], String, ?]].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[Kleisli[?[_], String, ?]]", SerializableTests.serializable(TFunctor[Kleisli[?[_], String, ?]]))
 
   {
     implicit val instance: ApplicativeError[Kleisli[Option, Int, ?], Unit] = Kleisli.catsDataApplicativeErrorForKleisli[Option, Unit, Int](cats.instances.option.catsStdInstancesForOption)

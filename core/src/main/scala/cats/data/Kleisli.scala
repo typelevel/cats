@@ -89,6 +89,11 @@ private[data] sealed trait KleisliFunctions {
 }
 
 private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
+
+  implicit def catsDataTFunctorFoKleisli[A]: TFunctor[Kleisli[?[_], A, ?]] = new TFunctor[Kleisli[?[_], A, ?]] {
+    def mapNT[F[_], G[_], B](k: Kleisli[F, A, B])(f: F ~> G): Kleisli[G, A, B] = k.transform(f)
+  }
+
   implicit def catsDataCommutativeMonadForKleisli[F[_], A, B](implicit F0: CommutativeMonad[F]): CommutativeMonad[Kleisli[F, A, ?]] =
     new KleisliMonad[F, A] with CommutativeMonad[Kleisli[F, A, ?]] {
       implicit def F: Monad[F] = F0

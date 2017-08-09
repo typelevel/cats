@@ -37,6 +37,7 @@ package object syntax {
   object semigroupk extends SemigroupKSyntax
   object show extends ShowSyntax
   object strong extends StrongSyntax
+  object tfunctor extends TFunctorSyntax
   object traverse extends TraverseSyntax
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
   object validated extends ValidatedSyntax

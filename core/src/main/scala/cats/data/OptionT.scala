@@ -196,6 +196,11 @@ object OptionT extends OptionTInstances {
 }
 
 private[data] sealed trait OptionTInstances extends OptionTInstances0 {
+
+  implicit val catsDataTFunctorForOptionT: TFunctor[OptionT] = new TFunctor[OptionT] {
+    def mapNT[F[_], G[_], A](h: OptionT[F, A])(f: F ~> G): OptionT[G, A] = OptionT(f(h.value))
+  }
+
   implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
     new OptionTMonad[F] { implicit val F = F0 }
 

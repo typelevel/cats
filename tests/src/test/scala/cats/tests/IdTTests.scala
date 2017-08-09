@@ -10,6 +10,9 @@ class IdTTests extends CatsSuite {
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[IdT[ListWrapper, ?]](IdT.catsDataFunctorForIdT(ListWrapper.functor))
 
+  checkAll("IdT", TFunctorTests[IdT].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[IdT]", SerializableTests.serializable(TFunctor[IdT]))
+
   {
     implicit val F = ListWrapper.eqv[Option[Int]]
 

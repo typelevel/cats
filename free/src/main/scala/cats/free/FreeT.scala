@@ -2,7 +2,6 @@ package cats
 package free
 
 import scala.annotation.tailrec
-
 import cats.arrow.FunctionK
 
 /**
@@ -183,6 +182,11 @@ object FreeT extends FreeTInstances {
 }
 
 private[free] sealed trait FreeTInstances extends FreeTInstances0 {
+
+  implicit def catsDataTFunctorFoFreeT[S[_]]: TFunctor[FreeT[S, ?[_], ?]] = new TFunctor[FreeT[S, ?[_], ?]] {
+    def mapNT[F[_], G[_], A](ft: FreeT[S, F, A])(f: F ~> G): FreeT[S, G, A] = ft.hoist(f)
+  }
+  
   implicit def catsFreeMonadErrorForFreeT[S[_], M[_], E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, ?], E] =
     new MonadError[FreeT[S, M, ?], E] with FreeTMonad[S, M] {
       override def M = E
