@@ -105,7 +105,7 @@ case class RemoveCartesianBuilder(mirror: Mirror)
            case t: Term.Name if t.isOneOfSymbols(partialApplies) => ()
         }.length > 0
         if (usesPartialApplies) {
-          ctx.addRight(t.tokens.last, "\nimport cats.syntax.apply._")
+          ctx.addRight(t.tokens.last, "\n  import cats.syntax.apply._")
         } else {
           ctx.replaceTree(t, "import cats.syntax.apply._")
         }
