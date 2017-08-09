@@ -67,8 +67,7 @@ implicit val eqFoo: Eq[Foo] = Eq.fromUniversalEquals
 Foo(10, "") === Foo(10, "")
 ```
 
-You can even go one step further and make use of the fact, that every case class will extend `scala.Product`, by creating an `Eq` instance for it.
-This means, you'll get an instance for all your case classes, but you'll have to define them for regular classes and objects yourself.
+You can even go one step further by making this implicitly available for all `scala.Product`s (which include case classes).
 ```tut:book
 
 case class Bar(a: Double, b: Int)
