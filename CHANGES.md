@@ -35,7 +35,8 @@ as many breaking changes as possible in this release before we lock down the API
  * `iteratorFoldM` was removed from `Foldable` due to #1716
  * `Split` is removed, and the method `split` is moved to `Arrow`. Note that only under `CommutativeArrow` does it guarantee the non-interference between the effects. see #1567
 
- 
+If you feel adventurous you can try the experimental Scalafix rewrites.
+See all the available rewrites and the instructions [here](/scalafix/README.md).
 ### Breaking Changes:
 
  * [#1614](https://github.com/typelevel/cats/pull/1614): added `leftT` and improved existing lift API for `EitherT`. by @kailuowang
