@@ -13,12 +13,15 @@ import cats.functor.Contravariant
 @typeclass trait Show[T] extends Show.ContravariantShow[T] {
   // duplicated so simulacrum knows it requires an instance of this trait
   def show(t: T): String
-  def _show(t: T): String = show(t)
+  def cshow(t: T): String = show(t)
 }
 
 object Show {
   trait ContravariantShow[-T] {
-    def _show(t: T): String
+    /**
+     * using a different name than `show` as a work around of scala bug https://github.com/scala/bug/issues/10458
+     */
+    def cshow(t: T): String
   }
 
   /** creates an instance of [[Show]] using the provided function */
@@ -33,7 +36,7 @@ object Show {
 
   final case class Shown(override val toString: String) extends AnyVal
   object Shown {
-    implicit def mat[A](x: A)(implicit z: ContravariantShow[A]): Shown = Shown(z _show x)
+    implicit def mat[A](x: A)(implicit z: ContravariantShow[A]): Shown = Shown(z cshow x)
   }
 
   final case class ShowInterpolator(_sc: StringContext) extends AnyVal {
