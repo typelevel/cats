@@ -239,7 +239,7 @@ type class instances easy.
 
 ## Type classes in cats
 
-![infographic](https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg)
+<img src="https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg" alt="infographic" style="width: 100%;"/>
 From [cats-infographic by @tpolecat](https://github.com/tpolecat/cats-infographic).
 
 

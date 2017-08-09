@@ -996,6 +996,38 @@ match <code>p</code>.
       
       <p class="shortcomment cmt">Check whether at least one element satisfies the predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Check whether at least one element satisfies the predicate.</p><p>If there are no elements, the result is <code>false</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+    </li><li name="cats.Foldable#existsM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="existsM[G[_],A](fa:F[A])(p:A=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]"></a><a id="existsM[G[_],A](F[A])((A)⇒G[Boolean])(Monad[G]):G[Boolean]"></a>
+      <span class="permalink">
+      <a href="../cats/NonEmptyTraverse.html#existsM[G[_],A](fa:F[A])(p:A=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">existsM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.NonEmptyTraverse.F">F</span>[<span class="extype" name="cats.Foldable.existsM.A">A</span>]</span>)</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Foldable.existsM.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.existsM.G">G</span>[<a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.existsM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.existsM.G">G</span>[<a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Check whether at least one element satisfies the effectful predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Check whether at least one element satisfies the effectful predicate.</p><p>If there are no elements, the result is <code>false</code>.  <code>existsM</code> short-circuits,
+i.e. once a <code>true</code> result is encountered, no further effects are produced.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.existsM(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>))(n <span class="kw">=&gt;</span> <span class="std">Option</span>(n &lt;= <span class="num">4</span>))
+res0: <span class="std">Option</span>[<span class="std">Boolean</span>] = <span class="std">Some</span>(<span class="kw">true</span>)
+
+scala&gt; F.existsM(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>))(n <span class="kw">=&gt;</span> <span class="std">Option</span>(n &gt; <span class="num">4</span>))
+res1: <span class="std">Option</span>[<span class="std">Boolean</span>] = <span class="std">Some</span>(<span class="kw">false</span>)
+
+scala&gt; F.existsM(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>))(n <span class="kw">=&gt;</span> <span class="kw">if</span> (n &lt;= <span class="num">2</span>) <span class="std">Option</span>(<span class="kw">true</span>) <span class="kw">else</span> <span class="std">Option</span>(<span class="kw">false</span>))
+res2: <span class="std">Option</span>[<span class="std">Boolean</span>] = <span class="std">Some</span>(<span class="kw">true</span>)
+
+scala&gt; F.existsM(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>))(n <span class="kw">=&gt;</span> <span class="kw">if</span> (n &lt;= <span class="num">2</span>) <span class="std">Option</span>(<span class="kw">true</span>) <span class="kw">else</span> <span class="std">None</span>)
+res3: <span class="std">Option</span>[<span class="std">Boolean</span>] = <span class="std">Some</span>(<span class="kw">true</span>)
+
+scala&gt; F.existsM(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>))(n <span class="kw">=&gt;</span> <span class="kw">if</span> (n &lt;= <span class="num">2</span>) <span class="std">None</span> <span class="kw">else</span> <span class="std">Option</span>(<span class="kw">true</span>))
+res4: <span class="std">Option</span>[<span class="std">Boolean</span>] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#filter_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="filter_[A](fa:F[A])(p:A=&gt;Boolean):List[A]"></a><a id="filter_[A](F[A])((A)⇒Boolean):List[A]"></a>
       <span class="permalink">
@@ -1236,6 +1268,38 @@ res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
       
       <p class="shortcomment cmt">Check whether all elements satisfy the predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Check whether all elements satisfy the predicate.</p><p>If there are no elements, the result is <code>true</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+    </li><li name="cats.Foldable#forallM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="forallM[G[_],A](fa:F[A])(p:A=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]"></a><a id="forallM[G[_],A](F[A])((A)⇒G[Boolean])(Monad[G]):G[Boolean]"></a>
+      <span class="permalink">
+      <a href="../cats/NonEmptyTraverse.html#forallM[G[_],A](fa:F[A])(p:A=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">forallM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.NonEmptyTraverse.F">F</span>[<span class="extype" name="cats.Foldable.forallM.A">A</span>]</span>)</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Foldable.forallM.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.forallM.G">G</span>[<a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.forallM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.forallM.G">G</span>[<a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Check whether all elements satisfy the effectful predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Check whether all elements satisfy the effectful predicate.</p><p>If there are no elements, the result is <code>true</code>.  <code>forallM</code> short-circuits,
+i.e. once a <code>false</code> result is encountered, no further effects are produced.</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> F = Foldable[<span class="std">List</span>]
+scala&gt; F.forallM(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>))(n <span class="kw">=&gt;</span> <span class="std">Option</span>(n &lt;= <span class="num">4</span>))
+res0: <span class="std">Option</span>[<span class="std">Boolean</span>] = <span class="std">Some</span>(<span class="kw">true</span>)
+
+scala&gt; F.forallM(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>))(n <span class="kw">=&gt;</span> <span class="std">Option</span>(n &lt;= <span class="num">1</span>))
+res1: <span class="std">Option</span>[<span class="std">Boolean</span>] = <span class="std">Some</span>(<span class="kw">false</span>)
+
+scala&gt; F.forallM(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>))(n <span class="kw">=&gt;</span> <span class="kw">if</span> (n &lt;= <span class="num">2</span>) <span class="std">Option</span>(<span class="kw">true</span>) <span class="kw">else</span> <span class="std">Option</span>(<span class="kw">false</span>))
+res2: <span class="std">Option</span>[<span class="std">Boolean</span>] = <span class="std">Some</span>(<span class="kw">false</span>)
+
+scala&gt; F.forallM(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>))(n <span class="kw">=&gt;</span> <span class="kw">if</span> (n &lt;= <span class="num">2</span>) <span class="std">Option</span>(<span class="kw">false</span>) <span class="kw">else</span> <span class="std">None</span>)
+res3: <span class="std">Option</span>[<span class="std">Boolean</span>] = <span class="std">Some</span>(<span class="kw">false</span>)
+
+scala&gt; F.forallM(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>))(n <span class="kw">=&gt;</span> <span class="kw">if</span> (n &lt;= <span class="num">2</span>) <span class="std">None</span> <span class="kw">else</span> <span class="std">Option</span>(<span class="kw">false</span>))
+res4: <span class="std">Option</span>[<span class="std">Boolean</span>] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Functor#fproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fproduct[A,B](fa:F[A])(f:A=&gt;B):F[(A,B)]"></a><a id="fproduct[A,B](F[A])((A)⇒B):F[(A,B)]"></a>
       <span class="permalink">
