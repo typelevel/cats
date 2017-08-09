@@ -44,6 +44,11 @@ case class RemoveCartesianBuilder(mirror: Mirror)
       .toSet +
       "_root_.cats.syntax.CartesianOps.`|@|`."
 
+  private[this] val partialApplies = Set(
+    s"_root_.cats.syntax.CartesianOps.`*>`.",
+    s"_root_.cats.syntax.CartesianOps.`<*`."
+  )
+
   private[this] val renames: Map[String, String] =
     (1 to 22)
       .map { arity =>
@@ -96,7 +101,14 @@ case class RemoveCartesianBuilder(mirror: Mirror)
         wrapInParensIfNeeded(ctx, t.lhs)
       case t: Term.Name => rename(ctx, t, renames)
       case t @ q"import cats.syntax.cartesian._" =>
-        ctx.replaceTree(t, "import cats.syntax.apply._")
+        val usesPartialApplies = ctx.tree.collect {
+           case t: Term.Name if t.isOneOfSymbols(partialApplies) => ()
+        }.length > 0
+        if (usesPartialApplies) {
+          ctx.addRight(t.tokens.last, "\nimport cats.syntax.apply._")
+        } else {
+          ctx.replaceTree(t, "import cats.syntax.apply._")
+        }
     }.asPatch
   }
 }
