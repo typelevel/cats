@@ -4,7 +4,7 @@
 [![Workflow](https://badge.waffle.io/typelevel/cats.svg?label=ready&title=Ready)](https://waffle.io/typelevel/cats)
 [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
 [![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
-[![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange)](https://index.scala-lang.org/typelevel/cats/cats-core)
+[![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
 [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.14.svg)](http://scala-js.org)
 
 ### Overview
@@ -20,7 +20,7 @@ The name is a playful shortening of the word *category*.
 Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
 standard library. Cats augments the standard library with tools that further enable functional programming such as
 `Validated`, `Monad`, and `Traverse`. A broader goal of Cats is to provide a foundation for an
-[ecosystem of pure, typeful libraries](http://typelevel.org/projects/).
+[ecosystem of pure, typeful libraries](https://github.com/typelevel/cats#the-cats-ecosystem).
 
 ### Getting Started
 
