@@ -107,7 +107,9 @@ language", and integrate with each other with ease.
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
-
+ * [libisabelle](https://github.com/larsrh/libisabelle): A Scala library which talks to Isabelle
+ * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services 
+ 
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
 
