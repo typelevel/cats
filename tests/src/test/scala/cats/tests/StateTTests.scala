@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{State, StateT, IndexedStateT, EitherT}
-import cats.functor.{Contravariant, Profunctor}
+import cats.functor.{Contravariant, Bifunctor, Profunctor}
 import cats.kernel.instances.tuple._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
@@ -253,14 +253,20 @@ class IndexedStateTTests extends CatsSuite {
   }
 
   {
-    // We only need a Monad to derive a Contravariant for IndexedStateT
-    implicit val F: Monad[ListWrapper] = ListWrapper.monad
+    // We only need a Functor to derive a Contravariant for IndexedStateT
+    implicit val F: Functor[ListWrapper] = ListWrapper.monad
     Contravariant[IndexedStateT[ListWrapper, ?, Int, String]]
   }
 
   {
-    // We only need a Monad to derive a Profunctor for IndexedStateT
-    implicit val F: Monad[ListWrapper] = ListWrapper.monad
+    // We only need a Functor to derive a Bifunctor for IndexedStateT
+    implicit val F: Functor[ListWrapper] = ListWrapper.monad
+    Bifunctor[IndexedStateT[ListWrapper, Int, ?, ?]]
+  }
+
+  {
+    // We only need a Functor to derive a Profunctor for IndexedStateT
+    implicit val F: Functor[ListWrapper] = ListWrapper.monad
     Profunctor[IndexedStateT[ListWrapper, ?, ?, String]]
   }
 
@@ -279,7 +285,7 @@ class IndexedStateTTests extends CatsSuite {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
     implicit val FS: Contravariant[IndexedStateT[ListWrapper, ?, Int, Int]] = IndexedStateT.catsDataContravariantForIndexedStateT
 
-    checkAll("IndexedStateT[ListWrapper, ?, Int, Int]", ContravariantTests[IndexedStateT[ListWrapper, ?, Int, Int]].contravariant[Int, Int, Int])
+    checkAll("IndexedStateT[ListWrapper, Int, Int, Int]", ContravariantTests[IndexedStateT[ListWrapper, ?, Int, Int]].contravariant[Int, Int, Int])
     checkAll("Contravariant[IndexedStateT[ListWrapper, ?, Int, Int]]", SerializableTests.serializable(Contravariant[IndexedStateT[ListWrapper, ?, Int, Int]]))
 
     Contravariant[IndexedStateT[ListWrapper, ?, Int, Int]]
@@ -287,9 +293,19 @@ class IndexedStateTTests extends CatsSuite {
 
   {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
+    implicit val FS: Bifunctor[IndexedStateT[ListWrapper, Int, ?, ?]] = IndexedStateT.catsDataBifunctorForIndexedStateT
+
+    checkAll("IndexedStateT[ListWrapper, Int, String, Int]", BifunctorTests[IndexedStateT[ListWrapper, Int, ?, ?]].bifunctor[String, String, String, Int, Int, Int])
+    checkAll("Bifunctor[IndexedStateT[ListWrapper, Int, ?, ?]]", SerializableTests.serializable(Bifunctor[IndexedStateT[ListWrapper, Int, ?, ?]]))
+
+    Bifunctor[IndexedStateT[ListWrapper, Int, ?, ?]]
+  }
+
+  {
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
     implicit val FS: Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]] = IndexedStateT.catsDataProfunctorForIndexedStateT
 
-    checkAll("IndexedStateT[ListWrapper, ?, Int, Int]", ProfunctorTests[IndexedStateT[ListWrapper, ?, ?, Int]].profunctor[Int, Int, Int, Int, Int, Int])
+    checkAll("IndexedStateT[ListWrapper, String, Int, Int]", ProfunctorTests[IndexedStateT[ListWrapper, ?, ?, Int]].profunctor[String, String, String, Int, Int, Int])
     checkAll("Profunctor[IndexedStateT[ListWrapper, ?, Int, Int]]", SerializableTests.serializable(Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]]))
 
     Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]]

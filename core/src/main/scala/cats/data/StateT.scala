@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.{ Contravariant, Profunctor }
+import cats.functor.{ Contravariant, Bifunctor, Profunctor }
 import cats.syntax.either._
 
 /**
@@ -41,6 +41,9 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
         (s0: S0) => safsba(f(s0))
       }
     }
+
+  def bimap[SC, B](f: SB => SC, g: A => B)(implicit F: Functor[F]): IndexedStateT[F, SA, SC, B] =
+    transform { (s, a) => (f(s), g(a)) }
 
   def dimap[S0, S1](f: S0 => SA)(g: SB => S1)(implicit F: Functor[F]): IndexedStateT[F, S0, S1, A] =
     contramap(f).modify(g)
@@ -240,6 +243,9 @@ private[data] sealed trait IndexedStateTInstances3 {
 
   implicit def catsDataProfunctorForIndexedStateT[F[_], V](implicit F0: Functor[F]): Profunctor[IndexedStateT[F, ?, ?, V]] =
     new IndexedStateTProfunctor[F, V] { implicit def F = F0 }
+
+  implicit def catsDataBifunctorForIndexedStateT[F[_], SA](implicit F0: Functor[F]): Bifunctor[IndexedStateT[F, SA, ?, ?]] =
+    new IndexedStateTBifunctor[F, SA] { implicit def F = F0 }
 }
 
 // To workaround SI-7139 `object State` needs to be defined inside the package object
@@ -287,6 +293,13 @@ private[data] sealed trait IndexedStateTContravariant[F[_], SB, V] extends Contr
 
   override def contramap[A, B](fa: IndexedStateT[F, A, SB, V])(f: B => A): IndexedStateT[F, B, SB, V] =
     fa.contramap(f)
+}
+
+private[data] sealed trait IndexedStateTBifunctor[F[_], SA] extends Bifunctor[IndexedStateT[F, SA, ?, ?]] {
+  implicit def F: Functor[F]
+
+  def bimap[A, B, C, D](fab: IndexedStateT[F, SA, A, B])(f: A => C, g: B => D): IndexedStateT[F, SA, C, D] =
+    fab.bimap(f, g)
 }
 
 private[data] sealed trait IndexedStateTProfunctor[F[_], V] extends Profunctor[IndexedStateT[F, ?, ?, V]] {
