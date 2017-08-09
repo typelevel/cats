@@ -12,7 +12,7 @@ import cats.functor.Contravariant
 trait Show[T] extends Show.ContravariantShow[T]
 
 /**
- * Hand rolling the type class boilerplate due to https://issues.scala-lang.org/browse/SI-6260 and scala/bug#10458
+ * Hand rolling the type class boilerplate due to scala/bug#6260 and scala/bug#10458
  */
 object Show {
 
