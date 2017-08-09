@@ -2,7 +2,7 @@
 scalaVersion in ThisBuild := org.scalameta.BuildInfo.supportedScalaVersions.last
 
 lazy val rewrites = project.settings(
-  libraryDependencies += "ch.epfl.scala" %% "scalafix-core" % "0.5.0-M1"
+  libraryDependencies += "ch.epfl.scala" %% "scalafix-core" % "0.5.0-M2"
 )
 
 lazy val input = project.settings(
@@ -21,7 +21,7 @@ lazy val output = project.settings(
 
 lazy val tests = project
   .settings(
-    libraryDependencies += "ch.epfl.scala" % "scalafix-testkit" % "0.5.0-M1" % Test cross CrossVersion.full,
+    libraryDependencies += "ch.epfl.scala" % "scalafix-testkit" % "0.5.0-M2" % Test cross CrossVersion.full,
     buildInfoPackage := "fix",
     buildInfoKeys := Seq[BuildInfoKey](
       "inputSourceroot" ->
