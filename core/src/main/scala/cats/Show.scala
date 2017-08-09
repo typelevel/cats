@@ -1,6 +1,5 @@
 package cats
 
-import simulacrum.typeclass
 import cats.functor.Contravariant
 
 /**
@@ -10,18 +9,30 @@ import cats.functor.Contravariant
  * made a toString method, a Show instance will only exist if someone
  * explicitly provided one.
  */
-@typeclass trait Show[T] extends Show.ContravariantShow[T] {
-  // duplicated so simulacrum knows it requires an instance of this trait
-  def show(t: T): String
-  def cshow(t: T): String = show(t)
-}
+trait Show[T] extends Show.ContravariantShow[T]
 
+/**
+ * Hand rolling the type class boilerplate due to https://issues.scala-lang.org/browse/SI-6260 and scala/bug#10458
+ */
 object Show {
-  trait ContravariantShow[-T] {
-    /**
-     * using a different name than `show` as a work around of scala bug https://github.com/scala/bug/issues/10458
-     */
-    def cshow(t: T): String
+
+  def apply[A](implicit instance: Show[A]): Show[A] = instance
+
+  trait ContravariantShow[-T] extends Serializable {
+    def show(t: T): String
+  }
+
+  trait Ops[A] {
+    def typeClassInstance: Show[A]
+    def self: A
+    def show: String = typeClassInstance.show(self)
+  }
+
+  trait ToShowOps {
+    implicit def toShow[A](target: A)(implicit tc: Show[A]): Ops[A] = new Ops[A] {
+      val self = target
+      val typeClassInstance = tc
+    }
   }
 
   /** creates an instance of [[Show]] using the provided function */
@@ -36,7 +47,7 @@ object Show {
 
   final case class Shown(override val toString: String) extends AnyVal
   object Shown {
-    implicit def mat[A](x: A)(implicit z: ContravariantShow[A]): Shown = Shown(z cshow x)
+    implicit def mat[A](x: A)(implicit z: ContravariantShow[A]): Shown = Shown(z show x)
   }
 
   final case class ShowInterpolator(_sc: StringContext) extends AnyVal {
