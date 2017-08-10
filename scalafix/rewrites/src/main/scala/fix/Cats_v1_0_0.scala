@@ -86,7 +86,8 @@ case class RemoveCartesianBuilder(semanticCtx: SemanticCtx)
   }
 
   private[this] def wrapInParensIfNeeded(ctx: RewriteCtx, t: Term): Patch = {
-    if (t.tokens.head.is[Token.LeftParen] && t.tokens.last.is[Token.RightParen]) {
+    if (t.tokens.head.is[Token.LeftParen] && t.tokens.last
+        .is[Token.RightParen]) {
       Patch.empty
     } else {
       ctx.addLeft(t.tokens.head, "(") + ctx.addRight(t.tokens.last, ")")
@@ -102,7 +103,7 @@ case class RemoveCartesianBuilder(semanticCtx: SemanticCtx)
       case t: Term.Name => rename(ctx, t, renames)
       case t @ q"import cats.syntax.cartesian._" =>
         val usesPartialApplies = ctx.tree.collect {
-           case t: Term.Name if t.isOneOfSymbols(partialApplies) => ()
+          case t: Term.Name if t.isOneOfSymbols(partialApplies) => ()
         }.length > 0
         if (usesPartialApplies) {
           ctx.addRight(t.tokens.last, "\n  import cats.syntax.apply._")
@@ -213,6 +214,20 @@ case class SimplifyEitherTLift(semanticCtx: SemanticCtx) extends SemanticRewrite
           if name.isSymbol(rightSymbol) =>
         ctx.replaceTree(name, "pure") + removeWithLeadingComma(ctx, b)
     }.asPatch
+  }
+
+}
+
+// ref: https://github.com/typelevel/cats/pull/1589
+//      https://github.com/typelevel/cats/pull/1596
+case class RenameInjectProdAndCoproduct(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+
+  def rewrite(ctx: RewriteCtx): Patch = {
+    ctx.replaceSymbols(
+      "_root_.cats.free.Inject." -> "_root_.cats.InjectK.",
+      "_root_.cats.data.Prod." -> "_root_.cats.data.Tuple2K.",
+      "_root_.cats.data.Coproduct." -> "_root_.cats.data.EitherK."
+    )
   }
 
 }

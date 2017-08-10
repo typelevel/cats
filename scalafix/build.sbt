@@ -10,14 +10,16 @@ lazy val input = project.settings(
   scalafixSourceroot := sourceDirectory.in(Compile).value,
   libraryDependencies ++= Seq(
     "org.typelevel" %% "cats" % "0.9.0"
-  )
+  ),
+  scalacOptions += "-language:higherKinds"
 )
 
 lazy val output = project.settings(
   libraryDependencies ++= Seq(
     "org.typelevel" %% "cats-core" % "1.0.0-MF",
     "org.typelevel" %% "cats-free" % "1.0.0-MF"
-  )
+  ),
+  scalacOptions += "-language:higherKinds"
 )
 
 lazy val tests = project

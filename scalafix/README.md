@@ -5,7 +5,7 @@
 Install the scalafix sbt plugin (globally or in a specific project):
 
 ```scala
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.0-M2")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.0-M3")
 ```
 
 run
@@ -26,11 +26,11 @@ sbt scalafix github:typelevel/cats/v1.0.0
 
 - [x] traverse1_, intercalate1 and sequence1_ in Reducible were renamed to nonEmptyTraverse_, nonEmptyIntercalate and nonEmptySequence_ respectively.
 
+- [x] cats.free.Inject is moved from cats-free to cats-core and renamed to cats.InjectK; cats.data.Prod is renamed to cats.data.Tuple2K; cats.data.Coproduct is renamed to cats.data.EitherK
+
 # WIP
 
 - [ ] cats no longer publishes the all-inclusive bundle package "org.typelevel" % "cats", use cats-core, cats-free, or cats-law accordingly instead. If you need cats.free, use "org.typelevel" % "cats-free", if you need cats-laws use "org.typelevel" % "cats-laws", if neither, use "org.typelevel" % "cats-core".
-
-- [ ] cats.free.Inject is moved from cats-free to cats-core and renamed to cats.InjectK; cats.data.Prod is renamed to cats.data.Tuple2K; cats.data.Coproduct is renamed to cats.data.EitherK
 
 - [ ] FunctorFilter, MonadCombine, MonadFilter, MonadReader, MonadState, MonadTrans, MonadWriter and TraverseFilter are no longer in cats, the functionalities they provided are inhereted by the new cats-mtl project. Please check here for migration guide.
 
