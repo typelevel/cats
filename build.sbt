@@ -54,7 +54,14 @@ lazy val commonSettings = Seq(
   // workaround for https://github.com/scalastyle/scalastyle-sbt-plugin/issues/47
   scalastyleSources in Compile ++= (unmanagedSourceDirectories in Compile).value,
   ivyConfigurations += config("compile-time").hide,
-  unmanagedClasspath in Compile ++= update.value.select(configurationFilter("compile-time"))
+  unmanagedClasspath in Compile ++= update.value.select(configurationFilter("compile-time")),
+  unmanagedSourceDirectories in Test ++= {
+    val bd = baseDirectory.value
+    if (CrossVersion.partialVersion(scalaVersion.value) exists (_._2 >= 11))
+      CrossType.Pure.sharedSrcDir(bd, "test").toList map (f => file(f.getPath + "-2.11+"))
+    else
+      Nil
+  }
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
 
 

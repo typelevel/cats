@@ -4,7 +4,6 @@ package tests
 import cats.data.{Const, NonEmptyList}
 
 import scala.collection.mutable
-import RegressionTests._
 class RegressionTests extends CatsSuite {
 
   // toy state class
@@ -122,20 +121,6 @@ class RegressionTests extends CatsSuite {
 
     NonEmptyList.of(6,7,8).traverse_(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(1)
-  }
-
-  test("#1802 duplicated method name") {
-    Show[First[String]]
-  }
-}
-
-
-object RegressionTests {
-  final case class First[A](getFirst: A) extends AnyVal
-  object First {
-    implicit def showInstance[A](implicit ev: Show[A]): Show[First[A]] = new Show[First[A]] {
-      def show(f: First[A]): String = s"First(${ev.show(f.getFirst)})"
-    }
   }
 
 }
