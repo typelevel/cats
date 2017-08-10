@@ -255,3 +255,14 @@ case class RenameTupleApplySyntax(semanticCtx: SemanticCtx) extends SemanticRewr
     }.asPatch
   }
 }
+
+// ref: https://github.com/typelevel/cats/pull/1766
+case class RemoveSplit(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+
+  def rewrite(ctx: RewriteCtx): Patch = {
+    ctx.replaceSymbols(
+      "_root_.cats.arrow.Split." -> "_root_.cats.arrow.Arrow."
+    )
+  }
+
+}

@@ -30,6 +30,7 @@ sbt scalafix github:typelevel/cats/v1.0.0
 
 - [x] Apply syntax on tuple (e.g. (x, y, z).map3(...)) was moved from cats.syntax.tuple._ to cats.syntax.apply._ and renamed to mapN, contramapN and imapN respectively.
 
+- [x] Split is removed, and the method split is moved to Arrow. Note that only under CommutativeArrow does it guarantee the non-interference between the effects. see #1567
 # WIP
 
 - [ ] cats no longer publishes the all-inclusive bundle package "org.typelevel" % "cats", use cats-core, cats-free, or cats-law accordingly instead. If you need cats.free, use "org.typelevel" % "cats-free", if you need cats-laws use "org.typelevel" % "cats-laws", if neither, use "org.typelevel" % "cats-core".
@@ -41,5 +42,3 @@ sbt scalafix github:typelevel/cats/v1.0.0
 - [ ] foldLeftM is removed from Free, use foldM on Foldable instead, see #1117 for detail.
 
 - [ ] iteratorFoldM was removed from Foldable due to #1716
-
-- [ ] Split is removed, and the method split is moved to Arrow. Note that only under CommutativeArrow does it guarantee the non-interference between the effects. see #1567
