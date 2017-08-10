@@ -231,3 +231,27 @@ case class RenameInjectProdAndCoproduct(semanticCtx: SemanticCtx) extends Semant
   }
 
 }
+
+// ref: https://github.com/typelevel/cats/pull/1487
+case class RenameTupleApplySyntax(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+
+  private[this] val renames: Map[String, String] =
+    (1 to 22)
+      .map { arity =>
+        Seq(
+          s"_root_.cats.syntax.Tuple${arity}CartesianOps.map$arity." -> "mapN",
+          s"_root_.cats.syntax.Tuple${arity}CartesianOps.contramap$arity." -> "contramapN",
+          s"_root_.cats.syntax.Tuple${arity}CartesianOps.imap$arity." -> "imapN"
+        )
+      }
+      .flatten
+      .toMap
+
+  def rewrite(ctx: RewriteCtx): Patch = {
+    ctx.tree.collect {
+      case t: Term.Name => rename(ctx, t, renames)
+      case t @ q"import cats.syntax.tuple._" =>
+        ctx.replaceTree(t, "import cats.syntax.apply._")
+    }.asPatch
+  }
+}
