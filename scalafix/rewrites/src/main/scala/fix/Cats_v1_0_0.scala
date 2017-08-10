@@ -10,7 +10,7 @@ object Utils {
   private[fix] def rename(
       ctx: RewriteCtx,
       t: Term.Name,
-      renames: Map[String, String])(implicit mirror: Mirror): Patch = {
+      renames: Map[String, String])(implicit semanticCtx: SemanticCtx): Patch = {
     renames.collect {
       case (target, rename) if t.isSymbol(target) =>
         ctx.replaceTree(t, rename)
@@ -18,29 +18,29 @@ object Utils {
   }
 
   implicit class TermNameOps(t: Name) {
-    def isSymbol(s: String)(implicit mirror: Mirror): Boolean =
-      t.symbolOpt.exists(_.normalized.syntax == s)
+    def isSymbol(s: String)(implicit semanticCtx: SemanticCtx): Boolean =
+      t.symbol.exists(_.normalized.syntax == s)
 
-    def isOneOfSymbols(symbols: Set[String])(implicit mirror: Mirror): Boolean =
-      t.symbolOpt.exists(s => symbols.contains(s.normalized.syntax))
+    def isOneOfSymbols(symbols: Set[String])(implicit semanticCtx: SemanticCtx): Boolean =
+      t.symbol.exists(s => symbols.contains(s.normalized.syntax))
   }
 
   implicit class OptionTermNameOps(t: Option[Name]) {
-    def isSymbol(s: String)(implicit mirror: Mirror): Boolean =
-      t.flatMap(_.symbolOpt).exists(_.normalized.syntax == s)
+    def isSymbol(s: String)(implicit semanticCtx: SemanticCtx): Boolean =
+      t.flatMap(_.symbol).exists(_.normalized.syntax == s)
   }
 
 }
 import Utils._
 
 // ref: https://github.com/typelevel/cats/pull/1745
-case class RemoveCartesianBuilder(mirror: Mirror)
-    extends SemanticRewrite(mirror) {
+case class RemoveCartesianBuilder(semanticCtx: SemanticCtx)
+    extends SemanticRewrite(semanticCtx) {
 
   private[this] val cartesianBuilders =
     (1 to 22)
       .map(arity =>
-        s"_root_.cats.syntax.CartesianBuilder#CartesianBuilder$arity.`|@|`.")
+        s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.`|@|`.")
       .toSet +
       "_root_.cats.syntax.CartesianOps.`|@|`."
 
@@ -53,9 +53,9 @@ case class RemoveCartesianBuilder(mirror: Mirror)
     (1 to 22)
       .map { arity =>
         Seq(
-          s"_root_.cats.syntax.CartesianBuilder#CartesianBuilder$arity.map." -> "mapN",
-          s"_root_.cats.syntax.CartesianBuilder#CartesianBuilder$arity.imap." -> "imapN",
-          s"_root_.cats.syntax.CartesianBuilder#CartesianBuilder$arity.contramap." -> "contramapN"
+          s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.map." -> "mapN",
+          s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.imap." -> "imapN",
+          s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.contramap." -> "contramapN"
         )
       }
       .flatten
@@ -114,7 +114,7 @@ case class RemoveCartesianBuilder(mirror: Mirror)
 }
 
 // ref: https://github.com/typelevel/cats/pull/1583
-case class RemoveUnapply(mirror: Mirror) extends SemanticRewrite(mirror) {
+case class RemoveUnapply(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
 
   private[this] val renames = Map(
     "_root_.cats.Traverse.Ops.traverseU." -> "traverse",
@@ -152,7 +152,7 @@ case class RemoveUnapply(mirror: Mirror) extends SemanticRewrite(mirror) {
 }
 
 // ref: https://github.com/typelevel/cats/pull/1709
-case class RenameFreeSuspend(mirror: Mirror) extends SemanticRewrite(mirror) {
+case class RenameFreeSuspend(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
 
   private[this] val renames = Map(
     "_root_.cats.free.Free.suspend." -> "defer",
@@ -168,8 +168,8 @@ case class RenameFreeSuspend(mirror: Mirror) extends SemanticRewrite(mirror) {
 }
 
 // ref: https://github.com/typelevel/cats/pull/1611
-case class RenameReducibleMethods(mirror: Mirror)
-    extends SemanticRewrite(mirror) {
+case class RenameReducibleMethods(semanticCtx: SemanticCtx)
+    extends SemanticRewrite(semanticCtx) {
 
   private[this] val renames = Map(
     "_root_.cats.Reducible.traverse1_." -> "nonEmptyTraverse_",
@@ -189,7 +189,7 @@ case class RenameReducibleMethods(mirror: Mirror)
 }
 
 // ref: https://github.com/typelevel/cats/pull/1614
-case class SimplifyEitherTLift(mirror: Mirror) extends SemanticRewrite(mirror) {
+case class SimplifyEitherTLift(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
 
   private[this] val leftSymbol = "_root_.cats.data.EitherTFunctions.left."
   private[this] val rightSymbol = "_root_.cats.data.EitherTFunctions.right."
