@@ -420,14 +420,6 @@ object EitherT extends EitherTInstances {
 
 private[data] abstract class EitherTInstances extends EitherTInstances1 {
 
-  /* TODO violates right absorbtion, right distributivity, and left distributivity -- re-enable when MonadCombine laws are split in to weak/strong
-  implicit def catsDataMonadCombineForEitherT[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadCombine[EitherT[F, L, ?]] = {
-    implicit val F0 = F
-    implicit val L0 = L
-    new EitherTMonadCombine[F, L] { implicit val F = F0; implicit val L = L0 }
-  }
-  */
-
   implicit def catsDataOrderForEitherT[F[_], L, R](implicit F: Order[F[Either[L, R]]]): Order[EitherT[F, L, R]] =
     new EitherTOrder[F, L, R] {
       val F0: Order[F[Either[L, R]]] = F
@@ -452,13 +444,6 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
 }
 
 private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
-  /* TODO violates monadFilter right empty law -- re-enable when MonadFilter laws are split in to weak/strong
-  implicit def catsDataMonadFilterForEitherT[F[_], L](implicit F: Monad[F], L: Monoid[L]): MonadFilter[EitherT[F, L, ?]] = {
-    implicit val F0 = F
-    implicit val L0 = L
-    new EitherTMonadFilter[F, L] { implicit val F = F0; implicit val L = L0 }
-  }
-   */
 
   implicit def catsSemigroupForEitherT[F[_], L, A](implicit F: Semigroup[F[Either[L, A]]]): Semigroup[EitherT[F, L, A]] =
     new EitherTSemigroup[F, L, A] { implicit val F0 = F }
@@ -586,21 +571,6 @@ private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, 
   override def recoverWith[A](fla: EitherT[F, L, A])(pf: PartialFunction[L, EitherT[F, L, A]]): EitherT[F, L, A] =
     fla.recoverWith(pf)
 }
-
-/* TODO violates monadFilter right empty law -- re-enable when MonadFilter laws are split in to weak/strong
-private[data] trait EitherTMonadFilter[F[_], L] extends MonadFilter[EitherT[F, L, ?]] with EitherTMonadError[F, L] {
-  implicit val F: Monad[F]
-  implicit val L: Monoid[L]
-  def empty[A]: EitherT[F, L, A] = EitherT(F.pure(Either.left(L.empty)))
-}
-*/
-
-/* TODO violates right absorbtion, right distributivity, and left distributivity -- re-enable when MonadCombine laws are split in to weak/strong
-private[data] trait EitherTMonadCombine[F[_], L] extends MonadCombine[EitherT[F, L, ?]] with EitherTMonadFilter[F, L] with EitherTSemigroupK[F, L] {
-  implicit val F: Monad[F]
-  implicit val L: Monoid[L]
-}
-*/
 
 private[data] sealed trait EitherTFoldable[F[_], L] extends Foldable[EitherT[F, L, ?]] {
   implicit def F0: Foldable[F]
