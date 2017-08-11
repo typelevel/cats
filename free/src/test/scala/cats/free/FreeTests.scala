@@ -3,17 +3,19 @@ package free
 
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
-import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
+import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests, TFunctorTests}
+import cats.laws.discipline.arbitrary._
 import cats.tests.CatsSuite
-
-import org.scalacheck.{Arbitrary, Gen, Cogen}
+import org.scalacheck.{Arbitrary, Cogen, Gen}
 import Arbitrary.arbFunction1
 
 class FreeTests extends CatsSuite {
   import FreeTests._
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[Free[Option, ?]]
+
+  checkAll("Free", TFunctorTests[Free].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[Free]", SerializableTests.serializable(TFunctor[Free]))
 
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
