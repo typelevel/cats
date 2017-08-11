@@ -107,6 +107,7 @@ language", and integrate with each other with ease.
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
+ * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
 
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
