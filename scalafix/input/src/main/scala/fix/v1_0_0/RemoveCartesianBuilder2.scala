@@ -1,4 +1,4 @@
-/* ONLY
+/*
 rewrite = "scala:fix.v1_0_0.RemoveCartesianBuilder"
  */
 package fix
