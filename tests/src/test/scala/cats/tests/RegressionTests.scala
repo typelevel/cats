@@ -4,7 +4,6 @@ package tests
 import cats.data.{Const, NonEmptyList}
 
 import scala.collection.mutable
-
 class RegressionTests extends CatsSuite {
 
   // toy state class
@@ -123,4 +122,5 @@ class RegressionTests extends CatsSuite {
     NonEmptyList.of(6,7,8).traverse_(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(1)
   }
+
 }

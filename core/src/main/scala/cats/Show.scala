@@ -1,6 +1,5 @@
 package cats
 
-import simulacrum.typeclass
 import cats.functor.Contravariant
 
 /**
@@ -10,14 +9,30 @@ import cats.functor.Contravariant
  * made a toString method, a Show instance will only exist if someone
  * explicitly provided one.
  */
-@typeclass trait Show[T] extends Show.ContravariantShow[T] {
-  // duplicated so simulacrum knows it requires an instance of this trait
-  def show(t: T): String
-}
+trait Show[T] extends Show.ContravariantShow[T]
 
+/**
+ * Hand rolling the type class boilerplate due to scala/bug#6260 and scala/bug#10458
+ */
 object Show {
-  trait ContravariantShow[-T] {
+
+  def apply[A](implicit instance: Show[A]): Show[A] = instance
+
+  trait ContravariantShow[-T] extends Serializable {
     def show(t: T): String
+  }
+
+  trait Ops[A] {
+    def typeClassInstance: Show[A]
+    def self: A
+    def show: String = typeClassInstance.show(self)
+  }
+
+  trait ToShowOps {
+    implicit def toShow[A](target: A)(implicit tc: Show[A]): Ops[A] = new Ops[A] {
+      val self = target
+      val typeClassInstance = tc
+    }
   }
 
   /** creates an instance of [[Show]] using the provided function */
