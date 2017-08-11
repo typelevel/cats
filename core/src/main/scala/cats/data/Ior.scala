@@ -170,6 +170,12 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
 
       def flatMap[B, C](fa: Ior[A, B])(f: B => Ior[A, C]): Ior[A, C] = fa.flatMap(f)
 
+      override def map2Eval[B, C, Z](fa: Ior[A, B], fb: Eval[Ior[A, C]])(f: (B, C) => Z): Eval[Ior[A, Z]] =
+        fa match {
+          case l @ Ior.Left(_) => Eval.now(l) // no need to evaluate fb
+          case notLeft => fb.map(fb => map2(notLeft, fb)(f))
+        }
+
       def tailRecM[B, C](b: B)(fn: B => Ior[A, Either[B, C]]): A Ior C = {
         @tailrec
         def loop(v: Ior[A, Either[B, C]]): A Ior C = v match {
