@@ -152,6 +152,11 @@ private[data] sealed abstract class EitherKInstances0 extends EitherKInstances1 
 
 private[data] sealed abstract class EitherKInstances extends EitherKInstances0 {
 
+  implicit def catsDataTFunctorFoEitherK[L[_]]: TFunctor[EitherK[L, ?[_], ?]] = new TFunctor[EitherK[L, ?[_], ?]] {
+    def mapNT[F[_], G[_], A](ek: EitherK[L, F, A])(f: F ~> G): EitherK[L, G, A] = EitherK(ek.run.map(f.apply))
+  }
+
+
   implicit def catsDataComonadForEitherK[F[_], G[_]](implicit F0: Comonad[F], G0: Comonad[G]): Comonad[EitherK[F, G, ?]] =
     new EitherKComonad[F, G] {
       implicit def F: Comonad[F] = F0

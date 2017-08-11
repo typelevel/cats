@@ -13,6 +13,11 @@ final case class Tuple2K[F[_], G[_], A](first: F[A], second: G[A])
 object Tuple2K extends Tuple2KInstances
 
 private[data] sealed abstract class Tuple2KInstances extends Tuple2KInstances0 {
+
+  implicit def catsDataTFunctorFoTuple2K[L[_]]: TFunctor[Tuple2K[L, ?[_], ?]] = new TFunctor[Tuple2K[L, ?[_], ?]] {
+    def mapNT[F[_], G[_], A](ek: Tuple2K[L, F, A])(f: F ~> G): Tuple2K[L, G, A] = Tuple2K(ek.first, f(ek.second))
+  }
+
   implicit def catsDataOrderForTuple2K[F[_], G[_], A](implicit FF: Order[F[A]], GF: Order[G[A]]): Order[Tuple2K[F, G, A]] = new Tuple2KOrder[F, G, A] {
     def F: Order[F[A]] = FF
     def G: Order[G[A]] = GF

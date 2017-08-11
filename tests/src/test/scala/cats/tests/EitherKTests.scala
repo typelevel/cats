@@ -1,6 +1,6 @@
-package cats.tests
+package cats
+package tests
 
-import cats._
 import cats.kernel.laws.OrderLaws
 import cats.data.EitherK
 import cats.functor.Contravariant
@@ -9,6 +9,9 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 
 class EitherKTests extends CatsSuite {
+
+  checkAll("EitherK[Option, ?[_], ?]", TFunctorTests[EitherK[Option, ?[_], ?]].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[EitherK[Option, ?[_], ?]]", SerializableTests.serializable(TFunctor[EitherK[Option, ?[_], ?]]))
 
   checkAll("EitherK[Option, Option, ?]", TraverseTests[EitherK[Option, Option, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[EitherK[Option, Option, ?]]", SerializableTests.serializable(Traverse[EitherK[Option, Option, ?]]))

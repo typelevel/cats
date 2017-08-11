@@ -10,6 +10,10 @@ import cats.kernel.laws.OrderLaws
 
 class Tuple2KTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[Tuple2K[Option, List, ?]]
+
+  checkAll("Tuple2K[Option, ?[_], ?]", TFunctorTests[Tuple2K[Option, ?[_], ?]].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[Tuple2K[Option, ?[_], ?]]", SerializableTests.serializable(TFunctor[Tuple2K[Option, ?[_], ?]]))
+
   checkAll("Tuple2K[Option, List, Int]", CartesianTests[λ[α => Tuple2K[Option, List, α]]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Tuple2K[Option, List, Int]]", SerializableTests.serializable(Cartesian[λ[α => Tuple2K[Option, List, α]]]))
 
