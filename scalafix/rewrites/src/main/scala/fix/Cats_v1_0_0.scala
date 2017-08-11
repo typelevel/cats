@@ -10,7 +10,7 @@ object Utils {
   private[fix] def rename(
       ctx: RewriteCtx,
       t: Term.Name,
-      renames: Map[String, String])(implicit mirror: Mirror): Patch = {
+      renames: Map[String, String])(implicit semanticCtx: SemanticCtx): Patch = {
     renames.collect {
       case (target, rename) if t.isSymbol(target) =>
         ctx.replaceTree(t, rename)
@@ -18,29 +18,29 @@ object Utils {
   }
 
   implicit class TermNameOps(t: Name) {
-    def isSymbol(s: String)(implicit mirror: Mirror): Boolean =
-      t.symbolOpt.exists(_.normalized.syntax == s)
+    def isSymbol(s: String)(implicit semanticCtx: SemanticCtx): Boolean =
+      t.symbol.exists(_.normalized.syntax == s)
 
-    def isOneOfSymbols(symbols: Set[String])(implicit mirror: Mirror): Boolean =
-      t.symbolOpt.exists(s => symbols.contains(s.normalized.syntax))
+    def isOneOfSymbols(symbols: Set[String])(implicit semanticCtx: SemanticCtx): Boolean =
+      t.symbol.exists(s => symbols.contains(s.normalized.syntax))
   }
 
   implicit class OptionTermNameOps(t: Option[Name]) {
-    def isSymbol(s: String)(implicit mirror: Mirror): Boolean =
-      t.flatMap(_.symbolOpt).exists(_.normalized.syntax == s)
+    def isSymbol(s: String)(implicit semanticCtx: SemanticCtx): Boolean =
+      t.flatMap(_.symbol).exists(_.normalized.syntax == s)
   }
 
 }
 import Utils._
 
 // ref: https://github.com/typelevel/cats/pull/1745
-case class RemoveCartesianBuilder(mirror: Mirror)
-    extends SemanticRewrite(mirror) {
+case class RemoveCartesianBuilder(semanticCtx: SemanticCtx)
+    extends SemanticRewrite(semanticCtx) {
 
   private[this] val cartesianBuilders =
     (1 to 22)
       .map(arity =>
-        s"_root_.cats.syntax.CartesianBuilder#CartesianBuilder$arity.`|@|`.")
+        s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.`|@|`.")
       .toSet +
       "_root_.cats.syntax.CartesianOps.`|@|`."
 
@@ -53,9 +53,9 @@ case class RemoveCartesianBuilder(mirror: Mirror)
     (1 to 22)
       .map { arity =>
         Seq(
-          s"_root_.cats.syntax.CartesianBuilder#CartesianBuilder$arity.map." -> "mapN",
-          s"_root_.cats.syntax.CartesianBuilder#CartesianBuilder$arity.imap." -> "imapN",
-          s"_root_.cats.syntax.CartesianBuilder#CartesianBuilder$arity.contramap." -> "contramapN"
+          s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.map." -> "mapN",
+          s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.imap." -> "imapN",
+          s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.contramap." -> "contramapN"
         )
       }
       .flatten
@@ -86,7 +86,8 @@ case class RemoveCartesianBuilder(mirror: Mirror)
   }
 
   private[this] def wrapInParensIfNeeded(ctx: RewriteCtx, t: Term): Patch = {
-    if (t.tokens.head.is[Token.LeftParen] && t.tokens.last.is[Token.RightParen]) {
+    if (t.tokens.head.is[Token.LeftParen] && t.tokens.last
+        .is[Token.RightParen]) {
       Patch.empty
     } else {
       ctx.addLeft(t.tokens.head, "(") + ctx.addRight(t.tokens.last, ")")
@@ -102,7 +103,7 @@ case class RemoveCartesianBuilder(mirror: Mirror)
       case t: Term.Name => rename(ctx, t, renames)
       case t @ q"import cats.syntax.cartesian._" =>
         val usesPartialApplies = ctx.tree.collect {
-           case t: Term.Name if t.isOneOfSymbols(partialApplies) => ()
+          case t: Term.Name if t.isOneOfSymbols(partialApplies) => ()
         }.length > 0
         if (usesPartialApplies) {
           ctx.addRight(t.tokens.last, "\n  import cats.syntax.apply._")
@@ -114,7 +115,7 @@ case class RemoveCartesianBuilder(mirror: Mirror)
 }
 
 // ref: https://github.com/typelevel/cats/pull/1583
-case class RemoveUnapply(mirror: Mirror) extends SemanticRewrite(mirror) {
+case class RemoveUnapply(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
 
   private[this] val renames = Map(
     "_root_.cats.Traverse.Ops.traverseU." -> "traverse",
@@ -152,7 +153,7 @@ case class RemoveUnapply(mirror: Mirror) extends SemanticRewrite(mirror) {
 }
 
 // ref: https://github.com/typelevel/cats/pull/1709
-case class RenameFreeSuspend(mirror: Mirror) extends SemanticRewrite(mirror) {
+case class RenameFreeSuspend(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
 
   private[this] val renames = Map(
     "_root_.cats.free.Free.suspend." -> "defer",
@@ -168,8 +169,8 @@ case class RenameFreeSuspend(mirror: Mirror) extends SemanticRewrite(mirror) {
 }
 
 // ref: https://github.com/typelevel/cats/pull/1611
-case class RenameReducibleMethods(mirror: Mirror)
-    extends SemanticRewrite(mirror) {
+case class RenameReducibleMethods(semanticCtx: SemanticCtx)
+    extends SemanticRewrite(semanticCtx) {
 
   private[this] val renames = Map(
     "_root_.cats.Reducible.traverse1_." -> "nonEmptyTraverse_",
@@ -189,7 +190,7 @@ case class RenameReducibleMethods(mirror: Mirror)
 }
 
 // ref: https://github.com/typelevel/cats/pull/1614
-case class SimplifyEitherTLift(mirror: Mirror) extends SemanticRewrite(mirror) {
+case class SimplifyEitherTLift(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
 
   private[this] val leftSymbol = "_root_.cats.data.EitherTFunctions.left."
   private[this] val rightSymbol = "_root_.cats.data.EitherTFunctions.right."
@@ -212,6 +213,58 @@ case class SimplifyEitherTLift(mirror: Mirror) extends SemanticRewrite(mirror) {
       case Term.ApplyType(Term.Select(_, name), Seq(f, a, b))
           if name.isSymbol(rightSymbol) =>
         ctx.replaceTree(name, "pure") + removeWithLeadingComma(ctx, b)
+    }.asPatch
+  }
+
+}
+
+// ref: https://github.com/typelevel/cats/pull/1589
+//      https://github.com/typelevel/cats/pull/1596
+case class RenameInjectProdAndCoproduct(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+
+  def rewrite(ctx: RewriteCtx): Patch = {
+    ctx.replaceSymbols(
+      "_root_.cats.free.Inject." -> "_root_.cats.InjectK.",
+      "_root_.cats.data.Prod." -> "_root_.cats.data.Tuple2K.",
+      "_root_.cats.data.Coproduct." -> "_root_.cats.data.EitherK."
+    )
+  }
+
+}
+
+// ref: https://github.com/typelevel/cats/pull/1487
+case class RenameTupleApplySyntax(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+
+  private[this] val renames: Map[String, String] =
+    (1 to 22)
+      .map { arity =>
+        Seq(
+          s"_root_.cats.syntax.Tuple${arity}CartesianOps.map$arity." -> "mapN",
+          s"_root_.cats.syntax.Tuple${arity}CartesianOps.contramap$arity." -> "contramapN",
+          s"_root_.cats.syntax.Tuple${arity}CartesianOps.imap$arity." -> "imapN"
+        )
+      }
+      .flatten
+      .toMap
+
+  def rewrite(ctx: RewriteCtx): Patch = {
+    ctx.tree.collect {
+      case t: Term.Name => rename(ctx, t, renames)
+      case t @ q"import cats.syntax.tuple._" =>
+        ctx.replaceTree(t, "import cats.syntax.apply._")
+    }.asPatch
+  }
+}
+
+// ref: https://github.com/typelevel/cats/pull/1766
+case class RemoveSplit(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+
+  def rewrite(ctx: RewriteCtx): Patch = {
+    ctx.replaceSymbols(
+      "_root_.cats.arrow.Split." -> "_root_.cats.arrow.Arrow."
+    ) + ctx.tree.collect {
+      case t @ q"import cats.syntax.split._" =>
+        ctx.replaceTree(t, "import cats.syntax.arrow._")
     }.asPatch
   }
 
