@@ -71,7 +71,7 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
   implicit def catsDataTFunctorFoWriterT[A]: TFunctor[WriterT[?[_], A, ?]] = new TFunctor[WriterT[?[_], A, ?]] {
     def mapNT[F[_], G[_], B](w: WriterT[F, A, B])(f: F ~> G): WriterT[G, A, B] = WriterT(f(w.run))
   }
-  
+
   implicit def catsDataCommutativeMonadForWriterT[F[_], L](implicit F: CommutativeMonad[F], L: CommutativeMonoid[L]): CommutativeMonad[WriterT[F, L, ?]] =
     new WriterTMonad[F, L] with CommutativeMonad[WriterT[F, L, ?]] {
       implicit val F0: Monad[F] = F
