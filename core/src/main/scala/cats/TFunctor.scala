@@ -25,6 +25,17 @@ import simulacrum.typeclass
 @typeclass trait TFunctor[T[_[_], _]] {
   def mapNT[F[_], G[_], A](h: T[F, A])(f: F ~> G): T[G, A]
 
+  /**
+   * Lift a `F ~> G` to a `T[F, ?] ~> T[G, ?]`.
+   *
+   * {{{
+   * scala> import cats.implicits._, cats.data.OptionT
+   * scala> val lv: List ~> Vector = λ[List ~> Vector](_.toVector)
+   * scala> val olv: OptionT[List, ?] ~> OptionT[Vector, ?] = TFunctor[OptionT].liftNT(lv)
+   * scala> olv(OptionT.liftF(List(1)))
+   * res0: OptionT[Vector, Int] = OptionT(Vector(Some(1)))
+   * }}}
+   */
   def liftNT[F[_], G[_]](f: F ~> G): T[F, ?] ~> T[G, ?] =
     λ[T[F, ?] ~> T[G, ?]](hf => mapNT(hf)(f))
 }
