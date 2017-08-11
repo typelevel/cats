@@ -12,6 +12,9 @@ import cats.kernel.laws.{GroupLaws, OrderLaws}
 class EitherTTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[EitherT[ListWrapper, String, ?]](EitherT.catsDataFunctorForEitherT(ListWrapper.functor))
 
+  checkAll("EitherT[?[_], String, ?]", TFunctorTests[EitherT[?[_], String, ?]].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[EitherT[?[_], String, ?]]", SerializableTests.serializable(TFunctor[EitherT[?[_], String, ?]]))
+
   {
     checkAll("EitherT[Option, ListWrapper[String], ?]", SemigroupKTests[EitherT[Option, ListWrapper[String], ?]].semigroupK[Int])
     checkAll("SemigroupK[EitherT[Option, ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[EitherT[Option, ListWrapper[String], ?]]))

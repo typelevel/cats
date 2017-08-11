@@ -100,6 +100,10 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
 
 private[data] sealed trait OneAndInstances extends OneAndLowPriority3 {
 
+  implicit val catsDataTFunctorForOneAnd: TFunctor[OneAnd] = new TFunctor[OneAnd] {
+    def mapNT[F[_], G[_], A](o: OneAnd[F, A])(f: F ~> G): OneAnd[G, A] = OneAnd(o.head, f(o.tail))
+  }
+
   implicit def catsDataEqForOneAnd[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
     new Eq[OneAnd[F, A]]{
       def eqv(x: OneAnd[F, A], y: OneAnd[F, A]): Boolean = x === y
