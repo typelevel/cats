@@ -6,7 +6,6 @@ package to1_0_0
 
 import cats.implicits._
 import cats.arrow.Split
-import cats.syntax.split._
 
 object RemoveSplitTests {
   val toLong: Int => Long = _.toLong
@@ -14,4 +13,9 @@ object RemoveSplitTests {
   val f: ((Int, Float)) => (Long, Double) =
     Split[Function1].split(toLong, toDouble)
   f((3, 4.0f))
+
+  {
+    import cats.syntax.split._
+    toLong split toDouble
+  }
 }

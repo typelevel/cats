@@ -10,4 +10,9 @@ object RemoveSplitTests {
   val f: ((Int, Float)) => (Long, Double) =
     Arrow[Function1].split(toLong, toDouble)
   f((3, 4.0f))
+
+  {
+    import cats.syntax.arrow._
+    toLong split toDouble
+  }
 }

@@ -1,4 +1,4 @@
-/* 
+/*
 rewrite = "scala:fix.v1_0_0.RenameTupleApplySyntax"
  */
 package fix

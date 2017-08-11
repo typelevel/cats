@@ -262,7 +262,10 @@ case class RemoveSplit(semanticCtx: SemanticCtx) extends SemanticRewrite(semanti
   def rewrite(ctx: RewriteCtx): Patch = {
     ctx.replaceSymbols(
       "_root_.cats.arrow.Split." -> "_root_.cats.arrow.Arrow."
-    )
+    ) + ctx.tree.collect {
+      case t @ q"import cats.syntax.split._" =>
+        ctx.replaceTree(t, "import cats.syntax.arrow._")
+    }.asPatch
   }
 
 }
