@@ -260,12 +260,6 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
 
   override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] = fa.map(f)
 
-  override def map2Eval[A, B, Z](fa: OptionT[F, A], fb: Eval[OptionT[F, B]])(f: (A, B) => Z): Eval[OptionT[F, Z]] =
-    F.map2Eval(fa.value, fb.map(_.value)) { // if F has a lazy map2Eval, leverage it
-      case (Some(a), Some(b)) => Some(f(a, b))
-      case _ => None
-    }.map(OptionT(_))
-
   def tailRecM[A, B](a: A)(f: A => OptionT[F, Either[A, B]]): OptionT[F, B] =
     OptionT(F.tailRecM(a)(a0 => F.map(f(a0).value)(
       _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))

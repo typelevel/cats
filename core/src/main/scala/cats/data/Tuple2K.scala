@@ -104,6 +104,13 @@ private[data] sealed trait Tuple2KApply[F[_], G[_]] extends Apply[λ[α => Tuple
     Tuple2K(F.ap(f.first)(fa.first), G.ap(f.second)(fa.second))
   override def product[A, B](fa: Tuple2K[F, G, A], fb: Tuple2K[F, G, B]): Tuple2K[F, G, (A, B)] =
     Tuple2K(F.product(fa.first, fb.first), G.product(fa.second, fb.second))
+  override def map2Eval[A, B, Z](fa: Tuple2K[F, G, A], fb: Eval[Tuple2K[F, G, B]])(f: (A, B) => Z): Eval[Tuple2K[F, G, Z]] = {
+    val fbmemo = fb.memoize // don't recompute this twice internally
+    for {
+      fz <- F.map2Eval(fa.first, fbmemo.map(_.first))(f)
+      gz <- G.map2Eval(fa.second, fbmemo.map(_.second))(f)
+    } yield Tuple2K(fz, gz)
+  }
 }
 
 private[data] sealed trait Tuple2KApplicative[F[_], G[_]] extends Applicative[λ[α => Tuple2K[F, G, α]]] with Tuple2KApply[F, G] {
