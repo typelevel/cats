@@ -183,7 +183,7 @@ object FreeT extends FreeTInstances {
 
 private[free] sealed trait FreeTInstances extends FreeTInstances0 {
 
-  implicit def catsFreeTFunctorFoFreeT[S[_]]: TFunctor[FreeT[S, ?[_], ?]] = new TFunctor[FreeT[S, ?[_], ?]] {
+  implicit def catsFreeTFunctorForFreeT[S[_]]: TFunctor[FreeT[S, ?[_], ?]] = new TFunctor[FreeT[S, ?[_], ?]] {
     def mapNT[F[_], G[_], A](ft: FreeT[S, F, A])(f: F ~> G): FreeT[S, G, A] = ft.hoist(f)
   }
 

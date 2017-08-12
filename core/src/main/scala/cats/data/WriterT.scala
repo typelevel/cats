@@ -68,7 +68,7 @@ object WriterT extends WriterTInstances with WriterTFunctions {
 
 private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
 
-  implicit def catsDataTFunctorFoWriterT[A]: TFunctor[WriterT[?[_], A, ?]] = new TFunctor[WriterT[?[_], A, ?]] {
+  implicit def catsDataTFunctorForWriterT[A]: TFunctor[WriterT[?[_], A, ?]] = new TFunctor[WriterT[?[_], A, ?]] {
     def mapNT[F[_], G[_], B](w: WriterT[F, A, B])(f: F ~> G): WriterT[G, A, B] = WriterT(f(w.run))
   }
 

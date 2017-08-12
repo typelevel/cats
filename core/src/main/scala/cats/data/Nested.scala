@@ -30,7 +30,7 @@ object Nested extends NestedInstances
 private[data] sealed abstract class NestedInstances extends NestedInstances0 {
 
 
-  implicit def catsDataTFunctorFoNested[I[_]]: TFunctor[Nested[?[_], I, ?]] = new TFunctor[Nested[?[_], I, ?]] {
+  implicit def catsDataTFunctorForNested[I[_]]: TFunctor[Nested[?[_], I, ?]] = new TFunctor[Nested[?[_], I, ?]] {
     def mapNT[F[_], G[_], A](n: Nested[F, I, A])(f: F ~> G): Nested[G, I, A] = Nested(f(n.value))
   }
 

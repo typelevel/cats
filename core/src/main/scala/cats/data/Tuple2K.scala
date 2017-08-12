@@ -14,7 +14,7 @@ object Tuple2K extends Tuple2KInstances
 
 private[data] sealed abstract class Tuple2KInstances extends Tuple2KInstances0 {
 
-  implicit def catsDataTFunctorFoTuple2K[L[_]]: TFunctor[Tuple2K[L, ?[_], ?]] = new TFunctor[Tuple2K[L, ?[_], ?]] {
+  implicit def catsDataTFunctorForTuple2K[L[_]]: TFunctor[Tuple2K[L, ?[_], ?]] = new TFunctor[Tuple2K[L, ?[_], ?]] {
     def mapNT[F[_], G[_], A](ek: Tuple2K[L, F, A])(f: F ~> G): Tuple2K[L, G, A] = Tuple2K(ek.first, f(ek.second))
   }
 

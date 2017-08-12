@@ -32,7 +32,7 @@ object Func extends FuncInstances {
 
 private[data] abstract class FuncInstances extends FuncInstances0 {
 
-  implicit def catsDataTFunctorFoFunc[A]: TFunctor[Func[?[_], A, ?]] = new TFunctor[Func[?[_], A, ?]] {
+  implicit def catsDataTFunctorForFunc[A]: TFunctor[Func[?[_], A, ?]] = new TFunctor[Func[?[_], A, ?]] {
     def mapNT[F[_], G[_], B](h: Func[F, A, B])(f: F ~> G): Func[G, A, B] = Func.func(h.run.andThen(f.apply))
   }
 

@@ -90,7 +90,7 @@ private[data] sealed trait KleisliFunctions {
 
 private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
 
-  implicit def catsDataTFunctorFoKleisli[A]: TFunctor[Kleisli[?[_], A, ?]] = new TFunctor[Kleisli[?[_], A, ?]] {
+  implicit def catsDataTFunctorForKleisli[A]: TFunctor[Kleisli[?[_], A, ?]] = new TFunctor[Kleisli[?[_], A, ?]] {
     def mapNT[F[_], G[_], B](k: Kleisli[F, A, B])(f: F ~> G): Kleisli[G, A, B] = k.transform(f)
   }
 

@@ -420,7 +420,7 @@ object EitherT extends EitherTInstances {
 
 private[data] abstract class EitherTInstances extends EitherTInstances1 {
 
-  implicit def catsDataTFunctorFoEitherT[A]: TFunctor[EitherT[?[_], A, ?]] = new TFunctor[EitherT[?[_], A, ?]] {
+  implicit def catsDataTFunctorForEitherT[A]: TFunctor[EitherT[?[_], A, ?]] = new TFunctor[EitherT[?[_], A, ?]] {
     def mapNT[F[_], G[_], B](h: EitherT[F, A, B])(f: F ~> G): EitherT[G, A, B] = EitherT(f(h.value))
   }
 
