@@ -61,6 +61,9 @@ lazyEval.value
 ```
 
 Notice that "Running expensive calculation" is printed only once, since the value was memoized internally.
+`Eval.later` is different to using a `lazy val` in a few different ways.
+First, it allows the runtime to perform garbage collection of the thunk after evaluation, leading to more memory being freed earlier.
+Secondly, when `lazy val`s are evaluated, in order to preserve thread-safety, the Scala compiler will lock the whole surrounding class, whereas `Eval` will only lock itself.
 
 #### Eval.always
 
