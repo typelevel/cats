@@ -1,7 +1,7 @@
 package cats
 
 import simulacrum.typeclass
-import syntax.either._
+
 /**
  * Monad.
  *
@@ -30,7 +30,7 @@ import syntax.either._
           Left(G.combineK(xs, G.pure(bv)))
         }
       },
-      ifFalse = pure(xs.asRight[G[A]])
+      ifFalse = pure(Right(xs))
     ))
   }
 
@@ -80,8 +80,8 @@ import syntax.either._
     flatMap(f) { i =>
       tailRecM(i) { a =>
         if (p(a))
-          map(f)(_.asLeft[A])
-        else pure(a.asRight[A])
+          map(f)(Left(_))
+        else pure(Right(a))
       }
     }
   }
@@ -94,8 +94,8 @@ import syntax.either._
     flatMap(f) { i =>
       tailRecM(i) { a =>
         if (p(a))
-          pure(a.asRight[A])
-        else map(f)(_.asLeft[A])
+          pure(Right(a))
+        else map(f)(Left(_))
       }
     }
   }
