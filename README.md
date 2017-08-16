@@ -99,10 +99,10 @@ language", and integrate with each other with ease.
 
  * [Circe](https://github.com/circe/circe): pure functional JSON library.
  * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources.
- * [Frameless](https://github.com/adelbertc/frameless): Expressive types for Spark.
+ * [Frameless](https://github.com/typelevel/frameless): Expressive types for Spark.
  * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
  * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
- * [Monix](https://github.com/monixio/monix): high-performance library for composing asynchronous and event-based programs.
+ * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs.
  * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
