@@ -535,6 +535,7 @@ private[data] trait EitherTFunctor[F[_], L] extends Functor[EitherT[F, L, ?]] {
 private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, ?]] with EitherTFunctor[F, L] {
   implicit val F: Monad[F]
   def pure[A](a: A): EitherT[F, L, A] = EitherT.pure(a)
+
   def flatMap[A, B](fa: EitherT[F, L, A])(f: A => EitherT[F, L, B]): EitherT[F, L, B] = fa flatMap f
   def tailRecM[A, B](a: A)(f: A => EitherT[F, L, Either[A, B]]): EitherT[F, L, B] =
     EitherT(F.tailRecM(a)(a0 => F.map(f(a0).value) {

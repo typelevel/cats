@@ -55,6 +55,10 @@ private[data] sealed trait IdTApply[F[_]] extends Apply[IdT[F, ?]] with IdTFunct
   implicit val F0: Apply[F]
 
   override def ap[A, B](ff: IdT[F, A => B])(fa: IdT[F, A]): IdT[F, B] = fa.ap(ff)
+
+  override def map2Eval[A, B, Z](fa: IdT[F, A], fb: Eval[IdT[F, B]])(f: (A, B) => Z): Eval[IdT[F, Z]] =
+    F0.map2Eval(fa.value, fb.map(_.value))(f) // if F0 has a lazy map2Eval, leverage it
+      .map(IdT(_))
 }
 
 private[data] sealed trait IdTApplicative[F[_]] extends Applicative[IdT[F, ?]] with IdTApply[F] {
