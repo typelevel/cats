@@ -26,7 +26,10 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with CartesianTests[F] {
     val name = "apply"
     val parents = Seq(functor[A, B, C], cartesian[A, B, C])
     val bases = Seq.empty
-    val props = Seq("apply composition" -> forAll(laws.applyComposition[A, B, C] _))
+    val props = Seq(
+      "apply composition" -> forAll(laws.applyComposition[A, B, C] _),
+      "map2/product-map consistency" -> forAll(laws.map2ProductConsistency[A, B, C] _),
+      "map2/map2Eval consistency" -> forAll(laws.map2EvalConsistency[A, B, C] _))
   }
 }
 
