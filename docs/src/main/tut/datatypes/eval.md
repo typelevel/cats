@@ -109,3 +109,6 @@ MutualRecursion.odd(199999).value
 ```
 
 Because `Eval` guarantees stack-safety, we can chain a lot of computations together using `flatMap` without fear of blowing up the stack.
+
+You can also use `Eval.defer` to defer any computation that will return an `Eval[A]`.
+This is useful, because nesting a call to `.value` inside any of the `Eval` creation methods can be unsafe.
