@@ -152,6 +152,17 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
 
+
+
+  def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel[M, F]): Unit = {
+    val ta = mock[T[A]]
+    val f = mock[A => M[B]]
+    val mtb = ta.parTraverse(f)
+
+    val tma = mock[T[M[A]]]
+    val mta = tma.parSequence
+  }
+
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
     val fa = mock[F[A]]
     val f1 = mock[(A, A) => A]
