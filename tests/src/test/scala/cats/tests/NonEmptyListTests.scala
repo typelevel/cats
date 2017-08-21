@@ -224,6 +224,7 @@ class NonEmptyListTests extends CatsSuite {
   test(":: consistent with List") {
     forAll { (nel: NonEmptyList[Int], i: Int) =>
       (i :: nel).toList should === (i :: nel.toList)
+      nel.prepend(i).toList should === (i :: nel.toList)
     }
   }
 
@@ -257,9 +258,10 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
-  test("NonEmptyList#size is consistent with List#size") {
+  test("NonEmptyList#size and length is consistent with List#size") {
     forAll { nel: NonEmptyList[Int] =>
       nel.size should === (nel.toList.size)
+      nel.length should === (nel.toList.size)
     }
   }
 
@@ -282,7 +284,15 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
-  test("NonEmptyList#fromFoldable is consistent with NonEmptyList#fromList") {
+  test("NonEmptyList#concat/concatNel is consistent with List#:::") {
+    forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
+      (nel ++ l).toList should === (nel.toList ::: l)
+      nel.concat(l).toList should === (nel.toList ::: l)
+      nel.concatNel(NonEmptyList(n, l)).toList should === (nel.toList ::: (n :: l))
+    }
+  }
+
+  test("NonEmptyList#fromFoldabale is consistent with NonEmptyList#fromList") {
     forAll { (xs: List[Int]) =>
       NonEmptyList.fromList(xs) should === (NonEmptyList.fromFoldable(xs))
     }

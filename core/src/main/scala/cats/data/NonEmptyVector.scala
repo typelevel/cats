@@ -36,6 +36,10 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
 
   def tail: Vector[A] = toVector.tail
 
+  def last: A = toVector.last
+
+  def init: Vector[A] = toVector.init
+
   /**
     * Remove elements not matching the predicate
     *
@@ -59,6 +63,8 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
     * }}}
     */
   def filterNot(f: A => Boolean): Vector[A] = toVector.filterNot(f)
+
+  def collect[B](pf: PartialFunction[A, B]): Vector[B] = toVector.collect(pf)
 
   /**
    * Alias for [[concat]]
@@ -198,6 +204,18 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
     */
   def zipWith[B, C](b: NonEmptyVector[B])(f: (A, B) => C): NonEmptyVector[C] =
     NonEmptyVector.fromVectorUnsafe((toVector, b.toVector).zipped.map(f))
+
+  def reverse: NonEmptyVector[A] =
+    new NonEmptyVector(toVector.reverse)
+
+  def zipWithIndex: NonEmptyVector[(A, Int)] =
+    new NonEmptyVector(toVector.zipWithIndex)
+
+  def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyVector[A] =
+    new NonEmptyVector(toVector.sortBy(f)(B.toOrdering))
+
+  def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyVector[AA] =
+    new NonEmptyVector(toVector.sorted(AA.toOrdering))
 }
 
 private[data] sealed abstract class NonEmptyVectorInstances {
