@@ -5,6 +5,8 @@ import cats.functor.Bifunctor
 import cats.instances.either._
 import cats.syntax.either._
 
+import scala.concurrent.{ExecutionContext, Future}
+
 /**
  * Transformer for `Either`, allowing the effect of an arbitrary type constructor `F` to be combined with the
  * fail-fast effect of `Either`.
@@ -334,6 +336,57 @@ object EitherT extends EitherTInstances {
    * }}}
    */
   final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
+
+  /** Create an `EitherT` from a recoverable F[_].
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val o1: Option[Int] = Some(5)
+    * scala> EitherT.fromRecoverable[Option, Unit](o1) { case _ => 1 }
+    * res0: EitherT[Option, Nothing, Int] = EitherT(Some(Right(5)))
+    * scala> val o2: Option[Int] = None
+    * scala> EitherT.fromRecoverable[Option, Unit](o2) { case _ => 1 }
+    * res1: EitherT[Option, Nothing, Int] = EitherT(Some(Right(1)))
+    * }}}
+    */
+  final def fromRecoverable[F[_], E]: FromRecoverablePartiallyApplied[F, E] = new FromRecoverablePartiallyApplied
+
+  /**
+    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+    */
+  private[data] final class FromRecoverablePartiallyApplied[F[_], E](val dummy: Boolean = true) extends AnyVal {
+    def apply[A, B](f: F[B])(pf: PartialFunction[E, B])(implicit me: MonadError[F, E]): EitherT[F, A, B] =
+      EitherT.right[A](me.recover(f)(pf))
+  }
+
+  /** Creates an `EitherT` from a Future, recovers its error into a Either.Left.
+    *
+    * {{{
+    * scala> import scala.concurrent.Future
+    * scala> import scala.concurrent.duration.Duration
+    * scala> import scala.concurrent.Await
+    * scala> import scala.concurrent.ExecutionContext.Implicits.global
+    * scala> val f1: Future[Int] = Future.successful(1)
+    * scala> Await.result(EitherT.fromFuture(f1).value, Duration.Inf)
+    * res0: Either[Throwable, Int] = Right(1)
+    * scala> val f2: Future[Int] = Future.failed(new Throwable("error"))
+    * scala> Await.result(EitherT.fromFuture(f2).value, Duration.Inf)
+    * res1: Either[Throwable, Int] = Left(java.lang.Throwable: error)
+    * }}}
+    */
+  final def fromFuture: FromFuturePartiallyApplied = new FromFuturePartiallyApplied
+
+  /**
+    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+    */
+  private[data] final class FromFuturePartiallyApplied(val dummy: Boolean = true) extends AnyVal {
+    def apply[B](future: Future[B])(implicit ec: ExecutionContext): EitherT[Future, Throwable, B] =
+      EitherT {
+        future.map(Right(_)).recoverWith {
+          case ex => Future.successful(Left(ex))
+        }
+      }
+  }
 
   /** Transforms an `Either` into an `EitherT`, lifted into the specified `Applicative`.
    *
