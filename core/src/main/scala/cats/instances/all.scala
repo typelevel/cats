@@ -17,6 +17,7 @@ trait AllInstances
   with    OptionInstances
   with    OrderInstances
   with    OrderingInstances
+  with    ParallelInstances
   with    PartialOrderInstances
   with    PartialOrderingInstances
   with    QueueInstances

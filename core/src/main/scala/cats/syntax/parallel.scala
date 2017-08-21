@@ -4,29 +4,27 @@ import cats.{Monad, Parallel, Traverse}
 
 trait ParallelSyntax {
   implicit final def catsSyntaxParallelTraverse[T[_]: Traverse, A]
-  (ta: T[A]): ParallelTraversableOps[T, A] = new ParallelTraversableOps[T, A] {
-    override def self = ta
+  (ta: T[A]): ParallelTraversableOps[T, A] = new ParallelTraversableOps[T, A](ta)
 
-    override val typeClassInstance: Traverse[T] = T
-  }
+  implicit final def catsSyntaxParallelSequence[T[_]: Traverse, M[_]: Monad, A]
+  (tma: T[M[A]]): ParallelSequenceOps[T, M, A] = new ParallelSequenceOps[T, M, A](tma)
 }
 
 
 
 
-trait ParallelTraversableOps[T[_], A] {
+final class ParallelTraversableOps[T[_], A](val ta: T[A]) extends AnyVal {
 
-  val typeClassInstance : cats.Traverse[T]
-  def self : T[A]
-
-  implicit val T = typeClassInstance
 
   def parTraverse[M[_]: Monad, F[_], B]
-  (f: A => M[B])(implicit P: Parallel[M, F]): M[T[B]] =
-    Parallel.parTraverse(self)(f)
+  (f: A => M[B])(implicit T: Traverse[T], P: Parallel[M, F]): M[T[B]] =
+    Parallel.parTraverse(ta)(f)
 
-  def parSequence[M[_]: Monad, F[_], B](implicit ev: A <:< M[B], P: Parallel[M, F]): M[T[B]] =
-    Parallel.parSequence(self.asInstanceOf[T[M[B]]])
+}
 
+final class ParallelSequenceOps[T[_], M[_], A](val tma: T[M[A]]) extends AnyVal {
+  def parSequence[F[_]]
+  (implicit M: Monad[M], T: Traverse[T], P: Parallel[M, F]): M[T[A]] =
+    Parallel.parSequence(tma)
 
 }
