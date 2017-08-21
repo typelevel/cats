@@ -374,19 +374,12 @@ object EitherT extends EitherTInstances {
     * res1: Either[Throwable, Int] = Left(java.lang.Throwable: error)
     * }}}
     */
-  final def fromFuture: FromFuturePartiallyApplied = new FromFuturePartiallyApplied
-
-  /**
-    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
-    */
-  private[data] final class FromFuturePartiallyApplied(val dummy: Boolean = true) extends AnyVal {
-    def apply[B](future: Future[B])(implicit ec: ExecutionContext): EitherT[Future, Throwable, B] =
-      EitherT {
-        future.map(Right(_)).recoverWith {
-          case ex => Future.successful(Left(ex))
-        }
+  final def fromFuture[B](future: Future[B])(implicit ec: ExecutionContext): EitherT[Future, Throwable, B] =
+    EitherT {
+      future.map(Right(_)).recoverWith {
+        case ex => Future.successful(Left(ex))
       }
-  }
+    }
 
   /** Transforms an `Either` into an `EitherT`, lifted into the specified `Applicative`.
    *
