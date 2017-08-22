@@ -2,7 +2,7 @@ package cats.syntax
 
 import cats.{Monad, Parallel, Traverse}
 
-trait ParallelSyntax {
+trait ParallelSyntax extends TupleParallelSyntax {
   implicit final def catsSyntaxParallelTraverse[T[_]: Traverse, A]
   (ta: T[A]): ParallelTraversableOps[T, A] = new ParallelTraversableOps[T, A](ta)
 
@@ -11,10 +11,7 @@ trait ParallelSyntax {
 }
 
 
-
-
 final class ParallelTraversableOps[T[_], A](val ta: T[A]) extends AnyVal {
-
 
   def parTraverse[M[_]: Monad, F[_], B]
   (f: A => M[B])(implicit T: Traverse[T], P: Parallel[M, F]): M[T[B]] =

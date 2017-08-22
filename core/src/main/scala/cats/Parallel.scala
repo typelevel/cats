@@ -6,7 +6,7 @@ trait Parallel[M[_], F[_]] {
   def parallel(implicit M: Monad[M]): M ~> F
 }
 
-object Parallel {
+object Parallel extends ParallelArityFunctions {
   def parSequence[T[_]: Traverse, M[_]: Monad, F[_], A]
   (tma: T[M[A]])(implicit P: Parallel[M, F]): M[T[A]] = {
     implicit val F = P.applicative
@@ -51,10 +51,4 @@ object Parallel {
                                         (ma: M[A], mb: M[B])
                                         (implicit P: Parallel[M, F]): M[Z] =
     Monad[M].map(parProduct(ma, parProduct(mb, ff))) { case (a, (b, f)) => f(a, b) }
-
-  def parMap2[M[_]: Monad, F[_], A, B, C](ma: M[A], mb: M[B])
-                                         (f: (A, B) => C)
-                                         (implicit P: Parallel[M, F]): M[C] = {
-    Monad[M].map(parProduct(ma, mb)) { case (a, b) => f(a, b) }
-  }
 }
