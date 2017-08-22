@@ -355,12 +355,13 @@ object EitherT extends EitherTInstances {
     * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
     */
   private[data] final class FromRecoverablePartiallyApplied[F[_], E](val dummy: Boolean = true) extends AnyVal {
-    def apply[A, B](f: F[B])(pf: PartialFunction[E, B])(implicit me: MonadError[F, E]): EitherT[F, A, B] =
-      EitherT.right[A](me.recover(f)(pf))
+    def apply[A, B](f: F[B])(pf: PartialFunction[E, B])(implicit ae: ApplicativeError[F, E]): EitherT[F, A, B] =
+      EitherT.right[A](ae.recover(f)(pf))
   }
 
   /** Creates an `EitherT` from a Future, recovers its error into a Either.Left.
-    *
+    * Catches any non-fatal exception in the future and always returns a successful
+    * future with the error in a Left.
     * {{{
     * scala> import scala.concurrent.Future
     * scala> import scala.concurrent.duration.Duration
