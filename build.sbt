@@ -4,8 +4,6 @@ import ReleaseTransformations._
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import org.scalajs.sbtplugin.cross.CrossProject
 
-lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev environment")
-
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
   coverageFailOnMinimum := false,
@@ -82,10 +80,8 @@ lazy val commonJsSettings = Seq(
   parallelExecution := false,
   requiresDOM := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
-  // Only used for scala.js for now
-  botBuild := scala.sys.env.get("TRAVIS").isDefined,
   // batch mode decreases the amount of memory needed to compile scala.js code
-  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value),
+  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(isTravisBuild.value),
   doctestGenTests := Seq.empty,
   doctestWithDependencies := false
 )
