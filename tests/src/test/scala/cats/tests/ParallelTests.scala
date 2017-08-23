@@ -1,9 +1,11 @@
 package cats
 
 
-import cats.data.{EitherT, Nested, OptionT, Validated}
+import cats.data._
 import cats.tests.CatsSuite
 import cats.laws.discipline.{ParallelTests => ParallelTypeclassTests}
+import cats.laws.discipline.eq._
+import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 
 class ParallelTests extends CatsSuite {
@@ -38,12 +40,13 @@ class ParallelTests extends CatsSuite {
   }
 
   checkAll("Parallel[Either[String, ?], Validated[String, ?]]", ParallelTypeclassTests[Either[String, ?], Validated[String, ?], Int].parallel)
+  checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?], Int].parallel)
+  checkAll("Parallel[EitherT[M, E, ?], Nested[F, Validated[E, ?], ?]]", ParallelTypeclassTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?], Int].parallel)
 
   {
-    implicit val arbO: Arbitrary[OptionT[Either[String, ?], Int]] = cats.laws.discipline.arbitrary.catsLawsArbitraryForOptionT
-    implicit val arbE: Arbitrary[EitherT[Either[String, ?], String, Int]] = cats.laws.discipline.arbitrary.catsLawsArbitraryForEitherT
+    implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
+      Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
-    checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?], Int].parallel)
-    checkAll("Parallel[EitherT[M, E, ?], Nested[F, Validated[E, ?], ?]]", ParallelTypeclassTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?], Int].parallel)
+    checkAll("Parallel[KlesliT[Id, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[Kleisli[Either[String, ?], Int, ?], Kleisli[Validated[String, ?], Int, ?], Int].parallel)
   }
 }
