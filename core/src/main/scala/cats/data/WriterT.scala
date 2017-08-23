@@ -81,6 +81,18 @@ private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 
       implicit val L0: Monoid[L] = L
     }
 
+  implicit def catsDataParallelForWriterT[F[_], M[_]: Monad, L: Monoid]
+  (implicit P: Parallel[M, F]): Parallel[WriterT[M, L, ?], WriterT[F, L, ?]] = new Parallel[WriterT[M, L, ?], WriterT[F, L, ?]]{
+    implicit val appF = P.applicative
+    def applicative: Applicative[WriterT[F, L, ?]] = catsDataApplicativeForWriterT
+
+    def sequential(implicit M: Monad[WriterT[M, L, ?]]): WriterT[F, L, ?] ~> WriterT[M, L, ?] =
+      λ[WriterT[F, L, ?] ~> WriterT[M, L, ?]](wfl => WriterT(P.sequential.apply(wfl.run)))
+
+    def parallel(implicit M: Monad[WriterT[M, L, ?]]): WriterT[M, L, ?] ~> WriterT[F, L, ?] =
+      λ[WriterT[M, L, ?] ~> WriterT[F, L, ?]](wml => WriterT(P.parallel.apply(wml.run)))
+  }
+
   implicit def catsDataEqForWriterTId[L: Eq, V: Eq]: Eq[WriterT[Id, L, V]] =
     catsDataEqForWriterT[Id, L, V]
 
