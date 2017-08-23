@@ -94,6 +94,7 @@ language", and integrate with each other with ease.
  * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs.
  * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
+ * [origami](https://github.com/atnos-org/origami): monadic folds
 
 #### Libraries with more specific uses
 
