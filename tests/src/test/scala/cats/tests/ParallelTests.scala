@@ -1,9 +1,10 @@
 package cats
 
 
-import cats.data.Validated
+import cats.data.{EitherT, Nested, OptionT, Validated}
 import cats.tests.CatsSuite
 import cats.laws.discipline.{ParallelTests => ParallelTypeclassTests}
+import org.scalacheck.Arbitrary
 
 class ParallelTests extends CatsSuite {
 
@@ -36,7 +37,13 @@ class ParallelTests extends CatsSuite {
     Parallel.parAp2(rightPlus)("Hello".asLeft, "World".asLeft) should === (Left("HelloWorld"))
   }
 
-
   checkAll("Parallel[Either[String, ?], Validated[String, ?]]", ParallelTypeclassTests[Either[String, ?], Validated[String, ?], Int].parallel)
 
+  {
+    implicit val arbO: Arbitrary[OptionT[Either[String, ?], Int]] = cats.laws.discipline.arbitrary.catsLawsArbitraryForOptionT
+    implicit val arbE: Arbitrary[EitherT[Either[String, ?], String, Int]] = cats.laws.discipline.arbitrary.catsLawsArbitraryForEitherT
+
+    checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?], Int].parallel)
+    checkAll("Parallel[EitherT[M, E, ?], Nested[F, Either[E, ?], ?]]", ParallelTypeclassTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Either[String, ?], ?], Int].parallel)
+  }
 }
