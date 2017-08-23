@@ -44,6 +44,6 @@ class ParallelTests extends CatsSuite {
     implicit val arbE: Arbitrary[EitherT[Either[String, ?], String, Int]] = cats.laws.discipline.arbitrary.catsLawsArbitraryForEitherT
 
     checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?], Int].parallel)
-    checkAll("Parallel[EitherT[M, E, ?], Nested[F, Either[E, ?], ?]]", ParallelTypeclassTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Either[String, ?], ?], Int].parallel)
+    checkAll("Parallel[EitherT[M, E, ?], Nested[F, Validated[E, ?], ?]]", ParallelTypeclassTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?], Int].parallel)
   }
 }
