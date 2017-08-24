@@ -39,6 +39,23 @@ class ParallelTests extends CatsSuite {
     Parallel.parAp2(rightPlus)("Hello".asLeft, "World".asLeft) should === (Left("HelloWorld"))
   }
 
+  test("Kleisli with Either should accumulate errors") {
+    val k1: Kleisli[Either[String, ?], String, Int] = Kleisli(s => Right(s.length))
+    val k2: Kleisli[Either[String, ?], String, Int] = Kleisli(s => Left("Boo"))
+    val k3: Kleisli[Either[String, ?], String, Int] = Kleisli(s => Left("Nope"))
+
+    (List(k1,k2,k3).parSequence.run("Hello")) should === (Left("BooNope"))
+
+  }
+
+  test("WriterT with Either should accumulate errors") {
+    val w1: WriterT[Either[String, ?], String, Int] = WriterT.lift(Left("Too "))
+    val w2: WriterT[Either[String, ?], String, Int] = WriterT.lift(Left("bad."))
+
+    ((w1,w2).parMapN(_ + _).value) should === (Left("Too bad."))
+
+  }
+
   checkAll("Parallel[Either[String, ?], Validated[String, ?]]", ParallelTypeclassTests[Either[String, ?], Validated[String, ?], Int].parallel)
   checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?], Int].parallel)
   checkAll("Parallel[EitherT[M, String, ?], Nested[F, Validated[String, ?], ?]]", ParallelTypeclassTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?], Int].parallel)
