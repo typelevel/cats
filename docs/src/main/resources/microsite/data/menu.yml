@@ -144,6 +144,10 @@ options:
     url: datatypes/optiont.html
     menu_type: data
 
+  - title: EitherT
+    url: datatypes/eithert.html
+    menu_type: data
+
   - title: State
     url: datatypes/state.html
     menu_type: data
