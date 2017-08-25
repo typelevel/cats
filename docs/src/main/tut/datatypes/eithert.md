@@ -125,14 +125,16 @@ val error: EitherT[Option, String, Int] = EitherT.left(errorO)
 ## From `Either[A, B]` or `F[Either[A, B]]` to `EitherT[F, A, B]`
 
 Use `EitherT.fromEither` to a lift a value of `Either[A, B]` into `EitherT[F, A, B]`.
-A `F[Either[A, B]]` can be 
+A `F[Either[A, B]]` can be converted into `EitherT` using the `EitherT` constructor.
 
 ```tut:silent
 val numberE: Either[String, Int] = Right(100)
 val errorE: Either[String, Int] = Left("Not a number")
+val numberFE: List[Either[String, Int]] = List(Right(250))
 
 val numberET: EitherT[List, String, Int] = EitherT.fromEither(numberE)
 val errorET: EitherT[List, String, Int] = EitherT.fromEither(errorE)
+val numberFET: EitherT[List, String, Int] = EitherT(numberFE)
 ```
 
 ## From `Option[B]` or `F[Option[B]]` to `EitherT[F, A, B]`
