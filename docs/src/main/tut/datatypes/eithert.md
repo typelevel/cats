@@ -14,12 +14,10 @@ following program:
 
 ```tut:book
 import scala.util.Try
+import cats.syntax.either._
 
 def parseDouble(s: String): Either[String, Double] =
-  Try(s.toDouble).toEither match {
-    case Left(_) => Left(s"$s is not a number")
-    case Right(n) => Right(n)
-  }
+  Try(s.toDouble).map(Right(_)).getOrElse(Left(s"$s is not a number"))
 
 def divide(a: Double, b: Double): Either[String, Double] =
   Either.cond(b != 0, a / b, "Cannot divide by zero")
@@ -66,7 +64,7 @@ def divisionProgramAsync(inputA: String, inputB: String): Future[Either[String, 
   }
 ```
 
-Clearly, the updated code is less readible and more verbose: the details of the
+Clearly, the updated code is less readable and more verbose: the details of the
 program are now mixed with the error handling. In addition, as more `Either`s
 and `Futures` are included, the amount of boilerplate required to properly
 handle the errors will increase dramatically.
@@ -94,8 +92,8 @@ divisionProgramAsync("4", "2").value // Future(Right(2.0))
 divisionProgramAsync("a", "b").value // Future(Left("a is not a number"))
 ```
 
-Note that since `EitherT` is a monad, monadic combinators such as `flatMap` can
-be used to compose `EitherT` values.
+Note that when `F` is a monad, then `EitherT` will also form a monad, allowing
+monadic combinators such as `flatMap` to be used in composing `EitherT` values.
 
 ## From `A` or `B` to `EitherT[F, A, B]`
 
@@ -110,7 +108,7 @@ val error: EitherT[Option, String, Int] = EitherT.leftT("Not a number")
 
 ## From `F[A]` or `F[B]` to `EitherT[F, A, B]`
 
-Similary, use `EitherT.left` and `EitherT.right` to convert a `F[A]` or a `F[B]`
+Similary, use `EitherT.left` and `EitherT.right` to convert an `F[A]` or an `F[B]`
 into an `EitherT`. It is also possible to use `EitherT.liftT` as an alias for
 `EitherT.right`.
 
@@ -125,7 +123,7 @@ val error: EitherT[Option, String, Int] = EitherT.left(errorO)
 ## From `Either[A, B]` or `F[Either[A, B]]` to `EitherT[F, A, B]`
 
 Use `EitherT.fromEither` to a lift a value of `Either[A, B]` into `EitherT[F, A, B]`.
-A `F[Either[A, B]]` can be converted into `EitherT` using the `EitherT` constructor.
+An `F[Either[A, B]]` can be converted into `EitherT` using the `EitherT` constructor.
 
 ```tut:silent
 val numberE: Either[String, Int] = Right(100)
@@ -139,7 +137,7 @@ val numberFET: EitherT[List, String, Int] = EitherT(numberFE)
 
 ## From `Option[B]` or `F[Option[B]]` to `EitherT[F, A, B]`
 
-An `Option[B]` or a `F[Option[B]]`, along with a default value, can be passed to
+An `Option[B]` or an `F[Option[B]]`, along with a default value, can be passed to
 `EitherT.fromOption` and `EitherT.fromOptionF`, respectively, to produce an
 `EitherT`.
 
