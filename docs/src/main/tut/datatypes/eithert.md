@@ -15,78 +15,146 @@ following program:
 ```tut:book
 import scala.util.Try
 
-def stringToDouble(s: String): Either[String, Double] =
+def parseDouble(s: String): Either[String, Double] =
   Try(s.toDouble).toEither match {
     case Left(_) => Left(s"$s is not a number")
     case Right(n) => Right(n)
   }
 
 def divide(a: Double, b: Double): Either[String, Double] =
-  Either.cond(b == 0, a / b, "Cannot divide by zero")
+  Either.cond(b != 0, a / b, "Cannot divide by zero")
 
 def divisionProgram(inputA: String, inputB: String): Either[String, Double] =
   for {
-    a <- stringToDouble(inputA)
-    b <- stringToDouble(inputB)
+    a <- parseDouble(inputA)
+    b <- parseDouble(inputB)
     result <- divide(a, b)
   } yield result
 
-divisionProgram("4", "2")
-divisionProgram("a", "b")
+divisionProgram("4", "2") // Right(2.0)
+divisionProgram("a", "b") // Left("a is not a number")
 ```
 
-Suppose `stringToDouble` and `divide` are rewritten to be asynchronous and
-return `Future[Either[String, Double]]` instead. The for-comprehension can no
-longer be used since `divisionProgram` must now compose `Future` and `Either`
-together.
+Suppose `parseDouble` and `divide` are rewritten to be asynchronous and return
+`Future[Either[String, Double]]` instead. The for-comprehension can no longer be
+used since `divisionProgram` must now compose `Future` and `Either` together,
+which means that the error handling must be performed explicitly to ensure that
+the proper types are returned:
 
 ```tut:silent
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-def stringToDouble(s: String): Future[Either[String, Double]] = ???
-def divide(a: Double, b: Double): Future[Either[String, Double]] = ???
+def parseDoubleAsync(s: String): Future[Either[String, Double]] =
+  Future.successful(parseDouble(s))
+def divideAsync(a: Double, b: Double): Future[Either[String, Double]] =
+  Future.successful(divide(a, b))
 
-def divisionProgram(inputA: String, inputB: String): Future[Either[String, Double]] =
-  stringToDouble(inputA) flatMap { eitherA =>
-    stringToDouble(inputB) flatMap { eitherB =>
+def divisionProgramAsync(inputA: String, inputB: String): Future[Either[String, Double]] =
+  parseDoubleAsync(inputA) flatMap { eitherA =>
+    parseDoubleAsync(inputB) flatMap { eitherB =>
       val parseResult = for {
         a <- eitherA
         b <- eitherB
       } yield (a, b)
       
       parseResult match {
-        case Right((a, b)) => divide(a, b)
+        case Right((a, b)) => divideAsync(a, b)
         case l@Left(err) => Future.successful(Left(err))
       }
     }
   }
 ```
 
-It is easy to see that as additional `Either`s and `Futures` are included, the
-amount of boilerplate required to properly handle the errors will increase
-dramatically.
+Clearly, the updated code is less readible and more verbose: the details of the
+program are now mixed with the error handling. In addition, as more `Either`s
+and `Futures` are included, the amount of boilerplate required to properly
+handle the errors will increase dramatically.
 
 ## EitherT
 
 `EitherT[F[_], A, B]` is a lightweight wrapper for `F[Either[A, B]]` that makes
-it easy to compose `Either`s and `F`s together. Using `EitherT`, the asynchronous
-division program can be rewritten as follows:
+it easy to compose `Either`s and `F`s together. To use `EitherT`, values of
+`Either`, `F`, `A`, and `B` are first converted into `EitherT`, and the
+resulting `EitherT` values are then composed using combinators. For example, the
+asynchronous division program can be rewritten as follows:
 
 ```tut:silent
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.util.Try
 import cats.data.EitherT
 import cats.implicits._
 
-def stringToDouble(s: String): Future[Either[String, Double]] = ???
-def divide(a: Double, b: Double): Future[Either[String, Double]] = ???
-
-def divisionProgram(inputA: String, inputB: String): EitherT[Future, String, Double] =
+def divisionProgramAsync(inputA: String, inputB: String): EitherT[Future, String, Double] =
   for {
-    a <- EitherT(stringToDouble(inputA))
-    b <- EitherT(stringToDouble(inputB))
-    result <- EitherT(divide(a, b))
+    a <- EitherT(parseDoubleAsync(inputA))
+    b <- EitherT(parseDoubleAsync(inputB))
+    result <- EitherT(divideAsync(a, b))
   } yield result
+
+divisionProgramAsync("4", "2").value // Future(Right(2.0))
+divisionProgramAsync("a", "b").value // Future(Left("a is not a number"))
+```
+
+Note that since `EitherT` is a monad, monadic combinators such as `flatMap` can
+be used to compose `EitherT` values.
+
+## From `A` or `B` to `EitherT[F, A, B]`
+
+To obtain a left version or a right version of `EitherT` when given an `A` or a
+`B`, use `EitherT.leftT` and `EitherT.rightT` (which is an alias for
+`EitherT.pure`), respectively.
+
+```tut:silent
+val number: EitherT[Option, String, Int] = EitherT.rightT(5)
+val error: EitherT[Option, String, Int] = EitherT.leftT("Not a number")
+```
+
+## From `F[A]` or `F[B]` to `EitherT[F, A B]`
+
+Similary, use `EitherT.left` and `EitherT.right` to convert a `F[A]` or a `F[B]`
+into an `EitherT`. It is also possible to use `EitherT.liftT` as an alias for
+`EitherT.right`.
+
+```tut:silent
+val numberO: Option[Int] = Some(5)
+val errorO: Option[String] = Some("Not a number")
+
+val number: EitherT[Option, String, Int] = EitherT.right(numberO)
+val error: EitherT[Option, String, Int] = EitherT.left(errorO)
+```
+
+## From `Either[A, B]` or `F[Either[A, B]]` to `EitherT[F, A, B]`
+
+Use `EitherT.fromEither` to a lift a value of `Either[A, B]` into `EitherT[F, A, B]`.
+A `F[Either[A, B]]` can be 
+
+```tut:silent
+val numberE: Either[String, Int] = Right(100)
+val errorE: Either[String, Int] = Left("Not a number")
+
+val numberET: EitherT[List, String, Int] = EitherT.fromEither(numberE)
+val errorET: EitherT[List, String, Int] = EitherT.fromEither(errorE)
+```
+
+## From `Option[B]` or `F[Option[B]]` to `EitherT[F, A, B]`
+
+An `Option[B]` or a `F[Option[B]]`, along with a default value, can be passed to
+`EitherT.fromOption` and `EitherT.fromOptionF`, respectively, to produce an
+`EitherT`.
+
+```tut:book
+val myOption: Option[Int] = None
+val myOptionList: List[Option[Int]] = List(None, Some(2), Some(3), None, Some(5))
+
+val myOptionET = EitherT.fromOption[Future](myOption, "option not defined")
+val myOptionListET = EitherT.fromOptionF(myOptionList, "option not defined")
+```
+
+## Extracting an `F[Either[A, B]]` from an `EitherT[F, A, B]`
+
+Use the `value` method defined on `EitherT` to retrieve the underlying `F[Either[A, B]]`:
+
+```tut:book
+val errorT: EitherT[Option, String, Int] = EitherT.leftT("foo")
+
+val error: Option[Either[String, Int]] = errorT.value
 ```
