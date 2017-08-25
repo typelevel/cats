@@ -116,6 +116,10 @@ options:
     url: datatypes/either.html
     menu_type: data
 
+  - title: Eval
+    url: datatypes/eval.html
+    menu_type: data
+
   - title: FreeApplicatives
     url: datatypes/freeapplicative.html
     menu_type: data
