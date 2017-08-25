@@ -108,7 +108,7 @@ val number: EitherT[Option, String, Int] = EitherT.rightT(5)
 val error: EitherT[Option, String, Int] = EitherT.leftT("Not a number")
 ```
 
-## From `F[A]` or `F[B]` to `EitherT[F, A B]`
+## From `F[A]` or `F[B]` to `EitherT[F, A, B]`
 
 Similary, use `EitherT.left` and `EitherT.right` to convert a `F[A]` or a `F[B]`
 into an `EitherT`. It is also possible to use `EitherT.liftT` as an alias for
