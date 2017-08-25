@@ -154,7 +154,7 @@ val myOptionListET = EitherT.fromOptionF(myOptionList, "option not defined")
 Use the `value` method defined on `EitherT` to retrieve the underlying `F[Either[A, B]]`:
 
 ```tut:book
-val errorT: EitherT[Option, String, Int] = EitherT.leftT("foo")
+val errorT: EitherT[Future, String, Int] = EitherT.leftT("foo")
 
-val error: Option[Either[String, Int]] = errorT.value
+val error: Option[Future[String, Int]] = errorT.value
 ```
