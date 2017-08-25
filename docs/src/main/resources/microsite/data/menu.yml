@@ -80,14 +80,6 @@ options:
     url: typeclasses/foldable.html
     menu_type: typeclasses
 
-  - title: MonadCombine
-    url: typeclasses/monadcombine.html
-    menu_type: typeclasses
-
-  - title: MonadFilter
-    url: typeclasses/monadfilter.html
-    menu_type: typeclasses
-
   - title: MonoidK
     url: typeclasses/monoidk.html
     menu_type: typeclasses
