@@ -100,6 +100,10 @@ options:
     url: typeclasses/show.html
     menu_type: typeclasses
 
+  - title: NonEmptyTraverse
+    url: typeclasses/nonemptytraverse.html
+    menu_type: typeclasses
+
   ###########################
   # Data Types Menu Options #
   ###########################
