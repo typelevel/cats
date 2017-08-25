@@ -156,5 +156,5 @@ Use the `value` method defined on `EitherT` to retrieve the underlying `F[Either
 ```tut:book
 val errorT: EitherT[Future, String, Int] = EitherT.leftT("foo")
 
-val error: Option[Future[String, Int]] = errorT.value
+val error: Future[Either[String, Int]] = errorT.value
 ```
