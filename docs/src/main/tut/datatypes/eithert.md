@@ -37,7 +37,7 @@ Suppose `parseDouble` and `divide` are rewritten to be asynchronous and return
 `Future[Either[String, Double]]` instead. The for-comprehension can no longer be
 used since `divisionProgram` must now compose `Future` and `Either` together,
 which means that the error handling must be performed explicitly to ensure that
-the proper types are returned:
+the proOh, you're right. I jper types are returned:
 
 ```tut:silent
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -53,8 +53,8 @@ def divisionProgramAsync(inputA: String, inputB: String): Future[Either[String, 
     parseDoubleAsync(inputB) flatMap { eitherB =>
       (eitherA, eitherB) match {
         case (Right(a), Right(b)) => divideAsync(a, b)
-        case (l@Left(err), _) => Future.successful(Left(err))
-        case (_, l@Left(err)) => Future.successful(Left(err))
+        case (Left(err), _) => Future.successful(Left(err))
+        case (_, Left(err)) => Future.successful(Left(err))
       }
     }
   }
