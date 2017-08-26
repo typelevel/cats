@@ -74,6 +74,37 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
+  test("NonEmptyList#partitionE retains size") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Either[String, String]) =>
+      val folded = nel.partitionE(f).fold(identity, identity, _ ++ _.toList)
+      folded.size should === (nel.size)
+    }
+  }
+
+  test("NonEmptyList#partitionE to one side is identity") {
+    forAll { (nel: NonEmptyList[Int], f: Int => String) =>
+      val g: Int => Either[Double, String] = f andThen Right.apply
+      val h: Int => Either[String, Double] = f andThen Left.apply
+
+      val withG = nel.partitionE(g).fold(_ => NonEmptyList.one(""), identity, (l,r) => r)
+      withG should === (nel.map(f))
+
+      val withH = nel.partitionE(h).fold(identity, _ => NonEmptyList.one(""), (l,r) => l)
+      withH should === (nel.map(f))
+    }
+  }
+
+  test("NonEmptyList#partitionE remains sorted") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Either[String, String]) =>
+
+      val sorted = nel.map(f).sorted
+      val ior = sorted.partitionE(identity)
+
+      ior.left.map(xs => xs.sorted should === (xs))
+      ior.right.map(xs => xs.sorted should === (xs))
+    }
+  }
+
   test("NonEmptyList#filter is consistent with List#filter") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.toList
