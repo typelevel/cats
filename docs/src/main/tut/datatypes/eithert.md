@@ -14,7 +14,7 @@ following program:
 
 ```tut:book
 import scala.util.Try
-import cats.syntax.either._
+import cats.implicits._
 
 def parseDouble(s: String): Either[String, Double] =
   Try(s.toDouble).map(Right(_)).getOrElse(Left(s"$s is not a number"))
@@ -51,14 +51,10 @@ def divideAsync(a: Double, b: Double): Future[Either[String, Double]] =
 def divisionProgramAsync(inputA: String, inputB: String): Future[Either[String, Double]] =
   parseDoubleAsync(inputA) flatMap { eitherA =>
     parseDoubleAsync(inputB) flatMap { eitherB =>
-      val parseResult = for {
-        a <- eitherA
-        b <- eitherB
-      } yield (a, b)
-      
-      parseResult match {
-        case Right((a, b)) => divideAsync(a, b)
-        case l@Left(err) => Future.successful(Left(err))
+      (eitherA, eitherB) match {
+        case (Right(a), Right(b)) => divideAsync(a, b)
+        case (l@Left(err), _) => Future.successful(Left(err))
+        case (_, l@Left(err)) => Future.successful(Left(err))
       }
     }
   }
@@ -77,7 +73,7 @@ it easy to compose `Either`s and `F`s together. To use `EitherT`, values of
 resulting `EitherT` values are then composed using combinators. For example, the
 asynchronous division program can be rewritten as follows:
 
-```tut:silent
+```tut:book
 import cats.data.EitherT
 import cats.implicits._
 
@@ -88,8 +84,8 @@ def divisionProgramAsync(inputA: String, inputB: String): EitherT[Future, String
     result <- EitherT(divideAsync(a, b))
   } yield result
 
-divisionProgramAsync("4", "2").value // Future(Right(2.0))
-divisionProgramAsync("a", "b").value // Future(Left("a is not a number"))
+divisionProgramAsync("4", "2").value
+divisionProgramAsync("a", "b").value
 ```
 
 Note that when `F` is a monad, then `EitherT` will also form a monad, allowing
