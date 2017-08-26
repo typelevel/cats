@@ -269,7 +269,7 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
-  test("NonEmptyList#fromFoldabale is consistent with NonEmptyList#fromList") {
+  test("NonEmptyList#fromFoldable is consistent with NonEmptyList#fromList") {
     forAll { (xs: List[Int]) =>
       NonEmptyList.fromList(xs) should === (NonEmptyList.fromFoldable(xs))
     }
