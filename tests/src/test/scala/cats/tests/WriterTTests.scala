@@ -18,6 +18,9 @@ class WriterTTests extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration.copy(sizeRange = 5)
 
+  checkAll("WriterT[?[_], String, ?]", TFunctorTests[WriterT[?[_], String, ?]].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[WriterT[?[_], String, ?]]", SerializableTests.serializable(TFunctor[WriterT[?[_], String, ?]]))
+  
   checkAll("WriterT[List, Int, Int]", OrderLaws[WriterT[List, Int, Int]].eqv)
   checkAll("Eq[WriterT[List, Int, Int]]", SerializableTests.serializable(Eq[WriterT[List, Int, Int]]))
 

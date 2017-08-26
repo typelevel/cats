@@ -28,6 +28,12 @@ final case class Nested[F[_], G[_], A](value: F[G[A]])
 object Nested extends NestedInstances
 
 private[data] sealed abstract class NestedInstances extends NestedInstances0 {
+
+
+  implicit def catsDataTFunctorForNested[I[_]]: TFunctor[Nested[?[_], I, ?]] = new TFunctor[Nested[?[_], I, ?]] {
+    def mapNT[F[_], G[_], A](n: Nested[F, I, A])(f: F ~> G): Nested[G, I, A] = Nested(f(n.value))
+  }
+
   implicit def catsDataEqForNested[F[_], G[_], A](implicit FGA: Eq[F[G[A]]]): Eq[Nested[F, G, A]] =
     FGA.on(_.value)
 

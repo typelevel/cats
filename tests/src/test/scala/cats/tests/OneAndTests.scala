@@ -5,13 +5,17 @@ import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.instances.stream._
 import cats.data.{NonEmptyStream, OneAnd}
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, NonEmptyTraverseTests, ReducibleTests}
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
 class OneAndTests extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
+
+
+  checkAll("OneAnd", TFunctorTests[OneAnd].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[OneAnd]", SerializableTests.serializable(TFunctor[OneAnd]))
 
   checkAll("OneAnd[Stream, Int]", OrderLaws[OneAnd[Stream, Int]].eqv)
 

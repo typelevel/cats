@@ -37,6 +37,7 @@ trait AllSyntax
     with SemigroupKSyntax
     with ShowSyntax
     with StrongSyntax
+    with TFunctorSyntax
     with TraverseSyntax
     with NonEmptyTraverseSyntax
     with ValidatedSyntax

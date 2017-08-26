@@ -156,6 +156,10 @@ private[data] sealed abstract class IdTInstances0 extends IdTInstances1 {
 
 private[data] sealed abstract class IdTInstances extends IdTInstances0 {
 
+  implicit val catsDataTFunctorForIdT: TFunctor[IdT] = new TFunctor[IdT] {
+    def mapNT[F[_], G[_], A](h: IdT[F, A])(f: F ~> G): IdT[G, A] = IdT(f(h.value))
+  }
+
   implicit def catsDataNonEmptyTraverseForIdT[F[_]](implicit F: NonEmptyTraverse[F]): NonEmptyTraverse[IdT[F, ?]] =
     new IdTNonEmptyTraverse[F] { implicit val F0: NonEmptyTraverse[F] = F }
 

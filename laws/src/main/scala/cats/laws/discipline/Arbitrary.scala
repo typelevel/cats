@@ -164,6 +164,17 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForReaderWriterStateT[F[_]: Applicative, E, L, S, A](implicit F: Arbitrary[(E, S) => F[(L, S, A)]]): Arbitrary[ReaderWriterStateT[F, E, L, S, A]] =
     Arbitrary(F.arbitrary.map(ReaderWriterStateT(_)))
 
+  implicit val catsLawArbitraryForFunctionKOptionList: Arbitrary[Option ~> List] = Arbitrary(Gen.const(λ[Option ~> List](_.toList)))
+
+  implicit val catsLawArbitraryForFunctionKListOption: Arbitrary[List ~> Option] = Arbitrary(Gen.const(λ[List ~> Option](_.headOption)))
+
+  implicit val catsLawArbitraryForFunctionKListVector: Arbitrary[List ~> Vector] = Arbitrary(Gen.const(λ[List ~> Vector](_.toVector)))
+
+  implicit val catsLawArbitraryForFunctionKVectorList: Arbitrary[Vector ~> List] = Arbitrary(Gen.const(λ[Vector ~> List](_.toList)))
+
+  implicit val catsLawArbitraryForFunctionKVectorOption: Arbitrary[Vector ~> Option] = Arbitrary(Gen.const(λ[Vector ~> Option](_.headOption)))
+
+  implicit val catsLawArbitraryForFunctionKOptionVector: Arbitrary[Option ~> Vector] = Arbitrary(Gen.const(λ[Option ~> Vector](_.toVector)))
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {

@@ -128,6 +128,17 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     })
 
   /**
+   * Changes the underlying `Monad` for this `Free`, ie.
+   * turning this `Free[S, A]` into a `Free[N, A]`.
+   */
+  def hoist[N[_]](mn: FunctionK[S, N]): Free[N, A] =
+    step match {
+      case Pure(a) => Pure(a)
+      case Suspend(m) => Suspend(mn(m))
+      case FlatMapped(c, g) => FlatMapped(c.hoist(mn), g.andThen(_.hoist(mn)))
+    }
+
+  /**
    * Compile your free monad into another language by changing the
    * suspension functor using the given natural transformation `f`.
    *
@@ -249,4 +260,8 @@ object Free {
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
     }
+
+  implicit val catsFreeTFunctorForFree: TFunctor[Free] = new TFunctor[Free] {
+    def mapNT[F[_], G[_], A](h: Free[F, A])(f: F ~> G): Free[G, A] = h.hoist(f)
+  }
 }

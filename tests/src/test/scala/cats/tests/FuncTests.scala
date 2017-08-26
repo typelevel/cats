@@ -17,6 +17,9 @@ class FuncTests extends CatsSuite {
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[Func[Option, Int, ?]]
 
+  checkAll("Func[?[_], String, ?]", TFunctorTests[Func[?[_], String, ?]].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[Func[?[_], String, ?]]", SerializableTests.serializable(TFunctor[Func[?[_], String, ?]]))
+
   checkAll("Func[Option, Int, Int]", CartesianTests[Func[Option, Int, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Func[Option, Int, ?]]", SerializableTests.serializable(Cartesian[Func[Option, Int, ?]]))
 

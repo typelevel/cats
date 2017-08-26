@@ -16,6 +16,9 @@ class NestedTests extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
+  checkAll("Nested[?[_], Option, ?]", TFunctorTests[Nested[?[_], Option, ?]].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[Nested[?[_], Option, ?]]", SerializableTests.serializable(TFunctor[Nested[?[_], Option, ?]]))
+
   {
     // Invariant composition
     implicit val instance = ListWrapper.invariant

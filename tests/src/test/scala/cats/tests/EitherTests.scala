@@ -5,9 +5,13 @@ import cats.data.EitherT
 import cats.laws.discipline._
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import scala.util.Try
+import cats.laws.discipline.arbitrary._
 
 class EitherTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[Either[Int, ?]]
+
+  checkAll("EitherT[?[_], String, ?]", TFunctorTests[EitherT[?[_], String, ?]].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[EitherT[?[_], String, ?]]", SerializableTests.serializable(TFunctor[EitherT[?[_], String, ?]]))
 
   checkAll("Either[String, Int]", GroupLaws[Either[String, Int]].monoid)
   checkAll("Monoid[Either[String, Int]]", SerializableTests.serializable(Monoid[Either[String, Int]]))

@@ -420,6 +420,11 @@ object EitherT extends EitherTInstances {
 
 private[data] abstract class EitherTInstances extends EitherTInstances1 {
 
+  implicit def catsDataTFunctorForEitherT[A]: TFunctor[EitherT[?[_], A, ?]] = new TFunctor[EitherT[?[_], A, ?]] {
+    def mapNT[F[_], G[_], B](h: EitherT[F, A, B])(f: F ~> G): EitherT[G, A, B] = EitherT(f(h.value))
+  }
+
+
   implicit def catsDataOrderForEitherT[F[_], L, R](implicit F: Order[F[Either[L, R]]]): Order[EitherT[F, L, R]] =
     new EitherTOrder[F, L, R] {
       val F0: Order[F[Either[L, R]]] = F

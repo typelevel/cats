@@ -1,13 +1,18 @@
 package cats
 package tests
 
+import cats.TFunctor
 import cats.data.OptionT
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
+
 class OptionTTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[OptionT[ListWrapper, ?]](OptionT.catsDataFunctorForOptionT(ListWrapper.functor))
+
+  checkAll("OptionT", TFunctorTests[OptionT].tfunctor[List, Vector, Option, Int])
+  checkAll("TFunctor[OptionT]", SerializableTests.serializable(TFunctor[OptionT]))
 
   {
     implicit val F = ListWrapper.eqv[Option[Int]]
