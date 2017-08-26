@@ -23,6 +23,8 @@ trait Parallel[M[_], F[_]] {
 
 object Parallel extends ParallelArityFunctions {
 
+  def apply[M[_], F[_]](implicit P: Parallel[M, F]): Parallel[M, F] = P
+
   /**
     * Like `Traverse[A].sequence`, but uses the applicative instance
     * corresponding to the Parallel instance instead.

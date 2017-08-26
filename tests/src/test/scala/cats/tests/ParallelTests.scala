@@ -3,12 +3,14 @@ package cats
 
 import cats.data._
 import cats.tests.CatsSuite
+import org.scalatest.FunSuite
 import cats.laws.discipline.{ApplicativeErrorTests, ParallelTests => ParallelTypeclassTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
+import org.typelevel.discipline.scalatest.Discipline
 
-class ParallelTests extends CatsSuite {
+class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
 
 
   test("ParTraversing Either should accumulate errors") {
@@ -68,5 +70,20 @@ class ParallelTests extends CatsSuite {
     checkAll("Parallel[KlesliT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[Kleisli[Either[String, ?], Int, ?], Kleisli[Validated[String, ?], Int, ?], Int].parallel)
   }
 
-  checkAll("ApplicativeError[Either[String, Int]]", ApplicativeErrorTests[Either[String, ?], String].applicativeError[Int, Int, Int])
+
+}
+
+trait ApplicativeErrorForEitherTest extends FunSuite with Discipline {
+  import cats.instances.parallel._
+  import cats.instances.either._
+  import cats.instances.string._
+  import cats.instances.int._
+  import cats.instances.unit._
+  import cats.instances.tuple._
+
+  implicit def eqV[A: Eq,B: Eq]: Eq[Validated[A, B]] = cats.data.Validated.catsDataEqForValidated
+
+
+
+  checkAll("ApplicativeError[Validated[String, Int]]", ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
 }
