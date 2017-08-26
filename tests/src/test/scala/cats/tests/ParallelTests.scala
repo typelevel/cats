@@ -3,7 +3,7 @@ package cats
 
 import cats.data._
 import cats.tests.CatsSuite
-import cats.laws.discipline.{ParallelTests => ParallelTypeclassTests}
+import cats.laws.discipline.{ApplicativeErrorTests, ParallelTests => ParallelTypeclassTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
@@ -67,4 +67,6 @@ class ParallelTests extends CatsSuite {
 
     checkAll("Parallel[KlesliT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[Kleisli[Either[String, ?], Int, ?], Kleisli[Validated[String, ?], Int, ?], Int].parallel)
   }
+
+  checkAll("ApplicativeError[Either[String, Int]]", ApplicativeErrorTests[Either[String, ?], String].applicativeError[Int, Int, Int])
 }
