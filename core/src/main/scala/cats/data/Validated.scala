@@ -278,7 +278,7 @@ object Validated extends ValidatedInstances with ValidatedFunctions{
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
   private[data] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean = true ) extends AnyVal{
-    def apply[A](f: => A)(implicit T: ClassTag[T], NT: NotNull[T]): Validated[T, A] =
+    def apply[A](f: => A)(implicit T: ClassTag[T]): Validated[T, A] =
       try {
         valid(f)
       } catch {
