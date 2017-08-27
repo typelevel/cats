@@ -12,7 +12,232 @@ Response comes back saying your username can't have dashes in it, so you make so
 have special characters either. Change, resubmit. Passwords need to have at least one capital letter. Change,
 resubmit. Password needs to have at least one number.
 
-Or perhaps you're reading from a configuration file. One could imagine the configuration library you're using returns
+It would be nice to have all of these errors be reported simultaneously. That the username can't have dashes can
+be validated separately from it not having special characters, as well as from the password needing to have certain
+requirements. A misspelled (or missing) field in a config can be validated separately from another field not being
+well-formed.
+
+Enter `Validated`.
+
+## A first approach
+
+You'll note firsthand that `Validated` is very similar to `Either` because it also has two possible values: errors on the left side or successful computations on the right side.
+
+We're going to implement our `Either` based first approach to this case.
+
+First, let's define our form model:
+
+```tut:silent
+case class RegistrationData(username: String, password: String, firstName: String, lastName: String, age: Int)
+```
+
+And the validation error model:
+
+```tut:silent
+sealed trait DomainValidation{
+
+  val errorMessage: String
+}
+
+case class ValidationError(errorMessage: String) extends DomainValidation
+```
+
+We have our `RegistrationData` case class that will hold the data that the user has submitted, alongside the definition of the error model that we'll be using it for displaying the possible errors of every field. Now, let's explore the proposed implementation:
+
+```scala
+trait FormValidator{
+  private def validateUserName(userName: String): Either[ValidationError, String] =
+    if (userName.matches("^[a-zA-Z0-9]+$")) Right(userName) else Left(ValidationError("Username cannot contain special characters."))
+
+  private def validatePassword(password: String): Either[ValidationError, String] =
+    if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) Right(password)
+    else Left(ValidationError("Password should have at least 10 chars, including an uppercase, a lowercase letter, one number or special character."))
+
+  private def validateFirstName(firstName: String): Either[ValidationError, String] =
+    if (firstName.matches("^[a-zA-Z]+$")) Right(firstName) else Left(ValidationError("First name should not contain spaces, numbers or special characters."))
+
+  private def validateLastName(lastName: String): Either[ValidationError, String] =
+    if (lastName.matches("^[a-zA-Z]+$")) Right(lastName) else Left(ValidationError("Last name should not contain spaces, numbers or special characters."))
+
+  private def validateAge(age: Int): Either[ValidationError, Int] =
+    if (age >= 18 && age <= 75) Right(age) else Left(ValidationError("You have to be at least 18 and not older than 75 to opt to our services."))
+
+  def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): Either[ValidationError, RegistrationData] = {
+
+    for {
+      validatedUserName <- validateUserName(username)
+      validatedPassword <- validatePassword(password)
+      validatedFirstName <- validateFirstName(firstName)
+      validatedLastName <- validateLastName(lastName)
+      validatedAge <- validateAge(age)
+    }
+      yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+  }
+
+}
+```
+
+The logic of the validation process is as follows: **check every individual field based on the established rules for each one of them. If the validation is successful, then return the field wrapped in a `Right` instance; If not, then return a `ValidationError` with the respective message, wrapped in an `Left` instance**.
+
+Our service has a method to validate all the fields and, if the validation succeeds it will create an instance of `RegistrationData`, right?
+
+Well, yes, but the error reporting part will have the downside of showing only the first error.
+
+Let's look in detail this part:
+
+```scala
+    for {
+      validatedUserName <- validateUserName(username)
+      validatedPassword <- validatePassword(password)
+      validatedFirstName <- validateFirstName(firstName)
+      validatedLastName <- validateLastName(lastName)
+      validatedAge <- validateAge(age)
+    }
+      yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+  }
+```
+
+A for-comprehension is _fail-fast_. If some of the evaluations in the `for` block fails for some reason, the `yield` part will not complete. In our case, if that happens we won't be getting the accumulated list of errors.
+
+If we run our code:
+
+```scala
+scala> object FormValidator extends FormValidator
+defined object FormValidator
+
+scala> FormValidator.validateForm("fakeUs3rname", "password", "John", "Doe", 15)
+res2: Either[ValidationError,RegistrationData] = Left(ValidationError(Password should have at least 10 chars, including an uppercase, a lowercase letter, one number or special character.))
+```
+
+We should have get another `ValidationError` with the age.
+
+### An iteration with `Validated`
+
+Time to do some refactoring! We're going to try a `Validated` approach:
+
+```scala
+import cats.data.Validated.{Invalid, Valid}
+import cats.data.Validated
+import cats.syntax.validated.catsSyntaxValidatedId
+import cats.implicits._
+
+trait FormValidator{
+  private def validateUserName(userName: String): Validated[ValidationError, String] =
+    if (userName.matches("^[a-zA-Z0-9]+$")) Valid(userName) else Invalid(ValidationError("Username cannot contain special characters."))
+
+  private def validatePassword(password: String): Validated[ValidationError, String] =
+    if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) Valid(password)
+    else Invalid(ValidationError("Password should have at least 10 chars, including an uppercase, a lowercase letter, one number or special character."))
+
+  private def validateFirstName(firstName: String): Validated[ValidationError, String] =
+    if (firstName.matches("^[a-zA-Z]+$")) Valid(firstName) else Invalid(ValidationError("First name should not contain spaces, numbers or special characters."))
+
+  private def validateLastName(lastName: String): Validated[ValidationError, String] =
+    if (lastName.matches("^[a-zA-Z]+$")) Valid(lastName) else Invalid(ValidationError("Last name should not contain spaces, numbers or special characters."))
+
+  private def validateAge(age: Int): Validated[ValidationError, Int] =
+    if (age >= 18 && age <= 75) Valid(age) else Invalid(ValidationError("You have to be at least 18 and not older than 75 to opt to our services."))
+
+  def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): Validated[ValidationError, RegistrationData] = {
+
+    for {
+      validatedUserName <- validateUserName(username)
+      validatedPassword <- validatePassword(password)
+      validatedFirstName <- validateFirstName(firstName)
+      validatedLastName <- validateLastName(lastName)
+      validatedAge <- validateAge(age)
+    }
+      yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+  }
+
+}
+```
+
+Looks similar to the first version. What we've done here was to use `Validated` instead of `Either`. Please note that our `Right` is now a `Valid` and `Left` is an `Invalid`.
+Remember, our goal is to get all the validation errors for displaying it to the user.
+
+But this approach won't compile. Why?
+
+```scala
+ for {
+      validatedUserName <- validateUserName(username)
+      validatedPassword <- validatePassword(password)
+      validatedFirstName <- validateFirstName(firstName)
+      validatedLastName <- validateLastName(lastName)
+      validatedAge <- validateAge(age)
+    }
+      yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+```
+
+Without diving into details about monads, a for-comprehension uses the `flatMap` method for composition. Monads like `Either` can be composed in that way, but the thing with `Validated` is that it isn't a monad, but an [_Applicative Functor_](../typeclasses/applicativetraverse.html).
+
+So, how do we do here?
+
+### Meeting applicative
+
+We have to look into another direction: for-comprehension plays well in a fail-fast scenario, but the structure in our previous example was designed to catch one error at a time, so we're going to refactor the implementation again.
+
+```scala
+import cats.data.{NonEmptyList, Validated}
+import cats.syntax.validated.catsSyntaxValidatedId
+import cats.implicits._
+
+trait FormValidatorNel {
+
+  type ValidationResult[A] = Validated[NonEmptyList[ValidationError], A]
+
+  private def validateUserName(userName: String): ValidationResult[String] =
+    if (userName.matches("^[a-zA-Z0-9]+$")) userName.validNel else ValidationError("Username cannot contain special characters.").invalidNel
+
+  private def validatePassword(password: String): ValidationResult[String] =
+    if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) password.validNel
+    else ValidationError("Password should have at least 10 chars, including an uppercase, a lowercase letter, one number or special character.").invalidNel
+
+  private def validateFirstName(firstName: String): ValidationResult[String] =
+    if (firstName.matches("^[a-zA-Z]+$")) firstName.validNel else ValidationError("First name should not contain spaces, numbers or special characters.").invalidNel
+
+  private def validateLastName(lastName: String): ValidationResult[String] =
+    if (lastName.matches("^[a-zA-Z]+$")) lastName.validNel else ValidationError("Last name should not contain spaces, numbers or special characters.").invalidNel
+
+  private def validateAge(age: Int): ValidationResult[Int] =
+    if (age >= 18 && age <= 75) age.validNel else ValidationError("You have to be at least 18 and not older than 75 to opt to our services.").invalidNel
+
+  def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): ValidationResult[RegistrationData] = {
+    (validateUserName(username) |@|
+    validatePassword(password) |@|
+    validateFirstName(firstName) |@|
+    validateLastName(lastName) |@|
+    validateAge(age)).map(RegistrationData)
+  }
+
+}
+```
+
+Let's see what changed here:
+
+1. In this new implementation we're using a `NonEmptyList`, a data structure that guarantees that, at least one element will be present. In case that multiple errors arise, you'll get a list of `ValidationError`.
+2. We've declared a type alias `ValidationResult` that conveniently express the return type of our validation.
+3. `.validNel` and `.invalidNel` combinators let us _lift_ the success or failure in their respective container (a `Valid` or `Invalid[NonEmptyList[A]]`).
+4. The [applicative](../typeclasses/applicative.html) syntax `|@|` provides us a way to accumulatively apply the validation functions and yield a cartesian product with their successful result or accumulate the errors in the `NonEmptyList`.
+
+Note that, at the end, we expect to lift the result of the validation functions into `RegistrationData`. If the process fails, we'll get our `NonEmptyList` detailing what went wrong.
+
+For example:
+
+```scala
+scala> object FormValidator extends FormValidator extends FormValidatorNel
+defined object FormValidator
+
+scala> FormValidator.validateForm("Joe", "Passw0r$1234", "John", "Doe", 21)
+res1: cats.data.Validated[List[ValidationError],RegistrationData] = Valid(RegistrationData(Joe,Passw0r$1234,John,Doe,21))
+
+scala> FormValidator.validateForm("Joe%%%", "password", "John", "Doe", 21)
+res2: cats.data.Validated[List[ValidationError],RegistrationData] = Invalid(List(ValidationError(Username cannot contain special characters.), ValidationError(Password should have at least 10 chars, including an uppercase, a lowercase letter, one number or special character.)))
+```
+
+## Another case
+
+Perhaps you're reading from a configuration file. One could imagine the configuration library you're using returns
 a `scala.util.Try`, or maybe a `scala.util.Either`. Your parsing may look something like:
 
 ```scala
@@ -25,12 +250,7 @@ for {
 You run your program and it says key "url" not found, turns out the key was "endpoint". So you change your code
 and re-run. Now it says the "port" key was not a well-formed integer.
 
-It would be nice to have all of these errors be reported simultaneously. That the username can't have dashes can
-be validated separately from it not having special characters, as well as from the password needing to have certain
-requirements. A misspelled (or missing) field in a config can be validated separately from another field not being
-well-formed.
 
-Enter `Validated`.
 
 ## Parallel validation
 Our goal is to report any and all errors across independent bits of data. For instance, when we ask for several
