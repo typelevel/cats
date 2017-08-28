@@ -1,10 +1,8 @@
-import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
+import microsites._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import org.scalajs.sbtplugin.cross.CrossProject
-
-lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev environment")
 
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
@@ -46,7 +44,7 @@ lazy val commonSettings = Seq(
     "com.github.mpilquist" %%% "simulacrum" % "0.10.0" % "compile-time",
     "org.typelevel" %%% "machinist" % "0.6.2",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
   ),
   fork in test := true,
   parallelExecution in Test := false,
@@ -82,10 +80,8 @@ lazy val commonJsSettings = Seq(
   parallelExecution := false,
   requiresDOM := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
-  // Only used for scala.js for now
-  botBuild := scala.sys.env.get("TRAVIS").isDefined,
   // batch mode decreases the amount of memory needed to compile scala.js code
-  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value),
+  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(isTravisBuild.value),
   doctestGenTests := Seq.empty,
   doctestWithDependencies := false
 )
@@ -108,7 +104,7 @@ lazy val includeGeneratedSrc: Setting[_] = {
 lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
 lazy val scalaCheckVersion = "1.13.5"
-lazy val scalaTestVersion = "3.0.1"
+lazy val scalaTestVersion = "3.0.4"
 lazy val disciplineVersion = "0.8"
 lazy val catalystsVersion = "0.0.5"
 
@@ -149,7 +145,12 @@ lazy val docSettings = Seq(
   micrositeBaseUrl := "cats",
   micrositeDocumentationUrl := "api",
   micrositeGithubOwner := "typelevel",
-  micrositeExtraMdFiles := Map(file("CONTRIBUTING.md") -> "contributing.md"),
+  micrositeExtraMdFiles := Map(
+    file("CONTRIBUTING.md") -> ExtraMdFileConfig(
+      "contributing.md",
+      "home"
+    )
+  ),
   micrositeGithubRepo := "cats",
   micrositePalette := Map(
     "brand-primary" -> "#5B5988",
@@ -174,6 +175,7 @@ lazy val docSettings = Seq(
     "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
     "-diagrams"
   ),
+  scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
   includeFilter in Jekyll := (includeFilter in makeSite).value
@@ -185,9 +187,7 @@ lazy val docs = project
   .settings(catsSettings)
   .settings(noPublishSettings)
   .settings(unidocSettings)
-  .settings(ghpages.settings)
   .settings(docSettings)
-  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
   .dependsOn(coreJVM, freeJVM)
 
@@ -338,7 +338,7 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(libraryDependencies ++= Seq(
-    "org.scalaz" %% "scalaz-core" % "7.2.7"))
+    "org.scalaz" %% "scalaz-core" % "7.2.15"))
   .enablePlugins(JmhPlugin)
 
 // cats-js is JS-only

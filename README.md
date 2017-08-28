@@ -94,6 +94,7 @@ language", and integrate with each other with ease.
  * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs.
  * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
+ * [origami](https://github.com/atnos-org/origami): monadic folds
 
 #### Libraries with more specific uses
 
@@ -108,6 +109,7 @@ language", and integrate with each other with ease.
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
+ * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
 
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
