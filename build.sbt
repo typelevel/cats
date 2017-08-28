@@ -140,9 +140,9 @@ lazy val docSettings = Seq(
   micrositeDescription := "Lightweight, modular, and extensible library for functional programming",
   micrositeAuthor := "Typelevel contributors",
   micrositeHighlightTheme := "atom-one-light",
-  micrositeHomepage := "http://typelevel.org/cats",
+  micrositeHomepage := "http://typelevel.org/cats/",
   micrositeBaseUrl := "cats",
-  micrositeDocumentationUrl := "api",
+  micrositeDocumentationUrl := "api/",
   micrositeGithubOwner := "typelevel",
   micrositeExtraMdFiles := Map(
     file("CONTRIBUTING.md") -> ExtraMdFileConfig(
@@ -217,9 +217,9 @@ lazy val catsJS = project.in(file(".catsJS"))
 
 lazy val macros = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-macros", name := "Cats macros")
-  .settings(catsSettings:_*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .settings(catsSettings)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
   .jsSettings(coverageEnabled := false)
   .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
 
@@ -231,19 +231,19 @@ val binaryCompatibleVersion = "0.8.0"
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
-  .settings(kernelSettings: _*)
-  .settings(publishSettings: _*)
-  .settings(scoverageSettings: _*)
+  .settings(kernelSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
   .settings(includeGeneratedSrc)
-  .jsSettings(commonJsSettings:_*)
+  .jsSettings(commonJsSettings)
   .jvmSettings((commonJvmSettings ++
     (mimaPreviousArtifacts := {
       if (scalaVersion.value startsWith "2.12")
         Set()
       else
         Set("org.typelevel" %% "cats-kernel" % binaryCompatibleVersion)
-    })):_*)
+    })))
 
 lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js
@@ -251,13 +251,13 @@ lazy val kernelJS = kernel.js
 lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
   .in(file("kernel-laws"))
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
-  .settings(kernelSettings: _*)
-  .settings(publishSettings: _*)
-  .settings(scoverageSettings: _*)
-  .settings(disciplineDependencies: _*)
-  .settings(testingDependencies: _*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .settings(kernelSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
+  .settings(disciplineDependencies)
+  .settings(testingDependencies)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
   .jsSettings(coverageEnabled := false)
   .dependsOn(kernel)
 
@@ -267,14 +267,14 @@ lazy val kernelLawsJS = kernelLaws.js
 lazy val core = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, kernel)
   .settings(moduleName := "cats-core", name := "Cats core")
-  .settings(catsSettings:_*)
+  .settings(catsSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
   .configureCross(disableScoverage210Jvm)
   .configureCross(disableScoverage210Js)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
@@ -282,12 +282,12 @@ lazy val coreJS = core.js
 lazy val laws = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, kernel, core, kernelLaws)
   .settings(moduleName := "cats-laws", name := "Cats laws")
-  .settings(catsSettings:_*)
-  .settings(disciplineDependencies:_*)
+  .settings(catsSettings)
+  .settings(disciplineDependencies)
   .configureCross(disableScoverage210Jvm)
-  .settings(testingDependencies: _*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .settings(testingDependencies)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
   .jsSettings(coverageEnabled := false)
 
 lazy val lawsJVM = laws.jvm
@@ -296,9 +296,9 @@ lazy val lawsJS = laws.js
 lazy val free = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, tests % "test-internal -> test")
   .settings(moduleName := "cats-free", name := "Cats Free")
-  .settings(catsSettings:_*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .settings(catsSettings)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
 
 lazy val freeJVM = free.jvm
 lazy val freeJS = free.js
@@ -306,10 +306,10 @@ lazy val freeJS = free.js
 lazy val tests = crossProject.crossType(CrossType.Pure)
   .dependsOn(testkit % "test")
   .settings(moduleName := "cats-tests")
-  .settings(catsSettings:_*)
-  .settings(noPublishSettings:_*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
 
 lazy val testsJVM = tests.jvm
 lazy val testsJS = tests.js
@@ -318,12 +318,12 @@ lazy val testsJS = tests.js
 lazy val testkit = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, laws)
   .settings(moduleName := "cats-testkit")
-  .settings(catsSettings:_*)
-  .settings(disciplineDependencies:_*)
+  .settings(catsSettings)
+  .settings(disciplineDependencies)
   .settings(
     libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
 
 lazy val testkitJVM = testkit.jvm
 lazy val testkitJS = testkit.js
@@ -344,8 +344,8 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
 lazy val js = project
   .dependsOn(macrosJS, coreJS, testsJS % "test-internal -> test")
   .settings(moduleName := "cats-js")
-  .settings(catsSettings:_*)
-  .settings(commonJsSettings:_*)
+  .settings(catsSettings)
+  .settings(commonJsSettings)
   .configure(disableScoverage210Js)
   .enablePlugins(ScalaJSPlugin)
 
@@ -354,8 +354,8 @@ lazy val js = project
 lazy val jvm = project
   .dependsOn(macrosJVM, coreJVM, testsJVM % "test-internal -> test")
   .settings(moduleName := "cats-jvm")
-  .settings(catsSettings:_*)
-  .settings(commonJvmSettings:_*)
+  .settings(catsSettings)
+  .settings(commonJvmSettings)
 
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/typelevel/cats")),
