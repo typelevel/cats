@@ -108,7 +108,7 @@ import simulacrum.typeclass
    * structure F when calling the function.
    *
    * This performs the traversal in a single pass but requires that
-   * effect G is monadic. An applicative traveral can be performed in
+   * effect G is monadic. An applicative traversal can be performed in
    * two passes using [[zipWithIndex]] followed by [[traverse]].
    */
   def traverseWithIndexM[G[_], A, B](fa: F[A])(f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
