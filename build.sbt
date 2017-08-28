@@ -141,9 +141,9 @@ lazy val docSettings = Seq(
   micrositeDescription := "Lightweight, modular, and extensible library for functional programming",
   micrositeAuthor := "Typelevel contributors",
   micrositeHighlightTheme := "atom-one-light",
-  micrositeHomepage := "http://typelevel.org/cats",
+  micrositeHomepage := "http://typelevel.org/cats/",
   micrositeBaseUrl := "cats",
-  micrositeDocumentationUrl := "api",
+  micrositeDocumentationUrl := "api/",
   micrositeGithubOwner := "typelevel",
   micrositeExtraMdFiles := Map(
     file("CONTRIBUTING.md") -> ExtraMdFileConfig(
