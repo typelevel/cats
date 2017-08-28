@@ -38,13 +38,15 @@ class FutureTests extends CatsSuite {
   implicit val nonFatalArbitrary: Arbitrary[Throwable] =
     Arbitrary(arbitrary[Exception].map(identity))
 
-  checkAll("Future with Throwable", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
+  checkAll("Future with Throwable",
+           MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
   checkAll("Future", CoflatMapTests[Future].coflatMap[Int, Int, Int])
 
   {
     implicit val F = ListWrapper.semigroup[Int]
-    checkAll("Future[ListWrapper[Int]]", GroupLaws[Future[ListWrapper[Int]]].semigroup)
+    checkAll("Future[ListWrapper[Int]]",
+             GroupLaws[Future[ListWrapper[Int]]].semigroup)
   }
 
   checkAll("Future[Int]", GroupLaws[Future[Int]].monoid)
