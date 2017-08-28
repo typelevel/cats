@@ -465,7 +465,8 @@ of Null.">
                           SemigroupK
                         </a>
                       </li><li class="current-entities indented1">
-                        <a class="object" href="" title=""></a>
+                        <a class="object" href="" title="Hand rolling the type class boilerplate due to scala/bug#6260 and scala/bug#10458
+"></a>
                         <a class="trait" href="Show.html" title="A type class to provide textual representation."></a>
                         <a href="Show.html" title="A type class to provide textual representation.">
                           Show
@@ -518,7 +519,8 @@ of Null.">
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Show.scala" target="_blank">Show.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Hand rolling the type class boilerplate due to scala/bug#6260 and scala/bug#10458
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Show.scala" target="_blank">Show.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -570,28 +572,10 @@ of Null.">
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.Show.AllOps" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="AllOps[T]extendsShow.Ops[T]"></a><a id="AllOps[T]:AllOps[T]"></a>
+              <ol><li name="cats.Show.ContravariantShow" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ContravariantShow[-T]extendsSerializable"></a><a id="ContravariantShow[-T]:ContravariantShow[T]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#AllOps[T]extendsShow.Ops[T]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="Show$$AllOps.html">
-              <span class="name">AllOps</span>
-            </a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="Show$$Ops.html" class="extype" name="cats.Show.Ops">Ops</a>[<span class="extype" name="cats.Show.AllOps.T">T</span>]</span>
-      </span>
-      
-      
-    </li><li name="cats.Show.ContravariantShow" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ContravariantShow[-T]extendsAnyRef"></a><a id="ContravariantShow[-T]:ContravariantShow[T]"></a>
-      <span class="permalink">
-      <a href="../cats/Show$.html#ContravariantShow[-T]extendsAnyRef" title="Permalink">
+      <a href="../cats/Show$.html#ContravariantShow[-T]extendsSerializable" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -602,14 +586,14 @@ of Null.">
       <span class="symbol">
         <a title="" href="Show$$ContravariantShow.html">
               <span class="name">ContravariantShow</span>
-            </a><span class="tparams">[<span name="T">-T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+            </a><span class="tparams">[<span name="T">-T</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
     </li><li name="cats.Show.Ops" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Ops[T]extendsAnyRef"></a><a id="Ops[T]:Ops[T]"></a>
+      <a id="Ops[A]extendsAnyRef"></a><a id="Ops[A]:Ops[A]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#Ops[T]extendsAnyRef" title="Permalink">
+      <a href="../cats/Show$.html#Ops[A]extendsAnyRef" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -620,7 +604,7 @@ of Null.">
       <span class="symbol">
         <a title="" href="Show$$Ops.html">
               <span class="name">Ops</span>
-            </a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
       
@@ -734,10 +718,10 @@ of Null.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.Show#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[T](implicitinstance:cats.Show[T]):cats.Show[T]"></a><a id="apply[T](Show[T]):Show[T]"></a>
+    </li><li name="cats.Show#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply[A](implicitinstance:cats.Show[A]):cats.Show[A]"></a><a id="apply[A](Show[A]):Show[A]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#apply[T](implicitinstance:cats.Show[T]):cats.Show[T]" title="Permalink">
+      <a href="../cats/Show$.html#apply[A](implicitinstance:cats.Show[A]):cats.Show[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -746,13 +730,10 @@ of Null.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="instance">instance: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.apply.T">T</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.apply.T">T</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="instance">instance: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.apply.A">A</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.apply.A">A</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@inline</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -1102,42 +1083,6 @@ of Null.">
         <a title="" href="Show$$Shown$.html">
               <span class="name">Shown</span>
             </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
-      </span>
-      
-      
-    </li><li name="cats.Show.nonInheritedOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="nonInheritedOps"></a><a id="nonInheritedOps:nonInheritedOps"></a>
-      <span class="permalink">
-      <a href="../cats/Show$.html#nonInheritedOps" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="Show$$nonInheritedOps$.html">
-              <span class="name">nonInheritedOps</span>
-            </a><span class="result"> extends <a href="Show$$ToShowOps.html" class="extype" name="cats.Show.ToShowOps">ToShowOps</a></span>
-      </span>
-      
-      
-    </li><li name="cats.Show.ops" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ops"></a><a id="ops:ops"></a>
-      <span class="permalink">
-      <a href="../cats/Show$.html#ops" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="Show$$ops$.html">
-              <span class="name">ops</span>
-            </a>
       </span>
       
       

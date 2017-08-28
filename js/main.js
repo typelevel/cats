@@ -35,10 +35,15 @@ function launchPopup(url) {
 
 function loadGitHubStats() {
   var content = $("#content");
-  var gitHubAPI = "https://api.github.com/repos/" + content.attr("data-github-owner") + "/" + content.attr("data-github-repo") + "?callback=?";
-  $.getJSON(gitHubAPI).done(function(data) {
-    $('#eyes').text(data.data.subscribers_count);
-    $('#stars').text(data.data.stargazers_count);
-  });
+  var githubOwner = content.attr("data-github-owner")
+  var githubRepo = content.attr("data-github-repo")
+
+  if(githubOwner && githubRepo) {
+    var gitHubAPI = "https://api.github.com/repos/" + githubOwner + "/" + githubRepo + "?callback=?";
+    $.getJSON(gitHubAPI).done(function(data) {
+      $('#eyes').text(data.data.subscribers_count);
+      $('#stars').text(data.data.stargazers_count);
+    });
+  }
 
 }

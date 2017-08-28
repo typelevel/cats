@@ -187,7 +187,7 @@ implementation inspired by https://github.com/safareli/free/pull/31/
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Free</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Free</span><span class="result"> extends <span class="extype" name="cats.free.FreeInstances">FreeInstances</span> with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
@@ -196,7 +196,7 @@ implementation inspired by https://github.com/safareli/free/pull/31/
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.free.FreeInstances">FreeInstances</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -222,7 +222,7 @@ implementation inspired by https://github.com/safareli/free/pull/31/
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.free.Free"><span>Free</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.free.Free"><span>Free</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.free.FreeInstances"><span>FreeInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -313,6 +313,22 @@ implementation inspired by https://github.com/safareli/free/pull/31/
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.free.FreeInstances#catsFreeFoldableForFree" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFreeFoldableForFree[F[_]](implicitfoldableF:cats.Foldable[F]):cats.Foldable[[β$17$]cats.free.Free[F,β$17$]]"></a><a id="catsFreeFoldableForFree[F[_]](Foldable[F]):Foldable[[β$17$]Free[F,β$17$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/Free$.html#catsFreeFoldableForFree[F[_]](implicitfoldableF:cats.Foldable[F]):cats.Foldable[[β$17$]cats.free.Free[F,β$17$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFreeFoldableForFree</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="foldableF">foldableF: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.free.FreeInstances.catsFreeFoldableForFree.F">F</span>]</span>)</span><span class="result">: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[β$17$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.FreeInstances.catsFreeFoldableForFree.F">F</span>, <span class="extype" name="cats.free.FreeInstances.&lt;refinement&gt;.Λ$.β$17$">β$17$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeInstances</dd></dl></div>
     </li><li name="cats.free.Free#catsFreeMonadForFree" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="catsFreeMonadForFree[S[_]]:cats.Monad[[β$12$]cats.free.Free[S,β$12$]]"></a><a id="catsFreeMonadForFree[S[_]]:Monad[[β$12$]Free[S,β$12$]]"></a>
       <span class="permalink">
@@ -329,6 +345,22 @@ implementation inspired by https://github.com/safareli/free/pull/31/
       </span>
       
       <p class="shortcomment cmt"><code>Free[S, ?]</code> has a monad for any type constructor <code>S[_]</code>.</p>
+    </li><li name="cats.free.FreeInstances#catsFreeTraverseForFree" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFreeTraverseForFree[F[_]](implicittraversableF:cats.Traverse[F]):cats.Traverse[[β$18$]cats.free.Free[F,β$18$]]"></a><a id="catsFreeTraverseForFree[F[_]](Traverse[F]):Traverse[[β$18$]Free[F,β$18$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/Free$.html#catsFreeTraverseForFree[F[_]](implicittraversableF:cats.Traverse[F]):cats.Traverse[[β$18$]cats.free.Free[F,β$18$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFreeTraverseForFree</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="traversableF">traversableF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.free.FreeInstances.catsFreeTraverseForFree.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$18$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.FreeInstances.catsFreeTraverseForFree.F">F</span>, <span class="extype" name="cats.free.FreeInstances.&lt;refinement&gt;.Λ$.β$18$">β$18$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeInstances</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -787,6 +819,8 @@ bound independently of the <code>A</code> parameter below.
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="cats.free.FreeInstances">
+              <h3>Inherited from <span class="extype" name="cats.free.FreeInstances">FreeInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
