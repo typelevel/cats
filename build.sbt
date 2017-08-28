@@ -18,10 +18,6 @@ lazy val scoverageSettings = Seq(
 
 organization in ThisBuild := "org.typelevel"
 
-lazy val catsDoctestSettings = Seq(
-  doctestWithDependencies := false
-)
-
 lazy val kernelSettings = Seq(
   // don't warn on value discarding because it's broken on 2.10 with @sp(Unit)
   scalacOptions ++= commonScalacOptions.filter(_ != "-Ywarn-value-discard"),
@@ -82,15 +78,14 @@ lazy val commonJsSettings = Seq(
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // batch mode decreases the amount of memory needed to compile scala.js code
   scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(isTravisBuild.value),
-  doctestGenTests := Seq.empty,
-  doctestWithDependencies := false
+  // currently sbt-doctest doesn't work in JS builds
+  // https://github.com/tkawachi/sbt-doctest/issues/52
+  doctestGenTests := Seq.empty
 )
 
 lazy val commonJvmSettings = Seq(
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
-// currently sbt-doctest doesn't work in JS builds, so this has to go in the
-// JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
-) ++ catsDoctestSettings
+)
 
 lazy val includeGeneratedSrc: Setting[_] = {
   mappings in (Compile, packageSrc) ++= {
