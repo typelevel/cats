@@ -3,7 +3,7 @@ package free
 
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
+import cats.laws.discipline.{CartesianTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 import cats.tests.CatsSuite
 
@@ -17,6 +17,19 @@ class FreeTests extends CatsSuite {
 
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
+
+  locally {
+    implicit val instance = Free.catsFreeFoldableForFree[Option]
+
+    checkAll("Free[Option, ?]", FoldableTests[Free[Option,?]].foldable[Int,Int])
+    checkAll("Foldable[Free[Option,?]]", SerializableTests.serializable(Foldable[Free[Option,?]]))
+  }
+
+  locally {
+    implicit val instance = Free.catsFreeTraverseForFree[Option]
+    checkAll("Free[Option,?]", TraverseTests[Free[Option,?]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[Free[Option,?]]", SerializableTests.serializable(Traverse[Free[Option,?]]))
+  }
 
   test("toString is stack-safe") {
     val r = Free.pure[List, Int](333)
