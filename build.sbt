@@ -1,5 +1,4 @@
 import microsites._
-import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import org.scalajs.sbtplugin.cross.CrossProject
@@ -178,10 +177,10 @@ lazy val docSettings = Seq(
 
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
+  .enablePlugins(ScalaUnidocPlugin)
   .settings(moduleName := "cats-docs")
   .settings(catsSettings)
   .settings(noPublishSettings)
-  .settings(unidocSettings)
   .settings(docSettings)
   .settings(commonJvmSettings)
   .dependsOn(coreJVM, freeJVM)
