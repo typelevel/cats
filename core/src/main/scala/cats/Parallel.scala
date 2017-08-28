@@ -4,19 +4,19 @@ package cats
   * Some types that form a Monad, are also capable of forming an Applicative that supports parallel composition.
   * The Parallel type class allows us to represent this relationship.
   */
-trait Parallel[M[_], F[_]] {
+trait Parallel[M[_], F[_]] extends Serializable {
   /**
     * The applicative instance for F[_]
     */
   def applicative: Applicative[F]
 
   /**
-    * Natural Transformation from the sequential Monad M[_] to the parallel Applicative F[_].
+    * Natural Transformation from the parallel Applicative F[_] to the sequential Monad M[_].
     */
   def sequential(implicit M: Monad[M]): F ~> M
 
   /**
-    * Natural Transformation from the parallel Applicative F[_] to the sequential Monad M[_].
+    * Natural Transformation from the sequential Monad M[_] to the parallel Applicative F[_].
     */
   def parallel(implicit M: Monad[M]): M ~> F
 }
