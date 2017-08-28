@@ -1,4 +1,4 @@
-import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
+import microsites._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import scala.xml.transform.{RewriteRule, RuleTransformer}
@@ -149,7 +149,12 @@ lazy val docSettings = Seq(
   micrositeBaseUrl := "cats",
   micrositeDocumentationUrl := "api",
   micrositeGithubOwner := "typelevel",
-  micrositeExtraMdFiles := Map(file("CONTRIBUTING.md") -> "contributing.md"),
+  micrositeExtraMdFiles := Map(
+    file("CONTRIBUTING.md") -> ExtraMdFileConfig(
+      "contributing.md",
+      "home"
+    )
+  ),
   micrositeGithubRepo := "cats",
   micrositePalette := Map(
     "brand-primary" -> "#5B5988",
@@ -174,6 +179,7 @@ lazy val docSettings = Seq(
     "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
     "-diagrams"
   ),
+  scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
   includeFilter in Jekyll := (includeFilter in makeSite).value
@@ -185,9 +191,7 @@ lazy val docs = project
   .settings(catsSettings)
   .settings(noPublishSettings)
   .settings(unidocSettings)
-  .settings(ghpages.settings)
   .settings(docSettings)
-  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
   .dependsOn(coreJVM, freeJVM)
 
