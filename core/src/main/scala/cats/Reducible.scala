@@ -176,6 +176,19 @@ import simulacrum.typeclass
         Reducible[NonEmptyList].reduce(NonEmptyList(hd, a :: intersperseList(tl, a)))
     }
 
+  /**
+    * Partition this Reducible by a separating function `A => Either[B, C]
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> import cats.data.NonEmptyList
+    * scala> val nel = NonEmptyList.of(1,2,3,4)
+    * scala> Reducible[NonEmptyList].partitionE(nel)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
+    * res0: cats.data.Ior[cats.data.NonEmptyList[String],cats.data.NonEmptyList[Int]] = Both(NonEmptyList(2, 4),NonEmptyList(1, 3))
+    * scala> Reducible[NonEmptyList].partitionE(nel)(a => Right(a * 4))
+    * res1: cats.data.Ior[cats.data.NonEmptyList[Nothing],cats.data.NonEmptyList[Int]] = Right(NonEmptyList(4, 8, 12, 16))
+    * }}}
+    */
   def partitionE[A, B, C](fa: F[A])(f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
     import cats.syntax.either._
 
