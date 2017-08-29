@@ -119,6 +119,10 @@ language", and integrate with each other with ease.
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
+ * [libisabelle](https://github.com/larsrh/libisabelle): A Scala library which talks to Isabelle
+ * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services 
+ * [grafter](https://github.com/zalando/grafter): dependency injection back to the fundamentals.
+ * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
 
 
 ## <a name="copyright" href="#copyright"></a>Copyright and License
