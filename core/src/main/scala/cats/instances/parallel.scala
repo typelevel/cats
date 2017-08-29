@@ -3,7 +3,7 @@ package cats.instances
 import cats.data.{EitherT, Nested, OptionT, Validated}
 import cats.kernel.Semigroup
 import cats.syntax.either._
-import cats.{Applicative, ApplicativeError, Functor, Monad, MonadError, Parallel, ~>}
+import cats.{Applicative, Functor, Monad, Parallel, ~>}
 
 
 trait ParallelInstances {
@@ -15,22 +15,6 @@ trait ParallelInstances {
 
     def parallel(implicit M: Monad[Either[E, ?]]): Either[E, ?] ~> Validated[E, ?] =
       λ[Either[E, ?] ~> Validated[E, ?]](_.toValidated)
-  }
-
-  implicit def catsApplicativeErrorForParallelMonadError[F[_], M[_], E]
-  (implicit P: Parallel[M, F], E: MonadError[M, E]): ApplicativeError[F, E] = new ApplicativeError[F, E] {
-
-    def raiseError[A](e: E): F[A] =
-      P.parallel.apply(MonadError[M, E].raiseError(e))
-
-    def handleErrorWith[A](fa: F[A])(f: (E) => F[A]): F[A] = {
-      val ma = MonadError[M, E].handleErrorWith(P.sequential.apply(fa))(f andThen P.sequential.apply)
-      P.parallel.apply(ma)
-    }
-
-    def pure[A](x: A): F[A] = P.applicative.pure(x)
-
-    def ap[A, B](ff: F[(A) => B])(fa: F[A]): F[B] = P.applicative.ap(ff)(fa)
   }
 
   implicit def catsParallelForOptionTNestedOption[F[_], M[_]: Monad]

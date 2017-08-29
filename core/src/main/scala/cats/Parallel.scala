@@ -97,4 +97,20 @@ object Parallel extends ParallelArityFunctions {
                                         (ma: M[A], mb: M[B])
                                         (implicit P: Parallel[M, F]): M[Z] =
     Monad[M].map(parProduct(ma, parProduct(mb, ff))) { case (a, (b, f)) => f(a, b) }
+
+  def applicativeError[F[_], M[_], E]
+  (implicit P: Parallel[M, F], E: MonadError[M, E]): ApplicativeError[F, E] = new ApplicativeError[F, E] {
+
+    def raiseError[A](e: E): F[A] =
+      P.parallel.apply(MonadError[M, E].raiseError(e))
+
+    def handleErrorWith[A](fa: F[A])(f: (E) => F[A]): F[A] = {
+      val ma = MonadError[M, E].handleErrorWith(P.sequential.apply(fa))(f andThen P.sequential.apply)
+      P.parallel.apply(ma)
+    }
+
+    def pure[A](x: A): F[A] = P.applicative.pure(x)
+
+    def ap[A, B](ff: F[(A) => B])(fa: F[A]): F[B] = P.applicative.ap(ff)(fa)
+  }
 }
