@@ -74,12 +74,14 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
 }
 
 trait ApplicativeErrorForEitherTest extends FunSuite with Discipline {
-  import cats.instances.parallel._
   import cats.instances.either._
+  import cats.instances.parallel._
   import cats.instances.string._
   import cats.instances.int._
   import cats.instances.unit._
   import cats.instances.tuple._
+
+  implicit val parVal = Parallel.applicativeError[Validated[String, ?], Either[String, ?], String]
 
   implicit def eqV[A: Eq,B: Eq]: Eq[Validated[A, B]] = cats.data.Validated.catsDataEqForValidated
 
