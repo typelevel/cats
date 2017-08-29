@@ -71,7 +71,7 @@ class ReducibleTestsAdditional extends CatsSuite {
 
 }
 
-abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends FoldableCheck[F](name) {
+abstract class ReducibleCheck[F[_]: Reducible: Functor](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends FoldableCheck[F](name) {
   def range(start: Long, endInclusive: Long): F[Long]
 
   test(s"Reducible[$name].reduceLeftM stack safety") {
@@ -93,6 +93,39 @@ abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: A
   test(s"Reducible[$name].nonEmptyIntercalate") {
     forAll { (fa: F[String], a: String) =>
       fa.nonEmptyIntercalate(a) === (fa.toList.mkString(a))
+    }
+  }
+
+
+  test("Reducible#partitionE retains size") {
+    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
+      val folded = fi.partitionE(f).fold(identity, identity, _ ++ _.toList)
+      folded.size.toLong should === (fi.size)
+    }
+  }
+
+  test("Reducible#partitionE to one side is identity") {
+    forAll { (fi: F[Int], f: Int => String) =>
+      val g: Int => Either[Double, String] = f andThen Right.apply
+      val h: Int => Either[String, Double] = f andThen Left.apply
+
+      val withG = fi.partitionE(g).fold(_ => NonEmptyList.one(""), identity, (l,r) => r)
+      withG should === (Reducible[F].toNonEmptyList((fi.map(f))))
+
+      val withH = fi.partitionE(h).fold(identity, _ => NonEmptyList.one(""), (l,r) => l)
+      withH should === (Reducible[F].toNonEmptyList((fi.map(f))))
+    }
+  }
+
+  test("Reducible#partitionE remains sorted") {
+    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
+      val nel = Reducible[F].toNonEmptyList(fi)
+
+      val sorted = nel.map(f).sorted
+      val ior = sorted.partitionE(identity)
+
+      ior.left.map(xs => xs.sorted should === (xs))
+      ior.right.map(xs => xs.sorted should === (xs))
     }
   }
 }

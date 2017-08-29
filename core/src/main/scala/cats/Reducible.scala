@@ -1,7 +1,6 @@
 package cats
 
-import cats.data.NonEmptyList
-
+import cats.data.{Ior, NonEmptyList}
 import simulacrum.typeclass
 
 /**
@@ -176,6 +175,22 @@ import simulacrum.typeclass
       case NonEmptyList(hd, tl) =>
         Reducible[NonEmptyList].reduce(NonEmptyList(hd, a :: intersperseList(tl, a)))
     }
+
+  def partitionE[A, B, C](fa: F[A])(f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
+    import cats.syntax.either._
+
+    def g(a: A, eval: Eval[Ior[NonEmptyList[B], NonEmptyList[C]]]): Eval[Ior[NonEmptyList[B], NonEmptyList[C]]] = {
+      val ior = eval.value
+      (f(a), ior) match {
+        case (Right(c), Ior.Left(_)) => Eval.now(ior.putRight(NonEmptyList.one(c)))
+        case (Right(c), _) => Eval.now(ior.map(c :: _))
+        case (Left(b), Ior.Right(r)) => Eval.now(Ior.bothNel(b, r))
+        case (Left(b), _) => Eval.now(ior.leftMap(b :: _))
+      }
+    }
+
+    reduceRightTo(fa)(a => f(a).bimap(NonEmptyList.one, NonEmptyList.one).toIor)(g).value
+  }
 
   override def isEmpty[A](fa: F[A]): Boolean = false
 
