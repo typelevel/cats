@@ -40,7 +40,7 @@ class WriterTTests extends CatsSuite {
     }
   }
 
-  test("reset consistencey"){
+  test("reset consistency"){
     forAll { (i: Int, w1: WriterT[Id, Int, Int], w2: WriterT[Id, Int, Int]) =>
       // if the value is the same, everything should be the same
       w1.map(_ => i).reset should === (w2.map(_ => i).reset)
