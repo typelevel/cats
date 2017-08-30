@@ -97,32 +97,32 @@ abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: A
   }
 
 
-  test("Reducible#partitionE retains size") {
+  test("Reducible#nonEmptyPartition retains size") {
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
-      val folded = fi.partitionE(f).fold(identity, identity, _ ++ _.toList)
+      val folded = fi.nonEmptyPartition(f).fold(identity, identity, _ ++ _.toList)
       folded.size.toLong should === (fi.size)
     }
   }
 
-  test("Reducible#partitionE to one side is identity") {
+  test("Reducible#nonEmptyPartition to one side is identity") {
     forAll { (fi: F[Int], f: Int => String) =>
       val g: Int => Either[Double, String] = f andThen Right.apply
       val h: Int => Either[String, Double] = f andThen Left.apply
 
-      val withG = fi.partitionE(g).right.getOrElse(NonEmptyList.one(""))
+      val withG = fi.nonEmptyPartition(g).right.getOrElse(NonEmptyList.one(""))
       withG should === (Reducible[F].toNonEmptyList(fi).map(f))
 
-      val withH = fi.partitionE(h).left.getOrElse(NonEmptyList.one(""))
+      val withH = fi.nonEmptyPartition(h).left.getOrElse(NonEmptyList.one(""))
       withH should === (Reducible[F].toNonEmptyList(fi).map(f))
     }
   }
 
-  test("Reducible#partitionE remains sorted") {
+  test("Reducible#nonEmptyPartition remains sorted") {
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val nel = Reducible[F].toNonEmptyList(fi)
 
       val sorted = nel.map(f).sorted
-      val ior = sorted.partitionE(identity)
+      val ior = sorted.nonEmptyPartition(identity)
 
       ior.left.map(xs => xs.sorted should === (xs))
       ior.right.map(xs => xs.sorted should === (xs))

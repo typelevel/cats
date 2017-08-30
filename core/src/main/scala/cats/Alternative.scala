@@ -22,21 +22,6 @@ import simulacrum.typeclass
     (as, bs)
   }
 
-  /**
-    * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]`
-    */
-  def mapSeparate[A, B, C](fa: F[A])(f: A => Either[B, C])(implicit F: Foldable[F], A: Alternative[F]): (F[B], F[C]) = {
-    import cats.instances.tuple._
-
-    implicit val mb: Monoid[F[B]] = A.algebra[B]
-    implicit val mc: Monoid[F[C]] = A.algebra[C]
-
-    F.foldMap(fa)(a => f(a) match {
-      case Right(c) => (empty[B], pure(c))
-      case Left(b) => (pure(b), empty[C])
-    })
-  }
-
   override def compose[G[_]: Applicative]: Alternative[λ[α => F[G[α]]]] =
     new ComposedAlternative[F, G] {
       val F = self

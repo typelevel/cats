@@ -25,24 +25,24 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test("Alternative#mapSeparate retains size") {
+  test("Alternative#partitionEither retains size") {
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val list = Foldable[F].toList(fi)
-      val (lefts, rights) = Alternative[List].mapSeparate(list)(f)
+      val (lefts, rights) = Foldable[List].partitionEither(list)(f)
       (lefts <+> rights).size.toLong should === (fi.size)
     }
   }
 
-  test("Alternative#mapSeparate to one side is identity") {
+  test("Alternative#partitionEither to one side is identity") {
     forAll { (fi: F[Int], f: Int => String) =>
       val list = Foldable[F].toList(fi)
       val g: Int => Either[Double, String] = f andThen Right.apply
       val h: Int => Either[String, Double] = f andThen Left.apply
 
-      val withG = Alternative[List].mapSeparate(list)(g)._2
+      val withG = Foldable[List].partitionEither(list)(g)._2
       withG should === (list.map(f))
 
-      val withH = Alternative[List].mapSeparate(list)(h)._1
+      val withH = Foldable[List].partitionEither(list)(h)._1
       withH should === (list.map(f))
     }
   }
@@ -52,7 +52,7 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
       val list = Foldable[F].toList(fi)
 
       val sorted = list.map(f).sorted
-      val (lefts, rights) = Alternative[List].mapSeparate(sorted)(identity)
+      val (lefts, rights) = Foldable[List].partitionEither(sorted)(identity)
 
       lefts.sorted should === (lefts)
       rights.sorted should === (rights)

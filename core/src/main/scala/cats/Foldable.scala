@@ -407,6 +407,21 @@ import simulacrum.typeclass
     }.toList
 
   /**
+    * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]`
+    */
+  def partitionEither[A, B, C](fa: F[A])(f: A => Either[B, C])(implicit F: Foldable[F], A: Alternative[F]): (F[B], F[C]) = {
+    import cats.instances.tuple._
+
+    implicit val mb: Monoid[F[B]] = A.algebra[B]
+    implicit val mc: Monoid[F[C]] = A.algebra[C]
+
+    F.foldMap(fa)(a => f(a) match {
+      case Right(c) => (A.empty[B], A.pure(c))
+      case Left(b) => (A.pure(b), A.empty[C])
+    })
+  }
+
+  /**
    * Convert F[A] to a List[A], only including elements which match `p`.
    */
   def filter_[A](fa: F[A])(p: A => Boolean): List[A] =

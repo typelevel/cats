@@ -182,13 +182,13 @@ import simulacrum.typeclass
     * {{{
     * scala> import cats.data.NonEmptyList
     * scala> val nel = NonEmptyList.of(1,2,3,4)
-    * scala> Reducible[NonEmptyList].partitionE(nel)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
+    * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
     * res0: cats.data.Ior[cats.data.NonEmptyList[String],cats.data.NonEmptyList[Int]] = Both(NonEmptyList(2, 4),NonEmptyList(1, 3))
-    * scala> Reducible[NonEmptyList].partitionE(nel)(a => Right(a * 4))
+    * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => Right(a * 4))
     * res1: cats.data.Ior[cats.data.NonEmptyList[Nothing],cats.data.NonEmptyList[Int]] = Right(NonEmptyList(4, 8, 12, 16))
     * }}}
     */
-  def partitionE[A, B, C](fa: F[A])(f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
+  def nonEmptyPartition[A, B, C](fa: F[A])(f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
     import cats.syntax.either._
 
     def g(a: A, eval: Eval[Ior[NonEmptyList[B], NonEmptyList[C]]]): Eval[Ior[NonEmptyList[B], NonEmptyList[C]]] = {
