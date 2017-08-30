@@ -71,7 +71,7 @@ class ReducibleTestsAdditional extends CatsSuite {
 
 }
 
-abstract class ReducibleCheck[F[_]: Reducible: Functor](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends FoldableCheck[F](name) {
+abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends FoldableCheck[F](name) {
   def range(start: Long, endInclusive: Long): F[Long]
 
   test(s"Reducible[$name].reduceLeftM stack safety") {
@@ -109,11 +109,11 @@ abstract class ReducibleCheck[F[_]: Reducible: Functor](name: String)(implicit A
       val g: Int => Either[Double, String] = f andThen Right.apply
       val h: Int => Either[String, Double] = f andThen Left.apply
 
-      val withG = fi.partitionE(g).fold(_ => NonEmptyList.one(""), identity, (l,r) => r)
-      withG should === (Reducible[F].toNonEmptyList((fi.map(f))))
+      val withG = fi.partitionE(g).right.getOrElse(NonEmptyList.one(""))
+      withG should === (Reducible[F].toNonEmptyList(fi).map(f))
 
-      val withH = fi.partitionE(h).fold(identity, _ => NonEmptyList.one(""), (l,r) => l)
-      withH should === (Reducible[F].toNonEmptyList((fi.map(f))))
+      val withH = fi.partitionE(h).left.getOrElse(NonEmptyList.one(""))
+      withH should === (Reducible[F].toNonEmptyList(fi).map(f))
     }
   }
 
