@@ -408,6 +408,16 @@ import simulacrum.typeclass
 
   /**
     * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]`
+    * Equivalent to `Functor#map` and then `Alternative#separate`.
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val list = List(1,2,3,4)
+    * scala> Foldable[List].partitionEither(list)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
+    * res0: (List[String], List[Int]) = (List(2, 4),List(1, 3))
+    * scala> Foldable[List].partitionEither(list)(a => Right(a * 4))
+    * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
+    * }}}
     */
   def partitionEither[A, B, C](fa: F[A])(f: A => Either[B, C])(implicit A: Alternative[F]): (F[B], F[C]) = {
     import cats.instances.tuple._
