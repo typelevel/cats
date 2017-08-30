@@ -68,14 +68,14 @@ private[cats] trait ComposedBifunctor[F[_, _], G[_, _]]
   }
 }
 
-private trait LeftFunctor[F[_, _], X] extends Functor[F[?, X]] {
+private abstract class LeftFunctor[F[_, _], X] extends Functor[F[?, X]] {
   implicit val F: Bifunctor[F]
 
   override def map[A, C](fax: F[A, X])(f: A => C): F[C, X] =
     F.bimap(fax)(f, identity)
 }
 
-private trait RightFunctor[F[_, _], X] extends Functor[F[X, ?]] {
+private abstract class RightFunctor[F[_, _], X] extends Functor[F[X, ?]] {
   implicit val F: Bifunctor[F]
 
   override def map[A, C](fxa: F[X, A])(f: A => C): F[X, C] =
