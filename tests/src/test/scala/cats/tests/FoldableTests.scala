@@ -33,6 +33,20 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test("Foldable#partitionEither consistent with List#partition") {
+    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
+      val list = Foldable[F].toList(fi)
+      val (lefts, rights) = Foldable[List].partitionEither(list)(f)
+      val (ls, rs) = list.map(f).partition({
+        case Left(_) => true
+        case Right(_) => false
+      })
+
+      lefts.map(_.asLeft[String]) should === (ls)
+      rights.map(_.asRight[String]) should === (rs)
+    }
+  }
+
   test("Foldable#partitionEither to one side is identity") {
     forAll { (fi: F[Int], f: Int => String) =>
       val list = Foldable[F].toList(fi)
