@@ -11,6 +11,9 @@ trait ParallelLaws[M[_], F[_]] {
 
   def parallelRoundTrip[A](ma: M[A]): IsEq[M[A]] =
     P.sequential(monadM)(P.parallel(monadM)(ma)) <-> ma
+
+  def sequentialRoundTrip[A](fa: F[A]): IsEq[F[A]] =
+    P.parallel(monadM)(P.sequential(monadM)(fa)) <-> fa
 }
 
 object ParallelLaws {
