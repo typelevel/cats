@@ -47,7 +47,7 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test("Foldable#mapSeparate remains sorted") {
+  test("Foldable#partitionEither remains sorted") {
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val list = Foldable[F].toList(fi)
 
