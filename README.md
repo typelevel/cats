@@ -110,6 +110,9 @@ language", and integrate with each other with ease.
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
+ * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services 
+ * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
+ 
 
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
