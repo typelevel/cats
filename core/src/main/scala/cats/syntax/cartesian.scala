@@ -4,6 +4,8 @@ package syntax
 trait CartesianSyntax {
   implicit final def catsSyntaxCartesian[F[_], A](fa: F[A])(implicit F: Cartesian[F]): CartesianOps[F, A] =
     new CartesianOps[F, A] {
+      type TypeClassType = Cartesian[F]
+
       val self = fa
       val typeClassInstance = F
     }
