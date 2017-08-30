@@ -44,8 +44,6 @@ lazy val commonSettings = Seq(
   fork in test := true,
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
-  // workaround for https://github.com/scalastyle/scalastyle-sbt-plugin/issues/47
-  scalastyleSources in Compile ++= (unmanagedSourceDirectories in Compile).value,
   ivyConfigurations += config("compile-time").hide,
   unmanagedClasspath in Compile ++= update.value.select(configurationFilter("compile-time")),
   unmanagedSourceDirectories in Test ++= {

@@ -3,7 +3,7 @@ package instances
 
 import scala.collection.immutable.BitSet
 
-package object bitSet extends BitSetInstances
+package object bitSet extends BitSetInstances // scalastyle:ignore package.object.name
 
 trait BitSetInstances {
   implicit val catsKernelStdPartialOrderForBitSet: PartialOrder[BitSet] =
