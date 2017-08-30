@@ -466,8 +466,8 @@ addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;v
 addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
 
 lazy val noPublishSettings = Seq(
-  publish := (),
-  publishLocal := (),
+  publish := {},
+  publishLocal := {},
   publishArtifact := false
 )
 
