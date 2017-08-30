@@ -22,6 +22,9 @@ import simulacrum.typeclass
     (as, bs)
   }
 
+  /**
+    * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]`
+    */
   def mapSeparate[A, B, C](fa: F[A])(f: A => Either[B, C])(implicit F: Foldable[F], A: Alternative[F]): (F[B], F[C]) = {
     import cats.instances.tuple._
 

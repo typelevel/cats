@@ -177,10 +177,9 @@ import simulacrum.typeclass
     }
 
   /**
-    * Partition this Reducible by a separating function `A => Either[B, C]
+    * Partition this Reducible by a separating function `A => Either[B, C]`
     *
     * {{{
-    * scala> import cats.implicits._
     * scala> import cats.data.NonEmptyList
     * scala> val nel = NonEmptyList.of(1,2,3,4)
     * scala> Reducible[NonEmptyList].partitionE(nel)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
