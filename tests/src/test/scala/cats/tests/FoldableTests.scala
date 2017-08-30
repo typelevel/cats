@@ -25,7 +25,7 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test("Alternative#partitionEither retains size") {
+  test("Foldable#partitionEither retains size") {
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val list = Foldable[F].toList(fi)
       val (lefts, rights) = Foldable[List].partitionEither(list)(f)
@@ -33,7 +33,7 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test("Alternative#partitionEither to one side is identity") {
+  test("Foldable#partitionEither to one side is identity") {
     forAll { (fi: F[Int], f: Int => String) =>
       val list = Foldable[F].toList(fi)
       val g: Int => Either[Double, String] = f andThen Right.apply
@@ -47,7 +47,7 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test("Alternative#mapSeparate remains sorted") {
+  test("Foldable#mapSeparate remains sorted") {
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val list = Foldable[F].toList(fi)
 
