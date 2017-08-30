@@ -199,7 +199,7 @@ combine(x, combine(y, z)) = combine(combine(x, y), z)
 combine(x, id) = combine(id, x) = x
 ```
 
-With these laws in place, functions parameterized over a `Monoid` can leverage them for say, performance
+With these laws in place, functions parametrized over a `Monoid` can leverage them for say, performance
 reasons. A function that collapses a `List[A]` into a single `A` can do so with `foldLeft` or
 `foldRight` since `combine` is assumed to be associative, or it can break apart the list into smaller
 lists and collapse in parallel, such as
