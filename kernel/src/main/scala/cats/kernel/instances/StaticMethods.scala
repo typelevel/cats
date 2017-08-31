@@ -79,4 +79,21 @@ object StaticMethods {
     xs.foreach(b ++= _)
     b.result
   }
+
+  // Adapted from scala.util.hashing.MurmurHash#productHash.
+  def caseClass1Hash(_1Hash: Int): Int = {
+    import scala.util.hashing.MurmurHash3._
+    var h = productSeed
+    h = mix(h, _1Hash)
+    finalizeHash(h, 1)
+  }
+
+  // Adapted from scala.util.hashing.MurmurHash#productHash.
+  def caseClass2Hash(_1Hash: Int, _2Hash: Int): Int = {
+    import scala.util.hashing.MurmurHash3._
+    var h = productSeed
+    h = mix(h, _1Hash)
+    h = mix(h, _2Hash)
+    finalizeHash(h, 2)
+  }
 }

@@ -68,8 +68,8 @@ trait EitherInstances0 extends EitherInstances1 {
     new EitherEq[A, B](A, B) with Hash[Either[A, B]] {
       def hash(x: Either[A, B]): Int = {
         x match {
-          case Left(xx) => Hash.caseClass1Hash("Left".##, A.hash(xx))
-          case Right(xx) => Hash.caseClass1Hash("Right".##, B.hash(xx))
+          case Left(xx) => StaticMethods.caseClass1Hash(A.hash(xx))
+          case Right(xx) => StaticMethods.caseClass1Hash(B.hash(xx))
         }
       }
     }

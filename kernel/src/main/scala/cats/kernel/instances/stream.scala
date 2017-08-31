@@ -36,16 +36,16 @@ class StreamPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[S
 }
 
 class StreamHash[A](implicit ev: Hash[A]) extends StreamEq[A]()(ev) with Hash[Stream[A]] {
-  import scala.util.hashing.MurmurHash3
+  import scala.util.hashing.MurmurHash3._
   // adapted from scala.util.hashing.MurmurHash3
   def hash(xs: Stream[A]): Int = {
     var n = 0
-    var h = MurmurHash3.seqSeed
+    var h = seqSeed
     xs foreach { x =>
-      h = MurmurHash3.mix(h, ev.hash(x))
+      h = mix(h, ev.hash(x))
       n += 1
     }
-    MurmurHash3.finalizeHash(h, n)
+    finalizeHash(h, n)
   }
 }
 

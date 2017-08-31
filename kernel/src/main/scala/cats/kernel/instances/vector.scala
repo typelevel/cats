@@ -37,15 +37,15 @@ class VectorPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[V
 
 class VectorHash[A](implicit ev: Hash[A]) extends VectorEq[A]()(ev) with Hash[Vector[A]] {
   // adapted from scala.util.hashing
-  import scala.util.hashing.MurmurHash3
+  import scala.util.hashing.MurmurHash3._
   def hash(xs: Vector[A]): Int = {
     var n = 0
-    var h = MurmurHash3.seqSeed
+    var h = seqSeed
     xs foreach { x =>
-      h = MurmurHash3.mix(h, ev.hash(x))
+      h = mix(h, ev.hash(x))
       n += 1
     }
-    MurmurHash3.finalizeHash(h, n)
+    finalizeHash(h, n)
   }
 }
 
