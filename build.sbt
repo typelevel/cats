@@ -181,7 +181,7 @@ lazy val docs = project
   .settings(noPublishSettings)
   .settings(docSettings)
   .settings(commonJvmSettings)
-  .dependsOn(coreJVM, freeJVM)
+  .dependsOn(coreJVM, freeJVM, kernelLawsJVM, lawsJVM, testkitJVM)
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "root")
