@@ -89,6 +89,12 @@ object FunctionK {
     * }}}
     *
     * Additionally, the type parameters on `f` must not be specified.
+    *
+    * The kind-projector compiler plugin provides a more concise alternative. 
+    * After adding the plugin to your project, you could write the above example as:
+    * {{{
+    *   val lifted: FunctionK[List, Option] = λ[FunctionK[List, Option]](_.headOption)
+    * }}}
     */
   def lift[F[_], G[_]](f: (F[α] ⇒ G[α]) forSome { type α }): FunctionK[F, G] =
     macro FunctionKMacros.lift[F, G]
