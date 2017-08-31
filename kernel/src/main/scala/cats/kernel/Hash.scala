@@ -29,14 +29,6 @@ abstract class HashFunctions[H[T] <: Hash[T]] extends EqFunctions[H] {
 
 object Hash extends HashFunctions[Hash] {
 
-  // Adapted from scala.util.hashing.MurmurHash#productHash.
-  private[kernel] def caseClass1Hash(prefixHash: Int, _1Hash: Int): Int = {
-    import scala.util.hashing.MurmurHash3
-    var h = MurmurHash3.productSeed
-    h = MurmurHash3.mix(h, _1Hash)
-    MurmurHash3.finalizeHash(h, 1)
-  }
-
   /** Fetch a `Hash` instance given the specific type. */
   @inline final def apply[A](implicit ev: Hash[A]): Hash[A] = ev
   
