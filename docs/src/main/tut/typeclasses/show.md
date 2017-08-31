@@ -37,5 +37,38 @@ def show[A](f: A => String): Show[A]
 def fromToString[A]: Show[A]
 ```
 
+These can be used like this:
+
+```tut:book
+import cats.Show
+
+case class Person(name: String, age: Int)
+
+implicit val showPerson: Show[Person] = Show.show(person => person.name)
+
+case class Department(id: Int, name: String)
+
+implicit val showDep: Show[Department] = Show.fromToString
+```
+
+
 This still may not seem useful to you, because case classes already automatically implement `toString`, while `show` would have to be implemented manually for each case class.
-Thankfully with the help of a small library called [kittens](https://github.com/milessabin/kittens) a lot of type class instances including `Show` can be derived automatically!
+Thankfully with the help of a small library called [kittens](https://github.com/milessabin/kittens)a lot of type class instances including `Show` can be derived automatically!
+
+Cats also offers `Show` syntax to make working with it easier.
+This includes the `show` method which can be called on anything with a `Show` instance in scope:
+
+```tut:book
+import cats.implicits._
+
+val john = Person("John", 31)
+
+john.show
+```
+
+It also includes a String interpolator, which works just like the standard `s"..."` interpolator, but uses `Show` instead of `toString`:
+
+```tut:book
+val engineering = Department(2, "Engineering")
+show"$john works at $engineering"
+```
