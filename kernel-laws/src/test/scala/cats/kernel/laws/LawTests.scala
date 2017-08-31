@@ -6,6 +6,10 @@ import catalysts.macros.TypeTagM
 
 import cats.kernel.instances.all._
 
+// these aren't included in all due to bincompat
+import cats.kernel.instances.duration._
+import cats.kernel.instances.queue._
+
 import org.typelevel.discipline.{ Laws }
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{ Arbitrary, Cogen, Gen }
