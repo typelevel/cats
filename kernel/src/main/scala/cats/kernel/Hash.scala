@@ -16,8 +16,11 @@ trait Hash[@sp A] extends Any with Eq[A] with Serializable { self =>
    */
   def hash(x: A): Int
 
-  // `Hash#on` deliberately not implement to avoid `Hash`/`Order` diamond inheritance problem.
+  // `Hash#on` deliberately not implemented to avoid `Hash`/`Order` diamond inheritance problem.
   // Please use `Hash.by` for the same functionality.
+
+  // `Hash#toHashing` deliberately not implemented since `scala.util.hashing.Hashing` is only
+  // compatible with universal equality.
 }
 
 abstract class HashFunctions[H[T] <: Hash[T]] extends EqFunctions[H] {
@@ -41,6 +44,12 @@ object Hash extends HashFunctions[Hash] {
   implicit def catsKernelHashingForHash[A](implicit ev: Hash[A]): Hashing[A] =
     new Hashing[A] {
       def hash(x: A): Int = ev.hash(x)
+    }
+
+  def fromHashing[A](implicit ev: Hashing[A]): Hash[A] =
+    new Hash[A] {
+      def hash(x: A) = ev.hash(x)
+      def eqv(x: A, y: A) = x == y // universal equality
     }
 
   def fromUniversalHashCode[A]: Hash[A] =
