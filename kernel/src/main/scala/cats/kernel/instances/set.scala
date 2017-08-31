@@ -3,7 +3,7 @@ package instances
 
 package object set extends SetInstances
 
-trait SetInstances {
+trait SetInstances extends SetInstances1 {
   implicit def catsKernelStdHashForSet[A]: Hash[Set[A]] =
     new SetHash[A]
 }
