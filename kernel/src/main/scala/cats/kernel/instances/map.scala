@@ -20,22 +20,23 @@ trait MapInstances1 {
 class MapHash[K, V](implicit V: Hash[V]) extends MapEq[K, V]()(V) with Hash[Map[K, V]] {
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.
-  import scala.util.hashing.MurmurHash3
+  import scala.util.hashing.MurmurHash3._
   def hash(x: Map[K, V]): Int = {
     var a, b, n = 0
-    var c = 1
+    var c = 1;
     x foreach { case (k, v) =>
-      val h = (k.##, V hash v).##
+      // use the default hash on keys because that's what Scala's Map does
+      val h = StaticMethods.caseClass2Hash(k.##, V.hash(v))
       a += h
       b ^= h
       if (h != 0) c *= h
       n += 1
     }
-    var h = MurmurHash3.mapSeed
-    h = MurmurHash3.mix(h, a)
-    h = MurmurHash3.mix(h, b)
-    h = MurmurHash3.mixLast(h, c)
-    MurmurHash3.finalizeHash(h, n)
+    var h = mapSeed
+    h = mix(h, a)
+    h = mix(h, b)
+    h = mixLast(h, c)
+    finalizeHash(h, n)
   }
 }
 
