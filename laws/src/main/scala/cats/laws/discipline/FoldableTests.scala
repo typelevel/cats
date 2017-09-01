@@ -37,7 +37,7 @@ trait FoldableTests[F[_]] extends Laws {
       "toList reference" -> forAll(laws.getRef[A] _),
       "filter_ reference" -> forAll(laws.getRef[A] _),
       "takeWhile_ reference" -> forAll(laws.getRef[A] _),
-      "dropWhile_ reference" -> forAll(laws.getRef[A] _),
+      "dropWhile_ reference" -> forAll(laws.getRef[A] _)
     )
   }
 }
