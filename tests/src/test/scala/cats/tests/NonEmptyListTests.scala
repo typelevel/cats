@@ -280,6 +280,12 @@ class NonEmptyListTests extends CatsSuite {
       NonEmptyList.fromReducible(xs) should === (Reducible[NonEmptyVector].toNonEmptyList(xs))
     }
   }
+
+  test("NonEmptyList#zipWith is consistent with List#zip and then List#map") {
+    forAll { (a: NonEmptyList[Int], b: NonEmptyList[Int], f: (Int, Int) => Int) =>
+      a.zipWith(b)(f).toList should === (a.toList.zip(b.toList).map {case (x, y) => f(x, y)})
+    }
+  }
 }
 
 class ReducibleNonEmptyListCheck extends ReducibleCheck[NonEmptyList]("NonEmptyList") {
