@@ -130,6 +130,7 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Long].check(_.order)
   laws[OrderLaws, BitSet].check(_.partialOrder)
   laws[OrderLaws, BigInt].check(_.order)
+  laws[OrderLaws, Duration].check(_.order)
   laws[OrderLaws, UUID].check(_.order)
   laws[OrderLaws, List[Int]].check(_.order)
   laws[OrderLaws, Option[String]].check(_.order)

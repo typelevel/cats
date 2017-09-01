@@ -2,12 +2,14 @@ package cats
 package laws
 package discipline
 
+import cats.instances.list._
+
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
-
 trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] {
   def laws: TraverseLaws[F]
+
 
   def traverse[A: Arbitrary, B: Arbitrary, C: Arbitrary, M: Arbitrary, X[_]: Applicative, Y[_]: Applicative](implicit
     ArbFA: Arbitrary[F[A]],
@@ -39,7 +41,10 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] {
         "traverse identity" -> forAll(laws.traverseIdentity[A, C] _),
         "traverse sequential composition" -> forAll(laws.traverseSequentialComposition[A, B, C, X, Y] _),
         "traverse parallel composition" -> forAll(laws.traverseParallelComposition[A, B, X, Y] _),
-        "traverse derive foldMap" -> forAll(laws.foldMapDerived[A, M] _)
+        "traverse derive foldMap" -> forAll(laws.foldMapDerived[A, M] _),
+        "traverse ref mapWithIndex" -> forAll(laws.mapWithIndexRef[A, C] _),
+        "traverse ref traverseWithIndexM" -> forAll(laws.traverseWithIndexMRef[List, A, C] _),
+        "traverse ref zipWithIndex" -> forAll(laws.zipWithIndexRef[A, C] _)
       )
     }
   }

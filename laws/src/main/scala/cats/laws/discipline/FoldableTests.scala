@@ -31,7 +31,13 @@ trait FoldableTests[F[_]] extends Laws {
       "reduceLeftOption consistent with reduceLeftToOption" ->
         forAll(laws.reduceLeftOptionConsistentWithReduceLeftToOption[A] _),
       "reduceRightOption consistent with reduceRightToOption" ->
-        forAll(laws.reduceRightOptionConsistentWithReduceRightToOption[A] _)
+        forAll(laws.reduceRightOptionConsistentWithReduceRightToOption[A] _),
+      "get reference" -> forAll(laws.getRef[A] _),
+      "fold reference" -> forAll(laws.getRef[A] _),
+      "toList reference" -> forAll(laws.getRef[A] _),
+      "filter_ reference" -> forAll(laws.getRef[A] _),
+      "takeWhile_ reference" -> forAll(laws.getRef[A] _),
+      "dropWhile_ reference" -> forAll(laws.getRef[A] _),
     )
   }
 }
