@@ -156,7 +156,7 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit def catsLawsArbitraryForOrder[A: Arbitrary]: Arbitrary[Order[A]] =
     Arbitrary(getArbitrary[Int => Int].map(f => new Order[A] {
-      def compare(x: A, y: A): Int = f(x.##) compare f(y.##)
+      def compare(x: A, y: A): Int = java.lang.Integer.compare(f(x.##), f(y.##))
     }))
 
   implicit def catsLawsArbitraryForOrdering[A: Arbitrary]: Arbitrary[Ordering[A]] =
