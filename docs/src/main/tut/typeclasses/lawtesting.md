@@ -1,9 +1,8 @@
 # Law testing
 
 [Laws](https://typelevel.org/cats/typeclasses.html#laws) are an important part of cats.
-They help us enforce constraints that we usually assume to be true and give us guarantees that our code does what we think it does.
-Manually testing each data type to adhere to each of its type class instances can be quite cumbersome.
-Thankfully cats comes with the `cats-testkit`, which makes it a lot easier to write tests for type class instances using laws.
+Cats uses `catalysts` and `discipline` to help test instances with laws.
+To make things easier, cats ships with `cats-testkit`, which makes use of `catalysts` and `discipline` and exposes `CatsSuite` based on ScalaTest.
 
 
 ## Getting started
