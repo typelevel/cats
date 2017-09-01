@@ -412,7 +412,7 @@ private[data] abstract class RWSFunctions {
     ReaderWriterStateT.tell(l)
 }
 
-private[data] sealed trait IRWSTInstances extends IRWSTInstances1 {
+private[data] sealed abstract class IRWSTInstances extends IRWSTInstances1 {
   implicit def catsDataProfunctorForIRWST[F[_], E, L, T](implicit F0: Functor[F]): Profunctor[IndexedReaderWriterStateT[F, E, L, ?, ?, T]] =
     new IRWSTProfunctor[F, E, L, T] {
       implicit def F: Functor[F] = F0
@@ -436,7 +436,7 @@ private[data] sealed trait IRWSTInstances extends IRWSTInstances1 {
 
 }
 
-private[data] sealed trait IRWSTInstances1 extends IRWSTInstances2 {
+private[data] sealed abstract class IRWSTInstances1 extends IRWSTInstances2 {
   implicit def catsDataMonadForRWST[F[_], E, L, S](implicit F0: Monad[F], L0: Monoid[L]): Monad[ReaderWriterStateT[F, E, L, S, ?]] =
     new RWSTMonad[F, E, L, S] {
       implicit def F: Monad[F] = F0
@@ -444,7 +444,7 @@ private[data] sealed trait IRWSTInstances1 extends IRWSTInstances2 {
     }
 }
 
-private[data] sealed trait IRWSTInstances2 extends IRWSTInstances3 {
+private[data] sealed abstract class IRWSTInstances2 extends IRWSTInstances3 {
   implicit def catsDataAlternativeForIRWST[F[_], E, L, S](implicit FM: Monad[F], FA: Alternative[F],
     L0: Monoid[L]): Alternative[IndexedReaderWriterStateT[F, E, L, S, S, ?]] =
     new RWSTAlternative[F, E, L, S] {
@@ -454,7 +454,7 @@ private[data] sealed trait IRWSTInstances2 extends IRWSTInstances3 {
     }
 }
 
-private[data] sealed trait IRWSTInstances3 {
+private[data] sealed abstract class IRWSTInstances3 {
   implicit def catsDataSemigroupKForIRWST[F[_], E, L, SA, SB](implicit F0: Monad[F],
     G0: SemigroupK[F]): SemigroupK[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] =
     new IRWSTSemigroupK[F, E, L, SA, SB] {
@@ -468,35 +468,35 @@ private[data] sealed trait IRWSTInstances3 {
     }
 }
 
-private[data] sealed trait IRWSTFunctor[F[_], E, L, SA, SB] extends Functor[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] {
+private[data] sealed abstract class IRWSTFunctor[F[_], E, L, SA, SB] extends Functor[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] {
   implicit def F: Functor[F]
 
   override def map[A, B](fa: IndexedReaderWriterStateT[F, E, L, SA, SB, A])(f: A => B): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
     fa.map(f)
 }
 
-private[data] sealed trait IRWSTContravariant[F[_], E, L, SB, T] extends Contravariant[IndexedReaderWriterStateT[F, E, L, ?, SB, T]] {
+private[data] sealed abstract class IRWSTContravariant[F[_], E, L, SB, T] extends Contravariant[IndexedReaderWriterStateT[F, E, L, ?, SB, T]] {
   implicit def F: Functor[F]
 
   override def contramap[A, B](fa: IndexedReaderWriterStateT[F, E, L, A, SB, T])(f: B => A): IndexedReaderWriterStateT[F, E, L, B, SB, T] =
     fa.contramap(f)
 }
 
-private[data] sealed trait IRWSTProfunctor[F[_], E, L, T] extends Profunctor[IndexedReaderWriterStateT[F, E, L, ?, ?, T]] {
+private[data] sealed abstract class IRWSTProfunctor[F[_], E, L, T] extends Profunctor[IndexedReaderWriterStateT[F, E, L, ?, ?, T]] {
   implicit def F: Functor[F]
 
   override def dimap[A, B, C, D](fab: IndexedReaderWriterStateT[F, E, L, A, B, T])(f: C => A)(g: B => D): IndexedReaderWriterStateT[F, E, L, C, D, T] =
     fab.dimap(f)(g)
 }
 
-private[data] sealed trait IRWSTBifunctor[F[_], E, L, SA] extends Bifunctor[IndexedReaderWriterStateT[F, E, L, SA, ?, ?]] {
+private[data] sealed abstract class IRWSTBifunctor[F[_], E, L, SA] extends Bifunctor[IndexedReaderWriterStateT[F, E, L, SA, ?, ?]] {
   implicit def F: Functor[F]
 
   override def bimap[A, B, C, D](fab: IndexedReaderWriterStateT[F, E, L, SA, A, B])(f: A => C, g: B => D): IndexedReaderWriterStateT[F, E, L, SA, C, D] =
     fab.bimap(f, g)
 }
 
-private[data] sealed trait RWSTMonad[F[_], E, L, S] extends Monad[ReaderWriterStateT[F, E, L, S, ?]] with IRWSTFunctor[F, E, L, S, S] {
+private[data] sealed abstract class RWSTMonad[F[_], E, L, S] extends IRWSTFunctor[F, E, L, S, S] with Monad[ReaderWriterStateT[F, E, L, S, ?]] {
   implicit def F: Monad[F]
   implicit def L: Monoid[L]
 
@@ -516,7 +516,7 @@ private[data] sealed trait RWSTMonad[F[_], E, L, S] extends Monad[ReaderWriterSt
     }
 }
 
-private[data] sealed trait IRWSTSemigroupK[F[_], E, L, SA, SB] extends SemigroupK[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] {
+private[data] sealed abstract class IRWSTSemigroupK[F[_], E, L, SA, SB] extends SemigroupK[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] {
   implicit def F: Monad[F]
   implicit def G: SemigroupK[F]
 
@@ -527,13 +527,18 @@ private[data] sealed trait IRWSTSemigroupK[F[_], E, L, SA, SB] extends Semigroup
     }
 }
 
-private[data] sealed trait RWSTAlternative[F[_], E, L, S]
-  extends Alternative[ReaderWriterStateT[F, E, L, S, ?]] with IRWSTFunctor[F, E, L, S, S]
-    with IRWSTSemigroupK[F, E, L, S, S] {
+private[data] sealed abstract class RWSTAlternative[F[_], E, L, S]
+  extends IRWSTFunctor[F, E, L, S, S] with Alternative[ReaderWriterStateT[F, E, L, S, ?]] {
 
   implicit def F: Monad[F]
-  override def G: Alternative[F]
+  def G: Alternative[F]
   implicit def L: Monoid[L]
+
+  def combineK[A](x: ReaderWriterStateT[F, E, L, S, A],
+    y: ReaderWriterStateT[F, E, L, S, A]): ReaderWriterStateT[F, E, L, S, A] =
+    ReaderWriterStateT { (e, sa) =>
+      G.combineK(x.run(e, sa), y.run(e, sa))
+    }
 
   def empty[A]: ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.lift(G.empty[A])
 
@@ -544,7 +549,7 @@ private[data] sealed trait RWSTAlternative[F[_], E, L, S]
 
 }
 
-private[data] sealed trait RWSTMonadError[F[_], E, L, S, R]
+private[data] sealed abstract class RWSTMonadError[F[_], E, L, S, R]
     extends RWSTMonad[F, E, L, S] with MonadError[ReaderWriterStateT[F, E, L, S, ?], R] {
 
   implicit def F: MonadError[F, R]
@@ -556,4 +561,3 @@ private[data] sealed trait RWSTMonadError[F[_], E, L, S, R]
       F.handleErrorWith(fa.run(e, s))(r => f(r).run(e, s))
     }
 }
-
