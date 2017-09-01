@@ -245,6 +245,29 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   }
 
   /**
+    * Zips this `NonEmptyList` with another `NonEmptyList` and applies a function for each pair of elements.
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> val as = NonEmptyList.of(1, 2, 3)
+    * scala> val bs = NonEmptyList.of("A", "B", "C")
+    * scala> as.zipWith(bs)(_ + _)
+    * res0: cats.data.NonEmptyList[String] = NonEmptyList(1A, 2B, 3C)
+    * }}}
+    */
+  def zipWith[B, C](b: NonEmptyList[B])(f: (A, B) => C): NonEmptyList[C] = {
+
+    @tailrec
+    def zwRev(as: List[A], bs: List[B], acc: List[C]): List[C] = (as, bs) match {
+      case (Nil, _) => acc
+      case (_, Nil) => acc
+      case (x :: xs, y :: ys) => zwRev(xs, ys, f(x, y) :: acc)
+    }
+
+    NonEmptyList(f(head, b.head), zwRev(tail, b.tail, Nil).reverse)
+  }
+
+  /**
    * Zips each element of this `NonEmptyList` with its index.
    *
    * {{{
