@@ -1,7 +1,6 @@
 package cats
 package instances
 
-import cats.functor._
 import cats.kernel.instances._
 
 trait HashInstances {
