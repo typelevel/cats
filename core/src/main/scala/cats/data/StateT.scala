@@ -175,7 +175,7 @@ private[data] trait CommonStateTConstructors {
     IndexedStateT(s => F.pure((s, s)))
 }
 
-object IndexedStateT extends CommonStateTConstructors with IndexedStateTInstances {
+object IndexedStateT extends IndexedStateTInstances with CommonStateTConstructors {
   def apply[F[_], SA, SB, A](f: SA => F[(SB, A)])(implicit F: Applicative[F]): IndexedStateT[F, SA, SB, A] =
     new IndexedStateT(F.pure(f))
 
@@ -215,13 +215,13 @@ private[data] abstract class StateTFunctions extends CommonStateTConstructors {
     apply(_ => F.map(fs)(s => (s, ())))
 }
 
-private[data] sealed trait IndexedStateTInstances extends IndexedStateTInstances1 {
+private[data] sealed abstract class IndexedStateTInstances extends IndexedStateTInstances1 {
   implicit def catsDataAlternativeForIndexedStateT[F[_], S](implicit FM: Monad[F],
     FA: Alternative[F]): Alternative[IndexedStateT[F, S, S, ?]] with Monad[IndexedStateT[F, S, S, ?]] =
     new IndexedStateTAlternative[F, S] { implicit def F = FM; implicit def G = FA }
 }
 
-private[data] sealed trait IndexedStateTInstances1 extends IndexedStateTInstances2 {
+private[data] sealed abstract class IndexedStateTInstances1 extends IndexedStateTInstances2 {
   implicit def catsDataMonadErrorForIndexedStateT[F[_], S, E](implicit F0: MonadError[F, E]): MonadError[IndexedStateT[F, S, S, ?], E] =
     new IndexedStateTMonadError[F, S, E] { implicit def F = F0 }
 
@@ -229,12 +229,12 @@ private[data] sealed trait IndexedStateTInstances1 extends IndexedStateTInstance
     new IndexedStateTSemigroupK[F, SA, SB] { implicit def F = F0; implicit def G = G0 }
 }
 
-private[data] sealed trait IndexedStateTInstances2 extends IndexedStateTInstances3 {
+private[data] sealed abstract class IndexedStateTInstances2 extends IndexedStateTInstances3 {
   implicit def catsDataMonadForIndexedStateT[F[_], S](implicit F0: Monad[F]): Monad[IndexedStateT[F, S, S, ?]] =
     new IndexedStateTMonad[F, S] { implicit def F = F0 }
 }
 
-private[data] sealed trait IndexedStateTInstances3 {
+private[data] sealed abstract class IndexedStateTInstances3 {
   implicit def catsDataFunctorForIndexedStateT[F[_], SA, SB](implicit F0: Functor[F]): Functor[IndexedStateT[F, SA, SB, ?]] =
     new IndexedStateTFunctor[F, SA, SB] { implicit def F = F0 }
 
@@ -281,36 +281,35 @@ private[data] abstract class StateFunctions {
   def set[S](s: S): State[S, Unit] = State(_ => (s, ()))
 }
 
-private[data] sealed trait IndexedStateTFunctor[F[_], SA, SB] extends Functor[IndexedStateT[F, SA, SB, ?]] {
+private[data] sealed abstract class IndexedStateTFunctor[F[_], SA, SB] extends Functor[IndexedStateT[F, SA, SB, ?]] {
   implicit def F: Functor[F]
 
   override def map[A, B](fa: IndexedStateT[F, SA, SB, A])(f: A => B): IndexedStateT[F, SA, SB, B] =
     fa.map(f)
 }
 
-private[data] sealed trait IndexedStateTContravariant[F[_], SB, V] extends Contravariant[IndexedStateT[F, ?, SB, V]] {
+private[data] sealed abstract class IndexedStateTContravariant[F[_], SB, V] extends Contravariant[IndexedStateT[F, ?, SB, V]] {
   implicit def F: Functor[F]
 
   override def contramap[A, B](fa: IndexedStateT[F, A, SB, V])(f: B => A): IndexedStateT[F, B, SB, V] =
     fa.contramap(f)
 }
 
-private[data] sealed trait IndexedStateTBifunctor[F[_], SA] extends Bifunctor[IndexedStateT[F, SA, ?, ?]] {
+private[data] sealed abstract class IndexedStateTBifunctor[F[_], SA] extends Bifunctor[IndexedStateT[F, SA, ?, ?]] {
   implicit def F: Functor[F]
 
   def bimap[A, B, C, D](fab: IndexedStateT[F, SA, A, B])(f: A => C, g: B => D): IndexedStateT[F, SA, C, D] =
     fab.bimap(f, g)
 }
 
-private[data] sealed trait IndexedStateTProfunctor[F[_], V] extends Profunctor[IndexedStateT[F, ?, ?, V]] {
+private[data] sealed abstract class IndexedStateTProfunctor[F[_], V] extends Profunctor[IndexedStateT[F, ?, ?, V]] {
   implicit def F: Functor[F]
 
   def dimap[A, B, C, D](fab: IndexedStateT[F, A, B, V])(f: C => A)(g: B => D): IndexedStateT[F, C, D, V] =
     fab.dimap(f)(g)
 }
 
-private[data] sealed trait IndexedStateTMonad[F[_], S] extends Monad[IndexedStateT[F, S, S, ?]]
-    with IndexedStateTFunctor[F, S, S] {
+private[data] sealed abstract class IndexedStateTMonad[F[_], S] extends IndexedStateTFunctor[F, S, S] with Monad[IndexedStateT[F, S, S, ?]] {
   implicit def F: Monad[F]
 
   def pure[A](a: A): IndexedStateT[F, S, S, A] =
@@ -325,7 +324,7 @@ private[data] sealed trait IndexedStateTMonad[F[_], S] extends Monad[IndexedStat
     })
 }
 
-private[data] sealed trait IndexedStateTSemigroupK[F[_], SA, SB] extends SemigroupK[IndexedStateT[F, SA, SB, ?]] {
+private[data] sealed abstract class IndexedStateTSemigroupK[F[_], SA, SB] extends SemigroupK[IndexedStateT[F, SA, SB, ?]] {
   implicit def F: Monad[F]
   implicit def G: SemigroupK[F]
 
@@ -333,7 +332,7 @@ private[data] sealed trait IndexedStateTSemigroupK[F[_], SA, SB] extends Semigro
     IndexedStateT(s => G.combineK(x.run(s), y.run(s)))
 }
 
-private[data] sealed trait IndexedStateTAlternative[F[_], S] extends Alternative[IndexedStateT[F, S, S, ?]] with IndexedStateTMonad[F, S] {
+private[data] sealed abstract class IndexedStateTAlternative[F[_], S] extends IndexedStateTMonad[F, S] with Alternative[IndexedStateT[F, S, S, ?]] {
   def G: Alternative[F]
 
   def combineK[A](x: IndexedStateT[F, S, S, A], y: IndexedStateT[F, S, S, A]): IndexedStateT[F, S, S, A] =
@@ -343,7 +342,7 @@ private[data] sealed trait IndexedStateTAlternative[F[_], S] extends Alternative
     IndexedStateT.lift[F, S, A](G.empty[A])(G)
 }
 
-private[data] sealed trait IndexedStateTMonadError[F[_], S, E] extends IndexedStateTMonad[F, S]
+private[data] sealed abstract class IndexedStateTMonadError[F[_], S, E] extends IndexedStateTMonad[F, S]
     with MonadError[IndexedStateT[F, S, S, ?], E] {
   implicit def F: MonadError[F, E]
 
