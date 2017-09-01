@@ -313,6 +313,12 @@ class NonEmptyVectorTests extends CatsSuite {
       nonEmptyVector.distinct.toVector should === (nonEmptyVector.toVector.distinct)
     }
   }
+
+  test("NonEmptyVector#zipWith is consistent with Vector#zip and then Vector#map") {
+    forAll { (a: NonEmptyVector[Int], b: NonEmptyVector[Int], f: (Int, Int) => Int) =>
+      a.zipWith(b)(f).toVector should === (a.toVector.zip(b.toVector).map { case (x, y) => f(x, y)})
+    }
+  }
 }
 
 class ReducibleNonEmptyVectorCheck extends ReducibleCheck[NonEmptyVector]("NonEmptyVector") {
