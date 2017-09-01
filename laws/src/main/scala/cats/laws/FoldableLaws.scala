@@ -137,7 +137,7 @@ trait FoldableLaws[F[_]] {
       if (p(a)) llst.map(a :: _) else Now(Nil)
     }.value
 
-  def dropWhile_[A](fa: F[A], p: A => Boolean): IsEq[List[A]] =
+  def dropWhile_Ref[A](fa: F[A], p: A => Boolean): IsEq[List[A]] =
     F.dropWhile_(fa)(p) <-> F.foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
       if (buf.nonEmpty || !p(a)) buf += a else buf
     }.toList

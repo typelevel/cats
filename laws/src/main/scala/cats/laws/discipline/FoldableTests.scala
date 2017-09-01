@@ -6,14 +6,18 @@ import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws
 
+import cats.instances.list._
+
 trait FoldableTests[F[_]] extends Laws {
   def laws: FoldableLaws[F]
 
   def foldable[A: Arbitrary, B: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
+    A: Monoid[A],
     B: Monoid[B],
     CogenA: Cogen[A],
     CogenB: Cogen[B],
+    EqA: Eq[A],
     EqB: Eq[B],
     EqOptionA: Eq[Option[A]]
   ): RuleSet = {
@@ -33,11 +37,11 @@ trait FoldableTests[F[_]] extends Laws {
       "reduceRightOption consistent with reduceRightToOption" ->
         forAll(laws.reduceRightOptionConsistentWithReduceRightToOption[A] _),
       "get reference" -> forAll(laws.getRef[A] _),
-      "fold reference" -> forAll(laws.getRef[A] _),
-      "toList reference" -> forAll(laws.getRef[A] _),
-      "filter_ reference" -> forAll(laws.getRef[A] _),
-      "takeWhile_ reference" -> forAll(laws.getRef[A] _),
-      "dropWhile_ reference" -> forAll(laws.getRef[A] _)
+      "fold reference" -> forAll(laws.foldRef[A] _),
+      "toList reference" -> forAll(laws.toListRef[A] _),
+      "filter_ reference" -> forAll(laws.filter_Ref[A] _),
+      "takeWhile_ reference" -> forAll(laws.takeWhile_Ref[A] _),
+      "dropWhile_ reference" -> forAll(laws.dropWhile_Ref[A] _)
     )
   }
 }
