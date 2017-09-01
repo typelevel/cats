@@ -184,6 +184,20 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
 
     NonEmptyVector(head, buf.result())
   }
+
+  /**
+    * Zips this `NonEmptyVector` with another `NonEmptyVector` and applies a function for each pair of elements.
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyVector
+    * scala> val as = NonEmptyVector.of(1, 2, 3)
+    * scala> val bs = NonEmptyVector.of("A", "B", "C")
+    * scala> as.zipWith(bs)(_ + _)
+    * res0: cats.data.NonEmptyVector[String] = NonEmptyVector(1A, 2B, 3C)
+    * }}}
+    */
+  def zipWith[B, C](b: NonEmptyVector[B])(f: (A, B) => C): NonEmptyVector[C] =
+    NonEmptyVector.fromVectorUnsafe((toVector, b.toVector).zipped.map(f))
 }
 
 private[data] sealed trait NonEmptyVectorInstances {
