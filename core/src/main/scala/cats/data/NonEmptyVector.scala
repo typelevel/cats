@@ -258,7 +258,7 @@ private[data] sealed trait NonEmptyVectorInstances {
         fa.foldRight(lb)(f)
 
       override def get[A](fa: NonEmptyVector[A])(idx: Long): Option[A] =
-        if (idx < Int.MaxValue) fa.get(idx.toInt) else None
+        if (0 <= idx && idx < Int.MaxValue) fa.get(idx.toInt) else None
 
       def tailRecM[A, B](a: A)(f: A => NonEmptyVector[Either[A, B]]): NonEmptyVector[B] = {
         val buf = new VectorBuilder[B]
