@@ -203,7 +203,9 @@ class EvalTests extends CatsSuite {
       DeepEval(step(0, leaf, Nil))
     }
 
-    val MaxDepth = 10000 // for a better stress test increase to 200K or so.
+    // we keep this low in master to keep travis happy.
+    // for an actual stress test increase to 200K or so.
+    val MaxDepth = 100
 
     implicit def arbitraryDeepEval[A: Arbitrary: Cogen]: Arbitrary[DeepEval[A]] = {
       val gen: Gen[O[A]] = arbitrary[O[A]]
