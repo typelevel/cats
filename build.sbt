@@ -17,6 +17,8 @@ lazy val scoverageSettings = Seq(
 
 organization in ThisBuild := "org.typelevel"
 
+val CompileTime = config("compile-time").hide
+
 lazy val kernelSettings = Seq(
   // don't warn on value discarding because it's broken on 2.10 with @sp(Unit)
   scalacOptions ++= commonScalacOptions.filter(_ != "-Ywarn-value-discard"),
@@ -36,7 +38,7 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.11.0" % "compile-time",
+    "com.github.mpilquist" %%% "simulacrum" % "0.11.0" % CompileTime,
     "org.typelevel" %%% "machinist" % "0.6.2",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
@@ -44,8 +46,8 @@ lazy val commonSettings = Seq(
   fork in test := true,
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
-  ivyConfigurations += config("compile-time").hide,
-  unmanagedClasspath in Compile ++= update.value.select(configurationFilter("compile-time")),
+  ivyConfigurations += CompileTime,
+  unmanagedClasspath in Compile ++= update.value.select(configurationFilter(CompileTime.name)),
   unmanagedSourceDirectories in Test ++= {
     val bd = baseDirectory.value
     if (CrossVersion.partialVersion(scalaVersion.value) exists (_._2 >= 11))
