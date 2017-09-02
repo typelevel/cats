@@ -6,6 +6,10 @@ import catalysts.macros.TypeTagM
 
 import cats.kernel.instances.all._
 
+// these aren't included in all due to bincompat
+import cats.kernel.instances.duration._
+import cats.kernel.instances.queue._
+
 import org.typelevel.discipline.{ Laws }
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{ Arbitrary, Cogen, Gen }
@@ -13,22 +17,14 @@ import Arbitrary.arbitrary
 import org.scalactic.anyvals.{ PosInt, PosZInt }
 import org.scalatest.FunSuite
 
+import scala.concurrent.duration.Duration
+import scala.collection.immutable.{BitSet, Queue}
 import scala.util.Random
-import scala.collection.immutable.BitSet
 
 import java.util.UUID
+import java.util.concurrent.TimeUnit.{DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS, MICROSECONDS, NANOSECONDS}
 
-class LawTests extends FunSuite with Discipline {
-
-  // The scalacheck defaults (100,100) are too high for scala-js.
-  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
-  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
-
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
-
-  implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
-  implicit def groupLaws[A: Cogen: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
+object KernelCheck {
 
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
     Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
@@ -38,6 +34,20 @@ class LawTests extends FunSuite with Discipline {
 
   implicit val arbitraryUUID: Arbitrary[UUID] =
     Arbitrary(Gen.uuid)
+
+  implicit val arbitraryDuration: Arbitrary[Duration] = {
+    // max range is +/- 292 years, but we give ourselves some extra headroom
+    // to ensure that we can add these things up. they crash on overflow.
+    val n = (292L * 365) / 50
+    Arbitrary(Gen.oneOf(
+      Gen.choose(-n, n).map(Duration(_, DAYS)),
+      Gen.choose(-n * 24L, n * 24L).map(Duration(_, HOURS)),
+      Gen.choose(-n * 1440L, n * 1440L).map(Duration(_, MINUTES)),
+      Gen.choose(-n * 86400L, n * 86400L).map(Duration(_, SECONDS)),
+      Gen.choose(-n * 86400000L, n * 86400000L).map(Duration(_, MILLISECONDS)),
+      Gen.choose(-n * 86400000000L, n * 86400000000L).map(Duration(_, MICROSECONDS)),
+      Gen.choose(-n * 86400000000000L, n * 86400000000000L).map(Duration(_, NANOSECONDS))))
+  }
 
   // this instance is not available in scalacheck 1.13.2.
   // remove this once a newer version is available.
@@ -55,6 +65,37 @@ class LawTests extends FunSuite with Discipline {
   implicit val cogenUUID: Cogen[UUID] =
     Cogen[(Long, Long)].contramap(u => (u.getMostSignificantBits, u.getLeastSignificantBits))
 
+  implicit val cogenDuration: Cogen[Duration] =
+    Cogen[Long].contramap { d =>
+      if (d == Duration.Inf) 3896691548866406746L
+      else if (d == Duration.MinusInf) 1844151880988859955L
+      else if (d == Duration.Undefined) -7917359255778781894L
+      else d.length * (d.unit match {
+        case DAYS => -6307593037248227856L
+        case HOURS => -3527447467459552709L
+        case MINUTES => 5955657079535371609L
+        case SECONDS => 5314272869665647192L
+        case MILLISECONDS => -2025740217814855607L
+        case MICROSECONDS => -2965853209268633779L
+        case NANOSECONDS => 6128745701389500153L
+      })
+    }
+}
+
+class LawTests extends FunSuite with Discipline {
+
+  import KernelCheck._
+
+  // The scalacheck defaults (100,100) are too high for scala-js.
+  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
+  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
+
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
+
+  implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
+  implicit def groupLaws[A: Cogen: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
+
   {
     // needed for Cogen[Map[...]]
     implicit val ohe: Ordering[HasEq[Int]] = Ordering[Int].on(_.a)
@@ -65,6 +106,7 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Option[HasEq[Int]]].check(_.eqv)
   laws[OrderLaws, Vector[HasEq[Int]]].check(_.eqv)
   laws[OrderLaws, Stream[HasEq[Int]]].check(_.eqv)
+  laws[OrderLaws, Queue[HasEq[Int]]].check(_.eqv)
 
   laws[OrderLaws, Set[Int]].check(_.partialOrder)
   laws[OrderLaws, Set[Int]]("reverse").check(_.partialOrder(PartialOrder[Set[Int]].reverse))
@@ -73,6 +115,7 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, List[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, Vector[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, Stream[HasPartialOrder[Int]]].check(_.partialOrder)
+  laws[OrderLaws, Queue[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, Set[Int]]("asMeetPartialOrder").check(_.partialOrder(Semilattice.asMeetPartialOrder[Set[Int]]))
   laws[OrderLaws, Set[Int]]("asJoinPartialOrder").check(_.partialOrder(Semilattice.asJoinPartialOrder[Set[Int]]))
 
@@ -87,12 +130,14 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Long].check(_.order)
   laws[OrderLaws, BitSet].check(_.partialOrder)
   laws[OrderLaws, BigInt].check(_.order)
+  laws[OrderLaws, Duration].check(_.order)
   laws[OrderLaws, UUID].check(_.order)
   laws[OrderLaws, List[Int]].check(_.order)
   laws[OrderLaws, Option[String]].check(_.order)
   laws[OrderLaws, List[String]].check(_.order)
   laws[OrderLaws, Vector[Int]].check(_.order)
   laws[OrderLaws, Stream[Int]].check(_.order)
+  laws[OrderLaws, Queue[Int]].check(_.order)
   laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
   laws[OrderLaws, Int]("reverse").check(_.order(Order[Int].reverse))
   laws[OrderLaws, Int]("reverse.reverse").check(_.order(Order[Int].reverse.reverse))
@@ -105,6 +150,7 @@ class LawTests extends FunSuite with Discipline {
   laws[GroupLaws, Stream[Int]].check(_.monoid)
   laws[GroupLaws, List[String]].check(_.monoid)
   laws[GroupLaws, Map[String, Int]].check(_.monoid)
+  laws[GroupLaws, Queue[Int]].check(_.monoid)
 
   laws[GroupLaws, BitSet].check(_.boundedSemilattice)
   laws[GroupLaws, Set[Int]].check(_.boundedSemilattice)
@@ -117,6 +163,7 @@ class LawTests extends FunSuite with Discipline {
   //laws[GroupLaws, Float].check(_.commutativeGroup) // approximately associative
   //laws[GroupLaws, Double].check(_.commutativeGroup) // approximately associative
   laws[GroupLaws, BigInt].check(_.commutativeGroup)
+  laws[GroupLaws, Duration].check(_.commutativeGroup)
 
   {
     // default Arbitrary[BigDecimal] is a bit too intense :/
@@ -273,5 +320,4 @@ class LawTests extends FunSuite with Discipline {
 
   private[laws] def laws[L[_] <: Laws, A](extraTag: String)(implicit laws: L[A], tag: TypeTagM[A]): LawChecker[L[A]] =
     LawChecker("[" + tag.name.toString + (if(extraTag != "") "@@" + extraTag else "") + "]", laws)
-
 }

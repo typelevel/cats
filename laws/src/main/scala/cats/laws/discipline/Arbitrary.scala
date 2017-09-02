@@ -133,21 +133,34 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForFn0[A: Arbitrary]: Arbitrary[() => A] =
     Arbitrary(getArbitrary[A].map(() => _))
 
+  // TODO: we should probably be using Cogen for generating Eq, Order,
+  // etc. however, we'd still have to ensure that (x.## == y.##)
+  // implies equal, in order to avoid producing invalid instances.
+
   implicit def catsLawsArbitraryForEq[A: Arbitrary]: Arbitrary[Eq[A]] =
-    Arbitrary(new Eq[A] { def eqv(x: A, y: A) = x.hashCode == y.hashCode })
+    Arbitrary(getArbitrary[Int => Int].map(f => new Eq[A] {
+      def eqv(x: A, y: A): Boolean = f(x.##) == f(y.##)
+    }))
+
+  implicit def catsLawsArbitraryForEquiv[A: Arbitrary]: Arbitrary[Equiv[A]] =
+    Arbitrary(getArbitrary[Eq[A]].map(Eq.catsKernelEquivForEq(_)))
 
   implicit def catsLawsArbitraryForPartialOrder[A: Arbitrary]: Arbitrary[PartialOrder[A]] =
-    Arbitrary(Gen.oneOf(
-      PartialOrder.from[A]((_: A, _: A) => Double.NaN),
-      PartialOrder.from[A]((_: A, _: A) => -1.0),
-      PartialOrder.from[A]((_: A, _: A) => 0.0),
-      PartialOrder.from[A]((_: A, _: A) => 1.0)))
+    Arbitrary(getArbitrary[Int => Double].map(f => new PartialOrder[A] {
+      def partialCompare(x: A, y: A): Double =
+        if (x.## == y.##) 0.0 else f(x.##) - f(y.##)
+    }))
+
+  implicit def catsLawsArbitraryForPartialOrdering[A: Arbitrary]: Arbitrary[PartialOrdering[A]] =
+    Arbitrary(getArbitrary[PartialOrder[A]].map(PartialOrder.catsKernelPartialOrderingForPartialOrder(_)))
 
   implicit def catsLawsArbitraryForOrder[A: Arbitrary]: Arbitrary[Order[A]] =
-    Arbitrary(Gen.oneOf(
-      Order.from[A]((_: A, _: A) => -1),
-      Order.from[A]((_: A, _: A) => 0),
-      Order.from[A]((_: A, _: A) => 1)))
+    Arbitrary(getArbitrary[Int => Int].map(f => new Order[A] {
+      def compare(x: A, y: A): Int = java.lang.Integer.compare(f(x.##), f(y.##))
+    }))
+
+  implicit def catsLawsArbitraryForOrdering[A: Arbitrary]: Arbitrary[Ordering[A]] =
+    Arbitrary(getArbitrary[Order[A]].map(Order.catsKernelOrderingForOrder(_)))
 
   implicit def catsLawsArbitraryForNested[F[_], G[_], A](implicit FG: Arbitrary[F[G[A]]]): Arbitrary[Nested[F, G, A]] =
     Arbitrary(FG.arbitrary.map(Nested(_)))
