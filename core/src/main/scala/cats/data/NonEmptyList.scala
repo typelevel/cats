@@ -1,6 +1,7 @@
 package cats
 package data
 
+import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.instances.list._
 import cats.syntax.order._
 
@@ -383,6 +384,18 @@ object NonEmptyList extends NonEmptyListInstances {
 
   def fromReducible[F[_], A](fa: F[A])(implicit F: Reducible[F]): NonEmptyList[A] =
     F.toNonEmptyList(fa)
+
+  class ZipNonEmptyList[A](val value: NonEmptyList[A]) extends AnyVal
+
+  object ZipNonEmptyList {
+    implicit val zipNelApplicative: Applicative[ZipNonEmptyList] = new Applicative[ZipNonEmptyList] {
+      def pure[A](x: A): ZipNonEmptyList[A] = new ZipNonEmptyList(NonEmptyList.one(x))
+      def ap[A, B](ff: ZipNonEmptyList[A => B])(fa: ZipNonEmptyList[A]): ZipNonEmptyList[B] =
+        new ZipNonEmptyList(ff.value.zipWith(fa.value)(_ apply _))
+    }
+
+    implicit def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
+  }
 }
 
 private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 {
@@ -478,6 +491,18 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
   implicit def catsDataOrderForNonEmptyList[A](implicit A: Order[A]): Order[NonEmptyList[A]] =
     new NonEmptyListOrder[A] {
       val A0 = A
+    }
+
+  implicit def catsDataParallelForNonEmptyList[A]: Parallel[NonEmptyList, ZipNonEmptyList] =
+    new Parallel[NonEmptyList, ZipNonEmptyList] {
+
+      def applicative: Applicative[ZipNonEmptyList] = ZipNonEmptyList.zipNelApplicative
+
+      def sequential(implicit M: Monad[NonEmptyList]): ZipNonEmptyList ~> NonEmptyList =
+        λ[ZipNonEmptyList ~> NonEmptyList](_.value)
+
+      def parallel(implicit M: Monad[NonEmptyList]): NonEmptyList ~> ZipNonEmptyList =
+        λ[NonEmptyList ~> ZipNonEmptyList](nel => new ZipNonEmptyList(nel))
     }
 }
 

@@ -1,6 +1,8 @@
 package cats
 
 
+import cats.data.NonEmptyList.ZipNonEmptyList
+import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.data._
 import cats.tests.CatsSuite
 import org.scalatest.FunSuite
@@ -58,10 +60,24 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
 
   }
 
+  test("ParMap over NonEmptyList should be consistent with zip") {
+    forAll { (as: NonEmptyList[Int], bs: NonEmptyList[Int], cs: NonEmptyList[Int]) =>
+      (as, bs, cs).parMapN(_ + _ + _) should === (as.zipWith(bs)(_ + _).zipWith(cs)(_ + _))
+    }
+  }
+
+  test("ParMap over NonEmptyVector should be consistent with zip") {
+    forAll { (as: NonEmptyVector[Int], bs: NonEmptyVector[Int], cs: NonEmptyVector[Int]) =>
+      (as, bs, cs).parMapN(_ + _ + _) should === (as.zipWith(bs)(_ + _).zipWith(cs)(_ + _))
+    }
+  }
+
   checkAll("Parallel[Either[String, ?], Validated[String, ?]]", ParallelTypeclassTests[Either[String, ?], Validated[String, ?], Int].parallel)
   checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?], Int].parallel)
   checkAll("Parallel[EitherT[M, String, ?], Nested[F, Validated[String, ?], ?]]", ParallelTypeclassTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?], Int].parallel)
   checkAll("Parallel[WriterT[M, Int, ?], WriterT[F, Int, ?]]", ParallelTypeclassTests[WriterT[Either[String, ?], Int, ?], WriterT[Validated[String, ?], Int, ?], Int].parallel)
+  checkAll("Parallel[NonEmptyList, ZipNonEmptyList]", ParallelTypeclassTests[NonEmptyList, ZipNonEmptyList, Int].parallel)
+  checkAll("Parallel[NonEmptyVector, ZipNonEmptyVector]", ParallelTypeclassTests[NonEmptyVector, ZipNonEmptyVector, Int].parallel)
 
   {
     implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =

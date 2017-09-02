@@ -1,6 +1,7 @@
 package cats
 package data
 
+import cats.data.NonEmptyVector.ZipNonEmptyVector
 import scala.annotation.tailrec
 import scala.collection.immutable.{TreeSet, VectorBuilder}
 import cats.instances.vector._
@@ -304,6 +305,18 @@ private[data] sealed trait NonEmptyVectorInstances {
   implicit def catsDataSemigroupForNonEmptyVector[A]: Semigroup[NonEmptyVector[A]] =
     catsDataInstancesForNonEmptyVector.algebra
 
+  implicit def catsDataParallelForNonEmptyVector[A]: Parallel[NonEmptyVector, ZipNonEmptyVector] =
+    new Parallel[NonEmptyVector, ZipNonEmptyVector] {
+
+      def applicative: Applicative[ZipNonEmptyVector] = ZipNonEmptyVector.zipNevApplicative
+
+      def sequential(implicit M: Monad[NonEmptyVector]): ZipNonEmptyVector ~> NonEmptyVector =
+        λ[ZipNonEmptyVector ~> NonEmptyVector](_.value)
+
+      def parallel(implicit M: Monad[NonEmptyVector]): NonEmptyVector ~> ZipNonEmptyVector =
+        λ[NonEmptyVector ~> ZipNonEmptyVector](nev => new ZipNonEmptyVector(nev))
+    }
+
 }
 
 object NonEmptyVector extends NonEmptyVectorInstances {
@@ -328,4 +341,16 @@ object NonEmptyVector extends NonEmptyVectorInstances {
   def fromVectorUnsafe[A](vector: Vector[A]): NonEmptyVector[A] =
     if (vector.nonEmpty) new NonEmptyVector(vector)
     else throw new IllegalArgumentException("Cannot create NonEmptyVector from empty vector")
+
+  class ZipNonEmptyVector[A](val value: NonEmptyVector[A])
+
+  object ZipNonEmptyVector {
+    implicit val zipNevApplicative: Applicative[ZipNonEmptyVector] = new Applicative[ZipNonEmptyVector] {
+      def pure[A](x: A): ZipNonEmptyVector[A] = new ZipNonEmptyVector(NonEmptyVector.one(x))
+      def ap[A, B](ff: ZipNonEmptyVector[A => B])(fa: ZipNonEmptyVector[A]): ZipNonEmptyVector[B] =
+        new ZipNonEmptyVector(ff.value.zipWith(fa.value)(_ apply _))
+    }
+
+    implicit def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
+  }
 }
