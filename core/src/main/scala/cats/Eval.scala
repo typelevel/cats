@@ -253,8 +253,15 @@ object Eval extends EvalInstances {
    * they will be automatically created when needed.
    */
   sealed abstract class Call[A](val thunk: () => Eval[A]) extends Eval[A] {
-    def memoize: Eval[A] = new Later(() => value)
-    def value: A = Call.loop(this).value
+
+    def memoize: Eval[A] =
+      new Call[A](thunk) {
+        override def memoize: Eval[A] = this
+        override lazy val value: A = Call.loop(this).value
+      }
+
+    def value: A =
+      Call.loop(this).value
   }
 
   object Call {
@@ -294,12 +301,19 @@ object Eval extends EvalInstances {
    * trampoline are not exposed. This allows a slightly more efficient
    * implementation of the .value method.
    */
-  sealed abstract class Compute[A] extends Eval[A] {
+  sealed abstract class Compute[A] extends Eval[A] { self =>
     type Start
     val start: () => Eval[Start]
     val run: Start => Eval[A]
 
-    def memoize: Eval[A] = Later(value)
+    def memoize: Eval[A] =
+      new Compute[A] {
+        type Start = self.Start
+        val start: () => Eval[Start] = self.start
+        val run: Start => Eval[A] = self.run
+        override def memoize: Eval[A] = this
+        override lazy val value: A = self.value
+      }
 
     def value: A = {
       type L = Eval[Any]
