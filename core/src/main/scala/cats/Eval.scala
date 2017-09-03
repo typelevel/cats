@@ -254,39 +254,33 @@ object Eval extends EvalInstances {
    */
   sealed abstract class Call[A](val thunk: () => Eval[A]) extends Eval[A] {
 
-    def memoize: Eval[A] =
-      new Call[A](thunk) {
-        override def memoize: Eval[A] = this
-        override lazy val value: A = Call.loop(this).value
-      }
-
-    def value: A =
-      Call.loop(this).value
+    def memoize: Eval[A] = Memoize(this)
+    def value: A = evaluate(this)
   }
 
-  object Call {
-
-    /**
-     * Collapse the call stack for eager evaluations.
-     */
-    @tailrec private def loop[A](fa: Eval[A]): Eval[A] = fa match {
+  /**
+   * Collapse the call stack for eager evaluations.
+   * returns a non Call Eval node
+   */
+  @tailrec private def doCall[A](fa: Eval[A]): Eval[A] =
+    fa match {
       case call: Eval.Call[A] =>
-        loop(call.thunk())
+        doCall(call.thunk())
       case compute: Eval.Compute[A] =>
         new Eval.Compute[A] {
           type Start = compute.Start
           val start: () => Eval[Start] = () => compute.start()
-          val run: Start => Eval[A] = s => loop1(compute.run(s))
+          val run: Start => Eval[A] = s => doCall1(compute.run(s))
         }
       case other => other
     }
 
-    /**
-     * Alias for loop that can be called in a non-tail position
-     * from an otherwise tailrec-optimized loop.
-     */
-    private def loop1[A](fa: Eval[A]): Eval[A] = loop(fa)
-  }
+  /**
+   * Alias for doCall that can be called in a non-tail position
+   * from an otherwise tailrec-optimized doCall.
+   */
+  private def doCall1[A](fa: Eval[A]): Eval[A] =
+    doCall(fa)
 
   /**
    * Compute is a type of Eval[A] that is used to chain computations
@@ -306,37 +300,72 @@ object Eval extends EvalInstances {
     val start: () => Eval[Start]
     val run: Start => Eval[A]
 
-    def memoize: Eval[A] =
-      new Compute[A] {
-        type Start = self.Start
-        val start: () => Eval[Start] = self.start
-        val run: Start => Eval[A] = self.run
-        override def memoize: Eval[A] = this
-        override lazy val value: A = self.value
+    def memoize: Eval[A] = Memoize(this)
+    def value: A = evaluate(this)
+  }
+
+  private case class Memoize[A](eval: Eval[A]) extends Eval[A] {
+    var result: Option[A] = None
+    def memoize: Eval[A] = this
+    def value: A =
+      result match {
+        case Some(a) => a
+        case None =>
+          val a = evaluate(this)
+          result = Some(a)
+          a
+      }
+  }
+
+
+  private def evaluate[A](e: Eval[A]): A = {
+    type L = Eval[Any]
+    type M = Memoize[Any]
+    type C = Any => Eval[Any]
+
+    def addToMemo(m: M): C = { a: Any =>
+      m.result = Some(a)
+      Now(a)
+    }
+
+    @tailrec def loop(curr: L, fs: List[C]): Any =
+      curr match {
+        case c: Compute[_] =>
+          c.start() match {
+            case cc: Compute[_] =>
+              loop(
+                cc.start().asInstanceOf[L],
+                cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
+            case mm@Memoize(eval) =>
+              mm.result match {
+                case Some(a) =>
+                  loop(Now(a), c.run.asInstanceOf[C] :: fs)
+                case None =>
+                  loop(eval, addToMemo(mm.asInstanceOf[M]) :: c.run.asInstanceOf[C] :: fs)
+              }
+            case xx =>
+              loop(c.run(xx.value), fs)
+          }
+        case call: Call[_] =>
+          loop(doCall(call), fs)
+        case m@Memoize(eval) =>
+          m.result match {
+            case Some(a) =>
+              fs match {
+                case f :: fs => loop(f(a), fs)
+                case Nil => a
+              }
+            case None =>
+              loop(eval, addToMemo(m) :: fs)
+          }
+        case x =>
+          fs match {
+            case f :: fs => loop(f(x.value), fs)
+            case Nil => x.value
+          }
       }
 
-    def value: A = {
-      type L = Eval[Any]
-      type C = Any => Eval[Any]
-      @tailrec def loop(curr: L, fs: List[C]): Any =
-        curr match {
-          case c: Compute[_] =>
-            c.start() match {
-              case cc: Compute[_] =>
-                loop(
-                  cc.start().asInstanceOf[L],
-                  cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
-              case xx =>
-                loop(c.run(xx.value), fs)
-            }
-          case x =>
-            fs match {
-              case f :: fs => loop(f(x.value), fs)
-              case Nil => x.value
-            }
-        }
-      loop(this.asInstanceOf[L], Nil).asInstanceOf[A]
-    }
+    loop(e.asInstanceOf[L], Nil).asInstanceOf[A]
   }
 }
 

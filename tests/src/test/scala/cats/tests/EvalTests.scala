@@ -228,4 +228,23 @@ class EvalTests extends CatsSuite {
       }
     }
   }
+
+  test("memoize handles branched evaluation correctly") {
+    forAll { (e: Eval[Int], fn: Int => Eval[Int]) =>
+      var n0 = 0
+      val a0 = e.flatMap { i => n0 += 1; fn(i); }.memoize
+      assert(a0.flatMap(i1 => a0.map(i1 == _)).value == true)
+      assert(n0 == 1)
+
+      var n1 = 0
+      val a1 = Eval.defer { n1 += 1; fn(0) }.memoize
+      assert(a1.flatMap(i1 => a1.map(i1 == _)).value == true)
+      assert(n1 == 1)
+
+      var n2 = 0
+      val a2 = Eval.defer { n2 += 1; fn(0) }.memoize
+      assert(Eval.defer(a2).value == Eval.defer(a2).value)
+      assert(n2 == 1)
+    }
+  }
 }
