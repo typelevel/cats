@@ -9,12 +9,14 @@ import org.typelevel.discipline.Laws
 trait ParallelTests[M[_], F[_], A] extends Laws {
   def laws: ParallelLaws[M, F]
 
-  def parallel(implicit ArbM: Arbitrary[M[A]], EqMa: Eq[M[A]], ArbF: Arbitrary[F[A]], EqFa: Eq[F[A]]): RuleSet =
+  def parallel
+  (implicit ArbA: Arbitrary[A], ArbM: Arbitrary[M[A]], EqMa: Eq[M[A]], ArbF: Arbitrary[F[A]], EqFa: Eq[F[A]]): RuleSet =
     new DefaultRuleSet(
       "parallel",
       None,
       "parallel round trip" -> forAll((ma: M[A]) => laws.parallelRoundTrip(ma)),
-      "sequential round trip" -> forAll((fa: F[A]) => laws.sequentialRoundTrip(fa))
+      "sequential round trip" -> forAll((fa: F[A]) => laws.sequentialRoundTrip(fa)),
+      "isomorphic pure" -> forAll((a: A) => laws.isomorphicPure(a))
     )
 }
 
