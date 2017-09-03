@@ -76,6 +76,14 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def zipWithIndex[A](fa: List[A]): List[(A, Int)] =
         fa.zipWithIndex
 
+      override def partitionEither[A, B, C](fa: List[A])
+                                           (f: (A) => Either[B, C])
+                                           (implicit A: Alternative[List]): (List[B], List[C]) =
+        fa.foldRight(List.empty[B], List.empty[C])((a, acc) => f(a) match {
+          case Left(b) => (b :: acc._1, acc._2)
+          case Right(c) => (acc._1, c :: acc._2)
+        })
+
       @tailrec
       override def get[A](fa: List[A])(idx: Long): Option[A] =
         fa match {
