@@ -61,26 +61,25 @@ Cats has defined rulesets for all type class laws in `cats.laws.discipline.*`.
 
 So for our example we will want to import `cats.laws.discipline.FunctorTests` and call `checkAll` with it.
 Before we do so, however,
-we will have to bring our instances into scope as well as the derived `Arbitrary` instances from `scalacheck-shapeless`:
+we will have to bring our instances into scope as well as the derived `Arbitrary` instances from `scalacheck-shapeless`
+(We have defined an Arbitrary instance for `Tree` here, but you won't need it if you import `org.scalacheck.Shapeless._`).
+
 
 
 ```tut:silent
-import Tree._
-```
-```scala
-import org.scalacheck.Shapeless._
-```
 
-```tut:invisible
 import org.scalacheck.{Arbitrary, Gen}
+
 implicit def arbFoo[A: Arbitrary]: Arbitrary[Tree[A]] =
   Arbitrary(Gen.oneOf(Gen.const(Leaf), (for {
       e <- Arbitrary.arbitrary[A]
-    } yield Node(e, Leaf, Leaf).asInstanceOf[Tree[A]]))
+    } yield Node(e, Leaf, Leaf)))
   )
 ```
 
 ```tut:book
+import Tree._
+
 import cats.laws.discipline.FunctorTests
 
 class TreeLawTests extends CatsSuite {
