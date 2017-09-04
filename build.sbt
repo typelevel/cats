@@ -181,7 +181,6 @@ lazy val docs = project
   .settings(noPublishSettings)
   .settings(docSettings)
   .settings(commonJvmSettings)
-  .settings(libraryDependencies += "com.github.alexarchambault" %% "scalacheck-shapeless_1.13" % "1.1.5" % Compile)
   .dependsOn(coreJVM, freeJVM, kernelLawsJVM, lawsJVM, testkitJVM)
 
 lazy val cats = project.in(file("."))

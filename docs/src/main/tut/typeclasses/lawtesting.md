@@ -64,11 +64,23 @@ Before we do so, however,
 we will have to bring our instances into scope as well as the derived `Arbitrary` instances from `scalacheck-shapeless`:
 
 
-```tut:book
+```tut:silent
 import Tree._
-
+```
+```scala
 import org.scalacheck.Shapeless._
+```
 
+```tut:invisible
+import org.scalacheck.{Arbitrary, Gen}
+implicit def arbFoo[A: Arbitrary]: Arbitrary[Tree[A]] =
+  Arbitrary(Gen.oneOf(Gen.const(Leaf), (for {
+      e <- Arbitrary.arbitrary[A]
+    } yield Node(e, Leaf, Leaf).asInstanceOf[Tree[A]]))
+  )
+```
+
+```tut:book
 import cats.laws.discipline.FunctorTests
 
 class TreeLawTests extends CatsSuite {
