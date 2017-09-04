@@ -6,7 +6,7 @@ import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.data._
 import cats.tests.CatsSuite
 import org.scalatest.FunSuite
-import cats.laws.discipline.{ApplicativeErrorTests, ParallelTests => ParallelTypeclassTests}
+import cats.laws.discipline.{ApplicativeErrorTests, SerializableTests, ParallelTests => ParallelTypeclassTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
@@ -79,6 +79,8 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
   checkAll("Parallel[NonEmptyList, ZipNonEmptyList]", ParallelTypeclassTests[NonEmptyList, ZipNonEmptyList, Int].parallel)
   checkAll("Parallel[NonEmptyVector, ZipNonEmptyVector]", ParallelTypeclassTests[NonEmptyVector, ZipNonEmptyVector, Int].parallel)
 
+  checkAll("Parallel[NonEmptyList, ZipNonEmptyList]", SerializableTests.serializable(Parallel[NonEmptyList, ZipNonEmptyList]))
+
   {
     implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
       Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
@@ -99,7 +101,7 @@ trait ApplicativeErrorForEitherTest extends FunSuite with Discipline {
 
   implicit val parVal = Parallel.applicativeError[Validated[String, ?], Either[String, ?], String]
 
-  implicit def eqV[A: Eq,B: Eq]: Eq[Validated[A, B]] = cats.data.Validated.catsDataEqForValidated
+  implicit def eqV[A: Eq, B: Eq]: Eq[Validated[A, B]] = cats.data.Validated.catsDataEqForValidated
 
 
 

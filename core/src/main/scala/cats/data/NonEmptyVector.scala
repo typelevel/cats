@@ -342,7 +342,7 @@ object NonEmptyVector extends NonEmptyVectorInstances {
     if (vector.nonEmpty) new NonEmptyVector(vector)
     else throw new IllegalArgumentException("Cannot create NonEmptyVector from empty vector")
 
-  class ZipNonEmptyVector[A](val value: NonEmptyVector[A])
+  class ZipNonEmptyVector[A](val value: NonEmptyVector[A]) extends Serializable
 
   object ZipNonEmptyVector {
     implicit val zipNevApplicative: Applicative[ZipNonEmptyVector] = new Applicative[ZipNonEmptyVector] {
