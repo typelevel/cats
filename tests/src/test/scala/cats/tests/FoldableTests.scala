@@ -27,8 +27,8 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
 
   test("Foldable#partitionEither retains size") {
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
-      val list = Foldable[F].toList(fi)
-      val (lefts, rights) = Foldable[List].partitionEither(list)(f)
+      val vector = Foldable[F].toList(fi).toVector
+      val (lefts, rights) = Foldable[Vector].partitionEither(vector)(f)
       (lefts <+> rights).size.toLong should === (fi.size)
     }
   }

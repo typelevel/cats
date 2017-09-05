@@ -258,10 +258,10 @@ private[data] sealed trait NonEmptyVectorInstances {
         fa.foldRight(lb)(f)
 
       override def nonEmptyPartition[A, B, C](fa: NonEmptyVector[A])(f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
-        import cats.syntax.reducible._
         import cats.syntax.either._
+        import cats.syntax.reducible._
 
-        fa.reduceLeftTo(a => f(a).bimap(NonEmptyVector.one, NonEmptyVector.one).toIor)((ior, a) => (f(a), ior) match {
+        reduceLeftTo(fa)(a => f(a).bimap(NonEmptyVector.one, NonEmptyVector.one).toIor)((ior, a) => (f(a), ior) match {
           case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyVector.one(c))
           case (Right(c), _) => ior.map(_ :+ c)
           case (Left(b), Ior.Right(_)) => ior.putLeft(NonEmptyVector.one(b))
@@ -319,7 +319,7 @@ private[data] sealed trait NonEmptyVectorInstances {
 
 }
 
-object NonEmptyVector extends NonEmptyVectorInstances {
+object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
 
   def apply[A](head: A, tail: Vector[A]): NonEmptyVector[A] =
     new NonEmptyVector(head +: tail)
