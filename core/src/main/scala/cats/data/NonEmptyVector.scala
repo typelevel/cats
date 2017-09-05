@@ -257,6 +257,19 @@ private[data] sealed trait NonEmptyVectorInstances {
       override def foldRight[A, B](fa: NonEmptyVector[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         fa.foldRight(lb)(f)
 
+      override def nonEmptyPartition[A, B, C](fa: NonEmptyVector[A])(f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
+        import cats.syntax.reducible._
+        import cats.syntax.either._
+
+        fa.reduceLeftTo(a => f(a).bimap(NonEmptyVector.one, NonEmptyVector.one).toIor)((ior, a) => (f(a), ior) match {
+          case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyVector.one(c))
+          case (Right(c), _) => ior.map(_ :+ c)
+          case (Left(b), Ior.Right(_)) => ior.putLeft(NonEmptyVector.one(b))
+          case (Left(b), _) => ior.leftMap(_ :+ b)
+        }).bimap(_.toNonEmptyList, _.toNonEmptyList)
+
+      }
+
       override def get[A](fa: NonEmptyVector[A])(idx: Long): Option[A] =
         if (0 <= idx && idx < Int.MaxValue) fa.get(idx.toInt) else None
 
