@@ -32,6 +32,15 @@ trait HashLaws[A] extends Laws {
     }
   )
 
+  def sameAsUniversalHash(implicit A: Hash[A]): HashProperties = new HashProperties(
+    name = "sameAsUniversalHash",
+    parent = None,
+    Rules.serializable(Equ),
+    "same-as-universal-hash" -> forAll { (x: A) =>
+      (A.hash(x) == x.##) && (Hash.fromUniversalHashCode[A].hash(x) == x.##)
+    }
+  )
+
   class HashProperties(name: String, parent: Option[RuleSet], props: (String, Prop)*)
   extends DefaultRuleSet(name, parent, props: _*)
 
