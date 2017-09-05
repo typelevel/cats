@@ -75,6 +75,7 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
   checkAll("Parallel[Either[String, ?], Validated[String, ?]]", ParallelTypeclassTests[Either[String, ?], Validated[String, ?], Int].parallel)
   checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?], Int].parallel)
   checkAll("Parallel[EitherT[M, String, ?], Nested[F, Validated[String, ?], ?]]", ParallelTypeclassTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?], Int].parallel)
+  checkAll("Parallel[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]]", ParallelTypeclassTests[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?], Int].parallel)
   checkAll("Parallel[WriterT[M, Int, ?], WriterT[F, Int, ?]]", ParallelTypeclassTests[WriterT[Either[String, ?], Int, ?], WriterT[Validated[String, ?], Int, ?], Int].parallel)
   checkAll("Parallel[NonEmptyList, ZipNonEmptyList]", ParallelTypeclassTests[NonEmptyList, ZipNonEmptyList, Int].parallel)
   checkAll("Parallel[NonEmptyVector, ZipNonEmptyVector]", ParallelTypeclassTests[NonEmptyVector, ZipNonEmptyVector, Int].parallel)

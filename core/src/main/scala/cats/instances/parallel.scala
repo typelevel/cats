@@ -6,7 +6,7 @@ import cats.syntax.either._
 import cats.{Applicative, Functor, Monad, Parallel, ~>}
 
 
-trait ParallelInstances {
+trait ParallelInstances extends ParallelInstances1 {
   implicit def catsParallelForEitherValidated[E: Semigroup]: Parallel[Either[E, ?], Validated[E, ?]] = new Parallel[Either[E, ?], Validated[E, ?]] {
     def applicative: Applicative[Validated[E, ?]] = Validated.catsDataApplicativeErrorForValidated
 
@@ -31,7 +31,7 @@ trait ParallelInstances {
       λ[OptionT[M, ?] ~> Nested[F, Option, ?]](optT => Nested(P.parallel.apply(optT.value)))
   }
 
-  implicit def catsParallelForEitherTNestedValidated[F[_], M[_]: Monad, E: Semigroup]
+  implicit def catsParallelForEitherTNestedParallelValidated[F[_], M[_]: Monad, E: Semigroup]
   (implicit P: Parallel[M, F]): Parallel[EitherT[M, E, ?], Nested[F, Validated[E, ?], ?]] =
     new Parallel[EitherT[M, E, ?], Nested[F, Validated[E, ?], ?]] {
 
@@ -52,4 +52,24 @@ trait ParallelInstances {
         Nested(Functor[F].map(fea)(_.toValidated))
       }
   }
+}
+
+private[instances] trait ParallelInstances1 {
+  implicit def catsParallelForEitherTNestedValidated[M[_]: Monad, E: Semigroup]: Parallel[EitherT[M, E, ?], Nested[M, Validated[E, ?], ?]] =
+    new Parallel[EitherT[M, E, ?], Nested[M, Validated[E, ?], ?]] {
+
+      implicit val appValidated: Applicative[Validated[E, ?]] = Validated.catsDataApplicativeErrorForValidated
+
+      def applicative: Applicative[Nested[M, Validated[E, ?], ?]] = cats.data.Nested.catsDataApplicativeForNested[M, Validated[E, ?]]
+
+      def sequential(implicit M: Monad[EitherT[M, E, ?]]): Nested[M, Validated[E, ?], ?] ~> EitherT[M, E, ?] =
+        λ[Nested[M, Validated[E, ?], ?] ~> EitherT[M, E, ?]] { nested =>
+          EitherT(Functor[M].map(nested.value)(_.toEither))
+        }
+
+      def parallel(implicit M: Monad[EitherT[M, E, ?]]): EitherT[M, E, ?]~> Nested[M, Validated[E, ?], ?] =
+        λ[EitherT[M, E, ?] ~> Nested[M, Validated[E, ?], ?]] { eitherT =>
+          Nested(Functor[M].map(eitherT.value)(_.toValidated))
+        }
+    }
 }
