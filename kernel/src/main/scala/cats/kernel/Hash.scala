@@ -41,11 +41,6 @@ object Hash extends HashFunctions[Hash] {
       def eqv(x: A, y: A) = ev.eqv(f(x), f(y))
     }
 
-  implicit def catsKernelHashingForHash[A](implicit ev: Hash[A]): Hashing[A] =
-    new Hashing[A] {
-      def hash(x: A): Int = ev.hash(x)
-    }
-
   def fromHashing[A](implicit ev: Hashing[A]): Hash[A] =
     new Hash[A] {
       def hash(x: A) = ev.hash(x)
