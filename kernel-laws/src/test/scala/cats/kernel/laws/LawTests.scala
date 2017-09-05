@@ -111,8 +111,10 @@ class LawTests extends FunSuite with Discipline {
   laws[HashLaws, Short].check(_.hash)
   laws[HashLaws, Char].check(_.hash)
   laws[HashLaws, Int].check(_.hash)
+  laws[HashLaws, Double].check(_.hash)
   laws[HashLaws, Long].check(_.hash)
   laws[HashLaws, BitSet].check(_.hash)
+  laws[HashLaws, BigDecimal].check(_.hash)
   laws[HashLaws, BigInt].check(_.hash)
   laws[HashLaws, UUID].check(_.hash)
   laws[HashLaws, List[Int]].check(_.hash)
@@ -120,6 +122,13 @@ class LawTests extends FunSuite with Discipline {
   laws[HashLaws, List[String]].check(_.hash)
   laws[HashLaws, Vector[Int]].check(_.hash)
   laws[HashLaws, Stream[Int]].check(_.hash)
+  laws[HashLaws, Set[Int]].check(_.hash)
+  laws[HashLaws, Either[Int, String]].check(_.hash)
+
+  laws[HashLaws, Option[HasHash[Int]]].check(_.hash)
+  laws[HashLaws, List[HasHash[Int]]].check(_.hash)
+  laws[HashLaws, Vector[HasHash[Int]]].check(_.hash)
+  laws[HashLaws, Stream[HasHash[Int]]].check(_.hash)
 
   laws[OrderLaws, List[HasEq[Int]]].check(_.eqv)
   laws[OrderLaws, Option[HasEq[Int]]].check(_.eqv)
@@ -327,6 +336,17 @@ class LawTests extends FunSuite with Discipline {
     implicit def hasPartialOrderArbitrary[A: Arbitrary]: Arbitrary[HasPartialOrder[A]] =
       Arbitrary(arbitrary[A].map(HasPartialOrder(_)))
     implicit def hasCogen[A: Cogen]: Cogen[HasPartialOrder[A]] =
+      Cogen[A].contramap(_.a)
+  }
+
+  case class HasHash[A](a: A)
+
+  object HasHash {
+    implicit def hasHash[A: Hash]: Hash[HasHash[A]] =
+      Hash.by(_.a) // not Hash[A].on(_.a) because of diamond inheritance problems with Eq
+    implicit def hasHashArbitrary[A: Arbitrary]: Arbitrary[HasHash[A]] =
+      Arbitrary(arbitrary[A].map(HasHash(_)))
+    implicit def hasCogen[A: Cogen]: Cogen[HasHash[A]] =
       Cogen[A].contramap(_.a)
   }
 
