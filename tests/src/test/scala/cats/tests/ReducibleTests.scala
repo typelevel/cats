@@ -117,15 +117,4 @@ abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: A
     }
   }
 
-  test("Reducible#nonEmptyPartition remains sorted") {
-    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
-      val nel = Reducible[F].toNonEmptyList(fi)
-
-      val sorted = nel.map(f).sorted
-      val ior = sorted.nonEmptyPartition(identity)
-
-      ior.left.map(xs => xs.sorted should === (xs))
-      ior.right.map(xs => xs.sorted should === (xs))
-    }
-  }
 }
