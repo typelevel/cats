@@ -314,9 +314,20 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
+
   test("NonEmptyVector#zipWith is consistent with Vector#zip and then Vector#map") {
     forAll { (a: NonEmptyVector[Int], b: NonEmptyVector[Int], f: (Int, Int) => Int) =>
-      a.zipWith(b)(f).toVector should === (a.toVector.zip(b.toVector).map { case (x, y) => f(x, y)})
+      a.zipWith(b)(f).toVector should ===(a.toVector.zip(b.toVector).map { case (x, y) => f(x, y) })
+    }
+  }
+  test("NonEmptyVector#nonEmptyPartition remains sorted") {
+    forAll { (nev: NonEmptyVector[Int], f: Int => Either[String, String]) =>
+
+      val sorted = NonEmptyVector.fromVectorUnsafe(nev.map(f).toVector.sorted)
+      val ior = Reducible[NonEmptyVector].nonEmptyPartition(sorted)(identity)
+
+      ior.left.map(xs => xs.sorted should === (xs))
+      ior.right.map(xs => xs.sorted should === (xs))
     }
   }
 }
