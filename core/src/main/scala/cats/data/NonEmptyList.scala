@@ -452,6 +452,23 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
       override def fold[A](fa: NonEmptyList[A])(implicit A: Monoid[A]): A =
         fa.reduce
 
+      override def nonEmptyPartition[A, B, C](fa: NonEmptyList[A])
+                                             (f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
+        import cats.syntax.either._
+
+        val reversed = fa.reverse
+        val lastIor = f(reversed.head).bimap(NonEmptyList.one, NonEmptyList.one).toIor
+
+        reversed.tail.foldLeft(lastIor)((ior, a) => (f(a), ior) match {
+          case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
+          case (Right(c), _) => ior.map(c :: _)
+          case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
+          case (Left(b), _) => ior.leftMap(b :: _)
+        })
+
+      }
+
+
       override def find[A](fa: NonEmptyList[A])(f: A => Boolean): Option[A] =
         fa find f
 

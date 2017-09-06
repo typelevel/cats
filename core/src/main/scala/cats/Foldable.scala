@@ -407,6 +407,31 @@ import simulacrum.typeclass
     }.toList
 
   /**
+    * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]`
+    * Equivalent to `Functor#map` and then `Alternative#separate`.
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val list = List(1,2,3,4)
+    * scala> Foldable[List].partitionEither(list)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
+    * res0: (List[String], List[Int]) = (List(2, 4),List(1, 3))
+    * scala> Foldable[List].partitionEither(list)(a => Right(a * 4))
+    * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
+    * }}}
+    */
+  def partitionEither[A, B, C](fa: F[A])(f: A => Either[B, C])(implicit A: Alternative[F]): (F[B], F[C]) = {
+    import cats.instances.tuple._
+
+    implicit val mb: Monoid[F[B]] = A.algebra[B]
+    implicit val mc: Monoid[F[C]] = A.algebra[C]
+
+    foldMap(fa)(a => f(a) match {
+      case Right(c) => (A.empty[B], A.pure(c))
+      case Left(b) => (A.pure(b), A.empty[C])
+    })
+  }
+
+  /**
    * Convert F[A] to a List[A], only including elements which match `p`.
    */
   def filter_[A](fa: F[A])(p: A => Boolean): List[A] =

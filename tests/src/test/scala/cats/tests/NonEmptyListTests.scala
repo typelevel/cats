@@ -74,6 +74,7 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
+
   test("NonEmptyList#filter is consistent with List#filter") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.toList
@@ -281,9 +282,20 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
+
   test("NonEmptyList#zipWith is consistent with List#zip and then List#map") {
     forAll { (a: NonEmptyList[Int], b: NonEmptyList[Int], f: (Int, Int) => Int) =>
-      a.zipWith(b)(f).toList should === (a.toList.zip(b.toList).map {case (x, y) => f(x, y)})
+      a.zipWith(b)(f).toList should ===(a.toList.zip(b.toList).map { case (x, y) => f(x, y) })
+    }
+  }
+  test("NonEmptyList#nonEmptyPartition remains sorted") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Either[String, String]) =>
+
+      val sorted = nel.map(f).sorted
+      val ior = Reducible[NonEmptyList].nonEmptyPartition(sorted)(identity)
+
+      ior.left.map(xs => xs.sorted should === (xs))
+      ior.right.map(xs => xs.sorted should === (xs))
     }
   }
 }
