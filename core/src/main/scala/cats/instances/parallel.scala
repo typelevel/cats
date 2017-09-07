@@ -1,6 +1,6 @@
 package cats.instances
 
-import cats.data.{EitherT, Nested, OptionT, Validated}
+import cats.data._
 import cats.kernel.Semigroup
 import cats.syntax.either._
 import cats.{Applicative, Functor, Monad, Parallel, ~>}
@@ -30,6 +30,18 @@ trait ParallelInstances extends ParallelInstances1 {
     def parallel(implicit M: Monad[OptionT[M, ?]]): OptionT[M, ?]~> Nested[F, Option, ?] =
       λ[OptionT[M, ?] ~> Nested[F, Option, ?]](optT => Nested(P.parallel.apply(optT.value)))
   }
+
+  implicit def catsStdParallelForZipVector[A]: Parallel[Vector, ZipVector] =
+    new Parallel[Vector, ZipVector] {
+
+      def applicative: Applicative[ZipVector] = ZipVector.catsDataApplicativeForZipVector
+
+      def sequential(implicit M: Monad[Vector]): ZipVector ~> Vector =
+        λ[ZipVector ~> Vector](_.value)
+
+      def parallel(implicit M: Monad[Vector]): Vector ~> ZipVector =
+        λ[Vector ~> ZipVector](v => new ZipVector(v))
+    }
 
   implicit def catsParallelForEitherTNestedParallelValidated[F[_], M[_]: Monad, E: Semigroup]
   (implicit P: Parallel[M, F]): Parallel[EitherT[M, E, ?], Nested[F, Validated[E, ?], ?]] =

@@ -50,6 +50,9 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForNonEmptyVector[A](implicit A: Cogen[A]): Cogen[NonEmptyVector[A]] =
     Cogen[Vector[A]].contramap(_.toVector)
 
+  implicit def catsLawsArbitraryForZipVector[A](implicit A: Arbitrary[A]): Arbitrary[ZipVector[A]] =
+    Arbitrary(implicitly[Arbitrary[Vector[A]]].arbitrary.map(v => new ZipVector(v)))
+
   implicit def catsLawsArbitraryForZipNonEmptyVector[A](implicit A: Arbitrary[A]): Arbitrary[ZipNonEmptyVector[A]] =
     Arbitrary(implicitly[Arbitrary[NonEmptyVector[A]]].arbitrary.map(nev => new ZipNonEmptyVector(nev)))
 
