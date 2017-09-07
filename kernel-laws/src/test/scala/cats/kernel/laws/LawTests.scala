@@ -124,6 +124,7 @@ class LawTests extends FunSuite with Discipline {
   laws[HashLaws, Stream[Int]].check(_.hash)
   laws[HashLaws, Set[Int]].check(_.hash)
   laws[HashLaws, Either[Int, String]].check(_.hash)
+  laws[HashLaws, Map[Int, String]].check(_.hash)
 
   laws[HashLaws, Unit].check(_.sameAsUniversalHash)
   laws[HashLaws, Boolean].check(_.sameAsUniversalHash)
@@ -146,6 +147,7 @@ class LawTests extends FunSuite with Discipline {
   laws[HashLaws, Stream[Int]].check(_.sameAsUniversalHash)
   laws[HashLaws, Set[Int]].check(_.sameAsUniversalHash)
   laws[HashLaws, Either[Int, String]].check(_.sameAsUniversalHash)
+  laws[HashLaws, Map[Int, String]].check(_.sameAsUniversalHash)
 
   laws[HashLaws, Option[HasHash[Int]]].check(_.hash)
   laws[HashLaws, List[HasHash[Int]]].check(_.hash)
