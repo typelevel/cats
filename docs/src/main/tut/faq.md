@@ -8,7 +8,7 @@ position: 4
 # Frequently Asked Questions
 
 ## Questions
-
+ * [What is the difference between cats and scalaz](#diff-scalaz) 
  * [What imports do I need?](#what-imports)
  * [Where is right-biased `Either`?](#either)
  * [Why is the compiler having trouble with types with more than one type parameter?](#si-2712)
@@ -23,6 +23,14 @@ position: 4
  * [What is `tailRecM`?](#tailrecm)
  * [What does this symbol mean?](#symbol)
  * [How can I help?](#contributing)
+
+## <a id="diff-scalaz" href="#diff-scalaz"></a>What is the difference between cats and scalaz? 
+
+The goal for both cats and scalaz are the same: facilitate pure functional programming in scala applications; the underling core strategy is different. Scalaz took the approach of trying to provide a single batteries-included *standard libary* for FP that powers the scala applications. Cats, on the other hand, aims to help build an [ecosystem](https://typelevel.org/cats/#ecosystem) of pure FP libraries by providing a solid and stable foundation. These libaries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included), scala applications can be powered with "FP awesome-ness" and beyond by picking whatever best fit their needs. 
+
+Based on this core strategy, cats took a [modular](https://typelevel.org/cats/#modularity) approach and focuses on providing core, binary compatible, [approable](https://typelevel.org/cats/#approachability) and [efficient](https://typelevel.org/cats/#efficiency) abstractions. It also takes great effort in providing a welcoming and supportive [community environment](https://gitter.im/typelevel/cats) and a comprehensive beginner-friendly [documentation](https://typelevel.org/cats/#documentation). 
+
+We believe that both cats and scalaz strategies have its merits and shortcomings, and it's a positive thing for the scala community to have both.                           
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
 
