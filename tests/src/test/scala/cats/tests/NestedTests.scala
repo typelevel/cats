@@ -78,6 +78,14 @@ class NestedTests extends CatsSuite {
   }
 
   {
+    //ApplicativeError composition
+    implicit val instance = ListWrapper.applicative
+
+    checkAll("Nested[Validated[String, ?], ListWrapper, ?]", ApplicativeErrorTests[Nested[Validated[String, ?], ListWrapper, ?], String].applicativeError[Int, Int, Int])
+    checkAll("ApplicativeError[Nested[Validated[String, ?], ListWrapper, ?]]", SerializableTests.serializable(ApplicativeError[Nested[Validated[String, ?], ListWrapper, ?], String]))
+  }
+
+  {
     // Alternative composition
     implicit val instance = ListWrapper.alternative
     checkAll("Nested[List, ListWrapper, ?]", AlternativeTests[Nested[List, ListWrapper, ?]].alternative[Int, Int, Int])
