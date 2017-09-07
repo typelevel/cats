@@ -154,7 +154,7 @@ into larger problems.
 If you are being harassed, please contact one of [us](#maintainers)
 immediately so that we can support you.
 
-### Binary compatibility goal
+### Binary compatibility and versioning
 
 After `1.0.0` release, we [decided](https://github.com/typelevel/cats/issues/1233) 
 to use *MAJOR.MINOR.PATCH* [Semantic Versioning 2.0.0](http://semver.org/)
