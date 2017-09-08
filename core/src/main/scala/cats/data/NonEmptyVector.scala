@@ -200,7 +200,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
     NonEmptyVector.fromVectorUnsafe((toVector, b.toVector).zipped.map(f))
 }
 
-private[data] sealed trait NonEmptyVectorInstances {
+private[data] sealed abstract class NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector] with Reducible[NonEmptyVector]
     with Comonad[NonEmptyVector] with NonEmptyTraverse[NonEmptyVector] with Monad[NonEmptyVector] =

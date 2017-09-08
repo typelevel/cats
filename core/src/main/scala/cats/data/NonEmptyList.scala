@@ -385,7 +385,7 @@ object NonEmptyList extends NonEmptyListInstances {
     F.toNonEmptyList(fa)
 }
 
-private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 {
+private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListInstances0 {
 
   implicit val catsDataInstancesForNonEmptyList: SemigroupK[NonEmptyList] with Reducible[NonEmptyList]
       with Comonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Monad[NonEmptyList] =
@@ -498,14 +498,14 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
     }
 }
 
-private[data] sealed trait NonEmptyListInstances0 extends NonEmptyListInstances1 {
+private[data] sealed abstract class NonEmptyListInstances0 extends NonEmptyListInstances1 {
   implicit def catsDataPartialOrderForNonEmptyList[A](implicit A: PartialOrder[A]): PartialOrder[NonEmptyList[A]] =
     new NonEmptyListPartialOrder[A] {
       val A0 = A
     }
 }
 
-private[data] sealed trait NonEmptyListInstances1 {
+private[data] sealed abstract class NonEmptyListInstances1 {
 
   implicit def catsDataEqForNonEmptyList[A](implicit A: Eq[A]): Eq[NonEmptyList[A]] =
     new NonEmptyListEq[A] {
