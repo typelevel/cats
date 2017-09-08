@@ -165,9 +165,6 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForHash[A: Hash]: Arbitrary[Hash[A]] =
     Arbitrary(Hash.fromUniversalHashCode[A])
 
-  implicit def catsLawsArbitraryForHash[A: Hash]: Arbitrary[Hash[A]] =
-    Arbitrary(Hash.fromUniversalHashCode[A])
-
   implicit def catsLawsArbitraryForNested[F[_], G[_], A](implicit FG: Arbitrary[F[G[A]]]): Arbitrary[Nested[F, G, A]] =
     Arbitrary(FG.arbitrary.map(Nested(_)))
 

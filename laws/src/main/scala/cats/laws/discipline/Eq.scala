@@ -97,20 +97,6 @@ object eq {
   }
 
   /**
-   * Creates an approximation of Eq[Hash[A]] by generating 100 values for A
-   * and comparing the application of the two hash functions.
-   */
-  implicit def catsLawsEqForHash[A](implicit arbA: Arbitrary[A]): Eq[Hash[A]] = new Eq[Hash[A]] {
-    def eqv(f: Hash[A], g: Hash[A]): Boolean = {
-      val samples = List.fill(100)(arbA.arbitrary.sample).collect {
-        case Some(a) => a
-        case None => sys.error("Could not generate arbitrary values to compare two Hash[A]")
-      }
-      samples.forall { x => f.hash(x) == g.hash(x) }
-    }
-  }
-
-  /**
    * Create an approximation of Eq[Semigroup[A]] by generating values for A
    * and comparing the application of the two combine functions.
    */
