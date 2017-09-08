@@ -158,7 +158,7 @@ immediately so that we can support you.
 
 After `1.0.0` release, we [decided](https://github.com/typelevel/cats/issues/1233) 
 to use *MAJOR.MINOR.PATCH* [Semantic Versioning 2.0.0](http://semver.org/)
-going forward, which is different from the *EPIC.MAJOR.MINOR* schema commonly in
+going forward, which is different from the *EPOCH.MAJOR.MINOR* schema commonly in
 Java and Scala libraries (including the Scala lang). 
 
 Cats' strives to provide a solid and stable foundation for an ecosystem of
