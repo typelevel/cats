@@ -95,7 +95,8 @@ language", and integrate with each other with ease.
  * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
  * [origami](https://github.com/atnos-org/origami): monadic folds
-
+ * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with cats type classes. 
+ 
 #### Libraries with more specific uses
 
  * [Circe](https://github.com/circe/circe): pure functional JSON library.
