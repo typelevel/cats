@@ -158,18 +158,18 @@ immediately so that we can support you.
 
 After `1.0.0` release, we [decided](https://github.com/typelevel/cats/issues/1233) 
 to use *MAJOR.MINOR.PATCH* [Semantic Versioning 2.0.0](http://semver.org/)
-going forward, which is different from the *EPOCH.MAJOR.MINOR* schema commonly in
+going forward, which is different from the *EPOCH.MAJOR.MINOR* scheme common among 
 Java and Scala libraries (including the Scala lang). 
 
-Cats' strives to provide a solid and stable foundation for an ecosystem of
-FP libraries. Thus, we treat maintaining binary compatibility with a high priority. 
-In semantic versioning, breaking change is **ONLY** allowed between *MAJOR* versions.
+Cats strives to provide a solid and stable foundation for an ecosystem of
+FP libraries. Thus, we treat backward binary compatibility maintainence with a high priority. 
+In semantic versioning, backward breaking change is **ONLY** allowed between *MAJOR* versions.
 We will maintain backward binary compatibility between *PATCH* AND *MINOR* versions.
 For example, when we release cats `1.1.0`, it will be backward binary compatible 
 with the previous `1.0.x` versions. I.E. the new JAR will be a drop-in replacement for 
 the old one. This is critical when your application has a diamond
-dependency on cats - depending on two (or more) libraries that both depend on cats. 
-If one library upgrades to the new `1.1.0` cats before the other one does, your 
+dependency on Cats - depending on two or more libraries that all depend on Cats. 
+If one library upgrades to the new `1.1.0` Cats before the other one does, your 
 application still runs thanks to this backward binary compatibility.  
 
 Also worth noting is that according to semantic versioning, 
